@@ -1,28 +1,45 @@
-== README
+# Libraries.io
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+All the package managers
 
-Things you may want to cover:
+## Clojure
 
-* Ruby version
+Data sources: https://github.com/ato/clojars-web/wiki/Data
 
-* System dependencies
+## Haskell
 
-* Configuration
+API: http://hackage.haskell.org/api
 
-* Database creation
+Package names: http://hackage.haskell.org/packages/ (JSON)
 
-* Database initialization
+http://hackage.haskell.org/package/:package (Nokogiri)
 
-* How to run the test suite
+## Perl
 
-* Services (job queues, cache servers, search engines, etc.)
+Data: https://github.com/CPAN-API/cpan-api/wiki/API-docs
 
-* Deployment instructions
+Package names: http://www.cpan.org/modules/01modules.index.html
 
-* ...
+## Bower
 
+https://bower-component-list.herokuapp.com (name, description, owner:wbw20, website, forks, stars, created, updated)
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+https://bower.herokuapp.com/packages (name, hits, github_url)
+
+## Node
+
+https://registry.npmjs.org/-/all/
+
+## Python
+
+Package names: https://pypi.python.org/simple/
+
+https://pypi.python.org/pypi/Django/json
+
+## Ruby
+
+Package names: http://production.cf.rubygems.org/specs.4.8.gz
+
+`Marshal.load(Gem.gunzip(Gem.read_binary(specz)))`
+
+API Docs: http://guides.rubygems.org/rubygems-org-api/
