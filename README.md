@@ -2,23 +2,12 @@
 
 All the package managers
 
-## Clojure
+## Elixir
 
-Data sources: https://github.com/ato/clojars-web/wiki/Data
+https://hex.pm/api/packages
 
-## Haskell
+https://hex.pm/api/packages/amqp
 
-API: http://hackage.haskell.org/api
-
-Package names: http://hackage.haskell.org/packages/ (JSON)
-
-http://hackage.haskell.org/package/:package (Nokogiri)
-
-## Perl
-
-Data: https://github.com/CPAN-API/cpan-api/wiki/API-docs
-
-Package names: http://www.cpan.org/modules/01modules.index.html
 
 ## Bower
 
@@ -44,6 +33,51 @@ Package names: http://production.cf.rubygems.org/specs.4.8.gz
 
 API Docs: http://guides.rubygems.org/rubygems-org-api/
 
+## Dart
+
+https://pub.dartlang.org/api/packages
+
+https://pub.dartlang.org/api/packages/viltage
+
+## D
+
+http://code.dlang.org/packages/index.json
+
+http://code.dlang.org/packages/zeal.json
+
+## Xcode
+
+https://github.com/supermarin/alcatraz-packages/blob/master/packages.json
+
+## Sublime
+
+https://sublime.wbond.net/channel.json
+
+## Emacs
+
+http://melpa.milkbox.net/archive.json
+
+----
+
+
+## Clojure
+
+Data sources: https://github.com/ato/clojars-web/wiki/Data
+
+## Haskell
+
+API: http://hackage.haskell.org/api
+
+Package names: http://hackage.haskell.org/packages/ (JSON)
+
+http://hackage.haskell.org/package/:package (Nokogiri)
+
+## Perl
+
+Data: https://github.com/CPAN-API/cpan-api/wiki/API-docs
+
+Package names: http://www.cpan.org/modules/01modules.index.html
+
 ## Jam
 
 http://jamjs.org/repository/_design/jam-packages/_view/packages_by_category?reduce=false&include_docs=true&startkey=%5B%22All%22%5D&endkey=%5B%22All%22%2C%7B%7D%5D&limit=2000&skip=0
@@ -66,15 +100,6 @@ http://cran.r-project.org/web/packages/A3/index.html
 
 http://godoc.org/-/index
 
-## Elixir
-
-https://hex.pm/api/packages
-https://hex.pm/api/packages/amqp
-
-## Emacs
-
-http://melpa.milkbox.net/archive.json
-
 ## Nuget
 
 http://chris.eldredge.io/blog/2013/02/25/fun-with-nuget-rest-api/
@@ -86,3 +111,49 @@ https://github.com/CocoaPods/search.cocoapods.org/blob/master/app.rb
 ## Meteor
 
 https://atmospherejs.com/recent
+
+## Vim
+
+http://www.vim.org/scripts/script_search_results.php?order_by=creation_date&direction=descending
+
+## Tex
+
+http://www.ctan.org/pkg
+http://www.ctan.org/pkg/a0poster
+
+## Lua
+
+https://rocks.moonscript.org/modules
+http://rocks.moonscript.org/manifest
+
+## Erlang
+
+https://github.com/agner/
+
+## Julia
+
+http://pkg.julialang.org/
+
+## Homebrew
+
+http://braumeister.org/browse/a
+
+## Atom
+
+https://atom.io/packages/list
+
+## Java
+
+http://search.maven.org/
+
+## Swift
+
+http://www.swifttoolbox.io/
+
+## C
+
+https://github.com/clibs/clib/wiki/Packages
+
+## Macports
+
+http://www.macports.org/ports.php?by=all
