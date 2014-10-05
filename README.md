@@ -2,26 +2,6 @@
 
 All the package managers
 
-## Python
-
-Package names: https://pypi.python.org/simple/
-
-https://pypi.python.org/pypi/Django/json
-
-## Ruby
-
-Package names: http://production.cf.rubygems.org/specs.4.8.gz
-
-`Marshal.load(Gem.gunzip(Gem.read_binary(specz)))`
-
-API Docs: http://guides.rubygems.org/rubygems-org-api/
-
-## Dart
-
-https://pub.dartlang.org/api/packages
-
-https://pub.dartlang.org/api/packages/viltage
-
 ## D
 
 http://code.dlang.org/packages/index.json
@@ -39,6 +19,13 @@ https://sublime.wbond.net/channel.json
 ## Emacs
 
 http://melpa.milkbox.net/archive.json
+
+## Python
+
+Package names: https://pypi.python.org/simple/
+
+https://pypi.python.org/pypi/Django/json
+
 
 ----
 
