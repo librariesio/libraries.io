@@ -2,23 +2,6 @@
 
 All the package managers
 
-## Elixir
-
-https://hex.pm/api/packages
-
-https://hex.pm/api/packages/amqp
-
-
-## Bower
-
-https://bower-component-list.herokuapp.com (name, description, owner:wbw20, website, forks, stars, created, updated)
-
-https://bower.herokuapp.com/packages (name, hits, github_url)
-
-## Node
-
-https://registry.npmjs.org/-/all/
-
 ## Python
 
 Package names: https://pypi.python.org/simple/
