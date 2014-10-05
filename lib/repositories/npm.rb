@@ -1,5 +1,5 @@
 module Repositories
-  class Hex
+  class Npm
     def self.project_names
       r = HTTParty.get("https://registry.npmjs.org/-/all/").parsed_response.keys[1..-1]
     end
