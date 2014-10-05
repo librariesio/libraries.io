@@ -38,6 +38,7 @@ GEM
     coffee-script-source (1.8.0)
     erubis (2.7.0)
     execjs (2.2.1)
+    gems (0.8.3)
     hike (1.2.3)
     httparty (0.13.1)
       json (~> 1.8)
@@ -113,6 +114,7 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 4.0.0)
+  gems
   httparty
   jbuilder (~> 2.0)
   jquery-rails
