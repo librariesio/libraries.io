@@ -2,10 +2,6 @@
 
 All the package managers
 
-## Sublime
-
-https://sublime.wbond.net/channel.json
-
 ## Emacs
 
 http://melpa.milkbox.net/archive.json
