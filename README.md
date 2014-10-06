@@ -2,16 +2,6 @@
 
 All the package managers
 
-## D
-
-http://code.dlang.org/packages/index.json
-
-http://code.dlang.org/packages/zeal.json
-
-## Xcode
-
-https://github.com/supermarin/alcatraz-packages/blob/master/packages.json
-
 ## Sublime
 
 https://sublime.wbond.net/channel.json
