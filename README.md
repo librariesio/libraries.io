@@ -15,6 +15,34 @@ https://pypi.python.org/pypi/Django/json
 
 ----
 
+## Go
+
+http://godoc.org/-/index
+
+## Lua
+
+https://rocks.moonscript.org/modules
+http://rocks.moonscript.org/manifest
+
+## Erlang
+
+https://github.com/agner/
+
+## Julia
+
+http://pkg.julialang.org/
+
+## Homebrew
+
+http://braumeister.org/browse/a
+
+## Atom
+
+https://atom.io/packages/list
+
+## Swift
+
+http://www.swifttoolbox.io/
 
 ## Clojure
 
@@ -40,6 +68,10 @@ http://jamjs.org/repository/_design/jam-packages/_view/packages_by_category?redu
 
 http://jamjs.org/repository/jquery.finger
 
+## Cocoapods
+
+https://github.com/CocoaPods/search.cocoapods.org/blob/master/app.rb
+
 ## PHP
 
 https://packagist.org/packages/
@@ -51,18 +83,6 @@ https://packagist.org/packages/rcrowe/turbo.json
 http://cran.r-project.org/web/packages/available_packages_by_name.html
 
 http://cran.r-project.org/web/packages/A3/index.html
-
-## Go
-
-http://godoc.org/-/index
-
-## Nuget
-
-http://chris.eldredge.io/blog/2013/02/25/fun-with-nuget-rest-api/
-
-## Cocoapods
-
-https://github.com/CocoaPods/search.cocoapods.org/blob/master/app.rb
 
 ## Meteor
 
@@ -77,34 +97,13 @@ http://www.vim.org/scripts/script_search_results.php?order_by=creation_date&dire
 http://www.ctan.org/pkg
 http://www.ctan.org/pkg/a0poster
 
-## Lua
+## Nuget
 
-https://rocks.moonscript.org/modules
-http://rocks.moonscript.org/manifest
-
-## Erlang
-
-https://github.com/agner/
-
-## Julia
-
-http://pkg.julialang.org/
-
-## Homebrew
-
-http://braumeister.org/browse/a
-
-## Atom
-
-https://atom.io/packages/list
+http://chris.eldredge.io/blog/2013/02/25/fun-with-nuget-rest-api/
 
 ## Java
 
 http://search.maven.org/
-
-## Swift
-
-http://www.swifttoolbox.io/
 
 ## C
 
