@@ -2,10 +2,6 @@
 
 All the package managers
 
-## Emacs
-
-http://melpa.milkbox.net/archive.json
-
 ## Python
 
 Package names: https://pypi.python.org/simple/
