@@ -2,10 +2,6 @@
 
 All the package managers
 
-## Erlang
-
-https://github.com/agner/
-
 ## Jam
 
 http://jamjs.org/repository/_design/jam-packages/_view/packages_by_category?reduce=false&include_docs=true&startkey=%5B%22All%22%5D&endkey=%5B%22All%22%2C%7B%7D%5D&limit=2000&skip=0

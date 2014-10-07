@@ -27,6 +27,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    addressable (2.3.6)
     arel (5.0.1.20140414130214)
     builder (3.2.2)
     coffee-rails (4.0.1)
@@ -38,6 +39,8 @@ GEM
     coffee-script-source (1.8.0)
     erubis (2.7.0)
     execjs (2.2.1)
+    faraday (0.9.0)
+      multipart-post (>= 1.2, < 3)
     gems (0.8.3)
     hike (1.2.3)
     httparty (0.13.1)
@@ -58,6 +61,9 @@ GEM
     minitest (5.4.2)
     multi_json (1.10.1)
     multi_xml (0.5.5)
+    multipart-post (2.0.0)
+    octokit (3.4.0)
+      sawyer (~> 0.5.3)
     pg (0.17.1)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -92,6 +98,9 @@ GEM
       sass (~> 3.2.0)
       sprockets (~> 2.8, <= 2.11.0)
       sprockets-rails (~> 2.0)
+    sawyer (0.5.5)
+      addressable (~> 2.3.5)
+      faraday (~> 0.8, < 0.10)
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -129,6 +138,7 @@ DEPENDENCIES
   httparty
   jbuilder (~> 2.0)
   jquery-rails
+  octokit
   pg
   rails (= 4.1.6)
   rails_12factor
