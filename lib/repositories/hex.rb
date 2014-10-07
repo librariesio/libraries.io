@@ -1,4 +1,4 @@
-module Repositories
+class Repositories
   class Hex
     def self.project_names
       page = 1

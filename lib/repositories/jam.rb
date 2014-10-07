@@ -1,4 +1,4 @@
-module Repositories
+class Repositories
   class Jam
     def self.project_names
       projects.keys.sort

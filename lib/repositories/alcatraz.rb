@@ -1,4 +1,4 @@
-module Repositories
+class Repositories
   class Alcatraz
     def self.project_names
       projects.keys.sort

@@ -1,4 +1,4 @@
-module Repositories
+class Repositories
   class Sublime
     def self.project_names
       projects.keys.sort

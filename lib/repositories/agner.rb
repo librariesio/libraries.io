@@ -1,4 +1,4 @@
-module Repositories
+class Repositories
   class Agner
     def self.project_names
       Octokit.auto_paginate = true

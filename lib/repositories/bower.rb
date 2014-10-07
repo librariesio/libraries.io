@@ -1,4 +1,4 @@
-module Repositories
+class Repositories
   class Bower
     def self.project_names
       projects.map{|project| project['name']}
