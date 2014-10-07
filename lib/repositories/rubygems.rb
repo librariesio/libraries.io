@@ -22,5 +22,7 @@ class Repositories
         :homepage => project["homepage_uri"]
       }
     end
+
+    # TODO repo, authors, versions, licenses
   end
 end

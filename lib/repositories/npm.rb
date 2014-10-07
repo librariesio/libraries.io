@@ -18,5 +18,7 @@ class Repositories
         :published_at => project["time"],
       }
     end
+
+    # TODO repo, authors, versions, licenses
   end
 end

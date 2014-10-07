@@ -27,5 +27,7 @@ class Repositories
         :homepage => project[:homepage]
       }
     end
+
+    # TODO repo, license, authors
   end
 end
