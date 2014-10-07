@@ -11,7 +11,7 @@ class Repositories
         p2 = HTTParty.get("https://bower.herokuapp.com/packages").parsed_response
 
         p2.each do |hash|
-          projects[hash['name'].downcase] = hash.slice('url', 'hits')
+          projects[hash['name'].downcase] = hash.slice('name', 'url', 'hits')
         end
 
         p1.each do |hash|
@@ -25,6 +25,19 @@ class Repositories
 
     def self.project(name)
       projects[name.downcase]
+    end
+
+    def self.keys
+      ['name', 'url', 'hits', 'description', "owner", "website", "forks", "stars", "created", "updated"]
+    end
+
+    def self.mapping(project)
+      {
+        :name => project["name"],
+        :description => project["description"],
+        :homepage => project["url"],
+        :published_at => project["created"],
+      }
     end
   end
 end

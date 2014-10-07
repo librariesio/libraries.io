@@ -9,7 +9,18 @@ class Repositories
     end
 
     def self.project(name)
-      projects[name.downcase]
+      projects[name.downcase].merge({"name" => name})
+    end
+
+    def self.keys
+      ["name", "ver", "deps", "desc", "type", "props"]
+    end
+
+    def self.mapping(project)
+      {
+        :name => project["name"],
+        :description => project["desc"]
+      }
     end
   end
 end

@@ -15,5 +15,17 @@ class Repositories
     def self.project(name)
       HTTParty.get("https://pub.dartlang.org/api/packages/#{name}").parsed_response
     end
+
+    def self.keys
+      ["uploaders", "name", "versions", "url", "uploaders_url", "created", "new_version_url", "version_url", "downloads", "latest"]
+    end
+
+    def self.mapping(project)
+      {
+        :name => project["name"],
+        :homepage => project["url"],
+        :published_at => project["created"],
+      }
+    end
   end
 end

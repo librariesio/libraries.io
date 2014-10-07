@@ -10,7 +10,7 @@ class Repositories
         packages = HTTParty.get("https://sublime.wbond.net/channel.json").parsed_response['packages_cache']
         packages.each do |json, pkgs|
           pkgs.each do |pkg|
-            prjcts[pkg['name'].downcase] = pkg.slice("labels", "homepage", "description", "author", "donate", "issues", "releases", "name", "buy", "readme")
+            prjcts[pkg['name'].downcase] = pkg.slice("name", "labels", "homepage", "description", "author", "donate", "issues", "releases", "name", "buy", "readme")
           end
         end
         prjcts
@@ -19,6 +19,19 @@ class Repositories
 
     def self.project(name)
       projects[name.downcase]
+    end
+
+    def self.keys
+      ["labels", "homepage", "description", "author", "donate", "issues", "releases", "name", "buy", "readme"]
+    end
+
+    def self.mapping(project)
+      {
+        :name => project["name"],
+        :description => project["description"],
+        :homepage => project["homepage"],
+        :keywords => project["labels"]
+      }
     end
   end
 end

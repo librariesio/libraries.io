@@ -7,5 +7,13 @@ class Repositories
     def self.project(name)
 
     end
+
+    def self.keys
+      []
+    end
+
+    def self.mapping(project)
+      #
+    end
   end
 end

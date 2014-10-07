@@ -15,5 +15,17 @@ class Repositories
       end
       package
     end
+
+    def self.keys
+      [:name, :description, :url, :homepage, :rebar_compatible, :applications, :authors, :license]
+    end
+
+    def self.mapping(project)
+      {
+        :name => project[:name],
+        :description => project[:description],
+        :homepage => project[:homepage]
+      }
+    end
   end
 end
