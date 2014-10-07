@@ -2,12 +2,27 @@
 
 All the package managers
 
+## Erlang
+
+https://github.com/agner/
+
+## Jam
+
+http://jamjs.org/repository/_design/jam-packages/_view/packages_by_category?reduce=false&include_docs=true&startkey=%5B%22All%22%5D&endkey=%5B%22All%22%2C%7B%7D%5D&limit=2000&skip=0
+
+http://jamjs.org/repository/jquery.finger
+
 ## Python
 
 Package names: https://pypi.python.org/simple/
 
 https://pypi.python.org/pypi/Django/json
 
+## PHP
+
+https://packagist.org/packages/
+
+https://packagist.org/packages/rcrowe/turbo.json
 
 ----
 
@@ -20,9 +35,6 @@ http://godoc.org/-/index
 https://rocks.moonscript.org/modules
 http://rocks.moonscript.org/manifest
 
-## Erlang
-
-https://github.com/agner/
 
 ## Julia
 
@@ -58,21 +70,9 @@ Data: https://github.com/CPAN-API/cpan-api/wiki/API-docs
 
 Package names: http://www.cpan.org/modules/01modules.index.html
 
-## Jam
-
-http://jamjs.org/repository/_design/jam-packages/_view/packages_by_category?reduce=false&include_docs=true&startkey=%5B%22All%22%5D&endkey=%5B%22All%22%2C%7B%7D%5D&limit=2000&skip=0
-
-http://jamjs.org/repository/jquery.finger
-
 ## Cocoapods
 
 https://github.com/CocoaPods/search.cocoapods.org/blob/master/app.rb
-
-## PHP
-
-https://packagist.org/packages/
-
-https://packagist.org/packages/rcrowe/turbo.json
 
 ## R
 
