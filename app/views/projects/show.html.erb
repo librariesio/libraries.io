@@ -1,0 +1,13 @@
+<h2>
+  <%= @project.name %> - <%= @project.platform %>
+</h2>
+
+<%= simple_format(@project.description) if @project.description.present? %>
+
+<%= link_to(@project.homepage, @project.homepage) if @project.homepage.present? %>
+
+<% if @project.keywords.present? %>
+  <p>
+    Keywords: <%= @project.keywords %>
+  </p>
+<% end %>
