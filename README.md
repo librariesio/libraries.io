@@ -119,6 +119,10 @@ All the package managers
 Total so far: 206,274
 Total still to get: 336,191
 
+## bash
+
+http://www.bpkg.io/packages/name/
+
 ## Rubymotion
 
 https://github.com/clayallsopp/motion-toolbox.com/blob/master/data.json
