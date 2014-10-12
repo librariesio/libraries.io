@@ -1,24 +1,11 @@
 class Repositories
   class Sublime
     def self.project_names
-      projects.keys.sort
-    end
-
-    def self.projects
-      @projects ||= begin
-        prjcts = {}
-        packages = HTTParty.get("https://sublime.wbond.net/channel.json").parsed_response['packages_cache']
-        packages.each do |json, pkgs|
-          pkgs.each do |pkg|
-            prjcts[pkg['name'].downcase] = pkg.slice("name", "labels", "homepage", "description", "author", "donate", "issues", "releases", "name", "buy", "readme")
-          end
-        end
-        prjcts
-      end
+      HTTParty.get("https://sublime.wbond.net/channel.json").parsed_response['packages_cache'].map{|k,v| v[0]['name']}
     end
 
     def self.project(name)
-      projects[name.downcase]
+      HTTParty.get("https://sublime.wbond.net/packages/#{name}.json").parsed_response
     end
 
     def self.mapping(project)
