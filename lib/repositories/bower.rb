@@ -1,5 +1,5 @@
 class Repositories
-  class Bower
+  class Bower < Base
     def self.project_names
       projects.map{|project| project['name']}
     end
@@ -25,10 +25,6 @@ class Repositories
 
     def self.project(name)
       projects[name.downcase]
-    end
-
-    def self.keys
-      ['name', 'url', 'hits', 'description', "owner", "website", "forks", "stars", "created", "updated"]
     end
 
     def self.mapping(project)

@@ -1,7 +1,5 @@
 class Repositories
-  class Agner
-    PLATFORM = 'Agner'
-
+  class Agner < Base
     def self.project_names
       Octokit.auto_paginate = true
       repos = Octokit.org_repos('agner')
@@ -18,27 +16,12 @@ class Repositories
       package
     end
 
-    def self.keys
-      [:name, :description, :url, :homepage, :rebar_compatible, :applications, :authors, :license]
-    end
-
     def self.mapping(project)
       {
         :name => project[:name],
         :description => project[:description],
         :homepage => project[:homepage]
       }
-    end
-
-    def self.save(project)
-      mapped_project = mapping(project)
-      project = Project.find_or_create_by({:name => mapped_project[:name], :platform => PLATFORM})
-      project.update_attributes(mapped_project.slice(:description, :homepage))
-      project
-    end
-
-    def self.update(name)
-      save(project(name))
     end
 
     # TODO repo, license, authors

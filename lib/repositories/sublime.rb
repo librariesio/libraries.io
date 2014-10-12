@@ -21,10 +21,6 @@ class Repositories
       projects[name.downcase]
     end
 
-    def self.keys
-      ["labels", "homepage", "description", "author", "donate", "issues", "releases", "name", "buy", "readme"]
-    end
-
     def self.mapping(project)
       {
         :name => project["name"],

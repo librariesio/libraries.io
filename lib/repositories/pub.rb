@@ -1,5 +1,5 @@
 class Repositories
-  class Pub
+  class Pub < Base
     def self.project_names
       page = 1
       projects = []
@@ -14,10 +14,6 @@ class Repositories
 
     def self.project(name)
       HTTParty.get("https://pub.dartlang.org/api/packages/#{name}").parsed_response
-    end
-
-    def self.keys
-      ["uploaders", "name", "versions", "url", "uploaders_url", "created", "new_version_url", "version_url", "downloads", "latest"]
     end
 
     def self.mapping(project)

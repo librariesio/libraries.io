@@ -1,5 +1,5 @@
 class Repositories
-  class Hex
+  class Hex < Base
     def self.project_names
       page = 1
       projects = []
@@ -14,10 +14,6 @@ class Repositories
 
     def self.project(name)
       HTTParty.get("https://hex.pm/api/packages/#{name}").parsed_response
-    end
-
-    def self.keys
-      ["created_at", "downloads", "meta", "name", "releases", "updated_at", "url"]
     end
 
     def self.mapping(project)

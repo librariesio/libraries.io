@@ -1,5 +1,5 @@
 class Repositories
-  class Emacs
+  class Emacs < Base
     def self.project_names
       projects.keys.sort
     end
@@ -10,10 +10,6 @@ class Repositories
 
     def self.project(name)
       projects[name.downcase].merge({"name" => name})
-    end
-
-    def self.keys
-      ["name", "ver", "deps", "desc", "type", "props"]
     end
 
     def self.mapping(project)

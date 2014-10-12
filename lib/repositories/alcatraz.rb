@@ -1,5 +1,5 @@
 class Repositories
-  class Alcatraz
+  class Alcatraz < Base
     def self.project_names
       projects.keys.sort
     end
@@ -22,16 +22,11 @@ class Repositories
       projects[name.downcase]
     end
 
-    def self.keys
-      ["name", "url", "description", "category"]
-    end
-
     def self.mapping(project)
       {
         :name => project["name"],
         :description => project["description"],
-        :homepage => project["url"],
-        :keywords => project["category"]
+        :homepage => project["url"]
       }
     end
 
