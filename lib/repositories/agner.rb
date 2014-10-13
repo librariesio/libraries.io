@@ -1,5 +1,7 @@
 class Repositories
   class Agner < Base
+    HAS_VERSIONS = false
+
     def self.project_names
       Octokit.auto_paginate = true
       repos = Octokit.org_repos('agner')

@@ -1,5 +1,7 @@
 class Repositories
   class Bower < Base
+    HAS_VERSIONS = false
+    
     def self.project_names
       projects.keys
     end

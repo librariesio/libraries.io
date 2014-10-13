@@ -1,5 +1,7 @@
 class Repositories
   class Pub < Base
+    HAS_VERSIONS = true
+    
     def self.project_names
       page = 1
       projects = []

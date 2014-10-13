@@ -1,5 +1,7 @@
 class Repositories
   class Alcatraz < Base
+    HAS_VERSIONS = false
+
     def self.project_names
       projects.keys.sort
     end
