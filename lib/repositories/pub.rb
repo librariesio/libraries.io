@@ -1,7 +1,7 @@
 class Repositories
   class Pub < Base
     HAS_VERSIONS = true
-    
+
     def self.project_names
       page = 1
       projects = []
@@ -19,10 +19,20 @@ class Repositories
     end
 
     def self.mapping(project)
+      latest_version = r['versions'].last
       {
         :name => project["name"],
-        :homepage => project["url"]
+        :homepage => latest_version['pubspec']['homepage'],
+        :description => latest_version['pubspec']['description']
       }
+    end
+
+    def self.versions(project)
+      Gems.versions(project['name']).map do |v|
+        {
+          :number => v['version']
+        }
+      end
     end
 
     # TODO repo, authors, versions

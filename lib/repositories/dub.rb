@@ -11,14 +11,27 @@ class Repositories
     end
 
     def self.mapping(project)
+      latest_version = project["versions"].last
       {
         :name => project["name"],
-        :homepage => homepage(project["repository"]),
-        :keywords => project["categories"].join(',')
+        :description => latest_version['description'],
+        :homepage => latest_version['homepage'],
+        :keywords => project["categories"].join(','),
+        :licenses => latest_version['license']#,
+        # :repository => repository(project["repository"])
       }
     end
 
-    def self.homepage(hash)
+    def self.versions(project)
+      project["versions"].map do |v|
+        {
+          :number => v['version'],
+          :published_at => v['date']
+        }
+      end
+    end
+
+    def self.repository(hash)
       if hash['kind'] == 'github'
         "https://github.com/#{hash['owner']}/#{hash['project']}"
       elsif hash['kind'] == 'bitbucket'
@@ -28,6 +41,6 @@ class Repositories
       end
     end
 
-    # TODO repo, versions, authors
+    # TODO repo, authors
   end
 end

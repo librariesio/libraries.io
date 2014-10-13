@@ -1,7 +1,7 @@
 class Repositories
   class Rubygems < Base
     HAS_VERSIONS = true
-    
+
     def self.project_names
       gems = Marshal.load(Gem.gunzip(HTTParty.get("http://production.cf.rubygems.org/specs.4.8.gz").parsed_response))
       gems.map(&:first).uniq
@@ -15,10 +15,21 @@ class Repositories
       {
         :name => project["name"],
         :description => project["info"],
-        :homepage => project["homepage_uri"]
+        :homepage => project["homepage_uri"],
+        :licenses => project["licenses"].join(',')#,
+        # :repository => project["source_code_uri"]
       }
     end
 
-    # TODO repo, authors, versions, licenses
+    def self.versions(project)
+      Gems.versions(project['name']).map do |v|
+        {
+          :number => v['number'],
+          :published_at => v['built_at']
+        }
+      end
+    end
+
+    # TODO repo, authors, licenses
   end
 end
