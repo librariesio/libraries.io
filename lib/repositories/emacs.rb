@@ -1,6 +1,6 @@
 class Repositories
   class Emacs < Base
-    HAS_VERSIONS = true
+    HAS_VERSIONS = false
 
     def self.project_names
       projects.keys.sort
@@ -18,9 +18,11 @@ class Repositories
       {
         :name => project["name"],
         :description => project["desc"]
+        :homepage => project["props"]["url"],
+        :keywords => project["props"]["keywords"]
       }
     end
 
-    # TODO versions, repo
+    # TODO repo
   end
 end
