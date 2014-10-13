@@ -21,10 +21,14 @@ class Repositories
     def self.mapping(project)
       {
         :name => project["name"],
-        :homepage => project["url"]
+        :homepage => project["meta"]["links"]["GitHub"],
+        :description => project["meta"]["description"],
+        :licenses => project["meta"]["licenses"]
       }
     end
 
-    # TODO versions, repo
+    # TODO versions, repo, dependencies
+    # https://hex.pm/api/packages/amqp/releases/0.0.5
+
   end
 end
