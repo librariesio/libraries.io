@@ -11,7 +11,7 @@ class Repositories
       contents = Base64.decode64(config)
       package = {}
       contents.split( /\r?\n/ ).each do |line|
-        package.merge! ErlangParser.new.erl_to_ruby(line.match(/(.+?)[\.]?$/)[1])
+        package.merge! ErlangParser.new.erl_to_ruby(line.match(/(.+?)[\.]?[\s]*$/)[1])
       end
       package
     end
