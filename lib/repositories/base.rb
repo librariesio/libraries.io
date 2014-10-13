@@ -8,7 +8,12 @@ class Repositories
     end
 
     def self.update(name)
-      save(project(name))
+      begin
+        save(project(name))
+      rescue Exception => e
+        p name
+        raise e
+      end
     end
 
     def self.import
