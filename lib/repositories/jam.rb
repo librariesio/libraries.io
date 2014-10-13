@@ -26,8 +26,7 @@ class Repositories
         :name => project["name"],
         :description => project["description"],
         :homepage => project["homepage"],
-        :keywords => project["tags"] + ', ' + project["keywords"] + ', ' + project["categories"],
-        :published_at => project["time"],
+        :keywords => project["tags"] + ', ' + project["keywords"] + ', ' + project["categories"]
       }
     end
 

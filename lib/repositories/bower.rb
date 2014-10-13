@@ -31,8 +31,7 @@ class Repositories
       {
         :name => project["name"],
         :description => project["description"],
-        :homepage => project["url"],
-        :published_at => project["created"],
+        :homepage => project["url"]
       }
     end
 

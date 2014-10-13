@@ -19,8 +19,7 @@ class Repositories
     def self.mapping(project)
       {
         :name => project["name"],
-        :homepage => project["url"],
-        :published_at => project["created_at"],
+        :homepage => project["url"]
       }
     end
 

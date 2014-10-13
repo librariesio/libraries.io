@@ -12,8 +12,7 @@ class Repositories
       {
         :name => project["name"],
         :homepage => project["repository"],
-        :keywords => project["categories"],
-        :published_at => project["dateAdded"],
+        :keywords => project["categories"]
       }
     end
 
