@@ -1,7 +1,7 @@
 class Repositories
   class Bower < Base
     def self.project_names
-      projects.map{|project| project['name']}
+      projects.keys
     end
 
     def self.projects
