@@ -1,5 +1,5 @@
 class Repositories
-  class Rubygems
+  class Rubygems < Base
     def self.project_names
       gems = Marshal.load(Gem.gunzip(HTTParty.get("http://production.cf.rubygems.org/specs.4.8.gz").parsed_response))
       gems.map(&:first).uniq
