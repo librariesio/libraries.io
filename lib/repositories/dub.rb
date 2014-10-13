@@ -11,9 +11,19 @@ class Repositories
     def self.mapping(project)
       {
         :name => project["name"],
-        :homepage => project["repository"],
-        :keywords => project["categories"]
+        :homepage => homepage(project["repository"]),
+        :keywords => project["categories"].join(',')
       }
+    end
+
+    def self.homepage(hash)
+      if hash['kind'] == 'github'
+        "https://github.com/#{hash['owner']}/#{hash['project']}"
+      elsif hash['kind'] == 'bitbucket'
+        "https://bitbucket.org/#{hash['owner']}/#{hash['project']}"
+      else
+        raise hash
+      end
     end
 
     # TODO repo, versions, authors
