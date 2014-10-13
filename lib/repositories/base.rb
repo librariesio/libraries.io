@@ -10,5 +10,9 @@ class Repositories
     def self.update(name)
       save(project(name))
     end
+
+    def self.import
+      project_names.each{|name| update(name) }
+    end
   end
 end
