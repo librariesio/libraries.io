@@ -18,7 +18,7 @@ class Repositories
     end
 
     def self.project(name)
-      JSON.parse HTTParty.get('http://jamjs.org/repository/jquery.finger').parsed_response
+      JSON.parse HTTParty.get("http://jamjs.org/repository/#{name}").parsed_response
     end
 
     def self.mapping(project)
@@ -26,7 +26,7 @@ class Repositories
         :name => project["name"],
         :description => project["description"],
         :homepage => project["homepage"],
-        :keywords => project["tags"] + ', ' + project["keywords"] + ', ' + project["categories"]
+        :keywords => (project["keywords"].present? ? project["keywords"].join(',') : '')
       }
     end
 
