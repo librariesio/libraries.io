@@ -9,7 +9,7 @@ class Repositories
     end
 
     def self.project(name)
-      projects[name.downcase].merge({"name" => name})
+      projects[name].merge({"name" => name})
     end
 
     def self.mapping(project)
