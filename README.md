@@ -222,3 +222,9 @@ http://www.swifttoolbox.io/
 ## C (150)
 
 https://github.com/clibs/clib/wiki/Packages
+
+----
+
+https://launchpad.net/
+https://searchcode.com/
+http://www.slideshare.net/nunobrito/2014-1014-github-plus-foss-1-million-spdx
