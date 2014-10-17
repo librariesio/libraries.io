@@ -1,7 +1,7 @@
 class Repositories
-  class Npm < Base
+  class NPM < Base
     HAS_VERSIONS = true
-    
+
     def self.project_names
       HTTParty.get("https://registry.npmjs.org/-/all/").parsed_response.keys[1..-1]
     end
