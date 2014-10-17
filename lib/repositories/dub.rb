@@ -40,7 +40,5 @@ class Repositories
         raise hash
       end
     end
-
-    # TODO repo, authors
   end
 end

@@ -1,7 +1,7 @@
 class Repositories
   class Sublime < Base
     HAS_VERSIONS = true
-    
+
     def self.project_names
       HTTParty.get("https://sublime.wbond.net/channel.json").parsed_response['packages_cache'].map{|k,v| v[0]['name']}
     end
@@ -18,7 +18,5 @@ class Repositories
         :keywords => project["labels"].join(',')
       }
     end
-
-    # TODO repo, authors, versions
   end
 end

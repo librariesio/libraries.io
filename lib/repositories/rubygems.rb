@@ -29,7 +29,5 @@ class Repositories
         }
       end
     end
-
-    # TODO repo, authors, licenses
   end
 end

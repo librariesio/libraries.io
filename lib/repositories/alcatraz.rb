@@ -31,7 +31,5 @@ class Repositories
         :homepage => project["url"]
       }
     end
-
-    # TODO repo
   end
 end

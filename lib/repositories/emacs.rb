@@ -22,7 +22,5 @@ class Repositories
         :keywords => project["props"]["keywords"]
       }
     end
-
-    # TODO repo
   end
 end

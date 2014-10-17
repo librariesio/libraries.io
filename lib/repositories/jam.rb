@@ -31,7 +31,5 @@ class Repositories
         :keywords => (project["keywords"].present? ? project["keywords"].join(',') : '')
       }
     end
-
-    # TODO repo, authors, versions
   end
 end

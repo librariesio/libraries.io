@@ -22,7 +22,5 @@ class Repositories
         :keywords => project["keywords"].join(',')
       }
     end
-
-    # TODO repo, authors, versions, licenses
   end
 end

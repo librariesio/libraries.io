@@ -1,7 +1,7 @@
 class Repositories
   class Bower < Base
     HAS_VERSIONS = false
-    
+
     def self.project_names
       projects.keys
     end
@@ -36,7 +36,5 @@ class Repositories
         :homepage => project["url"]
       }
     end
-
-    # TODO repo, authors
   end
 end

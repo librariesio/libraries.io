@@ -34,7 +34,5 @@ class Repositories
         }
       end
     end
-
-    # TODO repo, authors, versions
   end
 end
