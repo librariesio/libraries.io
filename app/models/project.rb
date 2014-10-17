@@ -7,6 +7,8 @@ class Project < ActiveRecord::Base
     "#{id}-#{name.parameterize}"
   end
 
+  has_many :versions
+
   ## relations
   # versions => dependencies
   # repository
