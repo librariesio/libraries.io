@@ -1,6 +1,7 @@
 class Repositories
   class Sublime < Base
     HAS_VERSIONS = true
+    HAS_DEPENDENCIES = false
 
     def self.project_names
       HTTParty.get("https://sublime.wbond.net/channel.json").parsed_response['packages_cache'].map{|k,v| v[0]['name']}

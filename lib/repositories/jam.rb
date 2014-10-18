@@ -1,6 +1,7 @@
 class Repositories
   class Jam < Base
     HAS_VERSIONS = true
+    HAS_DEPENDENCIES = true
 
     def self.project_names
       projects.keys.sort

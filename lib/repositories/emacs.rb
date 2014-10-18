@@ -1,6 +1,7 @@
 class Repositories
   class Emacs < Base
     HAS_VERSIONS = false
+    HAS_DEPENDENCIES = true
 
     def self.project_names
       projects.keys.sort
