@@ -1,13 +1,54 @@
 <h2>
-  <%= @project.name %> - <%= @project.platform %>
+  <%= @project.name %>
+  <% if @project.versions.any? %>
+    - <%= @project.versions.order(:number).last.number %>
+  <% end %>
+  - <%= @project.platform %>
 </h2>
 
 <%= simple_format(@project.description) if @project.description.present? %>
 
-<%= link_to(@project.homepage, @project.homepage) if @project.homepage.present? %>
+<% if @project.homepage.present? %>
+  <p>
+    Homepage: <%= link_to(@project.homepage, @project.homepage) %>
+  </p>
+<% end %>
 
 <% if @project.keywords.present? %>
   <p>
     Keywords: <%= @project.keywords %>
   </p>
 <% end %>
+
+<% if @project.licenses.present? %>
+  <p>
+    Licenses: <%= @project.licenses %>
+  </p>
+<% end %>
+
+<% if @project.versions.any? %>
+  <h3>Versions</h3>
+  <ul>
+    <% @project.versions.each do |version| %>
+      <li>
+        <%= version.number %>
+        <% if version.published_at.present? %>
+          - <%= version.published_at.to_date.to_s(:long) %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<!--
+install command
+authors/owners/maintainers
+links (source, homepage, bugs)
+dependencies
+dev dependencies
+reverse dependencies
+readme
+downloads
+stars
+download archive
+ -->
