@@ -26,5 +26,14 @@ class Repositories
         :licenses => project["meta"]["licenses"]
       }
     end
+
+    def self.versions(project)
+      project["releases"].map do |version|
+        {
+          :number => version['version'],
+          :published_at => version['created_at']
+        }
+      end
+    end
   end
 end
