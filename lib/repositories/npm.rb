@@ -24,9 +24,10 @@ class Repositories
     end
 
     def self.versions(project)
-      project['versions'].map do |k,v|
+      project['time'].except("modified", "created").map do |k,v|
         {
-          :number => v['version']
+          :number => k,
+          :published_at => v
         }
       end
     end
