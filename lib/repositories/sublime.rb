@@ -18,5 +18,13 @@ class Repositories
         :keywords => project["labels"].join(',')
       }
     end
+
+    def self.versions(project)
+      project['versions'].map do |v|
+        {
+          :number => v['version']
+        }
+      end
+    end
   end
 end
