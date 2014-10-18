@@ -17,7 +17,7 @@ class Repositories
     def self.mapping(project)
       {
         :name => project["name"],
-        :description => project["desc"]
+        :description => project["desc"],
         :homepage => project["props"]["url"],
         :keywords => project["props"]["keywords"]
       }
