@@ -2,9 +2,16 @@ class Repositories
   class Base
     def self.save(project)
       mapped_project = mapping(project)
-      project = Project.find_or_create_by({:name => mapped_project[:name], :platform => self.name.demodulize})
-      project.update_attributes(mapped_project.except(:name))
-      project
+      dbproject = Project.find_or_create_by({:name => mapped_project[:name], :platform => self.name.demodulize})
+      dbproject.update_attributes(mapped_project.except(:name))
+
+      if HAS_VERSIONS
+        versions(project).each do |version|
+          dbproject.versions.find_or_create_by({:number => version[:number], :published_at => version[:published_at]})
+        end
+      end
+
+      dbproject
     end
 
     def self.update(name)
