@@ -2,41 +2,6 @@
 
 All the package managers
 
-----
-
-# Mappings
-
-## Project
-
-```
-:name
-:description
-:homepage
-:keywords
-:published_at
-```
-## Consistent mappings
-
-```
-"name",
-"created_at",
-
-"description",
-"downloads",
-"keywords",
-"updated_at",
-"website",
-
-"repository",
-"dependencies",
-"licenses",
-"owners",
-"maintainers",
-"authors",
-
-"latest",
-"versions",
-```
 
 ## All mappings
 
@@ -118,10 +83,6 @@ All the package managers
 
 Total so far: 206,274
 Total still to get: 336,191
-
-## bash
-
-http://www.bpkg.io/packages/name/
 
 ## Rubymotion
 
@@ -222,6 +183,10 @@ http://www.swifttoolbox.io/
 ## C (150)
 
 https://github.com/clibs/clib/wiki/Packages
+
+## bash
+
+http://www.bpkg.io/packages/name/
 
 ----
 
