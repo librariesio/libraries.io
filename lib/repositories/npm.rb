@@ -24,7 +24,7 @@ class Repositories
     end
 
     def self.versions(project)
-      project['versions'].each do |k,v|
+      project['versions'].map do |k,v|
         {
           :number => v['version']
         }

@@ -5,9 +5,9 @@ class Repositories
       dbproject = Project.find_or_create_by({:name => mapped_project[:name], :platform => self.name.demodulize})
       dbproject.update_attributes(mapped_project.except(:name))
 
-      if HAS_VERSIONS
+      if self::HAS_VERSIONS
         versions(project).each do |version|
-          dbproject.versions.find_or_create_by({:number => version[:number], :published_at => version[:published_at]})
+          dbproject.versions.find_or_create_by(version)
         end
       end
 
