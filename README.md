@@ -82,37 +82,37 @@ All the package managers
 # Platforms
 
 Total so far: 206,274
-Total still to get: 336,191
+Total still to get: 340,000
 
 ## Rubymotion
 
 https://github.com/clayallsopp/motion-toolbox.com/blob/master/data.json
 
-## Java (88027)
+## Java (88,880)
 
 http://search.maven.org/#api
 
-## Python (49770)
+## Python (50240)
 
 Package names: https://pypi.python.org/simple/
 
 https://pypi.python.org/pypi/Django/json
 
-## PHP (39756)
+## PHP (40581)
 
 https://packagist.org/packages/
 
 https://packagist.org/packages/rcrowe/turbo.json
 
-## Go (38510)
+## Go (39266)
 
 http://godoc.org/-/index
 
-## Nuget (27466)
+## Nuget (27825)
 
 http://chris.eldredge.io/blog/2013/02/25/fun-with-nuget-rest-api/
 
-## Perl (26591)
+## Perl (26644)
 
 Data: https://github.com/CPAN-API/cpan-api/wiki/API-docs
 
@@ -122,11 +122,11 @@ Package names: http://www.cpan.org/modules/01modules.index.html
 
 http://www.macports.org/ports.php?by=all
 
-## Clojure (10528)
+## Clojure (10621)
 
 Data sources: https://github.com/ato/clojars-web/wiki/Data
 
-## Haskell (7019)
+## Haskell (7079)
 
 API: http://hackage.haskell.org/api
 
@@ -134,7 +134,7 @@ Package names: http://hackage.haskell.org/packages/ (JSON)
 
 http://hackage.haskell.org/package/:package (Nokogiri)
 
-## R (5910)
+## R (5964)
 
 http://cran.r-project.org/web/packages/available_packages_by_name.html
 
