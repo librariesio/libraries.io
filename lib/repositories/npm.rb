@@ -22,5 +22,13 @@ class Repositories
         :keywords => project["keywords"].join(',')
       }
     end
+
+    def self.versions(project)
+      project['versions'].each do |k,v|
+        {
+          :number => v['version']
+        }
+      end
+    end
   end
 end
