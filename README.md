@@ -188,6 +188,8 @@ https://github.com/clibs/clib/wiki/Packages
 
 http://www.bpkg.io/packages/name/
 
+http://modulereg.vertx.io/
+
 ----
 
 https://launchpad.net/
