@@ -88,31 +88,31 @@ Total still to get: 340,000
 
 https://github.com/clayallsopp/motion-toolbox.com/blob/master/data.json
 
-## Java (88,880)
+## Java (94846)
 
 http://search.maven.org/#api
 
-## Python (50240)
+## Python (53713)
 
 Package names: https://pypi.python.org/simple/
 
 https://pypi.python.org/pypi/Django/json
 
-## PHP (40581)
+## PHP (47314)
 
 https://packagist.org/packages/
 
 https://packagist.org/packages/rcrowe/turbo.json
 
-## Go (39266)
+## Go (46877)
 
 http://godoc.org/-/index
 
-## Nuget (27825)
+## Nuget (30927)
 
 http://chris.eldredge.io/blog/2013/02/25/fun-with-nuget-rest-api/
 
-## Perl (26644)
+## Perl (31119)
 
 Data: https://github.com/CPAN-API/cpan-api/wiki/API-docs
 
@@ -122,11 +122,11 @@ Package names: http://www.cpan.org/modules/01modules.index.html
 
 http://www.macports.org/ports.php?by=all
 
-## Clojure (10621)
+## Clojure (11362)
 
 Data sources: https://github.com/ato/clojars-web/wiki/Data
 
-## Haskell (7079)
+## Haskell (7528)
 
 API: http://hackage.haskell.org/api
 
@@ -134,7 +134,7 @@ Package names: http://hackage.haskell.org/packages/ (JSON)
 
 http://hackage.haskell.org/package/:package (Nokogiri)
 
-## R (5964)
+## R (6184)
 
 http://cran.r-project.org/web/packages/available_packages_by_name.html
 
