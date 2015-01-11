@@ -8,7 +8,7 @@ class Repositories
     end
 
     def self.projects
-      @projects ||= HTTParty.get("http://melpa.milkbox.net/archive.json").parsed_response
+      @projects ||= HTTParty.get("http://melpa.org/archive.json").parsed_response
     end
 
     def self.project(name)
@@ -19,8 +19,8 @@ class Repositories
       {
         :name => project["name"],
         :description => project["desc"],
-        :homepage => project["props"]["url"],
-        :keywords => project["props"]["keywords"]
+        :homepage => project.fetch("props", {}).try(:fetch, 'url', ''),
+        :keywords => project.fetch("props", {}).try(:fetch, 'keywords', '')
       }
     end
   end
