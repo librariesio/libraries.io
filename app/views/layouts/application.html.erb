@@ -12,5 +12,9 @@
 
 <%= yield %>
 
+<footer>
+  <%= pluralize Project.count, 'project' %>
+</footer>
+
 </body>
 </html>
