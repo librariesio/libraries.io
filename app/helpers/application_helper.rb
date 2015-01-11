@@ -9,6 +9,14 @@ module ApplicationHelper
       "http://melpa.org/#/#{name}"
     when 'Jam'
       "http://jamjs.org/packages/#/details/#{name}"
+    when 'Pub'
+      "https://pub.dartlang.org/packages/#{name}"
+    when 'NPM'
+      "https://www.npmjs.com/package/#{name}"
+    when 'Rubygems'
+      "https://rubygems.org/gems/#{name}"
+    when 'Sublime'
+      "https://packagecontrol.io/packages/#{name}"
     end
   end
 end
