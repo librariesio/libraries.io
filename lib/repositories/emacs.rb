@@ -20,7 +20,7 @@ class Repositories
         :name => project["name"],
         :description => project["desc"],
         :homepage => project.fetch("props", {}).try(:fetch, 'url', ''),
-        :keywords => project.fetch("props", {}).try(:fetch, 'keywords', '')
+        :keywords => project.fetch("props", {}).try(:fetch, 'keywords', []).join(',')
       }
     end
   end
