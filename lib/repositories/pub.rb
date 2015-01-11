@@ -20,7 +20,7 @@ class Repositories
     end
 
     def self.mapping(project)
-      latest_version = r['versions'].last
+      latest_version = project['versions'].last
       {
         :name => project["name"],
         :homepage => latest_version['pubspec']['homepage'],
@@ -29,7 +29,7 @@ class Repositories
     end
 
     def self.versions(project)
-      Gems.versions(project['name']).map do |v|
+      project['versions'].map do |v|
         {
           :number => v['version']
         }
