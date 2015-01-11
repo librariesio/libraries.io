@@ -5,3 +5,14 @@
     <%= link_to project.name, project %>
   </p>
 <% end %>
+
+<ul>
+  <% Repositories.descendants.each do |platform| %>
+    <% name = platform.to_s.demodulize %>
+    <% next if name == 'Base' %>
+    <li>
+
+      <%= link_to "#{name} (#{Project.platform(name).count})", url_for(platform: name) %>
+    </li>
+  <% end %>
+</ul>

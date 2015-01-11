@@ -9,6 +9,8 @@ class Project < ActiveRecord::Base
 
   has_many :versions
 
+  scope :platform, ->(platform) { where platform: platform }
+
   ## relations
   # versions => dependencies
   # repository
