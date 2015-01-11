@@ -1,6 +1,10 @@
 class Download
   def self.total
-    Repositories.descendants.sum{|pm| pm.project_names.length}
+    Repositories.descendants.sum { |pm| pm.project_names.length }
+  end
+
+  def self.import
+    Repositories.descendants.each(&:import)
   end
 
   def self.keys
