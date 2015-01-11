@@ -22,7 +22,7 @@ class Repositories
     def self.mapping(project)
       {
         :name => project["name"],
-        :homepage => project["meta"]["links"]["GitHub"],
+        :homepage => project["meta"].fetch("links", {}).fetch("GitHub", ''),
         :description => project["meta"]["description"],
         :licenses => project["meta"]["licenses"]
       }
