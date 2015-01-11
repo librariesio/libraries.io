@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    @projects = Project.order('created_at DESC').limit(10)
+    @projects = Project.order('created_at DESC').limit(100)
   end
 
   def show
