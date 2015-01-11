@@ -25,13 +25,14 @@ class Repositories
     end
 
     def self.mapping(project)
+      return false unless project["versions"].present?
       latest_version = project["versions"].to_a.last[1]
       {
         :name => project["name"],
         :description => project["description"],
         :homepage => project["homepage"],
-        :keywords => (project["keywords"].present? ? project["keywords"].join(',') : ''),
-        :licenses => latest_version['licenses'].map{|l| l['type'] }.join(',')
+        :keywords => project.fetch("keywords", []).join(','),
+        :licenses => latest_version.fetch('licenses', []).map{|l| l['type'] }.join(',')
       }
     end
 

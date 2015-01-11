@@ -2,6 +2,7 @@ class Repositories
   class Base
     def self.save(project)
       mapped_project = mapping(project)
+      return false unless mapped_project
       dbproject = Project.find_or_create_by({:name => mapped_project[:name], :platform => self.name.demodulize})
       dbproject.update_attributes(mapped_project.except(:name))
 
