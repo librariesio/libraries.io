@@ -26,6 +26,12 @@
   </p>
 <% end %>
 
+<% if link = package_link(@project.name, @project.platform) %>
+  <p>
+    On <%= @project.platform %>: <%= link_to link, link %>
+  </p>
+<% end %>
+
 <% if @project.versions.any? %>
   <h3>Versions</h3>
   <ul>
