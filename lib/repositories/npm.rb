@@ -4,7 +4,7 @@ class Repositories
     HAS_DEPENDENCIES = true
 
     def self.project_names
-      HTTParty.get("https://registry.npmjs.org/-/all/").parsed_response.keys[1..-1]
+      HTTParty.get("http://registry.npmjs.org/-/all/").parsed_response.keys[1..-1]
     end
 
     def self.project(name)
@@ -23,7 +23,7 @@ class Repositories
         :description => project["description"],
         :homepage => project["homepage"],
         :keywords => project.fetch("keywords", []).join(','),
-        :licenses => latest_version.fetch('licenses', []).map{|l| l['type'] }.join(',')
+        :licenses => Array.wrap(latest_version.fetch('licenses', [])).map{|l| l['type'] }.join(',')
       }
     end
 
