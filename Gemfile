@@ -16,6 +16,7 @@ gem 'persistent_httparty'
 gem 'gems'
 gem 'rails_12factor'
 gem 'octokit'
+gem 'parallel'
 
 group :development do
   gem 'spring'

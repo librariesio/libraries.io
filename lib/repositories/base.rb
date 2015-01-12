@@ -25,7 +25,7 @@ class Repositories
     end
 
     def self.import
-      project_names.each{|name| update(name) }
+      Parallel.each(project_names){|name| update(name) }
     end
 
     def self.get(url)
