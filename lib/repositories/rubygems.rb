@@ -4,7 +4,7 @@ class Repositories
     HAS_DEPENDENCIES = true
 
     def self.project_names
-      gems = Marshal.load(Gem.gunzip(HTTParty.get("http://production.cf.rubygems.org/specs.4.8.gz").parsed_response))
+      gems = Marshal.load(Gem.gunzip(get("http://production.cf.rubygems.org/specs.4.8.gz")))
       gems.map(&:first).uniq
     end
 

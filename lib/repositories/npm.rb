@@ -4,11 +4,11 @@ class Repositories
     HAS_DEPENDENCIES = true
 
     def self.project_names
-      HTTParty.get("http://registry.npmjs.org/-/all/").parsed_response.keys[1..-1]
+      get("http://registry.npmjs.org/-/all/").keys[1..-1]
     end
 
     def self.project(name)
-      HTTParty.get("http://registry.npmjs.org/#{name}").parsed_response
+      get("http://registry.npmjs.org/#{name}")
     end
 
     def self.keys

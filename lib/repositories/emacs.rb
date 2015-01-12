@@ -8,7 +8,7 @@ class Repositories
     end
 
     def self.projects
-      @projects ||= HTTParty.get("http://melpa.org/archive.json").parsed_response
+      @projects ||= get("http://melpa.org/archive.json")
     end
 
     def self.project(name)

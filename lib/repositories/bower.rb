@@ -10,8 +10,8 @@ class Repositories
     def self.projects
       @projects ||= begin
         projects = {}
-        p1 = HTTParty.get("https://bower-component-list.herokuapp.com").parsed_response
-        p2 = HTTParty.get("https://bower.herokuapp.com/packages").parsed_response
+        p1 = get("https://bower-component-list.herokuapp.com")
+        p2 = get("https://bower.herokuapp.com/packages")
 
         p2.each do |hash|
           projects[hash['name'].downcase] = hash.slice('name', 'url', 'hits')

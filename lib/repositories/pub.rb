@@ -7,7 +7,7 @@ class Repositories
       page = 1
       projects = []
       while true
-        r = HTTParty.get("https://pub.dartlang.org/api/packages?page=#{page}").parsed_response
+        r = get("https://pub.dartlang.org/api/packages?page=#{page}")
         break if r['packages'] == []
         projects += r['packages']
         page +=1
@@ -16,7 +16,7 @@ class Repositories
     end
 
     def self.project(name)
-      HTTParty.get("https://pub.dartlang.org/api/packages/#{name}").parsed_response
+      get("https://pub.dartlang.org/api/packages/#{name}")
     end
 
     def self.mapping(project)

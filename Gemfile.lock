@@ -51,6 +51,8 @@ GEM
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     gems (0.8.3)
+    gene_pool (1.4.1)
+      thread_safe
     globalid (0.3.0)
       activesupport (>= 4.1.0)
     hike (1.2.3)
@@ -83,6 +85,11 @@ GEM
       sawyer (~> 0.6.0, >= 0.5.3)
     oj (2.11.2)
     oj_mimic_json (1.0.1)
+    persistent_http (1.0.6)
+      gene_pool (>= 1.3)
+    persistent_httparty (0.1.2)
+      httparty (~> 0.9)
+      persistent_http (< 2)
     pg (0.18.1)
     rack (1.6.0)
     rack-test (0.6.3)
@@ -163,6 +170,7 @@ DEPENDENCIES
   octokit
   oj
   oj_mimic_json
+  persistent_httparty
   pg
   rails (= 4.2.0)
   rails_12factor

@@ -27,5 +27,13 @@ class Repositories
     def self.import
       project_names.each{|name| update(name) }
     end
+
+    def self.get(url)
+      PersistentHTTParty.get(url).parsed_response
+    end
+
+    def self.get_json(url)
+      JSON.parse get(url)
+    end
   end
 end

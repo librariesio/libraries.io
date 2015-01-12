@@ -4,11 +4,11 @@ class Repositories
     HAS_DEPENDENCIES = true
 
     def self.project_names
-      HTTParty.get("http://code.dlang.org/packages/index.json").parsed_response.sort
+      get("http://code.dlang.org/packages/index.json").sort
     end
 
     def self.project(name)
-      HTTParty.get("http://code.dlang.org/packages/#{name}.json").parsed_response
+      get("http://code.dlang.org/packages/#{name}.json")
     end
 
     def self.mapping(project)

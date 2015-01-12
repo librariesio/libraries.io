@@ -7,7 +7,7 @@ class Repositories
       page = 1
       projects = []
       while true
-        r = HTTParty.get("https://hex.pm/api/packages?page=#{page}").parsed_response
+        r = get("https://hex.pm/api/packages?page=#{page}")
         break if r == []
         projects += r
         page +=1
@@ -16,7 +16,7 @@ class Repositories
     end
 
     def self.project(name)
-      HTTParty.get("https://hex.pm/api/packages/#{name}").parsed_response
+      get("https://hex.pm/api/packages/#{name}")
     end
 
     def self.mapping(project)

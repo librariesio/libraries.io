@@ -10,7 +10,7 @@ class Repositories
     def self.projects
       @projects ||= begin
         prjcts = {}
-        packages = JSON.parse(HTTParty.get("https://raw.githubusercontent.com/supermarin/alcatraz-packages/master/packages.json").parsed_response)['packages']
+        packages = get_json("https://raw.githubusercontent.com/supermarin/alcatraz-packages/master/packages.json")['packages']
         packages.each do |category, pkgs|
           pkgs.each do |hash|
             prjcts[hash['name'].downcase] = hash.slice('name', 'url', 'description', 'screenshot')

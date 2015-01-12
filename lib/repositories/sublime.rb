@@ -4,11 +4,11 @@ class Repositories
     HAS_DEPENDENCIES = false
 
     def self.project_names
-      HTTParty.get("https://sublime.wbond.net/channel.json").parsed_response['packages_cache'].map{|k,v| v[0]['name']}
+      get("https://packagecontrol.io/channel.json")['packages_cache'].map{|k,v| v[0]['name']}
     end
 
     def self.project(name)
-      HTTParty.get(URI.escape("https://sublime.wbond.net/packages/#{name}.json")).parsed_response
+      get("https://packagecontrol.io/packages/#{URI.escape(name)}.json")
     end
 
     def self.mapping(project)
