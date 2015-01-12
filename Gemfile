@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 ruby '2.2.0'
 
+gem 'oj'
+gem 'oj_mimic_json'
 gem 'rails', '4.2.0'
 gem 'pg'
 gem 'sass-rails'

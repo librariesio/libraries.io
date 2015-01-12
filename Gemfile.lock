@@ -81,6 +81,8 @@ GEM
       mini_portile (~> 0.6.0)
     octokit (3.7.0)
       sawyer (~> 0.6.0, >= 0.5.3)
+    oj (2.11.2)
+    oj_mimic_json (1.0.1)
     pg (0.18.1)
     rack (1.6.0)
     rack-test (0.6.3)
@@ -159,6 +161,8 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   octokit
+  oj
+  oj_mimic_json
   pg
   rails (= 4.2.0)
   rails_12factor
