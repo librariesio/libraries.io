@@ -1,10 +1,6 @@
 <h2>New Projects</h2>
 
-<% @projects.each do |project| %>
-  <p>
-    <%= link_to project.name, project %>
-  </p>
-<% end %>
+<%= render @projects %>
 
 <ul>
   <% Repositories.descendants.each do |platform| %>
