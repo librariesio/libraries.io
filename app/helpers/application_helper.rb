@@ -19,6 +19,8 @@ module ApplicationHelper
       "https://packagecontrol.io/packages/#{name}"
     when 'Pypi'
       "https://pypi.python.org/pypi/#{name}"
+    when 'Packagist'
+      "https://packagist.org/packages/#{name}"
     end
   end
 end
