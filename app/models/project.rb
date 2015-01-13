@@ -22,8 +22,8 @@ class Project < ActiveRecord::Base
 
   def self.licenses
     licenses = Project.select('DISTINCT licenses').map(&:licenses).compact
-    licenses.join(',').gsub('["', '').gsub('"]', '').split(',')
-           .map(&:downcase).map(&:strip).reject(&:blank?).uniq.sort
+    licenses.join(',').split(',')
+      .map(&:downcase).map(&:strip).reject(&:blank?).uniq.sort
   end
 
   ## relations
