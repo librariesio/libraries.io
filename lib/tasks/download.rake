@@ -39,15 +39,15 @@ namespace :download do
     Repositories::Pub.import
   end
 
+  task pypi: :environment do
+    Repositories::Pypi.import
+  end
+
   task rubygems: :environment do
     Repositories::Rubygems.import
   end
 
   task sublime: :environment do
     Repositories::Sublime.import
-  end
-
-  task pypi: :environment do
-    Repositories::Pypi.import
   end
 end
