@@ -42,4 +42,8 @@ namespace :download do
   task sublime: :environment do
     Repositories::Sublime.import
   end
+
+  task pypi: :environment do
+    Repositories::Pypi.import
+  end
 end

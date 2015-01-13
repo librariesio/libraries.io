@@ -92,12 +92,6 @@ https://github.com/clayallsopp/motion-toolbox.com/blob/master/data.json
 
 http://search.maven.org/#api
 
-## Python (53713)
-
-Package names: https://pypi.python.org/simple/
-
-https://pypi.python.org/pypi/Django/json
-
 ## PHP (47314)
 
 https://packagist.org/packages/
@@ -195,3 +189,9 @@ http://modulereg.vertx.io/
 https://launchpad.net/
 https://searchcode.com/
 http://www.slideshare.net/nunobrito/2014-1014-github-plus-foss-1-million-spdx
+
+
+## License finders
+
+https://github.com/benbalter/licensee
+https://github.com/pivotal/LicenseFinder

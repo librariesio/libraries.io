@@ -17,6 +17,8 @@ module ApplicationHelper
       "https://rubygems.org/gems/#{name}"
     when 'Sublime'
       "https://packagecontrol.io/packages/#{name}"
+    when 'Pypi'
+      "https://pypi.python.org/pypi/#{name}"
     end
   end
 end
