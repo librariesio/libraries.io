@@ -94,7 +94,8 @@ http://search.maven.org/#api
 
 ## Go (46877)
 
-http://godoc.org/-/index
+http://go-search.org/api?action=packages
+http://go-search.org/api?action=package&id=github.com%2fdaviddengcn%2fgcse
 
 ## Nuget (30927)
 
