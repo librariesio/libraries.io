@@ -92,12 +92,6 @@ https://github.com/clayallsopp/motion-toolbox.com/blob/master/data.json
 
 http://search.maven.org/#api
 
-## PHP (47314)
-
-https://packagist.org/packages/
-
-https://packagist.org/packages/rcrowe/turbo.json
-
 ## Go (46877)
 
 http://godoc.org/-/index
