@@ -46,7 +46,9 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.8.0)
+    daemons (1.1.9)
     erubis (2.7.0)
+    eventmachine (1.0.4)
     execjs (2.2.2)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
@@ -146,6 +148,10 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
+    thin (1.6.3)
+      daemons (~> 1.0, >= 1.0.9)
+      eventmachine (~> 1.0)
+      rack (~> 1.0)
     thor (0.19.1)
     thread_safe (0.3.4)
     tilt (1.4.1)
@@ -165,7 +171,6 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails
   gems
-  httparty
   jbuilder
   jquery-rails
   octokit
@@ -178,5 +183,6 @@ DEPENDENCIES
   rails_12factor
   sass-rails
   spring
+  thin
   uglifier
   unicorn

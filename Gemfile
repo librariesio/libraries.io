@@ -10,14 +10,17 @@ gem 'uglifier'
 gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'jbuilder'
-gem 'unicorn'
-gem 'httparty'
 gem 'persistent_httparty'
 gem 'gems'
-gem 'rails_12factor'
 gem 'octokit'
 gem 'parallel'
 
 group :development do
   gem 'spring'
+  gem 'thin'
+end
+
+group :production do
+  gem 'unicorn'
+  gem 'rails_12factor'
 end
