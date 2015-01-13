@@ -7,6 +7,7 @@
 
 <%= render @projects %>
 
+<h3>Platforms</h3>
 <ul>
   <% Repositories.descendants.each do |platform| %>
   <% name = platform.to_s.demodulize %>
@@ -14,5 +15,14 @@
   <li>
     <%= link_to name, url_for(params.merge(platform: name)) %>
   </li>
+  <% end %>
+</ul>
+<hr/>
+<h3>Licenses (<%= Project.licenses.length %>)</h3>
+<ul>
+  <% Project.licenses.each do |license| %>
+    <li>
+      <%= link_to license, url_for(params.merge(license: license)) %>
+    </li>
   <% end %>
 </ul>

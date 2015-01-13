@@ -1,6 +1,7 @@
 <div class='project'>
   <strong><%= link_to project.name, project %></strong>
-  <small><%= project.platform %></small><br />
+  <small><%= project.platform %> - <%= project.licenses %></small>
+  <br />
   <%= truncate project.description, :length => 200 %>
   <br /><br />
 </div>

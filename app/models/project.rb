@@ -16,6 +16,16 @@ class Project < ActiveRecord::Base
     where('name ILIKE ? or keywords ILIKE ?', q, q).order(:created_at)
   end
 
+  def self.license(license)
+    where('licenses ILIKE ?', "%#{license}%")
+  end
+
+  def self.licenses
+    licenses = Project.select('DISTINCT licenses').map(&:licenses).compact
+    licenses.join(',').gsub('["', '').gsub('"]', '').split(',')
+           .map(&:downcase).map(&:strip).reject(&:blank?).uniq.sort
+  end
+
   ## relations
   # versions => dependencies
   # repository
