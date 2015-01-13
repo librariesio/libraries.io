@@ -6,6 +6,13 @@ class ProjectsController < ApplicationController
     @projects = scope.limit(30)
   end
 
+  def search
+    scope = Project.search(params[:q])
+    scope = scope.platform(params[:platform]) if params[:platform].present?
+
+    @projects = scope.limit(30)
+  end
+
   def show
     @project = Project.find params[:id]
   end

@@ -1,0 +1,18 @@
+<h2>
+  Search for "<%= params[:q] %>"
+  <% if params[:platform].present? %>
+    in <%= params[:platform] %>
+  <% end %>
+</h2>
+
+<%= render @projects %>
+
+<ul>
+  <% Repositories.descendants.each do |platform| %>
+  <% name = platform.to_s.demodulize %>
+  <% next if name == 'Base' %>
+  <li>
+    <%= link_to name, url_for(params.merge(platform: name)) %>
+  </li>
+  <% end %>
+</ul>
