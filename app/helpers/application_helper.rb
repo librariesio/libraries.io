@@ -21,6 +21,8 @@ module ApplicationHelper
       "https://pypi.python.org/pypi/#{name}"
     when 'Packagist'
       "https://packagist.org/packages/#{name}"
+    when 'Cargo'
+      "https://crates.io/crates/#{name}"
     end
   end
 end
