@@ -17,8 +17,7 @@ class Repositories
         :name => project["name"],
         :description => project["info"],
         :homepage => project["homepage_uri"],
-        :licenses => project["licenses"].join(',')#,
-        # :repository => project["source_code_uri"]
+        :licenses => project.fetch("licenses", []).try(:join, ',')
       }
     end
 
