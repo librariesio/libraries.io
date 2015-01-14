@@ -140,8 +140,7 @@ http://www.vim.org/scripts/script_search_results.php?order_by=creation_date&dire
 
 ## Cocoapods (4607)
 
-https://github.com/CocoaPods/search.cocoapods.org/blob/master/app.rb
-http://search.cocoapods.org/api/v1/pods.picky.hash.json?query=a&ids=3000&offset=0
+https://github.com/CocoaPods/Specs/tree/master/Specs
 
 ## Homebrew (2932)
 
