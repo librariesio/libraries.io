@@ -12,6 +12,7 @@ class Repositories
     end
 
     def self.mapping(project)
+      return false unless project["versions"].any?
       latest_version = project["versions"].to_a.last[1]
       {
         :name =>  latest_version['name'],
