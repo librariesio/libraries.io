@@ -101,9 +101,9 @@ http://go-search.org/api?action=package&id=github.com%2fdaviddengcn%2fgcse
 
 http://chris.eldredge.io/blog/2013/02/25/fun-with-nuget-rest-api/
 
-## Perl (31119)
+## CPAN Perl (31119)
 
-Data: https://github.com/CPAN-API/cpan-api/wiki/API-docs
+Data: https://github.com/CPAN-API/cpan-api/blob/master/docs/API-docs.md
 
 Package names: http://www.cpan.org/modules/01modules.index.html
 
