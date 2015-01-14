@@ -24,6 +24,7 @@ class Repositories
         :name => project['crate']['id'],
         :homepage => project['crate']['homepage'],
         :description => project['crate']['description'],
+        :keywords => project['crate']['keywords'].join(','),
         :licenses => project['crate']['license']
       }
     end
