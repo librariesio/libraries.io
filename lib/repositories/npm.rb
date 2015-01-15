@@ -22,7 +22,7 @@ class Repositories
         :name => project["name"],
         :description => project["description"],
         :homepage => project["homepage"],
-        :keywords => project.fetch("keywords", []).join(','),
+        :keywords => Array.wrap(project.fetch("keywords", [])).join(','),
         :licenses => Array.wrap(latest_version.fetch('licenses', [])).map{|l| l['type'] }.join(',')
       }
     end
