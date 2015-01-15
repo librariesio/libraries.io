@@ -168,6 +168,9 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    will_paginate (3.0.7)
+    will_paginate-bootstrap (1.0.1)
+      will_paginate (>= 3.0.3)
 
 PLATFORMS
   ruby
@@ -192,3 +195,5 @@ DEPENDENCIES
   thin
   uglifier
   unicorn
+  will_paginate
+  will_paginate-bootstrap

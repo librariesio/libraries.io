@@ -16,6 +16,8 @@ gem 'octokit'
 gem 'parallel'
 gem 'bootstrap-sass'
 gem 'bootswatch-rails'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
 
 group :development do
   gem 'spring'

@@ -1,19 +1,26 @@
-<h2>
-  Search for "<%= params[:q] %>"
-  <% if params[:platform].present? %>
-    in <%= params[:platform] %>
-  <% end %>
-</h2>
+<div class='row'>
+  <div class='col-md-8'>
+    <h3>
+      Search for "<%= params[:q] %>"
+      <% if params[:platform].present? %>
+      in <%= params[:platform] %>
+      <% end %>
+    </h3>
 
-<%= render @projects %>
+    <%= render @projects %>
 
-<h3>Platforms</h3>
-<ul>
-  <% Repositories.descendants.each do |platform| %>
-  <% name = platform.to_s.demodulize %>
-  <% next if name == 'Base' %>
-  <li>
-    <%= link_to name, url_for(params.merge(platform: name)) %>
-  </li>
-  <% end %>
-</ul>
+    <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
+  </div>
+
+  <div class='col-md-4'>
+    <ul>
+      <% Repositories.descendants.each do |platform| %>
+      <% name = platform.to_s.demodulize %>
+      <% next if name == 'Base' %>
+      <li>
+        <%= link_to name, url_for(params.merge(platform: name)) %>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

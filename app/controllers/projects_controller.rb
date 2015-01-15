@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
     scope = scope.platform(params[:platform]) if params[:platform].present?
     scope = scope.license(params[:license]) if params[:license].present?
 
-    @projects = scope.limit(30)
+    @projects = scope.paginate(page: params[:page])
   end
 
   def search
@@ -12,7 +12,7 @@ class ProjectsController < ApplicationController
     scope = scope.platform(params[:platform]) if params[:platform].present?
     scope = scope.license(params[:license]) if params[:license].present?
 
-    @projects = scope.limit(30)
+    @projects = scope.paginate(page: params[:page])
   end
 
   def show
