@@ -17,12 +17,3 @@
   </li>
   <% end %>
 </ul>
-<hr/>
-<h3>Licenses (<%= Project.licenses.length %>)</h3>
-<ul>
-  <% Project.licenses.each do |license| %>
-    <li>
-      <%= link_to license, url_for(params.merge(license: license)) %>
-    </li>
-  <% end %>
-</ul>
