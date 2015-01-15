@@ -14,6 +14,8 @@ gem 'persistent_httparty'
 gem 'gems'
 gem 'octokit'
 gem 'parallel'
+gem 'bootstrap-sass'
+gem 'bootswatch-rails'
 
 group :development do
   gem 'spring'

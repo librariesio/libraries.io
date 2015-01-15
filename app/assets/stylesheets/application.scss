@@ -13,3 +13,10 @@
  *= require_tree .
  *= require_self
  */
+
+ @import "bootswatch/flatly/variables";
+ @import "bootstrap";
+
+ body { padding-top: 100px; }
+
+ @import "bootswatch/flatly/bootswatch";
