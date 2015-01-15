@@ -1,6 +1,8 @@
 class Project < ActiveRecord::Base
   validates_presence_of :name, :platform
 
+  #  validate unique name and platform (case?)
+
   # TODO validate homepage format
 
   def to_param
