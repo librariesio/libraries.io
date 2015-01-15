@@ -1,50 +1,58 @@
-<h2>
-  <%= @project.name %>
-  <% if @project.versions.any? %>
-    - <%= @project.versions.order('number DESC').first.number %>
-  <% end %>
-  - <%= @project.platform %>
-</h2>
+<div class='row'>
+  <div class='col-md-8'>
+    <h3>
+      <%= @project.name %>
+      <small>
+        <% if @project.versions.any? %>
+        <%= @project.versions.order('number DESC').first.number %>
+        <% end %>
+        - <%= @project.platform %>
+      </small>
+    </h3>
 
-<%= simple_format(@project.description) if @project.description.present? %>
+    <%= simple_format(@project.description) if @project.description.present? %>
 
-<% if @project.homepage.present? %>
-  <p>
-    Homepage: <%= link_to(@project.homepage, @project.homepage) %>
-  </p>
-<% end %>
+    <% if @project.keywords.present? %>
+    <p>
+      Keywords: <%= @project.keywords %>
+    </p>
+    <% end %>
 
-<% if @project.keywords.present? %>
-  <p>
-    Keywords: <%= @project.keywords %>
-  </p>
-<% end %>
+    <% if @project.licenses.present? %>
+    <p>
+      Licenses: <%= @project.licenses %>
+    </p>
+    <% end %>
 
-<% if @project.licenses.present? %>
-  <p>
-    Licenses: <%= @project.licenses %>
-  </p>
-<% end %>
+    <% if @project.homepage.present? %>
+    <p>
+      Homepage: <%= link_to(@project.homepage, @project.homepage) %>
+    </p>
+    <% end %>
 
-<% if link = package_link(@project.name, @project.platform) %>
-  <p>
-    On <%= @project.platform %>: <%= link_to link, link %>
-  </p>
-<% end %>
+    <% if link = package_link(@project.name, @project.platform) %>
+    <p>
+      On <%= @project.platform %>: <%= link_to link, link %>
+    </p>
+    <% end %>
+  </div>
 
-<% if @project.versions.any? %>
-  <h3>Versions</h3>
-  <ul>
-    <% @project.versions.order('number DESC').each do |version| %>
+  <div class='col-md-4'>
+    <% if @project.versions.any? %>
+    <h4>Versions</h4>
+    <ul>
+      <% @project.versions.order('number DESC').each do |version| %>
       <li>
         <%= version.number %>
         <% if version.published_at.present? %>
-          - <%= version.published_at.to_date.to_s(:long) %>
+        - <%= version.published_at.to_date.to_s(:long) %>
         <% end %>
       </li>
+      <% end %>
+    </ul>
     <% end %>
-  </ul>
-<% end %>
+  </div>
+</div>
 
 <!--
 install command

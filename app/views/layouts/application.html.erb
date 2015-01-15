@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Contribulator</title>
+  <title>Libraries</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -17,7 +17,9 @@
       <div class="navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <%= link_to 'Home', root_path %>
+            <%= form_tag search_path, method: :get, class: 'navbar-form' do |f| %>
+              <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control' %>
+            <% end %>
           </li>
         </ul>
       </div>
@@ -27,11 +29,5 @@
   <div class="container">
     <%= yield %>
   </div>
-
-  <footer>
-    <div class="container">
-      <%= pluralize Project.count, 'project' %>
-    </div>
-  </footer>
 </body>
 </html>
