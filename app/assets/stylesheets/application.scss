@@ -14,9 +14,9 @@
  *= require_self
  */
 
- @import "bootswatch/flatly/variables";
+ @import "bootswatch/yeti/variables";
  @import "bootstrap";
 
- body { padding-top: 100px; }
+ body { padding-top: 60px; }
 
- @import "bootswatch/flatly/bootswatch";
+ @import "bootswatch/yeti/bootswatch";

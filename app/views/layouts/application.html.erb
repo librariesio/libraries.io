@@ -1,20 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Libraries</title>
-  <%= stylesheet_link_tag    'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contribulator</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <%= link_to 'Libraries', root_path, class: 'navbar-brand' %>
+      </div>
+      <div class="navbar-collapse collapse" id="navbar-main">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <%= link_to 'Home', root_path %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-<h1><%= link_to "Libraries.io", root_path %></h1>
+  <div class="container">
+    <%= yield %>
+  </div>
 
-<%= yield %>
-
-<footer>
-  <%= pluralize Project.count, 'project' %>
-</footer>
-
+  <footer>
+    <div class="container">
+      <%= pluralize Project.count, 'project' %>
+    </div>
+  </footer>
 </body>
 </html>
