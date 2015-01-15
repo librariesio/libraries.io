@@ -24,7 +24,7 @@ class Repositories
         :name => project["name"],
         :homepage => project["meta"].fetch("links", {}).fetch("GitHub", ''),
         :description => project["meta"]["description"],
-        :licenses => project["meta"]["licenses"].join(',')
+        :licenses => project["meta"].fetch("licenses", []).join(',')
       }
     end
 
