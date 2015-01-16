@@ -1,13 +1,16 @@
 class Download
+  def self.platforms
+    Repositories.descendants.reject{|platform| platform == Repositories::Base }
+  end
   def self.total
-    Repositories.descendants.sum { |pm| pm.project_names.length }
+    platforms.sum { |pm| pm.project_names.length }
   end
 
   def self.import
-    Repositories.descendants.each(&:import)
+    platforms.each(&:import)
   end
 
   def self.keys
-    Repositories.descendants.flat_map(&:keys).map(&:to_s).sort.uniq
+    platforms.flat_map(&:keys).map(&:to_s).sort.uniq
   end
 end
