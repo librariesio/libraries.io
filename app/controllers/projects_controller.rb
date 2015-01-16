@@ -17,5 +17,6 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.find params[:id]
+    @versions = @project.versions.order('number DESC')
   end
 end

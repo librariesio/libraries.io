@@ -38,10 +38,14 @@
   </div>
 
   <div class='col-md-4'>
-    <% if @project.versions.any? %>
-    <h4>Versions</h4>
+    <% if @versions.any? %>
+    <strong>
+      <%= pluralize @versions.count, 'version' %>
+    </strong>
+    since
+    <%= @versions.last.published_at.to_date.to_s(:long) %>
     <ul>
-      <% @project.versions.order('number DESC').each do |version| %>
+      <% @versions.each do |version| %>
       <li>
         <%= version.number %>
         <% if version.published_at.present? %>
