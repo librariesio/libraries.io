@@ -3,11 +3,10 @@
     <h3>
       <%= @project.name %>
       <small>
-        <% if @versions.any? %>
-        <%= @versions.first.number %>
-        -
-        <% end %>
         <%= @project.platform %>
+        <% if @versions.any? %>
+        - <%= @versions.first.number %>
+        <% end %>
       </small>
     </h3>
 
