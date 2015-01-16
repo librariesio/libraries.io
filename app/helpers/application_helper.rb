@@ -14,15 +14,15 @@ module ApplicationHelper
     when 'NPM'
       "https://www.npmjs.com/package/#{name}/#{version}"
     when 'Rubygems'
-      "https://rubygems.org/gems/#{name}"
+      "https://rubygems.org/gems/#{name}" + (version ? "/versions/#{version}" : "")
     when 'Sublime'
       "https://packagecontrol.io/packages/#{name}"
     when 'Pypi'
-      "https://pypi.python.org/pypi/#{name}"
+      "https://pypi.python.org/pypi/#{name}/#{version}"
     when 'Packagist'
-      "https://packagist.org/packages/#{name}"
+      "https://packagist.org/packages/#{name}##{version}"
     when 'Cargo'
-      "https://crates.io/crates/#{name}"
+      "https://crates.io/crates/#{name}/#{version}"
     end
   end
 end
