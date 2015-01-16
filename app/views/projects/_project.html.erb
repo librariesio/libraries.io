@@ -1,6 +1,10 @@
 <div class='project'>
   <strong><%= link_to project.name, project %></strong>
-  <small><%= project.platform %> - <%= project.licenses %></small>
+  <small><%= project.platform %>
+  <% if project.licenses.present? %>
+  - <%= project.licenses %>
+  <% end %>
+  </small>
   <br />
   <%= truncate project.description, :length => 200 %>
   <br /><br />
