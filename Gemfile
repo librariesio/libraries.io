@@ -18,6 +18,7 @@ gem 'bootstrap-sass'
 gem 'bootswatch-rails'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
+gem 'rack-google-analytics'
 
 group :development do
   gem 'spring'

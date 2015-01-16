@@ -99,6 +99,9 @@ GEM
       persistent_http (< 2)
     pg (0.18.1)
     rack (1.6.0)
+    rack-google-analytics (1.2.0)
+      actionpack
+      activesupport
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.0)
@@ -188,6 +191,7 @@ DEPENDENCIES
   parallel
   persistent_httparty
   pg
+  rack-google-analytics
   rails (= 4.2.0)
   rails_12factor
   sass-rails
