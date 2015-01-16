@@ -27,7 +27,13 @@ class Repositories
     end
 
     def self.import
-      Parallel.each(project_names){|name| update(name) }
+      name = self.name.demodulize
+      puts "Importing #{name}"
+      before = Time.now.utc
+      Parallel.each(project_names){|name| update(name)}
+      ActiveRecord::Base.connection.reconnect!
+      count = Project.platform(name).where('created_at > ?', before).count
+      puts "Imported #{count} new #{name} projects"
     end
 
     def self.get(url)
