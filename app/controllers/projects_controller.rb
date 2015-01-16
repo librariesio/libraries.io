@@ -17,6 +17,6 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.find params[:id]
-    @versions = @project.versions.order('number DESC')
+    @versions = @project.versions.order('number DESC').to_a
   end
 end
