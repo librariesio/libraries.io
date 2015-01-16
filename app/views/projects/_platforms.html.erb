@@ -1,0 +1,8 @@
+<ul>
+  <% Repositories.descendants.map{|p| p.to_s.demodulize }.sort.each do |platform| %>
+  <% next if platform == 'Base' %>
+  <li>
+    <%= link_to platform, url_for(params.merge(platform: platform)) %>
+  </li>
+  <% end %>
+</ul>

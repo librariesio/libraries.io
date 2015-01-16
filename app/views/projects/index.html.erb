@@ -5,14 +5,6 @@
   </div>
 
   <div class='col-md-4'>
-    <ul>
-      <% Repositories.descendants.each do |platform| %>
-        <% name = platform.to_s.demodulize %>
-        <% next if name == 'Base' %>
-        <li>
-          <%= link_to name, url_for(platform: name) %>
-        </li>
-      <% end %>
-    </ul>
+    <%= render 'platforms' %>
   </div>
 </div>
