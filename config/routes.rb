@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  root :to => 'projects#index'
-  resources :projects
-  get '/search', :to => 'projects#search'
+  root to: 'projects#index'
+  resources :projects do
+    resources :versions, :constraints => { :id => /.*/ }
+  end
+  get '/search', to: 'projects#search'
 end

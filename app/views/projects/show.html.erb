@@ -4,9 +4,12 @@
       <%= @project.name %>
       <small>
         <%= @project.platform %>
-        <% if @versions.any? %>
-        - <%= @versions.first.number %>
+        <% if @version %>
+          - <%= @version %>
+        <% elsif @versions.any? %>
+          - <%= @versions.first %>
         <% end %>
+
       </small>
     </h3>
 
@@ -30,7 +33,7 @@
     </p>
     <% end %>
 
-    <% if link = package_link(@project.name, @project.platform) %>
+    <% if link = package_link(@project.name, @project.platform, @version.try(:number)) %>
     <p>
       On <%= @project.platform %>: <%= link_to link, link %>
     </p>
@@ -42,12 +45,18 @@
     <strong>
       <%= pluralize @versions.count, 'version' %>
     </strong>
-    since
-    <%= @versions.last.published_at.to_date.to_s(:long) %>
+    <% if @versions.last.published_at.present? %>
+      since
+      <%= @versions.last.published_at.to_date.to_s(:long) %>
+    <% end %>
     <ul>
       <% @versions.each do |version| %>
       <li>
-        <%= version.number %>
+        <% if version == @version %>
+          <strong><%= version %></strong>
+        <% else %>
+          <%= link_to version, [@project, version] %>
+        <% end %>
         <% if version.published_at.present? %>
         - <%= version.published_at.to_date.to_s(:long) %>
         <% end %>

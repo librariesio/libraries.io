@@ -1,18 +1,18 @@
 module ApplicationHelper
-  def package_link(name, platform)
+  def package_link(name, platform, version = nil)
     case platform
     when 'Hex'
-      "https://hex.pm/packages/#{name}"
+      "https://hex.pm/packages/#{name}/#{version}"
     when 'Dub'
-      "http://code.dlang.org/packages/#{name}"
+      "http://code.dlang.org/packages/#{name}" + (version ? "/#{version}" : "")
     when 'Emacs'
       "http://melpa.org/#/#{name}"
     when 'Jam'
-      "http://jamjs.org/packages/#/details/#{name}"
+      "http://jamjs.org/packages/#/details/#{name}/#{version}"
     when 'Pub'
       "https://pub.dartlang.org/packages/#{name}"
     when 'NPM'
-      "https://www.npmjs.com/package/#{name}"
+      "https://www.npmjs.com/package/#{name}/#{version}"
     when 'Rubygems'
       "https://rubygems.org/gems/#{name}"
     when 'Sublime'
