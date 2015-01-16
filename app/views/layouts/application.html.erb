@@ -29,5 +29,18 @@
   <div class="container">
     <%= yield %>
   </div>
+  <footer>
+    <div class="container">
+      <div class='row'>
+        Tracking
+        <% cache("top_products", :expires_in => 1.hour) do %>
+          <strong><%= number_with_delimiter Version.count %></strong>
+          versions of
+          <strong><%= number_with_delimiter Project.count %></strong>
+        <% end %>
+        Projects
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
