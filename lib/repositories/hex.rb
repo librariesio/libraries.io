@@ -20,9 +20,13 @@ class Repositories
     end
 
     def self.mapping(project)
+      links = project["meta"].fetch("links", {}).each_with_object({}) do |(k, v), h|
+        h[k.downcase] = v
+      end
       {
         :name => project["name"],
-        :homepage => project["meta"].fetch("links", {}).fetch("GitHub", ''),
+        :homepage => links.except('github').first.try(:last),
+        :repository_url => links['github'],
         :description => project["meta"]["description"],
         :licenses => project["meta"].fetch("licenses", []).join(',')
       }
