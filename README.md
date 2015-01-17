@@ -2,6 +2,150 @@
 
 All the package managers
 
+## Plans
+
+Search
+- filter by language
+- filter by platform
+- filter by license
+
+
+Alternative/Related Projects
+- similar
+- extensions
+- same in other languages
+
+
+Maintainers
+
+
+Contributors
+- contributors for a certain release
+
+
+Dependencies
+Dependants
+
+
+Ecosystems/groups
+
+
+Security warnings
+- https://github.com/FriendsOfPHP/security-advisories
+-
+https://github.com/rubysec/ruby-advisory-db
+
+- http://www.cvedetails.com
+- https://nodesecurity.io/advisories
+- https://github.com/requires/monitoring
+- https://github.com/bekk/retire.js
+
+
+Free private security reporting tool
+
+
+Install instructions
+
+
+Licence warnings
+
+
+Suggesting project improvements
+- add a license
+- add a homepage etc
+
+
+Project resource links
+- books
+- screencasts
+- tutorials
+- slide decks and talks
+- stack overflow
+- searchcode
+- podcasts
+
+Realtime discussion
+- irc
+- gitter
+- other
+
+
+Message boards
+
+
+Popular
+- all time
+- by language
+- by license
+- upcoming
+- new
+
+
+Fresh meat
+
+
+Requests
+- Help wanted
+- Maintainers wanted
+
+
+Documentation
+
+
+Orgs
+
+
+Stats
+
+
+Languages
+
+
+Categories
+
+
+Keywords
+
+
+Git repos
+- stars
+- forks
+- issues
+
+
+Forks
+
+
+User profiles
+
+
+Cached versions and downloads of tarballs
+
+
+API
+- rest
+- webhooks
+- rss/atom
+- stream
+
+Save repository field when downloading
+Download github repos
+Activity levels
+elasticsearch
+ratings/reviews
+login with github
+changelog
+project activity feed
+wiki-like editing of project details
+link users twitter accounts
+project logo uploading
+communities
+check for valid licenses
+owners/maintainers of packages
+import dependencies
+
+<hr >
+
 
 ## All mappings
 
