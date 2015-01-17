@@ -243,6 +243,7 @@ http://go-search.org/api?action=package&id=github.com%2fdaviddengcn%2fgcse
 
 ## Nuget (30927)
 
+http://www.nuget.org/api/v2/$metadata
 http://chris.eldredge.io/blog/2013/02/25/fun-with-nuget-rest-api/
 
 ## CPAN Perl (31119)
