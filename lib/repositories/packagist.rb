@@ -19,7 +19,8 @@ class Repositories
         :description => latest_version['description'],
         :homepage => latest_version['home_page'],
         :keywords => latest_version['keywords'].join(','),
-        :licenses => latest_version['license'].join(',')
+        :licenses => latest_version['license'].join(','),
+        :repository_url => project['repository']
       }
     end
 

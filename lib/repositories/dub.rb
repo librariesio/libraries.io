@@ -18,8 +18,8 @@ class Repositories
         :description => latest_version['description'],
         :homepage => latest_version['homepage'],
         :keywords => project["categories"].join(','),
-        :licenses => latest_version['license']#,
-        # :repository => repository(project["repository"])
+        :licenses => latest_version['license'],
+        :repository_url => repository(project["repository"])
       }
     end
 
