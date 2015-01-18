@@ -12,6 +12,7 @@ class Project < ActiveRecord::Base
   has_many :versions
 
   scope :platform, ->(platform) { where platform: platform }
+  scope :with_repository , -> { where("repository_url <> ''") }
 
   def self.search(query)
     q = "%#{query}%"
