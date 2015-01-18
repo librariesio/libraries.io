@@ -28,14 +28,14 @@ class Project < ActiveRecord::Base
       .map(&:downcase).map(&:strip).reject(&:blank?).uniq.sort
   end
 
-  def extract_github_url
-    url = repository
+  def github_url
+    url = repository_url.clone
     github_regex = /^(((https|http|git)?:\/\/(www\.)?)|git@)github.com(:|\/)/i
-    return false unless url.match(github_regex)
+    return nil unless url.match(github_regex)
     url.gsub!(github_regex, '').strip!
     url.gsub!(/(\.git|\/)$/i, '')
     url = url.split('/')[0..1]
-    return false unless url.length == 2
+    return nil unless url.length == 2
     "https://github.com/#{url.join('/')}"
   end
 

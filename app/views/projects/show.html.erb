@@ -33,6 +33,12 @@
     </p>
     <% end %>
 
+    <% if @project.github_url.present? %>
+    <p>
+      Repo: <%= link_to @project.github_url, @project.github_url %>
+    </p>
+    <% end %>
+
     <% if link = package_link(@project.name, @project.platform, @version.try(:number)) %>
     <p>
       On <%= @project.platform %>: <%= link_to link, link %>
