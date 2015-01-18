@@ -11,10 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150117224529) do
+ActiveRecord::Schema.define(version: 20150118150406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "github_repositories", force: :cascade do |t|
+    t.integer  "project_id"
+    t.string   "full_name"
+    t.string   "owner_id"
+    t.string   "description"
+    t.boolean  "fork"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.datetime "pushed_at"
+    t.string   "homepage"
+    t.integer  "size"
+    t.integer  "stargazers_count"
+    t.string   "language"
+    t.boolean  "has_issues"
+    t.boolean  "has_wiki"
+    t.boolean  "has_pages"
+    t.integer  "forks_count"
+    t.string   "mirror_url"
+    t.integer  "open_issues_count"
+    t.string   "default_branch"
+    t.integer  "subscribers_count"
+  end
 
   create_table "projects", force: :cascade do |t|
     t.string   "name"

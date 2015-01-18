@@ -13,4 +13,12 @@ class Download
   def self.keys
     platforms.flat_map(&:keys).map(&:to_s).sort.uniq
   end
+
+  def self.github_repos
+    Project.with_repository_url.limit(1000).offset(120)
+      .select(&:github_url)
+      .compact
+      .reject(&:github_repository)
+      .each(&:update_github_repo)
+  end
 end
