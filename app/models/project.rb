@@ -45,7 +45,7 @@ class Project < ActiveRecord::Base
       g.project = self
       g.assign_attributes r.slice(*github_keys)
       g.save
-    rescue Octokit::NotFound => e
+    rescue Octokit::NotFound, Octokit::Forbidden => e
       p e
     end
   end

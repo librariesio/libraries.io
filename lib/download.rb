@@ -15,10 +15,15 @@ class Download
   end
 
   def self.github_repos
-    Project.with_repository_url.limit(1000).offset(120)
+    projects = Project.with_repository_url
+      .where('id NOT IN (SELECT DISTINCT(project_id) FROM github_repositories)')
+      .limit(4500).offset(100)
       .select(&:github_url)
       .compact
-      .reject(&:github_repository)
-      .each(&:update_github_repo)
+    Parallel.each(projects, :in_threads => 10) do |project|
+      ActiveRecord::Base.connection_pool.with_connection do
+        project.update_github_repo
+      end
+    end
   end
 end
