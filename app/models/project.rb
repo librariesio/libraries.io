@@ -9,6 +9,10 @@ class Project < ActiveRecord::Base
     "#{id}-#{name.parameterize}"
   end
 
+  def to_s
+    name
+  end
+
   has_many :versions
   has_one :github_repository
 
