@@ -62,6 +62,7 @@ class Project < ActiveRecord::Base
   end
 
   def github_url
+    return false if repository_url.blank?
     "https://github.com/#{github_name_with_owner}"
   end
 
