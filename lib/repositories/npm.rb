@@ -20,10 +20,10 @@ class Repositories
       latest_version = project["versions"].to_a.last[1]
       {
         :name => project["name"],
-        :description => project["description"],
+        :description => latest_version["description"],
         :homepage => project["homepage"],
-        :keywords => Array.wrap(project.fetch("keywords", [])).join(','),
-        :licenses => Array.wrap(latest_version.fetch('licenses', [])).map{|l| l['type'] }.join(','),
+        :keywords => Array.wrap(latest_version.fetch("keywords", [])).join(','),
+        :licenses => Array.wrap(latest_version.fetch('license', [])).map{|l| l['type'] }.join(','),
         :repository_url => latest_version.fetch('repository', {})['url']
       }
     end
