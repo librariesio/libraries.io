@@ -1,0 +1,67 @@
+<p>
+  On GitHub:
+</p>
+<% if @project.github_repository.present? %>
+  <% repo = @project.github_repository %>
+  <h4><%= link_to repo, repo.url %></h4>
+  <%= image_tag repo.avatar_url %>
+  <%= repo.description %>
+  <% if repo.homepage.present? %>
+    <%= link_to repo.homepage, repo.homepage %>
+  <% end %>
+  <p>
+    Fork: <%= repo.fork? %>
+  </p>
+  <p>
+    Created: <%= repo.created_at.to_s(:long) %>
+  </p>
+  <p>
+    Last updated: <%= repo.updated_at.to_s(:long) %>
+  </p>
+  <p>
+    Last pushed: <%= repo.pushed_at.to_s(:long) %>
+  </p>
+  <p>
+    size: <%= number_to_human_size repo.size*1000 %>
+  </p>
+  <p>
+    stars: <%= repo.stargazers_count %>
+  </p>
+  <p>
+    forks: <%= repo.forks_count %>
+  </p>
+  <p>
+    watchers: <%= repo.subscribers_count %>
+  </p>
+  <p>
+    language: <%= repo.language %>
+  </p>
+  <p>
+    default branch: <%= repo.default_branch %>
+  </p>
+  <p>
+    issues: <%= repo.has_issues? ? repo.open_issues_count : 'disabled'  %>
+  </p>
+  <% if repo.has_wiki? %>
+  <p>
+    wiki: <%= link_to repo.wiki_url, repo.wiki_url %>
+  </p>
+  <% end %>
+  <% if repo.has_pages? %>
+  <p>
+    pages: <%= link_to repo.pages_url, repo.pages_url %>
+  </p>
+  <% end %>
+  <% if repo.mirror_url.present? %>
+  <p>
+    mirror: <%= repo.mirror_url %>
+  </p>
+  <% end %>
+
+<% else %>
+  <% if @project.github_url.present? %>
+    <p>
+      Repo: <%= link_to @project.github_url, @project.github_url %>
+    </p>
+  <% end %>
+<% end %>
