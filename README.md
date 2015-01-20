@@ -241,6 +241,10 @@ http://search.maven.org/#api
 http://go-search.org/api?action=packages
 http://go-search.org/api?action=package&id=github.com%2fdaviddengcn%2fgcse
 
+## Wordpress (40,000)
+
+http://codex.wordpress.org/WordPress.org_API
+
 ## Nuget (30927)
 
 http://www.nuget.org/api/v2/$metadata
