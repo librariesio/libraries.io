@@ -236,11 +236,11 @@ Total still to get: 340,000
 
 https://github.com/clayallsopp/motion-toolbox.com/blob/master/data.json
 
-## Java (94846)
+## Java (95163)
 
 http://search.maven.org/#api
 
-## Go (46877)
+## Go (68164)
 
 http://go-search.org/api?action=packages
 http://go-search.org/api?action=package&id=github.com%2fdaviddengcn%2fgcse
@@ -249,12 +249,12 @@ http://go-search.org/api?action=package&id=github.com%2fdaviddengcn%2fgcse
 
 http://codex.wordpress.org/WordPress.org_API
 
-## Nuget (30927)
+## Nuget (31282)
 
 http://www.nuget.org/api/v2/$metadata
 http://chris.eldredge.io/blog/2013/02/25/fun-with-nuget-rest-api/
 
-## CPAN Perl (31119)
+## CPAN Perl (31157)
 
 Data: https://github.com/CPAN-API/cpan-api/blob/master/docs/API-docs.md
 
@@ -264,11 +264,11 @@ Package names: http://www.cpan.org/modules/01modules.index.html
 
 http://www.macports.org/ports.php?by=all
 
-## Clojure (11362)
+## Clojure (11453)
 
 Data sources: https://github.com/ato/clojars-web/wiki/Data
 
-## Haskell (7528)
+## Haskell (7564)
 
 API: http://hackage.haskell.org/api
 
@@ -276,7 +276,7 @@ Package names: http://hackage.haskell.org/packages/ (JSON)
 
 http://hackage.haskell.org/package/:package (Nokogiri)
 
-## R (6184)
+## R (6205)
 
 http://cran.r-project.org/web/packages/available_packages_by_name.html
 
@@ -295,21 +295,31 @@ http://www.vim.org/scripts/script_search_results.php?order_by=creation_date&dire
 
 https://github.com/CocoaPods/Specs/tree/master/Specs
 
-## Homebrew (2932)
+## Meteor (3505)
+
+https://atmospherejs.com/packages/recent
+
+## Homebrew (2967)
 
 http://brewformulas.org/
 http://braumeister.org/browse/a
 
-## Meteor (1892)
+## smalltalk (2064)
 
-https://atmospherejs.com/recent
+http://smalltalkhub.com/
 
-## Atom (1213)
+## Atom (1447)
 
 https://atom.io/packages/list
 
-## Lua (744)
+## Opam (831)
 
+https://github.com/ocaml/opam-repository
+http://opam.ocaml.org/
+
+## Lua (619)
+
+https://rocks.moonscript.org/m/root
 https://rocks.moonscript.org/modules
 http://rocks.moonscript.org/manifest
 
@@ -317,7 +327,7 @@ http://rocks.moonscript.org/manifest
 
 http://pkg.julialang.org/
 
-## Swift (181)
+## Swift (188)
 
 http://www.swifttoolbox.io/
 
