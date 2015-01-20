@@ -1,0 +1,11 @@
+<% name = platform.to_s.demodulize %>
+<h3><%= link_to name, platform_path(name) %></h3>
+<% projects = Project.platform(name).count %>
+<%= number_with_delimiter projects %> Packages
+<% if platform::HAS_VERSIONS %>
+  <br />
+  <% versions = Version.joins(:project).where("projects.platform = ?", name).count %>
+  <%= number_with_delimiter versions %>
+  Versions<br />
+  <%= (versions.to_f/projects).round(2) %> Versions per Project
+<% end %>

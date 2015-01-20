@@ -1,0 +1,22 @@
+<%= render 'platform', platform: @platform %>
+<hr>
+<div class='row'>
+  <div class='col-md-4'>
+    <h4>Recently Added</h4>
+    <%= render @added %>
+  </div>
+
+  <div class='col-md-4'>
+    <h4>Recently Updated</h4>
+    <%= render @updated %>
+  </div>
+
+  <div class='col-md-4'>
+    <h4>Popular Licenses</h4>
+    <% Project.platform(@platform_name).popular_licenses.each do |license| %>
+      <p>
+        <%= link_to license.licenses, projects_path(license: license.licenses) %> - <%= license.count %>
+      </p>
+    <% end %>
+  </div>
+</div>
