@@ -34,6 +34,21 @@ class Project < ActiveRecord::Base
       .map(&:downcase).map(&:strip).reject(&:blank?).uniq.sort
   end
 
+  def self.popular_platforms(limit = 5)
+    select('count(*) count, platform')
+    .group('platform')
+    .order('count DESC')
+    .limit(limit)
+  end
+
+  def self.popular_licenses(limit = 8)
+    where("licenses <> ''")
+      .select('count(*) count, licenses')
+      .group('licenses')
+      .order('count DESC')
+      .limit(limit)
+  end
+
   def github_client
     @github_client ||= Octokit::Client.new(access_token: ENV['OCTOKIT_TOKEN'])
   end
