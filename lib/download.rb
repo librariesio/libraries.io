@@ -1,6 +1,8 @@
 class Download
   def self.platforms
-    Repositories.descendants.reject{|platform| platform == Repositories::Base }
+    Repositories.descendants
+      .reject { |platform| platform == Repositories::Base }
+      .sort_by(&:name)
   end
   def self.total
     platforms.sum { |pm| pm.project_names.length }
