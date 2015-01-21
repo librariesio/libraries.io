@@ -1,22 +1,28 @@
 <%= render 'platform', platform: @platform %>
 <hr>
 <div class='row'>
-  <div class='col-md-4'>
-    <h4>Recently Added</h4>
-    <%= render @added %>
-  </div>
+  <% if @added.any? %>
+    <div class='col-md-4'>
+      <h4>Recently Added</h4>
+      <%= render @added %>
+    </div>
+  <% end %>
 
-  <div class='col-md-4'>
-    <h4>Recently Updated</h4>
-    <%= render @updated %>
-  </div>
+  <% if @updated.any? %>
+    <div class='col-md-4'>
+      <h4>Recently Updated</h4>
+      <%= render @updated %>
+    </div>
+  <% end %>
 
-  <div class='col-md-4'>
-    <h4>Popular Licenses</h4>
-    <% Project.platform(@platform_name).popular_licenses.each do |license| %>
-      <p>
-        <%= link_to license.licenses, search_path(license: license.licenses, platform: @platform_name) %> - <%= license.count %>
-      </p>
-    <% end %>
-  </div>
+  <% if @licenses.any? %>
+    <div class='col-md-4'>
+      <h4>Popular Licenses</h4>
+      <% @licenses.each do |license| %>
+        <p>
+          <%= link_to license.licenses, search_path(license: license.licenses, platform: @platform_name) %> - <%= license.count %>
+        </p>
+      <% end %>
+    </div>
+  <% end %>
 </div>
