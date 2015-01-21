@@ -23,7 +23,7 @@ class Repositories
         :description => latest_version["description"],
         :homepage => project["homepage"],
         :keywords => Array.wrap(latest_version.fetch("keywords", [])).join(','),
-        :licenses => Array.wrap(latest_version.fetch('license', [])).map{|l| l['type'] }.join(','),
+        :licenses => latest_version.fetch('license'),
         :repository_url => latest_version.fetch('repository', {})['url']
       }
     end
