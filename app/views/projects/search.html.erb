@@ -1,9 +1,15 @@
 <div class='row'>
   <div class='col-md-8'>
     <h3>
-      Search for "<%= params[:q] %>"
+      <% if params[:license].present? %>
+      <%= params[:license] %>
+      <% end %>
+      Projects
       <% if params[:platform].present? %>
-      in <%= params[:platform] %>
+      on <%= params[:platform] %>
+      <% end %>
+      <% if params[:q].present? %>
+      matching "<%= params[:q] %>"
       <% end %>
     </h3>
 
@@ -13,6 +19,12 @@
   </div>
 
   <div class='col-md-4'>
+    <h4>Platforms</h4>
     <%= render 'platforms' %>
+
+    <h4>Licenses</h4>
+    <% Project.popular_licenses.each do |license| %>
+      <%= link_to license.licenses, url_for(params.merge(license: license.licenses)) %><br>
+    <% end %>
   </div>
 </div>
