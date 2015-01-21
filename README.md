@@ -43,6 +43,7 @@ https://github.com/rubysec/ruby-advisory-db
 - https://nodesecurity.io/advisories
 - https://github.com/requires/monitoring
 - https://github.com/bekk/retire.js
+- https://github.com/presidentbeef/brakeman
 
 
 Free private security reporting tool
