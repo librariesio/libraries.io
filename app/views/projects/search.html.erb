@@ -13,9 +13,14 @@
       <% end %>
     </h3>
 
-    <%= render @projects %>
-
-    <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
+    <% if @projects.any? %>
+      <%= render @projects %>
+      <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
+    <% else %>
+      <p>
+        No projects found
+      </p>
+    <% end %>
   </div>
 
   <div class='col-md-4'>
