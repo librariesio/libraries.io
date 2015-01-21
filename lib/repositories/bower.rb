@@ -34,7 +34,7 @@ class Repositories
       {
         :name => project["name"],
         :description => project["description"],
-        :repository_url => project["url"]
+        :repository_url => project["website"] || project["url"]
       }
     end
   end
