@@ -15,7 +15,7 @@
     <h4>Popular Licenses</h4>
     <% Project.platform(@platform_name).popular_licenses.each do |license| %>
       <p>
-        <%= link_to license.licenses, projects_path(license: license.licenses) %> - <%= license.count %>
+        <%= link_to license.licenses, search_path(license: license.licenses, platform: @platform_name) %> - <%= license.count %>
       </p>
     <% end %>
   </div>
