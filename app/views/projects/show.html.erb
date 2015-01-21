@@ -3,7 +3,7 @@
     <h3>
       <%= @project.name %>
       <small>
-        <%= @project.platform %>
+        <%= link_to @project.platform, platform_path(@project.platform) %>
         <% if @version %>
           - <%= @version %>
         <% elsif @versions.any? %>
