@@ -16,10 +16,10 @@ class Download
     platforms.flat_map(&:keys).map(&:to_s).sort.uniq
   end
 
-  def self.github_repos
-    projects = Project.with_repository_url
+  def self.github_repos(platform)
+    projects = Project.platform(platform).with_repository_url
       .where('id NOT IN (SELECT DISTINCT(project_id) FROM github_repositories)')
-      .limit(4500).offset(100)
+      .limit(4500)
       .select(&:github_url)
       .compact
     Parallel.each(projects, :in_threads => 10) do |project|
@@ -27,5 +27,10 @@ class Download
         project.update_github_repo
       end
     end
+  end
+
+  def self.download_contributors(platform)
+    Project.platform(platform).map(&:github_repository)
+      .compact.each(&:download_github_contributions)
   end
 end
