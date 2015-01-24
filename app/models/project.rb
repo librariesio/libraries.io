@@ -64,8 +64,15 @@ class Project < ActiveRecord::Base
       g.project = self
       g.assign_attributes r.slice(*github_keys)
       g.save
-    rescue Octokit::NotFound, Octokit::Forbidden => e
-      p e
+    rescue Octokit::NotFound => e
+      response = Net::HTTP.get_response(URI(github_url))
+      if response.code.to_i == 301
+        self.repository_url = URI(response['location']).to_s
+        update_github_repo
+      else
+        p response.code.to_i
+        p e
+      end
     end
   end
 
