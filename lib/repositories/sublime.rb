@@ -16,6 +16,7 @@ class Repositories
         :name => project["name"],
         :description => project["description"],
         :homepage => project["homepage"],
+        :repository_url => parse_repo(project["issues"]),
         :keywords => project["labels"].join(',')
       }
     end
@@ -26,6 +27,11 @@ class Repositories
           :number => v['version']
         }
       end
+    end
+
+    def self.parse_repo(url)
+      return nil unless url
+      url.gsub(/\/issues(\/)?/i, '')
     end
   end
 end
