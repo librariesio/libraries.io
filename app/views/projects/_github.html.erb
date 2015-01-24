@@ -57,7 +57,7 @@
     mirror: <%= repo.mirror_url %>
   </p>
   <% end %>
-
+  <%= render 'contributions' %>
 <% else %>
   <% if @project.github_url.present? %>
     <p>

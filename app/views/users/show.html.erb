@@ -1,0 +1,18 @@
+<h1>
+  <%= image_tag @user.avatar_url, width: 60, height: 60 %>
+  <%= @user %>
+</h1>
+
+<p>
+  on Github: <%= link_to @user.github_url, @user.github_url %>
+</p>
+
+<h4>Contributions</h4>
+<% @user.github_contributions.order('count DESC').each do |contribution| %>
+  <% next unless contribution.github_repository %>
+  <% project = contribution.github_repository.project %>
+  <div>
+    <%= image_tag contribution.github_repository.avatar_url(60), width: 60, height: 60 %>
+    <%= link_to project, project %> - <%= pluralize contribution.count, 'contributions' %>
+  </div>
+<% end %>

@@ -1,0 +1,12 @@
+<% contributors = @project.github_repository.github_contributions %>
+<% if contributors.any? %>
+  <h4>Contributors</h4>
+  <% contributors.each do |contribution| %>
+    <% user = contribution.github_user %>
+    <div>
+      <%= image_tag user.avatar_url, width: 60, height: 60 %>
+      <%= link_to user, user_path(user) %><br>
+      <%= pluralize contribution.count, 'contributions' %>
+    </div>
+  <% end %>
+<% end %>

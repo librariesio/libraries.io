@@ -1,12 +1,6 @@
 <%= render 'platform', platform: @platform %>
 <hr>
 <div class='row'>
-  <% if @added.any? %>
-    <div class='col-md-4'>
-      <h4>Recently Added</h4>
-      <%= render @added %>
-    </div>
-  <% end %>
 
   <% if @updated.any? %>
     <div class='col-md-4'>
@@ -25,4 +19,17 @@
       <% end %>
     </div>
   <% end %>
+
+  <div class='col-md-4'>
+    <h4>Top Contributors</h4>
+    <% GithubUser.top_for(@platform_name).each do |u| %>
+      <% user = u[0] %>
+      <p>
+        <div>
+          <%= image_tag user.avatar_url, width: 60, height: 60 %>
+          <%= link_to user.login, user_path(user) %><br>
+        </div>
+      </p>
+    <% end %>
+  </div>
 </div>
