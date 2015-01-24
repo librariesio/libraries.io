@@ -76,6 +76,11 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def download_github_contributions
+    return false unless github_repository
+    github_repository.download_github_contributions
+  end
+
   def github_keys
     [:description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
      :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
