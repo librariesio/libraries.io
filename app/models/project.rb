@@ -50,7 +50,7 @@ class Project < ActiveRecord::Base
   end
 
   def github_client
-    @github_client ||= Octokit::Client.new(access_token: ENV['OCTOKIT_TOKEN'])
+    @github_client ||= Octokit::Client.new(access_token: ENV['OCTOKIT_TOKEN'], auto_paginate: true)
   end
 
   def update_github_repo
