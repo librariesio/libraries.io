@@ -55,6 +55,19 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     daemons (1.1.9)
+    elasticsearch (1.0.6)
+      elasticsearch-api (= 1.0.6)
+      elasticsearch-transport (= 1.0.6)
+    elasticsearch-api (1.0.6)
+      multi_json
+    elasticsearch-model (0.1.6)
+      activesupport (> 3)
+      elasticsearch (> 0.4)
+      hashie
+    elasticsearch-rails (0.1.6)
+    elasticsearch-transport (1.0.6)
+      faraday
+      multi_json
     erubis (2.7.0)
     eventmachine (1.0.4)
     execjs (2.2.2)
@@ -65,6 +78,7 @@ GEM
       thread_safe
     globalid (0.3.0)
       activesupport (>= 4.1.0)
+    hashie (3.3.2)
     hike (1.2.3)
     httparty (0.13.3)
       json (~> 1.8)
@@ -186,6 +200,8 @@ DEPENDENCIES
   bootstrap-sass
   bootswatch-rails
   coffee-rails
+  elasticsearch-model
+  elasticsearch-rails
   gems
   jbuilder
   jquery-rails

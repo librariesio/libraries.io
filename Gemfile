@@ -19,6 +19,8 @@ gem 'bootswatch-rails'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem 'rack-google-analytics'
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
 
 group :development do
   gem 'spring'
