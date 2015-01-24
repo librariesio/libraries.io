@@ -4,7 +4,7 @@
 <% if @project.github_repository.present? %>
   <% repo = @project.github_repository %>
   <h4><%= link_to repo, repo.url %></h4>
-  <%= image_tag repo.avatar_url %>
+  <%= image_tag repo.avatar_url, width: 60, height: 60 %>
   <%= repo.description %>
   <% if repo.homepage.present? %>
     <%= link_to repo.homepage, repo.homepage %>
