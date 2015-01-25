@@ -13,6 +13,6 @@
   <% project = contribution.github_repository.project %>
   <div>
     <%= image_tag contribution.github_repository.avatar_url(60), width: 60, height: 60 %>
-    <%= link_to project, project %> - <%= pluralize contribution.count, 'contributions' %>
+    <%= link_to project, project %> - <%= link_to pluralize(contribution.count, 'contributions'), contribution.github_url %>
   </div>
 <% end %>

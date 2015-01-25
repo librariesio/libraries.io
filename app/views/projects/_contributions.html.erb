@@ -6,7 +6,7 @@
     <div>
       <%= image_tag user.avatar_url, width: 60, height: 60 %>
       <%= link_to user, user_path(user) %><br>
-      <%= pluralize contribution.count, 'contributions' %>
+      <%= link_to pluralize(contribution.count, 'contributions'), contribution.github_url %>
     </div>
   <% end %>
 <% end %>
