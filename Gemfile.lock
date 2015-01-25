@@ -205,6 +205,7 @@ DEPENDENCIES
   gems
   jbuilder
   jquery-rails
+  nokogiri
   octokit
   oj
   oj_mimic_json

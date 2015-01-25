@@ -21,6 +21,7 @@ gem 'will_paginate-bootstrap'
 gem 'rack-google-analytics'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
+gem 'nokogiri'
 
 group :development do
   gem 'spring'
