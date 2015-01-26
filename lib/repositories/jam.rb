@@ -2,6 +2,7 @@ class Repositories
   class Jam < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    URL = 'http://jamjs.org/'
 
     def self.project_names
       projects.keys.sort
@@ -21,7 +22,7 @@ class Repositories
     end
 
     def self.project(name)
-      get_json("http://jamjs.org/repository/#{name}")
+      JSON.parse get("http://jamjs.org/repository/#{name}")
     end
 
     def self.mapping(project)

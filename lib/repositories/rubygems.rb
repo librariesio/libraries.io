@@ -2,6 +2,7 @@ class Repositories
   class Rubygems < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    URL = 'https://rubygems.org'
 
     def self.project_names
       gems = Marshal.load(Gem.gunzip(get("http://production.cf.rubygems.org/specs.4.8.gz")))

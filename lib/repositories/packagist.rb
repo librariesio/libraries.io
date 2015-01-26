@@ -2,6 +2,7 @@ class Repositories
   class Packagist < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
+    URL = 'https://packagist.org'
 
     def self.project_names
       get("https://packagist.org/packages/list.json")['packageNames']

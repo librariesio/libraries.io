@@ -2,6 +2,7 @@ class Repositories
   class Pub < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    URL = 'https://pub.dartlang.org'
 
     def self.project_names
       page = 1

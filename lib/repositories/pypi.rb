@@ -2,6 +2,7 @@ class Repositories
   class Pypi < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
+    URL = 'https://pypi.python.org'
 
     def self.project_names
       get("https://pypi.python.org/simple/").scan(/href='(\w+)'/).flatten

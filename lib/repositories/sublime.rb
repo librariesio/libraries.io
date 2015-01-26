@@ -2,6 +2,7 @@ class Repositories
   class Sublime < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
+    URL = 'https://packagecontrol.io'
 
     def self.project_names
       get("https://packagecontrol.io/channel.json")['packages_cache'].map{|k,v| v[0]['name']}

@@ -2,6 +2,7 @@ class Repositories
   class Dub < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    URL = 'http://code.dlang.org'
 
     def self.project_names
       get("http://code.dlang.org/packages/index.json").sort

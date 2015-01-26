@@ -2,6 +2,7 @@ class Repositories
   class Hackage < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    URL = 'http://hackage.haskell.org'
 
     def self.project_names
       get_json("http://hackage.haskell.org/packages/").map{ |h| h['packageName'] }

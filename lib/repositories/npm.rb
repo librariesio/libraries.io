@@ -2,6 +2,7 @@ class Repositories
   class NPM < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    URL = 'https://www.npmjs.com'
 
     def self.project_names
       get("http://registry.npmjs.org/-/all/").keys[1..-1]
