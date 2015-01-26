@@ -18,6 +18,8 @@ class ProjectsController < ApplicationController
   def show
     @project = Project.find params[:id]
     @versions = @project.versions.order('number DESC').to_a
-    @contributors = @project.github_repository.github_contributions.includes(:github_user)
+    if @project.github_repository
+      @contributors = @project.github_repository.github_contributions.includes(:github_user)
+    end
   end
 end
