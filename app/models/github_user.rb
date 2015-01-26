@@ -18,9 +18,11 @@ class GithubUser < ActiveRecord::Base
   end
 
   def self.top_for(platform, limit = 5)
-    GithubContribution.where(platform: platform)
-      .group_by(&:github_user)
-      .map{|k,v| [k,v.sum(&:count)]}
-      .sort_by{|a| a[1] }.reverse.first(limit)
+    GithubContribution.where(platform: platform).select('count(*) count, github_user_id')
+      .group('github_user_id')
+      .order('count DESC')
+      .limit(limit)
+      .includes(:github_user)
+      .map(&:github_user)
   end
 end
