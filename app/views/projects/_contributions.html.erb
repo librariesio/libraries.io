@@ -1,10 +1,10 @@
 <% if @contributors.any? %>
-  <h4>Contributors</h4>
+
   <% @contributors.each do |contribution| %>
     <% user = contribution.github_user %>
     <div>
       <%= image_tag user.avatar_url, width: 60, height: 60 %>
-      <%= link_to user, user_path(user) %><br>
+      <%= link_to user, user_path(user) %> -
       <%= link_to pluralize(contribution.count, 'contributions'), contribution.github_url %>
     </div>
   <% end %>
