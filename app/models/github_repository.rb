@@ -24,6 +24,26 @@ class GithubRepository < ActiveRecord::Base
     "#{url}/wiki"
   end
 
+  def watchers_url
+    "#{url}/watchers"
+  end
+
+  def forks_url
+    "#{url}/network"
+  end
+
+  def stargazers_url
+    "#{url}/stargazers"
+  end
+
+  def issues_url
+    "#{url}/issues"
+  end
+
+  def contributors_url
+    "#{url}/graphs/contributors"
+  end
+
   def url
     "https://github.com/#{full_name}"
   end

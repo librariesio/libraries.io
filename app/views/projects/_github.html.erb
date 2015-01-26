@@ -15,6 +15,9 @@
     </p>
     <% end %>
     <p>
+      Main Language: <%= repo.language %>
+    </p>
+    <p>
       Created: <%= repo.created_at.to_s(:long) %>
     </p>
     <p>
@@ -27,38 +30,36 @@
       size: <%= number_to_human_size repo.size*1000 %>
     </p>
     <p>
-      stars: <%= repo.stargazers_count %>
+      stars: <%= link_to number_with_delimiter(repo.stargazers_count), repo.stargazers_url %>
     </p>
     <p>
-      forks: <%= repo.forks_count %>
+      forks: <%= link_to number_with_delimiter(repo.forks_count), repo.forks_url %>
     </p>
     <p>
-      watchers: <%= repo.subscribers_count %>
+      watchers: <%= link_to number_with_delimiter(repo.subscribers_count), repo.watchers_url %>
     </p>
     <p>
-      language: <%= repo.language %>
+      Contributors: <%= link_to repo.github_contributions.count, repo.contributors_url %>
     </p>
+
     <p>
-      issues: <%= repo.has_issues? ? repo.open_issues_count : 'disabled'  %>
+      issues: <%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count), repo.issues_url) : 'disabled'  %>
     </p>
     <% if repo.has_wiki? %>
     <p>
-      wiki: <%= link_to repo.wiki_url, repo.wiki_url %>
+      <%= link_to 'Wiki', repo.wiki_url %>
     </p>
     <% end %>
     <% if repo.has_pages? %>
     <p>
-      pages: <%= link_to repo.pages_url, repo.pages_url %>
+      <%= link_to 'Pages', repo.pages_url %>
     </p>
     <% end %>
     <% if repo.mirror_url.present? %>
     <p>
-      mirror: <%= repo.mirror_url %>
+      Mirror of <%= repo.mirror_url %>
     </p>
     <% end %>
-    <p>
-      <%= pluralize repo.github_contributions.count, 'contributors' %>
-    </p>
   </div>
   <div class='col-md-6'>
     <h4>Top Contributors</h4>
