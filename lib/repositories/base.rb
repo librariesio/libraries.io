@@ -41,7 +41,7 @@ class Repositories
     end
 
     def self.get_json(url)
-      JSON.parse get(url)
+      PersistentHTTParty.get(url, headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }).parsed_response
     end
   end
 end
