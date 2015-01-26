@@ -18,6 +18,7 @@ class Project < ActiveRecord::Base
 
   scope :platform, ->(platform) { where platform: platform }
   scope :with_repository_url, -> { where("repository_url <> ''") }
+  scope :with_repo, -> { includes(:github_repository).where('github_repositories.id IS NOT NULL') }
 
   def self.search(query)
     q = "%#{query}%"

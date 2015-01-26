@@ -7,11 +7,18 @@
 <hr>
 <div class='row'>
 
-  <% if @updated.any? %>
+  <% if @popular.any? %>
     <div class='col-md-4'>
-      <h4>Recently Updated</h4>
-      <%= render @updated %>
+      <h4>Popular Projects</h4>
+      <%= render @popular %>
     </div>
+  <% end %>
+
+  <% if (@popular.empty? || @licenses.empty? || @contributors.empty?) && @updated.any? %>
+  <div class='col-md-4'>
+    <h4>Recently Updated</h4>
+    <%= render @updated %>
+  </div>
   <% end %>
 
   <% if @licenses.any? %>
@@ -19,19 +26,22 @@
       <h4>Popular Licenses</h4>
       <% @licenses.each do |license| %>
         <p>
-          <%= link_to license.licenses, search_path(license: license.licenses, platform: @platform_name) %> - <%= license.count %>
+          <%= link_to license.licenses, search_path(license: license.licenses, platform: @platform_name) %>
+          - <%= pluralize license.count, 'project' %>
         </p>
       <% end %>
     </div>
   <% end %>
 
-  <div class='col-md-4'>
-    <h4>Top Contributors</h4>
-    <% GithubUser.top_for(@platform_name).each do |user| %>
-      <div>
-        <%= image_tag user.avatar_url, width: 60, height: 60 %>
-        <%= link_to user.login, user_path(user) %><br>
-      </div>
-    <% end %>
-  </div>
+  <% if @contributors.any? %>
+    <div class='col-md-4'>
+      <h4>Top Contributors</h4>
+      <% @contributors.each do |user| %>
+        <div>
+          <%= image_tag user.avatar_url, width: 60, height: 60 %>
+          <%= link_to user.login, user_path(user) %><br>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 </div>
