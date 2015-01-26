@@ -1,13 +1,14 @@
-<h1>
-  <%= image_tag @user.avatar_url, width: 60, height: 60 %>
-  <%= @user %>
-</h1>
-
-<p>
-  on Github: <%= link_to @user.github_url, @user.github_url %>
-</p>
-
-<h4>Contributions</h4>
+<div class='row'>
+  <div class='col-md-6'>
+    <h1>
+      <%= image_tag @user.avatar_url, width: 60, height: 60 %>
+      <%= @user %>
+    </h1>
+    <%= link_to @user.github_url, @user.github_url %>
+  </div>
+</div>
+<hr>
+<h3>Contributions</h3>
 <% @contributions.each do |contribution| %>
   <% next unless contribution.github_repository %>
   <% project = contribution.github_repository.project %>
