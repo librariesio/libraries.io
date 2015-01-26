@@ -37,7 +37,6 @@
       On <%= @project.platform %>: <%= link_to link, link %>
     </p>
     <% end %>
-
     <%= render 'projects/github' if @project.github_url.present? %>
   </div>
 
