@@ -269,14 +269,6 @@ http://www.macports.org/ports.php?by=all
 
 Data sources: https://github.com/ato/clojars-web/wiki/Data
 
-## Haskell (7564)
-
-API: http://hackage.haskell.org/api
-
-Package names: http://hackage.haskell.org/packages/ (JSON)
-
-http://hackage.haskell.org/package/:package (Nokogiri)
-
 ## R (6205)
 
 http://cran.r-project.org/web/packages/available_packages_by_name.html

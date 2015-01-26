@@ -23,6 +23,8 @@ module ApplicationHelper
       "https://packagist.org/packages/#{name}##{version}"
     when 'Cargo'
       "https://crates.io/crates/#{name}/#{version}"
+    when 'Hackage'
+      "http://hackage.haskell.org/package/#{name}" + (version ? "-#{version}" : "")
     end
   end
 end
