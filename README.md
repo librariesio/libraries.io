@@ -133,8 +133,7 @@ API
 - rss/atom
 - stream
 
-Save repository field when downloading
-Download github repos
+
 Activity levels
 elasticsearch
 ratings/reviews
