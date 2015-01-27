@@ -47,6 +47,12 @@ namespace :download do
     Download.download_contributors('Jam')
   end
 
+  task nimble: :environment do
+    Repositories::Nimble.import
+    Download.update_repos('Nimble')
+    Download.download_contributors('Nimble')
+  end
+
   task npm: :environment do
     Repositories::NPM.import
     Download.github_repos('NPM')
