@@ -19,9 +19,17 @@ class Download
   def self.github_repos(platform)
     projects = Project.platform(platform).with_repository_url
       .where('id NOT IN (SELECT DISTINCT(project_id) FROM github_repositories)')
-      .limit(4500)
       .select(&:github_url)
       .compact
+    download_repos(projects)
+  end
+
+  def self.update_repos(platform)
+    projects = Project.platform(platform).with_repository_url.select(&:github_url).compact
+    download_repos(projects)
+  end
+
+  def self.download_repos(projects)
     Parallel.each(projects, :in_threads => 10) do |project|
       ActiveRecord::Base.connection_pool.with_connection do
         project.update_github_repo

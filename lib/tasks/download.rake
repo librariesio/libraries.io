@@ -1,7 +1,7 @@
 namespace :download do
   task alcatraz: :environment do
     Repositories::Alcatraz.import
-    Download.github_repos('Alcatraz')
+    Download.update_repos('Alcatraz')
     Download.download_contributors('Alcatraz')
   end
 
@@ -13,19 +13,19 @@ namespace :download do
 
   task cargo: :environment do
     Repositories::Cargo.import
-    Download.github_repos('Cargo')
+    Download.update_repos('Cargo')
     Download.download_contributors('Cargo')
   end
 
   task dub: :environment do
     Repositories::Dub.import
-    Download.github_repos('Dub')
+    Download.update_repos('Dub')
     Download.download_contributors('Dub')
   end
 
   task emacs: :environment do
     Repositories::Emacs.import
-    Download.github_repos('Emacs')
+    Download.update_repos('Emacs')
     Download.download_contributors('Emacs')
   end
 
@@ -37,13 +37,13 @@ namespace :download do
 
   task hex: :environment do
     Repositories::Hex.import
-    Download.github_repos('Hex')
+    Download.update_repos('Hex')
     Download.download_contributors('Hex')
   end
 
   task jam: :environment do
     Repositories::Jam.import
-    Download.github_repos('Jam')
+    Download.update_repos('Jam')
     Download.download_contributors('Jam')
   end
 
@@ -79,7 +79,7 @@ namespace :download do
 
   task sublime: :environment do
     Repositories::Sublime.import
-    Download.github_repos('Sublime')
+    Download.update_repos('Sublime')
     Download.download_contributors('Sublime')
   end
 end
