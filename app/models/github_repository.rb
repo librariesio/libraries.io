@@ -64,5 +64,7 @@ class GithubRepository < ActiveRecord::Base
       end
       github_contributions.create(github_user: user, count: c.contributions, platform: project.platform)
     end
+  rescue
+    p full_name
   end
 end
