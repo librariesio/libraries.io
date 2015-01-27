@@ -2,7 +2,7 @@ class Repositories
   class Nimble < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    URL = ''
+    URL = 'https://github.com/nim-lang/nimble'
 
     def self.project_names
       projects.keys.sort
