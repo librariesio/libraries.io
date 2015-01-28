@@ -24,9 +24,21 @@ class Repositories
         :description => latest_version["description"],
         :homepage => project["homepage"],
         :keywords => Array.wrap(latest_version.fetch("keywords", [])).join(','),
-        :licenses => latest_version.fetch('license'),
+        :licenses => licenses(latest_version),
         :repository_url => latest_version.fetch('repository', {})['url']
       }
+    end
+
+    def self.licenses(latest_version)
+      license = latest_version.fetch('license', nil)
+      if license.present?
+        if license.is_a?(Hash) ? license.fetch('type', '') : license
+      else
+        licenses = latest_version.fetch('licenses', [])
+        licenses.map do |license|
+          if license.is_a?(Hash) ? license.fetch('type', '') : license
+        end.join(',')
+      end
     end
 
     def self.versions(project)
