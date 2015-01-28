@@ -18,7 +18,7 @@ class GithubUser < ActiveRecord::Base
   end
 
   def self.top_for(platform, limit = 5)
-    GithubContribution.where(platform: platform).select('count(*) count, github_user_id')
+    GithubContribution.where(platform: platform).select('sum(count) as count, github_user_id')
       .group('github_user_id')
       .order('count DESC')
       .limit(limit)
