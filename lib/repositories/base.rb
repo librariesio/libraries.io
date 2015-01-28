@@ -37,11 +37,11 @@ class Repositories
     end
 
     def self.get(url)
-      PersistentHTTParty.get(url).parsed_response
+      HTTParty.get(url).parsed_response
     end
 
     def self.get_json(url)
-      PersistentHTTParty.get(url, headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }).parsed_response
+      HTTParty.get(url, headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }).parsed_response
     end
   end
 end
