@@ -32,11 +32,19 @@ class Repositories
     def self.licenses(latest_version)
       license = latest_version.fetch('license', nil)
       if license.present?
-        if license.is_a?(Hash) ? license.fetch('type', '') : license
+        if license.is_a?(Hash)
+          return license.fetch('type', '')
+        else
+          return license
+        end
       else
         licenses = latest_version.fetch('licenses', [])
         licenses.map do |license|
-          if license.is_a?(Hash) ? license.fetch('type', '') : license
+          if license.is_a?(Hash)
+            license.fetch('type', '')
+          else
+            license
+          end
         end.join(',')
       end
     end
