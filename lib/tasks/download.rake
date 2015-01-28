@@ -1,4 +1,8 @@
 namespace :download do
+  task stats: :environment do
+    Download.stats
+  end
+
   task alcatraz: :environment do
     Repositories::Alcatraz.import
     Download.update_repos('Alcatraz')

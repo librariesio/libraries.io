@@ -1,4 +1,23 @@
 class Download
+  def self.stats
+    downloaded = 0
+    total = 0
+    platforms.each do |platform|
+      count = Project.platform(platform.name.to_s.demodulize).count
+      available = platform.project_names.length
+      puts platform.name.to_s.demodulize
+      puts "  Dowloaded: #{count}"
+      puts "  Available: #{available}"
+      puts "  Diff: #{available - count}"
+      downloaded += count
+      total += available
+    end
+    puts '====='
+    puts "  Total Dowloaded: #{downloaded}"
+    puts "  Total Available: #{total}"
+    puts "  Total Diff: #{total - downloaded}"
+  end
+
   def self.platforms
     Repositories.descendants
       .reject { |platform| platform == Repositories::Base }
