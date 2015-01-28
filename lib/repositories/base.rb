@@ -1,13 +1,13 @@
 class Repositories
   class Base
-    def self.save(project)
+    def self.save(project, include_versions = true)
       mapped_project = mapping(project)
       return false unless mapped_project
       puts "Saving #{mapped_project[:name]}"
       dbproject = Project.find_or_create_by({:name => mapped_project[:name], :platform => self.name.demodulize})
       dbproject.update_attributes(mapped_project.except(:name))
 
-      if self::HAS_VERSIONS
+      if include_versions && self::HAS_VERSIONS
         versions(project).each do |version|
           dbproject.versions.find_or_create_by(version)
         end
@@ -16,9 +16,9 @@ class Repositories
       dbproject
     end
 
-    def self.update(name)
+    def self.update(name, include_versions = true)
       begin
-        save(project(name))
+        save(project(name), include_versions)
       rescue Exception => e
         p name
         p e
@@ -26,11 +26,11 @@ class Repositories
       end
     end
 
-    def self.import
+    def self.import(include_versions = true)
       name = self.name.demodulize
       puts "Importing #{name}"
       before = Time.now.utc
-      project_names.each{|name| update(name)}
+      project_names.each{|name| update(name, include_versions)}
       ActiveRecord::Base.connection.reconnect!
       count = Project.platform(name).where('created_at > ?', before).count
       puts "Imported #{count} new #{name} projects"

@@ -10,9 +10,9 @@ namespace :download do
   end
 
   task bower: :environment do
-    Repositories::Bower.import
-    Download.github_repos('Bower')
-    Download.download_contributors('Bower')
+    Repositories::Bower.import(false)
+    # Download.github_repos('Bower')
+    # Download.download_contributors('Bower')
   end
 
   task cargo: :environment do
@@ -58,33 +58,33 @@ namespace :download do
   end
 
   task npm: :environment do
-    Repositories::NPM.import
-    Download.github_repos('NPM')
-    Download.download_contributors('NPM')
+    Repositories::NPM.import(false)
+    # Download.github_repos('NPM')
+    # Download.download_contributors('NPM')
   end
 
   task packagist: :environment do
-    Repositories::Packagist.import
-    Download.github_repos('Packagist')
-    Download.download_contributors('Packagist')
+    Repositories::Packagist.import(false)
+    # Download.github_repos('Packagist')
+    # Download.download_contributors('Packagist')
   end
 
   task pub: :environment do
-    Repositories::Pub.import
-    Download.github_repos('Pub')
-    Download.download_contributors('Pub')
+    Repositories::Pub.import(false)
+    # Download.github_repos('Pub')
+    # Download.download_contributors('Pub')
   end
 
   task pypi: :environment do
-    Repositories::Pypi.import
-    Download.github_repos('Pypi')
-    Download.download_contributors('Pypi')
+    Repositories::Pypi.import(false)
+    # Download.github_repos('Pypi')
+    # Download.download_contributors('Pypi')
   end
 
   task rubygems: :environment do
-    Repositories::Rubygems.import
-    Download.github_repos('Rubygems')
-    Download.download_contributors('Rubygems')
+    Repositories::Rubygems.import(false)
+    # Download.github_repos('Rubygems')
+    # Download.download_contributors('Rubygems')
   end
 
   task sublime: :environment do
