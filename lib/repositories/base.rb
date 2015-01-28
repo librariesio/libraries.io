@@ -37,11 +37,15 @@ class Repositories
     end
 
     def self.get(url, options = {})
-      Oj.load(Typhoeus.get(url, options).body)
+      Oj.load(get_raw(url, options))
+    end
+
+    def self.get_raw(url, options = {})
+      Typhoeus.get(url, options).body
     end
 
     def self.get_html(url, options = {})
-      Nokogiri::HTML(Typhoeus.get(url, options).body)
+      Nokogiri::HTML(get_raw(url, options))
     end
 
     def self.get_json(url)

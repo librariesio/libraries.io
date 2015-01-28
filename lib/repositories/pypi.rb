@@ -5,7 +5,7 @@ class Repositories
     URL = 'https://pypi.python.org'
 
     def self.project_names
-      get("https://pypi.python.org/simple/").scan(/href='(\w+)'/).flatten
+      get_raw("https://pypi.python.org/simple/").scan(/href='(\w+)'/).flatten
     end
 
     def self.project(name)
