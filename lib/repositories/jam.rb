@@ -22,7 +22,7 @@ class Repositories
     end
 
     def self.project(name)
-      JSON.parse get("http://jamjs.org/repository/#{name}")
+      get("http://jamjs.org/repository/#{name}")
     end
 
     def self.mapping(project)

@@ -11,7 +11,7 @@ class Repositories
     def self.projects
       @projects ||= begin
         prjcts = {}
-        packages = JSON.parse(get("https://raw.githubusercontent.com/nim-lang/packages/master/packages.json"))
+        packages = get("https://raw.githubusercontent.com/nim-lang/packages/master/packages.json")
         packages.each do |hash|
           prjcts[hash['name'].downcase] = hash.slice('name', 'url', 'description', 'tags', 'license', 'web')
         end

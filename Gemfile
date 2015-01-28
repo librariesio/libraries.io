@@ -21,6 +21,7 @@ gem 'rack-google-analytics'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 gem 'nokogiri'
+gem 'typhoeus'
 
 group :development do
   gem 'spring'

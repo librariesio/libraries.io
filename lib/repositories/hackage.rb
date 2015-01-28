@@ -11,7 +11,7 @@ class Repositories
     def self.project(name)
       {
         name: name,
-        page: Nokogiri::HTML(get("http://hackage.haskell.org/package/#{name}"))
+        page: get_html("http://hackage.haskell.org/package/#{name}")
       }
     end
 

@@ -30,18 +30,22 @@ class Repositories
       name = self.name.demodulize
       puts "Importing #{name}"
       before = Time.now.utc
-      Parallel.each(project_names){|name| update(name)}
+      project_names.each{|name| update(name)}
       ActiveRecord::Base.connection.reconnect!
       count = Project.platform(name).where('created_at > ?', before).count
       puts "Imported #{count} new #{name} projects"
     end
 
-    def self.get(url)
-      HTTParty.get(url).parsed_response
+    def self.get(url, options = {})
+      Oj.load(Typhoeus.get(url, options).body)
+    end
+
+    def self.get_html(url, options = {})
+      Nokogiri::HTML(Typhoeus.get(url, options).body)
     end
 
     def self.get_json(url)
-      HTTParty.get(url, headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }).parsed_response
+      get(url, headers: { 'Accept' => "application/json"})
     end
   end
 end
