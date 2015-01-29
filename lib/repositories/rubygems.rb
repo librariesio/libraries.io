@@ -5,7 +5,7 @@ class Repositories
     URL = 'https://rubygems.org'
 
     def self.project_names
-      gems = Marshal.load(Gem.gunzip(get("http://production.cf.rubygems.org/specs.4.8.gz")))
+      gems = Marshal.load(Gem.gunzip(get_raw("http://production.cf.rubygems.org/specs.4.8.gz")))
       gems.map(&:first).uniq
     end
 
