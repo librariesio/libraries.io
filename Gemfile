@@ -22,6 +22,8 @@ gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 gem 'nokogiri'
 gem 'typhoeus'
+gem 'redis'
+gem 'hiredis'
 
 group :development do
   gem 'spring'
