@@ -238,6 +238,7 @@ https://github.com/clayallsopp/motion-toolbox.com/blob/master/data.json
 
 ## Java (95163)
 
+http://mvnrepository.com/
 http://search.maven.org/#api
 
 ## Go (68164)
@@ -328,9 +329,21 @@ http://package.elm-lang.org/packages
 
 http://www.swifttoolbox.io/
 
+## Pascal
+
+http://wiki.freepascal.org/fppkg
+
+## Common Lisp
+
+http://www.quicklisp.org/beta/releases.html
+
 ## C (150)
 
 https://github.com/clibs/clib/wiki/Packages
+
+# Erlang rebar
+
+https://github.com/rebar/rebar
 
 ## bash
 
