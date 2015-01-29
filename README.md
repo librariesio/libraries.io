@@ -315,9 +315,14 @@ https://rocks.moonscript.org/m/root
 https://rocks.moonscript.org/modules
 http://rocks.moonscript.org/manifest
 
-## Julia (411)
+## Julia (507)
 
 http://pkg.julialang.org/
+https://github.com/JuliaLang/METADATA.jl
+
+## Elm (43)
+
+http://package.elm-lang.org/packages
 
 ## Swift (188)
 
