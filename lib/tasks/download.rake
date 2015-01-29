@@ -51,6 +51,13 @@ namespace :download do
     Download.download_contributors('Jam')
   end
 
+  task maven: :environment do
+    Repositories::Maven.load_names
+    # Repositories::Maven.import
+    # Download.update_repos('Maven')
+    # Download.download_contributors('Maven')
+  end
+
   task nimble: :environment do
     Repositories::Nimble.import
     Download.update_repos('Nimble')
