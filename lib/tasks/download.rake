@@ -10,8 +10,8 @@ namespace :download do
   end
 
   task bower: :environment do
-    Repositories::Bower.import(false)
-    # Download.github_repos('Bower')
+    Repositories::Bower.import
+    Download.github_repos('Bower')
     # Download.download_contributors('Bower')
   end
 
@@ -34,8 +34,8 @@ namespace :download do
   end
 
   task hackage: :environment do
-    Repositories::Hackage.import(false)
-    # Download.github_repos('Hackage')
+    Repositories::Hackage.import
+    Download.github_repos('Hackage')
     # Download.download_contributors('Hackage')
   end
 
@@ -58,7 +58,7 @@ namespace :download do
   end
 
   task npm: :environment do
-    Repositories::NPM.import(false)
+    Repositories::NPM.import
     # Download.github_repos('NPM')
     # Download.download_contributors('NPM')
   end
