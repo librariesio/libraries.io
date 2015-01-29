@@ -64,25 +64,25 @@ namespace :download do
   end
 
   task packagist: :environment do
-    Repositories::Packagist.import(false)
+    Repositories::Packagist.import
     # Download.github_repos('Packagist')
     # Download.download_contributors('Packagist')
   end
 
   task pub: :environment do
-    Repositories::Pub.import(false)
+    Repositories::Pub.import
     # Download.github_repos('Pub')
     # Download.download_contributors('Pub')
   end
 
   task pypi: :environment do
-    Repositories::Pypi.import(false)
+    Repositories::Pypi.import
     # Download.github_repos('Pypi')
     # Download.download_contributors('Pypi')
   end
 
   task rubygems: :environment do
-    Repositories::Rubygems.import(false)
+    Repositories::Rubygems.import
     # Download.github_repos('Rubygems')
     # Download.download_contributors('Rubygems')
   end
