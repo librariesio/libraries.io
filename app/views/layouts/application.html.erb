@@ -38,6 +38,9 @@
           <strong><%= number_with_delimiter Project.count %></strong>
         <% end %>
         Projects
+        and
+        <strong><%= number_with_delimiter GithubRepository.count %></strong>
+        GitHub Repos
       </div>
     </div>
   </footer>
