@@ -53,7 +53,7 @@ namespace :download do
 
   task maven: :environment do
     Repositories::Maven.load_names
-    # Repositories::Maven.import
+    Repositories::Maven.import(false)
     # Download.update_repos('Maven')
     # Download.download_contributors('Maven')
   end

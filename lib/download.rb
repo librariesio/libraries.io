@@ -43,6 +43,14 @@ class Download
     download_repos(projects)
   end
 
+  def self.new_github_repos
+    projects = Project.with_repository_url
+    .where('id NOT IN (SELECT DISTINCT(project_id) FROM github_repositories)')
+    .select(&:github_url)
+    .compact
+    download_repos(projects)
+  end
+
   def self.update_repos(platform)
     projects = Project.platform(platform).with_repository_url.select(&:github_url).compact
     download_repos(projects)
