@@ -46,8 +46,6 @@ class Download
   def self.new_github_repos
     projects = Project.with_repository_url
     .where('id NOT IN (SELECT DISTINCT(project_id) FROM github_repositories)')
-    .select(&:github_url)
-    .compact
     download_repos(projects)
   end
 
