@@ -96,7 +96,7 @@ class Project < ActiveRecord::Base
 
   def github_name_with_owner
     url = repository_url.clone
-    github_regex = /^(((https|http|git)?:\/\/(www\.)?)|git@)(github.com|raw.githubusercontent.com)(:|\/)/i
+    github_regex = /(((https|http|git)?:\/\/(www\.)?)|git@|scm:git:git@)(github.com|raw.githubusercontent.com)(:|\/)/i
     return nil unless url.match(github_regex)
     url.gsub!(github_regex, '').strip!
     url.gsub!(/(\.git|\/)$/i, '')
