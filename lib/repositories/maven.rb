@@ -5,10 +5,12 @@ class Repositories
     URL = 'http://search.maven.org/'
 
     def self.load_names
-      num = REDIS.get('maven-page').to_i
+      num = REDIS.get('maven-page')
       if num.nil?
         REDIS.set 'maven-page', 41753
         num = 41753
+      else
+        num = num.to_i
       end
 
       (1..num).to_a.reverse.each do |number|
@@ -25,21 +27,39 @@ class Repositories
     end
 
     def self.project(name)
-      # maven-scraper
-      # https://maven-repository.com/artifact/org.jenkins-ci.plugins/accurev/0.6.30
+      h = {
+        name: name,
+        path: name.split(':').join('/')
+      }
+      h[:versions] = versions(h)
+      h
     end
 
     def self.mapping(project)
-      #   name
-      #   keywords
-      #   description
-      #   licenses
-      #   homepage
-      #   repository_url
+      latest_version = get_html("https://maven-repository.com/artifact/#{project[:path]}/#{project[:versions][0][:number]}")
+      hash = {}
+      latest_version.css('tr').each do |tr|
+        tds = tr.css('td')
+        hash[tds[0].text.gsub(/[^a-zA-Z0-9\s]/,'')] = tds[1] if tds.length == 2
+      end
+      {
+        name: project[:name],
+        description: hash['Description'].try(:text),
+        homepage: hash['URL'].try(:css,'a').try(:text),
+        repository_url: hash['Connection'].try(:text),
+        licenses: hash['Name'].try(:text)
+      }
     end
 
     def self.versions(project)
-
+      page = get_html("https://maven-repository.com/artifact/#{project[:path]}/")
+      page.css('tr')[1..-1].map do |tr|
+        tds = tr.css('td')
+        {
+          :number => tds[0].text,
+          :published_at => tds[2].text
+        }
+      end
     end
   end
 end
