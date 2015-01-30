@@ -52,6 +52,7 @@ class Repositories
     end
 
     def self.versions(project)
+      # multiple verion pages
       page = get_html("https://maven-repository.com/artifact/#{project[:path]}/")
       page.css('tr')[1..-1].map do |tr|
         tds = tr.css('td')
