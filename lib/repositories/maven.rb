@@ -2,7 +2,7 @@ class Repositories
   class Maven < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    URL = 'http://search.maven.org/'
+    URL = 'http://maven.org'
 
     def self.load_names
       num = REDIS.get('maven-page')
