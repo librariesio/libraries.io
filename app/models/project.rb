@@ -20,6 +20,10 @@ class Project < ActiveRecord::Base
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :with_repo, -> { includes(:github_repository).where('github_repositories.id IS NOT NULL') }
 
+  def self.undownloaded_repos
+    with_repository_url.where('id NOT IN (SELECT DISTINCT(project_id) FROM github_repositories)')
+  end
+
   def self.search(query)
     q = "%#{query}%"
     where('name ILIKE ? or keywords ILIKE ?', q, q).order(:created_at)

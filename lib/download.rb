@@ -36,16 +36,14 @@ class Download
   end
 
   def self.github_repos(platform)
-    projects = Project.platform(platform).with_repository_url
-      .where('id NOT IN (SELECT DISTINCT(project_id) FROM github_repositories)')
+    projects = Project.platform(platform).undownloaded_repos
       .select(&:github_url)
       .compact
     download_repos(projects)
   end
 
   def self.new_github_repos
-    projects = Project.with_repository_url
-    .where('id NOT IN (SELECT DISTINCT(project_id) FROM github_repositories)')
+    projects = Project.undownloaded_repos
     download_repos(projects)
   end
 
