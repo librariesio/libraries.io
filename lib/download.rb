@@ -16,6 +16,10 @@ class Download
     puts "  Total Dowloaded: #{downloaded}"
     puts "  Total Available: #{total}"
     puts "  Total Diff: #{total - downloaded}"
+
+    puts '====='
+    puts "Github Repos: #{GithubRepository.count}"
+    puts "Remaining: #{Project.undownloaded_repos}"
   end
 
   def self.platforms
