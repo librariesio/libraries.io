@@ -3,6 +3,10 @@ namespace :download do
     Download.stats
   end
 
+  task new_github_repos: :environment do
+    Download.new_github_repos
+  end
+
   task alcatraz: :environment do
     Repositories::Alcatraz.import
     Download.update_repos('Alcatraz')
