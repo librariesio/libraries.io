@@ -1,7 +1,7 @@
 class Version < ActiveRecord::Base
   validates_presence_of :project_id, :number
   # validate unique number and project_id
-  belongs_to :project
+  belongs_to :project, touch: true
 
   def to_param
     number

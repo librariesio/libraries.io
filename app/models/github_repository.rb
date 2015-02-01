@@ -1,7 +1,7 @@
 class GithubRepository < ActiveRecord::Base
   # validations (presense and uniqueness)
 
-  belongs_to :project
+  belongs_to :project, touch: true
   has_many :github_contributions
 
   def to_s
