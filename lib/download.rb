@@ -57,11 +57,7 @@ class Download
   end
 
   def self.download_repos(projects)
-    Parallel.each(projects, :in_threads => 5) do |project|
-      ActiveRecord::Base.connection_pool.with_connection do
-        project.update_github_repo
-      end
-    end
+    projects.find_each(&:update_github_repo)
   end
 
   def self.download_contributors(platform)

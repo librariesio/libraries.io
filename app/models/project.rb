@@ -60,8 +60,9 @@ class Project < ActiveRecord::Base
 
   def update_github_repo
     name_with_owner = github_name_with_owner
-    return false unless name_with_owner
     p name_with_owner
+    return false unless name_with_owner
+
     begin
       r = github_client.repo(name_with_owner).to_hash
       g = GithubRepository.find_or_initialize_by(r.slice(:full_name))
