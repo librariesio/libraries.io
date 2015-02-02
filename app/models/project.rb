@@ -48,6 +48,7 @@ class Project < ActiveRecord::Base
 
   def self.popular_licenses(limit = 8)
     where("licenses <> ''")
+      .where("licenses != 'UNKNOWN'")
       .select('count(*) count, licenses')
       .group('licenses')
       .order('count DESC')
