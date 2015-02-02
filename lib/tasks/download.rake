@@ -40,7 +40,7 @@ namespace :download do
   task hackage: :environment do
     Repositories::Hackage.import
     Download.github_repos('Hackage')
-    # Download.download_contributors('Hackage')
+    Download.download_contributors('Hackage')
   end
 
   task hex: :environment do
