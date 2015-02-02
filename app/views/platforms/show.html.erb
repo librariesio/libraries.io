@@ -6,7 +6,6 @@
 </div>
 <hr>
 <div class='row'>
-
   <% if @popular.any? %>
     <div class='col-md-4'>
       <h4>Popular Projects</h4>
@@ -14,13 +13,22 @@
     </div>
   <% end %>
 
-  <% if (@popular.empty? || @licenses.empty? || @contributors.empty?) && @updated.any? %>
+  <% if @updated.any? %>
   <div class='col-md-4'>
     <h4>Recently Updated</h4>
     <%= render @updated %>
   </div>
   <% end %>
 
+  <% if @created.any? %>
+  <div class='col-md-4'>
+    <h4>Recently Published</h4>
+    <%= render @created %>
+  </div>
+  <% end %>
+</div>
+
+<div class='row'>
   <% if @licenses.any? %>
     <div class='col-md-4'>
       <h4>Popular Licenses</h4>
