@@ -82,13 +82,13 @@ namespace :download do
 
   task pub: :environment do
     Repositories::Pub.import
-    # Download.github_repos('Pub')
-    # Download.download_contributors('Pub')
+    Download.github_repos('Pub')
+    Download.download_contributors('Pub')
   end
 
   task pypi: :environment do
     Repositories::Pypi.import
-    # Download.github_repos('Pypi')
+    Download.github_repos('Pypi')
     # Download.download_contributors('Pypi')
   end
 
