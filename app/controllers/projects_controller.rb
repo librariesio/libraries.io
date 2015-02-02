@@ -1,10 +1,8 @@
 class ProjectsController < ApplicationController
   def index
-    scope = Project.order('created_at DESC')
-    scope = scope.platform(params[:platform]) if params[:platform].present?
-    scope = scope.license(params[:license]) if params[:license].present?
-
-    @projects = scope.paginate(page: params[:page])
+    @licenses = Project.popular_licenses(10)
+    @updated = Project.order('updated_at DESC').limit(5)
+    @platforms = Project.popular_platforms(10)
   end
 
   def search

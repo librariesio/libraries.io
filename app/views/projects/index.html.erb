@@ -7,9 +7,9 @@
 <div class='row'>
   <div class='col-md-4'>
     <h3>Package managers</h3>
-    <% Project.popular_platforms.each do |platform| %>
+    <% @platforms.each do |platform| %>
       <p>
-        <%= link_to platform.platform, platform_path(platform.platform) %> -
+        <strong><%= link_to platform.platform, platform_path(platform.platform) %></strong> -
         <%= number_with_delimiter platform.count %>
       </p>
     <% end %>
@@ -19,9 +19,9 @@
   </div>
   <div class='col-md-4'>
     <h3>Licenses</h3>
-    <% Project.popular_licenses(5).each do |license| %>
+    <% @licenses.each do |license| %>
     <p>
-      <%= link_to license.licenses, search_path(license: license.licenses) %> -
+      <strong><%= link_to license.licenses, search_path(license: license.licenses) %></strong> -
       <%= number_with_delimiter license.count %>
     </p>
     <% end %>
@@ -31,10 +31,16 @@
   </div>
   <div class='col-md-4'>
     <h3>Recently updated</h3>
-    <% Project.limit(5).order('updated_at DESC').each do |project| %>
-    <p>
-      <%= link_to project, project %> - <%= project.updated_at.to_s(:short) %>
-    </p>
+    <% @updated.each do |project| %>
+    <div class='project'>
+      <strong><%= link_to project.name, project %></strong>
+      <small>- <%= link_to project.platform, platform_path(project.platform) %>
+        - Updated <%= time_ago_in_words project.updated_at %> ago
+      </small>
+      <br />
+      <%= truncate project.description, :length => 100 %>
+      <br /><br />
+    </div>
     <% end %>
     <p>
       <%= link_to 'See more projects &raquo;'.html_safe, search_path %>
