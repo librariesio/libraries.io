@@ -16,7 +16,7 @@ namespace :download do
   task bower: :environment do
     Repositories::Bower.import
     Download.github_repos('Bower')
-    # Download.download_contributors('Bower')
+    Download.download_contributors('Bower')
   end
 
   task cargo: :environment do
