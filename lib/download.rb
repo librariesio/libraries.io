@@ -41,8 +41,6 @@ class Download
 
   def self.github_repos(platform)
     projects = Project.platform(platform).undownloaded_repos
-      .select(&:github_url)
-      .compact
     download_repos(projects)
   end
 
@@ -52,7 +50,7 @@ class Download
   end
 
   def self.update_repos(platform)
-    projects = Project.platform(platform).with_repository_url.select(&:github_url).compact
+    projects = Project.platform(platform).with_repository_url
     download_repos(projects)
   end
 
