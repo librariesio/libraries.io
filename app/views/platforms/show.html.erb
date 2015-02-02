@@ -9,21 +9,52 @@
   <% if @popular.any? %>
     <div class='col-md-4'>
       <h4>Popular Projects</h4>
-      <%= render @popular %>
+      <% @popular.each do |project| %>
+      <div class='project'>
+        <strong><%= link_to project.name, project %></strong>
+        <small>
+          - <%= number_with_delimiter project.github_repository.stargazers_count %> stars
+        </small>
+        <br />
+        <%= truncate project.description, :length => 100 %>
+        <br /><br />
+      </div>
+
+      <% end %>
     </div>
   <% end %>
 
   <% if @updated.any? %>
   <div class='col-md-4'>
     <h4>Recently Updated</h4>
-    <%= render @updated %>
+    <% @updated.each do |project| %>
+    <div class='project'>
+      <strong><%= link_to project.name, project %></strong>
+      <small>
+        - Updated <%= time_ago_in_words project.updated_at %> ago
+      </small>
+      <br />
+      <%= truncate project.description, :length => 100 %>
+      <br /><br />
+    </div>
+    <% end %>
   </div>
   <% end %>
 
   <% if @created.any? %>
   <div class='col-md-4'>
     <h4>Recently Published</h4>
-    <%= render @created %>
+    <% @created.each do |project| %>
+    <div class='project'>
+      <strong><%= link_to project.name, project %></strong>
+      <small>
+        - Published <%= time_ago_in_words project.updated_at %> ago
+      </small>
+      <br />
+      <%= truncate project.description, :length => 100 %>
+      <br /><br />
+    </div>
+    <% end %>
   </div>
   <% end %>
 </div>
