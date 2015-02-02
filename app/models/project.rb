@@ -67,7 +67,7 @@ class Project < ActiveRecord::Base
 
     begin
       r = github_client.repo(name_with_owner).to_hash
-      return false if r.nil?
+      return false if r.nil? || r.empty?
       g = GithubRepository.find_or_initialize_by(r.slice(:full_name))
       g.owner_id = r[:owner][:id]
       g.project = self
