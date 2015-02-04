@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :platforms
   resources :licenses
   get '/users/github/:login', to: 'users#show', as: :user
+  get '/users/:id', to: 'users#legacy'
   resources :projects do
     resources :versions, :constraints => { :id => /.*/ }
   end
