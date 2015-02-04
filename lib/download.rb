@@ -58,8 +58,7 @@ class Download
     projects.find_each(&:update_github_repo)
   end
 
-  def self.download_contributors(platform)
-    Project.platform(platform).map(&:github_repository)
-      .compact.each(&:download_github_contributions)
+  def self.download_contributors
+    GithubRepository.each(&:download_github_contributions)
   end
 end
