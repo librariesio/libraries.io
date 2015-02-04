@@ -160,6 +160,8 @@ GEM
     sawyer (0.6.0)
       addressable (~> 2.3.5)
       faraday (~> 0.8, < 0.10)
+    sitemap_generator (5.0.5)
+      builder
     spring (1.2.0)
     sprockets (2.12.3)
       hike (~> 1.2)
@@ -214,6 +216,7 @@ DEPENDENCIES
   rails_12factor
   redis
   sass-rails
+  sitemap_generator
   spring
   thin
   typhoeus

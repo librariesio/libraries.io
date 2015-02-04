@@ -25,6 +25,7 @@ gem 'typhoeus'
 gem 'redis'
 gem 'hiredis'
 gem 'rack-canonical-host'
+gem 'sitemap_generator'
 
 group :development do
   gem 'spring'
