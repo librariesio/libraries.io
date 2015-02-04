@@ -75,12 +75,16 @@ class Project < ActiveRecord::Base
       self.github_repository_id = g.id
       self.save
     rescue Octokit::NotFound, Octokit::Forbidden => e
-      response = Net::HTTP.get_response(URI(github_url))
-      if response.code.to_i == 301
-        self.repository_url = URI(response['location']).to_s
-        update_github_repo
-      else
-        p response.code.to_i
+      begin
+        response = Net::HTTP.get_response(URI(github_url))
+        if response.code.to_i == 301
+          self.repository_url = URI(response['location']).to_s
+          update_github_repo
+        else
+          p response.code.to_i
+          p e
+        end
+      rescue URI::InvalidURIError => e
         p e
       end
     end
@@ -135,10 +139,4 @@ class Project < ActiveRecord::Base
     return nil unless url.length == 2
     url.join('/')
   end
-
-  ## relations
-  # versions => dependencies
-  # repository
-  # licenses
-  # users
 end
