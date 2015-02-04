@@ -1,0 +1,57 @@
+<h1>
+  <%= @license %>
+  license
+</h1><hr>
+<div class='row'>
+  <% if @popular.any? %>
+  <div class='col-md-4'>
+    <h4>Popular <%= @license %> Projects</h4>
+    <% @popular.each do |project| %>
+    <div class='project'>
+      <strong><%= link_to project.name, project %></strong>
+      <small>
+        - <%= number_with_delimiter project.github_repository.stargazers_count %> stars
+      </small>
+      <br />
+      <%= truncate project.description, :length => 100 %>
+      <br /><br />
+    </div>
+
+    <% end %>
+  </div>
+  <% end %>
+
+  <% if @updated.any? %>
+  <div class='col-md-4'>
+    <h4>Updated <%= @license %> Projects</h4>
+    <% @updated.each do |project| %>
+    <div class='project'>
+      <strong><%= link_to project.name, project %></strong>
+      <small>
+        - Updated <%= time_ago_in_words project.updated_at %> ago
+      </small>
+      <br />
+      <%= truncate project.description, :length => 100 %>
+      <br /><br />
+    </div>
+    <% end %>
+  </div>
+  <% end %>
+
+  <% if @created.any? %>
+  <div class='col-md-4'>
+    <h4>New <%= @license %> Projects</h4>
+    <% @created.each do |project| %>
+    <div class='project'>
+      <strong><%= link_to project.name, project %></strong>
+      <small>
+        - Published <%= time_ago_in_words project.updated_at %> ago
+      </small>
+      <br />
+      <%= truncate project.description, :length => 100 %>
+      <br /><br />
+    </div>
+    <% end %>
+  </div>
+  <% end %>
+</div>
