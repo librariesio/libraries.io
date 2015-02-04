@@ -18,7 +18,7 @@ namespace :download do
 
   task bower: :environment do
     Repositories::Bower.import
-    Download.github_repos('Bower')
+    Download.update_repos('Bower')
   end
 
   task cargo: :environment do
@@ -38,7 +38,7 @@ namespace :download do
 
   task hackage: :environment do
     Repositories::Hackage.import
-    Download.github_repos('Hackage')
+    Download.update_repos('Hackage')
   end
 
   task hex: :environment do
@@ -54,7 +54,7 @@ namespace :download do
   task maven: :environment do
     Repositories::Maven.load_names
     Repositories::Maven.import(false)
-    # Download.update_repos('Maven')
+    Download.github_repos('Maven')
   end
 
   task nimble: :environment do
@@ -64,12 +64,12 @@ namespace :download do
 
   task npm: :environment do
     Repositories::NPM.import
-    # Download.github_repos('NPM')
+    Download.github_repos('NPM')
   end
 
   task packagist: :environment do
     Repositories::Packagist.import
-    # Download.github_repos('Packagist')
+    Download.github_repos('Packagist')
   end
 
   task pub: :environment do
@@ -79,12 +79,12 @@ namespace :download do
 
   task pypi: :environment do
     Repositories::Pypi.import
-    Download.github_repos('Pypi')
+    Download.update_repos('Pypi')
   end
 
   task rubygems: :environment do
     Repositories::Rubygems.import
-    # Download.github_repos('Rubygems')
+    Download.github_repos('Rubygems')
   end
 
   task sublime: :environment do
