@@ -18,6 +18,7 @@ class ProjectsController < ApplicationController
     @versions = @project.versions.order('number DESC').to_a
     if @project.github_repository
       @contributors = @project.github_repository.github_contributions.includes(:github_user).limit(10)
+      @related = @project.github_repository.projects.reject{ |p| p.id == @project.id }
     end
   end
 end
