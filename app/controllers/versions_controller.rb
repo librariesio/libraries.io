@@ -1,6 +1,6 @@
 class VersionsController < ApplicationController
   def show
-    @project = Project.platform(params[:platform]).find_by(name: params[:name])
+    @project = Project.platform(params[:platform]).find_by!(name: params[:name])
     @version = @project.versions.find_by!(number: params[:number])
     @versions = @project.versions.order('number DESC').to_a
     if @project.github_repository
