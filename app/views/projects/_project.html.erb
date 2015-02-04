@@ -1,6 +1,6 @@
 <div class='project'>
   <strong><%= link_to project.name, project %></strong>
-  <small><%= link_to project.platform, platform_path(project.platform) %>
+  <small><%= link_to project.platform, platform_path(project.platform.downcase) %>
   <% if project.licenses.present? %>
   - <%= project.licenses %>
   <% end %>

@@ -9,7 +9,7 @@
     <h3>Package managers</h3>
     <% @platforms.each do |platform| %>
       <p>
-        <strong><%= link_to platform.platform, platform_path(platform.platform) %></strong> -
+        <strong><%= link_to platform.platform, platform_path(platform.platform.downcase) %></strong> -
         <%= number_with_delimiter platform.count %>
       </p>
     <% end %>
@@ -21,7 +21,7 @@
     <h3>Licenses</h3>
     <% @licenses.each do |license| %>
     <p>
-      <strong><%= link_to license.licenses, license_path(license.licenses) %></strong> -
+      <strong><%= link_to license.licenses, license_path(license.licenses.downcase) %></strong> -
       <%= number_with_delimiter license.count %>
     </p>
     <% end %>
@@ -34,7 +34,7 @@
     <% @updated.each do |project| %>
     <div class='project'>
       <strong><%= link_to project.name, project %></strong>
-      <small>- <%= link_to project.platform, platform_path(project.platform) %>
+      <small>- <%= link_to project.platform, platform_path(project.platform.downcase) %>
         - Updated <%= time_ago_in_words project.updated_at %> ago
       </small>
       <br />
