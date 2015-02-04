@@ -24,6 +24,7 @@ gem 'nokogiri'
 gem 'typhoeus'
 gem 'redis'
 gem 'hiredis'
+gem 'rack-canonical-host'
 
 group :development do
   gem 'spring'

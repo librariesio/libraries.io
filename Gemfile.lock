@@ -111,6 +111,9 @@ GEM
     puma (2.11.0)
       rack (>= 1.1, < 2.0)
     rack (1.6.0)
+    rack-canonical-host (0.1.0)
+      addressable
+      rack (~> 1.0)
     rack-google-analytics (1.2.0)
       actionpack
       activesupport
@@ -205,6 +208,7 @@ DEPENDENCIES
   parallel
   pg
   puma
+  rack-canonical-host
   rack-google-analytics
   rails (= 4.2.0)
   rails_12factor
