@@ -11,7 +11,7 @@
 <h3>Contributions</h3>
 <% @contributions.each do |contribution| %>
   <% next unless contribution.github_repository %>
-  <% project = contribution.github_repository.project %>
+  <% project = contribution.github_repository.projects.first %>
   <div>
     <%= image_tag contribution.github_repository.avatar_url(60), width: 60, height: 60 %>
     <%= link_to project, project %> - <%= project.platform %> - <%= link_to pluralize(contribution.count, 'contributions'), contribution.github_url %>
