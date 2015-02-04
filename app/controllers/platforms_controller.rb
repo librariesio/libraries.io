@@ -4,7 +4,8 @@ class PlatformsController < ApplicationController
   end
 
   def show
-    @platform = "Repositories::#{params[:id]}".constantize
+    @platform = Download.platforms.find{|p| p.to_s.demodulize.downcase == params[:id].downcase }
+    raise ActiveRecord::RecordNotFound if @platform.nil?
     @platform_name = @platform.to_s.demodulize
     @licenses = Project.platform(@platform_name).popular_licenses.limit(8).to_a
     @updated = Project.platform(@platform_name).limit(5).order('updated_at DESC')
