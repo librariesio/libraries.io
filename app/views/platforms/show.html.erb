@@ -8,7 +8,7 @@
 <div class='row'>
   <% if @popular.any? %>
     <div class='col-md-4'>
-      <h4>Popular Projects</h4>
+      <h4>Popular <%= @platform_name %> Projects</h4>
       <% @popular.each do |project| %>
       <div class='project'>
         <strong><%= link_to project.name, project %></strong>
@@ -26,7 +26,7 @@
 
   <% if @updated.any? %>
   <div class='col-md-4'>
-    <h4>Recently Updated</h4>
+    <h4>Updated <%= @platform_name %> Projects</h4>
     <% @updated.each do |project| %>
     <div class='project'>
       <strong><%= link_to project.name, project %></strong>
@@ -43,7 +43,7 @@
 
   <% if @created.any? %>
   <div class='col-md-4'>
-    <h4>Recently Published</h4>
+    <h4>New <%= @platform_name %> Projects</h4>
     <% @created.each do |project| %>
     <div class='project'>
       <strong><%= link_to project.name, project %></strong>
@@ -62,7 +62,7 @@
 <div class='row'>
   <% if @licenses.any? %>
     <div class='col-md-4'>
-      <h4>Popular Licenses</h4>
+      <h4>Popular <%= @platform_name %> Licenses</h4>
       <% @licenses.each do |license| %>
         <p>
           <%= link_to license.licenses, search_path(license: license.licenses, platform: @platform_name) %>
@@ -74,7 +74,7 @@
 
   <% if @contributors.any? %>
     <div class='col-md-4'>
-      <h4>Top Contributors</h4>
+      <h4>Top <%= @platform_name %> Contributors</h4>
       <% @contributors.each do |user| %>
         <div>
           <%= image_tag user.avatar_url, width: 60, height: 60 %>
