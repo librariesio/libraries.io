@@ -4,15 +4,15 @@ SitemapGenerator::Sitemap.default_host = "http://libraries.io"
 SitemapGenerator::Sitemap.create do
   puts "Generating Projects"
   Project.find_each do |project|
-    add project_path(project), :lastmod => project.updated_at
+    add project_path(project.to_param), :lastmod => project.updated_at
     project.versions.find_each do |version|
-      add project_version_path(project, version), :lastmod => project.updated_at
+      add version_path(version.to_param), :lastmod => project.updated_at
     end
   end
 
   puts "Generating Users"
   GithubUser.find_each do |user|
-    add user_path(user.downcase), :lastmod => user.updated_at
+    add user_path(user), :lastmod => user.updated_at
   end
 
   puts "Generating Platforms"

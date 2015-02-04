@@ -11,7 +11,7 @@
       <h4>Popular <%= @platform_name %> Projects</h4>
       <% @popular.each do |project| %>
       <div class='project'>
-        <strong><%= link_to project.name, project %></strong>
+        <strong><%= link_to project.name, project_path(project.to_param) %></strong>
         <small>
           - <%= number_with_delimiter project.github_repository.stargazers_count %> stars
         </small>
@@ -29,7 +29,7 @@
     <h4>Updated <%= @platform_name %> Projects</h4>
     <% @updated.each do |project| %>
     <div class='project'>
-      <strong><%= link_to project.name, project %></strong>
+      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
       <small>
         - Updated <%= time_ago_in_words project.updated_at %> ago
       </small>
@@ -46,7 +46,7 @@
     <h4>New <%= @platform_name %> Projects</h4>
     <% @created.each do |project| %>
     <div class='project'>
-      <strong><%= link_to project.name, project %></strong>
+      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
       <small>
         - Published <%= time_ago_in_words project.updated_at %> ago
       </small>

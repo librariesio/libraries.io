@@ -4,7 +4,7 @@ class Version < ActiveRecord::Base
   belongs_to :project, touch: true
 
   def to_param
-    number
+    project.to_param.merge(number: number)
   end
 
   def to_s

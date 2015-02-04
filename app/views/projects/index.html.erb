@@ -33,7 +33,7 @@
     <h3>Recently updated</h3>
     <% @updated.each do |project| %>
     <div class='project'>
-      <strong><%= link_to project.name, project %></strong>
+      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
       <small>- <%= link_to project.platform, platform_path(project.platform.downcase) %>
         - Updated <%= time_ago_in_words project.updated_at %> ago
       </small>

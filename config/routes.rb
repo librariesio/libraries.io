@@ -1,11 +1,22 @@
 Rails.application.routes.draw do
   root to: 'projects#index'
-  resources :platforms
+
   resources :licenses
+
+  get '/platforms', to: 'platforms#index', as: :platforms
+
   get '/users/github/:login', to: 'users#show', as: :user
-  get '/users/:id', to: 'users#legacy'
-  resources :projects do
-    resources :versions, :constraints => { :id => /.*/ }
-  end
+
   get '/search', to: 'projects#search'
+
+  # legacy
+  get '/platforms/:id', to: 'platforms#legacy'
+  get '/users/:id', to: 'users#legacy'
+  get '/projects/:id', to: 'projects#legacy'
+  get '/projects/:project_id/versions/:id', to: 'versions#legacy', constraints: { :id => /.*/ }
+
+  # project routes
+  get '/:platform/:name/:number', to: 'versions#show', as: :version, constraints: { :number => /.*/ }
+  get '/:platform/:name', to: 'projects#show', as: :project
+  get '/:id/', to: 'platforms#show', as: :platform
 end

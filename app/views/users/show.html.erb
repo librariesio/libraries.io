@@ -15,6 +15,6 @@
   <% next unless project %>
   <div>
     <%= image_tag contribution.github_repository.avatar_url(60), width: 60, height: 60 %>
-    <%= link_to project, project %> - <%= project.platform %> - <%= link_to pluralize(contribution.count, 'contributions'), contribution.github_url %>
+    <%= link_to project, project_path(project.to_param) %> - <%= project.platform %> - <%= link_to pluralize(contribution.count, 'contributions'), contribution.github_url %>
   </div>
 <% end %>

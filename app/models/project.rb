@@ -6,7 +6,7 @@ class Project < ActiveRecord::Base
   # TODO validate homepage format
 
   def to_param
-    "#{id}-#{name.parameterize}"
+    { name: name, platform: platform.downcase }
   end
 
   def to_s
@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
   has_many :versions
   belongs_to :github_repository
 
-  scope :platform, ->(platform) { where platform: platform }
+  scope :platform, ->(platform) { where('platform ILIKE ?', platform) }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :with_repo, -> { includes(:github_repository).where('github_repositories.id IS NOT NULL') }
   scope :without_repo, -> { where(github_repository_id: nil) }
