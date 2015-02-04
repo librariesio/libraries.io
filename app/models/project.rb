@@ -100,18 +100,18 @@ class Project < ActiveRecord::Base
   end
 
   def github_url
-    return false if repository_url.blank?
+    return false if repository_url.blank? || github_name_with_owner.blank?
     "https://github.com/#{github_name_with_owner}"
   end
 
   def github_name_with_owner
     url = repository_url.clone
-    github_regex = /(((https|http|git|ssh)?:\/\/(www\.)?)|ssh:\/\/git@|scm:git:git@)(github.com|raw.githubusercontent.com)(:|\/)/i
+    github_regex = /(((https|http|git|ssh)?:\/\/(www\.)?)|ssh:\/\/git@|https:\/\/git@|scm:git:git@)(github.com|raw.githubusercontent.com)(:|\/)/i
     return nil unless url.match(github_regex)
     url.gsub!(github_regex, '').strip!
     url.gsub!(/(\.git|\/)$/i, '')
     url.gsub!(' ', '')
-    url = url.split('/')[0..1]
+    url = url.split('/').reject(&:blank?)[0..1]
     return nil unless url.length == 2
     url.join('/')
   end
