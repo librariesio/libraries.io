@@ -59,6 +59,6 @@ class Download
   end
 
   def self.download_contributors
-    GithubRepository.each(&:download_github_contributions)
+    GithubRepository.order('updated_at DESC').each(&:download_github_contributions)
   end
 end
