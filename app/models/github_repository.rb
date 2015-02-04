@@ -1,7 +1,7 @@
 class GithubRepository < ActiveRecord::Base
   # validations (presense and uniqueness)
 
-  belongs_to :project, touch: true
+  has_many :projects
   has_many :github_contributions
 
   def to_s
@@ -53,7 +53,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_github_contributions
-    contributions = project.github_client.contributors(full_name)
+    contributions = projects.first.github_client.contributors(full_name)
     return false if contributions.empty?
     contributions.each do |c|
       p c.login
@@ -63,7 +63,7 @@ class GithubRepository < ActiveRecord::Base
       end
       cont = github_contributions.find_or_create_by(github_user: user)
       cont.count = c.contributions
-      cont.platform = project.platform
+      cont.platform = projects.first.platform
       cont.save
     end
   rescue

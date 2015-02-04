@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150127220301) do
+ActiveRecord::Schema.define(version: 20150204004703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(version: 20150127220301) do
   end
 
   create_table "github_repositories", force: :cascade do |t|
-    t.integer  "project_id"
     t.string   "full_name"
     t.string   "owner_id"
     t.string   "description"
@@ -55,8 +54,6 @@ ActiveRecord::Schema.define(version: 20150127220301) do
     t.integer  "subscribers_count"
   end
 
-  add_index "github_repositories", ["project_id"], name: "index_github_repositories_on_project_id", using: :btree
-
   create_table "github_users", force: :cascade do |t|
     t.integer  "github_id"
     t.string   "login"
@@ -75,6 +72,7 @@ ActiveRecord::Schema.define(version: 20150127220301) do
     t.string   "homepage"
     t.string   "licenses"
     t.string   "repository_url"
+    t.integer  "github_repository_id"
   end
 
   add_index "projects", ["platform"], name: "index_projects_on_platform", using: :btree

@@ -14,7 +14,7 @@ class Project < ActiveRecord::Base
   end
 
   has_many :versions
-  has_one :github_repository
+  belongs_to :github_repository
 
   scope :platform, ->(platform) { where platform: platform }
   scope :with_repository_url, -> { where("repository_url <> ''") }
@@ -70,9 +70,10 @@ class Project < ActiveRecord::Base
       return false if r.nil? || r.empty?
       g = GithubRepository.find_or_initialize_by(r.slice(:full_name))
       g.owner_id = r[:owner][:id]
-      g.project = self
       g.assign_attributes r.slice(*github_keys)
       g.save
+      self.github_repository_id = g.id
+      self.save
     rescue Octokit::NotFound, Octokit::Forbidden => e
       response = Net::HTTP.get_response(URI(github_url))
       if response.code.to_i == 301
