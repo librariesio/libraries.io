@@ -26,6 +26,7 @@ gem 'redis'
 gem 'hiredis'
 gem 'rack-canonical-host'
 gem 'sitemap_generator'
+gem 'newrelic_rpm'
 
 group :development do
   gem 'spring'
