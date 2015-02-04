@@ -47,14 +47,13 @@ class Project < ActiveRecord::Base
     .limit(limit)
   end
 
-  def self.popular_licenses(limit = 8)
+  def self.popular_licenses
     where("licenses <> ''")
       .where("licenses != 'UNKNOWN'")
       .where("licenses != 'OtherLicense'")
       .select('count(*) count, licenses')
       .group('licenses')
       .order('count DESC')
-      .limit(limit)
   end
 
   def github_client

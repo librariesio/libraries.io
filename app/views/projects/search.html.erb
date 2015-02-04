@@ -28,7 +28,7 @@
     <%= render 'platforms' %>
 
     <h4>Licenses</h4>
-    <% Project.popular_licenses.each do |license| %>
+    <% Project.popular_licenses.limit(8).each do |license| %>
       <%= link_to license.licenses, url_for(params.merge(license: license.licenses)) %><br>
     <% end %>
   </div>

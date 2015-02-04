@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    @licenses = Project.popular_licenses(10)
+    @licenses = Project.popular_licenses.limit(10)
     @updated = Project.order('updated_at DESC').limit(4)
     @platforms = Project.popular_platforms(10)
   end

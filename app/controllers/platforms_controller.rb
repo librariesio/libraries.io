@@ -6,7 +6,7 @@ class PlatformsController < ApplicationController
   def show
     @platform = "Repositories::#{params[:id]}".constantize
     @platform_name = @platform.to_s.demodulize
-    @licenses = Project.platform(@platform_name).popular_licenses.to_a
+    @licenses = Project.platform(@platform_name).popular_licenses.limit(8).to_a
     @updated = Project.platform(@platform_name).limit(5).order('updated_at DESC')
     @created = Project.platform(@platform_name).limit(5).order('created_at DESC')
     @popular = Project.platform(@platform_name).with_repo.limit(5).order('github_repositories.stargazers_count DESC')
