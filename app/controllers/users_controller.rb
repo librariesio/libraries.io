@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   def show
-    @user = GithubUser.find(params[:id])
+    @user = GithubUser.where("lower(login) = ?", params[:login].downcase).first
+    raise ActiveRecord::RecordNotFound if @user.nil?
     @contributions = @user.github_contributions
                           .includes(:github_repository => :projects)
                           .order('count DESC')

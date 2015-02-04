@@ -14,7 +14,7 @@ class GithubUser < ActiveRecord::Base
   end
 
   def to_param
-    "#{id}-#{login}"
+    login.downcase
   end
 
   def self.top_for(platform, limit = 5)
