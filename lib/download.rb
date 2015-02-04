@@ -45,7 +45,7 @@ class Download
   end
 
   def self.new_github_repos
-    projects = Project.undownloaded_repos
+    projects = Project.undownloaded_repos.where('repository_url ILIKE ?', '%github.com%')
     download_repos(projects)
   end
 
