@@ -1,7 +1,9 @@
+<% title "#{@project} #{@version} on #{@project.platform} - Libraries" %>
+
 <div class='row'>
   <div class='col-md-8'>
     <h3>
-      <%= @project.name %>
+      <%= @project %>
       <small>
         <%= link_to @project.platform, platform_path(@project.platform.downcase) %>
         <% if @version %>
