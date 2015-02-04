@@ -15,3 +15,5 @@
 /log/*.log
 /tmp
 .env
+
+public/sitemap*
