@@ -40,17 +40,17 @@ class Download
   end
 
   def self.github_repos(platform)
-    projects = Project.platform(platform).undownloaded_repos
+    projects = Project.platform(platform).undownloaded_repos.where('repository_url ILIKE ?', '%github.com%').order('updated_at DESC')
     download_repos(projects)
   end
 
   def self.new_github_repos
-    projects = Project.undownloaded_repos.where('repository_url ILIKE ?', '%github.com%')
+    projects = Project.undownloaded_repos.where('repository_url ILIKE ?', '%github.com%').order('updated_at DESC')
     download_repos(projects)
   end
 
   def self.update_repos(platform)
-    projects = Project.platform(platform).with_repository_url
+    projects = Project.platform(platform).with_repository_url.order('updated_at DESC')
     download_repos(projects)
   end
 
