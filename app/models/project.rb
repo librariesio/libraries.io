@@ -110,6 +110,7 @@ class Project < ActiveRecord::Base
     return nil unless url.match(github_regex)
     url.gsub!(github_regex, '').strip!
     url.gsub!(/(\.git|\/)$/i, '')
+    url.gsub!(' ', '')
     url = url.split('/')[0..1]
     return nil unless url.length == 2
     url.join('/')
