@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root to: 'projects#index'
 
   resources :licenses
+  resources :languages
 
   get '/platforms', to: 'platforms#index', as: :platforms
 

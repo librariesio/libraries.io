@@ -34,6 +34,10 @@ class Project < ActiveRecord::Base
     where('licenses ILIKE ?', "%#{license}%")
   end
 
+  def self.language(language)
+    joins(:github_repository).where('github_repositories.language ILIKE ?', language)
+  end
+
   def self.licenses
     licenses = Project.select('DISTINCT licenses').map(&:licenses).compact
     licenses.join(',').split(',')

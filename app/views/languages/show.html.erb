@@ -1,0 +1,72 @@
+<% title "#{@language} - Libraries" %>
+
+<h1>
+  <%= @language %>
+</h1><hr>
+<div class='row'>
+  <% if @popular.any? %>
+  <div class='col-md-4'>
+    <h4>Popular <%= @language %> Projects</h4>
+    <% @popular.each do |project| %>
+    <div class='project'>
+      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
+      <small>
+        - <%= number_with_delimiter project.github_repository.stargazers_count %> stars
+      </small>
+      <br />
+      <%= truncate project.description, :length => 100 %>
+      <br /><br />
+    </div>
+
+    <% end %>
+  </div>
+  <% end %>
+
+  <% if @updated.any? %>
+  <div class='col-md-4'>
+    <h4>Updated <%= @language %> Projects</h4>
+    <% @updated.each do |project| %>
+    <div class='project'>
+      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
+      <small>
+        - Updated <%= time_ago_in_words project.updated_at %> ago
+      </small>
+      <br />
+      <%= truncate project.description, :length => 100 %>
+      <br /><br />
+    </div>
+    <% end %>
+  </div>
+  <% end %>
+
+  <% if @created.any? %>
+  <div class='col-md-4'>
+    <h4>New <%= @language %> Projects</h4>
+    <% @created.each do |project| %>
+    <div class='project'>
+      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
+      <small>
+        - Published <%= time_ago_in_words project.updated_at %> ago
+      </small>
+      <br />
+      <%= truncate project.description, :length => 100 %>
+      <br /><br />
+    </div>
+    <% end %>
+  </div>
+  <% end %>
+</div>
+
+<div class='row'>
+  <% if @licenses.any? %>
+  <div class='col-md-4'>
+    <h4>Popular <%= @platform_name %> Licenses</h4>
+    <% @licenses.each do |license| %>
+    <p>
+      <%= link_to license.licenses, search_path(license: license.licenses, platform: @platform_name) %>
+      - <%= number_with_delimiter(license.count) %> projects
+    </p>
+    <% end %>
+  </div>
+  <% end %>
+</div>

@@ -1,0 +1,10 @@
+<% title "Languages - Libraries" %>
+
+<h1>Languages</h1><hr>
+<div class='row'>
+  <% @languages.each do |language| %>
+  <div class='platform col-md-4'>
+    <%= render 'language', language: language %>
+  </div>
+  <% end %>
+</div>

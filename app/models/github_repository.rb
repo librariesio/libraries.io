@@ -52,6 +52,13 @@ class GithubRepository < ActiveRecord::Base
     "https://avatars.githubusercontent.com/u/#{owner_id}?size=#{size}"
   end
 
+  def self.popular_languages
+    where("language <> ''")
+    .select('count(*) count, language')
+    .group('language')
+    .order('count DESC')
+  end
+
   def download_github_contributions
     contributions = projects.first.github_client.contributors(full_name)
     return false if contributions.empty?

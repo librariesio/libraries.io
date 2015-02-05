@@ -15,7 +15,7 @@
     </p>
     <% end %>
     <p>
-      Main Language: <%= repo.language %>
+      Main Language: <%= link_to repo.language, language_path(repo.language) %>
     </p>
     <p>
       Created: <%= repo.created_at.to_s(:long) %>
