@@ -4,6 +4,7 @@
     <p>Discover new modules and libraries you can use in your projects.</p>
   </div>
 </div>
+
 <div class='row'>
   <div class='col-md-4'>
     <h3>Package managers</h3>
@@ -18,6 +19,18 @@
     </p>
   </div>
   <div class='col-md-4'>
+    <h3>Languages</h3>
+    <% @languages.each do |language| %>
+    <p>
+      <strong><%= link_to language.language, language_path(language.language.downcase) %></strong> -
+      <%= number_with_delimiter language.count %>
+    </p>
+    <% end %>
+    <p>
+      <%= link_to 'See all language &raquo;'.html_safe, languages_path %>
+    </p>
+  </div>
+  <div class='col-md-4'>
     <h3>Licenses</h3>
     <% @licenses.each do |license| %>
     <p>
@@ -29,9 +42,12 @@
       <%= link_to 'See all licenses &raquo;'.html_safe, licenses_path %>
     </p>
   </div>
+</div>
+
+<div class='row'>
   <div class='col-md-4'>
-    <h3>Recently updated</h3>
-    <% @updated.each do |project| %>
+    <h3>Popular Projects</h3>
+    <% @popular.each do |project| %>
     <div class='project'>
       <strong><%= link_to project.name, project_path(project.to_param) %></strong>
       <small>- <%= link_to project.platform, platform_path(project.platform.downcase) %>
@@ -45,5 +61,26 @@
     <p>
       <%= link_to 'See more projects &raquo;'.html_safe, search_path %>
     </p>
+  </div>
+  <div class='col-md-4'>
+    <h3>New Projects</h3>
+    <% @created.each do |project| %>
+    <div class='project'>
+      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
+      <small>- <%= link_to project.platform, platform_path(project.platform.downcase) %>
+        - Updated <%= time_ago_in_words project.updated_at %> ago
+      </small>
+      <br />
+      <%= truncate project.description, :length => 100 %>
+      <br /><br />
+    </div>
+    <% end %>
+    <p>
+      <%= link_to 'See more projects &raquo;'.html_safe, search_path %>
+    </p>
+  </div>
+  <div class='col-md-4'>
+    <h3>Contributors</h3>
+    <% @contributors.each do |user| %><%= link_to image_tag(user.avatar_url, width: 60, height: 60), user_path(user) %><% end %>
   </div>
 </div>

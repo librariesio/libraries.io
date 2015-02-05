@@ -1,8 +1,13 @@
 class ProjectsController < ApplicationController
   def index
     @licenses = Project.popular_licenses.limit(10)
-    @updated = Project.order('updated_at DESC').limit(4)
+    @created = Project.order('created_at DESC').limit(4)
     @platforms = Project.popular_platforms(10)
+    @languages = GithubRepository.popular_languages.limit(10)
+    @contributors = GithubUser.top(24)
+    @popular = Project.with_repo.limit(30)
+      .order('github_repositories.stargazers_count DESC')
+      .to_a.uniq(&:github_repository_id).first(4)
   end
 
   def search
