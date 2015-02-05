@@ -68,7 +68,7 @@
       <% @licenses.each do |license| %>
         <p>
           <%= link_to license.licenses, search_path(license: license.licenses, platform: @platform_name) %>
-          - <%= pluralize license.count, 'project' %>
+          - <%= number_with_delimiter(license.count) %> projects
         </p>
       <% end %>
     </div>
