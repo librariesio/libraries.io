@@ -1,6 +1,6 @@
 class LicensesController < ApplicationController
   def index
-    @licenses = Project.popular_licenses.limit(21)
+    @licenses = Project.popular_licenses.limit(42)
   end
 
   def show
