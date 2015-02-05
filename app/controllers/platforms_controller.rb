@@ -10,7 +10,7 @@ class PlatformsController < ApplicationController
     @updated = Project.platform(@platform_name).limit(5).order('updated_at DESC')
     @created = Project.platform(@platform_name).limit(5).order('created_at DESC')
     @contributors = GithubUser.top_for(@platform_name, 5)
-    @popular = Project.platform(@platform_name).with_repo.limit(20)
+    @popular = Project.platform(@platform_name).with_repo.limit(30)
       .order('github_repositories.stargazers_count DESC')
       .to_a.uniq(&:github_repository_id).first(5)
   end
