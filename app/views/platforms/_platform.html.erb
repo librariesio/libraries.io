@@ -3,5 +3,5 @@
 
 <% cache("platform:#{name}:count", :expires_in => 1.day) do %>
   <% projects = Project.platform(name).count %>
-  <%= number_with_delimiter projects %> Packages
+  <%= number_with_delimiter projects %> Projects
 <% end %>
