@@ -52,7 +52,7 @@ namespace :download do
   end
 
   task maven: :environment do
-    Repositories::Maven.load_names
+    # Repositories::Maven.load_names
     Repositories::Maven.import(false)
     Download.github_repos('Maven')
   end
