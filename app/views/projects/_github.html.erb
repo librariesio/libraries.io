@@ -7,7 +7,6 @@
       <%= image_tag repo.avatar_url, width: 60, height: 60 %>
       <%= link_to repo, repo.url %>
     </h4>
-
     <p>
       <%= repo.description %>
     </p>
@@ -45,10 +44,12 @@
     <p>
       Watchers: <%= link_to number_with_delimiter(repo.subscribers_count), repo.watchers_url %>
     </p>
-    <p>
-      Contributors: <%= link_to repo.github_contributions.count, repo.contributors_url %>
-    </p>
-
+    <% contributions = repo.github_contributions.count %>
+    <% if contributions > 0 %>
+      <p>
+        Contributors: <%= link_to contributions, repo.contributors_url %>
+      </p>
+    <% end %>
     <p>
       Open issues: <%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count), repo.issues_url) : 'disabled'  %>
     </p>
