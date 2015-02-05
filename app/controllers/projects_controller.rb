@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
     @created = Project.order('created_at DESC').limit(4)
     @platforms = Project.popular_platforms(10)
     @languages = GithubRepository.popular_languages.limit(10)
-    @contributors = GithubUser.top(24)
+    @contributors = GithubUser.top(30)
     @popular = Project.with_repo.limit(50)
       .order('github_repositories.stargazers_count DESC')
       .to_a.uniq(&:github_repository_id).first(4)
