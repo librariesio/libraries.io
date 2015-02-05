@@ -11,6 +11,9 @@ class ProjectsController < ApplicationController
   end
 
   def search
+    @platforms = Project.group('platform, id').search(params[:q]).map(&:platform).uniq.sort
+    @licenses = Project.group('licenses, id').search(params[:q]).where("licenses <> ''").map(&:licenses).uniq.compact.first(8).sort
+
     scope = Project.search(params[:q])
     scope = scope.platform(params[:platform]) if params[:platform].present?
     scope = scope.license(params[:license]) if params[:license].present?
