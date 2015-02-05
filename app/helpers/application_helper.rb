@@ -31,4 +31,12 @@ module ApplicationHelper
   def title(page_title)
     content_for(:title) { page_title }
   end
+
+  def linked_licenses(licenses)
+    licenses.split(',').map{|l| link_to l, license_path(l) }.join(', ').html_safe
+  end
+
+  def linked_keywords(keywords)
+    keywords.split(',').map{|k| link_to k, search_path(q: k) }.join(', ').html_safe
+  end
 end

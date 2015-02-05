@@ -19,13 +19,13 @@
 
     <% if @project.keywords.present? %>
     <p>
-      Keywords: <%= @project.keywords %>
+      <%= 'Keyword'.pluralize(@project.keywords.split(',').length) %>: <%= linked_keywords @project.keywords %>
     </p>
     <% end %>
 
     <% if @project.licenses.present? %>
     <p>
-      Licenses: <%= @project.licenses %>
+      <%= 'License'.pluralize(@project.licenses.split(',').length) %>: <%= linked_licenses @project.licenses %>
     </p>
     <% end %>
 
