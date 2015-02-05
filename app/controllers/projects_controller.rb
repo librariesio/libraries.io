@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
     @project = Project.platform(params[:platform]).find_by!(name: params[:name])
     @versions = @project.versions.order('number DESC').to_a
     if @project.github_repository
-      @contributors = @project.github_repository.github_contributions.includes(:github_user).limit(42)
+      @contributors = @project.github_repository.github_contributions.order('count DESC').includes(:github_user).limit(42)
       @related = @project.github_repository.projects.reject{ |p| p.id == @project.id }
     end
   end
