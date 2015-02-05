@@ -3,11 +3,18 @@
 <div class='row'>
   <div class='col-md-6'>
     <% repo = @project.github_repository %>
-    <h4><%= link_to repo, repo.url %></h4>
-    <%= image_tag repo.avatar_url, width: 60, height: 60 %>
-    <%= repo.description %>
+    <h4>
+      <%= image_tag repo.avatar_url, width: 60, height: 60 %>
+      <%= link_to repo, repo.url %>
+    </h4>
+
+    <p>
+      <%= repo.description %>
+    </p>
     <% if repo.homepage.present? %>
-    <%= link_to repo.homepage, repo.homepage %>
+      <p>
+        <%= link_to repo.homepage, repo.homepage %>
+      </p>
     <% end %>
     <% if repo.fork %>
     <p>
@@ -15,7 +22,7 @@
     </p>
     <% end %>
     <p>
-      Main Language: <%= link_to repo.language, language_path(repo.language) %>
+      Language: <%= link_to repo.language, language_path(repo.language) %>
     </p>
     <p>
       Created: <%= repo.created_at.to_s(:long) %>
@@ -27,23 +34,23 @@
       Last pushed: <%= repo.pushed_at.to_s(:long) %>
     </p>
     <p>
-      size: <%= number_to_human_size repo.size*1000 %>
+      Size: <%= number_to_human_size repo.size*1000 %>
     </p>
     <p>
-      stars: <%= link_to number_with_delimiter(repo.stargazers_count), repo.stargazers_url %>
+      Stars: <%= link_to number_with_delimiter(repo.stargazers_count), repo.stargazers_url %>
     </p>
     <p>
-      forks: <%= link_to number_with_delimiter(repo.forks_count), repo.forks_url %>
+      Forks: <%= link_to number_with_delimiter(repo.forks_count), repo.forks_url %>
     </p>
     <p>
-      watchers: <%= link_to number_with_delimiter(repo.subscribers_count), repo.watchers_url %>
+      Watchers: <%= link_to number_with_delimiter(repo.subscribers_count), repo.watchers_url %>
     </p>
     <p>
       Contributors: <%= link_to repo.github_contributions.count, repo.contributors_url %>
     </p>
 
     <p>
-      issues: <%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count), repo.issues_url) : 'disabled'  %>
+      Open issues: <%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count), repo.issues_url) : 'disabled'  %>
     </p>
     <% if repo.has_wiki? %>
     <p>
@@ -62,7 +69,6 @@
     <% end %>
   </div>
   <div class='col-md-6'>
-    <h4>Contributors</h4>
     <%= render 'projects/contributions' %>
   </div>
 </div>

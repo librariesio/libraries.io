@@ -1,3 +1,4 @@
 <% if @contributors.any? %>
+  <h4>Top Contributors</h4>
   <% @contributors.map(&:github_user).each do |user| %><%= link_to image_tag(user.avatar_url, width: 60, height: 60), user_path(user) %><% end %>
 <% end %>
