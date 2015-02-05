@@ -19,5 +19,5 @@ Rails.application.routes.draw do
   # project routes
   get '/:platform/:name/:number', to: 'versions#show', as: :version, constraints: { :number => /.*/, :name => /.*/ }
   get '/:platform/:name', to: 'projects#show', as: :project, constraints: { :name => /.*/ }
-  get '/:id/', to: 'platforms#show', as: :platform
+  get '/:id', to: 'platforms#show', as: :platform
 end
