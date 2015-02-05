@@ -28,12 +28,16 @@
   <div class='col-md-4'>
     <h4>Platforms</h4>
     <% @platforms.each do |platform| %>
+    <% if platform == params['platform'] %><strong><% end %>
       <%= link_to platform, url_for(params.merge(platform: platform)) %><br>
+      <% if platform == params['platform'] %></strong><% end %>
     <% end %>
 
     <h4>Licenses</h4>
     <% @licenses.each do |license| %>
+      <% if license == params['license'] %><strong><% end %>
       <%= link_to license, url_for(params.merge(license: license)) %><br>
+      <% if license == params['license'] %></strong><% end %>
     <% end %>
   </div>
 </div>
