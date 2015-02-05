@@ -27,13 +27,11 @@
 
   <div class='col-md-4'>
     <h4>Platforms</h4>
-    <% @platforms.each do |platform| %>
-      <%= link_to platform, url_for(params.merge(platform: platform)) %><br>
-    <% end %>
+    <%= render 'platforms' %>
 
     <h4>Licenses</h4>
-    <% @licenses.each do |license| %>
-      <%= link_to license, url_for(params.merge(license: license)) %><br>
+    <% Project.popular_licenses.limit(8).each do |license| %>
+      <%= link_to license.licenses, url_for(params.merge(license: license.licenses)) %><br>
     <% end %>
   </div>
 </div>

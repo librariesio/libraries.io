@@ -1,0 +1,3 @@
+<% Download.platforms.map{|p| p.to_s.demodulize }.each do |platform| %>
+  <%= link_to platform, url_for(params.merge(platform: platform)) %><br>
+<% end %>
