@@ -67,8 +67,12 @@ class Project < ActiveRecord::Base
 
   def update_github_repo
     name_with_owner = github_name_with_owner
-    p name_with_owner
-    return false unless name_with_owner
+    if name_with_owner
+      puts name_with_owner
+    else
+      puts repository_url
+      return false
+    end
 
     begin
       r = github_client.repo(name_with_owner).to_hash
@@ -85,9 +89,6 @@ class Project < ActiveRecord::Base
         if response.code.to_i == 301
           self.repository_url = URI(response['location']).to_s
           update_github_repo
-        else
-          p response.code.to_i
-          p e
         end
       rescue URI::InvalidURIError => e
         p e
