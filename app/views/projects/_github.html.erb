@@ -1,4 +1,3 @@
-<% if @project.github_repository.present? %>
 <hr>
 <div class='row'>
   <div class='col-md-6'>
@@ -73,11 +72,3 @@
     <%= render 'projects/contributions' %>
   </div>
 </div>
-
-<% else %>
-  <% if @project.github_url.present? %>
-    <p>
-      Repo: <%= link_to @project.github_url, @project.github_url %>
-    </p>
-  <% end %>
-<% end %>

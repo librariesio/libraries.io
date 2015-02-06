@@ -39,7 +39,23 @@
       On <%= @project.platform %>: <%= link_to truncate(link, length: 70), link %>
     </p>
     <% end %>
-    <%= render 'projects/github' if @project.github_url.present? %>
+
+    <% if @project.github_url.present? %>
+      <p>
+        Repo: <%= link_to @project.github_url, @project.github_url %>
+      </p>
+    <% end %>
+
+    <% if install_instructions(@project.name, @project.platform, @version.try(:number)) %>
+      <p>
+        Install:
+        <code>
+          <%= install_instructions(@project.name, @project.platform, @version.try(:number)) %>
+        </code>
+      </p>
+    <% end %>
+
+    <%= render 'projects/github' if @project.github_repository.present? %>
   </div>
 
   <div class='col-md-4'>

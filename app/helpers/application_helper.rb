@@ -35,6 +35,25 @@ module ApplicationHelper
     end
   end
 
+  def install_instructions(name, platform, version = nil)
+    case platform
+    when 'Rubygems'
+      "gem install #{name}" + (version ? " -v #{version}" : "")
+    when 'NPM'
+      "npm install #{name}" + (version ? "@#{version}" : "")
+    when 'Jam'
+      "jam install #{name}" + (version ? "@#{version}" : "")
+    when 'Bower'
+      "bower install #{name}" + (version ? "##{version}" : "")
+    when 'Dub'
+      "dub fetch #{name}" + (version ? " --version #{version}" : "")
+    when 'Hackage'
+      "cabal install #{name}" + (version ? "-#{version}" : "")
+    when 'PyPi'
+      "pip install #{name}" + (version ? "==#{version}" : "")
+    end
+  end
+
   def title(page_title)
     content_for(:title) { page_title }
   end
