@@ -36,7 +36,7 @@
     <% end %>
     <% if link = package_link(@project.name, @project.platform, @version.try(:number)) %>
     <p>
-      On <%= @project.platform %>: <%= link_to link, link %>
+      On <%= @project.platform %>: <%= link_to truncate(link, length: 70), link %>
     </p>
     <% end %>
     <%= render 'projects/github' if @project.github_url.present? %>

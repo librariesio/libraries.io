@@ -25,6 +25,13 @@ module ApplicationHelper
       "https://crates.io/crates/#{name}/#{version}"
     when 'Hackage'
       "http://hackage.haskell.org/package/#{name}" + (version ? "-#{version}" : "")
+    when 'Maven'
+      if version
+        "http://search.maven.org/#artifactdetails%7C#{name.gsub(':', '%7C')}%7C#{version}%7Cjar"
+      else
+        group, artifact = name.split(':')
+        "http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22#{group}%22%20AND%20a%3A%22#{artifact}%22"
+      end
     end
   end
 
