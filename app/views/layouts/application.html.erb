@@ -36,10 +36,10 @@
           <strong><%= number_with_delimiter Version.count %></strong>
           versions of
           <strong><%= number_with_delimiter Project.count %></strong>
+          Projects
+          and
+          <strong><%= number_with_delimiter GithubRepository.count %></strong>
         <% end %>
-        Projects
-        and
-        <strong><%= number_with_delimiter GithubRepository.count %></strong>
         Repositories
       </div>
     </div>
