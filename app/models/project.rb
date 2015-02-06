@@ -20,9 +20,10 @@ class Project < ActiveRecord::Base
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :with_repo, -> { includes(:github_repository).where('github_repositories.id IS NOT NULL') }
   scope :without_repo, -> { where(github_repository_id: nil) }
+  scope :with_github_url, -> { where('repository_url ILIKE ?', '%github.com%') }
 
   def self.undownloaded_repos
-    with_repository_url.without_repo
+    with_github_url.without_repo
   end
 
   def self.search(query)
