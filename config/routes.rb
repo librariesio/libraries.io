@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get '/projects/:project_id/versions/:id', to: 'versions#legacy', constraints: { :id => /.*/ }
 
   # project routes
-  get '/:platform/:name/:number', to: 'versions#show', as: :version, constraints: { :number => /.*/, :name => /.*/ }
+  get '/:platform/:name/:number', to: 'projects#show', as: :version, constraints: { :number => /.*/, :name => /.*/ }
   get '/:platform/:name', to: 'projects#show', as: :project, constraints: { :name => /.*/ }
   get '/:id', to: 'platforms#show', as: :platform
 end
