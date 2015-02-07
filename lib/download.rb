@@ -6,12 +6,12 @@ class Download
   end
 
   def self.new_github_repos
-    projects = Project.undownloaded_repos.order('updated_at DESC')
+    projects = Project.undownloaded_repos.order('created_at DESC')
     download_repos(projects)
   end
 
   def self.update_repos(platform)
-    projects = Project.platform(platform).with_repository_url.order('updated_at DESC')
+    projects = Project.platform(platform).with_repository_url.order('updated_at ASC')
     download_repos(projects)
   end
 
