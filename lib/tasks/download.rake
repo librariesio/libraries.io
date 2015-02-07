@@ -52,9 +52,8 @@ namespace :download do
   end
 
   task maven: :environment do
-    # Repositories::Maven.load_names
-    Repositories::Maven.import(false)
-    Download.github_repos('Maven')
+    Repositories::Maven.load_names(50)
+    Repositories::Maven.import
   end
 
   task nimble: :environment do

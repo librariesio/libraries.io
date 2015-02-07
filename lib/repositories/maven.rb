@@ -4,9 +4,12 @@ class Repositories
     HAS_DEPENDENCIES = true
     URL = 'http://maven.org'
 
-    def self.load_names
+    def self.load_names(limit = nil)
       num = REDIS.get('maven-page')
-      if num.nil?
+      if limit
+        REDIS.set 'maven-page', limit
+        num = limit
+      elsif num.nil?
         REDIS.set 'maven-page', 41753
         num = 41753
       else
