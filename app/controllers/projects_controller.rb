@@ -19,9 +19,4 @@ class ProjectsController < ApplicationController
       @related = @project.github_repository.projects.reject{ |p| p.id == @project.id }
     end
   end
-
-  def legacy
-    @project = Project.find params[:id]
-    redirect_to project_path(@project.to_param), :status => :moved_permanently
-  end
 end

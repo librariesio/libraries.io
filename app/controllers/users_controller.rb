@@ -6,9 +6,4 @@ class UsersController < ApplicationController
                           .includes(:github_repository => :projects)
                           .order('count DESC')
   end
-
-  def legacy
-    @user = GithubUser.find(params[:id])
-    redirect_to user_path(@user), :status => :moved_permanently
-  end
 end
