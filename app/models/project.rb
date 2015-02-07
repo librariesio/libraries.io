@@ -61,10 +61,6 @@ class Project < ActiveRecord::Base
       .order('count DESC')
   end
 
-  def github_client
-    AuthToken.client
-  end
-
   def update_github_repo
     name_with_owner = github_name_with_owner
     if name_with_owner
@@ -75,7 +71,7 @@ class Project < ActiveRecord::Base
     end
 
     begin
-      r = github_client.repo(name_with_owner).to_hash
+      r = AuthToken.client.repo(name_with_owner).to_hash
       return false if r.nil? || r.empty?
       g = GithubRepository.find_or_initialize_by(r.slice(:full_name))
       g.owner_id = r[:owner][:id]
