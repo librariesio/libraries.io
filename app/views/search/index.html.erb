@@ -16,8 +16,12 @@
     </h3>
 
     <% if @projects.any? %>
-      <%= render @projects %>
+      <p>
+        <%= page_entries_info @projects %>
+      </p>
+      <%= render @projects.records %>
       <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
+      <%= page_entries_info @projects %>
     <% else %>
       <p>
         No projects found
