@@ -19,9 +19,11 @@
       <p>
         <%= page_entries_info @projects %>
       </p>
-      <%= render @projects.records %>
+      <%= render @projects %>
+      <p>
+        <%= page_entries_info @projects %>
+      </p>
       <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
-      <%= page_entries_info @projects %>
     <% else %>
       <p>
         No projects found
@@ -30,14 +32,21 @@
   </div>
 
   <div class='col-md-4'>
-    <h4>Platforms</h4>
-    <% @platforms.each do |platform| %>
-      <%= link_to platform, url_for(params.merge(platform: platform)) %><br>
-    <% end %>
-
-    <h4>Licenses</h4>
-    <% @licenses.each do |license| %>
-      <%= link_to license.license, url_for(params.merge(license: license.license)) %><br>
+    <% @projects.facets.each do |facet| %>
+      <h4><%= facet_name facet[0] %></h4>
+      <ul>
+        <% facet[1]['terms'].each do |term| %>
+          <% active = term['term'] == params[facet_param(facet[0]).to_sym] %>
+          <li class='<%= 'active' if active %>'>
+            <% if active %>
+              <%= link_to term['term'], url_for(params.merge(facet_param(facet[0]).to_sym => nil)) %>
+            <% else %>
+              <%= link_to term['term'], url_for(params.merge(facet_param(facet[0]).to_sym => term['term'])) %>
+            <% end %>
+            - <%= term['count'] %>
+          </li>
+        <% end %>
+      </ul>
     <% end %>
   </div>
 </div>

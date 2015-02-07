@@ -162,6 +162,10 @@ GEM
     sawyer (0.6.0)
       addressable (~> 2.3.5)
       faraday (~> 0.8, < 0.10)
+    searchkick (0.8.5)
+      activemodel
+      elasticsearch (>= 1)
+      hashie
     sitemap_generator (5.0.5)
       builder
     spdx (1.1.1)
@@ -224,6 +228,7 @@ DEPENDENCIES
   rails_12factor
   redis
   sass-rails
+  searchkick
   sitemap_generator
   spdx
   spring

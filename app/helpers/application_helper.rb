@@ -65,4 +65,22 @@ module ApplicationHelper
   def linked_keywords(keywords)
     keywords.split(',').map{|k| link_to k, search_path(q: k) }.join(', ').html_safe
   end
+
+  def facet_name(string)
+    case string
+    when 'platform'
+      'Platforms'
+    when 'normalized_licenses'
+      'Licenses'
+    end
+  end
+
+  def facet_param(string)
+    case string
+    when 'platform'
+      'platform'
+    when 'normalized_licenses'
+      'license'
+    end
+  end
 end
