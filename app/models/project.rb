@@ -1,4 +1,8 @@
 class Project < ActiveRecord::Base
+  require 'typhoeus/adapters/faraday'
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
   validates_presence_of :name, :platform
 
   #  validate unique name and platform (case?)
@@ -26,11 +30,6 @@ class Project < ActiveRecord::Base
 
   def self.undownloaded_repos
     with_github_url.without_repo
-  end
-
-  def self.search(query)
-    q = "%#{query}%"
-    where('name ILIKE ? or keywords ILIKE ?', q, q).order(:created_at)
   end
 
   def self.license(license)
