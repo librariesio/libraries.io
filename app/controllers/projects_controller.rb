@@ -10,14 +10,6 @@ class ProjectsController < ApplicationController
       .to_a.uniq(&:github_repository_id).first(4)
   end
 
-  def search
-    scope = Project.search(params[:q])
-    scope = scope.platform(params[:platform]) if params[:platform].present?
-    scope = scope.license(params[:license]) if params[:license].present?
-
-    @projects = scope.paginate(page: params[:page])
-  end
-
   def show
     @project = Project.platform(params[:platform]).find_by!(name: params[:name])
     @version = @project.versions.find_by!(number: params[:number]) if params[:number].present?

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   get '/users/github/:login', to: 'users#show', as: :user
 
-  get '/search', to: 'projects#search'
+  get '/search', to: 'search#index'
 
   # legacy
   get '/platforms/:id', to: 'platforms#legacy'
