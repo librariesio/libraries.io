@@ -164,7 +164,7 @@ GEM
       faraday (~> 0.8, < 0.10)
     sitemap_generator (5.0.5)
       builder
-    spdx (1.1.0)
+    spdx (1.1.1)
       fuzzy_match (~> 2.1)
       spdx-licenses (~> 1.0)
     spdx-licenses (1.0.0)
