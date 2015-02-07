@@ -73,7 +73,7 @@ namespace :download do
 
   task pub: :environment do
     Repositories::Pub.import
-    Download.github_repos('Pub')
+    Download.update_repos('Pub')
   end
 
   task pypi: :environment do
