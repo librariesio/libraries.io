@@ -18,7 +18,6 @@ namespace :download do
 
   task bower: :environment do
     Repositories::Bower.import
-    Download.update_repos('Bower')
   end
 
   task cargo: :environment do
