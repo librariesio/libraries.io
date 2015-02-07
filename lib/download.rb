@@ -30,23 +30,32 @@ class Download
   def self.stats
     downloaded = 0
     total = 0
+    counts = {}
     platforms.each do |platform|
-      count = Project.platform(platform.name.to_s.demodulize).count
-      available = platform.project_names.length
-      puts platform.name.to_s.demodulize
-      puts "  Dowloaded: #{count}"
-      puts "  Available: #{available}"
-      puts "  Diff: #{available - count}"
-      downloaded += count
-      total += available
+      counts[platform] = {
+        count: Project.platform(platform.name.to_s.demodulize).count,
+        available: platform.project_names.length
+      }
     end
+    github_count = GithubRepository.count
+    github_total = Project.undownloaded_repos
+
+    counts.each do |platform, values|
+      puts platform.name.to_s.demodulize
+      puts "  Dowloaded: #{values[:count]}"
+      puts "  Available: #{values:[available]}"
+      puts "  Diff: #{values[:available] - values[:count]}"
+      downloaded += values[:count]
+      total += values[:available]
+    end
+
     puts '====='
     puts "  Total Dowloaded: #{downloaded}"
     puts "  Total Available: #{total}"
     puts "  Total Diff: #{total - downloaded}"
 
     puts '====='
-    puts "Github Repos: #{GithubRepository.count}"
-    puts "Remaining: #{Project.undownloaded_repos}"
+    puts "Github Repos: #{github_count}"
+    puts "Remaining: #{github_total}"
   end
 end
