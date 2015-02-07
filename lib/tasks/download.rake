@@ -19,7 +19,6 @@ namespace :download do
 
   task alcatraz: :environment do
     Repositories::Alcatraz.import
-    Download.update_repos('Alcatraz')
   end
 
   task bower: :environment do
@@ -28,32 +27,26 @@ namespace :download do
 
   task cargo: :environment do
     Repositories::Cargo.import
-    Download.update_repos('Cargo')
   end
 
   task dub: :environment do
     Repositories::Dub.import
-    Download.update_repos('Dub')
   end
 
   task emacs: :environment do
     Repositories::Emacs.import
-    Download.update_repos('Emacs')
   end
 
   task hackage: :environment do
     Repositories::Hackage.import
-    Download.update_repos('Hackage')
   end
 
   task hex: :environment do
     Repositories::Hex.import
-    Download.update_repos('Hex')
   end
 
   task jam: :environment do
     Repositories::Jam.import
-    Download.update_repos('Jam')
   end
 
   task maven: :environment do
@@ -63,7 +56,6 @@ namespace :download do
 
   task nimble: :environment do
     Repositories::Nimble.import
-    Download.update_repos('Nimble')
   end
 
   task npm: :environment do
@@ -76,7 +68,6 @@ namespace :download do
 
   task pub: :environment do
     Repositories::Pub.import
-    Download.update_repos('Pub')
   end
 
   task pypi: :environment do
@@ -89,6 +80,5 @@ namespace :download do
 
   task sublime: :environment do
     Repositories::Sublime.import
-    Download.update_repos('Sublime')
   end
 end
