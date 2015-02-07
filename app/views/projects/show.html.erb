@@ -23,9 +23,9 @@
     </p>
     <% end %>
 
-    <% if @project.licenses.present? %>
+    <% if @project.normalized_licenses.present? %>
     <p>
-      <%= 'License'.pluralize(@project.licenses.split(',').length) %>: <%= linked_licenses @project.normalized_licenses %>
+      <%= 'License'.pluralize(@project.normalized_licenses.length) %>: <%= linked_licenses @project.normalized_licenses %>
     </p>
     <% end %>
 
@@ -91,8 +91,8 @@
         <li class='project'>
           <strong><%= link_to project.name, project_path(project.to_param) %></strong>
           <small><%= link_to project.platform, platform_path(project.platform.downcase) %>
-            <% if project.licenses.present? %>
-            - <%= project.licenses %>
+            <% if project.normalized_licenses.present? %>
+            - <%= linked_licenses project.normalized_licenses %>
             <% end %>
           </small>
         </li>

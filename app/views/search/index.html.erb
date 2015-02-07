@@ -33,7 +33,7 @@
 
     <h4>Licenses</h4>
     <% @licenses.each do |license| %>
-      <%= link_to license.licenses, url_for(params.merge(license: license.licenses)) %><br>
+      <%= link_to license.license, url_for(params.merge(license: license.license)) %><br>
     <% end %>
   </div>
 </div>

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root to: 'projects#index'
 
-  resources :licenses
+  resources :licenses, constraints: { :id => /.*/ }
   resources :languages
 
   get '/platforms', to: 'platforms#index', as: :platforms

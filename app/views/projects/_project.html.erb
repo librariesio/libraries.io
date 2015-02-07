@@ -1,8 +1,8 @@
 <div class='project'>
   <strong><%= link_to project.name, project_path(project.to_param) %></strong>
   <small><%= link_to project.platform, platform_path(project.platform.downcase) %>
-  <% if project.licenses.present? %>
-  - <%= project.licenses %>
+  <% if project.normalized_licenses.present? %>
+    - <%= linked_licenses project.normalized_licenses %>
   <% end %>
   </small>
   <br />

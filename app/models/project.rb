@@ -51,6 +51,7 @@ class Project < ActiveRecord::Base
   def self.popular_licenses
     where("normalized_licenses != '{}'")
       .select('count(*) count, unnest(normalized_licenses) as license')
+      .where('NOT (? = ANY("normalized_licenses"))', 'Other')
       .group('license')
       .order('count DESC')
   end

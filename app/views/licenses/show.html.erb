@@ -1,13 +1,18 @@
-<% title "#{@license} license - Libraries" %>
+<% title "#{@license.name} license - Libraries" %>
 
 <h1>
-  <%= @license %>
-  license
-</h1><hr>
+  <%= @license.name %>
+  <% if @license.osi_approved? %>
+    <small>OSI Approved</small>
+  <% end %>
+</h1>
+<% url = "http://spdx.org/licenses/#{@license.id}" %>
+<%= link_to url, url %>
+<hr>
 <div class='row'>
   <% if @popular.any? %>
   <div class='col-md-4'>
-    <h4>Popular <%= @license %> Projects</h4>
+    <h4>Popular <%= @license.id %> Projects</h4>
     <% @popular.each do |project| %>
     <div class='project'>
       <strong><%= link_to project.name, project_path(project.to_param) %></strong>
@@ -25,7 +30,7 @@
 
   <% if @updated.any? %>
   <div class='col-md-4'>
-    <h4>Updated <%= @license %> Projects</h4>
+    <h4>Updated <%= @license.id %> Projects</h4>
     <% @updated.each do |project| %>
     <div class='project'>
       <strong><%= link_to project.name, project_path(project.to_param) %></strong>
@@ -42,7 +47,7 @@
 
   <% if @created.any? %>
   <div class='col-md-4'>
-    <h4>New <%= @license %> Projects</h4>
+    <h4>New <%= @license.id %> Projects</h4>
     <% @created.each do |project| %>
     <div class='project'>
       <strong><%= link_to project.name, project_path(project.to_param) %></strong>

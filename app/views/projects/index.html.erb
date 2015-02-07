@@ -42,7 +42,7 @@
     <h3>Licenses</h3>
     <% @licenses.each do |license| %>
     <p>
-      <strong><%= link_to license.licenses, license_path(license.licenses.downcase) %></strong> -
+      <strong><%= link_to license.license, license_path(license.license) %></strong> -
       <%= number_with_delimiter license.count %>
     </p>
     <% end %>

@@ -25,8 +25,8 @@ SitemapGenerator::Sitemap.create do
   puts "Generating Licenses"
   add licenses_path, :priority => 0.7, :changefreq => 'daily'
   Project.popular_licenses.limit(42).each do |license|
-    name = license.licenses
-    add license_path(name.downcase), :lastmod => Project.license(name).order('updated_at DESC').first.try(:updated_at)
+    name = license.license
+    add license_path(name), :lastmod => Project.license(name).order('updated_at DESC').first.try(:updated_at)
   end
 
   puts "Generating Languages"
