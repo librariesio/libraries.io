@@ -59,7 +59,7 @@ module ApplicationHelper
   end
 
   def linked_licenses(licenses)
-    licenses.split(',').map{|l| link_to l, license_path(l) }.join(', ').html_safe
+    licenses.map{|l| link_to l, license_path(l) }.join(', ').html_safe
   end
 
   def linked_keywords(keywords)

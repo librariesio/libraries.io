@@ -14,6 +14,8 @@ class Project < ActiveRecord::Base
   scope :without_repo, -> { where(github_repository_id: nil) }
   scope :with_github_url, -> { where('repository_url ILIKE ?', '%github.com%') }
 
+  before_save :normalize_licenses
+
   def to_param
     { name: name, platform: platform.downcase }
   end
@@ -32,17 +34,11 @@ class Project < ActiveRecord::Base
   end
 
   def self.license(license)
-    where('licenses ILIKE ?', "%#{license}%")
+    where('? = ANY("normalized_licenses")', license)
   end
 
   def self.language(language)
     joins(:github_repository).where('github_repositories.language ILIKE ?', language)
-  end
-
-  def self.licenses
-    licenses = Project.select('DISTINCT licenses').map(&:licenses).compact
-    licenses.join(',').split(',')
-      .map(&:downcase).map(&:strip).reject(&:blank?).uniq.sort
   end
 
   def self.popular_platforms(limit = 5)
@@ -53,12 +49,24 @@ class Project < ActiveRecord::Base
   end
 
   def self.popular_licenses
-    where("licenses <> ''")
-      .where("licenses != 'UNKNOWN'")
-      .where("licenses != 'OtherLicense'")
-      .select('count(*) count, licenses')
-      .group('licenses')
+    where("normalized_licenses != '{}'")
+      .select('count(*) count, unnest(normalized_licenses) as license')
+      .group('license')
       .order('count DESC')
+  end
+
+  def normalize_licenses
+    if licenses.blank?
+      normalized = []
+    elsif licenses.length > 150
+      normalized = ['Other']
+    else
+      normalized = licenses.split(',').map do |license|
+        Spdx.find(license).try(:id)
+      end.compact
+      normalized = ['Other'] if normalized.empty?
+    end
+    self.normalized_licenses = normalized
   end
 
   def update_github_repo
