@@ -63,12 +63,10 @@ namespace :download do
 
   task npm: :environment do
     Repositories::NPM.import
-    Download.github_repos('NPM')
   end
 
   task packagist: :environment do
     Repositories::Packagist.import
-    Download.github_repos('Packagist')
   end
 
   task pub: :environment do
@@ -78,12 +76,10 @@ namespace :download do
 
   task pypi: :environment do
     Repositories::Pypi.import
-    Download.update_repos('Pypi')
   end
 
   task rubygems: :environment do
     Repositories::Rubygems.import
-    Download.github_repos('Rubygems')
   end
 
   task sublime: :environment do
