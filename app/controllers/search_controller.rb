@@ -16,6 +16,6 @@ class SearchController < ApplicationController
     {
       platform: params[:platform],
       normalized_licenses: params[:license]
-    }.delete_if { |_, v| v.nil? || v.empty? }
+    }.compact
   end
 end
