@@ -5,14 +5,6 @@ class Project < ActiveRecord::Base
 
   # TODO validate homepage format
 
-  def to_param
-    { name: name, platform: platform.downcase }
-  end
-
-  def to_s
-    name
-  end
-
   has_many :versions
   belongs_to :github_repository
 
@@ -21,6 +13,14 @@ class Project < ActiveRecord::Base
   scope :with_repo, -> { includes(:github_repository).where('github_repositories.id IS NOT NULL') }
   scope :without_repo, -> { where(github_repository_id: nil) }
   scope :with_github_url, -> { where('repository_url ILIKE ?', '%github.com%') }
+
+  def to_param
+    { name: name, platform: platform.downcase }
+  end
+
+  def to_s
+    name
+  end
 
   def self.undownloaded_repos
     with_github_url.without_repo
