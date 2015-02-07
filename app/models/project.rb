@@ -79,7 +79,7 @@ class Project < ActiveRecord::Base
       return false if r.nil? || r.empty?
       g = GithubRepository.find_or_initialize_by(r.slice(:full_name))
       g.owner_id = r[:owner][:id]
-      g.assign_attributes r.slice(*github_keys)
+      g.assign_attributes r.slice(*GithubRepository::API_FIELDS)
       g.save
       self.github_repository_id = g.id
       self.save
@@ -94,18 +94,6 @@ class Project < ActiveRecord::Base
         p e
       end
     end
-  end
-
-  def download_github_contributions
-    return false unless github_repository
-    github_repository.download_github_contributions
-  end
-
-  def github_keys
-    [:description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
-     :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
-     :forks_count, :mirror_url, :open_issues_count, :default_branch,
-     :subscribers_count]
   end
 
   def github_url

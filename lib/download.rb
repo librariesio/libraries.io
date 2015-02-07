@@ -1,4 +1,32 @@
 class Download
+  def self.platforms
+    Repositories.descendants
+      .reject { |platform| platform == Repositories::Base }
+      .sort_by(&:name)
+  end
+
+  def self.new_github_repos
+    projects = Project.undownloaded_repos.order('updated_at DESC')
+    download_repos(projects)
+  end
+
+  def self.update_repos(platform)
+    projects = Project.platform(platform).with_repository_url.order('updated_at DESC')
+    download_repos(projects)
+  end
+
+  def self.download_repos(projects)
+    projects.find_each(&:update_github_repo)
+  end
+
+  def self.download_contributors
+    GithubRepository.order('updated_at ASC').find_each(&:download_github_contributions)
+  end
+
+  def self.update_github_repos
+    GithubRepository.order('updated_at ASC').find_each(&:update_from_github)
+  end
+
   def self.stats
     downloaded = 0
     total = 0
@@ -20,45 +48,5 @@ class Download
     puts '====='
     puts "Github Repos: #{GithubRepository.count}"
     puts "Remaining: #{Project.undownloaded_repos}"
-  end
-
-  def self.platforms
-    Repositories.descendants
-      .reject { |platform| platform == Repositories::Base }
-      .sort_by(&:name)
-  end
-  def self.total
-    platforms.sum { |pm| pm.project_names.length }
-  end
-
-  def self.import
-    platforms.each(&:import)
-  end
-
-  def self.keys
-    platforms.flat_map(&:keys).map(&:to_s).sort.uniq
-  end
-
-  def self.github_repos(platform)
-    projects = Project.platform(platform).undownloaded_repos.order('updated_at DESC')
-    download_repos(projects)
-  end
-
-  def self.new_github_repos
-    projects = Project.undownloaded_repos.order('updated_at DESC')
-    download_repos(projects)
-  end
-
-  def self.update_repos(platform)
-    projects = Project.platform(platform).with_repository_url.order('updated_at DESC')
-    download_repos(projects)
-  end
-
-  def self.download_repos(projects)
-    projects.find_each(&:update_github_repo)
-  end
-
-  def self.download_contributors
-    GithubRepository.order('updated_at DESC').each(&:download_github_contributions)
   end
 end

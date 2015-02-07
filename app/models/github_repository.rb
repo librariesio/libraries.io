@@ -1,6 +1,11 @@
 class GithubRepository < ActiveRecord::Base
   # validations (presense and uniqueness)
 
+  API_FIELDS = [:description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
+   :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
+   :forks_count, :mirror_url, :open_issues_count, :default_branch,
+   :subscribers_count]
+
   has_many :projects
   has_many :github_contributions
 
@@ -59,8 +64,20 @@ class GithubRepository < ActiveRecord::Base
     .order('count DESC')
   end
 
+  def github_client
+    AuthToken.client
+  end
+
+  def update_from_github
+    r = github_client.repo(full_name).to_hash
+    return false if r.nil? || r.empty?
+    self.owner_id = r[:owner][:id]
+    assign_attributes r.slice(*API_FIELDS)
+    save
+  end
+
   def download_github_contributions
-    contributions = projects.first.github_client.contributors(full_name)
+    contributions = github_client.contributors(full_name)
     return false if contributions.empty?
     contributions.each do |c|
       p c.login
