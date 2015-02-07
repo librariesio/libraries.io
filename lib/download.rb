@@ -43,7 +43,7 @@ class Download
     counts.each do |platform, values|
       puts platform.name.to_s.demodulize
       puts "  Dowloaded: #{values[:count]}"
-      puts "  Available: #{values:[available]}"
+      puts "  Available: #{values[:available]}"
       puts "  Diff: #{values[:available] - values[:count]}"
       downloaded += values[:count]
       total += values[:available]
