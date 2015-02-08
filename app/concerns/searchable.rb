@@ -4,43 +4,19 @@ module Searchable
   included do
     include Elasticsearch::Model
 
-    # Set up index configuration and mapping
-    #
-    # settings index: { number_of_shards: 1, number_of_replicas: 0 } do
-    #   mapping do
-    #     indexes :title, type: 'multi_field' do
-    #       indexes :title,     analyzer: 'snowball'
-    #       indexes :tokenized, analyzer: 'simple'
-    #     end
-    #
-    #     indexes :content, type: 'multi_field' do
-    #       indexes :content,   analyzer: 'snowball'
-    #       indexes :tokenized, analyzer: 'simple'
-    #     end
-    #
-    #     indexes :published_on, type: 'date'
-    #
-    #     indexes :authors do
-    #       indexes :full_name, type: 'multi_field' do
-    #         indexes :full_name
-    #         indexes :raw, analyzer: 'keyword'
-    #       end
-    #     end
-    #
-    #     indexes :categories, analyzer: 'keyword'
-    #
-    #     indexes :comments, type: 'nested' do
-    #       indexes :body, analyzer: 'snowball'
-    #       indexes :stars
-    #       indexes :pick
-    #       indexes :user, analyzer: 'keyword'
-    #       indexes :user_location, type: 'multi_field' do
-    #         indexes :user_location
-    #         indexes :raw, analyzer: 'keyword'
-    #       end
-    #     end
-    #   end
-    # end
+    settings index: { number_of_shards: 1, number_of_replicas: 0 } do
+      mapping do
+        indexes :name, :analyzer => 'snowball', :boost => 10
+        indexes :description, :analyzer => 'snowball', :boost => 5
+        indexes :homepage
+        indexes :repository_url
+        indexes :normalized_licenses, :analyzer => 'keyword'
+        indexes :platform, :analyzer => 'keyword'
+
+        indexes :created_at
+        indexes :updated_at
+      end
+    end
 
     # Set up callbacks for updating the index on model changes
     #
@@ -61,136 +37,22 @@ module Searchable
     # end
 
     def self.search(query, options={})
-
-      # Prefill and set the filters (top-level `filter` and `facet_filter` elements)
-      #
-      __set_filters = lambda do |key, f|
-
-        @search_definition[:filter][:and] ||= []
-        @search_definition[:filter][:and]  |= [f]
-
-        @search_definition[:facets][key.to_sym][:facet_filter][:and] ||= []
-        @search_definition[:facets][key.to_sym][:facet_filter][:and]  |= [f]
-      end
-
-      @search_definition = {
-        query: {},
-
-        # highlight: {
-        #   pre_tags: ['<em class="label label-highlight">'],
-        #   post_tags: ['</em>'],
-        #   fields: {
-        #     title:    { number_of_fragments: 0 },
-        #     abstract: { number_of_fragments: 0 },
-        #     content:  { fragment_size: 50 }
-        #   }
-        # },
-
-        filter: {},
-
+      search_definition = {
+        query: { query_string: { query: query } },
+        filter: { bool: { must: [] } },
         facets: {
-          platforms: {
-            terms: {
-              field: 'platform'
-            },
-            facet_filter: {}
-          },
-          licenses: {
-            terms: {
-              field: 'normalized_licenses'
-            },
-            facet_filter: {}
-          }
+          platforms: { terms: { field: "platform" } },
+          licenses: { terms: { field: "normalized_licenses" } }
         }
       }
-
-      unless query.blank?
-        @search_definition[:query] = {
-          bool: {
-            should: [
-              { multi_match: {
-                  query: query,
-                  fields: ['name^10', 'description^2', 'keywords'],
-                  operator: 'and'
-                }
-              }
-            ]
-          }
-        }
-      else
-        @search_definition[:query] = { match_all: {} }
-        @search_definition[:sort]  = { published_on: 'desc' }
+      options[:filters] ||= []
+      options[:filters].each do |k,v|
+        if v.present?
+          search_definition[:filter][:bool][:must] << {term: { k => v}}
+        end
       end
 
-      # if options[:category]
-      #   f = { term: { categories: options[:category] } }
-      #
-      #   __set_filters.(:authors, f)
-      #   __set_filters.(:published, f)
-      # end
-      #
-      # if options[:author]
-      #   f = { term: { 'authors.full_name.raw' => options[:author] } }
-      #
-      #   __set_filters.(:categories, f)
-      #   __set_filters.(:published, f)
-      # end
-      #
-      # if options[:published_week]
-      #   f = {
-      #     range: {
-      #       published_on: {
-      #         gte: options[:published_week],
-      #         lte: "#{options[:published_week]}||+1w"
-      #       }
-      #     }
-      #   }
-      #
-      #   __set_filters.(:categories, f)
-      #   __set_filters.(:authors, f)
-      # end
-      #
-      # if query.present? && options[:comments]
-      #   @search_definition[:query][:bool][:should] ||= []
-      #   @search_definition[:query][:bool][:should] << {
-      #     nested: {
-      #       path: 'comments',
-      #       query: {
-      #         multi_match: {
-      #           query: query,
-      #           fields: ['body'],
-      #           operator: 'and'
-      #         }
-      #       }
-      #     }
-      #   }
-      #   @search_definition[:highlight][:fields].update 'comments.body' => { fragment_size: 50 }
-      # end
-
-      if options[:sort]
-        @search_definition[:sort]  = { options[:sort] => 'desc' }
-        @search_definition[:track_scores] = true
-      end
-
-      unless query.blank?
-        @search_definition[:suggest] = {
-          text: query,
-          suggest_title: {
-            term: {
-              field: 'name.tokenized',
-              suggest_mode: 'always'
-            }
-          },
-          suggest_body: {
-            term: {
-              field: 'description.tokenized',
-              suggest_mode: 'always'
-            }
-          }
-        }
-      end
-
-      __elasticsearch__.search(@search_definition)
+      __elasticsearch__.search(search_definition)
     end
   end
 end
