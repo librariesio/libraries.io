@@ -1,4 +1,6 @@
 module ApplicationHelper
+  include SanitizeUrl
+
   def package_link(name, platform, version = nil)
     case platform
     when 'Hex'

@@ -11,7 +11,7 @@
     </p>
     <% if repo.homepage.present? %>
       <p>
-        <%= link_to repo.homepage, repo.homepage %>
+        <%= link_to repo.homepage, sanitize_url(repo.homepage) %>
       </p>
     <% end %>
     <% if repo.fork %>
