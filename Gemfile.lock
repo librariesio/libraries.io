@@ -60,6 +60,11 @@ GEM
       elasticsearch-transport (= 1.0.6)
     elasticsearch-api (1.0.6)
       multi_json
+    elasticsearch-model (0.1.6)
+      activesupport (> 3)
+      elasticsearch (> 0.4)
+      hashie
+    elasticsearch-rails (0.1.6)
     elasticsearch-transport (1.0.6)
       faraday
       multi_json
@@ -203,6 +208,8 @@ DEPENDENCIES
   bootstrap-sass
   bootswatch-rails
   coffee-rails
+  elasticsearch-model
+  elasticsearch-rails
   faraday
   gems
   hiredis
