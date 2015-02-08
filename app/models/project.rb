@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
   require 'typhoeus/adapters/faraday'
-  searchkick
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   validates_presence_of :name, :platform
 

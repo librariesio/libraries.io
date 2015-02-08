@@ -1,21 +1,11 @@
 class SearchController < ApplicationController
   def index
-    @projects = Project.search params[:q],
-                               page: params[:page],
-                               per_page: 30,
-                               facets: facets,
-                               smart_facets: false,
-                               where: filters
-  end
+    scope = Project.search(params[:q])
+    scope = scope.platform(params[:platform]) if params[:platform].present?
+    scope = scope.license(params[:license]) if params[:license].present?
 
-  def facets
-    [:platform, :normalized_licenses]
-  end
-
-  def filters
-    {
-      platform: params[:platform],
-      normalized_licenses: params[:license]
-    }.delete_if { |_, v| v.nil? || v.empty? }
+    @licenses = Project.popular_licenses.limit(20)
+    @platforms = Download.platforms.map{|p| p.to_s.demodulize }
+    @projects = scope.paginate(page: params[:page])
   end
 end
