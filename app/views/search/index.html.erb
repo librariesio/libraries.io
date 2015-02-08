@@ -3,28 +3,18 @@
 <div class='row'>
   <div class='col-md-8'>
     <h3>
-      <% if params[:license].present? %>
-      <%= params[:license] %>
-      <% end %>
-      Projects
-      <% if params[:platform].present? %>
-      on <%= params[:platform] %>
-      <% end %>
-      <% if params[:q].present? %>
-      matching "<%= params[:q] %>"
-      <% end %>
+      Search for "<%= params[:q] %>"
+      <small><%= page_entries_info @projects, model: 'projects' %></small>
     </h3>
 
     <% if @projects.any? %>
-      <p>
-        <%= page_entries_info @projects %>
-      </p>
       <%= render @projects.records %>
       <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
-      <%= page_entries_info @projects %>
     <% else %>
       <p>
-        No projects found
+        <% if params[:platforms].present? || params[:licenses].present? %>
+          <%= link_to 'Try removing some filters.', search_path(q: params[:q]) %>
+        <% end %>
       </p>
     <% end %>
   </div>

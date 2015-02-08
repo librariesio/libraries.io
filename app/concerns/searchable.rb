@@ -41,8 +41,14 @@ module Searchable
         query: { query_string: { query: query } },
         filter: { bool: { must: [] } },
         facets: {
-          platforms: { terms: { field: "platform" } },
-          licenses: { terms: { field: "normalized_licenses" } }
+          platforms: { terms: {
+            field: "platform",
+            size: 30
+          } },
+          licenses: { terms: {
+            field: "normalized_licenses",
+            size: 30
+          } }
         }
       }
       options[:filters] ||= []
