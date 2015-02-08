@@ -29,6 +29,7 @@ gem 'sitemap_generator'
 gem 'newrelic_rpm'
 gem 'spdx'
 gem 'searchkick'
+gem 'faraday'
 
 group :development do
   gem 'spring'

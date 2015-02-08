@@ -210,6 +210,7 @@ DEPENDENCIES
   coffee-rails
   elasticsearch-model
   elasticsearch-rails
+  faraday
   gems
   hiredis
   jbuilder

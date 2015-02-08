@@ -1,5 +1,4 @@
 class Project < ActiveRecord::Base
-  require 'typhoeus/adapters/faraday'
   searchkick
 
   validates_presence_of :name, :platform
