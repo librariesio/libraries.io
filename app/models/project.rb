@@ -1,7 +1,5 @@
 class Project < ActiveRecord::Base
-  require 'typhoeus/adapters/faraday'
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
+  include Searchable
 
   validates_presence_of :name, :platform
 

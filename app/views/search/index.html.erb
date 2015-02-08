@@ -30,14 +30,21 @@
   </div>
 
   <div class='col-md-4'>
-    <h4>Platforms</h4>
-    <% @platforms.each do |platform| %>
-      <%= link_to platform, url_for(params.merge(platform: platform)) %><br>
-    <% end %>
-
-    <h4>Licenses</h4>
-    <% @licenses.each do |license| %>
-      <%= link_to license.license, url_for(params.merge(license: license.license)) %><br>
+    <% @projects.response.facets.each do |name, facet| %>
+      <h4><%= name %></h4>
+      <ul>
+        <% facet['terms'].each do |term| %>
+          <% active = term['term'] == params[name.to_sym] %>
+          <li class='<%= 'active' if active %>'>
+            <% if active %>
+              <%= link_to term['term'], url_for(params.merge(name.to_sym => nil)) %>
+            <% else %>
+              <%= link_to term['term'], url_for(params.merge(name.to_sym => term['term'])) %>
+            <% end %>
+            - <%= term['count'] %>
+          </li>
+        <% end %>
+      </ul>
     <% end %>
   </div>
 </div>
