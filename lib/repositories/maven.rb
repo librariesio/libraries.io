@@ -2,7 +2,8 @@ class Repositories
   class Maven < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    URL = 'http://maven.org'
+    URL = "http://maven.org"
+    BASE_URL = "https://maven-repository.com"
 
     def self.load_names(limit = nil)
       num = REDIS.get('maven-page')
@@ -56,7 +57,13 @@ class Repositories
 
     def self.versions(project)
       # multiple verion pages
-      page = get_html("https://maven-repository.com/artifact/#{project[:path]}/")
+      initial_page = get_html("https://maven-repository.com/artifact/#{project[:path]}/")
+      version_pages(initial_page).reduce(extract_versions(initial_page)) do |acc, page|
+        acc.concat( extract_versions(get_html(page)) )
+      end
+    end
+
+    def self.extract_versions(page)
       page.css('tr')[1..-1].map do |tr|
         tds = tr.css('td')
         {
@@ -64,6 +71,10 @@ class Repositories
           :published_at => tds[2].text
         }
       end
+    end
+
+    def self.version_pages(page)
+      page.css('.pagination li a').map{|link| BASE_URL + link['href'] }.uniq
     end
   end
 end
