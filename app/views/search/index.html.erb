@@ -21,6 +21,7 @@
 
   <div class='col-md-4'>
     <% @projects.response.facets.each do |name, facet| %>
+      <% next if facet['terms'].empty? %>
       <h4><%= name.humanize %></h4>
       <ul>
         <% facet['terms'].each do |term| %>
