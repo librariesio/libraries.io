@@ -31,7 +31,7 @@
 
   <div class='col-md-4'>
     <% @projects.response.facets.each do |name, facet| %>
-      <h4><%= name %></h4>
+      <h4><%= name.humanize %></h4>
       <ul>
         <% facet['terms'].each do |term| %>
           <% active = term['term'] == params[name.to_sym] %>
