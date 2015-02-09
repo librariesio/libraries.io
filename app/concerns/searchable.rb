@@ -37,6 +37,7 @@ module Searchable
     # end
 
     def self.search(query, options={})
+      query = '*' if query.blank?
       search_definition = {
         query: { query_string: { query: query } },
         filter: { bool: { must: [] } },
