@@ -51,7 +51,7 @@ namespace :download do
 
   task maven: :environment do
     Repositories::Maven.load_names(50)
-    Repositories::Maven.import
+    Repositories::Maven.import_recent
   end
 
   task nimble: :environment do
@@ -59,11 +59,11 @@ namespace :download do
   end
 
   task npm: :environment do
-    Repositories::NPM.import
+    Repositories::NPM.import_recent
   end
 
   task packagist: :environment do
-    Repositories::Packagist.import
+    Repositories::Packagist.import_recent
   end
 
   task pub: :environment do
@@ -71,11 +71,11 @@ namespace :download do
   end
 
   task pypi: :environment do
-    Repositories::Pypi.import
+    Repositories::Pypi.import_recent
   end
 
   task rubygems: :environment do
-    Repositories::Rubygems.import
+    Repositories::Rubygems.import_recent
   end
 
   task sublime: :environment do
