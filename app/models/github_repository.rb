@@ -1,7 +1,7 @@
 class GithubRepository < ActiveRecord::Base
   # validations (presense and uniqueness)
 
-  API_FIELDS = [:description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
+  API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
    :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
    :forks_count, :mirror_url, :open_issues_count, :default_branch,
    :subscribers_count]
@@ -68,12 +68,29 @@ class GithubRepository < ActiveRecord::Base
     AuthToken.client
   end
 
+  def id_or_name
+    github_id || full_name
+  end
+
   def update_from_github
-    r = github_client.repo(full_name).to_hash
-    return false if r.nil? || r.empty?
-    self.owner_id = r[:owner][:id]
-    assign_attributes r.slice(*API_FIELDS)
-    save
+    begin
+      r = github_client.repo(id_or_name).to_hash
+      return false if r.nil? || r.empty?
+      self.github_id = r[:id]
+      self.owner_id = r[:owner][:id]
+      assign_attributes r.slice(*API_FIELDS)
+      save
+    rescue Octokit::NotFound, Octokit::Forbidden => e
+      begin
+        response = Net::HTTP.get_response(URI(url))
+        if response.code.to_i == 301
+          self.full_name = URI(response['location']).to_s.match(/github.com\/(.*)/)[1]
+          update_from_github
+        end
+      rescue URI::InvalidURIError => e
+        p e
+      end
+    end
   end
 
   def download_github_contributions
