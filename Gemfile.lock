@@ -163,6 +163,7 @@ GEM
     sawyer (0.6.0)
       addressable (~> 2.3.5)
       faraday (~> 0.8, < 0.10)
+    semantic (1.4.0)
     sitemap_generator (5.0.5)
       builder
     spdx (1.1.1)
@@ -226,6 +227,7 @@ DEPENDENCIES
   redis
   sanitize-url
   sass-rails
+  semantic
   sitemap_generator
   spdx
   spring

@@ -3,6 +3,18 @@ class Version < ActiveRecord::Base
   # validate unique number and project_id
   belongs_to :project, touch: true
 
+  def <=>(other)
+    if parsed_number.is_a?(String) || other.parsed_number.is_a?(String)
+      other.number <=> number
+    else
+      other.parsed_number <=> parsed_number
+    end
+  end
+
+  def parsed_number
+    Semantic::Version.new(number) rescue number
+  end
+
   def to_param
     project.to_param.merge(number: number)
   end
