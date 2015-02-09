@@ -4,8 +4,13 @@ class Repositories
       mapped_project = mapping(project)
       return false unless mapped_project
       puts "Saving #{mapped_project[:name]}"
-      dbproject = Project.find_or_create_by({:name => mapped_project[:name], :platform => self.name.demodulize})
-      dbproject.update_attributes(mapped_project.except(:name))
+      dbproject = Project.find_or_initialize_by({:name => mapped_project[:name], :platform => self.name.demodulize})
+      if dbproject.new_record?
+        dbproject.assign_attributes(mapped_project.except(:name))
+        dbproject.save
+      else
+        dbproject.update_attributes(mapped_project.except(:name))
+      end
 
       if include_versions && self::HAS_VERSIONS
         versions(project).each do |version|

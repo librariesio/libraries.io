@@ -17,6 +17,7 @@ class Project < ActiveRecord::Base
   scope :with_github_url, -> { where('repository_url ILIKE ?', '%github.com%') }
 
   before_save :normalize_licenses
+  after_create :update_github_repo
 
   def to_param
     { name: name, platform: platform.downcase }
@@ -104,6 +105,7 @@ class Project < ActiveRecord::Base
   end
 
   def github_name_with_owner
+    return nil if repository_url.nil?
     url = repository_url.clone
     github_regex = /(((https|http|git|ssh)?:\/\/(www\.)?)|ssh:\/\/git@|https:\/\/git@|scm:git:git@)(github.com|raw.githubusercontent.com)(:|\/)/i
     return nil unless url.match(github_regex)
