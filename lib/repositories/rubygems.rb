@@ -19,7 +19,7 @@ class Repositories
         :description => project["info"],
         :homepage => project["homepage_uri"],
         :licenses => project.fetch("licenses", []).try(:join, ','),
-        :repository_url => project['source_code_uri']
+        :repository_url => repo_fallback(project['source_code_uri'],project["homepage_uri"])
       }
     end
 

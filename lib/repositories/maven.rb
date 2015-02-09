@@ -50,7 +50,7 @@ class Repositories
         name: project[:name],
         description: hash['Description'].try(:text),
         homepage: hash['URL'].try(:css,'a').try(:text),
-        repository_url: hash['Connection'].try(:text),
+        repository_url: repo_fallback(hash['Connection'].try(:text), hash['URL'].try(:css,'a').try(:text)),
         licenses: hash['Name'].try(:text)
       }
     end

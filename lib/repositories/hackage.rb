@@ -22,7 +22,7 @@ class Repositories
         description: description(project[:page]),
         licenses: find_attribute(project[:page], 'License'),
         homepage: find_attribute(project[:page], 'Home page'),
-        repository_url: repository_url(find_attribute(project[:page], 'Source repository'))
+        repository_url: repo_fallback(repository_url(find_attribute(project[:page], 'Source repository')), find_attribute(project[:page], 'Home page'))
       }
     end
 

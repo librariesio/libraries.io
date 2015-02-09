@@ -5,13 +5,13 @@ class Project < ActiveRecord::Base
 
   #  validate unique name and platform (case?)
 
-  # TODO validate homepage format
-
   has_many :versions
   belongs_to :github_repository
 
   scope :platform, ->(platform) { where('platform ILIKE ?', platform) }
+  scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
+  scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
   scope :with_repo, -> { includes(:github_repository).where('github_repositories.id IS NOT NULL') }
   scope :without_repo, -> { where(github_repository_id: nil) }
   scope :with_github_url, -> { where('repository_url ILIKE ?', '%github.com%') }
@@ -105,37 +105,6 @@ class Project < ActiveRecord::Base
   end
 
   def github_name_with_owner
-    return nil if repository_url.nil?
-    url = repository_url.clone
-    github_regex = /(((https|http|git|ssh)?:\/\/(www\.)?)|ssh:\/\/git@|https:\/\/git@|scm:git:git@)(github.com|raw.githubusercontent.com)(:|\/)/i
-    return nil unless url.match(github_regex)
-    url.gsub!(github_regex, '').strip!
-    url.gsub!(/(\.git|\/)$/i, '')
-    url.gsub!(' ', '')
-    url.gsub!(/^scm:git:/, '')
-    url = url.split('/').reject(&:blank?)[0..1]
-    return nil unless url.length == 2
-    url.join('/')
-  end
-
-  def bitbucket_url
-    url = repository_url.clone
-    github_regex = /^(((https|http|git)?:\/\/(www\.)?)|git@)bitbucket.org(:|\/)/i
-    return nil unless url.match(github_regex)
-    url.gsub!(github_regex, '').strip!
-    url.gsub!(/(\.git|\/)$/i, '')
-    url = url.split('/')[0..1]
-    return nil unless url.length == 2
-    "https://bitbucket.org/#{bitbucket_name_with_owner}"
-  end
-
-  def bitbucket_name_with_owner
-    github_regex = /^(((https|http|git)?:\/\/(www\.)?)|git@)bitbucket.org(:|\/)/i
-    return nil unless url.match(github_regex)
-    url.gsub!(github_regex, '').strip!
-    url.gsub!(/(\.git|\/)$/i, '')
-    url = url.split('/')[0..1]
-    return nil unless url.length == 2
-    url.join('/')
+    GithubRepository.extract_full_name repository_url
   end
 end

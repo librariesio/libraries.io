@@ -17,7 +17,7 @@ class Repositories
         :name => project["name"],
         :description => project["description"],
         :homepage => project["homepage"],
-        :repository_url => parse_repo(project["issues"]),
+        :repository_url => repo_fallback(parse_repo(project["issues"]),project["homepage"]),
         :keywords => project["labels"].join(',')
       }
     end

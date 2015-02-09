@@ -27,7 +27,7 @@ class Repositories
       {
         :name => project["name"],
         :description => project["description"],
-        :repository_url => project['url'],
+        :repository_url => repo_fallback(project['url'],project['web']),
         :keywords => project['tags'].join(','),
         :licenses => project['license'],
         :homepage => project['web']

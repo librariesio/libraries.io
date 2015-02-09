@@ -21,7 +21,7 @@ class Repositories
         :homepage => latest_version['home_page'],
         :keywords => latest_version['keywords'].join(','),
         :licenses => latest_version['license'].join(','),
-        :repository_url => project['repository']
+        :repository_url => repo_fallback(project['repository'],latest_version['home_page'])
       }
     end
 

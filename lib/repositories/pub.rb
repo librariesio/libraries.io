@@ -25,7 +25,8 @@ class Repositories
       {
         :name => project["name"],
         :homepage => latest_version['pubspec']['homepage'],
-        :description => latest_version['pubspec']['description']
+        :description => latest_version['pubspec']['description'],
+        :repository_url => repo_fallback('', latest_version['pubspec']['homepage'])
       }
     end
 

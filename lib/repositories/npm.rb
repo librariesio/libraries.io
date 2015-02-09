@@ -25,7 +25,7 @@ class Repositories
         :homepage => project["homepage"],
         :keywords => Array.wrap(latest_version.fetch("keywords", [])).join(','),
         :licenses => licenses(latest_version),
-        :repository_url => latest_version.fetch('repository', {})['url']
+        :repository_url => repo_fallback(latest_version.fetch('repository', {})['url'],project["homepage"])
       }
     end
 

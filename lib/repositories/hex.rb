@@ -29,7 +29,7 @@ class Repositories
         :homepage => links.except('github').first.try(:last),
         :repository_url => links['github'],
         :description => project["meta"]["description"],
-        :licenses => project["meta"].fetch("licenses", []).join(',')
+        :licenses => repo_fallback(project["meta"].fetch("licenses", []).join(','), links.except('github').first.try(:last))
       }
     end
 

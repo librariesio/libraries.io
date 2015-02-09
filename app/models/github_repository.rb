@@ -84,13 +84,26 @@ class GithubRepository < ActiveRecord::Base
       begin
         response = Net::HTTP.get_response(URI(url))
         if response.code.to_i == 301
-          self.full_name = URI(response['location']).to_s.match(/github.com\/(.*)/)[1]
+          self.full_name = GithubRepository.extract_full_name URI(response['location']).to_s
           update_from_github
         end
       rescue URI::InvalidURIError => e
         p e
       end
     end
+  end
+
+  def self.extract_full_name(url)
+    return nil if url.nil?
+    github_regex = /(((https|http|git|ssh)?:\/\/(www\.)?)|ssh:\/\/git@|https:\/\/git@|scm:git:git@)(github.com|raw.githubusercontent.com)(:|\/)/i
+    return nil unless url.match(github_regex)
+    url.gsub!(github_regex, '').strip!
+    url.gsub!(/(\.git|\/)$/i, '')
+    url.gsub!(' ', '')
+    url.gsub!(/^scm:git:/, '')
+    url = url.split('/').reject(&:blank?)[0..1]
+    return nil unless url.length == 2
+    url.join('/')
   end
 
   def download_github_contributions

@@ -58,5 +58,19 @@ class Repositories
     def self.get_json(url)
       get(url, headers: { 'Accept' => "application/json"})
     end
+
+    def self.repo_fallback(repo, homepage)
+      repo = '' if repo.nil?
+      homepage = '' if homepage.nil?
+      repo_gh = GithubRepository.extract_full_name(repo)
+      homepage_gh = GithubRepository.extract_full_name(homepage)
+      if repo_gh.present?
+        "https://github.com/#{repo_gh}"
+      elsif homepage_gh.present?
+        "https://github.com/#{homepage_gh}"
+      else
+        repo
+      end
+    end
   end
 end

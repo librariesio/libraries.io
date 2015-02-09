@@ -27,7 +27,7 @@ class Repositories
         :description => project['crate']['description'],
         :keywords => project['crate']['keywords'].join(','),
         :licenses => project['crate']['license'],
-        :repository_url => project['crate']['repository']
+        :repository_url => repo_fallback(project['crate']['repository'], project['crate']['homepage'])
       }
     end
 
