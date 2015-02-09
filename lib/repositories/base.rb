@@ -19,6 +19,8 @@ class Repositories
     def self.update(name, include_versions = true)
       begin
         save(project(name), include_versions)
+      rescue SystemExit, Interrupt
+        exit 0
       rescue Exception => e
         p name
         p e
