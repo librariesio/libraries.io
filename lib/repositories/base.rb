@@ -65,9 +65,9 @@ class Repositories
       repo_gh = GithubRepository.extract_full_name(repo)
       homepage_gh = GithubRepository.extract_full_name(homepage)
       if repo_gh.present?
-        "https://github.com/#{repo_gh}"
+        return "https://github.com/#{repo_gh}"
       elsif homepage_gh.present?
-        "https://github.com/#{homepage_gh}"
+        return "https://github.com/#{homepage_gh}"
       else
         repo
       end
