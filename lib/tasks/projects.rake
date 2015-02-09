@@ -14,4 +14,13 @@ namespace :projects do
       end
     end
   end
+
+  task fix_repository_url: :environment do
+    Project.with_repository_url.where("repository_url NOT ILIKE 'http%'").find_each do |project|
+      if repo_gh = GithubRepository.extract_full_name(project.repository_url)
+        project.update_attribute(:repository_url, "https://github.com/#{repo_gh}")
+        project.update_github_repo
+      end
+    end
+  end
 end
