@@ -30,6 +30,13 @@ class Repositories
       REDIS.smembers 'maven-names'
     end
 
+    def self.recent_names
+      page = Repositories::Maven.get_html "https://maven-repository.com/artifact/latest?page=#{1}"
+      page.css('tr')[1..-1].map do |tr|
+        tr.css('td')[0..1].map(&:text).join(':')
+      end
+    end
+
     def self.project(name)
       h = {
         name: name,

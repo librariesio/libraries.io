@@ -8,6 +8,14 @@ class Repositories
       get_raw("https://pypi.python.org/simple/").scan(/href='(\w+)'/).flatten
     end
 
+    def self.recent_names
+      u = 'https://pypi.python.org/pypi?%3Aaction=rss'
+      updated = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
+      u = 'https://pypi.python.org/pypi?%3Aaction=packages_rss'
+      new_packages = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
+      (updated.map { |t| t.split(' ').first } + new_packages.map { |t| t.split(' ').first }).uniq
+    end
+
     def self.project(name)
       get("https://pypi.python.org/pypi/#{name}/json")
     end

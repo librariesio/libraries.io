@@ -8,6 +8,12 @@ class Repositories
       get("http://registry.npmjs.org/-/all/").keys[1..-1]
     end
 
+    def self.recent_names
+      u = 'http://registry.npmjs.org/-/rss?descending=true&limit=50'
+      titles = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
+      titles.map { |t| t.split('@').first }
+    end
+
     def self.project(name)
       get("http://registry.npmjs.org/#{name}")
     end

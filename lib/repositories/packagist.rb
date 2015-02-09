@@ -8,6 +8,14 @@ class Repositories
       get("https://packagist.org/packages/list.json")['packageNames']
     end
 
+    def self.recent_names
+      u = 'https://packagist.org/feeds/releases.rss'
+      updated = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
+      u = 'https://packagist.org/feeds/packages.rss'
+      new_packages = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
+      (updated.map { |t| t.split(' ').first } + new_packages).uniq
+    end
+
     def self.project(name)
       get("https://packagist.org/packages/#{name}.json")['package']
     end

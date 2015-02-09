@@ -8,6 +8,12 @@ class Repositories
       get_json("http://hackage.haskell.org/packages/").map{ |h| h['packageName'] }
     end
 
+    def self.recent_names
+      u = 'http://hackage.haskell.org/packages/recent.rss'
+      titles = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
+      titles.map { |t| t.split(' ').first }
+    end
+
     def self.project(name)
       {
         name: name,

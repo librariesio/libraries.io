@@ -30,6 +30,7 @@ gem 'newrelic_rpm'
 gem 'spdx'
 gem 'sanitize-url'
 gem 'semantic'
+gem 'simple-rss'
 
 group :development do
   gem 'spring'

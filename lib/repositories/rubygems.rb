@@ -9,6 +9,12 @@ class Repositories
       gems.map(&:first).uniq
     end
 
+    def self.recent_names
+      updated = get('https://rubygems.org/api/v1/activity/just_updated.json').map{|h| h['name']}
+      new_gems = get('https://rubygems.org/api/v1/activity/latest.json').map{|h| h['name']}
+      (updated + new_gems).uniq
+    end
+
     def self.project(name)
       Gems.info name
     end

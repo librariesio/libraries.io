@@ -34,13 +34,11 @@ class Repositories
     end
 
     def self.import(include_versions = true)
-      name = self.name.demodulize
-      puts "Importing #{name}"
-      before = Time.now.utc
-      project_names.each{|name| update(name, include_versions)}
-      ActiveRecord::Base.connection.reconnect!
-      count = Project.platform(name).where('created_at > ?', before).count
-      puts "Imported #{count} new #{name} projects"
+      project_names.each { |name| update(name, include_versions) }
+    end
+
+    def self.import_recent
+      recent_names.each { |name| update(name) }
     end
 
     def self.get(url, options = {})
