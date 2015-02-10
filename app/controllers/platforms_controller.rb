@@ -1,6 +1,6 @@
 class PlatformsController < ApplicationController
   def index
-    @platforms = Project.search('*').response.facets[:platforms][:terms].sort_by(&:term)
+    @platforms = Project.popular_platforms.sort_by(&:term)
   end
 
   def show
