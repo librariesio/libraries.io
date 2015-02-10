@@ -11,7 +11,9 @@ namespace :projects do
     Project.__elasticsearch__.create_index! force: true
   end
 
-  task reindex: [:environment, :recreate_index, 'elasticsearch:import:all']
+  task reindex: [:environment, :recreate_index] do
+    Project.import query: -> { includes(:github_repository) }
+  end
 
   task find_repos_in_homepage: :environment do
     Project.with_homepage.without_repository_url.find_each do |project|
