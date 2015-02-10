@@ -38,7 +38,7 @@ namespace :download do
   end
 
   task hackage: :environment do
-    Repositories::Hackage.import
+    Repositories::Hackage.import_recent
   end
 
   task hex: :environment do
