@@ -67,7 +67,7 @@
     </div>
     <% end %>
     <p>
-      <%= link_to 'See more projects &raquo;'.html_safe, search_path %>
+      <%= link_to 'See more projects &raquo;'.html_safe, search_path(sort: 'stars', order: 'desc') %>
     </p>
   </div>
   <div class='col-md-4'>

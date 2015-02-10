@@ -19,7 +19,7 @@
     </div>
     <% end %>
     <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path %>
+      <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'stars', order: 'desc') %>
     </p>
   </div>
   <% end %>
@@ -39,7 +39,7 @@
     </div>
     <% end %>
     <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(sort: 'updated_at', order: 'desc') %>
+      <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'updated_at', order: 'desc') %>
     </p>
   </div>
   <% end %>
@@ -59,7 +59,7 @@
     </div>
     <% end %>
     <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(sort: 'created_at', order: 'desc') %>
+      <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'created_at', order: 'desc') %>
     </p>
   </div>
   <% end %>
