@@ -46,7 +46,11 @@ class Project < ActiveRecord::Base
     .limit(limit)
   end
 
-  def self.popular_licenses
+  def self.popular_licenses(options = {})
+    search('*', options).response.facets[:licenses][:terms].reject{ |t| t.term == 'Other' }
+  end
+
+  def self.popular_licenses_sql
     where("normalized_licenses != '{}'")
       .select('count(*) count, unnest(normalized_licenses) as license')
       .where('NOT (? = ANY("normalized_licenses"))', 'Other')

@@ -45,7 +45,7 @@ module Searchable
           } },
           licenses: { terms: {
             field: "normalized_licenses",
-            size: 30
+            size: 42
           } }
         }
       }

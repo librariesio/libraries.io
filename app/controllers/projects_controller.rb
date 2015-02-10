@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    @licenses = Project.popular_licenses.limit(10)
+    @licenses = Project.popular_licenses.first(10)
     @created = Project.order('created_at DESC').limit(4)
     @platforms = Project.popular_platforms(10)
     @languages = GithubRepository.popular_languages.limit(10)

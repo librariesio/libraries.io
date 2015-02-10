@@ -12,6 +12,6 @@ class LanguagesController < ApplicationController
     @popular = scope.with_repo.limit(30)
       .order('github_repositories.stargazers_count DESC')
       .to_a.uniq(&:github_repository_id).first(5)
-    @licenses = scope.popular_licenses.limit(8).to_a
+    @licenses = scope.popular_licenses_sql.limit(8).to_a
   end
 end

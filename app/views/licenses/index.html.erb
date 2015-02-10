@@ -4,7 +4,8 @@
 <div class='row'>
   <% @licenses.each do |license| %>
   <div class='platform col-md-4'>
-    <%= render 'license', license: license %>
+    <h4><%= link_to license.term, license_path(license.term) %></h4>
+    <%= number_with_delimiter license['count'] %> Projects
   </div>
   <% end %>
 </div>
