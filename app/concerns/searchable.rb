@@ -15,6 +15,8 @@ module Searchable
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
+
+        indexes :stars, type: 'integer'
       end
     end
 
@@ -22,16 +24,9 @@ module Searchable
       __elasticsearch__.index_document
     end
 
-    # Customize the JSON serialization for Elasticsearch
-    #
-    # def as_indexed_json(options={})
-    #   hash = self.as_json(
-    #     include: { authors:    { methods: [:full_name], only: [:full_name] },
-    #                comments:   { only: [:body, :stars, :pick, :user, :user_location] }
-    #              })
-    #   hash['categories'] = self.categories.map(&:title)
-    #   hash
-    # end
+    def as_indexed_json(options={})
+      as_json methods: :stars
+    end
 
     def self.search(query, options={})
       query = '*' if query.blank?

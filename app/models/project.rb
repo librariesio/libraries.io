@@ -27,6 +27,10 @@ class Project < ActiveRecord::Base
     name
   end
 
+  def stars
+    github_repository.try(:stargazers_count) || 0
+  end
+
   def self.undownloaded_repos
     with_github_url.without_repo
   end
