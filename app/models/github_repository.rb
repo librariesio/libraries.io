@@ -57,13 +57,6 @@ class GithubRepository < ActiveRecord::Base
     "https://avatars.githubusercontent.com/u/#{owner_id}?size=#{size}"
   end
 
-  def self.popular_languages
-    where("language <> ''")
-    .select('count(*) count, language')
-    .group('language')
-    .order('count DESC')
-  end
-
   def github_client
     AuthToken.client
   end

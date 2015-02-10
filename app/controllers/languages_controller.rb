@@ -1,6 +1,6 @@
 class LanguagesController < ApplicationController
   def index
-    @languages = GithubRepository.popular_languages
+    @languages = Project.popular_languages
   end
 
   def show
@@ -9,9 +9,7 @@ class LanguagesController < ApplicationController
     # raise ActiveRecord::RecordNotFound if scope.first.nil?
     @updated = scope.limit(5).order('updated_at DESC')
     @created = scope.limit(5).order('created_at DESC')
-    @popular = scope.with_repo.limit(30)
-      .order('github_repositories.stargazers_count DESC')
-      .to_a.uniq(&:github_repository_id).first(5)
-    @licenses = scope.popular_licenses_sql.limit(8).to_a
+    @popular = Project.popular(filters: { language: @language }).first(5)
+    @licenses = Project.popular_licenses(filters: { language: @language }).first(8)
   end
 end

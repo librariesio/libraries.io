@@ -4,7 +4,8 @@
 <div class='row'>
   <% @languages.each do |language| %>
   <div class='platform col-md-4'>
-    <%= render 'language', language: language %>
+    <h3><%= link_to language.term, language_path(language.term.downcase) %></h3>
+    <%= number_with_delimiter language['count'] %> Projects
   </div>
   <% end %>
 </div>

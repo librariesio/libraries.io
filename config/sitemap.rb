@@ -31,8 +31,8 @@ SitemapGenerator::Sitemap.create do
 
   puts "Generating Languages"
   add languages_path, :priority => 0.7, :changefreq => 'daily'
-  GithubRepository.popular_languages.each do |language|
-    name = language.language
+  Project.popular_languages.each do |language|
+    name = language.term
     add language_path(name.downcase), :lastmod => Project.language(name).order('updated_at DESC').first.try(:updated_at)
   end
 end

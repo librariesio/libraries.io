@@ -9,6 +9,7 @@ class LicensesController < ApplicationController
     @updated = scope.limit(5).order('updated_at DESC')
     @created = scope.limit(5).order('created_at DESC')
     @popular = Project.popular(filters: {normalized_licenses: @license.id}).first(5)
+    @languages = Project.popular_languages(filters: {normalized_licenses: @license.id}).first(10)
   end
 
   private

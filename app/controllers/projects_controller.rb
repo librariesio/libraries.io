@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
     @licenses = Project.popular_licenses.first(10)
     @created = Project.order('created_at DESC').limit(4)
     @platforms = Project.popular_platforms.first(10)
-    @languages = GithubRepository.popular_languages.limit(10)
+    @languages = Project.popular_languages.first(10)
     @contributors = GithubUser.top(30)
     @popular = Project.popular.first(4)
   end

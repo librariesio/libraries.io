@@ -47,8 +47,12 @@ class Project < ActiveRecord::Base
     joins(:github_repository).where('github_repositories.language ILIKE ?', language)
   end
 
-  def self.popular_platforms
-    search('*').response.facets[:platforms][:terms]
+  def self.popular_languages(options = {})
+    search('*', options).response.facets[:languages][:terms]
+  end
+
+  def self.popular_platforms(options = {})
+    search('*', options).response.facets[:platforms][:terms]
   end
 
   def self.popular_licenses(options = {})

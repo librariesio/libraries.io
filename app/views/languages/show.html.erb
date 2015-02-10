@@ -71,8 +71,8 @@
     <h4>Popular <%= @platform_name %> Licenses</h4>
     <% @licenses.each do |license| %>
     <p>
-      <%= link_to license.license, search_path(licenses: license.license, platforms: @platform_name) %>
-      - <%= number_with_delimiter(license.count) %> projects
+      <%= link_to license.term, search_path(licenses: license.term, platforms: @platform_name) %>
+      - <%= number_with_delimiter(license['count']) %> projects
     </p>
     <% end %>
   </div>
