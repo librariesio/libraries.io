@@ -32,7 +32,7 @@
             <% else %>
               <%= link_to term['term'], url_for(params.merge(name.to_sym => term['term'])) %>
             <% end %>
-            - <%= term['count'] %>
+            - <%= number_with_delimiter term['count'] %>
           </li>
         <% end %>
       </ul>
