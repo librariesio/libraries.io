@@ -30,7 +30,7 @@
     <h3>Languages</h3>
     <% @languages.each do |language| %>
     <p>
-      <strong><%= link_to language.term, language_path(language.term.downcase) %></strong> -
+      <strong><%= link_to language.term, language_path(language.term) %></strong> -
       <%= number_with_delimiter language['count'] %>
     </p>
     <% end %>
