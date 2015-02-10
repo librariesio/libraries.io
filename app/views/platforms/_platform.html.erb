@@ -1,7 +1,2 @@
-<% name = platform.to_s.demodulize %>
-<h3><%= link_to name, platform_path(name.downcase) %></h3>
-
-<% cache("platform:#{name}:count", :expires_in => 1.day) do %>
-  <% projects = Project.platform(name).count %>
-  <%= number_with_delimiter projects %> Projects
-<% end %>
+<h3><%= link_to platform.term, platform_path(platform.term.downcase) %></h3>
+<%= number_with_delimiter platform.count %> Projects
