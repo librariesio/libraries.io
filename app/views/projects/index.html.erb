@@ -76,7 +76,7 @@
     <div class='project'>
       <strong><%= link_to project.name, project_path(project.to_param) %></strong>
       <small>- <%= link_to project.platform, platform_path(project.platform.downcase) %>
-        - Updated <%= time_ago_in_words project.updated_at %> ago
+        - Published <%= time_ago_in_words project.updated_at %> ago
       </small>
       <br />
       <%= truncate project.description, :length => 100 %>
