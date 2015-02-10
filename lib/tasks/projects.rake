@@ -6,6 +6,11 @@ namespace :projects do
     end
   end
 
+  task recreate_index: :environment do
+    Project.__elasticsearch__.client.indices.delete index: 'projects'
+    Project.__elasticsearch__.create_index! force: true
+  end
+
   task find_repos_in_homepage: :environment do
     Project.with_homepage.without_repository_url.find_each do |project|
       if homepage_gh = GithubRepository.extract_full_name(project.homepage)
