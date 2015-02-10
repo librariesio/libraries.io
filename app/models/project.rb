@@ -8,7 +8,7 @@ class Project < ActiveRecord::Base
   has_many :versions
   belongs_to :github_repository
 
-  scope :platform, ->(platform) { where('platform ILIKE ?', platform) }
+  scope :platform, ->(platform) { where('lower(platform) = ?', platform.downcase) }
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
