@@ -15,7 +15,7 @@
       <div class='project'>
         <strong><%= link_to project.name, project_path(project.to_param) %></strong>
         <small>
-          - <%= number_with_delimiter project.github_repository.stargazers_count %> stars
+          - <%= number_with_delimiter project.github_repository.try(:stargazers_count) %> stars
         </small>
         <br />
         <%= truncate project.description, :length => 100 %>

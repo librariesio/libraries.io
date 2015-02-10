@@ -10,8 +10,6 @@ class PlatformsController < ApplicationController
     @updated = scope.limit(5).order('updated_at DESC')
     @created = scope.limit(5).order('created_at DESC')
     @contributors = GithubUser.top_for(@platform_name, 24)
-    @popular = scope.with_repo.limit(50)
-      .order('github_repositories.stargazers_count DESC')
-      .to_a.uniq(&:github_repository_id).first(5)
+    @popular = Project.popular(filters: { platform: @platform_name }).first(5)
   end
 end

@@ -8,9 +8,7 @@ class LicensesController < ApplicationController
     scope = Project.license(@license.id)
     @updated = scope.limit(5).order('updated_at DESC')
     @created = scope.limit(5).order('created_at DESC')
-    @popular = scope.with_repo.limit(30)
-      .order('github_repositories.stargazers_count DESC')
-      .to_a.uniq(&:github_repository_id).first(5)
+    @popular = Project.popular(filters: {normalized_licenses: @license.id}).first(5)
   end
 
   private

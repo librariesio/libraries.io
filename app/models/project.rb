@@ -51,6 +51,10 @@ class Project < ActiveRecord::Base
     search('*', options).response.facets[:licenses][:terms].reject{ |t| t.term == 'Other' }
   end
 
+  def self.popular(options = {})
+    search('*', options.merge(sort: 'stars', order: 'desc')).records
+  end
+
   def self.popular_licenses_sql
     where("normalized_licenses != '{}'")
       .select('count(*) count, unnest(normalized_licenses) as license')
