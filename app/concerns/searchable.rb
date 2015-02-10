@@ -10,6 +10,7 @@ module Searchable
         indexes :description, :analyzer => 'snowball', :boost => 5
         indexes :homepage
         indexes :repository_url
+        indexes :language, :analyzer => 'keyword'
         indexes :normalized_licenses, :analyzer => 'keyword'
         indexes :platform, :analyzer => 'keyword'
 
@@ -17,6 +18,7 @@ module Searchable
         indexes :updated_at, type: 'date'
 
         indexes :stars, type: 'integer'
+        indexes :github_repository_id, type: 'integer'
       end
     end
 
@@ -25,7 +27,7 @@ module Searchable
     end
 
     def as_indexed_json(options={})
-      as_json methods: :stars
+      as_json methods: [:stars, :language]
     end
 
     def self.search(query, options={})
@@ -36,6 +38,10 @@ module Searchable
         facets: {
           platforms: { terms: {
             field: "platform",
+            size: 30
+          } },
+          languages: { terms: {
+            field: "language",
             size: 30
           } },
           licenses: { terms: {
