@@ -6,7 +6,7 @@ class LanguagesController < ApplicationController
   def show
     @language = params[:id]
     scope = Project.language(@language)
-    raise ActiveRecord::RecordNotFound if scope.first.nil?
+    # raise ActiveRecord::RecordNotFound if scope.first.nil?
     @updated = scope.limit(5).order('updated_at DESC')
     @created = scope.limit(5).order('created_at DESC')
     @popular = scope.with_repo.limit(30)
