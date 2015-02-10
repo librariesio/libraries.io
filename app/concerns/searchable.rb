@@ -49,6 +49,11 @@ module Searchable
           } }
         }
       }
+      if options[:sort]
+        search_definition[:sort]  = { options[:sort] => (options[:order] || 'desc') }
+        search_definition[:track_scores] = true
+      end
+
       options[:filters] ||= []
       options[:filters].each do |k,v|
         if v.present?
