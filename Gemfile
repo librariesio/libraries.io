@@ -31,6 +31,7 @@ gem 'spdx'
 gem 'sanitize-url'
 gem 'semantic'
 gem 'simple-rss'
+gem 'faraday-http-cache'
 
 group :development do
   gem 'spring'

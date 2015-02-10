@@ -77,6 +77,8 @@ GEM
     execjs (2.3.0)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
+    faraday-http-cache (1.0.1)
+      faraday (~> 0.8)
     ffi (1.9.6)
     fuzzy_match (2.1.0)
     gems (0.8.3)
@@ -212,6 +214,7 @@ DEPENDENCIES
   coffee-rails
   elasticsearch-model
   elasticsearch-rails
+  faraday-http-cache
   gems
   hiredis
   jbuilder
