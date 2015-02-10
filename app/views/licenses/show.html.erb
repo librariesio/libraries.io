@@ -23,8 +23,10 @@
       <%= truncate project.description, :length => 100 %>
       <br /><br />
     </div>
-
     <% end %>
+    <p>
+      <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id) %>
+    </p>
   </div>
   <% end %>
 
@@ -42,6 +44,9 @@
       <br /><br />
     </div>
     <% end %>
+    <p>
+      <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'updated_at', order: 'desc') %>
+    </p>
   </div>
   <% end %>
 
@@ -59,6 +64,9 @@
       <br /><br />
     </div>
     <% end %>
+    <p>
+      <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'created_at', order: 'desc') %>
+    </p>
   </div>
   <% end %>
 </div>

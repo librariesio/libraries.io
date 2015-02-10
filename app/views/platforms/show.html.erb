@@ -21,8 +21,10 @@
         <%= truncate project.description, :length => 100 %>
         <br /><br />
       </div>
-
       <% end %>
+      <p>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name) %>
+      </p>
     </div>
   <% end %>
 
@@ -40,6 +42,9 @@
       <br /><br />
     </div>
     <% end %>
+    <p>
+      <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'updated_at', order: 'desc') %>
+    </p>
   </div>
   <% end %>
 
@@ -57,6 +62,9 @@
       <br /><br />
     </div>
     <% end %>
+    <p>
+      <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc') %>
+    </p>
   </div>
   <% end %>
 </div>

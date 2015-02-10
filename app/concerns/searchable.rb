@@ -13,8 +13,8 @@ module Searchable
         indexes :normalized_licenses, :analyzer => 'keyword'
         indexes :platform, :analyzer => 'keyword'
 
-        indexes :created_at
-        indexes :updated_at
+        indexes :created_at, type: 'date'
+        indexes :updated_at, type: 'date'
       end
     end
 
