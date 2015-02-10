@@ -33,6 +33,6 @@ SitemapGenerator::Sitemap.create do
   add languages_path, :priority => 0.7, :changefreq => 'daily'
   Project.popular_languages.each do |language|
     name = language.term
-    add language_path(name.downcase), :lastmod => Project.language(name).order('updated_at DESC').first.try(:updated_at)
+    add language_path(name), :lastmod => Project.language(name).order('updated_at DESC').first.try(:updated_at)
   end
 end
