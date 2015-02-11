@@ -5,9 +5,8 @@ class LicensesController < ApplicationController
 
   def show
     find_license
-    scope = Project.license(@license.id)
-    @updated = scope.limit(5).order('updated_at DESC')
-    @created = scope.limit(5).order('created_at DESC')
+    @updated = Project.search('*', filters: {normalized_licenses: @license.id}, sort: 'updated_at').records.first(5)
+    @created = Project.search('*', filters: {normalized_licenses: @license.id}, sort: 'created_at').records.first(5)
     @popular = Project.popular(filters: {normalized_licenses: @license.id}).first(5)
     @languages = Project.popular_languages(filters: {normalized_licenses: @license.id}).first(10)
   end

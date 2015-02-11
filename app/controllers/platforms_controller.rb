@@ -5,10 +5,9 @@ class PlatformsController < ApplicationController
 
   def show
     find_platform
-    scope = Project.platform(@platform_name)
     @licenses = Project.popular_licenses(filters: {platform: @platform_name}).first(10)
-    @updated = scope.limit(5).order('updated_at DESC')
-    @created = scope.limit(5).order('created_at DESC')
+    @updated = Project.search('*', filters: {platform: @platform_name}, sort: 'updated_at').records.first(5)
+    @created = Project.search('*', filters: {platform: @platform_name}, sort: 'created_at').records.first(5)
     @contributors = GithubUser.top_for(@platform_name, 24)
     @popular = Project.popular(filters: { platform: @platform_name }).first(5)
     @languages = Project.popular_languages(filters: {platform: @platform_name}).first(10)
