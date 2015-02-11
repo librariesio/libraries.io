@@ -9,12 +9,18 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.platform(params[:platform]).find_by!(name: params[:name])
+    find_project
     @version = @project.versions.find_by!(number: params[:number]) if params[:number].present?
     @versions = @project.versions.to_a.sort
     if @project.github_repository
       @contributors = @project.github_repository.github_contributions.order('count DESC').includes(:github_user).limit(42)
       @related = @project.github_repository.projects.reject{ |p| p.id == @project.id }
     end
+  end
+
+  def find_project
+    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).first
+    raise ActiveRecord::RecordNotFound if @project.nil?
+    redirect_to project_path(@project.to_param) if params[:platform] != params[:platform].downcase || params[:name] != @project.name
   end
 end
