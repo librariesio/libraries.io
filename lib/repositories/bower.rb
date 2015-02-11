@@ -20,7 +20,7 @@ class Repositories
 
         p1.each do |hash|
           if projects[hash['name'].downcase]
-            projects[hash['name'].downcase].merge! hash.slice('description', "owner", "website", "forks", "stars", "created", "updated")
+            projects[hash['name'].downcase].merge! hash.slice('description', "owner", "website", "forks", "stars", "created", "updated","keywords")
           end
         end
         projects
@@ -35,6 +35,7 @@ class Repositories
       {
         :name => project["name"],
         :description => project["description"],
+        :keywords => project["keywords"].try(:join, ','),
         :repository_url => project["website"] || project["url"]
       }
     end
