@@ -15,7 +15,11 @@
       </small>
     </h3>
 
-    <%= simple_format(@project.description) if @project.description.present? %>
+    <% if @project.description.present? %>
+    <p>
+      <%= @project.description %>
+    </p>
+    <% end %>
 
     <% if @project.keywords.present? %>
     <p>
