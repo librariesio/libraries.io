@@ -1,7 +1,7 @@
 <div class='row'>
   <div class="jumbotron row">
     <div class='col-md-2 hidden-xs hidden-sm'>
-      <%= image_tag 'logo.png', class: 'pull-left', width: 140 %>
+      <%= image_tag 'logo.png', class: 'pull-left', width: 140, alt: 'Libraries.io Logo' %>
     </div>
     <div class='col-md-10'>
       <h1>
@@ -89,6 +89,6 @@
   </div>
   <div class='col-md-4'>
     <h3>Contributors</h3>
-    <% @contributors.each do |user| %><%= link_to image_tag(user.avatar_url, width: 60, height: 60), user_path(user) %><% end %>
+    <% @contributors.each do |user| %><%= link_to image_tag(user.avatar_url, width: 60, height: 60, alt: user), user_path(user) %><% end %>
   </div>
 </div>

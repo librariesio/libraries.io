@@ -3,7 +3,7 @@
   <div class='col-md-6'>
     <% repo = @project.github_repository %>
     <h4>
-      <%= image_tag repo.avatar_url, width: 60, height: 60 %>
+      <%= image_tag repo.avatar_url, width: 60, height: 60, alt: repo %>
       <%= link_to repo, repo.url %>
     </h4>
     <p>

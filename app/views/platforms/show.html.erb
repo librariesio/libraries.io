@@ -85,7 +85,7 @@
   <% if @contributors.any? %>
     <div class='col-md-4'>
       <h4>Top <%= @platform_name %> Contributors</h4>
-      <% @contributors.each do |user| %><%= link_to image_tag(user.avatar_url, width: 60, height: 60), user_path(user) %><% end %>
+      <% @contributors.each do |user| %><%= link_to image_tag(user.avatar_url, width: 60, height: 60, alt: user), user_path(user) %><% end %>
     </div>
   <% end %>
 </div>
