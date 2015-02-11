@@ -28,10 +28,10 @@ class GithubUser < ActiveRecord::Base
 
   def self.top(limit = 5)
     GithubContribution.select('sum(count) as count, github_user_id')
-    .group('github_user_id')
-    .order('count DESC')
-    .limit(limit)
-    .includes(:github_user)
-    .map(&:github_user)
+      .group('github_user_id')
+      .order('count DESC')
+      .limit(limit)
+      .includes(:github_user)
+      .map(&:github_user)
   end
 end
