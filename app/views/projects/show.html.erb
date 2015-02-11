@@ -84,7 +84,9 @@
     <% end %>
 
     <% if @related && @related.any? %>
-      <hr>
+      <% if @versions.any? %>
+        <hr>
+      <% end %>
       <strong>Related Projects</strong>
       <ul>
         <% @related.each do |project| %>
