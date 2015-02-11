@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150211002635) do
+ActiveRecord::Schema.define(version: 20150211005554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 20150211002635) do
     t.string   "normalized_licenses",  default: [], array: true
   end
 
+  add_index "projects", ["github_repository_id"], name: "index_projects_on_github_repository_id", using: :btree
   add_index "projects", ["platform"], name: "index_projects_on_platform", using: :btree
 
   create_table "versions", force: :cascade do |t|
