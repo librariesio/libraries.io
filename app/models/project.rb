@@ -35,6 +35,14 @@ class Project < ActiveRecord::Base
     github_repository.try(:language)
   end
 
+  def description
+    read_attribute(:description) || github_repository.try(:description)
+  end
+
+  def homepage
+    read_attribute(:homepage) || github_repository.try(:homepage)
+  end
+
   def self.undownloaded_repos
     with_github_url.without_repo
   end
