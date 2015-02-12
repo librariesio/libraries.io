@@ -3,7 +3,8 @@ class SearchController < ApplicationController
     scope = Project.search params[:q], filters: {
       platform: params[:platforms],
       normalized_licenses: params[:licenses],
-      language: params[:languages]
+      language: params[:languages],
+      keywords: params[:keywords]
     }, sort: params[:sort], order: params[:order]
 
 

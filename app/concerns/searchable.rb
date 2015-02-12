@@ -10,6 +10,7 @@ module Searchable
         indexes :description, :analyzer => 'snowball', :boost => 5
         indexes :homepage
         indexes :repository_url
+        indexes :keywords
         indexes :language, :analyzer => 'keyword'
         indexes :normalized_licenses, :analyzer => 'keyword'
         indexes :platform, :analyzer => 'keyword'
@@ -42,6 +43,10 @@ module Searchable
           } },
           languages: { terms: {
             field: "language",
+            size: 30
+          } },
+          keywords: { terms: {
+            field: "keywords",
             size: 30
           } },
           licenses: { terms: {
