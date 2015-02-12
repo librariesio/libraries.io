@@ -71,14 +71,6 @@ class Project < ActiveRecord::Base
     search('*', options.merge(sort: 'stars', order: 'desc')).records
   end
 
-  def self.popular_licenses_sql
-    where("normalized_licenses != '{}'")
-      .select('count(*) count, unnest(normalized_licenses) as license')
-      .where('NOT (? = ANY("normalized_licenses"))', 'Other')
-      .group('license')
-      .order('count DESC')
-  end
-
   def normalize_licenses
     if licenses.blank?
       normalized = []
