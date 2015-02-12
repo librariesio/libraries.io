@@ -60,6 +60,20 @@
       </p>
     <% end %>
 
+    <% if @dependencies.any? %>
+      <% @dependencies.group_by(&:kind).each do |kind, dependencies| %>
+        <h3><%= kind.humanize unless kind == 'normal' %> Dependencies</h3>
+        <ul>
+          <% dependencies.each do |dependency| %>
+            <li>
+              <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
+              - <%= dependency.requirements %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+
     <%= render 'projects/github' if @project.github_repository.present? %>
   </div>
 

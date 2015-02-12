@@ -39,5 +39,29 @@ class Repositories
         }
       end
     end
+
+    def self.save_dependencies(project)
+      name = project[:name]
+      proj = Project.find_by(name: name, platform: self.name.demodulize)
+      proj.versions.each do |version|
+        dependencies(name, version).each do |dep|
+          version.dependencies.create(dep)
+        end
+      end
+    end
+
+    def self.dependencies(name, version)
+      deps = get("https://crates.io/api/v1/crates/#{name}/#{version}/dependencies")['dependencies']
+
+      deps.map do |dep|
+        {
+          project_name: dep['crate_id'],
+          requirements: dep['req'],
+          kind: dep['kind'],
+          optional: dep['optional'],
+          platform: self.name.demodulize
+        }
+      end
+    end
   end
 end
