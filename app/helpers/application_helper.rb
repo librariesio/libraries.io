@@ -60,6 +60,10 @@ module ApplicationHelper
     content_for(:title) { page_title }
   end
 
+  def description(page_description)
+    content_for(:description) { page_description }
+  end
+
   def linked_licenses(licenses)
     licenses.map{|l| link_to l, license_path(l) }.join('/').html_safe
   end
