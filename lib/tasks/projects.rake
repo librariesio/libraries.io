@@ -7,7 +7,8 @@ namespace :projects do
   end
 
   task recreate_index: :environment do
-    Project.__elasticsearch__.client.indices.delete index: 'projects'
+    # If the index doesn't exists can't be deleted, returns 404, carry on
+    Project.__elasticsearch__.client.indices.delete index: 'projects' rescue nil
     Project.__elasticsearch__.create_index! force: true
   end
 

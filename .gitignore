@@ -17,3 +17,7 @@
 .env
 
 public/sitemap*
+
+# Vim
+*.swp
+*.swo
