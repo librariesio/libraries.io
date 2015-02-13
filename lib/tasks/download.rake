@@ -81,4 +81,8 @@ namespace :download do
   task sublime: :environment do
     Repositories::Sublime.import
   end
+
+  task go: :environment do
+    Repositories::Go.import
+  end
 end

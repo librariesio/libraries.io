@@ -112,7 +112,6 @@ GEM
       sawyer (~> 0.6.0, >= 0.5.3)
     oj (2.11.4)
     oj_mimic_json (1.0.1)
-    parallel (1.3.4)
     pg (0.18.1)
     puma (2.11.0)
       rack (>= 1.1, < 2.0)
@@ -224,7 +223,6 @@ DEPENDENCIES
   octokit
   oj
   oj_mimic_json
-  parallel
   pg
   puma
   rack-canonical-host
