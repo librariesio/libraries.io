@@ -27,6 +27,12 @@ class Project < ActiveRecord::Base
     name
   end
 
+  def mlt
+    results = Project.__elasticsearch__.client.mlt(id: self.id, index: 'projects', type: 'project', mlt_fields: 'keywords,platform,description,repository_url', min_term_freq: 1, min_doc_freq: 2)
+    ids = results['hits']['hits'].map{|h| h['_id']}
+    Project.find(ids)
+  end
+
   def stars
     github_repository.try(:stargazers_count) || 0
   end
