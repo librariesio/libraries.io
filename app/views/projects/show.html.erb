@@ -115,7 +115,8 @@
             <% if project.normalized_licenses.present? %>
             - <%= linked_licenses project.normalized_licenses %>
             <% end %>
-          </small>
+          </small><br>
+          <%= truncate project.description, :length => 100 %>
         </li>
         <% end %>
       </ul>
