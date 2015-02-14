@@ -11,7 +11,7 @@ SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
 
 SitemapGenerator::Sitemap.create do
   puts "Generating Projects"
-  Project.find_each do |project|
+  Project.includes(:versions).find_each do |project|
     add project_path(project.to_param), :lastmod => project.updated_at
     project.versions.find_each do |version|
       add version_path(version.to_param), :lastmod => project.updated_at
