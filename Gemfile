@@ -31,6 +31,7 @@ gem 'sanitize-url'
 gem 'semantic'
 gem 'simple-rss'
 gem 'faraday-http-cache'
+gem 'fog'
 
 group :development do
   gem 'spring'
