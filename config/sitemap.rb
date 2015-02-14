@@ -33,7 +33,7 @@ SitemapGenerator::Sitemap.create do
   puts "Generating Licenses"
   add licenses_path, :priority => 0.7, :changefreq => 'daily'
   Project.popular_licenses.each do |license|
-    name = license.license
+    name = license.term
     add license_path(name), :lastmod => Project.license(name).order('updated_at DESC').first.try(:updated_at)
   end
 
