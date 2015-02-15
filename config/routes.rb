@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   get '/search', to: 'search#index'
 
+  get '/sitemap1.xml.gz', to: redirect("http://#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com/sitemaps/sitemap1.xml.gz")
+
   # legacy
   get '/platforms/:id', to: 'legacy#platform'
   get '/users/:id', to: 'legacy#user'
