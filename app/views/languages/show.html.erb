@@ -68,7 +68,7 @@
 <div class='row'>
   <% if @licenses.any? %>
   <div class='col-md-4'>
-    <h4>Popular <%= @platform_name %> Licenses</h4>
+    <h4>Popular <%= @language %> Licenses</h4>
     <% @licenses.each do |license| %>
     <p>
       <%= link_to license.term, search_path(licenses: license.term, languages: @language) %>
