@@ -17,6 +17,20 @@ footer{
   color: #999;
 }
 
+.facets{
+  ul{
+    padding-left: 25px;
+  }
+  li{
+    list-style: none;
+  }
+}
+
 .active {
   font-weight: bold;
+}
+.active:before
+{
+   content: '✔';
+   margin-left: -1em; margin-right: .100em;
 }

@@ -19,7 +19,7 @@
     <% end %>
   </div>
 
-  <div class='col-md-4'>
+  <div class='col-md-4 facets'>
     <% @projects.response.facets.each do |name, facet| %>
       <% next if facet['terms'].empty? %>
       <h4><%= name.humanize %></h4>
@@ -31,8 +31,8 @@
               <%= link_to term['term'], url_for(params.merge(name.to_sym => nil)) %>
             <% else %>
               <%= link_to term['term'], url_for(params.merge(name.to_sym => term['term'])) %>
+              - <%= number_with_delimiter term['count'] %>
             <% end %>
-            - <%= number_with_delimiter term['count'] %>
           </li>
         <% end %>
       </ul>
