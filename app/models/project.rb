@@ -42,7 +42,11 @@ class Project < ActiveRecord::Base
   end
 
   def description
-    read_attribute(:description) || github_repository.try(:description)
+    if platform == 'Go'
+      github_repository.try(:description) || read_attribute(:description)
+    else
+      read_attribute(:description) || github_repository.try(:description)
+    end
   end
 
   def homepage
