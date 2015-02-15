@@ -9,6 +9,7 @@ class LicensesController < ApplicationController
     @created = Project.search('*', filters: {normalized_licenses: @license.id}, sort: 'created_at').records.first(5)
     @popular = Project.popular(filters: {normalized_licenses: @license.id}).first(5)
     @languages = Project.popular_languages(filters: {normalized_licenses: @license.id}).first(10)
+    @platforms = Project.popular_platforms(filters: {normalized_licenses: @license.id}).first(10)
   end
 
   private

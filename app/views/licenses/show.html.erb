@@ -70,3 +70,28 @@
   </div>
   <% end %>
 </div>
+
+<div class='row'>
+  <% if @languages.any? %>
+  <div class='col-md-4'>
+    <h4>Popular <%= @license.id %> Languages</h4>
+    <% @languages.each do |language| %>
+    <p>
+      <strong><%= link_to language.term, search_path(languages: language.term, licenses: @license.id) %></strong> -
+      <%= number_with_delimiter language['count'] %>
+    </p>
+    <% end %>
+  </div>
+  <% end %>
+  <% if @platforms.any? %>
+  <div class='col-md-4'>
+    <h4>Popular <%= @license.id %> Platforms</h4>
+    <% @platforms.each do |platform| %>
+      <p>
+        <strong><%= link_to platform.term, search_path(licenses: @license.id, platforms: platform.term) %></strong> -
+        <%= number_with_delimiter platform['count'] %>
+      </p>
+    <% end %>
+  </div>
+  <% end %>
+</div>

@@ -7,7 +7,6 @@ class SearchController < ApplicationController
       keywords: params[:keywords]
     }, sort: params[:sort], order: params[:order]
 
-
     @projects = scope.paginate(page: params[:page])
   end
 end

@@ -82,6 +82,18 @@
     </div>
   <% end %>
 
+  <% if @languages.any? %>
+  <div class='col-md-4'>
+    <h4>Popular Languages</h4>
+    <% @languages.each do |language| %>
+    <p>
+      <strong><%= link_to language.term, search_path(languages: language.term, platforms: @platform_name) %></strong> -
+      <%= number_with_delimiter language['count'] %>
+    </p>
+    <% end %>
+  </div>
+  <% end %>
+
   <% if @contributors.any? %>
     <div class='col-md-4'>
       <h4>Top <%= @platform_name %> Contributors</h4>
