@@ -49,13 +49,13 @@ module Searchable
             field: "language",
             size: 30
           } },
-          keywords: { terms: {
-            field: "keywords",
-            size: 30
-          } },
           licenses: { terms: {
             field: "normalized_licenses",
             size: 42
+          } },
+          keywords: { terms: {
+            field: "keywords",
+            size: 30
           } }
         }
       }
