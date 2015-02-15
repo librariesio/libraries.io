@@ -27,6 +27,8 @@ module ApplicationHelper
       "https://crates.io/crates/#{name}/#{version}"
     when 'Hackage'
       "http://hackage.haskell.org/package/#{name}" + (version ? "-#{version}" : "")
+    when 'Go'
+      "http://go-search.org/view?id=#{name}"
     when 'Maven'
       if version
         "http://search.maven.org/#artifactdetails%7C#{name.gsub(':', '%7C')}%7C#{version}%7Cjar"
@@ -53,6 +55,8 @@ module ApplicationHelper
       "cabal install #{name}" + (version ? "-#{version}" : "")
     when 'PyPi'
       "pip install #{name}" + (version ? "==#{version}" : "")
+    when 'Go'
+      "go get #{name}"
     end
   end
 
