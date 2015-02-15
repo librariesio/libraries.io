@@ -34,8 +34,12 @@ module Searchable
     def self.search(query, options={})
       query = '*' if query.blank?
       search_definition = {
-        query: { query_string: { query: query } },
-        filter: { bool: { must: [] } },
+        query: {
+          filtered: {
+             query: {query_string: {query: query}},
+             filter:{ bool: { must: [] } },
+          }
+        },
         facets: {
           platforms: { terms: {
             field: "platform",
@@ -63,7 +67,7 @@ module Searchable
       options[:filters] ||= []
       options[:filters].each do |k,v|
         if v.present?
-          search_definition[:filter][:bool][:must] << {term: { k => v}}
+          search_definition[:query][:filtered][:filter][:bool][:must] << {term: { k => v}}
         end
       end
 
