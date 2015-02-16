@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   resources :licenses, constraints: { :id => /.*/ }
   resources :languages
 
+  get '/stats', to: 'stats#index', as: :stats
+
   get '/platforms', to: 'platforms#index', as: :platforms
 
   get '/users/github/:login', to: 'users#show', as: :user
