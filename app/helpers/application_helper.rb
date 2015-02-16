@@ -29,6 +29,8 @@ module ApplicationHelper
       "http://hackage.haskell.org/package/#{name}" + (version ? "-#{version}" : "")
     when 'Go'
       "http://go-search.org/view?id=#{name}"
+    when 'Wordpress'
+      "https://wordpress.org/plugins/#{name}/#{version}"
     when 'Maven'
       if version
         "http://search.maven.org/#artifactdetails%7C#{name.gsub(':', '%7C')}%7C#{version}%7Cjar"

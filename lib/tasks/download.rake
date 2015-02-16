@@ -82,6 +82,10 @@ namespace :download do
     Repositories::Sublime.import
   end
 
+  task wordpress: :environment do
+    Repositories::Wordpress.import_recent
+  end
+
   task go: :environment do
     Repositories::Go.import
   end
