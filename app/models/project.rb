@@ -35,7 +35,7 @@ class Project < ActiveRecord::Base
   def mlt
     results = Project.__elasticsearch__.client.mlt(id: self.id, index: 'projects', type: 'project', mlt_fields: 'keywords,platform,description,repository_url', min_term_freq: 1, min_doc_freq: 2)
     ids = results['hits']['hits'].map{|h| h['_id']}
-    Project.find(ids)
+    Project.where(id: ids)
   end
 
   def stars
