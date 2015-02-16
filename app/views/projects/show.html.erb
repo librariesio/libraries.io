@@ -34,7 +34,7 @@
     </p>
     <% end %>
 
-    <% if @project.homepage.present? %>
+    <% if @project.homepage.present? && @project.homepage != package_link(@project.name, @project.platform) %>
     <p>
       Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage)) %>
     </p>
@@ -45,7 +45,7 @@
     </p>
     <% end %>
 
-    <% if @project.github_url.present? %>
+    <% if @project.github_url.present? && @project.github_repository.nil? %>
       <p>
         Repo: <%= link_to @project.github_url, sanitize_url(@project.github_url) %>
       </p>
