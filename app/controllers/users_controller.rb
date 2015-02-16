@@ -4,6 +4,6 @@ class UsersController < ApplicationController
     raise ActiveRecord::RecordNotFound if @user.nil?
     @contributions = @user.github_contributions
                           .includes(:github_repository => :projects)
-                          .order('count DESC')
+                          .order('count DESC').reject{|g| g.github_repository.owner_name == @user.login }
   end
 end

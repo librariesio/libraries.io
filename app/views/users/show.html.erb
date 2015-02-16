@@ -9,13 +9,46 @@
   </div>
 </div>
 <hr>
-<h3>Contributions</h3>
-<% @contributions.each do |contribution| %>
-  <% next unless contribution.github_repository %>
-  <% project = contribution.github_repository.projects.first %>
-  <% next unless project %>
-  <div>
-    <%= image_tag contribution.github_repository.avatar_url(60), width: 60, height: 60, alt: contribution.github_repository %>
-    <%= link_to project, project_path(project.to_param) %> - <%= project.platform %> - <%= link_to pluralize(contribution.count, 'contributions'), contribution.github_url %>
-  </div>
-<% end %>
+<div class="row">
+  <% if @user.repositories.any? %>
+    <div class="col-md-6">
+      <h3>Projects</h3>
+      <ul>
+        <% @user.repositories.each do |github_repository| %>
+          <% github_repository.projects.each do |project| %>
+            <li class='project'>
+              <strong><%= link_to project.name, project_path(project.to_param) %></strong>
+              <small><%= link_to project.platform, platform_path(project.platform.downcase) %>
+                <% if project.normalized_licenses.present? %>
+                - <%= linked_licenses project.normalized_licenses %>
+                <% end %>
+              </small><br>
+              <%= truncate project.description, :length => 100 %>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if @contributions.any? %>
+    <div class="col-md-6">
+      <h3>Contributions</h3>
+      <ul>
+        <% @contributions.each do |contribution| %>
+          <% github_repository = contribution.github_repository %>
+          <% next unless github_repository %>
+
+          <% github_repository.projects.each do |project| %>
+            <li class='project'>
+              <strong><%= link_to project.name, project_path(project.to_param) %></strong>
+              <small><%= link_to project.platform, platform_path(project.platform.downcase) %>
+                - <%= link_to pluralize(contribution.count, 'contributions'), contribution.github_url %>
+              </small><br>
+              <%= truncate project.description, :length => 100 %>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>
