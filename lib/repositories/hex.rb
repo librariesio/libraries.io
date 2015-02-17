@@ -41,5 +41,19 @@ class Repositories
         }
       end
     end
+
+    def self.dependencies(name, version)
+      deps = get("https://hex.pm/api/packages/#{name}/releases/#{version}")['requirements']
+      return nil if deps.nil?
+      deps.map do |k, v|
+        {
+          project_name: k,
+          requirements: v['requirement'],
+          kind: 'normal',
+          optional: v['optional'],
+          platform: self.name.demodulize
+        }
+      end
+    end
   end
 end
