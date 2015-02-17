@@ -39,7 +39,30 @@ class Repositories
       elsif hash['kind'] == 'bitbucket'
         "https://bitbucket.org/#{hash['owner']}/#{hash['project']}"
       else
-        raise hash
+        ''
+      end
+    end
+
+    def self.dependencies(name, version)
+      vers = project(name)['versions'].find{|v| v['version'] == version.number}
+      return [] if vers.nil?
+      deps = vers['dependencies']
+      return [] if deps.nil?
+      deps.map do |k,v|
+        if v.is_a? Hash
+          req = v["version"]
+          optional = v["optional"]
+        else
+          req = v
+          optional = false
+        end
+        {
+          project_name: k,
+          requirements: req,
+          kind: 'normal',
+          optional: optional,
+          platform: self.name.demodulize
+        }
       end
     end
   end
