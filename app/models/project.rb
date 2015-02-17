@@ -6,6 +6,7 @@ class Project < ActiveRecord::Base
   #  validate unique name and platform (case?)
 
   has_many :versions
+  has_many :dependencies, -> { group 'project_name' }, through: :versions
   belongs_to :github_repository
 
   scope :platform, ->(platform) { where('lower(platform) = ?', platform.downcase) }
@@ -56,6 +57,14 @@ class Project < ActiveRecord::Base
 
   def homepage
     read_attribute(:homepage).presence || github_repository.try(:homepage)
+  end
+
+  def dependents
+    Dependency.where(platform: platform, project_name: name)
+  end
+
+  def dependent_projects
+    dependents.includes(:version => :project).map(&:version).map(&:project).uniq
   end
 
   def self.undownloaded_repos

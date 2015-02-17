@@ -18,6 +18,10 @@ class Repositories
         end
       end
 
+      if self::HAS_DEPENDENCIES
+        save_dependencies(mapped_project[:name])
+      end
+
       dbproject
     end
 
@@ -39,6 +43,23 @@ class Repositories
 
     def self.import_recent
       recent_names.each { |name| update(name) }
+    end
+
+    def self.save_dependencies(name)
+      proj = Project.find_by(name: name, platform: self.name.demodulize)
+      proj.versions.each do |version|
+        dependencies(name, version).each do |dep|
+          version.dependencies.find_or_create_by(dep)
+        end
+      end
+    end
+
+    def self.download_dependencies
+      project_names.each { |name| save_dependencies(name) }
+    end
+
+    def self.dependencies(_name, _version)
+      []
     end
 
     def self.get(url, options = {})

@@ -60,18 +60,44 @@
       </p>
     <% end %>
 
-    <% if @dependencies.any? %>
-      <% @dependencies.group_by(&:kind).each do |kind, dependencies| %>
-        <h3><%= kind.humanize unless kind == 'normal' %> Dependencies</h3>
-        <ul>
-          <% dependencies.each do |dependency| %>
-            <li>
-              <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
-              - <%= dependency.requirements %>
-            </li>
+    <% if @dependencies.any? || @project.dependent_projects.any? %>
+      <div class="row">
+        <hr>
+        <% if @dependencies.any? %>
+        <div class="col-md-6">
+          <% @dependencies.group_by(&:kind).each do |kind, dependencies| %>
+            <h4><%= kind.humanize unless kind == 'normal' %> Dependencies</h4>
+            <ul>
+              <% dependencies.each do |dependency| %>
+                <li>
+                  <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
+                  - <%= dependency.requirements %>
+                </li>
+              <% end %>
+            </ul>
           <% end %>
-        </ul>
-      <% end %>
+        </div>
+        <% end %>
+
+        <% if @project.dependent_projects.any? %>
+          <div class="col-md-6">
+            <h4>Dependents</h4>
+            <ul>
+              <% @project.dependent_projects.each do |project| %>
+              <li class='project'>
+                <strong><%= link_to project.name, project_path(project.to_param) %></strong>
+                <small><%= link_to project.platform, platform_path(project.platform.downcase) %>
+                  <% if project.normalized_licenses.present? %>
+                  - <%= linked_licenses project.normalized_licenses %>
+                  <% end %>
+                </small><br>
+                <%= truncate project.description, :length => 100 %>
+              </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
     <% end %>
 
     <%= render 'projects/github' if @project.github_repository.present? %>
