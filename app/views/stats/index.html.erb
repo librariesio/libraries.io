@@ -80,4 +80,19 @@
       <% end %>
     </table>
   </div>
+  <div class="col-md-4">
+    <h4>New Dependencies</h4>
+    <table class='table table-striped table-hover'>
+      <% @new_dependencies.each do |date,count| %>
+        <tr>
+          <td>
+            <%= date.to_s(:long) %>
+          </td>
+          <td>
+            <%= number_with_delimiter count %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
 </div>
