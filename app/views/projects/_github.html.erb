@@ -30,9 +30,11 @@
     <p>
       Last updated: <%= repo.updated_at.to_s(:long) %>
     </p>
+    <% if repo.pushed_at.present? %>
     <p>
       Last pushed: <%= repo.pushed_at.to_s(:long) %>
     </p>
+    <% end %>
     <p>
       Size: <%= number_to_human_size repo.size*1000 %>
     </p>
