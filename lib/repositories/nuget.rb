@@ -45,7 +45,7 @@ class Repositories
     end
 
     def self.versions(project)
-      latest_version = get_json("https://az320818.vo.msecnd.net/registrations-0/#{project[:name].downcase}/index.json")
+      latest_version = get_json("https://az320820.vo.msecnd.net/registrations-0/#{project[:name].downcase}/index.json")
       latest_version['items'].first['items'].map do |item|
         {
           number: item['catalogEntry']['version'],
