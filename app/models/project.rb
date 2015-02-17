@@ -48,14 +48,14 @@ class Project < ActiveRecord::Base
 
   def description
     if platform == 'Go'
-      github_repository.try(:description) || read_attribute(:description)
+      github_repository.try(:description).presence || read_attribute(:description)
     else
-      read_attribute(:description) || github_repository.try(:description)
+      read_attribute(:description).presence || github_repository.try(:description)
     end
   end
 
   def homepage
-    read_attribute(:homepage) || github_repository.try(:homepage)
+    read_attribute(:homepage).presence || github_repository.try(:homepage)
   end
 
   def self.undownloaded_repos
