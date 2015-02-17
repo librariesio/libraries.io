@@ -42,7 +42,7 @@ class Repositories
 
     def self.dependencies(name, version)
       deps = get("https://crates.io/api/v1/crates/#{name}/#{version}/dependencies")['dependencies']
-      return nil if deps.nil?
+      return [] if deps.nil?
       deps.map do |dep|
         {
           project_name: dep['crate_id'],
