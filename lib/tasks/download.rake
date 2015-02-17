@@ -58,6 +58,11 @@ namespace :download do
     Repositories::Nimble.import
   end
 
+  task nuget: :environment do
+    Repositories::NuGet.load_names
+    Repositories::NuGet.import
+  end
+
   task npm: :environment do
     Repositories::NPM.import_recent
   end
