@@ -1,9 +1,15 @@
-<% title "Search - Libraries" %>
+<% if params[:q].present? %>
+  <% page_title = "Search for #{params[:q]}" %>
+<% else %>
+  <% page_title = "Search" %>
+<% end %>
+
+<% title "#{page_title} - Libraries" %>
 
 <div class='row'>
   <div class='col-md-8'>
     <h3>
-      Search for <strong>"<%= params[:q] %>"</strong><br/>
+      <%= page_title %><br/>
       <small><%= page_entries_info @projects, model: 'projects' %></small>
     </h3>
 
@@ -12,7 +18,7 @@
       <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
     <% else %>
       <p>
-        <% if params[:platforms].present? || params[:licenses].present? %>
+        <% if params[:platforms].present? || params[:licenses].present? ||  params[:languages].present? ||  params[:keywords].present? %>
           <%= link_to 'Try removing some filters.', search_path(q: params[:q]) %>
         <% end %>
       </p>
