@@ -48,7 +48,7 @@ class Repositories
     def self.save_dependencies(name)
       proj = Project.find_by(name: name, platform: self.name.demodulize)
       proj.versions.each do |version|
-        dependencies(name, version).each do |dep|
+        dependencies(name, version.number).each do |dep|
           version.dependencies.create(dep) unless version.dependencies.find_by_project_name dep[:project_name]
         end
       end

@@ -44,7 +44,7 @@ class Repositories
     end
 
     def self.dependencies(name, version)
-      vers = project(name)['versions'].find{|v| v['version'] == version.number}
+      vers = project(name)['versions'].find{|v| v['version'] == version}
       return [] if vers.nil?
       deps = vers['dependencies']
       return [] if deps.nil?
