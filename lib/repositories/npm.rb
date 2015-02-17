@@ -69,5 +69,36 @@ class Repositories
         end
       end
     end
+
+    def self.dependencies(name, version)
+      proj = project(name)
+      vers = proj['versions'][version]
+      return [] if vers.nil?
+      vers.fetch('dependencies', {}).map do |k,v|
+        {
+          project_name: k,
+          requirements: v,
+          kind: 'normal',
+          optional: false,
+          platform: self.name.demodulize
+        }
+      end + vers.fetch('devDependencies', {}).map do |k,v|
+        {
+          project_name: k,
+          requirements: v,
+          kind: 'Development',
+          optional: false,
+          platform: self.name.demodulize
+        }
+      end + vers.fetch('optionalDependencies', {}).map do |k,v|
+        {
+          project_name: k,
+          requirements: v,
+          kind: 'Optional',
+          optional: true,
+          platform: self.name.demodulize
+        }
+      end
+    end
   end
 end
