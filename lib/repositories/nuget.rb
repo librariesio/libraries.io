@@ -36,7 +36,8 @@ class Repositories
         name: project[:name],
         description: description(item),
         homepage: item['projectUrl'],
-        keywords: item['tags'].join(',')
+        keywords: item['tags'].join(','),
+        repository_url: repo_fallback('', item['projectUrl'])
       }
     end
 
