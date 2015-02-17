@@ -31,6 +31,8 @@ module ApplicationHelper
       "http://go-search.org/view?id=#{name}"
     when 'Wordpress'
       "https://wordpress.org/plugins/#{name}/#{version}"
+    when 'NuGet'
+      "https://www.nuget.org/packages/#{name}/#{version}"
     when 'Maven'
       if version
         "http://search.maven.org/#artifactdetails%7C#{name.gsub(':', '%7C')}%7C#{version}%7Cjar"
@@ -59,6 +61,8 @@ module ApplicationHelper
       "pip install #{name}" + (version ? "==#{version}" : "")
     when 'Go'
       "go get #{name}"
+    when 'NuGet'
+      "Install-Package #{name}" + (version ? " -Version #{version}" : "")
     end
   end
 
