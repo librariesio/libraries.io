@@ -2,6 +2,7 @@ class Repositories
   class NuGet < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    URL = 'https://www.nuget.org'
 
     def self.load_names(limit = nil)
       segment_index = Repositories::NuGet.get_json "http://preview.nuget.org/ver3-ctp1/islatest/segment_index.json"
