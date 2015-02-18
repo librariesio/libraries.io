@@ -1,6 +1,6 @@
 class LicensesController < ApplicationController
   def index
-    @licenses = Project.popular_licenses
+    @licenses = Project.popular_licenses(:facet_limit => 120)
   end
 
   def show

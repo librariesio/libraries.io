@@ -1,6 +1,6 @@
 class LanguagesController < ApplicationController
   def index
-    @languages = Project.popular_languages
+    @languages = Project.popular_languages(:facet_limit => 120)
   end
 
   def show

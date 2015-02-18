@@ -27,11 +27,12 @@ module Searchable
       __elasticsearch__.index_document
     end
 
-    def as_indexed_json(options={})
+    def as_indexed_json(options = {})
       as_json methods: [:stars, :language]
     end
 
-    def self.search(query, options={})
+    def self.search(query, options = {})
+      facet_limit = options.fetch(:facet_limit, 30)
       query = '*' if query.blank?
       search_definition = {
         query: {
@@ -43,19 +44,19 @@ module Searchable
         facets: {
           platforms: { terms: {
             field: "platform",
-            size: 30
+            size: facet_limit
           } },
           languages: { terms: {
             field: "language",
-            size: 30
+            size: facet_limit
           } },
           licenses: { terms: {
             field: "normalized_licenses",
-            size: 42
+            size: facet_limit
           } },
           keywords: { terms: {
             field: "keywords",
-            size: 30
+            size: facet_limit
           } }
         }
       }
