@@ -11,7 +11,7 @@
       - Published <%= time_ago_in_words project.created_at %> ago
     <% end %>
   </small>
-  <br />
-  <%= truncate project.description, :length => 100 %>
-  <br /><br />
+  <p>
+    <%= truncate project.description, :length => 100 %>
+  </p>
 </div>
