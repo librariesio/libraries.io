@@ -47,7 +47,9 @@ class Repositories
 
     def self.new_names
       names = project_names
-      names - Project.platform(self.name.demodulize).where(:name => names).pluck('name')
+      existing_names = []
+      Project.platform(self.name.demodulize).select(:id, :name).find_each {|project| existing_names << project.name }
+      names - existing_names
     end
 
     def self.import_new
