@@ -22,7 +22,7 @@ namespace :download do
   end
 
   task bower: :environment do
-    Repositories::Bower.import
+    Repositories::Bower.import_new
   end
 
   task cargo: :environment do
@@ -92,6 +92,6 @@ namespace :download do
   end
 
   task go: :environment do
-    Repositories::Go.import
+    Repositories::Go.import_new
   end
 end
