@@ -1,2 +1,4 @@
-<h3><%= link_to platform.term, platform_path(platform.term.downcase) %></h3>
-<%= number_with_delimiter platform['count'] %> Projects
+<div class='platform col-md-4'>
+  <h4><%= link_to platform.term, platform_path(platform.term.downcase) %></h4>
+  <%= number_with_delimiter platform['count'] %> Projects
+</div>

@@ -1,2 +1,4 @@
-<h4><%= link_to license.license, license_path(license.license) %></h4>
-<%= number_with_delimiter license.count %> Projects
+<div class='license col-md-4'>
+  <h4><%= link_to license.term, license_path(license.term) %></h4>
+  <%= number_with_delimiter license['count'] %> Projects
+</div>

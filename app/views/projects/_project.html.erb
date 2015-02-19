@@ -4,6 +4,12 @@
   <% if project.normalized_licenses.present? %>
     - <%= linked_licenses project.normalized_licenses %>
   <% end %>
+    - <%= number_with_delimiter project.stars %> stars
+    <% if project.updated_at > project.created_at + 1.minute %>
+      - Updated <%= time_ago_in_words project.updated_at %> ago
+    <% else %>
+      - Published <%= time_ago_in_words project.created_at %> ago
+    <% end %>
   </small>
   <br />
   <%= truncate project.description, :length => 100 %>

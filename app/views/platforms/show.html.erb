@@ -11,17 +11,7 @@
   <% if @popular.any? %>
     <div class='col-md-4'>
       <h4>Popular <%= @platform_name %> Projects</h4>
-      <% @popular.each do |project| %>
-      <div class='project'>
-        <strong><%= link_to project.name, project_path(project.to_param) %></strong>
-        <small>
-          - <%= number_with_delimiter project.github_repository.try(:stargazers_count) %> stars
-        </small>
-        <br />
-        <%= truncate project.description, :length => 100 %>
-        <br /><br />
-      </div>
-      <% end %>
+      <%= render @popular %>
       <p>
         <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'stars', order: 'desc') %>
       </p>
@@ -31,17 +21,7 @@
   <% if @updated.any? %>
   <div class='col-md-4'>
     <h4>Updated <%= @platform_name %> Projects</h4>
-    <% @updated.each do |project| %>
-    <div class='project'>
-      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
-      <small>
-        - Updated <%= time_ago_in_words project.updated_at %> ago
-      </small>
-      <br />
-      <%= truncate project.description, :length => 100 %>
-      <br /><br />
-    </div>
-    <% end %>
+    <%= render @updated %>
     <p>
       <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'updated_at', order: 'desc') %>
     </p>
@@ -51,17 +31,7 @@
   <% if @created.any? %>
   <div class='col-md-4'>
     <h4>New <%= @platform_name %> Projects</h4>
-    <% @created.each do |project| %>
-    <div class='project'>
-      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
-      <small>
-        - Published <%= time_ago_in_words project.updated_at %> ago
-      </small>
-      <br />
-      <%= truncate project.description, :length => 100 %>
-      <br /><br />
-    </div>
-    <% end %>
+    <%= render @created %>
     <p>
       <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc') %>
     </p>
@@ -73,31 +43,21 @@
   <% if @licenses.any? %>
     <div class='col-md-4'>
       <h4>Popular <%= @platform_name %> Licenses</h4>
-      <% @licenses.each do |license| %>
-        <p>
-          <%= link_to license.term, search_path(licenses: license.term, platforms: @platform_name) %>
-          - <%= number_with_delimiter(license['count']) %> projects
-        </p>
-      <% end %>
+      <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
     </div>
   <% end %>
 
   <% if @languages.any? %>
   <div class='col-md-4'>
-    <h4>Popular Languages</h4>
-    <% @languages.each do |language| %>
-    <p>
-      <strong><%= link_to language.term, search_path(languages: language.term, platforms: @platform_name) %></strong> -
-      <%= number_with_delimiter language['count'] %>
-    </p>
-    <% end %>
+    <h4>Popular <%= @platform_name %> Languages</h4>
+    <%= render partial: 'languages/list_language', collection: @languages, as: :language %>
   </div>
   <% end %>
 
   <% if @contributors.any? %>
     <div class='col-md-4'>
       <h4>Top <%= @platform_name %> Contributors</h4>
-      <% @contributors.each do |user| %><%= link_to image_tag(user.avatar_url, width: 60, height: 60, alt: user), user_path(user) %><% end %>
+      <%= render @contributors %>
     </div>
   <% end %>
 </div>

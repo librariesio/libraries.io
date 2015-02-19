@@ -2,10 +2,5 @@
 
 <h1>Open Source Licenses</h1><hr>
 <div class='row'>
-  <% @licenses.each do |license| %>
-  <div class='platform col-md-4'>
-    <h4><%= link_to license.term, license_path(license.term) %></h4>
-    <%= number_with_delimiter license['count'] %> Projects
-  </div>
-  <% end %>
+  <%= render partial: 'license', collection: @licenses %>
 </div>

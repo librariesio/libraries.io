@@ -1,0 +1,4 @@
+<p class='license'>
+  <strong><%= link_to license.term, search_path(licenses: license.term, platforms: @platform_name, languages: @language) %></strong> -
+  <%= number_with_delimiter license['count'] %> projects
+</p>

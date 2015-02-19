@@ -15,7 +15,7 @@
 
 <div class='row'>
   <div class='col-md-4'>
-    <h3>Package managers</h3>
+    <h4>Package managers</h4>
     <% @platforms.each do |platform| %>
       <p>
         <strong><%= link_to platform.term, platform_path(platform.term.downcase) %></strong> -
@@ -27,7 +27,7 @@
     </p>
   </div>
   <div class='col-md-4'>
-    <h3>Languages</h3>
+    <h4>Languages</h4>
     <% @languages.each do |language| %>
     <p>
       <strong><%= link_to language.term, language_path(language.term) %></strong> -
@@ -35,11 +35,11 @@
     </p>
     <% end %>
     <p>
-      <%= link_to 'See all language &raquo;'.html_safe, languages_path %>
+      <%= link_to 'See all languages &raquo;'.html_safe, languages_path %>
     </p>
   </div>
   <div class='col-md-4'>
-    <h3>Licenses</h3>
+    <h4>Licenses</h4>
     <% @licenses.each do |license| %>
     <p>
       <strong><%= link_to license.term, license_path(license.term) %></strong> -
@@ -54,7 +54,7 @@
 
 <div class='row'>
   <div class='col-md-4'>
-    <h3>Popular Projects</h3>
+    <h4>Popular Projects</h4>
     <% @popular.each do |project| %>
     <div class='project'>
       <strong><%= link_to project.name, project_path(project.to_param) %></strong>
@@ -71,7 +71,7 @@
     </p>
   </div>
   <div class='col-md-4'>
-    <h3>New Projects</h3>
+    <h4>New Projects</h4>
     <% @created.each do |project| %>
     <div class='project'>
       <strong><%= link_to project.name, project_path(project.to_param) %></strong>
@@ -88,7 +88,7 @@
     </p>
   </div>
   <div class='col-md-4'>
-    <h3>Contributors</h3>
-    <% @contributors.each do |user| %><%= link_to image_tag(user.avatar_url, width: 60, height: 60, alt: user), user_path(user) %><% end %>
+    <h4>Top Contributors</h4>
+    <%= render @contributors %>
   </div>
 </div>

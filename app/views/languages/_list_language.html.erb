@@ -1,0 +1,4 @@
+<p>
+  <strong><%= link_to language.term, search_path(languages: language.term, licenses: @license.try(:id), platforms: @platform_name) %></strong> -
+  <%= number_with_delimiter language['count'] %> projects
+</p>

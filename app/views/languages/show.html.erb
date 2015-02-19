@@ -1,23 +1,12 @@
 <% title "#{@language} - Libraries" %>
 
-<h1>
-  <%= @language %>
-</h1><hr>
+<h1><%= @language %></h1>
+<hr>
 <div class='row'>
   <% if @popular.any? %>
   <div class='col-md-4'>
     <h4>Popular <%= @language %> Projects</h4>
-    <% @popular.each do |project| %>
-    <div class='project'>
-      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
-      <small>
-        - <%= number_with_delimiter project.github_repository.stargazers_count %> stars
-      </small>
-      <br />
-      <%= truncate project.description, :length => 100 %>
-      <br /><br />
-    </div>
-    <% end %>
+    <%= render @popular %>
     <p>
       <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'stars', order: 'desc') %>
     </p>
@@ -27,17 +16,7 @@
   <% if @updated.any? %>
   <div class='col-md-4'>
     <h4>Updated <%= @language %> Projects</h4>
-    <% @updated.each do |project| %>
-    <div class='project'>
-      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
-      <small>
-        - Updated <%= time_ago_in_words project.updated_at %> ago
-      </small>
-      <br />
-      <%= truncate project.description, :length => 100 %>
-      <br /><br />
-    </div>
-    <% end %>
+    <%= render @updated %>
     <p>
       <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'updated_at', order: 'desc') %>
     </p>
@@ -47,17 +26,7 @@
   <% if @created.any? %>
   <div class='col-md-4'>
     <h4>New <%= @language %> Projects</h4>
-    <% @created.each do |project| %>
-    <div class='project'>
-      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
-      <small>
-        - Published <%= time_ago_in_words project.updated_at %> ago
-      </small>
-      <br />
-      <%= truncate project.description, :length => 100 %>
-      <br /><br />
-    </div>
-    <% end %>
+    <%= render @created %>
     <p>
       <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'created_at', order: 'desc') %>
     </p>
@@ -69,23 +38,14 @@
   <% if @licenses.any? %>
   <div class='col-md-4'>
     <h4>Popular <%= @language %> Licenses</h4>
-    <% @licenses.each do |license| %>
-    <p>
-      <%= link_to license.term, search_path(licenses: license.term, languages: @language) %>
-      - <%= number_with_delimiter(license['count']) %> projects
-    </p>
-    <% end %>
+    <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
   </div>
   <% end %>
+
   <% if @platforms.length > 1 %>
   <div class='col-md-4'>
     <h4>Popular <%= @language %> Platforms</h4>
-    <% @platforms.each do |platform| %>
-      <p>
-        <strong><%= link_to platform.term, search_path(platforms: platform.term, languages: @language) %></strong> -
-        <%= number_with_delimiter platform['count'] %>
-      </p>
-    <% end %>
+    <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
   </div>
   <% end %>
 </div>
