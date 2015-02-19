@@ -55,34 +55,14 @@
 <div class='row'>
   <div class='col-md-4'>
     <h4>Popular Projects</h4>
-    <% @popular.each do |project| %>
-    <div class='project'>
-      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
-      <small>- <%= link_to project.platform, platform_path(project.platform.downcase) %>
-        - Updated <%= time_ago_in_words project.updated_at %> ago
-      </small>
-      <br />
-      <%= truncate project.description, :length => 100 %>
-      <br /><br />
-    </div>
-    <% end %>
+    <%= render @popular %>
     <p>
       <%= link_to 'See more projects &raquo;'.html_safe, search_path(sort: 'stars', order: 'desc') %>
     </p>
   </div>
   <div class='col-md-4'>
     <h4>New Projects</h4>
-    <% @created.each do |project| %>
-    <div class='project'>
-      <strong><%= link_to project.name, project_path(project.to_param) %></strong>
-      <small>- <%= link_to project.platform, platform_path(project.platform.downcase) %>
-        - Published <%= time_ago_in_words project.updated_at %> ago
-      </small>
-      <br />
-      <%= truncate project.description, :length => 100 %>
-      <br /><br />
-    </div>
-    <% end %>
+    <%= render @created %>
     <p>
       <%= link_to 'See more projects &raquo;'.html_safe, search_path(sort: 'created_at', order: 'desc') %>
     </p>
