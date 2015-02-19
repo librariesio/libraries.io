@@ -47,7 +47,7 @@ GEM
       sass (>= 3.2.19)
     bootswatch-rails (3.2.4)
       railties (>= 3.1)
-    bugsnag (2.7.1)
+    bugsnag (2.8.0)
       multi_json (~> 1.0)
     builder (3.2.2)
     coffee-rails (4.1.0)
@@ -56,7 +56,7 @@ GEM
     coffee-script (2.3.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.9.0)
+    coffee-script-source (1.9.1)
     daemons (1.1.9)
     elasticsearch (1.0.6)
       elasticsearch-api (= 1.0.6)
