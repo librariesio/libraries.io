@@ -45,6 +45,15 @@ class Repositories
       recent_names.each { |name| update(name) }
     end
 
+    def self.new_names
+      names = project_names
+      names - Project.platform(self.name.demodulize).where(:name => names).pluck('name')
+    end
+
+    def self.import_new
+      new_names.each { |name| update(name) }
+    end
+
     def self.save_dependencies(name)
       proj = Project.find_by(name: name, platform: self.name.demodulize)
       proj.versions.each do |version|
