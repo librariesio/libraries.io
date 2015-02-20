@@ -6,6 +6,6 @@ class SearchController < ApplicationController
       language: params[:languages],
       keywords: params[:keywords]
     }, sort: params[:sort], order: params[:order]).paginate(page: params[:page])
-    @projects = @search.records.includes(:versions).paginate(page: params[:page])
+    @projects = @search.records.includes(:versions)
   end
 end
