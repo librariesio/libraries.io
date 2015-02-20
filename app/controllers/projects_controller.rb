@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
     @created = Project.order('created_at DESC').limit(5).includes(:versions)
     @platforms = Project.popular_platforms.first(10)
     @languages = Project.popular_languages.first(10)
-    @contributors = GithubUser.top(30)
+    @contributors = GithubUser.top(20)
     @popular = Project.popular.first(5)
   end
 
@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
     @versions = @project.versions.to_a.sort
     @dependencies = (@versions.any? ? (@version || @versions.first).dependencies : [])
     @related = @project.mlt
-    @contributors = @project.github_repository.github_contributions.order('count DESC').includes(:github_user).limit(42) if @project.github_repository
+    @contributors = @project.github_repository.github_contributions.order('count DESC').includes(:github_user).limit(20) if @project.github_repository
   end
 
   def find_project
