@@ -39,6 +39,10 @@ module Searchable
       as_json methods: [:stars, :language]
     end
 
+    def self.total
+      __elasticsearch__.client.count["count"]
+    end
+
     def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 30)
       query = '*' if query.blank?

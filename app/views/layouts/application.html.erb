@@ -53,7 +53,7 @@
   <footer>
     <div class="container">
       <div class='row'>
-        Tracking <%= link_to number_with_delimiter(Project.search('').total_entries), search_path %> open source projects
+        Tracking <%= link_to number_with_delimiter(Project.total), search_path %> open source projects
         from across <%= link_to Project.popular_platforms.length, platforms_path %> platforms
       </div>
     </div>
