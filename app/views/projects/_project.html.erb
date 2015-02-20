@@ -10,7 +10,7 @@
 
   <small>
     <%= link_to project.platform, platform_path(project.platform.downcase) %> -
-    <% if project.language.present? %>
+    <% if project.language.present? && project.language != project.platform %>
       <%= link_to project.language, language_path(project.language) %> -
     <% end %>
     <% if project.normalized_licenses.present? %>
