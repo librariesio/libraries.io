@@ -183,6 +183,7 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (1.8.2)
+    languages (1.0.0)
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -309,6 +310,7 @@ DEPENDENCIES
   hiredis
   jbuilder
   jquery-rails
+  languages
   newrelic_rpm
   nokogiri
   octokit

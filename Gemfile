@@ -32,6 +32,7 @@ gem 'semantic'
 gem 'simple-rss'
 gem 'faraday-http-cache'
 gem 'fog'
+gem 'languages'
 
 group :development do
   gem 'spring'
