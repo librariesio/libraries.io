@@ -21,7 +21,7 @@
 <div class='row'>
   <div class='col-md-8'>
     <% if @projects.any? %>
-      <%= render @projects.records %>
+      <%= render @projects %>
       <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
     <% else %>
       <p>
@@ -33,7 +33,7 @@
   </div>
 
   <div class='col-md-4 facets'>
-    <% @projects.response.facets.each do |name, facet| %>
+    <% @search.response.facets.each do |name, facet| %>
       <% next if facet['terms'].empty? %>
       <h4><%= name.humanize %></h4>
       <ul>
