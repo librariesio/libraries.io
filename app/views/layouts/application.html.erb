@@ -53,16 +53,8 @@
   <footer>
     <div class="container">
       <div class='row'>
-        Tracking
-        <% cache("top_products", :expires_in => 1.hour) do %>
-          <strong><%= number_with_delimiter Version.count %></strong>
-          versions of
-          <strong><%= number_with_delimiter Project.count %></strong>
-          Projects
-          and
-          <strong><%= number_with_delimiter GithubRepository.count %></strong>
-        <% end %>
-        Repositories
+        Tracking <%= link_to number_with_delimiter(Project.search('').total_entries), search_path %> open source projects
+        from across <%= link_to Project.popular_platforms.length, platforms_path %> platforms
       </div>
     </div>
   </footer>
