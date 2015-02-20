@@ -39,7 +39,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li>
             <%= form_tag search_path, method: :get, class: 'navbar-form' do |f| %>
-              <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control' %>
+              <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 60 %>
             <% end %>
           </li>
         </ul>

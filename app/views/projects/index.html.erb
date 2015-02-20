@@ -8,64 +8,51 @@
         Open Source Libraries
       </h1>
       <p>Discover new modules and libraries you can use in your projects.</p>
-
+      <%= form_tag search_path, method: :get, class: 'search-form' do |f| %>
+        <%= text_field_tag 'q', params[:q], placeholder: 'Search..', class: 'form-control' %>
+      <% end %>
     </div>
   </div>
 </div>
-
+<hr>
 <div class='row'>
   <div class='col-md-4'>
-    <h4>Package managers</h4>
+    <h4><%= link_to 'Package managers', platforms_path %></h4>
     <% @platforms.each do |platform| %>
       <p>
         <strong><%= link_to platform.term, platform_path(platform.term.downcase) %></strong> -
         <%= number_with_delimiter platform['count'] %>
       </p>
     <% end %>
-    <p>
-      <%= link_to 'See all package managers &raquo;'.html_safe, platforms_path %>
-    </p>
   </div>
   <div class='col-md-4'>
-    <h4>Languages</h4>
+    <h4><%= link_to 'Languages', languages_path %></h4>
     <% @languages.each do |language| %>
     <p>
       <strong><%= link_to language.term, language_path(language.term) %></strong> -
       <%= number_with_delimiter language['count'] %>
     </p>
     <% end %>
-    <p>
-      <%= link_to 'See all languages &raquo;'.html_safe, languages_path %>
-    </p>
   </div>
   <div class='col-md-4'>
-    <h4>Licenses</h4>
+    <h4><%= link_to 'Licenses', licenses_path %></h4>
     <% @licenses.each do |license| %>
     <p>
       <strong><%= link_to license.term, license_path(license.term) %></strong> -
       <%= number_with_delimiter license['count'] %>
     </p>
     <% end %>
-    <p>
-      <%= link_to 'See all licenses &raquo;'.html_safe, licenses_path %>
-    </p>
   </div>
 </div>
-
+<hr>
 <div class='row'>
   <div class='col-md-4'>
-    <h4>Popular Projects</h4>
+    <h4><%= link_to 'Popular Projects', search_path(sort: 'stars', order: 'desc') %></h4>
     <%= render @popular %>
-    <p>
-      <%= link_to 'See more projects &raquo;'.html_safe, search_path(sort: 'stars', order: 'desc') %>
-    </p>
   </div>
   <div class='col-md-4'>
-    <h4>New Projects</h4>
+    <h4><%= link_to 'New Projects', search_path(sort: 'created_at', order: 'desc') %></h4>
     <%= render @created %>
-    <p>
-      <%= link_to 'See more projects &raquo;'.html_safe, search_path(sort: 'created_at', order: 'desc') %>
-    </p>
   </div>
   <div class='col-md-4'>
     <h4>Top Contributors</h4>

@@ -3,22 +3,36 @@
 
 <div class='row'>
   <div class='col-md-8'>
-    <h3>
+    <h1>
       <%= @project %>
       <small>
-        <%= link_to @project.platform, platform_path(@project.platform.downcase) %>
         <% if @version %>
-          - <%= @version %>
-        <% elsif @versions.any? %>
-          - <%= @versions.first %>
+          <%= @version %>
+        <% else %>
+          <%= @project.latest_version %>
         <% end %>
-
       </small>
-    </h3>
+    </h1>
 
     <% if @project.description.present? %>
     <p>
       <%= @project.description %>
+    </p>
+    <% end %>
+
+    <% if @project.homepage.present? && @project.homepage != package_link(@project.name, @project.platform) %>
+    <p>
+      <%= link_to(@project.homepage, sanitize_url(@project.homepage)) %>
+    </p>
+    <% end %>
+
+    <p>
+      Platform: <%= link_to @project.platform, platform_path(@project.platform.downcase) %>
+    </p>
+
+    <% if @project.normalized_licenses.present? %>
+    <p>
+      <%= 'License'.pluralize(@project.normalized_licenses.length) %>: <%= linked_licenses @project.normalized_licenses %>
     </p>
     <% end %>
 
@@ -28,17 +42,6 @@
     </p>
     <% end %>
 
-    <% if @project.normalized_licenses.present? %>
-    <p>
-      <%= 'License'.pluralize(@project.normalized_licenses.length) %>: <%= linked_licenses @project.normalized_licenses %>
-    </p>
-    <% end %>
-
-    <% if @project.homepage.present? && @project.homepage != package_link(@project.name, @project.platform) %>
-    <p>
-      Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage)) %>
-    </p>
-    <% end %>
     <% if link = package_link(@project.name, @project.platform, @version.try(:number)) %>
     <p>
       View on registry: <%= link_to truncate(link, length: 70), link %>
@@ -105,13 +108,7 @@
 
   <div class='col-md-4'>
     <% if @versions.any? %>
-    <strong>
-      <%= pluralize @versions.count, 'version' %>
-    </strong>
-    <% if @versions.last.published_at.present? %>
-      since
-      <%= @versions.last.published_at.to_date.to_s(:long) %>
-    <% end %>
+    <h4>Releases</h4>
     <ul>
       <% @versions.each do |version| %>
       <li>
@@ -132,7 +129,7 @@
       <% if @versions.any? %>
         <hr>
       <% end %>
-      <strong>Related Projects</strong>
+      <h4>Related Projects</h4>
       <ul>
         <% @related.each do |project| %>
         <li class='project'>

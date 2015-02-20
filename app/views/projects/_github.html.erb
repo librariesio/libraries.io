@@ -59,16 +59,6 @@
     <p>
       Open issues: <%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count), repo.issues_url) : 'disabled'  %>
     </p>
-    <% if repo.has_wiki? %>
-    <p>
-      <%= link_to 'Wiki', repo.wiki_url %>
-    </p>
-    <% end %>
-    <% if repo.has_pages? %>
-    <p>
-      <%= link_to 'Pages', repo.pages_url %>
-    </p>
-    <% end %>
     <% if repo.mirror_url.present? %>
     <p>
       Mirror of <%= repo.mirror_url %>
@@ -76,6 +66,9 @@
     <% end %>
   </div>
   <div class='col-md-6'>
-    <%= render 'projects/contributions' %>
+    <% if @contributors.any? %>
+      <h4>Top Contributors</h4>
+      <%= render @contributors.map(&:github_user) %>
+    <% end %>
   </div>
 </div>

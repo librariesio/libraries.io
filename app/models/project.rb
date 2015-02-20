@@ -28,6 +28,10 @@ class Project < ActiveRecord::Base
     name
   end
 
+  def latest_version
+    @latest_version ||= versions.to_a.sort.first
+  end
+
   def owner
     return nil unless github_repository
     GithubUser.find_by_login github_repository.owner_name

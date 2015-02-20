@@ -6,13 +6,20 @@
 
 <% title "#{page_title} - Libraries" %>
 
-<div class='row'>
+<div class="row">
   <div class='col-md-8'>
+    <%= form_tag search_path, method: :get, class: 'search-form' do |f| %>
+      <%= text_field_tag 'q', params[:q], placeholder: 'Search..', class: 'form-control' %>
+    <% end %>
+  </div>
+  <div class='col-md-4'>
     <h3>
-      <%= page_title %><br/>
       <small><%= page_entries_info @projects, model: 'projects' %></small>
     </h3>
-
+  </div>
+</div>
+<div class='row'>
+  <div class='col-md-8'>
     <% if @projects.any? %>
       <%= render @projects.records %>
       <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
@@ -37,7 +44,7 @@
               <%= link_to term['term'], url_for(params.merge(name.to_sym => nil)) %>
             <% else %>
               <%= link_to term['term'], url_for(params.merge(name.to_sym => term['term'])) %>
-              - <%= number_with_delimiter term['count'] %>
+              <small><%= number_with_delimiter term['count'] %></small>
             <% end %>
           </li>
         <% end %>
