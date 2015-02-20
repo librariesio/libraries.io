@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
     URL = 'https://wordpress.org/plugins'
+    COLOR = '#4F5D95'
 
     def self.recent_names
       page = 1

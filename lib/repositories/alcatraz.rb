@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
     URL = 'http://alcatraz.io'
+    COLOR = '#438eff'
 
     def self.project_names
       projects.keys.sort

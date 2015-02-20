@@ -4,6 +4,7 @@ class Repositories
     HAS_DEPENDENCIES = true
     URL = "http://maven.org"
     BASE_URL = "https://maven-repository.com"
+    COLOR = '#b07219'
 
     def self.load_names(limit = nil)
       num = REDIS.get('maven-page')

@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
     URL = 'https://pypi.python.org'
+    COLOR = '#3581ba'
 
     def self.project_names
       get_raw("https://pypi.python.org/simple/").scan(/href='(\w+)'/).flatten

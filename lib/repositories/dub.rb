@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     URL = 'http://code.dlang.org'
+    COLOR = '#fcd46d'
 
     def self.project_names
       get("http://code.dlang.org/packages/index.json").sort

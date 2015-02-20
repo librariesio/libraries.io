@@ -1,5 +1,11 @@
 class Repositories
   class Base
+    COLOR = '#fff'
+
+    def self.color
+      self::COLOR
+    end
+
     def self.save(project, include_versions = true)
       mapped_project = mapping(project)
       return false unless mapped_project

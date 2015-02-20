@@ -37,6 +37,14 @@ class Project < ActiveRecord::Base
     GithubUser.find_by_login github_repository.owner_name
   end
 
+  def platform_class
+    "Repositories::#{platform}".constantize
+  end
+
+  def color
+    Languages::Language[language].try(:color) || platform_class.color
+  end
+
   def mlt
     begin
       results = Project.__elasticsearch__.client.mlt(id: self.id, index: 'projects', type: 'project', mlt_fields: 'keywords,platform,description,repository_url', min_term_freq: 1, min_doc_freq: 2)

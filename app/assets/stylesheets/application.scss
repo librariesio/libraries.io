@@ -19,7 +19,7 @@
 
 body {
   padding: 60px 0 100px;
-  background-color: #f5f5f5;
+  background-color: #fafafa;
   font-size: 15px;
   font-family:"Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -94,6 +94,8 @@ h3,h4{
 }
 
 .project{
+  border-left: 3px solid;
+  padding-left: 5px;
   h5{
     font-weight: bold;
     font-size: 16px;

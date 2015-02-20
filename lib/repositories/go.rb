@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = true
     URL = 'http://go-search.org/'
+    COLOR = '#375eab'
 
     def self.project_names
       get("http://go-search.org/api?action=packages")

@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     URL = 'https://pub.dartlang.org'
+    COLOR = '#98BAD6'
 
     def self.project_names
       page = 1

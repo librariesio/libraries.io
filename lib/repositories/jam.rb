@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     URL = 'http://jamjs.org/'
+    COLOR = '#f1e05a'
 
     def self.project_names
       projects.keys.sort

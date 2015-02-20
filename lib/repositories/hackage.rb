@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     URL = 'http://hackage.haskell.org'
+    COLOR = '#29b544'
 
     def self.project_names
       get_json("http://hackage.haskell.org/packages/").map{ |h| h['packageName'] }

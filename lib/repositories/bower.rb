@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = true
     URL = 'http://bower.io'
+    COLOR = '#563d7c'
 
     def self.project_names
       projects.keys

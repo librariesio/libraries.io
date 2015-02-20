@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
     URL = 'https://github.com/nim-lang/nimble'
+    COLOR = '#37775b'
 
     def self.project_names
       projects.keys.sort

@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     URL = 'https://hex.pm'
+    COLOR = '#6e4a7e'
 
     def self.project_names
       page = 1

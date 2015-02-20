@@ -1,4 +1,4 @@
-<div class='project'>
+<div class='project' style="border-color: <%= project.color %>;">
   <h5>
     <%= link_to project.name, project_path(project.to_param) %>
     <small><%= project.latest_version %></small>

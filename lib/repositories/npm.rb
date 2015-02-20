@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     URL = 'https://www.npmjs.com'
+    COLOR = '#f1e05a'
 
     def self.project_names
       get("http://registry.npmjs.org/-/all/").keys[1..-1]

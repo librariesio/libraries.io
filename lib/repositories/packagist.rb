@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
     URL = 'https://packagist.org'
+    COLOR = '#4F5D95'
 
     def self.project_names
       get("https://packagist.org/packages/list.json")['packageNames']
