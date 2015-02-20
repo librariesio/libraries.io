@@ -26,7 +26,7 @@ class ProjectsController < ApplicationController
   end
 
   def find_project
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).first
+    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes({:versions => :dependencies}, {:github_repository => {:github_contributions => :github_user}}).first
     raise ActiveRecord::RecordNotFound if @project.nil?
     redirect_to project_path(@project.to_param), :status => :moved_permanently if params[:platform] != params[:platform].downcase || params[:name] != @project.name
   end
