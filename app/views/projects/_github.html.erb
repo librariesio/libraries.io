@@ -50,8 +50,7 @@
     <p>
       Watchers: <%= link_to number_with_delimiter(repo.subscribers_count), repo.watchers_url %>
     </p>
-    <% contributions = repo.github_contributions.count %>
-    <% if contributions > 0 %>
+    <% if repo.github_contributions.any? %>
       <p>
         Contributors: <%= link_to contributions, repo.contributors_url %>
       </p>
