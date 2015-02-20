@@ -3,6 +3,7 @@ class Repositories
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = true
     URL = 'http://melpa.org'
+    COLOR = '#c065db'
 
     def self.project_names
       projects.keys.sort
