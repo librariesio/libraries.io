@@ -130,19 +130,7 @@
         <hr>
       <% end %>
       <h4>Related Projects</h4>
-      <ul>
-        <% @related.each do |project| %>
-        <li class='project'>
-          <strong><%= link_to project.name, project_path(project.to_param) %></strong>
-          <small><%= link_to project.platform, platform_path(project.platform.downcase) %>
-            <% if project.normalized_licenses.present? %>
-            - <%= linked_licenses project.normalized_licenses %>
-            <% end %>
-          </small><br>
-          <%= truncate project.description, :length => 100 %>
-        </li>
-        <% end %>
-      </ul>
+      <%= render @related %>
     <% end %>
   </div>
 </div>
