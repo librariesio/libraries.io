@@ -33,6 +33,8 @@ gem 'simple-rss'
 gem 'faraday-http-cache'
 gem 'fog'
 gem 'languages'
+gem 'omniauth'
+gem 'omniauth-github'
 
 group :development do
   gem 'spring'

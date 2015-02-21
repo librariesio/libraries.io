@@ -14,6 +14,12 @@ Rails.application.routes.draw do
 
   get '/sitemap.xml.gz', to: redirect("http://#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com/sitemaps/sitemap.xml.gz")
 
+  get '/login',  to: 'sessions#new',     as: 'login'
+  get '/logout', to: 'sessions#destroy', as: 'logout'
+
+  match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
+  post '/auth/failure',             to: 'sessions#failure'
+
   # legacy
   get '/platforms/:id', to: 'legacy#platform'
   get '/users/:id', to: 'legacy#user'

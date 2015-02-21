@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221103949) do
+ActiveRecord::Schema.define(version: 20150221225536) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,6 +110,21 @@ ActiveRecord::Schema.define(version: 20150221103949) do
   end
 
   add_index "readmes", ["github_repository_id"], name: "index_readmes_on_github_repository_id", using: :btree
+
+  create_table "users", force: :cascade do |t|
+    t.string   "uid",         null: false
+    t.string   "nickname",    null: false
+    t.string   "gravatar_id"
+    t.string   "token"
+    t.string   "name"
+    t.string   "blog"
+    t.string   "location"
+    t.string   "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["nickname"], name: "index_users_on_nickname", unique: true, using: :btree
 
   create_table "versions", force: :cascade do |t|
     t.integer  "project_id"
