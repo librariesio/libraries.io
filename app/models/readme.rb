@@ -12,7 +12,7 @@ class Readme < ActiveRecord::Base
     doc = Nokogiri::HTML(html_body)
     doc.xpath('//a').each do |d|
       rel_url = d.get_attribute('href')
-      d.set_attribute('href', URI.join(github_repository.blob_url, rel_url))
+      d.set_attribute('href', URI.join(github_repository.blob_url, rel_url)) if rel_url.present?
     end
     self.html_body = doc.to_s
   end
