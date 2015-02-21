@@ -16,8 +16,8 @@ class Readme < ActiveRecord::Base
         if rel_url.present? && URI.parse(rel_url)
           d.set_attribute('href', URI.join(github_repository.blob_url, rel_url))
         end
-      rescue URI::InvalidURIError
-        
+      rescue URI::InvalidURIError, URI::InvalidComponentError
+
       end
     end
     self.html_body = doc.to_s
