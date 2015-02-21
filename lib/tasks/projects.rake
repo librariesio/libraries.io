@@ -16,6 +16,12 @@ namespace :projects do
     Project.import query: -> { includes(:github_repository, :versions, :github_contributions, :dependents) }
   end
 
+  task add_project_id_to_deps: :environment do
+    Dependency.includes(:version).find_each do |dep|
+      dep.update_attribute(:project_id, dep.version.project_id)
+    end
+  end
+
   task find_repos_in_homepage: :environment do
     Project.with_homepage.without_repository_url.find_each do |project|
       if homepage_gh = GithubRepository.extract_full_name(project.homepage)
