@@ -55,7 +55,7 @@
     <%= render @created %>
   </div>
   <div class='col-md-4'>
-    <h4>Top Contributors</h4>
-    <%= render @contributors %>
+    <h4><%= link_to 'Updated Projects', search_path(sort: 'updated_at', order: 'desc') %></h4>
+    <%= render @updated %>
   </div>
 </div>

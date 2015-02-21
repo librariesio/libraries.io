@@ -111,7 +111,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.popular(options = {})
-    search('*', options.merge(sort: 'rank', order: 'desc')).records.includes(:versions).reject{|p| p.github_repository.nil? }
+    search('*', options.merge(sort: 'rank', order: 'desc')).records.includes(:versions, :github_repository).reject{|p| p.github_repository.nil? }
   end
 
   def normalize_licenses
