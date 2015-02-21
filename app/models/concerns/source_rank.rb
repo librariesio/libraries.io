@@ -9,6 +9,9 @@ module SourceRank
     # repo present
     r +=1 if repository_present?
 
+    # readme present
+    r +=1 if readme_present?
+
     # valid license present
     r +=1 if license_present?
 
@@ -43,6 +46,10 @@ module SourceRank
 
   def repository_present?
     github_repository.present?
+  end
+
+  def readme_present?
+    github_repository.present? && github_repository.readme.present?
   end
 
   def license_present?
