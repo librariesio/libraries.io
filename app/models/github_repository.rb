@@ -81,7 +81,7 @@ class GithubRepository < ActiveRecord::Base
     else
       readme.update_attributes(contents)
     end
-    rescue Octokit::NotFound
+  rescue Octokit::NotFound, Octokit::InternalServerError
     nil
   end
 
