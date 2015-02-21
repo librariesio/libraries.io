@@ -9,6 +9,7 @@ class Project < ActiveRecord::Base
   has_many :versions
   has_many :dependencies, -> { group 'project_name' }, through: :versions
   has_many :github_contributions, through: :github_repository
+  has_many :dependents, ->(project) { where(platform: project.platform) }, class_name: 'Dependency', primary_key: :name, foreign_key: :project_name
   belongs_to :github_repository
 
   scope :platform, ->(platform) { where('lower(platform) = ?', platform.downcase) }
@@ -75,10 +76,6 @@ class Project < ActiveRecord::Base
 
   def homepage
     read_attribute(:homepage).presence || github_repository.try(:homepage)
-  end
-
-  def dependents
-    Dependency.where(platform: platform, project_name: name)
   end
 
   def dependent_projects
