@@ -68,7 +68,10 @@ class Repositories
         deps = dependencies(name, version.number)
         next unless deps.any? && version.dependencies.empty?
         deps.each do |dep|
-          version.dependencies.create(dep.merge(project_id: proj.id)) unless version.dependencies.find_by_project_name dep[:project_name]
+          unless version.dependencies.find_by_project_name dep[:project_name]
+            named_project = Project.platform(self.name.demodulize).where('lower(name) = ?', dep[:project_name].downcase).first.try(:id)
+            version.dependencies.create(dep.merge(project_id: named_project))
+          end
         end
       end
     end

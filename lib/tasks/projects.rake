@@ -17,8 +17,8 @@ namespace :projects do
   end
 
   task add_project_id_to_deps: :environment do
-    Dependency.includes(:version).find_each do |dep|
-      dep.update_attribute(:project_id, dep.version.project_id)
+    Dependency.includes(version: :project).find_each do |dep|
+      dep.update_attribute(:project_id, dep.find_project_id)
     end
   end
 
