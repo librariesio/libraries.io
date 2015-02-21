@@ -8,6 +8,9 @@ class GithubRepository < ActiveRecord::Base
 
   has_many :projects
   has_many :github_contributions
+  has_one :readme
+
+  after_create :download_readme
 
   def to_s
     full_name
@@ -53,6 +56,10 @@ class GithubRepository < ActiveRecord::Base
     "https://github.com/#{full_name}"
   end
 
+  def blob_url
+    "#{url}/blob/#{default_branch}/"
+  end
+
   def avatar_url(size = 60)
     "https://avatars.githubusercontent.com/u/#{owner_id}?size=#{size}"
   end
@@ -63,6 +70,17 @@ class GithubRepository < ActiveRecord::Base
 
   def id_or_name
     github_id || full_name
+  end
+
+  def download_readme
+    contents = {html_body: github_client.readme(full_name, accept: 'application/vnd.github.V3.html')}
+    if readme.nil?
+      create_readme(contents)
+    else
+      readme.update_attributes(contents)
+    end
+    rescue Octokit::NotFound
+    nil
   end
 
   def update_from_github

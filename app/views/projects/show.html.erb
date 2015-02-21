@@ -63,6 +63,11 @@
       </p>
     <% end %>
 
+    <% if @project.github_repository.present? && @project.github_repository.readme.present? %>
+    <hr>
+    <%== @project.github_repository.readme %>
+    <% end %>
+
     <% if @dependencies.any? || @project.dependent_projects.any? %>
       <div class="row">
         <hr>
