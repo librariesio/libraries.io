@@ -11,6 +11,7 @@ module Searchable
         indexes :homepage
         indexes :repository_url
         indexes :keywords
+        indexes :repo_name
         indexes :language, :analyzer => 'keyword'
         indexes :normalized_licenses, :analyzer => 'keyword'
         indexes :platform, :analyzer => 'keyword'
@@ -37,7 +38,7 @@ module Searchable
     end
 
     def as_indexed_json(options = {})
-      as_json methods: [:stars, :language, :rank]
+      as_json methods: [:stars, :language, :rank, :repo_name]
     end
 
     def self.total

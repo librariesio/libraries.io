@@ -66,6 +66,10 @@ class Project < ActiveRecord::Base
     github_repository.try(:language)
   end
 
+  def repo_name
+    github_repository.try(:full_name)
+  end
+
   def description
     if platform == 'Go'
       github_repository.try(:description).presence || read_attribute(:description)
