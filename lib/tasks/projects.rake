@@ -13,7 +13,7 @@ namespace :projects do
   end
 
   task reindex: [:environment, :recreate_index] do
-    Project.import query: -> { includes(:github_repository, :versions, :github_contributions) }
+    Project.import query: -> { includes(:github_repository, :versions, :github_contributions, :dependents) }
   end
 
   task find_repos_in_homepage: :environment do

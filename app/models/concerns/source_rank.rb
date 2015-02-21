@@ -25,7 +25,7 @@ module SourceRank
     r += log_scale(stars)
 
     # number of dependent projects
-    r += log_scale(dependents.count)
+    r += log_scale(dependents.length)
 
     # number of contributors
     r += log_scale(github_contributions.length)
