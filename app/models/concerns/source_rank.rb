@@ -28,7 +28,7 @@ module SourceRank
     r += log_scale(dependents.count)
 
     # number of contributors
-    r += log_scale(github_contributions.count)
+    r += log_scale(github_contributions.length)
 
     # more than one maintainer/owner
 
@@ -50,15 +50,15 @@ module SourceRank
   end
 
   def versions_present?
-    versions.count > 1
+    versions.length > 1
   end
 
   def recent_release?
-    versions.where('published_at > ?', 6.months.ago).any?
+    versions.any? {|v| v.published_at && v.published_at > 6.months.ago }
   end
 
   def not_brand_new?
-    versions.where('published_at < ?', 6.months.ago).any?
+    versions.any? {|v| v.published_at && v.published_at > 6.months.ago }
   end
 
   def log_scale(number)
