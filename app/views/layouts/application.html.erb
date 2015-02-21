@@ -53,8 +53,10 @@
   <footer>
     <div class="container">
       <div class='row'>
-        Tracking <%= link_to number_with_delimiter(Project.total), search_path %> open source projects
-        from across <%= link_to Project.popular_platforms.length, platforms_path %> platforms
+        <% cache("global_stats", :expires_in => 1.hour) do %>
+          Tracking <%= link_to number_with_delimiter(Project.total), search_path %> open source projects
+          from across <%= link_to Download.platforms.length, platforms_path %> platforms
+        <% end %>
       </div>
     </div>
   </footer>
