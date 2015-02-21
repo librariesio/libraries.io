@@ -53,11 +53,4 @@
     <%= render partial: 'languages/list_language', collection: @languages, as: :language %>
   </div>
   <% end %>
-
-  <% if @contributors.any? %>
-    <div class='col-md-4'>
-      <h4>Top <%= @platform_name %> Contributors</h4>
-      <%= render @contributors %>
-    </div>
-  <% end %>
 </div>
