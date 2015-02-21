@@ -82,10 +82,8 @@ module Searchable
           } }
         },
       }
-      if options[:sort]
-        search_definition[:sort]  = { options[:sort] => (options[:order] || 'desc') }
-        search_definition[:track_scores] = true
-      end
+      search_definition[:sort]  = { (options[:sort] || 'rank') => (options[:order] || 'desc') }
+      search_definition[:track_scores] = true
 
       options[:filters] ||= []
       options[:filters].each do |k,v|
