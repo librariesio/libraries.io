@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150220204446) do
+ActiveRecord::Schema.define(version: 20150221005540) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20150220204446) do
   end
 
   add_index "dependencies", ["platform", "project_name"], name: "index_dependencies_on_platform_and_project_name", using: :btree
+  add_index "dependencies", ["project_id"], name: "index_dependencies_on_project_id", using: :btree
   add_index "dependencies", ["version_id"], name: "index_dependencies_on_version_id", using: :btree
 
   create_table "github_contributions", force: :cascade do |t|
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(version: 20150220204446) do
     t.string   "platform"
   end
 
+  add_index "github_contributions", ["github_repository_id"], name: "index_github_contributions_on_github_repository_id", using: :btree
   add_index "github_contributions", ["github_user_id"], name: "index_github_contributions_on_github_user_id", using: :btree
   add_index "github_contributions", ["platform"], name: "index_github_contributions_on_platform", using: :btree
 
@@ -80,6 +82,8 @@ ActiveRecord::Schema.define(version: 20150220204446) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "github_users", ["login"], name: "index_github_users_on_login", using: :btree
 
   create_table "projects", force: :cascade do |t|
     t.string   "name"
