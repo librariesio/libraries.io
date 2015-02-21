@@ -1,8 +1,8 @@
 class Readme < ActiveRecord::Base
   belongs_to :github_repository
-  validates_presence_of :html_body
+  validates_presence_of :html_body, :github_repository
 
-  before_validation :reformat
+  after_validation :reformat
 
   def to_s
     html_body
