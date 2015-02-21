@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
     @versions = @project.versions.to_a.sort
     @dependencies = (@versions.any? ? (@version || @versions.first).dependencies : [])
     @related = @project.mlt
-    @contributors = @project.github_repository.github_contributions.order('count DESC').includes(:github_user).limit(20) if @project.github_repository
+    @contributors = @project.github_contributions.order('count DESC').includes(:github_user).limit(20)
   end
 
   def find_project

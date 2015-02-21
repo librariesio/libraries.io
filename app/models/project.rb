@@ -7,6 +7,7 @@ class Project < ActiveRecord::Base
 
   has_many :versions
   has_many :dependencies, -> { group 'project_name' }, through: :versions
+  has_many :github_contributions, through: :github_repository
   belongs_to :github_repository
 
   scope :platform, ->(platform) { where('lower(platform) = ?', platform.downcase) }
