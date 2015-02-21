@@ -1,5 +1,6 @@
 class Project < ActiveRecord::Base
   include Searchable
+  include SourceRank
 
   validates_presence_of :name, :platform
 

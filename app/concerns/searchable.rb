@@ -18,6 +18,7 @@ module Searchable
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
 
+        indexes :rank, type: 'integer'
         indexes :stars, type: 'integer'
         indexes :github_repository_id, type: 'integer'
       end
@@ -36,7 +37,7 @@ module Searchable
     end
 
     def as_indexed_json(options = {})
-      as_json methods: [:stars, :language]
+      as_json methods: [:stars, :language, :rank]
     end
 
     def self.total
@@ -48,9 +49,18 @@ module Searchable
       query = '*' if query.blank?
       search_definition = {
         query: {
-          filtered: {
-             query: {query_string: {query: query}},
-             filter:{ bool: { must: [] } },
+          function_score: {
+            query: {
+              filtered: {
+                 query: {query_string: {query: query}},
+                 filter:{ bool: { must: [] } }
+              }
+            },
+            field_value_factor: {
+              field: "rank",
+              modifier: "log1p",
+              factor:   2
+            }
           }
         },
         facets: {
@@ -70,7 +80,7 @@ module Searchable
             field: "keywords",
             size: facet_limit
           } }
-        }
+        },
       }
       if options[:sort]
         search_definition[:sort]  = { options[:sort] => (options[:order] || 'desc') }
@@ -80,7 +90,7 @@ module Searchable
       options[:filters] ||= []
       options[:filters].each do |k,v|
         if v.present?
-          search_definition[:query][:filtered][:filter][:bool][:must] << {term: { k => v}}
+          search_definition[:query][:function_score][:query][:filtered][:filter][:bool][:must] << {term: { k => v}}
         end
       end
 
