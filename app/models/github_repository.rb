@@ -12,6 +12,8 @@ class GithubRepository < ActiveRecord::Base
 
   after_create :download_readme
 
+  scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
+
   def to_s
     full_name
   end
