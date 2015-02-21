@@ -23,7 +23,9 @@ namespace :projects do
   end
 
   task download_readmes: :environment do
-    GithubRepository.find_each(&:download_readme)
+    GithubRepository.find_each do |repo|
+      repo.download_readme unless repo.readme.present?
+    end
   end
 
   task find_repos_in_homepage: :environment do
