@@ -55,7 +55,7 @@
     </p>
     <% end %>
 
-    <% if @project.github_url.present? && @project.github_repository.nil? %>
+    <% if @project.github_url.present? && @github_repository.nil? %>
       <p>
         Repo: <%= link_to @project.github_url, sanitize_url(@project.github_url) %>
       </p>
@@ -70,9 +70,9 @@
       </p>
     <% end %>
 
-    <% if @project.github_repository.present? && @project.github_repository.readme.present? %>
+    <% if @github_repository.present? && @github_repository.readme.present? %>
     <hr>
-    <%== @project.github_repository.readme %>
+    <%== @github_repository.readme %>
     <% end %>
 
     <% if @dependencies.any? || @dependents.any? %>
@@ -109,7 +109,7 @@
       </div>
     <% end %>
 
-    <%= render 'projects/github' if @project.github_repository.present? %>
+    <%= render 'projects/github' if @github_repository.present? %>
   </div>
 
   <div class='col-md-4'>
