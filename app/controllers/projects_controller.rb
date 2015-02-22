@@ -15,7 +15,8 @@ class ProjectsController < ApplicationController
       @version = @project.versions.find { |v| v.number == params[:number] }
       raise ActiveRecord::RecordNotFound if @version.nil?
     end
-    @dependencies = (@versions.any? ? (@version || @versions.first).dependencies : [])
+    @dependencies = (@versions.any? ? (@version || @versions.first).dependencies.order('project_name ASC') : [])
+    @dependents = @project.dependent_projects
     @related = @project.mlt
     @contributors = @project.github_contributions.order('count DESC').limit(20).includes(:github_user)
   end

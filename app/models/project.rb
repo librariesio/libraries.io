@@ -83,7 +83,7 @@ class Project < ActiveRecord::Base
   end
 
   def dependent_projects
-    dependents.includes(:version => :project).map(&:version).map(&:project).uniq
+    dependents.includes(:version => :project).map(&:version).map(&:project).uniq.sort_by(&:name)
   end
 
   def self.undownloaded_repos

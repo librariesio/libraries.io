@@ -75,7 +75,7 @@
     <%== @project.github_repository.readme %>
     <% end %>
 
-    <% if @dependencies.any? || @project.dependent_projects.any? %>
+    <% if @dependencies.any? || @dependents.any? %>
       <div class="row">
         <hr>
         <% if @dependencies.any? %>
@@ -94,11 +94,11 @@
         </div>
         <% end %>
 
-        <% if @project.dependent_projects.any? %>
+        <% if @dependents.any? %>
           <div class="col-md-6">
             <h4>Dependents</h4>
             <ul>
-              <% @project.dependent_projects.each do |project| %>
+              <% @dependents.each do |project| %>
               <li>
                 <%= link_to project.name, project_path(project.to_param) %>
               </li>
