@@ -17,11 +17,11 @@ class ProjectsController < ApplicationController
     end
     @dependencies = (@versions.any? ? (@version || @versions.first).dependencies : [])
     @related = @project.mlt
-    @contributors = @project.github_contributions.order('count DESC').includes(:github_user).limit(20)
+    @contributors = @project.github_contributions.order('count DESC').limit(20).includes(:github_user)
   end
 
   def find_project
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes({:versions => :dependencies}, {:github_repository => [{:github_contributions => :github_user}, :readme]}).first
+    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes({:versions => :dependencies}, {:github_repository => :readme}).first
     raise ActiveRecord::RecordNotFound if @project.nil?
     redirect_to project_path(@project.to_param), :status => :moved_permanently if params[:platform] != params[:platform].downcase || params[:name] != @project.name
   end
