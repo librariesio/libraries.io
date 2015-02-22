@@ -18,7 +18,12 @@ class Project < ActiveRecord::Base
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
   scope :with_repo, -> { includes(:github_repository).where('github_repositories.id IS NOT NULL') }
   scope :without_repo, -> { where(github_repository_id: nil) }
+
   scope :with_github_url, -> { where('repository_url ILIKE ?', '%github.com%') }
+  scope :with_gitlab_url, -> { where('repository_url ILIKE ?', '%gitlab.com%') }
+  scope :with_bitbucket_url, -> { where('repository_url ILIKE ?', '%bitbucket.org%') }
+  scope :with_launchpad_url, -> { where('repository_url ILIKE ?', '%launchpad.net%') }
+  scope :with_sourceforge_url, -> { where('repository_url ILIKE ?', '%sourceforge.net%') }
 
   before_save :normalize_licenses
   after_create :update_github_repo
