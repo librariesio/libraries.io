@@ -10,8 +10,8 @@ class Download
   end
 
   def self.download_contributors
-    GithubRepository.order('created_at DESC').includes(:projects, :github_contributions).find_each do |repo|
-      next if repo.projects.empty? || repo.github_contributions.any?
+    GithubRepository.with_projects.order('created_at DESC').find_each do |repo|
+      next if repo.github_contributions.any?
       repo.download_github_contributions
     end
   end
