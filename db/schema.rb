@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221233723) do
+ActiveRecord::Schema.define(version: 20150222210633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20150221233723) do
     t.datetime "updated_at"
   end
 
+  add_index "dependencies", ["created_at"], name: "index_dependencies_on_created_at", using: :btree
   add_index "dependencies", ["platform", "project_name"], name: "index_dependencies_on_platform_and_project_name", using: :btree
   add_index "dependencies", ["project_id"], name: "index_dependencies_on_project_id", using: :btree
   add_index "dependencies", ["version_id"], name: "index_dependencies_on_version_id", using: :btree
@@ -48,6 +49,7 @@ ActiveRecord::Schema.define(version: 20150221233723) do
     t.string   "platform"
   end
 
+  add_index "github_contributions", ["created_at"], name: "index_github_contributions_on_created_at", using: :btree
   add_index "github_contributions", ["github_repository_id"], name: "index_github_contributions_on_github_repository_id", using: :btree
   add_index "github_contributions", ["github_user_id"], name: "index_github_contributions_on_github_user_id", using: :btree
   add_index "github_contributions", ["platform"], name: "index_github_contributions_on_platform", using: :btree
@@ -83,6 +85,7 @@ ActiveRecord::Schema.define(version: 20150221233723) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "github_users", ["created_at"], name: "index_github_users_on_created_at", using: :btree
   add_index "github_users", ["login"], name: "index_github_users_on_login", using: :btree
 
   create_table "projects", force: :cascade do |t|
@@ -118,6 +121,7 @@ ActiveRecord::Schema.define(version: 20150221233723) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
   add_index "subscriptions", ["user_id", "project_id"], name: "index_subscriptions_on_user_id_and_project_id", using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -133,6 +137,7 @@ ActiveRecord::Schema.define(version: 20150221233723) do
     t.datetime "updated_at"
   end
 
+  add_index "users", ["created_at"], name: "index_users_on_created_at", using: :btree
   add_index "users", ["nickname"], name: "index_users_on_nickname", unique: true, using: :btree
 
   create_table "versions", force: :cascade do |t|
