@@ -39,6 +39,9 @@
         <ul class="nav navbar-nav navbar-right">
           <% if logged_in? %>
             <li>
+              <%= link_to 'Subscriptions', subscriptions_path %>
+            </li>
+            <li>
               <%= link_to 'Logout', logout_path %>
             </li>
           <% end %>

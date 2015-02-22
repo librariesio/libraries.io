@@ -7,6 +7,14 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def redirect_to_back_or_default(default = root_url, *args)
+    if request.env['HTTP_REFERER'].present? && request.env['HTTP_REFERER'] != request.env['REQUEST_URI']
+      redirect_to :back, *args
+    else
+      redirect_to default, *args
+    end
+  end
+
   def ensure_logged_in
     unless logged_in?
       session[:pre_login_destination] = "http://#{request.host_with_port}#{request.path}"
