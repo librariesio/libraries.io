@@ -12,6 +12,13 @@
           <%= @project.latest_version %>
         <% end %>
       </small>
+      <% if logged_in? %>
+        <% if current_user.subscribed_to?(@project) %>
+          <%= link_to 'Unsubscribe', subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'btn btn-default pull-right' %>
+        <% else %>
+          <%= link_to 'Subscribe', subscriptions_path(project_id: @project.id), method: :post, class: 'btn btn-primary pull-right' %>
+        <% end %>
+      <% end %>
     </h1>
 
     <% if @project.description.present? %>

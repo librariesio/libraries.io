@@ -37,6 +37,11 @@
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav navbar-right">
+          <% if logged_in? %>
+            <li>
+              <%= link_to 'Logout', logout_path %>
+            </li>
+          <% end %>
           <li>
             <%= form_tag search_path, method: :get, class: 'navbar-form' do |f| %>
               <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 60 %>

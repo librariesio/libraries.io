@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :licenses, constraints: { :id => /.*/ }
   resources :languages
+  resources :subscriptions
 
   get '/stats', to: 'stats#index', as: :stats
 
