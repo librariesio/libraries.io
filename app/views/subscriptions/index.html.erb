@@ -3,9 +3,12 @@
     <h1>Manage Subscriptions</h1>
     <table class='table table-striped table-hover'>
       <% @subscriptions.each do |subscription| %>
-        <tr>
+        <tr class='project' style="border-color: <%= subscription.project.color %>;">
           <td>
-            <%= link_to subscription.project, project_path(subscription.project.to_param) %>
+            <h5>
+              <%= link_to subscription.project, project_path(subscription.project.to_param) %>
+              <small><%= subscription.project.latest_version %></small>
+            </h5>
           </td>
           <td>
             <%= link_to 'Unsubscribe', subscription_path(subscription), method: :delete, class: 'btn btn-default pull-right' %>

@@ -2,7 +2,7 @@ class SubscriptionsController < ApplicationController
   before_action :ensure_logged_in
 
   def index
-    @subscriptions = current_user.subscriptions.includes(:project)
+    @subscriptions = current_user.subscriptions.includes(:project => :versions)
   end
 
   def create
