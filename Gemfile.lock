@@ -45,8 +45,6 @@ GEM
     bootstrap-sass (3.3.3)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
-    bootswatch-rails (3.2.4)
-      railties (>= 3.1)
     bugsnag (2.8.0)
       multi_json (~> 1.0)
     builder (3.2.2)
@@ -320,7 +318,6 @@ PLATFORMS
 
 DEPENDENCIES
   bootstrap-sass
-  bootswatch-rails
   bugsnag
   coffee-rails
   elasticsearch-model
