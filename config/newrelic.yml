@@ -83,7 +83,7 @@ common: &default_settings
   browser_monitoring:
       # By default the agent automatically injects the monitoring JavaScript
       # into web pages. Set this attribute to false to turn off this behavior.
-      auto_instrument: true
+      auto_instrument: false
 
   # Proxy settings for connecting to the New Relic server.
   #
@@ -109,7 +109,7 @@ common: &default_settings
   # Java: create a config setting called "ignored_params" and set it to
   #     a comma separated list of HTTP parameter names.
   #     ex: ignored_params: credit_card, ssn, password
-  capture_params: false
+  capture_params: true
 
   # Transaction tracer captures deep information about slow
   # transactions and sends this to the New Relic service once a
@@ -134,7 +134,7 @@ common: &default_settings
     # recorded. The recorder has three modes, "off" which sends no
     # SQL, "raw" which sends the SQL statement in its original form,
     # and "obfuscated", which strips out numeric and string literals.
-    record_sql: obfuscated
+    record_sql: raw
 
     # Threshold in seconds for when to collect stack trace for a SQL
     # call. In other words, when SQL statements exceed this threshold,

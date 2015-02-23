@@ -1,4 +1,6 @@
 class LegacyController < ApplicationController
+  newrelic_ignore
+
   def project
     @project = Project.find params[:id]
     redirect_to project_path(@project.to_param), :status => :moved_permanently
