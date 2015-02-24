@@ -11,5 +11,6 @@ class StatsController < ApplicationController
     @new_dependencies = Dependency.where('created_at > ?', period).group("date(created_at)").count.sort_by{|k,v| k }.reverse
     @new_users = User.where('created_at > ?', period).group("date(created_at)").count.sort_by{|k,v| k }.reverse
     @new_subscriptions = Subscription.where('created_at > ?', period).group("date(created_at)").count.sort_by{|k,v| k }.reverse
+    @new_readmes = Readme.where('created_at > ?', period).group("date(created_at)").count.sort_by{|k,v| k }.reverse
   end
 end
