@@ -2,7 +2,7 @@ class StatsController < ApplicationController
   newrelic_ignore
 
   def index
-    period = 7.days.ago
+    period = 5.days.ago
     @new_projects = Project.where('created_at > ?', period).group("date(created_at)").count.sort_by{|k,v| k }.reverse
     @new_versions = Version.where('created_at > ?', period).group("date(created_at)").count.sort_by{|k,v| k }.reverse
     @new_repos = GithubRepository.where('created_at > ?', period).group("date(created_at)").count.sort_by{|k,v| k }.reverse
