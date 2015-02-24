@@ -58,9 +58,7 @@ module Searchable
               }
             },
             field_value_factor: {
-              field: "rank",
-              modifier: "log1p",
-              factor:   2
+              field: "rank"
             }
           }
         },
