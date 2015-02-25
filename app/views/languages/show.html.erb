@@ -8,7 +8,7 @@
     <h4>Popular <%= @language %> Projects</h4>
     <%= render @popular %>
     <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'stars', order: 'desc') %>
+      <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, order: 'desc') %>
     </p>
   </div>
   <% end %>

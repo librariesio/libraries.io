@@ -13,7 +13,7 @@
       <h4>Popular <%= @platform_name %> Projects</h4>
       <%= render @popular %>
       <p>
-        <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'stars', order: 'desc') %>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, order: 'desc') %>
       </p>
     </div>
   <% end %>
