@@ -16,10 +16,15 @@ class ProjectsController < ApplicationController
       raise ActiveRecord::RecordNotFound if @version.nil?
     end
     @dependencies = (@versions.any? ? (@version || @versions.first).dependencies.order('project_name ASC') : [])
-    @dependents = @project.dependent_projects
+    @dependents = @project.dependent_projects(10)
     @github_repository = @project.github_repository
     @related = @project.mlt
     @contributors = @project.github_contributions.order('count DESC').limit(20).includes(:github_user)
+  end
+
+  def dependents
+    find_project
+    @dependents = @project.dependent_projects.paginate(page: params[:page])
   end
 
   def find_project

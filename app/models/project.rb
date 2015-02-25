@@ -87,8 +87,9 @@ class Project < ActiveRecord::Base
     read_attribute(:homepage).presence || github_repository.try(:homepage)
   end
 
-  def dependent_projects
-    dependents.includes(:version => :project).map(&:version).map(&:project).uniq.sort_by(&:name)
+  def dependent_projects(limit = nil)
+    deps = dependents.includes(:version => :project).map(&:version).map(&:project).uniq.sort_by(&:name)
+    limit ? deps.first(limit) : deps
   end
 
   def self.undownloaded_repos
