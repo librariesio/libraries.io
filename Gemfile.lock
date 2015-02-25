@@ -56,6 +56,7 @@ GEM
       execjs
     coffee-script-source (1.9.1)
     daemons (1.1.9)
+    dalli (2.7.2)
     elasticsearch (1.0.6)
       elasticsearch-api (= 1.0.6)
       elasticsearch-transport (= 1.0.6)
@@ -321,6 +322,7 @@ DEPENDENCIES
   bootstrap-sass
   bugsnag
   coffee-rails
+  dalli
   elasticsearch-model
   elasticsearch-rails
   faraday-http-cache

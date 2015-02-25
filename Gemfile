@@ -35,6 +35,7 @@ gem 'languages'
 gem 'omniauth'
 gem 'omniauth-github'
 gem 'rails_safe_tasks'
+gem 'dalli'
 
 group :development do
   gem 'spring'
