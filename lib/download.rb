@@ -6,7 +6,7 @@ class Download
   end
 
   def self.new_github_repos
-    Project.undownloaded_repos.order('created_at ASC').find_each(&:update_github_repo)
+    Project.undownloaded_repos.order('created_at DESC').find_each(&:update_github_repo)
   end
 
   def self.download_contributors
