@@ -34,6 +34,7 @@ gem 'fog'
 gem 'languages'
 gem 'omniauth'
 gem 'omniauth-github'
+gem 'rails_safe_tasks'
 
 group :development do
   gem 'spring'
