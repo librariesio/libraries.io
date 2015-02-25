@@ -34,6 +34,7 @@ gem 'fog'
 gem 'languages'
 gem 'omniauth'
 gem 'omniauth-github'
+gem 'bigquery', require: 'big_query'
 
 group :development do
   gem 'spring'
