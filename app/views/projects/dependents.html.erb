@@ -1,4 +1,4 @@
 <h1>Projects that depend on <%= link_to @project, project_path(@project.to_param) %></h1>
 <hr>
 <%= render @dependents %>
-<%= will_paginate @dependents %>
+<%= will_paginate @dependents, renderer: BootstrapPagination::Rails, page_links: false %>
