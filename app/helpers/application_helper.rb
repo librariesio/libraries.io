@@ -33,6 +33,8 @@ module ApplicationHelper
       "https://wordpress.org/plugins/#{name}/#{version}"
     when 'NuGet'
       "https://www.nuget.org/packages/#{name}/#{version}"
+    when 'CPAN'
+      "https://metacpan.org/release/#{name}"
     when 'Maven'
       if version
         "http://search.maven.org/#artifactdetails%7C#{name.gsub(':', '%7C')}%7C#{version}%7Cjar"
