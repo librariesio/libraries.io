@@ -132,12 +132,15 @@
     </ul>
     <% end %>
 
-    <% if @related && @related.any? %>
-      <% if @versions.any? %>
-        <hr>
+    <% cache("projects:#{@project.id}:related", :expires_in => 1.day) do %>
+      <% related = @project.mlt %>
+      <% if related && related.any? %>
+        <% if versions.any? %>
+          <hr>
+        <% end %>
+        <h4>Related Projects</h4>
+        <%= render related %>
       <% end %>
-      <h4>Related Projects</h4>
-      <%= render @related %>
     <% end %>
   </div>
 </div>
