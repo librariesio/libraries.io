@@ -42,7 +42,7 @@ module Searchable
     end
 
     def self.total
-      __elasticsearch__.client.count["count"]
+      __elasticsearch__.client.count(index: 'projects')["count"]
     end
 
     def self.search(query, options = {})
