@@ -41,9 +41,15 @@ GEM
     after_commit_action (0.1.4)
       activerecord (>= 3.0.0)
     arel (6.0.0)
+    autoparse (0.3.3)
+      addressable (>= 2.3.1)
+      extlib (>= 0.9.15)
+      multi_json (>= 1.0.0)
     autoprefixer-rails (5.1.7)
       execjs
       json
+    bigquery (0.7.0)
+      google-api-client (~> 0.8.2)
     bootstrap-sass (3.3.3)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
@@ -82,6 +88,7 @@ GEM
     eventmachine (1.0.7)
     excon (0.44.3)
     execjs (2.3.0)
+    extlib (0.9.16)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (1.0.1)
@@ -174,6 +181,16 @@ GEM
     gems (0.8.3)
     globalid (0.3.3)
       activesupport (>= 4.1.0)
+    google-api-client (0.8.2)
+      activesupport (>= 3.2)
+      addressable (~> 2.3)
+      autoparse (~> 0.3)
+      extlib (~> 0.9)
+      faraday (~> 0.9)
+      launchy (~> 2.4)
+      multi_json (~> 1.10)
+      retriable (~> 1.4)
+      signet (~> 0.6)
     hashie (3.4.0)
     hike (1.2.3)
     hiredis (0.6.0)
@@ -191,6 +208,8 @@ GEM
     jwt (1.3.0)
     languages (1.0.1)
       escape_utils (~> 1.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -272,6 +291,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     redis (3.2.1)
+    retriable (1.4.1)
     sanitize-url (0.1.4)
     sass (3.4.13)
     sass-rails (5.0.1)
@@ -284,6 +304,12 @@ GEM
       addressable (~> 2.3.5)
       faraday (~> 0.8, < 0.10)
     semantic (1.4.0)
+    signet (0.6.0)
+      addressable (~> 2.3)
+      extlib (~> 0.9)
+      faraday (~> 0.9)
+      jwt (~> 1.0)
+      multi_json (~> 1.10)
     simple-rss (1.3.1)
     sitemap_generator (5.0.5)
       builder
@@ -324,6 +350,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bigquery
   bootstrap-sass
   bugsnag
   coffee-rails
