@@ -19,6 +19,10 @@ class GithubRepository < ActiveRecord::Base
     full_name
   end
 
+  def to_param
+    full_name
+  end
+
   def owner_name
     full_name.split('/')[0]
   end

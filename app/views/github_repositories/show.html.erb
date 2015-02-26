@@ -1,0 +1,70 @@
+<div class='row'>
+  <div class='col-md-6'>
+    <% repo = @github_repository %>
+    <h1>
+      <%= image_tag repo.avatar_url, width: 30, height: 30, alt: repo %>
+      <%= link_to repo, repo.url %>
+    </h1>
+    <p>
+      <%= repo.description %>
+    </p>
+    <% if repo.homepage.present? %>
+      <p>
+        <%= link_to repo.homepage, sanitize_url(repo.homepage) %>
+      </p>
+    <% end %>
+    <% if repo.fork %>
+    <p>
+      Fork: <%= repo.fork? %>
+    </p>
+    <% end %>
+    <% if repo.language.present? %>
+    <p>
+      Language: <%= link_to repo.language, language_path(repo.language) %>
+    </p>
+    <% end %>
+    <p>
+      Created: <%= repo.created_at.to_s(:long) %>
+    </p>
+    <p>
+      Last updated: <%= repo.updated_at.to_s(:long) %>
+    </p>
+    <% if repo.pushed_at.present? %>
+    <p>
+      Last pushed: <%= repo.pushed_at.to_s(:long) %>
+    </p>
+    <% end %>
+    <p>
+      Size: <%= number_to_human_size repo.size*1000 %>
+    </p>
+    <p>
+      Stars: <%= link_to number_with_delimiter(repo.stargazers_count), repo.stargazers_url %>
+    </p>
+    <p>
+      Forks: <%= link_to number_with_delimiter(repo.forks_count), repo.forks_url %>
+    </p>
+    <p>
+      Watchers: <%= link_to number_with_delimiter(repo.subscribers_count), repo.watchers_url %>
+    </p>
+    <p>
+      Open issues: <%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count), repo.issues_url) : 'disabled'  %>
+    </p>
+    <% if repo.mirror_url.present? %>
+    <p>
+      Mirror of <%= repo.mirror_url %>
+    </p>
+    <% end %>
+  </div>
+  <div class='col-md-6'>
+    <% if @contributors.any? %>
+      <h4>Top Contributors</h4>
+      <%= render @contributors.map(&:github_user) %>
+    <% end %>
+  </div>
+</div>
+<% if @projects.any? %>
+  <div class="row">
+    <h4>Projects Referencing this Repo</h4>
+    <%= render @projects %>
+  </div>
+<% end %>
