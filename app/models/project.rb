@@ -171,6 +171,6 @@ class Project < ActiveRecord::Base
   end
 
   def github_name_with_owner
-    GithubRepository.extract_full_name repository_url
+    GithubRepository.extract_full_name(repository_url)
   end
 end
