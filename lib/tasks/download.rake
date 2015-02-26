@@ -29,6 +29,10 @@ namespace :download do
     Repositories::Cargo.import
   end
 
+  task cpan: :environment do
+    Repositories::CPAN.import_recent
+  end
+
   task dub: :environment do
     Repositories::Dub.import
   end
