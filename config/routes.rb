@@ -9,9 +9,9 @@ Rails.application.routes.draw do
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
-  get '/users/github/:login/repositories', to: 'users#repositories', as: :user_repositories
-  get '/users/github/:login/contributions', to: 'users#contributions', as: :user_contributions
-  get '/users/github/:login', to: 'users#show', as: :user
+  get '/github/:login/repositories', to: 'users#repositories', as: :user_repositories
+  get '/github/:login/contributions', to: 'users#contributions', as: :user_contributions
+  get '/github/:login', to: 'users#show', as: :user
 
   get '/search', to: 'search#index'
 
@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   # legacy
   get '/platforms/:id', to: 'legacy#platform'
   get '/users/:id', to: 'legacy#user'
+  get '/users/github/:login', to: 'legacy#github_user'
   get '/projects/:id', to: 'legacy#project'
   get '/projects/:project_id/versions/:id', to: 'legacy#version', constraints: { :id => /.*/ }
 

@@ -21,4 +21,10 @@ class LegacyController < ApplicationController
     @user = GithubUser.find(params[:id])
     redirect_to user_path(@user), :status => :moved_permanently
   end
+
+  def github_user
+    @user = GithubUser.where("lower(login) = ?", params[:login].downcase).first
+    raise ActiveRecord::RecordNotFound if @user.nil?
+    redirect_to user_path(@user), :status => :moved_permanently
+  end
 end
