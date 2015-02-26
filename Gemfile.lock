@@ -107,7 +107,7 @@ GEM
     fog-atmos (0.1.0)
       fog-core
       fog-xml
-    fog-aws (0.1.0)
+    fog-aws (0.1.1)
       fog-core (~> 1.27)
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
@@ -210,7 +210,7 @@ GEM
       rack (~> 1.2)
     octokit (3.8.0)
       sawyer (~> 0.6.0, >= 0.5.3)
-    oj (2.11.4)
+    oj (2.11.5)
     oj_mimic_json (1.0.1)
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
