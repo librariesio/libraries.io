@@ -27,6 +27,14 @@ class GithubRepository < ActiveRecord::Base
     full_name.split('/')[1]
   end
 
+  def color
+    Languages::Language[language].try(:color)
+  end
+
+  def stars
+    stargazers_count
+  end
+
   def pages_url
     "http://#{owner_name}.github.io/#{project_name}"
   end
