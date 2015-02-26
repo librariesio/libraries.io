@@ -21,10 +21,18 @@ SitemapGenerator::Sitemap.create do
     add version_path(version.to_param), :lastmod => version.project.updated_at
   end
 
+  GithubRepository.find_each do |repo|
+    add github_repository_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
+  end
+
   puts "Generating Users"
   GithubUser.find_each do |user|
     add user_path(user), :lastmod => user.updated_at
+    add user_contributions_path(user), :lastmod => user.updated_at
+    add user_repositories_path(user), :lastmod => user.updated_at
   end
+
+  add search_path
 
   puts "Generating Platforms"
   add platforms_path, :priority => 0.7, :changefreq => 'daily'
