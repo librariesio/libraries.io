@@ -9,19 +9,16 @@
 <div class="row">
   <% if @user.repositories.any? %>
     <div class="col-md-6">
-      <h4>Projects</h4>
-        <% @repositories.each do |github_repository| %>
-          <%= render github_repository.projects %>
-        <% end %>
+      <h4>Repositories</h4>
+      <%= render @repositories %>
+      <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
     </div>
   <% end %>
   <% if @contributions.any? %>
     <div class="col-md-6">
-      <h4>Contributions</h4>
-      <% @contributions.each do |contribution| %>
-        <% github_repository = contribution.github_repository %>
-        <%= render github_repository.projects %>
-      <% end %>
+      <h4>Contributed to</h4>
+      <%= render @contributions.map(&:github_repository)  %>
+      <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
     </div>
   <% end %>
 </div>

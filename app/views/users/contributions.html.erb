@@ -1,0 +1,19 @@
+<% title "#{@user}'s Contributions - Libraries" %>
+
+<h1>
+  <%= image_tag @user.avatar_url, width: 60, height: 60, alt: @user %>
+  <%= link_to @user, user_path(@user) %>'s Contributions
+</h1>
+<hr>
+<div class="row">
+  <% if @contributions.any? %>
+    <div class="col-md-6">
+      <%= render @contributions.map(&:github_repository)  %>
+      <%= will_paginate @contributions, renderer: BootstrapPagination::Rails, page_links: false %>
+    </div>
+  <% else %>
+    <p>
+      No projects found, go back to <%= link_to @user, user_path(@user) %>.
+    </p>
+  <% end %>
+</div>

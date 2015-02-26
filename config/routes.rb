@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
+  get '/users/github/:login/repositories', to: 'users#repositories', as: :user_repositories
+  get '/users/github/:login/contributions', to: 'users#contributions', as: :user_contributions
   get '/users/github/:login', to: 'users#show', as: :user
 
   get '/search', to: 'search#index'
@@ -20,6 +22,8 @@ Rails.application.routes.draw do
 
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   post '/auth/failure',             to: 'sessions#failure'
+
+  get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, constraints: { :name => /.*/ }, format: false
 
   # legacy
   get '/platforms/:id', to: 'legacy#platform'

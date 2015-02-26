@@ -1,10 +1,28 @@
 class UsersController < ApplicationController
   def show
+    find_user
+    @repositories = @user.repositories.order('stargazers_count DESC').limit(10)
+    @contributions = @user.github_contributions.with_repo
+                          .includes(:github_repository)
+                          .order('count DESC').limit(10)
+  end
+
+  def repositories
+    find_user
+    @repositories = @user.repositories.order('stargazers_count DESC').paginate(page: params[:page])
+  end
+
+  def contributions
+    find_user
+    @contributions = @user.github_contributions.with_repo
+                          .includes(:github_repository)
+                          .order('count DESC').paginate(page: params[:page])
+  end
+
+  private
+
+  def find_user
     @user = GithubUser.where("lower(login) = ?", params[:login].downcase).first
     raise ActiveRecord::RecordNotFound if @user.nil?
-    @repositories = @user.repositories.includes(:projects => :versions).reject{|g| g.projects.empty? }
-    @contributions = @user.github_contributions
-                          .includes(:github_repository => {:projects => :versions})
-                          .order('count DESC').reject{|g| g.github_repository.nil? || g.github_repository.owner_name == @user.login || g.github_repository.projects.empty? }
   end
 end
