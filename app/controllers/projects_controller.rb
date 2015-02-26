@@ -1,11 +1,7 @@
 class ProjectsController < ApplicationController
   def index
-    @licenses = Project.popular_licenses.first(10)
     @created = Project.order('created_at DESC').limit(5).includes(:versions, :github_repository)
     @updated = Project.order('updated_at DESC').limit(5).includes(:versions, :github_repository)
-    @platforms = Project.popular_platforms.first(10)
-    @languages = Project.popular_languages.first(10)
-    @popular = Project.popular.first(5)
   end
 
   def show

@@ -19,7 +19,7 @@
   <div class='col-md-4'>
     <h4><%= link_to 'Package managers', platforms_path %></h4>
     <% cache("top_platforms", :expires_in => 1.hour) do %>
-      <% @platforms.each do |platform| %>
+      <% Project.popular_platforms.first(10).each do |platform| %>
         <p>
           <strong><%= link_to platform.term, platform_path(platform.term.downcase) %></strong> -
           <%= number_with_delimiter platform['count'] %>
@@ -30,7 +30,7 @@
   <div class='col-md-4'>
     <h4><%= link_to 'Languages', languages_path %></h4>
     <% cache("top_languages", :expires_in => 1.hour) do %>
-      <% @languages.each do |language| %>
+      <% Project.popular_languages.first(10).each do |language| %>
       <p>
         <strong><%= link_to language.term, language_path(language.term) %></strong> -
         <%= number_with_delimiter language['count'] %>
@@ -41,7 +41,7 @@
   <div class='col-md-4'>
     <h4><%= link_to 'Licenses', licenses_path %></h4>
     <% cache("top_licenses", :expires_in => 1.hour) do %>
-      <% @licenses.each do |license| %>
+      <% Project.popular_licenses.first(10).each do |license| %>
       <p>
         <strong><%= link_to license.term, license_path(license.term) %></strong> -
         <%= number_with_delimiter license['count'] %>
@@ -55,7 +55,7 @@
   <div class='col-md-4'>
     <h4><%= link_to 'Popular Projects', search_path(sort: 'rank', order: 'desc') %></h4>
     <% cache("popular_projects", :expires_in => 1.hour) do %>
-      <%= render @popular %>
+      <%= render Project.popular.first(5) %>
     <% end %>
   </div>
   <div class='col-md-4'>
