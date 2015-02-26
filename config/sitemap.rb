@@ -13,6 +13,7 @@ SitemapGenerator::Sitemap.create do
   puts "Generating Projects"
   Project.find_each do |project|
     add project_path(project.to_param), :lastmod => project.updated_at
+    add project_dependents_path(project.to_param), :lastmod => project.updated_at
   end
 
   Version.includes(:project).find_each do |version|
