@@ -1,3 +1,5 @@
+<% title "Projects that depend on #{@project} - Libraries" %>
+
 <h1>Projects that depend on <%= link_to @project, project_path(@project.to_param) %></h1>
 <hr>
 <% if @dependents.any? %>
