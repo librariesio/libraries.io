@@ -20,6 +20,9 @@
       Updated <%= time_ago_in_words project.updated_at %> ago
     <% else %>
       Published <%= time_ago_in_words project.created_at %> ago
-    <% end %> - <%= number_with_delimiter project.stars %> stars
+    <% end %>
+    <% if project.stars > 0 %>
+     - <%= number_with_delimiter project.stars %> stars
+    <% end %>
   </small>
 </div>
