@@ -1,10 +1,15 @@
-<div class='row'>
+<% repo = @github_repository %>
+<div class="row">
   <div class='col-md-6'>
-    <% repo = @github_repository %>
     <h1>
       <%= image_tag repo.avatar_url, width: 30, height: 30, alt: repo %>
       <%= link_to repo, repo.url %>
     </h1>
+  </div>
+</div>
+<hr>
+<div class='row'>
+  <div class='col-md-6'>
     <p>
       <%= repo.description %>
     </p>
