@@ -22,6 +22,8 @@ class ProjectsController < ApplicationController
     @dependents = @project.dependent_projects.paginate(page: params[:page])
   end
 
+  private
+
   def find_project
     @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes({:versions => :dependencies}, {:github_repository => :readme}).first
     raise ActiveRecord::RecordNotFound if @project.nil?
