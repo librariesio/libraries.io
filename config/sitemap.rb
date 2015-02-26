@@ -10,6 +10,8 @@ SitemapGenerator::Sitemap.sitemaps_host = "http://#{ENV['FOG_DIRECTORY']}.s3.ama
 SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
 
 SitemapGenerator::Sitemap.create do
+  add root_path, :priority => 1, :changefreq => 'daily'
+
   puts "Generating Projects"
   Project.find_each do |project|
     add project_path(project.to_param), :lastmod => project.updated_at
