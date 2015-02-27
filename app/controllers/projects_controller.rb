@@ -6,10 +6,16 @@ class ProjectsController < ApplicationController
 
   def show
     find_project
-    @versions = @project.versions.order('published_at DESC').limit(10)
-    if params[:number].present?
-      @version = @project.versions.find_by_number(params[:number])
-      raise ActiveRecord::RecordNotFound if @version.nil?
+    @version_count = @project.versions.count
+    if @version_count.zero?
+      @versions = []
+      raise ActiveRecord::RecordNotFound if params[:number].present?
+    else
+      @versions = @project.versions.order('published_at DESC').limit(10)
+      if params[:number].present?
+        @version = @project.versions.find_by_number(params[:number])
+        raise ActiveRecord::RecordNotFound if @version.nil?
+      end
     end
     @dependencies = (@versions.any? ? (@version || @versions.first).dependencies.order('project_name ASC') : [])
     @dependents = @project.dependent_projects(10)
@@ -30,7 +36,7 @@ class ProjectsController < ApplicationController
   private
 
   def find_project
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes({:versions => :dependencies}, {:github_repository => :readme}).first
+    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes({:github_repository => :readme}).first
     raise ActiveRecord::RecordNotFound if @project.nil?
     redirect_to project_path(@project.to_param), :status => :moved_permanently if params[:platform] != params[:platform].downcase || params[:name] != @project.name
   end

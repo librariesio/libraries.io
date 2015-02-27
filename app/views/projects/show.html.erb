@@ -114,7 +114,7 @@
   </div>
 
   <div class='col-md-4'>
-    <% if @versions.any? %>
+    <% if @version_count > 0 %>
       <h4>Releases</h4>
       <ul>
         <% @versions.each do |version| %>
