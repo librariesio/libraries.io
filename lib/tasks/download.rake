@@ -71,6 +71,10 @@ namespace :download do
     Repositories::NPM.import_recent
   end
 
+  task npm_all: :environment do
+    Repositories::NPM.import
+  end
+
   task packagist: :environment do
     Repositories::Packagist.import_recent
   end
