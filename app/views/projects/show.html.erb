@@ -121,7 +121,7 @@
         <li>
           <%= link_to version, version_path(version.to_param) %>
           <% if version.published_at.present? %>
-          - <%= version.published_at.to_date.to_s(:long) %>
+          - <%= version.published_at.to_s(:long) %>
           <% end %>
         </li>
         <% end %>
