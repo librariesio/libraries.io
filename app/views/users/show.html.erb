@@ -11,14 +11,18 @@
     <div class="col-md-6">
       <h4>Repositories</h4>
       <%= render @repositories %>
-      <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
+      <% if @user.repositories.count > 10 %>
+        <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
+      <% end %>
     </div>
   <% end %>
   <% if @contributions.any? %>
     <div class="col-md-6">
       <h4>Contributed to</h4>
       <%= render @contributions.map(&:github_repository)  %>
-      <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
+      <% if @user.github_contributions.with_repo.count > 10 %>
+        <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
+      <% end %>
     </div>
   <% end %>
 </div>
