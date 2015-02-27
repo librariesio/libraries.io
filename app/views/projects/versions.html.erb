@@ -1,0 +1,22 @@
+
+<% title "#{@project} Releases - Libraries" %>
+
+<h1><%= link_to @project, project_path(@project.to_param) %> Releases</h1>
+<hr>
+<% if @versions.any? %>
+  <ul>
+    <% @versions.each do |version| %>
+    <li>
+      <%= link_to version, version_path(version.to_param) %>
+      <% if version.published_at.present? %>
+      - <%= version.published_at.to_date.to_s(:long) %>
+      <% end %>
+    </li>
+    <% end %>
+  </ul>
+  <%= will_paginate @versions, renderer: BootstrapPagination::Rails, page_links: false %>
+<% else %>
+  <p>
+    No releases found, go back to <%= link_to @project, project_path(@project.to_param) %>.
+  </p>
+<% end %>

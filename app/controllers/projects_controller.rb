@@ -6,9 +6,9 @@ class ProjectsController < ApplicationController
 
   def show
     find_project
-    @versions = @project.versions.to_a.sort
+    @versions = @project.versions.order('published_at DESC').limit(10)
     if params[:number].present?
-      @version = @project.versions.find { |v| v.number == params[:number] }
+      @version = @project.versions.find_by_number(params[:number])
       raise ActiveRecord::RecordNotFound if @version.nil?
     end
     @dependencies = (@versions.any? ? (@version || @versions.first).dependencies.order('project_name ASC') : [])
@@ -20,6 +20,11 @@ class ProjectsController < ApplicationController
   def dependents
     find_project
     @dependents = @project.dependent_projects.paginate(page: params[:page])
+  end
+
+  def versions
+    find_project
+    @versions = @project.versions.order('published_at DESC').paginate(page: params[:page])
   end
 
   private

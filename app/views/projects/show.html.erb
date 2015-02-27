@@ -115,21 +115,20 @@
 
   <div class='col-md-4'>
     <% if @versions.any? %>
-    <h4>Releases</h4>
-    <ul>
-      <% @versions.each do |version| %>
-      <li>
-        <% if version == @version %>
-          <strong><%= version %></strong>
-        <% else %>
+      <h4>Releases</h4>
+      <ul>
+        <% @versions.each do |version| %>
+        <li>
           <%= link_to version, version_path(version.to_param) %>
+          <% if version.published_at.present? %>
+          - <%= version.published_at.to_date.to_s(:long) %>
+          <% end %>
+        </li>
         <% end %>
-        <% if version.published_at.present? %>
-        - <%= version.published_at.to_date.to_s(:long) %>
-        <% end %>
-      </li>
+      </ul>
+      <% if @project.versions.count > 10 %>
+        <%= link_to "See all #{pluralize(@project.versions.count, 'releases')}", project_versions_path(@project.to_param) %>
       <% end %>
-    </ul>
     <% end %>
 
     <% cache("projects:#{@project.id}:related", :expires_in => 1.day) do %>

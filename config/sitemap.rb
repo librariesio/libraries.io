@@ -16,6 +16,7 @@ SitemapGenerator::Sitemap.create do
   Project.find_each do |project|
     add project_path(project.to_param), :lastmod => project.updated_at
     add project_dependents_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
+    add project_versions_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
   end
 
   Version.includes(:project).find_each do |version|
