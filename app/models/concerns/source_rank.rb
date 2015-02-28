@@ -28,7 +28,7 @@ module SourceRank
     r += log_scale(stars)
 
     # number of dependent projects
-    r += log_scale(dependents.length) * 2
+    r += log_scale(dependents.joins(:version).pluck('DISTINCT versions.project_id').length) * 2
 
     # number of contributors
     r += log_scale(github_contributions.length)
