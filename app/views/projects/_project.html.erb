@@ -16,7 +16,7 @@
     <% if project.normalized_licenses.present? %>
       <%= linked_licenses project.normalized_licenses %> -
     <% end %>
-    <% if project.updated_at > project.created_at + 1.minute %>
+    <% if project.versions_count > 1 %>
       Updated <%= time_ago_in_words project.updated_at %> ago
     <% else %>
       Published <%= time_ago_in_words project.created_at %> ago
