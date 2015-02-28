@@ -36,6 +36,7 @@ gem 'omniauth'
 gem 'omniauth-github'
 gem 'rails_safe_tasks'
 gem 'dalli'
+gem 'counter_culture'
 
 group :development do
   gem 'spring'
