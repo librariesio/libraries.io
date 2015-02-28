@@ -16,5 +16,6 @@
         </tr>
       <% end %>
     </table>
+    <%= will_paginate @subscriptions, renderer: BootstrapPagination::Rails, page_links: false %>
   </div>
 </div>
