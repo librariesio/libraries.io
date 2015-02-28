@@ -1,0 +1,11 @@
+Hi <%= @user.nickname %>
+
+I detected a new release (<%= @version.number %>) of <%= @project %> (<%= project_url(@project.to_param) %>) on <%= @project.platform %> (<%= platform_url(@project.platform.downcase) %>) <%= "at #{@version.published_at.to_s(:long)}" if @version.published_at.present? %>
+
+Check out all the details here: <%= version_url(@version.to_param) %>
+
+From your friendly neighbourhood robot, Libby.
+
+-----
+
+p.s. You can manage and unsubscribe from subscriptions here: <%= subscriptions_url %>

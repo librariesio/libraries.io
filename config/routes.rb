@@ -32,6 +32,11 @@ Rails.application.routes.draw do
   get '/projects/:id', to: 'legacy#project'
   get '/projects/:project_id/versions/:id', to: 'legacy#version', constraints: { :id => /.*/ }
 
+  if Rails.env.development?
+    get '/rails/mailers'         => "rails/mailers#index"
+    get '/rails/mailers/*path'   => "rails/mailers#preview"
+  end
+
   # project routes
   get '/:platform/:name/versions', to: 'projects#versions', as: :project_versions, constraints: { :name => /.*/ }
   get '/:platform/:name/dependents', to: 'projects#dependents', as: :project_dependents, constraints: { :name => /.*/ }

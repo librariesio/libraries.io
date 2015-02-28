@@ -1,0 +1,24 @@
+<p>
+  Hi <%= @user.nickname %>
+</p>
+
+<p>
+  I detected a new release (<%= link_to @version.number, version_url(@version.to_param) %>)
+  of <%= link_to @project, project_url(@project.to_param) %>
+  on <%= link_to @project.platform, platform_url(@project.platform.downcase) %>
+  <% if @version.published_at.present? %>
+  at <%= @version.published_at.to_s(:long) %>
+  <% end %>
+</p>
+
+<p>
+  Check out all the details here: <%= link_to version_url(@version.to_param), version_url(@version.to_param) %>
+</p>
+
+<p>
+  From your friendly neighbourhood robot, Libby.
+</p>
+<hr>
+<p>
+  <em>p.s. You can manage and unsubscribe from subscriptions here: <%= link_to subscriptions_url, subscriptions_url %></em>
+</p>

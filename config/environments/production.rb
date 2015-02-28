@@ -77,6 +77,8 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  config.action_mailer.default_url_options = { host: 'libraries.io' }
+
   config.middleware.use Rack::GoogleAnalytics, tracker: 'UA-265870-38'
 
   config.cache_store = :dalli_store,
@@ -87,4 +89,14 @@ Rails.application.configure do
                      :socket_timeout => 1.5,
                      :socket_failure_delay => 0.2
                     }
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.sendgrid.net',
+    port:                 '587',
+    authentication:       :plain,
+    user_name:            ENV['SENDGRID_USERNAME'],
+    password:             ENV['SENDGRID_PASSWORD'],
+    domain:               'heroku.com',
+    enable_starttls_auto: true
+  }
+  config.action_mailer.delivery_method = :smtp
 end

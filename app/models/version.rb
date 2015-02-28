@@ -5,6 +5,14 @@ class Version < ActiveRecord::Base
   counter_culture :project
   has_many :dependencies
 
+  after_create :notify_subscribers
+
+  def notify_subscribers
+    project.subscribers.each do |subscription|
+      VersionMailer.new_version(subscription.user, self).deliver_later
+    end
+  end
+
   def <=>(other)
     if parsed_number.is_a?(String) || other.parsed_number.is_a?(String)
       other.number <=> number
