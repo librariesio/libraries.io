@@ -65,10 +65,21 @@
   <footer>
     <div class="container">
       <div class='row'>
-        <% cache("global_stats", :expires_in => 1.hour) do %>
-          Tracking <%= link_to number_with_delimiter(Project.total), search_path %> open source projects
-          from across <%= link_to Download.platforms.length, platforms_path %> platforms
-        <% end %>
+        <div class="col-md-7">
+            <% cache("global_stats", :expires_in => 1.hour) do %>
+              Tracking <%= link_to number_with_delimiter(Project.total), search_path %> open source projects
+              from across <%= link_to Download.platforms.length, platforms_path %> platforms
+            <% end %>
+        </div>
+        <div class="col-md-5">
+          <form action="//libraries.us10.list-manage.com/subscribe/post?u=15c11768c94674bc6f18d079f&amp;id=848ac04a44" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="navbar-form" target="_blank" novalidate>
+          	<input type="email" value="" name="EMAIL" size='40' placeholder='Your email...' class="form-control" id="mce-EMAIL">
+            <div style="position: absolute; left: -5000px;"><input type="text" name="b_15c11768c94674bc6f18d079f_848ac04a44" tabindex="-1" value=""></div>
+            <input type="submit" value="Get Updates" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary"></div>
+          </form>
+        </div>
+
+
       </div>
     </div>
   </footer>
