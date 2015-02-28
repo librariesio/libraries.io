@@ -8,7 +8,7 @@ class Version < ActiveRecord::Base
   after_create :notify_subscribers
 
   def notify_subscribers
-    project.subscribers.each do |subscription|
+    project.subscriptions.each do |subscription|
       VersionMailer.new_version(subscription.user, self).deliver_later
     end
   end
