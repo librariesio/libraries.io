@@ -63,6 +63,12 @@
     </p>
     <% end %>
 
+    <% if link = documentation_url(@project.name, @project.platform, @version.try(:number) || @project.latest_version ) %>
+    <p>
+      Documentation: <%= link_to truncate(link, length: 70), link %>
+    </p>
+    <% end %>
+
     <% if @project.github_url.present? && @github_repository.nil? %>
       <p>
         Repo: <%= link_to @project.github_url, sanitize_url(@project.github_url) %>

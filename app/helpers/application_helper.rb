@@ -45,6 +45,17 @@ module ApplicationHelper
     end
   end
 
+  def documentation_url(name, platform, version = nil)
+    case platform
+    when 'Rubygems'
+      "http://www.rubydoc.info/gems/#{name}/#{version}"
+    when 'Go'
+      "http://godoc.org/#{name}"
+    when 'Pub'
+      "http://www.dartdocs.org/documentation/#{name}/#{version}"
+    end
+  end
+
   def install_instructions(name, platform, version = nil)
     case platform
     when 'Rubygems'
