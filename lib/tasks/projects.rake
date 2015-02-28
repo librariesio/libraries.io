@@ -26,6 +26,10 @@ namespace :projects do
     GithubRepository.without_readme.find_each(&:download_readme)
   end
 
+  task update_version_counts: :environment do
+    Version.counter_culture_fix_counts
+  end
+
   task find_repos_in_homepage: :environment do
     Project.with_homepage.without_repository_url.find_each do |project|
       if homepage_gh = GithubRepository.extract_full_name(project.homepage)
