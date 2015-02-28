@@ -19,6 +19,9 @@ class Project < ActiveRecord::Base
   scope :with_repo, -> { includes(:github_repository).where('github_repositories.id IS NOT NULL') }
   scope :without_repo, -> { where(github_repository_id: nil) }
 
+  scope :few_versions, -> { where('versions_count < 2') }
+  scope :many_versions, -> { where('versions_count > 2') }
+
   scope :with_github_url, -> { where('repository_url ILIKE ?', '%github.com%') }
   scope :with_gitlab_url, -> { where('repository_url ILIKE ?', '%gitlab.com%') }
   scope :with_bitbucket_url, -> { where('repository_url ILIKE ?', '%bitbucket.org%') }
