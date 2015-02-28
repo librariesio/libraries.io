@@ -94,7 +94,7 @@ class GithubRepository < ActiveRecord::Base
     else
       readme.update_attributes(contents)
     end
-  rescue Octokit::NotFound, Octokit::InternalServerError
+  rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway
     nil
   end
 
@@ -106,7 +106,7 @@ class GithubRepository < ActiveRecord::Base
       self.owner_id = r[:owner][:id]
       assign_attributes r.slice(*API_FIELDS)
       save
-    rescue Octokit::NotFound, Octokit::Forbidden => e
+    rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       begin
         response = Net::HTTP.get_response(URI(url))
         if response.code.to_i == 301

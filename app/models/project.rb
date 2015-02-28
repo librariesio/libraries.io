@@ -154,7 +154,7 @@ class Project < ActiveRecord::Base
       g.save
       self.github_repository_id = g.id
       self.save
-    rescue Octokit::NotFound, Octokit::Forbidden => e
+    rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       begin
         response = Net::HTTP.get_response(URI(github_url))
         if response.code.to_i == 301
