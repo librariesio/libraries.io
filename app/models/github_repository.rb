@@ -73,6 +73,10 @@ class GithubRepository < ActiveRecord::Base
     "https://github.com/#{full_name}"
   end
 
+  def source_url
+    "https://github.com/#{source_name}"
+  end
+
   def blob_url
     "#{url}/blob/#{default_branch}/"
   end
