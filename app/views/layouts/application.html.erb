@@ -50,7 +50,7 @@
           </li>
           <% end %>
           <li>
-            <%= form_tag search_path, method: :get, class: 'navbar-form' do |f| %>
+            <%= form_tag search_path, method: :get, class: 'navbar-form', enforce_utf8: false do |f| %>
               <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 60 %>
             <% end %>
           </li>

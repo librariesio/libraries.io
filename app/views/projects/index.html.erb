@@ -8,7 +8,7 @@
         Open Source Libraries
       </h1>
       <p>Discover new modules and libraries you can use in your projects.</p>
-      <%= form_tag search_path, method: :get, class: 'search-form' do |f| %>
+      <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
         <%= text_field_tag 'q', params[:q], placeholder: 'Search..', class: 'form-control' %>
       <% end %>
     </div>
