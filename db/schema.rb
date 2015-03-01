@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150228104413) do
+ActiveRecord::Schema.define(version: 20150301213123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20150228104413) do
     t.string   "default_branch"
     t.integer  "subscribers_count"
     t.integer  "github_id"
+    t.string   "source_name"
   end
 
   create_table "github_users", force: :cascade do |t|

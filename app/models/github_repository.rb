@@ -14,6 +14,8 @@ class GithubRepository < ActiveRecord::Base
 
   scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
+  scope :fork, -> { where(fork: true) }
+  scope :source, -> { where(fork: false) }
 
   def to_s
     full_name
@@ -104,6 +106,7 @@ class GithubRepository < ActiveRecord::Base
       return false if r.nil? || r.empty?
       self.github_id = r[:id]
       self.owner_id = r[:owner][:id]
+      self.source_name = r[:parent][:full_name] if r[:fork]
       assign_attributes r.slice(*API_FIELDS)
       save
     rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
