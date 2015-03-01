@@ -10,6 +10,9 @@
   <div class='col-md-8'>
     <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
       <%= text_field_tag 'q', params[:q], placeholder: 'Search..', class: 'form-control' %>
+      <% [:platforms, :licenses, :languages, :keywords].each do |field| %>
+        <%= hidden_field_tag field, params[field] if params[field].present? %>
+      <% end %>
     <% end %>
   </div>
   <div class='col-md-4'>
