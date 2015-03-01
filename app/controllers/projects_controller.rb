@@ -18,14 +18,17 @@ class ProjectsController < ApplicationController
       end
     end
     @dependencies = (@versions.any? ? (@version || @versions.first).dependencies.order('project_name ASC') : [])
-    @dependents = @project.dependent_projects.limit(10)
+    @dependents = @project.dependent_projects(per_page: 10)
     @github_repository = @project.github_repository
     @contributors = @project.github_contributions.order('count DESC').limit(20).includes(:github_user)
   end
 
   def dependents
     find_project
-    @dependents = @project.dependent_projects.paginate(page: params[:page])
+    page = params[:page].to_i > 0 ? params[:page].to_i : 1
+    @dependents = WillPaginate::Collection.create(page, 30, @project.dependents_count) do |pager|
+      pager.replace(@project.dependent_projects(page: page))
+    end
   end
 
   def versions

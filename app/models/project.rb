@@ -91,8 +91,13 @@ class Project < ActiveRecord::Base
     read_attribute(:homepage).presence || github_repository.try(:homepage)
   end
 
-  def dependent_projects
-    Project.where(id: dependents.joins(:version).pluck('DISTINCT versions.project_id'))
+  def dependent_projects(options = {})
+    options.merge!(per_page: 30, page: 1)
+    Project.where(id: dependents.joins(:version).limit(options[:per_page]).offset(options[:per_page]*(options[:page].to_i-1)).pluck('DISTINCT versions.project_id'))
+  end
+
+  def dependents_count
+    dependents.joins(:version).pluck('DISTINCT versions.project_id').count
   end
 
   def self.undownloaded_repos
