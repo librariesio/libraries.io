@@ -19,21 +19,7 @@
     </table>
 
   </div>
-  <div class="col-md-4">
-    <h4>Versions</h4>
-    <table class='table table-striped table-hover'>
-      <% @new_versions.each do |date,count| %>
-        <tr>
-          <td>
-            <%= date.to_s(:long) %>
-          </td>
-          <td>
-            <%= number_with_delimiter count %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-  </div>
+
   <div class="col-md-4">
     <h4>Repos</h4>
     <table class='table table-striped table-hover'>
@@ -49,42 +35,11 @@
       <% end %>
     </table>
   </div>
-</div>
-<div class="row">
+
   <div class="col-md-4">
     <h4>GitHub Users</h4>
     <table class='table table-striped table-hover'>
       <% @new_github_users.each do |date,count| %>
-        <tr>
-          <td>
-            <%= date.to_s(:long) %>
-          </td>
-          <td>
-            <%= number_with_delimiter count %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-  </div>
-  <div class="col-md-4">
-    <h4>Contributions</h4>
-    <table class='table table-striped table-hover'>
-      <% @new_contributions.each do |date,count| %>
-        <tr>
-          <td>
-            <%= date.to_s(:long) %>
-          </td>
-          <td>
-            <%= number_with_delimiter count %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-  </div>
-  <div class="col-md-4">
-    <h4>Dependencies</h4>
-    <table class='table table-striped table-hover'>
-      <% @new_dependencies.each do |date,count| %>
         <tr>
           <td>
             <%= date.to_s(:long) %>
