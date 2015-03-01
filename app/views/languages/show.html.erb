@@ -3,14 +3,17 @@
 <h1><%= @language %></h1>
 <hr>
 <div class='row'>
-  <% if @popular.any? %>
-  <div class='col-md-4'>
-    <h4>Popular <%= @language %> Projects</h4>
-    <%= render @popular %>
-    <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, order: 'desc') %>
-    </p>
-  </div>
+  <% cache("language:#{@language}:popular", :expires_in => 1.day) do %>
+    <% popular = Project.popular(filters: { language: @language }).first(5) %>
+    <% if popular.any? %>
+    <div class='col-md-4'>
+      <h4>Popular <%= @language %> Projects</h4>
+      <%= render popular %>
+      <p>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, order: 'desc') %>
+      </p>
+    </div>
+    <% end %>
   <% end %>
 
   <% if @updated.any? %>
@@ -35,17 +38,23 @@
 </div>
 <hr>
 <div class='row'>
-  <% if @licenses.any? %>
-  <div class='col-md-4'>
-    <h4>Popular <%= @language %> Licenses</h4>
-    <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
-  </div>
+  <% cache("language:#{@language}:licenses", :expires_in => 1.day) do %>
+    <% licenses = Project.popular_licenses(filters: { language: @language }).first(8) %>
+    <% if licenses.any? %>
+      <div class='col-md-4'>
+        <h4>Popular <%= @language %> Licenses</h4>
+        <%= render partial: 'licenses/list_license', collection: licenses, as: :license %>
+      </div>
+    <% end %>
   <% end %>
 
-  <% if @platforms.length > 1 %>
-  <div class='col-md-4'>
-    <h4>Popular <%= @language %> Platforms</h4>
-    <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
-  </div>
+  <% cache("language:#{@language}:platforms", :expires_in => 1.day) do %>
+    <% platforms = Project.popular_platforms(filters: { language: @language }).first(10) %>
+    <% if platforms.length > 1 %>
+      <div class='col-md-4'>
+        <h4>Popular <%= @language %> Platforms</h4>
+        <%= render partial: 'platforms/list_platform', collection: platforms, as: :platform %>
+      </div>
+    <% end %>
   <% end %>
 </div>
