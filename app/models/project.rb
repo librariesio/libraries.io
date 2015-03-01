@@ -92,7 +92,7 @@ class Project < ActiveRecord::Base
   end
 
   def dependent_projects(options = {})
-    options.merge!(per_page: 30, page: 1)
+    options = {per_page: 30, page: 1}.merge(options)
     Project.where(id: dependents.joins(:version).limit(options[:per_page]).offset(options[:per_page]*(options[:page].to_i-1)).pluck('DISTINCT versions.project_id'))
   end
 
