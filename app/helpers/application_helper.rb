@@ -35,6 +35,8 @@ module ApplicationHelper
       "https://www.nuget.org/packages/#{name}/#{version}"
     when 'CPAN'
       "https://metacpan.org/release/#{name}"
+    when 'CRAN'
+      "http://cran.r-project.org/web/packages/#{name}/index.html"
     when 'Maven'
       if version
         "http://search.maven.org/#artifactdetails%7C#{name.gsub(':', '%7C')}%7C#{version}%7Cjar"
@@ -53,6 +55,8 @@ module ApplicationHelper
       "http://godoc.org/#{name}"
     when 'Pub'
       "http://www.dartdocs.org/documentation/#{name}/#{version}"
+    when 'CRAN'
+      "http://cran.r-project.org/web/packages/#{name}/#{name}.pdf"
     end
   end
 
