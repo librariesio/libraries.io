@@ -16,6 +16,10 @@ namespace :projects do
     Project.import query: -> { includes([:github_repository]) }
   end
 
+  task update_source_ranks: :environment do
+    Project.includes([{:github_repository => :readme}, :versions, :github_contributions]).find_each(&:update_source_rank)
+  end
+
   task add_project_id_to_deps: :environment do
     Dependency.includes(version: :project).find_each do |dep|
       dep.update_attribute(:project_id, dep.find_project_id)

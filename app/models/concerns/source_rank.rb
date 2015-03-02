@@ -1,6 +1,10 @@
 module SourceRank
   extend ActiveSupport::Concern
 
+  def update_source_rank
+    update_attribute :rank, source_rank
+  end
+
   def source_rank
     r = 0
     # basic information available
