@@ -28,6 +28,9 @@
       <%= will_paginate @search, renderer: BootstrapPagination::Rails, page_links: false %>
     <% else %>
       <p>
+        No projects found.
+      </p>
+      <p>
         <% if params[:platforms].present? || params[:licenses].present? ||  params[:languages].present? ||  params[:keywords].present? %>
           <%= link_to 'Try removing some filters.', search_path(q: params[:q]) %>
         <% end %>
