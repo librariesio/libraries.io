@@ -33,6 +33,10 @@ namespace :download do
     Repositories::CPAN.import_recent
   end
 
+  task cran: :environment do
+    Repositories::CPAN.import_recent
+  end
+
   task dub: :environment do
     Repositories::Dub.import
   end
