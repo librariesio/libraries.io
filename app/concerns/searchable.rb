@@ -58,7 +58,8 @@ module Searchable
               }
             },
             field_value_factor: {
-              field: "rank"
+              field: "rank",
+              "modifier": "log1p"
             }
           }
         },
@@ -81,7 +82,7 @@ module Searchable
           } }
         },
       }
-      search_definition[:sort]  = { (options[:sort] || 'rank') => (options[:order] || 'desc') }
+      search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
       search_definition[:track_scores] = true
 
       options[:filters] ||= []
