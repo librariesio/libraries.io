@@ -84,12 +84,6 @@
       </p>
     <% end %>
 
-    <% cache("projects:#{@project.id}:rank", :expires_in => 7.day) do %>
-      <p>
-        SourceRank: <strong><%= @project.rank %></strong>
-      </p>
-    <% end %>
-
     <% if @github_repository.present? && @github_repository.readme.present? %>
     <hr>
     <%== @github_repository.readme %>
