@@ -15,7 +15,7 @@
     <h4>Popular <%= @license.id %> Projects</h4>
     <%= render @popular %>
     <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, order: 'desc') %>
+      <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'rank', order: 'desc') %>
     </p>
   </div>
   <% end %>
