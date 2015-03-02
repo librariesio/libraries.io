@@ -1,7 +1,7 @@
 module SourceRank
   extend ActiveSupport::Concern
 
-  def rank
+  def source_rank
     r = 0
     # basic information available
     r +=1 if basic_info_present?

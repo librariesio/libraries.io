@@ -13,7 +13,7 @@ namespace :projects do
   end
 
   task reindex: [:environment, :recreate_index] do
-    Project.import query: -> { includes([{:github_repository => :readme}, :versions, :github_contributions, :dependents]) }
+    Project.import query: -> { includes([:github_repository]) }
   end
 
   task add_project_id_to_deps: :environment do
