@@ -87,43 +87,44 @@
     <%== @github_repository.readme %>
     <% end %>
 
-    <% if @dependencies.any? || @dependents.any? %>
-      <div class="row">
+
+    <div class="row">
+      <% cache("projects:#{@project.id}:dependents", :expires_in => 1.day) do  %>
+
+        <% dependents = @project.dependent_projects(per_page: 10) %>
+        <% if dependents.any? || @dependencies.any? %>
         <hr>
-        <% if @dependencies.any? %>
-        <div class="col-md-6">
-          <% @dependencies.group_by(&:kind).each do |kind, dependencies| %>
-            <h4><%= kind.humanize unless kind == 'normal' %> Dependencies</h4>
+        <% end %>
+        <% if dependents.any? %>
+          <div class="col-md-6">
+            <h4>Dependents</h4>
             <ul>
-              <% dependencies.each do |dependency| %>
-                <li>
-                  <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
-                  <%= dependency.requirements %>
-                </li>
+              <% dependents.each do |project| %>
+              <li>
+                <%= link_to project.name, project_path(project.to_param) %>
+              </li>
               <% end %>
             </ul>
-          <% end %>
-        </div>
+            <%= link_to 'See all dependents', project_dependents_path(@project.to_param) %>
+          </div>
         <% end %>
-
-        <% cache("projects:#{@project.id}:dependents", :expires_in => 1.day) do  %>
-          <% dependents = @project.dependent_projects(per_page: 10) %>
-          <% if dependents.any? %>
-            <div class="col-md-6">
-              <h4>Dependents</h4>
-              <ul>
-                <% dependents.each do |project| %>
-                <li>
-                  <%= link_to project.name, project_path(project.to_param) %>
-                </li>
-                <% end %>
-              </ul>
-              <%= link_to 'See all dependents', project_dependents_path(@project.to_param) %>
-            </div>
-          <% end %>
+      <% end %>
+      <% if @dependencies.any? %>
+      <div class="col-md-6">
+        <% @dependencies.group_by(&:kind).each do |kind, dependencies| %>
+          <h4><%= kind.humanize unless kind == 'normal' %> Dependencies</h4>
+          <ul>
+            <% dependencies.each do |dependency| %>
+              <li>
+                <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
+                <%= dependency.requirements %>
+              </li>
+            <% end %>
+          </ul>
         <% end %>
       </div>
-    <% end %>
+      <% end %>
+    </div>
 
     <%= render 'projects/github' if @github_repository.present? %>
   </div>
