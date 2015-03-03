@@ -1,3 +1,5 @@
+require 'uri'
+
 module ApplicationHelper
   include SanitizeUrl
 
@@ -97,5 +99,10 @@ module ApplicationHelper
 
   def linked_keywords(keywords)
     keywords.split(',').map{|k| link_to k, search_path(keywords: k) }.join(', ').html_safe
+  end
+
+  def favicon(size)
+    libicon = "https://libicons.herokuapp.com/favicon.ico" 
+    @color ? "#{libicon}?hex=#{URI::escape(@color)}&size=#{size}" : "/favicon-#{size}.ico"
   end
 end

@@ -10,5 +10,7 @@ class PlatformsController < ApplicationController
     @created = Project.search('*', filters: {platform: @platform_name}, sort: 'created_at').records.includes(:versions).first(5)
     @popular = Project.popular(filters: { platform: @platform_name }).first(5)
     @languages = Project.popular_languages(filters: {platform: @platform_name}).first(10)
+
+    @color = @platform.color
   end
 end
