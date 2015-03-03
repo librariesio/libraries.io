@@ -5,7 +5,7 @@ class SubscriptionsController < ApplicationController
     @subscriptions = current_user.subscriptions.includes(:project => :versions).paginate(page: params[:page])
   end
 
-  def create
+  def subscribe
     @subscription = current_user.subscriptions.create(project_id: params[:project_id])
     redirect_to_back_or_default project_path(@subscription.project.to_param)
   end

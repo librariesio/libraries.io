@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :licenses, constraints: { :id => /.*/ }
   resources :languages
   resources :subscriptions
+  get '/subscribe/:project_id', to: 'subscriptions#subscribe', as: :subscribe
 
   get '/stats', to: 'stats#index', as: :stats
 
