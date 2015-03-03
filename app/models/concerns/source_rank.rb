@@ -3,6 +3,7 @@ module SourceRank
 
   def update_source_rank
     update_attribute :rank, source_rank
+    touch
   end
 
   def source_rank
