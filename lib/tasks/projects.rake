@@ -17,7 +17,8 @@ namespace :projects do
   end
 
   task update_source_ranks: :environment do
-    Project.includes([{:github_repository => :readme}, :versions, :github_contributions]).find_each(&:update_source_rank)
+    ids = Project.order('updated_at ASC').limit(10_000).pluck(:id).to_a
+    Project.includes([{:github_repository => :readme}, :versions, :github_contributions]).where(id: ids).find_each(&:update_source_rank)
   end
 
   task add_project_id_to_deps: :environment do
