@@ -11,7 +11,7 @@ class ProjectsController < ApplicationController
       @versions = []
       raise ActiveRecord::RecordNotFound if params[:number].present?
     else
-      @versions = @project.versions.order('published_at DESC').limit(10)
+      @versions = @project.versions.order('published_at DESC').limit(10).to_a.sort
       if params[:number].present?
         @version = @project.versions.find_by_number(params[:number])
         raise ActiveRecord::RecordNotFound if @version.nil?
