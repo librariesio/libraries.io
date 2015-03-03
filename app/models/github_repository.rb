@@ -141,7 +141,6 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_github_contributions
-    return false if projects.empty?
     contributions = github_client.contributors(full_name)
     return false if contributions.empty?
     contributions.each do |c|
