@@ -4,5 +4,6 @@ class GithubRepositoriesController < ApplicationController
     raise ActiveRecord::RecordNotFound if @github_repository.nil?
     @contributors = @github_repository.github_contributions.order('count DESC').limit(20).includes(:github_user)
     @projects = @github_repository.projects.includes(:versions)
+    @color = @github_repository.color
   end
 end
