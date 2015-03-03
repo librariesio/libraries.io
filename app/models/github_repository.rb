@@ -11,6 +11,7 @@ class GithubRepository < ActiveRecord::Base
   has_one :readme
 
   after_create :download_readme
+  after_create :download_github_contributions
 
   scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
