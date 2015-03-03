@@ -1,14 +1,18 @@
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-8">
     <h1>Manage Subscriptions</h1>
     <table class='table table-striped table-hover'>
       <% @subscriptions.each do |subscription| %>
+        <% latest_version = subscription.project.latest_version %>
         <tr class='project' style="border-color: <%= subscription.project.color %>;">
           <td>
             <h5>
               <%= link_to subscription.project, project_path(subscription.project.to_param) %>
-              <small><%= subscription.project.latest_version %></small>
+              <small><%= latest_version %></small>
             </h5>
+          </td>
+          <td>
+            <h5><small>Last updated <%= time_ago_in_words(latest_version && latest_version.published_at.present? ? latest_version.published_at.to_date : subscription.project.updated_at) %> ago</small></h5>
           </td>
           <td>
             <%= link_to 'Unsubscribe', subscription_path(subscription), method: :delete, class: 'btn btn-default pull-right' %>
