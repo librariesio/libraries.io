@@ -1,7 +1,7 @@
 class Repositories
   class Packagist < Base
     HAS_VERSIONS = true
-    HAS_DEPENDENCIES = false
+    HAS_DEPENDENCIES = true
     URL = 'https://packagist.org'
     COLOR = '#4F5D95'
 
@@ -39,6 +39,28 @@ class Repositories
         {
           :number => k,
           :published_at => v['time']
+        }
+      end
+    end
+
+    def self.dependencies(name, version)
+      vers = project(name)['versions'][version]
+      return [] if vers.nil?
+      vers.fetch('require', {}).reject{|k,v| k == 'php' }.map do |k,v|
+        {
+          project_name: k,
+          requirements: v,
+          kind: 'normal',
+          optional: false,
+          platform: self.name.demodulize
+        }
+      end + vers.fetch('require-dev', {}).reject{|k,v| k == 'php' }.map do |k,v|
+        {
+          project_name: k,
+          requirements: v,
+          kind: 'Development',
+          optional: false,
+          platform: self.name.demodulize
         }
       end
     end

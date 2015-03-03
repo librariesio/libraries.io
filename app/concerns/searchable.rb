@@ -38,7 +38,7 @@ module Searchable
     end
 
     def as_indexed_json(options = {})
-      as_json methods: [:stars, :language, :rank, :repo_name]
+      as_json methods: [:stars, :language, :repo_name]
     end
 
     def self.total
