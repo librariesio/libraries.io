@@ -2,7 +2,7 @@ class SubscriptionsController < ApplicationController
   before_action :ensure_logged_in
 
   def index
-    @subscriptions = current_user.subscriptions.includes(:project => :versions).paginate(page: params[:page])
+    @subscriptions = current_user.subscriptions.includes(:project => :versions).order('created_at DESC').paginate(page: params[:page])
   end
 
   def subscribe
