@@ -83,6 +83,10 @@ namespace :download do
     Repositories::Packagist.import_recent
   end
 
+  task packagist_all: :environment do
+    Repositories::Packagist.import
+  end
+
   task pub: :environment do
     Repositories::Pub.import
   end
