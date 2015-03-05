@@ -45,7 +45,7 @@ class Repositories
           return license
         end
       else
-        licenses = latest_version.fetch('licenses', [])
+        licenses = Array(latest_version.fetch('licenses', []))
         licenses.map do |license|
           if license.is_a?(Hash)
             license.fetch('type', '')
