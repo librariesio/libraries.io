@@ -161,25 +161,25 @@ class GithubRepository < ActiveRecord::Base
 
   def download_tags
     github_client.refs(full_name, 'tags').each do |tag|
-      # get url
-      object = github_client.get(tag.object.url)
+      name = tag.ref.match(/refs\/tags\/(.*)/)[1]
+      if github_tags.find_by_name(name).nil?
 
-      tag_hash = {
-        name: tag.ref.match(/refs\/tags\/(.*)/)[1],
-        kind: tag.object.type,
-        sha: tag.object.sha
-      }
+        object = github_client.get(tag.object.url)
 
-      # map depending on if its a commit or a tag
-      case tag.object.type
-      when 'commit'
-        tag_hash[:published_at] = object.committer.date
-      when 'tag'
-        tag_hash[:published_at] = object.tagger.date
-      end
+        tag_hash = {
+          name: name,
+          kind: tag.object.type,
+          sha: tag.object.sha
+        }
 
-      # find or create tag
-      if github_tags.find_by_name(tag_hash[:name]).nil?
+        # map depending on if its a commit or a tag
+        case tag.object.type
+        when 'commit'
+          tag_hash[:published_at] = object.committer.date
+        when 'tag'
+          tag_hash[:published_at] = object.tagger.date
+        end
+
         github_tags.create!(tag_hash)
       end
     end
