@@ -1,0 +1,21 @@
+<% title "#{@project} Releases - Libraries" %>
+
+<h1><%= link_to @project, project_path(@project.to_param) %> tagged releases</h1>
+<hr>
+<% if @tags.any? %>
+  <ul>
+    <% @tags.each do |tag| %>
+    <li>
+      <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
+      <% if tag.published_at.present? %>
+      - <%= tag.published_at.to_s(:long) %>
+      <% end %>
+    </li>
+    <% end %>
+  </ul>
+  <%= will_paginate @tags, renderer: BootstrapPagination::Rails, page_links: false %>
+<% else %>
+  <p>
+    No tags found, go back to <%= link_to @project, project_path(@project.to_param) %>.
+  </p>
+<% end %>

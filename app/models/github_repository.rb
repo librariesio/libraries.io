@@ -8,6 +8,7 @@ class GithubRepository < ActiveRecord::Base
 
   has_many :projects
   has_many :github_contributions
+  has_many :github_tags
   has_one :readme
 
   after_create :download_readme
@@ -156,5 +157,33 @@ class GithubRepository < ActiveRecord::Base
     end
   rescue
     p full_name
+  end
+
+  def download_tags
+    github_client.refs(full_name, 'tags').each do |tag|
+      # get url
+      object = github_client.get(tag.object.url)
+
+      tag_hash = {
+        name: tag.ref.match(/refs\/tags\/(.*)/)[1],
+        kind: tag.object.type,
+        sha: tag.object.sha
+      }
+
+      # map depending on if its a commit or a tag
+      case tag.object.type
+      when 'commit'
+        tag_hash[:published_at] = object.committer.date
+      when 'tag'
+        tag_hash[:published_at] = object.tagger.date
+      end
+
+      # find or create tag
+      if github_tags.find_by_name(tag_hash[:name]).nil?
+        github_tags.create!(tag_hash)
+      end
+    end
+  rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    nil
   end
 end
