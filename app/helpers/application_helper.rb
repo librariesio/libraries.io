@@ -78,6 +78,8 @@ module ApplicationHelper
       "cabal install #{name}" + (version ? "-#{version}" : "")
     when 'PyPi'
       "pip install #{name}" + (version ? "==#{version}" : "")
+    when 'Nimble'
+      "nimble install #{name}" + (version ? "@##{version}" : "")
     when 'Go'
       "go get #{name}"
     when 'NuGet'
