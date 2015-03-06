@@ -183,5 +183,7 @@ class GithubRepository < ActiveRecord::Base
         github_tags.create!(tag_hash)
       end
     end
+  rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    nil
   end
 end
