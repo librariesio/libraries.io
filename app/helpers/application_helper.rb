@@ -104,7 +104,7 @@ module ApplicationHelper
   end
 
   def favicon(size)
-    libicon = "https://libicons.herokuapp.com/favicon.ico" 
+    libicon = "https://libicons.herokuapp.com/favicon.ico"
     @color ? "#{libicon}?hex=#{URI::escape(@color)}&size=#{size}" : "/favicon-#{size}.ico"
   end
 end
