@@ -80,6 +80,19 @@ ActiveRecord::Schema.define(version: 20150305022013) do
 
   add_index "github_repositories", ["full_name"], name: "index_github_repositories_on_full_name", using: :btree
 
+  create_table "github_tags", force: :cascade do |t|
+    t.integer  "github_repository_id"
+    t.string   "name"
+    t.string   "sha"
+    t.string   "kind"
+    t.datetime "published_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "github_tags", ["github_repository_id"], name: "index_github_tags_on_github_repository_id", using: :btree
+  add_index "github_tags", ["name"], name: "index_github_tags_on_name", using: :btree
+
   create_table "github_users", force: :cascade do |t|
     t.integer  "github_id"
     t.string   "login"
@@ -129,19 +142,6 @@ ActiveRecord::Schema.define(version: 20150305022013) do
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
   add_index "subscriptions", ["user_id", "project_id"], name: "index_subscriptions_on_user_id_and_project_id", using: :btree
-
-  create_table "tags", force: :cascade do |t|
-    t.integer  "github_repository_id"
-    t.string   "name"
-    t.string   "sha"
-    t.string   "kind"
-    t.datetime "published_at"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
-
-  add_index "tags", ["github_repository_id"], name: "index_tags_on_github_repository_id", using: :btree
-  add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "uid",         null: false
