@@ -2,7 +2,7 @@
 <% description @github_repository.description %>
 <% repo = @github_repository %>
 <div class="row">
-  <div class='col-md-6'>
+  <div class='col-md-8'>
     <h1>
       <%= image_tag repo.avatar_url, width: 30, height: 30, alt: repo %>
       <%= link_to repo, repo.url %>
@@ -11,7 +11,7 @@
 </div>
 <hr>
 <div class='row'>
-  <div class='col-md-6'>
+  <div class='col-md-8'>
     <p>
       <%= repo.description %>
     </p>
@@ -61,17 +61,37 @@
       Mirror of <%= repo.mirror_url %>
     </p>
     <% end %>
+    <% if repo.readme.present? %>
+      <hr>
+      <%== repo.readme %>
+    <% end %>
   </div>
-  <div class='col-md-6'>
+  <div class='col-md-4'>
     <% if @contributors.any? %>
       <h4>Top Contributors</h4>
       <%= render @contributors.map(&:github_user) %>
     <% end %>
+
+    <% if @projects.any? %>
+      <div class="row"></div>
+      <hr>
+      <h4>Projects Referencing this Repo</h4>
+      <%= render @projects %>
+    <% end %>
+
+    <% if repo.github_tags.any? %>
+      <hr>
+      <h4>Tags</h4>
+      <ul>
+        <% repo.github_tags.to_a.sort.each do |tag| %>
+          <li>
+            <%= link_to tag, tag.github_url %>
+            <% if tag.published_at.present? %>
+            - <%= tag.published_at.to_s(:long) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
   </div>
 </div>
-<% if @projects.any? %>
-  <div class="row">
-    <h4>Projects Referencing this Repo</h4>
-    <%= render @projects %>
-  </div>
-<% end %>

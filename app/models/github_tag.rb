@@ -21,4 +21,8 @@ class GithubTag < ActiveRecord::Base
   def number
     name
   end
+
+  def github_url
+    "#{github_repository.url}/releases/tag/#{name}"
+  end
 end
