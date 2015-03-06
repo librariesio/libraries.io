@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150302215352) do
+ActiveRecord::Schema.define(version: 20150305022013) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,7 +78,6 @@ ActiveRecord::Schema.define(version: 20150302215352) do
     t.string   "source_name"
   end
 
-  add_index "github_repositories", ["created_at"], name: "index_github_repositories_on_created_at", using: :btree
   add_index "github_repositories", ["full_name"], name: "index_github_repositories_on_full_name", using: :btree
 
   create_table "github_users", force: :cascade do |t|
@@ -93,22 +92,21 @@ ActiveRecord::Schema.define(version: 20150302215352) do
   add_index "github_users", ["login"], name: "index_github_users_on_login", using: :btree
 
   create_table "projects", force: :cascade do |t|
-    t.string   "name",                 limit: 255
-    t.string   "platform",             limit: 255
+    t.string   "name"
+    t.string   "platform"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "description"
     t.text     "keywords"
-    t.string   "homepage",             limit: 255
+    t.string   "homepage"
     t.string   "licenses"
     t.string   "repository_url"
     t.integer  "github_repository_id"
-    t.string   "normalized_licenses",              default: [],              array: true
-    t.integer  "versions_count",                   default: 0,  null: false
+    t.string   "normalized_licenses",  default: [],              array: true
+    t.integer  "versions_count",       default: 0,  null: false
     t.integer  "rank",                 default: 0
   end
 
-  add_index "projects", ["created_at"], name: "index_projects_on_created_at", using: :btree
   add_index "projects", ["github_repository_id"], name: "index_projects_on_github_repository_id", using: :btree
   add_index "projects", ["platform"], name: "index_projects_on_platform", using: :btree
 
@@ -131,6 +129,19 @@ ActiveRecord::Schema.define(version: 20150302215352) do
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
   add_index "subscriptions", ["user_id", "project_id"], name: "index_subscriptions_on_user_id_and_project_id", using: :btree
+
+  create_table "tags", force: :cascade do |t|
+    t.integer  "github_repository_id"
+    t.string   "name"
+    t.string   "sha"
+    t.string   "kind"
+    t.datetime "published_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "tags", ["github_repository_id"], name: "index_tags_on_github_repository_id", using: :btree
+  add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "uid",         null: false
@@ -156,7 +167,6 @@ ActiveRecord::Schema.define(version: 20150302215352) do
     t.datetime "updated_at"
   end
 
-  add_index "versions", ["created_at"], name: "index_versions_on_created_at", using: :btree
   add_index "versions", ["number"], name: "index_versions_on_number", using: :btree
   add_index "versions", ["project_id"], name: "index_versions_on_project_id", using: :btree
 
