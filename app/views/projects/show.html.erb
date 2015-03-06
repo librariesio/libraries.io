@@ -143,6 +143,21 @@
       <% if @project.versions.count > 10 %>
         <%= link_to "See all #{pluralize(@project.versions.count, 'releases')}", project_versions_path(@project.to_param) %>
       <% end %>
+    <% elsif @github_repository && @github_tags.any? %>
+      <h4>Tagged Releases</h4>
+      <ul>
+        <% @github_tags.each do |tag| %>
+        <li>
+          <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
+          <% if tag.published_at.present? %>
+          - <%= tag.published_at.to_s(:long) %>
+          <% end %>
+        </li>
+        <% end %>
+      </ul>
+      <% if @github_repository.github_tags.count > 10 %>
+        <%= link_to "See all #{pluralize(@github_repository.github_tags.count, 'tags')}", project_tags_path(@project.to_param) %>
+      <% end %>
     <% end %>
 
     <% cache("projects:#{@project.id}:related", :expires_in => 1.day) do %>

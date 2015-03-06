@@ -7,9 +7,21 @@ class ProjectsController < ApplicationController
   def show
     find_project
     @version_count = @project.versions.count
+    @github_repository = @project.github_repository
     if @version_count.zero?
       @versions = []
-      raise ActiveRecord::RecordNotFound if params[:number].present?
+      if @github_repository.present?
+        @github_tags = @github_repository.github_tags.order('published_at DESC').limit(10).to_a.sort
+        if params[:number].present?
+          @version = @github_repository.github_tags.find_by_name(params[:number])
+          raise ActiveRecord::RecordNotFound if @version.nil?
+        end
+      else
+        @github_tags = []
+      end
+      if @versions.empty? && @github_tags.empty?
+        raise ActiveRecord::RecordNotFound if params[:number].present?
+      end
     else
       @versions = @project.versions.order('published_at DESC').limit(10).to_a.sort
       if params[:number].present?
@@ -33,6 +45,15 @@ class ProjectsController < ApplicationController
   def versions
     find_project
     @versions = @project.versions.order('published_at DESC').paginate(page: params[:page])
+  end
+
+  def tags
+    find_project
+    if @project.github_repository.nil?
+      @tags = []
+    else
+      @tags = @project.github_repository.github_tags.order('published_at DESC').paginate(page: params[:page])
+    end
   end
 
   private
