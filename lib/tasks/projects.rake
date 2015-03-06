@@ -28,7 +28,11 @@ namespace :projects do
   end
 
   task download_readmes: :environment do
-    GithubRepository.without_readme.find_each(&:download_readme)
+    GithubRepository.find_each(&:download_readme)
+  end
+
+  task download_tags: :environment do
+    GithubRepository.find_each(&:download_tags)
   end
 
   task update_version_counts: :environment do
