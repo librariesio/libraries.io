@@ -129,6 +129,13 @@ class GithubRepository < ActiveRecord::Base
     end
   end
 
+  def update_all_info
+    update_from_github
+    download_readme
+    download_tags
+    download_github_contributions
+  end
+
   def self.extract_full_name(url)
     return nil if url.nil?
     github_regex = /(((https|http|git|ssh)?:\/\/(www\.)?)|ssh:\/\/git@|https:\/\/git@|scm:git:git@|git@)(github.com|raw.githubusercontent.com)(:|\/)/i

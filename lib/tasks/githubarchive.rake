@@ -46,12 +46,9 @@ namespace :gh do
     query = "SELECT repo.name FROM [githubarchive:day.events_#{args.date}] WHERE type CONTAINS 'PushEvent' GROUP BY repo.name"
 
     results = query_archive(query)
-    p [:total_modified_repos, results.count]
 
     repo_names = results.map {|r| r['repo_name']}
-    repos = GithubRepository.where(full_name: repo_names)
-
-    p [:modified_repos, repos.count]
+    GithubRepository.where(full_name: repo_names).find_each(&:update_all_info)
   end
 
   desc "Find repos tagged on a given date, eg: rake gh:repos[20150101]"
@@ -61,12 +58,8 @@ namespace :gh do
     query = "SELECT * FROM ( SELECT type, created_at, repo.name, actor.login, JSON_EXTRACT(payload, '$.ref_type') as event FROM [githubarchive:day.events_#{args.date}] WHERE type = 'CreateEvent') WHERE event CONTAINS 'tag'"
 
     results = query_archive(query)
-    p [:total_tagged_repos, results.count]
 
     repo_names = results.map {|r| r['repo_name']}
-    repos = GithubRepository.where(full_name: repo_names)
-
-    p [:tagged_repos, repos.count]
+    GithubRepository.where(full_name: repo_names).find_each(&:download_tags)
   end
-
 end
