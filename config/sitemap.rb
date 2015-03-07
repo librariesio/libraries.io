@@ -24,7 +24,7 @@ SitemapGenerator::Sitemap.create do
 
       project.github_repository.github_tags.each do |tag|
         p tag.name
-        add version_path(project.to_param.merge(number: tag.name)), :lastmod => version.project.updated_at
+        add version_path(project.to_param.merge(number: tag.name)), :lastmod => project.updated_at
       end
     end
   end
