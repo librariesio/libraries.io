@@ -59,7 +59,7 @@ namespace :gh do
     args.with_defaults(date: 1.day.ago.strftime('%Y%m%d'))
 
     query = "SELECT * FROM ( SELECT type, created_at, repo.name, actor.login, JSON_EXTRACT(payload, '$.ref_type') as event FROM [githubarchive:day.events_#{args.date}] WHERE type = 'CreateEvent') WHERE event CONTAINS 'tag'"
-    
+
     results = query_archive(query)
     p [:total_tagged_repos, results.count]
 
