@@ -46,7 +46,7 @@ namespace :gh do
     query = "SELECT repo.name FROM [githubarchive:day.events_#{args.date}] WHERE type CONTAINS 'PushEvent' GROUP BY repo.name"
 
     results = query_archive(query)
-    p [:total_modified_repos, repos.count]
+    p [:total_modified_repos, results.count]
 
     repo_names = results.map {|r| r['repo_name']}
     repos = GithubRepository.where(full_name: repo_names)
