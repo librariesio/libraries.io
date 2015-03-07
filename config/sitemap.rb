@@ -17,6 +17,16 @@ SitemapGenerator::Sitemap.create do
     add project_path(project.to_param), :lastmod => project.updated_at
     add project_dependents_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
     add project_versions_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
+
+    if project.versions_count.zero? && project.github_repository_id.present?
+      return if project.github_repository.nil?
+      add project_tags_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
+
+      project.github_repository.github_tags.each do |tag|
+        p tag.name
+        add version_path(project.to_param.merge(number: tag.name)), :lastmod => version.project.updated_at
+      end
+    end
   end
 
   Version.includes(:project).find_each do |version|
