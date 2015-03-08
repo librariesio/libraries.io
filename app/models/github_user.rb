@@ -1,5 +1,6 @@
 class GithubUser < ActiveRecord::Base
   has_many :github_contributions
+  has_many :github_repositories, primary_key: :github_id, foreign_key: :owner_id
 
   def avatar_url(size = 60)
     "https://avatars.githubusercontent.com/u/#{github_id}?size=#{size}"
@@ -18,6 +19,6 @@ class GithubUser < ActiveRecord::Base
   end
 
   def repositories
-    GithubRepository.where('full_name ILIKE ?', "#{login}/%")
+    GithubRepository.where(owner_id: github_id)
   end
 end

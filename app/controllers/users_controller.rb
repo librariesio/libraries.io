@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   def show
     find_user
-    @repositories = @user.repositories.order('stargazers_count DESC').limit(10)
+    @repositories = @user.github_repositories.order('stargazers_count DESC').limit(10)
     @contributions = @user.github_contributions.with_repo
                           .includes(:github_repository)
                           .order('count DESC').limit(10)
@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   def repositories
     find_user
-    @repositories = @user.repositories.order('stargazers_count DESC').paginate(page: params[:page])
+    @repositories = @user.github_repositories.order('stargazers_count DESC').paginate(page: params[:page])
   end
 
   def contributions

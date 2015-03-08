@@ -10,6 +10,7 @@ class GithubRepository < ActiveRecord::Base
   has_many :github_contributions
   has_many :github_tags
   has_one :readme
+  belongs_to :owner, class: GithubUser, primary_key: :github_id
 
   after_create :download_readme
   after_create :download_tags

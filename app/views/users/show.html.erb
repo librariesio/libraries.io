@@ -7,11 +7,11 @@
 <%= link_to @user.github_url, @user.github_url %>
 <hr>
 <div class="row">
-  <% if @user.repositories.any? %>
+  <% if @user.github_repositories.any? %>
     <div class="col-md-6">
       <h4>Repositories</h4>
       <%= render @repositories %>
-      <% if @user.repositories.count > 10 %>
+      <% if @user.github_repositories.count > 10 %>
         <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
       <% end %>
     </div>
