@@ -44,6 +44,23 @@ class Project < ActiveRecord::Base
     @latest_version ||= versions.to_a.sort.first
   end
 
+  def latest_tag
+    return nil if github_repository.nil?
+    github_repository.github_tags.to_a.sort.first
+  end
+
+  def latest_release
+    latest_version || latest_tag
+  end
+
+  def latest_release_published_at
+    latest_release.try(:published_at).presence || updated_at
+  end
+
+  def latest_release_number
+    latest_release.try(:number)
+  end
+
   def owner
     return nil unless github_repository
     GithubUser.find_by_login github_repository.owner_name
