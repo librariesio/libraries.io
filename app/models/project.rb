@@ -41,12 +41,12 @@ class Project < ActiveRecord::Base
   end
 
   def latest_version
-    @latest_version ||= versions.to_a.sort.first
+    @latest_version ||= versions.order('published_at DESC').first
   end
 
   def latest_tag
     return nil if github_repository.nil?
-    github_repository.github_tags.to_a.sort.first
+    github_repository.github_tags.order('published_at DESC').first
   end
 
   def latest_release
