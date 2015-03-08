@@ -1,10 +1,40 @@
 <% title "#{@user} on GitHub - Libraries" %>
 <% description "Github repositories owned and contributed by #{@user}" %>
-<h1>
-  <%= image_tag @user.avatar_url, width: 60, height: 60, alt: @user %>
-  <%= @user %>
-</h1>
-<%= link_to @user.github_url, @user.github_url %>
+<div class="row">
+  <div class="col-md-6">
+    <h1>
+      <%= image_tag @user.avatar_url, width: 60, height: 60, alt: @user %>
+      <%= @user %>
+      <% if @user.name.present? %>
+        <small>
+          <%= @user.login %>
+        </small>
+      <% end %>
+    </h1>
+    <p>
+      <%= link_to @user.github_url, @user.github_url %>
+    </p>
+  </div>
+  <div class="col-md-6">
+    <br>
+    <% if @user.blog.present? %>
+      <p>
+        Homepage: <%= link_to @user.blog, sanitize_url(@user.blog) %>
+      </p>
+    <% end %>
+    <% if @user.company.present? %>
+      <p>
+        Company: <%= @user.company %>
+      </p>
+    <% end %>
+    <% if @user.location.present? %>
+      <p>
+        Location: <%= link_to @user.location, "http://maps.google.com/?q=#{@user.location}" %>
+      </p>
+    <% end %>
+  </div>
+</div>
+
 <hr>
 <div class="row">
   <% if @user.github_repositories.any? %>

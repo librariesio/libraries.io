@@ -11,7 +11,7 @@ class GithubUser < ActiveRecord::Base
   end
 
   def to_s
-    login
+    name.presence || login
   end
 
   def to_param
