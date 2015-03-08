@@ -7,7 +7,7 @@
     </h4>
     <p>
       <%= image_tag repo.avatar_url, width: 30, height: 30, alt: repo %>
-      <%= link_to repo, repo.url %>
+      <%= link_to repo, github_repository_path(repo.owner_name, repo.project_name) %>
     </p>
     <p>
       <%= repo.description %>
