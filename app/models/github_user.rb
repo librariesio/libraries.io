@@ -17,4 +17,14 @@ class GithubUser < ActiveRecord::Base
   def to_param
     login.downcase
   end
+
+  def github_client
+    AuthToken.client
+  end
+
+  def dowload_from_github
+    update_attributes(github_client.user(github_id).to_hash.slice(:login, :name, :company, :blog, :location))
+  rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    nil
+  end
 end
