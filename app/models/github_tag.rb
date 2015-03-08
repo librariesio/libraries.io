@@ -1,9 +1,18 @@
 class GithubTag < ActiveRecord::Base
   belongs_to :github_repository
   validates_presence_of :name, :sha, :github_repository
+  after_create :notify_subscribers
 
   def to_s
     name
+  end
+
+  def notify_subscribers
+    github_repository.projects.each do |project|
+      project.subscriptions.each do |subscription|
+        VersionsMailer.new_version(subscription.user, project, self).deliver_later
+      end
+    end
   end
 
   def <=>(other)

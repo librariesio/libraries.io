@@ -9,7 +9,7 @@ class Version < ActiveRecord::Base
 
   def notify_subscribers
     project.subscriptions.each do |subscription|
-      VersionsMailer.new_version(subscription.user, self).deliver_later
+      VersionsMailer.new_version(subscription.user, project, self).deliver_later
     end
   end
 

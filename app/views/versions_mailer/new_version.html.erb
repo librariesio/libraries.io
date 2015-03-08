@@ -3,7 +3,7 @@
 </p>
 
 <p>
-  I detected a new release (<%= link_to @version.number, version_url(@version.to_param) %>)
+  I detected a new release (<%= link_to @version.number, version_url(@project.to_param.merge(number: @version.number)) %>)
   of <%= link_to @project, project_url(@project.to_param) %>
   on <%= link_to @project.platform, platform_url(@project.platform.downcase) %>
   <% if @version.published_at.present? %>
@@ -12,7 +12,7 @@
 </p>
 
 <p>
-  Check out all the details here: <%= link_to version_url(@version.to_param), version_url(@version.to_param) %>
+  Check out all the details here: <%= link_to version_url(@project.to_param.merge(number: @version.number)), version_url(@project.to_param.merge(number: @version.number)) %>
 </p>
 
 <p>
