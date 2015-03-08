@@ -17,8 +17,4 @@ class GithubUser < ActiveRecord::Base
   def to_param
     login.downcase
   end
-
-  def repositories
-    GithubRepository.where(owner_id: github_id)
-  end
 end
