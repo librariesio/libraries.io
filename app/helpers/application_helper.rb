@@ -96,6 +96,7 @@ module ApplicationHelper
   end
 
   def linked_licenses(licenses)
+    return 'Missing' if licenses.empty?
     licenses.map{|l| link_to l, license_path(l) }.join('/').html_safe
   end
 
