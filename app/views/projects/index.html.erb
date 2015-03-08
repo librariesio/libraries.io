@@ -17,7 +17,7 @@
 <hr>
 <div class='row'>
   <div class='col-md-4'>
-    <h4><%= link_to 'Package managers', platforms_path %></h4>
+    <h4><%= link_to 'Platforms', platforms_path %></h4>
     <% cache("top_platforms", :expires_in => 1.hour) do %>
       <% Project.popular_platforms.first(10).each do |platform| %>
         <p>
