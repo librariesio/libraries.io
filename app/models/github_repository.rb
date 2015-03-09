@@ -170,26 +170,29 @@ class GithubRepository < ActiveRecord::Base
 
   def download_tags
     github_client.refs(full_name, 'tags').each do |tag|
-      name = tag.ref.match(/refs\/tags\/(.*)/)[1]
-      if github_tags.find_by_name(name).nil?
+      match = tag.ref.match(/refs\/tags\/(.*)/)
+      if match
+        name = match[1]
+        if github_tags.find_by_name(name).nil?
 
-        object = github_client.get(tag.object.url)
+          object = github_client.get(tag.object.url)
 
-        tag_hash = {
-          name: name,
-          kind: tag.object.type,
-          sha: tag.object.sha
-        }
+          tag_hash = {
+            name: name,
+            kind: tag.object.type,
+            sha: tag.object.sha
+          }
 
-        # map depending on if its a commit or a tag
-        case tag.object.type
-        when 'commit'
-          tag_hash[:published_at] = object.committer.date
-        when 'tag'
-          tag_hash[:published_at] = object.tagger.date
+          # map depending on if its a commit or a tag
+          case tag.object.type
+          when 'commit'
+            tag_hash[:published_at] = object.committer.date
+          when 'tag'
+            tag_hash[:published_at] = object.tagger.date
+          end
+
+          github_tags.create!(tag_hash)
         end
-
-        github_tags.create!(tag_hash)
       end
     end
   rescue Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
