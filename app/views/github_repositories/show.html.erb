@@ -20,6 +20,11 @@
         <%= link_to repo.homepage, sanitize_url(repo.homepage) %>
       </p>
     <% end %>
+    <% if repo.license.present? %>
+      <p>
+        License: <%= link_to repo.license, license_path(repo.license) %>
+      </p>
+    <% end %>
     <% if repo.fork %>
     <p>
       Fork of <%= link_to repo.source_name, repo.source_url %>
