@@ -145,6 +145,10 @@ class Project < ActiveRecord::Base
     search('*', options.merge(sort: 'rank', order: 'desc')).records.includes(:versions, :github_repository).reject{|p| p.github_repository.nil? }
   end
 
+  def normalized_licenses
+    read_attribute(:normalized_licenses).presence || [github_repository.license].compact
+  end
+
   def normalize_licenses
     if licenses.blank?
       normalized = []
