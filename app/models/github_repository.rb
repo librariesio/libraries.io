@@ -110,10 +110,11 @@ class GithubRepository < ActiveRecord::Base
 
   def update_from_github
     begin
-      r = github_client.repo(id_or_name).to_hash
+      r = github_client.repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
       return false if r.nil? || r.empty?
       self.github_id = r[:id]
       self.owner_id = r[:owner][:id]
+      self.license = r[:license][:key] if r[:license]
       self.source_name = r[:parent][:full_name] if r[:fork]
       assign_attributes r.slice(*API_FIELDS)
       save

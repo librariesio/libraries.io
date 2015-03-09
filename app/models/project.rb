@@ -169,10 +169,13 @@ class Project < ActiveRecord::Base
     end
 
     begin
-      r = AuthToken.client.repo(name_with_owner).to_hash
+      r = AuthToken.client.repo(name_with_owner, accept: 'application/vnd.github.drax-preview+json').to_hash
       return false if r.nil? || r.empty?
       g = GithubRepository.find_or_initialize_by(r.slice(:full_name))
       g.owner_id = r[:owner][:id]
+      g.github_id = r[:id]
+      g.license = r[:license][:key] if r[:license]
+      g.source_name = r[:parent][:full_name] if r[:fork]
       g.assign_attributes r.slice(*GithubRepository::API_FIELDS)
       g.save
       self.github_repository_id = g.id
