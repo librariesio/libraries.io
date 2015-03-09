@@ -146,7 +146,7 @@ class Project < ActiveRecord::Base
   end
 
   def normalized_licenses
-    read_attribute(:normalized_licenses).presence || [github_repository.license].compact
+    read_attribute(:normalized_licenses).presence || [github_repository.try(:license)].compact
   end
 
   def normalize_licenses
