@@ -101,7 +101,7 @@ module ApplicationHelper
   end
 
   def linked_keywords(keywords)
-    keywords.split(',').map{|k| link_to k, search_path(keywords: k) }.join(', ').html_safe
+    keywords.split(',').map{|k| link_to k, search_path(keywords: k.downcase) }.join(', ').html_safe
   end
 
   def favicon(size)
