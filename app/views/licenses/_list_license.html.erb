@@ -1,4 +1,4 @@
 <p class='list'>
-  <strong><%= link_to license.term, search_path(licenses: license.term, platforms: @platform_name, languages: @language) %></strong>
+  <strong><%= link_to (Spdx.find(license.term).try(:id) || license.term), search_path(licenses: license.term, platforms: @platform_name, languages: @language) %></strong>
   <small><%= pluralize number_with_delimiter(license['count']), 'project' %></small>
 </p>
