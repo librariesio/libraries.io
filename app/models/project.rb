@@ -138,7 +138,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.popular_licenses(options = {})
-    search('*', options).response.facets[:licenses][:terms].reject{ |t| t.term == 'Other' }
+    search('*', options).response.facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
   end
 
   def self.popular(options = {})
