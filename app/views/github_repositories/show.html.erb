@@ -22,7 +22,7 @@
     <% end %>
     <% if repo.license.present? %>
       <p>
-        License: <%= link_to repo.license, license_path(repo.license) %>
+        License: <%= link_to format_license(repo.license), license_path(repo.license) %>
       </p>
     <% end %>
     <% if repo.fork %>

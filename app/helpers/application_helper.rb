@@ -97,7 +97,7 @@ module ApplicationHelper
 
   def linked_licenses(licenses)
     return 'Missing' if licenses.empty?
-    licenses.map{|l| link_to (Spdx.find(l).try(:id) || l), license_path(l) }.join('/').html_safe
+    licenses.map{|l| link_to format_license(l), license_path(l) }.join('/').html_safe
   end
 
   def linked_keywords(keywords)
@@ -107,5 +107,10 @@ module ApplicationHelper
   def favicon(size)
     libicon = "https://libicons.herokuapp.com/favicon.ico"
     @color ? "#{libicon}?hex=#{URI::escape(@color)}&size=#{size}" : "/favicon-#{size}.ico"
+  end
+
+  def format_license(license)
+    return 'Missing' if license.blank?
+    Project.format_license(license)
   end
 end

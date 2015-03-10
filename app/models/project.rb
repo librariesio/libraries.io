@@ -146,7 +146,13 @@ class Project < ActiveRecord::Base
   end
 
   def normalized_licenses
-    read_attribute(:normalized_licenses).presence || [github_repository.try(:license)].compact
+    read_attribute(:normalized_licenses).presence || [Project.format_license(github_repository.try(:license))].compact
+  end
+
+  def self.format_license(license)
+    return nil if license.blank?
+    return 'Other' if license.downcase == 'other'
+    Spdx.find(license).try(:id) || license
   end
 
   def normalize_licenses
