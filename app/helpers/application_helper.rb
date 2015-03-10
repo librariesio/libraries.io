@@ -97,7 +97,7 @@ module ApplicationHelper
 
   def linked_licenses(licenses)
     return 'Missing' if licenses.empty?
-    licenses.map{|l| link_to l, license_path(l) }.join('/').html_safe
+    licenses.map{|l| link_to (Spdx.find(l).try(:id) || l), license_path(l) }.join('/').html_safe
   end
 
   def linked_keywords(keywords)
