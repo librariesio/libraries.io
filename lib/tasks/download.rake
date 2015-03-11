@@ -62,6 +62,10 @@ namespace :download do
     Repositories::Maven.import_recent
   end
 
+  task meteor: :environment do
+    Repositories::Meteor.import
+  end
+
   task nimble: :environment do
     Repositories::Nimble.import
   end

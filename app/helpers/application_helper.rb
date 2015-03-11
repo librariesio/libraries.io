@@ -46,6 +46,8 @@ module ApplicationHelper
         group, artifact = name.split(':')
         "http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22#{group}%22%20AND%20a%3A%22#{artifact}%22"
       end
+    when 'Meteor'
+      "https://atmospherejs.com/#{name.gsub(':', '/')}"
     end
   end
 
@@ -86,6 +88,8 @@ module ApplicationHelper
       "go get #{name}"
     when 'NuGet'
       "Install-Package #{name}" + (version ? " -Version #{version}" : "")
+    when 'Meteor'
+      "meteor add #{name}" + (version ? "@=#{version}" : "")
     end
   end
 
