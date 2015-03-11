@@ -106,7 +106,7 @@ module ApplicationHelper
 
   def favicon(size)
     libicon = "https://libicons.herokuapp.com/favicon.ico"
-    @color ? "#{libicon}?hex=#{URI::escape(@color)}&size=#{size}" : "/favicon-#{size}.ico"
+    @color ? "#{libicon}?hex=#{URI::escape(@color)}&size=#{size}" : "/favicon-#{size}.png"
   end
 
   def format_license(license)
