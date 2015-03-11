@@ -59,6 +59,8 @@ module ApplicationHelper
       "http://www.dartdocs.org/documentation/#{name}/#{version}"
     when 'CRAN'
       "http://cran.r-project.org/web/packages/#{name}/#{name}.pdf"
+    when 'Hex'
+      "http://hexdocs.pm/#{name}/#{version}"
     end
   end
 
