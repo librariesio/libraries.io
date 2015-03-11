@@ -139,3 +139,10 @@ h3,h4{
     margin-left: 5px;
   }
 }
+
+#readme{
+  overflow: hidden;
+  .markdown-body {
+    word-break: break-word;
+  }
+}
