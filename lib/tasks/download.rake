@@ -1,8 +1,4 @@
 namespace :download do
-  task stats: :environment do
-    Download.stats
-  end
-
   task new_github_repos: :environment do
     Download.new_github_repos
   end
