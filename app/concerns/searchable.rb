@@ -10,8 +10,8 @@ module Searchable
         indexes :description, :analyzer => 'snowball'
         indexes :homepage
         indexes :repository_url
-        indexes :keywords
         indexes :repo_name
+        indexes :keywords, :analyzer => 'keyword'
         indexes :language, :analyzer => 'keyword'
         indexes :normalized_licenses, :analyzer => 'keyword'
         indexes :platform, :analyzer => 'keyword'
