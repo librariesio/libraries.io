@@ -38,9 +38,11 @@ module SourceRank
     # number of contributors
     r += log_scale(github_contributions.length)
 
-    # more than one maintainer/owner
+    # more than one maintainer/owner?
 
     # number of downloads
+
+    # documentation available?
 
     return r
   end
