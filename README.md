@@ -33,7 +33,7 @@ Fight entropy with schemas
  rake projects:reindex
 ``` 
 
-Go create a GitHub application. Set the callback url to `localhost:3000/auth/github/callback`. Copy the token, for you will need it to pay the ferryman.
+Go create a Personal access token on GitHub. Copy the token, for you will need it to pay the ferryman.
 
 Lure rails into slurping down some data
 
