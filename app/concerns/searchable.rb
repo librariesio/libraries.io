@@ -47,13 +47,14 @@ module Searchable
 
     def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 30)
+      query = sanitize_query(query)
       query = '*' if query.blank?
       search_definition = {
         query: {
           function_score: {
             query: {
               filtered: {
-                 query: {query_string: {query: sanitize_query(query)}},
+                 query: {query_string: {query: query}},
                  filter:{ bool: { must: [] } }
               }
             },
