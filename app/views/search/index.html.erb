@@ -14,6 +14,12 @@
         <%= hidden_field_tag field, params[field] if params[field].present? %>
       <% end %>
     <% end %>
+    <% if @suggestion && @suggestion.options.any? %>
+      <p>
+        Did you mean
+        <strong><%= link_to "#{@suggestion.options.first.text}?", search_path(q: @suggestion.options.first.text) %></strong>
+      </p>
+    <% end %>
   </div>
   <div class='col-md-4'>
     <h3>

@@ -111,6 +111,15 @@ module Searchable
           bool: {
             must: []
           }
+        },
+        suggest: {
+          did_you_mean: {
+            text: query,
+            term: {
+              size: 3,
+              field: "name"
+            }
+          }
         }
       }
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }

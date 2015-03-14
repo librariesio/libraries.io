@@ -6,6 +6,7 @@ class SearchController < ApplicationController
       language: params[:languages],
       keywords: params[:keywords]
     }, sort: params[:sort], order: params[:order]).paginate(page: params[:page])
+    @suggestion = @search.response.suggest.did_you_mean.first
     @projects = @search.records.includes(:github_repository)
   end
 end
