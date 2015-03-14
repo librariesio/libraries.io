@@ -11,6 +11,7 @@ module Searchable
         indexes :homepage
         indexes :repository_url
         indexes :repo_name
+        indexes :latest_release_number, :analyzer => 'keyword'
         indexes :keywords, :analyzer => 'keyword'
         indexes :language, :analyzer => 'keyword'
         indexes :normalized_licenses, :analyzer => 'keyword'
@@ -18,9 +19,11 @@ module Searchable
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
+        indexes :latest_release_published_at, type: 'date'
 
         indexes :rank, type: 'integer'
         indexes :stars, type: 'integer'
+        indexes :versions_count, type: 'integer'
         indexes :github_repository_id, type: 'integer'
       end
     end
