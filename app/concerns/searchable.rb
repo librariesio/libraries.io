@@ -48,6 +48,7 @@ module Searchable
     def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 30)
       query = sanitize_query(query)
+      options[:filters] ||= []
       search_definition = {
         query: {
           function_score: {
@@ -66,33 +67,65 @@ module Searchable
         facets: {
           platforms: { terms: {
             field: "platform",
-            size: facet_limit
-          } },
+            size: facet_limit},
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :platform)
+              }
+            }
+          },
           languages: { terms: {
-            field: "language",
-            size: facet_limit
-          } },
-          licenses: { terms: {
-            field: "normalized_licenses",
-            size: facet_limit
-          } },
-          keywords: { terms: {
-            field: "keywords",
-            size: facet_limit
-          } }
+              field: "language",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :language)
+              }
+            }
+          },
+          licenses: {
+            terms: {
+              field: "normalized_licenses",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :normalized_licenses)
+              }
+            }
+          },
+          keywords: {
+            terms: {
+              field: "keywords",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :keywords)
+              }
+            }
+          }
         },
+        filter: {
+          bool: {
+            must: []
+          }
+        }
       }
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
       search_definition[:track_scores] = true
-
-      options[:filters] ||= []
-      options[:filters].each do |k,v|
-        if v.present?
-          search_definition[:query][:function_score][:query][:filtered][:filter][:bool][:must] << {term: { k => v}}
-        end
-      end
+      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
 
       __elasticsearch__.search(search_definition)
+    end
+
+    def self.filter_format(filters, except = nil)
+      filters.select { |k, v| v.present? && k != except }.map do |k, v|
+        {
+          term: { k => v }
+        }
+      end
     end
 
     def self.sanitize_query(str)
