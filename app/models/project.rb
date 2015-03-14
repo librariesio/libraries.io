@@ -55,6 +55,10 @@ class Project < ActiveRecord::Base
     latest_version || latest_tag
   end
 
+  def latest_release_published_at
+    read_attribute(:latest_release_published_at) || (latest_release.try(:published_at).presence || updated_at)
+  end
+
   def set_latest_release_published_at
     self.latest_release_published_at = (latest_release.try(:published_at).presence || updated_at)
   end
