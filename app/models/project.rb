@@ -29,8 +29,10 @@ class Project < ActiveRecord::Base
   scope :with_launchpad_url, -> { where('repository_url ILIKE ?', '%launchpad.net%') }
   scope :with_sourceforge_url, -> { where('repository_url ILIKE ?', '%sourceforge.net%') }
 
-  before_save :normalize_licenses
   after_create :update_github_repo
+  before_save  :normalize_licenses,
+               :set_latest_release_published_at,
+               :set_latest_release_number
 
   def to_param
     { name: name, platform: platform.downcase }
@@ -53,12 +55,12 @@ class Project < ActiveRecord::Base
     latest_version || latest_tag
   end
 
-  def latest_release_published_at
-    latest_release.try(:published_at).presence || updated_at
+  def set_latest_release_published_at
+    self.latest_release_published_at = (latest_release.try(:published_at).presence || updated_at)
   end
 
-  def latest_release_number
-    latest_release.try(:number)
+  def set_latest_release_number
+    self.latest_release_number = latest_release.try(:number)
   end
 
   def owner

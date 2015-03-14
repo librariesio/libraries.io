@@ -1,0 +1,6 @@
+class AddLatestReleaseFieldsToProjects < ActiveRecord::Migration
+  def change
+    add_column :projects, :latest_release_published_at, :datetime
+    add_column :projects, :latest_release_number, :string
+  end
+end
