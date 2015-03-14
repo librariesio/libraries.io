@@ -48,7 +48,6 @@ module Searchable
     def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 30)
       query = sanitize_query(query)
-      query = '*' if query.blank?
       search_definition = {
         query: {
           function_score: {
@@ -97,9 +96,10 @@ module Searchable
     end
 
     def self.sanitize_query(str)
+      return '*' if str.blank?
       # Escape special characters
       # http://lucene.apache.org/core/old_versioned_docs/versions/2_9_1/queryparsersyntax.html#Escaping Special Characters
-      escaped_characters = Regexp.escape('\\+-&|/!(){}[]^~*?:')
+      escaped_characters = Regexp.escape('\\+-&|/!(){}[]^~?:')
       str = str.gsub(/([#{escaped_characters}])/, '\\\\\1')
 
       # AND, OR and NOT are used by lucene as logical operators. We need
