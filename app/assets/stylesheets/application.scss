@@ -116,6 +116,9 @@ h3,h4{
     font-size: 16px;
     padding: 0;
     margin-bottom:4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   margin-bottom: 30px;
   small{
