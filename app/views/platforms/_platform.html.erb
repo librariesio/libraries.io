@@ -1,4 +1,9 @@
-<div class='platform col-md-3'>
-  <h4><%= link_to platform.term, platform_path(platform.term.downcase) %></h4>
-  <%= number_with_delimiter platform['count'] %> Projects
+<div class='platform col-xs-6 col-sm-3'>
+  <h4>
+    <div class="pictogram pictogram-<%= platform.term.downcase %>"></div>
+    <div class="blurb">
+    <%= link_to platform.term, platform_path(platform.term.downcase) %>
+    <small><%= number_with_delimiter platform['count'] %> Projects</small>
+  </h4>
+
 </div>

@@ -148,17 +148,21 @@ h3,h4{
   }
 }
 
+.platform h4,
 .language h4{
   line-height:1.1;
 }
+.platform img,
 .language img {
   vertical-align:top;
   margin-right:5px;
 }
+.platform .blurb,
 .language .blurb {
   vertical-align:top;
   display:inline-block;
 }
+.platform .blurb small,
 .language .blurb small{
   display:block;
 }

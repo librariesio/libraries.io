@@ -2,7 +2,9 @@
 <% description "New and popular projects published on #{@platform_name}" %>
 <div class='row'>
   <div class='col-md-6'>
-    <h1><%= @platform_name %></h1>
+    <h1>
+      <div class="pictogram pictogram-lg pictogram-<%= @platform_name.downcase %>"></div>
+      <%= @platform_name %></h1>
     <%= link_to @platform::URL, @platform::URL %>
   </div>
 </div>
