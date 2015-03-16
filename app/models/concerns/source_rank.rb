@@ -36,7 +36,7 @@ module SourceRank
     r += log_scale(dependents.joins(:version).pluck('DISTINCT versions.project_id').length) * 2
 
     # number of contributors
-    r += log_scale(github_contributions.length)
+    r += (log_scale(github_contributions.length) / 2.0).ceil
 
     # more than one maintainer/owner?
 
