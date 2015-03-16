@@ -174,3 +174,10 @@ h3,h4{
   display: inline-block;
   vertical-align:middle;
 }
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+  border: none;
+}
+.navbar-form {
+  box-shadow: none;
+}

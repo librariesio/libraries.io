@@ -33,6 +33,12 @@
   <div class="navbar navbar-default navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
         <%= link_to 'Libraries', root_path, class: 'navbar-brand' %>
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
@@ -47,7 +53,7 @@
           <% end %>
           <li>
             <%= form_tag search_path, method: :get, class: 'navbar-form', enforce_utf8: false do |f| %>
-              <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 60 %>
+              <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 50 %>
             <% end %>
           </li>
         </ul>
