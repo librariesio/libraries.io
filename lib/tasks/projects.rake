@@ -13,12 +13,12 @@ namespace :projects do
   end
 
   task reindex: [:environment, :recreate_index] do
-    Project.import query: -> { includes([:github_repository]) }
+    Project.import query: -> { includes(:github_repository => :github_tags) }
   end
 
   task update_source_ranks: :environment do
     ids = Project.order('updated_at ASC').limit(10_000).pluck(:id).to_a
-    Project.includes([{:github_repository => :readme}, :versions, :github_contributions]).where(id: ids).find_each(&:update_source_rank)
+    Project.includes([{:github_repository => [:readme, :github_tags]}, :versions, :github_contributions]).where(id: ids).find_each(&:update_source_rank)
   end
 
   task add_project_id_to_deps: :environment do
