@@ -35,13 +35,20 @@
 
     <% if @project.homepage.present? && @project.homepage != package_link(@project.name, @project.platform) %>
     <p>
-      <%= link_to(@project.homepage, sanitize_url(@project.homepage)) %>
+      Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage)) %>
     </p>
     <% end %>
 
     <p>
       Platform: <%= link_to @project.platform, platform_path(@project.platform.downcase) %>
     </p>
+
+    <% if @project.language.present? %>
+    <p>
+      Language: <%= link_to @project.language, language_path(@project.language) %>
+    </p>
+    <% end %>
+
 
     <% if @project.normalized_licenses.present? %>
     <p>
