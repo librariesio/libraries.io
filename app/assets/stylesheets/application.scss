@@ -31,12 +31,31 @@ html {
 }
 
 footer{
+  position: absolute;
   bottom: 0;
   width: 100%;
   min-height: 60px;
   background-color: #555;
   padding: 20px 0;
   color: #999;
+}
+
+@media (min-width: 980px) {
+  body {
+    padding: 60px 0 160px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+  body {
+    padding: 60px 0 200px;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    padding: 60px 0 350px;
+  }
 }
 
 .facets{
