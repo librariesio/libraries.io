@@ -1,4 +1,8 @@
-<div class='license col-md-4'>
-  <h4><%= link_to format_license(license.term), license_path(license.term) %></h4>
-  <%= number_with_delimiter license['count'] %> Projects
+<div class='license col-xs-12 col-sm-4'>
+  <h4>
+    <div class="blurb">
+      <h4><%= link_to format_license(license.term), license_path(license.term) %></h4>
+      <small><%= number_with_delimiter license['count'] %> Projects</small>
+    </div>
+  </h4>
 </div>
