@@ -64,7 +64,7 @@ module SourceRank
   end
 
   def versions_present?
-    versions.length > 1
+    versions_count > 1
   end
 
   def recent_release?
