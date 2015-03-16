@@ -1,4 +1,9 @@
-<div class='language col-md-3'>
-  <h4><%= link_to language.term, language_path(language.term) %></h4>
-  <%= number_with_delimiter language['count'] %> Projects
+<div class='language col-xs-6 col-sm-3'>
+  <h4>
+    <div class="pictogram pictogram-<%= language.term.downcase %>"></div>
+    <div class="blurb">
+      <%= link_to language.term, language_path(language.term) %>
+      <small><%= number_with_delimiter language['count'] %> Projects</small>
+    </div>
+  </h4>
 </div>

@@ -1,6 +1,9 @@
 <% title "#{@language} - Libraries" %>
 <% description "New and popular projects written in #{@language}" %>
-<h1><%= @language %></h1>
+<h1>
+  <div class="pictogram pictogram-lg pictogram-<%= @language.downcase %>"></div>
+  <%= @language %>
+</h1>
 <hr>
 <div class='row'>
   <% cache("language:#{@language}:popular", :expires_in => 1.day) do %>
