@@ -1,13 +1,13 @@
 <div class='row'>
-  <div class="jumbotron row">
-    <div class='col-md-2 hidden-xs hidden-sm'>
+  <div class="jumbotron">
+    <div class='col-md-2 hidden-sm hidden-xs'>
       <%= image_tag 'logo.png', class: 'pull-left', width: 140 %>
     </div>
-    <div class='col-md-10'>
+    <div class='col-sm-12 col-md-10'>
       <h1>
         Open Source Libraries
       </h1>
-      <p>Discover new modules and libraries you can use in your projects.</p>
+      <p>Discover new open source libraries, modules and frameworks and keep track of ones you depend upon.</p>
       <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
         <%= text_field_tag 'q', params[:q], placeholder: 'Search..', class: 'form-control' %>
       <% end %>
@@ -16,7 +16,7 @@
 </div>
 <hr>
 <div class='row'>
-  <div class='col-md-4'>
+  <div class='col-sm-4'>
     <h4><%= link_to 'Platforms', platforms_path %></h4>
     <% cache("top_platforms", :expires_in => 1.hour) do %>
       <% Project.popular_platforms.first(10).each do |platform| %>
@@ -27,7 +27,7 @@
       <% end %>
     <% end %>
   </div>
-  <div class='col-md-4'>
+  <div class='col-sm-4'>
     <h4><%= link_to 'Languages', languages_path %></h4>
     <% cache("top_languages", :expires_in => 1.hour) do %>
       <% Project.popular_languages.first(10).each do |language| %>
@@ -38,7 +38,7 @@
       <% end %>
     <% end %>
   </div>
-  <div class='col-md-4'>
+  <div class='col-sm-4'>
     <h4><%= link_to 'Licenses', licenses_path %></h4>
     <% cache("top_licenses", :expires_in => 1.hour) do %>
       <% Project.popular_licenses.first(10).each do |license| %>

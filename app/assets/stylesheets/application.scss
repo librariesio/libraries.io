@@ -19,7 +19,7 @@
 @import url("http://librariesio.github.io/pictogram/pictogram.css");
 
 body {
-  padding: 60px 0 200px;
+  padding: 60px 0 0;
   background-color: #fafafa;
   font-size: 15px;
   font-family:"Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -31,7 +31,6 @@ html {
 }
 
 footer{
-  position: absolute;
   bottom: 0;
   width: 100%;
   min-height: 60px;
