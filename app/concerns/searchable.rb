@@ -97,18 +97,18 @@ module Searchable
                 must: filter_format(options[:filters], :normalized_licenses)
               }
             }
-          },
-          keywords: {
-            terms: {
-              field: "keywords",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :keywords)
-              }
-            }
-          }
+          }#,
+          # keywords: {
+          #   terms: {
+          #     field: "keywords",
+          #     size: facet_limit
+          #   },
+          #   facet_filter: {
+          #     bool: {
+          #       must: filter_format(options[:filters], :keywords)
+          #     }
+          #   }
+          # }
         },
         filter: {
           bool: {
