@@ -1,10 +1,10 @@
-<% title "#{@platform_name} - Libraries" %>
-<% description "New and popular projects published on #{@platform_name}" %>
+<% title "#{platform_name(@platform_name)} - Libraries" %>
+<% description "New and popular projects published on #{platform_name(@platform_name)}" %>
 <div class='row'>
   <div class='col-md-6'>
     <h1>
       <div class="pictogram pictogram-lg pictogram-<%= @platform_name.downcase %>"></div>
-      <%= @platform_name %></h1>
+      <%= platform_name(@platform_name) %></h1>
     <%= link_to @platform::URL, @platform::URL %>
   </div>
 </div>
@@ -14,7 +14,7 @@
     <% popular = Project.popular(filters: { platform: @platform_name }).first(5) %>
     <% if popular.any? %>
       <div class='col-md-4'>
-        <h4>Popular <%= @platform_name %> Projects</h4>
+        <h4>Popular <%= platform_name(@platform_name) %> Projects</h4>
         <%= render popular %>
         <p>
           <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'rank', order: 'desc') %>
@@ -25,7 +25,7 @@
 
   <% if @updated.any? %>
   <div class='col-md-4'>
-    <h4>Updated <%= @platform_name %> Projects</h4>
+    <h4>Updated <%= platform_name(@platform_name) %> Projects</h4>
     <%= render @updated %>
     <p>
       <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'updated_at', order: 'desc') %>
@@ -35,7 +35,7 @@
 
   <% if @created.any? %>
   <div class='col-md-4'>
-    <h4>New <%= @platform_name %> Projects</h4>
+    <h4>New <%= platform_name(@platform_name) %> Projects</h4>
     <%= render @created %>
     <p>
       <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc') %>
@@ -49,7 +49,7 @@
     <% licenses = Project.popular_licenses(filters: {platform: @platform_name}).first(10) %>
     <% if licenses.any? %>
       <div class='col-md-4'>
-        <h4>Popular <%= @platform_name %> Licenses</h4>
+        <h4>Popular <%= platform_name(@platform_name) %> Licenses</h4>
         <%= render partial: 'licenses/list_license', collection: licenses, as: :license %>
       </div>
     <% end %>
@@ -59,7 +59,7 @@
     <% languages = Project.popular_languages(filters: {platform: @platform_name}).first(10) %>
     <% if languages.any? %>
     <div class='col-md-4'>
-      <h4>Popular <%= @platform_name %> Languages</h4>
+      <h4>Popular <%= platform_name(@platform_name) %> Languages</h4>
       <%= render partial: 'languages/list_language', collection: languages, as: :language %>
     </div>
     <% end %>

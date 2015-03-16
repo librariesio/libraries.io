@@ -110,6 +110,14 @@ module ApplicationHelper
     keywords.split(',').map{|k| link_to k, search_path(keywords: k.downcase) }.join(', ').html_safe
   end
 
+  def platform_name(platform)
+    if platform.downcase == 'npm'
+      return 'npm'
+    else
+      return platform
+    end
+  end
+
   def favicon(size)
     libicon = "https://libicons.herokuapp.com/favicon.ico"
     @color ? "#{libicon}?hex=#{URI::escape(@color)}&size=#{size}" : "/favicon-#{size}.png"
