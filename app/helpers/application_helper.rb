@@ -39,6 +39,8 @@ module ApplicationHelper
       "https://metacpan.org/release/#{name}"
     when 'CRAN'
       "http://cran.r-project.org/web/packages/#{name}/index.html"
+    when 'Clojars'
+      "https://clojars.org/#{name}" + (version ? "/versions/#{version}" : "")
     when 'Maven'
       if version
         "http://search.maven.org/#artifactdetails%7C#{name.gsub(':', '%7C')}%7C#{version}%7Cjar"
