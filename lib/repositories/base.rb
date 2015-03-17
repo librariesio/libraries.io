@@ -27,7 +27,7 @@ class Repositories
       if self::HAS_DEPENDENCIES
         save_dependencies(mapped_project[:name])
       end
-
+      dbproject.save
       dbproject
     end
 
