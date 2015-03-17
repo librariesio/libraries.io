@@ -1,7 +1,7 @@
 class Repositories
   class Clojars < Base
-    HAS_VERSIONS = false
-    HAS_DEPENDENCIES = true
+    HAS_VERSIONS = true
+    HAS_DEPENDENCIES = false
     URL = 'https://clojars.org'
     COLOR = '#db5855'
 
@@ -22,15 +22,20 @@ class Repositories
     end
 
     def self.mapping(project)
+      name = project[:name] == project["group-id"] ? project[:name] : "#{project["group-id"]}/#{project[:name]}"
       {
-        :name => project["name"],
+        :name => name,
         :description => project["description"],
         :repository_url => repo_fallback(project["scm"]["url"], '')
       }
     end
 
     def self.versions(project)
-      []
+      project['versions'].map do |v|
+        {
+          :number => v['version']
+        }
+      end
     end
   end
 end
