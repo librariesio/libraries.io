@@ -51,7 +51,7 @@ GEM
       json
     bigquery (0.7.0)
       google-api-client (~> 0.8.2)
-    bootstrap-sass (3.3.3)
+    bootstrap-sass (3.3.4)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
     bugsnag (2.8.1)
@@ -64,7 +64,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1)
-    counter_culture (0.1.31)
+    counter_culture (0.1.32)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
       after_commit_action (~> 1.0.0)
