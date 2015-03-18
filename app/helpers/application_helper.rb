@@ -39,6 +39,8 @@ module ApplicationHelper
       "https://metacpan.org/release/#{name}"
     when 'CRAN'
       "http://cran.r-project.org/web/packages/#{name}/index.html"
+    when 'CocoaPods'
+      "http://cocoapods.org/pods/#{name}"
     when 'Clojars'
       "https://clojars.org/#{name}" + (version ? "/versions/#{version}" : "")
     when 'Maven'
@@ -65,6 +67,8 @@ module ApplicationHelper
       "http://cran.r-project.org/web/packages/#{name}/#{name}.pdf"
     when 'Hex'
       "http://hexdocs.pm/#{name}/#{version}"
+    when 'CocoaPods'
+      "http://cocoadocs.org/docsets/#{name}/#{version}/"
     end
   end
 

@@ -33,6 +33,10 @@ namespace :download do
     Repositories::CPAN.import_recent
   end
 
+  task cocoapods: :environment do
+    Repositories::CocoaPods.import_recent
+  end
+
   task cran: :environment do
     Repositories::CPAN.import_recent
   end
