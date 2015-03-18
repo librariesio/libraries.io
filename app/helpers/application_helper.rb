@@ -68,7 +68,7 @@ module ApplicationHelper
     when 'Hex'
       "http://hexdocs.pm/#{name}/#{version}"
     when 'CocoaPods'
-      "http://cocoadocs.org/docsets/#{name}/#{version}/"
+      "http://cocoadocs.org/docsets/#{name}/#{version}"
     end
   end
 
