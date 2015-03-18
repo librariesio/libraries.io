@@ -6,7 +6,7 @@
 </h1>
 <hr>
 <div class='row'>
-  <% cache("language:#{@language}:popular", :expires_in => 1.day) do %>
+  <% cache("language:#{@language}:popular", :expires_in => 3.hours) do %>
     <% popular = Project.popular(filters: { language: @language }).first(5) %>
     <% if popular.any? %>
     <div class='col-md-4'>
@@ -41,7 +41,7 @@
 </div>
 <hr>
 <div class='row'>
-  <% cache("language:#{@language}:licenses", :expires_in => 1.day) do %>
+  <% cache("language:#{@language}:licenses", :expires_in => 3.hours) do %>
     <% licenses = Project.popular_licenses(filters: { language: @language }).first(8) %>
     <% if licenses.any? %>
       <div class='col-md-4'>
@@ -51,7 +51,7 @@
     <% end %>
   <% end %>
 
-  <% cache("language:#{@language}:platforms", :expires_in => 1.day) do %>
+  <% cache("language:#{@language}:platforms", :expires_in => 3.hours) do %>
     <% platforms = Project.popular_platforms(filters: { language: @language }).first(10) %>
     <% if platforms.length > 1 %>
       <div class='col-md-4'>
