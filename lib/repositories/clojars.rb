@@ -13,10 +13,6 @@ class Repositories
       @projects ||= get("http://clojars-json.herokuapp.com/feed.json")
     end
 
-    def self.versions
-      @versions ||= get("http://clojars-json.herokuapp.com/packages.json")
-    end
-
     def self.project(name)
       projects[name.downcase].try(:first).merge(name: name)
     end
