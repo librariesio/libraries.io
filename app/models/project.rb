@@ -32,7 +32,8 @@ class Project < ActiveRecord::Base
   after_create :update_github_repo
   before_save  :normalize_licenses,
                :set_latest_release_published_at,
-               :set_latest_release_number
+               :set_latest_release_number,
+               :set_source_rank
 
   def to_param
     { name: name, platform: platform.downcase }

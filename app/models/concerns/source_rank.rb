@@ -6,6 +6,10 @@ module SourceRank
     touch
   end
 
+  def set_source_rank
+    self.rank = source_rank
+  end
+
   def source_rank
     r = 0
     # basic information available
