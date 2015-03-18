@@ -34,7 +34,7 @@ namespace :download do
   end
 
   task cocoapods: :environment do
-    Repositories::CocoaPods.import_recent
+    Repositories::CocoaPods.import
   end
 
   task cran: :environment do
