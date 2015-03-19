@@ -3,7 +3,7 @@ ruby '2.2.1'
 
 gem 'oj'
 gem 'oj_mimic_json'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.1'
 gem 'pg'
 gem 'sass-rails'
 gem 'uglifier'
