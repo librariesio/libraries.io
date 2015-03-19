@@ -208,7 +208,7 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.2)
     jwt (1.4.1)
-    languages (1.1.1)
+    languages (1.1.2)
       escape_utils (~> 1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
