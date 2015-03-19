@@ -26,7 +26,7 @@ class UsersController < ApplicationController
   private
 
   def find_user
-    @user = GithubUser.where("lower(login) = ?", params[:login].downcase).first
+    @user = GithubUser.visible.where("lower(login) = ?", params[:login].downcase).first
     raise ActiveRecord::RecordNotFound if @user.nil?
   end
 end

@@ -2,6 +2,8 @@ class GithubUser < ActiveRecord::Base
   has_many :github_contributions
   has_many :github_repositories, primary_key: :github_id, foreign_key: :owner_id
 
+  scope :visible, -> { where(hidden: false) }
+
   def avatar_url(size = 60)
     "https://avatars.githubusercontent.com/u/#{github_id}?size=#{size}"
   end

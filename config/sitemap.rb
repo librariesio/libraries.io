@@ -38,7 +38,7 @@ SitemapGenerator::Sitemap.create do
   end
 
   puts "Generating Users"
-  GithubUser.find_each do |user|
+  GithubUser.visible.find_each do |user|
     add user_path(user), :lastmod => user.updated_at
     add user_contributions_path(user), :lastmod => user.updated_at
     add user_repositories_path(user), :lastmod => user.updated_at

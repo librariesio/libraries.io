@@ -70,7 +70,7 @@ class Project < ActiveRecord::Base
 
   def owner
     return nil unless github_repository
-    GithubUser.find_by_login github_repository.owner_name
+    GithubUser.visible.find_by_login github_repository.owner_name
   end
 
   def platform_class

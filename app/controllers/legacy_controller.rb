@@ -18,12 +18,12 @@ class LegacyController < ApplicationController
   end
 
   def user
-    @user = GithubUser.find(params[:id])
+    @user = GithubUser.visible.find(params[:id])
     redirect_to user_path(@user), :status => :moved_permanently
   end
 
   def github_user
-    @user = GithubUser.where("lower(login) = ?", params[:login].downcase).first
+    @user = GithubUser.visible.where("lower(login) = ?", params[:login].downcase).first
     raise ActiveRecord::RecordNotFound if @user.nil?
     redirect_to user_path(@user), :status => :moved_permanently
   end
