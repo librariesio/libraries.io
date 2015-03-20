@@ -18,6 +18,7 @@ class Repositories
     end
 
     def self.project(name)
+      sleep 5
       get("https://hex.pm/api/packages/#{name}")
     end
 
