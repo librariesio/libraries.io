@@ -29,7 +29,7 @@ class Repositories
     def self.versions(project)
       project['versions'].map do |v|
         {
-          :number => v['version']
+          :number => v
         }
       end
     end
