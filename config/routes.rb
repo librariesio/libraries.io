@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :api do
+    get '/:platform/:name', to: 'projects#show', as: :project, constraints: { :name => /.*/ }
+  end
+
   root to: 'projects#index'
 
   get '/404', to: 'errors#not_found'
