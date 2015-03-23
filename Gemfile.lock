@@ -142,7 +142,7 @@ GEM
       fog-xml
     fog-json (1.0.0)
       multi_json (~> 1.0)
-    fog-profitbricks (0.0.1)
+    fog-profitbricks (0.0.2)
       fog-core
       fog-xml
       nokogiri
