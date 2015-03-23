@@ -22,4 +22,6 @@ public/sitemap*
 *.swp
 *.swo
 
+# cloned repo folders
 Specs
+METADATA.jl
