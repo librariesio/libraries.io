@@ -45,6 +45,10 @@ namespace :download do
     Repositories::Dub.import
   end
 
+  task elm: :environment do
+    Repositories::Elm.import
+  end
+
   task emacs: :environment do
     Repositories::Emacs.import
   end

@@ -41,6 +41,8 @@ module ApplicationHelper
       "http://cran.r-project.org/web/packages/#{name}/index.html"
     when 'CocoaPods'
       "http://cocoapods.org/pods/#{name}"
+    when 'Elm'
+      "http://package.elm-lang.org/packages/#{name}/#{version || 'latest'}"
     when 'Clojars'
       "https://clojars.org/#{name}" + (version ? "/versions/#{version}" : "")
     when 'Maven'
@@ -96,6 +98,8 @@ module ApplicationHelper
       "Install-Package #{name}" + (version ? " -Version #{version}" : "")
     when 'Meteor'
       "meteor add #{name}" + (version ? "@=#{version}" : "")
+    when 'Elm'
+      "elm-package install #{name} #{version}"
     end
   end
 
