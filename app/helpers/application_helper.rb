@@ -41,6 +41,8 @@ module ApplicationHelper
       "http://cran.r-project.org/web/packages/#{name}/index.html"
     when 'CocoaPods'
       "http://cocoapods.org/pods/#{name}"
+    when 'Julia'
+      "http://pkg.julialang.org/?pkg=#{name}&ver=release"
     when 'Elm'
       "http://package.elm-lang.org/packages/#{name}/#{version || 'latest'}"
     when 'Clojars'

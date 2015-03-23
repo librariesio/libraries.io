@@ -65,6 +65,10 @@ namespace :download do
     Repositories::Jam.import
   end
 
+  task julia: :environment do
+    Repositories::Julia.import
+  end
+
   task maven: :environment do
     Repositories::Maven.load_names(50)
     Repositories::Maven.import_recent
