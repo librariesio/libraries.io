@@ -1,0 +1,14 @@
+<tr class='project' style="border-color: <%= subscription.project.color %>;">
+  <td>
+    <h5>
+      <%= link_to subscription.project, project_path(subscription.project.to_param) %>
+      <small><%= subscription.project.latest_release_number %></small>
+    </h5>
+  </td>
+  <td>
+    <h5><small>Last updated <%= time_ago_in_words(subscription.project.latest_release_published_at) %> ago</small></h5>
+  </td>
+  <td>
+    <%= link_to 'Unsubscribe', subscription_path(subscription), method: :delete, class: 'btn btn-default pull-right' %>
+  </td>
+</tr>
