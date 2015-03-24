@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_many :api_keys
 
   def admin?
-    ['andrew'].include?(nickname)
+    ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall', 'zachinglis'].include?(nickname)
   end
 
   def self.create_from_auth_hash(hash)
