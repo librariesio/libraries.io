@@ -1,5 +1,11 @@
 class User < ActiveRecord::Base
   has_many :subscriptions
+  has_many :manifests
+  has_many :api_keys
+
+  def admin?
+    ['andrew'].include?(nickname)
+  end
 
   def self.create_from_auth_hash(hash)
     create!(AuthHash.new(hash).user_info)

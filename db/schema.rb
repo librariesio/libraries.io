@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150319221514) do
+ActiveRecord::Schema.define(version: 20150324200933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "api_keys", force: :cascade do |t|
+    t.string   "access_token"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
 
   create_table "auth_tokens", force: :cascade do |t|
     t.string   "login"
@@ -114,6 +120,16 @@ ActiveRecord::Schema.define(version: 20150319221514) do
   add_index "github_users", ["hidden"], name: "index_github_users_on_hidden", using: :btree
   add_index "github_users", ["login"], name: "index_github_users_on_login", using: :btree
 
+  create_table "manifests", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "file_name"
+    t.string   "url"
+    t.text     "contents"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "projects", force: :cascade do |t|
     t.string   "name"
     t.string   "platform"
@@ -150,8 +166,9 @@ ActiveRecord::Schema.define(version: 20150319221514) do
   create_table "subscriptions", force: :cascade do |t|
     t.integer  "project_id"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "manifest_id"
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
