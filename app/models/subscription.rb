@@ -4,4 +4,8 @@ class Subscription < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
   belongs_to :manifest
+
+  def notification_user
+    user || manifest.user
+  end
 end
