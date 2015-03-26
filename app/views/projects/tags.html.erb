@@ -1,4 +1,5 @@
 <% title "#{@project} Releases - Libraries" %>
+<% content_for :atom, auto_discovery_link_tag(:atom, project_tags_path({format: "atom"}.merge(@project.to_param))) %>
 
 <h1><%= link_to @project, project_path(@project.to_param) %> tagged releases</h1>
 <hr>

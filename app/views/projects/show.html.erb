@@ -1,5 +1,10 @@
 <% title "#{@project} #{@version} on #{@project.platform} - Libraries" %>
 <% description @project.description  %>
+<% if @version_count > 0 %>
+  <% content_for :atom, auto_discovery_link_tag(:atom, project_versions_path({format: "atom"}.merge(@project.to_param))) %>
+<% elsif @github_repository && @github_tags.any? %>
+  <% content_for :atom, auto_discovery_link_tag(:atom, project_tags_path({format: "atom"}.merge(@project.to_param))) %>
+<% end %>
 
 <div class="row">
   <div class='col-md-8'>

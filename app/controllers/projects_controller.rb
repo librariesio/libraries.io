@@ -45,6 +45,10 @@ class ProjectsController < ApplicationController
   def versions
     find_project
     @versions = @project.versions.order('published_at DESC').paginate(page: params[:page])
+    respond_to do |format|
+      format.html
+      format.atom
+    end
   end
 
   def tags
@@ -53,6 +57,10 @@ class ProjectsController < ApplicationController
       @tags = []
     else
       @tags = @project.github_repository.github_tags.order('published_at DESC').paginate(page: params[:page])
+    end
+    respond_to do |format|
+      format.html
+      format.atom
     end
   end
 

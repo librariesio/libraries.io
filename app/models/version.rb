@@ -13,6 +13,10 @@ class Version < ActiveRecord::Base
     end
   end
 
+  def published_at
+    read_attribute(:published_at).presence || created_at
+  end
+
   def <=>(other)
     if parsed_number.is_a?(String) || other.parsed_number.is_a?(String)
       other.number <=> number
