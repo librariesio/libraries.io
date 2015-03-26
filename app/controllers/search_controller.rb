@@ -8,5 +8,32 @@ class SearchController < ApplicationController
     }, sort: params[:sort], order: params[:order]).paginate(page: params[:page])
     @suggestion = @search.response.suggest.did_you_mean.first
     @projects = @search.records.includes(:github_repository)
+    @title = page_title
+    respond_to do |format|
+      format.html
+      format.atom
+    end
+  end
+
+  private
+
+  def page_title
+    return "Search for #{params[:q]}" if params[:q].present?
+
+    modifiers = []
+    modifiers << params[:licenses] if params[:licenses].present?
+    modifiers << params[:platforms] if params[:platforms].present?
+    modifiers << params[:languages] if params[:languages].present?
+
+    modifier = " #{modifiers.compact.join(' ')} "
+
+    case params[:sort]
+    when 'created_at'
+      "New#{modifier}Projects"
+    when 'updated_at'
+      "Updated#{modifier}Projects"
+    else
+      "Popular#{modifier}Projects"
+    end
   end
 end
