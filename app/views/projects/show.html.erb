@@ -54,16 +54,21 @@
     </p>
     <% end %>
 
-
     <% if @project.normalized_licenses.present? %>
     <p>
       <%= 'License'.pluralize(@project.normalized_licenses.length) %>: <%= linked_licenses @project.normalized_licenses %>
     </p>
     <% end %>
 
-    <% if @project.keywords.present? %>
+    <!-- <% if @project.keywords.present? %>
     <p>
       <%= 'Keyword'.pluralize(@project.keywords.split(',').length) %>: <%= linked_keywords @project.keywords %>
+    </p>
+    <% end %> -->
+
+    <% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
+    <p>
+      Repository: <%= link_to @project.repository_url, @project.repository_url %>
     </p>
     <% end %>
 
