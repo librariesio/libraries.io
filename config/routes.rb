@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   namespace :api do
+    get '/searchcode', to: 'projects#searchcode'
     get '/:platform/:name', to: 'projects#show', constraints: { :name => /.*/ }
     post '/manifests/update', to: 'manifests#update'
   end
