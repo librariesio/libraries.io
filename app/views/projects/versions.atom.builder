@@ -1,5 +1,5 @@
 atom_feed do |feed|
-  feed.title("#{@project} versions")
+  feed.title("#{@project} versions - Libraries.io")
   feed.updated(@versions[0].published_at) if @versions.length > 0
 
   @versions.each do |version|

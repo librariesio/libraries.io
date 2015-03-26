@@ -1,5 +1,5 @@
 atom_feed do |feed|
-  feed.title("#{@project} tags")
+  feed.title("#{@project} tags - Libraries.io")
   feed.updated(@tags[0].published_at) if @tags.length > 0
 
   @tags.each do |tag|
