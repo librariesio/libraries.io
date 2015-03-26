@@ -5,7 +5,7 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def searchcode
-    render json: Project.where('updated_at > ?', 1.day.ago).pluck(:repository_url).compact
+    render json: Project.where('updated_at > ?', 1.day.ago).pluck(:repository_url).compact.reject(&:blank?)
   end
 
   private
