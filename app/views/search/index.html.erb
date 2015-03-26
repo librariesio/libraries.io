@@ -1,4 +1,4 @@
-<% title "#{@title} - Libraries" %>
+<% title @title %>
 <% content_for :atom, auto_discovery_link_tag(:atom, url_for({format: "atom"}.merge(params))) %>
 <div class="row">
   <div class='col-md-8'>
