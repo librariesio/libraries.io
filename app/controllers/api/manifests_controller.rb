@@ -4,7 +4,7 @@ class Api::ManifestsController < Api::ApplicationController
     @manifest = @user.manifests.find_or_create_by(name: params[:name])
 
     @projects = []
-    Oj.load(params[:packages]).each do |platform, pkgs|
+    params[:packages].each do |platform, pkgs|
       pkgs.each do |name|
         @projects << Project.platform(platform).where('lower(name) = ?', name.downcase).first.try(:id)
       end
