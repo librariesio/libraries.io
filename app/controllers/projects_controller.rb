@@ -6,6 +6,9 @@ class ProjectsController < ApplicationController
 
   def show
     find_project
+    if params[:platform] != params[:platform].downcase || params[:name] != @project.name
+      redirect_to(project_path(@project.to_param), :status => :moved_permanently) and return
+    end
     @version_count = @project.versions.count
     @github_repository = @project.github_repository
     if @version_count.zero?
@@ -44,23 +47,31 @@ class ProjectsController < ApplicationController
 
   def versions
     find_project
-    @versions = @project.versions.order('published_at DESC').paginate(page: params[:page])
-    respond_to do |format|
-      format.html
-      format.atom
+    if params[:platform] != params[:platform].downcase || params[:name] != @project.name
+      redirect_to(project_versions_path(@project.to_param), :status => :moved_permanently) and return
+    else
+      @versions = @project.versions.order('published_at DESC').paginate(page: params[:page])
+      respond_to do |format|
+        format.html
+        format.atom
+      end
     end
   end
 
   def tags
     find_project
-    if @project.github_repository.nil?
-      @tags = []
+    if params[:platform] != params[:platform].downcase || params[:name] != @project.name
+      redirect_to(project_tags_path(@project.to_param), :status => :moved_permanently) and return
     else
-      @tags = @project.github_repository.github_tags.order('published_at DESC').paginate(page: params[:page])
-    end
-    respond_to do |format|
-      format.html
-      format.atom
+      if @project.github_repository.nil?
+        @tags = []
+      else
+        @tags = @project.github_repository.github_tags.order('published_at DESC').paginate(page: params[:page])
+      end
+      respond_to do |format|
+        format.html
+        format.atom
+      end
     end
   end
 
@@ -69,9 +80,6 @@ class ProjectsController < ApplicationController
   def find_project
     @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes({:github_repository => :readme}).first
     raise ActiveRecord::RecordNotFound if @project.nil?
-    if params[:platform] != params[:platform].downcase || params[:name] != @project.name
-      return redirect_to project_path(@project.to_param), :status => :moved_permanently
-    end
     @color = @project.color
   end
 end
