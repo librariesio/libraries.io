@@ -6,8 +6,8 @@ class ProjectsController < ApplicationController
 
   def show
     find_project
-    if params[:platform] != params[:platform].downcase || params[:name] != @project.name
-      redirect_to(project_path(@project.to_param), :status => :moved_permanently) and return
+    if incorrect_case?
+      return redirect_to(project_path(@project.to_param), :status => :moved_permanently)
     end
     @version_count = @project.versions.count
     @github_repository = @project.github_repository
@@ -47,8 +47,8 @@ class ProjectsController < ApplicationController
 
   def versions
     find_project
-    if params[:platform] != params[:platform].downcase || params[:name] != @project.name
-      redirect_to(project_versions_path(@project.to_param), :status => :moved_permanently) and return
+    if incorrect_case?
+      return redirect_to(project_versions_path(@project.to_param), :status => :moved_permanently)
     else
       @versions = @project.versions.order('published_at DESC').paginate(page: params[:page])
       respond_to do |format|
@@ -60,8 +60,8 @@ class ProjectsController < ApplicationController
 
   def tags
     find_project
-    if params[:platform] != params[:platform].downcase || params[:name] != @project.name
-      redirect_to(project_tags_path(@project.to_param), :status => :moved_permanently) and return
+    if incorrect_case?
+      return redirect_to(project_tags_path(@project.to_param), :status => :moved_permanently)
     else
       if @project.github_repository.nil?
         @tags = []
@@ -76,6 +76,10 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def incorrect_case?
+    params[:platform] != params[:platform].downcase || (@project && params[:name] != @project.name)
+  end
 
   def find_project
     @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes({:github_repository => :readme}).first
