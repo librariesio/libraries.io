@@ -1,0 +1,28 @@
+<h1>Manifests</h1>
+
+<% if current_user.has_repo_scope? %>
+  <ul>
+    <% @repos.group_by{|r| r.owner.login }.each do |owner, repos| %>
+      <li>
+        <%= owner %>
+        <ul>
+          <% repos.each do |repo| %>
+            <li>
+              <% manifest = @manifests.find{|m| m.repository_id == repo.id } %>
+              <% if manifest %>
+                <%= link_to repo.full_name, manifest %>
+                <%= button_to 'Untrack', manifest, method: :delete, class: 'btn btn-danger' %>
+              <% else %>
+                <%= repo.full_name %>
+                <%= button_to 'Track', manifests_path(repository_id: repo.id), class: 'btn btn-primary' %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  get private repo scope
+  <%= link_to 'Enable private repo access', "/auth/github?role=private" %>
+<% end %>
