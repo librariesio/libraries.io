@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     get '/searchcode', to: 'projects#searchcode'
     get '/:platform/:name', to: 'projects#show', constraints: { :name => /.*/ }
     post '/manifests/update', to: 'manifests#update'
+    get '/manifests', to: 'manifests#index'
   end
 
   root to: 'projects#index'

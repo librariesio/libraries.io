@@ -1,4 +1,9 @@
 class Api::ManifestsController < Api::ApplicationController
+  def index
+    @user = User.find_by_nickname(params[:user])
+    render json: @user.manifests
+  end
+
   def update
     @user = User.find_by_nickname(params[:user])
     @manifest = @user.manifests.find_or_create_by(name: params[:name])
