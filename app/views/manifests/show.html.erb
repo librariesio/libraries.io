@@ -1,0 +1,13 @@
+<h1>
+  <%= link_to @repository.full_name, "https://github.com/#{@repository.full_name}" %>
+</h1>
+
+<%= button_to 'Sync', manifest_path, method: :put, class: 'btn btn-primary'  %>
+
+<% if @subscriptions.any? %>
+  <h3>Subscriptions</h3>
+
+  <table class='table table-striped table-hover'>
+    <%= render @subscriptions %>
+  </table>
+<% end %>

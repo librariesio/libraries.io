@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     post '/manifests/update', to: 'manifests#update'
   end
 
+  resources :manifests
+
   root to: 'projects#index'
 
   get '/404', to: 'errors#not_found'
