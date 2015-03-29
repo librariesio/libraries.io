@@ -4,6 +4,12 @@ class Api::ProjectsController < Api::ApplicationController
     render json: @project.as_json(:include => [:versions, :github_repository])
   end
 
+  def list
+    names = Array(params[:names])
+    @projects = Project.platform(params[:platform]).where(name: names).includes(:versions, :github_repository)
+    render json: @projects
+  end
+
   def searchcode
     render json: Project.where('updated_at > ?', 1.day.ago).pluck(:repository_url).compact.reject(&:blank?)
   end
