@@ -7,6 +7,14 @@ class User < ActiveRecord::Base
     ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall', 'zachinglis'].include?(nickname)
   end
 
+  def github_client
+    Octokit::Client.new(access_token: token, auto_paginate: true)
+  end
+
+  def has_repo_scope?
+    github_client.scopes.include? 'repo'
+  end
+
   def self.create_from_auth_hash(hash)
     create!(AuthHash.new(hash).user_info)
   end
