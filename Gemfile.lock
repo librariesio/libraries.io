@@ -64,7 +64,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1)
-    color (1.7.1)
     counter_culture (0.1.32)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -370,7 +369,6 @@ DEPENDENCIES
   bootstrap-sass
   bugsnag
   coffee-rails
-  color
   counter_culture
   dalli
   elasticsearch-model
