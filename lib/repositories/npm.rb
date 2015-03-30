@@ -69,10 +69,10 @@ class Repositories
           { :number => v['version'] }
         end
       end
-      versions.select {|number,date| version_valid?(project['name'], number) }
+      versions.reject {|number,date| version_invalid?(project['name'], number) }
     end
 
-    def self.version_valid?(name, version)
+    def self.version_invalid?(name, version)
       get("http://registry.npmjs.org/#{name}/#{version}").has_key?('error')
     end
 
