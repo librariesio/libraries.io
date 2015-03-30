@@ -17,7 +17,7 @@ class GithubUser < ActiveRecord::Base
   end
 
   def to_param
-    login.downcase
+    login
   end
 
   def github_client
