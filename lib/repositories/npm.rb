@@ -57,7 +57,7 @@ class Repositories
     end
 
     def self.versions(project)
-      if project['time']
+      versions = if project['time']
         project['time'].except("modified", "created").map do |k,v|
           {
             :number => k,
@@ -69,6 +69,11 @@ class Repositories
           { :number => v['version'] }
         end
       end
+      versions.select {|number,date| version_valid?(project['name'], number) }
+    end
+
+    def self.version_valid?(name, version)
+      get("http://registry.npmjs.org/#{name}/#{version}").has_key?('error')
     end
 
     def self.dependencies(name, version)
