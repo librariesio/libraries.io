@@ -38,6 +38,7 @@ gem 'rails_safe_tasks'
 gem 'dalli'
 gem 'counter_culture'
 gem 'bigquery', require: 'big_query'
+gem 'color'
 
 group :development do
   gem 'spring'
