@@ -26,11 +26,17 @@ class Repositories
     end
 
     def self.versions(project)
-      project["versions"].map do |v|
+      acceptable_versions(project).map do |v|
         {
           :number => v['version'],
           :published_at => v['date']
         }
+      end
+    end
+
+    def self.acceptable_versions(project)
+      project['versions'].select do |k, v|
+        (k =~ /^~.*/i).nil?
       end
     end
 
