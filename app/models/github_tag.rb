@@ -16,6 +16,13 @@ class GithubTag < ActiveRecord::Base
     end
   end
 
+  def notify_gitter
+    github_repository.projects.each do |project|
+      next if project.versions_count > 0
+      GitterNotifications.new_version(project.name, project.platform, number)
+    end
+  end
+
   def <=>(other)
     if parsed_number.is_a?(String) || other.parsed_number.is_a?(String)
       other.number <=> number
