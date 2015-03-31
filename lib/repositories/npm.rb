@@ -69,7 +69,7 @@ class Repositories
           { :number => v['version'] }
         end
       end
-      versions.reject {|number,date| version_invalid?(project['name'], number) }
+      versions.reject {|version,date| version_invalid?(project['name'], version[:number]) }
     end
 
     def self.version_invalid?(name, version)
