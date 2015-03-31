@@ -29,7 +29,7 @@ class Project < ActiveRecord::Base
   scope :with_launchpad_url, -> { where('repository_url ILIKE ?', '%launchpad.net%') }
   scope :with_sourceforge_url, -> { where('repository_url ILIKE ?', '%sourceforge.net%') }
 
-  after_create :update_github_repo
+  after_create :update_github_repo, :notify_gitter
   before_save  :normalize_licenses,
                :set_latest_release_published_at,
                :set_latest_release_number,
@@ -174,6 +174,11 @@ class Project < ActiveRecord::Base
       normalized = ['Other'] if normalized.empty?
     end
     self.normalized_licenses = normalized
+  end
+
+
+  def notify_gitter
+    GitterNotifications.new_project(name, platform)
   end
 
   def update_github_repo
