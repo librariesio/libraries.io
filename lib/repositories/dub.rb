@@ -35,8 +35,8 @@ class Repositories
     end
 
     def self.acceptable_versions(project)
-      project['versions'].select do |k, v|
-        (k =~ /^~.*/i).nil?
+      project['versions'].select do |version|
+        (version['version'] =~ /^~.*/i).nil?
       end
     end
 
