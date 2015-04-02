@@ -64,7 +64,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1)
-    counter_culture (0.1.32)
+    counter_culture (0.1.33)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
       after_commit_action (~> 1.0.0)
@@ -93,7 +93,7 @@ GEM
     extlib (0.9.16)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
-    faraday-http-cache (1.0.1)
+    faraday-http-cache (1.1.0)
       faraday (~> 0.8)
     ffi (1.9.8)
     fission (0.5.0)
