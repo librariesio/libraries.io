@@ -7,7 +7,11 @@ class ProjectsController < ApplicationController
   def show
     find_project
     if incorrect_case?
-      return redirect_to(project_path(@project.to_param), :status => :moved_permanently)
+      if params[:number].present?
+        return redirect_to(version_path(@project.to_param.merge(number: params[:number])), :status => :moved_permanently)
+      else
+        return redirect_to(project_path(@project.to_param), :status => :moved_permanently)
+      end
     end
     @version_count = @project.versions.count
     @github_repository = @project.github_repository
