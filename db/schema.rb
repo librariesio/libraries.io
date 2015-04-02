@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150324200933) do
+ActiveRecord::Schema.define(version: 20150402181050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,8 +126,9 @@ ActiveRecord::Schema.define(version: 20150324200933) do
     t.string   "file_name"
     t.string   "url"
     t.text     "contents"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "repository_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -148,9 +149,11 @@ ActiveRecord::Schema.define(version: 20150324200933) do
     t.string   "latest_release_number"
   end
 
+  add_index "projects", ["created_at"], name: "index_projects_on_created_at", using: :btree
   add_index "projects", ["github_repository_id"], name: "index_projects_on_github_repository_id", using: :btree
   add_index "projects", ["name", "platform"], name: "index_projects_on_name_and_platform", using: :btree
   add_index "projects", ["platform"], name: "index_projects_on_platform", using: :btree
+  add_index "projects", ["updated_at"], name: "index_projects_on_updated_at", using: :btree
   add_index "projects", ["versions_count"], name: "index_projects_on_versions_count", using: :btree
 
   create_table "readmes", force: :cascade do |t|
