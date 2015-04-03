@@ -118,7 +118,7 @@ class GithubRepository < ActiveRecord::Base
       return false if r.nil? || r.empty?
       self.github_id = r[:id]
       self.owner_id = r[:owner][:id]
-      self.license = r[:license][:key] if r[:license]
+      self.license = Project.format_license(r[:license][:key]) if r[:license]
       self.source_name = r[:parent][:full_name] if r[:fork]
       assign_attributes r.slice(*API_FIELDS)
       save
