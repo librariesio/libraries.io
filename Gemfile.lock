@@ -98,13 +98,15 @@ GEM
     ffi (1.9.8)
     fission (0.5.0)
       CFPropertyList (~> 2.2)
-    fog (1.28.0)
+    fog (1.29.0)
       fog-atmos
       fog-aws (~> 0.0)
       fog-brightbox (~> 0.4)
-      fog-core (~> 1.27, >= 1.27.3)
+      fog-core (~> 1.27, >= 1.27.4)
       fog-ecloud
       fog-json
+      fog-local
+      fog-powerdns (>= 0.1.1)
       fog-profitbricks
       fog-radosgw (>= 0.0.2)
       fog-riakcs
@@ -130,9 +132,9 @@ GEM
       fog-core (~> 1.22)
       fog-json
       inflecto (~> 0.0.2)
-    fog-core (1.29.0)
+    fog-core (1.30.0)
       builder
-      excon (~> 0.38)
+      excon (~> 0.45)
       formatador (~> 0.2)
       mime-types
       net-scp (~> 1.1)
@@ -142,6 +144,12 @@ GEM
       fog-xml
     fog-json (1.0.0)
       multi_json (~> 1.0)
+    fog-local (0.1.0)
+      fog-core (~> 1.27)
+    fog-powerdns (0.1.1)
+      fog-core (~> 1.27)
+      fog-json (~> 1.0)
+      fog-xml (~> 0.1)
     fog-profitbricks (0.0.2)
       fog-core
       fog-xml
