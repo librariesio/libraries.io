@@ -1,15 +1,7 @@
 namespace :one_off do
-  task clean_npm_versions: :environment do
-    Project.platform('npm').find_each do |project|
-      redundant_versions = project.versions.select do |version|
-        Repositories::NPM.version_invalid?(project.name, version.number)
-      end
-
-      redundant_versions.each {|version| version.destroy }
-
-      project.set_latest_release_published_at
-      project.set_latest_release_number
-      project.save!
+  task download_missing_users: :environment do
+    GithubRepository.where('(select count(*) from github_users where github_id=github_repositories.owner_id) = 0').find_each do |repo|
+      repo.download_github_contributions
     end
   end
 end
