@@ -41,6 +41,8 @@ class GithubRepository < ActiveRecord::Base
       user.dowload_from_github
       user
     end
+  rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    nil
   end
 
   def to_s
