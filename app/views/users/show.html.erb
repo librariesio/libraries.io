@@ -7,10 +7,15 @@
       <%= @user %>
       <% if @user.name.present? %>
         <small>
-          <%= @user.login %>
+          <%= link_to @user.login, @user.github_url %>
         </small>
       <% end %>
     </h1>
+    <% if @user.description.present? %>
+      <p>
+        <%= @user.description %>
+      </p>
+    <% end %>
     <p>
       <%= link_to @user.github_url, @user.github_url %>
     </p>

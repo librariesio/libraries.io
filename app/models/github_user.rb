@@ -20,6 +20,10 @@ class GithubUser < ActiveRecord::Base
     login
   end
 
+  def description
+    nil
+  end
+
   def github_client
     AuthToken.client
   end

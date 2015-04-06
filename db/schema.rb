@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150402181050) do
+ActiveRecord::Schema.define(version: 20150405230528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,13 +60,25 @@ ActiveRecord::Schema.define(version: 20150402181050) do
   add_index "github_contributions", ["github_user_id"], name: "index_github_contributions_on_github_user_id", using: :btree
   add_index "github_contributions", ["platform"], name: "index_github_contributions_on_platform", using: :btree
 
+  create_table "github_organisations", force: :cascade do |t|
+    t.string   "login"
+    t.integer  "github_id"
+    t.string   "name"
+    t.string   "blog"
+    t.string   "email"
+    t.string   "location"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "github_repositories", force: :cascade do |t|
     t.string   "full_name"
     t.string   "owner_id"
     t.string   "description"
     t.boolean  "fork"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.datetime "pushed_at"
     t.string   "homepage"
     t.integer  "size"
@@ -83,6 +95,7 @@ ActiveRecord::Schema.define(version: 20150402181050) do
     t.integer  "github_id"
     t.string   "source_name"
     t.string   "license"
+    t.integer  "github_organisation_id"
   end
 
   add_index "github_repositories", ["full_name"], name: "index_github_repositories_on_full_name", using: :btree
