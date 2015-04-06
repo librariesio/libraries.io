@@ -4,7 +4,7 @@
 <div class="row">
   <div class='col-md-8'>
     <h1>
-      <%= image_tag repo.avatar_url, width: 30, height: 30, alt: repo %>
+      <%= link_to image_tag(repo.avatar_url, width: 30, height: 30, alt: repo), user_path(repo.owner) %>
       <%= link_to repo, repo.url %>
     </h1>
   </div>

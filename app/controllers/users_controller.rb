@@ -27,6 +27,7 @@ class UsersController < ApplicationController
 
   def find_user
     @user = GithubUser.visible.where("lower(login) = ?", params[:login].downcase).first
+    @user = GithubOrganisation.where("lower(login) = ?", params[:login].downcase).first if @user.nil?
     raise ActiveRecord::RecordNotFound if @user.nil?
     redirect_to user_path(@user), :status => :moved_permanently if params[:login] != @user.login
   end

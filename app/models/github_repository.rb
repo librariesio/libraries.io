@@ -10,7 +10,8 @@ class GithubRepository < ActiveRecord::Base
   has_many :github_contributions
   has_many :github_tags
   has_one :readme
-  belongs_to :owner, class: GithubUser, primary_key: :github_id
+  belongs_to :github_organisation
+  belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
 
   after_create :download_readme
   after_create :download_tags
@@ -20,6 +21,26 @@ class GithubRepository < ActiveRecord::Base
   scope :with_projects, -> { joins(:projects) }
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
+
+  def owner
+    github_organisation_id.present? ? github_organisation : github_user
+  end
+
+  def download_owner
+    o = github_client.user(owner_name)
+    if o.type == "Organization"
+      go = GithubOrganisation.create_from_github(owner_id.to_i)
+      self.github_organisation_id = go.id
+      save
+    else
+      user = GithubUser.find_or_create_by(github_id: c.id) do |u|
+        u.login = c.login
+        u.user_type = c.type
+      end
+      user.dowload_from_github
+      user
+    end
+  end
 
   def to_s
     full_name
