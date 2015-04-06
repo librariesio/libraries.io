@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150405230528) do
+ActiveRecord::Schema.define(version: 20150406174503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,9 @@ ActiveRecord::Schema.define(version: 20150405230528) do
     t.datetime "updated_at",  null: false
   end
 
+  add_index "github_organisations", ["github_id"], name: "index_github_organisations_on_github_id", using: :btree
+  add_index "github_organisations", ["login"], name: "index_github_organisations_on_login", using: :btree
+
   create_table "github_repositories", force: :cascade do |t|
     t.string   "full_name"
     t.string   "owner_id"
@@ -99,6 +102,7 @@ ActiveRecord::Schema.define(version: 20150405230528) do
   end
 
   add_index "github_repositories", ["full_name"], name: "index_github_repositories_on_full_name", using: :btree
+  add_index "github_repositories", ["github_organisation_id"], name: "index_github_repositories_on_github_organisation_id", using: :btree
   add_index "github_repositories", ["owner_id"], name: "index_github_repositories_on_owner_id", using: :btree
 
   create_table "github_tags", force: :cascade do |t|
