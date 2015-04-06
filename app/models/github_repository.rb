@@ -34,9 +34,9 @@ class GithubRepository < ActiveRecord::Base
       self.github_organisation_id = go.id
       save
     else
-      user = GithubUser.find_or_create_by(github_id: c.id) do |u|
-        u.login = c.login
-        u.user_type = c.type
+      user = GithubUser.find_or_create_by(github_id: o.id) do |u|
+        u.login = o.login
+        u.user_type = o.type
       end
       user.dowload_from_github
       user
