@@ -44,6 +44,12 @@ SitemapGenerator::Sitemap.create do
     add user_repositories_path(user), :lastmod => user.updated_at
   end
 
+  puts "Generating Orgs"
+  GithubOrganisation.find_each do |org|
+    add user_path(org), :lastmod => org.updated_at
+    add user_repositories_path(org), :lastmod => org.updated_at
+  end
+
   add search_path
 
   puts "Generating Platforms"
