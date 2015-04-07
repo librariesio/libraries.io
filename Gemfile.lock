@@ -75,11 +75,11 @@ GEM
       elasticsearch-transport (= 1.0.7)
     elasticsearch-api (1.0.7)
       multi_json
-    elasticsearch-model (0.1.6)
+    elasticsearch-model (0.1.7)
       activesupport (> 3)
       elasticsearch (> 0.4)
       hashie
-    elasticsearch-rails (0.1.6)
+    elasticsearch-rails (0.1.7)
     elasticsearch-transport (1.0.7)
       faraday
       multi_json
@@ -190,7 +190,7 @@ GEM
     formatador (0.2.5)
     fuzzy_match (2.1.0)
     gems (0.8.3)
-    globalid (0.3.3)
+    globalid (0.3.5)
       activesupport (>= 4.1.0)
     google-api-client (0.8.5)
       activesupport (>= 3.2)
