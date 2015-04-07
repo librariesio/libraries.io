@@ -123,7 +123,7 @@ GEM
     fog-atmos (0.1.0)
       fog-core
       fog-xml
-    fog-aws (0.1.1)
+    fog-aws (0.1.2)
       fog-core (~> 1.27)
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
@@ -142,7 +142,8 @@ GEM
     fog-ecloud (0.1.1)
       fog-core
       fog-xml
-    fog-json (1.0.0)
+    fog-json (1.0.1)
+      fog-core (~> 1.0)
       multi_json (~> 1.0)
     fog-local (0.1.0)
       fog-core (~> 1.27)
@@ -168,7 +169,7 @@ GEM
     fog-serverlove (0.1.2)
       fog-core
       fog-json
-    fog-softlayer (0.4.1)
+    fog-softlayer (0.4.2)
       fog-core
       fog-json
     fog-storm_on_demand (0.1.1)
