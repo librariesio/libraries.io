@@ -38,6 +38,7 @@ class GithubOrganisation < ActiveRecord::Base
       g
     rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       p e
+      false
     end
   end
 end

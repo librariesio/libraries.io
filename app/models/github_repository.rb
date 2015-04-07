@@ -30,9 +30,10 @@ class GithubRepository < ActiveRecord::Base
   def download_owner
     o = github_client.user(owner_name)
     if o.type == "Organization"
-      go = GithubOrganisation.create_from_github(owner_id.to_i)
-      self.github_organisation_id = go.id
-      save
+      if go = GithubOrganisation.create_from_github(owner_id.to_i)
+        self.github_organisation_id = go.id
+        save
+      end
     else
       user = GithubUser.find_or_create_by(github_id: o.id) do |u|
         u.login = o.login
