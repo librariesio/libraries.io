@@ -20,7 +20,7 @@ Install and run the deps
 Perform the sacred ruby voodoo
 
 ```sh
- rbenv install 2.2.1
+ rbenv install 2.2.2
  gem install bundler
  rbenv rehash
  bundle
@@ -31,7 +31,7 @@ Fight entropy with schemas
 ```sh
  rake db:create db:migrate
  rake projects:reindex
-``` 
+```
 
 Go create a Personal access token on GitHub. Copy the token, for you will need it to pay the ferryman.
 
@@ -52,5 +52,3 @@ rails s
 ```
 
 [Godspeed](http://xkcd.com/461/)
-
-
