@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 20150406225155) do
     t.integer  "github_organisation_id"
   end
 
+  add_index "github_repositories", ["created_at"], name: "index_github_repositories_on_created_at", using: :btree
   add_index "github_repositories", ["full_name"], name: "index_github_repositories_on_full_name", using: :btree
   add_index "github_repositories", ["github_organisation_id"], name: "index_github_repositories_on_github_organisation_id", using: :btree
   add_index "github_repositories", ["owner_id"], name: "index_github_repositories_on_owner_id", using: :btree
@@ -143,9 +144,8 @@ ActiveRecord::Schema.define(version: 20150406225155) do
     t.string   "file_name"
     t.string   "url"
     t.text     "contents"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.integer  "repository_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "projects", force: :cascade do |t|
@@ -218,6 +218,7 @@ ActiveRecord::Schema.define(version: 20150406225155) do
     t.datetime "updated_at"
   end
 
+  add_index "versions", ["created_at"], name: "index_versions_on_created_at", using: :btree
   add_index "versions", ["number"], name: "index_versions_on_number", using: :btree
   add_index "versions", ["project_id"], name: "index_versions_on_project_id", using: :btree
   add_index "versions", ["published_at"], name: "index_versions_on_published_at", using: :btree
