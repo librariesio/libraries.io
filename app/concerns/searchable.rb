@@ -110,7 +110,7 @@ module Searchable
           did_you_mean: {
             text: query,
             term: {
-              size: 3,
+              size: 1,
               field: "name"
             }
           }
