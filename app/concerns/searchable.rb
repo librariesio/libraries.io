@@ -3,6 +3,7 @@ module Searchable
 
   included do
     include Elasticsearch::Model
+    include Elasticsearch::Model::Callbacks
 
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
       mapping do
@@ -28,17 +29,7 @@ module Searchable
       end
     end
 
-    after_commit on: [:create] do
-      __elasticsearch__.index_document
-    end
-
-    after_commit on: [:update] do
-      __elasticsearch__.update_document
-    end
-
-    after_commit on: [:destroy] do
-      __elasticsearch__.delete_document
-    end
+    after_touch() { __elasticsearch__.index_document }
 
     def as_indexed_json(options = {})
       as_json methods: [:stars, :language, :repo_name]
