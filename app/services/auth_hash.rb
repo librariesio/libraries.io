@@ -13,7 +13,8 @@ class AuthHash
       uid:         uid,
       nickname:    nickname,
       email:       email,
-      gravatar_id: gravatar_id
+      gravatar_id: gravatar_id,
+      public_repo_token: public_repo_token
     }
   end
 
@@ -22,7 +23,7 @@ class AuthHash
   attr_reader :user_hash
 
   def provider
-    user_hash.fetch('provider')
+    'github'
   end
 
   def uid
@@ -54,7 +55,11 @@ class AuthHash
   end
 
   def token
-    user_hash.fetch('credentials', {}).fetch('token')
+    user_hash.fetch('credentials', {}).fetch('token') if user_hash.fetch('provider') != 'githubpublic'
+  end
+
+  def public_repo_token
+    user_hash.fetch('credentials', {}).fetch('token') if user_hash.fetch('provider') == 'githubpublic'
   end
 
   private
