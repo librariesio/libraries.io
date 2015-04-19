@@ -8,14 +8,15 @@ class AuthHash
   end
 
   def user_info
-    {
+    h = {
       token:       token,
       uid:         uid,
       nickname:    nickname,
       email:       email,
-      gravatar_id: gravatar_id,
-      public_repo_token: public_repo_token
+      gravatar_id: gravatar_id
     }
+    h.merge!(public_repo_token: public_repo_token) if public_repo_token.present?
+    h
   end
 
   private
