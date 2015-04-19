@@ -23,4 +23,20 @@ class User < ActiveRecord::Base
   def subscribed_to?(project)
     subscriptions.find_by_project_id(project.id)
   end
+
+  def token
+    public_repo_token.presence || read_attribute(:token)
+  end
+
+  def github_client
+    @github_client ||= Octokit::Client.new(access_token: token, auto_paginate: true)
+  end
+
+  def repos
+    github_client.repos
+  end
+
+  def orgs
+    github_client.orgs
+  end
 end

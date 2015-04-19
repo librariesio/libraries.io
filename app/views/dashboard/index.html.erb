@@ -1,0 +1,24 @@
+<h1>Dashboard</h1>
+
+<% if current_user.public_repo_token.blank? %>
+  <%= link_to 'Enable Public Repo Access', '/auth/github_public', class: 'btn btn-primary' %>
+<% end %>
+
+<div class='row'>
+  <div class='col-md-3'>
+    <h2>Orgs</h2>
+    <ul>
+      <% @orgs.each do |org| %>
+        <li><%= org.login %></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class='col-md-9'>
+    <h2>Repos</h2>
+    <ul>
+      <% @repos.each do |repo| %>
+        <li><%= repo.full_name %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
