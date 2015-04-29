@@ -60,7 +60,7 @@
             <% end %>
           </li>
         </ul>
-        <%= link_to('Login with GitHub', login_url(protocol: (Rails.env.development? ? 'http' : 'https' )), class: 'pull-right btn btn-primary navbar-btn') unless logged_in? %>
+        <%= link_to('Login with GitHub', secure_login_url, class: 'pull-right btn btn-primary navbar-btn') unless logged_in? %>
       </div>
     </div>
   </div>
