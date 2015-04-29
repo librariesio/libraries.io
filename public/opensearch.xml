@@ -1,9 +1,9 @@
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
   <ShortName>Libraries.io</ShortName>
   <Description>Discover new modules and libraries you can use in your projects.</Description>
-  <Url type="text/html" method="get" template="http://libraries.io/search?q={searchTerms}"/>
+  <Url type="text/html" method="get" template="https://libraries.io/search?q={searchTerms}"/>
   <Contact>support@libraries.io</Contact>
   <Developer>Andrew Nesbitt</Developer>
   <InputEncoding>UTF-8</InputEncoding>
-  <moz:SearchForm>http://libraries.io</moz:SearchForm>
+  <moz:SearchForm>https://libraries.io</moz:SearchForm>
 </OpenSearchDescription>
