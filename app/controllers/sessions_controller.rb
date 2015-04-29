@@ -3,8 +3,6 @@ class SessionsController < ApplicationController
     skip_before_action :verify_authenticity_token, only: [:create]
   end
 
-  force_ssl if: :ssl_configured?
-
   def new
     redirect_to "/auth/github"
   end

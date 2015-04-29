@@ -17,22 +17,9 @@ class ApplicationController < ActionController::Base
 
   def ensure_logged_in
     unless logged_in?
-      session[:pre_login_destination] = "#{https_or_http?}://#{request.host_with_port}#{request.path}"
-      redirect_to secure_login_url, notice: 'You must be logged in to view this content.'
+      session[:pre_login_destination] = request.original_url
+      redirect_to login_path, notice: 'You must be logged in to view this content.'
     end
-  end
-
-  helper_method :secure_login_url
-  def secure_login_url
-    login_url(protocol: https_or_http?)
-  end
-
-  def https_or_http?
-    ssl_configured? ? 'https' : 'http'
-  end
-
-  def ssl_configured?
-    !Rails.env.development?
   end
 
   def current_user
