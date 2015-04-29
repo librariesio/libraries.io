@@ -28,7 +28,11 @@ class ApplicationController < ActionController::Base
   end
 
   def https_or_http?
-    Rails.env.development? ? 'http' : 'https'
+    ssl_configured? ? 'https' : 'http'
+  end
+
+  def ssl_configured?
+    !Rails.env.development?
   end
 
   def current_user
