@@ -28,7 +28,7 @@
     <h4>Updated <%= platform_name(@platform_name) %> Projects</h4>
     <%= render @updated %>
     <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'updated_at', order: 'desc') %>
+      <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc') %>
     </p>
   </div>
   <% end %>
