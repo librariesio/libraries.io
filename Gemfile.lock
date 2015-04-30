@@ -340,7 +340,7 @@ GEM
       spdx-licenses (~> 1.0)
     spdx-licenses (1.0.0)
       json
-    spring (1.3.4)
+    spring (1.3.5)
     sprockets (2.12.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
