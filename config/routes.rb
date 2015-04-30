@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     get '/manifests', to: 'manifests#index'
   end
 
+  namespace :admin do
+    resources :projects
+  end
+
   get '/dashboard', to: 'dashboard#index'
 
   root to: 'projects#index'
