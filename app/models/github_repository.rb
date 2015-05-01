@@ -228,4 +228,53 @@ class GithubRepository < ActiveRecord::Base
   rescue Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
+
+  def create_webhook(token = nil)
+    # find or create web hook
+    # Get token from a user who has admin access
+
+    github_client.create_hook(
+      full_name,
+      'web',
+      {
+        :url => 'https://libraries.io/hooks/github',
+        :content_type => 'json'
+      },
+      {
+        :events => ['push', 'pull_request'], # all events
+        :active => true
+      }
+    )
+  end
+
+  def download_manifests(token = nil)
+    # Get token from a user who has read access
+
+    r = Typhoeus::Request.new("http://ci.libraries.io/repos/#{full_name}",
+      method: :get,
+      params: { token: token },
+      headers: { 'Accept' => 'application/json' }).run
+    manifests = Oj.load(r.body)["manifests"]
+
+    # projects = []
+    # manifests.each do |manifest|
+    #   platform = manifest["name"]
+    #   path = manifest["path"]
+    #   deps = manifest["deps"]
+    #   deps.each do |name, requirement|
+    #     projects << Project.platform(platform).where('lower(name) = ?', name.downcase).first.try(:id)
+    #   end
+    # end
+    #
+    # projects.compact!
+    #
+    # existing = subscriptions.map(&:project_id)
+    #
+    # subscriptions.where(project_id: (existing - projects)).delete_all
+    # (projects - existing).each do |project_id|
+    #   subscriptions.create(project_id: project_id)
+    # end
+
+    # TODO implment branch manifests
+  end
 end

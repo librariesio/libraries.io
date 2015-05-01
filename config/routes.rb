@@ -3,15 +3,17 @@ Rails.application.routes.draw do
     get '/searchcode', to: 'projects#searchcode'
     post '/:platform/projects', to: 'projects#list'
     get '/:platform/:name', to: 'projects#show', constraints: { :name => /.*/ }
-    post '/manifests/update', to: 'manifests#update'
-    get '/manifests', to: 'manifests#index'
   end
 
   namespace :admin do
     resources :projects
   end
 
+  post '/hooks/github', to: 'hooks#github'
+
   get '/dashboard', to: 'dashboard#index'
+  post '/watch/:github_repository_id', to: 'dashboard#watch', as: :watch
+  post '/unwatch/:github_repository_id', to: 'dashboard#unwatch', as: :unwatch
 
   root to: 'projects#index'
 

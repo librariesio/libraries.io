@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   has_many :subscriptions
-  has_many :manifests
   has_many :api_keys
+  has_many :github_repositories, primary_key: :uid, foreign_key: :owner_id
 
   def admin?
     ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall', 'zachinglis'].include?(nickname)

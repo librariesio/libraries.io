@@ -5,17 +5,5 @@
       <%= render @subscriptions %>
     </table>
     <%= will_paginate @subscriptions, renderer: BootstrapPagination::Rails, page_links: false %>
-
-  <% if current_user.admin? %>
-    <% @manifests.each do |manifest| %>
-      <hr>
-      <h3>
-        <%= manifest.name %>
-      </h3>
-      <table class='table table-striped table-hover'>
-        <%= render manifest.subscriptions %>
-      </table>
-    <% end %>
-  <% end %>
 </div>
 </div>
