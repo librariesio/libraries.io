@@ -13,10 +13,7 @@ class GithubRepository < ActiveRecord::Base
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
 
-  after_create :download_readme
-  after_create :download_tags
-  after_create :download_github_contributions
-  after_create :download_owner
+  after_create :update_all_info
 
   scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
