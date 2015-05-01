@@ -70,6 +70,25 @@
       <hr>
       <%== repo.readme %>
     <% end %>
+
+    <% if repo.manifests.any? %>
+      <hr>
+      <h4>Dependencies</h4>
+      <% repo.manifests.each do |manifest| %>
+        <% next if manifest.repository_dependencies.empty? %>
+        <h5><%= link_to manifest.path, manifest.github_link %></h5>
+        <ul>
+          <% manifest.repository_dependencies.order(:project_name).each do |dependency| %>
+            <li>
+              <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
+              <%= dependency.requirements %>
+            </li>
+          <% end %>
+        </ul>
+
+
+      <% end %>
+    <% end %>
   </div>
   <div class='col-md-4'>
     <% if @contributors.any? %>

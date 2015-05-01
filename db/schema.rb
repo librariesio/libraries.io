@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150501144047) do
+ActiveRecord::Schema.define(version: 20150501201442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,14 +139,13 @@ ActiveRecord::Schema.define(version: 20150501144047) do
   add_index "github_users", ["login"], name: "index_github_users_on_login", using: :btree
 
   create_table "manifests", force: :cascade do |t|
-    t.integer  "user_id"
+    t.integer  "github_repository_id"
     t.string   "name"
-    t.string   "file_name"
-    t.string   "url"
-    t.text     "contents"
+    t.string   "path"
+    t.string   "sha"
+    t.string   "branch"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
-    t.integer  "github_repository_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -184,12 +183,23 @@ ActiveRecord::Schema.define(version: 20150501144047) do
   add_index "readmes", ["created_at"], name: "index_readmes_on_created_at", using: :btree
   add_index "readmes", ["github_repository_id"], name: "index_readmes_on_github_repository_id", using: :btree
 
+  create_table "repository_dependencies", force: :cascade do |t|
+    t.integer  "project_id"
+    t.integer  "manifest_id"
+    t.boolean  "optional"
+    t.string   "project_name"
+    t.string   "platform"
+    t.string   "requirements"
+    t.string   "kind"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.integer  "project_id"
     t.integer  "user_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "manifest_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree

@@ -9,6 +9,7 @@ class GithubRepository < ActiveRecord::Base
   has_many :projects
   has_many :github_contributions
   has_many :github_tags
+  has_many :manifests
   has_one :readme
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
@@ -251,27 +252,40 @@ class GithubRepository < ActiveRecord::Base
       method: :get,
       params: { token: token },
       headers: { 'Accept' => 'application/json' }).run
-    manifests = Oj.load(r.body)["manifests"]
+    new_manifests = Oj.load(r.body)["manifests"]
 
-    # projects = []
-    # manifests.each do |manifest|
-    #   platform = manifest["name"]
-    #   path = manifest["path"]
-    #   deps = manifest["deps"]
-    #   deps.each do |name, requirement|
-    #     projects << Project.platform(platform).where('lower(name) = ?', name.downcase).first.try(:id)
-    #   end
-    # end
-    #
-    # projects.compact!
-    #
-    # existing = subscriptions.map(&:project_id)
-    #
-    # subscriptions.where(project_id: (existing - projects)).delete_all
-    # (projects - existing).each do |project_id|
-    #   subscriptions.create(project_id: project_id)
-    # end
+    new_manifests.each do |m|
+      args = m.slice('name', 'path', 'sha')
+      if manifests.find_by(args)
+        # not much
+      else
+        manifest = manifests.create(args)
+        m['deps'].each do |dep, requirements|
+          platform = manifest.name
+          project = Project.platform(platform).find_by_name(dep)
+          manifest.repository_dependencies.create({
+            project_id: project.try(:id),
+            project_name: dep,
+            platform: platform,
+            requirements: requirements,
+            kind: 'normal'
+          })
+        end
+      end
+    end
 
     # TODO implment branch manifests
+  end
+
+  def self.create_from_github(full_name, client = AuthToken.client)
+    r = client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
+    return false if r.nil? || r.empty?
+    g = GithubRepository.find_or_initialize_by(r.slice(:full_name))
+    g.owner_id = r[:owner][:id]
+    g.github_id = r[:id]
+    g.license = r[:license][:key] if r[:license]
+    g.source_name = r[:parent][:full_name] if r[:fork]
+    g.assign_attributes r.slice(*GithubRepository::API_FIELDS)
+    g.save
   end
 end

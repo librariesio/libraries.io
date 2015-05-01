@@ -24,19 +24,25 @@ class User < ActiveRecord::Base
     subscriptions.find_by_project_id(project.id)
   end
 
-  # def token
-  #   public_repo_token.presence || read_attribute(:token)
-  # end
+  def token
+    public_repo_token.presence || read_attribute(:token)
+  end
 
   def github_client
     @github_client ||= Octokit::Client.new(access_token: token, auto_paginate: true)
   end
 
   def repos
-    github_client.repos
+    github_client.repos.select{|r|r[:permissions][:admin]}
   end
 
-  def orgs
-    github_client.orgs
+  def download_repos
+    repos.each do |repo|
+      GithubRepository.create_from_github(repo.full_name, github_client)
+    end
+  end
+
+  def subscribed_to(github_repository)
+    # TODO
   end
 end
