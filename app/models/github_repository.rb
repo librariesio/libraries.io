@@ -14,10 +14,7 @@ class GithubRepository < ActiveRecord::Base
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
 
-  after_create :download_readme
-  after_create :download_tags
-  after_create :download_github_contributions
-  after_create :download_owner
+  after_create :update_all_info
 
   scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
@@ -141,7 +138,7 @@ class GithubRepository < ActiveRecord::Base
   def update_from_github
     begin
       r = github_client.repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
-      return false if r.nil? || r.empty?
+      return if r.nil? || r.empty?
       self.github_id = r[:id]
       self.owner_id = r[:owner][:id]
       self.license = Project.format_license(r[:license][:key]) if r[:license]
@@ -183,7 +180,7 @@ class GithubRepository < ActiveRecord::Base
 
   def download_github_contributions
     contributions = github_client.contributors(full_name)
-    return false if contributions.empty?
+    return if contributions.empty?
     contributions.each do |c|
       p c.login
       user = GithubUser.find_or_create_by(github_id: c.id) do |u|
@@ -192,11 +189,9 @@ class GithubRepository < ActiveRecord::Base
       end
       cont = github_contributions.find_or_create_by(github_user: user)
       cont.count = c.contributions
-      cont.platform = projects.first.platform
+      cont.platform = projects.first.platform if projects.any?
       cont.save
     end
-  rescue
-    p full_name
   end
 
   def download_tags
