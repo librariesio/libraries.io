@@ -4,7 +4,7 @@ class GithubRepository < ActiveRecord::Base
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
    :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
    :forks_count, :mirror_url, :open_issues_count, :default_branch,
-   :subscribers_count]
+   :subscribers_count, :private]
 
   has_many :projects
   has_many :github_contributions
