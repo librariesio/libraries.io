@@ -6,6 +6,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   def update
     @project = Project.find(params[:id])
     if @project.update_attributes(project_params)
+      @project.github_repository.try(:update_all_info)
       redirect_to project_path(@project.to_param)
     else
       redirect_to admin_project_path(@project.id)

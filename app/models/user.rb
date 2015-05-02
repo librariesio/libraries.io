@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   has_many :subscriptions
+  has_many :repository_subscriptions
   has_many :api_keys
   has_many :github_repositories, primary_key: :uid, foreign_key: :owner_id
 
@@ -20,10 +21,6 @@ class User < ActiveRecord::Base
     where(conditions).first
   end
 
-  def subscribed_to?(project)
-    subscriptions.find_by_project_id(project.id)
-  end
-
   def token
     public_repo_token.presence || read_attribute(:token)
   end
@@ -42,7 +39,20 @@ class User < ActiveRecord::Base
     end
   end
 
-  def subscribed_to(github_repository)
-    # TODO
+  def subscribe_to_repo(github_repository)
+    repository_subscriptions.find_or_create_by(github_repository_id: github_repository.id)
+  end
+
+  def unsubscribe_from_repo(github_repository)
+    sub = subscribed_to_repo?(github_repository)
+    sub.destroy
+  end
+
+  def subscribed_to?(project)
+    subscriptions.find_by_project_id(project.id)
+  end
+
+  def subscribed_to_repo?(github_repository)
+    repository_subscriptions.find_by_github_repository_id(github_repository.id)
   end
 end

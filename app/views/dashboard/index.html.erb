@@ -31,7 +31,7 @@
           </div>
         </div>
         <div class="col-md-2">
-          <% if current_user.subscribed_to(github_repository) %>
+          <% if current_user.subscribed_to_repo?(github_repository) %>
             <%= button_to 'Unwatch', unwatch_path(github_repository.id), method: :post, class: 'btn btn-danger' %>
           <% else %>
             <%= button_to 'Watch', watch_path(github_repository.id), method: :post, class: 'btn btn-primary' %>

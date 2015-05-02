@@ -229,18 +229,21 @@ class GithubRepository < ActiveRecord::Base
     # find or create web hook
     # Get token from a user who has admin access
 
-    github_client.create_hook(
-      full_name,
-      'web',
-      {
-        :url => 'https://libraries.io/hooks/github',
-        :content_type => 'json'
-      },
-      {
-        :events => ['push', 'pull_request'], # all events
-        :active => true
-      }
-    )
+    existing_hooks = github_client.hooks(full_name)
+    if existing_hooks.select{|h| h[:config][:url] && h[:config][:url].match(/libraries.io/) }.empty?
+      github_client.create_hook(
+        full_name,
+        'web',
+        {
+          :url => 'https://libraries.io/hooks/github',
+          :content_type => 'json'
+        },
+        {
+          :events => ['push', 'pull_request'], # all events
+          :active => true
+        }
+      )
+    end
   end
 
   def download_manifests(token = nil)
