@@ -6,6 +6,7 @@ namespace :one_off do
       deps = Repositories::Rubygems.dependencies(name, version.number)
       next unless deps.any? && version.dependencies.empty?
       deps.each do |dep|
+        next if dep[:project_name].nil?
         unless version.dependencies.find_by_project_name dep[:project_name]
           named_project = Project.platform('Rubygems').where('lower(name) = ?', dep[:project_name].downcase).first.try(:id)
           version.dependencies.create(dep.merge(project_id: named_project))
