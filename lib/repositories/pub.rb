@@ -38,5 +38,29 @@ class Repositories
         }
       end
     end
+
+    def self.dependencies(name, version)
+      proj = project(name)
+      vers = proj['versions'].find{|v| v['version'] == version }
+
+      return [] if vers.nil?
+      vers['pubspec'].fetch('dependencies', {}).map do |k,v|
+        {
+          project_name: k,
+          requirements: v,
+          kind: 'normal',
+          optional: false,
+          platform: self.name.demodulize
+        }
+      end + vers['pubspec'].fetch('dev_dependencies', {}).map do |k,v|
+        {
+          project_name: k,
+          requirements: v,
+          kind: 'normal',
+          optional: false,
+          platform: self.name.demodulize
+        }
+      end
+    end
   end
 end
