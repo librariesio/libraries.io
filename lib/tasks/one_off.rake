@@ -1,4 +1,6 @@
 namespace :one_off do
+  # put your one off tasks here and delete them once they've been ran
+
   task get_ruby_deps: :environment do
     Project.platform('Rubygems').find_each do |proj|
       name = proj.name
