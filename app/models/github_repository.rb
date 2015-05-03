@@ -192,6 +192,8 @@ class GithubRepository < ActiveRecord::Base
       cont.platform = projects.first.platform if projects.any?
       cont.save
     end
+  rescue Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    nil
   end
 
   def download_tags
