@@ -196,7 +196,7 @@ class Project < ActiveRecord::Base
       g.source_name = r[:parent][:full_name] if r[:fork]
       g.assign_attributes r.slice(*GithubRepository::API_FIELDS)
       g.save
-      self.update_columns(github_repository_id: g.id)
+      self.update_columns(github_repository_id: g.id) unless self.new_record?
     rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       begin
         response = Net::HTTP.get_response(URI(github_url))
