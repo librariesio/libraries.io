@@ -183,12 +183,7 @@ class Project < ActiveRecord::Base
 
   def update_github_repo
     name_with_owner = github_name_with_owner
-    if name_with_owner
-      puts name_with_owner
-    else
-      puts repository_url
-      return false
-    end
+    return false unless name_with_owner
 
     begin
       r = AuthToken.client.repo(name_with_owner, accept: 'application/vnd.github.drax-preview+json').to_hash
