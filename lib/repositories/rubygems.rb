@@ -38,5 +38,30 @@ class Repositories
         }
       end
     end
+
+    def self.dependencies(name, version)
+      g = Gems.info(name)
+      return [] unless g['version'] == version
+
+      deps = g['dependencies']
+      d = []
+      deps['development'].each do |dep|
+        d <<  {
+          project_name: dep['name'],
+          requirements: dep['requirements'],
+          kind: 'Development',
+          platform: self.name.demodulize
+        }
+      end
+      deps['runtime'].each do |dep|
+        d <<  {
+          project_name: dep['name'],
+          requirements: dep['requirements'],
+          kind: 'normal',
+          platform: self.name.demodulize
+        }
+      end
+      d
+    end
   end
 end
