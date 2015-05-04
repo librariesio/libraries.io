@@ -15,6 +15,12 @@
   Check out all the details here: <%= link_to version_url(@project.to_param.merge(number: @version.number)), version_url(@project.to_param.merge(number: @version.number)) %>
 </p>
 
+<% if @project.github_repository.present? %>
+<p>
+  You can also browse the latest commits on GitHub: <%= link_to @project.github_repository.commits_url, @project.github_repository.commits_url %>
+</p>
+<% end %>
+
 <p>
   From your friendly neighborhood robot, Libby.
 </p>

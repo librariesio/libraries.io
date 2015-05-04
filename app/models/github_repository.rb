@@ -112,6 +112,10 @@ class GithubRepository < ActiveRecord::Base
     "#{url}/raw/#{default_branch}/"
   end
 
+  def commits_url
+    "#{url}/commits"
+  end
+
   def avatar_url(size = 60)
     "https://avatars.githubusercontent.com/u/#{owner_id}?size=#{size}"
   end
