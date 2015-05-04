@@ -45,7 +45,7 @@ class Project < ActiveRecord::Base
   end
 
   def latest_version
-    @latest_version ||= versions.order('published_at DESC').first
+    @latest_version ||= versions.order('published_at DESC').sort.first
   end
 
   def latest_tag
