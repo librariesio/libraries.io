@@ -27,7 +27,7 @@ class Version < ActiveRecord::Base
 
   def <=>(other)
     if parsed_number.is_a?(String) || other.parsed_number.is_a?(String)
-      other.number <=> number
+      other.published_at <=> published_at
     else
       other.parsed_number <=> parsed_number
     end
