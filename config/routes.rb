@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   namespace :api do
     get '/searchcode', to: 'projects#searchcode'
     post '/:platform/projects', to: 'projects#list'
