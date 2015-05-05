@@ -11,6 +11,10 @@ class AuthToken < ActiveRecord::Base
     client
   end
 
+  def self.token
+    client.access_token
+  end
+
   def self.create_multiple(array_of_tokens)
     array_of_tokens.each do |token|
       self.find_or_create_by(token: token)

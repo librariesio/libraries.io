@@ -2,7 +2,7 @@ class GithubDownloadWorker
   include Sidekiq::Worker
 
   def perform(repo_id, token)
-    # load repo from repo_id
-    # update_all_info with token
+    repo = GithubRepository.find(repo_id)
+    repo.update_all_info(token)
   end
 end

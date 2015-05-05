@@ -14,7 +14,7 @@ class GithubRepository < ActiveRecord::Base
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
 
-  after_create :update_all_info
+  after_save :update_all_info_async
 
   scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
@@ -128,8 +128,8 @@ class GithubRepository < ActiveRecord::Base
     github_id || full_name
   end
 
-  def download_readme
-    contents = {html_body: github_client.readme(full_name, accept: 'application/vnd.github.V3.html')}
+  def download_readme(client)
+    contents = {html_body: client.readme(full_name, accept: 'application/vnd.github.V3.html')}
     if readme.nil?
       create_readme(contents)
     else
@@ -139,9 +139,9 @@ class GithubRepository < ActiveRecord::Base
     nil
   end
 
-  def update_from_github
+  def update_from_github(client)
     begin
-      r = github_client.repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
+      r = client.repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
       return if r.nil? || r.empty?
       self.github_id = r[:id]
       self.owner_id = r[:owner][:id]
@@ -154,7 +154,7 @@ class GithubRepository < ActiveRecord::Base
         response = Net::HTTP.get_response(URI(url))
         if response.code.to_i == 301
           self.full_name = GithubRepository.extract_full_name URI(response['location']).to_s
-          update_from_github
+          update_from_github(client)
         end
       rescue URI::InvalidURIError => e
         p e
@@ -162,11 +162,20 @@ class GithubRepository < ActiveRecord::Base
     end
   end
 
-  def update_all_info
-    update_from_github
-    download_readme
-    download_tags
-    download_github_contributions
+  def update_all_info_async(token = nil)
+    GithubDownloadWorker.perform_in(5.seconds, self.id, token || AuthToken.token)
+  end
+
+  def update_all_info(token = nil)
+    if token.present?
+      client = Octokit::Client.new(access_token: token, auto_paginate: true)
+    else
+      client = github_client
+    end
+    update_from_github(client)
+    download_readme(client)
+    download_tags(client)
+    download_github_contributions(client)
   end
 
   def self.extract_full_name(url)
@@ -182,8 +191,8 @@ class GithubRepository < ActiveRecord::Base
     url.join('/')
   end
 
-  def download_github_contributions
-    contributions = github_client.contributors(full_name)
+  def download_github_contributions(client)
+    contributions = client.contributors(full_name)
     return if contributions.empty?
     contributions.each do |c|
       p c.login
@@ -200,14 +209,14 @@ class GithubRepository < ActiveRecord::Base
     nil
   end
 
-  def download_tags
-    github_client.refs(full_name, 'tags').each do |tag|
+  def download_tags(client)
+    client.refs(full_name, 'tags').each do |tag|
       match = tag.ref.match(/refs\/tags\/(.*)/)
       if match
         name = match[1]
         if github_tags.find_by_name(name).nil?
 
-          object = github_client.get(tag.object.url)
+          object = client.get(tag.object.url)
 
           tag_hash = {
             name: name,

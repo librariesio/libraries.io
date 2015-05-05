@@ -17,6 +17,6 @@ class Download
   end
 
   def self.update_github_repos
-    GithubRepository.order('updated_at ASC').find_each(&:update_from_github)
+    GithubRepository.order('updated_at ASC').find_each(&:update_all_info_async)
   end
 end
