@@ -22,7 +22,7 @@ class AuthToken < ActiveRecord::Base
   end
 
   def high_rate_limit?
-    github_client.rate_limit.remaining > 100
+    github_client.rate_limit.remaining > 500
   rescue Octokit::Unauthorized
     false
   end
