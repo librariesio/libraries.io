@@ -11,7 +11,7 @@ class GithubTag < ActiveRecord::Base
     github_repository.projects.each do |project|
       next if project.versions_count > 0
       project.subscriptions.each do |subscription|
-        VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later
+        #VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later
       end
     end
   end
