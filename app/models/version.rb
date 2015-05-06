@@ -5,11 +5,11 @@ class Version < ActiveRecord::Base
   counter_culture :project
   has_many :dependencies
 
-  after_create :notify_subscribers, :notify_gitter, :notify_firehose
+  after_commit :notify_subscribers, :notify_gitter, :notify_firehose on: :create
 
   def notify_subscribers
     project.subscriptions.each do |subscription|
-      #VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later
+      VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later
     end
   end
 

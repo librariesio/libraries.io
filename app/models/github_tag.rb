@@ -1,7 +1,8 @@
 class GithubTag < ActiveRecord::Base
   belongs_to :github_repository
   validates_presence_of :name, :sha, :github_repository
-  after_create :notify_subscribers, :notify_gitter, :notify_firehose
+
+  after_commit :notify_subscribers, :notify_gitter, :notify_firehose on: :create
 
   def to_s
     name
@@ -11,7 +12,7 @@ class GithubTag < ActiveRecord::Base
     github_repository.projects.each do |project|
       next if project.versions_count > 0
       project.subscriptions.each do |subscription|
-        #VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later
+        VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later
       end
     end
   end
