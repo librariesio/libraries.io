@@ -2,7 +2,7 @@ class GithubTag < ActiveRecord::Base
   belongs_to :github_repository
   validates_presence_of :name, :sha, :github_repository
 
-  after_commit :notify_subscribers, :notify_gitter, :notify_firehose on: :create
+  after_commit :notify_subscribers, :notify_gitter, :notify_firehose, on: :create
 
   def to_s
     name

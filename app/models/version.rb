@@ -5,7 +5,7 @@ class Version < ActiveRecord::Base
   counter_culture :project
   has_many :dependencies
 
-  after_commit :notify_subscribers, :notify_gitter, :notify_firehose on: :create
+  after_commit :notify_subscribers, :notify_gitter, :notify_firehose, on: :create
 
   def notify_subscribers
     project.subscriptions.each do |subscription|
