@@ -29,8 +29,7 @@ class Project < ActiveRecord::Base
   scope :with_launchpad_url, -> { where('repository_url ILIKE ?', '%launchpad.net%') }
   scope :with_sourceforge_url, -> { where('repository_url ILIKE ?', '%sourceforge.net%') }
 
-  after_create :notify_gitter
-  after_save   :update_github_repo_async
+  after_create :notify_gitter, :update_github_repo_async
   before_save  :normalize_licenses,
                :set_latest_release_published_at,
                :set_latest_release_number,
