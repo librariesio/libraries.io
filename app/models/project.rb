@@ -4,7 +4,7 @@ class Project < ActiveRecord::Base
 
   validates_presence_of :name, :platform
 
-  #  validate unique name and platform (case?)
+  #  validate unique name and platform (case senstivite )
 
   has_many :versions
   has_many :dependencies, -> { group 'project_name' }, through: :versions
