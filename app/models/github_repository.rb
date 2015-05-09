@@ -191,7 +191,7 @@ class GithubRepository < ActiveRecord::Base
     contributions = github_client(token).contributors(full_name)
     return if contributions.empty?
     contributions.each do |c|
-      p c.login
+      return unless c['id']
       user = GithubUser.find_or_create_by(github_id: c.id) do |u|
         u.login = c.login
         u.user_type = c.type
