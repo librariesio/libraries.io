@@ -163,7 +163,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def update_all_info_async(token = nil)
-    GithubDownloadWorker.perform_in(5.seconds, self.id, token || AuthToken.token)
+    GithubDownloadWorker.perform_in(5.seconds, self.id, token)
   end
 
   def update_all_info(token = nil)
