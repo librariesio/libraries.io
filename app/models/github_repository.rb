@@ -121,8 +121,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def github_client(token = nil)
-    return AuthToken.client if token.nil?
-    Octokit::Client.new(access_token: token, auto_paginate: true)
+    AuthToken.fallback_client(token)
   end
 
   def id_or_name
@@ -288,7 +287,8 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def self.create_from_github(full_name, token = nil)
-    r = github_client(token).repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
+    github_client = AuthToken.new_client(token)
+    r = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
     return false if r.nil? || r.empty?
     g = GithubRepository.find_or_initialize_by(r.slice(:full_name))
     g.owner_id = r[:owner][:id]

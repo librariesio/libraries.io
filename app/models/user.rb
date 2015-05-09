@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   end
 
   def github_client
-    @github_client ||= Octokit::Client.new(access_token: token, auto_paginate: true)
+    AuthToken.new_client(token)
   end
 
   def repos
