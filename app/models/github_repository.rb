@@ -187,7 +187,7 @@ class GithubRepository < ActiveRecord::Base
     url.join('/')
   end
 
-  def download_github_contributions(token)
+  def download_github_contributions(token = nil)
     contributions = github_client(token).contributors(full_name)
     return if contributions.empty?
     contributions.each do |c|
@@ -205,7 +205,7 @@ class GithubRepository < ActiveRecord::Base
     nil
   end
 
-  def download_tags(token)
+  def download_tags(token = nil)
     github_client(token).refs(full_name, 'tags').each do |tag|
       match = tag.ref.match(/refs\/tags\/(.*)/)
       if match
