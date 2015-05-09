@@ -207,6 +207,7 @@ class GithubRepository < ActiveRecord::Base
 
   def download_tags(token = nil)
     github_client(token).refs(full_name, 'tags').each do |tag|
+      return unless tag['ref']
       match = tag.ref.match(/refs\/tags\/(.*)/)
       if match
         name = match[1]
