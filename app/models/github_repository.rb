@@ -120,8 +120,9 @@ class GithubRepository < ActiveRecord::Base
     "https://avatars.githubusercontent.com/u/#{owner_id}?size=#{size}"
   end
 
-  def github_client
-    AuthToken.client
+  def github_client(token = nil)
+    return AuthToken.client if token.nil?
+    Octokit::Client.new(access_token: token, auto_paginate: true)
   end
 
   def id_or_name
@@ -241,12 +242,9 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def create_webhook(token = nil)
-    # find or create web hook
-    # Get token from a user who has admin access
-
-    existing_hooks = github_client.hooks(full_name)
+    existing_hooks = github_client(token).hooks(full_name)
     if existing_hooks.select{|h| h[:config][:url] && h[:config][:url].match(/libraries.io/) }.empty?
-      github_client.create_hook(
+      github_client(token).create_hook(
         full_name,
         'web',
         {
