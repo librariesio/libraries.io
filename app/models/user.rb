@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
 
   def download_repos
     repos.each do |repo|
-      GithubRepository.create_from_github(repo.full_name, token)
+      GithubCreateWorker.perform_async(repo.full_name, token)
     end
   end
 
