@@ -14,7 +14,7 @@ class GithubRepository < ActiveRecord::Base
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
 
-  after_create :update_all_info_async
+  after_commit :update_all_info_async, on: :create
 
   scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
@@ -163,7 +163,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def update_all_info_async(token = nil)
-    GithubDownloadWorker.perform_in(5.seconds, self.id, token)
+    GithubDownloadWorker.perform_async(self.id, token)
   end
 
   def update_all_info(token = nil)
