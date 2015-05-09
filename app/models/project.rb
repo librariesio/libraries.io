@@ -49,7 +49,7 @@ class Project < ActiveRecord::Base
 
   def latest_tag
     return nil if github_repository.nil?
-    github_repository.github_tags.order('published_at DESC').first
+    github_repository.github_tags.published.order('published_at DESC').first
   end
 
   def latest_release

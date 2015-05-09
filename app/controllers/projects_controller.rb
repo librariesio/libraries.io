@@ -18,9 +18,9 @@ class ProjectsController < ApplicationController
     if @version_count.zero?
       @versions = []
       if @github_repository.present?
-        @github_tags = @github_repository.github_tags.order('published_at DESC').limit(10).to_a.sort
+        @github_tags = @github_repository.github_tags.published.order('published_at DESC').limit(10).to_a.sort
         if params[:number].present?
-          @version = @github_repository.github_tags.find_by_name(params[:number])
+          @version = @github_repository.github_tags.published.find_by_name(params[:number])
           raise ActiveRecord::RecordNotFound if @version.nil?
         end
       else
@@ -70,7 +70,7 @@ class ProjectsController < ApplicationController
       if @project.github_repository.nil?
         @tags = []
       else
-        @tags = @project.github_repository.github_tags.order('published_at DESC').paginate(page: params[:page])
+        @tags = @project.github_repository.github_tags.published.order('published_at DESC').paginate(page: params[:page])
       end
       respond_to do |format|
         format.html

@@ -22,7 +22,7 @@ SitemapGenerator::Sitemap.create do
       return if project.github_repository.nil?
       add project_tags_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
 
-      project.github_repository.github_tags.each do |tag|
+      project.github_repository.github_tags.published.each do |tag|
         add version_path(project.to_param.merge(number: tag.name)), :lastmod => project.updated_at
       end
     end

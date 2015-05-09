@@ -102,11 +102,11 @@
       <%= render @projects %>
     <% end %>
 
-    <% if repo.github_tags.any? %>
+    <% if repo.github_tags.published.any? %>
       <hr>
       <h4>Tags</h4>
       <ul>
-        <% repo.github_tags.to_a.sort.each do |tag| %>
+        <% repo.github_tags.published.to_a.sort.each do |tag| %>
           <li>
             <%= link_to tag, tag.github_url %>
             <% if tag.published_at.present? %>

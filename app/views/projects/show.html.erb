@@ -175,8 +175,8 @@
         </li>
         <% end %>
       </ul>
-      <% if @github_repository.github_tags.count > 10 %>
-        <%= link_to "See all #{pluralize(@github_repository.github_tags.count, 'tags')}", project_tags_path(@project.to_param) %>
+      <% if @github_repository.github_tags.published.count > 10 %>
+        <%= link_to "See all #{pluralize(@github_repository.github_tags.published.count, 'tags')}", project_tags_path(@project.to_param) %>
       <% end %>
     <% end %>
 
