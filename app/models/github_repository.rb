@@ -10,7 +10,6 @@ class GithubRepository < ActiveRecord::Base
   has_many :github_contributions
   has_many :github_tags
   has_many :manifests
-  has_many :repository_dependencies, through: :manifests
   has_many :repository_subscriptions
   has_one :readme
   belongs_to :github_organisation
@@ -23,6 +22,10 @@ class GithubRepository < ActiveRecord::Base
   scope :with_manifests, -> { joins(:manifests) }
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
+
+  def repository_dependencies
+    manifests.latest.includes(:repository_dependencies).map(&:repository_dependencies).flatten.uniq
+  end
 
   def owner
     github_organisation_id.present? ? github_organisation : github_user
