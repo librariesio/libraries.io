@@ -71,10 +71,10 @@
       <%== repo.readme %>
     <% end %>
 
-    <% if repo.manifests.any? %>
+    <% if repo.manifests.latest.any? %>
       <hr>
       <h4>Dependencies</h4>
-      <% repo.manifests.each do |manifest| %>
+      <% repo.manifests.latest.each do |manifest| %>
         <h5><%= link_to manifest.path, manifest.github_link %></h5>
         <ul>
           <% manifest.repository_dependencies.order(:project_name).each do |dependency| %>
@@ -84,8 +84,6 @@
             </li>
           <% end %>
         </ul>
-
-
       <% end %>
     <% end %>
   </div>
