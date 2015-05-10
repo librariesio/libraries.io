@@ -139,4 +139,8 @@ module ApplicationHelper
     return 'Missing' if license.blank?
     Project.format_license(license)
   end
+
+  def stats_for(title, records)
+    render 'table', title: title, records: records
+  end
 end
