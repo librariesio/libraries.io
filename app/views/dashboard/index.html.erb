@@ -36,6 +36,7 @@
           <% else %>
             <%= button_to 'Watch', watch_path(github_repository.id), method: :post, class: 'btn btn-primary' %>
           <% end %>
+          <small><%= pluralize github_repository.repository_dependencies.count, 'dependencies' %></small>
         </div>
       </div>
 

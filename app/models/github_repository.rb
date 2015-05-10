@@ -10,6 +10,8 @@ class GithubRepository < ActiveRecord::Base
   has_many :github_contributions
   has_many :github_tags
   has_many :manifests
+  has_many :repository_dependencies, through: :manifests
+  has_many :repository_subscriptions
   has_one :readme
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
@@ -287,7 +289,7 @@ class GithubRepository < ActiveRecord::Base
       end
     end
 
-    # TODO implment branch manifests
+    repository_subscriptions.each(&:update_subscriptions)
   end
 
   def self.create_from_github(full_name, token = nil)
