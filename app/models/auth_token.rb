@@ -32,7 +32,7 @@ class AuthToken < ActiveRecord::Base
   end
 
   def self.fallback_client(token = nil)
-    AuthToken.new_client(token || AuthToken.client)
+    AuthToken.new_client(token || AuthToken.token)
   end
 
   def self.new_client(token)
