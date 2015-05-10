@@ -176,7 +176,6 @@ class Project < ActiveRecord::Base
     self.normalized_licenses = normalized
   end
 
-
   def notify_gitter
     GitterNotifications.new_project(name, platform)
   end
