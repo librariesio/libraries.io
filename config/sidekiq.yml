@@ -2,4 +2,4 @@
 :concurrency: 15
 :queues:
   - default
-  - [critical, 2]
+  - [critical, 10]
