@@ -31,6 +31,8 @@ class User < ActiveRecord::Base
 
   def repos
     github_client.repos.select{|r|r[:permissions][:admin]}
+  rescue
+    []
   end
 
   def download_repos
