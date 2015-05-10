@@ -6,8 +6,6 @@ class HooksController < ApplicationController
     user = User.find_by_uid(params["sender"]["id"])
     github_repository.download_manifests(user.token)
 
-    # TODO handle other kinds of pushes
-
     render json: nil, status: :ok
   end
 end
