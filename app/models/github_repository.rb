@@ -171,6 +171,9 @@ class GithubRepository < ActiveRecord::Base
     download_readme(token)
     download_tags(token)
     download_github_contributions(token)
+    download_manifests(token)
+  rescue
+    nil
   end
 
   def self.extract_full_name(url)
