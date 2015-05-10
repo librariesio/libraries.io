@@ -172,6 +172,7 @@ class GithubRepository < ActiveRecord::Base
     download_tags(token)
     download_github_contributions(token)
     download_manifests(token)
+    download_owner
   rescue
     nil
   end
