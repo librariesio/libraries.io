@@ -8,6 +8,6 @@ class Subscription < ActiveRecord::Base
   scope :with_user, -> { joins(:user) }
 
   def notification_user
-    user
+    repository_subscription.try(:user) || user
   end
 end
