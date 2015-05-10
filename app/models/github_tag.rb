@@ -4,10 +4,20 @@ class GithubTag < ActiveRecord::Base
 
   scope :published, -> { where('published_at IS NOT NULL') }
 
-  after_commit :notify_subscribers, :notify_gitter, :notify_firehose, on: :create
+  after_commit :send_notifications_async, on: :create
 
   def to_s
     name
+  end
+
+  def send_notifications_async
+    TagNotificationsWorker.perform_async(self.id)
+  end
+
+  def send_notifications
+    notify_subscribers
+    notify_gitter
+    notify_firehose
   end
 
   def notify_subscribers

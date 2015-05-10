@@ -5,7 +5,7 @@ class Version < ActiveRecord::Base
   counter_culture :project
   has_many :dependencies
 
-  after_commit :notify_subscribers, :notify_gitter, :notify_firehose, on: :create
+  after_commit :send_notifications_async, on: :create
 
   def notify_subscribers
     project.subscriptions.each do |subscription|
@@ -19,6 +19,16 @@ class Version < ActiveRecord::Base
 
   def notify_firehose
     Firehose.new_version(project.name, project.platform, number)
+  end
+
+  def send_notifications_async
+    VersionNotificationsWorker.perform_async(self.id)
+  end
+
+  def send_notifications
+    notify_subscribers
+    notify_gitter
+    notify_firehose
   end
 
   def published_at

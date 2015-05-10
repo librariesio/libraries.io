@@ -29,7 +29,7 @@ class Project < ActiveRecord::Base
   scope :with_launchpad_url, -> { where('repository_url ILIKE ?', '%launchpad.net%') }
   scope :with_sourceforge_url, -> { where('repository_url ILIKE ?', '%sourceforge.net%') }
 
-  after_commit :notify_gitter, :update_github_repo_async, on: :create
+  after_commit :update_github_repo_async, on: :create
   before_save  :normalize_licenses,
                :set_latest_release_published_at,
                :set_latest_release_number,
@@ -199,6 +199,7 @@ class Project < ActiveRecord::Base
       g.assign_attributes r.slice(*GithubRepository::API_FIELDS)
       g.save
       self.update_columns(github_repository_id: g.id) unless self.new_record?
+      notify_gitter
     rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       begin
         response = Net::HTTP.get_response(URI(github_url))
