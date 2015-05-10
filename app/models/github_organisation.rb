@@ -36,7 +36,7 @@ class GithubOrganisation < ActiveRecord::Base
       g.assign_attributes r.slice(*GithubOrganisation::API_FIELDS)
       g.save
       g
-    rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       p e
       false
     end

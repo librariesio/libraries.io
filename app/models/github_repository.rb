@@ -41,7 +41,7 @@ class GithubRepository < ActiveRecord::Base
       user.dowload_from_github
       user
     end
-  rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
@@ -136,7 +136,7 @@ class GithubRepository < ActiveRecord::Base
     else
       readme.update_attributes(contents)
     end
-  rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway
+  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway
     nil
   end
 
@@ -150,7 +150,7 @@ class GithubRepository < ActiveRecord::Base
       self.source_name = r[:parent][:full_name] if r[:fork]
       assign_attributes r.slice(*API_FIELDS)
       save
-    rescue Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       begin
         response = Net::HTTP.get_response(URI(url))
         if response.code.to_i == 301
@@ -205,7 +205,7 @@ class GithubRepository < ActiveRecord::Base
       cont.platform = projects.first.platform if projects.any?
       cont.save
     end
-  rescue Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
@@ -237,7 +237,7 @@ class GithubRepository < ActiveRecord::Base
         end
       end
     end
-  rescue Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
