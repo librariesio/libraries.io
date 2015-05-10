@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :projects
+    get '/stats', to: 'stats#index', as: :stats
   end
 
   post '/hooks/github', to: 'hooks#github'
@@ -29,7 +30,7 @@ Rails.application.routes.draw do
   resources :subscriptions
   get '/subscribe/:project_id', to: 'subscriptions#subscribe', as: :subscribe
 
-  get '/stats', to: 'stats#index', as: :stats
+  get '/stats', to: redirect('/admin/stats')
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
