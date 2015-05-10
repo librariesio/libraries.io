@@ -4,6 +4,8 @@ class Subscription < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
 
+  scope :with_user, -> { joins(:user) }
+
   def notification_user
     user
   end

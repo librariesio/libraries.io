@@ -8,8 +8,8 @@ class Version < ActiveRecord::Base
   after_commit :send_notifications_async, on: :create
 
   def notify_subscribers
-    project.subscriptions.each do |subscription|
-      VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later
+    project.subscriptions.with_user.each do |subscription|
+      VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later rescue nil
     end
   end
 
