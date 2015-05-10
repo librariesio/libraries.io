@@ -11,13 +11,19 @@ class GithubTag < ActiveRecord::Base
   end
 
   def send_notifications_async
-    TagNotificationsWorker.perform_async(self.id)
+    TagNotificationsWorker.perform_async(self.id) if has_projects?
   end
 
   def send_notifications
-    notify_subscribers
-    notify_gitter
-    notify_firehose
+    if has_projects?
+      notify_subscribers
+      notify_gitter
+      notify_firehose
+    end
+  end
+
+  def has_projects?
+    github_repository && github_repository.projects.any?
   end
 
   def notify_subscribers
