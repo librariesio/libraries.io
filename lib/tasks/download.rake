@@ -3,14 +3,6 @@ namespace :download do
     Download.new_github_repos
   end
 
-  task update_github_repos: :environment do
-    Download.update_github_repos
-  end
-
-  task github_contributors: :environment do
-    Download.download_contributors
-  end
-
   task small_registries: [:alcatraz, :cargo, :dub, :emacs, :hackage, :jam, :nimble, :sublime]
 
   task alcatraz: :environment do
