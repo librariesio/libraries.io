@@ -17,7 +17,7 @@ class Project < ActiveRecord::Base
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
-  scope :with_repo, -> { includes(:github_repository).where('github_repositories.id IS NOT NULL') }
+  scope :with_repo, -> { joins(:github_repository).where('github_repositories.id IS NOT NULL') }
   scope :without_repo, -> { where(github_repository_id: nil) }
 
   scope :few_versions, -> { where('versions_count < 2') }
