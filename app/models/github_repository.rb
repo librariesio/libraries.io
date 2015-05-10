@@ -260,8 +260,6 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_manifests(token = nil)
-    # Get token from a user who has read access
-
     r = Typhoeus::Request.new("http://ci.libraries.io/repos/#{full_name}",
       method: :get,
       params: { token: token },
