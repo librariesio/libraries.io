@@ -40,11 +40,13 @@ class User < ActiveRecord::Base
   end
 
   def subscribe_to_repo(github_repository)
-    repository_subscriptions.find_or_create_by(github_repository_id: github_repository.id)
+    hook = github_repository.create_webhook(token)
+    repository_subscriptions.find_or_create_by(github_repository_id: github_repository.id, hook_id: hook.id)
   end
 
   def unsubscribe_from_repo(github_repository)
     sub = subscribed_to_repo?(github_repository)
+    github_repository.remove_hook(sub.hook_id, token)
     sub.destroy
   end
 

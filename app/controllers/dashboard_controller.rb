@@ -7,7 +7,6 @@ class DashboardController < ApplicationController
 
   def watch
     github_repository = GithubRepository.find(params[:github_repository_id])
-    github_repository.create_webhook(current_user.token)
     current_user.subscribe_to_repo(github_repository)
     redirect_to dashboard_path
   end

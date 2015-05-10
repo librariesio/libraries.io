@@ -241,22 +241,23 @@ class GithubRepository < ActiveRecord::Base
     nil
   end
 
-  def create_webhook(token = nil)
-    existing_hooks = github_client(token).hooks(full_name)
-    if existing_hooks.select{|h| h[:config][:url] && h[:config][:url].match(/libraries.io/) }.empty?
-      github_client(token).create_hook(
-        full_name,
-        'web',
-        {
-          :url => 'https://libraries.io/hooks/github',
-          :content_type => 'json'
-        },
-        {
-          :events => ['push', 'pull_request'], # all events
-          :active => true
-        }
-      )
-    end
+  def create_webhook(token)
+    github_client(token).create_hook(
+      full_name,
+      'web',
+      {
+        :url => 'https://libraries.io/hooks/github',
+        :content_type => 'json'
+      },
+      {
+        :events => ['push', 'pull_request'],
+        :active => true
+      }
+    )
+  end
+
+  def remove_hook(id, token)
+    github_client(token).remove_hook(full_name, id)
   end
 
   def download_manifests(token = nil)
