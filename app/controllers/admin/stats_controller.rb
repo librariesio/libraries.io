@@ -11,8 +11,6 @@ class Admin::StatsController < ApplicationController
     @new_manifests      = stats_for(Manifest)
     @new_repo_subs      = stats_for(RepositorySubscription)
     @new_readmes        = stats_for(Readme)
-    @new_repo_deps      = stats_for(RepositoryDependency)
-    @new_deps           = stats_for(Dependency)
     @new_orgs           = stats_for(GithubOrganisation)
     @new_contributions  = stats_for(GithubContribution)
     @new_tags           = stats_for(GithubTag)
