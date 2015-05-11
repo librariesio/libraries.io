@@ -1,5 +1,7 @@
 ---
 :concurrency: 15
+:timeout: 8
+:verbose: true
 :queues:
   - default
   - [critical, 10]
