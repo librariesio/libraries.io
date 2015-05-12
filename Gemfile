@@ -42,6 +42,7 @@ gem 'sprockets', '~> 2.12'
 gem 'simple_form'
 gem 'sidekiq'
 gem 'sinatra', :require => nil
+gem 'skylight'
 
 group :development do
   gem 'spring'
