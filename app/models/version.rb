@@ -7,6 +7,10 @@ class Version < ActiveRecord::Base
 
   after_commit :send_notifications_async, on: :create
 
+  def as_json(options = nil)
+    super({ only: [:number, :published_at] }.merge(options || {}))
+  end
+
   def notify_subscribers
     project.subscriptions.each do |subscription|
       VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later rescue nil
