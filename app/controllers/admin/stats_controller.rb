@@ -3,7 +3,6 @@ class Admin::StatsController < ApplicationController
 
   def index
     @new_projects       = stats_for(Project)
-    @new_repos          = stats_for(GithubRepository)
     @new_github_users   = stats_for(GithubUser)
     @new_users          = stats_for(User)
     @new_subscriptions  = stats_for(Subscription)
