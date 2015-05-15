@@ -8,6 +8,10 @@ class User < ActiveRecord::Base
     ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall', 'zachinglis'].include?(nickname)
   end
 
+  def api_key
+    api_keys.first.access_token
+  end
+
   def self.create_from_auth_hash(hash)
     create!(AuthHash.new(hash).user_info)
   end
