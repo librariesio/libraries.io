@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   post '/hooks/github', to: 'hooks#github'
 
   get '/dashboard', to: 'dashboard#index'
+  get '/account', to: 'account#index'
   post '/watch/:github_repository_id', to: 'dashboard#watch', as: :watch
   post '/unwatch/:github_repository_id', to: 'dashboard#unwatch', as: :unwatch
 
