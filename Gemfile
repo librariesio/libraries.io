@@ -43,6 +43,7 @@ gem 'simple_form'
 gem 'sidekiq'
 gem 'sinatra', :require => nil
 gem 'skylight'
+gem 'sassc-rails'
 
 group :development do
   gem 'spring'

@@ -335,6 +335,15 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
+    sassc (1.1.2)
+      bundler
+      ffi (~> 1.9.6)
+    sassc-rails (0.0.9)
+      rails (>= 4.0.0)
+      sass
+      sassc (~> 1.1.2)
+      sprockets (> 2.11)
+      tilt
     sawyer (0.6.0)
       addressable (~> 2.3.5)
       faraday (~> 0.8, < 0.10)
@@ -434,6 +443,7 @@ DEPENDENCIES
   redis
   sanitize-url
   sass-rails
+  sassc-rails
   semantic
   sidekiq
   simple-rss
