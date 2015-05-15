@@ -3,7 +3,7 @@ namespace :download do
     Download.new_github_repos
   end
 
-  task small_registries: [:alcatraz, :cargo, :dub, :emacs, :hackage, :jam, :nimble, :sublime]
+  task small_registries: [:alcatraz, :cargo, :dub, :emacs, :hackage, :jam, :nimble, :platformio, :sublime]
 
   task alcatraz: :environment do
     Repositories::Alcatraz.import
@@ -93,6 +93,10 @@ namespace :download do
 
   task packagist_all: :environment do
     Repositories::Packagist.import
+  end
+
+  task platformio: :environment do
+    Repositories::PlatformIO.import
   end
 
   task pub: :environment do

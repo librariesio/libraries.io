@@ -41,7 +41,7 @@
     </p>
     <% end %>
 
-    <% if @project.homepage.present? && @project.homepage != package_link(@project.name, @project.platform) %>
+    <% if @project.homepage.present? && @project.homepage != package_link(@project, @project.platform) %>
     <p>
       Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage)) %>
     </p>
@@ -75,7 +75,7 @@
     </p>
     <% end %>
 
-    <% if link = package_link(@project.name, @project.platform, @version.try(:number)) %>
+    <% if link = package_link(@project, @project.platform, @version.try(:number)) %>
     <p>
       View on registry: <%= link_to truncate(link, length: 70), link %>
     </p>
@@ -93,11 +93,11 @@
       </p>
     <% end %>
 
-    <% if install_instructions(@project.name, @project.platform, @version.try(:number)) %>
+    <% if install_instructions(@project, @project.platform, @version.try(:number)) %>
       <p>
         Install:
         <code>
-          <%= install_instructions(@project.name, @project.platform, @version.try(:number)) %>
+          <%= install_instructions(@project, @project.platform, @version.try(:number)) %>
         </code>
       </p>
     <% end %>

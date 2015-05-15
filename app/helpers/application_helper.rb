@@ -3,7 +3,8 @@ require 'uri'
 module ApplicationHelper
   include SanitizeUrl
 
-  def package_link(name, platform, version = nil)
+  def package_link(project, platform, version = nil)
+    name = project.name
     case platform
     when 'Hex'
       "https://hex.pm/packages/#{name}/#{version}"
@@ -56,6 +57,8 @@ module ApplicationHelper
       end
     when 'Meteor'
       "https://atmospherejs.com/#{name.gsub(':', '/')}"
+    when 'PlatformIO'
+      "http://platformio.org/#!/lib/show/#{project.pm_id}/#{name}"
     end
   end
 
@@ -76,7 +79,8 @@ module ApplicationHelper
     end
   end
 
-  def install_instructions(name, platform, version = nil)
+  def install_instructions(project, platform, version = nil)
+    name = project.name
     case platform
     when 'Rubygems'
       "gem install #{name}" + (version ? " -v #{version}" : "")
@@ -102,6 +106,8 @@ module ApplicationHelper
       "meteor add #{name}" + (version ? "@=#{version}" : "")
     when 'Elm'
       "elm-package install #{name} #{version}"
+    when 'PlatformIO'
+      "platformio lib install #{project.pm_id}"
     end
   end
 
