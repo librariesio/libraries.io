@@ -43,9 +43,9 @@ class Project < ActiveRecord::Base
     name
   end
 
-  def as_json(options = nil)
-    super({ only: [:name, :platform, :description, :homepage, :repository_url,  :normalized_licenses] }.merge(options || {}))
-  end
+  # def as_json(options = nil)
+  #   super({ only: [:name, :platform, :description, :homepage, :repository_url,  :normalized_licenses] }.merge(options || {}))
+  # end
 
   def latest_version
     @latest_version ||= versions.order('published_at DESC').sort.first
