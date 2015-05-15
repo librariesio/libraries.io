@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150510215628) do
+ActiveRecord::Schema.define(version: 20150515090411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 20150510215628) do
     t.datetime "updated_at",  null: false
   end
 
+  add_index "github_organisations", ["created_at"], name: "index_github_organisations_on_created_at", using: :btree
   add_index "github_organisations", ["github_id"], name: "index_github_organisations_on_github_id", using: :btree
   add_index "github_organisations", ["login"], name: "index_github_organisations_on_login", using: :btree
 
@@ -117,6 +118,7 @@ ActiveRecord::Schema.define(version: 20150510215628) do
     t.datetime "updated_at",           null: false
   end
 
+  add_index "github_tags", ["created_at"], name: "index_github_tags_on_created_at", using: :btree
   add_index "github_tags", ["github_repository_id", "name"], name: "index_github_tags_on_github_repository_id_and_name", using: :btree
   add_index "github_tags", ["github_repository_id"], name: "index_github_tags_on_github_repository_id", using: :btree
   add_index "github_tags", ["name"], name: "index_github_tags_on_name", using: :btree
@@ -149,6 +151,7 @@ ActiveRecord::Schema.define(version: 20150510215628) do
     t.datetime "updated_at",           null: false
   end
 
+  add_index "manifests", ["created_at"], name: "index_manifests_on_created_at", using: :btree
   add_index "manifests", ["github_repository_id"], name: "index_manifests_on_github_repository_id", using: :btree
 
   create_table "projects", force: :cascade do |t|
@@ -207,6 +210,8 @@ ActiveRecord::Schema.define(version: 20150510215628) do
     t.datetime "updated_at",           null: false
     t.integer  "hook_id"
   end
+
+  add_index "repository_subscriptions", ["created_at"], name: "index_repository_subscriptions_on_created_at", using: :btree
 
   create_table "subscriptions", force: :cascade do |t|
     t.integer  "project_id"
