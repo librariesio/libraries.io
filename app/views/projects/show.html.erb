@@ -180,7 +180,7 @@
       <% end %>
     <% end %>
 
-    <% cache("projects:#{@project.id}:related", :expires_in => 1.day) do %>
+    <% cache("projects:#{@project.id}:related", :expires_in => 5.day) do %>
       <% related = @project.mlt %>
       <% if related && related.any? %>
         <% if @versions.any? %>
