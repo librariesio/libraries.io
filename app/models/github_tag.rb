@@ -23,12 +23,11 @@ class GithubTag < ActiveRecord::Base
   end
 
   def has_projects?
-    github_repository && github_repository.projects.any?
+    github_repository && github_repository.projects.without_versions.any?
   end
 
   def notify_subscribers
-    github_repository.projects.each do |project|
-      next if project.versions_count > 0
+    github_repository.projects.without_versions.each do |project|
       project.subscriptions.each do |subscription|
         VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later rescue nil
       end
@@ -36,15 +35,13 @@ class GithubTag < ActiveRecord::Base
   end
 
   def notify_gitter
-    github_repository.projects.each do |project|
-      next if project.versions_count > 0
+    github_repository.projects.without_versions.each do |project|
       GitterNotifications.new_version(project.name, project.platform, number)
     end
   end
 
   def notify_firehose
-    github_repository.projects.each do |project|
-      next if project.versions_count > 0
+    github_repository.projects.without_versions.each do |project|
       Firehose.new_version(project.name, project.platform, number)
     end
   end
