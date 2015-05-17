@@ -221,6 +221,7 @@ GEM
     hashie (3.4.1)
     hike (1.2.3)
     hiredis (0.6.0)
+    hirefire-resource (0.3.7)
     hitimes (1.2.2)
     i18n (0.7.0)
     inflecto (0.0.2)
@@ -423,6 +424,7 @@ DEPENDENCIES
   fog
   gems
   hiredis
+  hirefire-resource
   jbuilder
   jquery-rails
   languages

@@ -44,6 +44,7 @@ gem 'sidekiq'
 gem 'sinatra', :require => nil
 gem 'skylight'
 gem 'sassc-rails'
+gem 'hirefire-resource'
 
 group :development do
   gem 'spring'
