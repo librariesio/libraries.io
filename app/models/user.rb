@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_many :api_keys
   has_many :github_repositories, primary_key: :uid, foreign_key: :owner_id
   has_many :dependencies, through: :github_repositories
-  has_many :favourite_projects, -> { group :id }, through: :dependencies, source: :project
+  has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
 
   def admin?
     ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall', 'zachinglis'].include?(nickname)
