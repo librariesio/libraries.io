@@ -50,7 +50,7 @@ namespace :download do
   end
 
   task hex: :environment do
-    Repositories::Hex.import_recent
+    Repositories::Hex.import
   end
 
   task jam: :environment do
