@@ -9,4 +9,11 @@ namespace :github do
       repo.update_all_info_async
     end
   end
+
+  task parse_new_manifests: :environment do
+    GithubRepository.find_each do |repo|
+      next if repo.manifests.any?
+      repo.update_all_info_async
+    end
+  end
 end
