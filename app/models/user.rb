@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_many :repository_subscriptions
   has_many :api_keys
   has_many :github_repositories, primary_key: :uid, foreign_key: :owner_id
+  has_many :dependencies, through: :github_repositories
 
   def admin?
     ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall', 'zachinglis'].include?(nickname)
@@ -31,6 +32,11 @@ class User < ActiveRecord::Base
 
   def github_client
     AuthToken.new_client(token)
+  end
+
+  def favourite_projects
+    ids = dependencies.with_project.group(:project_id).order('count_all desc').count.keys
+    Project.where(id: ids)
   end
 
   def repos

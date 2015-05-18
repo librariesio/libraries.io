@@ -10,6 +10,7 @@ class GithubRepository < ActiveRecord::Base
   has_many :github_contributions
   has_many :github_tags
   has_many :manifests
+  has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :repository_subscriptions
   has_one :readme
   belongs_to :github_organisation
