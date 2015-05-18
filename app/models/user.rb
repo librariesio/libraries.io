@@ -3,7 +3,8 @@ class User < ActiveRecord::Base
   has_many :repository_subscriptions
   has_many :api_keys
   has_many :github_repositories, primary_key: :uid, foreign_key: :owner_id
-  has_many :dependencies, through: :github_repositories
+  has_many :source_github_repositories, -> { where fork: false }, class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
+  has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
 
   def admin?
