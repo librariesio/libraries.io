@@ -7,6 +7,10 @@ class GithubOrganisation < ActiveRecord::Base
     GithubContribution.none
   end
 
+  def favourite_projects
+    Project.none
+  end
+
   def avatar_url(size = 60)
     "https://avatars.githubusercontent.com/u/#{github_id}?size=#{size}"
   end
