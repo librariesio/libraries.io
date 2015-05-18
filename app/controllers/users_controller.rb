@@ -1,10 +1,11 @@
 class UsersController < ApplicationController
   def show
     find_user
-    @repositories = @user.github_repositories.order('stargazers_count DESC').limit(10)
+    @repositories = @user.github_repositories.source.order('stargazers_count DESC').limit(10)
     @contributions = @user.github_contributions.with_repo
                           .joins(:github_repository)
                           .where('github_repositories.owner_id != ?', @user.github_id.to_s)
+                          .where('github_repositories.fork = ?', false)
                           .includes(:github_repository)
                           .order('count DESC').limit(10)
   end
