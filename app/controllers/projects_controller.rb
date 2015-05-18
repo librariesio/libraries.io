@@ -2,6 +2,9 @@ class ProjectsController < ApplicationController
   def index
     @created = Project.few_versions.order('created_at DESC').limit(5).includes(:github_repository)
     @updated = Project.many_versions.order('updated_at DESC').limit(5).includes(:github_repository)
+    @platforms = Project.popular_platforms
+    @languages = Project.popular_languages(:facet_limit => 24)
+    @licenses = Project.popular_licenses(:facet_limit => 24)
   end
 
   def show
