@@ -371,8 +371,6 @@ GEM
       tilt (>= 1.3, < 3)
     sitemap_generator (5.0.5)
       builder
-    skylight (0.6.0)
-      activesupport (>= 3.0.0)
     spdx (1.2.3)
       fuzzy_match (~> 2.1)
       spdx-licenses (~> 1.0)
@@ -452,7 +450,6 @@ DEPENDENCIES
   simple_form
   sinatra
   sitemap_generator
-  skylight
   spdx
   spring
   sprockets (~> 2.12)

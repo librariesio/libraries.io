@@ -42,7 +42,6 @@ gem 'sprockets', '~> 2.12'
 gem 'simple_form'
 gem 'sidekiq'
 gem 'sinatra', :require => nil
-gem 'skylight'
 gem 'sassc-rails'
 gem 'hirefire-resource'
 
