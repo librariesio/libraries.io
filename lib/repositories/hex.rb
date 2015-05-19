@@ -18,9 +18,7 @@ class Repositories
     end
 
     def self.recent_names
-      u = 'https://hex.pm/feeds/new-packages.rss'
-      titles = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
-      titles.map { |t| t.split('Package').last.strip.gsub('"','') }
+      get('https://hex.pm/api/packages?sort=inserted_at').map{|project| project['name'] }
     end
 
     def self.project(name)
