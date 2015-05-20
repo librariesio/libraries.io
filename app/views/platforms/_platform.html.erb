@@ -3,7 +3,7 @@
     <div class="pictogram pictogram-<%= platform.term.downcase %>"></div>
     <div class="blurb">
     <%= link_to platform_name(platform.term), platform_path(platform.term.downcase) %>
-    <small><%= number_with_delimiter platform['count'] %> Projects</small>
+    <small><%= number_to_human platform['count'] %> Projects</small>
   </h4>
 
 </div>

@@ -2,7 +2,7 @@
   <h4>
     <div class="blurb">
       <h4><%= link_to format_license(license.term), license_path(license.term) %></h4>
-      <small><%= number_with_delimiter license['count'] %> Projects</small>
+      <small><%= number_to_human license['count'] %> Projects</small>
     </div>
   </h4>
 </div>

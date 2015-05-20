@@ -3,7 +3,7 @@
     <div class="pictogram pictogram-<%= language.term.downcase %>"></div>
     <div class="blurb">
       <%= link_to language.term, language_path(language.term) %>
-      <small><%= number_with_delimiter language['count'] %> Projects</small>
+      <small><%= number_to_human language['count'] %> Projects</small>
     </div>
   </h4>
 </div>

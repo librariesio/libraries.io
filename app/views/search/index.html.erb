@@ -50,7 +50,7 @@
               <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => nil)) %>
             <% else %>
               <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => term['term'])) %>
-              <small><%= number_with_delimiter term['count'] %></small>
+              <small><%= number_to_human term['count'] %></small>
             <% end %>
           </li>
         <% end %>
