@@ -8,42 +8,75 @@
         Libraries.io
       </h1>
       <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
-        <%= text_field_tag 'q', params[:q], placeholder: 'Search open source libraries...', class: 'form-control' %>
+        <%= text_field_tag 'q', params[:q], placeholder: 'Search libraries...', class: 'form-control' %>
       <% end %>
-      <p>Libraries.io monitors over 790,000 open source libraries across many different package managers. You can discover new libraries to use in your software projects as well as being notified of new releases to keep your applications secure and up to date.</p>
+      <p>Libraries.io monitors over 790,000 open source libraries across many different package managers.</p>
+      <p class='hidden-xs'>
+        You can discover new libraries to use in your software projects as well as being notified of new releases to keep your applications secure and up to date.
+      </p>
     </div>
   </div>
 </div>
 <hr>
+<h3>
+  Search Projects by Platform
+  <small>
+    <%= link_to 'See all', platforms_path %>
+  </small>
+</h3>
 <div class='row'>
-  <h3>Search Projects by Platform</h3>
   <%= render partial: 'platforms/platform', collection: @platforms %>
 </div>
 <hr>
 
+<h3>
+  Search Projects by Language
+  <small>
+    <%= link_to 'See all', languages_path %>
+  </small>
+</h3>
 <div class='row'>
-  <h3>Search Projects by Language</h3>
   <%= render partial: 'languages/language', collection: @languages %>
 </div>
 <hr>
+<h3>
+  Search Projects by License
+  <small>
+    <%= link_to 'See all', licenses_path %>
+  </small>
+</h3>
 <div class='row'>
-  <h3>Search Projects by License</h3>
   <%= render partial: 'licenses/license', collection: @licenses %>
 </div>
 <hr>
 <div class='row'>
   <div class='col-md-4'>
-    <h4><%= link_to 'Popular Projects', search_path(sort: 'rank', order: 'desc') %></h4>
+    <h4>
+      Popular Projects
+      <small>
+        <%= link_to 'See all', search_path(sort: 'rank', order: 'desc') %>
+      </small>
+    </h4>
     <% cache("popular_projects", :expires_in => 1.hour) do %>
       <%= render Project.popular.first(5) %>
     <% end %>
   </div>
   <div class='col-md-4'>
-    <h4><%= link_to 'New Projects', search_path(sort: 'created_at', order: 'desc') %></h4>
+    <h4>
+      New Projects
+      <small>
+        <%= link_to 'See all', search_path(sort: 'created_at', order: 'desc') %>
+      </small>
+    </h4>
     <%= render @created %>
   </div>
   <div class='col-md-4'>
-    <h4><%= link_to 'Updated Projects', search_path(sort: 'updated_at', order: 'desc') %></h4>
+    <h4>
+      Updated Projects
+      <small>
+        <%= link_to 'See all', search_path(sort: 'updated_at', order: 'desc') %>
+      </small>
+    </h4>
     <%= render @updated %>
   </div>
 </div>
