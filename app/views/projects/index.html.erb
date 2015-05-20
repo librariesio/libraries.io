@@ -27,7 +27,7 @@
     </small>
   </h3>
   <div class='row'>
-    <%= render partial: 'platforms/platform', collection: @platforms %>
+    <%= render partial: 'platforms/platform', collection: Project.popular_platforms %>
   </div>
 <% end %>
 
@@ -41,7 +41,7 @@
     </small>
   </h3>
   <div class='row'>
-    <%= render partial: 'languages/language', collection: @languages %>
+    <%= render partial: 'languages/language', collection: Project.popular_languages(:facet_limit => 24) %>
   </div>
 <% end %>
 
@@ -55,7 +55,7 @@
     </small>
   </h3>
   <div class='row'>
-    <%= render partial: 'licenses/license', collection: @licenses %>
+    <%= render partial: 'licenses/license', collection: Project.popular_licenses(:facet_limit => 24) %>
   </div>
 <% end %>
 
