@@ -3,6 +3,7 @@ class SubscriptionsController < ApplicationController
 
   def index
     @subscriptions = current_user.subscriptions.includes(:project).order('created_at DESC').paginate(page: params[:page])
+    @projects = Project.most_watched.limit(10)
   end
 
   def subscribe

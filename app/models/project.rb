@@ -31,6 +31,8 @@ class Project < ActiveRecord::Base
   scope :with_launchpad_url, -> { where('repository_url ILIKE ?', '%launchpad.net%') }
   scope :with_sourceforge_url, -> { where('repository_url ILIKE ?', '%sourceforge.net%') }
 
+  scope :most_watched, -> { joins(:subscriptions).group('projects.id').order("COUNT(subscriptions.id) DESC") }
+
   after_commit :update_github_repo_async, on: :create
   before_save  :normalize_licenses,
                :set_latest_release_published_at,
