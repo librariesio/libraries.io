@@ -395,6 +395,8 @@ GEM
     tilt (1.4.1)
     timers (4.0.1)
       hitimes
+    turbolinks (2.5.3)
+      coffee-rails
     typhoeus (0.7.1)
       ethon (>= 0.7.1)
     tzinfo (1.2.2)
@@ -454,6 +456,7 @@ DEPENDENCIES
   spring
   sprockets (~> 2.12)
   thin
+  turbolinks
   typhoeus
   uglifier
   will_paginate

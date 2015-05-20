@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= content_for?(:title) ? content_for(:title) : "Libraries - The Open Source Discovery Service" %></title>
   <meta name="description" content="<%= content_for?(:description) ? content_for(:description) : "Discover new modules and libraries you can use in your projects." %>">
-  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <%= content_for :atom %>
   <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/apple-touch-icon-57x57.png" />
@@ -101,6 +101,6 @@
       </div>
     </div>
   </footer>
-  <%= javascript_include_tag 'application' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 </body>
 </html>
