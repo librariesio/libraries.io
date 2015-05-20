@@ -10,7 +10,7 @@ class LicensesController < ApplicationController
     @popular = Project.popular(filters: {normalized_licenses: @license.id}).first(5)
     @languages = Project.popular_languages(filters: {normalized_licenses: @license.id}).first(10)
     @platforms = Project.popular_platforms(filters: {normalized_licenses: @license.id}).first(10)
-    @watched = Project.license(@license.id).most_watched.limit(5)
+    @watched = Project.license(@license.id).most_watched.limit(4)
   end
 
   private

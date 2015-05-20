@@ -8,7 +8,7 @@ class LanguagesController < ApplicationController
     @updated = Project.search('*', filters: { language: @language }, sort: 'latest_release_published_at').records.includes(:github_repository).first(5)
     @created = Project.search('*', filters: { language: @language }, sort: 'created_at').records.includes(:github_repository).first(5)
     @color = Languages::Language[@language].try(:color)
-    @watched = Project.language(@language).most_watched.limit(5)
+    @watched = Project.language(@language).most_watched.limit(4)
   end
 
   def find_language
