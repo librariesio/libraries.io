@@ -184,3 +184,8 @@ h3,h4{
 .navbar-form {
   box-shadow: none;
 }
+
+html.turbolinks-progress-bar::before {
+  background-color: #fff !important;
+  height: 1px !important;
+}
