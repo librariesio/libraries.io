@@ -15,7 +15,7 @@
       Updated <%= time_ago_in_words github_repository.updated_at %> ago
     <% else %>
       Published <%= time_ago_in_words github_repository.created_at %> ago
-    <% end %> - <%= number_with_delimiter github_repository.stars %> stars
+    <% end %> - <%= number_to_human github_repository.stars %> stars
     <% if github_repository.fork? %>
     - Fork of <%= link_to github_repository.source_name, github_repository.source_url %>
     <% end %>

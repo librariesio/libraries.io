@@ -1,4 +1,4 @@
 <p class='list'>
   <strong><%= link_to platform_name(platform.term), search_path(platforms: platform.term, languages: @language, licenses: @license.try(:id)) %></strong>
-  <small><%= pluralize number_with_delimiter(platform['count']), 'project' %></small>
+  <small><%= pluralize number_to_human(platform['count']), 'project' %></small>
 </p>
