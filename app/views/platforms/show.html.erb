@@ -64,4 +64,11 @@
     </div>
     <% end %>
   <% end %>
+
+  <% if @watched.any? %>
+  <div class='col-md-4'>
+    <h4>Most Watched <%= platform_name(@platform_name) %> Projects</h4>
+    <%= render @watched %>
+  </div>
+  <% end %>
 </div>

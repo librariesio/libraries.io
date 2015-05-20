@@ -54,4 +54,11 @@
     <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
   </div>
   <% end %>
+
+  <% if @watched.any? %>
+  <div class='col-md-4'>
+    <h4>Most Watched <%= @license.id %> Projects</h4>
+    <%= render @watched %>
+  </div>
+  <% end %>
 </div>
