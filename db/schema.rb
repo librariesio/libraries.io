@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519063224) do
+ActiveRecord::Schema.define(version: 20150519070042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,7 +47,6 @@ ActiveRecord::Schema.define(version: 20150519063224) do
   end
 
   add_index "dependencies", ["created_at"], name: "index_dependencies_on_created_at", using: :btree
-  add_index "dependencies", ["platform", "project_name"], name: "index_dependencies_on_platform_and_project_name", using: :btree
   add_index "dependencies", ["project_id"], name: "index_dependencies_on_project_id", using: :btree
   add_index "dependencies", ["version_id"], name: "index_dependencies_on_version_id", using: :btree
 
@@ -64,7 +63,6 @@ ActiveRecord::Schema.define(version: 20150519063224) do
   add_index "github_contributions", ["github_repository_id", "github_user_id"], name: "index_contributions_on_repository_id_and_user_id", using: :btree
   add_index "github_contributions", ["github_repository_id"], name: "index_github_contributions_on_github_repository_id", using: :btree
   add_index "github_contributions", ["github_user_id"], name: "index_github_contributions_on_github_user_id", using: :btree
-  add_index "github_contributions", ["platform"], name: "index_github_contributions_on_platform", using: :btree
 
   create_table "github_organisations", force: :cascade do |t|
     t.string   "login"
@@ -146,7 +144,6 @@ ActiveRecord::Schema.define(version: 20150519063224) do
   add_index "github_users", ["created_at"], name: "index_github_users_on_created_at", using: :btree
   add_index "github_users", ["github_id"], name: "index_github_users_on_github_id", using: :btree
   add_index "github_users", ["hidden"], name: "index_github_users_on_hidden", using: :btree
-  add_index "github_users", ["login"], name: "index_github_users_on_login", using: :btree
 
   create_table "manifests", force: :cascade do |t|
     t.integer  "github_repository_id"
