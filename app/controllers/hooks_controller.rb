@@ -1,5 +1,5 @@
 class HooksController < ApplicationController
-  skip_before_filter :verify_authenticity_token
+  skip_before_action :verify_authenticity_token
 
   def github
     github_repository = GithubRepository.find_by_github_id(params["repository"]["id"])
