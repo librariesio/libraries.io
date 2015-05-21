@@ -45,6 +45,7 @@ gem 'sinatra', :require => nil
 gem 'sassc-rails'
 gem 'hirefire-resource'
 gem 'turbolinks'
+gem 'rails_12factor'
 
 group :development do
   gem 'spring'
@@ -53,6 +54,5 @@ end
 
 group :production do
   gem 'puma'
-  gem 'rails_12factor'
   gem 'bugsnag'
 end
