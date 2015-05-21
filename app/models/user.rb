@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   end
 
   def api_key
-    api_keys.first.access_token
+    api_keys.first.try(:access_token)
   end
 
   def self.create_from_auth_hash(hash)
