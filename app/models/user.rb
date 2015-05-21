@@ -43,6 +43,14 @@ class User < ActiveRecord::Base
     AuthToken.new_client(token)
   end
 
+  def avatar_url(size = 60)
+    "https://avatars.githubusercontent.com/u/#{uid}?size=#{size}"
+  end
+
+  def github_url
+    "https://github.com/#{nickname}"
+  end
+
   def repos
     github_client.repos.select{|r|r[:permissions][:admin]}
   rescue

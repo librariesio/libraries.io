@@ -4,8 +4,8 @@
 <div class="row">
   <div class="col-md-12">
     <h5><strong>Recent Signups</strong></h5>
-    <% @recent_users.map(&:github_user).each do |github_user| %>
-      <%= link_to image_tag(github_user.avatar_url, width: 60, height: 60, alt: github_user, class: 'pull-left'), user_path(github_user) %>
+    <% @recent_users.each do |user| %>
+      <%= link_to image_tag(user.avatar_url, width: 60, height: 60, alt: user, class: 'pull-left'), user.github_url %>
     <% end %>
   </div>
 </div>
