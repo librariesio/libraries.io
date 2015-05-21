@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
   end
 
   def token
-    public_repo_token.presence || read_attribute(:token)
+    private_repo_token.presence || public_repo_token.presence || read_attribute(:token)
   end
 
   def github_client
@@ -80,5 +80,9 @@ class User < ActiveRecord::Base
 
   def subscribed_to_repo?(github_repository)
     repository_subscriptions.find_by_github_repository_id(github_repository.id)
+  end
+
+  def can_read?(github_repository)
+    github_repository.owner_id == self.uid.to_i
   end
 end

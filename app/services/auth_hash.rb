@@ -16,6 +16,7 @@ class AuthHash
       gravatar_id: gravatar_id
     }
     h.merge!(public_repo_token: public_repo_token) if public_repo_token.present?
+    h.merge!(private_repo_token: private_repo_token) if private_repo_token.present?
     h
   end
 
@@ -56,11 +57,15 @@ class AuthHash
   end
 
   def token
-    user_hash.fetch('credentials', {}).fetch('token') if user_hash.fetch('provider') != 'githubpublic'
+    user_hash.fetch('credentials', {}).fetch('token') if user_hash.fetch('provider') == 'github'
   end
 
   def public_repo_token
     user_hash.fetch('credentials', {}).fetch('token') if user_hash.fetch('provider') == 'githubpublic'
+  end
+
+  def private_repo_token
+    user_hash.fetch('credentials', {}).fetch('token') if user_hash.fetch('provider') == 'githubprivate'
   end
 
   private
