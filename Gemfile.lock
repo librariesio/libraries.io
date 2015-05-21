@@ -280,7 +280,7 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     pg (0.18.2)
-    puma (2.11.2)
+    puma (2.11.3)
       rack (>= 1.1, < 2.0)
     rack (1.6.1)
     rack-canonical-host (0.1.0)
@@ -336,13 +336,13 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
-    sassc (1.1.2)
+    sassc (1.2.0)
       bundler
       ffi (~> 1.9.6)
-    sassc-rails (0.0.9)
+    sassc-rails (0.1.0)
       rails (>= 4.0.0)
       sass
-      sassc (~> 1.1.2)
+      sassc (~> 1.2.0)
       sprockets (> 2.11)
       tilt
     sawyer (0.6.0)
