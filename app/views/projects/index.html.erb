@@ -58,36 +58,3 @@
     <%= render partial: 'licenses/license', collection: Project.popular_licenses(:facet_limit => 24) %>
   </div>
 <% end %>
-
-<hr>
-<div class='row'>
-  <div class='col-md-4'>
-    <h4>
-      Popular Projects
-      <small>
-        <%= link_to 'See all', search_path(sort: 'rank', order: 'desc') %>
-      </small>
-    </h4>
-    <% cache("popular_projects", :expires_in => 1.hour) do %>
-      <%= render Project.popular.first(5) %>
-    <% end %>
-  </div>
-  <div class='col-md-4'>
-    <h4>
-      New Projects
-      <small>
-        <%= link_to 'See all', search_path(sort: 'created_at', order: 'desc') %>
-      </small>
-    </h4>
-    <%= render @created %>
-  </div>
-  <div class='col-md-4'>
-    <h4>
-      Updated Projects
-      <small>
-        <%= link_to 'See all', search_path(sort: 'updated_at', order: 'desc') %>
-      </small>
-    </h4>
-    <%= render @updated %>
-  </div>
-</div>

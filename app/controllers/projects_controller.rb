@@ -1,7 +1,5 @@
 class ProjectsController < ApplicationController
   def index
-    @created = Project.few_versions.order('created_at DESC').limit(5).includes(:github_repository)
-    @updated = Project.many_versions.order('updated_at DESC').limit(5).includes(:github_repository)
   end
 
   def show
