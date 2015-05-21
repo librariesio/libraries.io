@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :source_github_repositories, -> { where fork: false }, class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
   has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
+  has_one :github_user, primary_key: :uid, foreign_key: :github_id
 
   after_commit :create_api_key, on: :create
 
