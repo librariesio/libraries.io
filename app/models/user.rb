@@ -7,8 +7,14 @@ class User < ActiveRecord::Base
   has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
 
+  after_commit :create_api_key, on: :create
+
   def admin?
     ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall', 'zachinglis'].include?(nickname)
+  end
+
+  def create_api_key
+    api_keys.create
   end
 
   def api_key
