@@ -2,7 +2,7 @@ class Admin::StatsController < ApplicationController
   newrelic_ignore
 
   def index
-    @recent_users = User.order('created_at ASC').limit(20)
+    @recent_users = User.order('created_at DESC').limit(19)
 
     @new_projects       = stats_for(Project)
     @new_github_users   = stats_for(GithubUser)
