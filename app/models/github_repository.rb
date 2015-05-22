@@ -23,6 +23,8 @@ class GithubRepository < ActiveRecord::Base
   scope :with_manifests, -> { joins(:manifests) }
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
+  scope :open_source, -> { where(private: false) }
+  scope :private, -> { where(private: true) }
 
   def repository_dependencies
     manifests.latest.includes(:repository_dependencies).map(&:repository_dependencies).flatten.uniq
