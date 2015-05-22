@@ -36,6 +36,8 @@ module ApplicationHelper
       "https://wordpress.org/plugins/#{name}/#{version}"
     when 'NuGet'
       "https://www.nuget.org/packages/#{name}/#{version}"
+    when 'Biicode'
+      "https://www.biicode.com/#{name}/#{version}"
     when 'CPAN'
       "https://metacpan.org/release/#{name}"
     when 'CRAN'
@@ -131,6 +133,8 @@ module ApplicationHelper
   def platform_name(platform)
     if platform.downcase == 'npm'
       return 'npm'
+    elsif platform.downcase == 'biicode'
+      return 'biicode'
     else
       return platform
     end

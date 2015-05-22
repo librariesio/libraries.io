@@ -9,6 +9,10 @@ namespace :download do
     Repositories::Alcatraz.import
   end
 
+  task biicode: :environment do
+    Repositories::Biicode.import
+  end
+
   task bower: :environment do
     Repositories::Bower.import_new
   end
