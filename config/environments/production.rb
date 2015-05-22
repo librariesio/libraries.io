@@ -79,8 +79,6 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'libraries.io' }
 
-  config.middleware.use Rack::GoogleAnalytics, tracker: 'UA-265870-38'
-
   config.cache_store = :dalli_store,
                     (ENV["MEMCACHIER_SERVERS"] || "").split(","),
                     {:username => ENV["MEMCACHIER_USERNAME"],
