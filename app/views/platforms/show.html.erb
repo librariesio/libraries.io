@@ -14,32 +14,38 @@
     <% popular = Project.popular(filters: { platform: @platform_name }).first(5) %>
     <% if popular.any? %>
       <div class='col-md-4'>
-        <h4>Popular <%= platform_name(@platform_name) %> Projects</h4>
+        <h4>
+          Popular <%= platform_name(@platform_name) %> Projects
+          <small class='more'>
+            <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'rank', order: 'desc') %>
+          </small>
+        </h4>
         <%= render popular %>
-        <p>
-          <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'rank', order: 'desc') %>
-        </p>
       </div>
     <% end %>
   <% end %>
 
   <% if @updated.any? %>
   <div class='col-md-4'>
-    <h4>Updated <%= platform_name(@platform_name) %> Projects</h4>
+    <h4>
+      Updated <%= platform_name(@platform_name) %> Projects
+      <small class='more'>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc') %>
+      </small>
+    </h4>
     <%= render @updated %>
-    <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc') %>
-    </p>
   </div>
   <% end %>
 
   <% if @created.any? %>
   <div class='col-md-4'>
-    <h4>New <%= platform_name(@platform_name) %> Projects</h4>
+    <h4>
+      New <%= platform_name(@platform_name) %> Projects
+      <small class='more'>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc') %>
+      </small>
+    </h4>
     <%= render @created %>
-    <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc') %>
-    </p>
   </div>
   <% end %>
 </div>

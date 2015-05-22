@@ -12,31 +12,37 @@
 <div class='row'>
   <% if @popular.any? %>
   <div class='col-md-4'>
-    <h4>Popular <%= @license.id %> Projects</h4>
+    <h4>
+      Popular <%= @license.id %> Projects
+      <small class='more'>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'rank', order: 'desc') %>
+      </small>
+    </h4>
     <%= render @popular %>
-    <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'rank', order: 'desc') %>
-    </p>
   </div>
   <% end %>
 
   <% if @updated.any? %>
   <div class='col-md-4'>
-    <h4>Updated <%= @license.id %> Projects</h4>
+    <h4>
+      Updated <%= @license.id %> Projects
+      <small class='more'>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'updated_at', order: 'desc') %>
+      </small>
+    </h4>
     <%= render @updated %>
-    <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'updated_at', order: 'desc') %>
-    </p>
   </div>
   <% end %>
 
   <% if @created.any? %>
   <div class='col-md-4'>
-    <h4>New <%= @license.id %> Projects</h4>
+    <h4>
+      New <%= @license.id %> Projects
+      <small class='more'>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'created_at', order: 'desc') %>
+      </small>
+    </h4>
     <%= render @created %>
-    <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'created_at', order: 'desc') %>
-    </p>
   </div>
   <% end %>
 </div>

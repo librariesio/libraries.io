@@ -10,32 +10,36 @@
     <% popular = Project.popular(filters: { language: @language }).first(5) %>
     <% if popular.any? %>
     <div class='col-md-4'>
-      <h4>Popular <%= @language %> Projects</h4>
+      <h4>
+        Popular <%= @language %> Projects
+        <small class='more'>
+          <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'rank', order: 'desc') %>
+        </small>
+      </h4>
       <%= render popular %>
-      <p>
-        <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'rank', order: 'desc') %>
-      </p>
     </div>
     <% end %>
   <% end %>
 
   <% if @updated.any? %>
   <div class='col-md-4'>
-    <h4>Updated <%= @language %> Projects</h4>
+    <h4>
+      Updated <%= @language %> Projects
+      <small>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'latest_release_published_at', order: 'desc') %>
+      </small>
+    </h4>
     <%= render @updated %>
-    <p>
-      <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'latest_release_published_at', order: 'desc') %>
-    </p>
   </div>
   <% end %>
 
   <% if @created.any? %>
   <div class='col-md-4'>
-    <h4>New <%= @language %> Projects</h4>
-    <%= render @created %>
-    <p>
+    <h4>
+      New <%= @language %> Projects
       <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'created_at', order: 'desc') %>
-    </p>
+    </h4>
+    <%= render @created %>
   </div>
   <% end %>
 </div>

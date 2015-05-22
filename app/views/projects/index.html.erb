@@ -22,8 +22,8 @@
 <% cache 'homepage:platforms', :expires_in => 1.day do %>
   <h3>
     Search Projects by Platform
-    <small>
-      <%= link_to 'See all', platforms_path %>
+    <small class='more'>
+      <%= link_to 'See more &raquo;'.html_safe, platforms_path %>
     </small>
   </h3>
   <div class='row'>
@@ -36,8 +36,8 @@
 <% cache 'homepage:languages', :expires_in => 1.day do %>
   <h3>
     Search Projects by Language
-    <small>
-      <%= link_to 'See all', languages_path %>
+    <small class='more'>
+      <%= link_to 'See more &raquo;'.html_safe, languages_path %>
     </small>
   </h3>
   <div class='row'>
@@ -50,8 +50,8 @@
 <% cache 'homepage:licenses', :expires_in => 1.day do %>
   <h3>
     Search Projects by License
-    <small>
-      <%= link_to 'See all', licenses_path %>
+    <small class='more'>
+      <%= link_to 'See more &raquo;'.html_safe, licenses_path %>
     </small>
   </h3>
   <div class='row'>

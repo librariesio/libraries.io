@@ -24,7 +24,7 @@
       <% if logged_in? && current_user.subscribed_to?(@project) %>
         <%= link_to 'Unsubscribe from updates', subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'btn btn-danger' %>
       <% else %>
-        <%= link_to 'Subscribe to updates', subscribe_path(project_id: @project.id), class: 'btn btn-success', rel: 'nofollow' %>
+        <%= link_to 'Subscribe to Releases', subscribe_path(project_id: @project.id), class: 'btn btn-success', rel: 'nofollow' %>
       <% end %>
       <% if logged_in? && current_user.admin? %>
         <%= link_to 'Edit in Admin', admin_project_path(@project.id), class: 'btn btn-primary', rel: 'nofollow' %>
