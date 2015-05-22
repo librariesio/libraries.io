@@ -45,6 +45,13 @@
 </div>
 <hr>
 <div class='row'>
+  <% if @watched.any? %>
+  <div class='col-md-4'>
+    <h4>Most Watched <%= platform_name(@platform_name) %> Projects</h4>
+    <%= render @watched %>
+  </div>
+  <% end %>
+
   <% cache("platform:#{@platform_name}:licenses", :expires_in => 3.hours) do %>
     <% licenses = Project.popular_licenses(filters: {platform: @platform_name}).first(10) %>
     <% if licenses.any? %>
@@ -63,12 +70,5 @@
       <%= render partial: 'languages/list_language', collection: languages, as: :language %>
     </div>
     <% end %>
-  <% end %>
-
-  <% if @watched.any? %>
-  <div class='col-md-4'>
-    <h4>Most Watched <%= platform_name(@platform_name) %> Projects</h4>
-    <%= render @watched %>
-  </div>
   <% end %>
 </div>

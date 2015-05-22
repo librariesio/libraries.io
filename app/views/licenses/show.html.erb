@@ -42,23 +42,24 @@
 </div>
 <hr>
 <div class='row'>
+  <% if @watched.any? %>
+  <div class='col-md-4'>
+    <h4>Most Watched <%= @license.id %> Projects</h4>
+    <%= render @watched %>
+  </div>
+  <% end %>
+
   <% if @languages.any? %>
   <div class='col-md-4'>
     <h4>Popular <%= @license.id %> Languages</h4>
     <%= render partial: 'languages/list_language', collection: @languages, as: :language %>
   </div>
   <% end %>
+
   <% if @platforms.any? %>
   <div class='col-md-4'>
     <h4>Popular <%= @license.id %> Platforms</h4>
     <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
-  </div>
-  <% end %>
-
-  <% if @watched.any? %>
-  <div class='col-md-4'>
-    <h4>Most Watched <%= @license.id %> Projects</h4>
-    <%= render @watched %>
   </div>
   <% end %>
 </div>
