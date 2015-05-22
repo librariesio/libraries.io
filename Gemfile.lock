@@ -195,6 +195,8 @@ GEM
     fog-xml (0.1.2)
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
+    font-awesome-rails (4.3.0.0)
+      railties (>= 3.2, < 5.0)
     formatador (0.2.5)
     fuzzy_match (2.1.0)
     gems (0.8.3)
@@ -419,6 +421,7 @@ DEPENDENCIES
   elasticsearch-rails
   faraday-http-cache
   fog
+  font-awesome-rails
   gems
   hiredis
   hirefire-resource

@@ -1,5 +1,6 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "font-awesome";
 @import url("https://librariesio.github.io/pictogram/pictogram.css");
 
 body {
@@ -195,4 +196,8 @@ h3,h4{
 html.turbolinks-progress-bar::before {
   background-color: #fff !important;
   height: 1px !important;
+}
+
+a.rss{
+  color: #FF6600;
 }

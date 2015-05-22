@@ -24,6 +24,9 @@
   <% if @updated.any? %>
   <div class='col-md-4'>
     <h4>
+      <%= link_to search_path(languages: @language, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
+        <%= fa_icon "rss-square" %>
+      <% end %>
       Updated <%= @language %> Projects
       <small>
         <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'latest_release_published_at', order: 'desc') %>
@@ -36,6 +39,9 @@
   <% if @created.any? %>
   <div class='col-md-4'>
     <h4>
+      <%= link_to search_path(languages: @language, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
+        <%= fa_icon "rss-square" %>
+      <% end %>
       New <%= @language %> Projects
       <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'created_at', order: 'desc') %>
     </h4>

@@ -149,7 +149,12 @@
 
   <div class='col-md-4'>
     <% if @version_count > 0 %>
-      <h4>Releases</h4>
+      <h4>
+        <%= link_to project_versions_path(@project.to_param.merge(format: :atom)), class: 'rss' do %>
+          <%= fa_icon "rss-square" %>
+        <% end %>
+        Releases
+      </h4>
       <ul>
         <% @versions.each do |version| %>
         <li>
@@ -164,7 +169,12 @@
         <%= link_to "See all #{pluralize(@project.versions.count, 'releases')}", project_versions_path(@project.to_param) %>
       <% end %>
     <% elsif @github_repository && @github_tags.any? %>
-      <h4>Tagged Releases</h4>
+      <h4>
+        <%= link_to project_tags_path(@project.to_param.merge(format: :atom)), class: 'rss' do %>
+          <%= fa_icon "rss-square" %>
+        <% end %>
+        Tagged Releases
+      </h4>
       <ul>
         <% @github_tags.each do |tag| %>
         <li>

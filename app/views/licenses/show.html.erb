@@ -25,9 +25,12 @@
   <% if @updated.any? %>
   <div class='col-md-4'>
     <h4>
+      <%= link_to search_path(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
+        <%= fa_icon "rss-square" %>
+      <% end %>
       Updated <%= @license.id %> Projects
       <small class='more'>
-        <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'updated_at', order: 'desc') %>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc') %>
       </small>
     </h4>
     <%= render @updated %>
@@ -37,6 +40,9 @@
   <% if @created.any? %>
   <div class='col-md-4'>
     <h4>
+      <%= link_to search_path(licenses: @license.id, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
+        <%= fa_icon "rss-square" %>
+      <% end %>
       New <%= @license.id %> Projects
       <small class='more'>
         <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'created_at', order: 'desc') %>

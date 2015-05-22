@@ -1,7 +1,9 @@
 <% title "#{@project} Releases - Libraries" %>
 <% content_for :atom, auto_discovery_link_tag(:atom, project_versions_path({format: "atom"}.merge(@project.to_param))) %>
 
-<h1><%= link_to @project, project_path(@project.to_param) %> Releases</h1>
+<h1>
+  <%= link_to @project, project_path(@project.to_param) %> Releases
+</h1>
 <hr>
 <% if @versions.any? %>
   <ul>
@@ -15,6 +17,10 @@
     <% end %>
   </ul>
   <%= will_paginate @versions, renderer: BootstrapPagination::Rails, page_links: false %>
+  <%= link_to project_versions_path(@project.to_param.merge(format: :atom)) do %>
+    <%= fa_icon "rss-square" %>
+    Subscribe to an RSS feed of <%= @project %> releases
+  <% end %>
 <% else %>
   <p>
     No releases found, go back to <%= link_to @project, project_path(@project.to_param) %>.
