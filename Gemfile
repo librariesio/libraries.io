@@ -46,6 +46,7 @@ gem 'sassc-rails'
 gem 'hirefire-resource'
 gem 'turbolinks'
 gem 'rails_12factor'
+gem 'google-analytics-turbolinks'
 
 group :development do
   gem 'spring'
