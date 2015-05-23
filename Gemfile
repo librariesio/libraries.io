@@ -40,7 +40,7 @@ gem 'bigquery', require: 'big_query'
 gem 'sprockets', '~> 2.12'
 gem 'simple_form'
 gem 'sidekiq'
-gem 'sinatra', :require => nil
+gem 'sinatra', require: nil
 gem 'sassc-rails'
 gem 'hirefire-resource'
 gem 'turbolinks'
