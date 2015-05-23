@@ -221,6 +221,12 @@ GEM
       multi_json (= 1.11)
       signet (~> 0.6)
     hashie (3.4.1)
+    heroics (0.0.14)
+      erubis (~> 2.7.0)
+      excon
+      moneta
+      multi_json (>= 1.9.2)
+      netrc
     hike (1.2.3)
     hiredis (0.6.0)
     hirefire-resource (0.3.7)
@@ -253,12 +259,14 @@ GEM
     mime-types (2.5)
     mini_portile (0.6.2)
     minitest (5.6.1)
+    moneta (0.8.0)
     multi_json (1.11.0)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
+    netrc (0.10.3)
     newrelic_rpm (3.12.0.288)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
@@ -282,6 +290,8 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     pg (0.18.2)
+    platform-api (0.2.0)
+      heroics (~> 0.0.10)
     puma (2.11.3)
       rack (>= 1.1, < 2.0)
     rack (1.6.1)
@@ -436,6 +446,7 @@ DEPENDENCIES
   omniauth
   omniauth-github
   pg
+  platform-api
   puma
   rack-canonical-host
   rails (= 4.2.1)

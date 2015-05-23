@@ -46,6 +46,7 @@ gem 'hirefire-resource'
 gem 'turbolinks'
 gem 'rails_12factor'
 gem 'font-awesome-rails'
+gem 'platform-api', require: nil
 
 group :development do
   gem 'spring'
