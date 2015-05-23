@@ -47,6 +47,7 @@ gem 'turbolinks'
 gem 'rails_12factor'
 gem 'font-awesome-rails'
 gem 'platform-api', require: nil
+gem 'pushover'
 
 group :development do
   gem 'spring'

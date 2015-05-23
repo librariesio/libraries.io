@@ -51,6 +51,8 @@ GEM
       json
     bigquery (0.7.0)
       google-api-client (~> 0.8.2)
+    bini (0.7.0)
+      sys-proctable
     bootstrap-sass (3.3.4.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
@@ -231,6 +233,9 @@ GEM
     hiredis (0.6.0)
     hirefire-resource (0.3.7)
     hitimes (1.2.2)
+    httparty (0.11.0)
+      multi_json (~> 1.0)
+      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     inflecto (0.0.2)
     ipaddress (0.8.0)
@@ -294,6 +299,10 @@ GEM
       heroics (~> 0.0.10)
     puma (2.11.3)
       rack (>= 1.1, < 2.0)
+    pushover (1.0.4)
+      bini (= 0.7.0)
+      httparty (= 0.11.0)
+      yajl-ruby (= 1.1.0)
     rack (1.6.1)
     rack-canonical-host (0.1.0)
       addressable
@@ -395,6 +404,7 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
+    sys-proctable (0.9.8)
     thin (1.6.3)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0)
@@ -416,6 +426,7 @@ GEM
     will_paginate (3.0.7)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
+    yajl-ruby (1.1.0)
 
 PLATFORMS
   ruby
@@ -448,6 +459,7 @@ DEPENDENCIES
   pg
   platform-api
   puma
+  pushover
   rack-canonical-host
   rails (= 4.2.1)
   rails_12factor

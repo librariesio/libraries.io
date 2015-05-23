@@ -8,10 +8,14 @@ class User < ActiveRecord::Base
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_one :github_user, primary_key: :uid, foreign_key: :github_id
 
-  after_commit :create_api_key, on: :create
+  after_commit :create_api_key, :ping_andrew, on: :create
 
   def admin?
     ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall', 'zachinglis'].include?(nickname)
+  end
+
+  def ping_andrew
+    PushoverNewUserWorker.perform_async(self.id)
   end
 
   def create_api_key
