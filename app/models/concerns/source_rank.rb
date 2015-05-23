@@ -6,6 +6,10 @@ module SourceRank
     touch
   end
 
+  def update_source_rank_async
+    UpdateSourceRankWorker.perform_async(self.id)
+  end
+
   def set_source_rank
     self.rank = source_rank
   end

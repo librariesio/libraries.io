@@ -5,5 +5,6 @@ production:
 :timeout: 8
 :verbose: true
 :queues:
-  - default
+  - low
+  - [default, 2]
   - [critical, 10]
