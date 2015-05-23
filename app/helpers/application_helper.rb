@@ -46,6 +46,8 @@ module ApplicationHelper
       "http://cocoapods.org/pods/#{name}"
     when 'Julia'
       "http://pkg.julialang.org/?pkg=#{name}&ver=release"
+    when 'Atom'
+      "https://atom.io/packages/#{name}"
     when 'Elm'
       "http://package.elm-lang.org/packages/#{name}/#{version || 'latest'}"
     when 'Clojars'
@@ -98,6 +100,8 @@ module ApplicationHelper
       "cabal install #{name}" + (version ? "-#{version}" : "")
     when 'PyPi'
       "pip install #{name}" + (version ? "==#{version}" : "")
+    when 'Atom'
+      "apm install #{name}" + (version ? "@#{version}" : "")
     when 'Nimble'
       "nimble install #{name}" + (version ? "@##{version}" : "")
     when 'Go'

@@ -9,6 +9,10 @@ namespace :download do
     Repositories::Alcatraz.import
   end
 
+  task atom: :environment do
+    Repositories::Atom.import_recent
+  end
+
   task biicode: :environment do
     Repositories::Biicode.import
   end
