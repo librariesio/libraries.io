@@ -46,6 +46,9 @@ module SourceRank
     # number of contributors
     r += (log_scale(github_contributions.length) / 2.0).ceil
 
+    # number of subscribers
+    r += (log_scale(subscriptions.length) / 2.0).ceil
+
     # more than one maintainer/owner?
 
     # number of downloads
