@@ -10,7 +10,7 @@ namespace :download do
   end
 
   task atom: :environment do
-    Repositories::Atom.import#_recent
+    Repositories::Atom.import_recent
   end
 
   task biicode: :environment do
