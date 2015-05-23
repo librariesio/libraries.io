@@ -17,8 +17,7 @@ namespace :projects do
   end
 
   task update_source_ranks: :environment do
-    ids = Project.order('updated_at ASC').limit(10_000).pluck(:id).to_a
-    Project.includes([{:github_repository => [:readme, :github_tags]}, :versions, :github_contributions]).where(id: ids).find_each(&:update_source_rank)
+    Project.where('updated_at > ?', 1.week.ago).find_each(&:update_source_rank_async) if Date.today.sunday?
   end
 
   task link_dependencies: :environment do
