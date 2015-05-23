@@ -74,10 +74,10 @@
     <% if repo.manifests.latest.any? %>
       <hr>
       <h4>Dependencies</h4>
-      <% repo.manifests.latest.each do |manifest| %>
+      <% repo.manifests.limit(100).latest.each do |manifest| %>
         <h5><%= link_to manifest.path, manifest.github_link %></h5>
         <ul>
-          <% manifest.repository_dependencies.order(:project_name).each do |dependency| %>
+          <% manifest.repository_dependencies.limit(100).order(:project_name).each do |dependency| %>
             <li>
               <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
               <%= dependency.requirements %>
@@ -105,7 +105,7 @@
       <hr>
       <h4>Tags</h4>
       <ul>
-        <% repo.github_tags.published.to_a.sort.each do |tag| %>
+        <% repo.github_tags.published.limit(100).to_a.sort.each do |tag| %>
           <li>
             <%= link_to tag, tag.github_url %>
             <% if tag.published_at.present? %>
