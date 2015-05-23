@@ -9,6 +9,13 @@ namespace :projects do
     Project.import query: -> { includes(:github_repository => :github_tags) }
   end
 
+  desc 'Update the sitemap every other day'
+  task update_sitemap: :environment do
+    if Date.today.wday.even?
+      Rake::Task["sitemap:refresh"].invoke
+    end
+  end
+
   task update_source_ranks: :environment do
     ids = Project.order('updated_at ASC').limit(10_000).pluck(:id).to_a
     Project.includes([{:github_repository => [:readme, :github_tags]}, :versions, :github_contributions]).where(id: ids).find_each(&:update_source_rank)
