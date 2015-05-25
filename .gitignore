@@ -25,3 +25,5 @@ public/sitemap*
 # cloned repo folders
 Specs
 METADATA.jl
+
+node_modules
