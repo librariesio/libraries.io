@@ -4,6 +4,7 @@ class SessionsController < ApplicationController
   end
 
   def new
+    session[:pre_login_destination] = params[:return_to] if params[:return_to].present?
     redirect_to "/auth/github"
   end
 
