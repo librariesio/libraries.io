@@ -1,12 +1,6 @@
 <div class='row'>
   <div class="jumbotron">
-    <div class='col-md-2 hidden-sm hidden-xs'>
-      <%= image_tag 'logo.png', class: 'pull-left', width: 140 %>
-    </div>
-    <div class='col-sm-12 col-md-10'>
-      <h1>
-        Libraries.io
-      </h1>
+    <div class='col-md-12 col-md-8'>
       <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
         <%= text_field_tag 'q', params[:q], placeholder: 'Search libraries...', class: 'form-control' %>
       <% end %>
