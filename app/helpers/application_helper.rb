@@ -17,7 +17,7 @@ module ApplicationHelper
     when 'Pub'
       "https://pub.dartlang.org/packages/#{name}"
     when 'NPM'
-      "https://www.npmjs.com/package/#{name}/#{version}"
+      "https://www.npmjs.com/package/#{name}"
     when 'Rubygems'
       "https://rubygems.org/gems/#{name}" + (version ? "/versions/#{version}" : "")
     when 'Sublime'
