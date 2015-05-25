@@ -2,14 +2,28 @@
 <% description "New and popular projects licensed with #{@license.name}" %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_path(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc', format: :atom)) %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_path(licenses: @license.id, sort: 'created_at', order: 'desc', format: :atom)) %>
-<h1>
-  <%= @license.name %>
-  <% if @license.osi_approved? %>
-    <small>OSI Approved</small>
-  <% end %>
-</h1>
-<% url = "http://spdx.org/licenses/#{@license.id}" %>
-<%= link_to url, url %>
+
+<div class="row">
+  <div class="col-md-6">
+    <h1>
+      <%= @license.name %>
+      <% if @license.osi_approved? %>
+        <small>OSI Approved</small>
+      <% end %>
+    </h1>
+  </div>
+  <div class="col-md-6">
+    <br>
+    <p>
+      <% url = "http://spdx.org/licenses/#{@license.id}" %>
+      Website: <%= link_to url, url %>
+    </p>
+    <p>
+      Total Packages: <%= number_with_delimiter Project.license(@license.name).count %>
+    </p>
+  </div>
+</div>
+
 <hr>
 <div class='row'>
   <% if @popular.any? %>

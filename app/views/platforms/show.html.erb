@@ -8,7 +8,16 @@
     <h1>
       <div class="pictogram pictogram-lg pictogram-<%= @platform_name.downcase %>"></div>
       <%= platform_name(@platform_name) %></h1>
-    <%= link_to @platform::URL, @platform::URL %>
+
+  </div>
+  <div class="col-md-6">
+    <br>
+    <p>
+      Website: <%= link_to @platform::URL, @platform::URL %>
+    </p>
+    <p>
+      Total Packages: <%= number_with_delimiter Project.platform(@platform_name).count %>
+    </p>
   </div>
 </div>
 <hr>
