@@ -14,7 +14,10 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require turbolinks
+//= require tipsy
 //= require_tree .
 
 Turbolinks.enableProgressBar();
 Turbolinks.enableTransitionCache();
+
+$('.tip').tipsy();

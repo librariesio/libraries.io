@@ -414,6 +414,9 @@ GEM
     tilt (1.4.1)
     timers (4.0.1)
       hitimes
+    tipsy-rails (1.0.5)
+      railties (>= 3.0)
+      sass-rails
     turbolinks (2.5.3)
       coffee-rails
     typhoeus (0.7.1)
@@ -478,6 +481,7 @@ DEPENDENCIES
   spring
   sprockets (~> 2.12)
   thin
+  tipsy-rails
   turbolinks
   typhoeus
   uglifier

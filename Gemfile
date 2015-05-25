@@ -48,6 +48,7 @@ gem 'rails_12factor'
 gem 'font-awesome-rails'
 gem 'platform-api', require: nil
 gem 'pushover'
+gem 'tipsy-rails'
 
 group :development do
   gem 'spring'
