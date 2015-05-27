@@ -261,7 +261,7 @@ GEM
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     memoist (0.12.0)
-    mime-types (2.5)
+    mime-types (2.6.1)
     mini_portile (0.6.2)
     minitest (5.6.1)
     moneta (0.8.0)
@@ -452,6 +452,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   languages
+  mime-types (~> 2.6.1)
   newrelic_rpm
   nokogiri
   octokit
