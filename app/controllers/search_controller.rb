@@ -32,6 +32,8 @@ class SearchController < ApplicationController
       "New#{modifier}Projects - Libraries"
     when 'updated_at'
       "Updated#{modifier}Projects - Libraries"
+    when 'latest_release_published_at'
+      "Updated#{modifier}Projects - Libraries"
     else
       "Popular#{modifier}Projects - Libraries"
     end
