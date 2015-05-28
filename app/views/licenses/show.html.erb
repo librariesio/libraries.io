@@ -1,7 +1,7 @@
 <% title "#{@license.name} license - Libraries" %>
 <% description "New and popular projects licensed with #{@license.name}" %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_path(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc', format: :atom)) %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_path(licenses: @license.id, sort: 'created_at', order: 'desc', format: :atom)) %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_path(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@license.id} Projects") %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_path(licenses: @license.id, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@license.id} Projects") %>
 
 <div class="row">
   <div class="col-md-6">
