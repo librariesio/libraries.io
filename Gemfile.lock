@@ -75,17 +75,17 @@ GEM
       after_commit_action (~> 1.0.0)
     daemons (1.2.2)
     dalli (2.7.4)
-    elasticsearch (1.0.9)
-      elasticsearch-api (= 1.0.9)
-      elasticsearch-transport (= 1.0.9)
-    elasticsearch-api (1.0.9)
+    elasticsearch (1.0.10)
+      elasticsearch-api (= 1.0.10)
+      elasticsearch-transport (= 1.0.10)
+    elasticsearch-api (1.0.10)
       multi_json
     elasticsearch-model (0.1.7)
       activesupport (> 3)
       elasticsearch (> 0.4)
       hashie
     elasticsearch-rails (0.1.7)
-    elasticsearch-transport (1.0.9)
+    elasticsearch-transport (1.0.10)
       faraday
       multi_json
     erubis (2.7.0)
