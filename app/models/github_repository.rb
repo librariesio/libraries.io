@@ -273,7 +273,7 @@ class GithubRepository < ActiveRecord::Base
       params: { token: token },
       headers: { 'Accept' => 'application/json' }).run
     new_manifests = Oj.load(r.body)["manifests"]
-
+    return if new_manifests.nil?
     new_manifests.each do |m|
       args = m.slice('name', 'path', 'sha')
       if manifests.find_by(args)
