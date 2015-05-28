@@ -4,7 +4,9 @@ class HooksController < ApplicationController
   def github
     github_repository = GithubRepository.find_by_github_id(params["repository"]["id"])
     user = User.find_by_uid(params["sender"]["id"])
-    github_repository.download_manifests(user.token)
+    if user.present? && github_repository.present?
+      github_repository.download_manifests(user.token)
+    end
 
     render json: nil, status: :ok
   end
