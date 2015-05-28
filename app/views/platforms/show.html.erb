@@ -1,7 +1,7 @@
 <% title "#{platform_name(@platform_name)} - Libraries" %>
 <% description "New and popular projects published on #{platform_name(@platform_name)}" %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_path(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{platform_name(@platform_name)} Projects") %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), title: "New #{platform_name(@platform_name)} Projects") %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{platform_name(@platform_name)} Projects") %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), title: "New #{platform_name(@platform_name)} Projects") %>
 
 <div class='row'>
   <div class='col-md-6'>
