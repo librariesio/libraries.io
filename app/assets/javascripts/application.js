@@ -21,3 +21,8 @@ Turbolinks.enableProgressBar();
 Turbolinks.enableTransitionCache();
 
 $('.tip').tipsy();
+
+$('.rss').on('click', function(){
+  subtome($(this).attr('href'))
+  return false;
+})
