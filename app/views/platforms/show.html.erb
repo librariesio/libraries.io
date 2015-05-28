@@ -40,7 +40,7 @@
   <% if @updated.any? %>
   <div class='col-md-4'>
     <h4>
-      <%= link_to search_path(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
+      <%= link_to search_url(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
         <%= fa_icon "rss-square" %>
       <% end %>
       Updated <%= platform_name(@platform_name) %> Projects
@@ -55,7 +55,7 @@
   <% if @created.any? %>
   <div class='col-md-4'>
     <h4>
-      <%= link_to search_path(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
+      <%= link_to search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
         <%= fa_icon "rss-square" %>
       <% end %>
       New <%= platform_name(@platform_name) %> Projects

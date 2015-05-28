@@ -147,7 +147,7 @@
   <div class='col-md-4'>
     <% if @version_count > 0 %>
       <h4>
-        <%= link_to project_versions_path(@project.to_param.merge(format: :atom)), class: 'rss' do %>
+        <%= link_to project_versions_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
           <%= fa_icon "rss-square" %>
         <% end %>
         Releases
@@ -167,7 +167,7 @@
       <% end %>
     <% elsif @github_repository && @github_tags.any? %>
       <h4>
-        <%= link_to project_tags_path(@project.to_param.merge(format: :atom)), class: 'rss' do %>
+        <%= link_to project_tags_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
           <%= fa_icon "rss-square" %>
         <% end %>
         Tagged Releases

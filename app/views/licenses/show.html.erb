@@ -41,7 +41,7 @@
   <% if @updated.any? %>
   <div class='col-md-4'>
     <h4>
-      <%= link_to search_path(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
+      <%= link_to search_url(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
         <%= fa_icon "rss-square" %>
       <% end %>
       Updated <%= @license.id %> Projects
@@ -56,7 +56,7 @@
   <% if @created.any? %>
   <div class='col-md-4'>
     <h4>
-      <%= link_to search_path(licenses: @license.id, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
+      <%= link_to search_url(licenses: @license.id, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
         <%= fa_icon "rss-square" %>
       <% end %>
       New <%= @license.id %> Projects
