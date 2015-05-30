@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_one :github_user, primary_key: :uid, foreign_key: :github_id
 
-  after_commit :create_api_key, :ping_andrew, on: :create
+  after_commit :create_api_key, :ping_andrew, :download_orgs, :download_repos, on: :create
 
   def admin?
     ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall', 'zachinglis'].include?(nickname)
@@ -64,6 +64,12 @@ class User < ActiveRecord::Base
   def download_repos
     repos.each do |repo|
       GithubCreateWorker.perform_async(repo.full_name, token)
+    end
+  end
+
+  def download_orgs
+    github_client.orgs.each do |org|
+      GithubCreateOrgWorker.perform_async(org.login)
     end
   end
 

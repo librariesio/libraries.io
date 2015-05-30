@@ -44,4 +44,7 @@ class GithubOrganisation < ActiveRecord::Base
       false
     end
   end
+
+  # TODO download repos
+  # TODO download members
 end
