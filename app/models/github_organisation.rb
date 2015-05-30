@@ -45,6 +45,13 @@ class GithubOrganisation < ActiveRecord::Base
     end
   end
 
-  # TODO download repos
+  def download_repos
+    AuthToken.client.org_repos(login).each do |repo|
+      GithubCreateWorker.perform_async(repo.full_name)
+    end
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    nil
+  end
+
   # TODO download members
 end
