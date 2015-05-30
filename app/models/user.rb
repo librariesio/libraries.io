@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
     repos.each do |repo|
       GithubCreateWorker.perform_async(repo.full_name, token)
     end
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
@@ -73,7 +73,7 @@ class User < ActiveRecord::Base
     github_client.orgs.each do |org|
       GithubCreateOrgWorker.perform_async(org.login)
     end
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
