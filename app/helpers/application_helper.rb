@@ -131,7 +131,7 @@ module ApplicationHelper
   end
 
   def linked_keywords(keywords)
-    keywords.map{|k| link_to k, search_path(keywords: k.downcase) }.join(', ').html_safe
+    keywords.map{|k| link_to k, search_path(keywords: k) }.join(', ').html_safe
   end
 
   def platform_name(platform)
