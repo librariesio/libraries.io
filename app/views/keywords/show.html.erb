@@ -1,0 +1,86 @@
+<% title "#{@keyword} Projects - Libraries" %>
+<% description "New and popular projects tagged with #{@keyword}" %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(keywords: @keyword, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@keyword} Projects") %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(keywords: @keyword, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@keyword} Projects") %>
+
+<div class="row">
+  <div class="col-md-6">
+    <h1>
+      <%= @keyword %> Projects
+    </h1>
+  </div>
+  <div class="col-md-6">
+    <br>
+    <p>
+      Total Packages: <%= number_with_delimiter Project.keyword(@keyword).count %>
+    </p>
+  </div>
+</div>
+
+<hr>
+<div class='row'>
+  <% if @popular.any? %>
+  <div class='col-md-4'>
+    <h4>
+      Popular <%= @keyword %> Projects
+      <small class='more'>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(keywords: @keyword, sort: 'rank', order: 'desc') %>
+      </small>
+    </h4>
+    <%= render @popular %>
+  </div>
+  <% end %>
+
+  <% if @updated.any? %>
+  <div class='col-md-4'>
+    <h4>
+      <%= link_to search_url(keywords: @keyword, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
+        <%= fa_icon "rss-square" %>
+      <% end %>
+      Updated <%= @keyword %> Projects
+      <small class='more'>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(keywords: @keyword, sort: 'latest_release_published_at', order: 'desc') %>
+      </small>
+    </h4>
+    <%= render @updated %>
+  </div>
+  <% end %>
+
+  <% if @created.any? %>
+  <div class='col-md-4'>
+    <h4>
+      <%= link_to search_url(keywords: @keyword, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
+        <%= fa_icon "rss-square" %>
+      <% end %>
+      New <%= @keyword %> Projects
+      <small class='more'>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(keywords: @keyword, sort: 'created_at', order: 'desc') %>
+      </small>
+    </h4>
+    <%= render @created %>
+  </div>
+  <% end %>
+</div>
+<hr>
+<div class='row'>
+  <% if @watched.any? %>
+  <div class='col-md-4'>
+    <h4>Most Watched <%= @keyword %> Projects</h4>
+    <%= render @watched %>
+  </div>
+  <% end %>
+
+  <% if @languages.any? %>
+  <div class='col-md-4'>
+    <h4>Popular <%= @keyword %> Languages</h4>
+    <%= render partial: 'languages/list_language', collection: @languages, as: :language %>
+  </div>
+  <% end %>
+
+  <% if @platforms.any? %>
+  <div class='col-md-4'>
+    <h4>Popular <%= @keyword %> Platforms</h4>
+    <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
+  </div>
+  <% end %>
+</div>

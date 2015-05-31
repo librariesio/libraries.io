@@ -136,6 +136,10 @@ class Project < ActiveRecord::Base
     where('? = ANY("normalized_licenses")', license)
   end
 
+  def self.keyword(keyword)
+    where('? = ANY("keywords_array")', keyword)
+  end
+
   def self.language(language)
     joins(:github_repository).where('github_repositories.language ILIKE ?', language)
   end
@@ -146,6 +150,10 @@ class Project < ActiveRecord::Base
 
   def self.popular_platforms(options = {})
     search('*', options).response.facets[:platforms][:terms]
+  end
+
+  def self.popular_keywords(options = {})
+    search('*', options).response.facets[:keywords][:terms]
   end
 
   def self.popular_licenses(options = {})
