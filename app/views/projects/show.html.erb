@@ -68,7 +68,7 @@
 
     <% if @project.keywords_array.present? %>
     <p>
-      <%= 'Keyword'.pluralize(@project.keywords_array.split(',').length) %>: <%= linked_keywords @project.keywords_array %>
+      Keywords: <%= linked_keywords @project.keywords_array %>
     </p>
     <% end %>
 
