@@ -52,3 +52,17 @@
     <%= render partial: 'licenses/license', collection: Project.popular_licenses(:facet_limit => 24) %>
   </div>
 <% end %>
+
+<hr>
+
+<% cache 'homepage:keywords', :expires_in => 1.day do %>
+  <h3>
+    Search Projects by Keyword
+    <small class='more'>
+      <%= link_to 'See more &raquo;'.html_safe, keywords_path %>
+    </small>
+  </h3>
+  <div class='row'>
+    <%= render partial: 'keywords/keyword', collection: Project.popular_keywords(:facet_limit => 24) %>
+  </div>
+<% end %>
