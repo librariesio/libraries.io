@@ -21,19 +21,16 @@
 
 <hr>
 <div class='row'>
-  <% cache("language:#{@language}:popular", :expires_in => 3.hours) do %>
-    <% popular = Project.popular(filters: { language: @language }).first(5) %>
-    <% if popular.any? %>
-    <div class='col-md-4'>
-      <h4>
-        Popular <%= @language %> Projects
-        <small class='more'>
-          <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'rank', order: 'desc') %>
-        </small>
-      </h4>
-      <%= render popular %>
-    </div>
-    <% end %>
+  <% if @popular.any? %>
+  <div class='col-md-4'>
+    <h4>
+      Popular <%= @language %> Projects
+      <small class='more'>
+        <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'rank', order: 'desc') %>
+      </small>
+    </h4>
+    <%= render @popular %>
+  </div>
   <% end %>
 
   <% if @updated.any? %>

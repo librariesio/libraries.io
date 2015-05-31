@@ -10,6 +10,7 @@ class LanguagesController < ApplicationController
     @updated = Project.language(@language).many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
     @color = Languages::Language[@language].try(:color)
     @watched = Project.language(@language).most_watched.limit(4)
+    @popular = Project.language(@language).order('projects.rank DESC').limit(5).includes(:github_repository)
   end
 
   def find_language

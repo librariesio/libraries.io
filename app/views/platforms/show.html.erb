@@ -22,19 +22,16 @@
 </div>
 <hr>
 <div class='row'>
-  <% cache("platform:#{@platform_name}:popular", :expires_in => 3.hours) do %>
-    <% popular = Project.popular(filters: { platform: @platform_name }).first(5) %>
-    <% if popular.any? %>
-      <div class='col-md-4'>
-        <h4>
-          Popular <%= platform_name(@platform_name) %> Projects
-          <small class='more'>
-            <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'rank', order: 'desc') %>
-          </small>
-        </h4>
-        <%= render popular %>
-      </div>
-    <% end %>
+  <% if @popular.any? %>
+    <div class='col-md-4'>
+      <h4>
+        Popular <%= platform_name(@platform_name) %> Projects
+        <small class='more'>
+          <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'rank', order: 'desc') %>
+        </small>
+      </h4>
+      <%= render @popular %>
+    </div>
   <% end %>
 
   <% if @updated.any? %>

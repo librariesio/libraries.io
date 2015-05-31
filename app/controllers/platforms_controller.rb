@@ -9,6 +9,7 @@ class PlatformsController < ApplicationController
     @created = Project.platform(@platform_name).few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository)
     @updated = Project.platform(@platform_name).many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
     @watched = Project.platform(@platform_name).most_watched.limit(4)
+    @popular = Project.platform(@platform_name).order('projects.rank DESC').limit(5).includes(:github_repository)
 
     @color = @platform.color
   end
