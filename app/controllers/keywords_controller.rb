@@ -12,6 +12,7 @@ class KeywordsController < ApplicationController
     @popular = Project.keyword(@keyword).order('projects.rank DESC').limit(5).includes(:github_repository)
     @languages = Project.popular_languages(filters: {keywords_array: @keyword}).first(10)
     @platforms = Project.popular_platforms(filters: {keywords_array: @keyword}).first(10)
+    @licenses = Project.popular_licenses(filters: {keywords_array: @keyword}).first(10)
   end
 
   def find_keyword

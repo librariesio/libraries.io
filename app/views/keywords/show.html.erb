@@ -63,13 +63,6 @@
 </div>
 <hr>
 <div class='row'>
-  <% if @watched.any? %>
-  <div class='col-md-4'>
-    <h4>Most Watched <%= @keyword %> Projects</h4>
-    <%= render @watched %>
-  </div>
-  <% end %>
-
   <% if @languages.any? %>
   <div class='col-md-4'>
     <h4>Popular <%= @keyword %> Languages</h4>
@@ -83,4 +76,20 @@
     <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
   </div>
   <% end %>
+
+  <% if @licenses.any? %>
+  <div class='col-md-4'>
+    <h4>Popular <%= @keyword %> Licenses</h4>
+    <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
+  </div>
+  <% end %>
 </div>
+<% if @watched.any? %>
+  <hr>
+  <div class="row">
+    <div class='col-md-4'>
+      <h4>Most Watched <%= @keyword %> Projects</h4>
+      <%= render @watched %>
+    </div>
+  </div>
+<% end %>
