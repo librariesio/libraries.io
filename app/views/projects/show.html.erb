@@ -66,11 +66,11 @@
     </p>
     <% end %>
 
-    <!-- <% if @project.keywords.present? %>
+    <% if @project.keywords_array.present? %>
     <p>
-      <%= 'Keyword'.pluralize(@project.keywords.split(',').length) %>: <%= linked_keywords @project.keywords %>
+      <%= 'Keyword'.pluralize(@project.keywords_array.split(',').length) %>: <%= linked_keywords @project.keywords_array %>
     </p>
-    <% end %> -->
+    <% end %>
 
     <% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
     <p>

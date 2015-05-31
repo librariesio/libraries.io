@@ -13,7 +13,7 @@ module Searchable
         indexes :repository_url
         indexes :repo_name
         indexes :latest_release_number, :analyzer => 'keyword'
-        indexes :keywords, :analyzer => 'keyword'
+        indexes :keywords_array, :analyzer => 'keyword'
         indexes :language, :analyzer => 'keyword'
         indexes :normalized_licenses, :analyzer => 'keyword'
         indexes :platform, :analyzer => 'keyword'
@@ -90,18 +90,18 @@ module Searchable
                 must: filter_format(options[:filters], :normalized_licenses)
               }
             }
-          }#,
-          # keywords: {
-          #   terms: {
-          #     field: "keywords",
-          #     size: facet_limit
-          #   },
-          #   facet_filter: {
-          #     bool: {
-          #       must: filter_format(options[:filters], :keywords)
-          #     }
-          #   }
-          # }
+          }
+          keywords: {
+            terms: {
+              field: "keywords_array",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :keywords_array)
+              }
+            }
+          }
         },
         filter: {
           bool: {

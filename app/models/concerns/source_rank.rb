@@ -59,7 +59,7 @@ module SourceRank
   end
 
   def basic_info_present?
-    [description.presence, homepage.presence, repository_url.presence, keywords.presence].compact.length > 1
+    [description.presence, homepage.presence, repository_url.presence, keywords_array.presence].compact.length > 1
   end
 
   def repository_present?
