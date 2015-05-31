@@ -1,7 +1,7 @@
 <div class='license col-xs-6 col-sm-4 col-md-3'>
   <h4>
     <div class="blurb">
-      <h4><%= link_to format_license(license.term), license_path(license.term) %></h4>
+      <%= link_to format_license(license.term), license_path(license.term) %>
       <small><%= number_to_human license['count'] %> Projects</small>
     </div>
   </h4>
