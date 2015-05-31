@@ -1,4 +1,4 @@
-<% title "#{@keyword} Projects - Libraries" %>
+<% title "Projects tagged with '#{@keyword}' - Libraries" %>
 <% description "New and popular projects tagged with #{@keyword}" %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(keywords: @keyword, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@keyword} Projects") %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(keywords: @keyword, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@keyword} Projects") %>
@@ -6,7 +6,7 @@
 <div class="row">
   <div class="col-md-6">
     <h1>
-      <%= @keyword %> Projects
+      Projects tagged with "<%= @keyword %>"
     </h1>
   </div>
   <div class="col-md-6">
@@ -22,7 +22,7 @@
   <% if @popular.any? %>
   <div class='col-md-4'>
     <h4>
-      Popular <%= @keyword %> Projects
+      Popular "<%= @keyword %>" Projects
       <small class='more'>
         <%= link_to 'See more &raquo;'.html_safe, search_path(keywords: @keyword, sort: 'rank', order: 'desc') %>
       </small>
@@ -37,7 +37,7 @@
       <%= link_to search_url(keywords: @keyword, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
         <%= fa_icon "rss-square" %>
       <% end %>
-      Updated <%= @keyword %> Projects
+      Updated "<%= @keyword %>" Projects
       <small class='more'>
         <%= link_to 'See more &raquo;'.html_safe, search_path(keywords: @keyword, sort: 'latest_release_published_at', order: 'desc') %>
       </small>
@@ -52,7 +52,7 @@
       <%= link_to search_url(keywords: @keyword, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
         <%= fa_icon "rss-square" %>
       <% end %>
-      New <%= @keyword %> Projects
+      New "<%= @keyword %>" Projects
       <small class='more'>
         <%= link_to 'See more &raquo;'.html_safe, search_path(keywords: @keyword, sort: 'created_at', order: 'desc') %>
       </small>
@@ -65,21 +65,21 @@
 <div class='row'>
   <% if @languages.any? %>
   <div class='col-md-4'>
-    <h4>Popular <%= @keyword %> Languages</h4>
+    <h4>Popular "<%= @keyword %>" Languages</h4>
     <%= render partial: 'languages/list_language', collection: @languages, as: :language %>
   </div>
   <% end %>
 
   <% if @platforms.any? %>
   <div class='col-md-4'>
-    <h4>Popular <%= @keyword %> Platforms</h4>
+    <h4>Popular "<%= @keyword %>" Platforms</h4>
     <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
   </div>
   <% end %>
 
   <% if @licenses.any? %>
   <div class='col-md-4'>
-    <h4>Popular <%= @keyword %> Licenses</h4>
+    <h4>Popular "<%= @keyword %>" Licenses</h4>
     <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
   </div>
   <% end %>
@@ -88,7 +88,7 @@
   <hr>
   <div class="row">
     <div class='col-md-4'>
-      <h4>Most Watched <%= @keyword %> Projects</h4>
+      <h4>Most Watched "<%= @keyword %>" Projects</h4>
       <%= render @watched %>
     </div>
   </div>
