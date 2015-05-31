@@ -24,6 +24,7 @@ class SearchController < ApplicationController
     modifiers << params[:licenses] if params[:licenses].present?
     modifiers << params[:platforms] if params[:platforms].present?
     modifiers << params[:languages] if params[:languages].present?
+    modifiers << params[:keywords] if params[:keywords].present?
 
     modifier = " #{modifiers.compact.join(' ')} "
 
