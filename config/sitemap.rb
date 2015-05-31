@@ -72,4 +72,10 @@ SitemapGenerator::Sitemap.create do
     name = language.term
     add language_path(name), :lastmod => Project.language(name).order('updated_at DESC').first.try(:updated_at)
   end
+
+  add keywords_path, :priority => 0.7, :changefreq => 'daily'
+  Project.popular_keywords(:facet_limit => 500).each do |keyword|
+    name = keyword.term
+    add keyword_path(name), :lastmod => Project.keyword(name).order('updated_at DESC').first.try(:updated_at)
+  end
 end
