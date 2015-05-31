@@ -25,7 +25,7 @@ class Repositories
     def self.mapping(project)
       {
         name: project[:name],
-        keywords: project[:page].css('#content div:first a')[1..-1].map(&:text).join(','),
+        keywords_array: Array(project[:page].css('#content div:first a')[1..-1].map(&:text)),
         description: description(project[:page]),
         licenses: find_attribute(project[:page], 'License'),
         homepage: find_attribute(project[:page], 'Home page'),

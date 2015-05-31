@@ -36,7 +36,7 @@ class Repositories
       {
         :name => project["name"],
         :description => project["description"],
-        :keywords => project["keywords"].try(:join, ','),
+        :keywords_array => Array.wrap(project["keywords"]),
         :repository_url => repo_fallback(project["website"], project["url"])
       }
     end

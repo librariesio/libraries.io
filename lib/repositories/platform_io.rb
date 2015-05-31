@@ -27,7 +27,7 @@ class Repositories
         :pm_id => project['id'],
         :homepage => project['url'],
         :description => project['description'],
-        :keywords => project['keywords'].join(','),
+        :keywords_array => Array.wrap(project["keywords"].split(',')),
         :repository_url => repo_fallback('', project['url'])
       }
     end

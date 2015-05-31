@@ -29,7 +29,7 @@ class Repositories
         :name => project["name"],
         :description => project["description"],
         :repository_url => repo_fallback(project['url'],project['web']),
-        :keywords => project['tags'].join(','),
+        :keywords_array => Array.wrap(project["tags"]),
         :licenses => project['license'],
         :homepage => project['web']
       }

@@ -22,7 +22,7 @@ class Repositories
         :name => project["name"],
         :description => project["desc"],
         :repository_url => project.fetch("props", {}).try(:fetch, 'url', ''),
-        :keywords => project.fetch("props", {}).try(:fetch, 'keywords', []).try(:join, ',')
+        :keywords_array => Array.wrap(project.fetch("props", {}).try(:fetch, 'keywords', []))
       }
     end
   end

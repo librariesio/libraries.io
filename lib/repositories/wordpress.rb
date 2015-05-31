@@ -45,7 +45,7 @@ class Repositories
         :name => project["slug"],
         :description => project["short_description"],
         :homepage => project["homepage"],
-        :keywords => project.fetch("tags", {}).values.join(','),
+        :keywords_array => Array.wrap(project.fetch("tags", {}).values),
         :repository_url => repo_fallback('', project["homepage"])
       }
     end

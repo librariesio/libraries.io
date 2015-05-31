@@ -26,7 +26,7 @@ class Repositories
         :name => project['info']['name'],
         :description => project['info']['summary'],
         :homepage => project['info']['home_page'],
-        :keywords => project['info']['keywords'],
+        :keywords_array => Array.wrap(project['info']['keywords']),
         :licenses => project['info']['license'],
         :repository_url => repo_fallback('', project['info']['home_page'])
       }

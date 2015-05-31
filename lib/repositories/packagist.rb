@@ -28,7 +28,7 @@ class Repositories
         :name =>  latest_version['name'],
         :description => latest_version['description'],
         :homepage => latest_version['home_page'],
-        :keywords => latest_version['keywords'].join(','),
+        :keywords_array => Array.wrap(latest_version['keywords']),
         :licenses => latest_version['license'].join(','),
         :repository_url => repo_fallback(project['repository'],latest_version['home_page'])
       }

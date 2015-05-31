@@ -30,7 +30,7 @@ class Repositories
         :name => project["name"],
         :description => latest_version["description"],
         :homepage => project["homepage"],
-        :keywords => Array.wrap(latest_version.fetch("keywords", [])).join(','),
+        :keywords_array => Array.wrap(latest_version.fetch("keywords", [])),
         :licenses => licenses(latest_version),
         :repository_url => repo_fallback(latest_version.fetch('repository', {})['url'],project["homepage"])
       }
