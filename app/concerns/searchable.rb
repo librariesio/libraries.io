@@ -90,7 +90,7 @@ module Searchable
                 must: filter_format(options[:filters], :normalized_licenses)
               }
             }
-          }
+          },
           keywords: {
             terms: {
               field: "keywords_array",
