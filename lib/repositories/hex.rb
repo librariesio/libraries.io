@@ -18,7 +18,8 @@ class Repositories
     end
 
     def self.recent_names
-      get('https://hex.pm/api/packages?sort=inserted_at').map{|project| project['name'] }
+      (get('https://hex.pm/api/packages?sort=inserted_at').map{|project| project['name'] } +
+      get('https://hex.pm/api/packages?sort=updated_at').map{|project| project['name'] }).uniq
     end
 
     def self.project(name)
