@@ -80,17 +80,6 @@ module Searchable
               }
             }
           },
-          licenses: {
-            terms: {
-              field: "normalized_licenses",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :normalized_licenses)
-              }
-            }
-          },
           keywords: {
             terms: {
               field: "keywords_array",
@@ -99,6 +88,17 @@ module Searchable
             facet_filter: {
               bool: {
                 must: filter_format(options[:filters], :keywords_array)
+              }
+            }
+          },
+          licenses: {
+            terms: {
+              field: "normalized_licenses",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :normalized_licenses)
               }
             }
           }
