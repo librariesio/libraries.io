@@ -5,8 +5,8 @@ class LicensesController < ApplicationController
 
   def show
     find_license
-    @updated = Project.search('*', filters: {normalized_licenses: @license.id}, sort: 'updated_at').records.includes(:github_repository).first(5)
-    @created = Project.search('*', filters: {normalized_licenses: @license.id}, sort: 'created_at').records.includes(:github_repository).first(5)
+    @created = Project.license(@license.id).few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository)
+    @updated = Project.license(@license.id).many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
     @popular = Project.popular(filters: {normalized_licenses: @license.id}).first(5)
     @languages = Project.popular_languages(filters: {normalized_licenses: @license.id}).first(10)
     @platforms = Project.popular_platforms(filters: {normalized_licenses: @license.id}).first(10)
