@@ -52,21 +52,18 @@ SitemapGenerator::Sitemap.create do
 
   add search_path
 
-  puts "Generating Platforms"
   add platforms_path, :priority => 0.7, :changefreq => 'daily'
   Download.platforms.each do |platform|
     name = platform.to_s.demodulize
     add platform_path(name.downcase), :lastmod => Project.platform(name).order('updated_at DESC').first.try(:updated_at)
   end
 
-  puts "Generating Licenses"
   add licenses_path, :priority => 0.7, :changefreq => 'daily'
   Project.popular_licenses(:facet_limit => 120).each do |license|
     name = license.term
     add license_path(name), :lastmod => Project.license(name).order('updated_at DESC').first.try(:updated_at)
   end
 
-  puts "Generating Languages"
   add languages_path, :priority => 0.7, :changefreq => 'daily'
   Project.popular_languages(:facet_limit => 120).each do |language|
     name = language.term
