@@ -10,7 +10,7 @@ class LicensesController < ApplicationController
     @popular = Project.license(@license.id).order('projects.rank DESC').limit(5).includes(:github_repository)
     @languages = Project.popular_languages(filters: {normalized_licenses: @license.id}).first(10)
     @platforms = Project.popular_platforms(filters: {normalized_licenses: @license.id}).first(10)
-    @watched = Project.license(@license.id).most_watched.limit(4)
+    @watched = Project.license(@license.id).most_watched.limit(5)
   end
 
   private

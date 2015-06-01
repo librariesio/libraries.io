@@ -8,7 +8,7 @@ class KeywordsController < ApplicationController
 
     @created = Project.keyword(@keyword).few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository)
     @updated = Project.keyword(@keyword).many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
-    @watched = Project.keyword(@keyword).most_watched.limit(4)
+    @watched = Project.keyword(@keyword).most_watched.limit(5)
     @popular = Project.keyword(@keyword).order('projects.rank DESC').limit(5).includes(:github_repository)
     @languages = Project.popular_languages(filters: {keywords_array: @keyword}).first(10)
     @platforms = Project.popular_platforms(filters: {keywords_array: @keyword}).first(10)
