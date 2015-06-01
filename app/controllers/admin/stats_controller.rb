@@ -13,8 +13,6 @@ class Admin::StatsController < ApplicationController
     @new_repo_subs      = stats_for(RepositorySubscription)
     @new_readmes        = stats_for(Readme)
     @new_orgs           = stats_for(GithubOrganisation)
-    @new_contributions  = stats_for(GithubContribution)
-    @new_tags           = stats_for(GithubTag)
   end
 
   def stats_for(klass)
