@@ -20,73 +20,78 @@
 </div>
 
 <hr>
-<div class='row'>
-  <% if @popular.any? %>
-  <div class='col-md-4'>
-    <h4>
-      Popular <%= @language %> Projects
-      <small class='more'>
-        <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'rank', order: 'desc') %>
-      </small>
-    </h4>
-    <%= render @popular %>
-  </div>
-  <% end %>
 
-  <% if @updated.any? %>
-  <div class='col-md-4'>
-    <h4>
-      <%= link_to search_url(languages: @language, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
-        <%= fa_icon "rss-square" %>
+<div class="row">
+  <div class="col-md-8">
+    <div class='row'>
+      <% if @popular.any? %>
+      <div class='col-md-6'>
+        <h4>
+          Popular <%= @language %> Projects
+          <small class='more'>
+            <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'rank', order: 'desc') %>
+          </small>
+        </h4>
+        <%= render @popular %>
+      </div>
       <% end %>
-      Updated <%= @language %> Projects
-      <small>
-        <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'latest_release_published_at', order: 'desc') %>
-      </small>
-    </h4>
-    <%= render @updated %>
-  </div>
-  <% end %>
 
-  <% if @created.any? %>
-  <div class='col-md-4'>
-    <h4>
-      <%= link_to search_url(languages: @language, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
-        <%= fa_icon "rss-square" %>
+      <% if @created.any? %>
+      <div class='col-md-6'>
+        <h4>
+          <%= link_to search_url(languages: @language, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
+            <%= fa_icon "rss-square" %>
+          <% end %>
+          New <%= @language %> Projects
+          <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'created_at', order: 'desc') %>
+        </h4>
+        <%= render @created %>
+      </div>
       <% end %>
-      New <%= @language %> Projects
-      <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'created_at', order: 'desc') %>
-    </h4>
-    <%= render @created %>
-  </div>
-  <% end %>
-</div>
-<hr>
-<div class='row'>
-  <% if @watched.any? %>
-    <div class='col-md-4'>
-      <h4>Most Watched <%= @language %> Projects</h4>
-      <%= render @watched %>
     </div>
-  <% end %>
-
-  <% cache("language:#{@language}:licenses", :expires_in => 3.hours) do %>
-    <% licenses = Project.popular_licenses(filters: { language: @language }).first(8) %>
-    <% if licenses.any? %>
-      <div class='col-md-4'>
-        <h4>Popular <%= @language %> Licenses</h4>
-        <%= render partial: 'licenses/list_license', collection: licenses, as: :license %>
+    <hr>
+    <div class='row'>
+      <% if @updated.any? %>
+      <div class='col-md-6'>
+        <h4>
+          <%= link_to search_url(languages: @language, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
+            <%= fa_icon "rss-square" %>
+          <% end %>
+          Updated <%= @language %> Projects
+          <small>
+            <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'latest_release_published_at', order: 'desc') %>
+          </small>
+        </h4>
+        <%= render @updated %>
       </div>
+      <% end %>
+      <% if @watched.any? %>
+        <div class='col-md-6'>
+          <h4>Most Watched <%= @language %> Projects</h4>
+          <%= render @watched %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <% cache("language:#{@language}:licenses", :expires_in => 3.hours) do %>
+      <% licenses = Project.popular_licenses(filters: { language: @language }).first(8) %>
+      <% if licenses.any? %>
+        <div class='col-md-12'>
+          <h4>Popular <%= @language %> Licenses</h4>
+          <%= render partial: 'licenses/list_license', collection: licenses, as: :license %>
+        </div>
+      <% end %>
     <% end %>
-  <% end %>
 
-  <% cache("language:#{@language}:platforms", :expires_in => 3.hours) do %>
-    <% platforms = Project.popular_platforms(filters: { language: @language }).first(10) %>
-    <% if platforms.length > 1 %>
-      <div class='col-md-4'>
-        <h4>Popular <%= @language %> Platforms</h4>
-        <%= render partial: 'platforms/list_platform', collection: platforms, as: :platform %>
-      </div>
+    <% cache("language:#{@language}:platforms", :expires_in => 3.hours) do %>
+      <% platforms = Project.popular_platforms(filters: { language: @language }).first(10) %>
+      <% if platforms.length > 1 %>
+        <div class='col-md-12'>
+          <h4>Popular <%= @language %> Platforms</h4>
+          <%= render partial: 'platforms/list_platform', collection: platforms, as: :platform %>
+        </div>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
 </div>
