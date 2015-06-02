@@ -127,11 +127,11 @@ module ApplicationHelper
 
   def linked_licenses(licenses)
     return 'Missing' if licenses.empty?
-    licenses.map{|l| link_to format_license(l), license_path(l) }.join('/').html_safe
+    licenses.delete_if(&:empty?).map{|l| link_to format_license(l), license_path(l) }.join('/').html_safe
   end
 
   def linked_keywords(keywords)
-    keywords.map{|k| link_to k, keyword_path(k) }.join(', ').html_safe
+    keywords.delete_if(&:empty?).map{|k| link_to k, keyword_path(k) }.join(', ').html_safe
   end
 
   def platform_name(platform)
