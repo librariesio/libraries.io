@@ -1,0 +1,7 @@
+---
+production:
+  api_key: 2aaf00b1bb42a45215653f71c18b90dc
+  rails:
+    enabled: true
+  sidekiq:
+    enabled: true

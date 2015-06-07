@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/trifle-io/trifle-ruby.git
+  revision: e9b4cb9ff9bab3684a06bbd1109dcad61484f94b
+  tag: 2.3.0.1
+  specs:
+    trifle-ruby (2.3.0.0)
+      redis (~> 3.0, >= 3.0.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -483,6 +491,7 @@ DEPENDENCIES
   sprockets (~> 2.12)
   thin
   tipsy-rails
+  trifle-ruby!
   turbolinks
   typhoeus
   uglifier
