@@ -6,6 +6,7 @@ class Version < ActiveRecord::Base
   has_many :dependencies
 
   after_commit :send_notifications_async, on: :create
+  after_commit :notify_firehose, on: :create
 
   def as_json(options = nil)
     super({ only: [:number, :published_at] }.merge(options || {}))
@@ -22,7 +23,7 @@ class Version < ActiveRecord::Base
   end
 
   def notify_firehose
-    Firehose.new_version(project.name, project.platform, number)
+    Firehose.new_version(project, project.platform, number)
   end
 
   def send_notifications_async
@@ -32,7 +33,6 @@ class Version < ActiveRecord::Base
   def send_notifications
     notify_subscribers
     notify_gitter
-    notify_firehose
   end
 
   def published_at

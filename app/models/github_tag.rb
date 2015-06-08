@@ -5,6 +5,7 @@ class GithubTag < ActiveRecord::Base
   scope :published, -> { where('published_at IS NOT NULL') }
 
   after_commit :send_notifications_async, on: :create
+  after_commit :notify_firehose, on: :create
 
   def to_s
     name
@@ -18,7 +19,6 @@ class GithubTag < ActiveRecord::Base
     if has_projects?
       notify_subscribers
       notify_gitter
-      notify_firehose
     end
   end
 
@@ -42,7 +42,7 @@ class GithubTag < ActiveRecord::Base
 
   def notify_firehose
     github_repository.projects.without_versions.each do |project|
-      Firehose.new_version(project.name, project.platform, number)
+      Firehose.new_version(project, project.platform, number)
     end
   end
 
