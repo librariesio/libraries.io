@@ -4,7 +4,7 @@
       <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
         <%= text_field_tag 'q', params[:q], placeholder: 'Search libraries...', class: 'form-control' %>
       <% end %>
-      <p>Libraries.io monitors <%= number_with_delimiter(Project.total) %> open source libraries across many different package managers.</p>
+      <p>Libraries.io monitors <%= number_with_delimiter(Project.total) %> open source libraries across <%= Download.platforms.length %> different package managers.</p>
       <p class='hidden-xs'>
         You can discover new libraries to use in your software projects as well as be notified of new releases to keep your applications secure and up to date.
       </p>
