@@ -8,6 +8,14 @@ class ProjectsController < ApplicationController
     @keywords = facets[:keywords][:terms]
   end
 
+  def bus_factor
+    @projects = Project.joins(:github_repository)
+          .where('projects.dependents_count > 1')
+          .where('github_repositories.github_contributions_count < 6')
+          .where('github_repositories.github_contributions_count > 0')
+          .order('projects.dependents_count DESC, github_repositories.github_contributions_count ASC').paginate(page: params[:page])
+  end
+
   def show
     find_project
     if incorrect_case?

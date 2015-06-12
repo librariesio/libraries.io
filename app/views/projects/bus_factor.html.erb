@@ -1,0 +1,66 @@
+<div class="row">
+  <h1>Fix the Bus Factor</h1>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-md-8">
+    <% @projects.each do |project| %>
+      <div class="row">
+        <div class='project col-md-8' style="border-color: <%= project.color %>;">
+          <h5>
+            <%= link_to project.name, project_path(project.to_param) %>
+            <small><%= project.latest_version %></small>
+          </h5>
+
+          <div class="">
+            <%= truncate project.description, :length => 100 %>
+          </div>
+
+          <small>
+            <%= link_to platform_name(project.platform), platform_path(project.platform.downcase) %> -
+            <% if project.language.present? && project.language != project.platform %>
+              <%= link_to project.language, language_path(project.language) %> -
+            <% end %>
+            <% if project.normalized_licenses.present? %>
+              <%= linked_licenses project.normalized_licenses %> -
+            <% end %>
+            <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+            <%= time_ago_in_words project.latest_release_published_at %> ago
+            <% if project.stars > 0 %>
+             - <%= number_to_human project.stars %> stars
+            <% end %>
+          </small>
+
+          <p>
+            <small>
+              <%= link_to pluralize(project.dependents_count, 'dependent release'), project_dependents_path(project.to_param) %> -
+              <%= link_to pluralize(project.github_repository.github_contributions_count, 'contributor'), project.github_repository.contributors_url %>
+            </small>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <br>
+          <%= link_to 'Contribute on GitHub', project.github_repository.url, class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+    <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
+  </div>
+  <div class="col-md-4">
+    <h3>
+      <strong>
+        What's the bus factor?
+      </strong>
+    </h3>
+    <p>
+      The bus factor is the number of key developers who would need to be incapacitated to make a project unable to proceed.
+    </p>
+    <p>
+      This page shows libraries that are depended upon by many other libraries but have only ever had a handful of contributors commit to the project.
+    </p>
+    <p>
+      You can help out by reviewing the code for these projects, helping out with open issues and pull requests and lending the maintainers a helping hand if required.
+    </p>
+  </div>
+</div>

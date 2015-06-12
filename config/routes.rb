@@ -37,6 +37,8 @@ Rails.application.routes.draw do
 
   get '/stats', to: redirect('/admin/stats')
 
+  get 'bus-factor', to: 'projects#bus_factor', as: :bus_factor
+
   get '/platforms', to: 'platforms#index', as: :platforms
 
   get '/github/:login/repositories', to: 'users#repositories', as: :user_repositories
