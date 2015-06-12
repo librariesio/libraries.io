@@ -66,5 +66,21 @@
     <p>
       <em>This is an experiment based on GitHub contributions and available dependency data from package manager repositories that make it easily available.</em>
     </p>
+    <h3>
+      <strong>
+        Filter by language
+      </strong>
+    </h3>
+    <ul>
+      <% @languages.each do |language| %>
+        <li class='<%= 'active' if language.downcase == params[:language].downcase %>'>
+          <% if language.downcase == params[:language].downcase %>
+            <%= link_to language, bus_factor_path(language: nil) %>
+          <% else %>
+            <%= link_to language, bus_factor_path(language: language) %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 </div>

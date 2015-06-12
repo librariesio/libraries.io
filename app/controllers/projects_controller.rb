@@ -9,11 +9,17 @@ class ProjectsController < ApplicationController
   end
 
   def bus_factor
-    @projects = Project.joins(:github_repository)
-          .where('projects.dependents_count > 1')
-          .where('github_repositories.github_contributions_count < 6')
-          .where('github_repositories.github_contributions_count > 0')
-          .order('projects.dependents_count DESC, github_repositories.github_contributions_count ASC').paginate(page: params[:page])
+    if params[:language].present?
+      @language = GithubRepository.where('lower(language) = ?', params[:language].downcase).first.try(:language)
+      raise ActiveRecord::RecordNotFound if @language.nil?
+      scope = Project.language(@language)
+    else
+      scope = Project
+    end
+
+    @languages = Project.bus_factor.group('github_repositories.language').order('github_repositories.language').pluck('github_repositories.language')
+
+    @projects = scope.bus_factor.order('projects.dependents_count DESC, github_repositories.github_contributions_count ASC').paginate(page: params[:page])
   end
 
   def show
