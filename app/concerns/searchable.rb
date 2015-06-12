@@ -25,6 +25,7 @@ module Searchable
         indexes :rank, type: 'integer'
         indexes :stars, type: 'integer'
         indexes :versions_count, type: 'integer'
+        indexes :dependents_count, type: 'integer'
         indexes :github_repository_id, type: 'integer'
       end
     end
