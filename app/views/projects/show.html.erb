@@ -120,7 +120,7 @@
               </li>
               <% end %>
             </ul>
-            <%= link_to "See all #{@project.dependents_count} dependent projects", project_dependents_path(@project.to_param) %>
+            <%= link_to "See all #{number_to_human(@project.dependents_count)} dependent projects", project_dependents_path(@project.to_param) %>
           </div>
         <% end %>
       <% end %>
