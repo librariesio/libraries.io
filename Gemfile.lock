@@ -57,7 +57,7 @@ GEM
     autoprefixer-rails (5.2.0)
       execjs
       json
-    bigquery (0.7.0)
+    bigquery (0.8.0)
       google-api-client (~> 0.8.2)
     bini (0.7.0)
       sys-proctable
@@ -153,7 +153,7 @@ GEM
       mime-types
       net-scp (~> 1.1)
       net-ssh (>= 2.1.3)
-    fog-ecloud (0.1.1)
+    fog-ecloud (0.1.3)
       fog-core
       fog-xml
     fog-google (0.0.5)
@@ -169,7 +169,7 @@ GEM
       fog-core (~> 1.27)
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
-    fog-profitbricks (0.0.2)
+    fog-profitbricks (0.0.3)
       fog-core
       fog-xml
       nokogiri
@@ -381,11 +381,11 @@ GEM
       json
       redis (>= 3.0.6)
       redis-namespace (>= 1.3.1)
-    signet (0.6.0)
+    signet (0.6.1)
       addressable (~> 2.3)
       extlib (~> 0.9)
       faraday (~> 0.9)
-      jwt (~> 1.0)
+      jwt (~> 1.5)
       multi_json (~> 1.10)
     simple-rss (1.3.1)
     simple_form (3.1.0)
