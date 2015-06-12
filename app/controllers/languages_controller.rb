@@ -11,6 +11,12 @@ class LanguagesController < ApplicationController
     @color = Languages::Language[@language].try(:color)
     @watched = Project.language(@language).most_watched.limit(5)
     @popular = Project.language(@language).order('projects.rank DESC').limit(5).includes(:github_repository)
+
+    facets = Project.facets(filters: { language: @language }, :facet_limit => 10)
+
+    @platforms = facets[:platforms][:terms]
+    @licenses = facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
+    @keywords = facets[:keywords][:terms]
   end
 
   def find_language

@@ -144,20 +144,27 @@ class Project < ActiveRecord::Base
     joins(:github_repository).where('github_repositories.language ILIKE ?', language)
   end
 
+  def self.facets(options = {})
+    Rails.cache.fetch "facets:#{options.to_s}", :expires_in => 1.hour do
+      search('*', options).response.facets
+    end
+  end
+
   def self.popular_languages(options = {})
-    search('*', options).response.facets[:languages][:terms]
+    facets(options)
+    facets(options)[:languages][:terms]
   end
 
   def self.popular_platforms(options = {})
-    search('*', options).response.facets[:platforms][:terms]
+    facets(options)[:platforms][:terms]
   end
 
   def self.popular_keywords(options = {})
-    search('*', options).response.facets[:keywords][:terms]
+    facets(options)[:keywords][:terms]
   end
 
   def self.popular_licenses(options = {})
-    search('*', options).response.facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
+    facets(options)[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
   end
 
   def self.popular(options = {})

@@ -8,9 +8,13 @@ class LicensesController < ApplicationController
     @created = Project.license(@license.id).few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository)
     @updated = Project.license(@license.id).many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
     @popular = Project.license(@license.id).order('projects.rank DESC').limit(5).includes(:github_repository)
-    @languages = Project.popular_languages(filters: {normalized_licenses: @license.id}).first(10)
-    @platforms = Project.popular_platforms(filters: {normalized_licenses: @license.id}).first(10)
     @watched = Project.license(@license.id).most_watched.limit(5)
+
+    facets = Project.facets(filters: {normalized_licenses: @license.id}, :facet_limit => 10)
+
+    @languages = facets[:languages][:terms]
+    @platforms = facets[:platforms][:terms]
+    @keywords = facets[:keywords][:terms]
   end
 
   private

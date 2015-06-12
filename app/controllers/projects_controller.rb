@@ -1,5 +1,11 @@
 class ProjectsController < ApplicationController
   def index
+    facets = Project.facets(:facet_limit => 30)
+
+    @languages = facets[:languages][:terms]
+    @platforms = facets[:platforms][:terms]
+    @licenses = facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
+    @keywords = facets[:keywords][:terms]
   end
 
   def show

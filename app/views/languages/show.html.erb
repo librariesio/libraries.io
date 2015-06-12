@@ -74,24 +74,25 @@
     </div>
   </div>
   <div class="col-md-4">
-    <% cache("language:#{@language}:licenses", :expires_in => 3.hours) do %>
-      <% licenses = Project.popular_licenses(filters: { language: @language }).first(8) %>
-      <% if licenses.any? %>
-        <div class='col-md-12'>
-          <h4>Popular <%= @language %> Licenses</h4>
-          <%= render partial: 'licenses/list_license', collection: licenses, as: :license %>
-        </div>
-      <% end %>
+    <% if @licenses.any? %>
+      <div class='col-md-12'>
+        <h4>Popular <%= @language %> Licenses</h4>
+        <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
+      </div>
     <% end %>
 
-    <% cache("language:#{@language}:platforms", :expires_in => 3.hours) do %>
-      <% platforms = Project.popular_platforms(filters: { language: @language }).first(10) %>
-      <% if platforms.length > 1 %>
-        <div class='col-md-12'>
-          <h4>Popular <%= @language %> Platforms</h4>
-          <%= render partial: 'platforms/list_platform', collection: platforms, as: :platform %>
-        </div>
-      <% end %>
+    <% if @platforms.length > 1 %>
+      <div class='col-md-12'>
+        <h4>Popular <%= @language %> Platforms</h4>
+        <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
+      </div>
+    <% end %>
+
+    <% if @keywords.length > 1 %>
+      <div class='col-md-12'>
+        <h4>Popular <%= @language %> Keywords</h4>
+        <%= render partial: 'keywords/list_keyword', collection: @keywords, as: :keyword %>
+      </div>
     <% end %>
   </div>
 </div>

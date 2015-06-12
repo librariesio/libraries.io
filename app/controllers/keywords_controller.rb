@@ -10,9 +10,12 @@ class KeywordsController < ApplicationController
     @updated = Project.keyword(@keyword).many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
     @watched = Project.keyword(@keyword).most_watched.limit(5)
     @popular = Project.keyword(@keyword).order('projects.rank DESC').limit(5).includes(:github_repository)
-    @languages = Project.popular_languages(filters: {keywords_array: @keyword}).first(10)
-    @platforms = Project.popular_platforms(filters: {keywords_array: @keyword}).first(10)
-    @licenses = Project.popular_licenses(filters: {keywords_array: @keyword}).first(10)
+
+    facets = Project.facets(filters: {keywords_array: @keyword}, :facet_limit => 10)
+
+    @languages = facets[:languages][:terms]
+    @platforms = facets[:platforms][:terms]
+    @licenses = facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
   end
 
   def find_keyword

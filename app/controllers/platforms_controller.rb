@@ -12,5 +12,11 @@ class PlatformsController < ApplicationController
     @popular = Project.platform(@platform_name).order('projects.rank DESC').limit(5).includes(:github_repository)
 
     @color = @platform.color
+
+    facets = Project.facets(filters: {platform: @platform_name}, :facet_limit => 10)
+
+    @languages = facets[:languages][:terms]
+    @licenses = facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
+    @keywords = facets[:keywords][:terms]
   end
 end
