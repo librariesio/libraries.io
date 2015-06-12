@@ -25,6 +25,8 @@ class Project < ActiveRecord::Base
   scope :few_versions, -> { where('versions_count < 2') }
   scope :many_versions, -> { where('versions_count > 2') }
 
+  scope :with_dependents, -> { where('dependents_count > 0') }
+
   scope :with_github_url, -> { where('repository_url ILIKE ?', '%github.com%') }
   scope :with_gitlab_url, -> { where('repository_url ILIKE ?', '%gitlab.com%') }
   scope :with_bitbucket_url, -> { where('repository_url ILIKE ?', '%bitbucket.org%') }
@@ -32,6 +34,7 @@ class Project < ActiveRecord::Base
   scope :with_sourceforge_url, -> { where('repository_url ILIKE ?', '%sourceforge.net%') }
 
   scope :most_watched, -> { joins(:subscriptions).group('projects.id').order("COUNT(subscriptions.id) DESC") }
+  scope :most_dependents, -> { with_dependents.order('dependents_count DESC') }
 
   after_commit :update_github_repo_async, on: :create
   after_commit :set_dependents_count
