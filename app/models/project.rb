@@ -34,6 +34,7 @@ class Project < ActiveRecord::Base
   scope :most_watched, -> { joins(:subscriptions).group('projects.id').order("COUNT(subscriptions.id) DESC") }
 
   after_commit :update_github_repo_async, on: :create
+  after_commit :set_dependents_count
   before_save  :normalize_licenses,
                :set_latest_release_published_at,
                :set_latest_release_number,
@@ -124,8 +125,8 @@ class Project < ActiveRecord::Base
     Project.where(id: dependents.joins(:version).limit(options[:per_page]).offset(options[:per_page]*(options[:page].to_i-1)).pluck('DISTINCT versions.project_id'))
   end
 
-  def dependents_count
-    dependents.joins(:version).pluck('DISTINCT versions.project_id').count
+  def set_dependents_count
+    self.update_columns(dependents_count: dependents.joins(:version).pluck('DISTINCT versions.project_id').count)
   end
 
   def self.undownloaded_repos

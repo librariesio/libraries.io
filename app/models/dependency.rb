@@ -1,6 +1,6 @@
 class Dependency < ActiveRecord::Base
   belongs_to :version
-  belongs_to :project
+  belongs_to :project, touch: true
 
   validates_presence_of :project_name, :version_id, :requirements, :platform
 
