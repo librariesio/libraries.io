@@ -10,6 +10,7 @@ class KeywordsController < ApplicationController
     @updated = Project.keyword(@keyword).many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
     @watched = Project.keyword(@keyword).most_watched.limit(5)
     @popular = Project.keyword(@keyword).order('projects.rank DESC').limit(5).includes(:github_repository)
+    @dependend = Project.keyword(@keyword).most_dependents.limit(5).includes(:github_repository)
 
     facets = Project.facets(filters: {keywords_array: @keyword}, :facet_limit => 10)
 

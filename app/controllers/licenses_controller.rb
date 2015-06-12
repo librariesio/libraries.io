@@ -9,6 +9,7 @@ class LicensesController < ApplicationController
     @updated = Project.license(@license.id).many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
     @popular = Project.license(@license.id).order('projects.rank DESC').limit(5).includes(:github_repository)
     @watched = Project.license(@license.id).most_watched.limit(5)
+    @dependend = Project.license(@license.id).most_dependents.limit(5).includes(:github_repository)
 
     facets = Project.facets(filters: {normalized_licenses: @license.id}, :facet_limit => 10)
 

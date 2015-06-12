@@ -79,6 +79,15 @@
       </div>
       <% end %>
     </div>
+    <% if @dependend.any? %>
+      <hr>
+      <div class="row">
+        <div class='col-md-6'>
+          <h4>Most Depended upon <%= @license.id %> Projects</h4>
+          <%= render @dependend %>
+        </div>
+      </div>
+    <% end %>
   </div>
   <div class="col-md-4">
     <% if @languages.any? %>
