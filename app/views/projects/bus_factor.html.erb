@@ -36,13 +36,13 @@
           <p>
             <small>
               <%= link_to pluralize(project.dependents_count, 'dependent release'), project_dependents_path(project.to_param) %> -
-              <%= link_to pluralize(project.github_repository.github_contributions_count, 'contributor'), project.github_repository.contributors_url %>
+              <%= link_to pluralize(project.github_repository.github_contributions_count, 'contributor'), project.github_repository.contributors_url, target: :blank %>
             </small>
           </p>
         </div>
         <div class="col-md-4">
           <br>
-          <%= link_to 'Contribute on GitHub', project.github_repository.url, class: 'btn btn-primary' %>
+          <%= link_to 'Contribute on GitHub', project.github_repository.url, class: 'btn btn-primary', target: :blank %>
         </div>
       </div>
     <% end %>
