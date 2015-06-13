@@ -5,6 +5,8 @@ module Searchable
     include Elasticsearch::Model
     include Elasticsearch::Model::Callbacks
 
+    FIELDS = ['name^2', 'exact_name^2', 'repo_name', 'description', 'homepage', 'language', 'keywords_array', 'normalized_licenses', 'platform']
+
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
       mapping do
         indexes :name, :analyzer => 'snowball', :boost => 6
@@ -57,7 +59,7 @@ module Searchable
           function_score: {
             query: {
               filtered: {
-                 query: {query_string: {query: query}},
+                 query: {match_all: {}},
                  filter:{ bool: { must: [] } }
               }
             },
@@ -129,6 +131,26 @@ module Searchable
       search_definition[:track_scores] = true
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
 
+      if query.present?
+        search_definition[:query][:function_score][:query][:filtered][:query] = {
+          bool: {
+            should: [
+              { multi_match: {
+                  query: query,
+                  fields: FIELDS,
+                  fuzziness: 1.2,
+                  slop: 2,
+                  type: 'cross_fields',
+                  operator: 'or'
+                }
+              }
+            ]
+          }
+        }
+      elsif options[:sort].blank?
+        search_definition[:sort]  = [{'rank' => 'desc'}, {'stars' => 'desc'}]
+      end
+
       __elasticsearch__.search(search_definition)
     end
 
@@ -141,7 +163,7 @@ module Searchable
     end
 
     def self.sanitize_query(str)
-      return '*' if str.blank?
+      return '' if str.blank?
       # Escape special characters
       # http://lucene.apache.org/core/old_versioned_docs/versions/2_9_1/queryparsersyntax.html#Escaping Special Characters
       escaped_characters = Regexp.escape('\\+-&|/!(){}[]^~?:')
