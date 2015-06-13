@@ -141,7 +141,7 @@ module Searchable
                   fuzziness: 1.2,
                   slop: 2,
                   type: 'cross_fields',
-                  operator: 'or'
+                  operator: 'and'
                 }
               }
             ]
