@@ -156,13 +156,12 @@ class Project < ActiveRecord::Base
   end
 
   def self.facets(options = {})
-    Rails.cache.fetch "facets:#{options.to_s}", :expires_in => 1.hour do
+    Rails.cache.fetch "facets:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour do
       search('*', options).response.facets
     end
   end
 
   def self.popular_languages(options = {})
-    facets(options)
     facets(options)[:languages][:terms]
   end
 
