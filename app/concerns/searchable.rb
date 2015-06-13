@@ -51,10 +51,7 @@ module Searchable
           function_score: {
             query: {
               filtered: {
-                 query: {query_string: {
-                   query: query,
-                   default_operator: 'AND'
-                   }},
+                 query: {query_string: {query: query}},
                  filter:{ bool: { must: [] } }
               }
             },
