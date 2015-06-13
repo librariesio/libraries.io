@@ -40,6 +40,7 @@ class Project < ActiveRecord::Base
                          .where('projects.dependents_count > 25')
                          .where('github_repositories.github_contributions_count < 6')
                          .where('github_repositories.github_contributions_count > 0')
+                         .where('github_repositories.stargazers_count > 0')
                           }
 
   after_commit :update_github_repo_async, on: :create
