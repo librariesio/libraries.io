@@ -83,6 +83,9 @@ GEM
       after_commit_action (~> 1.0.0)
     daemons (1.2.2)
     dalli (2.7.4)
+    dotenv (2.0.1)
+    dotenv-rails (2.0.1)
+      dotenv (= 2.0.1)
     elasticsearch (1.0.12)
       elasticsearch-api (= 1.0.12)
       elasticsearch-transport (= 1.0.12)
@@ -456,6 +459,7 @@ DEPENDENCIES
   coffee-rails
   counter_culture
   dalli
+  dotenv-rails
   elasticsearch-model
   elasticsearch-rails
   faraday-http-cache

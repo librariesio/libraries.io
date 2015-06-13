@@ -60,6 +60,10 @@ group :development do
   gem 'thin'
 end
 
+group :development, :test do
+  gem 'dotenv-rails'
+end
+
 group :production do
   gem 'puma'
   gem 'bugsnag'
