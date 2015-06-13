@@ -45,7 +45,7 @@ module Searchable
     end
 
     def self.total
-      Rails.cache.fetch 'projects:total', :expires_in => 3.hour do
+      Rails.cache.fetch 'projects:total', :expires_in => 1.hour do
         __elasticsearch__.client.count(index: 'projects')["count"]
       end
     end
