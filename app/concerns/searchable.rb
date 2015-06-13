@@ -8,6 +8,8 @@ module Searchable
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
       mapping do
         indexes :name, :analyzer => 'snowball', :boost => 6
+        indexes :exact_name, :analyzer => 'keyword', :boost => 10
+
         indexes :description, :analyzer => 'snowball'
         indexes :homepage
         indexes :repository_url
@@ -33,7 +35,11 @@ module Searchable
     after_touch() { __elasticsearch__.update_document }
 
     def as_indexed_json(options = {})
-      as_json methods: [:stars, :language, :repo_name]
+      as_json methods: [:stars, :language, :repo_name, :exact_name]
+    end
+
+    def exact_name
+      name
     end
 
     def self.total
