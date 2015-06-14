@@ -131,7 +131,7 @@ module ApplicationHelper
   end
 
   def linked_keywords(keywords)
-    keywords.compact.delete_if(&:empty?).map{|k| link_to k, keyword_path(k) }.join(', ').html_safe
+    keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/keywords/#{k}" }.join(', ').html_safe
   end
 
   def platform_name(platform)
