@@ -1,0 +1,32 @@
+body {
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+  max-width: 600px;
+  background-color: #fdfdfd;
+}
+
+p {
+  word-wrap: break-word;
+  padding: 0px;
+  margin: 0px;
+  margin-bottom: 20px;
+}
+
+.header{
+  height: 55px;
+  background-image: image_url('mail-header.png');
+}
+
+.body {
+  padding: 30px 20px;
+}
