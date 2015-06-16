@@ -8,6 +8,8 @@ Octokit.middleware = Faraday::RackBuilder.new do |builder|
   builder.adapter :typhoeus
 end
 
+Octokit.default_media_type = "application/vnd.github.moondragon+json"
+
 # Verbose logging in Octokit
 Octokit.configure do |config|
   config.middleware.response :logger unless ENV['RACK_ENV'] == 'production'
