@@ -58,26 +58,12 @@ class User < ActiveRecord::Base
     "https://github.com/#{nickname}"
   end
 
-  def repos
-    github_client.repos.select{|r|r[:permissions][:admin]}
-  rescue
-    []
-  end
-
-  def download_repos
-    repos.each do |repo|
-      GithubCreateWorker.perform_async(repo.full_name, token)
-    end
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
-    nil
-  end
-
   def update_repo_permissions_async
     SyncPermissionsWorker.perform_async(self.id)
   end
 
   def update_repo_permissions
-    r = repos
+    r = github_client.repos
 
     current_repo_ids = []
     r.each do |repo|
