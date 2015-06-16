@@ -2,8 +2,18 @@
 <html>
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <%= stylesheet_link_tag 'email' %>
   </head>
   <body>
-    <%= yield %>
+    <table border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="header"></td>
+      </tr>
+      <tr>
+        <td class="body">
+          <%= yield %>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

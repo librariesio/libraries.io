@@ -54,6 +54,7 @@ gem 'trifle-ruby', github: "trifle-io/trifle-ruby", tag: "2.3.0.1"
 gem 'fast_blank'
 gem 'fast_xs'
 gem 'fast_xor'
+gem 'premailer-rails'
 
 group :development do
   gem 'spring'
