@@ -2,13 +2,16 @@ class User < ActiveRecord::Base
   has_many :subscriptions
   has_many :repository_subscriptions
   has_many :api_keys
+  has_many :repository_permissions
+  has_many :adminable_repository_permissions, -> { where admin: true }, class: RepositoryPermission
+  has_many :adminable_github_repositories, through: :adminable_repository_permissions, source: :github_repository
   has_many :github_repositories, primary_key: :uid, foreign_key: :owner_id
   has_many :source_github_repositories, -> { where fork: false }, class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
   has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_one :github_user, primary_key: :uid, foreign_key: :github_id
 
-  after_commit :create_api_key, :ping_andrew, :download_orgs, :download_repos, on: :create
+  after_commit :create_api_key, :ping_andrew, :download_orgs, :update_repo_permissions_async, on: :create
 
   def admin?
     ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall', 'zachinglis'].include?(nickname)
@@ -65,6 +68,38 @@ class User < ActiveRecord::Base
     repos.each do |repo|
       GithubCreateWorker.perform_async(repo.full_name, token)
     end
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    nil
+  end
+
+  def update_repo_permissions_async
+    SyncPermissionsWorker.perform_async(self.id)
+  end
+
+  def update_repo_permissions
+    r = repos
+
+    current_repo_ids = []
+    r.each do |repo|
+      github_repo = GithubRepository.find_by_full_name(repo.full_name)
+      begin
+        github_repo = GithubRepository.create_from_github(repo.full_name, token) if github_repo.nil?
+        current_repo_ids << github_repo.id
+      rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+        nil
+      end
+
+      rp = repository_permissions.find_or_initialize_by(github_repository: github_repo)
+      rp.admin = repo.permissions.admin
+      rp.push = repo.permissions.push
+      rp.pull = repo.permissions.pull
+      rp.save
+    end
+
+    # delete missing permissions
+    existing_repo_ids = repository_permissions.pluck(:github_repository_id)
+    remove_ids = existing_repo_ids - current_repo_ids
+    repository_permissions.where(github_repository_id: remove_ids).delete_all if remove_ids.any?
   rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end

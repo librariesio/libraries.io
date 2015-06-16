@@ -2,7 +2,7 @@ class DashboardController < ApplicationController
   before_action :ensure_logged_in
 
   def index
-    @repos = current_user.github_repositories.order('pushed_at DESC').paginate(page: params[:page])
+    @repos = current_user.adminable_github_repositories.order('pushed_at DESC').paginate(page: params[:page])
   end
 
   def watch

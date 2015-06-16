@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
     flash[:notice] = nil
     session[:user_id] = user.id
 
-    user.download_repos
+    user.update_repo_permissions_async
 
     redirect_to(root_path) && return unless pre_login_destination
     redirect_to pre_login_destination
