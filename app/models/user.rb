@@ -68,12 +68,9 @@ class User < ActiveRecord::Base
     current_repo_ids = []
     r.each do |repo|
       github_repo = GithubRepository.find_by_full_name(repo.full_name)
-      begin
-        github_repo = GithubRepository.create_from_github(repo.full_name, token) if github_repo.nil?
-        current_repo_ids << github_repo.id
-      rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
-        nil
-      end
+
+      github_repo = GithubRepository.create_from_github(repo.full_name, token) if github_repo.nil?
+      current_repo_ids << github_repo.id unless github_repo.nil?
 
       rp = repository_permissions.find_or_initialize_by(github_repository: github_repo)
       rp.admin = repo.permissions.admin
