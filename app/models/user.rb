@@ -115,6 +115,6 @@ class User < ActiveRecord::Base
   end
 
   def can_read?(github_repository)
-    github_repository.owner_id == self.uid.to_i
+    repository_permissions.where(github_repository: github_repository).where(pull: true).any?
   end
 end
