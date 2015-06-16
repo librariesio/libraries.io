@@ -308,6 +308,7 @@ class GithubRepository < ActiveRecord::Base
     g.source_name = r[:parent][:full_name] if r[:fork]
     g.assign_attributes r.slice(*GithubRepository::API_FIELDS)
     g.save
+    g
   rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
