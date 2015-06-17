@@ -54,7 +54,7 @@ GEM
       addressable (>= 2.3.1)
       extlib (>= 0.9.15)
       multi_json (>= 1.0.0)
-    autoprefixer-rails (5.2.0)
+    autoprefixer-rails (5.2.0.1)
       execjs
       json
     bigquery (0.8.0)
@@ -64,7 +64,7 @@ GEM
     bootstrap-sass (3.3.5)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
-    bugsnag (2.8.7)
+    bugsnag (2.8.8)
       multi_json (~> 1.0)
     builder (3.2.2)
     celluloid (0.16.0)
@@ -156,7 +156,7 @@ GEM
       fog-core (~> 1.22)
       fog-json
       inflecto (~> 0.0.2)
-    fog-core (1.30.0)
+    fog-core (1.31.1)
       builder
       excon (~> 0.45)
       formatador (~> 0.2)
@@ -267,7 +267,7 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.3)
     jwt (1.5.0)
-    languages (1.1.5)
+    languages (1.1.6)
       escape_utils (~> 1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -394,7 +394,7 @@ GEM
       addressable (~> 2.3.5)
       faraday (~> 0.8, < 0.10)
     semantic (1.4.1)
-    sidekiq (3.3.4)
+    sidekiq (3.4.0)
       celluloid (>= 0.16.0)
       connection_pool (>= 2.1.1)
       json
