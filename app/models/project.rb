@@ -10,6 +10,7 @@ class Project < ActiveRecord::Base
   has_many :dependencies, -> { group 'project_name' }, through: :versions
   has_many :github_contributions, through: :github_repository
   has_many :dependents, class_name: 'Dependency'
+  has_many :dependent_repositories, class_name: 'RepositoryDependency'
   has_many :subscriptions
   belongs_to :github_repository
 
@@ -133,6 +134,10 @@ class Project < ActiveRecord::Base
   def dependent_projects(options = {})
     options = {per_page: 30, page: 1}.merge(options)
     Project.where(id: dependents.joins(:version).limit(options[:per_page]).offset(options[:per_page]*(options[:page].to_i-1)).pluck('DISTINCT versions.project_id'))
+  end
+
+  def dependent_repositories_count
+    dependent_repositories.pluck('DISTINCT project_id').count
   end
 
   def set_dependents_count
