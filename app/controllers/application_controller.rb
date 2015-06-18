@@ -5,7 +5,15 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :logged_in?
 
+  before_filter :welcome_new_users
+
   private
+
+  def welcome_new_users
+    if not cookies[:_libraries_session] # maybe not logged_in? instead?
+      flash[:show_welcome] = true # Actual content is at views/shared/_flash
+    end
+  end
 
   def redirect_to_back_or_default(default = root_url, *args)
     if request.env['HTTP_REFERER'].present? && request.env['HTTP_REFERER'] != request.env['REQUEST_URI']
