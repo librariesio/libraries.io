@@ -4,5 +4,11 @@
   <strong>Libraries.io</strong> helps you track packages and its dependencies so your applications are always up to date.
 </p>
 
+<%- if not logged_in? %>
+<p style="text-align: center;">
+  <a href="<%= login_path %>" class="btn btn-primary btn-lg">Sign up for free</a>
+</p>
+<%- end %>
+
 <h2>FAQ</h2>
 
