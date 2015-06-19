@@ -24,6 +24,10 @@ $('.rss').on('click', function(){
   return false;
 })
 
+$('.learn-more').on('click', function(){
+  $('#welcome-alert').alert('close')
+})
+
 $('#welcome-alert').on('closed.bs.alert', function() {
   Cookies.set('hide_welcome_alert', 'true');
 });
