@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   def welcome_new_users
     if not logged_in? and not cookies[:hide_welcome_alert]
-      flash[:show_welcome] = true # Actual content is at views/shared/_flash
+      flash.now[:show_welcome] = true # Actual content is at views/shared/_flash
     end
   end
 

@@ -56,8 +56,10 @@ gem 'fast_xs'
 gem 'fast_xor'
 gem 'premailer-rails'
 gem 'gemoji'
+gem 'js-cookie-rails'
 
 group :development do
+  gem 'bundler'
   gem 'spring'
   gem 'thin'
 end

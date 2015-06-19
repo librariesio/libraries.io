@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require tipsy
+//= require js.cookie
 //= require_tree .
 
 $('.tip').tipsy();
@@ -24,5 +25,5 @@ $('.rss').on('click', function(){
 })
 
 $('#welcome-alert').on('closed.bs.alert', function() {
-  document.cookie += "hide_welcome_alert=true;";
+  Cookies.set('hide_welcome_alert', 'true');
 });
