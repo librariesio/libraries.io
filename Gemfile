@@ -55,6 +55,7 @@ gem 'fast_blank'
 gem 'fast_xs'
 gem 'fast_xor'
 gem 'premailer-rails'
+gem 'gemoji'
 
 group :development do
   gem 'spring'

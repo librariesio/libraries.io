@@ -10,7 +10,7 @@
       <%= link_to repo, github_repository_path(repo.owner_name, repo.project_name) %>
     </p>
     <p>
-      <%= repo.description %>
+      <%= emojify repo.description %>
     </p>
     <% if repo.homepage.present? %>
       <p>

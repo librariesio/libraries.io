@@ -28,5 +28,8 @@ module Libraries
     config.active_record.raise_in_transactional_callbacks = true
 
     config.exceptions_app = routes
+
+    config.assets.paths << Emoji.images_path
+    config.assets.precompile << "emoji/**/*.png"
   end
 end

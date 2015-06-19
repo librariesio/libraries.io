@@ -219,6 +219,7 @@ GEM
       railties (>= 3.2, < 5.0)
     formatador (0.2.5)
     fuzzy_match (2.1.0)
+    gemoji (2.1.0)
     gems (0.8.3)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
@@ -477,6 +478,7 @@ DEPENDENCIES
   fast_xs
   fog
   font-awesome-rails
+  gemoji
   gems
   hiredis
   hirefire-resource
