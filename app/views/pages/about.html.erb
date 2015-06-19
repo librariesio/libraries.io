@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-md-8">
+    <h1>What is Libraries.io?</h1>
+
+    <p>
+      <strong>Libraries.io</strong> helps developers find new open source libraries, modules and frameworks and keep track of ones they depend upon.
+    </p>
+
+    <p>
+      The world of open source software depends on a lot of open source libraries. We are standing on the shoulders of giants, which helps us to reach further than we could otherwise.
+    </p>
+
+    <p>
+      The problem with platforms like Rubygems and NPM is there are so many libraries, with hundreds of new ones added every day. Trying to find the right library can be overwhelming.
+    </p>
+
+    <p>
+      How do you find libraries that help you solve problems? How do you then know which of those libraries are worth using?
+    </p>
+
+    <p>
+      Within Libraries.io we’ve aggregated <strong><%= number_with_delimiter(Project.total) %></strong> projects, written in <strong>160</strong> languages from across <strong><%= Download.platforms.length %></strong> package managers, including dependencies, releases, license information and source code repository infomation. This results in a rich index of almost every open source library available for use today.
+    </p>
+
+    <p>
+      The index is kept up to date with information about new libraries and new releases of existing libraries every day. This ensures upcoming projects get exposure, as well as existing well known libraries.
+    </p>
+
+    <p>
+      This also means you can subscribe to a project to receive notifications when new releases are published, including new tags on GitHub repos for platforms like Bower and Go that don’t store release information in a central repository.
+    </p>
+
+    <%- if not logged_in? %>
+    <p style="text-align: center;">
+      <a href="<%= login_path %>" class="btn btn-primary btn-lg">Sign up for free</a>
+    </p>
+    <%- end %>
+
+    <hr>
+
+
+  </div>
+  <div class="col-md-4">
+    <h3>
+      <strong>Contact us</strong>
+    </h3>
+    <p>
+      Got a question or request for Libraries? Open an <%= link_to 'issue on GitHub', 'https://github.com/librariesio/support/issues' %>, <%= link_to 'tweet us', 'https://twitter.com/librariesio' %> or email <%= mail_to 'support@libraries.io', 'support@libraries.io' %>
+    </p>
+  </div>
+</div>

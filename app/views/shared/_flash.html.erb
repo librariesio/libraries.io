@@ -1,0 +1,53 @@
+<%- if flash[:notice] %>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-info" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <%= flash[:notice] %>
+      </div>
+    </div>
+  </div>
+<%- end %>
+
+<%- if flash[:error] %>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <%= flash[:error] %>
+      </div>
+    </div>
+  </div>
+<%- end %>
+
+<%- if flash[:success] %>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <%= flash[:success] %>
+      </div>
+    </div>
+  </div>
+<%- end %>
+
+<%- if flash[:show_welcome] %>
+  <div class="row">
+    <div class="col-md-12">
+      <div id="welcome-alert" class="alert alert-info" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        Hello! <strong>Libraries.io</strong> helps you track packages and its dependencies so your applications are always up to date. <a href="<%= about_path %>" class="btn btn-primary btn-xs">Learn more</a>
+      </div>
+    </div>
+  </div>
+<%- end %>
+
+
