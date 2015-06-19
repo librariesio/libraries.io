@@ -22,3 +22,7 @@ $('.rss').on('click', function(){
   subtome($(this).attr('href'))
   return false;
 })
+
+$('#welcome-alert').on('closed.bs.alert', function() {
+  document.cookie += "hide_welcome_alert=true;";
+});
