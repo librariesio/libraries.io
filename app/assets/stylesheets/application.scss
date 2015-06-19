@@ -5,7 +5,7 @@
 @import url("https://librariesio.github.io/pictogram/pictogram.css");
 
 body {
-  padding: 70px 0 0;
+  padding: 60px 0 0;
   background-color: #fdfdfd;
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -28,19 +28,19 @@ footer{
 
 @media (min-width: 980px) {
   body {
-    padding: 70px 0 180px;
+    padding: 60px 0 180px;
   }
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
   body {
-    padding: 70px 0 230px;
+    padding: 60px 0 230px;
   }
 }
 
 @media (max-width: 767px) {
   body {
-    padding: 70px 0 370px;
+    padding: 60px 0 370px;
   }
 }
 
@@ -200,4 +200,8 @@ html.turbolinks-progress-bar::before {
 
 a.rss{
   color: #FF6600;
+}
+
+.alert {
+  margin-top: 10px;
 }
