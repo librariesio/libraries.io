@@ -50,7 +50,7 @@ gem 'platform-api', require: nil
 gem 'pushover'
 gem 'tipsy-rails'
 gem 'mime-types', '~> 2.6.1', require: 'mime/types/columnar'
-gem 'trifle-ruby', github: "trifle-io/trifle-ruby", tag: "2.3.0.1"
+gem 'trifle-ruby', github: "trifle-io/trifle-ruby", tag: "2.3.1.0"
 gem 'fast_blank'
 gem 'fast_xs'
 gem 'fast_xor'
