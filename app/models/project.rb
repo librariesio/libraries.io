@@ -150,15 +150,15 @@ class Project < ActiveRecord::Base
   end
 
   def self.license(license)
-    where("normalized_licenses  @> ?", "{#{license}}")
+    where("projects.normalized_licenses  @> ?", "{#{license}}")
   end
 
   def self.keyword(keyword)
-    where("keywords_array  @> ?", "{#{keyword}}")
+    where("projects.keywords_array  @> ?", "{#{keyword}}")
   end
 
   def self.language(language)
-    where('lower(language) = ?', language.try(:downcase))
+    where('lower(projects.language) = ?', language.try(:downcase))
   end
 
   def self.facets(options = {})
