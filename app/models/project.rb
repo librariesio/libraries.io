@@ -158,7 +158,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.language(language)
-    joins(:github_repository).where('github_repositories.language ILIKE ?', language)
+    where('lower(language) = ?', language.downcase)
   end
 
   def self.facets(options = {})

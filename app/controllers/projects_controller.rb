@@ -10,15 +10,14 @@ class ProjectsController < ApplicationController
 
   def bus_factor
     if params[:language].present?
-      @language = GithubRepository.where('lower(language) = ?', params[:language].downcase).first.try(:language)
+      @language = Project.language(params[:language].downcase).first.try(:language)
       raise ActiveRecord::RecordNotFound if @language.nil?
       scope = Project.language(@language)
     else
       scope = Project
     end
 
-    @languages = Project.bus_factor.group('github_repositories.language').order('github_repositories.language').pluck('github_repositories.language').compact
-
+    @languages = Project.bus_factor.group('language').order('language').pluck('language').compact
     @projects = scope.bus_factor.order('github_repositories.github_contributions_count ASC, projects.dependents_count DESC').paginate(page: params[:page])
   end
 

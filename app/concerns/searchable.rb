@@ -37,7 +37,7 @@ module Searchable
     after_touch() { __elasticsearch__.update_document }
 
     def as_indexed_json(options = {})
-      as_json methods: [:stars, :language, :repo_name, :exact_name]
+      as_json methods: [:stars, :repo_name, :exact_name]
     end
 
     def exact_name
