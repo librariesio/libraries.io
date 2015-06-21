@@ -150,11 +150,11 @@ class Project < ActiveRecord::Base
   end
 
   def self.license(license)
-    where('? = ANY("normalized_licenses")', license)
+    where("normalized_licenses  @> ?", "{#{license}}")
   end
 
   def self.keyword(keyword)
-    where("keywords_array  @> ?", "{keyword}")
+    where("keywords_array  @> ?", "{#{keyword}}")
   end
 
   def self.language(language)
