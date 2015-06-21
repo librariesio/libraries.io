@@ -398,8 +398,8 @@ GEM
       addressable (~> 2.3.5)
       faraday (~> 0.8, < 0.10)
     semantic (1.4.1)
-    sidekiq (3.4.0)
-      celluloid (>= 0.16.0)
+    sidekiq (3.4.1)
+      celluloid (~> 0.16.0)
       connection_pool (>= 2.1.1)
       json
       redis (>= 3.0.6)
