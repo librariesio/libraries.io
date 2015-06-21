@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150616203251) do
+ActiveRecord::Schema.define(version: 20150621083840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -179,12 +179,14 @@ ActiveRecord::Schema.define(version: 20150616203251) do
     t.integer  "pm_id"
     t.string   "keywords_array",              default: [],              array: true
     t.integer  "dependents_count",            default: 0,  null: false
+    t.string   "language"
   end
 
   add_index "projects", ["created_at"], name: "index_projects_on_created_at", using: :btree
   add_index "projects", ["dependents_count"], name: "index_projects_on_dependents_count", using: :btree
   add_index "projects", ["github_repository_id"], name: "index_projects_on_github_repository_id", using: :btree
   add_index "projects", ["keywords_array"], name: "index_projects_on_keywords_array", using: :gin
+  add_index "projects", ["language"], name: "index_projects_on_language", using: :btree
   add_index "projects", ["name", "platform"], name: "index_projects_on_name_and_platform", using: :btree
   add_index "projects", ["platform"], name: "index_projects_on_platform", using: :btree
   add_index "projects", ["updated_at"], name: "index_projects_on_updated_at", using: :btree

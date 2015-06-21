@@ -49,7 +49,8 @@ class Project < ActiveRecord::Base
   before_save  :normalize_licenses,
                :set_latest_release_published_at,
                :set_latest_release_number,
-               :set_source_rank
+               :set_source_rank,
+               :set_language
 
   def to_param
     { name: name, platform: platform.downcase }
@@ -111,8 +112,8 @@ class Project < ActiveRecord::Base
     github_repository.try(:stargazers_count) || 0
   end
 
-  def language
-    github_repository.try(:language)
+  def set_language
+    self.language = github_repository.try(:language)
   end
 
   def repo_name

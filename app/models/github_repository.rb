@@ -17,6 +17,7 @@ class GithubRepository < ActiveRecord::Base
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
 
   after_commit :update_all_info_async, on: :create
+  after_save :touch_projects
 
   scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
@@ -24,6 +25,10 @@ class GithubRepository < ActiveRecord::Base
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
   scope :open_source, -> { where(private: false) }
+
+  def touch_projects
+    projects.find_each(&:save)
+  end
 
   def repository_dependencies
     manifests.latest.includes(:repository_dependencies).map(&:repository_dependencies).flatten.uniq
