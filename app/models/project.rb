@@ -154,7 +154,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.keyword(keyword)
-    where('? = ANY("keywords_array")', keyword)
+    where("keywords_array  @> ?", "{keyword}")
   end
 
   def self.language(language)
