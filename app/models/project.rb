@@ -158,7 +158,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.language(language)
-    where('lower(language) = ?', language.downcase)
+    where('lower(language) = ?', language.try(:downcase))
   end
 
   def self.facets(options = {})

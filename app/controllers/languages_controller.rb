@@ -21,7 +21,7 @@ class LanguagesController < ApplicationController
   end
 
   def find_language
-    @language = Project.language(@language).first.try(:language)
+    @language = Project.language(params[:id]).first.try(:language)
     raise ActiveRecord::RecordNotFound if @language.nil?
     redirect_to language_path(@language), :status => :moved_permanently if @language != params[:id]
   end
