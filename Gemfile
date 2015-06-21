@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.2.2'
 
+gem 'rb-readline'
 gem 'oj'
 gem 'oj_mimic_json'
 gem 'rails', '4.2.2'

@@ -375,6 +375,7 @@ GEM
     rake (10.4.2)
     rake-compiler (0.9.5)
       rake
+    rb-readline (0.5.3)
     redis (3.2.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
@@ -509,6 +510,7 @@ DEPENDENCIES
   rails (= 4.2.2)
   rails_12factor
   rails_safe_tasks
+  rb-readline
   redis
   sanitize-url
   sass-rails
