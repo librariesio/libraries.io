@@ -149,7 +149,7 @@ GEM
     fog-atmos (0.1.0)
       fog-core
       fog-xml
-    fog-aws (0.5.0)
+    fog-aws (0.6.0)
       fog-core (~> 1.27)
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
@@ -165,10 +165,10 @@ GEM
       mime-types
       net-scp (~> 1.1)
       net-ssh (>= 2.1.3)
-    fog-ecloud (0.1.3)
+    fog-ecloud (0.2.0)
       fog-core
       fog-xml
-    fog-google (0.0.5)
+    fog-google (0.0.6)
       fog-core
       fog-json
       fog-xml
@@ -199,7 +199,7 @@ GEM
     fog-serverlove (0.1.2)
       fog-core
       fog-json
-    fog-softlayer (0.4.6)
+    fog-softlayer (0.4.7)
       fog-core
       fog-json
     fog-storm_on_demand (0.1.1)
@@ -271,7 +271,7 @@ GEM
     js-cookie-rails (2.0.0.pre.beta.1.0)
       railties (>= 3.2.0, < 5.0)
     json (1.8.3)
-    jwt (1.5.0)
+    jwt (1.5.1)
     languages (1.1.6)
       escape_utils (~> 1.0)
     launchy (2.4.3)
@@ -316,7 +316,7 @@ GEM
     omniauth-github (1.1.2)
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.1)
-    omniauth-oauth2 (1.3.0)
+    omniauth-oauth2 (1.3.1)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     pg (0.18.2)
@@ -381,7 +381,7 @@ GEM
       redis (~> 3.0, >= 3.0.4)
     retriable (1.4.1)
     sanitize-url (0.1.4)
-    sass (3.4.14)
+    sass (3.4.15)
     sass-rails (5.0.3)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.1)
@@ -434,7 +434,7 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sprockets-rails (2.3.1)
+    sprockets-rails (2.3.2)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
@@ -534,4 +534,4 @@ DEPENDENCIES
   will_paginate-bootstrap
 
 BUNDLED WITH
-   1.10.3
+   1.10.4
