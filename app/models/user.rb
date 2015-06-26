@@ -3,10 +3,10 @@ class User < ActiveRecord::Base
   has_many :repository_subscriptions
   has_many :api_keys
   has_many :repository_permissions
-  has_many :adminable_repository_permissions, -> { where admin: true }, class: RepositoryPermission
+  has_many :adminable_repository_permissions, -> { where admin: true }, anonymous_class: RepositoryPermission
   has_many :adminable_github_repositories, through: :adminable_repository_permissions, source: :github_repository
   has_many :github_repositories, primary_key: :uid, foreign_key: :owner_id
-  has_many :source_github_repositories, -> { where fork: false }, class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
+  has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
   has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_one :github_user, primary_key: :uid, foreign_key: :github_id

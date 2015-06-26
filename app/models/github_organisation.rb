@@ -2,7 +2,7 @@ class GithubOrganisation < ActiveRecord::Base
   API_FIELDS = [:name, :login, :blog, :email, :location, :description]
 
   has_many :github_repositories
-  has_many :source_github_repositories, -> { where fork: false }, class: GithubRepository
+  has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository
   has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
 
