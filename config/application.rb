@@ -31,5 +31,7 @@ module Libraries
 
     config.assets.paths << Emoji.images_path
     config.assets.precompile << "emoji/**/*.png"
+
+    GC::Profiler.enable
   end
 end
