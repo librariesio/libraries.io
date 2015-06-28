@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   post '/auth/failure',             to: 'sessions#failure'
 
   get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, constraints: { :name => /.*/ }, format: false
+  get '/github', to: 'github_repositories#index', as: :github
 
 
   get '/about', to: 'pages#about', as: :about

@@ -1,0 +1,74 @@
+<% title "GitHub Repositories - Libraries" %>
+<% description "Explore popular GitHub Repositories on Libraries.io" %>
+
+<div class='row'>
+  <div class='col-md-12'>
+    <h1>GitHub Repositories</h1>
+  </div>
+</div>
+<hr>
+<div class="col-md-8">
+  <div class='row'>
+    <% if @popular.any? %>
+      <div class='col-md-6'>
+        <h4>
+          Most Starred Repositories
+        </h4>
+        <%= render @popular %>
+      </div>
+    <% end %>
+    <% if @forked.any? %>
+      <div class='col-md-6'>
+        <h4>
+          Most Forked Repositories
+        </h4>
+        <%= render @forked %>
+      </div>
+    <% end %>
+  </div>
+  <hr>
+  <div class='row'>
+    <% if @created.any? %>
+    <div class='col-md-6'>
+      <h4>
+        New Repositories
+      </h4>
+      <%= render @created %>
+    </div>
+    <% end %>
+    <% if @updated.any? %>
+    <div class='col-md-6'>
+      <h4>
+        Updated Repositories
+      </h4>
+      <%= render @updated %>
+    </div>
+    <% end %>
+  </div>
+</div>
+<div class="col-md-4">
+  <div class='row'>
+    <% if @languages.any? %>
+      <div class='col-md-12'>
+        <h4>Popular Languages</h4>
+        <% @languages.each do |language| %>
+          <p class='list'>
+            <strong><%= link_to language[0], github_path(language: language[0]) %></strong>
+            <small><%= pluralize number_to_human(language[1]), 'repositories' %></small>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+    <% if @licenses.any? %>
+      <div class='col-md-12'>
+        <h4>Popular Licenses</h4>
+        <% @licenses.each do |license| %>
+          <p class='list'>
+            <strong><%= link_to format_license(license[0]), github_path(license: license[0]) %></strong>
+            <small><%= pluralize number_to_human(license[1]), 'repositories' %></small>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
