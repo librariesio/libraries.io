@@ -3,7 +3,7 @@ class Api::GithubRepositoriesController < Api::ApplicationController
 
   def show
     full_name = [params[:owner], params[:name]].join('/')
-    @github_repository = GithubRepository.where('lower(full_name) = ?', full_name.downcase).first
+    @github_repository = GithubRepository.open_source.where('lower(full_name) = ?', full_name.downcase).first
 
     raise ActiveRecord::RecordNotFound if @github_repository.nil?
 

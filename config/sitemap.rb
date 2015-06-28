@@ -33,7 +33,7 @@ SitemapGenerator::Sitemap.create do
     add version_path(version.to_param), :lastmod => version.project.updated_at
   end
 
-  GithubRepository.find_each do |repo|
+  GithubRepository.open_source.find_each do |repo|
     add github_repository_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
   end
 
