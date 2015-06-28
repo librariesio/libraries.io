@@ -1,6 +1,6 @@
 class GithubRepositoriesController < ApplicationController
   def index
-    scope = GithubRepository.open_source.source
+    scope = GithubRepository.open_source.source.not(pushed_at: nil)
     scope = scope.where('lower(language) = ?', params[:language].downcase) if params[:language].present?
     scope = scope.where('lower(license) = ?', params[:license].downcase) if params[:license].present?
 
