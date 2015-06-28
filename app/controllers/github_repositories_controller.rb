@@ -7,7 +7,7 @@ class GithubRepositoriesController < ApplicationController
     @popular = scope.where('stargazers_count > 0').order('stargazers_count DESC').limit(6)
     @forked = scope.where('forks_count > 0').order('forks_count DESC').limit(6)
     @created = scope.order('created_at DESC').limit(6)
-    @updated = scope.order('updated_at DESC').limit(6)
+    @updated = scope.order('pushed_at DESC').limit(6)
 
     @languages = scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(25)
     @licenses = scope.group('lower(license)').count.reject{|k,v| k.blank? || k == 'other' }.sort_by{|k,v| v }.reverse.first(25)
