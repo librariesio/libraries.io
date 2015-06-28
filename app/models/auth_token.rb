@@ -32,10 +32,11 @@ class AuthToken < ActiveRecord::Base
   end
 
   def self.fallback_client(token = nil)
-    AuthToken.new_client(token || AuthToken.token)
+    AuthToken.new_client(token)
   end
 
   def self.new_client(token)
+    token ||= AuthToken.token
     Octokit::Client.new(access_token: token, auto_paginate: true)
   end
 end

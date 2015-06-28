@@ -308,17 +308,22 @@ class GithubRepository < ActiveRecord::Base
 
   def self.create_from_github(full_name, token = nil)
     github_client = AuthToken.new_client(token)
-    r = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
-    return false if r.nil? || r.empty?
-    g = GithubRepository.find_or_initialize_by(r.slice(:full_name))
-    g.owner_id = r[:owner][:id]
-    g.github_id = r[:id]
-    g.license = r[:license][:key] if r[:license]
-    g.source_name = r[:parent][:full_name] if r[:fork]
-    g.assign_attributes r.slice(*GithubRepository::API_FIELDS)
-    g.save
-    g
+    repo_hash = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
+    return false if repo_hash.nil? || repo_hash.empty?
+    create_from_hash(repo_hash)
   rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
+  end
+
+  def self.create_from_hash(repo_hash)
+    repo_hash = repo_hash.to_hash
+    g = GithubRepository.find_or_initialize_by(repo_hash.slice(:full_name))
+    g.owner_id = repo_hash[:owner][:id]
+    g.github_id = repo_hash[:id]
+    g.license = repo_hash[:license][:key] if repo_hash[:license]
+    g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork]
+    g.assign_attributes repo_hash.slice(*GithubRepository::API_FIELDS)
+    g.save
+    g
   end
 end
