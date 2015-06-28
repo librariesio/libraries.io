@@ -5,7 +5,7 @@ class PushoverNewUserWorker
     user = User.find(user_id)
     repos = user.github_client.repos.length
     followers = user.github_client.user(user.nickname).followers
-    if repos > 0 || followers > 0
+    if repos > 10 || followers > 5
       Pushover.notification({
         title: "@#{user.nickname} just signed up",
         message: "#{repos} repos and #{followers} followers",
