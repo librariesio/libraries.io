@@ -154,6 +154,11 @@ module ApplicationHelper
     Project.format_license(license)
   end
 
+  def format_language(language)
+    return nil if language.blank?
+    Languages::Language[language].try(:to_s)
+  end
+
   def stats_for(title, records)
     render 'table', title: title, records: records
   end

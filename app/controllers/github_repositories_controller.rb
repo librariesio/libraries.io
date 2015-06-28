@@ -1,6 +1,6 @@
 class GithubRepositoriesController < ApplicationController
   def index
-    scope = GithubRepository
+    scope = GithubRepository.open_source
     scope = scope.where(language: params[:language]) if params[:language].present?
     scope = scope.where(license: params[:license]) if params[:license].present?
 
@@ -9,8 +9,8 @@ class GithubRepositoriesController < ApplicationController
     @created = scope.order('created_at DESC').limit(5)
     @updated = scope.order('updated_at DESC').limit(5)
 
-    @languages = scope.group(:language).limit(20).count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse
-    @licenses = scope.group(:license).limit(20).count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse
+    @languages = scope.group('lower(language)').limit(20).count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse
+    @licenses = scope.group('lower(license)').limit(20).count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse
   end
 
   def show
