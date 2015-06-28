@@ -53,8 +53,8 @@
         <h4>Popular Languages</h4>
         <% @languages.each do |language| %>
           <p class='list'>
-            <strong><%= link_to format_language(language[0]), github_path(language: language[0]) %></strong>
-            <small><%= pluralize number_to_human(language[1]), 'repositories' %></small>
+            <strong><%= link_to format_language(language[0]), github_path(language: format_language(language[0])) %></strong>
+            <small><%= pluralize number_to_human(language[1]), 'repos' %></small>
           </p>
         <% end %>
       </div>
@@ -64,8 +64,8 @@
         <h4>Popular Licenses</h4>
         <% @licenses.each do |license| %>
           <p class='list'>
-            <strong><%= link_to format_license(license[0]), github_path(license: license[0]) %></strong>
-            <small><%= pluralize number_to_human(license[1]), 'repositories' %></small>
+            <strong><%= link_to format_license(license[0]), github_path(license: format_license(license[0])) %></strong>
+            <small><%= pluralize number_to_human(license[1]), 'repos' %></small>
           </p>
         <% end %>
       </div>

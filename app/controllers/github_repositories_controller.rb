@@ -1,8 +1,8 @@
 class GithubRepositoriesController < ApplicationController
   def index
     scope = GithubRepository.open_source
-    scope = scope.where(language: params[:language]) if params[:language].present?
-    scope = scope.where(license: params[:license]) if params[:license].present?
+    scope = scope.where('lower(language) = ?' params[:language].downcase) if params[:language].present?
+    scope = scope.where('lower(license) = ?' params[:license].downcase) if params[:license].present?
 
     @popular = scope.where('stargazers_count > 0').order('stargazers_count DESC').limit(6)
     @forked = scope.where('forks_count > 0').order('forks_count DESC').limit(6)
