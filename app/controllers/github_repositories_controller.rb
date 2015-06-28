@@ -4,13 +4,13 @@ class GithubRepositoriesController < ApplicationController
     scope = scope.where(language: params[:language]) if params[:language].present?
     scope = scope.where(license: params[:license]) if params[:license].present?
 
-    @popular = scope.order('stargazers_count DESC').limit(5)
-    @forked = scope.where('forks_count > 0').order('forks_count DESC').limit(5)
-    @created = scope.order('created_at DESC').limit(5)
-    @updated = scope.order('updated_at DESC').limit(5)
+    @popular = scope.order('stargazers_count DESC').limit(6)
+    @forked = scope.where('forks_count > 0').order('forks_count DESC').limit(6)
+    @created = scope.order('created_at DESC').limit(6)
+    @updated = scope.order('updated_at DESC').limit(6)
 
-    @languages = scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(20)
-    @licenses = scope.group('lower(license)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(20)
+    @languages = scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(25)
+    @licenses = scope.group('lower(license)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(25)
   end
 
   def show
