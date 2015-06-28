@@ -5,7 +5,7 @@ class GithubRepositoriesController < ApplicationController
     scope = scope.where(license: params[:license]) if params[:license].present?
 
     @popular = scope.order('stargazers_count DESC').limit(5)
-    @forked = scope.order('forks_count DESC').limit(5)
+    @forked = scope.where('forks_count > 0').order('forks_count DESC').limit(5)
     @created = scope.order('created_at DESC').limit(5)
     @updated = scope.order('updated_at DESC').limit(5)
 
