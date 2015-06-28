@@ -10,7 +10,7 @@ class GithubRepositoriesController < ApplicationController
     @updated = scope.order('updated_at DESC').limit(6)
 
     @languages = scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(25)
-    @licenses = scope.group('lower(license)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(25)
+    @licenses = scope.group('lower(license)').count.reject{|k,v| k.blank? || k == 'other' }.sort_by{|k,v| v }.reverse.first(25)
   end
 
   def show
