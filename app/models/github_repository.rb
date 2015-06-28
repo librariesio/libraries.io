@@ -81,6 +81,10 @@ class GithubRepository < ActiveRecord::Base
     stargazers_count
   end
 
+  def forks
+    forks_count
+  end
+
   def pages_url
     "http://#{owner_name}.github.io/#{project_name}"
   end
