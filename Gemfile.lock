@@ -62,6 +62,8 @@ GEM
       google-api-client (~> 0.8.2)
     bini (0.7.0)
       sys-proctable
+    bloomfilter-rb (2.1.1)
+      redis
     bootstrap-sass (3.3.5.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
@@ -115,6 +117,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (1.1.1)
       faraday (~> 0.8)
+    fast-stemmer (1.0.2)
     fast_blank (0.0.2)
     fast_xor (1.1.3)
       rake
@@ -250,6 +253,9 @@ GEM
       moneta
       multi_json (>= 1.9.2)
       netrc
+    highscore (1.2.0)
+      bloomfilter-rb (>= 2.1.1)
+      whatlanguage (>= 1.0.0)
     hike (1.2.3)
     hiredis (0.6.0)
     hirefire-resource (0.3.7)
@@ -460,6 +466,7 @@ GEM
     uglifier (2.7.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    whatlanguage (1.0.5)
     will_paginate (3.0.7)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
@@ -470,6 +477,7 @@ PLATFORMS
 
 DEPENDENCIES
   bigquery
+  bloomfilter-rb
   bootstrap-sass
   bugsnag
   bundler
@@ -480,6 +488,7 @@ DEPENDENCIES
   elasticsearch-model
   elasticsearch-rails
   faraday-http-cache
+  fast-stemmer
   fast_blank
   fast_xor
   fast_xs
@@ -487,6 +496,7 @@ DEPENDENCIES
   font-awesome-rails
   gemoji
   gems
+  highscore
   hiredis
   hirefire-resource
   jbuilder

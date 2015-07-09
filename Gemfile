@@ -59,6 +59,10 @@ gem 'premailer-rails'
 gem 'gemoji'
 gem 'js-cookie-rails'
 
+gem 'highscore'
+gem 'fast-stemmer'
+gem 'bloomfilter-rb'
+
 group :development do
   gem 'bundler'
   gem 'spring'
