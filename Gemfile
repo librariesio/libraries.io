@@ -58,6 +58,7 @@ gem 'fast_xor'
 gem 'premailer-rails'
 gem 'gemoji'
 gem 'js-cookie-rails'
+gem 'postgres_ext'
 
 group :development do
   gem 'bundler'
