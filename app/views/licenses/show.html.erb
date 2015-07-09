@@ -19,7 +19,7 @@
       Website: <%= link_to url, url %>
     </p>
     <p>
-      Total Packages: <%= number_with_delimiter Project.license(@license.name).count %>
+      Total Packages: <%= number_with_delimiter Project.license(@license.id).count %>
     </p>
   </div>
 </div>
