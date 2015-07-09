@@ -1,16 +1,23 @@
 class GithubRepositoriesController < ApplicationController
   def index
-    scope = GithubRepository.open_source.source.where.not(pushed_at: nil)
-    scope = scope.where('lower(language) = ?', params[:language].downcase) if params[:language].present?
-    scope = scope.where('lower(license) = ?', params[:license].downcase) if params[:license].present?
+    @language = Languages::Language[params[:language]] if params[:language].present?
+    @license = Spdx.find(params[:license]) if params[:license].present?
+
+    postfix = [@language, @license.try(:id)].compact.any? ? 'Repos' : 'Repositories'
+    @title = [@language, @license.try(:id), postfix].compact.join(' ')
+
+    orginal_scope = GithubRepository.open_source.source.where.not(pushed_at: nil)
+    language_scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
+    license_scope = @license.present? ? orginal_scope.where('lower(license) = ?', @license.id.downcase) : orginal_scope
+    scope = @license.present? ? language_scope.where('lower(license) = ?', @license.id.downcase) : language_scope
 
     @popular = scope.where('stargazers_count > 0').order('stargazers_count DESC').limit(6)
     @forked = scope.where('forks_count > 0').order('forks_count DESC').limit(6)
     @created = scope.order('created_at DESC').limit(6)
     @updated = scope.order('pushed_at DESC').limit(6)
 
-    @languages = scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(25)
-    @licenses = scope.group('lower(license)').count.reject{|k,v| k.blank? || k == 'other' }.sort_by{|k,v| v }.reverse.first(25)
+    @languages = license_scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(25)
+    @licenses = language_scope.group('lower(license)').count.reject{|k,v| k.blank? || k == 'other' }.sort_by{|k,v| v }.reverse.first(25)
   end
 
   def show

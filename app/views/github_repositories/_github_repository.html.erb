@@ -15,6 +15,9 @@
     <% if github_repository.language.present? %>
       <%= link_to github_repository.language, language_path(github_repository.language) %> -
     <% end %>
+    <% if github_repository.license.present? %>
+      <%= link_to github_repository.license, license_path(github_repository.license) %> -
+    <% end %>
     <% if github_repository.updated_at > github_repository.created_at + 1.minute %>
       Updated <%= time_ago_in_words github_repository.updated_at %> ago
     <% else %>
