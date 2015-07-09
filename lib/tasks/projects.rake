@@ -5,6 +5,7 @@ namespace :projects do
     Project.__elasticsearch__.create_index! force: true
   end
 
+  desc 'Reindex the search'
   task reindex: [:environment, :recreate_index] do
     Project.import query: -> { includes(:github_repository => :github_tags) }
   end
