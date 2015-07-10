@@ -9,23 +9,14 @@
           <button class="btn btn-primary" type="button">Search</button>
         </span>
       </div>
-      <p>Libraries.io monitors <strong><%= number_with_delimiter(Project.total) %></strong> open source libraries across <strong><%= Download.platforms.length %></strong> different package managers.
-        <span class='hidden-xs'>
+      <p class='hidden-xs'>Libraries.io monitors <strong><%= number_with_delimiter(Project.total) %></strong> open source libraries across <strong><%= Download.platforms.length %></strong> different package managers.
           You can discover new libraries to use in your software projects as well as be notified of new releases to keep your applications secure and up to date.
-        </span>
       <%= link_to 'Find out more', about_path %>
       </p>
     <% end %>
   </div>
 </div>
-<hr>
 
-<h3>
-  Search Projects by Platform
-  <small class='more'>
-    <%= link_to 'See more &raquo;'.html_safe, platforms_path %>
-  </small>
-</h3>
 <div class='row'>
   <%= render partial: 'platforms/platform', collection: @platforms %>
 </div>
