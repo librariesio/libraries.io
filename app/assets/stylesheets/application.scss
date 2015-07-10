@@ -99,12 +99,6 @@ footer {
   padding: 15px 10px;
 }
 
-.jumbotron {
-  background: none;
-  padding-bottom:0;
-  margin-bottom: 0;
-}
-
 h3,h4{
   color:#555;
   font-weight: normal;
@@ -140,11 +134,19 @@ h3,h4{
   }
 }
 
-.search-form .form-control {
-  font-size:28px;
-  height: auto;
-  width: 100%;
-  margin: 20px 0;
+.search-form{
+  .input-group-lg > .input-group-btn > .btn{
+    height: 59px
+  }
+  .form-control {
+   font-size:28px;
+   height: auto;
+   width: 100%;
+   margin: 20px 0;
+ }
+ p{
+   font-size: 18px;
+ }
 }
 
 .list, .facets {

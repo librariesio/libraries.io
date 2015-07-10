@@ -1,14 +1,21 @@
 <div class='row'>
-  <div class="jumbotron">
-    <div class='col-md-12 col-md-8'>
-      <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
-        <%= text_field_tag 'q', params[:q], placeholder: 'Search libraries...', class: 'form-control' %>
-      <% end %>
-      <p>Libraries.io monitors <%= number_with_delimiter(Project.total) %> open source libraries across <%= Download.platforms.length %> different package managers.</p>
-      <p class='hidden-xs'>
-        You can discover new libraries to use in your software projects as well as be notified of new releases to keep your applications secure and up to date.
+  <div class="col-md-12">
+    <h1>Libraries.io - The Open Source Discovery Service</h1>
+    <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
+      <div class="input-group input-group-lg">
+        <%= text_field_tag 'q', params[:q], placeholder: 'Search open source libraries, frameworks and tools...', class: 'form-control' %>
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="button">Search</button>
+        </span>
+      </div>
+      <p>Libraries.io monitors <strong><%= number_with_delimiter(Project.total) %></strong> open source libraries across <strong><%= Download.platforms.length %></strong> different package managers.
+        <span class='hidden-xs'>
+          You can discover new libraries to use in your software projects as well as be notified of new releases to keep your applications secure and up to date.
+        </span>
+      <%= link_to 'Find out more', about_path %>
       </p>
-    </div>
+
+    <% end %>
   </div>
 </div>
 <hr>
