@@ -42,6 +42,24 @@ footer{
   body {
     padding: 60px 0 370px;
   }
+
+  .leaderboard{
+    h1{
+      font-size: 30px;
+      a {
+        display: inline !important;
+      }
+    }
+    .search-form .form-control {
+      font-size: 18px;
+    }
+    .search-form {
+      .input-group-lg > .input-group-btn > .btn{
+        height: auto;
+      }
+    }
+
+  }
 }
 
 .facets{

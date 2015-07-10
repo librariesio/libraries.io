@@ -1,6 +1,6 @@
 <div class='row'>
-  <div class="col-md-12">
-    <h1>Libraries.io <small>The Open Source Discovery Service</small></h1>
+  <div class="col-md-12 leaderboard">
+    <h1>Libraries.io <small>The Open Source Discovery Service. <%= link_to 'Find out more &raquo;'.html_safe, about_path, class: 'visible-xs' %></small></h1>
 
     <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
       <div class="input-group input-group-lg">
@@ -13,6 +13,7 @@
           You can discover new libraries to use in your software projects as well as be notified of new releases to keep your applications secure and up to date.
       <%= link_to 'Find out more', about_path %>
       </p>
+      <hr>
     <% end %>
   </div>
 </div>
