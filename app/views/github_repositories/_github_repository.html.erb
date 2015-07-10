@@ -18,7 +18,7 @@
     <% if github_repository.license.present? %>
       <%= link_to github_repository.license, license_path(github_repository.license) %> -
     <% end %>
-    <% if github_repository.pushed_at > github_repository.created_at + 1.minute %>
+    <% if github_repository.pushed_at && github_repository.pushed_at > github_repository.created_at + 1.minute %>
       Last pushed <%= time_ago_in_words github_repository.pushed_at %> ago
     <% else %>
       Published <%= time_ago_in_words github_repository.created_at %> ago
