@@ -1,0 +1,78 @@
+<h4>Project Statistics</h4>
+<table class='table table-striped'>
+
+  <tr>
+    <td>
+      Dependent projects
+    </td>
+    <td>
+      <strong><%= link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %></strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Dependent repositories
+    </td>
+    <td>
+      <strong><%= link_to number_to_human(@project.dependent_repositories_count), project_dependent_repos_path(@project.to_param) %></strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Dependencies
+    </td>
+    <td>
+      <strong><%= number_to_human(@project.dependencies.count.keys.length) %></strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Total releases
+    </td>
+    <td>
+      <strong><%= link_to number_to_human(@project.versions.count), project_versions_path(@project.to_param) %></strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Latest Release
+    </td>
+    <td>
+      <strong><%= time_ago_in_words(@project.latest_release.try(:published_at).presence || @project.updated_at) %> ago</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      First Release
+    </td>
+    <td>
+      <strong><%= time_ago_in_words(@project.first_release.try(:published_at).presence || @project.github_repository.try(:created_at).presence || @project.created_at) %> ago</strong>
+    </td>
+  </tr>
+  <% if @project.github_repository.present? %>
+  <tr>
+    <td>
+      Stars
+    </td>
+    <td>
+      <strong><%= link_to number_to_human(@project.github_repository.stargazers_count), @project.github_repository.stargazers_url %></strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Forks
+    </td>
+    <td>
+      <strong><%= link_to number_to_human(@project.github_repository.forks_count), @project.github_repository.forks_url %></strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Contributors
+    </td>
+    <td>
+      <strong><%= link_to number_to_human(@project.github_contributions.count), @project.github_repository.stargazers_url %></strong>
+    </td>
+  </tr>
+  <% end %>
+</table>

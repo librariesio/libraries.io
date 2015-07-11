@@ -73,6 +73,19 @@ class Project < ActiveRecord::Base
     latest_version || latest_tag
   end
 
+  def first_version
+    @first_version ||= versions.order('published_at ASC').first
+  end
+
+  def first_tag
+    return nil if github_repository.nil?
+    github_repository.github_tags.published.order('published_at ASC').first
+  end
+
+  def first_release
+    first_version || first_tag
+  end
+
   def latest_release_published_at
     read_attribute(:latest_release_published_at) || (latest_release.try(:published_at).presence || updated_at)
   end

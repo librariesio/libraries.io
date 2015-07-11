@@ -109,7 +109,7 @@
         <% dependents = @project.dependent_projects(per_page: 10) %>
         <% dependent_repos = @project.dependent_repos(per_page: 10) %>
         <% if dependent_repos.any? || dependents.any? || @dependencies.any? %>
-        <hr>
+          <hr>
         <% end %>
         <% if dependent_repos.any? || dependents.any? %>
           <div class="col-md-6">
@@ -205,12 +205,12 @@
       <% end %>
     <% end %>
 
+    <%= render 'statistics' %>
+
     <% cache("projects:#{@project.id}:related", :expires_in => 5.day) do %>
       <% related = @project.mlt %>
       <% if related && related.any? %>
-        <% if @versions.any? %>
-          <hr>
-        <% end %>
+
         <h4>Related Projects</h4>
         <%= render related %>
       <% end %>
