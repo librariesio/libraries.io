@@ -14,7 +14,7 @@ class Project < ActiveRecord::Base
   has_many :subscriptions
   belongs_to :github_repository
 
-  scope :platform, ->(platform) { where('lower(platform) = ?', platform.downcase) }
+  scope :platform, ->(platform) { where('lower(platform) = ?', platform.try(:downcase)) }
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
@@ -135,6 +135,11 @@ class Project < ActiveRecord::Base
   def dependent_projects(options = {})
     options = {per_page: 30, page: 1}.merge(options)
     Project.where(id: dependents.joins(:version).limit(options[:per_page]).offset(options[:per_page]*(options[:page].to_i-1)).pluck('DISTINCT versions.project_id'))
+  end
+
+  def dependent_repos(options = {})
+    options = {per_page: 30, page: 1}.merge(options)
+    GithubRepository.where(id: dependent_repositories.limit(options[:per_page]).offset(options[:per_page]*(options[:page].to_i-1)).pluck('DISTINCT project_id'))
   end
 
   def dependent_repositories_count
