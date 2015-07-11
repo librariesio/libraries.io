@@ -23,5 +23,6 @@ namespace :projects do
 
   task link_dependencies: :environment do
     Dependency.without_project_id.find_each(&:update_project_id)
+    RepositoryDependency.without_project_id.find_each(&:update_project_id)
   end
 end
