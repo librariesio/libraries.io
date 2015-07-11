@@ -66,6 +66,14 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def dependent_repos
+    find_project
+    page = params[:page].to_i > 0 ? params[:page].to_i : 1
+    @dependent_repos = WillPaginate::Collection.create(page, 30, @project.dependent_repositories_count) do |pager|
+      pager.replace(@project.dependent_repos(page: page))
+    end
+  end
+
   def versions
     find_project
     if incorrect_case?
