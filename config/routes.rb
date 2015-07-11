@@ -59,10 +59,7 @@ Rails.application.routes.draw do
   get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, constraints: { :name => /.*/ }, format: false
   get '/github', to: 'github_repositories#index', as: :github
 
-
   get '/about', to: 'pages#about', as: :about
-  #get '/welcome', to: 'pages#welcome', as: :welcome
-
 
   # legacy
   get '/platforms/:id', to: 'legacy#platform'
