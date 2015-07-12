@@ -1,7 +1,7 @@
 class Repositories
   class Maven < Base
     HAS_VERSIONS = true
-    HAS_DEPENDENCIES = true
+    HAS_DEPENDENCIES = false
     URL = "http://maven.org"
     BASE_URL = "https://maven-repository.com"
     COLOR = '#b07219'

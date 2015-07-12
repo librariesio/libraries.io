@@ -1,7 +1,7 @@
 class Repositories
   class Bower < Base
     HAS_VERSIONS = false
-    HAS_DEPENDENCIES = true
+    HAS_DEPENDENCIES = false
     URL = 'http://bower.io'
     COLOR = '#563d7c'
 

@@ -1,7 +1,7 @@
 class Repositories
   class Go < Base
     HAS_VERSIONS = false
-    HAS_DEPENDENCIES = true
+    HAS_DEPENDENCIES = false
     URL = 'http://go-search.org/'
     COLOR = '#375eab'
 

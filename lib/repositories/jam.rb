@@ -1,7 +1,7 @@
 class Repositories
   class Jam < Base
     HAS_VERSIONS = true
-    HAS_DEPENDENCIES = true
+    HAS_DEPENDENCIES = false
     URL = 'http://jamjs.org/'
     COLOR = '#f1e05a'
 

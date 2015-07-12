@@ -1,7 +1,7 @@
 class Repositories
   class Emacs < Base
     HAS_VERSIONS = false
-    HAS_DEPENDENCIES = true
+    HAS_DEPENDENCIES = false
     URL = 'http://melpa.org'
     COLOR = '#c065db'
 
