@@ -3,7 +3,7 @@ namespace :one_off do
   desc 'get popular repos'
   task update_popular_repos: :environment do
     Project.popular_languages(:facet_limit => 20).map(&:term).each do |language|
-      AuthToken.client.search_repos("language:#{language} stars:<400", sort: 'stars').items.each do |repo|
+      AuthToken.client.search_repos("language:#{language} stars:<300", sort: 'stars').items.each do |repo|
         GithubRepository.create_from_hash repo.to_hash
       end
     end
