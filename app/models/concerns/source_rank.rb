@@ -78,17 +78,17 @@ module SourceRank
   end
 
   def versions_present?
-    versions_count > 1 || (github_repository && github_repository.github_tags.published.any?)
+    versions_count > 1 || (github_tags.published.any?)
   end
 
   def recent_release?
     versions.any? {|v| v.published_at && v.published_at > 6.months.ago } ||
-      (github_repository && github_repository.github_tags.published.any? {|v| v.published_at && v.published_at > 6.months.ago })
+      (github_tags.published.any? {|v| v.published_at && v.published_at > 6.months.ago })
   end
 
   def not_brand_new?
     versions.any? {|v| v.published_at && v.published_at < 6.months.ago } ||
-      (github_repository && github_repository.github_tags.published.any? {|v| v.published_at && v.published_at < 6.months.ago })
+      (github_tags.published.any? {|v| v.published_at && v.published_at < 6.months.ago })
   end
 
   def log_scale(number)

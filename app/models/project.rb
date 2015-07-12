@@ -9,6 +9,7 @@ class Project < ActiveRecord::Base
   has_many :versions
   has_many :dependencies, -> { group 'project_name' }, through: :versions
   has_many :github_contributions, through: :github_repository
+  has_many :github_tags, through: :github_repository
   has_many :dependents, class_name: 'Dependency'
   has_many :dependent_repositories, class_name: 'RepositoryDependency'
   has_many :subscriptions
@@ -66,7 +67,7 @@ class Project < ActiveRecord::Base
 
   def latest_tag
     return nil if github_repository.nil?
-    github_repository.github_tags.published.order('published_at DESC').first
+    github_tags.published.order('published_at DESC').first
   end
 
   def latest_release
@@ -79,7 +80,7 @@ class Project < ActiveRecord::Base
 
   def first_tag
     return nil if github_repository.nil?
-    github_repository.github_tags.published.order('published_at ASC').first
+    github_tags.published.order('published_at ASC').first
   end
 
   def first_release
@@ -235,6 +236,22 @@ class Project < ActiveRecord::Base
 
   def update_github_repo_async
     GithubProjectWorker.perform_async(self.id)
+  end
+
+  def can_have_dependencies?
+    platform_class::HAS_DEPENDENCIES
+  end
+
+  def can_have_versions?
+    platform_class::HAS_VERSIONS
+  end
+
+  def release_or_tag
+    can_have_versions? ? 'releases' : 'tags'
+  end
+
+  def platform_class
+    Download.platforms.find{|p| p.to_s.demodulize.downcase == platform.downcase }
   end
 
   def update_github_repo

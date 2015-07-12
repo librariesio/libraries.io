@@ -8,14 +8,24 @@
       <strong><%= @project.rank %></strong>
     </td>
   </tr>
-  <tr>
-    <td>
-      Dependent projects
-    </td>
-    <td>
-      <strong><%= link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %></strong>
-    </td>
-  </tr>
+  <% if @project.can_have_dependencies? %>
+    <tr>
+      <td>
+        Dependencies
+      </td>
+      <td>
+        <strong><%= number_to_human(@project.dependencies.count.keys.length) %></strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Dependent projects
+      </td>
+      <td>
+        <strong><%= link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %></strong>
+      </td>
+    </tr>
+  <% end %>
   <tr>
     <td>
       Dependent repositories
@@ -26,23 +36,21 @@
   </tr>
   <tr>
     <td>
-      Dependencies
+      Total <%= @project.release_or_tag %>
     </td>
     <td>
-      <strong><%= number_to_human(@project.dependencies.count.keys.length) %></strong>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Total releases
-    </td>
-    <td>
-      <strong><%= link_to number_to_human(@project.versions.count), project_versions_path(@project.to_param) %></strong>
+      <strong>
+        <% if @project.can_have_versions? %>
+          <%= link_to number_to_human(@project.versions.count), project_versions_path(@project.to_param) %>
+        <% else %>
+          <%= link_to number_to_human(@project.github_tags.count), project_tags_path(@project.to_param) %>
+        <% end %>
+      </strong>
     </td>
   </tr>
   <tr>
     <td>
-      Latest Release
+      Latest <%= @project.release_or_tag %>
     </td>
     <td>
       <strong><%= time_ago_in_words(@project.latest_release.try(:published_at).presence || @project.updated_at) %> ago</strong>
@@ -50,7 +58,7 @@
   </tr>
   <tr>
     <td>
-      First Release
+      First <%= @project.release_or_tag %>
     </td>
     <td>
       <strong><%= time_ago_in_words(@project.first_release.try(:published_at).presence || @project.github_repository.try(:created_at).presence || @project.created_at) %> ago</strong>
@@ -75,10 +83,26 @@
   </tr>
   <tr>
     <td>
+      Watchers
+    </td>
+    <td>
+      <strong><%= link_to number_with_delimiter(@project.github_repository.subscribers_count), @project.github_repository.watchers_url %></strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
       Contributors
     </td>
     <td>
       <strong><%= link_to number_to_human(@project.github_contributions.count), @project.github_repository.stargazers_url %></strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Repo Size:
+    </td>
+    <td>
+      <strong><%= number_to_human_size @project.github_repository.size*1000 %></strong>
     </td>
   </tr>
   <% end %>
