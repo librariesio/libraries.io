@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
   include Searchable
   include SourceRank
+  HAS_DEPENDENCIES = false
 
   validates_presence_of :name, :platform
 
