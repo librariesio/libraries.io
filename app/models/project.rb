@@ -109,7 +109,7 @@ class Project < ActiveRecord::Base
   end
 
   def color
-    Languages::Language[language].try(:color) || platform_class.color
+    Languages::Language[language].try(:color) || platform_class.try(:color)
   end
 
   def mlt
