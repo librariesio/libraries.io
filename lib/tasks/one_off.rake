@@ -9,6 +9,22 @@ namespace :one_off do
     end
   end
 
+  desc 'get popular users'
+  task update_popular_users: :environment do
+    Project.popular_languages(:facet_limit => 100).map(&:term).each do |language|
+      AuthToken.client.search_users("language:#{language}", sort: 'followers').items.each do |item|
+        user = GithubUser.find_or_create_by(github_id: item.id) do |u|
+          u.login = item.login
+          u.user_type = item.type
+          u.name = item.name
+          u.company = item.company
+          u.blog = item.blog
+          u.location = item.location
+        end
+      end
+    end
+  end
+
   desc 'fix git urls'
   task fix_git_urls: :environment do
     Project.where('repository_url LIKE ?', 'https://github.com/git+%').find_each do |p|
