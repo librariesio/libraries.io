@@ -56,7 +56,8 @@ Rails.application.routes.draw do
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   post '/auth/failure',             to: 'sessions#failure'
 
-  get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, constraints: { :name => /.*/ }, format: false
+  get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, format: false
+  get '/github/:owner/:name/contributors', to: 'github_repositories#contributors', as: :github_repository_contributors, format: false
   get '/github', to: 'github_repositories#index', as: :github
 
   get '/about', to: 'pages#about', as: :about
