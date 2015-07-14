@@ -13,8 +13,15 @@ class User < ActiveRecord::Base
 
   after_commit :create_api_key, :ping_andrew, :download_orgs, :update_repo_permissions_async, on: :create
 
+  ADMIN_USERS = ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall']
+  BETA_USERS = ['scottrobertson', 'adambutler', 'wadtech', 'keithamus', 'kdaigle', 'stefanbc', 'danbartlett', 'erlingwl', 'alanshaw']
+
   def admin?
-    ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall', 'zachinglis'].include?(nickname)
+    ADMIN_USERS.include?(nickname)
+  end
+
+  def beta?
+    (ADMIN_USERS + BETA_USERS).include?(nickname)
   end
 
   def ping_andrew
