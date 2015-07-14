@@ -50,7 +50,7 @@ GEM
     after_commit_action (1.0.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-    arel (6.0.1)
+    arel (6.0.2)
     autoparse (0.3.3)
       addressable (>= 2.3.1)
       extlib (>= 0.9.15)
@@ -58,8 +58,8 @@ GEM
     autoprefixer-rails (5.2.1)
       execjs
       json
-    bigquery (0.8.0)
-      google-api-client (~> 0.8.2)
+    bigquery (0.8.3)
+      google-api-client (= 0.8.6)
     bini (0.7.0)
       sys-proctable
     bootstrap-sass (3.3.5.1)
@@ -108,7 +108,7 @@ GEM
     ethon (0.7.4)
       ffi (>= 1.3.0)
     eventmachine (1.0.7)
-    excon (0.45.3)
+    excon (0.45.4)
     execjs (2.5.2)
     extlib (0.9.16)
     faraday (0.9.1)
@@ -308,7 +308,7 @@ GEM
       rack (~> 1.2)
     octokit (4.0.1)
       sawyer (~> 0.6.0, >= 0.5.3)
-    oj (2.12.9)
+    oj (2.12.10)
     oj_mimic_json (1.0.1)
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
@@ -393,13 +393,14 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
-    sassc (1.2.0)
+    sassc (1.5.1)
       bundler
       ffi (~> 1.9.6)
-    sassc-rails (0.1.0)
+      sass (>= 3.3.0)
+    sassc-rails (1.0.0)
       rails (>= 4.0.0)
       sass
-      sassc (~> 1.2.0)
+      sassc (~> 1.5)
       sprockets (> 2.11)
       tilt
     sawyer (0.6.0)
