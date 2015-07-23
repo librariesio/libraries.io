@@ -1,0 +1,24 @@
+<h1><%= title 'Account Settings - Libraries.io' %></h1>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Emails</div>
+  <div class="panel-body">
+    <%= simple_form_for(current_user, url: account_path, html: { class: 'form-vertical' }) do |form| %>
+      <%= form.input :email, label: false, input_html: {size: 40} %>
+      <%= form.submit 'Update Email', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">API Key</div>
+  <div class="panel-body">
+    <p>
+      Your private token is used to access application resources without authentication.
+Soon it will be used for private atom feeds and API access. <strong>Keep it secret!</strong>
+    </p>
+    <div class="well">
+      <%= current_user.api_key %>
+    </div>
+  </div>
+</div>

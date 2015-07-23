@@ -16,6 +16,9 @@ class User < ActiveRecord::Base
   ADMIN_USERS = ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall']
   BETA_USERS = ['scottrobertson', 'adambutler', 'wadtech', 'keithamus', 'kdaigle', 'stefanbc', 'danbartlett', 'erlingwl', 'alanshaw']
 
+  validates_presence_of :email, :on => :update
+  validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
+
   def admin?
     ADMIN_USERS.include?(nickname)
   end
