@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150628202111) do
+ActiveRecord::Schema.define(version: 20150723172234) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 20150628202111) do
   add_index "github_repositories", ["fork"], name: "index_github_repositories_on_fork", where: "(fork = false)", using: :btree
   add_index "github_repositories", ["full_name"], name: "index_github_repositories_on_full_name", using: :btree
   add_index "github_repositories", ["github_contributions_count"], name: "index_github_repositories_on_github_contributions_count", using: :btree
+  add_index "github_repositories", ["github_id"], name: "index_github_repositories_on_github_id", using: :btree
   add_index "github_repositories", ["github_organisation_id"], name: "index_github_repositories_on_github_organisation_id", using: :btree
   add_index "github_repositories", ["language"], name: "index_github_repositories_on_language", using: :btree
   add_index "github_repositories", ["license"], name: "index_github_repositories_on_license", using: :btree
