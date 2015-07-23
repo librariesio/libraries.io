@@ -7,9 +7,10 @@ class AccountsController < ApplicationController
 
   def update
     if current_user.update_attributes(user_params)
-      redirect_to account_path
+      redirect_to account_path, notice: 'Email updated'
     else
-      render action: :show, error: "Couldn't update email"
+      flash.now[:error] = "Couldn't update your email address"
+      render action: :show
     end
   end
 
