@@ -6,7 +6,7 @@
       <div class="input-group input-group-lg">
         <%= text_field_tag 'q', params[:q], placeholder: 'Search open source libraries, frameworks and tools...', class: 'form-control' %>
         <span class="input-group-btn">
-          <button class="btn btn-primary" type="button">Search</button>
+          <button class="btn btn-primary" type="submit">Search</button>
         </span>
       </div>
       <p class='hidden-xs'>Libraries.io monitors <strong><%= number_with_delimiter(Project.total) %></strong> open source libraries across <strong><%= Download.platforms.length %></strong> different package managers.

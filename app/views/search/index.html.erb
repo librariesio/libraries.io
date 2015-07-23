@@ -3,7 +3,14 @@
 <div class="row">
   <div class='col-md-8'>
     <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
-      <%= text_field_tag 'q', params[:q], placeholder: 'Search..', class: 'form-control' %>
+
+      <div class="input-group input-group-lg">
+        <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 40 %>
+        <span class="input-group-btn">
+          <button class="btn btn-primary btn-large " type="submit">Search</button>
+        </span>
+      </div>
+
       <% [:platforms, :licenses, :languages, :keywords].each do |field| %>
         <%= hidden_field_tag field, params[field] if params[field].present? %>
       <% end %>
