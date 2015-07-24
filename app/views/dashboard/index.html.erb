@@ -2,7 +2,7 @@
   <% if current_user.public_repo_token.blank? %>
     <%= link_to 'Enable Public Repo Access', '/auth/github_public', class: 'btn btn-primary' %>
   <% else %>
-    <% if current_user.beta? && current_user.private_repo_token.blank? %>
+    <% if current_user.private_repo_token.blank? %>
       <%= link_to 'Enable Private Repo Access', '/auth/github_private', class: 'btn btn-primary' %>
     <% end %>
     <h2>Your Repos</h2>

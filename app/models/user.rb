@@ -14,17 +14,12 @@ class User < ActiveRecord::Base
   after_commit :create_api_key, :ping_andrew, :download_orgs, :update_repo_permissions_async, on: :create
 
   ADMIN_USERS = ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall']
-  BETA_USERS = ['scottrobertson', 'adambutler', 'wadtech', 'keithamus', 'kdaigle', 'stefanbc', 'danbartlett', 'erlingwl', 'alanshaw']
 
   validates_presence_of :email, :on => :update
   validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
 
   def admin?
     ADMIN_USERS.include?(nickname)
-  end
-
-  def beta?
-    (ADMIN_USERS + BETA_USERS).include?(nickname)
   end
 
   def ping_andrew
