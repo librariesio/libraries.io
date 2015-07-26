@@ -26,6 +26,10 @@ class GithubRepository < ActiveRecord::Base
   scope :source, -> { where(fork: false) }
   scope :open_source, -> { where(private: false) }
 
+  def self.language(language)
+    where('lower(github_repositories.language) = ?', language.try(:downcase))
+  end
+
   def touch_projects
     projects.find_each(&:save)
   end
