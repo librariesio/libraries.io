@@ -5,7 +5,7 @@
     <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
 
       <div class="input-group input-group-lg">
-        <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 40 %>
+        <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search...', class: 'form-control', size: 40 %>
         <span class="input-group-btn">
           <button class="btn btn-primary btn-large " type="submit">Search</button>
         </span>
