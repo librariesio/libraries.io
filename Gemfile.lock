@@ -208,7 +208,7 @@ GEM
     fog-xml (0.1.2)
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
-    font-awesome-rails (4.3.0.0)
+    font-awesome-rails (4.4.0.0)
       railties (>= 3.2, < 5.0)
     formatador (0.2.5)
     fuzzy_match (2.1.0)
@@ -382,14 +382,14 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
-    sassc (1.5.1)
+    sassc (1.6.0)
       bundler
       ffi (~> 1.9.6)
       sass (>= 3.3.0)
-    sassc-rails (1.0.0)
+    sassc-rails (1.1.0)
       rails (>= 4.0.0)
       sass
-      sassc (~> 1.5)
+      sassc (~> 1.6)
       sprockets (> 2.11)
       tilt
     sawyer (0.6.0)
