@@ -1,5 +1,6 @@
 class SearchController < ApplicationController
   def index
+    @query = params[:q]
     @search = Project.search(params[:q], filters: {
       platform: params[:platforms],
       normalized_licenses: params[:licenses],
