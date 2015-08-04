@@ -82,11 +82,11 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def stars
-    stargazers_count
+    stargazers_count || 0
   end
 
   def forks
-    forks_count
+    forks_count || 0
   end
 
   def pages_url
