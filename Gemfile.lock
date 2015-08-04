@@ -56,7 +56,7 @@ GEM
     bootstrap-sass (3.3.5.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
-    bugsnag (2.8.10)
+    bugsnag (2.8.11)
       json (~> 1.7, >= 1.7.7)
     builder (3.2.2)
     celluloid (0.16.0)
@@ -106,7 +106,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (1.1.1)
       faraday (~> 0.8)
-    fast_blank (0.0.2)
+    fast_blank (1.0.0)
     fast_xor (1.1.3)
       rake
       rake-compiler
@@ -140,7 +140,7 @@ GEM
     fog-atmos (0.1.0)
       fog-core
       fog-xml
-    fog-aws (0.7.3)
+    fog-aws (0.7.4)
       fog-core (~> 1.27)
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
@@ -263,7 +263,7 @@ GEM
       railties (>= 3.2.0, < 5.0)
     json (1.8.3)
     jwt (1.5.1)
-    languages (1.1.9)
+    languages (1.1.11)
       escape_utils (~> 1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -298,7 +298,7 @@ GEM
       rack (~> 1.2)
     octokit (4.0.1)
       sawyer (~> 0.6.0, >= 0.5.3)
-    oj (2.12.10)
+    oj (2.12.11)
     oj_mimic_json (1.0.1)
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
@@ -323,7 +323,7 @@ GEM
     premailer-rails (1.8.2)
       actionmailer (>= 3, < 5)
       premailer (~> 1.7, >= 1.7.9)
-    puma (2.12.2)
+    puma (2.12.3)
     pushover (1.0.4)
       bini (= 0.7.0)
       httparty (= 0.11.0)
