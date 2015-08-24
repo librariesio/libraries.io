@@ -32,4 +32,24 @@ namespace :one_off do
       p.save
     end
   end
+
+  desc 'delete duplicate repos'
+  task delete_duplicate_repos: :environment do
+    repo_ids = GithubRepository.select(:github_id).group(:github_id).having("count(*) > 1").pluck(:github_id)
+
+    repo_ids.each do |repo_id|
+      repos = GithubRepository.where(github_id: repo_id).includes(:projects, :repository_subscriptions)
+      # keep one repo
+
+      # remove if no projects or repository_subscriptions
+      for_removal = repos.select do |repo|
+        repo.projects.empty? && repo.repository_subscriptions.empty?
+      end
+
+      for_removal.each_with_index do |repo, index|
+        next if index.zero?
+        repo.destroy
+      end
+    end
+  end
 end
