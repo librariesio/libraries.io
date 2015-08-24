@@ -317,7 +317,7 @@ class GithubRepository < ActiveRecord::Base
     g.owner_id = repo_hash[:owner][:id]
     g.github_id = repo_hash[:id]
     g.license = repo_hash[:license][:key] if repo_hash[:license]
-    g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork]
+    g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
     g.assign_attributes repo_hash.slice(*GithubRepository::API_FIELDS)
     g.save
     g
