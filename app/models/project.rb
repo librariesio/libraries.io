@@ -255,6 +255,7 @@ class Project < ActiveRecord::Base
     name_with_owner = github_name_with_owner
     return false unless name_with_owner.present?
     g = GithubRepository.create_from_github(name_with_owner)
+    return if g.nil?
     self.update_columns(github_repository_id: g.id) unless self.new_record?
   end
 
