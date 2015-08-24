@@ -39,7 +39,8 @@ class User < ActiveRecord::Base
   end
 
   def assign_from_auth_hash(hash)
-    update_attributes(AuthHash.new(hash).user_info)
+    ignored_fields = new_record? ? [] : %i(email)
+    update_attributes(AuthHash.new(hash).user_info.except(*ignored_fields))
   end
 
   def self.find_by_auth_hash(hash)
