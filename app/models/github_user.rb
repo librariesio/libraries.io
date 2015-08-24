@@ -36,4 +36,12 @@ class GithubUser < ActiveRecord::Base
   rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
+
+  def download_orgs
+    github_client.orgs(login).each do |org|
+      GithubCreateOrgWorker.perform_async(org.login)
+    end
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    nil
+  end
 end
