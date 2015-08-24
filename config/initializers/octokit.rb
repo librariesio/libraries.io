@@ -3,6 +3,7 @@ Octokit.middleware = Faraday::RackBuilder.new do |builder|
   logger = Logger.new(STDOUT)
   logger.level = Logger::DEBUG unless ENV['RACK_ENV'] == 'production'
   builder.use :http_cache, store: store, logger: logger, shared_cache: false, serializer: Marshal
+  builder.use Octokit::Middleware::FollowRedirects
   builder.use Octokit::Response::RaiseError
   builder.request :retry
   builder.adapter :typhoeus

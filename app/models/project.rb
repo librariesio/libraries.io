@@ -267,15 +267,7 @@ class Project < ActiveRecord::Base
       g.save
       self.update_columns(github_repository_id: g.id) unless self.new_record?
     rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
-      begin
-        response = Net::HTTP.get_response(URI(github_url))
-        if response.code.to_i == 301
-          self.repository_url = URI(response['location']).to_s
-          update_github_repo
-        end
-      rescue URI::InvalidURIError => e
-        p e
-      end
+      nil
     end
   end
 

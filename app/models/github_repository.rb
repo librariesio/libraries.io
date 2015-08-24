@@ -171,15 +171,7 @@ class GithubRepository < ActiveRecord::Base
       assign_attributes r.slice(*API_FIELDS)
       save
     rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
-      begin
-        response = Net::HTTP.get_response(URI(url))
-        if response.code.to_i == 301
-          self.full_name = GithubRepository.extract_full_name URI(response['location']).to_s
-          update_from_github(token)
-        end
-      rescue URI::InvalidURIError => e
-        p e
-      end
+      nil
     end
   end
 
