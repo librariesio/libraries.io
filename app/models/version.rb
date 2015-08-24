@@ -17,10 +17,6 @@ class Version < ActiveRecord::Base
     end
   end
 
-  def notify_gitter
-    GitterNotifications.new_version(project.name, project.platform, number)
-  end
-
   def notify_firehose
     Firehose.new_version(project, project.platform, number)
   end
@@ -31,7 +27,6 @@ class Version < ActiveRecord::Base
 
   def send_notifications
     notify_subscribers
-    notify_gitter
     notify_firehose
   end
 

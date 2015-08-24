@@ -231,10 +231,6 @@ class Project < ActiveRecord::Base
     self.normalized_licenses = normalized
   end
 
-  def notify_gitter
-    GitterNotifications.new_project(name, platform)
-  end
-
   def update_github_repo_async
     GithubProjectWorker.perform_async(self.id)
   end
@@ -270,7 +266,6 @@ class Project < ActiveRecord::Base
       g.assign_attributes r.slice(*GithubRepository::API_FIELDS)
       g.save
       self.update_columns(github_repository_id: g.id) unless self.new_record?
-      notify_gitter
     rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       begin
         response = Net::HTTP.get_response(URI(github_url))
