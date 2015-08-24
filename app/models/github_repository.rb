@@ -313,7 +313,7 @@ class GithubRepository < ActiveRecord::Base
 
   def self.create_from_hash(repo_hash)
     repo_hash = repo_hash.to_hash
-    g = GithubRepository.find_or_initialize_by(repo_hash.slice(:full_name))
+    g = GithubRepository.find_or_initialize_by(github_id: repo_hash[:id])
     g.owner_id = repo_hash[:owner][:id]
     g.github_id = repo_hash[:id]
     g.license = repo_hash[:license][:key] if repo_hash[:license]
