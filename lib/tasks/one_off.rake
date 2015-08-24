@@ -52,4 +52,11 @@ namespace :one_off do
       end
     end
   end
+
+  desc 'download orgs'
+  task download_orgs: :environment do
+    GithubUser.find_each do |user|
+      user.download_orgs
+    end
+  end
 end
