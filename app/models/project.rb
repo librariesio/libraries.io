@@ -253,22 +253,9 @@ class Project < ActiveRecord::Base
 
   def update_github_repo
     name_with_owner = github_name_with_owner
-    return false unless name_with_owner
-
-    begin
-      r = AuthToken.client.repo(name_with_owner, accept: 'application/vnd.github.drax-preview+json').to_hash
-      return false if r.nil? || r.empty?
-      g = GithubRepository.find_or_initialize_by(r.slice(:full_name))
-      g.owner_id = r[:owner][:id]
-      g.github_id = r[:id]
-      g.license = r[:license][:key] if r[:license]
-      g.source_name = r[:parent][:full_name] if r[:fork]
-      g.assign_attributes r.slice(*GithubRepository::API_FIELDS)
-      g.save
-      self.update_columns(github_repository_id: g.id) unless self.new_record?
-    rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
-      nil
-    end
+    return false unless name_with_owner.present?
+    g = create_from_github(name_with_owner)
+    self.update_columns(github_repository_id: g.id) unless self.new_record?
   end
 
   def github_url
