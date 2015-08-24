@@ -12,8 +12,9 @@ class Version < ActiveRecord::Base
   end
 
   def notify_subscribers
-    project.subscriptions.each do |subscription|
-      VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later rescue nil
+    project.subscriptions.group_by(&:notification_user).each do |user, subscriptions|
+      next if user.nil?
+      VersionsMailer.new_version(user, project, self).deliver_later rescue nil
     end
   end
 
