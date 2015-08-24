@@ -11,6 +11,13 @@
   <% end %>
 </p>
 
+<% if @repos.any? %>
+<p>
+  You depend on <%= link_to @project, project_url(@project.to_param) %> in the following repos:
+  <%= @repos.map{|repo| link_to repo.full_name, github_repository_url(repo.owner_name, repo.project_name).html_safe }.to_sentence %>
+</p>
+<% end %>
+
 <p>
   Check out all the details here: <%= link_to version_url(@project.to_param.merge(number: @version.number)), version_url(@project.to_param.merge(number: @version.number)) %>
 </p>

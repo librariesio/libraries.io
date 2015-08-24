@@ -267,4 +267,8 @@ class Project < ActiveRecord::Base
   def github_name_with_owner
     GithubRepository.extract_full_name(repository_url)
   end
+
+  def subscribed_repos(user)
+    subscriptions.with_repository_subscription.where('repository_subscriptions.user_id = ?', user.id).map(&:github_repository)
+  end
 end
