@@ -72,7 +72,7 @@
             <% end %>
           </li>
         </ul>
-        <%= link_to('Login with GitHub', login_path(return_to: request.original_url), class: 'pull-right btn btn-success navbar-btn') unless logged_in? %>
+        <%= link_to('Login with GitHub', login_path(return_to: request.original_url), class: 'pull-right btn btn-success navbar-btn', rel: 'nofollow') unless logged_in? %>
       </div>
     </div>
   </div>
