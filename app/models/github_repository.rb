@@ -7,12 +7,12 @@ class GithubRepository < ActiveRecord::Base
    :subscribers_count, :private]
 
   has_many :projects
-  has_many :github_contributions
-  has_many :github_tags
-  has_many :manifests
+  has_many :github_contributions, dependent: :destroy
+  has_many :github_tags, dependent: :destroy
+  has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :repository_subscriptions
-  has_one :readme
+  has_one :readme, dependent: :destroy
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
 
