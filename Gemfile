@@ -38,7 +38,7 @@ gem 'rails_safe_tasks'
 gem 'dalli'
 gem 'counter_culture'
 gem 'bigquery', require: 'big_query'
-gem 'sprockets', '~> 2.12'
+gem 'sprockets'
 gem 'simple_form'
 gem 'sidekiq'
 gem 'sinatra', require: nil
