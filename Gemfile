@@ -58,11 +58,12 @@ gem 'premailer-rails'
 gem 'gemoji'
 gem 'js-cookie-rails'
 gem 'postgres_ext'
+gem 'foreman', require: false
+gem 'puma'
 
 group :development do
   gem 'bundler'
   gem 'spring'
-  gem 'thin'
 end
 
 group :development, :test do
@@ -70,6 +71,5 @@ group :development, :test do
 end
 
 group :production do
-  gem 'puma'
   gem 'bugsnag'
 end
