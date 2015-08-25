@@ -5,6 +5,8 @@ class GithubUser < ActiveRecord::Base
   has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
 
+  validates_uniqueness_of :github_id
+
   scope :visible, -> { where(hidden: false) }
 
   def avatar_url(size = 60)
