@@ -140,6 +140,8 @@ module ApplicationHelper
       return 'npm'
     elsif platform.downcase == 'biicode'
       return 'biicode'
+    elsif platform.downcase == 'wordpress'
+      return 'WordPress'
     else
       return platform
     end
