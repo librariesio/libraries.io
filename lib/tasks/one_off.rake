@@ -11,8 +11,8 @@ namespace :one_off do
 
   desc 'get popular users'
   task update_popular_users: :environment do
-    Project.popular_languages(:facet_limit => 100).map(&:term).each do |language|
-      AuthToken.client.search_users("language:#{language}", sort: 'followers').items.each do |item|
+    Project.popular_languages(:facet_limit => 20).map(&:term).each do |language|
+      AuthToken.client.search_users("language:#{language} followers:<500", sort: 'followers').items.each do |item|
         user = GithubUser.find_or_create_by(github_id: item.id) do |u|
           u.login = item.login
           u.user_type = item.type
