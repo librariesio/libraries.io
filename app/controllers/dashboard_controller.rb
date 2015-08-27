@@ -2,7 +2,10 @@ class DashboardController < ApplicationController
   before_action :ensure_logged_in
 
   def index
-    @repos = current_user.adminable_github_repositories.order('pushed_at DESC').paginate(page: params[:page])
+    @orgs = current_user.adminable_github_orgs
+    @org = @orgs.find{|org| org.login == params[:org] }
+    @repos = current_user.adminable_github_repositories.order('pushed_at DESC').paginate(per_page: 15, page: params[:page])
+    @repos = @repos.from_org(@org.try(:id)) if params[:org].present?
   end
 
   def watch

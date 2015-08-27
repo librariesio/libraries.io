@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   has_many :repository_permissions
   has_many :adminable_repository_permissions, -> { where admin: true }, anonymous_class: RepositoryPermission
   has_many :adminable_github_repositories, through: :adminable_repository_permissions, source: :github_repository
+  has_many :adminable_github_orgs, -> { group('github_organisations.id') }, through: :adminable_github_repositories, source: :github_organisation
   has_many :github_repositories, primary_key: :uid, foreign_key: :owner_id
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
   has_many :dependencies, through: :source_github_repositories
