@@ -16,7 +16,7 @@ class GithubRepository < ActiveRecord::Base
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
 
-  validates_uniqueness_of :github_id
+  validates_uniqueness_of :github_id, :full_name
 
   after_commit :update_all_info_async, on: :create
   # after_save :touch_projects
@@ -171,7 +171,7 @@ class GithubRepository < ActiveRecord::Base
       self.license = Project.format_license(r[:license][:key]) if r[:license]
       self.source_name = r[:parent][:full_name] if r[:fork]
       assign_attributes r.slice(*API_FIELDS)
-      save
+      save!
     rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       nil
     end
@@ -321,7 +321,7 @@ class GithubRepository < ActiveRecord::Base
     g.license = repo_hash[:license][:key] if repo_hash[:license]
     g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
     g.assign_attributes repo_hash.slice(*GithubRepository::API_FIELDS)
-    g.save
+    g.save!
     g
   end
 end
