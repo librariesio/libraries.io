@@ -57,7 +57,7 @@
     <% @search.response.facets.each do |name, facet| %>
       <% next if facet['terms'].empty? %>
       <h4><%= name.humanize %></h4>
-      <ul>
+      <ul class='filter'>
         <% facet['terms'].each do |term| %>
           <% active = term['term'] == params[name.to_sym] %>
           <li class='<%= 'active' if active %>'>

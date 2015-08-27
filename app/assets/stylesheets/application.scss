@@ -71,10 +71,10 @@ footer{
   }
 }
 
-.active {
+.filter .active {
   font-weight: bold;
 }
-.active:after {
+.filter .active:after {
    content: '✔';
    margin-left: 0.5em; margin-right: .100em;
 }

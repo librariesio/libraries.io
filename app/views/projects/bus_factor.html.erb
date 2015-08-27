@@ -73,16 +73,18 @@
         Filter by language
       </strong>
     </h3>
-    <ul>
-      <% @languages.each do |language| %>
-        <li class='<%= 'active' if language.downcase == params[:language].try(:downcase) %>'>
-          <% if language.downcase == params[:language].try(:downcase) %>
-            <%= link_to language, bus_factor_path(language: nil) %>
-          <% else %>
-            <%= link_to language, bus_factor_path(language: language) %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
+    <div class="facets">
+      <ul class='filter'>
+        <% @languages.each do |language| %>
+          <li class='<%= 'active' if language.downcase == params[:language].try(:downcase) %>'>
+            <% if language.downcase == params[:language].try(:downcase) %>
+              <%= link_to language, bus_factor_path(language: nil) %>
+            <% else %>
+              <%= link_to language, bus_factor_path(language: language) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </div>
