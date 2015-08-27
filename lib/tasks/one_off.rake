@@ -80,4 +80,12 @@ namespace :one_off do
       user.download_orgs
     end
   end
+
+  desc 'update user repos'
+  task update_user_repos: :environment do
+    User.find_each do |user|
+      user.update_repo_permissions
+      user.adminable_github_repositories.each{|g| g.update_all_info_async user.token }
+    end
+  end
 end
