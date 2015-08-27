@@ -33,6 +33,47 @@ namespace :one_off do
     end
   end
 
+  desc 'delete duplicate repos'
+  task delete_duplicate_repos: :environment do
+    repo_ids = GithubRepository.select(:github_id).group(:github_id).having("count(*) > 1").pluck(:github_id)
+
+    repo_ids.each do |repo_id|
+      repos = GithubRepository.where(github_id: repo_id).includes(:projects, :repository_subscriptions)
+      # keep one repo
+
+      with_projects = repos.select do |repo|
+        repo.repository_subscriptions.empty?
+      end
+
+      # remove if no projects or repository_subscriptions
+      for_removal = with_projects.select do |repo|
+        repo.projects.empty?
+      end
+
+      if for_removal.length == with_projects.length
+        keep = for_removal.first
+      end
+
+      if for_removal.length.zero?
+        keep = with_projects.first
+      end
+
+      with_projects.each do |repo|
+        next if repo == keep
+        repo.projects.each do |project|
+          project.github_repository_id = repo.id
+          project.save
+        end
+        repo.destroy
+      end
+
+      for_removal.each do |repo|
+        next if repo == keep
+        repo.destroy
+      end
+    end
+  end
+
   desc 'download orgs'
   task download_orgs: :environment do
     GithubUser.find_each do |user|
