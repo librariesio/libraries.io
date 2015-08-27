@@ -315,7 +315,9 @@ class GithubRepository < ActiveRecord::Base
 
   def self.create_from_hash(repo_hash)
     repo_hash = repo_hash.to_hash
-    g = GithubRepository.find_or_initialize_by(github_id: repo_hash[:id])
+    g = GithubRepository.find_by(github_id: repo_hash[:id])
+    g = GithubRepository.find_by(full_name: repo_hash[:full_name]) if g.nil?
+    g = GithubRepository.new(github_id: repo_hash[:id], full_name: repo_hash[:full_name])
     g.owner_id = repo_hash[:owner][:id]
     g.github_id = repo_hash[:id]
     g.license = repo_hash[:license][:key] if repo_hash[:license]
