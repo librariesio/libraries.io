@@ -61,7 +61,7 @@ namespace :one_off do
       with_projects.each do |repo|
         next if repo == keep
         repo.projects.each do |project|
-          project.github_repository_id = repo.id
+          project.github_repository_id = keep.id
           project.save
         end
         repo.destroy
