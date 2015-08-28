@@ -73,7 +73,6 @@ namespace :one_off do
 
       for_removal.each_with_index do |repo, index|
         next if keep.present? && repo == keep
-        next if keep.nil? && index.zero?
         repo.destroy
       end
     end
