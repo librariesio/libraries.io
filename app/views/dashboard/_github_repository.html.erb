@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class='project' style="border-color: <%= github_repository.color %>;">
+      <h5>
+        <%= link_to github_repository.full_name, github_repository_path(github_repository.owner_name, github_repository.project_name) %>
+        <small>
+          <%= fa_icon("lock") if github_repository.private? %>
+          <%= fa_icon("code-fork") if github_repository.fork? %>
+        </small>
+      </h5>
+
+      <div>
+        <%= emojify truncate(github_repository.description, :length => 100) %>
+      </div>
+
+      <small>
+        <% if github_repository.language.present? %>
+          <%= link_to github_repository.language, language_path(github_repository.language) %> -
+        <% end %>
+        <% if github_repository.updated_at > github_repository.created_at + 1.minute %>
+          Updated <%= time_ago_in_words github_repository.updated_at %> ago
+        <% else %>
+          Published <%= time_ago_in_words github_repository.created_at %> ago
+        <% end %> - <%= number_to_human github_repository.stars %> stars
+        <% if github_repository.fork? %>
+        - Fork of <%= link_to github_repository.source_name, github_repository.source_url %>
+        <% end %>
+      </small>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <% if current_user.subscribed_to_repo?(github_repository) %>
+      <%= button_to 'Unwatch', unwatch_path(github_repository.id), method: :post, class: 'btn btn-danger' %>
+    <% else %>
+      <%= button_to 'Watch', watch_path(github_repository.id), method: :post, class: 'btn btn-primary' %>
+    <% end %>
+    <small>
+      <%= pluralize github_repository.repository_dependencies.count, 'dependencies' %>
+    </small>
+  </div>
+</div>
