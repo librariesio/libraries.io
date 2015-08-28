@@ -35,8 +35,8 @@
                 </small>
               </h5>
 
-              <div class="">
-                <%= truncate github_repository.description, :length => 100 %>
+              <div>
+                <%= emojify truncate(github_repository.description, :length => 100) %>
               </div>
 
               <small>
