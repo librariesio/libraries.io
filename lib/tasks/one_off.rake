@@ -35,10 +35,10 @@ namespace :one_off do
 
   desc 'delete duplicate repos'
   task delete_duplicate_repos: :environment do
-    repo_ids = GithubRepository.select(:github_id).group(:github_id).having("count(*) > 1").pluck(:github_id)
+    repo_names = GithubRepository.select('lower(full_name)').group(:full_name).having("count(*) > 1").pluck(:full_name)
 
-    repo_ids.each do |repo_id|
-      repos = GithubRepository.where(github_id: repo_id).includes(:projects, :repository_subscriptions)
+    repo_names.each do |repo_name|
+      repos = GithubRepository.where('lower(full_name) = ?', repo_name).includes(:projects, :repository_subscriptions)
       # keep one repo
 
       with_projects = repos.select do |repo|
