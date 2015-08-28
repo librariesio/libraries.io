@@ -38,7 +38,7 @@ namespace :one_off do
     repo_names = GithubRepository.select('lower(full_name)').group(:full_name).having("count(*) > 1").pluck(:full_name)
 
     repo_names.each do |repo_name|
-      repos = GithubRepository.where('lower(full_name) = ?', repo_name).includes(:projects, :repository_subscriptions)
+      repos = GithubRepository.where('lower(full_name) = ?', repo_name.downcase).includes(:projects, :repository_subscriptions)
       # keep one repo
 
       with_projects = repos.select do |repo|
