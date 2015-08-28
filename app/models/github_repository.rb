@@ -279,7 +279,11 @@ class GithubRepository < ActiveRecord::Base
       method: :get,
       params: { token: token },
       headers: { 'Accept' => 'application/json' }).run
-    new_manifests = Oj.load(r.body)["manifests"]
+    begin
+      new_manifests = Oj.load(r.body)["manifests"]
+    rescue Oj::ParseError
+      new_manifests = nil
+    end
     return if new_manifests.nil?
     new_manifests.each do |m|
       args = m.slice('name', 'path', 'sha')
