@@ -35,7 +35,8 @@ namespace :one_off do
 
   desc 'delete duplicate repos'
   task delete_duplicate_repos: :environment do
-    repo_names = GithubRepository.select('lower(full_name)').group(:full_name).having("count(*) > 1").pluck(:full_name)
+    records_array = ActiveRecord::Base.connection.execute('SELECT lower(full_name) FROM "github_repositories" GROUP BY lower(full_name) HAVING count(*) > 1')
+    repo_names = records_array.map{|k,v| k['lower']}
 
     repo_names.each do |repo_name|
       repos = GithubRepository.where('lower(full_name) = ?', repo_name.downcase).includes(:projects, :repository_subscriptions)

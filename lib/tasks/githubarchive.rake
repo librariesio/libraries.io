@@ -48,7 +48,7 @@ namespace :gh do
     results = query_archive(query)
 
     repo_names = results.map {|r| r['repo_name']}
-    GithubRepository.where(full_name: repo_names).find_each(&:update_all_info_async)
+    GithubRepository.where('lower(full_name) IN (?)', repo_names).find_each(&:update_all_info_async)
   end
 
   desc "Find repos tagged on a given date, eg: rake gh:repos[20150101]"
@@ -60,6 +60,6 @@ namespace :gh do
     results = query_archive(query)
 
     repo_names = results.map {|r| r['repo_name']}
-    GithubRepository.where(full_name: repo_names).find_each(&:update_all_info_async)
+    GithubRepository.where('lower(full_name) IN (?)', repo_names).find_each(&:update_all_info_async)
   end
 end
