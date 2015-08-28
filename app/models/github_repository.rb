@@ -219,7 +219,7 @@ class GithubRepository < ActiveRecord::Base
       cont.platform = projects.first.platform if projects.any?
       cont.save
     end
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
@@ -251,7 +251,7 @@ class GithubRepository < ActiveRecord::Base
         end
       end
     end
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
@@ -313,7 +313,7 @@ class GithubRepository < ActiveRecord::Base
     repo_hash = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
     return false if repo_hash.nil? || repo_hash.empty?
     create_from_hash(repo_hash)
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
