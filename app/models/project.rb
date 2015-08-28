@@ -236,10 +236,12 @@ class Project < ActiveRecord::Base
   end
 
   def can_have_dependencies?
+    return false if platform_class == Project
     platform_class::HAS_DEPENDENCIES
   end
 
   def can_have_versions?
+    return false if platform_class == Project
     platform_class::HAS_VERSIONS
   end
 
