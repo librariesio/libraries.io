@@ -154,7 +154,7 @@ class Project < ActiveRecord::Base
 
   def dependent_repos(options = {})
     options = {per_page: 30, page: 1}.merge(options)
-    GithubRepository.where(id: dependent_repositories.joins(:manifest).limit(options[:per_page]).offset(options[:per_page]*(options[:page].to_i-1)).pluck('DISTINCT manifests.github_repository_id'))
+    GithubRepository.open_source.where(id: dependent_repositories.joins(:manifest).limit(options[:per_page]).offset(options[:per_page]*(options[:page].to_i-1)).pluck('DISTINCT manifests.github_repository_id'))
   end
 
   def dependent_repositories_count
