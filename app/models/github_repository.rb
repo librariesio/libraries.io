@@ -1,7 +1,7 @@
 class GithubRepository < ActiveRecord::Base
   # validations (presense and uniqueness)
 
-  API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
+  API_FIELDS = [:description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
    :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
    :forks_count, :mirror_url, :open_issues_count, :default_branch,
    :subscribers_count, :private]
@@ -168,6 +168,7 @@ class GithubRepository < ActiveRecord::Base
       r = github_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
       return if r.nil? || r.empty?
       self.github_id = r[:id]
+      self.full_name = r[:full_name] if self.full_name.downcase != r[:full_name].downcase
       self.owner_id = r[:owner][:id]
       self.license = Project.format_license(r[:license][:key]) if r[:license]
       self.source_name = r[:parent][:full_name] if r[:fork]
@@ -318,6 +319,7 @@ class GithubRepository < ActiveRecord::Base
     g = GithubRepository.find_by(full_name: repo_hash[:full_name]) if g.nil?
     g = GithubRepository.new(github_id: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
     g.owner_id = repo_hash[:owner][:id]
+    g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
     g.github_id = repo_hash[:id]
     g.license = repo_hash[:license][:key] if repo_hash[:license]
     g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
