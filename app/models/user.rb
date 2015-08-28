@@ -74,7 +74,7 @@ class User < ActiveRecord::Base
 
     current_repo_ids = []
     r.each do |repo|
-      github_repo = GithubRepository.find_by_github_id(repo.id) || GithubRepository.create_from_hash(repo)
+      github_repo = GithubRepository.find_by_github_id(repo.id) || GithubRepository.find_by('lower(full_name) = ?', repo.full_name.downcase) || GithubRepository.create_from_hash(repo)
       current_repo_ids << github_repo.id unless github_repo.nil?
 
       rp = repository_permissions.find_or_initialize_by(github_repository: github_repo)
