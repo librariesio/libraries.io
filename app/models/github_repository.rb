@@ -280,7 +280,12 @@ class GithubRepository < ActiveRecord::Base
       params: { token: token },
       headers: { 'Accept' => 'application/json' }).run
     begin
-      new_manifests = Oj.load(r.body)["manifests"]
+      body = Oj.load(r.body)
+      if body
+        new_manifests = body["manifests"]
+      else
+        new_manifests = nil
+      end
     rescue Oj::ParseError
       new_manifests = nil
     end
