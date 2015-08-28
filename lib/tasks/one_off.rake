@@ -50,6 +50,8 @@ namespace :one_off do
         repo.projects.empty?
       end
 
+      keep = nil
+
       if for_removal.length == with_projects.length
         keep = for_removal.first
       end
@@ -58,17 +60,20 @@ namespace :one_off do
         keep = with_projects.first
       end
 
-      with_projects.each do |repo|
-        next if repo == keep
-        repo.projects.each do |project|
-          project.github_repository_id = keep.id
-          project.save
+      if keep.present?
+        with_projects.each do |repo|
+          next if repo == keep
+          repo.projects.each do |project|
+            project.github_repository_id = keep.id
+            project.save
+          end
+          repo.destroy
         end
-        repo.destroy
       end
 
-      for_removal.each do |repo|
-        next if repo == keep
+      for_removal.each_with_index do |repo, index|
+        next if keep.present? && repo == keep
+        next if keep.nil? && index.zero?
         repo.destroy
       end
     end
