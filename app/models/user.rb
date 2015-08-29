@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   has_many :subscriptions
+  has_many :subscribed_projects, through: :subscriptions, source: :project
   has_many :repository_subscriptions
   has_many :api_keys
   has_many :repository_permissions
@@ -18,6 +19,14 @@ class User < ActiveRecord::Base
 
   validates_presence_of :email, :on => :update
   validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
+
+  def recommended_projects(limit)
+    projects = favourite_projects.where.not(id: subscribed_projects.pluck(:id)).limit(limit)
+    if projects.length < limit
+      projects += Project.most_watched.where.not(id: subscribed_projects.pluck(:id)).limit(limit)
+    end
+    projects.first(limit)
+  end
 
   def admin?
     ADMIN_USERS.include?(nickname)
