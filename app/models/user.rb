@@ -116,7 +116,6 @@ class User < ActiveRecord::Base
 
   def unsubscribe_from_repo(github_repository)
     sub = subscribed_to_repo?(github_repository)
-    github_repository.remove_hook(sub.hook_id, token)
     sub.destroy
   end
 

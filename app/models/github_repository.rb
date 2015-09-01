@@ -270,10 +270,6 @@ class GithubRepository < ActiveRecord::Base
     )
   end
 
-  def remove_hook(id, token)
-    github_client(token).remove_hook(full_name, id)
-  end
-
   def download_manifests(token = nil)
     r = Typhoeus::Request.new("http://ci.libraries.io/repos/#{full_name}",
       method: :get,
