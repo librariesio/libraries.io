@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150901101257) do
+ActiveRecord::Schema.define(version: 20150901165303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20150901101257) do
   end
 
   add_index "github_organisations", ["created_at"], name: "index_github_organisations_on_created_at", using: :btree
-  add_index "github_organisations", ["github_id"], name: "index_github_organisations_on_github_id", using: :btree
+  add_index "github_organisations", ["github_id"], name: "index_github_organisations_on_github_id", unique: true, using: :btree
   add_index "github_organisations", ["login"], name: "index_github_organisations_on_login", using: :btree
 
   create_table "github_repositories", force: :cascade do |t|
@@ -143,7 +143,7 @@ ActiveRecord::Schema.define(version: 20150901101257) do
   end
 
   add_index "github_users", ["created_at"], name: "index_github_users_on_created_at", using: :btree
-  add_index "github_users", ["github_id"], name: "index_github_users_on_github_id", using: :btree
+  add_index "github_users", ["github_id"], name: "index_github_users_on_github_id", unique: true, using: :btree
   add_index "github_users", ["hidden"], name: "index_github_users_on_hidden", using: :btree
 
   create_table "manifests", force: :cascade do |t|
