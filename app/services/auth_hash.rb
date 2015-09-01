@@ -17,6 +17,7 @@ class AuthHash
     }
     h.merge!(public_repo_token: public_repo_token) if public_repo_token.present?
     h.merge!(private_repo_token: private_repo_token) if private_repo_token.present?
+    h.merge!(token_upgrade: false) if public_repo_token.present? || private_repo_token.present?
     h
   end
 
