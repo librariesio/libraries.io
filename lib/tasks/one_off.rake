@@ -93,4 +93,10 @@ namespace :one_off do
       user.adminable_github_repositories.each{|g| g.update_all_info_async user.token }
     end
   end
+
+  desc 'mark users who need token upgrade'
+  task token_upgrade: :environment do
+    User.where.not(public_repo_token: nil).update_all(token_upgrade: true)
+    User.where.not(private_repo_token: nil).update_all(token_upgrade: true)
+  end
 end

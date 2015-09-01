@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150828094144) do
+ActiveRecord::Schema.define(version: 20150901101257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -248,8 +248,8 @@ ActiveRecord::Schema.define(version: 20150828094144) do
   add_index "subscriptions", ["user_id", "project_id"], name: "index_subscriptions_on_user_id_and_project_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "uid",                null: false
-    t.string   "nickname",           null: false
+    t.string   "uid",                                null: false
+    t.string   "nickname",                           null: false
     t.string   "gravatar_id"
     t.string   "token"
     t.string   "name"
@@ -260,6 +260,7 @@ ActiveRecord::Schema.define(version: 20150828094144) do
     t.datetime "updated_at"
     t.string   "public_repo_token"
     t.string   "private_repo_token"
+    t.boolean  "token_upgrade",      default: false
   end
 
   add_index "users", ["created_at"], name: "index_users_on_created_at", using: :btree
