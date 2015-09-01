@@ -9,7 +9,7 @@
     <div class="col-md-4">
       <div>
         <%= link_to url_for(org: nil) do %>
-          <%= image_tag current_user.avatar_url(40) %>
+          <%= image_tag current_user.avatar_url(40), width: 40 %>
           <%= current_user.nickname %>
         <% end %>
       </div>
