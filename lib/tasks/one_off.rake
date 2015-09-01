@@ -81,11 +81,10 @@ namespace :one_off do
 
   desc 'delete duplicate users'
   task delete_duplicate_users: :environment do
-    records_array = ActiveRecord::Base.connection.execute('SELECT lower(login) FROM "github_users" GROUP BY lower(login) HAVING count(*) > 1')
-    user_logins = records_array.map{|k,v| k['lower']}
+    ids = GithubUser.select(:github_id).group(:github_id).having("count(*) > 1").pluck(:github_id)
 
-    user_logins.each do |user_login|
-      users = GithubUser.where('lower(login) = ?', user_login.downcase)
+    ids.each do |user_id|
+      users = GithubUser.where(github_id: user_id)
 
       users.each_with_index do |user, index|
         next if index.zero?
@@ -96,11 +95,10 @@ namespace :one_off do
 
   desc 'delete duplicate orgs'
   task delete_duplicate_orgs: :environment do
-    records_array = ActiveRecord::Base.connection.execute('SELECT lower(login) FROM "github_organisations" GROUP BY lower(login) HAVING count(*) > 1')
-    user_logins = records_array.map{|k,v| k['lower']}
+    ids = GithubUser.select(:github_id).group(:github_id).having("count(*) > 1").pluck(:github_id)
 
-    user_logins.each do |user_login|
-      users = GithubOrganisation.where('lower(login) = ?', user_login.downcase)
+    ids.each do |user_id|
+      users = GithubOrganisation.where(github_id: user_id)
 
       users.each_with_index do |user, index|
         next if index.zero?
