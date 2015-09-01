@@ -79,6 +79,36 @@ namespace :one_off do
     end
   end
 
+  desc 'delete duplicate users'
+  task delete_duplicate_users: :environment do
+    records_array = ActiveRecord::Base.connection.execute('SELECT lower(login) FROM "github_users" GROUP BY lower(login) HAVING count(*) > 1')
+    user_logins = records_array.map{|k,v| k['lower']}
+
+    user_logins.each do |user_login|
+      users = GithubUser.where('lower(login) = ?', user_login.downcase)
+
+      users.each_with_index do |user, index|
+        next if index.zero?
+        user.destroy
+      end
+    end
+  end
+
+  desc 'delete duplicate orgs'
+  task delete_duplicate_orgs: :environment do
+    records_array = ActiveRecord::Base.connection.execute('SELECT lower(login) FROM "github_organisations" GROUP BY lower(login) HAVING count(*) > 1')
+    user_logins = records_array.map{|k,v| k['lower']}
+
+    user_logins.each do |user_login|
+      users = GithubOrganisation.where('lower(login) = ?', user_login.downcase)
+
+      users.each_with_index do |user, index|
+        next if index.zero?
+        user.destroy
+      end
+    end
+  end
+
   desc 'download orgs'
   task download_orgs: :environment do
     GithubUser.find_each do |user|
