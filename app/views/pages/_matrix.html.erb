@@ -1,0 +1,56 @@
+<table class="table table-hover table-striped">
+  <thead>
+    <th>
+      Platform
+    </th>
+    <th>
+      Number of Packages
+    </th>
+    <th class='text-center'>
+      Versions
+    </th>
+    <th class='text-center'>
+      Tags
+    </th>
+    <th class='text-center'>
+      Dependencies
+    </th>
+    <th class='text-center'>
+      Manifest Parsing
+    </th>
+    <th class='text-center'>
+      Security Notifications
+    </th>
+    <th class='text-center'>
+      License checking
+    </th>
+  </thead>
+  <% Download.platforms.sort_by{|p| p.name.downcase }.each do |platform| %>
+    <tr>
+      <td>
+        <strong><%= link_to platform.name, platform_path(platform.name.downcase) %></strong>
+      </td>
+      <td>
+        <%= number_with_delimiter Project.platform(platform.to_s.demodulize).count %>
+      </td>
+      <td class='text-center'>
+        <%= feature_flag platform::HAS_VERSIONS %>
+      </td>
+      <td class='text-center'>
+        <%= feature_flag true %>
+      </td>
+      <td class='text-center'>
+        <%= feature_flag platform::HAS_DEPENDENCIES %>
+      </td>
+      <td class='text-center'>
+        <%= feature_flag platform::LIBRARIAN_SUPPORT, (platform::LIBRARIAN_PLANNED ? 'Coming soon' : nil) %>
+      </td>
+      <td class='text-center'>
+        <i> <%= platform::SECURITY_PLANNED ? 'Coming soon' : '-' %></i>
+      </td>
+      <td class='text-center'>
+        <i>Coming soon</i>
+      </td>
+    </tr>
+  <% end %>
+</table>

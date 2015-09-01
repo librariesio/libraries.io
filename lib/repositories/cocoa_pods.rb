@@ -2,6 +2,7 @@ class Repositories
   class CocoaPods < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
+    LIBRARIAN_SUPPORT = true
     URL = 'http://cocoapods.org/'
     COLOR = '#438eff'
 

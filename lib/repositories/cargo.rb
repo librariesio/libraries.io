@@ -2,6 +2,7 @@ class Repositories
   class Cargo < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    LIBRARIAN_SUPPORT = true
     URL = 'https://crates.io'
     COLOR = '#dea584'
 

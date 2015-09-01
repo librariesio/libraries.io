@@ -1,9 +1,16 @@
 class Repositories
   class Base
     COLOR = '#fff'
+    LIBRARIAN_SUPPORT = false
+    LIBRARIAN_PLANNED = false
+    SECURITY_PLANNED = false
 
     def self.color
       self::COLOR
+    end
+
+    def self.name
+      self.to_s.demodulize
     end
 
     def self.save(project, include_versions = true)

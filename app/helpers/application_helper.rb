@@ -175,4 +175,11 @@ module ApplicationHelper
       end
     end.html_safe if content.present?
   end
+
+  def feature_flag(bool, negative = nil)
+    icon_class = bool ? 'check' : 'times'
+    color = bool ? 'green' : 'red'
+    tag = content_tag :i, '', class: "fa fa-#{icon_class}", style: "color:#{color}"
+    !bool && negative ? content_tag(:i, negative) : tag
+  end
 end

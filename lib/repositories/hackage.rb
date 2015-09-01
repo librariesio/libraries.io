@@ -2,6 +2,7 @@ class Repositories
   class Hackage < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
+    LIBRARIAN_PLANNED = true
     URL = 'http://hackage.haskell.org'
     COLOR = '#29b544'
 

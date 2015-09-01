@@ -2,6 +2,8 @@ class Repositories
   class Packagist < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    LIBRARIAN_SUPPORT = true
+    SECURITY_PLANNED = true
     URL = 'https://packagist.org'
     COLOR = '#4F5D95'
 

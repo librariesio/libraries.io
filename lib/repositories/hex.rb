@@ -2,6 +2,7 @@ class Repositories
   class Hex < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    LIBRARIAN_SUPPORT = true
     URL = 'https://hex.pm'
     COLOR = '#6e4a7e'
 

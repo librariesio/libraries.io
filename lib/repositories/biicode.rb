@@ -2,8 +2,13 @@ class Repositories
   class Biicode < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    LIBRARIAN_PLANNED = true
     URL = 'https://www.biicode.com/'
     COLOR = '#f34b7d'
+
+    def self.name
+      'biicode'
+    end
 
     def self.project_names
       get("https://webapi.biicode.com/v1/misc/blocks")['blocks']

@@ -2,6 +2,7 @@ class Repositories
   class CPAN < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
+    LIBRARIAN_PLANNED = true
     URL = 'https://metacpan.org'
     COLOR = '#0298c3'
 

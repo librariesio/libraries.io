@@ -2,6 +2,8 @@ class Repositories
   class Pypi < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
+    LIBRARIAN_SUPPORT = true
+    SECURITY_PLANNED = true
     URL = 'https://pypi.python.org'
     COLOR = '#3581ba'
 

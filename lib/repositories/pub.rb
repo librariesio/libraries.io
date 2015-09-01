@@ -2,6 +2,7 @@ class Repositories
   class Pub < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    LIBRARIAN_SUPPORT = true
     URL = 'https://pub.dartlang.org'
     COLOR = '#98BAD6'
 

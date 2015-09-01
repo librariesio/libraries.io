@@ -2,6 +2,7 @@ class Repositories
   class Dub < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    LIBRARIAN_SUPPORT = true
     URL = 'http://code.dlang.org'
     COLOR = '#fcd46d'
 

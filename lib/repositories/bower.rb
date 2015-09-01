@@ -2,6 +2,8 @@ class Repositories
   class Bower < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
+    LIBRARIAN_SUPPORT = true
+    SECURITY_PLANNED = true
     URL = 'http://bower.io'
     COLOR = '#563d7c'
 
