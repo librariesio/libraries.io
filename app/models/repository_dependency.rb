@@ -5,6 +5,10 @@ class RepositoryDependency < ActiveRecord::Base
   scope :with_project, -> { joins(:project).where('projects.id IS NOT NULL') }
   scope :without_project_id, -> { where(project_id: nil) }
 
+  def github_repository
+    manifest.try(:github_repository)
+  end
+
   def find_project_id
     Project.platform(platform).where('lower(name) = ?', project_name.try(:downcase)).first.try(:id)
   end

@@ -142,21 +142,41 @@
           </div>
         <% end %>
       <% end %>
-      <% if @dependencies.any? %>
+
       <div class="col-md-6">
-        <% @dependencies.group_by(&:kind).each do |kind, dependencies| %>
-          <h4><%= kind.humanize unless kind == 'normal' %> Dependencies</h4>
-          <ul>
-            <% dependencies.each do |dependency| %>
-              <li>
-                <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
-                <%= dependency.requirements %>
-              </li>
+        <% if @dependencies.any? %>
+          <% @dependencies.group_by(&:kind).each do |kind, dependencies| %>
+            <h4><%= kind.humanize unless kind == 'normal' %> Dependencies</h4>
+            <ul>
+              <% dependencies.each do |dependency| %>
+                <li>
+                  <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
+                  <%= dependency.requirements %>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+        <% if current_user %>
+          <% your_dependent_repos = current_user.all_dependencies.where(project_id: @project.id) %>
+          <% if your_dependent_repos.any? %>
+            <h4>Your Dependent Repositories</h4>
+            <ul>
+              <% your_dependent_repos.limit(10).each do |dependency| %>
+                <% repo = dependency.manifest.github_repository %>
+                <li>
+                <%= link_to repo.full_name, github_repository_path(repo.owner_name, repo.project_name) %>
+                </li>
+              <% end %>
+            </ul>
+            <% if your_dependent_repos.count > 10 %>
+              <%= link_to "See all your dependent repositories", your_project_dependent_repos_path(@project.to_param) %>
             <% end %>
-          </ul>
+          <% end %>
         <% end %>
       </div>
-      <% end %>
+
+
     </div>
   </div>
 

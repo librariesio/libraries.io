@@ -1,4 +1,6 @@
 class ProjectsController < ApplicationController
+  before_action :ensure_logged_in, only: :your_dependent_repos
+
   def index
     facets = Project.facets(:facet_limit => 30)
 
@@ -72,6 +74,11 @@ class ProjectsController < ApplicationController
     @dependent_repos = WillPaginate::Collection.create(page, 30, @project.dependent_repositories_count) do |pager|
       pager.replace(@project.dependent_repos(page: page))
     end
+  end
+
+  def your_dependent_repos
+    find_project
+    @dependent_repos = current_user.all_dependencies.where(project_id: @project.id).paginate(page: params[:page])
   end
 
   def versions

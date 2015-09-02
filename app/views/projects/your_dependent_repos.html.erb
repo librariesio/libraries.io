@@ -1,0 +1,12 @@
+<% title "Your repositories that depend on #{@project} - Libraries" %>
+
+<h1>Your repositories that depend on <%= link_to @project, project_path(@project.to_param) %></h1>
+<hr>
+<% if @dependent_repos.any? %>
+  <%= render @dependent_repos.map(&:github_repository) %>
+  <%= will_paginate @dependent_repos, renderer: BootstrapPagination::Rails, page_links: false %>
+<% else %>
+  <p>
+    No repositories found, go back to <%= link_to @project, project_path(@project.to_param) %>.
+  </p>
+<% end %>
