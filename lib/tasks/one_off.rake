@@ -15,4 +15,18 @@ namespace :one_off do
       user.adminable_github_repositories.each{|g| g.update_all_info_async user.token }
     end
   end
+
+  desc 'delete duplicate permissions'
+  task delete_duplicate_permissions: :environment do
+    perms = RepositoryPermission.select(:user_id, :github_repository_id).group(:user_id, :github_repository_id).having("count(*) > 1")
+
+    perms.each do |perm|
+      repo_perms = RepositoryPermission.where(github_repository_id: perm.github_repository_id, user_id: perm.user_id)
+
+      repo_perms.each_with_index do |p, index|
+        next if index.zero?
+        p.destroy
+      end
+    end
+  end
 end
