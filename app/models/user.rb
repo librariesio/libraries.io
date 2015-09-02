@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
       rp.admin = repo.permissions.admin
       rp.push = repo.permissions.push
       rp.pull = repo.permissions.pull
-      rp.save
+      rp.save!
     end
 
     # delete missing permissions
