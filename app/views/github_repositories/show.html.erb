@@ -73,18 +73,27 @@
 
     <% if repo.manifests.latest.any? %>
       <hr>
-      <h4>Dependencies</h4>
-      <% repo.manifests.limit(100).latest.each do |manifest| %>
-        <h5><%= link_to manifest.path, manifest.github_link %></h5>
-        <ul>
-          <% manifest.repository_dependencies.limit(100).order(:project_name).each do |dependency| %>
-            <li>
-              <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
-              <%= dependency.requirements %>
-            </li>
+      <div id="dependencies">
+        <h4>Dependencies</h4>
+        <% repo.manifests.limit(100).latest.each do |manifest| %>
+          <h5><%= link_to manifest.path, manifest.github_link %></h5>
+          <% deps = manifest.repository_dependencies.limit(100).order(:project_name) %>
+          <% if deps.any? %>
+            <ul>
+              <% deps.each do |dependency| %>
+                <li>
+                  <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
+                  <%= dependency.requirements %>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p>
+              No dependencies found
+            </p>
           <% end %>
-        </ul>
-      <% end %>
+        <% end %>
+      </div>
     <% end %>
   </div>
   <div class='col-md-4'>
