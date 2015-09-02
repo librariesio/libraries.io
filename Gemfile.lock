@@ -469,7 +469,7 @@ GEM
     spdx-licenses (1.0.0)
       json
     spring (1.3.6)
-    sprockets (3.3.3)
+    sprockets (3.3.4)
       rack (~> 1.0)
     sprockets-rails (2.3.2)
       actionpack (>= 3.0)
