@@ -2,7 +2,7 @@ class Repositories
   class Atom < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    LIBRARIAN_PLANNED = true
+    LIBRARIAN_SUPPORT = true
     SECURITY_PLANNED = true
     URL = 'https://atom.io'
     COLOR = '#244776'
