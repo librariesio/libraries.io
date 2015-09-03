@@ -14,6 +14,13 @@ class AccountsController < ApplicationController
     end
   end
 
+  def destroy
+    current_user.destroy
+    session.delete(:user_id)
+    flash[:notice] = "Account deleted, we're sorry to see you go :'("
+    redirect_to root_path
+  end
+
   private
 
   def user_params
