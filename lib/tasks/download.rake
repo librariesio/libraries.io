@@ -21,6 +21,10 @@ namespace :download do
     Repositories::Bower.import_new
   end
 
+  task bower_all: :environment do
+    Repositories::Bower.import
+  end
+
   task cargo: :environment do
     Repositories::Cargo.import
   end
@@ -33,12 +37,20 @@ namespace :download do
     Repositories::CPAN.import_recent
   end
 
+  task cpan_all: :environment do
+    Repositories::CPAN.import
+  end
+
   task cocoapods: :environment do
     Repositories::CocoaPods.import
   end
 
   task cran: :environment do
-    Repositories::CPAN.import_recent
+    Repositories::CRAN.import_recent
+  end
+
+  task cran_all: :environment do
+    Repositories::CRAN.import
   end
 
   task dub: :environment do
@@ -61,6 +73,10 @@ namespace :download do
     Repositories::Hex.import_recent
   end
 
+  task hex_all: :environment do
+    Repositories::Hex.import_recent
+  end
+
   task jam: :environment do
     Repositories::Jam.import
   end
@@ -72,6 +88,11 @@ namespace :download do
   task maven: :environment do
     Repositories::Maven.load_names(50)
     Repositories::Maven.import_recent
+  end
+
+  task maven_all: :environment do
+    Repositories::Maven.load_names
+    Repositories::Maven.import
   end
 
   task meteor: :environment do
@@ -115,8 +136,16 @@ namespace :download do
     Repositories::Pypi.import_recent
   end
 
+  task pypi_all: :environment do
+    Repositories::Pypi.import
+  end
+
   task rubygems: :environment do
     Repositories::Rubygems.import_recent
+  end
+
+  task rubygems_all: :environment do
+    Repositories::Rubygems.import
   end
 
   task sublime: :environment do
@@ -125,6 +154,10 @@ namespace :download do
 
   task wordpress: :environment do
     Repositories::Wordpress.import_recent
+  end
+
+  task wordpress_all: :environment do
+    Repositories::Wordpress.import
   end
 
   task go: :environment do
