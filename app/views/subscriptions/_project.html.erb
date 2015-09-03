@@ -11,7 +11,7 @@
       </div>
 
       <small>
-        <%= link_to platform_name(project.platform), platform_path(project.platform.downcase) %> -
+        <%= link_to project.platform_name, platform_path(project.platform.downcase) %> -
         <% if project.language.present? && project.language != project.platform %>
           <%= link_to project.language, language_path(project.language) %> -
         <% end %>

@@ -109,6 +109,10 @@ class Project < ActiveRecord::Base
     "Repositories::#{platform}".constantize
   end
 
+  def platform_name
+    platform_class.formatted_name
+  end
+
   def color
     Languages::Language[language].try(:color) || platform_class.try(:color)
   end
