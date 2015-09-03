@@ -6,7 +6,7 @@ class Repositories
     URL = 'https://www.biicode.com/'
     COLOR = '#f34b7d'
 
-    def self.name
+    def self.formatted_name
       'biicode'
     end
 

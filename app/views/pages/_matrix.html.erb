@@ -25,10 +25,10 @@
       License checking
     </th>
   </thead>
-  <% Download.platforms.sort_by{|p| p.name.downcase }.each do |platform| %>
+  <% Download.platforms.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
     <tr>
       <td>
-        <strong><%= link_to platform.name, platform_path(platform.name.downcase) %></strong>
+        <strong><%= link_to platform.formatted_name, platform_path(platform.formatted_name.downcase) %></strong>
       </td>
       <td>
         <%= number_with_delimiter Project.platform(platform.to_s.demodulize).count %>

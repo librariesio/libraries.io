@@ -7,7 +7,7 @@ class Repositories
     URL = 'https://wordpress.org/plugins'
     COLOR = '#4F5D95'
 
-    def self.name
+    def self.formatted_name
       'WordPress'
     end
 

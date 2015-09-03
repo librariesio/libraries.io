@@ -1,3 +1,4 @@
+require 'repositories/base'
 class Repositories
   class Alcatraz < Base
     HAS_VERSIONS = false

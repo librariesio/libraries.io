@@ -7,7 +7,7 @@ class Repositories
     URL = 'https://www.npmjs.com'
     COLOR = '#f1e05a'
 
-    def self.name
+    def self.formatted_name
       'npm'
     end
 

@@ -9,7 +9,7 @@ class Repositories
       self::COLOR
     end
 
-    def self.name
+    def self.formatted_name
       self.to_s.demodulize
     end
 
