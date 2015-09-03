@@ -1,9 +1,9 @@
 class User < ActiveRecord::Base
-  has_many :subscriptions
+  has_many :subscriptions, dependent: :destroy
   has_many :subscribed_projects, through: :subscriptions, source: :project
-  has_many :repository_subscriptions
-  has_many :api_keys
-  has_many :repository_permissions
+  has_many :repository_subscriptions, dependent: :destroy
+  has_many :api_keys, dependent: :destroy
+  has_many :repository_permissions, dependent: :destroy
   has_many :adminable_repository_permissions, -> { where admin: true }, anonymous_class: RepositoryPermission
   has_many :adminable_github_repositories, through: :adminable_repository_permissions, source: :github_repository
   has_many :adminable_github_orgs, -> { group('github_organisations.id') }, through: :adminable_github_repositories, source: :github_organisation
