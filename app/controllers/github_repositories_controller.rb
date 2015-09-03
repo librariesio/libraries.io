@@ -22,14 +22,14 @@ class GithubRepositoriesController < ApplicationController
 
   def show
     load_repo
-    @contributors = @github_repository.github_contributions.order('count DESC').limit(20).includes(:github_user)
+    @contributors = @github_repository.contributors.order('count DESC').visible.limit(20)
     @projects = @github_repository.projects
     @color = @github_repository.color
   end
 
   def contributors
     load_repo
-    @contributors = @github_repository.github_contributions.order('count DESC').includes(:github_user).paginate(page: params[:page])
+    @contributors = @github_repository.contributors.order('count DESC').visible.paginate(page: params[:page])
   end
 
   def load_repo

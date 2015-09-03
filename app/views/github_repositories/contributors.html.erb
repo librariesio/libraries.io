@@ -15,8 +15,7 @@
 <hr>
 <div class="row">
   <% if @contributors.any? %>
-    <% @contributors.each do |contribution| %>
-      <% user = contribution.github_user %>
+    <% @contributors.each do |user| %>
       <% next if user.nil? %>
       <div class="contributor">
         <%= link_to image_tag(user.avatar_url, width: 60, height: 60, alt: user), user_path(user) %>
@@ -28,7 +27,7 @@
             </small>
           <% end %>
         </h4>
-        <small><%= link_to pluralize(contribution.count, 'commit'), @github_repository.commits_url + "?author=#{user.login}" %></small>
+
       </div>
     <% end %>
     <%= will_paginate @contributors, renderer: BootstrapPagination::Rails, page_links: false %>

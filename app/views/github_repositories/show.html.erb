@@ -99,7 +99,7 @@
   <div class='col-md-4'>
     <% if @contributors.any? %>
       <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
-      <%= render @contributors.map(&:github_user).compact.reject(&:hidden) %>
+      <%= render @contributors %>
     <% end %>
 
 

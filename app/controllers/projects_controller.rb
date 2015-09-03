@@ -57,7 +57,7 @@ class ProjectsController < ApplicationController
     end
     @dependencies = (@versions.any? ? (@version || @versions.first).dependencies.order('project_name ASC').limit(100) : [])
     @github_repository = @project.github_repository
-    @contributors = @project.github_contributions.order('count DESC').limit(20).includes(:github_user)
+    @contributors = @project.contributors.order('count DESC').visible.limit(20)
   end
 
   def dependents

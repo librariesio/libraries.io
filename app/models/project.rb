@@ -10,6 +10,7 @@ class Project < ActiveRecord::Base
   has_many :versions
   has_many :dependencies, -> { group 'project_name' }, through: :versions
   has_many :github_contributions, through: :github_repository
+  has_many :contributors, through: :github_contributions, source: :github_user
   has_many :github_tags, through: :github_repository
   has_many :dependents, class_name: 'Dependency'
   has_many :dependent_repositories, class_name: 'RepositoryDependency'

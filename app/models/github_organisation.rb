@@ -5,6 +5,7 @@ class GithubOrganisation < ActiveRecord::Base
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository
   has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
+  has_many :contributors, -> { group('github_users.id').order("COUNT(github_users.id) DESC") }, through: :github_repositories, source: :contributors
 
   validates_uniqueness_of :github_id, :login
 
@@ -12,6 +13,10 @@ class GithubOrganisation < ActiveRecord::Base
 
   def github_contributions
     GithubContribution.none
+  end
+
+  def org?
+    true
   end
 
   def avatar_url(size = 60)

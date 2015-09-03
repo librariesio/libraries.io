@@ -8,6 +8,7 @@ class GithubRepository < ActiveRecord::Base
 
   has_many :projects
   has_many :github_contributions, dependent: :destroy
+  has_many :contributors, through: :github_contributions, source: :github_user
   has_many :github_tags, dependent: :destroy
   has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies

@@ -13,6 +13,10 @@ class GithubUser < ActiveRecord::Base
     "https://avatars.githubusercontent.com/u/#{github_id}?size=#{size}"
   end
 
+  def org?
+    false
+  end
+
   def github_url
     "https://github.com/#{login}"
   end
