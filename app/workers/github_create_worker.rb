@@ -1,6 +1,6 @@
 class GithubCreateWorker
   include Sidekiq::Worker
-  sidekiq_options :queue => :critical
+  sidekiq_options :queue => :low
 
   def perform(repo_name, token = nil)
     token = token || AuthToken.token
