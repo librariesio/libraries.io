@@ -84,15 +84,24 @@ class User < ActiveRecord::Base
     r = github_client.repos
 
     current_repo_ids = []
+
+    existing_permissions = repository_permissions.all
+    new_repo_ids = r.map(&:id)
+    existing_repos = GithubRepository.where(github_id: new_repo_ids).select(:id, :github_id)
+
     r.each do |repo|
-      github_repo = GithubRepository.find_by_github_id(repo.id) || GithubRepository.find_by('lower(full_name) = ?', repo.full_name.downcase) || GithubRepository.create_from_hash(repo)
+      unless github_repo = existing_repos.find{|r| r.github_id == repo.id}
+        github_repo = GithubRepository.find_by('lower(full_name) = ?', repo.full_name.downcase) || GithubRepository.create_from_hash(repo)
+      end
       current_repo_ids << github_repo.id unless github_repo.nil?
 
-      rp = repository_permissions.find_or_initialize_by(github_repository: github_repo)
+      unless rp = existing_permissions.find{|p| p.github_repository_id == github_repo.id}
+        rp = repository_permissions.build(github_repository_id: github_repo.id)
+      end
       rp.admin = repo.permissions.admin
       rp.push = repo.permissions.push
       rp.pull = repo.permissions.pull
-      rp.save!
+      rp.save! if rp.changed?
     end
 
     # delete missing permissions

@@ -174,7 +174,7 @@ class GithubRepository < ActiveRecord::Base
       self.license = Project.format_license(r[:license][:key]) if r[:license]
       self.source_name = r[:parent][:full_name] if r[:fork]
       assign_attributes r.slice(*API_FIELDS)
-      save!
+      save! if self.changed?
     rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       nil
     end
@@ -330,7 +330,7 @@ class GithubRepository < ActiveRecord::Base
     g.license = repo_hash[:license][:key] if repo_hash[:license]
     g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
     g.assign_attributes repo_hash.slice(*GithubRepository::API_FIELDS)
-    g.save!
+    g.save! if g.changed?
     g
   end
 end
