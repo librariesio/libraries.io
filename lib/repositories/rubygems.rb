@@ -36,7 +36,7 @@ class Repositories
       Gems.versions(project['name']).map do |v|
         {
           :number => v['number'],
-          :published_at => v['created_at']
+          :published_at => v['built_at']
         }
       end
     end
