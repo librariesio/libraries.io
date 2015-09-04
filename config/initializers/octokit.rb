@@ -5,13 +5,7 @@ Octokit.middleware = Faraday::RackBuilder.new do |builder|
   builder.use :http_cache, store: store, logger: logger, shared_cache: false, serializer: Marshal
   builder.use Octokit::Middleware::FollowRedirects
   builder.use Octokit::Response::RaiseError
+  builder.use Octokit::Response::FeedParser
   builder.request :retry
   builder.adapter :typhoeus
-end
-
-Octokit.default_media_type = "application/vnd.github.moondragon+json"
-
-# Verbose logging in Octokit
-Octokit.configure do |config|
-  config.middleware.response :logger unless ENV['RACK_ENV'] == 'production'
 end
