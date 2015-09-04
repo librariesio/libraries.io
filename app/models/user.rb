@@ -80,6 +80,7 @@ class User < ActiveRecord::Base
   end
 
   def update_repo_permissions
+    self.update_attribute(:currently_syncing, true)
     r = github_client.repos
 
     current_repo_ids = []
@@ -98,8 +99,12 @@ class User < ActiveRecord::Base
     existing_repo_ids = repository_permissions.pluck(:github_repository_id)
     remove_ids = existing_repo_ids - current_repo_ids
     repository_permissions.where(github_repository_id: remove_ids).delete_all if remove_ids.any?
+
   rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
+  ensure
+    self.update_attribute(:last_synced_at, Time.now)
+    self.update_attribute(:currently_syncing, false)
   end
 
   def download_orgs
