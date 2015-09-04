@@ -16,17 +16,18 @@ namespace :one_off do
     end
   end
 
-  desc 'delete duplicate permissions'
-  task delete_duplicate_permissions: :environment do
-    perms = RepositoryPermission.select(:user_id, :github_repository_id).group(:user_id, :github_repository_id).having("count(*) > 1")
+  desc 'delete duplicate versions'
+  task delete_duplicate_versions: :environment do
+    versions = Version.find_by_sql('SELECT lower(number) as number, project_id FROM "versions" GROUP BY lower(number),project_id HAVING count(*) > 1')
 
-    perms.each do |perm|
-      repo_perms = RepositoryPermission.where(github_repository_id: perm.github_repository_id, user_id: perm.user_id)
-
-      repo_perms.each_with_index do |p, index|
+    versions.each do |version|
+      dupes = Version.where(project_id: version.project_id).where('lower(number) = ?', version.number.downcase).order('published_at')
+      dupes.each_with_index do |v, index|
         next if index.zero?
-        p.destroy
+        v.destroy
       end
     end
   end
+
+
 end
