@@ -19,16 +19,16 @@ Rails.application.routes.draw do
 
   post '/hooks/github', to: 'hooks#github'
 
-  get '/dashboard', to: 'dashboard#index'
+  get '/dashboard', to: 'dashboard#index', as: :dashboard
+  post '/dashboard/sync', to: 'dashboard#sync', as: :sync
+  post '/watch/:github_repository_id', to: 'dashboard#watch', as: :watch
+  post '/unwatch/:github_repository_id', to: 'dashboard#unwatch', as: :unwatch
 
   resource :account do
     member do
       get 'delete'
     end
   end
-
-  post '/watch/:github_repository_id', to: 'dashboard#watch', as: :watch
-  post '/unwatch/:github_repository_id', to: 'dashboard#unwatch', as: :unwatch
 
   root to: 'projects#index'
 

@@ -8,6 +8,11 @@ class DashboardController < ApplicationController
     @repos = @repos.from_org(@org.try(:id)) if params[:org].present?
   end
 
+  def sync
+    current_user.update_repo_permissions_async
+    redirect_to_back_or_default dashboard_path
+  end
+
   def watch
     github_repository = GithubRepository.find(params[:github_repository_id])
     current_user.subscribe_to_repo(github_repository)

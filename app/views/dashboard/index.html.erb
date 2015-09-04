@@ -6,6 +6,14 @@
     <% if current_user.admin? && current_user.private_repo_token.blank? %>
       <%= link_to 'Enable Private Repo Access', '/auth/github_private', class: 'btn btn-primary' %>
     <% end %>
+    <div class="">
+      <% if current_user.currently_syncing? %>
+        <i class="fa fa-refresh fa-spin"></i> currently syncing
+      <% else %>
+        Last sync: <%= current_user.last_synced_at %>
+        <%= button_to 'Sync', sync_path, class: 'btn btn-info' %>
+      <% end %>
+    </div>
     <div class="col-md-4">
       <div>
         <%= link_to url_for(org: nil) do %>
