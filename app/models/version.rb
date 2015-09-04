@@ -1,6 +1,7 @@
 class Version < ActiveRecord::Base
   validates_presence_of :project_id, :number
-  # validate unique number and project_id
+  validates_uniqueness_of :number, scope: :project_id
+
   belongs_to :project, touch: true
   counter_culture :project
   has_many :dependencies
