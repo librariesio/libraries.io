@@ -232,12 +232,13 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_tags(token = nil)
+    existing_tags = github_tags.to_a
     github_client(token).refs(full_name, 'tags').each do |tag|
       return unless tag['ref']
       match = tag.ref.match(/refs\/tags\/(.*)/)
       if match
         name = match[1]
-        if github_tags.find_by_name(name).nil?
+        if existing_tags.find{|t| t.name == name }.nil?
 
           object = github_client(token).get(tag.object.url)
 
