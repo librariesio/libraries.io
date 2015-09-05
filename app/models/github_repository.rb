@@ -209,17 +209,24 @@ class GithubRepository < ActiveRecord::Base
   def download_github_contributions(token = nil)
     contributions = github_client(token).contributors(full_name)
     return if contributions.empty?
+    existing_github_contributions = github_contributions.includes(:github_user).to_a
+    platform = projects.first.try(:platform)
     contributions.each do |c|
       return unless c['id']
-      user = GithubUser.find_or_create_by(github_id: c.id) do |u|
-        u.login = c.login
-        u.user_type = c.type
+
+      unless cont = existing_github_contributions.find{|c| c.github_user.github_id = c.id }
+        user = GithubUser.find_or_create_by(github_id: c.id) do |u|
+          u.login = c.login
+          u.user_type = c.type
+        end
+        cont = github_contributions.find_or_create_by(github_user: user)
       end
-      cont = github_contributions.find_or_create_by(github_user: user)
+
       cont.count = c.contributions
-      cont.platform = projects.first.platform if projects.any?
-      cont.save
+      cont.platform = platform
+      cont.save! if cont.changed?
     end
+    true
   rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
