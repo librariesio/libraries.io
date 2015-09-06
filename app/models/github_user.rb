@@ -7,6 +7,8 @@ class GithubUser < ActiveRecord::Base
 
   validates_uniqueness_of :github_id, :login
 
+  after_commit :download_orgs, on: :create
+
   scope :visible, -> { where(hidden: false) }
 
   def avatar_url(size = 60)
