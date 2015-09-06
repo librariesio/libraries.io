@@ -49,6 +49,16 @@ class GithubUser < ActiveRecord::Base
     github_client.orgs(login).each do |org|
       GithubCreateOrgWorker.perform_async(org.login)
     end
+    true
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    nil
+  end
+
+  def download_repos
+    github_client.repos(login).each do |repo|
+      GithubRepository.create_from_hash repo.to_hash
+    end
+    true
   rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
