@@ -55,9 +55,10 @@ class GithubUser < ActiveRecord::Base
   end
 
   def download_repos
-    github_client.repos(login).each do |repo|
+    AuthToken.client.search_repos("user:#{login}").items.each do |repo|
       GithubRepository.create_from_hash repo.to_hash
     end
+
     true
   rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
