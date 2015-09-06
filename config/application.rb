@@ -27,6 +27,8 @@ module Libraries
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
+    config.active_job.queue_adapter = :sidekiq
+
     config.exceptions_app = routes
 
     config.assets.paths << Emoji.images_path
