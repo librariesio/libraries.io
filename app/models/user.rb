@@ -81,6 +81,7 @@ class User < ActiveRecord::Base
 
   def update_repo_permissions
     self.update_attribute(:currently_syncing, true)
+    download_orgs
     r = github_client.repos
 
     current_repo_ids = []
