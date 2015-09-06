@@ -58,7 +58,7 @@ class GithubRepository < ActiveRecord::Base
         u.login = o.login
         u.user_type = o.type
       end
-      user.dowload_from_github
+      user.download_from_github
       user
     end
   rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e

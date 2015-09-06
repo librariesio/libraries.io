@@ -1,6 +1,6 @@
 namespace :github do
   task :update_users => :environment do
-    GithubUser.visible.find_each(&:dowload_from_github)
+    GithubUser.visible.find_each(&:download_from_github)
   end
 
   task reparse_manifests: :environment do
