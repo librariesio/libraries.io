@@ -33,6 +33,10 @@ class User < ActiveRecord::Base
     ADMIN_USERS.include?(nickname)
   end
 
+  def monitoring_enabled?
+    admin? || public_repo_token.present? || private_repo_token.present?
+  end
+
   def ping_andrew
     PushoverNewUserWorker.perform_async(self.id)
   end
