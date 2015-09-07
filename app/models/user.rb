@@ -9,9 +9,15 @@ class User < ActiveRecord::Base
   has_many :adminable_github_orgs, -> { group('github_organisations.id') }, through: :adminable_github_repositories, source: :github_organisation
   has_many :github_repositories, primary_key: :uid, foreign_key: :owner_id
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
+
+  has_many :watched_github_repositories, source: :github_repository, through: :repository_subscriptions
+  has_many :watched_dependencies, through: :watched_github_repositories, source: :dependencies
+  has_many :watched_dependent_projects, -> { group('projects.id') }, through: :watched_dependencies, source: :project
+
   has_many :dependencies, through: :source_github_repositories
   has_many :all_dependencies, through: :github_repositories, source: :dependencies
   has_many :all_dependent_projects, -> { group('projects.id') }, through: :all_dependencies, source: :project
+
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_one :github_user, primary_key: :uid, foreign_key: :github_id
 
@@ -27,7 +33,7 @@ class User < ActiveRecord::Base
   end
 
   def all_subscribed_project_ids
-    (subscribed_projects.pluck(:id) + all_dependent_projects.pluck(:id)).uniq
+    (subscribed_projects.pluck(:id) + watched_dependent_projects.pluck(:id)).uniq
   end
 
   def recommended_projects(limit)
