@@ -3,7 +3,7 @@
   <div class="notification">
     <div class="pull-right mute">
       <% if subscription = current_user.subscribed_to?(project) %>
-        <%= link_to subscription_path(subscription), method: :delete, class: 'btn tip', title: "Stop being notified of new releases of #{project.name}" do %>
+        <%= link_to subscription_path(subscription), method: :delete, class: 'tip', title: "Unsubscribe from #{project.name}" do %>
           <i class='fa fa-eye-slash'></i>
         <% end %>
       <% else %>
