@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
   has_many :dependencies, through: :source_github_repositories
   has_many :all_dependencies, through: :github_repositories, source: :dependencies
+  has_many :all_dependent_projects, -> { group('projects.id') }, through: :all_dependencies, source: :project
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_one :github_user, primary_key: :uid, foreign_key: :github_id
 
@@ -20,6 +21,14 @@ class User < ActiveRecord::Base
 
   validates_presence_of :email, :on => :update
   validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
+
+  def all_subscribed_projects
+    Project.where(id: all_subscribed_project_ids)
+  end
+
+  def all_subscribed_project_ids
+    (subscribed_projects.pluck(:id) + all_dependent_projects.pluck(:id)).uniq
+  end
 
   def recommended_projects(limit)
     projects = favourite_projects.where.not(id: subscribed_projects.pluck(:id)).limit(limit)

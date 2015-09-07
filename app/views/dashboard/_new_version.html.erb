@@ -1,4 +1,3 @@
-<% project = subscription.project %>
 <% if project.latest_release_number.present? %>
   <div class="notification">
     <%= link_to version_url(project.to_param.merge(number: project.latest_release_number)) do %>
@@ -10,6 +9,5 @@
       <%= link_to project, project_path(project.to_param) %> published
       <small> <%= time_ago_in_words(project.latest_release_published_at) %> ago</small>
     </h5>
-
   </div>
 <% end %>

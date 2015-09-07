@@ -1,11 +1,11 @@
 <div class="row">
   <div class="col-md-8">
     <h3>Release Newsfeed</h3>
-    <%= render collection: @subscriptions, partial: 'dashboard/new_version', as: :subscription  %>
-    <%= will_paginate @subscriptions, renderer: BootstrapPagination::Rails, page_links: false %>
+    <%= render collection: @versions, partial: 'dashboard/new_version', as: :project  %>
+    <%= will_paginate @versions, renderer: BootstrapPagination::Rails, page_links: false %>
   </div>
   <div class="col-md-4">
-    <h4>Recommended Libraries</h4>
+    <h3>Recommended Libraries</h3>
     <%= render collection: @projects, partial: 'project' %>
   </div>
 </div>
