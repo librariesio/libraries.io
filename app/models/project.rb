@@ -101,6 +101,10 @@ class Project < ActiveRecord::Base
     self.latest_release_number = latest_release.try(:number)
   end
 
+  def latest_release_number
+    read_attribute(:latest_release_number) || latest_release.try(:number)
+  end
+
   def owner
     return nil unless github_repository
     GithubUser.visible.find_by_login github_repository.owner_name
