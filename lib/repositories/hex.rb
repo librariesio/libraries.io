@@ -45,7 +45,7 @@ class Repositories
       project["releases"].map do |version|
         {
           :number => version['version'],
-          :published_at => version['created_at']
+          :published_at => version['inserted_at']
         }
       end
     end
