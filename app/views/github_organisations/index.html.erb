@@ -18,7 +18,7 @@
           <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
           <strong><%= link_to org, user_path(org) %></strong>
           <p>
-            <%= pluralize org.repo_count, 'repository' %></small>
+            <small><%= pluralize number_to_human(org.repo_count), 'repository' %></small>
           </p>
         </div>
       <% end %>
@@ -34,7 +34,7 @@
           <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
           <strong><%= link_to org, user_path(org) %></strong>
           <p>
-            <small><%= number_to_human org.star_count %> stars on <%= pluralize org.repo_count, 'repository' %></small>
+            <small><%= number_to_human org.star_count %> stars on <%= pluralize number_to_human(org.repo_count), 'repository' %></small>
           </p>
         </div>
       <% end %>
@@ -50,7 +50,7 @@
           <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
           <strong><%= link_to org, user_path(org) %></strong>
           <p>
-            <%= pluralize org.repo_count, 'repository' %></small>
+            <small><%= pluralize number_to_human(org.repo_count), 'repository' %></small>
           </p>
         </div>
       <% end %>
