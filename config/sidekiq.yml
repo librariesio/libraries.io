@@ -7,4 +7,5 @@ production:
 :queues:
   - low
   - [default, 2]
+  - [mailers, 5]
   - [critical, 10]
