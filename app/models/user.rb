@@ -36,6 +36,10 @@ class User < ActiveRecord::Base
     (subscribed_projects.pluck(:id) + watched_dependent_projects.pluck(:id)).uniq
   end
 
+  def all_subscribed_versions
+    Version.where(project_id: all_subscribed_project_ids)
+  end
+
   def recommended_projects(limit)
     projects = favourite_projects.where.not(id: subscribed_projects.pluck(:id)).limit(limit)
     if projects.length < limit
