@@ -1,0 +1,59 @@
+<% title "GitHub Organisations - Libraries" %>
+<% description "Explore popular GitHub Organisations on Libraries.io" %>
+
+<div class='row'>
+  <div class='col-md-12'>
+    <h1>GitHub Organisations</h1>
+  </div>
+</div>
+<hr>
+<div class='row'>
+  <% if @most_repos.any? %>
+    <div class='col-md-4'>
+      <h4>
+        Most Repositories
+      </h4>
+      <% @most_repos.each do |org| %>
+        <div class="org">
+          <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
+          <strong><%= link_to org, user_path(org) %></strong>
+          <p>
+            <%= pluralize org.repo_count, 'repository' %></small>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <% if @most_stars.any? %>
+    <div class='col-md-4'>
+      <h4>
+        Most Stars
+      </h4>
+      <% @most_stars.each do |org| %>
+        <div class="org">
+          <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
+          <strong><%= link_to org, user_path(org) %></strong>
+          <p>
+            <small><%= number_to_human org.star_count %> stars on <%= pluralize org.repo_count, 'repository' %></small>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <% if @newest.any? %>
+    <div class='col-md-4'>
+      <h4>
+        Recently Indexed
+      </h4>
+      <% @newest.each do |org| %>
+        <div class="org">
+          <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
+          <strong><%= link_to org, user_path(org) %></strong>
+          <p>
+            <%= pluralize org.repo_count, 'repository' %></small>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

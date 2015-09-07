@@ -11,6 +11,10 @@ class GithubOrganisation < ActiveRecord::Base
 
   after_commit :download_repos, on: :create
 
+  scope :most_repos, -> { joins(:source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('repo_count DESC') }
+  scope :most_stars, -> { joins(:source_github_repositories).select('github_organisations.*, sum(github_repositories.stargazers_count) AS star_count, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('star_count DESC') }
+  scope :newest, -> { joins(:source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('created_at DESC').having('count(github_repositories.id) > 0') }
+
   def github_contributions
     GithubContribution.none
   end
