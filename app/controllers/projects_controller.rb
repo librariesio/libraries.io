@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
 
   def index
     if current_user && current_user.monitoring_enabled?
-      @versions = current_user.all_subscribed_versions.order('published_at DESC').paginate(page: params[:page])
+      @versions = current_user.all_subscribed_versions.where.not(published_at: nil).order('published_at DESC').paginate(page: params[:page])
       @projects = current_user.recommended_projects(10)
       render 'dashboard/home'
     else
