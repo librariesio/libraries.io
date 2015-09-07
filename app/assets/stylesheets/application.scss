@@ -245,3 +245,16 @@ a.rss{
     margin-right: 10px;
   }
 }
+
+.notification{
+  height: 50px;
+
+  border-bottom: 1px solid #eee;
+  .pictogram {
+    float: left;
+    margin-right: 12px;
+  }
+  h5 {
+    line-height: 40px;
+  }
+}

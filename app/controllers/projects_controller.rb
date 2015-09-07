@@ -2,12 +2,18 @@ class ProjectsController < ApplicationController
   before_action :ensure_logged_in, only: :your_dependent_repos
 
   def index
-    facets = Project.facets(:facet_limit => 30)
+    if current_user && current_user.monitoring_enabled?
+      @subscriptions = current_user.subscriptions.includes(:project).order('projects.latest_release_published_at DESC').paginate(page: params[:page])
+      @projects = current_user.recommended_projects(10)
+      render 'dashboard/home'
+    else
+      facets = Project.facets(:facet_limit => 30)
 
-    @languages = facets[:languages][:terms]
-    @platforms = facets[:platforms][:terms]
-    @licenses = facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
-    @keywords = facets[:keywords][:terms]
+      @languages = facets[:languages][:terms]
+      @platforms = facets[:platforms][:terms]
+      @licenses = facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
+      @keywords = facets[:keywords][:terms]
+    end
   end
 
   def bus_factor
