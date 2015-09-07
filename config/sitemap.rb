@@ -55,6 +55,7 @@ SitemapGenerator::Sitemap.create do
   add search_path
 
   add github_path
+  add github_organisations_path
 
   add platforms_path, :priority => 0.7, :changefreq => 'daily'
   Download.platforms.each do |platform|
