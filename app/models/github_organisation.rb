@@ -3,6 +3,7 @@ class GithubOrganisation < ActiveRecord::Base
 
   has_many :github_repositories
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository
+  has_many :open_source_github_repositories, -> { where fork: false, private: false }, anonymous_class: GithubRepository
   has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :contributors, -> { group('github_users.id').order("COUNT(github_users.id) DESC") }, through: :github_repositories, source: :contributors
@@ -11,9 +12,9 @@ class GithubOrganisation < ActiveRecord::Base
 
   after_commit :download_repos, on: :create
 
-  scope :most_repos, -> { joins(:source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('repo_count DESC') }
-  scope :most_stars, -> { joins(:source_github_repositories).select('github_organisations.*, sum(github_repositories.stargazers_count) AS star_count, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('star_count DESC') }
-  scope :newest, -> { joins(:source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('created_at DESC').having('count(github_repositories.id) > 0') }
+  scope :most_repos, -> { joins(:open_source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('repo_count DESC') }
+  scope :most_stars, -> { joins(:open_source_github_repositories).select('github_organisations.*, sum(github_repositories.stargazers_count) AS star_count, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('star_count DESC') }
+  scope :newest, -> { joins(:open_source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('created_at DESC').having('count(github_repositories.id) > 0') }
 
   def github_contributions
     GithubContribution.none
