@@ -32,6 +32,14 @@ class User < ActiveRecord::Base
     Project.where(id: all_subscribed_project_ids)
   end
 
+  def to_s
+    full_name
+  end
+
+  def full_name
+    name.presence || nickname
+  end
+
   def all_subscribed_project_ids
     (subscribed_projects.pluck(:id) + watched_dependent_projects.pluck(:id)).uniq
   end
