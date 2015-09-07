@@ -60,7 +60,7 @@ class GithubUser < ActiveRecord::Base
     end
 
     true
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::UnprocessableEntity, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 end
