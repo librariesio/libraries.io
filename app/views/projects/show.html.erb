@@ -23,7 +23,7 @@
   <div class='col-md-4'>
     <h1>
       <% if logged_in? && current_user.subscribed_to?(@project) %>
-        <%= link_to 'Unsubscribe from updates', subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'btn btn-danger tip', title: 'Stop being notified by email of new releases of this library' %>
+        <%= link_to 'Unsubscribe from updates', subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'btn btn-danger tip', title: 'Stop being notified of new releases of this library' %>
       <% elsif logged_in? %>
         <%= link_to 'Subscribe to Releases', subscribe_path(project_id: @project.id), class: 'tip btn btn-success', rel: 'nofollow', title: 'Get notified by email of new releases of this library' %>
       <% else %>
