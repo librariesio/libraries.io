@@ -61,6 +61,9 @@
                   <li><%= link_to 'Repositories', dashboard_path %></li>
                 <% end %>
                 <li><%= link_to 'Subscriptions', subscriptions_path %></li>
+                <% if current_user.github_user.present? %>
+                  <li><%= link_to 'Profile', user_path(current_user.github_user) %></li>
+                <% end %>
                 <li><%= link_to 'Settings', account_path %></li>
                 <li><%= link_to 'Logout', logout_path %></li>
               </ul>
