@@ -41,11 +41,16 @@ class User < ActiveRecord::Base
   end
 
   def recommended_projects(limit)
-    projects = favourite_projects.where.not(id: subscribed_projects.pluck(:id)).limit(limit)
-    if projects.length < limit
-      projects += Project.most_watched.where.not(id: subscribed_projects.pluck(:id)).limit(limit)
-    end
+    projects = favourite_projects.where(language: favourite_languages).limit(limit)
+    projects = favourite_projects.where.not(id: subscribed_projects.pluck(:id)).limit(limit) if projects.length < limit
+    projects += Project.most_watched.where.not(id: subscribed_projects.pluck(:id)).limit(limit) if projects.length < limit
     projects.first(limit)
+  end
+
+  def favourite_languages(limit = 3)
+    all_languages = (github_repositories.where('pushed_at > ?', 2.years.ago).pluck(:language) + subscribed_projects.pluck(:language)).compact
+    all_languages = github_repositories.pluck(:language) if all_languages.empty?
+    all_languages.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.first(limit).map(&:first)
   end
 
   def admin?
