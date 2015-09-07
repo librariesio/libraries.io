@@ -2,6 +2,7 @@
   <div class="col-md-8">
     <h3>Release Newsfeed</h3>
     <%= render collection: @subscriptions, partial: 'dashboard/new_version', as: :subscription  %>
+    <%= will_paginate @subscriptions, renderer: BootstrapPagination::Rails, page_links: false %>
   </div>
   <div class="col-md-4">
     <h4>Recommended Libraries</h4>
