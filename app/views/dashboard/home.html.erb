@@ -1,10 +1,25 @@
 <div class="row">
   <div class="col-md-8" id='newsfeed'>
-    <%= render collection: @versions, partial: 'dashboard/new_version', as: :version  %>
-    <%= will_paginate @versions, renderer: BootstrapPagination::Rails, page_links: false %>
+    <% if @versions.any? %>
+      <%= render collection: @versions, partial: 'dashboard/new_version', as: :version  %>
+      <%= will_paginate @versions, renderer: BootstrapPagination::Rails, page_links: false %>
+    <% else %>
+      <h2>Hi there <%= current_user.full_name %>!</h2>
+      <p>
+        Libraries.io lets you watch libraries that you depend on and notifies you when there's a new release.
+        When you follow a library, new releases will show up here in your newsfeed.
+      </p>
+
+      <p>
+        Below are some recommended projects for you to watch:
+      </p>
+      <%= render collection: @projects, partial: 'subscriptions/project' %>
+    <% end %>
   </div>
   <div class="col-md-4">
-    <h3>Recommended Libraries</h3>
-    <%= render collection: @projects, partial: 'project' %>
+    <% if @versions.any? %>
+      <h3>Recommended Libraries</h3>
+      <%= render collection: @projects, partial: 'project' %>
+    <% end %>
   </div>
 </div>
