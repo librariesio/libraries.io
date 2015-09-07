@@ -257,4 +257,19 @@ a.rss{
   h5 {
     line-height: 40px;
   }
+  .mute{
+    display: none;
+    line-height: 40px;
+    color: #aaa;
+    margin-right: 15px;
+  }
+  &:hover{
+    .mute{
+      display: block;
+    }
+  }
+}
+
+#newsfeed {
+  margin-top: 28px;
 }
