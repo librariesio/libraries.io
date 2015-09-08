@@ -126,6 +126,7 @@ class User < ActiveRecord::Base
   end
 
   def update_repo_permissions_async
+    self.update_attribute(:currently_syncing, true)
     SyncPermissionsWorker.perform_async(self.id)
   end
 
