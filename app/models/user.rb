@@ -84,6 +84,17 @@ class User < ActiveRecord::Base
     api_keys.first.try(:access_token)
   end
 
+  def github_settings_url
+    if private_repo_token.present?
+      key = ENV['GITHUB_PRIVATE_KEY']
+    elsif
+      key = ENV['GITHUB_PUBLIC_KEY']
+    else
+      key = ENV['GITHUB_KEY']
+    end
+    "https://github.com/settings/connections/applications/#{key}"
+  end
+
   def self.create_from_auth_hash(hash)
     create!(AuthHash.new(hash).user_info)
   end
