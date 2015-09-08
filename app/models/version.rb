@@ -15,6 +15,7 @@ class Version < ActiveRecord::Base
   def notify_subscribers
     project.subscriptions.group_by(&:notification_user).each do |user, subscriptions|
       next if user.nil?
+      next if user.muted?(project)
       VersionsMailer.new_version(user, project, self).deliver_later
     end
   end
