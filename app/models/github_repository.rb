@@ -277,6 +277,8 @@ class GithubRepository < ActiveRecord::Base
         :active => true
       }
     )
+  rescue Octokit::UnprocessableEntity => e
+    nil
   end
 
   def download_manifests(token = nil)
