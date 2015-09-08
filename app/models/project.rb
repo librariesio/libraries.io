@@ -13,7 +13,9 @@ class Project < ActiveRecord::Base
   has_many :contributors, through: :github_contributions, source: :github_user
   has_many :github_tags, through: :github_repository
   has_many :dependents, class_name: 'Dependency'
-  has_many :dependent_repositories, class_name: 'RepositoryDependency'
+  has_many :repository_dependencies
+  has_many :dependent_manifests, through: :repository_dependencies, source: :manifest
+  has_many :dependent_repositories, -> { group('github_repositories.id') }, through: :dependent_manifests, source: :github_repository
   has_many :subscriptions
   belongs_to :github_repository
 
@@ -159,15 +161,6 @@ class Project < ActiveRecord::Base
   def dependent_projects(options = {})
     options = {per_page: 30, page: 1}.merge(options)
     Project.where(id: dependents.joins(:version).limit(options[:per_page]).offset(options[:per_page]*(options[:page].to_i-1)).pluck('DISTINCT versions.project_id'))
-  end
-
-  def dependent_repos(options = {})
-    options = {per_page: 30, page: 1}.merge(options)
-    GithubRepository.open_source.where(id: dependent_repositories.joins(:manifest).limit(options[:per_page]).offset(options[:per_page]*(options[:page].to_i-1)).pluck('DISTINCT manifests.github_repository_id'))
-  end
-
-  def dependent_repositories_count
-    dependent_repositories.joins(:manifest).pluck('DISTINCT manifests.github_repository_id').count
   end
 
   def set_dependents_count

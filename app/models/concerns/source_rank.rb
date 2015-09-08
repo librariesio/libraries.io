@@ -44,7 +44,7 @@ module SourceRank
     r += log_scale(dependents_count) * 2
 
     # number of dependent repositories
-    r += log_scale(dependent_repositories_count)
+    r += log_scale(dependent_repositories.open_source.length)
 
     # number of contributors
     r += (log_scale(github_contributions.length) / 2.0).ceil

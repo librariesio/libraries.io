@@ -76,10 +76,7 @@ class ProjectsController < ApplicationController
 
   def dependent_repos
     find_project
-    page = params[:page].to_i > 0 ? params[:page].to_i : 1
-    @dependent_repos = WillPaginate::Collection.create(page, 30, @project.dependent_repositories_count) do |pager|
-      pager.replace(@project.dependent_repos(page: page))
-    end
+    @dependent_repos = @project.dependent_repositories.open_source.paginate(page: params[:page])
   end
 
   def your_dependent_repos
