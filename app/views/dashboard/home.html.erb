@@ -40,7 +40,7 @@
       <% @repositories.each do |github_repository| %>
         <div class='mini-project'>
           <%= link_to github_repository_path(github_repository.owner_name, github_repository.project_name) do %>
-            <%= image_tag github_repository.owner.avatar_url(40), width: 20  %>
+            <%= image_tag github_repository.avatar_url(40), width: 20  %>
           <% end %>
           <%= link_to github_repository.full_name, github_repository_path(github_repository.owner_name, github_repository.project_name) %>
           <small><% if github_repository.pushed_at > github_repository.created_at + 1.minute %>
