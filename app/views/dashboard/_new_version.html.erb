@@ -7,7 +7,9 @@
           <i class='fa fa-eye-slash'></i>
         <% end %>
       <% else %>
-        <!-- <i class='fa fa-microphone-slash'></i> -->
+        <%= link_to mute_project_path(project.to_param), method: :post, class: 'tip', title: "Mute #{project.name} notifications" do %>
+          <i class='fa fa-microphone-slash'></i>
+        <% end %>
       <% end %>
     </div>
 

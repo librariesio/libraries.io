@@ -1,9 +1,10 @@
 class ProjectsController < ApplicationController
-  before_action :ensure_logged_in, only: :your_dependent_repos
+  before_action :ensure_logged_in, only: [:your_dependent_repos, :mute, :unmute]
 
   def index
     if current_user && current_user.monitoring_enabled?
-      @versions = current_user.all_subscribed_versions.where.not(published_at: nil).order('published_at DESC').includes(:project).paginate(per_page: 20, page: params[:page])
+      muted_ids = params[:include_muted].present? ? [] : current_user.muted_project_ids
+      @versions = current_user.all_subscribed_versions.where.not(project_id: muted_ids).where.not(published_at: nil).order('published_at DESC').includes(:project).paginate(per_page: 20, page: params[:page])
       @projects = current_user.recommended_projects(10)
       render 'dashboard/home'
     else
@@ -112,6 +113,18 @@ class ProjectsController < ApplicationController
         format.atom
       end
     end
+  end
+
+  def mute
+    find_project
+    current_user.mute(@project)
+    redirect_to_back_or_default project_path(@project.to_param)
+  end
+
+  def unmute
+    find_project
+    current_user.unmute(@project)
+    redirect_to_back_or_default project_path(@project.to_param)
   end
 
   private

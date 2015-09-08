@@ -22,6 +22,17 @@
   </div>
   <div class='col-md-4'>
     <h1>
+      <% if logged_in? && current_user.monitoring_enabled? %>
+        <% if current_user.muted?(@project) %>
+          <%= link_to unmute_project_path(@project.to_param), method: :delete, class: 'btn btn-danger tip', title: "Unmute #{@project.name}" do %>
+            <i class='fa fa-microphone-slash'></i>
+          <% end %>
+        <% else %>
+          <%= link_to mute_project_path(@project.to_param), method: :post, class: 'btn btn-info tip', title: "Mute #{@project.name}" do %>
+            <i class='fa fa-microphone-slash'></i>
+          <% end %>
+        <% end %>
+      <% end %>
       <% if logged_in? && current_user.subscribed_to?(@project) %>
         <%= link_to 'Unsubscribe from updates', subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'btn btn-danger tip', title: 'Stop being notified of new releases of this library' %>
       <% elsif logged_in? %>

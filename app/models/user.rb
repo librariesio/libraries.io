@@ -21,6 +21,9 @@ class User < ActiveRecord::Base
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_one :github_user, primary_key: :uid, foreign_key: :github_id
 
+  has_many :project_mutes
+  has_many :muted_projects, through: :project_mutes, source: :project
+
   after_commit :create_api_key, :ping_andrew, :download_orgs, :update_repo_permissions_async, on: :create
 
   ADMIN_USERS = ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall']
@@ -177,6 +180,18 @@ class User < ActiveRecord::Base
 
   def subscribed_to_repo?(github_repository)
     repository_subscriptions.find_by_github_repository_id(github_repository.id)
+  end
+
+  def muted?(project)
+    project_mutes.where(project_id: project.id).any?
+  end
+
+  def mute(project)
+    project_mutes.find_or_create_by(project: project)
+  end
+
+  def unmute(project)
+    project_mutes.where(project_id: project.id).delete_all
   end
 
   def can_read?(github_repository)

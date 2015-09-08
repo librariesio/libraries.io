@@ -15,6 +15,21 @@
       </p>
       <%= render collection: @projects, partial: 'subscriptions/project' %>
     <% end %>
+    <% if current_user.muted_projects.any? %>
+
+        <p>
+          <small>
+            <% if params[:include_muted].present? %>
+              Showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
+              <%= link_to 'Hide muted projects', url_for(params.except(:include_muted)) %>
+            <% else %>
+              Not showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
+              <%= link_to 'Show muted projects', url_for(params.merge(include_muted: true)) %>
+            <% end %>
+          </small>
+        </p>
+
+    <% end %>
   </div>
   <div class="col-md-4">
     <% if @versions.any? %>
