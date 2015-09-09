@@ -53,9 +53,10 @@ class User < ActiveRecord::Base
 
   def recommended_projects(limit)
     projects = favourite_projects.where(language: favourite_languages).limit(limit)
-    projects = favourite_projects.where.not(id: subscribed_projects.pluck(:id)).limit(limit) if projects.length < limit
+    projects += Project.most_watched.where.not(id: subscribed_projects.pluck(:id)).where(language: favourite_languages).limit(limit) if projects.length < limit
+    projects += favourite_projects.where.not(id: subscribed_projects.pluck(:id)).limit(limit) if projects.length < limit
     projects += Project.most_watched.where.not(id: subscribed_projects.pluck(:id)).limit(limit) if projects.length < limit
-    projects.first(limit)
+    projects.uniq.first(limit)
   end
 
   def favourite_languages(limit = 3)
