@@ -10,7 +10,7 @@ class RepositoryDependency < ActiveRecord::Base
   end
 
   def find_project_id
-    Project.platform(platform).where('lower(name) = ?', project_name.try(:downcase)).first.try(:id)
+    Project.platform(platform).where('lower(name) = ?', project_name.try(:downcase)).limit(1).pluck(:id).first
   end
 
   def platform
