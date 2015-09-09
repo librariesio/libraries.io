@@ -22,7 +22,7 @@
   </div>
   <div class='col-md-4'>
     <h1>
-      <% if logged_in? && current_user.monitoring_enabled? %>
+      <% if logged_in? %>
         <% if current_user.muted?(@project) %>
           <%= link_to unmute_project_path(@project.to_param), method: :delete, class: 'btn btn-danger tip', title: "Unmute #{@project.name}" do %>
             <i class='fa fa-microphone-slash'></i>

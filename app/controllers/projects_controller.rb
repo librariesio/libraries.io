@@ -2,8 +2,7 @@ class ProjectsController < ApplicationController
   before_action :ensure_logged_in, only: [:your_dependent_repos, :mute, :unmute]
 
   def index
-    if current_user && current_user.monitoring_enabled?
-      @repositories = current_user.adminable_github_repositories.order('pushed_at DESC').limit(15)
+    if current_user
       muted_ids = params[:include_muted].present? ? [] : current_user.muted_project_ids
       @versions = current_user.all_subscribed_versions.where.not(project_id: muted_ids).where.not(published_at: nil).order('published_at DESC').includes(:project).paginate(per_page: 20, page: params[:page])
       @projects = current_user.recommended_projects(10)

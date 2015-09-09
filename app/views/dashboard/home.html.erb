@@ -30,35 +30,6 @@
     <% end %>
   </div>
   <div class="col-md-4">
-    <% if @repositories.any? %>
-      <h3>
-        Active Projects
-        <%= link_to dashboard_path, class: 'pull-right' do %>
-          <small>Manage Repositories</small>
-        <% end %>
-      </h3>
-      <% @repositories.each do |github_repository| %>
-        <div class='mini-project'>
-          <%= link_to github_repository_path(github_repository.owner_name, github_repository.project_name) do %>
-            <%= image_tag github_repository.avatar_url(40), width: 20  %>
-          <% end %>
-          <strong>
-            <%= link_to github_repository.full_name, github_repository_path(github_repository.owner_name, github_repository.project_name) %>
-          </strong>
-          <small>
-            <%= fa_icon("lock", class: "text-muted") if github_repository.private? %>
-            <%= fa_icon("code-fork", class: "text-muted") if github_repository.fork? %>
-          </small>
-          <small class='pull-right'>
-            <% if github_repository.pushed_at > github_repository.created_at + 1.minute %>
-              Last pushed <%= time_ago_in_words(github_repository.pushed_at).gsub('about','') %> ago
-            <% else %>
-              Created <%= time_ago_in_words(github_repository.created_at).gsub('about','') %> ago
-            <% end %>
-          </small>
-        </div>
-      <% end %>
-    <% end %>
     <% if @versions.any? %>
       <h3>Recommended Libraries</h3>
       <%= render collection: @projects, partial: 'project' %>
