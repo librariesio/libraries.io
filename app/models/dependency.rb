@@ -10,6 +10,18 @@ class Dependency < ActiveRecord::Base
     Project.platform(platform).where('lower(name) = ?', project_name.downcase).first.try(:id)
   end
 
+  def platform
+    plat = self.read_attribute(:platform)
+    case plat
+    when 'rubygemslockfile'
+      'Rubygems'
+    when 'npmshrinkwrap'
+      'NPM'
+    else
+      plat
+    end
+  end
+
   def update_project_id
     proj_id = find_project_id
     update_attribute(:project_id, proj_id) if proj_id.present?
