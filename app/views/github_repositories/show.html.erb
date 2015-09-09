@@ -76,17 +76,35 @@
       <div id="dependencies">
         <h4>Dependencies</h4>
         <% repo.manifests.limit(20).latest.each do |manifest| %>
-          <h5><%= link_to manifest.path, manifest.github_link %></h5>
-          <% deps = manifest.repository_dependencies.limit(500).order(:project_name) %>
+          <% deps = manifest.repository_dependencies.limit(500).order(:project_name).includes(:project) %>
           <% if deps.any? %>
-            <ul>
+            <table class='table table-hover table-condensed'>
+              <thead>
+                <th>
+                  <%= link_to manifest.path, manifest.github_link %>
+                </th>
+                <th>
+                  Requirements
+                </th>
+                <th>
+                  Latest Release
+                </th>
+              </thead>
               <% deps.each do |dependency| %>
-                <li>
-                  <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
-                  <%= dependency.requirements %>
-                </li>
+                <tr>
+                  <td>
+                    <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
+                  </td>
+                  <td>
+                    <%= dependency.requirements %>
+                  </td>
+                  <td>
+                    <%= dependency.try(:project).try(:latest_release_number) %>
+                  </td>
+
+                </tr>
               <% end %>
-            </ul>
+            </table>
           <% else %>
             <p>
               No dependencies found
