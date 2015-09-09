@@ -75,9 +75,9 @@
       <hr>
       <div id="dependencies">
         <h4>Dependencies</h4>
-        <% repo.manifests.limit(100).latest.each do |manifest| %>
+        <% repo.manifests.limit(20).latest.each do |manifest| %>
           <h5><%= link_to manifest.path, manifest.github_link %></h5>
-          <% deps = manifest.repository_dependencies.limit(100).order(:project_name) %>
+          <% deps = manifest.repository_dependencies.limit(500).order(:project_name) %>
           <% if deps.any? %>
             <ul>
               <% deps.each do |dependency| %>
