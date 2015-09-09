@@ -182,4 +182,15 @@ module ApplicationHelper
     tag = content_tag :i, '', class: "fa fa-#{icon_class}", style: "color:#{color}"
     !bool && negative ? content_tag(:i, negative) : tag
   end
+
+  def dependency_platform(platform_string)
+    case platform_string.downcase
+    when 'rubygemslockfile'
+      'rubygems'
+    when 'npmshrinkwrap'
+      'npm'
+    else
+      platform_string.downcase
+    end
+  end
 end

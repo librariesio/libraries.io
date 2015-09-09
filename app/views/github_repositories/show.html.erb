@@ -93,7 +93,7 @@
               <% deps.each do |dependency| %>
                 <tr>
                   <td>
-                    <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
+                    <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
                   </td>
                   <td>
                     <%= dependency.requirements %>

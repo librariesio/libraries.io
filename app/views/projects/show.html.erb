@@ -157,7 +157,7 @@
             <ul>
               <% dependencies.each do |dependency| %>
                 <li>
-                  <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.downcase) %>
+                  <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
                   <%= dependency.requirements %>
                 </li>
               <% end %>
