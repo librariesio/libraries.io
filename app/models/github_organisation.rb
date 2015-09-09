@@ -6,7 +6,7 @@ class GithubOrganisation < ActiveRecord::Base
   has_many :open_source_github_repositories, -> { where fork: false, private: false }, anonymous_class: GithubRepository
   has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
-  has_many :contributors, -> { group('github_users.id').order("COUNT(github_users.id) DESC") }, through: :open_source_github_repositories, source: :contributors
+  has_many :contributors, -> { group('github_users.id').order("sum(github_contributions.count) DESC") }, through: :open_source_github_repositories, source: :contributors
 
   validates_uniqueness_of :github_id, :login
 
