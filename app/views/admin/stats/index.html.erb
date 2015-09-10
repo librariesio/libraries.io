@@ -5,7 +5,7 @@
   <div class="col-md-12">
     <h5><strong>Recent Signups</strong></h5>
     <% @recent_users.each do |user| %>
-      <%= link_to image_tag(user.avatar_url, width: 60, height: 60, alt: user, class: 'pull-left'), user.github_url %>
+      <%= link_to image_tag(user.avatar_url, width: 60, height: 60, alt: user, class: 'pull-left'), user.github_url, class: 'tip', title: "#{pluralize(user.subscriptions.count, 'subscription')}, #{pluralize(user.github_repositories.count, 'repo')}" %>
     <% end %>
   </div>
 </div>
