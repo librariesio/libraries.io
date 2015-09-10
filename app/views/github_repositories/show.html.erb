@@ -64,6 +64,9 @@
                 <th>
                   Latest Release
                 </th>
+                <th>
+                  Licenses
+                </th>
               </thead>
               <% deps.each do |dependency| %>
                 <tr>
@@ -75,6 +78,11 @@
                   </td>
                   <td>
                     <%= dependency.try(:project).try(:latest_release_number) %>
+                  </td>
+                  <td>
+                    <% if dependency.project %>
+                      <%= linked_licenses dependency.project.normalized_licenses %>
+                    <% end %>
                   </td>
                 </tr>
               <% end %>
