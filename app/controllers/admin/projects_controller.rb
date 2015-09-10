@@ -13,6 +13,18 @@ class Admin::ProjectsController < Admin::ApplicationController
     end
   end
 
+  def index
+    scope = Project.without_repository_url.most_dependents
+    if params[:platform].present?
+      @platform = Project.platform(params[:platform].downcase).first.try(:platform)
+      raise ActiveRecord::RecordNotFound if @platform.nil?
+      scope = scope.platform(@platform)
+    end
+
+    @platforms = Project.without_repository_url.most_dependents.pluck('platform').compact.uniq
+    @projects = scope.paginate(page: params[:page])
+  end
+
   private
 
   def project_params
