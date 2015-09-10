@@ -3,6 +3,20 @@
     <% if @versions.any? %>
       <%= render collection: @versions, partial: 'dashboard/new_version', as: :version  %>
       <%= will_paginate @versions, renderer: BootstrapPagination::Rails, page_links: false %>
+      <p>
+        <small class='text-muted'>
+          <% if current_user.muted_projects.any? %>
+            <% if params[:include_muted].present? %>
+              Showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
+              <%= link_to 'Hide muted projects', url_for(params.except(:include_muted)) %> -
+            <% else %>
+              Not showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
+              <%= link_to 'Show muted projects', url_for(params.merge(include_muted: true)) %> -
+            <% end %>
+          <% end %>
+          <%= link_to 'Manage your subscriptions', subscriptions_path %>
+        </small>
+      </p>
     <% else %>
       <h2>Hi there <%= current_user.full_name %>!</h2>
       <p>
@@ -17,19 +31,6 @@
       <p>
         <%= link_to 'Browse and filter more recommendations &raquo;'.html_safe, recommendations_path %>
       </p>
-    <% end %>
-    <% if current_user.muted_projects.any? %>
-        <p>
-          <small class='text-muted'>
-            <% if params[:include_muted].present? %>
-              Showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
-              <%= link_to 'Hide muted projects', url_for(params.except(:include_muted)) %>
-            <% else %>
-              Not showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
-              <%= link_to 'Show muted projects', url_for(params.merge(include_muted: true)) %>
-            <% end %>
-          </small>
-        </p>
     <% end %>
   </div>
   <div class="col-md-4">
