@@ -96,7 +96,7 @@
   <footer>
     <div class="container">
       <div class='row'>
-        <div class="col-xs-12 col-sm-6 col-md-7">
+        <div class="col-xs-12 col-sm-6 col-md-4">
             <p>
               <%= link_to 'Libraries', root_path %> helps you find new open source libraries, modules and frameworks and keep track of ones you depend upon.
             </p>
@@ -104,21 +104,35 @@
               Currently tracking <%= link_to number_with_delimiter(Project.total), search_path %> open source projects
               from across <%= link_to Download.platforms.length, platforms_path %> platforms.
             </p>
-            <p>
-              <%= link_to 'About', '/about' %> -
-              <%= link_to 'Support', 'https://github.com/librariesio/support/issues/new' %> -
-              <%= link_to 'Twitter', 'https://twitter.com/librariesio' %> -
-              <%= link_to 'GitHub', 'https://github.com/librariesio' %> -
-              <%= link_to 'Contact', 'mailto:support@libraries.io' %> -
-              <%= link_to 'Increase the Bus Factor', bus_factor_path %>
-            </p>
+
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-5">
+        <div class="col-xs-12 col-md-2">
+          <strong>About Us</strong>
+          <ul>
+            <li><%= link_to 'About Libraries.io', '/about' %></li>
+            <li><%= link_to 'Support', 'https://github.com/librariesio/support/issues/new' %></li>
+            <li><%= link_to 'Twitter', 'https://twitter.com/librariesio' %></li>
+            <li><%= link_to 'GitHub', 'https://github.com/librariesio' %></li>
+            <li><%= link_to 'Email', 'mailto:support@libraries.io' %></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-md-2">
+          <strong>Explore</strong>
+          <ul>
+            <li><%= link_to 'Platforms', '/platforms' %></li>
+            <li><%= link_to 'Languages', '/languages' %></li>
+            <li><%= link_to 'Licenses', '/licenses' %></li>
+            <li><%= link_to 'Repositories', '/repositories' %></li>
+            <li><%= link_to 'Organizations', '/organisations' %></li>
+            <li><%= link_to 'Bus Factor', bus_factor_path %></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
           <form action="//libraries.us10.list-manage.com/subscribe/post?u=15c11768c94674bc6f18d079f&amp;id=848ac04a44" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="navbar-form" target="_blank" novalidate>
             <p>
               Subscribe to the Libraries newsletter:
             </p>
-          	<input type="email" value="" name="EMAIL" size='40' placeholder='Your email...' class="form-control" id="mce-EMAIL">
+          	<input type="email" value="" name="EMAIL" size='20' placeholder='Your email...' class="form-control" id="mce-EMAIL">
             <div style="position: absolute; left: -5000px;"><input type="text" name="b_15c11768c94674bc6f18d079f_848ac04a44" tabindex="-1" value=""></div>
             <input type="submit" value="Get Updates" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary"></div>
           </form>
