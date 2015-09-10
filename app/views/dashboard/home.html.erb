@@ -31,7 +31,12 @@
   </div>
   <div class="col-md-4">
     <% if @versions.any? %>
-      <h3>Recommended Libraries</h3>
+      <h3>
+        Recommended Libraries
+        <small>
+          <%= link_to 'See more &raquo;'.html_safe, recommendations_path %>
+        </small>
+      </h3>
       <%= render collection: @projects, partial: 'subscriptions/project' %>
     <% end %>
   </div>
