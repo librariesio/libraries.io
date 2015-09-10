@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   has_many :project_mutes
   has_many :muted_projects, through: :project_mutes, source: :project
 
-  after_commit :create_api_key, :ping_andrew, :download_orgs, :update_repo_permissions_async, on: :create
+  after_commit :create_api_key, :download_self, :ping_andrew, :download_orgs, :update_repo_permissions_async, on: :create
 
   ADMIN_USERS = ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall']
 
@@ -155,6 +155,14 @@ class User < ActiveRecord::Base
   ensure
     self.update_attribute(:last_synced_at, Time.now)
     self.update_attribute(:currently_syncing, false)
+  end
+
+  def download_self
+    user = GithubUser.find_or_create_by(github_id: uid) do |u|
+      u.login = o.login
+      u.user_type = o.type
+    end
+    user.download_from_github
   end
 
   def download_orgs
