@@ -22,15 +22,15 @@ module Recommendable
 
   def favourite_recommendation_ids
     return [] if github_user.nil?
-    recommendation_filter github_user.favourite_projects
+    recommendation_filter github_user.favourite_projects.limit(100)
   end
 
   def most_depended_on_recommendation_ids
-    recommendation_filter Project.most_dependents
+    recommendation_filter Project.most_dependents.limit(100)
   end
 
   def most_watched_recommendation_ids
-    recommendation_filter Project.most_watched
+    recommendation_filter Project.most_watched.limit(100)
   end
 
   def favourite_languages(limit = 2)
