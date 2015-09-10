@@ -16,7 +16,7 @@ module Recommendable
   end
 
   def recommendation_filter(scope)
-    filtered = scope.where.not(id: already_watching_ids).pluck(:id)
+    filtered = scope.where.not(id: already_watching_ids)
     filtered = filtered.where('lower(projects.language) IN (?)', favourite_languages) if favourite_languages && favourite_languages.any?
     filtered.pluck(:id)
   end
