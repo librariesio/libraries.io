@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-8">
-    <h1>Your Subscriptions</h1>
+    <h2>Projects you're watching</h2>
     <% if @subscriptions.any? %>
       <table id='subscriptions' class='table table-striped table-hover'>
         <%= render @subscriptions %>
@@ -14,7 +14,7 @@
   </div>
 
   <div class="col-md-4">
-    <h4>Recommended Projects to watch</h4>
-    <%= render @projects %>
+    <h4>Recommended libraries to watch</h4>
+    <%= render collection: @projects, partial: 'subscriptions/project' %>
   </div>
 </div>

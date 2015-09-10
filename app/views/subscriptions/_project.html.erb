@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-11">
     <div class='project' style="border-color: <%= project.color %>;">
       <h5>
         <%= link_to project.name, project_path(project.to_param) %>
@@ -26,8 +26,8 @@
       </small>
     </div>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-1">
     <br>
-    <%= link_to 'Subscribe to Releases', subscribe_path(project_id: project.id), class: 'tip btn btn-success', rel: 'nofollow', title: 'Get notified by email of new releases of this library' %>
+    <%= link_to fa_icon('eye'), subscribe_path(project_id: project.id), class: 'tip btn btn-default', rel: 'nofollow', title: "Watch for new releases of #{project.name}" %>
   </div>
 </div>
