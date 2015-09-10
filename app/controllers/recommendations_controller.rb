@@ -13,17 +13,13 @@ class RecommendationsController < ApplicationController
     if params[:license].present?
       @license = Spdx.find(params[:license]) if params[:license].present?
       raise ActiveRecord::RecordNotFound if @license.nil?
-      scope = current_user.recommended_projects.license(@license.id)
-    else
-      scope = current_user.recommended_projects
+      scope = scope.license(@license.id)
     end
 
     if params[:platform].present?
       @platform = Project.platform(params[:platform].downcase).first.try(:platform)
       raise ActiveRecord::RecordNotFound if @platform.nil?
-      scope = current_user.recommended_projects.platform(@platform)
-    else
-      scope = current_user.recommended_projects
+      scope = scope.platform(@platform)
     end
 
     @languages = current_user.recommended_projects.pluck('language').compact.uniq
