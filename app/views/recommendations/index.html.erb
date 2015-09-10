@@ -1,0 +1,67 @@
+
+  <h1>Recommendations</h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <%= render collection: @projects, partial: 'subscriptions/project' %>
+    <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
+  </div>
+  <div class="col-md-4">
+    <h3>
+      <strong>
+        Filter by platform
+      </strong>
+    </h3>
+    <div class="facets">
+      <ul class='filter'>
+        <% @platforms.each do |platform| %>
+          <li class='<%= 'active' if platform.downcase == params[:platform].try(:downcase) %>'>
+            <% if platform.downcase == params[:platform].try(:downcase) %>
+              <%= link_to platform, url_for(platform: nil) %>
+            <% else %>
+              <%= link_to platform, url_for(platform: platform) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <h3>
+      <strong>
+        Filter by language
+      </strong>
+    </h3>
+    <div class="facets">
+      <ul class='filter'>
+        <% @languages.each do |language| %>
+          <li class='<%= 'active' if language.downcase == params[:language].try(:downcase) %>'>
+            <% if language.downcase == params[:language].try(:downcase) %>
+              <%= link_to language, url_for(language: nil) %>
+            <% else %>
+              <%= link_to language, url_for(language: language) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <h3>
+      <strong>
+        Filter by license
+      </strong>
+    </h3>
+    <div class="facets">
+      <ul class='filter'>
+        <% @licenses.each do |license| %>
+          <li class='<%= 'active' if license.downcase == params[:license].try(:downcase) %>'>
+            <% if license.downcase == params[:license].try(:downcase) %>
+              <%= link_to license, url_for(license: nil) %>
+            <% else %>
+              <%= link_to license, url_for(license: license) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

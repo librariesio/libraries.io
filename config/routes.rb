@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     get '/stats', to: 'stats#index', as: :stats
   end
 
+  get '/recommendations', to: 'recommendations#index', as: :recommendations
+
   post '/hooks/github', to: 'hooks#github'
 
   get '/dashboard', to: 'dashboard#index', as: :dashboard
