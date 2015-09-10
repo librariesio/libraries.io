@@ -35,32 +35,7 @@
       Language: <%= link_to repo.language, language_path(repo.language) %>
     </p>
     <% end %>
-    <p>
-      Created: <%= repo.created_at.to_s(:long) %>
-    </p>
-    <p>
-      Last updated: <%= repo.updated_at.to_s(:long) %>
-    </p>
-    <% if repo.pushed_at.present? %>
-    <p>
-      Last pushed: <%= repo.pushed_at.to_s(:long) %>
-    </p>
-    <% end %>
-    <p>
-      Size: <%= number_to_human_size repo.size*1000 %>
-    </p>
-    <p>
-      Stars: <%= link_to number_with_delimiter(repo.stargazers_count), repo.stargazers_url %>
-    </p>
-    <p>
-      Forks: <%= link_to number_with_delimiter(repo.forks_count), repo.forks_url %>
-    </p>
-    <p>
-      Watchers: <%= link_to number_with_delimiter(repo.subscribers_count), repo.watchers_url %>
-    </p>
-    <p>
-      Open issues: <%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count), repo.issues_url) : 'disabled'  %>
-    </p>
+
     <% if repo.mirror_url.present? %>
     <p>
       Mirror of <%= repo.mirror_url %>
@@ -115,11 +90,102 @@
     <% end %>
   </div>
   <div class='col-md-4'>
+    <h4>Project Statistics</h4>
+    <table class='table table-striped'>
+      <tr>
+        <td>
+          Size
+        </td>
+        <td>
+          <strong><%= number_to_human_size repo.size*1000 %></strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Stars
+        </td>
+        <td>
+          <strong><%= link_to number_with_delimiter(repo.stargazers_count), repo.stargazers_url %></strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Forks
+        </td>
+        <td>
+          <strong><%= link_to number_with_delimiter(repo.forks_count), repo.forks_url %></strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Watchers
+        </td>
+        <td>
+          <strong><%= link_to number_with_delimiter(repo.subscribers_count), repo.watchers_url %></strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Open issues
+        </td>
+        <td>
+          <strong><%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count), repo.issues_url) : 'disabled'  %></strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dependencies
+        </td>
+        <td>
+          <strong><%= number_with_delimiter repo.repository_dependencies.count %></strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Contributors
+        </td>
+        <td>
+          <strong><%= link_to number_with_delimiter(repo.contributors.count), repo.contributors_url  %></strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Tags
+        </td>
+        <td>
+          <strong><%= link_to number_with_delimiter(repo.github_tags.count), repo.tags_url  %></strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Created
+        </td>
+        <td>
+          <strong><%= time_ago_in_words repo.created_at %> ago</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Last updated
+        </td>
+        <td>
+          <strong><%= time_ago_in_words repo.updated_at %> ago</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Last pushed
+        </td>
+        <td>
+          <strong><%= repo.pushed_at.present? ? time_ago_in_words(repo.pushed_at) : 'Never'  %> ago</strong>
+        </td>
+      </tr>
+    </table>
+
     <% if @contributors.any? %>
       <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
       <%= render @contributors %>
     <% end %>
-
 
     <% if @projects.any? %>
       <div class="row"></div>
