@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-xs-8">
     <div class='project' style="border-color: <%= github_repository.color %>;">
       <h5>
         <%= link_to github_repository.full_name, github_repository_path(github_repository.owner_name, github_repository.project_name) %>
@@ -28,7 +28,7 @@
       </small>
     </div>
   </div>
-  <div class="col-md-2">
+  <div class="col-xs-4">
     <% if current_user.subscribed_to_repo?(github_repository) %>
       <%= button_to 'Unwatch', unwatch_path(github_repository.id), method: :post, class: 'btn btn-danger' %>
     <% else %>
