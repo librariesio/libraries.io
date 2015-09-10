@@ -1,4 +1,4 @@
-class Admin::StatsController < ApplicationController
+class Admin::StatsController < Admin::ApplicationController
   newrelic_ignore
 
   def index
