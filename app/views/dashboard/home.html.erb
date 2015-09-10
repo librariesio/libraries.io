@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-8" id='newsfeed'>
+  <div class="col-sm 6 col-md-8" id='newsfeed'>
     <% if @versions.any? %>
       <%= render collection: @versions, partial: 'dashboard/new_version', as: :version  %>
       <%= will_paginate @versions, renderer: BootstrapPagination::Rails, page_links: false %>
