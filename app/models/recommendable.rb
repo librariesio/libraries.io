@@ -41,7 +41,7 @@ module Recommendable
     Project.where(id: ids).order('rank DESC')
   end
 
-  def favourite_languages(limit = 2)
+  def favourite_languages(limit = 3)
     @favourite_languages ||= begin
       # your github Repositories
       languages = github_repositories.pluck(:language).compact
@@ -49,10 +49,10 @@ module Recommendable
       # repositoreis you've contributed to
       languages += github_user.contributed_repositories.pluck(:language).compact if github_user.present?
 
-      # Repositories your subscribed to
-      languages += subscribed_projects.pluck(:language).compact
+      # Repositories your subscribed to (twice to bump those languages)
+      languages += subscribed_projects.pluck(:language).compact + subscribed_projects.pluck(:language).compact
 
-      languages = languages.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.first(limit).map(&:first)
+      languages = languages.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.first(3).map(&:first)
       languages ||= []
     end
   end
