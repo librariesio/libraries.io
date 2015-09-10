@@ -226,7 +226,7 @@ GEM
       fog-core
       fog-json
       fog-xml
-    fog-sakuracloud (1.1.0)
+    fog-sakuracloud (1.1.1)
       fog-core
       fog-json
     fog-serverlove (0.1.2)
@@ -471,7 +471,7 @@ GEM
     spring (1.3.6)
     sprockets (3.3.4)
       rack (~> 1.0)
-    sprockets-rails (2.3.2)
+    sprockets-rails (2.3.3)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
