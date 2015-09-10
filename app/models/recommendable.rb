@@ -2,7 +2,9 @@ module Recommendable
   extend ActiveSupport::Concern
 
   def recommended_projects
-    Project.where(id: recommended_project_ids)
+    projects = Project.where(id: recommended_project_ids)
+    projects = unfiltered_recommendations if projects.empty?
+    projects
   end
 
   def recommended_project_ids
@@ -31,6 +33,12 @@ module Recommendable
 
   def most_watched_recommendation_ids
     recommendation_filter Project.most_watched.limit(100)
+  end
+
+  def unfiltered_recommendations
+    ids = Project.most_dependents.limit(100).pluck(:id) + Project.most_watched.limit(100).pluck(:id)
+    ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.map(&:first)
+    Project.where(id: ids)
   end
 
   def favourite_languages(limit = 2)
