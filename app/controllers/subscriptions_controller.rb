@@ -3,7 +3,7 @@ class SubscriptionsController < ApplicationController
 
   def index
     @subscriptions = current_user.subscriptions.includes(:project).order('projects.latest_release_published_at DESC').paginate(page: params[:page])
-    @projects = current_user.recommended_projects(10)
+    @projects = current_user.recommended_projects.limit(10)
   end
 
   def subscribe

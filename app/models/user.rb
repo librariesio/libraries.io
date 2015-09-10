@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include Recommendable
+
   has_many :subscriptions, dependent: :destroy
   has_many :subscribed_projects, through: :subscriptions, source: :project
   has_many :repository_subscriptions, dependent: :destroy
@@ -49,20 +51,6 @@ class User < ActiveRecord::Base
 
   def all_subscribed_versions
     Version.where(project_id: all_subscribed_project_ids)
-  end
-
-  def recommended_projects(limit)
-    projects = favourite_projects.where(language: favourite_languages).limit(limit)
-    projects += Project.most_watched.where.not(id: subscribed_projects.pluck(:id)).where(language: favourite_languages).limit(limit) if projects.length < limit
-    projects += favourite_projects.where.not(id: subscribed_projects.pluck(:id)).limit(limit) if projects.length < limit
-    projects += Project.most_watched.where.not(id: subscribed_projects.pluck(:id)).limit(limit) if projects.length < limit
-    projects.uniq.first(limit)
-  end
-
-  def favourite_languages(limit = 3)
-    all_languages = (github_repositories.where('pushed_at > ?', 2.years.ago).pluck(:language) + subscribed_projects.pluck(:language)).compact
-    all_languages = github_repositories.pluck(:language) if all_languages.empty?
-    all_languages.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.first(limit).map(&:first)
   end
 
   def admin?
