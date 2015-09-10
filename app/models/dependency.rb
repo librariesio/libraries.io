@@ -15,6 +15,8 @@ class Dependency < ActiveRecord::Base
     case plat
     when 'rubygemslockfile'
       'Rubygems'
+    when 'gemspec'
+      'Rubygems'
     when 'npmshrinkwrap'
       'NPM'
     else
