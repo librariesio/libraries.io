@@ -4,6 +4,7 @@ class GithubUser < ActiveRecord::Base
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
   has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
+  has_many :contributed_repositories, through: :github_contributions, source: :github_repository
 
   validates_uniqueness_of :github_id, :login
 
