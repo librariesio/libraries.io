@@ -13,7 +13,10 @@
       <p>
         Below are some recommended projects for you to watch:
       </p>
-      <%= render collection: @projects, partial: 'subscriptions/project' %>
+      <%= render collection: @projects.limit(5), partial: 'subscriptions/project' %>
+      <p>
+        <%= link_to 'Browse and filter more recommendations &raquo;'.html_safe, recommendations_path %>
+      </p>
     <% end %>
     <% if current_user.muted_projects.any? %>
         <p>
