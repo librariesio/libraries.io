@@ -20,7 +20,7 @@
     <h5>
       <%= link_to version, version_url(version.to_param) %> of
       <%= link_to project, project_path(project.to_param) %> published
-      <small> <%= time_ago_in_words(version.published_at) %> ago</small>
+      <small> <%= time_ago_in_words(version.published_at).gsub('about','') %> ago</small>
     </h5>
   </div>
 <% end %>
