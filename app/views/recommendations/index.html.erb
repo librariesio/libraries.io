@@ -1,5 +1,4 @@
-
-  <h1>Recommendations</h1>
+<h1>Recommended Libraries</h1>
 
 <div class="row">
   <div class="col-md-8">
@@ -7,6 +6,22 @@
     <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
   </div>
   <div class="col-md-4">
+    <h3>
+      <strong>
+        What's this based on?
+      </strong>
+    </h3>
+    <p>
+      Recommendations are based on data from your
+      <%= link_to 'GitHub Profile', user_path(current_user.nickname) %> and Libraries data.
+    </p>
+    <p>
+      That includes libraries your repositories depend on, projects you watch and popular libraries written in languages you use.
+    </p>
+    <p>
+      Not seeing anything interesting to you? <%= link_to 'Let us know.', 'mailto:support@libraries.io' %>
+    </p>
+
     <h3>
       <strong>
         Filter by platform
