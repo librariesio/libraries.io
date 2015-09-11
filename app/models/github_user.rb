@@ -8,7 +8,7 @@ class GithubUser < ActiveRecord::Base
 
   validates_uniqueness_of :github_id, :login
 
-  after_commit :download_orgs, on: :create
+  after_commit :download_orgs, :download_repos, on: :create
 
   scope :visible, -> { where(hidden: false) }
 
