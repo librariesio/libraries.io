@@ -5,6 +5,7 @@ class GithubUser < ActiveRecord::Base
   has_many :dependencies, through: :source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :contributed_repositories, through: :github_contributions, source: :github_repository
+  has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('github_users.id').order("COUNT(github_users.id) DESC") }, through: :contributed_repositories, source: :contributors
 
   validates_uniqueness_of :github_id, :login
 
