@@ -46,7 +46,7 @@ module Recommendable
       # your github Repositories
       languages = github_repositories.pluck(:language).compact
 
-      # repositoreis you've contributed to
+      # repositories you've contributed to
       languages += github_user.contributed_repositories.pluck(:language).compact if github_user.present?
 
       # Repositories your subscribed to (twice to bump those languages)
