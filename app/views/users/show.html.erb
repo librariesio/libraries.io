@@ -78,7 +78,7 @@
   <div class="row">
     <div class="col-md-12">
       <h4>People <%= @user %> often collaborates with</h4>
-      <% cache("users:#{@user.id}:collaborators", :expires_in => 1.day) do  %>
+      <% cache("users:#{@user.id}:similar", :expires_in => 1.week) do  %>
         <%= render @user.fellow_contributors.visible.limit(38) %>
       <% end %>
     </div>
