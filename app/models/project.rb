@@ -225,7 +225,7 @@ class Project < ActiveRecord::Base
     elsif licenses.length > 150
       normalized = ['Other']
     else
-      normalized = licenses.split(',').map do |license|
+      normalized = licenses.split(/[,\/]/).map do |license|
         Spdx.find(license).try(:id)
       end.compact
       normalized = ['Other'] if normalized.empty?
