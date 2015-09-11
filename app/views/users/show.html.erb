@@ -21,6 +21,9 @@
     </p>
   </div>
   <div class="col-md-6">
+    <% if logged_in? && current_user.admin? %>
+      <%= link_to 'Sync', sync_admin_user_path(@user), class: 'btn btn-danger pull-right', method: :post %>
+    <% end %>
     <br>
     <% if @user.blog.present? %>
       <p>
