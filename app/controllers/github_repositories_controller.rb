@@ -25,11 +25,17 @@ class GithubRepositoriesController < ApplicationController
     @contributors = @github_repository.contributors.order('count DESC').visible.limit(20)
     @projects = @github_repository.projects
     @color = @github_repository.color
+    @forks = @github_repository.forked_repositories.interesting.limit(5)
   end
 
   def contributors
     load_repo
     @contributors = @github_repository.contributors.order('count DESC').visible.paginate(page: params[:page])
+  end
+
+  def forks
+    load_repo
+    @forks = @github_repository.forked_repositories.order('stargazers_count DESC').paginate(page: params[:page])
   end
 
   def load_repo

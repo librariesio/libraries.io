@@ -73,6 +73,7 @@ Rails.application.routes.draw do
 
   get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/contributors', to: 'github_repositories#contributors', as: :github_repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/forks', to: 'github_repositories#forks', as: :github_repository_forks, format: false, constraints: { :name => /[^\/]+/ }
 
   get '/github', to: 'github_repositories#index', as: :github
 

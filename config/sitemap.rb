@@ -37,6 +37,7 @@ SitemapGenerator::Sitemap.create do
   GithubRepository.open_source.find_each do |repo|
     add github_repository_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
     add github_repository_contributors_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
+    add github_repository_forks_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
   end
 
   puts "Generating Users"
