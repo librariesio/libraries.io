@@ -23,7 +23,7 @@
           Published <%= time_ago_in_words github_repository.created_at %> ago
         <% end %> - <%= number_to_human github_repository.stars %> stars
         <% if github_repository.fork? %>
-        - Fork of <%= link_to github_repository.source_name, github_repository.source_url %>
+        - Fork of <%= link_to github_repository.source_name, source_path(github_repository) %>
         <% end %>
       </small>
     </div>

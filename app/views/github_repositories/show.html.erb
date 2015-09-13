@@ -10,11 +10,7 @@
     <% if repo.fork? %>
       <small>
         Forked from
-        <% if repo.source.present? %>
-          <%= link_to repo.source_name, github_repository_path(repo.source.owner_name, repo.source.project_name) %>
-        <% else %>
-          <%= link_to repo.source_name, repo.source_url %>
-        <% end %>
+        <%= link_to repo.source_name, source_path(repo) %>
       </small>
     <% end %>
   </div>

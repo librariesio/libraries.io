@@ -195,4 +195,13 @@ module ApplicationHelper
       platform_string.downcase
     end
   end
+
+  def source_path(github_repository)
+    return nil unless github_repository.fork?
+    if github_repository.source.present?
+      github_repository_path(github_repository.source.owner_name, github_repository.source.project_name)
+    else
+      github_repository.source
+    end
+  end
 end

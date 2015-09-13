@@ -19,7 +19,7 @@
     <% end %>
     <% if repo.fork %>
     <p>
-      Fork of <%= link_to repo.source_name, repo.source_url %>
+      Fork of <%= link_to repo.source_name, source_path(repo) %>
     </p>
     <% end %>
     <% if repo.language.present? %>
