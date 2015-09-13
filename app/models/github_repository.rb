@@ -16,6 +16,8 @@ class GithubRepository < ActiveRecord::Base
   has_one :readme, dependent: :destroy
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
+  belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
+  has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
 
   validates_uniqueness_of :github_id, :full_name
 
