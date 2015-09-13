@@ -196,6 +196,12 @@ class GithubRepository < ActiveRecord::Base
     download_github_contributions(token)
     download_manifests(token)
     download_owner
+    download_fork_source(token)
+  end
+
+  def download_fork_source(token)
+    return true unless self.fork?
+    GithubRepository.create_from_github(source_name, token)
   end
 
   def self.extract_full_name(url)
