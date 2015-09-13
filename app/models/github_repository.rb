@@ -29,6 +29,7 @@ class GithubRepository < ActiveRecord::Base
   scope :source, -> { where(fork: false) }
   scope :open_source, -> { where(private: false) }
   scope :from_org, lambda{ |org_id|  where(github_organisation_id: org_id) }
+  scope :without_manifests, -> { includes(:manifests).where(manifests: {github_repository_id: nil}) }
 
   def self.language(language)
     where('lower(github_repositories.language) = ?', language.try(:downcase))
