@@ -7,6 +7,16 @@
       <%= link_to image_tag(repo.avatar_url, width: 30, height: 30, alt: repo), user_path(repo.owner_name) %>
       <%= link_to repo, repo.url %>
     </h1>
+    <% if repo.fork? %>
+      <small>
+        Forked from
+        <% if repo.source.present? %>
+          <%= link_to repo.source_name, github_repository_path(repo.source.owner_name, repo.source.project_name) %>
+        <% else %>
+          <%= link_to repo.source_name, repo.source_url %>
+        <% end %>
+      </small>
+    <% end %>
   </div>
 </div>
 <hr>
@@ -25,17 +35,11 @@
         License: <%= link_to format_license(repo.license), license_path(repo.license) %>
       </p>
     <% end %>
-    <% if repo.fork %>
-    <p>
-      Fork of <%= link_to repo.source_name, repo.source_url %>
-    </p>
-    <% end %>
     <% if repo.language.present? %>
     <p>
       Language: <%= link_to repo.language, language_path(repo.language) %>
     </p>
     <% end %>
-
     <% if repo.mirror_url.present? %>
     <p>
       Mirror of <%= repo.mirror_url %>
