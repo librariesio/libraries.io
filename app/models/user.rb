@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   has_many :project_mutes
   has_many :muted_projects, through: :project_mutes, source: :project
 
-  after_commit :create_api_key, :ping_andrew, :download_orgs, :update_repo_permissions_async, on: :create
+  after_commit :ping_andrew, :update_repo_permissions_async, :download_self, :create_api_key, on: :create
 
   ADMIN_USERS = ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall']
 
@@ -115,7 +115,6 @@ class User < ActiveRecord::Base
   end
 
   def update_repo_permissions_async
-    self.update_attribute(:currently_syncing, true)
     SyncPermissionsWorker.perform_async(self.id)
   end
 
