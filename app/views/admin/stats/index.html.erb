@@ -2,10 +2,47 @@
 <h1>Stats</h1>
 
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-4">
     <h5><strong>Recent Signups</strong></h5>
     <% @recent_users.each do |user| %>
       <%= link_to image_tag(user.avatar_url, width: 60, height: 60, alt: user, class: 'pull-left'), user_path(user.nickname), class: 'tip', style: 'display:block; float:left;', title: "#{user.nickname}: #{pluralize(user.subscriptions.count, 'subs')}, #{pluralize(user.github_repositories.count, 'repo')}, #{pluralize(user.repository_subscriptions.count, 'track')}" %>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+    <h5><strong>Recent Subscriptions</strong></h5>
+    <% @recent_subscriptions.each do |sub| %>
+      <div style='height:30px;'>
+        <% if sub.user %>
+        <%= link_to image_tag(sub.user.avatar_url, width: 20, height: 20, alt: sub.user, class: 'pull-left'), user_path(sub.user.nickname), class: 'tip', style: 'display:block; float:left; margin-right:5px;', title: "#{sub.user.nickname}: #{pluralize(sub.user.subscriptions.count, 'subs')}, #{pluralize(sub.user.github_repositories.count, 'repo')}, #{pluralize(sub.user.repository_subscriptions.count, 'track')}" %>
+         <%= link_to sub.user, user_path(sub.user.nickname) %>
+        <% else %>Deleted<% end %>
+        subscribed to <%= link_to sub.project, project_path(sub.project.to_param) %>
+        <small>
+          <%= time_ago_in_words(sub.created_at) %> ago
+        </small>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+    <h5><strong>Recent Repo Subscriptions</strong></h5>
+    <% @recent_watches.each do |sub| %>
+      <div style='min-height:30px;'>
+        <% if sub.user %>
+        <%= link_to image_tag(sub.user.avatar_url, width: 20, height: 20, alt: sub.user, class: 'pull-left'), user_path(sub.user.nickname), class: 'tip', style: 'display:block; float:left; margin-right:5px;', title: "#{sub.user.nickname}: #{pluralize(sub.user.subscriptions.count, 'subs')}, #{pluralize(sub.user.github_repositories.count, 'repo')}, #{pluralize(sub.user.repository_subscriptions.count, 'track')}" %>
+         <%= link_to sub.user, user_path(sub.user.nickname) %>
+        <% else %>Deleted<% end %>
+        watched
+        <% if sub.github_repository %>
+        <%= link_to sub.github_repository, github_repository_path(sub.github_repository.owner_name, sub.github_repository.project_name) %>
+        <% else %>deleted repo<% end %>
+        <br>
+        <small>
+          <%= time_ago_in_words(sub.created_at) %> ago
+          <% if sub.github_repository %>
+            - <%= link_to pluralize(sub.github_repository.repository_dependencies.count, 'dependencies'), github_repository_path(sub.github_repository.owner_name, sub.github_repository.project_name, anchor: 'dependencies') %>
+          <% end %>
+        </small>
+      </div>
     <% end %>
   </div>
 </div>
