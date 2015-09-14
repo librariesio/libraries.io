@@ -108,7 +108,7 @@
           Stars
         </td>
         <td>
-          <strong><%= link_to number_with_delimiter(repo.stargazers_count), repo.stargazers_url %></strong>
+          <strong><%= link_to number_with_delimiter(repo.stargazers_count || 0), repo.stargazers_url %></strong>
         </td>
       </tr>
       <tr>
@@ -116,7 +116,7 @@
           Forks
         </td>
         <td>
-          <strong><%= link_to number_with_delimiter(repo.forks_count), repo.forks_url %></strong>
+          <strong><%= link_to number_with_delimiter(repo.forks_count || 0), repo.forks_url %></strong>
         </td>
       </tr>
       <tr>
@@ -124,7 +124,7 @@
           Watchers
         </td>
         <td>
-          <strong><%= link_to number_with_delimiter(repo.subscribers_count), repo.watchers_url %></strong>
+          <strong><%= link_to number_with_delimiter(repo.subscribers_count || 0), repo.watchers_url %></strong>
         </td>
       </tr>
       <tr>
@@ -132,7 +132,7 @@
           Open issues
         </td>
         <td>
-          <strong><%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count), repo.issues_url) : 'disabled'  %></strong>
+          <strong><%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count || 0), repo.issues_url) : 'disabled'  %></strong>
         </td>
       </tr>
       <tr>
