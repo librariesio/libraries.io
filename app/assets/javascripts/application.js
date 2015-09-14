@@ -17,7 +17,7 @@
 //= require js.cookie
 //= require_tree .
 
-$('.tip').tipsy();
+$('.tip').tipsy({gravity: 's'});
 
 $('.rss').on('click', function(){
   subtome($(this).attr('href'))

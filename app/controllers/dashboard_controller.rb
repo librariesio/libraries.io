@@ -10,18 +10,18 @@ class DashboardController < ApplicationController
 
   def sync
     current_user.update_repo_permissions_async
-    redirect_to_back_or_default dashboard_path
+    redirect_to_back_or_default repositories_path
   end
 
   def watch
     github_repository = GithubRepository.find(params[:github_repository_id])
     current_user.subscribe_to_repo(github_repository)
-    redirect_to_back_or_default dashboard_path
+    redirect_to_back_or_default repositories_path
   end
 
   def unwatch
     github_repository = GithubRepository.find(params[:github_repository_id])
     current_user.unsubscribe_from_repo(github_repository)
-    redirect_to_back_or_default dashboard_path
+    redirect_to_back_or_default repositories_path
   end
 end
