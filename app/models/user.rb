@@ -158,11 +158,11 @@ class User < ActiveRecord::Base
   end
 
   def download_self
-    user = GithubUser.find_or_create_by(github_id: uid) do |u|
-      u.login = o.login
-      u.user_type = o.type
+    user = GithubUser.find_or_create_by(github_id: self.uid) do |u|
+      u.login = self.nickname
+      u.user_type = 'User'
     end
-    user.download_from_github
+    GithubUpdateUserWorker.perform_async(nickname)
   end
 
   def download_orgs
