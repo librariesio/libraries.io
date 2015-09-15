@@ -105,7 +105,9 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <h2>Package Manager Compatibility Matrix</h2>
-    <%= render 'matrix' %>
+    <% cache("matrix", :expires_in => 1.day) do  %>
+      <h2>Package Manager Compatibility Matrix</h2>
+      <%= render 'matrix' %>
+    <% end %>
   </div>
 </div>
