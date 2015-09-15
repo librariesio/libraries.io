@@ -298,3 +298,30 @@ a.rss{
 #subscriptions {
   table-layout: fixed;
 }
+
+.org-filter{
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #eee;
+  a{
+    display: block;
+  }
+  img{
+    margin-right: 5px;
+  }
+  &.active{
+    font-weight: bold;
+  }
+}
+
+.syncing{
+  margin: 10px 0;
+}
+
+.table.repositories td{
+  vertical-align: middle;
+}
+
+tr.top td{
+  border: none !important;
+}

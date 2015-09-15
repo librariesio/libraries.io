@@ -24,6 +24,8 @@
         When you follow a library, new releases will show up here in your newsfeed.
       </p>
 
+      <%= render 'dashboard/monitoring_promo' if current_user.public_repo_token.blank? %>
+
       <p>
         Below are some recommended projects for you to watch:
       </p>

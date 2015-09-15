@@ -1,7 +1,93 @@
-<h2>Repository Monitoring</h2>
+<div class="row">
+  <div class="col-md-12">
+    <h2>GitHub Repository Monitoring</h2>
+    <br>
+  </div>
+</div>
 <div class='row'>
   <% if current_user.public_repo_token.blank? %>
     <div class="col-md-8">
+      <%= render 'monitoring_promo' %>
+    </div>
+  <% else %>
+    <div class="col-md-3">
+      <div class='org-filter <%= 'active' unless @org %>'>
+        <%= link_to url_for(org: nil) do %>
+          <%= image_tag current_user.avatar_url(60), width: 30 %>
+          <%= current_user.nickname %>
+        <% end %>
+      </div>
+      <% @orgs.each do |org| %>
+        <div class='org-filter <%= 'active' if @org && org.login == @org.login %>'>
+          <%= link_to url_for(org: org) do %>
+            <%= image_tag org.avatar_url(60), width: 30 %>
+            <%= org.login %>
+          <% end %>
+        </div>
+      <% end %>
+      <div class='syncing'>
+        <% if current_user.currently_syncing? %>
+          <i class="fa fa-refresh fa-spin"></i> currently syncing
+        <% else %>
+          <%= link_to 'Sync', sync_path, method: :post, class: 'btn btn-sm btn-info' %>
+          <% if current_user.last_synced_at.present? %>
+            Last updated <%= time_ago_in_words current_user.last_synced_at %> ago
+          <% end %>
+        <% end %>
+      </div>
+
+      <p>
+        <small>
+        Is an organization missing?<br>
+        <%= link_to 'Review and add', current_user.github_settings_url %> your authorized organizations.
+        </small>
+      </p>
+    </div>
+    <div class="col-md-6">
+      <table class='table repositories table-hover table-condensed'>
+        <thead>
+          <th colspan="3">
+            <small class='pull-right'>
+              <%= page_entries_info @repos, model: "#{@org.try(:login)} repositories" %>
+            </small>
+          </th>
+        </thead>
+        <% @repos.each do |github_repository| %>
+          <tr>
+            <td>
+                <%= link_to image_tag(github_repository.avatar_url(40), width: 20), github_repository_path(github_repository.owner_name, github_repository.project_name) %>
+                <strong>
+                  <%= link_to github_repository.full_name, github_repository_path(github_repository.owner_name, github_repository.project_name) %>
+                </strong>
+                <small>
+                  <%= fa_icon("lock") if github_repository.private? %>
+                  <%= fa_icon("code-fork") if github_repository.fork? %>
+                </small>
+            </td>
+            <td>
+              <small><%= pluralize(github_repository.repository_dependencies.count, 'dependencies') %></small>
+            </td>
+            <td>
+              <% if current_user.subscribed_to_repo?(github_repository) %>
+                <%= button_to unwatch_path(github_repository.id), method: :post, class: 'tip btn btn-sm btn-success pull-right', title: 'Stop watching' do %>
+                  <%= fa_icon('check') %>
+                  Watching
+                <% end %>
+              <% else %>
+                <%= button_to watch_path(github_repository.id), method: :post, class: 'btn btn-sm btn-default  pull-right' do %>
+                  <%= fa_icon('eye') %>
+                  Watch
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+
+      <%= will_paginate @repos, renderer: BootstrapPagination::Rails, page_links: false %>
+    </div>
+    <div class="col-md-3">
+      <h5>How does this work?</h5>
       <p>
         With the help of a webhook, Libraries.io can automatically keep track of all
         of the libraries that your GitHub project depends upon across many different package managers.
@@ -11,67 +97,13 @@
         if you add or remove a new dependency it will change the notifications settings for that library
         as soon as you push to GitHub.
       </p>
-      <p><strong>Supported Package Managers:</strong></p>
-      <div class="">
-        <% Download.platforms.select{|p| p::LIBRARIAN_SUPPORT }.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
-          <div class="pictogram tip pictogram-<%= platform.formatted_name.downcase %>" title='<%= platform.formatted_name %>'></div>
-        <% end %>
-      </div>
-      <br>
-      <p>
-        <%= link_to '/auth/github_public', class: 'btn btn-primary' do %>
-          <i class="fa fa-github"></i> Enable Open Source Access for Free
-        <% end %>
-      </p>
-    </div>
-  <% else %>
-    <% if current_user.admin? && current_user.private_repo_token.blank? %>
-    <div class="col-md-12">
-      <p>
-        <%= link_to '/auth/github_private', class: 'btn btn-primary' do %>
-          <i class="fa fa-github"></i> Enable Private Repository Access
-        <% end %>
-      </p>
-    </div>
-    <% end %>
-
-    <div class="col-md-4">
-      <div>
-        <%= link_to url_for(org: nil) do %>
-          <%= image_tag current_user.avatar_url(80), width: 40 %>
-          <%= current_user.nickname %>
-        <% end %>
-      </div>
-      <% @orgs.each do |org| %>
-        <div>
-          <%= link_to url_for(org: org) do %>
-            <%= image_tag org.avatar_url(80), width: 40 %>
-            <%= org %>
+      <% if current_user.admin? && current_user.private_repo_token.blank? %>
+        <p>
+          <%= link_to '/auth/github_private', class: 'btn btn-primary' do %>
+            <i class="fa fa-github"></i> Enable Private Repository Access
           <% end %>
-        </div>
+        </p>
       <% end %>
-      <hr>
-      <p>
-        <% if current_user.currently_syncing? %>
-          <i class="fa fa-refresh fa-spin"></i> currently syncing
-        <% else %>
-          <%= link_to 'Sync', sync_path, method: :post, class: 'btn btn-sm btn-info' %>
-          Last updated <%= time_ago_in_words current_user.last_synced_at %> ago
-        <% end %>
-      </p>
-
-      <p>
-        <small>
-        Is an organization missing?<br>
-        <%= link_to 'Review and add', current_user.github_settings_url %> your authorized organizations.
-        </small>
-      </p>
-    </div>
-    <div class="col-md-8">
-      <% @repos.each do |github_repository| %>
-        <%= render 'github_repository', github_repository: github_repository %>
-      <% end %>
-      <%= will_paginate @repos, renderer: BootstrapPagination::Rails, page_links: false %>
     </div>
   <% end %>
 </div>

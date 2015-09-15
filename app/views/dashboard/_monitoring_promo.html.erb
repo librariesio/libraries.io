@@ -1,0 +1,21 @@
+<p>
+  With the help of a webhook, Libraries.io can automatically keep track of all
+  of the libraries that your GitHub project depends upon across many different package managers.
+</p>
+<p>
+  Once synced, Libraries.io will email you about new versions of your dependencies,
+  if you add or remove a new dependency it will change the notifications settings for that library
+  as soon as you push to GitHub.
+</p>
+<p><strong>Supported Package Managers:</strong></p>
+<div class="">
+  <% Download.platforms.select{|p| p::LIBRARIAN_SUPPORT }.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
+    <div class="pictogram tip pictogram-<%= platform.formatted_name.downcase %>" title='<%= platform.formatted_name %>'></div>
+  <% end %>
+</div>
+<br>
+<p>
+  <%= link_to '/auth/github_public', class: 'btn btn-primary' do %>
+    <i class="fa fa-github"></i> Enable Open Source Access for Free
+  <% end %>
+</p>
