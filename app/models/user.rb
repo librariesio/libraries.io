@@ -61,6 +61,10 @@ class User < ActiveRecord::Base
     admin? || public_repo_token.present? || private_repo_token.present?
   end
 
+  def can_monitor?(github_repository)
+    repository_permissions.where(github_repository: github_repository).where(admin: true).any?
+  end
+
   def ping_andrew
     PushoverNewUserWorker.perform_async(self.id)
   end

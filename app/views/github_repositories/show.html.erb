@@ -14,6 +14,24 @@
       </small>
     <% end %>
   </div>
+  <div class="col-md-4">
+    <% if current_user && current_user.can_monitor?(repo) %>
+      <p>
+        <br>
+      <% if current_user.subscribed_to_repo?(repo) %>
+        <%= button_to unwatch_path(repo.id), method: :post, class: 'tip btn btn-success pull-right', title: 'Stop watching' do %>
+          <%= fa_icon('check') %>
+          Monitoring dependencies
+        <% end %>
+      <% else %>
+        <%= button_to watch_path(repo.id), method: :post, class: 'btn btn-primary btn-default  pull-right tip', title: 'Automatically watch every dependency of this project' do %>
+          <%= fa_icon('eye') %>
+          Monitor dependencies
+        <% end %>
+      <% end %>
+    </p>
+    <% end %>
+  </div>
 </div>
 <hr>
 <div class='row'>
