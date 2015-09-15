@@ -25,23 +25,22 @@
           <% end %>
         </div>
       <% end %>
-      <div class='syncing'>
-        <% if current_user.currently_syncing? %>
-          <i class="fa fa-refresh fa-spin"></i> currently syncing
-        <% else %>
-          <%= link_to 'Sync', sync_path, method: :post, class: 'btn btn-sm btn-info' %>
-          <% if current_user.last_synced_at.present? %>
-            Last updated <%= time_ago_in_words current_user.last_synced_at %> ago
-          <% end %>
-        <% end %>
-      </div>
-
       <p>
         <small>
         Is an organization missing?<br>
         <%= link_to 'Review and add', current_user.github_settings_url %> your authorized organizations.
         </small>
       </p>
+      <div class='syncing'>
+        <% if current_user.currently_syncing? %>
+          <i class="fa fa-refresh fa-spin"></i> currently syncing
+        <% else %>
+          <%= link_to 'Sync', sync_path, method: :post, class: 'btn btn-sm btn-info' %>
+          <% if current_user.last_synced_at.present? %>
+            <small>Last updated <%= time_ago_in_words current_user.last_synced_at %> ago</small>
+          <% end %>
+        <% end %>
+      </div>
     </div>
     <div class="col-md-6">
       <table class='table repositories table-hover table-condensed'>

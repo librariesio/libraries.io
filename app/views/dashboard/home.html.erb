@@ -24,26 +24,23 @@
         When you follow a library, new releases will show up here in your newsfeed.
       </p>
 
-      <%= render 'dashboard/monitoring_promo' if current_user.public_repo_token.blank? %>
-
-      <p>
-        Below are some recommended projects for you to watch:
-      </p>
-      <%= render collection: @projects.limit(5), partial: 'subscriptions/project' %>
-      <p>
-        <%= link_to 'Browse and filter more recommendations &raquo;'.html_safe, recommendations_path %>
-      </p>
+      <% if current_user.public_repo_token.blank? %>
+        <%= render 'dashboard/monitoring_promo' %>
+      <% else %>
+        <%= link_to repositories_path, class: 'btn btn-primary' do %>
+          <%= fa_icon 'github' %>
+          Start monitoring you GitHub Repositories
+        <% end %>
+      <% end %>
     <% end %>
   </div>
   <div class="col-md-4">
-    <% if @versions.any? %>
-      <h3>
-        Recommended Libraries
-        <small>
-          <%= link_to 'See more &raquo;'.html_safe, recommendations_path %>
-        </small>
-      </h3>
-      <%= render collection: @projects, partial: 'subscriptions/project' %>
-    <% end %>
+    <h3>
+      Recommended Libraries
+      <small>
+        <%= link_to 'See more &raquo;'.html_safe, recommendations_path %>
+      </small>
+    </h3>
+    <%= render collection: @projects, partial: 'subscriptions/project' %>
   </div>
 </div>
