@@ -16,7 +16,7 @@
 <br>
 <p>
 <% if current_user && current_user.public_repo_token.blank? %>
-  <% path = current_path == repositories_path ? '/auth/github_public' : repositories_path %>
+  <% path = request.path == repositories_path ? '/auth/github_public' : repositories_path %>
     <%= link_to path, class: 'btn btn-primary' do %>
       <i class="fa fa-github"></i> Enable Open Source Access for Free
     <% end %>
