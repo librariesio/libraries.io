@@ -6,6 +6,7 @@ production:
 :verbose: true
 :queues:
   - low
-  - [default, 2]
-  - [mailers, 5]
-  - [critical, 10]
+  - [default, 1]
+  - [mailers, 2]
+  - [critical, 4]
+  - [user, 8]
