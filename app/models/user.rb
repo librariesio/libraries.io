@@ -119,7 +119,7 @@ class User < ActiveRecord::Base
   end
 
   def update_repo_permissions
-    self.update_attribute(:currently_syncing, true)
+    self.update_column(:currently_syncing, true)
     download_orgs
     r = github_client.repos
 
@@ -152,8 +152,7 @@ class User < ActiveRecord::Base
   rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   ensure
-    self.update_attribute(:last_synced_at, Time.now)
-    self.update_attribute(:currently_syncing, false)
+    self.update_columns(last_synced_at: Time.now, currently_syncing: false)
   end
 
   def download_self

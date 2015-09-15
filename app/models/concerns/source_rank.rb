@@ -2,7 +2,7 @@ module SourceRank
   extend ActiveSupport::Concern
 
   def update_source_rank
-    update_attribute :rank, source_rank
+    update_column :rank, source_rank
     touch
   end
 
