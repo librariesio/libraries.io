@@ -9,6 +9,7 @@ class DashboardController < ApplicationController
   end
 
   def sync
+    current_user.update_column(:currently_syncing, true)
     current_user.update_repo_permissions_async
     redirect_to_back_or_default repositories_path
   end
