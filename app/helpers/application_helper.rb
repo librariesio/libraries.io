@@ -204,4 +204,12 @@ module ApplicationHelper
       github_repository.source
     end
   end
+
+  def github_user_title(user)
+    if user.name.present? && user.name.downcase != user.login.downcase
+      "#{user.name} (#{user.login})"
+    else
+      user.login
+    end
+  end
 end
