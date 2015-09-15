@@ -187,6 +187,8 @@ module ApplicationHelper
     case platform_string.downcase
     when 'rubygemslockfile'
       'rubygems'
+    when 'packagistlockfile'
+      'packagist'
     when 'gemspec'
       'rubygems'
     when 'npmshrinkwrap'
