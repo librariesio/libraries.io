@@ -23,18 +23,14 @@
         Libraries.io lets you watch libraries that you depend on and notifies you when there's a new release.
         When you follow a library, new releases will show up here in your newsfeed.
       </p>
-
-      <% if current_user.public_repo_token.blank? %>
-        <%= render 'dashboard/monitoring_promo' %>
-      <% else %>
-        <%= link_to repositories_path, class: 'btn btn-primary' do %>
-          <%= fa_icon 'github' %>
-          Start monitoring you GitHub Repositories
-        <% end %>
-      <% end %>
+      <%= render 'dashboard/monitoring_promo' %>
     <% end %>
   </div>
   <div class="col-md-4">
+    <% if @versions.any? %>
+      <h3>Repository Monitoring</h3>
+      <%= render 'dashboard/monitoring_promo' %>
+    <% end %>
     <h3>
       Recommended Libraries
       <small>

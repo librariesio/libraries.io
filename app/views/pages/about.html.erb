@@ -7,16 +7,17 @@
       <strong>Libraries.io</strong> helps developers find new open source libraries, modules and frameworks and keep track of ones they depend upon.
     </p>
 
+    <h3>Repository Monitoring</h3>
+    <%= render 'dashboard/monitoring_promo' %>
+
+    <h3>Advanced search</h3>
+
     <p>
       The world of open source software depends on a lot of open source libraries. We are standing on the shoulders of giants, which helps us to reach further than we could otherwise.
     </p>
 
     <p>
       The problem with platforms like Rubygems and NPM is there are so many libraries, with hundreds of new ones added every day. Trying to find the right library can be overwhelming.
-    </p>
-
-    <p>
-      How do you find libraries that help you solve problems? How do you then know which of those libraries are worth using?
     </p>
 
     <p>
@@ -27,13 +28,35 @@
       The index is kept up to date with information about new libraries and new releases of existing libraries every day. This ensures upcoming projects get exposure, as well as existing well known libraries.
     </p>
 
+    <%= link_to search_path, class: "btn btn-info" do %>
+      <%= fa_icon 'search' %>
+      Search for open source libraries
+    <% end %>
+
+    <h3>New version notifications</h3>
+
     <p>
-      This also means you can subscribe to a project to receive notifications when new releases are published, including new tags on GitHub repos for platforms like Bower and Go that don’t store release information in a central repository.
+      Libraries.io lets you watch libraries that you depend on and notifies you when there's a new release.
+      When you follow a library, new releases will show up here in your newsfeed.
     </p>
 
-    <%- if not logged_in? %>
-    <p style="text-align: center;">
-      <a href="<%= login_path %>" class="btn btn-primary btn-lg">Sign up for free</a>
+    <p>
+      This means you can subscribe to a project to receive notifications when new releases are published, including new tags on GitHub repos for platforms like Bower and Go that don’t store release information in a central repository.
+    </p>
+
+    <%- if logged_in? %>
+    <p>
+      <a href="<%= platforms_path %>" class="btn btn-success">
+        <%= fa_icon 'star' %>
+        Explore all <%= Download.platforms.count %> package managers
+      </a>
+    </p>
+    <% else %>
+    <p>
+      <a href="<%= login_path %>" class="btn btn-success">
+        <%= fa_icon 'star' %>
+        Sign up, it's free for Open Source
+      </a>
     </p>
     <%- end %>
 
@@ -50,7 +73,7 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <h2>Package manager compatibility</h2>
+    <h2>Package Manager Compatibility Matrix</h2>
     <%= render 'matrix' %>
   </div>
 </div>

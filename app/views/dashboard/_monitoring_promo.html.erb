@@ -1,6 +1,6 @@
 <p>
-  With the help of a webhook, Libraries.io can automatically keep track of all
-  of the libraries that your GitHub project depends upon across many different package managers.
+  Libraries.io can automatically keep track of all
+  of the libraries that your GitHub projects depend upon across many different package managers.
 </p>
 <p>
   Once synced, Libraries.io will email you about new versions of your dependencies,
@@ -15,7 +15,20 @@
 </div>
 <br>
 <p>
-  <%= link_to '/auth/github_public', class: 'btn btn-primary' do %>
-    <i class="fa fa-github"></i> Enable Open Source Access for Free
+<% if current_user && current_user.public_repo_token.blank? %>
+  <% path = current_path == repositories_path ? '/auth/github_public' : repositories_path %>
+    <%= link_to path, class: 'btn btn-primary' do %>
+      <i class="fa fa-github"></i> Enable Open Source Access for Free
+    <% end %>
+<% elsif current_user %>
+  <%= link_to repositories_path, class: 'btn btn-primary' do %>
+    <%= fa_icon 'github' %>
+    Manage your GitHub Repositories
   <% end %>
+<% else %>
+  <%= link_to repositories_path, class: 'btn btn-primary' do %>
+    <%= fa_icon 'github' %>
+    Start monitoring your GitHub Repositories
+  <% end %>
+<% end %>
 </p>
