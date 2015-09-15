@@ -214,4 +214,10 @@ module ApplicationHelper
       user.login
     end
   end
+
+  def project_description(project, version)
+    text = project.description
+    text += " - #{version}" if version
+    text += " - a #{project.language} library on #{project.platform_name} - Libraries.io"
+  end
 end
