@@ -4,8 +4,9 @@
 <div class="row">
   <div class='col-md-8'>
     <h1>
-      <%= link_to image_tag(repo.avatar_url, width: 30, height: 30, alt: repo), user_path(repo.owner_name) %>
-      <%= link_to repo, repo.url %>
+      <%= link_to image_tag(repo.avatar_url, width: 50, height: 50, alt: repo), user_path(repo.owner_name) %>
+      <%= repo %>
+      <%= link_to fa_icon('github'), repo.url, class: 'tip', title: "View #{repo} on GitHub" %>
     </h1>
     <% if repo.fork? %>
       <small>

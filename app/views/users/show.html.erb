@@ -3,22 +3,15 @@
 <div class="row">
   <div class="col-md-6">
     <h1>
-      <%= image_tag @user.avatar_url, width: 60, height: 60, alt: @user %>
+      <%= image_tag @user.avatar_url, width: 50, height: 50, alt: @user %>
       <%= @user %>
-      <% if @user.name.present? %>
-        <small>
-          <%= link_to @user.login, @user.github_url %>
-        </small>
-      <% end %>
+      <%= link_to fa_icon('github'), @user.github_url, class: 'tip', title: "View #{@user.login} on GitHub" %>
     </h1>
     <% if @user.description.present? %>
       <p>
         <%= @user.description %>
       </p>
     <% end %>
-    <p>
-      <%= link_to @user.github_url, @user.github_url %>
-    </p>
   </div>
   <div class="col-md-6">
     <% if logged_in? && current_user.admin? %>
