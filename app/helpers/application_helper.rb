@@ -123,7 +123,7 @@ module ApplicationHelper
   end
 
   def description(page_description)
-    content_for(:description) { page_description }
+    content_for(:description) { truncate(page_description, length: 160) }
   end
 
   def linked_licenses(licenses)
