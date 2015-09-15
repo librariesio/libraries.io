@@ -75,6 +75,32 @@
     <p>
       Got a question or request for Libraries? Open an <%= link_to 'issue on GitHub', 'https://github.com/librariesio/support/issues' %>, <%= link_to 'tweet us', 'https://twitter.com/librariesio' %> or email <%= mail_to 'support@libraries.io', 'support@libraries.io' %>
     </p>
+    <h3>
+      <strong>Who built this?</strong>
+    </h3>
+    <%= link_to user_path('andrew') do %>
+      <img src="https://avatars.githubusercontent.com/u/1060?size=80" alt="" class='pull-left avatar' />
+    <% end %>
+    <strong>Andrew Nesbitt</strong><br>
+    <%= link_to 'https://github.com/andrew' do %>
+      <%= fa_icon 'github' %> GitHub
+    <% end %><br>
+    <%= link_to 'https://twitter.com/teabass' do %>
+      <%= fa_icon 'twitter' %> Twitter
+    <% end %><br>
+    <%= link_to 'http://nesbitt.io' do %>
+      <%= fa_icon 'globe' %> Website
+    <% end %><br><hr>
+    <%= link_to user_path('malditogeek') do %>
+      <img src="https://avatars.githubusercontent.com/u/14751?size=80" alt="" class='pull-left avatar' />
+    <% end %>
+    <strong>Mauro Pompilio</strong><br>
+    <%= link_to 'https://github.com/malditogeek' do %>
+      <%= fa_icon 'github' %> GitHub
+    <% end %><br>
+    <%= link_to 'https://twitter.com/malditogeek' do %>
+      <%= fa_icon 'twitter' %> Twitter
+    <% end %>
   </div>
 </div>
 <div class="row">
