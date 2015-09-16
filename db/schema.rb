@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150908093255) do
+ActiveRecord::Schema.define(version: 20150916163328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,14 +107,12 @@ ActiveRecord::Schema.define(version: 20150908093255) do
   end
 
   add_index "github_repositories", ["created_at"], name: "index_github_repositories_on_created_at", using: :btree
-  add_index "github_repositories", ["fork"], name: "index_github_repositories_on_fork", where: "(fork = false)", using: :btree
   add_index "github_repositories", ["github_contributions_count"], name: "index_github_repositories_on_github_contributions_count", using: :btree
   add_index "github_repositories", ["github_id"], name: "index_github_repositories_on_github_id", unique: true, using: :btree
   add_index "github_repositories", ["github_organisation_id"], name: "index_github_repositories_on_github_organisation_id", using: :btree
   add_index "github_repositories", ["language"], name: "index_github_repositories_on_language", using: :btree
   add_index "github_repositories", ["license"], name: "index_github_repositories_on_license", using: :btree
   add_index "github_repositories", ["owner_id"], name: "index_github_repositories_on_owner_id", using: :btree
-  add_index "github_repositories", ["private"], name: "index_github_repositories_on_private", where: "(private = false)", using: :btree
 
   create_table "github_tags", force: :cascade do |t|
     t.integer  "github_repository_id"
