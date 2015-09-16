@@ -82,7 +82,7 @@ class ProjectsController < ApplicationController
 
   def your_dependent_repos
     find_project
-    @dependent_repos = current_user.all_dependencies.where(project_id: @project.id).paginate(page: params[:page])
+    @dependent_repos = current_user.your_dependent_repos(@project).paginate(page: params[:page])
   end
 
   def versions

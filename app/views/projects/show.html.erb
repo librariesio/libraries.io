@@ -165,12 +165,11 @@
           <% end %>
         <% end %>
         <% if current_user %>
-          <% your_dependent_repos = current_user.all_dependencies.where(project_id: @project.id) %>
+          <% your_dependent_repos = current_user.your_dependent_repos(@project) %>
           <% if your_dependent_repos.any? %>
             <h4>Your Dependent Repositories</h4>
             <ul>
-              <% your_dependent_repos.limit(10).each do |dependency| %>
-                <% repo = dependency.manifest.github_repository %>
+              <% your_dependent_repos.limit(10).each do |repo| %>
                 <li>
                 <%= link_to repo.full_name, github_repository_path(repo.owner_name, repo.project_name) %>
                 </li>
