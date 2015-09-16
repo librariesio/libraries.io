@@ -41,7 +41,7 @@ module Recommendable
     Project.where(id: ids).order('rank DESC')
   end
 
-  def favourite_languages(limit = 4)
+  def favourite_languages(limit = 3)
     @favourite_languages ||= begin
       # your github Repositories
       languages = github_repositories.pluck(:language).compact
