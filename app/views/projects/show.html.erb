@@ -231,13 +231,10 @@
 
     <%= render 'statistics' %>
 
-    <% cache("projects:#{@project.id}:related", :expires_in => 5.day) do %>
-      <% related = @project.mlt %>
-      <% if related && related.any? %>
-
-        <h4>Related Projects</h4>
-        <%= render related %>
-      <% end %>
+    <% related = @project.mlt %>
+    <% if related && related.any? %>
+      <h4>Related Projects</h4>
+      <%= render related %>
     <% end %>
 
     <% if @contributors.any? %>

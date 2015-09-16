@@ -126,11 +126,16 @@ class Project < ActiveRecord::Base
 
   def mlt
     begin
-      results = Project.__elasticsearch__.client.mlt(id: self.id, index: 'projects', type: 'project', mlt_fields: 'keywords_array,platform,description,repository_url', min_term_freq: 1, min_doc_freq: 2)
-      ids = results['hits']['hits'].map{|h| h['_id']}
-      Project.where(id: ids).limit(5).includes(:github_repository)
+      Project.where(id: mlt_ids).limit(5)
     rescue
       []
+    end
+  end
+
+  def mlt_ids
+    Rails.cache.fetch "projects:#{self.id}:mlt_ids", :expires_in => 1.week do
+      results = Project.__elasticsearch__.client.mlt(id: self.id, index: 'projects', type: 'project', mlt_fields: 'keywords_array,platform,description,repository_url', min_term_freq: 1, min_doc_freq: 2)
+      ids = results['hits']['hits'].map{|h| h['_id']}
     end
   end
 
