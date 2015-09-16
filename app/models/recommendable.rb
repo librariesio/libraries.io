@@ -4,7 +4,7 @@ module Recommendable
   def recommended_projects
     projects = Project.where(id: recommended_project_ids).order("position(','||id::text||',' in '#{recommended_project_ids.join(',')}'), rank DESC")
     projects = unfiltered_recommendations if projects.empty?
-    projects.where.not(id: already_watching_ids)
+    projects.where.not(id: already_watching_ids).includes(:github_repository)
   end
 
   def recommended_project_ids
