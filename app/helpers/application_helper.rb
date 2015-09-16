@@ -174,6 +174,8 @@ module ApplicationHelper
         match
       end
     end.html_safe if content.present?
+  rescue
+    content
   end
 
   def feature_flag(bool, negative = nil)
