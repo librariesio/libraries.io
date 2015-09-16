@@ -4,12 +4,14 @@ module Recommendable
   def recommended_projects
     projects = Project.where(id: recommended_project_ids).order("position(','||id::text||',' in '#{recommended_project_ids.join(',')}'), rank DESC")
     projects = unfiltered_recommendations if projects.empty?
-    projects
+    projects.where.not(id: already_watching_ids)
   end
 
   def recommended_project_ids
-    ids = favourite_recommendation_ids + most_depended_on_recommendation_ids + most_watched_recommendation_ids
-    ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.map(&:first)
+    Rails.cache.fetch "recommendations:#{self.id}", :expires_in => 1.day do
+      ids = favourite_recommendation_ids + most_depended_on_recommendation_ids + most_watched_recommendation_ids
+      ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.map(&:first)
+    end
   end
 
   def already_watching_ids
@@ -29,15 +31,15 @@ module Recommendable
   end
 
   def most_depended_on_recommendation_ids
-    recommendation_filter Project.most_dependents.limit(100)
+    recommendation_filter Project.most_dependents.limit(50)
   end
 
   def most_watched_recommendation_ids
-    recommendation_filter Project.most_watched.limit(100)
+    recommendation_filter Project.most_watched.limit(50)
   end
 
   def unfiltered_recommendations
-    ids = Project.most_dependents.limit(100).pluck(:id) + Project.most_watched.limit(100).pluck(:id)
+    ids = Project.most_dependents.limit(50).pluck(:id) + Project.most_watched.limit(50).pluck(:id)
     ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.map(&:first)
     Project.where(id: ids).order('rank DESC')
   end
