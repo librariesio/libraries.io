@@ -18,6 +18,7 @@ module Recommendable
 
   def recommendation_filter(scope)
     filtered = scope.where.not(id: already_watching_ids)
+    filtered = filtered.where('lower(projects.platform) IN (?)', favourite_platforms.map(&:downcase)) if favourite_platforms.any?
     filtered = filtered.where('lower(projects.language) IN (?)', favourite_languages.map(&:downcase)) if favourite_languages.any?
     filtered.pluck(:id)
   end
@@ -41,6 +42,10 @@ module Recommendable
     Project.where(id: ids).order('rank DESC')
   end
 
+  def favourite_platforms
+    favourite_languages.map{|lang| platform_language_mapping[lang.to_sym] }.compact.uniq
+  end
+
   def favourite_languages(limit = 3)
     @favourite_languages ||= begin
       # your github Repositories
@@ -55,5 +60,38 @@ module Recommendable
       languages = languages.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.first(limit).map(&:first)
       languages ||= []
     end
+  end
+
+  def platform_language_mapping
+    {
+      'Go': 'Go',
+      'JavaScript': 'NPM',
+      'Objective-C': 'CocoaPods',
+      'Swift': 'CocoaPods',
+      'HTML': 'Bower',
+      'CSS': 'Bower',
+      'CoffeeScript': 'NPM',
+      'TypeScript': 'NPM',
+      'LiveScript': 'NPM',
+      'Ruby': 'Rubygems',
+      'PHP': 'Packagist',
+      'Java': 'Maven',
+      'Python': 'Pypi',
+      'Scala': 'Maven',
+      'C#': 'Nuget',
+      'Clojure': 'Clojars',
+      'Perl': 'CPAN',
+      'Haskell': 'Hackage',
+      'Rust': 'Cargo',
+      'Emacs Lisp': 'Emacs',
+      'Dart': 'Pub',
+      'Elm': 'Elm',
+      'R': 'CRAN',
+      'Elixir': 'Hex',
+      'Erlang': 'Hex',
+      'Julia': 'Julia',
+      'D': 'Dub',
+      'Nimrod': 'Nimble'
+    }
   end
 end
