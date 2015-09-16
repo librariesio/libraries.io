@@ -1,109 +1,111 @@
-<h4>Project Statistics</h4>
-<table class='table table-striped'>
-  <tr>
-    <td>
-      SourceRank
-    </td>
-    <td>
-      <strong><%= @project.rank %></strong>
-    </td>
-  </tr>
-  <% if @project.can_have_dependencies? %>
+<% cache(['v1', @project, 'stats'], :expires_in => 1.week) do %>
+  <h4>Project Statistics</h4>
+  <table class='table table-striped'>
     <tr>
       <td>
-        Dependencies
+        SourceRank
       </td>
       <td>
-        <strong><%= number_to_human(@project.dependencies.count.keys.length) %></strong>
+        <strong><%= @project.rank %></strong>
+      </td>
+    </tr>
+    <% if @project.can_have_dependencies? %>
+      <tr>
+        <td>
+          Dependencies
+        </td>
+        <td>
+          <strong><%= number_to_human(@project.dependencies.count.keys.length) %></strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Dependent projects
+        </td>
+        <td>
+          <strong><%= link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %></strong>
+        </td>
+      </tr>
+    <% end %>
+    <tr>
+      <td>
+        Dependent repositories
+      </td>
+      <td>
+        <strong><%= link_to number_to_human(@project.dependent_repositories.open_source.length), project_dependent_repos_path(@project.to_param) %></strong>
       </td>
     </tr>
     <tr>
       <td>
-        Dependent projects
+        Total <%= @project.release_or_tag %>
       </td>
       <td>
-        <strong><%= link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %></strong>
+        <strong>
+          <% if @project.can_have_versions? %>
+            <%= link_to number_to_human(@project.versions.count), project_versions_path(@project.to_param) %>
+          <% else %>
+            <%= link_to number_to_human(@project.github_tags.count), project_tags_path(@project.to_param) %>
+          <% end %>
+        </strong>
       </td>
     </tr>
-  <% end %>
-  <tr>
-    <td>
-      Dependent repositories
-    </td>
-    <td>
-      <strong><%= link_to number_to_human(@project.dependent_repositories.open_source.length), project_dependent_repos_path(@project.to_param) %></strong>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Total <%= @project.release_or_tag %>
-    </td>
-    <td>
-      <strong>
-        <% if @project.can_have_versions? %>
-          <%= link_to number_to_human(@project.versions.count), project_versions_path(@project.to_param) %>
-        <% else %>
-          <%= link_to number_to_human(@project.github_tags.count), project_tags_path(@project.to_param) %>
-        <% end %>
-      </strong>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Latest <%= @project.release_or_tag %>
-    </td>
-    <td>
-      <strong><%= time_ago_in_words(@project.latest_release.try(:published_at).presence || @project.updated_at) %> ago</strong>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      First <%= @project.release_or_tag %>
-    </td>
-    <td>
-      <strong><%= time_ago_in_words(@project.first_release.try(:published_at).presence || @project.github_repository.try(:created_at).presence || @project.created_at) %> ago</strong>
-    </td>
-  </tr>
-  <% if @project.github_repository.present? %>
-  <tr>
-    <td>
-      Stars
-    </td>
-    <td>
-      <strong><%= link_to number_to_human(@project.github_repository.stargazers_count), @project.github_repository.stargazers_url %></strong>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Forks
-    </td>
-    <td>
-      <strong><%= link_to number_to_human(@project.github_repository.forks_count), @project.github_repository.forks_url %></strong>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Watchers
-    </td>
-    <td>
-      <strong><%= link_to number_with_delimiter(@project.github_repository.subscribers_count), @project.github_repository.watchers_url %></strong>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Contributors
-    </td>
-    <td>
-      <strong><%= link_to number_to_human(@project.github_contributions.count), @project.github_repository.contributors_url %></strong>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Repo Size:
-    </td>
-    <td>
-      <strong><%= number_to_human_size @project.github_repository.size*1000 %></strong>
-    </td>
-  </tr>
-  <% end %>
-</table>
+    <tr>
+      <td>
+        Latest <%= @project.release_or_tag %>
+      </td>
+      <td>
+        <strong><%= time_ago_in_words(@project.latest_release.try(:published_at).presence || @project.updated_at) %> ago</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        First <%= @project.release_or_tag %>
+      </td>
+      <td>
+        <strong><%= time_ago_in_words(@project.first_release.try(:published_at).presence || @project.github_repository.try(:created_at).presence || @project.created_at) %> ago</strong>
+      </td>
+    </tr>
+    <% if @project.github_repository.present? %>
+    <tr>
+      <td>
+        Stars
+      </td>
+      <td>
+        <strong><%= link_to number_to_human(@project.github_repository.stargazers_count), @project.github_repository.stargazers_url %></strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Forks
+      </td>
+      <td>
+        <strong><%= link_to number_to_human(@project.github_repository.forks_count), @project.github_repository.forks_url %></strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Watchers
+      </td>
+      <td>
+        <strong><%= link_to number_with_delimiter(@project.github_repository.subscribers_count), @project.github_repository.watchers_url %></strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Contributors
+      </td>
+      <td>
+        <strong><%= link_to number_to_human(@project.github_contributions.count), @project.github_repository.contributors_url %></strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Repo Size:
+      </td>
+      <td>
+        <strong><%= number_to_human_size @project.github_repository.size*1000 %></strong>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+<% end %>
