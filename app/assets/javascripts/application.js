@@ -15,6 +15,7 @@
 //= require bootstrap-sprockets
 //= require tipsy
 //= require js.cookie
+//= require peek
 //= require_tree .
 
 $('.tip').tipsy({gravity: 's'});

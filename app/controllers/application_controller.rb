@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
 
   before_filter :welcome_new_users
 
+  def peek_enabled?
+    current_user && current_user.admin?
+  end
+
   private
 
   def welcome_new_users
