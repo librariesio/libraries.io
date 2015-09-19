@@ -363,8 +363,6 @@ GEM
       peek
     peek-gc (0.0.2)
       peek
-    peek-host (1.0.0)
-      peek
     peek-performance_bar (1.1.6)
       peek (>= 0.1.0)
     peek-pg (1.1.0)
@@ -375,10 +373,6 @@ GEM
       atomic (>= 1.0.0)
       peek
       redis
-    peek-sidekiq (1.0.3)
-      atomic (>= 1.0.0)
-      peek
-      sidekiq
     pg (0.18.3)
     pg_array_parser (0.0.9)
     platform-api (0.3.0)
@@ -564,11 +558,9 @@ DEPENDENCIES
   peek
   peek-dalli
   peek-gc
-  peek-host
   peek-performance_bar
   peek-pg
   peek-redis
-  peek-sidekiq
   pg
   platform-api
   postgres_ext
