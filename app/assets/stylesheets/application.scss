@@ -4,12 +4,17 @@
 @import "tipsy";
 @import url("https://librariesio.github.io/pictogram/pictogram.css");
 @import "peek";
+@import "peek/views/performance_bar";
 
 body {
   padding: 60px 0 0;
   background-color: #fdfdfd;
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body.admin {
+  padding-top: 96px !important;
 }
 
 html {
@@ -329,4 +334,12 @@ tr.top td{
 
 .avatar{
   margin-right: 10px;
+}
+
+#peek{
+  height: 36px;
+  font-size: 13px;
+  .wrapper{
+    width: 1170px;
+  }
 }

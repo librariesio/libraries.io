@@ -43,8 +43,7 @@
     <% end %>
   </script>
 </head>
-<body>
-
+<body class="<%= 'admin' if current_user && current_user.admin? %>">
   <div class="navbar navbar-inverse navbar-fixed-top">
     <%= render 'peek/bar' %>
     <div class="container">

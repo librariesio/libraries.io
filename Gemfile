@@ -65,8 +65,10 @@ gem 'peek'
 gem 'peek-pg'
 gem 'peek-redis'
 gem 'peek-dalli'
-# gem 'peek-faraday'
-# gem 'peek-elasticsearch'
+gem 'peek-gc'
+gem 'peek-host'
+gem 'peek-performance_bar'
+gem 'peek-sidekiq'
 
 group :development do
   gem 'bundler'
