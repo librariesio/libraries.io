@@ -314,6 +314,10 @@ GEM
     logging (2.0.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
+    lograge (0.3.4)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -372,6 +376,8 @@ GEM
       bini (= 0.7.0)
       httparty (= 0.11.0)
       yajl-ruby (= 1.1.0)
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
     rack (1.6.4)
     rack-canonical-host (0.1.0)
       addressable
@@ -527,6 +533,7 @@ DEPENDENCIES
   jquery-rails
   js-cookie-rails
   languages
+  lograge
   mime-types (~> 2.6.1)
   newrelic_rpm
   nokogiri
@@ -541,6 +548,7 @@ DEPENDENCIES
   premailer-rails
   puma
   pushover
+  quiet_assets
   rack-canonical-host
   rails (= 4.2.4)
   rails_12factor

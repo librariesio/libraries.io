@@ -97,4 +97,6 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
   config.action_mailer.delivery_method = :smtp
+
+  config.lograge.enabled = true
 end

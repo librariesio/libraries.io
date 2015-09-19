@@ -64,6 +64,7 @@ gem 'puma'
 group :development do
   gem 'bundler'
   gem 'spring'
+  gem 'quiet_assets'
 end
 
 group :development, :test do
@@ -72,4 +73,5 @@ end
 
 group :production do
   gem 'bugsnag'
+  gem 'lograge'
 end
