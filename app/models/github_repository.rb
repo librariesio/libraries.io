@@ -201,11 +201,25 @@ class GithubRepository < ActiveRecord::Base
     download_manifests(token)
     download_owner
     download_fork_source(token)
+    download_forks_async(token)
   end
 
-  def download_fork_source(token)
+  def download_fork_source(token = nil)
     return true unless self.fork?
     GithubRepository.create_from_github(source_name, token)
+  end
+
+  def download_forks_async(token = nil)
+    GithubDownloadForkWorker.perform_async(self.id, token)
+  end
+
+  def download_forks(token = nil)
+    return unless forks_count && forks_count > 0 && forks_count < 1000
+    return if forks_count == forked_repositories.count
+    github_client = AuthToken.new_client(token)
+    github_client.forks(full_name).each do |fork|
+      GithubRepository.create_from_hash(fork)
+    end
   end
 
   def self.extract_full_name(url)
