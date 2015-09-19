@@ -5,8 +5,8 @@ production:
 :timeout: 8
 :verbose: true
 :queues:
-  - low
-  - [default, 1]
-  - [mailers, 2]
-  - [critical, 4]
-  - [user, 8]
+  - [low, 1]
+  - [default, 2]
+  - [mailers, 4]
+  - [critical, 8]
+  - [user, 16]
