@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   has_many :project_mutes
   has_many :muted_projects, through: :project_mutes, source: :project
 
-  after_commit :ping_andrew, :update_repo_permissions_async, :download_self, :create_api_key, on: :create
+  after_commit :update_repo_permissions_async, :download_self, :create_api_key, on: :create
 
   ADMIN_USERS = ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall']
 
@@ -68,10 +68,6 @@ class User < ActiveRecord::Base
 
   def can_monitor?(github_repository)
     repository_permissions.where(github_repository: github_repository).where(admin: true).any?
-  end
-
-  def ping_andrew
-    PushoverNewUserWorker.perform_async(self.id)
   end
 
   def create_api_key
