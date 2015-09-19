@@ -214,8 +214,9 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_forks(token = nil)
-    return unless forks_count && forks_count > 0 && forks_count < 1000
-    return if forks_count == forked_repositories.count
+    return true if fork?
+    return true unless forks_count && forks_count > 0 && forks_count < 100
+    return true if forks_count == forked_repositories.count
     github_client = AuthToken.new_client(token)
     github_client.forks(full_name).each do |fork|
       GithubRepository.create_from_hash(fork)
