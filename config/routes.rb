@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
   end if Rails.env.production?
   mount Sidekiq::Web => '/sidekiq'
+  mount Peek::Railtie => '/peek'
 
   namespace :api do
     get '/searchcode', to: 'projects#searchcode'

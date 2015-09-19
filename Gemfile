@@ -61,6 +61,15 @@ gem 'postgres_ext'
 gem 'foreman', require: false
 gem 'puma'
 
+gem 'peek'
+gem 'peek-pg'
+gem 'peek-redis'
+gem 'peek-dalli'
+gem 'peek-gc'
+gem 'peek-host'
+gem 'peek-performance_bar'
+gem 'peek-sidekiq'
+
 group :development do
   gem 'bundler'
   gem 'spring'
