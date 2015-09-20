@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150916163328) do
+ActiveRecord::Schema.define(version: 20150920114207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -106,12 +106,7 @@ ActiveRecord::Schema.define(version: 20150916163328) do
     t.integer  "github_contributions_count", default: 0, null: false
   end
 
-  add_index "github_repositories", ["created_at"], name: "index_github_repositories_on_created_at", using: :btree
-  add_index "github_repositories", ["github_contributions_count"], name: "index_github_repositories_on_github_contributions_count", using: :btree
   add_index "github_repositories", ["github_id"], name: "index_github_repositories_on_github_id", unique: true, using: :btree
-  add_index "github_repositories", ["github_organisation_id"], name: "index_github_repositories_on_github_organisation_id", using: :btree
-  add_index "github_repositories", ["language"], name: "index_github_repositories_on_language", using: :btree
-  add_index "github_repositories", ["license"], name: "index_github_repositories_on_license", using: :btree
   add_index "github_repositories", ["owner_id"], name: "index_github_repositories_on_owner_id", using: :btree
 
   create_table "github_tags", force: :cascade do |t|
@@ -192,9 +187,7 @@ ActiveRecord::Schema.define(version: 20150916163328) do
   add_index "projects", ["dependents_count"], name: "index_projects_on_dependents_count", using: :btree
   add_index "projects", ["github_repository_id"], name: "index_projects_on_github_repository_id", using: :btree
   add_index "projects", ["keywords_array"], name: "index_projects_on_keywords_array", using: :gin
-  add_index "projects", ["language"], name: "index_projects_on_language", using: :btree
   add_index "projects", ["name", "platform"], name: "index_projects_on_name_and_platform", using: :btree
-  add_index "projects", ["platform"], name: "index_projects_on_platform", using: :btree
   add_index "projects", ["updated_at"], name: "index_projects_on_updated_at", using: :btree
   add_index "projects", ["versions_count"], name: "index_projects_on_versions_count", using: :btree
 
@@ -285,7 +278,6 @@ ActiveRecord::Schema.define(version: 20150916163328) do
     t.datetime "updated_at"
   end
 
-  add_index "versions", ["created_at"], name: "index_versions_on_created_at", using: :btree
   add_index "versions", ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true, using: :btree
   add_index "versions", ["project_id"], name: "index_versions_on_project_id", using: :btree
 
