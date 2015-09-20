@@ -13,6 +13,10 @@ namespace :download do
     Repositories::Atom.import_recent
   end
 
+  task atom_all: :environment do
+    Repositories::Atom.import
+  end
+
   task biicode: :environment do
     Repositories::Biicode.import
   end
@@ -67,6 +71,10 @@ namespace :download do
 
   task hackage: :environment do
     Repositories::Hackage.import_recent
+  end
+
+  task hackage_all: :environment do
+    Repositories::Hackage.import
   end
 
   task hex: :environment do
@@ -162,5 +170,9 @@ namespace :download do
 
   task go: :environment do
     Repositories::Go.import_new
+  end
+
+  task go_all: :environment do
+    Repositories::Go.import
   end
 end
