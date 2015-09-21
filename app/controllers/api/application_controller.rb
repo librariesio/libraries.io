@@ -8,6 +8,7 @@ class Api::ApplicationController < ApplicationController
   end
 
   def api_key_present?
+    return true if Rails.env.development?
     params[:api_key].present? && ApiKey.active.find_by_access_token(params[:api_key])
   end
 
