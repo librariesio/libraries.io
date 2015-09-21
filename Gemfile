@@ -45,7 +45,6 @@ gem 'sidekiq-unique-jobs'
 gem 'sinatra', require: nil
 gem 'sassc-rails'
 gem 'hirefire-resource'
-gem 'turbolinks'
 gem 'rails_12factor'
 gem 'font-awesome-rails'
 gem 'platform-api', require: nil

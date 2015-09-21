@@ -492,8 +492,6 @@ GEM
     tipsy-rails (1.0.5)
       railties (>= 3.0)
       sass-rails
-    turbolinks (2.5.3)
-      coffee-rails
     typhoeus (0.8.0)
       ethon (>= 0.8.0)
     tzinfo (1.2.2)
@@ -571,7 +569,6 @@ DEPENDENCIES
   spring
   sprockets
   tipsy-rails
-  turbolinks
   typhoeus
   uglifier
   will_paginate
