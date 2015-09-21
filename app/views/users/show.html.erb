@@ -61,7 +61,7 @@
   <% if @user.org? %>
     <div class="col-md-4">
       <h4>Top Contributors</h4>
-      <%= render @user.contributors.visible.limit(50) %>
+      <%= render @user.top_contributors %>
     </div>
   <% end %>
 </div>

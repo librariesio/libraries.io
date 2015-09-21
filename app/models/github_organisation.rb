@@ -20,6 +20,16 @@ class GithubOrganisation < ActiveRecord::Base
     GithubContribution.none
   end
 
+  def top_contributors
+    GithubUser.where(id: top_contributor_ids).order("position(','||github_users.id::text||',' in '#{top_contributor_ids.join(',')}')")
+  end
+
+  def top_contributor_ids
+    Rails.cache.fetch "org:#{self.id}:top_contributor_ids", :expires_in => 1.week do
+      contributors.visible.limit(50).pluck(:id)
+    end
+  end
+
   def org?
     true
   end
