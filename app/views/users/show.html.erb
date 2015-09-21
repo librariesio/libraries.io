@@ -38,25 +38,21 @@
 
 <hr>
 <div class="row">
-  <% if @repositories.any? %>
+  <% if @repositories.length > 0 %>
     <div class="col-md-4">
       <h4>Repositories</h4>
       <%= render @repositories %>
-      <% if @user.github_repositories.count > 10 %>
-        <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
-      <% end %>
+      <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
     </div>
   <% end %>
-  <% if @contributions.any? %>
+  <% if @contributions.length > 0 %>
     <div class="col-md-4">
       <h4>Repositories Contributed To</h4>
       <%= render @contributions.map(&:github_repository)  %>
-      <% if @user.github_contributions.with_repo.count > 10 %>
-        <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
-      <% end %>
+      <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
     </div>
   <% end %>
-  <% if @favourite_projects.any? %>
+  <% if @favourite_projects.length > 0 %>
     <div class="col-md-4">
       <h4>Most Used Projects</h4>
       <%= render @favourite_projects %>

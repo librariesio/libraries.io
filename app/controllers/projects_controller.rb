@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   def index
     if current_user
       muted_ids = params[:include_muted].present? ? [] : current_user.muted_project_ids
-      @versions = current_user.all_subscribed_versions.where.not(project_id: muted_ids).where.not(published_at: nil).order('published_at DESC').includes(:project).paginate(per_page: 20, page: params[:page])
+      @versions = current_user.all_subscribed_versions.where.not(project_id: muted_ids).where.not(published_at: nil).newest_first.includes(:project).paginate(per_page: 20, page: params[:page])
       @projects = current_user.recommended_projects.limit(10)
       render 'dashboard/home'
     else
@@ -39,7 +39,7 @@ class ProjectsController < ApplicationController
         return redirect_to(project_path(@project.to_param), :status => :moved_permanently)
       end
     end
-    @version_count = @project.versions.count
+    @version_count = @project.versions.newest_first.count
     @github_repository = @project.github_repository
     if @version_count.zero?
       @versions = []
@@ -52,18 +52,17 @@ class ProjectsController < ApplicationController
       else
         @github_tags = []
       end
-      if @versions.empty? && @github_tags.empty?
+      if @github_tags.empty?
         raise ActiveRecord::RecordNotFound if params[:number].present?
       end
     else
-      @versions = @project.versions.order('published_at DESC').limit(10).to_a.sort
+      @versions = @project.versions.newest_first.to_a.first(10).sort
       if params[:number].present?
         @version = @project.versions.find_by_number(params[:number])
         raise ActiveRecord::RecordNotFound if @version.nil?
       end
     end
     @dependencies = (@versions.any? ? (@version || @versions.first).dependencies.order('project_name ASC').limit(100) : [])
-    @github_repository = @project.github_repository
     @contributors = @project.contributors.order('count DESC').visible.limit(20)
   end
 
@@ -90,7 +89,7 @@ class ProjectsController < ApplicationController
     if incorrect_case?
       return redirect_to(project_versions_path(@project.to_param), :status => :moved_permanently)
     else
-      @versions = @project.versions.order('published_at DESC').paginate(page: params[:page])
+      @versions = @project.versions.newest_first.paginate(page: params[:page])
       respond_to do |format|
         format.html
         format.atom
@@ -134,8 +133,8 @@ class ProjectsController < ApplicationController
   end
 
   def find_project
-    @project = Project.platform(params[:platform]).where(name: params[:name]).includes({:github_repository => :readme}).first
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes({:github_repository => :readme}).first if @project.nil?
+    @project = Project.platform(params[:platform]).where(name: params[:name]).includes(:github_repository).first
+    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes(:github_repository).first if @project.nil?
     raise ActiveRecord::RecordNotFound if @project.nil?
     @color = @project.color
   end

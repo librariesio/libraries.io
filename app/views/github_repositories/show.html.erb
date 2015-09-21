@@ -65,13 +65,13 @@
       <%== repo.readme %>
     <% end %>
 
-    <% if repo.manifests.latest.any? %>
+    <% if repo.manifests.latest.length > 0 %>
       <hr>
       <div id="dependencies">
         <h4>Dependencies</h4>
         <% repo.manifests.limit(20).latest.each do |manifest| %>
           <% deps = manifest.repository_dependencies.limit(500).order(:project_name).includes(:project) %>
-          <% if deps.any? %>
+          <% if deps.length > 0 %>
             <table class='table table-hover table-condensed'>
               <thead>
                 <th>
@@ -204,12 +204,12 @@
       </tr>
     </table>
 
-    <% if @contributors.any? %>
+    <% if @contributors.length > 0 %>
       <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
       <%= render @contributors %>
     <% end %>
 
-    <% if @projects.any? %>
+    <% if @projects.length > 0 %>
       <div class="row"></div>
       <hr>
       <h4>Projects Referencing this Repo</h4>
@@ -226,7 +226,7 @@
       <%= render @forks %>
     <% end %>
 
-    <% if repo.github_tags.published.any? %>
+    <% if repo.github_tags.published.length > 0 %>
       <div class="row"></div>
       <hr>
       <h4>Tags</h4>
