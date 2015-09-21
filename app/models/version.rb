@@ -8,6 +8,8 @@ class Version < ActiveRecord::Base
 
   after_commit :send_notifications_async, on: :create
 
+  scope :newest_first, -> { order('versions.published_at DESC') }
+
   def as_json(options = nil)
     super({ only: [:number, :published_at] }.merge(options || {}))
   end
