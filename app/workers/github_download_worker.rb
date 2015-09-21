@@ -1,5 +1,6 @@
 class GithubDownloadWorker
   include Sidekiq::Worker
+  sidekiq_options unique: true
 
   def perform(repo_id, token = nil)
     token = token || AuthToken.token

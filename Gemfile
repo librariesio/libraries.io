@@ -41,6 +41,7 @@ gem 'bigquery', require: 'big_query'
 gem 'sprockets'
 gem 'simple_form'
 gem 'sidekiq'
+gem 'sidekiq-unique-jobs'
 gem 'sinatra', require: nil
 gem 'sassc-rails'
 gem 'hirefire-resource'

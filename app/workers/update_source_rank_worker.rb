@@ -1,6 +1,6 @@
 class UpdateSourceRankWorker
   include Sidekiq::Worker
-  sidekiq_options :queue => :low
+  sidekiq_options :queue => :low, unique: true
 
   def perform(project_id)
     project = Project.find(project_id)

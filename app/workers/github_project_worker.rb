@@ -1,5 +1,6 @@
 class GithubProjectWorker
   include Sidekiq::Worker
+  sidekiq_options unique: true
 
   def perform(project_id)
     project = Project.find(project_id)

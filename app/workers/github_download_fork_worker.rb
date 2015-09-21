@@ -1,6 +1,6 @@
 class GithubDownloadForkWorker
   include Sidekiq::Worker
-  sidekiq_options :queue => :low
+  sidekiq_options queue: :low, unique: true
 
   def perform(repo_id, token = nil)
     token = token || AuthToken.token

@@ -453,6 +453,8 @@ GEM
       json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
       redis-namespace (~> 1.5, >= 1.5.2)
+    sidekiq-unique-jobs (3.0.15)
+      sidekiq (>= 2.6)
     signet (0.6.1)
       addressable (~> 2.3)
       extlib (~> 0.9)
@@ -560,6 +562,7 @@ DEPENDENCIES
   sassc-rails
   semantic
   sidekiq
+  sidekiq-unique-jobs
   simple-rss
   simple_form
   sinatra
