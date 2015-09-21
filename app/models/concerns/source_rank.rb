@@ -78,7 +78,7 @@ module SourceRank
   end
 
   def versions_present?
-    versions_count > 1 || (github_tags.published.any?)
+    versions_count > 1 || (github_tags.published.length > 0)
   end
 
   def recent_release?

@@ -14,7 +14,7 @@
 </div>
 <hr>
 <div class="row">
-  <% if @contributors.any? %>
+  <% if @contributors.length > 0 %>
     <% @contributors.each do |user| %>
       <% next if user.nil? %>
       <div class="contributor">

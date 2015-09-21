@@ -8,7 +8,7 @@
 </div>
 <hr>
 <div class='row'>
-  <% if @most_repos.any? %>
+  <% if @most_repos.length > 0 %>
     <div class='col-sm-4'>
       <h4>
         Most Repositories
@@ -24,7 +24,7 @@
       <% end %>
     </div>
   <% end %>
-  <% if @most_stars.any? %>
+  <% if @most_stars.length > 0 %>
     <div class='col-sm-4'>
       <h4>
         Most Stars
@@ -40,7 +40,7 @@
       <% end %>
     </div>
   <% end %>
-  <% if @newest.any? %>
+  <% if @newest.length > 0 %>
     <div class='col-sm-4'>
       <h4>
         Recently Indexed

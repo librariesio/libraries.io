@@ -22,7 +22,7 @@ class GithubTag < ActiveRecord::Base
   end
 
   def has_projects?
-    github_repository && github_repository.projects.without_versions.any?
+    github_repository && github_repository.projects.without_versions.length > 0
   end
 
   def notify_subscribers

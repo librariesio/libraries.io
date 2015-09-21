@@ -1,11 +1,11 @@
 <div class="row">
   <div class="col-sm 6 col-md-8" id='newsfeed'>
-    <% if @versions.any? %>
+    <% if @versions.length > 0 %>
       <%= render collection: @versions, partial: 'dashboard/new_version', as: :version  %>
       <%= will_paginate @versions, renderer: BootstrapPagination::Rails, page_links: false %>
       <p>
         <small class='text-muted'>
-          <% if current_user.muted_projects.any? %>
+          <% if current_user.muted_projects.length > 0 %>
             <% if params[:include_muted].present? %>
               Showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
               <%= link_to 'Hide muted projects', url_for(params.except(:include_muted)) %> -
@@ -27,7 +27,7 @@
     <% end %>
   </div>
   <div class="col-md-4">
-    <% if @versions.any? %>
+    <% if @versions.length > 0 %>
       <h3>Repository Monitoring</h3>
       <%= render 'dashboard/monitoring_promo' %>
     <% end %>
