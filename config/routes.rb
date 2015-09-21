@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
 
   namespace :api do
+    get '/search', to: 'search#index'
     get '/searchcode', to: 'projects#searchcode'
     get '/github/:owner/:name', to: 'github_repositories#show', constraints: { :name => /.*/ }
     post '/:platform/projects', to: 'projects#list'
