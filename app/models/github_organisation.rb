@@ -20,6 +20,16 @@ class GithubOrganisation < ActiveRecord::Base
     GithubContribution.none
   end
 
+  def top_favourite_projects
+    Project.where(id: top_favourite_project_ids).order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
+  end
+
+  def top_favourite_project_ids
+    Rails.cache.fetch "org:#{self.id}:top_favourite_project_ids", :expires_in => 1.week do
+      favourite_projects.limit(10).pluck(:id)
+    end
+  end
+
   def top_contributors
     GithubUser.where(id: top_contributor_ids).order("position(','||github_users.id::text||',' in '#{top_contributor_ids.join(',')}')")
   end

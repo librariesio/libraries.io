@@ -13,6 +13,16 @@ class GithubUser < ActiveRecord::Base
 
   scope :visible, -> { where(hidden: false) }
 
+  def top_favourite_projects
+    Project.where(id: top_favourite_project_ids).order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
+  end
+
+  def top_favourite_project_ids
+    Rails.cache.fetch "user:#{self.id}:top_favourite_project_ids", :expires_in => 1.week do
+      favourite_projects.limit(10).pluck(:id)
+    end
+  end
+
   def avatar_url(size = 60)
     "https://avatars.githubusercontent.com/u/#{github_id}?size=#{size}"
   end

@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   def show
     find_user
     @repositories = @user.github_repositories.open_source.source.order('stargazers_count DESC').limit(10)
-    @favourite_projects = @user.favourite_projects.limit(10)
+    @favourite_projects = @user.top_favourite_projects
     @contributions = @user.github_contributions.with_repo
                           .joins(:github_repository)
                           .where('github_repositories.owner_id != ?', @user.github_id.to_s)
