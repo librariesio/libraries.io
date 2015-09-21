@@ -3,7 +3,6 @@ ruby '2.2.3'
 
 gem 'rb-readline'
 gem 'oj'
-gem 'oj_mimic_json'
 gem 'rails', '4.2.4'
 gem 'pg'
 gem 'sass-rails'
@@ -60,6 +59,7 @@ gem 'js-cookie-rails'
 gem 'postgres_ext'
 gem 'foreman', require: false
 gem 'puma'
+gem 'rack-mini-profiler', require: false
 
 group :development do
   gem 'bundler'
