@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     get '/stats', to: 'stats#index', as: :stats
   end
 
+  resources :account_subscriptions
+
   get '/recommendations', to: 'recommendations#index', as: :recommendations
 
   post '/hooks/github', to: 'hooks#github'
