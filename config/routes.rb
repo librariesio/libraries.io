@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     get '/stats', to: 'stats#index', as: :stats
   end
 
+  get '/pricing', to: 'account_subscriptions#plans', as: :pricing
   resources :account_subscriptions
 
   get '/recommendations', to: 'recommendations#index', as: :recommendations

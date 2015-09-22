@@ -1,0 +1,32 @@
+<%= render 'payola/transactions/stripe_header' %>
+<% title 'Pricing - Libraries.io' %>
+<div class="row">
+  <div class="col-md-6">
+    <h1>Pricing</h1>
+  </div>
+  <div class="col-md-6">
+    <br>
+    <br>
+    <% other_interval = params[:interval] == 'year' ? 'month' : 'year' %>
+    <%= link_to "Switch to #{other_interval}ly pricing", pricing_path(interval: other_interval), class: 'pull-right' %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="plan col-md-3  text-center">
+    <h4>Open Source</h4>
+    <p>
+      Free forever
+    </p>
+    <%= link_to 'Get started', repositories_path, class: 'btn btn-primary' %>
+  </div>
+  <% @plans.each do |plan| %>
+    <div class="plan col-md-3 text-center">
+      <h4><%= plan.name %></h4>
+      <p>
+        <%= number_to_currency plan.amount/100.0 %> per <%= plan.interval %>
+      </p>
+      <%= render 'payola/subscriptions/checkout', plan: plan, email: current_user.email %>
+    </div>
+  <% end %>
+</div>

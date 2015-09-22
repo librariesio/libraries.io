@@ -3,6 +3,11 @@ class AccountSubscriptionsController < ApplicationController
 
   include Payola::StatusBehavior
 
+  def plans
+    @interval = params[:interval] == 'year' ? 'year' : 'month'
+    @plans = SubscriptionPlan.interval(@interval)
+  end
+
   def new
     @plan = SubscriptionPlan.first
   end
