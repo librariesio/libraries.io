@@ -61,6 +61,7 @@ gem 'foreman', require: false
 gem 'puma'
 gem 'rack-mini-profiler', require: false
 gem 'stripe'
+gem 'payola-payments'
 
 group :development do
   gem 'bundler'
