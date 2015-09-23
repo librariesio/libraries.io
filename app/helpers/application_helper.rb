@@ -189,6 +189,8 @@ module ApplicationHelper
     case platform_string.downcase
     when 'rubygemslockfile'
       'rubygems'
+    when 'cocoapodslockfile'
+      'cocoapods'
     when 'packagistlockfile'
       'packagist'
     when 'gemspec'

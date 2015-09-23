@@ -18,8 +18,10 @@ class RepositoryDependency < ActiveRecord::Base
     case plat
     when 'rubygemslockfile'
       'Rubygems'
+    when 'cocoapodslockfile'
+      'CocoaPods'
     when 'packagistlockfile'
-      'packagist'
+      'Packagist'
     when 'gemspec'
       'Rubygems'
     when 'npmshrinkwrap'
