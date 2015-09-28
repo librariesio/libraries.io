@@ -2,7 +2,7 @@ class Repositories
   class NuGet < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    LIBRARIAN_PLANNED = true
+    LIBRARIAN_SUPPORT = true
     URL = 'https://www.nuget.org'
     COLOR = '#178600'
 
