@@ -112,7 +112,7 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
       after_commit_action (~> 1.0.0)
-    css_parser (1.3.6)
+    css_parser (1.3.7)
       addressable
     dalli (2.7.4)
     dotenv (2.0.2)
@@ -201,7 +201,7 @@ GEM
     fog-ecloud (0.3.0)
       fog-core
       fog-xml
-    fog-google (0.0.7)
+    fog-google (0.0.9)
       fog-core
       fog-json
       fog-xml
@@ -226,7 +226,7 @@ GEM
       fog-core
       fog-json
       fog-xml
-    fog-sakuracloud (1.3.0)
+    fog-sakuracloud (1.3.2)
       fog-core
       fog-json
     fog-serverlove (0.1.2)
@@ -325,7 +325,7 @@ GEM
     memoist (0.12.0)
     mime-types (2.6.2)
     mini_portile (0.6.2)
-    minitest (5.8.0)
+    minitest (5.8.1)
     moneta (0.8.0)
     multi_json (1.11.2)
     multi_xml (0.5.5)
@@ -333,7 +333,7 @@ GEM
     nenv (0.2.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
-    net-ssh (2.9.2)
+    net-ssh (3.0.1)
     netrc (0.10.3)
     newrelic_rpm (3.13.1.300)
     nokogiri (1.6.6.2)
@@ -344,7 +344,7 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (~> 1.2)
-    octokit (4.1.0)
+    octokit (4.1.1)
       sawyer (~> 0.6.0, >= 0.5.3)
     oj (2.12.14)
     omniauth (1.2.2)
@@ -463,7 +463,7 @@ GEM
       jwt (~> 1.5)
       multi_json (~> 1.10)
     simple-rss (1.3.1)
-    simple_form (3.1.1)
+    simple_form (3.2.0)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
     sinatra (1.4.6)
@@ -478,8 +478,8 @@ GEM
     spdx-licenses (1.0.0)
       json
     spring (1.4.0)
-    sprockets (3.3.4)
-      rack (~> 1.0)
+    sprockets (3.3.5)
+      rack (> 1, < 3)
     sprockets-rails (2.3.3)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
