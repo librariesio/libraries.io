@@ -7,18 +7,21 @@ class Admin::StatsController < Admin::ApplicationController
     @recent_watches = RepositorySubscription.order('created_at DESC').limit(15)
 
     @new_projects       = stats_for(Project)
-    @new_github_users   = stats_for(GithubUser)
+    @new_versions       = stats_for(Version)
     @new_users          = stats_for(User)
     @new_subscriptions  = stats_for(Subscription)
-    @new_versions       = stats_for(Version)
-    @new_manifests      = stats_for(Manifest)
     @new_repo_subs      = stats_for(RepositorySubscription)
+  end
+
+  def github
+    @new_github_users   = stats_for(GithubUser)
+    @new_manifests      = stats_for(Manifest)
     @new_readmes        = stats_for(Readme)
     @new_orgs           = stats_for(GithubOrganisation)
   end
 
   def stats_for(klass)
-    period = 2.days.ago.beginning_of_day
+    period = 3.days.ago.beginning_of_day
     klass.where('created_at > ?', period).group("date(created_at)").count.sort_by{|k,v| k }.reverse
   end
 end
