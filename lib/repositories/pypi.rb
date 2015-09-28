@@ -7,6 +7,10 @@ class Repositories
     URL = 'https://pypi.python.org'
     COLOR = '#3581ba'
 
+    def self.formatted_name
+      'PyPI'
+    end
+
     def self.project_names
       get_raw("https://pypi.python.org/simple/").scan(/href='(\w+)'/).flatten
     end
