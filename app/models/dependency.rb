@@ -17,6 +17,8 @@ class Dependency < ActiveRecord::Base
       'Rubygems'
     when 'cocoapodslockfile'
       'CocoaPods'
+    when 'nugetlockfile'
+      'NuGet'
     when 'packagistlockfile'
       'Packagist'
     when 'gemspec'

@@ -191,6 +191,8 @@ module ApplicationHelper
       'rubygems'
     when 'cocoapodslockfile'
       'cocoapods'
+    when 'nugetlockfile'
+      'nuget'
     when 'packagistlockfile'
       'packagist'
     when 'gemspec'
