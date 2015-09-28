@@ -25,10 +25,6 @@ namespace :download do
     Repositories::Bower.import_new
   end
 
-  task bower_all: :environment do
-    Repositories::Bower.import
-  end
-
   task cargo: :environment do
     Repositories::Cargo.import
   end
