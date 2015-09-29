@@ -27,7 +27,7 @@ class ProjectsController < ApplicationController
     end
 
     @languages = Project.bus_factor.group('language').order('language').pluck('language').compact
-    @projects = scope.bus_factor.order('github_repositories.github_contributions_count ASC, projects.dependents_count DESC, github_repositories.stargazers_count DESC').paginate(page: params[:page])
+    @projects = scope.bus_factor.order('github_repositories.github_contributions_count ASC, projects.dependents_count DESC').paginate(page: params[:page])
   end
 
   def show

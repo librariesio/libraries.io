@@ -43,7 +43,8 @@ class Project < ActiveRecord::Base
   scope :most_dependents, -> { with_dependents.order('dependents_count DESC') }
 
   scope :bus_factor, -> { joins(:github_repository)
-                         .where('github_repositories.github_contributions_count < 4')
+                         .where('projects.dependents_count > 25')
+                         .where('github_repositories.github_contributions_count < 6')
                          .where('github_repositories.github_contributions_count > 0')
                          .where('github_repositories.stargazers_count > 0')
                           }
