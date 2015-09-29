@@ -1,6 +1,6 @@
 <% title "#{@github_repository.full_name} on GitHub - Libraries" %>
 <% description @github_repository.description %>
-<% cache_if(logged_out?, [@github_repository, 'show', 'v1']) do %>
+<% cache_if(logged_out?, [@github_repository, 'show', 'v1'], :expires_in => 1.week) do %>
   <% repo = @github_repository %>
   <div class="row">
     <div class='col-md-8'>

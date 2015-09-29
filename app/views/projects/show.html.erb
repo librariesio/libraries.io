@@ -6,7 +6,7 @@
   <% content_for :atom, auto_discovery_link_tag(:atom, project_tags_url({format: "atom"}.merge(@project.to_param))) %>
 <% end %>
 
-<% cache_if(logged_out?, [@project, @version, 'projects:show', 'v1']) do %>
+<% cache_if(logged_out?, [@project, @version, 'projects:show', 'v1'], :expires_in => 1.week) do %>
 <div class="row">
   <div class='col-md-8'>
     <h1>
