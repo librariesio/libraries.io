@@ -59,7 +59,6 @@ gem 'js-cookie-rails'
 gem 'postgres_ext'
 gem 'foreman', require: false
 gem 'puma'
-gem 'rack-mini-profiler', require: false
 gem 'rack-timeout'
 
 group :development do

@@ -7,12 +7,6 @@ class ApplicationController < ActionController::Base
 
   before_filter :welcome_new_users
 
-  before_action do
-    if current_user && current_user.admin?
-      Rack::MiniProfiler.authorize_request
-    end
-  end
-
   private
 
   def welcome_new_users
