@@ -1,5 +1,5 @@
 class GithubTag < ActiveRecord::Base
-  belongs_to :github_repository
+  belongs_to :github_repository, touch: true
   validates_presence_of :name, :sha, :github_repository
 
   scope :published, -> { where('published_at IS NOT NULL') }
