@@ -1,245 +1,247 @@
 <% title "#{@github_repository.full_name} on GitHub - Libraries" %>
 <% description @github_repository.description %>
-<% repo = @github_repository %>
-<div class="row">
-  <div class='col-md-8'>
-    <h1>
-      <%= link_to image_tag(repo.avatar_url, width: 50, height: 50, alt: repo), user_path(repo.owner_name) %>
-      <%= repo %>
-      <%= link_to fa_icon('github'), repo.url, class: 'tip', title: "View #{repo} on GitHub" %>
-    </h1>
-    <% if repo.fork? %>
-      <small>
-        Forked from
-        <%= link_to repo.source_name, source_path(repo) %>
-      </small>
-    <% end %>
-  </div>
-  <div class="col-md-4">
-    <% if current_user && current_user.can_monitor?(repo) %>
-      <p>
-        <br>
-      <% if current_user.subscribed_to_repo?(repo) %>
-        <%= button_to unwatch_path(repo.id), method: :post, class: 'tip btn btn-success pull-right', title: 'Stop watching' do %>
-          <%= fa_icon('check') %>
-          Monitoring dependencies
-        <% end %>
-      <% else %>
-        <%= button_to watch_path(repo.id), method: :post, class: 'btn btn-primary btn-default  pull-right tip', title: 'Automatically watch every dependency of this project' do %>
-          <%= fa_icon('eye') %>
-          Monitor dependencies
-        <% end %>
+<% cache_if(logged_out?, [@github_repository, 'show', 'v1']) do %>
+  <% repo = @github_repository %>
+  <div class="row">
+    <div class='col-md-8'>
+      <h1>
+        <%= link_to image_tag(repo.avatar_url, width: 50, height: 50, alt: repo), user_path(repo.owner_name) %>
+        <%= repo %>
+        <%= link_to fa_icon('github'), repo.url, class: 'tip', title: "View #{repo} on GitHub" %>
+      </h1>
+      <% if repo.fork? %>
+        <small>
+          Forked from
+          <%= link_to repo.source_name, source_path(repo) %>
+        </small>
       <% end %>
-    </p>
-    <% end %>
-  </div>
-</div>
-<hr>
-<div class='row'>
-  <div class='col-md-8'>
-    <p>
-      <%= emojify repo.description %>
-    </p>
-    <% if repo.homepage.present? %>
-      <p>
-        <%= link_to repo.homepage, sanitize_url(repo.homepage) %>
-      </p>
-    <% end %>
-    <% if repo.license.present? %>
-      <p>
-        License: <%= link_to format_license(repo.license), license_path(repo.license) %>
-      </p>
-    <% end %>
-    <% if repo.language.present? %>
-    <p>
-      Language: <%= link_to repo.language, language_path(repo.language) %>
-    </p>
-    <% end %>
-    <% if repo.mirror_url.present? %>
-    <p>
-      Mirror of <%= repo.mirror_url %>
-    </p>
-    <% end %>
-    <% if repo.readme.present? %>
-      <hr>
-      <%== repo.readme %>
-    <% end %>
-
-    <% if repo.manifests.latest.length > 0 %>
-      <hr>
-      <div id="dependencies">
-        <h4>Dependencies</h4>
-        <% repo.manifests.limit(20).latest.each do |manifest| %>
-          <% deps = manifest.repository_dependencies.limit(500).order(:project_name).includes(:project) %>
-          <% if deps.length > 0 %>
-            <table class='table table-hover table-condensed'>
-              <thead>
-                <th>
-                  <%= link_to manifest.path, manifest.github_link %>
-                </th>
-                <th>
-                  Requirements
-                </th>
-                <th>
-                  Latest Release
-                </th>
-                <th>
-                  Licenses
-                </th>
-              </thead>
-              <% deps.each do |dependency| %>
-                <tr>
-                  <td>
-                    <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
-                  </td>
-                  <td>
-                    <%= dependency.requirements %>
-                  </td>
-                  <td>
-                    <%= dependency.try(:project).try(:latest_release_number) %>
-                  </td>
-                  <td>
-                    <% if dependency.project %>
-                      <%= linked_licenses dependency.project.normalized_licenses %>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            </table>
+    </div>
+    <div class="col-md-4">
+      <% if current_user && current_user.can_monitor?(repo) %>
+        <p>
+          <br>
+        <% if current_user.subscribed_to_repo?(repo) %>
+          <%= button_to unwatch_path(repo.id), method: :post, class: 'tip btn btn-success pull-right', title: 'Stop watching' do %>
+            <%= fa_icon('check') %>
+            Monitoring dependencies
+          <% end %>
+        <% else %>
+          <%= button_to watch_path(repo.id), method: :post, class: 'btn btn-primary btn-default  pull-right tip', title: 'Automatically watch every dependency of this project' do %>
+            <%= fa_icon('eye') %>
+            Monitor dependencies
           <% end %>
         <% end %>
-      </div>
-    <% end %>
+      </p>
+      <% end %>
+    </div>
   </div>
-  <div class='col-md-4'>
-    <h4>Project Statistics</h4>
-    <table class='table table-striped'>
-      <tr>
-        <td>
-          Size
-        </td>
-        <td>
-          <strong><%= number_to_human_size repo.size*1000 %></strong>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Stars
-        </td>
-        <td>
-          <strong><%= link_to number_with_delimiter(repo.stargazers_count || 0), repo.stargazers_url %></strong>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Forks
-        </td>
-        <td>
-          <strong><%= link_to number_with_delimiter(repo.forks_count || 0), repo.forks_url %></strong>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Watchers
-        </td>
-        <td>
-          <strong><%= link_to number_with_delimiter(repo.subscribers_count || 0), repo.watchers_url %></strong>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Open issues
-        </td>
-        <td>
-          <strong><%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count || 0), repo.issues_url) : 'disabled'  %></strong>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Dependencies
-        </td>
-        <td>
-          <strong><%= number_with_delimiter repo.repository_dependencies.count %></strong>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Contributors
-        </td>
-        <td>
-          <strong><%= link_to number_with_delimiter(repo.contributors.count), repo.contributors_url  %></strong>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Tags
-        </td>
-        <td>
-          <strong><%= link_to number_with_delimiter(repo.github_tags.count), repo.tags_url  %></strong>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Created
-        </td>
-        <td>
-          <strong><%= time_ago_in_words repo.created_at %> ago</strong>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Last updated
-        </td>
-        <td>
-          <strong><%= time_ago_in_words repo.updated_at %> ago</strong>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Last pushed
-        </td>
-        <td>
-          <strong><%= repo.pushed_at.present? ? time_ago_in_words(repo.pushed_at) : 'Never'  %> ago</strong>
-        </td>
-      </tr>
-    </table>
+  <hr>
+  <div class='row'>
+    <div class='col-md-8'>
+      <p>
+        <%= emojify repo.description %>
+      </p>
+      <% if repo.homepage.present? %>
+        <p>
+          <%= link_to repo.homepage, sanitize_url(repo.homepage) %>
+        </p>
+      <% end %>
+      <% if repo.license.present? %>
+        <p>
+          License: <%= link_to format_license(repo.license), license_path(repo.license) %>
+        </p>
+      <% end %>
+      <% if repo.language.present? %>
+      <p>
+        Language: <%= link_to repo.language, language_path(repo.language) %>
+      </p>
+      <% end %>
+      <% if repo.mirror_url.present? %>
+      <p>
+        Mirror of <%= repo.mirror_url %>
+      </p>
+      <% end %>
+      <% if repo.readme.present? %>
+        <hr>
+        <%== repo.readme %>
+      <% end %>
 
-    <% if @contributors.length > 0 %>
-      <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
-      <%= render @contributors %>
-    <% end %>
-
-    <% if @projects.length > 0 %>
-      <div class="row"></div>
-      <hr>
-      <h4>Projects Referencing this Repo</h4>
-      <%= render @projects %>
-    <% end %>
-
-    <% if @forks.length > 0 %>
-      <div class="row"></div>
-      <hr>
-      <h4>
-        Interesting Forks
-        <small><%= link_to 'See all', github_repository_forks_path(@github_repository.owner_name, @github_repository.project_name) %></small>
-      </h4>
-      <%= render @forks %>
-    <% end %>
-
-    <% if repo.github_tags.published.length > 0 %>
-      <div class="row"></div>
-      <hr>
-      <h4>Tags</h4>
-      <ul>
-        <% repo.github_tags.published.limit(100).to_a.sort.each do |tag| %>
-          <li>
-            <%= link_to tag, tag.github_url %>
-            <% if tag.published_at.present? %>
-            - <%= tag.published_at.to_s(:long) %>
+      <% if repo.manifests.latest.length > 0 %>
+        <hr>
+        <div id="dependencies">
+          <h4>Dependencies</h4>
+          <% repo.manifests.limit(20).latest.each do |manifest| %>
+            <% deps = manifest.repository_dependencies.limit(500).order(:project_name).includes(:project) %>
+            <% if deps.length > 0 %>
+              <table class='table table-hover table-condensed'>
+                <thead>
+                  <th>
+                    <%= link_to manifest.path, manifest.github_link %>
+                  </th>
+                  <th>
+                    Requirements
+                  </th>
+                  <th>
+                    Latest Release
+                  </th>
+                  <th>
+                    Licenses
+                  </th>
+                </thead>
+                <% deps.each do |dependency| %>
+                  <tr>
+                    <td>
+                      <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
+                    </td>
+                    <td>
+                      <%= dependency.requirements %>
+                    </td>
+                    <td>
+                      <%= dependency.try(:project).try(:latest_release_number) %>
+                    </td>
+                    <td>
+                      <% if dependency.project %>
+                        <%= linked_licenses dependency.project.normalized_licenses %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </table>
             <% end %>
-          </li>
-        <% end %>
-      </ul>
-    <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div class='col-md-4'>
+      <h4>Project Statistics</h4>
+      <table class='table table-striped'>
+        <tr>
+          <td>
+            Size
+          </td>
+          <td>
+            <strong><%= number_to_human_size repo.size*1000 %></strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Stars
+          </td>
+          <td>
+            <strong><%= link_to number_with_delimiter(repo.stargazers_count || 0), repo.stargazers_url %></strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Forks
+          </td>
+          <td>
+            <strong><%= link_to number_with_delimiter(repo.forks_count || 0), repo.forks_url %></strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Watchers
+          </td>
+          <td>
+            <strong><%= link_to number_with_delimiter(repo.subscribers_count || 0), repo.watchers_url %></strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Open issues
+          </td>
+          <td>
+            <strong><%= repo.has_issues? ? link_to(number_with_delimiter(repo.open_issues_count || 0), repo.issues_url) : 'disabled'  %></strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Dependencies
+          </td>
+          <td>
+            <strong><%= number_with_delimiter repo.repository_dependencies.count %></strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Contributors
+          </td>
+          <td>
+            <strong><%= link_to number_with_delimiter(repo.contributors.count), repo.contributors_url  %></strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Tags
+          </td>
+          <td>
+            <strong><%= link_to number_with_delimiter(repo.github_tags.count), repo.tags_url  %></strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Created
+          </td>
+          <td>
+            <strong><%= time_ago_in_words repo.created_at %> ago</strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Last updated
+          </td>
+          <td>
+            <strong><%= time_ago_in_words repo.updated_at %> ago</strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Last pushed
+          </td>
+          <td>
+            <strong><%= repo.pushed_at.present? ? time_ago_in_words(repo.pushed_at) : 'Never'  %> ago</strong>
+          </td>
+        </tr>
+      </table>
+
+      <% if @contributors.length > 0 %>
+        <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
+        <%= render @contributors %>
+      <% end %>
+
+      <% if @projects.length > 0 %>
+        <div class="row"></div>
+        <hr>
+        <h4>Projects Referencing this Repo</h4>
+        <%= render @projects %>
+      <% end %>
+
+      <% if @forks.length > 0 %>
+        <div class="row"></div>
+        <hr>
+        <h4>
+          Interesting Forks
+          <small><%= link_to 'See all', github_repository_forks_path(@github_repository.owner_name, @github_repository.project_name) %></small>
+        </h4>
+        <%= render @forks %>
+      <% end %>
+
+      <% if repo.github_tags.published.length > 0 %>
+        <div class="row"></div>
+        <hr>
+        <h4>Tags</h4>
+        <ul>
+          <% repo.github_tags.published.limit(100).to_a.sort.each do |tag| %>
+            <li>
+              <%= link_to tag, tag.github_url %>
+              <% if tag.published_at.present? %>
+              - <%= tag.published_at.to_s(:long) %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
   </div>
-</div>
+<% end %>
