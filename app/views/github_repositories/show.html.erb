@@ -20,7 +20,7 @@
       <% if repo.fork? %>
         <small>
           Forked
-          <% if github_repository.source.present? || github_repository.source_name.present? %>
+          <% if repo.source.present? || repo.source_name.present? %>
             from
             <%= link_to repo.source_name, source_path(repo) %>
           <% end %>
