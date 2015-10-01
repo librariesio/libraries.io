@@ -7,7 +7,7 @@ class GithubHookWorker
     user = User.find_by_uid(sender_id)
     if user.present? && github_repository.present?
       github_repository.download_manifests(user.token)
-      update_all_info_async(user.token)
+      github_repository.update_all_info_async(user.token)
     end
   end
 end
