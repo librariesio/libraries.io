@@ -201,7 +201,7 @@ class GithubRepository < ActiveRecord::Base
     download_manifests(token)
     download_owner
     download_fork_source(token)
-    download_forks_async(token) unless fork?
+    # download_forks_async(token) unless fork?
   end
 
   def download_fork_source(token = nil)
