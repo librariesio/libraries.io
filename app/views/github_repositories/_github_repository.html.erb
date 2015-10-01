@@ -25,7 +25,10 @@
         Published <%= time_ago_in_words github_repository.created_at %> ago
       <% end %> - <%= number_to_human github_repository.stars %> stars
       <% if github_repository.fork? %>
-      - Fork of <%= link_to github_repository.source_name, source_path(github_repository) %>
+      - Fork
+        <% if github_repository.source.present? || github_repository.source_name.present? %>
+        of <%= link_to github_repository.source_name, source_path(github_repository) %>
+        <% end %>
       <% elsif github_repository.forks > 0 %>
         - <%= number_to_human github_repository.forks %> forks
       <% end %>
