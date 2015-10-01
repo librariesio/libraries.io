@@ -10,7 +10,7 @@
         <%= link_to fa_icon('github'), repo.url, class: 'tip', title: "View #{repo} on GitHub" %>
         <%= fa_icon("lock", title: 'This repo is private', class: 'tip') if repo.private? %>
         <% if repo.fork? %>
-          <% if github_repository.source.present? || github_repository.source_name.present? %>
+          <% if repo.source.present? || repo.source_name.present? %>
             <%= link_to fa_icon('code-fork'), source_path(repo), class: 'tip', title: "Forked from #{repo.source_name}" %>
           <% else %>
             <%= fa_icon("code-fork", title: 'This repo is a fork', class: 'tip') %>
