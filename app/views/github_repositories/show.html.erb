@@ -8,6 +8,10 @@
         <%= link_to image_tag(repo.avatar_url, width: 50, height: 50, alt: repo), user_path(repo.owner_name) %>
         <%= repo %>
         <%= link_to fa_icon('github'), repo.url, class: 'tip', title: "View #{repo} on GitHub" %>
+        <%= fa_icon("lock", title: 'This repo is private', class: 'tip') if repo.private? %>
+        <% if repo.fork? %>
+          <%= link_to fa_icon('code-fork'), source_path(repo), class: 'tip', title: "Forked from #{repo.source_name}" %>
+        <% end %>
       </h1>
       <% if repo.fork? %>
         <small>
