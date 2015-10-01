@@ -278,6 +278,6 @@ class Project < ActiveRecord::Base
   end
 
   def subscribed_repos(user)
-    subscriptions.with_repository_subscription.where('repository_subscriptions.user_id = ?', user.id).map(&:github_repository)
+    subscriptions.with_repository_subscription.where('repository_subscriptions.user_id = ?', user.id).map(&:github_repository).uniq
   end
 end
