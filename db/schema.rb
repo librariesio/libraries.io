@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150920185312) do
+ActiveRecord::Schema.define(version: 20151002143305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,7 +76,6 @@ ActiveRecord::Schema.define(version: 20150920185312) do
 
   add_index "github_organisations", ["created_at"], name: "index_github_organisations_on_created_at", using: :btree
   add_index "github_organisations", ["github_id"], name: "index_github_organisations_on_github_id", unique: true, using: :btree
-  add_index "github_organisations", ["login"], name: "index_github_organisations_on_login", using: :btree
 
   create_table "github_repositories", force: :cascade do |t|
     t.string   "full_name"
@@ -142,12 +141,13 @@ ActiveRecord::Schema.define(version: 20150920185312) do
 
   create_table "manifests", force: :cascade do |t|
     t.integer  "github_repository_id"
-    t.string   "name"
-    t.string   "path"
+    t.string   "platform"
+    t.string   "filepath"
     t.string   "sha"
     t.string   "branch"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.string   "kind"
   end
 
   add_index "manifests", ["created_at"], name: "index_manifests_on_created_at", using: :btree
@@ -263,8 +263,8 @@ ActiveRecord::Schema.define(version: 20150920185312) do
     t.datetime "updated_at"
     t.string   "public_repo_token"
     t.string   "private_repo_token"
-    t.boolean  "token_upgrade",      default: false
-    t.boolean  "currently_syncing",  default: false
+    t.boolean  "token_upgrade"
+    t.boolean  "currently_syncing",  default: false, null: false
     t.datetime "last_synced_at"
   end
 

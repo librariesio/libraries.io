@@ -311,7 +311,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_manifests(token = nil)
-    r = Typhoeus::Request.new("http://ci.libraries.io/repos/#{full_name}",
+    r = Typhoeus::Request.new("http://ci.libraries.io/v2/repos/#{full_name}",
       method: :get,
       params: { token: token },
       headers: { 'Accept' => 'application/json' }).run
@@ -327,20 +327,25 @@ class GithubRepository < ActiveRecord::Base
     end
     return if new_manifests.nil?
     new_manifests.each do |m|
-      args = m.slice('name', 'path', 'sha')
+      #args = m.slice('platform','kind','filepath', 'sha')
+      args = {platform: m['platform'], kind: m['type'], filepath: m['filepath'], sha: m['sha']}
+
       if manifests.find_by(args)
         # not much
       else
         manifest = manifests.create(args)
-        m['deps'].each do |dep, requirements|
-          platform = manifest.name
+        m['dependencies'].each do |dep|
+          p [:dep, dep]
+          platform = manifest.platform
+
           project = Project.platform(platform).find_by_name(dep)
+
           manifest.repository_dependencies.create({
             project_id: project.try(:id),
-            project_name: dep,
+            project_name: dep['name'],
             platform: platform,
-            requirements: requirements,
-            kind: 'normal'
+            requirements: dep['version'],
+            kind: dep['type']
           })
         end
       end
