@@ -2,7 +2,7 @@ class Repositories
   class Clojars < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    LIBRARIAN_PLANNED = true
+    LIBRARIAN_SUPPORT = true
     URL = 'https://clojars.org'
     COLOR = '#db5855'
 
