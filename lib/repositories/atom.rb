@@ -30,10 +30,12 @@ class Repositories
     end
 
     def self.mapping(project)
+      metadata = project['metadata']
+      repo = metadata['repository'].is_a?(Hash) ? metadata['repository']['url'] : metadata['repository']
       {
         :name => project['name'],
-        :description => project['metadata']['description'],
-        :repository_url => project['metadata']['repository']
+        :description => metadata['description'],
+        :repository_url => repo
       }
     end
 
