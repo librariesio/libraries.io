@@ -7,7 +7,7 @@ class Repositories
     COLOR = '#db5855'
 
     def self.project_names
-      projects.keys
+      @names ||= get("http://clojars-json.herokuapp.com/packages.json").keys
     end
 
     def self.projects
