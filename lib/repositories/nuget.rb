@@ -1,7 +1,7 @@
 class Repositories
   class NuGet < Base
     HAS_VERSIONS = true
-    HAS_DEPENDENCIES = false
+    HAS_DEPENDENCIES = true
     LIBRARIAN_SUPPORT = true
     URL = 'https://www.nuget.org'
     COLOR = '#178600'
@@ -66,6 +66,59 @@ class Repositories
           published_at: item['catalogEntry']['published']
         }
       end
+    end
+
+    def self.dependencies(name, version)
+      versions = get_json("https://api.nuget.org/v3/registration1/#{name.downcase}/index.json")
+      all_versions = versions['items'].first['items']
+      current_version = all_versions.find{|v| v['catalogEntry']['version'] == version }
+      dep_groups = current_version['catalogEntry']['dependencyGroups'] || []
+
+      deps = dep_groups.map do |dep_group|
+        dep_group["dependencies"].map do |dependency|
+          {
+            name: dependency['id'],
+            requirements: parse_requirements(dependency['range'])
+          }
+        end
+      end.flatten.compact
+
+      deps.map do |dep|
+        {
+          project_name: dep[:name],
+          requirements: dep[:requirements],
+          kind: 'normal',
+          optional: false,
+          platform: self.name.demodulize
+        }
+      end
+    end
+
+    def self.parse_requirements(range)
+      parts = range[1..-2].split(',')
+      requirements = []
+      low_bound = range[0]
+      high_bound = range[-1]
+      low_number = parts[0].strip
+      high_number = parts[1].try(:strip)
+
+      # lowest
+      low_sign = low_bound == '[' ? '>=' : '>'
+      high_sign = high_bound == ']' ? '<=' : '<'
+
+      # highest
+      if high_number
+        if high_number != low_number
+          requirements << "#{low_sign} #{low_number}" if low_number.present?
+          requirements << "#{high_sign} #{high_number}" if high_number.present?
+        elsif high_number == low_number
+          requirements << "= #{high_number}"
+        end
+      else
+        requirements << "#{low_sign} #{low_number}" if low_number.present?
+      end
+      requirements << '>= 0' if requirements.empty?
+      requirements.join(' ')
     end
   end
 end
