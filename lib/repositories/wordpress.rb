@@ -2,7 +2,6 @@ class Repositories
   class Wordpress < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    LIBRARIAN_PLANNED = true
     SECURITY_PLANNED = true
     URL = 'https://wordpress.org/plugins'
     COLOR = '#4F5D95'
