@@ -3,8 +3,8 @@ class Admin::StatsController < Admin::ApplicationController
 
   def index
     @recent_users = User.order('created_at DESC').limit(19)
-    @recent_subscriptions = Subscription.where(repository_subscription_id: nil).order('created_at DESC').limit(15)
-    @recent_watches = RepositorySubscription.order('created_at DESC').limit(15)
+    @recent_subscriptions = Subscription.where(repository_subscription_id: nil).order('created_at DESC').limit(7)
+    @recent_watches = RepositorySubscription.order('created_at DESC').limit(7)
 
     @new_projects       = stats_for(Project)
     @new_versions       = stats_for(Version)
