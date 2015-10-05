@@ -7,15 +7,23 @@ class Repositories
     COLOR = '#178600'
 
     def self.load_names(limit = nil)
-      segment_index = Repositories::NuGet.get_json "http://preview.nuget.org/ver3-ctp1/islatest/segment_index.json"
-      segment_count = limit || segment_index['segmentNumber'].to_i - 1
+      endpoints = name_endpoints
+      segment_count = limit || endpoints.length - 1
 
-      (0..segment_count).to_a.reverse.each do |number|
-        page = Repositories::NuGet.get_json "http://nugetprod0.blob.core.windows.net/ver3-ctp1/islatest/segment_#{number}.json"
-        package_ids = page['entry'].map{|entry| entry['id'] }
+      endpoints.reverse[0..segment_count].each do |endpoint|
+        p endpoint
+        package_ids = get_names(endpoint)
         package_ids.each { |id| REDIS.sadd 'nuget-names', id }
       end
       puts "Loaded all the names"
+    end
+
+    def self.name_endpoints
+      get('https://api.nuget.org/v3/catalog0/index.json')['items'].map{|i| i['@id']}
+    end
+
+    def self.get_names(endpoint)
+      get(endpoint)['items'].map{|i| i["nuget:id"]}
     end
 
     def self.project_names
@@ -31,7 +39,7 @@ class Repositories
     end
 
     def self.mapping(project)
-      latest_version = get_json("https://az320820.vo.msecnd.net/registrations-0/#{project[:name].downcase}/index.json")
+      latest_version = get_json("https://api.nuget.org/v3/registration1/#{project[:name].downcase}/index.json")
       item = latest_version['items'].first['items'].first['catalogEntry']
 
       {
@@ -48,7 +56,7 @@ class Repositories
     end
 
     def self.versions(project)
-      latest_version = get_json("https://az320820.vo.msecnd.net/registrations-0/#{project[:name].downcase}/index.json")
+      latest_version = get_json("https://api.nuget.org/v3/registration1/#{project[:name].downcase}/index.json")
       latest_version['items'].first['items'].map do |item|
         {
           number: item['catalogEntry']['version'],
