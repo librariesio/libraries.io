@@ -11,11 +11,21 @@ class Repositories
     end
 
     def self.projects
-      @projects ||= get("http://clojars-json.herokuapp.com/feed.json")
+      @projects ||= begin
+        projs = {}
+        get("http://clojars-json.herokuapp.com/feed.json").each do |k,v|
+          v.each do |proj|
+            group = proj['group-id']
+            key = (group == k ? k : "#{group}/#{k}")
+            projs[key] = proj
+          end
+        end
+        projs
+      end
     end
 
     def self.project(name)
-      projects[name.downcase].try(:first).merge(name: name)
+      projects[name.downcase].merge(name: name)
     end
 
     def self.mapping(project)
@@ -30,7 +40,7 @@ class Repositories
     def self.versions(project)
       project['versions'].map do |v|
         {
-          :number => v['version']
+          :number => v
         }
       end
     end
