@@ -29,9 +29,8 @@ class Repositories
     end
 
     def self.mapping(project)
-      name = project[:name] == project["group-id"] ? project[:name] : "#{project["group-id"]}/#{project[:name]}"
       {
-        :name => name,
+        :name => project[:name],
         :description => project["description"],
         :repository_url => repo_fallback(project["scm"]["url"], '')
       }
