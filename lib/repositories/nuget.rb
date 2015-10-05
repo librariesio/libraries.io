@@ -11,11 +11,14 @@ class Repositories
       segment_count = limit || endpoints.length - 1
 
       endpoints.reverse[0..segment_count].each do |endpoint|
-        p endpoint
         package_ids = get_names(endpoint)
         package_ids.each { |id| REDIS.sadd 'nuget-names', id }
       end
       puts "Loaded all the names"
+    end
+
+    def self.recent_names
+      name_endpoints.reverse[0..2].map{|url| get_names(url) }.flatten.uniq
     end
 
     def self.name_endpoints

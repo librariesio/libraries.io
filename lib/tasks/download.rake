@@ -108,6 +108,11 @@ namespace :download do
   end
 
   task nuget: :environment do
+    Repositories::NuGet.load_names(5)
+    Repositories::NuGet.import_recent
+  end
+
+  task nuget_all: :environment do
     Repositories::NuGet.load_names
     Repositories::NuGet.import
   end
