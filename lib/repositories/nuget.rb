@@ -43,7 +43,7 @@ class Repositories
 
     def self.mapping(project)
       latest_version = get_json("https://api.nuget.org/v3/registration1/#{project[:name].downcase}/index.json")
-      item = latest_version['items'].first['items'].first['catalogEntry']
+      item = latest_version['items'].last['items'].last['catalogEntry']
 
       {
         name: project[:name],
