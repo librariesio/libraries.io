@@ -11,6 +11,7 @@ class GithubTag < ActiveRecord::Base
   end
 
   def send_notifications_async
+    return if published_at && published_at < 1.week.ago
     TagNotificationsWorker.perform_async(self.id) if has_projects?
   end
 
