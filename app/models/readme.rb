@@ -1,5 +1,5 @@
 class Readme < ActiveRecord::Base
-  belongs_to :github_repository
+  belongs_to :github_repository, touch: true
   validates_presence_of :html_body, :github_repository
 
   after_validation :reformat
