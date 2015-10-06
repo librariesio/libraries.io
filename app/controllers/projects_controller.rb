@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
     if current_user
       muted_ids = params[:include_muted].present? ? [] : current_user.muted_project_ids
       @versions = current_user.all_subscribed_versions.where.not(project_id: muted_ids).where.not(published_at: nil).newest_first.includes(:project).paginate(per_page: 20, page: params[:page])
-      @projects = current_user.recommended_projects.limit(10)
+      @projects = current_user.recommended_projects.limit(7)
       render 'dashboard/home'
     else
       facets = Project.facets(:facet_limit => 30)
