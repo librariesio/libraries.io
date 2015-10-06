@@ -228,6 +228,7 @@ class GithubRepository < ActiveRecord::Base
     return nil unless url.match(github_regex)
     url = url.gsub(github_regex, '').strip
     url = url.gsub(/(\.git|\/)$/i, '')
+    url = url.gsub(/(#\S*)$/i, '')
     url = url.gsub(' ', '')
     url = url.gsub(/^scm:git:/, '')
     url = url.split('/').reject(&:blank?)[0..1]
