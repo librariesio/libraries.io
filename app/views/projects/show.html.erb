@@ -141,6 +141,10 @@
                   <% dependent_repos.each do |repo| %>
                   <li>
                     <%= link_to repo.full_name, github_repository_path(repo.owner_name, repo.project_name) %>
+                    <small>
+                      <%= fa_icon("lock") if repo.private? %>
+                      <%= fa_icon("code-fork") if repo.fork? %>
+                    </small>
                   </li>
                   <% end %>
                 </ul>
@@ -172,7 +176,11 @@
             <ul>
               <% your_dependent_repos.limit(10).each do |repo| %>
                 <li>
-                <%= link_to repo.full_name, github_repository_path(repo.owner_name, repo.project_name) %>
+                  <%= link_to repo.full_name, github_repository_path(repo.owner_name, repo.project_name) %>
+                  <small>
+                    <%= fa_icon("lock") if repo.private? %>
+                    <%= fa_icon("code-fork") if repo.fork? %>
+                  </small>
                 </li>
               <% end %>
             </ul>
