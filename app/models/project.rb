@@ -26,6 +26,9 @@ class Project < ActiveRecord::Base
   scope :with_repo, -> { joins(:github_repository).where('github_repositories.id IS NOT NULL') }
   scope :without_repo, -> { where(github_repository_id: nil) }
 
+  scope :with_license, -> { where("licenses <> ''") }
+  scope :without_license, -> { where("licenses IS ? OR licenses = ''", nil) }
+
   scope :with_versions, -> { where('versions_count > 0') }
   scope :without_versions, -> { where('versions_count < 1') }
   scope :few_versions, -> { where('versions_count < 2') }

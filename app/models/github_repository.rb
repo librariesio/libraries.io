@@ -33,6 +33,10 @@ class GithubRepository < ActiveRecord::Base
   scope :from_org, lambda{ |org_id|  where(github_organisation_id: org_id) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {github_repository_id: nil}) }
 
+  scope :with_license, -> { where("license <> ''") }
+  scope :without_license, -> {where("license IS ? OR license = ''", nil)}
+
+
   scope :interesting, -> { where('github_repositories.stargazers_count > 0').order('github_repositories.stargazers_count DESC, github_repositories.pushed_at DESC') }
 
   def self.language(language)
