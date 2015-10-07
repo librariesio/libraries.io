@@ -248,7 +248,7 @@ class GithubRepository < ActiveRecord::Base
     contributions.each do |c|
       return unless c['id']
 
-      unless cont = existing_github_contributions.find{|c| c.github_user.github_id = c.id }
+      unless cont = existing_github_contributions.find{|c| c.github_user.try(:github_id) == c.id }
         user = GithubUser.find_or_create_by(github_id: c.id) do |u|
           u.login = c.login
           u.user_type = c.type
