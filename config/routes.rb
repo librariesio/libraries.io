@@ -55,7 +55,7 @@ Rails.application.routes.draw do
   get '/stats', to: redirect('/admin/stats')
 
   get 'bus-factor', to: 'projects#bus_factor', as: :bus_factor
-  get 'unlicensed', to: 'projects#unlicensed', as: :unlicensed
+  get '/unlicensed-libraries', to: 'projects#unlicensed', as: :unlicensed
 
   get '/platforms', to: 'platforms#index', as: :platforms
 

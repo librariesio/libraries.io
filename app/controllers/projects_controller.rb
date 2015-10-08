@@ -31,8 +31,16 @@ class ProjectsController < ApplicationController
   end
 
   def unlicensed
-    @languages = Project.unlicensed.group('language').order('language').pluck('language').compact
-    @projects = Project.unlicensed.order('rank DESC').paginate(page: params[:page])
+    if params[:platform].present?
+      find_platform(:platform)
+      raise ActiveRecord::RecordNotFound if @platform_name.nil?
+      scope = Project.platform(@platform_name)
+    else
+      scope = Project
+    end
+
+    @platforms = Project.unlicensed.group('platform').order('platform').pluck('platform').compact
+    @projects = scope.unlicensed.order('rank DESC').paginate(page: params[:page])
   end
 
   def show

@@ -1,6 +1,6 @@
-<% title "Unlicensed Libraries - Libraries" %>
+<% title "Libraries without licenses - Libraries" %>
 <div class="row">
-  <h1><i class="fa fa-copyright"></i> Unlicensed Libraries</h1>
+  <h1><i class="fa fa-copyright"></i> Libraries without licenses</h1>
 </div>
 <hr>
 
@@ -8,35 +8,18 @@
   <div class="col-md-8">
     <% @projects.each do |project| %>
       <div class="row">
-        <div class='project col-xs-8' style="border-color: <%= project.color %>;">
-          <h5>
-            <%= link_to project.name, project_path(project.to_param) %>
-            <small><%= project.latest_version %></small>
-          </h5>
-
-          <div class="">
-            <%= truncate project.description, :length => 100 %>
-          </div>
-
-          <small>
-            <%= link_to project.platform_name, platform_path(project.platform.downcase) %> -
-            <% if project.language.present? && project.language != project.platform %>
-              <%= link_to project.language, language_path(project.language) %> -
-            <% end %>
-            <% if project.normalized_licenses.present? %>
-              <%= linked_licenses project.normalized_licenses %> -
-            <% end %>
-            <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
-            <%= time_ago_in_words project.latest_release_published_at %> ago
-            <% if project.stars > 0 %>
-             - <%= number_to_human project.stars %> stars
-            <% end %>
-          </small>
+        <div class='col-xs-8'>
+          <%= render project %>
         </div>
         <div class="col-xs-4">
           <br>
           <%= link_to project.github_repository.try(:url), class: 'btn btn-primary', target: :blank do %>
-          Contribute<span class='hidden-xs'> on GitHub</span>
+          Sugget a License
+          <% end %>
+          <% if current_user && current_user.admin? %>
+            <%= link_to admin_project_path(project.id), class: 'btn' do %>
+              <%= fa_icon 'gear' %>
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -46,34 +29,34 @@
   <div class="col-md-4">
     <h3>
       <strong>
-        What's the bus factor?
+        What's the deal with licenses?
       </strong>
     </h3>
     <p>
-      The <%= link_to 'Bus factor', 'https://en.wikipedia.org/wiki/Bus_factor', target: :blank %> is the number of key developers who would need to be incapacitated to make a project unable to proceed.
+      Over <strong>30%</strong> of all open source libraries published aren't licensed correctly, by using a library in your code that doesn't have a license you could be in breach of copyright.
     </p>
     <p>
-      This page shows libraries that are depended upon by many other libraries but have only ever had a handful of contributors commit to the project.
+      Code without an explicit license is protected by copyright and is by default All Rights Reserved. The person or people who wrote the code are protected as such. Any time you're using software you didn't write, licensing should be considered and abided.
     </p>
     <p>
-      You can help out by reviewing the code for these projects, helping out with open issues and pull requests and lending the maintainers a helping hand if required.
+      This is a list of the most popular/important libraries that we couldn't find a license for, you can help the community by encouraging the authors to add a <code>LICENSE</code> file to their repositories.
     </p>
     <p>
-      <em>This is an experiment based on GitHub contributions and available dependency data from package manager repositories that make it easily available.</em>
+      Find out more about open source licensing at <%= link_to 'ChooseALicense.com','http://choosealicense.com/', target: :blank %>
     </p>
     <h3>
       <strong>
-        Filter by language
+        Filter by package manager
       </strong>
     </h3>
     <div class="facets">
       <ul class='filter'>
-        <% @languages.each do |language| %>
-          <li class='<%= 'active' if language.downcase == params[:language].try(:downcase) %>'>
-            <% if language.downcase == params[:language].try(:downcase) %>
-              <%= link_to language, bus_factor_path(language: nil) %>
+        <% @platforms.each do |platform| %>
+          <li class='<%= 'active' if platform.downcase == params[:platform].try(:downcase) %>'>
+            <% if platform.downcase == params[:platform].try(:downcase) %>
+              <%= link_to platform, unlicensed_path(platform: nil) %>
             <% else %>
-              <%= link_to language, bus_factor_path(language: language) %>
+              <%= link_to platform, unlicensed_path(platform: platform) %>
             <% end %>
           </li>
         <% end %>

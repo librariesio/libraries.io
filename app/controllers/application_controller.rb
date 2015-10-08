@@ -42,8 +42,8 @@ class ApplicationController < ActionController::Base
     !logged_in?
   end
 
-  def find_platform
-    @platform = Download.platforms.find{|p| p.to_s.demodulize.downcase == params[:id].downcase }
+  def find_platform(param = :id)
+    @platform = Download.platforms.find{|p| p.to_s.demodulize.downcase == params[param].downcase }
     raise ActiveRecord::RecordNotFound if @platform.nil?
     @platform_name = @platform.to_s.demodulize
   end
