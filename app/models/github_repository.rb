@@ -26,6 +26,8 @@ class GithubRepository < ActiveRecord::Base
 
   scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
+  scope :without_projects, -> { includes(:projects).where(projects: { github_repository_id: nil }) }
+  scope :without_subscriptons, -> { includes(:repository_subscriptions).where(repository_subscriptions: { github_repository_id: nil }) }
   scope :with_manifests, -> { joins(:manifests) }
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
