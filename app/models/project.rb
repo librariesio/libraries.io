@@ -28,6 +28,7 @@ class Project < ActiveRecord::Base
 
   scope :with_license, -> { where("licenses <> ''") }
   scope :without_license, -> { where("licenses IS ? OR licenses = ''", nil) }
+  scope :unlicensed, -> { without_license.with_repo.where("github_repositories.license IS ? OR github_repositories.license = ''", nil) }
 
   scope :with_versions, -> { where('versions_count > 0') }
   scope :without_versions, -> { where('versions_count < 1') }

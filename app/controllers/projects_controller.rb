@@ -30,6 +30,11 @@ class ProjectsController < ApplicationController
     @projects = scope.bus_factor.order('github_repositories.github_contributions_count ASC, projects.dependents_count DESC').paginate(page: params[:page])
   end
 
+  def unlicensed
+    @languages = Project.unlicensed.group('language').order('language').pluck('language').compact
+    @projects = Project.unlicensed.order('rank DESC').paginate(page: params[:page])
+  end
+
   def show
     find_project
     if incorrect_case?
