@@ -7,13 +7,13 @@ class GithubRepository < ActiveRecord::Base
    :subscribers_count, :private]
 
   has_many :projects
-  has_many :github_contributions, dependent: :delete
+  has_many :github_contributions, dependent: :destroy
   has_many :contributors, through: :github_contributions, source: :github_user
-  has_many :github_tags, dependent: :delete
+  has_many :github_tags, dependent: :destroy
   has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :repository_subscriptions
-  has_one :readme, dependent: :delete
+  has_one :readme, dependent: :destroy
   belongs_to :github_organisation#, touch: true
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id#, touch: true
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
