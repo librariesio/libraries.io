@@ -1,6 +1,6 @@
 class Manifest < ActiveRecord::Base
   belongs_to :github_repository
-  has_many :repository_dependencies, dependent: :delete_all
+  has_many :repository_dependencies, dependent: :delete
 
   scope :latest, -> { order("manifests.path, manifests.created_at DESC").select("DISTINCT on (manifests.path) *") }
 

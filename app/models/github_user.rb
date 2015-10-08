@@ -1,5 +1,5 @@
 class GithubUser < ActiveRecord::Base
-  has_many :github_contributions, dependent: :delete_all
+  has_many :github_contributions, dependent: :delete
   has_many :github_repositories, primary_key: :github_id, foreign_key: :owner_id
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
   has_many :dependencies, through: :source_github_repositories
