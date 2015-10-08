@@ -6,6 +6,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   def update
     @project = Project.find(params[:id])
     if @project.update_attributes(project_params)
+      @project.normalize_licenses
       @project.update_github_repo_async
       redirect_to project_path(@project.to_param)
     else
@@ -28,6 +29,6 @@ class Admin::ProjectsController < Admin::ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:repository_url)
+    params.require(:project).permit(:repository_url, :licenses)
   end
 end
