@@ -15,7 +15,7 @@
         <div class="col-xs-4">
           <br>
           <%= link_to project.github_repository.try(:url), class: 'btn btn-primary', target: :blank do %>
-          Sugget a License
+          Suggest a License
           <% end %>
           <% if current_user && current_user.admin? %>
             <%= link_to admin_project_path(project.id), class: 'btn' do %>
