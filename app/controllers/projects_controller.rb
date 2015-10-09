@@ -27,7 +27,7 @@ class ProjectsController < ApplicationController
     end
 
     @languages = Project.bus_factor.group('language').order('language').pluck('language').compact
-    @projects = scope.bus_factor.order('github_repositories.github_contributions_count ASC, projects.dependents_count DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+    @projects = scope.bus_factor.includes(:github_repository).order('github_repositories.github_contributions_count ASC, projects.dependents_count DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
   end
 
   def unlicensed
@@ -40,7 +40,7 @@ class ProjectsController < ApplicationController
     end
 
     @platforms = Project.unlicensed.group('platform').order('platform').pluck('platform').compact
-    @projects = scope.unlicensed.order('rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+    @projects = scope.unlicensed.includes(:github_repository).order('rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
   end
 
   def show
