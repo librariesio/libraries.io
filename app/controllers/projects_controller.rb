@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
     if current_user
       muted_ids = params[:include_muted].present? ? [] : current_user.muted_project_ids
       @versions = current_user.all_subscribed_versions.where.not(project_id: muted_ids).where.not(published_at: nil).newest_first.includes(:project).paginate(per_page: 20, page: params[:page])
-      @projects = current_user.recommended_projects.limit(10)
+      @projects = current_user.recommended_projects.limit(7)
       render 'dashboard/home'
     else
       facets = Project.facets(:facet_limit => 30)
@@ -27,7 +27,20 @@ class ProjectsController < ApplicationController
     end
 
     @languages = Project.bus_factor.group('language').order('language').pluck('language').compact
-    @projects = scope.bus_factor.order('github_repositories.github_contributions_count ASC, projects.dependents_count DESC').paginate(page: params[:page])
+    @projects = scope.bus_factor.order('github_repositories.github_contributions_count ASC, projects.dependents_count DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+  end
+
+  def unlicensed
+    if params[:platform].present?
+      find_platform(:platform)
+      raise ActiveRecord::RecordNotFound if @platform_name.nil?
+      scope = Project.platform(@platform_name)
+    else
+      scope = Project
+    end
+
+    @platforms = Project.unlicensed.group('platform').order('platform').pluck('platform').compact
+    @projects = scope.unlicensed.order('rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
   end
 
   def show

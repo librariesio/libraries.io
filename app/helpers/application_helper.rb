@@ -189,6 +189,10 @@ module ApplicationHelper
     case platform_string.downcase
     when 'rubygemslockfile'
       'rubygems'
+    when 'cocoapodslockfile'
+      'cocoapods'
+    when 'nugetlockfile', 'nuspec'
+      'nuget'
     when 'packagistlockfile'
       'packagist'
     when 'gemspec'
@@ -205,7 +209,7 @@ module ApplicationHelper
     if github_repository.source.present?
       github_repository_path(github_repository.source.owner_name, github_repository.source.project_name)
     else
-      github_repository.source
+      github_repository.source_url
     end
   end
 

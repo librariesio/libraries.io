@@ -1,12 +1,27 @@
 <div class="row">
   <%= simple_form_for(@project, url: admin_project_path(@project.id), html: { class: 'form-vertical col-md-6' }) do |form| %>
-    <h1>Admin</h1>
-    <h2><%= @project.platform_name %> - <%= link_to @project, project_path(@project.to_param) %> </h2>
+    <h2>
+      Admin / <%= @project.platform_name %> / <%= link_to @project, project_path(@project.to_param) %>
+      <% if @project.github_repository.present? %>
+        <%= link_to fa_icon('github'), @project.github_repository.url, target: :blank %>
+      <% end %>
+    </h2>
     <p>
       <strong>Rank:</strong> <%= @project.rank %>
     </p>
+    <p>
+      <strong>Subscribers:</strong> <%= @project.subscriptions.count %>
+    </p>
 
     <%= form.input :repository_url %>
+    <%= form.input :licenses %>
+
+    <p>
+      <small>
+        <%= Project.popular_licenses(:facet_limit => 15).map{|l| format_license(l.term) }.join(', ') %>
+      </small>
+    </p>
+
     <%= form.submit class: 'btn btn-primary' %>
   <% end %>
 </div>

@@ -1,5 +1,7 @@
 <% title "#{github_user_title(@user)} on GitHub - Libraries" %>
 <% description "GitHub repositories created and contributed to by #{github_user_title(@user)}" %>
+
+<% cache([@user, 'users:show', 'v1'], :expires_in => 1.week) do %>
 <div class="row">
   <div class="col-md-6">
     <h1>
@@ -14,9 +16,6 @@
     <% end %>
   </div>
   <div class="col-md-6">
-    <% if logged_in? && current_user.admin? %>
-      <%= link_to 'Sync', sync_admin_user_path(@user), class: 'btn btn-danger pull-right', method: :post %>
-    <% end %>
     <br>
     <% if @user.blog.present? %>
       <p>
@@ -75,4 +74,5 @@
       <% end %>
     </div>
   </div>
+<% end %>
 <% end %>

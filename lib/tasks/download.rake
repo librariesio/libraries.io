@@ -25,10 +25,6 @@ namespace :download do
     Repositories::Bower.import_new
   end
 
-  task bower_all: :environment do
-    Repositories::Bower.import
-  end
-
   task cargo: :environment do
     Repositories::Cargo.import
   end
@@ -112,6 +108,11 @@ namespace :download do
   end
 
   task nuget: :environment do
+    Repositories::NuGet.load_names(3)
+    Repositories::NuGet.import_recent
+  end
+
+  task nuget_all: :environment do
     Repositories::NuGet.load_names
     Repositories::NuGet.import
   end

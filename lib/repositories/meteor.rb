@@ -2,7 +2,7 @@ class Repositories
   class Meteor < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    LIBRARIAN_PLANNED = true
+    LIBRARIAN_SUPPORT = true
     URL = 'https://atmospherejs.com'
     COLOR = '#f1e05a'
 

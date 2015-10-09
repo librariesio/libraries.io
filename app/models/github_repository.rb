@@ -7,15 +7,15 @@ class GithubRepository < ActiveRecord::Base
    :subscribers_count, :private]
 
   has_many :projects
-  has_many :github_contributions, dependent: :destroy
+  has_many :github_contributions, dependent: :delete_all
   has_many :contributors, through: :github_contributions, source: :github_user
-  has_many :github_tags, dependent: :destroy
+  has_many :github_tags, dependent: :delete_all
   has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :repository_subscriptions
-  has_one :readme, dependent: :destroy
-  belongs_to :github_organisation
-  belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
+  has_one :readme, dependent: :delete
+  belongs_to :github_organisation#, touch: true
+  belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id#, touch: true
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
   has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
 
@@ -26,12 +26,20 @@ class GithubRepository < ActiveRecord::Base
 
   scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
-  scope :with_manifests, -> { joins(:manifests) }
+  scope :without_projects, -> { includes(:projects).where(projects: { github_repository_id: nil }) }
+  scope :without_subscriptons, -> { includes(:repository_subscriptions).where(repository_subscriptions: { github_repository_id: nil }) }
+
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
+
   scope :open_source, -> { where(private: false) }
   scope :from_org, lambda{ |org_id|  where(github_organisation_id: org_id) }
+
+  scope :with_manifests, -> { joins(:manifests) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {github_repository_id: nil}) }
+
+  scope :with_license, -> { where("license <> ''") }
+  scope :without_license, -> {where("license IS ? OR license = ''", nil)}
 
   scope :interesting, -> { where('github_repositories.stargazers_count > 0').order('github_repositories.stargazers_count DESC, github_repositories.pushed_at DESC') }
 
@@ -201,7 +209,7 @@ class GithubRepository < ActiveRecord::Base
     download_manifests(token)
     download_owner
     download_fork_source(token)
-    download_forks_async(token) unless fork?
+    # download_forks_async(token) unless fork?
   end
 
   def download_fork_source(token = nil)
@@ -228,8 +236,13 @@ class GithubRepository < ActiveRecord::Base
     return nil unless url.match(github_regex)
     url = url.gsub(github_regex, '').strip
     url = url.gsub(/(\.git|\/)$/i, '')
+    url = url.gsub(/(#\S*)$/i, '')
+    url = url.gsub(/(\?\S*)$/i, '')
     url = url.gsub(' ', '')
-    url = url.gsub(/^scm:git:/, '')
+    url = url.gsub('>', '').gsub('<', '')
+    url = url.gsub('(', '').gsub(')', '')
+    url = url.gsub('[', '').gsub(']', '')
+    url = url.gsub(/^scm:git:/, '').gsub(/^scm:/, '')
     url = url.split('/').reject(&:blank?)[0..1]
     return nil unless url.length == 2
     url.join('/')
@@ -243,7 +256,7 @@ class GithubRepository < ActiveRecord::Base
     contributions.each do |c|
       return unless c['id']
 
-      unless cont = existing_github_contributions.find{|c| c.github_user.github_id = c.id }
+      unless cont = existing_github_contributions.find{|c| c.github_user.try(:github_id) == c.id }
         user = GithubUser.find_or_create_by(github_id: c.id) do |u|
           u.login = c.login
           u.user_type = c.type

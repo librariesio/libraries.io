@@ -27,6 +27,7 @@ class Version < ActiveRecord::Base
   end
 
   def send_notifications_async
+    return if published_at && published_at < 1.week.ago
     VersionNotificationsWorker.perform_async(self.id)
   end
 

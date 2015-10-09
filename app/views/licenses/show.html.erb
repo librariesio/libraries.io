@@ -3,6 +3,7 @@
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@license.id} Projects") %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(licenses: @license.id, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@license.id} Projects") %>
 
+<% cache([@license.id, 'licenses:show', 'v1'], :expires_in => 1.hour) do %>
 <div class="row">
   <div class="col-md-6">
     <h1>
@@ -112,3 +113,4 @@
     <% end %>
   </div>
 </div>
+<% end %>

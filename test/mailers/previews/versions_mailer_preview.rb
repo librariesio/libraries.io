@@ -9,7 +9,7 @@ class VersionsMailerPreview < ActionMailer::Preview
 
   # Preview this email at http://localhost:3000/rails/mailers/versions_mailer/new_tag
   def new_tag
-    tag = GithubTag.first
+    tag = GithubTag.joins(:github_repository => :projects).first
     repo = tag.github_repository
     project = repo.projects.first
     VersionsMailer.new_version(User.first, project, tag)

@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       end
     end
     get '/stats', to: 'stats#index', as: :stats
+    get '/stats/github', to: 'stats#github', as: :github_stats
   end
 
   get '/pricing', to: 'account_subscriptions#plans', as: :pricing
@@ -58,6 +59,7 @@ Rails.application.routes.draw do
   get '/stats', to: redirect('/admin/stats')
 
   get 'bus-factor', to: 'projects#bus_factor', as: :bus_factor
+  get '/unlicensed-libraries', to: 'projects#unlicensed', as: :unlicensed
 
   get '/platforms', to: 'platforms#index', as: :platforms
 

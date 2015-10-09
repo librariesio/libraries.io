@@ -3,16 +3,19 @@ class Admin::StatsController < Admin::ApplicationController
 
   def index
     @recent_users = User.order('created_at DESC').limit(19)
-    @recent_subscriptions = Subscription.where(repository_subscription_id: nil).order('created_at DESC').limit(15)
-    @recent_watches = RepositorySubscription.order('created_at DESC').limit(15)
+    @recent_subscriptions = Subscription.where(repository_subscription_id: nil).order('created_at DESC').limit(7)
+    @recent_watches = RepositorySubscription.order('created_at DESC').limit(7)
 
     @new_projects       = stats_for(Project)
-    @new_github_users   = stats_for(GithubUser)
+    @new_versions       = stats_for(Version)
     @new_users          = stats_for(User)
     @new_subscriptions  = stats_for(Subscription)
-    @new_versions       = stats_for(Version)
-    @new_manifests      = stats_for(Manifest)
     @new_repo_subs      = stats_for(RepositorySubscription)
+  end
+
+  def github
+    @new_github_users   = stats_for(GithubUser)
+    @new_manifests      = stats_for(Manifest)
     @new_readmes        = stats_for(Readme)
     @new_orgs           = stats_for(GithubOrganisation)
   end

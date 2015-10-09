@@ -6,6 +6,7 @@
   <% content_for :atom, auto_discovery_link_tag(:atom, project_tags_url({format: "atom"}.merge(@project.to_param))) %>
 <% end %>
 
+<% cache_if(logged_out?, [@project, @version, 'projects:show', 'v1'], :expires_in => 1.week) do %>
 <div class="row">
   <div class='col-md-8'>
     <h1>
@@ -140,6 +141,10 @@
                   <% dependent_repos.each do |repo| %>
                   <li>
                     <%= link_to repo.full_name, github_repository_path(repo.owner_name, repo.project_name) %>
+                    <small>
+                      <%= fa_icon("lock") if repo.private? %>
+                      <%= fa_icon("code-fork") if repo.fork? %>
+                    </small>
                   </li>
                   <% end %>
                 </ul>
@@ -171,7 +176,11 @@
             <ul>
               <% your_dependent_repos.limit(10).each do |repo| %>
                 <li>
-                <%= link_to repo.full_name, github_repository_path(repo.owner_name, repo.project_name) %>
+                  <%= link_to repo.full_name, github_repository_path(repo.owner_name, repo.project_name) %>
+                  <small>
+                    <%= fa_icon("lock") if repo.private? %>
+                    <%= fa_icon("code-fork") if repo.fork? %>
+                  </small>
                 </li>
               <% end %>
             </ul>
@@ -243,3 +252,4 @@
     <% end %>
   </div>
 </div>
+<% end %>

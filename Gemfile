@@ -40,7 +40,7 @@ gem 'bigquery', require: 'big_query'
 gem 'sprockets'
 gem 'simple_form'
 gem 'sidekiq'
-gem 'sidekiq-unique-jobs'
+gem 'sidekiq-unique-jobs', '~> 3.0.15'
 gem 'sinatra', require: nil
 gem 'sassc-rails'
 gem 'hirefire-resource'
@@ -59,9 +59,9 @@ gem 'js-cookie-rails'
 gem 'postgres_ext'
 gem 'foreman', require: false
 gem 'puma'
-gem 'rack-mini-profiler', require: false
 gem 'stripe'
 gem 'payola-payments'
+gem 'rack-timeout'
 
 group :development do
   gem 'bundler'

@@ -1,6 +1,6 @@
 class Dependency < ActiveRecord::Base
   belongs_to :version
-  belongs_to :project, touch: true
+  belongs_to :project#, touch: true
 
   validates_presence_of :project_name, :version_id, :requirements, :platform
 
@@ -15,8 +15,12 @@ class Dependency < ActiveRecord::Base
     case plat
     when 'rubygemslockfile'
       'Rubygems'
+    when 'cocoapodslockfile'
+      'CocoaPods'
+    when 'nugetlockfile', 'nuspec'
+      'NuGet'
     when 'packagistlockfile'
-      'packagist'
+      'Packagist'
     when 'gemspec'
       'Rubygems'
     when 'npmshrinkwrap'

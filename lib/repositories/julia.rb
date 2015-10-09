@@ -2,7 +2,7 @@ class Repositories
   class Julia < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    LIBRARIAN_PLANNED = true
+    LIBRARIAN_SUPPORT = true
     URL = 'http://pkg.julialang.org/'
     COLOR = '#a270ba'
 

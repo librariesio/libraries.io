@@ -1,0 +1,73 @@
+<% title "Libraries without licenses - Libraries" %>
+<% description "help the community by encouraging the authors to add a LICENSE file to their libraries." %>
+<div class="row">
+  <h1><i class="fa fa-copyright"></i> Libraries without licenses</h1>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-md-8">
+    <% @projects.each do |project| %>
+      <div class="row">
+        <div class='col-xs-8'>
+          <%= render project %>
+        </div>
+        <div class="col-xs-4">
+          <br>
+          <%= link_to project.github_repository.try(:url), class: 'btn btn-primary', target: :blank do %>
+          Suggest a License
+          <% end %>
+          <% if current_user && current_user.admin? %>
+            <%= link_to admin_project_path(project.id), class: 'btn' do %>
+              <%= fa_icon 'gear' %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
+    <p>
+      <small><%= page_entries_info @projects, model: 'libraries without licenses' %></small>
+    </p>
+  </div>
+  <div class="col-md-4">
+    <h3>
+      <strong>
+        What's the deal with licenses?
+      </strong>
+    </h3>
+    <p>
+      Over <strong>30%</strong> of all open source libraries published aren't licensed correctly, by using a library in your code that doesn't have a license you could be in breach of copyright.
+    </p>
+    <p>
+      Theoretically the author could assert copyright at any time and demand that you stop using their code.
+    </p>
+    <p>
+      Code without an explicit license is protected by copyright and is by default All Rights Reserved. The person or people who wrote the code are protected as such. Any time you're using software you didn't write, licensing should be considered and abided.
+    </p>
+    <p>
+      This is a list of the most popular/important libraries that we couldn't find a license for, you can help the community by encouraging the authors to add a <code>LICENSE</code> file to their repositories.
+    </p>
+    <p>
+      Find out more about open source licensing at <%= link_to 'ChooseALicense.com','http://choosealicense.com/', target: :blank %>
+    </p>
+    <h3>
+      <strong>
+        Filter by package manager
+      </strong>
+    </h3>
+    <div class="facets">
+      <ul class='filter'>
+        <% @platforms.each do |platform| %>
+          <li class='<%= 'active' if platform.downcase == params[:platform].try(:downcase) %>'>
+            <% if platform.downcase == params[:platform].try(:downcase) %>
+              <%= link_to platform, unlicensed_path(platform: nil) %>
+            <% else %>
+              <%= link_to platform, unlicensed_path(platform: platform) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

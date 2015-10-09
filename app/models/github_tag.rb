@@ -1,5 +1,5 @@
 class GithubTag < ActiveRecord::Base
-  belongs_to :github_repository
+  belongs_to :github_repository#, touch: true
   validates_presence_of :name, :sha, :github_repository
 
   scope :published, -> { where('published_at IS NOT NULL') }
@@ -11,6 +11,7 @@ class GithubTag < ActiveRecord::Base
   end
 
   def send_notifications_async
+    return if published_at && published_at < 1.week.ago
     TagNotificationsWorker.perform_async(self.id) if has_projects?
   end
 

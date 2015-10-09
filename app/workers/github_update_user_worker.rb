@@ -8,5 +8,6 @@ class GithubUpdateUserWorker
     user.download_from_github
     user.download_orgs
     user.download_repos
+    user.touch
   end
 end

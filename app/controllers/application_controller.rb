@@ -3,15 +3,9 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_user, :logged_in?
+  helper_method :current_user, :logged_in?, :logged_out?
 
   before_filter :welcome_new_users
-
-  before_action do
-    if current_user && current_user.admin?
-      Rack::MiniProfiler.authorize_request
-    end
-  end
 
   private
 
@@ -44,8 +38,12 @@ class ApplicationController < ActionController::Base
     !!current_user
   end
 
-  def find_platform
-    @platform = Download.platforms.find{|p| p.to_s.demodulize.downcase == params[:id].downcase }
+  def logged_out?
+    !logged_in?
+  end
+
+  def find_platform(param = :id)
+    @platform = Download.platforms.find{|p| p.to_s.demodulize.downcase == params[param].downcase }
     raise ActiveRecord::RecordNotFound if @platform.nil?
     @platform_name = @platform.to_s.demodulize
   end
