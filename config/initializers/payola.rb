@@ -1,3 +1,5 @@
+SubscriptionPlan.first # have to force load the SubscriptionPlan class for development
+
 Payola.configure do |config|
   # Example subscription:
   #
