@@ -59,7 +59,6 @@ gem 'js-cookie-rails'
 gem 'postgres_ext'
 gem 'foreman', require: false
 gem 'puma'
-gem 'stripe'
 gem 'payola-payments'
 gem 'rack-timeout'
 
