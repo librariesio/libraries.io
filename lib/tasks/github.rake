@@ -4,6 +4,6 @@ namespace :github do
   end
 
   task remove_uninteresting_forks: :environment do
-    GithubRepository.where(id: GithubRepository.fork.open_source.where('stargazers_count < 1').without_projects.without_subscriptons.without_manifests.limit(200000).pluck(:id)).find_each(&:destroy)    
+    GithubRepository.where(id: GithubRepository.fork.open_source.where('stargazers_count < 1').without_projects.without_subscriptons.limit(200000).pluck(:id)).find_each(&:destroy)
   end
 end
