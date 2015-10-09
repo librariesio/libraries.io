@@ -58,6 +58,10 @@ class SubscriptionPlan < ActiveRecord::Base
     name
   end
 
+  def short_name
+    name.gsub(/yearly|monthly/i, '').strip
+  end
+
   def repo_count
     plan_hash[:repo_count]
   end

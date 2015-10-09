@@ -18,15 +18,29 @@
     <p>
       Free forever
     </p>
+    <p>
+      Unlimited public repositories
+    </p>
     <%= link_to 'Get started', repositories_path, class: 'btn btn-primary' %>
   </div>
   <% @plans.each do |plan| %>
     <div class="plan col-md-3 text-center">
-      <h4><%= plan.name %></h4>
+      <h4><%= plan.short_name %></h4>
       <p>
         <%= number_to_currency plan.amount/100.0, unit: '£' %> per <%= plan.interval %>
       </p>
-      <%= render 'payola/subscriptions/checkout', plan: plan, email: current_user.email %>
+      <p>
+        Unlimited public repositories
+      </p>
+      <p>
+        <strong><%= plan.repo_count %></strong> private repositories
+      </p>
+      <% if current_user.current_plan == plan %>
+        <%= link_to 'Your Current Plan', repositories_path, class: 'btn btn-success' %>
+      <% else %>
+        <% button_text = current_user.has_active_subscription? ? 'Switch Plan' : 'Subscribe Now'  %>
+        <%= render 'payola/subscriptions/checkout', plan: plan, email: current_user.email, button_text: button_text %>
+      <% end %>
     </div>
   <% end %>
 </div>
