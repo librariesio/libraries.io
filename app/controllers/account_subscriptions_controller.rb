@@ -4,7 +4,8 @@ class AccountSubscriptionsController < ApplicationController
   include Payola::StatusBehavior
 
   def plans
-    @interval = params[:interval] == 'year' ? 'year' : 'month'
+    default_interval = current_user.current_plan.try(:interval) || 'month'
+    @interval = params[:interval] == 'year' ? 'year' : default_interval
     @plans = SubscriptionPlan.interval(@interval)
   end
 

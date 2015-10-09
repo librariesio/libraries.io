@@ -103,7 +103,7 @@
         <% end %>
       </div>
       <br>
-      <% if current_user.admin? && current_user.private_repo_token.blank? %>
+      <% if current_user.can_enable_private_repo_tracking? %>
         <p>
           <%= link_to '/auth/github_private', class: 'btn btn-primary' do %>
             <i class="fa fa-github"></i> Enable Private Repository Access

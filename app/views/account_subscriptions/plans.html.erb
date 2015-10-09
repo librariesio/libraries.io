@@ -7,7 +7,7 @@
   <div class="col-md-6">
     <br>
     <br>
-    <% other_interval = params[:interval] == 'year' ? 'month' : 'year' %>
+    <% other_interval = @interval == 'year' ? 'month' : 'year' %>
     <%= link_to "Switch to #{other_interval}ly pricing", pricing_path(interval: other_interval), class: 'pull-right' %>
   </div>
 </div>
@@ -24,7 +24,7 @@
     <div class="plan col-md-3 text-center">
       <h4><%= plan.name %></h4>
       <p>
-        <%= number_to_currency plan.amount/100.0 %> per <%= plan.interval %>
+        <%= number_to_currency plan.amount/100.0, unit: '£' %> per <%= plan.interval %>
       </p>
       <%= render 'payola/subscriptions/checkout', plan: plan, email: current_user.email %>
     </div>
