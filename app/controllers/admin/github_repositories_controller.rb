@@ -13,7 +13,7 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   end
 
   def index
-    @github_repositories = GithubRepository.where("github_repositories.license IS ? OR github_repositories.license = ''", nil).with_projects.order('stargazers_count DESC').paginate(page: params[:page])
+    @github_repositories = GithubRepository.where("github_repositories.license IS ? OR github_repositories.license = ''", nil).with_projects.select("DISTINCT on (github_repositories.github_id, github_repositories.stargazers_count) *").order('github_repositories.stargazers_count DESC').paginate(page: params[:page])
   end
 
   private
