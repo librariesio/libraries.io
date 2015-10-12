@@ -3,7 +3,8 @@ class PushoverNewUserWorker
   sidekiq_options queue: :user
 
   def perform(user_id)
-    user = User.find(user_id)
+    user = User.find_by_id(user_id)
+    return unless user
     repos = user.github_client.repos.length
     followers = user.github_client.user(user.nickname).followers
     if repos > 10 || followers > 5
