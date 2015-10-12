@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :projects
+    resources :github_repositories
     resources :users do
       member do
         post 'sync'

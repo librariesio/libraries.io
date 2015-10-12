@@ -1,0 +1,18 @@
+<div class="row">
+  <%= simple_form_for(@github_repository, url: admin_github_repository_path(@github_repository.id), html: { class: 'form-vertical col-md-6' }) do |form| %>
+    <h2>
+      Admin / <%= link_to @github_repository.full_name, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %>
+      <%= link_to fa_icon('github'), @github_repository.url, target: :blank %>
+    </h2>
+
+    <%= form.input :license %>
+
+    <p>
+      <small>
+        <%= Project.popular_licenses(:facet_limit => 15).map{|l| format_license(l.term) }.join(', ') %>
+      </small>
+    </p>
+
+    <%= form.submit class: 'btn btn-primary' %>
+  <% end %>
+</div>
