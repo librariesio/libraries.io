@@ -1,4 +1,4 @@
 <h1>Unlicensed Github repos</h1>
-<% @github_repositories.each do |repo| %>
-  <%= render repo %>
-<% end %>
+
+<%= render @github_repositories %>
+<%= will_paginate @github_repositories, renderer: BootstrapPagination::Rails, page_links: false %>
