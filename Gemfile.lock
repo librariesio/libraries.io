@@ -100,11 +100,11 @@ GEM
       elasticsearch-transport (= 1.0.13)
     elasticsearch-api (1.0.13)
       multi_json
-    elasticsearch-model (0.1.7)
+    elasticsearch-model (0.1.8)
       activesupport (> 3)
       elasticsearch (> 0.4)
       hashie
-    elasticsearch-rails (0.1.7)
+    elasticsearch-rails (0.1.8)
     elasticsearch-transport (1.0.13)
       faraday
       multi_json
