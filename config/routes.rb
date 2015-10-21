@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   namespace :api do
     get '/search', to: 'search#index'
     get '/searchcode', to: 'projects#searchcode'
+    get '/github/:owner/:name/star', to: 'github_repositories#star', constraints: { :name => /.*/ }
     get '/github/:owner/:name', to: 'github_repositories#show', constraints: { :name => /.*/ }
     post '/:platform/projects', to: 'projects#list'
     get '/:platform/:name', to: 'projects#show', constraints: { :name => /.*/ }
