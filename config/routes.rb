@@ -60,6 +60,8 @@ Rails.application.routes.draw do
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
+  get 'hacker_news', to: 'github_repositories#hacker_news'
+
   get '/github/organisations', to: 'github_organisations#index', as: :github_organisations
 
   get '/github/:login/repositories', to: 'users#repositories', as: :user_repositories

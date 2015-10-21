@@ -20,6 +20,10 @@ class GithubRepositoriesController < ApplicationController
     @licenses = language_scope.group('lower(license)').count.reject{|k,v| k.blank? || k == 'other' }.sort_by{|k,v| v }.reverse.first(25)
   end
 
+  def hacker_news
+    @repos = GithubRepository.open_source.hacker_news.paginate(page: params[:page])
+  end
+
   def show
     load_repo
     @contributors = @github_repository.contributors.order('count DESC').visible.limit(20)
