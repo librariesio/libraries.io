@@ -24,7 +24,7 @@ class GithubRepositoriesController < ApplicationController
     @language = Languages::Language[params[:language]] if params[:language].present?
     @license = Spdx.find(params[:license]) if params[:license].present?
 
-    orginal_scope = GithubRepository.open_source.source.where.not(pushed_at: nil)
+    orginal_scope = GithubRepository.open_source.where.not(pushed_at: nil)
     language_scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
     license_scope = @license.present? ? orginal_scope.where('lower(license) = ?', @license.id.downcase) : orginal_scope
     scope = @license.present? ? language_scope.where('lower(license) = ?', @license.id.downcase) : language_scope
