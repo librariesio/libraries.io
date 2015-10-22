@@ -43,6 +43,7 @@ class GithubRepository < ActiveRecord::Base
 
   scope :interesting, -> { where('github_repositories.stargazers_count > 0').order('github_repositories.stargazers_count DESC, github_repositories.pushed_at DESC') }
 
+  scope :recently_created, -> { where('created_at > ?', 7.days.ago)}
   scope :hacker_news, -> { order("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.5)) DESC") }
 
   def self.language(language)
