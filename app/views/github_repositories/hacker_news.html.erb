@@ -1,12 +1,10 @@
-<h1>Hacker News</h1>
+<% title "Trending GitHub Repositories - Libraries" %>
+<h1>Trending GitHub Repositories</h1>
 
 <div class="row">
   <div class="col-md-8">
-    <div class="row">
-      <%= render @repos %>
-      <%= will_paginate @repos, renderer: BootstrapPagination::Rails, page_links: false %>
-
-    </div>
+    <%= render @repos %>
+    <%= will_paginate @repos, renderer: BootstrapPagination::Rails, page_links: false %>
   </div>
   <div class="col-md-4">
     <div class='row'>
