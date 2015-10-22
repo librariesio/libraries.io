@@ -21,7 +21,17 @@ class GithubRepositoriesController < ApplicationController
   end
 
   def hacker_news
-    @repos = GithubRepository.open_source.hacker_news.paginate(page: params[:page])
+    @language = Languages::Language[params[:language]] if params[:language].present?
+    @license = Spdx.find(params[:license]) if params[:license].present?
+
+    orginal_scope = GithubRepository.open_source.source.where.not(pushed_at: nil)
+    language_scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
+    license_scope = @license.present? ? orginal_scope.where('lower(license) = ?', @license.id.downcase) : orginal_scope
+    scope = @license.present? ? language_scope.where('lower(license) = ?', @license.id.downcase) : language_scope
+    @repos = scope.hacker_news.paginate(page: params[:page])
+
+    @languages = license_scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(40)
+    @licenses = language_scope.group('lower(license)').count.reject{|k,v| k.blank? || k == 'other' }.sort_by{|k,v| v }.reverse.first(25)
   end
 
   def show

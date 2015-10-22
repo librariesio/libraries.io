@@ -61,7 +61,9 @@ Rails.application.routes.draw do
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
-  get 'hacker_news', to: 'github_repositories#hacker_news'
+  get '/github/trending', to: 'github_repositories#hacker_news', as: :trending
+  get 'hacker_news' => redirect('/github/trending')
+  get '/github/new', to: 'github_repositories#new', as: :new_repos
 
   get '/github/organisations', to: 'github_organisations#index', as: :github_organisations
 
