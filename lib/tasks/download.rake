@@ -10,7 +10,7 @@ namespace :download do
   end
 
   task atom: :environment do
-    Repositories::Atom.import_recent
+    Repositories::Atom.import_async
   end
 
   task atom_all: :environment do
@@ -34,7 +34,7 @@ namespace :download do
   end
 
   task cpan: :environment do
-    Repositories::CPAN.import_recent
+    Repositories::CPAN.import_async
   end
 
   task cpan_all: :environment do
@@ -46,7 +46,7 @@ namespace :download do
   end
 
   task cran: :environment do
-    Repositories::CRAN.import_recent
+    Repositories::CRAN.import_async
   end
 
   task cran_all: :environment do
@@ -66,7 +66,7 @@ namespace :download do
   end
 
   task hackage: :environment do
-    Repositories::Hackage.import_recent
+    Repositories::Hackage.import_async
   end
 
   task hackage_all: :environment do
@@ -74,7 +74,7 @@ namespace :download do
   end
 
   task hex: :environment do
-    Repositories::Hex.import_recent
+    Repositories::Hex.import_async
   end
 
   task hex_all: :environment do
@@ -91,7 +91,7 @@ namespace :download do
 
   task maven: :environment do
     Repositories::Maven.load_names(50)
-    Repositories::Maven.import_recent
+    Repositories::Maven.import_async
   end
 
   task maven_all: :environment do
@@ -109,7 +109,7 @@ namespace :download do
 
   task nuget: :environment do
     Repositories::NuGet.load_names(3)
-    Repositories::NuGet.import_recent
+    Repositories::NuGet.import_async
   end
 
   task nuget_all: :environment do
@@ -118,7 +118,7 @@ namespace :download do
   end
 
   task npm: :environment do
-    Repositories::NPM.import_recent
+    Repositories::NPM.import_async
   end
 
   task npm_all: :environment do
@@ -126,7 +126,7 @@ namespace :download do
   end
 
   task packagist: :environment do
-    Repositories::Packagist.import_recent
+    Repositories::Packagist.import_async
   end
 
   task packagist_all: :environment do
@@ -142,7 +142,7 @@ namespace :download do
   end
 
   task pypi: :environment do
-    Repositories::Pypi.import_recent
+    Repositories::Pypi.import_async
   end
 
   task pypi_all: :environment do
@@ -150,7 +150,7 @@ namespace :download do
   end
 
   task rubygems: :environment do
-    Repositories::Rubygems.import_recent
+    Repositories::Rubygems.import_async
   end
 
   task rubygems_all: :environment do
@@ -162,7 +162,7 @@ namespace :download do
   end
 
   task wordpress: :environment do
-    Repositories::Wordpress.import_recent
+    Repositories::Wordpress.import_async
   end
 
   task wordpress_all: :environment do
