@@ -50,6 +50,10 @@ class Repositories
       end
     end
 
+    def self.import_async
+      recent_names.each { |name| RepositoryDownloadWorker.perform_async(self.name, name) }
+    end
+
     def self.import(include_versions = true)
       project_names.each { |name| update(name, include_versions) }
     end
