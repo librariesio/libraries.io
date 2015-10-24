@@ -54,6 +54,10 @@ class Repositories
       recent_names.each { |name| RepositoryDownloadWorker.perform_async(self.name.demodulize, name) }
     end
 
+    def self.import_new_async
+      new_names.each { |name| RepositoryDownloadWorker.perform_async(self.name.demodulize, name) }
+    end
+
     def self.import(include_versions = true)
       project_names.each { |name| update(name, include_versions) }
     end
