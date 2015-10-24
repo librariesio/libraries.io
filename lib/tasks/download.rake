@@ -6,7 +6,7 @@ namespace :download do
   task small_registries: [:emacs, :hackage, :sublime]
 
   task alcatraz: :environment do
-    Repositories::Alcatraz.import
+    Repositories::Alcatraz.import_async
   end
 
   task atom: :environment do
@@ -18,7 +18,7 @@ namespace :download do
   end
 
   task biicode: :environment do
-    Repositories::Biicode.import
+    Repositories::Biicode.import_async
   end
 
   task bower: :environment do
@@ -58,11 +58,11 @@ namespace :download do
   end
 
   task elm: :environment do
-    Repositories::Elm.import
+    Repositories::Elm.import_async
   end
 
   task emacs: :environment do
-    Repositories::Emacs.import
+    Repositories::Emacs.import_async
   end
 
   task hackage: :environment do
@@ -70,7 +70,7 @@ namespace :download do
   end
 
   task hackage_all: :environment do
-    Repositories::Hackage.import
+    Repositories::Hackage.import_async
   end
 
   task hex: :environment do
@@ -158,7 +158,7 @@ namespace :download do
   end
 
   task sublime: :environment do
-    Repositories::Sublime.import
+    Repositories::Sublime.import_async
   end
 
   task wordpress: :environment do
