@@ -63,6 +63,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_owner
+    return true if github_user.present?
     o = github_client.user(owner_name)
     if o.type == "Organization"
       if go = GithubOrganisation.create_from_github(owner_id.to_i)
@@ -216,7 +217,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_fork_source(token = nil)
-    return true unless self.fork?
+    return true unless self.fork? && self.source.nil?
     GithubRepository.create_from_github(source_name, token)
   end
 
