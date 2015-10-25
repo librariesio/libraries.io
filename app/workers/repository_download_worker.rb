@@ -1,6 +1,6 @@
 class RepositoryDownloadWorker
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options queue: :critical, unique: true
 
   def perform(class_name, name)
     klass = "Repositories::#{class_name}".constantize
