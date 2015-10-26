@@ -24,11 +24,11 @@ class GithubRepositoriesController < ApplicationController
     @language = Languages::Language[params[:language]] if params[:language].present?
     @license = Spdx.find(params[:license]) if params[:license].present?
 
-    orginal_scope = GithubRepository.open_source.where.not(pushed_at: nil)
+    orginal_scope = GithubRepository.open_source.where.not(pushed_at: nil).recently_created.where('stargazers_count > 0')
     scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
-    @repos = scope.recently_created.hacker_news.paginate(page: params[:page])
+    @repos = scope.hacker_news.paginate(page: params[:page])
 
-    @languages = orginal_scope.recently_created.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(40)
+    @languages = orginal_scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(40)
   end
 
   def new
