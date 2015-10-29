@@ -17,7 +17,7 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   end
 
   def mit
-    @github_repositories = GithubRepository.with_projects.without_license.includes(:readme).order('github_repositories.stargazers_count DESC').paginate(page: params[:page])
+    @github_repositories = GithubRepository.with_projects.without_license.group('github_repositories.id').includes(:readme).order('github_repositories.stargazers_count DESC').paginate(page: params[:page], per_page: 100)
   end
 
   private
