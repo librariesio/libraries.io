@@ -17,7 +17,7 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   end
 
   def mit
-    @github_repositories = GithubRepository.with_projects.without_license.joins(:readme).where('readmes.html_body ILIKE ?', '%mit license%').paginate(page: params[:page])
+    @github_repositories = GithubRepository.with_projects.without_license.includes(:readme).paginate(page: params[:page])
   end
 
   private
