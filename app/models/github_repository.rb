@@ -237,7 +237,9 @@ class GithubRepository < ActiveRecord::Base
   def self.extract_full_name(url)
     return nil if url.nil?
     github_regex = /(git\+)?(((https|http|git|ssh)?:\/\/(www\.)?)|ssh:\/\/git@|https:\/\/git@|scm:git:git@|git@)(github.com|raw.githubusercontent.com)(:|\/)/i
-    return nil unless url.match(github_regex)
+    if !url.match(github_regex)
+      return extract_github_io_name(url)
+    end
     url = url.gsub(github_regex, '').strip
     url = url.gsub(/(\.git|\/)$/i, '')
     url = url.gsub(/(#\S*)$/i, '')
@@ -250,6 +252,13 @@ class GithubRepository < ActiveRecord::Base
     url = url.split('/').reject(&:blank?)[0..1]
     return nil unless url.length == 2
     url.join('/')
+  end
+
+  def self.extract_github_io_name(url)
+    return nil if url.nil?
+    match = url.match(/\/([\w\.@\:-~]+).github.io\/([\w\.@\:-~]+)/i)
+    return nil unless match && match.length == 3
+    "#{match[1]}/#{match[2]}"
   end
 
   def download_github_contributions(token = nil)
