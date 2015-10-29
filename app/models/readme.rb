@@ -8,6 +8,10 @@ class Readme < ActiveRecord::Base
     html_body
   end
 
+  def plain_text
+    Nokogiri::HTML(html_body).text
+  end
+
   def reformat
     doc = Nokogiri::HTML(html_body)
     doc.xpath('//a').each do |d|

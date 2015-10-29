@@ -16,7 +16,11 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :projects
-    resources :github_repositories
+    resources :github_repositories do
+      collection do
+        get 'mit'
+      end
+    end
     resources :users do
       member do
         post 'sync'

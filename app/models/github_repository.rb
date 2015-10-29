@@ -38,8 +38,8 @@ class GithubRepository < ActiveRecord::Base
   scope :with_manifests, -> { joins(:manifests) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {github_repository_id: nil}) }
 
-  scope :with_license, -> { where("license <> ''") }
-  scope :without_license, -> {where("license IS ? OR license = ''", nil)}
+  scope :with_license, -> { where("github_repositories.license <> ''") }
+  scope :without_license, -> {where("github_repositories.license IS ? OR github_repositories.license = ''", nil)}
 
   scope :interesting, -> { where('github_repositories.stargazers_count > 0').order('github_repositories.stargazers_count DESC, github_repositories.pushed_at DESC') }
 

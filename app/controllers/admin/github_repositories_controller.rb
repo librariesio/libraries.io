@@ -13,7 +13,11 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   end
 
   def index
-    @github_repositories = GithubRepository.where("github_repositories.license IS ? OR github_repositories.license = ''", nil).with_projects.group('github_repositories.id').order('github_repositories.stargazers_count DESC').paginate(page: params[:page])
+    @github_repositories = GithubRepository.without_license.with_projects.group('github_repositories.id').order('github_repositories.stargazers_count DESC').paginate(page: params[:page])
+  end
+
+  def mit
+    @github_repositories = GithubRepository.with_projects.without_license.joins(:readme).where('readmes.html_body ILIKE ?', '%mit license%').paginate(page: params[:page])
   end
 
   private
