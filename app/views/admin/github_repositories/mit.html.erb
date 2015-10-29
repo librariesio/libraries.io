@@ -2,8 +2,8 @@
 
 <% @github_repositories.each do |repo| %>
   <div class="row">
-    <%= render object: repo, partial: 'github_repositories/github_repository' %>
-    <% if repo.readme.plain_text.match(/mit license/i) %>
+    <% if repo.readme && repo.readme.plain_text.match(/mit license/i) %>
+      <%= render object: repo, partial: 'github_repositories/github_repository' %>
       <textarea name="name" rows="20" cols="120">
         <%= repo.readme.plain_text %>
       </textarea>
