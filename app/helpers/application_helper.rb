@@ -66,6 +66,23 @@ module ApplicationHelper
     end
   end
 
+  def download_url(name, platform, version = nil)
+    case platform
+    when 'Rubygems'
+      "https://rubygems.org/downloads/#{name}-#{version}.gem"
+    when 'Atom'
+      "https://www.atom.io/api/packages/#{name}/versions/#{version}/tarball"
+    when 'Cargo'
+      "https://crates.io/api/v1/crates/#{name}/#{version}/download"
+    when 'CRAN'
+      "https://cran.r-project.org/src/contrib/#{name}_#{version}.tar.gz"
+    when 'Emacs'
+      "http://melpa.org/packages/#{name}-#{version}.tar"
+    when 'Hackage'
+      "http://hackage.haskell.org/package/#{name}-#{version}/#{name}-#{version}.tar.gz"
+    end
+  end
+
   def documentation_url(name, platform, version = nil)
     case platform
     when 'Rubygems'
