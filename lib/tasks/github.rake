@@ -8,7 +8,8 @@ namespace :github do
   end
 
   task update_trending: :environment do
-    GithubRepository.open_source.where.not(pushed_at: nil).recently_created.order('created_at DESC').limit(1000).each{|g| GithubCreateWorker.perform_async(g.full_name) }
-    GithubRepository.open_source.where.not(pushed_at: nil).recently_created.hacker_news.limit(1000).each{|g| GithubCreateWorker.perform_async(g.full_name) }
+    trending = GithubRepository.open_source.where.not(pushed_at: nil).recently_created.hacker_news.limit(30)
+    brand_new = GithubRepository.open_source.where.not(pushed_at: nil).recently_created.order('created_at DESC').limit(60)
+    (trending + brand_new).uniq.each{|g| GithubCreateWorker.perform_async(g.full_name) }
   end
 end
