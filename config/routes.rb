@@ -70,6 +70,7 @@ Rails.application.routes.draw do
   get '/github/new', to: 'github_repositories#new', as: :new_repos
 
   get '/github/organisations', to: 'github_organisations#index', as: :github_organisations
+  get '/github/timeline', to: 'github_repositories#timeline', as: :github_timeline
 
   get '/github/:login/repositories', to: 'users#repositories', as: :user_repositories
   get '/github/:login/contributions', to: 'users#contributions', as: :user_contributions
