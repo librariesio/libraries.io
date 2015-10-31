@@ -7,12 +7,12 @@
   </div>
 
   <% @orgs.each do |org| %>
-    <% next if org.github_repositories.length.zero? %>
+    <% next if org.source_github_repositories.length.zero? %>
     <div class="col-sm-4 org">
       <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
       <strong><%= link_to org, user_path(org) %></strong>
       <p>
-        <small><%= pluralize number_to_human(org.github_repositories.length), 'repository' %></small>
+        <small><%= pluralize number_to_human(org.source_github_repositories.length), 'repository' %></small>
       </p>
     </div>
   <% end %>
