@@ -1,0 +1,14 @@
+<h1>Mozilla Open Source</h1>
+
+<h3>Organisations</h3>
+<div class="row">
+  <% @orgs.each do |org| %>
+    <div class="col-sm-4 org">
+      <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
+      <strong><%= link_to org, user_path(org) %></strong>
+      <p>
+        <small><%= pluralize number_to_human(org.github_repositories.length), 'repository' %></small>
+      </p>
+    </div>
+  <% end %>
+</div>

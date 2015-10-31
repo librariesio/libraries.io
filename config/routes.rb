@@ -76,6 +76,8 @@ Rails.application.routes.draw do
   get '/github/:login/contributions', to: 'users#contributions', as: :user_contributions
   get '/github/:login', to: 'users#show', as: :user
 
+  get '/mozilla', to: 'github_organisations#mozilla', as: :mozilla
+
   get '/search', to: 'search#index'
 
   get '/sitemap.xml.gz', to: redirect("https://#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com/sitemaps/sitemap.xml.gz")
