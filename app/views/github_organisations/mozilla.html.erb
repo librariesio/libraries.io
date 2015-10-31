@@ -23,6 +23,7 @@
     <h3>Languages</h3>
     <ul class=''>
       <% @languages.each do |k,v| %>
+        <% next if k.nil? %>
         <li>
           <%= link_to k, language_path(k) %> -
           <small><%= v %></small>
