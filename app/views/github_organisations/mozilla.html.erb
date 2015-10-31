@@ -1,8 +1,12 @@
-<h1>Mozilla Open Source</h1>
-
-<h3>Organisations</h3>
 <div class="row">
+  <div class="col-md-12">
+    <h1>Mozilla Open Source</h1>
+
+    <h3>Organisations</h3>
+  </div>
+
   <% @orgs.each do |org| %>
+    <% next if org.github_repositories.length.zero? %>
     <div class="col-sm-4 org">
       <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
       <strong><%= link_to org, user_path(org) %></strong>
@@ -11,4 +15,29 @@
       </p>
     </div>
   <% end %>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-4 facets">
+    <h3>Languages</h3>
+    <ul class=''>
+      <% @languages.each do |k,v| %>
+        <li>
+          <%= link_to k, language_path(k) %> -
+          <small><%= v %></small>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="col-md-4 facets">
+    <h3>Licenses</h3>
+    <ul class=''>
+      <% @licenses.each do |k,v| %>
+        <li>
+          <%= linked_licenses [k] %>
+          <small><%= v %></small>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 </div>
