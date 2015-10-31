@@ -22,10 +22,10 @@
   <div class="col-md-4 facets">
     <h3>Languages</h3>
     <ul class=''>
-      <% @languages.sort{|k,v| -v }.each do |k,v| %>
+      <% @languages.sort_by{|k,v| -v }.each do |k,v| %>
         <% next if k.nil? %>
         <li>
-          <%= link_to k, language_path(k) %> -
+          <%= link_to k, language_path(k) %>
           <small><%= v %></small>
         </li>
       <% end %>
@@ -34,7 +34,7 @@
   <div class="col-md-4 facets">
     <h3>Licenses</h3>
     <ul class=''>
-      <% @licenses.sort{|k,v| -v }.each do |k,v| %>
+      <% @licenses.sort_by{|k,v| -v }.each do |k,v| %>
         <li>
           <%= linked_licenses [k] %>
           <small><%= v %></small>
