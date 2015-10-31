@@ -144,7 +144,7 @@ module ApplicationHelper
   end
 
   def linked_licenses(licenses)
-    return 'Missing' if licenses.empty?
+    return 'Unknown' if licenses.compact.empty?
     licenses.compact.delete_if(&:empty?).map{|l| link_to format_license(l), license_path(l) }.join('/').html_safe
   end
 
@@ -170,7 +170,7 @@ module ApplicationHelper
   end
 
   def format_license(license)
-    return 'Missing' if license.blank?
+    return 'Unknown' if license.blank?
     Project.format_license(license)
   end
 
