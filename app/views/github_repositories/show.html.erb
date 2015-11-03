@@ -243,7 +243,7 @@
         <hr>
         <h4>Tags</h4>
         <ul>
-          <% repo.github_tags.published.limit(100).to_a.sort.each do |tag| %>
+          <% repo.github_tags.published.order('published_at DESC, name DESC').limit(100).to_a.each do |tag| %>
             <li>
               <%= link_to tag, tag.github_url %>
               <% if tag.published_at.present? %>
