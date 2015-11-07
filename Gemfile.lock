@@ -46,7 +46,7 @@ GEM
       addressable (>= 2.3.1)
       extlib (>= 0.9.15)
       multi_json (>= 1.0.0)
-    autoprefixer-rails (6.0.3)
+    autoprefixer-rails (6.1.0.1)
       execjs
       json
     bigquery (0.8.3)
@@ -153,7 +153,7 @@ GEM
       fog-xml (~> 0.1.1)
       ipaddress (~> 0.5)
       nokogiri
-    fog-aliyun (0.0.10)
+    fog-aliyun (0.1.0)
       fog-core (~> 1.27)
       fog-json (~> 1.0)
       ipaddress (~> 0.8)
@@ -355,7 +355,7 @@ GEM
     premailer-rails (1.8.2)
       actionmailer (>= 3, < 5)
       premailer (~> 1.7, >= 1.7.9)
-    puma (2.14.0)
+    puma (2.15.2)
     pushover (1.0.4)
       bini (= 0.7.0)
       httparty (= 0.11.0)
