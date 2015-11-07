@@ -6,11 +6,11 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def dependents
-    render json: @project.dependent_projects.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} })
+    render json: @project.dependent_projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} })
   end
 
   def dependent_repositories
-    render json: @project.dependent_repositories.as_json(except: [:id, :github_organisation_id, :owner_id])
+    render json: @project.dependent_repositories.paginate(page: params[:page]).as_json(except: [:id, :github_organisation_id, :owner_id])
   end
 
   def searchcode

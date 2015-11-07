@@ -11,7 +11,7 @@ class Api::GithubRepositoriesController < Api::ApplicationController
   end
 
   def projects
-    render json: @github_repository.projects.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} })
+    render json: @github_repository.projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} })
   end
 
   private
