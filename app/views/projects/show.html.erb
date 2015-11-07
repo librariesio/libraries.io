@@ -48,7 +48,7 @@
     </p>
     <% end %>
 
-    <% if @project.homepage.present? && @project.homepage != package_link(@project, @project.platform) %>
+    <% if @project.homepage.present? && @project.homepage != package_link(@project) %>
     <p>
       Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage)) %>
     </p>
@@ -82,7 +82,7 @@
     </p>
     <% end %>
 
-    <% if link = package_link(@project, @project.platform, @version.try(:number)) %>
+    <% if link = package_link(@project, @version.try(:number)) %>
     <p>
       View on registry: <%= link_to truncate(link, length: 70), link %>
     </p>

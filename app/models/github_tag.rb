@@ -38,7 +38,7 @@ class GithubTag < ActiveRecord::Base
 
   def notify_firehose
     github_repository.projects.without_versions.each do |project|
-      Firehose.new_version(project, project.platform, number)
+      Firehose.new_version(project, project.platform, self)
     end
   end
 

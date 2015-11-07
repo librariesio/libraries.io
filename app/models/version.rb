@@ -23,7 +23,7 @@ class Version < ActiveRecord::Base
   end
 
   def notify_firehose
-    Firehose.new_version(project, project.platform, number)
+    Firehose.new_version(project, project.platform, self)
   end
 
   def send_notifications_async
