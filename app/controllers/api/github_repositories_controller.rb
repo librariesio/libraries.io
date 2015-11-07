@@ -3,6 +3,7 @@ class Api::GithubRepositoriesController < Api::ApplicationController
 
   def show
     render json: @github_repository.as_json({
+      except: [:id, :github_organisation_id, :owner_id],
       include: {
         repository_dependencies: {only: [:platform, :project_name, :requirements]}
       }

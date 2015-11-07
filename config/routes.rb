@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     get '/github/:owner/:name/projects', to: 'github_repositories#projects', constraints: { :name => /.*/ }
     get '/github/:owner/:name', to: 'github_repositories#show', constraints: { :name => /.*/ }
 
+    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :name => /.*/ }
+    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :name => /.*/ }
     get '/:platform/:name', to: 'projects#show', constraints: { :name => /.*/ }
   end
 
