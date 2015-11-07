@@ -3,7 +3,7 @@ name: <%= @project.name %>
 description: <%= @project.description %>
 <%- end -%>
 <%- if about_licenses(@project.normalized_licenses).present? -%>
-license_spdx: <%= licenses %>
+license_spdx: <%= about_licenses(@project.normalized_licenses) %>
 <%- end -%>
 <%- if @project.latest_release_number -%>
 version: <%= @project.latest_release_number %>
