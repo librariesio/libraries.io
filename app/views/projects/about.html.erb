@@ -1,11 +1,23 @@
 name: <%= @project.name %>
+<%- if @project.description.present? -%>
 description: <%= @project.description %>
-license_spdx: <%= about_licenses @project.normalized_licenses %>
+<%- end -%>
+<%- if about_licenses(@project.normalized_licenses).present? -%>
+license_spdx: <%= licenses %>
+<%- end -%>
+<%- if @project.latest_release_number -%>
 version: <%= @project.latest_release_number %>
+<%- end -%>
 spec_version: 1.0
-download_url: <%= download_url(@project.name, @project.platform, @project.latest_release_number) %>
+<%- if dl_url = download_url(@project.name, @project.platform, @project.latest_release_number) -%>
+download_url: <%= dl_url %>
+<%- end -%>
+<%- if @project.homepage.present? -%>
 home_url: <%= @project.homepage %>
+<%- end -%>
+<%- if rss_url(@project) -%>
 news_url: <%= rss_url(@project) %>
+<%- end -%>
 date: <%= @project.updated_at.to_date.iso8601 %>
 about_resource: NONE
 libraries_io_url: <%= project_url(@project.to_param) %>
