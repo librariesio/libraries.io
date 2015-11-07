@@ -158,6 +158,10 @@ class GithubRepository < ActiveRecord::Base
     "#{url}/commits"
   end
 
+  def readme_url
+    "#{url}#readme"
+  end
+
   def tags_url
     "#{url}/tags"
   end

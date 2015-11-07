@@ -118,6 +118,7 @@ Rails.application.routes.draw do
   get '/:platform/:name/dependent-repositories', to: 'projects#dependent_repos', as: :project_dependent_repos, constraints: { :name => /.*/ }
   get '/:platform/:name/dependent-repositories/yours', to: 'projects#your_dependent_repos', as: :your_project_dependent_repos, constraints: { :name => /.*/ }
   get '/:platform/:name/:number', to: 'projects#show', as: :version, constraints: { :number => /.*/, :name => /.*/ }
+  get '/:platform/:name.about', to: 'projects#about', as: :about_project, constraints: { :name => /.*/ }
   get '/:platform/:name', to: 'projects#show', as: :project, constraints: { :name => /.*/ }
   get '/:id', to: 'platforms#show', as: :platform
 end

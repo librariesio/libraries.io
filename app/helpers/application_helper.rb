@@ -134,6 +134,14 @@ module ApplicationHelper
     end
   end
 
+  def rss_url(project)
+    if project.versions.count > 0
+      project_versions_url({format: "atom"}.merge(project.to_param))
+    elsif project.github_repository && project.github_tags.length > 0
+      project_tags_url({format: "atom"}.merge(project.to_param))
+    end
+  end
+
   def title(page_title)
     content_for(:title) { page_title }
     page_title
@@ -146,6 +154,10 @@ module ApplicationHelper
   def linked_licenses(licenses)
     return 'Unknown' if licenses.compact.empty?
     licenses.compact.delete_if(&:empty?).map{|l| link_to format_license(l), license_path(l) }.join('/').html_safe
+  end
+
+  def about_licenses(licenses)
+    licenses.compact.delete_if(&:empty?).map{|l| format_license(l) }.join(' or ')
   end
 
   def linked_keywords(keywords)

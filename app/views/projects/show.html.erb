@@ -1,10 +1,6 @@
 <% title "#{@project} #{@version} on #{@project.platform_name} - Libraries" %>
 <% description project_description(@project, @version) %>
-<% if @version_count > 0 %>
-  <% content_for :atom, auto_discovery_link_tag(:atom, project_versions_url({format: "atom"}.merge(@project.to_param))) %>
-<% elsif @github_repository && @github_tags.length > 0 %>
-  <% content_for :atom, auto_discovery_link_tag(:atom, project_tags_url({format: "atom"}.merge(@project.to_param))) %>
-<% end %>
+<% content_for :atom, auto_discovery_link_tag(:atom, rss_url(@project)) %>
 
 <% cache_if(logged_out?, [@project, @version, 'projects:show', 'v1'], :expires_in => 1.week) do %>
 <div class="row">

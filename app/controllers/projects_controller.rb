@@ -79,6 +79,11 @@ class ProjectsController < ApplicationController
     @contributors = @project.contributors.order('count DESC').visible.limit(20)
   end
 
+  def about
+    find_project
+    send_data render_to_string(:about, layout: false), filename: "#{@project.platform.downcase}-#{@project}.about", type: 'application/text', disposition: 'attachment'
+  end
+
   def dependents
     find_project
     page = params[:page].to_i > 0 ? params[:page].to_i : 1

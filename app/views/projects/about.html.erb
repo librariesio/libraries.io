@@ -1,0 +1,16 @@
+name: <%= @project.name %>
+description: <%= @project.description %>
+license_spdx: <%= about_licenses @project.normalized_licenses %>
+version: <%= @project.latest_release_number %>
+spec_version: 1.0
+download_url: <%= download_url(@project.name, @project.platform, @project.latest_release_number) %>
+home_url: <%= @project.homepage %>
+news_url: <%= rss_url(@project) %>
+date: <%= @project.updated_at.to_date.iso8601 %>
+about_resource: NONE
+libraries_io_url: <%= project_url(@project.to_param) %>
+<%- if @project.github_repository.present? -%>
+vcs_tool: git
+vcs_repository: <%= @project.github_repository.url %>
+vcs_branch: <%= @project.github_repository.default_branch %>
+<%- end -%>

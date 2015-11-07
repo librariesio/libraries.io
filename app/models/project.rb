@@ -18,6 +18,7 @@ class Project < ActiveRecord::Base
   has_many :dependent_repositories, -> { group('github_repositories.id').order('github_repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :github_repository
   has_many :subscriptions
   belongs_to :github_repository
+  has_one :readme, through: :github_repository
 
   scope :platform, ->(platform) { where('lower(platform) = ?', platform.try(:downcase)) }
   scope :with_homepage, -> { where("homepage <> ''") }
