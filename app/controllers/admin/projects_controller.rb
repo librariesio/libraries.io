@@ -30,11 +30,20 @@ class Admin::ProjectsController < Admin::ApplicationController
     @search = Project.search('deprecated', filters: {
       platform: params[:platform]
     }, sort: params[:sort], order: params[:order])
+
+    if params[:platform].present?
+      @platform = Project.platform(params[:platform].downcase).first.try(:platform)
+      raise ActiveRecord::RecordNotFound if @platform.nil?
+      scope = Project.platform(@platform).where("status IS ? OR status = ''", nil)
+    else
+      scope = Project.where("status IS ? OR status = ''", nil)
+    end
+
     @projects = @search.records.where("status IS ? OR status = ''", nil).order('rank DESC').paginate(page: params[:page])
     @platforms = @search.records.where("status IS ? OR status = ''", nil).pluck('platform').compact.uniq
     if @projects.empty?
       repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%deprecated%'").pluck(:id)
-      @projects = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).order('rank DESC').paginate(page: params[:page])
+      @projects = scope.where(github_repository_id: repo_ids).order('rank DESC').paginate(page: params[:page])
       @platforms = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).pluck('platform').compact.uniq
     end
   end
