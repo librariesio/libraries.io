@@ -49,7 +49,8 @@ class Project < ActiveRecord::Base
   scope :most_watched, -> { joins(:subscriptions).group('projects.id').order("COUNT(subscriptions.id) DESC") }
   scope :most_dependents, -> { with_dependents.order('dependents_count DESC') }
 
-  scope :not_deprecated, -> { where('projects."status" != ?', "Deprecated")}
+  scope :not_deprecated, -> { where('projects."status" != ? OR projects."status" IS NULL', "Deprecated")}
+  scope :deprecated, -> { where('projects."status" = ?', "Deprecated")}
 
   scope :bus_factor, -> { joins(:github_repository)
                          .where('github_repositories.github_contributions_count < 6')
