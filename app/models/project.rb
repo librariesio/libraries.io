@@ -80,7 +80,7 @@ class Project < ActiveRecord::Base
   end
 
   def not_deprecated?
-    !deprecated?
+    !is_deprecated?
   end
 
   def latest_version
