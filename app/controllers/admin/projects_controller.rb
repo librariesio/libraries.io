@@ -29,6 +29,6 @@ class Admin::ProjectsController < Admin::ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:repository_url, :licenses)
+    params.require(:project).permit(:repository_url, :licenses, :status)
   end
 end
