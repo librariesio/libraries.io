@@ -6,6 +6,16 @@
         <%= link_to fa_icon('github'), @project.github_repository.url, target: :blank %>
       <% end %>
     </h2>
+    <% if @project.description.present? %>
+    <p>
+      description: <%= @project.description %>
+    </p>
+    <% end %>
+    <% if @project.github_repository.present? && @project.github_repository.description != @project.description %>
+    <p>
+      github description: <%= @project.github_repository.description %>
+    </p>
+    <% end %>
     <p>
       <strong>Rank:</strong> <%= @project.rank %>
     </p>
