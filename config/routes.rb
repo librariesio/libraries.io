@@ -18,7 +18,11 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :projects
+    resources :projects do
+      collection do
+        get 'deprecated'
+      end
+    end
     resources :project_suggestions
     resources :github_repositories do
       collection do

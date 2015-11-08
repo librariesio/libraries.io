@@ -26,6 +26,14 @@ class Admin::ProjectsController < Admin::ApplicationController
     @projects = scope.paginate(page: params[:page])
   end
 
+  def deprecated
+    @search = Project.search('deprecated', filters: {
+      platform: params[:platform]
+    }, sort: params[:sort], order: params[:order])
+    @projects = @search.records.where("status IS ? OR status = ''", nil).paginate(page: params[:page])
+    @platforms = @search.records.where("status IS ? OR status = ''", nil).pluck('platform').compact.uniq
+  end
+
   private
 
   def project_params
