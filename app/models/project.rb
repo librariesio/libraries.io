@@ -75,7 +75,7 @@ class Project < ActiveRecord::Base
     name
   end
 
-  def deprecated?
+  def is_deprecated?
     status == 'Deprecated'
   end
 

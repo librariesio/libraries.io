@@ -37,7 +37,7 @@ module SourceRank
     # at least X months old
     r +=1 if not_brand_new?
 
-    r -=5 if deprecated?
+    r -=5 if is_deprecated?
 
     # number of github stars
     r += log_scale(stars)
