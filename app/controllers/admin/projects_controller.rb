@@ -15,7 +15,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def index
-    scope = Project.without_repository_url.without_repo.most_dependents.where('latest_release_published_at > ?', 2.years.ago)
+    scope = Project.not_deprecated.without_repository_url.without_repo.most_dependents.where('latest_release_published_at > ?', 2.years.ago)
     if params[:platform].present?
       @platform = Project.platform(params[:platform].downcase).first.try(:platform)
       raise ActiveRecord::RecordNotFound if @platform.nil?

@@ -2,7 +2,7 @@
 <% description project_description(@project, @version) %>
 <% content_for :atom, auto_discovery_link_tag(:atom, rss_url(@project)) %>
 
-<% if logged_in? && @project.needs_suggestions? && @project.project_suggestions.where(user: current_user).count.zero? %>
+<% if logged_in? && @project.not_deprecated? && @project.needs_suggestions? && @project.project_suggestions.where(user: current_user).count.zero? %>
 <div class="alert alert-info" role="alert">
   We're missing some data for this project, can you help out by adding it?
   <a href="<%= project_suggestions_path(@project.to_param) %>" class="btn btn-primary btn-xs learn-more">Suggest an improvement</a>
