@@ -60,6 +60,8 @@ module SourceRank
 
     # documentation available?
 
+    r = 0 if r < 0
+
     return r
   end
 
