@@ -19,7 +19,7 @@ class ProjectsController < ApplicationController
 
   def bus_factor
     if params[:language].present?
-      @language = Project.not_deprecated.language(params[:language].downcase).first.try(:language)
+      @language = Project.language(params[:language].downcase).first.try(:language)
       raise ActiveRecord::RecordNotFound if @language.nil?
       scope = Project.language(@language)
     else
