@@ -31,9 +31,11 @@ class Admin::ProjectsController < Admin::ApplicationController
       platform: params[:platform]
     }, sort: params[:sort], order: params[:order])
     @projects = @search.records.where("status IS ? OR status = ''", nil).order('rank DESC').paginate(page: params[:page])
+    @platforms = @search.records.where("status IS ? OR status = ''", nil).pluck('platform').compact.uniq
     if @projects.empty?
       repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%deprecated%'").pluck(:id)
       @projects = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).order('rank DESC').paginate(page: params[:page])
+      @platforms = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).pluck('platform').compact.uniq
     end
   end
 

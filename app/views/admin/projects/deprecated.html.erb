@@ -1,4 +1,5 @@
-<h1>Deprecated Projects</h1>
+<h1>Popular projects without repo links</h1>
+<%= page_entries_info @projects %>
 <div class="row">
   <div class="col-md-8">
     <% @projects.each do |project| %>
@@ -13,5 +14,25 @@
     <% end %>
 
     <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
+  </div>
+  <div class="col-md-4">
+    <h3>
+      <strong>
+        Filter by platform
+      </strong>
+    </h3>
+    <div class="facets">
+      <ul class='filter'>
+        <% @platforms.each do |platform| %>
+          <li class='<%= 'active' if platform.downcase == params[:platform].try(:downcase) %>'>
+            <% if platform.downcase == params[:platform].try(:downcase) %>
+              <%= link_to platform, url_for(params.merge(platform: nil)) %>
+            <% else %>
+              <%= link_to platform, url_for(params.merge(platform: platform)) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </div>
