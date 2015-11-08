@@ -179,7 +179,7 @@ class Project < ActiveRecord::Base
   end
 
   def needs_suggestions?
-    repository_url.blank? || licenses.blank?
+    repository_url.blank? || normalized_licenses.blank?
   end
 
   def self.undownloaded_repos
