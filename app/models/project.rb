@@ -31,7 +31,7 @@ class Project < ActiveRecord::Base
 
   scope :with_license, -> { where("licenses <> ''") }
   scope :without_license, -> { where("licenses IS ? OR licenses = ''", nil) }
-  scope :unlicensed, -> { without_license.with_repo.where("github_repositories.license IS ? OR github_repositories.license = ''", nil) }
+  scope :unlicensed, -> { not_deprecated.without_license.with_repo.where("github_repositories.license IS ? OR github_repositories.license = ''", nil) }
 
   scope :with_versions, -> { where('versions_count > 0') }
   scope :without_versions, -> { where('versions_count < 1') }
@@ -52,7 +52,8 @@ class Project < ActiveRecord::Base
   scope :not_deprecated, -> { where('projects."status" != ? OR projects."status" IS NULL', "Deprecated")}
   scope :deprecated, -> { where('projects."status" = ?', "Deprecated")}
 
-  scope :bus_factor, -> { joins(:github_repository)
+  scope :bus_factor, -> { not_deprecated.
+                          joins(:github_repository)
                          .where('github_repositories.github_contributions_count < 6')
                          .where('github_repositories.github_contributions_count > 0')
                          .where('github_repositories.stargazers_count > 0')
