@@ -17,6 +17,7 @@ class Project < ActiveRecord::Base
   has_many :dependent_manifests, through: :repository_dependencies, source: :manifest
   has_many :dependent_repositories, -> { group('github_repositories.id').order('github_repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :github_repository
   has_many :subscriptions
+  has_many :project_suggestions
   belongs_to :github_repository
   has_one :readme, through: :github_repository
 
@@ -174,6 +175,10 @@ class Project < ActiveRecord::Base
 
   def set_dependents_count
     self.update_columns(dependents_count: dependents.joins(:version).pluck('DISTINCT versions.project_id').count)
+  end
+
+  def needs_suggestions?
+    repository_url.blank? || licenses.blank?
   end
 
   def self.undownloaded_repos

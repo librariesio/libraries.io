@@ -1,0 +1,13 @@
+<div class="row">
+  <%= simple_form_for(@project_suggestions, url: project_suggestions_path(@project.to_param), html: { class: 'form-vertical col-md-6' }) do |form| %>
+    <h2>
+      Add/Update data for <%= link_to @project, project_path(@project.to_param) %>
+    </h2>
+
+    <%= form.input :repository_url, input_html: {value: @project.repository_url} %>
+    <%= form.input :licenses, include_blank: true, selected: @project.licenses, label: 'License', collection: Project.popular_licenses(:facet_limit => 60).map{|l| format_license(l.term) } %>
+    <%= form.input :notes, hint: 'Leave us some information about where you found this data so we can double check it.' %>
+
+    <%= form.submit 'Suggest changes', class: 'btn btn-primary' %>
+  <% end %>
+</div>

@@ -26,6 +26,8 @@ class User < ActiveRecord::Base
   has_many :project_mutes
   has_many :muted_projects, through: :project_mutes, source: :project
 
+  has_many :project_suggestions
+
   after_commit :update_repo_permissions_async, :download_self, :create_api_key, on: :create
 
   ADMIN_USERS = ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall']

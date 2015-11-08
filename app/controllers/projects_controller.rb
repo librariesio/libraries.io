@@ -149,11 +149,4 @@ class ProjectsController < ApplicationController
   def incorrect_case?
     params[:platform] != params[:platform].downcase || (@project && params[:name] != @project.name)
   end
-
-  def find_project
-    @project = Project.platform(params[:platform]).where(name: params[:name]).includes(:github_repository).first
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes(:github_repository).first if @project.nil?
-    raise ActiveRecord::RecordNotFound if @project.nil?
-    @color = @project.color
-  end
 end

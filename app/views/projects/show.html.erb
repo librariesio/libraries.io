@@ -2,6 +2,13 @@
 <% description project_description(@project, @version) %>
 <% content_for :atom, auto_discovery_link_tag(:atom, rss_url(@project)) %>
 
+<% if logged_in? && @project.needs_suggestions? %>
+<div class="alert alert-info" role="alert">
+  We're missing some data for this project, can you help out by adding it?
+  <a href="<%= project_suggestions_path(@project.to_param) %>" class="btn btn-primary btn-xs learn-more">Suggest an improvement</a>
+</div>
+<% end %>
+
 <% cache_if(logged_out?, [@project, @version, 'projects:show', 'v1'], :expires_in => 1.week) do %>
 <div class="row">
   <div class='col-md-8'>
