@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :projects
+    resources :project_suggestions
     resources :github_repositories do
       collection do
         get 'mit'
