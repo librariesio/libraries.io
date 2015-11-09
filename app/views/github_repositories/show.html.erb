@@ -98,6 +98,9 @@
                   <th>
                     Licenses
                   </th>
+                  <th>
+
+                  </th>
                 </thead>
                 <% deps.each do |dependency| %>
                   <tr>
@@ -113,6 +116,11 @@
                     <td>
                       <% if dependency.project %>
                         <%= linked_licenses dependency.project.normalized_licenses %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if dependency.project && dependency.project.is_deprecated? %>
+                        <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
                       <% end %>
                     </td>
                   </tr>
