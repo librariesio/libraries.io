@@ -9,6 +9,12 @@
   <a href="<%= project_suggestions_path(@project.to_param) %>" class="btn btn-primary btn-xs learn-more">Suggest an improvement</a>
 </div>
 <% end %>
+<% if @project.is_deprecated? %>
+<div class="alert alert-danger" role="alert">
+  <%= fa_icon 'exclamation-triangle' %>
+  This project has been marked as deprecated and is not recommended for use any more.
+</div>
+<% end %>
 
 <% cache_if(logged_out?, [@project, @version, 'projects:show', 'v1'], :expires_in => 1.week) do %>
 <div class="row">
