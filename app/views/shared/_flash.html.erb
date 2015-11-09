@@ -5,6 +5,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        <%= fa_icon 'info-circle' %>
         <%= flash[:notice] %>
       </div>
     </div>
@@ -18,6 +19,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        <%= fa_icon 'exclamation-triangle' %>
         <%= flash[:error] %>
       </div>
     </div>
@@ -31,6 +33,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        <%= fa_icon 'check-circle' %>
         <%= flash[:success] %>
       </div>
     </div>
@@ -44,6 +47,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        <%= fa_icon 'info-circle' %>
         Hello! <strong>Libraries.io</strong> helps you track packages and its dependencies so your applications are always up to date.
         <a href="<%= about_path %>" class="btn btn-primary btn-xs learn-more" data-dismiss="alert" aria-label="Close">Learn more</a>
       </div>
@@ -58,6 +62,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        <%= fa_icon 'info-circle' %>
         We've tweaked our GitHub OAuth permissions and need you to re-authorize your account to get the best experience, thanks for beta testing Libraries.io!
         <a href="/auth/<%= current_user.private_repo_token.present? ? 'github_private' : 'github_public' %>" class="btn btn-info btn-xs learn-more" data-dismiss="alert" aria-label="Close">Re-oauthorize Now</a>
       </div>
