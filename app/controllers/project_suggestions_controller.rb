@@ -20,6 +20,6 @@ class ProjectSuggestionsController < ApplicationController
   private
 
   def project_suggestion_params
-    params.require(:project_suggestion).permit(:licenses, :repository_url, :notes)
+    params.require(:project_suggestion).permit(:licenses, :repository_url, :status, :notes)
   end
 end

@@ -18,6 +18,11 @@
   <strong>license</strong>: <%= project_suggestion.licenses %>
 </p>
 <% end %>
+<% if project_suggestion.status.present? && project_suggestion.status != project_suggestion.project.status %>
+<p>
+  <strong>status</strong>: <%= project_suggestion.status %>
+</p>
+<% end %>
 <p>
   <strong>notes</strong>: <%= project_suggestion.notes %>
 </p>
