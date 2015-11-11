@@ -123,12 +123,64 @@
     <% end %>
 
     <div class="row">
-      <% cache("projects:#{@project.id}:dependents", :expires_in => 3.days) do  %>
+      <% cache("projects:#{@project.id}:dependents:v2", :expires_in => 1.day) do  %>
         <% dependents = @project.dependent_projects(per_page: 10) %>
         <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
         <% if dependent_repos.length > 0 || dependents.length > 0 || @dependencies.length > 0 %>
           <hr>
         <% end %>
+        <% if @dependencies.length > 0 %>
+          <div class="col-md-12">
+          <% @dependencies.group_by(&:kind).each do |kind, deps| %>
+            <% if deps.length > 0 %>
+              <table class='table table-hover table-condensed'>
+                <thead>
+                  <th>
+                    <%= kind.humanize unless kind == 'normal' %> Dependencies
+                  </th>
+                  <th>
+                    Requirements
+                  </th>
+                  <th>
+                    Latest Release
+                  </th>
+                  <th>
+                    Licenses
+                  </th>
+                  <th>
+
+                  </th>
+                </thead>
+                <% deps.each do |dependency| %>
+                  <tr>
+                    <td>
+                      <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
+                    </td>
+                    <td>
+                      <%= dependency.requirements %>
+                    </td>
+                    <td>
+                      <%= dependency.try(:project).try(:latest_release_number) %>
+                    </td>
+                    <td>
+                      <% if dependency.project %>
+                        <%= linked_licenses dependency.project.normalized_licenses %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if dependency.project && dependency.project.is_deprecated? %>
+                        <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </table>
+            <% end %>
+          <% end %>
+        </div>
+        <hr>
+        <% end %>
+
         <% if dependent_repos.length > 0 || dependents.length > 0 %>
           <div class="col-md-6">
             <% if dependents.length > 0 %>
@@ -164,21 +216,7 @@
           </div>
         <% end %>
       <% end %>
-
       <div class="col-md-6">
-        <% if @dependencies.length > 0 %>
-          <% @dependencies.group_by(&:kind).each do |kind, dependencies| %>
-            <h4><%= kind.humanize unless kind == 'normal' %> Dependencies</h4>
-            <ul>
-              <% dependencies.each do |dependency| %>
-                <li>
-                  <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
-                  <%= dependency.requirements %>
-                </li>
-              <% end %>
-            </ul>
-          <% end %>
-        <% end %>
         <% if current_user %>
           <% your_dependent_repos = current_user.your_dependent_repos(@project) %>
           <% if your_dependent_repos.length > 0 %>
@@ -200,8 +238,6 @@
           <% end %>
         <% end %>
       </div>
-
-
     </div>
   </div>
 

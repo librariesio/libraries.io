@@ -75,7 +75,7 @@ class ProjectsController < ApplicationController
         raise ActiveRecord::RecordNotFound if @version.nil?
       end
     end
-    @dependencies = (@versions.length > 0 ? (@version || @versions.first).dependencies.order('project_name ASC').limit(100) : [])
+    @dependencies = (@versions.length > 0 ? (@version || @versions.first).dependencies.includes(:project).order('project_name ASC').limit(100) : [])
     @contributors = @project.contributors.order('count DESC').visible.limit(20)
   end
 
