@@ -31,12 +31,16 @@ module SourceRank
     # more than one version
     r +=1 if versions_present?
 
+    # all versions/tags are valid semver numbers
+    r +=1 if follows_semver?
+
     # a version released within the last X months
     r +=1 if recent_release?
 
     # at least X months old
     r +=1 if not_brand_new?
 
+    # has the project been marked as deprecated?
     r -=5 if is_deprecated?
 
     # number of github stars

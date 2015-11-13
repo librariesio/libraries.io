@@ -75,6 +75,14 @@ class Project < ActiveRecord::Base
     name
   end
 
+  def follows_semver?
+    if versions.all.length > 0
+      versions.all?(&:valid_number?)
+    elsif github_tags.all.length > 0
+      github_tags.published.all?(&:valid_number?)
+    end
+  end
+
   def is_deprecated?
     status == 'Deprecated'
   end
