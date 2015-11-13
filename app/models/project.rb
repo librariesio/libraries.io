@@ -91,6 +91,23 @@ class Project < ActiveRecord::Base
     !is_deprecated?
   end
 
+  def latest_stable_version
+    @latest_version ||= versions.newest_first.select(&:stable?).sort.first
+  end
+
+  def latest_stable_tag
+    return nil if github_repository.nil?
+    github_tags.published.select(&:stable?).sort.first
+  end
+
+  def latest_stable_release
+    latest_stable_version || latest_stable_tag
+  end
+
+  def latest_stable_release_number
+    latest_stable_release.try(:number)
+  end
+
   def latest_version
     @latest_version ||= versions.newest_first.sort.first
   end

@@ -58,6 +58,10 @@ class GithubTag < ActiveRecord::Base
     Semantic::Version.new(number) rescue nil
   end
 
+  def stable?
+    !prerelease?
+  end
+
   def prerelease?
     !!parsed_number.try(:pre)
   end

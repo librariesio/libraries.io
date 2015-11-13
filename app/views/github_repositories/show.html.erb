@@ -93,6 +93,9 @@
                     Requirements
                   </th>
                   <th>
+                    Latest Stable
+                  </th>
+                  <th>
                     Latest Release
                   </th>
                   <th>
@@ -109,6 +112,9 @@
                     </td>
                     <td>
                       <%= dependency.requirements %>
+                    </td>
+                    <td>
+                      <%= dependency.try(:project).try(:latest_stable_release_number) %>
                     </td>
                     <td>
                       <%= dependency.try(:project).try(:latest_release_number) %>
