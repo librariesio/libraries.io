@@ -43,6 +43,8 @@ module SourceRank
     # has the project been marked as deprecated?
     r -=5 if is_deprecated?
 
+    r -=1 if any_outdated_dependencies?
+
     # number of github stars
     r += log_scale(stars)
 
@@ -97,6 +99,10 @@ module SourceRank
   def not_brand_new?
     versions.any? {|v| v.published_at && v.published_at < 6.months.ago } ||
       (github_tags.published.any? {|v| v.published_at && v.published_at < 6.months.ago })
+  end
+
+  def any_outdated_dependencies?
+    latest_version.try(:any_outdated_dependencies?)
   end
 
   def log_scale(number)
