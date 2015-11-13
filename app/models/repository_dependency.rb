@@ -41,4 +41,11 @@ class RepositoryDependency < ActiveRecord::Base
   def valid_requirements?
     !!SemanticRange.valid_range(requirements)
   end
+
+  def outdated?
+    return nil unless valid_requirements? && project && project.latest_stable_release_number
+    !SemanticRange.satisfies(project.latest_stable_release_number, requirements)
+  rescue
+    nil
+  end
 end
