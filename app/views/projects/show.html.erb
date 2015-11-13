@@ -293,8 +293,12 @@
     <%= render 'statistics' %>
 
     <% if @contributors.length > 0 %>
-      <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
-      <%= render @contributors %>
+      <div class="row">
+        <div class="col-md-12">
+          <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
+          <%= render @contributors %>
+        </div>
+      </div>
     <% end %>
     <div class="row">
       <div class="col-md-12">
