@@ -431,6 +431,7 @@ GEM
       addressable (~> 2.3.5)
       faraday (~> 0.8, < 0.10)
     semantic (1.4.1)
+    semantic_range (0.1.0)
     sidekiq (3.5.3)
       celluloid (~> 0.17.2)
       connection_pool (~> 2.2, >= 2.2.0)
@@ -544,6 +545,7 @@ DEPENDENCIES
   sass-rails
   sassc-rails
   semantic
+  semantic_range
   sidekiq
   sidekiq-unique-jobs (~> 3.0.15)
   simple-rss

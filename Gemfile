@@ -60,6 +60,7 @@ gem 'postgres_ext'
 gem 'foreman', require: false
 gem 'puma'
 gem 'rack-timeout'
+gem 'semantic_range'
 
 group :development do
   gem 'bundler'
