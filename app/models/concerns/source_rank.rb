@@ -46,6 +46,9 @@ module SourceRank
     # does the latest version have any outdated dependencies
     r -=1 if any_outdated_dependencies?
 
+    # any releases greater than or equal to 1.0.0
+    r +=1 if one_point_oh?
+
     # every version is a prerelease?
     r -=2 if all_prereleases?
 
@@ -111,6 +114,10 @@ module SourceRank
 
   def all_prereleases?
     prereleases.length == versions.length
+  end
+
+  def one_point_oh?
+    versions.any?(&:greater_than_1?)
   end
 
   def log_scale(number)

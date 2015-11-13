@@ -80,6 +80,11 @@ class Version < ActiveRecord::Base
     dependencies.any?(&:outdated?)
   end
 
+  def greater_than_1?
+    return nil unless follows_semver?
+    SemanticRange.gte(number, '1.0.0')
+  end
+
   def to_param
     project.to_param.merge(number: number)
   end
