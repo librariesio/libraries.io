@@ -76,6 +76,10 @@ class Version < ActiveRecord::Base
     valid_number? && follows_semver_for_dependency_requirements?
   end
 
+  def any_outdated_dependencies?
+    dependencies.any?(&:outdated?)
+  end
+
   def to_param
     project.to_param.merge(number: number)
   end
