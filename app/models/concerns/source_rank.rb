@@ -43,7 +43,11 @@ module SourceRank
     # has the project been marked as deprecated?
     r -=5 if is_deprecated?
 
+    # does the latest version have any outdated dependencies
     r -=1 if any_outdated_dependencies?
+
+    # every version is a prerelease?
+    r -=2 if all_prereleases?
 
     # number of github stars
     r += log_scale(stars)
@@ -103,6 +107,10 @@ module SourceRank
 
   def any_outdated_dependencies?
     latest_version.try(:any_outdated_dependencies?)
+  end
+
+  def all_prereleases?
+    prereleases.length == versions.length
   end
 
   def log_scale(number)

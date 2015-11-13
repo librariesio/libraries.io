@@ -91,8 +91,16 @@ class Project < ActiveRecord::Base
     !is_deprecated?
   end
 
+  def stable_releases
+    versions.newest_first.select(&:stable?)
+  end
+
+  def prereleases
+    versions.newest_first.select(&:prerelease?)
+  end
+
   def latest_stable_version
-    @latest_version ||= versions.newest_first.select(&:stable?).sort.first
+    @latest_version ||= stable_releases.sort.first
   end
 
   def latest_stable_tag
