@@ -77,9 +77,9 @@ class Project < ActiveRecord::Base
 
   def follows_semver?
     if versions.all.length > 0
-      versions.all?(&:valid_number?)
-    elsif github_tags.all.length > 0
-      github_tags.published.all?(&:valid_number?)
+      versions.all?(&:follows_semver?)
+    elsif github_tags.published.length > 0
+      github_tags.published.all?(&:follows_semver?)
     end
   end
 

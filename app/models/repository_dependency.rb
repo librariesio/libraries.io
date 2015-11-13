@@ -37,4 +37,8 @@ class RepositoryDependency < ActiveRecord::Base
     proj_id = find_project_id
     update_attribute(:project_id, proj_id) if proj_id.present?
   end
+
+  def valid_requirements?
+    !!SemanticRange.valid_range(requirements)
+  end
 end

@@ -66,6 +66,10 @@ class GithubTag < ActiveRecord::Base
     !!semantic_version
   end
 
+  def follows_semver?
+    valid_number?
+  end
+
   def number
     name
   end

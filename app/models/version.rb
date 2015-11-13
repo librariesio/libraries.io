@@ -64,6 +64,14 @@ class Version < ActiveRecord::Base
     !!semantic_version
   end
 
+  def follows_semver_for_dependency_requirements?
+    dependencies.all?(&:valid_requirements?)
+  end
+
+  def follows_semver?
+    valid_number? && follows_semver_for_dependency_requirements?
+  end
+
   def to_param
     project.to_param.merge(number: number)
   end
