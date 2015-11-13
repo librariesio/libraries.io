@@ -130,7 +130,7 @@
           <hr>
         <% end %>
         <% if @dependencies.length > 0 %>
-          <div class="col-md-12">
+          <div class="col-md-12 table-responsive">
           <% @dependencies.group_by(&:kind).each do |kind, deps| %>
             <% if deps.length > 0 %>
               <table class='table table-hover table-condensed'>

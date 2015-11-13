@@ -79,7 +79,7 @@
 
       <% if repo.manifests.latest.length > 0 %>
         <hr>
-        <div id="dependencies">
+        <div id="dependencies" class="table-responsive">
           <h4>Dependencies</h4>
           <% repo.manifests.limit(20).latest.each do |manifest| %>
             <% deps = manifest.repository_dependencies.limit(500).order(:project_name).includes(:project) %>
