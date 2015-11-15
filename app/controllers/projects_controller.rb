@@ -52,36 +52,15 @@ class ProjectsController < ApplicationController
         return redirect_to(project_path(@project.to_param), :status => :moved_permanently)
       end
     end
-    @version_count = @project.versions.newest_first.count
-    @github_repository = @project.github_repository
-    if @version_count.zero?
-      @versions = []
-      if @github_repository.present?
-        @github_tags = @github_repository.github_tags.published.order('published_at DESC').limit(10).to_a.sort
-        if params[:number].present?
-          @version = @github_repository.github_tags.published.find_by_name(params[:number])
-          raise ActiveRecord::RecordNotFound if @version.nil?
-        end
-      else
-        @github_tags = []
-      end
-      if @github_tags.empty?
-        raise ActiveRecord::RecordNotFound if params[:number].present?
-      end
-    else
-      @versions = @project.versions.newest_first.to_a.first(10).sort
-      if params[:number].present?
-        @version = @project.versions.find_by_number(params[:number])
-        raise ActiveRecord::RecordNotFound if @version.nil?
-      end
-    end
+    find_version
     @dependencies = (@versions.length > 0 ? (@version || @versions.first).dependencies.includes(:project).order('project_name ASC').limit(100) : [])
     @contributors = @project.contributors.order('count DESC').visible.limit(20)
   end
 
   def about
     find_project
-    send_data render_to_string(:about, layout: false), filename: "#{@project.platform.downcase}-#{@project}.about", type: 'application/text', disposition: 'attachment'
+    find_version
+    send_data render_to_string(:about, layout: false), filename: "#{@project.platform.downcase}-#{@project}.ABOUT", type: 'application/text', disposition: 'attachment'
   end
 
   def dependents
@@ -148,5 +127,32 @@ class ProjectsController < ApplicationController
 
   def incorrect_case?
     params[:platform] != params[:platform].downcase || (@project && params[:name] != @project.name)
+  end
+
+  def find_version
+    @version_count = @project.versions.newest_first.count
+    @github_repository = @project.github_repository
+    if @version_count.zero?
+      @versions = []
+      if @github_repository.present?
+        @github_tags = @github_repository.github_tags.published.order('published_at DESC').limit(10).to_a.sort
+        if params[:number].present?
+          @version = @github_repository.github_tags.published.find_by_name(params[:number])
+          raise ActiveRecord::RecordNotFound if @version.nil?
+        end
+      else
+        @github_tags = []
+      end
+      if @github_tags.empty?
+        raise ActiveRecord::RecordNotFound if params[:number].present?
+      end
+    else
+      @versions = @project.versions.newest_first.to_a.first(10).sort
+      if params[:number].present?
+        @version = @project.versions.find_by_number(params[:number])
+        raise ActiveRecord::RecordNotFound if @version.nil?
+      end
+    end
+    @version_number = @version.try(:number) || @project.latest_release_number
   end
 end
