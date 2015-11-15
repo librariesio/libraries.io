@@ -314,7 +314,7 @@
         </p>
         <p>
           <%= fa_icon 'download' %>
-          <%= link_to 'Export a .ABOUT file for this library', params[:number].present? ? about_version_path(@version.to_param) : about_project_path(@project.to_param) %>
+          <%= link_to 'Export a .ABOUT file for this library', @version.present? ? about_version_path(@version.to_param) : about_project_path(@project.to_param) %>
         </p>
       </div>
     </div>
