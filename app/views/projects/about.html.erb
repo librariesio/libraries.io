@@ -25,7 +25,7 @@ date: <%= @project.updated_at.to_date.iso8601 %>
 <%- end -%>
 about_resource: NONE
 <%- if @version -%>
-libraries_io_url: <%= version_url(@version.to_param) %>
+libraries_io_url: <%= project_url(@project.to_param.merge(number: params[:number])) %>
 <%- else -%>
 libraries_io_url: <%= project_url(@project.to_param) %>
 <%- end -%>
