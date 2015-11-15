@@ -308,10 +308,13 @@
       <div class="col-md-12">
         <br>
         <p>
-          <small>
-            Notice something wrong with this page?
-            <%= link_to 'Make a suggestion here', project_suggestions_path(@project.to_param) %>
-          </small>
+          <%= fa_icon 'question-circle' %>
+          Something wrong with this page?
+          <%= link_to 'Make a suggestion', project_suggestions_path(@project.to_param) %>
+        </p>
+        <p>
+          <%= fa_icon 'download' %>
+          <%= link_to 'Export a .ABOUT file for this library', params[:number].present? ? about_version_path(@version.to_param) : about_project_path(@project.to_param) %>
         </p>
       </div>
     </div>
