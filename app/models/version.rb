@@ -82,7 +82,11 @@ class Version < ActiveRecord::Base
 
   def greater_than_1?
     return nil unless follows_semver?
-    SemanticRange.gte(number, '1.0.0')
+    begin
+      SemanticRange.gte(number, '1.0.0')
+    rescue
+      false
+    end
   end
 
   def to_param
