@@ -2,7 +2,7 @@ class Project < ActiveRecord::Base
   include Searchable
   include SourceRank
   HAS_DEPENDENCIES = false
-  STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted']
+  STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
 
   validates_presence_of :name, :platform
 
