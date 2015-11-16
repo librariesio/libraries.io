@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109155659) do
+ActiveRecord::Schema.define(version: 20151115223657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,23 @@ ActiveRecord::Schema.define(version: 20151109155659) do
   add_index "github_contributions", ["github_repository_id", "github_user_id"], name: "index_contributions_on_repository_id_and_user_id", using: :btree
   add_index "github_contributions", ["github_repository_id"], name: "index_github_contributions_on_github_repository_id", using: :btree
   add_index "github_contributions", ["github_user_id"], name: "index_github_contributions_on_github_user_id", using: :btree
+
+  create_table "github_issues", force: :cascade do |t|
+    t.integer  "github_repository_id"
+    t.integer  "github_id"
+    t.integer  "number"
+    t.string   "state"
+    t.string   "title"
+    t.text     "body"
+    t.integer  "github_user_id"
+    t.boolean  "locked"
+    t.integer  "comments_count"
+    t.datetime "closed_at"
+    t.string   "labels",               default: [],              array: true
+    t.string   "string",               default: [],              array: true
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
 
   create_table "github_organisations", force: :cascade do |t|
     t.string   "login"
