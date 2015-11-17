@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount Payola::Engine => '/payola', as: :payola
   require 'sidekiq/web'
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
@@ -37,6 +38,9 @@ Rails.application.routes.draw do
     get '/stats', to: 'stats#index', as: :stats
     get '/stats/github', to: 'stats#github', as: :github_stats
   end
+
+  get '/pricing', to: 'account_subscriptions#plans', as: :pricing
+  resources :account_subscriptions
 
   get '/recommendations', to: 'recommendations#index', as: :recommendations
 

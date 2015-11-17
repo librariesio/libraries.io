@@ -20,8 +20,12 @@ class DashboardController < ApplicationController
 
   def watch
     github_repository = GithubRepository.find(params[:github_repository_id])
-    current_user.subscribe_to_repo(github_repository)
-    redirect_to_back_or_default repositories_path
+    if current_user.can_watch?(github_repository)
+      current_user.subscribe_to_repo(github_repository)
+      redirect_to_back_or_default repositories_path
+    else
+      redirect_to pricing_path, notice: 'You need to upgrade your plan to track more repositories'
+    end
   end
 
   def unwatch

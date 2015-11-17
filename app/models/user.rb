@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
   has_many :project_mutes
   has_many :muted_projects, through: :project_mutes, source: :project
 
+  has_many :payola_subscriptions, anonymous_class: Payola::Subscription, as: :owner
   has_many :project_suggestions
 
   after_commit :update_repo_permissions_async, :download_self, :create_api_key, on: :create
@@ -34,6 +35,50 @@ class User < ActiveRecord::Base
 
   validates_presence_of :email, :on => :update
   validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
+
+  def has_active_subscription?
+    active_subscription.present?
+  end
+
+  def current_plan
+    @current_plan ||= payola_subscriptions.active.select{|sub| sub.plan.present? }.sort{|sub| sub.plan.amount }.last.try(:plan)
+  end
+
+  def active_subscription
+    @active_subscription ||= payola_subscriptions.active.select{|sub| sub.plan.present? }.sort{|sub| sub.plan.amount }
+  end
+
+  def max_private_repo_count
+    current_plan.try(:repo_count) || 0
+  end
+
+  def current_private_repo_count
+    watched_github_repositories.where(private: true).count
+  end
+
+  def reached_private_repo_limit?
+    current_private_repo_count >= max_private_repo_count
+  end
+
+  def can_enable_private_repo_tracking?
+    private_repo_token.blank? && admin?
+  end
+
+  def can_track_private_repos?
+    admin? || has_active_subscription?
+  end
+
+  def needs_to_enable_github_access?
+    private_repo_token.blank? && public_repo_token.blank?
+  end
+
+  def can_watch?(repo)
+    if repo.private?
+      can_track_private_repos? && !reached_private_repo_limit?
+    else
+      !needs_to_enable_github_access?
+    end
+  end
 
   def your_dependent_repos(project)
     ids = all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
