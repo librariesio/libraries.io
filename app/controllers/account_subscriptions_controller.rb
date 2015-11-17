@@ -1,10 +1,10 @@
 class AccountSubscriptionsController < ApplicationController
-  before_action :ensure_logged_in
+  before_action :ensure_logged_in, :except => :plans
 
   include Payola::StatusBehavior
 
   def plans
-    default_interval = current_user.current_plan.try(:interval) || 'month'
+    default_interval = current_user.try(:current_plan).try(:interval) || 'month'
     @interval = params[:interval] == 'year' ? 'year' : default_interval
     @plans = SubscriptionPlan.interval(@interval)
   end
