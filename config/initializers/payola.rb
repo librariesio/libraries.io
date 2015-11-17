@@ -1,5 +1,8 @@
 SubscriptionPlan.first if Rails.env.development? # have to force load the SubscriptionPlan class for development
 
+Payola.background_worker = :sidekiq
+Payola.default_currency = 'gbp'
+
 Payola.configure do |config|
   # Example subscription:
   #
