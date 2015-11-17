@@ -8,7 +8,7 @@
     <br>
     <br>
     <% other_interval = @interval == 'year' ? 'month' : 'year' %>
-    <%= link_to "Switch to #{other_interval}ly pricing", pricing_path(interval: other_interval), class: 'pull-right' %>
+    <%= link_to "Switch to #{other_interval.capitalize}ly Pricing #{'and Get One Month Free' if other_interval == 'year'}", pricing_path(interval: other_interval), class: "pull-right btn btn-#{other_interval == 'year' ? 'success' : 'default'}" %>
   </div>
 </div>
 
@@ -21,13 +21,21 @@
     <p>
       Unlimited public repositories
     </p>
+    <% if @interval == 'year' %>
+    <p>
+      &nbsp;
+    </p>
+    <% end %>
+    <p>
+      &nbsp;
+    </p>
     <%= link_to 'Get started', repositories_path, class: 'btn btn-primary' %>
   </div>
   <% @plans.each do |plan| %>
     <div class="plan col-md-3 text-center">
       <h4><%= plan.short_name %></h4>
       <p>
-        <%= number_to_currency plan.amount/100.0, unit: '£' %> per <%= plan.interval %>
+        <%= number_to_currency plan.amount/100.0, unit: '£' %>+VAT per <%= plan.interval %>
       </p>
       <p>
         Unlimited public repositories
@@ -35,6 +43,11 @@
       <p>
         <strong><%= plan.repo_count %></strong> private repositories
       </p>
+      <% if @interval == 'year' %>
+      <p>
+        One Month Free
+      </p>
+      <% end %>
       <% if current_user.current_plan == plan %>
         <%= link_to 'Your Current Plan', repositories_path, class: 'btn btn-success' %>
       <% else %>
