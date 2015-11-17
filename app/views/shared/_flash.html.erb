@@ -40,7 +40,7 @@
   </div>
 <%- end %>
 
-<%- if flash[:show_welcome] && !current_page?('/') %>
+<%- if flash[:show_welcome] && !current_page?('/') && !current_page?('/about') && !current_page?('/pricing') %>
   <div class="row">
     <div class="col-md-12">
       <div id="welcome-alert" class="alert alert-info" role="alert">
