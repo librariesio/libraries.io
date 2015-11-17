@@ -20,6 +20,11 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  number:
+    currency:
+      format:
+        format: "%n%u"
+        unit: "GBP"
   hello: "Hello world"
   number:
     human:

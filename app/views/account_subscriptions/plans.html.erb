@@ -56,7 +56,7 @@
             <%= mail_to 'support@libraries.io','Contact us to change plan', subject: 'Change Plan', class: 'btn btn-primary' %>
           <% else %>
             <% button_text = current_user && current_user.has_active_subscription? ? 'Switch Plan' : 'Subscribe Now'  %>
-            <%= render 'payola/subscriptions/checkout', plan: plan, email: current_user.email, button_text: button_text, currency: 'gbp', billing_address: true, allow_remember_me: true, verify_zip_code: true, plan_image_path: asset_path('stripe-logo.png') %>
+            <%= render 'payola/subscriptions/checkout', plan: plan, email: current_user.email, button_text: button_text, currency: 'gbp', billing_address: true, allow_remember_me: true, verify_zip_code: true, plan_image_path: asset_path('stripe-logo.png'), name: 'Libraries.io Subscription', description: "#{plan.short_name} - #{formatted_price(plan.amount, unit: '£')} per #{plan.interval}" %>
           <% end %>
         <% else %>
           <%= link_to 'Subscribe Now', login_path(return_to: pricing_path), class: 'btn btn-primary' %>
