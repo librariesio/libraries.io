@@ -57,6 +57,7 @@ class User < ActiveRecord::Base
   end
 
   def reached_private_repo_limit?
+    return false if admin?
     current_private_repo_count >= max_private_repo_count
   end
 
@@ -73,6 +74,7 @@ class User < ActiveRecord::Base
   end
 
   def can_watch?(repo)
+    return true if admin?
     if repo.private?
       can_track_private_repos? && !reached_private_repo_limit?
     else
