@@ -5,50 +5,51 @@ class SubscriptionPlan < ActiveRecord::Base
 
   PLANS = [
     {
-      amount: 1999,
+      amount: 4999,
       interval: 'month',
       stripe_id: '1',
       name: 'Bronze Monthly',
-      repo_count: 10
+      repo_count: 2
     },
     {
-      amount: 4999,
+      amount: 12999,
       interval: 'month',
       stripe_id: '2',
       name: 'Silver Monthly',
-      repo_count: 50
+      repo_count: 6
     },
     {
-      amount: 11999,
+      amount: 24999,
       interval: 'month',
       stripe_id: '3',
       name: 'Gold Monthly',
-      repo_count: 100
+      repo_count: 15
     },
     {
-      amount: 21989,
+      amount: 54999,
       interval: 'year',
       stripe_id: '4',
       name: 'Bronze Yearly',
-      repo_count: 10
+      repo_count: 2
     },
     {
-      amount: 54989,
+      amount: 142999,
       interval: 'year',
       stripe_id: '5',
       name: 'Silver Yearly',
-      repo_count: 50
+      repo_count: 6
     },
     {
-      amount: 131989,
+      amount: 274989,
       interval: 'year',
       stripe_id: '6',
       name: 'Gold Yearly',
-      repo_count: 100
+      repo_count: 15
     }
   ]
 
   def self.setup_plans
+    delete_all
     PLANS.each do |plan|
       self.find_or_create_by(plan)
     end
