@@ -61,11 +61,23 @@ class User < ActiveRecord::Base
   end
 
   def can_enable_private_repo_tracking?
-    private_repo_token.blank? && (admin? || has_active_subscription?)
+    private_repo_token.blank? && admin?
+  end
+
+  def can_track_private_repos?
+    admin? || has_active_subscription?
   end
 
   def needs_to_enable_github_access?
     private_repo_token.blank? && public_repo_token.blank?
+  end
+
+  def can_watch?(repo)
+    if repo.private?
+      can_track_private_repos? && !reached_private_repo_limit?
+    else
+      !needs_to_enable_github_access?
+    end
   end
 
   def your_dependent_repos(project)
