@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
   end
 
   def can_enable_private_repo_tracking?
-    private_repo_token.blank? && admin?
+    private_repo_token.blank?
   end
 
   def can_track_private_repos?
@@ -110,7 +110,7 @@ class User < ActiveRecord::Base
   end
 
   def monitoring_enabled?
-    admin? || public_repo_token.present? || private_repo_token.present?
+    public_repo_token.present? || private_repo_token.present?
   end
 
   def can_monitor?(github_repository)
