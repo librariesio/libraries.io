@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   end
 
   def current_plan
-    @current_plan ||= payola_subscriptions.active.select{|sub| sub.plan.present? }.sort{|sub| sub.plan.amount }.last.plan
+    @current_plan ||= payola_subscriptions.active.select{|sub| sub.plan.present? }.sort{|sub| sub.plan.amount }.last.try(:plan)
   end
 
   def active_subscription
