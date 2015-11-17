@@ -423,7 +423,7 @@ GEM
       faraday (~> 0.8, < 0.10)
     semantic (1.4.1)
     semantic_range (0.2.0)
-    sidekiq (4.0.0)
+    sidekiq (4.0.1)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       json (~> 1.0)
