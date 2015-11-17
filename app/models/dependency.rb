@@ -34,4 +34,15 @@ class Dependency < ActiveRecord::Base
     proj_id = find_project_id
     update_attribute(:project_id, proj_id) if proj_id.present?
   end
+
+  def valid_requirements?
+    !!SemanticRange.valid_range(requirements)
+  end
+
+  def outdated?
+    return nil unless valid_requirements? && project && project.latest_stable_release_number
+    !SemanticRange.satisfies(project.latest_stable_release_number, requirements)
+  rescue
+    nil
+  end
 end

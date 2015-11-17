@@ -4,7 +4,7 @@ module Recommendable
   def recommended_projects
     projects = Project.where(id: recommended_project_ids).order("position(','||projects.id::text||',' in '#{recommended_project_ids.join(',')}'), rank DESC")
     projects = unfiltered_recommendations if projects.empty?
-    projects.where.not(id: already_watching_ids).includes(:github_repository)
+    projects.where.not(id: already_watching_ids).not_deprecated.includes(:github_repository)
   end
 
   def recommended_project_ids
@@ -41,7 +41,7 @@ module Recommendable
   def unfiltered_recommendations
     ids = Project.most_dependents.limit(50).pluck(:id) + Project.most_watched.limit(50).pluck(:id)
     ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.map(&:first)
-    Project.where(id: ids).order('rank DESC')
+    Project.where(id: ids).order('rank DESC').not_deprecated
   end
 
   def favourite_platforms

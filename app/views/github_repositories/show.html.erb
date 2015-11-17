@@ -79,7 +79,7 @@
 
       <% if repo.manifests.latest.length > 0 %>
         <hr>
-        <div id="dependencies">
+        <div id="dependencies" class="table-responsive">
           <h4>Dependencies</h4>
           <% repo.manifests.limit(20).latest.each do |manifest| %>
             <% deps = manifest.repository_dependencies.limit(500).order(:project_name).includes(:project) %>
@@ -93,10 +93,16 @@
                     Requirements
                   </th>
                   <th>
+                    Latest Stable
+                  </th>
+                  <th>
                     Latest Release
                   </th>
                   <th>
                     Licenses
+                  </th>
+                  <th>
+
                   </th>
                 </thead>
                 <% deps.each do |dependency| %>
@@ -108,11 +114,23 @@
                       <%= dependency.requirements %>
                     </td>
                     <td>
+                      <%= dependency.try(:project).try(:latest_stable_release_number) %>
+                    </td>
+                    <td>
                       <%= dependency.try(:project).try(:latest_release_number) %>
                     </td>
                     <td>
                       <% if dependency.project %>
                         <%= linked_licenses dependency.project.normalized_licenses %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if dependency.project %>
+                        <% if dependency.project.is_deprecated? %>
+                          <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
+                        <% elsif dependency.outdated? %>
+                          <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: 'Out of date' %>
+                        <% end %>
                       <% end %>
                     </td>
                   </tr>
@@ -243,7 +261,7 @@
         <hr>
         <h4>Tags</h4>
         <ul>
-          <% repo.github_tags.published.limit(100).to_a.sort.each do |tag| %>
+          <% repo.github_tags.published.order('published_at DESC, name DESC').limit(100).to_a.each do |tag| %>
             <li>
               <%= link_to tag, tag.github_url %>
               <% if tag.published_at.present? %>

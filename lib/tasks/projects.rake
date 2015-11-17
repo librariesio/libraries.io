@@ -12,7 +12,7 @@ namespace :projects do
 
   desc 'Update the sitemap every other day'
   task update_sitemap: :environment do
-    if Date.today.wday.even?
+    if Date.today.wday.zero?
       Rake::Task["sitemap:refresh"].invoke
     end
   end

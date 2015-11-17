@@ -31,14 +31,8 @@
             <% if project.stars > 0 %>
              - <%= number_to_human project.stars %> stars
             <% end %>
+            - <%= link_to pluralize(project.github_repository.github_contributions_count, 'contributor'), project.github_repository.contributors_url, target: :blank %>
           </small>
-
-          <p>
-            <small>
-              <%= link_to pluralize(project.dependents_count, 'dependent release'), project_dependents_path(project.to_param) %> -
-              <%= link_to pluralize(project.github_repository.github_contributions_count, 'contributor'), project.github_repository.contributors_url, target: :blank %>
-            </small>
-          </p>
         </div>
         <div class="col-xs-4">
           <br>

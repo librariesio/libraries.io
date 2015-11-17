@@ -38,7 +38,7 @@ class GithubTag < ActiveRecord::Base
 
   def notify_firehose
     github_repository.projects.without_versions.each do |project|
-      Firehose.new_version(project, project.platform, number)
+      Firehose.new_version(project, project.platform, self)
     end
   end
 
@@ -51,7 +51,27 @@ class GithubTag < ActiveRecord::Base
   end
 
   def parsed_number
-    Semantic::Version.new(number) rescue number
+    semantic_version || number
+  end
+
+  def semantic_version
+    Semantic::Version.new(number) rescue nil
+  end
+
+  def stable?
+    !prerelease?
+  end
+
+  def prerelease?
+    !!parsed_number.try(:pre)
+  end
+
+  def valid_number?
+    !!semantic_version
+  end
+
+  def follows_semver?
+    valid_number?
   end
 
   def number

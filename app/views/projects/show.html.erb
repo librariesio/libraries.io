@@ -1,9 +1,19 @@
 <% title "#{@project} #{@version} on #{@project.platform_name} - Libraries" %>
 <% description project_description(@project, @version) %>
-<% if @version_count > 0 %>
-  <% content_for :atom, auto_discovery_link_tag(:atom, project_versions_url({format: "atom"}.merge(@project.to_param))) %>
-<% elsif @github_repository && @github_tags.length > 0 %>
-  <% content_for :atom, auto_discovery_link_tag(:atom, project_tags_url({format: "atom"}.merge(@project.to_param))) %>
+<% content_for :atom, auto_discovery_link_tag(:atom, rss_url(@project)) %>
+
+<% if logged_in? && @project.not_deprecated? && @project.needs_suggestions? && @project.project_suggestions.where(user: current_user).count.zero? %>
+<div class="alert alert-info" role="alert">
+  <%= fa_icon 'question-circle' %>
+  We're missing some data for this project, can you help out by adding it?
+  <a href="<%= project_suggestions_path(@project.to_param) %>" class="btn btn-primary btn-xs learn-more">Suggest an improvement</a>
+</div>
+<% end %>
+<% if @project.is_deprecated? %>
+<div class="alert alert-danger" role="alert">
+  <%= fa_icon 'exclamation-triangle' %>
+  This project has been marked as deprecated and is not recommended for use any more.
+</div>
 <% end %>
 
 <% cache_if(logged_out?, [@project, @version, 'projects:show', 'v1'], :expires_in => 1.week) do %>
@@ -52,7 +62,7 @@
     </p>
     <% end %>
 
-    <% if @project.homepage.present? && @project.homepage != package_link(@project, @project.platform) %>
+    <% if @project.homepage.present? && @project.homepage != package_link(@project) %>
     <p>
       Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage)) %>
     </p>
@@ -86,7 +96,7 @@
     </p>
     <% end %>
 
-    <% if link = package_link(@project, @project.platform, @version.try(:number)) %>
+    <% if link = package_link(@project, @version.try(:number)) %>
     <p>
       View on registry: <%= link_to truncate(link, length: 70), link %>
     </p>
@@ -113,12 +123,74 @@
     <% end %>
 
     <div class="row">
-      <% cache("projects:#{@project.id}:dependents", :expires_in => 3.days) do  %>
+      <% cache("projects:#{@project.id}:dependents:v2", :expires_in => 1.day) do  %>
         <% dependents = @project.dependent_projects(per_page: 10) %>
         <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
         <% if dependent_repos.length > 0 || dependents.length > 0 || @dependencies.length > 0 %>
           <hr>
         <% end %>
+        <% if @dependencies.length > 0 %>
+          <div class="col-md-12 table-responsive">
+          <% @dependencies.group_by(&:kind).each do |kind, deps| %>
+            <% if deps.length > 0 %>
+              <table class='table table-hover table-condensed'>
+                <thead>
+                  <th>
+                    <%= kind.humanize unless kind == 'normal' %> Dependencies
+                  </th>
+                  <th>
+                    Requirements
+                  </th>
+                  <th>
+                    Latest Stable
+                  </th>
+                  <th>
+                    Latest Release
+                  </th>
+                  <th>
+                    Licenses
+                  </th>
+                  <th>
+
+                  </th>
+                </thead>
+                <% deps.each do |dependency| %>
+                  <tr>
+                    <td>
+                      <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
+                    </td>
+                    <td>
+                      <%= dependency.requirements %>
+                    </td>
+                    <td>
+                      <%= dependency.try(:project).try(:latest_stable_release_number) %>
+                    </td>
+                    <td>
+                      <%= dependency.try(:project).try(:latest_release_number) %>
+                    </td>
+                    <td>
+                      <% if dependency.project %>
+                        <%= linked_licenses dependency.project.normalized_licenses %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if dependency.project %>
+                        <% if dependency.project.is_deprecated? %>
+                          <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
+                        <% elsif dependency.outdated? %>
+                          <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: 'Out of date version' %>
+                        <% end %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </table>
+            <% end %>
+          <% end %>
+        </div>
+        <hr>
+        <% end %>
+
         <% if dependent_repos.length > 0 || dependents.length > 0 %>
           <div class="col-md-6">
             <% if dependents.length > 0 %>
@@ -154,21 +226,7 @@
           </div>
         <% end %>
       <% end %>
-
       <div class="col-md-6">
-        <% if @dependencies.length > 0 %>
-          <% @dependencies.group_by(&:kind).each do |kind, dependencies| %>
-            <h4><%= kind.humanize unless kind == 'normal' %> Dependencies</h4>
-            <ul>
-              <% dependencies.each do |dependency| %>
-                <li>
-                  <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
-                  <%= dependency.requirements %>
-                </li>
-              <% end %>
-            </ul>
-          <% end %>
-        <% end %>
         <% if current_user %>
           <% your_dependent_repos = current_user.your_dependent_repos(@project) %>
           <% if your_dependent_repos.length > 0 %>
@@ -190,8 +248,6 @@
           <% end %>
         <% end %>
       </div>
-
-
     </div>
   </div>
 
@@ -240,16 +296,28 @@
 
     <%= render 'statistics' %>
 
-    <% related = @project.mlt %>
-    <% if related && related.length > 0 %>
-      <h4>Related Projects</h4>
-      <%= render related %>
-    <% end %>
-
     <% if @contributors.length > 0 %>
-      <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
-      <%= render @contributors %>
+      <div class="row">
+        <div class="col-md-12">
+          <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
+          <%= render @contributors %>
+        </div>
+      </div>
     <% end %>
+    <div class="row">
+      <div class="col-md-12">
+        <br>
+        <p>
+          <%= fa_icon 'question-circle' %>
+          Something wrong with this page?
+          <%= link_to 'Make a suggestion', project_suggestions_path(@project.to_param) %>
+        </p>
+        <p>
+          <%= fa_icon 'download' %>
+          <%= link_to 'Export .ABOUT file for this library', @version.present? ? about_version_path(@project.to_param.merge(number: @version.number)) : about_project_path(@project.to_param) %>
+        </p>
+      </div>
+    </div>
   </div>
 </div>
 <% end %>

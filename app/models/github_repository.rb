@@ -38,10 +38,13 @@ class GithubRepository < ActiveRecord::Base
   scope :with_manifests, -> { joins(:manifests) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {github_repository_id: nil}) }
 
-  scope :with_license, -> { where("license <> ''") }
-  scope :without_license, -> {where("license IS ? OR license = ''", nil)}
+  scope :with_license, -> { where("github_repositories.license <> ''") }
+  scope :without_license, -> {where("github_repositories.license IS ? OR github_repositories.license = ''", nil)}
 
   scope :interesting, -> { where('github_repositories.stargazers_count > 0').order('github_repositories.stargazers_count DESC, github_repositories.pushed_at DESC') }
+
+  scope :recently_created, -> { where('created_at > ?', 7.days.ago)}
+  scope :hacker_news, -> { order("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC") }
 
   def self.language(language)
     where('lower(github_repositories.language) = ?', language.try(:downcase))
@@ -60,6 +63,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_owner
+    return true if github_user.present? || github_organisation.present?
     o = github_client.user(owner_name)
     if o.type == "Organization"
       if go = GithubOrganisation.create_from_github(owner_id.to_i)
@@ -74,7 +78,7 @@ class GithubRepository < ActiveRecord::Base
       user.download_from_github
       user
     end
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::RepositoryUnavailable, Octokit::InvalidRepository, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
@@ -154,6 +158,10 @@ class GithubRepository < ActiveRecord::Base
     "#{url}/commits"
   end
 
+  def readme_url
+    "#{url}#readme"
+  end
+
   def tags_url
     "#{url}/tags"
   end
@@ -177,7 +185,7 @@ class GithubRepository < ActiveRecord::Base
     else
       readme.update_attributes(contents)
     end
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway
     nil
   end
 
@@ -192,7 +200,7 @@ class GithubRepository < ActiveRecord::Base
       self.source_name = r[:parent][:full_name] if r[:fork]
       assign_attributes r.slice(*API_FIELDS)
       save! if self.changed?
-    rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       nil
     end
   end
@@ -213,7 +221,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_fork_source(token = nil)
-    return true unless self.fork?
+    return true unless self.fork? && self.source.nil?
     GithubRepository.create_from_github(source_name, token)
   end
 
@@ -233,7 +241,9 @@ class GithubRepository < ActiveRecord::Base
   def self.extract_full_name(url)
     return nil if url.nil?
     github_regex = /(git\+)?(((https|http|git|ssh)?:\/\/(www\.)?)|ssh:\/\/git@|https:\/\/git@|scm:git:git@|git@)(github.com|raw.githubusercontent.com)(:|\/)/i
-    return nil unless url.match(github_regex)
+    if !url.match(github_regex)
+      return extract_github_io_name(url)
+    end
     url = url.gsub(github_regex, '').strip
     url = url.gsub(/(\.git|\/)$/i, '')
     url = url.gsub(/(#\S*)$/i, '')
@@ -246,6 +256,13 @@ class GithubRepository < ActiveRecord::Base
     url = url.split('/').reject(&:blank?)[0..1]
     return nil unless url.length == 2
     url.join('/')
+  end
+
+  def self.extract_github_io_name(url)
+    return nil if url.nil?
+    match = url.match(/\/([\w\.@\:-~]+).github.io\/([\w\.@\:-~]+)/i)
+    return nil unless match && match.length == 3
+    "#{match[1]}/#{match[2]}"
   end
 
   def download_github_contributions(token = nil)
@@ -269,7 +286,7 @@ class GithubRepository < ActiveRecord::Base
       cont.save! if cont.changed?
     end
     true
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
@@ -302,7 +319,7 @@ class GithubRepository < ActiveRecord::Base
         end
       end
     end
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
@@ -367,7 +384,7 @@ class GithubRepository < ActiveRecord::Base
     repo_hash = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
     return false if repo_hash.nil? || repo_hash.empty?
     create_from_hash(repo_hash)
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 

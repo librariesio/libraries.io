@@ -37,7 +37,7 @@ module Searchable
     after_touch() { __elasticsearch__.update_document }
 
     def as_indexed_json(options = {})
-      as_json methods: [:stars, :repo_name, :exact_name]
+      as_json methods: [:stars, :repo_name, :exact_name], except: [:status]
     end
 
     def exact_name
@@ -65,7 +65,7 @@ module Searchable
             },
             field_value_factor: {
               field: "rank",
-              "modifier": "log1p"
+              "modifier": "log2p"
             }
           }
         },

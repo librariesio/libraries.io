@@ -23,6 +23,9 @@ footer{
   padding: 20px 0;
   color: #999;
   margin-top: 20px;
+  ul{
+    padding-left: 20px;
+  }
 }
 
 @media (min-width: 980px) {
@@ -323,4 +326,7 @@ tr.top td{
 
 .avatar{
   margin-right: 10px;
+}
+.text-warning{
+  color: #C3B028;
 }

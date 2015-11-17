@@ -6,11 +6,11 @@ namespace :download do
   task small_registries: [:emacs, :hackage, :sublime]
 
   task alcatraz: :environment do
-    Repositories::Alcatraz.import
+    Repositories::Alcatraz.import_async
   end
 
   task atom: :environment do
-    Repositories::Atom.import_recent
+    Repositories::Atom.import_recent_async
   end
 
   task atom_all: :environment do
@@ -18,23 +18,23 @@ namespace :download do
   end
 
   task biicode: :environment do
-    Repositories::Biicode.import
+    Repositories::Biicode.import_async
   end
 
   task bower: :environment do
-    Repositories::Bower.import_new
+    Repositories::Bower.import_new_async
   end
 
   task cargo: :environment do
-    Repositories::Cargo.import
+    Repositories::Cargo.import_async
   end
 
   task clojars: :environment do
-    Repositories::Clojars.import
+    Repositories::Clojars.import_async
   end
 
   task cpan: :environment do
-    Repositories::CPAN.import_recent
+    Repositories::CPAN.import_recent_async
   end
 
   task cpan_all: :environment do
@@ -46,7 +46,7 @@ namespace :download do
   end
 
   task cran: :environment do
-    Repositories::CRAN.import_recent
+    Repositories::CRAN.import_recent_async
   end
 
   task cran_all: :environment do
@@ -54,27 +54,27 @@ namespace :download do
   end
 
   task dub: :environment do
-    Repositories::Dub.import
+    Repositories::Dub.import_async
   end
 
   task elm: :environment do
-    Repositories::Elm.import
+    Repositories::Elm.import_async
   end
 
   task emacs: :environment do
-    Repositories::Emacs.import
+    Repositories::Emacs.import_async
   end
 
   task hackage: :environment do
-    Repositories::Hackage.import_recent
+    Repositories::Hackage.import_recent_async
   end
 
   task hackage_all: :environment do
-    Repositories::Hackage.import
+    Repositories::Hackage.import_async
   end
 
   task hex: :environment do
-    Repositories::Hex.import_recent
+    Repositories::Hex.import_recent_async
   end
 
   task hex_all: :environment do
@@ -82,16 +82,16 @@ namespace :download do
   end
 
   task jam: :environment do
-    Repositories::Jam.import
+    Repositories::Jam.import_async
   end
 
   task julia: :environment do
-    Repositories::Julia.import
+    Repositories::Julia.import_async
   end
 
   task maven: :environment do
     Repositories::Maven.load_names(50)
-    Repositories::Maven.import_recent
+    Repositories::Maven.import_recent_async
   end
 
   task maven_all: :environment do
@@ -100,16 +100,16 @@ namespace :download do
   end
 
   task meteor: :environment do
-    Repositories::Meteor.import
+    Repositories::Meteor.import_async
   end
 
   task nimble: :environment do
-    Repositories::Nimble.import
+    Repositories::Nimble.import_async
   end
 
   task nuget: :environment do
     Repositories::NuGet.load_names(3)
-    Repositories::NuGet.import_recent
+    Repositories::NuGet.import_async
   end
 
   task nuget_all: :environment do
@@ -118,7 +118,7 @@ namespace :download do
   end
 
   task npm: :environment do
-    Repositories::NPM.import_recent
+    Repositories::NPM.import_recent_async
   end
 
   task npm_all: :environment do
@@ -126,7 +126,7 @@ namespace :download do
   end
 
   task packagist: :environment do
-    Repositories::Packagist.import_recent
+    Repositories::Packagist.import_recent_async
   end
 
   task packagist_all: :environment do
@@ -138,11 +138,11 @@ namespace :download do
   end
 
   task pub: :environment do
-    Repositories::Pub.import
+    Repositories::Pub.import_async
   end
 
   task pypi: :environment do
-    Repositories::Pypi.import_recent
+    Repositories::Pypi.import_recent_async
   end
 
   task pypi_all: :environment do
@@ -150,7 +150,7 @@ namespace :download do
   end
 
   task rubygems: :environment do
-    Repositories::Rubygems.import_recent
+    Repositories::Rubygems.import_recent_async
   end
 
   task rubygems_all: :environment do
@@ -158,11 +158,11 @@ namespace :download do
   end
 
   task sublime: :environment do
-    Repositories::Sublime.import
+    Repositories::Sublime.import_async
   end
 
   task wordpress: :environment do
-    Repositories::Wordpress.import_recent
+    Repositories::Wordpress.import_recent_async
   end
 
   task wordpress_all: :environment do
@@ -170,7 +170,7 @@ namespace :download do
   end
 
   task go: :environment do
-    Repositories::Go.import_new
+    Repositories::Go.import_new_async
   end
 
   task go_all: :environment do

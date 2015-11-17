@@ -15,7 +15,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def index
-    scope = Project.without_repository_url.without_repo.most_dependents.where('latest_release_published_at > ?', 2.years.ago)
+    scope = Project.not_deprecated.without_repository_url.without_repo.most_dependents.where('latest_release_published_at > ?', 2.years.ago)
     if params[:platform].present?
       @platform = Project.platform(params[:platform].downcase).first.try(:platform)
       raise ActiveRecord::RecordNotFound if @platform.nil?
@@ -26,9 +26,31 @@ class Admin::ProjectsController < Admin::ApplicationController
     @projects = scope.paginate(page: params[:page])
   end
 
+  def deprecated
+    @search = Project.search('deprecated', filters: {
+      platform: params[:platform]
+    }, sort: params[:sort], order: params[:order])
+
+    if params[:platform].present?
+      @platform = Project.platform(params[:platform].downcase).first.try(:platform)
+      raise ActiveRecord::RecordNotFound if @platform.nil?
+      scope = Project.platform(@platform).where("status IS ? OR status = ''", nil)
+    else
+      scope = Project.where("status IS ? OR status = ''", nil)
+    end
+
+    @projects = @search.records.where("status IS ? OR status = ''", nil).order('rank DESC').paginate(page: params[:page])
+    @platforms = @search.records.where("status IS ? OR status = ''", nil).pluck('platform').compact.uniq
+    if @projects.empty?
+      repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%deprecated%'").pluck(:id)
+      @projects = scope.where(github_repository_id: repo_ids).order('rank DESC').paginate(page: params[:page])
+      @platforms = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).pluck('platform').compact.uniq
+    end
+  end
+
   private
 
   def project_params
-    params.require(:project).permit(:repository_url, :licenses)
+    params.require(:project).permit(:repository_url, :licenses, :status)
   end
 end

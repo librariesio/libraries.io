@@ -3,7 +3,7 @@ ruby '2.2.3'
 
 gem 'rb-readline'
 gem 'oj'
-gem 'rails', '4.2.4'
+gem 'rails', '4.2.5'
 gem 'pg'
 gem 'sass-rails'
 gem 'uglifier'
@@ -61,6 +61,7 @@ gem 'foreman', require: false
 gem 'puma'
 gem 'payola-payments'
 gem 'rack-timeout'
+gem 'semantic_range'
 
 group :development do
   gem 'bundler'
