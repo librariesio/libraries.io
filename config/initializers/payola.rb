@@ -1,4 +1,4 @@
-SubscriptionPlan.first # have to force load the SubscriptionPlan class for development
+SubscriptionPlan.first if Rails.env.development? # have to force load the SubscriptionPlan class for development
 
 Payola.configure do |config|
   # Example subscription:
