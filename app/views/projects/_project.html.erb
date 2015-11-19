@@ -10,7 +10,9 @@
     </div>
 
     <small>
-      <% if project.is_deprecated? %>
+      <% if project.is_removed? %>
+        <%= fa_icon('exclamation-triangle') %> This project is no longer available on <%= project.platform %>
+      <% elsif project.is_deprecated? %>
         <%= fa_icon('exclamation-triangle') %> This project is deprecated -
         <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
         <%= time_ago_in_words project.latest_release_published_at %> ago

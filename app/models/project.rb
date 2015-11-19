@@ -89,8 +89,12 @@ class Project < ActiveRecord::Base
     status == 'Deprecated'
   end
 
+  def is_removed?
+    status == 'Removed'
+  end
+
   def not_deprecated?
-    !is_deprecated?
+    !is_deprecated? && !is_removed?
   end
 
   def stable_releases

@@ -126,7 +126,9 @@
                     </td>
                     <td>
                       <% if dependency.project %>
-                        <% if dependency.project.is_deprecated? %>
+                        <% if dependency.project.is_removed? %>
+                          <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: "This project is no longer available on #{dependency.project.platform}" %>
+                        <% elsif dependency.project.is_deprecated? %>
                           <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
                         <% elsif dependency.outdated? %>
                           <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: 'Out of date' %>

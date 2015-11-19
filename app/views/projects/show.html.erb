@@ -9,10 +9,15 @@
   <a href="<%= project_suggestions_path(@project.to_param) %>" class="btn btn-primary btn-xs learn-more">Suggest an improvement</a>
 </div>
 <% end %>
-<% if @project.is_deprecated? %>
+<% if @project.is_removed? %>
 <div class="alert alert-danger" role="alert">
   <%= fa_icon 'exclamation-triangle' %>
-  This project has been marked as deprecated and is not recommended for use any more.
+  This project has been removed from <%= @project.platform %> and cannot be used anymore.
+</div>
+<% elsif @project.is_deprecated? %>
+<div class="alert alert-danger" role="alert">
+  <%= fa_icon 'exclamation-triangle' %>
+  This project has been marked as deprecated and is not recommended for use anymore.
 </div>
 <% end %>
 
@@ -175,7 +180,9 @@
                     </td>
                     <td>
                       <% if dependency.project %>
-                        <% if dependency.project.is_deprecated? %>
+                        <% if dependency.project.is_removed? %>
+                          <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: "This project is no longer available on #{dependency.project.platform}" %>
+                        <% elsif dependency.project.is_deprecated? %>
                           <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
                         <% elsif dependency.outdated? %>
                           <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: 'Out of date version' %>
