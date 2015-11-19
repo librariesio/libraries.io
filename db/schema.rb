@@ -76,7 +76,6 @@ ActiveRecord::Schema.define(version: 20151117130742) do
 
   add_index "github_organisations", ["created_at"], name: "index_github_organisations_on_created_at", using: :btree
   add_index "github_organisations", ["github_id"], name: "index_github_organisations_on_github_id", unique: true, using: :btree
-  add_index "github_organisations", ["login"], name: "index_github_organisations_on_login", using: :btree
 
   create_table "github_repositories", force: :cascade do |t|
     t.string   "full_name"
@@ -171,10 +170,10 @@ ActiveRecord::Schema.define(version: 20151117130742) do
   end
 
   create_table "payola_sales", force: :cascade do |t|
-    t.string   "email"
-    t.string   "guid"
+    t.string   "email",                limit: 191
+    t.string   "guid",                 limit: 191
     t.integer  "product_id"
-    t.string   "product_type"
+    t.string   "product_type",         limit: 100
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "state"
@@ -192,11 +191,11 @@ ActiveRecord::Schema.define(version: 20151117130742) do
     t.integer  "affiliate_id"
     t.text     "customer_address"
     t.text     "business_address"
-    t.string   "stripe_customer_id"
+    t.string   "stripe_customer_id",   limit: 191
     t.string   "currency"
     t.text     "signed_custom_fields"
     t.integer  "owner_id"
-    t.string   "owner_type"
+    t.string   "owner_type",           limit: 100
   end
 
   add_index "payola_sales", ["coupon_id"], name: "index_payola_sales_on_coupon_id", using: :btree
@@ -240,7 +239,7 @@ ActiveRecord::Schema.define(version: 20151117130742) do
     t.datetime "updated_at"
     t.string   "currency"
     t.integer  "amount"
-    t.string   "guid"
+    t.string   "guid",                 limit: 191
     t.string   "stripe_status"
     t.integer  "affiliate_id"
     t.string   "coupon"
@@ -384,8 +383,8 @@ ActiveRecord::Schema.define(version: 20151117130742) do
     t.datetime "updated_at"
     t.string   "public_repo_token"
     t.string   "private_repo_token"
-    t.boolean  "token_upgrade",      default: false
-    t.boolean  "currently_syncing",  default: false
+    t.boolean  "token_upgrade"
+    t.boolean  "currently_syncing",  default: false, null: false
     t.datetime "last_synced_at"
   end
 
