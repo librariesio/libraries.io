@@ -27,7 +27,7 @@ class Version < ActiveRecord::Base
   end
 
   def notify_web_hooks
-    repos = project.subscriptions.map(&:github_repository).compact
+    repos = project.subscriptions.map(&:github_repository).compact.uniq
     repos.each do |repo|
       repo.web_hooks.each do |web_hook|
         web_hook.send_new_version(project, project.platform, self)

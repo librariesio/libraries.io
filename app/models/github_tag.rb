@@ -25,7 +25,7 @@ class GithubTag < ActiveRecord::Base
 
   def notify_web_hooks
     github_repository.projects.without_versions.each do |project|
-      repos = project.subscriptions.map(&:github_repository).compact
+      repos = project.subscriptions.map(&:github_repository).compact.uniq
       repos.each do |repo|
         repo.web_hooks.each do |web_hook|
           web_hook.send_new_version(project, project.platform, self)
