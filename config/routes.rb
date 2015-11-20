@@ -104,6 +104,14 @@ Rails.application.routes.draw do
   get '/github/:owner/:name/contributors', to: 'github_repositories#contributors', as: :github_repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/forks', to: 'github_repositories#forks', as: :github_repository_forks, format: false, constraints: { :name => /[^\/]+/ }
 
+  get '/github/:owner/:name/web_hooks', to: 'web_hooks#index', as: :github_repository_web_hooks, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/web_hooks/new', to: 'web_hooks#new', as: :new_github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  delete '/github/:owner/:name/web_hooks/:id', to: 'web_hooks#destroy', as: :github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  patch '/github/:owner/:name/web_hooks/:id', to: 'web_hooks#update', format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/web_hooks/:id/edit', to: 'web_hooks#edit', as: :edit_github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  post '/github/:owner/:name/web_hooks/:id/test', to: 'web_hooks#test', as: :test_github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  post '/github/:owner/:name/web_hooks', to: 'web_hooks#create', format: false, constraints: { :name => /[^\/]+/ }
+
   get '/github', to: 'github_repositories#index', as: :github
 
   get '/about', to: 'pages#about', as: :about

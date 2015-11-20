@@ -13,6 +13,7 @@ class GithubRepository < ActiveRecord::Base
   has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :repository_subscriptions
+  has_many :web_hooks
   has_one :readme, dependent: :delete
   belongs_to :github_organisation#, touch: true
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id#, touch: true

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151117130742) do
+ActiveRecord::Schema.define(version: 20151120151142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -402,5 +402,17 @@ ActiveRecord::Schema.define(version: 20151117130742) do
 
   add_index "versions", ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true, using: :btree
   add_index "versions", ["project_id"], name: "index_versions_on_project_id", using: :btree
+
+  create_table "web_hooks", force: :cascade do |t|
+    t.integer  "github_repository_id"
+    t.integer  "user_id"
+    t.string   "url"
+    t.string   "last_response"
+    t.datetime "last_sent_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "web_hooks", ["github_repository_id"], name: "index_web_hooks_on_github_repository_id", using: :btree
 
 end
