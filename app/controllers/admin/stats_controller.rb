@@ -11,6 +11,7 @@ class Admin::StatsController < Admin::ApplicationController
     @new_users          = stats_for(User)
     @new_subscriptions  = stats_for(Subscription)
     @new_repo_subs      = stats_for(RepositorySubscription)
+    @new_web_hooks      = stats_for(WebHook)
   end
 
   def github
