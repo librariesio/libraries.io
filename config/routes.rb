@@ -94,6 +94,8 @@ Rails.application.routes.draw do
 
   get '/sitemap.xml.gz', to: redirect("https://#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com/sitemaps/sitemap.xml.gz")
 
+  get '/enable_private', to: 'sessions#enable_private', as: :enable_private
+  get '/enable_public', to: 'sessions#enable_public', as: :enable_public
   get '/login',  to: 'sessions#new',     as: 'login'
   get '/logout', to: 'sessions#destroy', as: 'logout'
 

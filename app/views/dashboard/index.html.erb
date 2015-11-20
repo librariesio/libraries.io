@@ -10,7 +10,7 @@
     <div class="alert alert-success" role="alert">
       <%= fa_icon 'info-circle' %>
       Enable private repo tracking upgrading your GitHub OAuth access.
-      <a href="/auth/github_private" class="btn btn-info btn-xs learn-more" data-dismiss="alert" aria-label="Close">Authorize Now</a>
+      <a href="<%= enable_private_path %>" class="btn btn-info btn-xs learn-more" data-dismiss="alert" aria-label="Close">Authorize Now</a>
     </div>
   </div>
 </div>
@@ -117,7 +117,7 @@
       <br>
       <% if current_user.private_repo_token.blank? %>
         <p>
-          <%= link_to '/auth/github_private', class: 'btn btn-primary' do %>
+          <%= link_to enable_private_path, class: 'btn btn-primary' do %>
             <i class="fa fa-github"></i> Enable Private Repository Access
           <% end %>
         </p>

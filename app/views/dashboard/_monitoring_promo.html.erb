@@ -16,16 +16,8 @@
 <br>
 <p>
 <% if current_user && current_user.needs_to_enable_github_access? %>
-  <% if current_user.can_enable_private_repo_tracking? %>
-    <% path = request.path == repositories_path ? '/auth/github_private' : repositories_path %>
-    <%= link_to path, class: 'btn btn-primary' do %>
-      <i class="fa fa-github"></i> Enable GitHub Access
-    <% end %>
-  <% else %>
-    <% path = request.path == repositories_path ? '/auth/github_public' : repositories_path %>
-    <%= link_to path, class: 'btn btn-primary' do %>
-      <i class="fa fa-github"></i> Enable Open Source Access for Free
-    <% end %>
+  <%= link_to enable_public_path, class: 'btn btn-primary' do %>
+    <i class="fa fa-github"></i> Enable Open Source Access for Free
   <% end %>
 <% elsif current_user %>
   <%= link_to repositories_path, class: 'btn btn-primary' do %>
