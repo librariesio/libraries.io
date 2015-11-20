@@ -22,7 +22,7 @@
             Last Response
           </th>
           <th>
-            
+
           </th>
         </tr>
         <%= render @web_hooks %>
@@ -35,8 +35,39 @@
     <% end %>
   </div>
   <div class="col-md-4">
+    <h4>How's this work?</h4>
+    <p>
+      Libraries will post JSON to your web hook url whenever a new version of a library that your repository is released.
+    </p>
     <p class='text-center'>
       <%= link_to 'Add a web hook', new_github_repository_web_hook_path(@github_repository.owner_name, @github_repository.project_name), class: 'btn btn-primary' %>
     </p>
+    <hr>
+    <p>
+      Example payload data:
+    </p>
+    <pre>
+{
+   "event":"new_version",
+   "repository":"foo/bar",
+   "platform":"NPM",
+   "name":"faye",
+   "version":"0.5.0",
+   "package_manager_url":"https://www.npmjs.com/package/faye",
+   "published_at":"2010-12-19T15:04:47.790Z",
+   "project":{
+      "name":"faye",
+      "platform":"NPM",
+      "description":"Simple pub/sub messaging for the web",
+      "homepage":"http://faye.jcoglan.com",
+      "repository_url":"https://github.com/faye/faye",
+      "normalized_licenses":[
+         "MIT"
+      ],
+      "latest_release_published_at":"2015-02-25T00:17:29.493Z",
+      "language":"JavaScript"
+   }
+}
+    </pre>
   </div>
 </div>
