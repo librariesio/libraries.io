@@ -26,6 +26,15 @@ class Version < ActiveRecord::Base
     Firehose.new_version(project, project.platform, self)
   end
 
+  def notify_web_hooks
+    repos = project.subscriptions.map(&:github_repository).compact
+    repos.each do |repo|
+      repo.web_hooks.each do |web_hook|
+        web_hook.send_new_version(project, project.platform, self)
+      end
+    end
+  end
+
   def send_notifications_async
     return if published_at && published_at < 1.week.ago
     VersionNotificationsWorker.perform_async(self.id)
@@ -34,6 +43,7 @@ class Version < ActiveRecord::Base
   def send_notifications
     notify_subscribers
     notify_firehose
+    notify_web_hooks
   end
 
   def published_at
