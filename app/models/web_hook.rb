@@ -4,6 +4,14 @@ class WebHook < ActiveRecord::Base
   validates_presence_of :url
   validates :url, :format => URI::regexp(%w(http https))
 
+  before_save :clear_timestamps
+
+  def clear_timestamps
+    return unless self.url_changed?
+    self.last_sent_at = nil
+    self.last_response = nil
+  end
+
   def send_test_payload
     v = Version.first
     send_new_version(v.project, v.project.platform, v)
