@@ -40,7 +40,7 @@ class CheckStatusWorker
       response = Typhoeus.get("https://atom.io/packages/#{project.name}")
       project.update_attribute(:status, 'Removed') if response.response_code == 404
     when 'cargo'
-      response = Typhoeus.get("https://crates.io/crates/#{project.name}/#{version}")
+      response = Typhoeus.get("https://crates.io/crates/#{project.name}")
       project.update_attribute(:status, 'Removed') if response.response_code == 404
     when 'sublime'
       response = Typhoeus.get("https://packagecontrol.io/packages/#{project.name}")
@@ -49,7 +49,7 @@ class CheckStatusWorker
       response = Typhoeus.get("https://pub.dartlang.org/packages/#{project.name}")
       project.update_attribute(:status, 'Removed') if response.response_code == 404
     when 'hex'
-      response = Typhoeus.get("https://hex.pm/packages/#{project.name}/#{version}")
+      response = Typhoeus.get("https://hex.pm/packages/#{project.name}")
       project.update_attribute(:status, 'Removed') if response.response_code == 404
     when 'elm'
       response = Typhoeus.get("http://package.elm-lang.org/packages/#{project.name}/latest")
