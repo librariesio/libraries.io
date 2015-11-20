@@ -17,6 +17,35 @@ class Api::ProjectsController < Api::ApplicationController
     render json: Project.where('updated_at > ?', 1.day.ago).pluck(:repository_url).compact.reject(&:blank?)
   end
 
+  def dependencies
+    version = if params[:version] == 'latest' 
+      @project.versions.newest_first.first
+    else
+      @project.versions.find_by_number(params[:version])
+    end
+
+    raise ActiveRecord::RecordNotFound if version.nil?
+
+    dependencies = version.dependencies || []
+
+    deps = dependencies.map do |dependency|
+      {
+        project_name: dependency.project_name,
+        platform: dependency.platform,
+        requirements: dependency.requirements,
+        latest_stable: dependency.try(:project).try(:latest_stable_release_number),
+        latest: dependency.try(:project).try(:latest_release_number),
+        deprecated: dependency.try(:project).try(:is_deprecated?),
+        outdated: dependency.outdated?
+      }
+    end
+
+    project_json = @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses])
+    project_json[:dependencies] = deps
+
+    render json: project_json
+  end
+
   private
 
   def find_project

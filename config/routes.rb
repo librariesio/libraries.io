@@ -10,12 +10,14 @@ Rails.application.routes.draw do
     get '/search', to: 'search#index'
     get '/searchcode', to: 'projects#searchcode'
 
-    get '/github/:owner/:name/projects', to: 'github_repositories#projects', constraints: { :name => /.*/ }
-    get '/github/:owner/:name', to: 'github_repositories#show', constraints: { :name => /.*/ }
+    get '/github/:owner/:name/dependencies', to: 'github_repositories#dependencies'
+    get '/github/:owner/:name/projects', to: 'github_repositories#projects'
+    get '/github/:owner/:name', to: 'github_repositories#show'
 
-    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :name => /.*/ }
-    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :name => /.*/ }
-    get '/:platform/:name', to: 'projects#show', constraints: { :name => /.*/ }
+    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\-\_]+/, :version => /[\w\-\_\.]+/ }
+    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories'
+    get '/:platform/:name/dependents', to: 'projects#dependents'
+    get '/:platform/:name', to: 'projects#show'
   end
 
   namespace :admin do
