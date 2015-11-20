@@ -19,6 +19,8 @@ class WebHook < ActiveRecord::Base
 
   def send_new_version(project, platform, version_or_tag)
     send_payload({
+      event: 'new_version',
+      repository: github_repository.full_name,
       platform: platform,
       name: project.name,
       version: version_or_tag.number,
