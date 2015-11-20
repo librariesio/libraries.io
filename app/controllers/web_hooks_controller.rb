@@ -59,10 +59,6 @@ class WebHooksController < ApplicationController
   end
 
   def authorized?
-    if @github_repository.private?
-      current_user && current_user.can_read?(@github_repository)
-    else
-      true
-    end
+    current_user.can_read?(@github_repository)
   end
 end
