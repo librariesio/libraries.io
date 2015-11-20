@@ -17,7 +17,7 @@
 <% end %>
 
 <div class='row'>
-  <% if current_user.public_repo_token.blank? %>
+  <% if current_user.needs_to_enable_github_access? %>
     <div class="col-md-8">
       <%= render 'monitoring_promo' %>
     </div>
