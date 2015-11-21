@@ -2,10 +2,8 @@ class GithubUser < ActiveRecord::Base
   has_many :github_contributions, dependent: :delete_all
   has_many :github_repositories, primary_key: :github_id, foreign_key: :owner_id
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
-  has_many :public_source_github_repositories, -> { where fork: false, private: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
   has_many :dependencies, through: :source_github_repositories
-  has_many :public_dependencies, through: :public_source_github_repositories, anonymous_class: Dependency
-  has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :public_dependencies, source: :project
+  has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :contributed_repositories, -> { GithubRepository.source.open_source }, through: :github_contributions, source: :github_repository
   has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('github_users.id').order("COUNT(github_users.id) DESC") }, through: :contributed_repositories, source: :contributors
 
@@ -16,7 +14,6 @@ class GithubUser < ActiveRecord::Base
   scope :visible, -> { where(hidden: false) }
 
   def top_favourite_projects
-    return [] if top_favourite_project_ids.empty?
     Project.where(id: top_favourite_project_ids).not_deprecated.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
   end
 
