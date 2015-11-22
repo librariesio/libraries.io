@@ -3,16 +3,8 @@ class GithubTag < ActiveRecord::Base
   validates_presence_of :name, :sha, :github_repository
 
   scope :published, -> { where('published_at IS NOT NULL') }
-  scope :stable, -> {where('github_tags."stable" = ? OR github_tags."stable" IS NULL', true)}
-  scope :prerelease, -> {where(stable: false)}
-
-  before_save :set_stable
 
   after_commit :send_notifications_async, on: :create
-
-  def set_stable
-    self.stable = stable_release?
-  end
 
   def to_s
     name
@@ -78,7 +70,7 @@ class GithubTag < ActiveRecord::Base
     Semantic::Version.new(number) rescue nil
   end
 
-  def stable_release?
+  def stable?
     !prerelease?
   end
 

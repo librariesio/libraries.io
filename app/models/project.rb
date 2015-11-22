@@ -98,7 +98,7 @@ class Project < ActiveRecord::Base
   end
 
   def stable_releases
-    versions.newest_first.select(&:stable_release?)
+    versions.newest_first.select(&:stable?)
   end
 
   def prereleases
@@ -111,7 +111,7 @@ class Project < ActiveRecord::Base
 
   def latest_stable_tag
     return nil if github_repository.nil?
-    github_tags.published.select(&:stable_release?).sort.first
+    github_tags.published.select(&:stable?).sort.first
   end
 
   def latest_stable_release

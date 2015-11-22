@@ -6,17 +6,9 @@ class Version < ActiveRecord::Base
   counter_culture :project
   has_many :dependencies, dependent: :destroy
 
-  before_save :set_stable
-
   after_commit :send_notifications_async, on: :create
 
   scope :newest_first, -> { order('versions.published_at DESC') }
-  scope :stable, -> {where('versions."stable" = ? OR versions."stable" IS NULL', true)}
-  scope :prerelease, -> {where(stable: false)}
-
-  def set_stable
-    self.stable = stable_release?
-  end
 
   def as_json(options = nil)
     super({ only: [:number, :published_at] }.merge(options || {}))
@@ -74,7 +66,7 @@ class Version < ActiveRecord::Base
     Semantic::Version.new(number) rescue nil
   end
 
-  def stable_release?
+  def stable?
     !prerelease?
   end
 

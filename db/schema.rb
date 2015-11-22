@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151122154844) do
+ActiveRecord::Schema.define(version: 20151120151142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,7 +117,6 @@ ActiveRecord::Schema.define(version: 20151122154844) do
     t.datetime "published_at"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
-    t.boolean  "stable"
   end
 
   add_index "github_tags", ["github_repository_id", "name"], name: "index_github_tags_on_github_repository_id_and_name", using: :btree
@@ -398,7 +397,6 @@ ActiveRecord::Schema.define(version: 20151122154844) do
     t.datetime "published_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "stable"
   end
 
   add_index "versions", ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true, using: :btree
