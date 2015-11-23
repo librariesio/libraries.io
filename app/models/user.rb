@@ -29,6 +29,10 @@ class User < ActiveRecord::Base
   has_many :payola_subscriptions, anonymous_class: Payola::Subscription, as: :owner
   has_many :project_suggestions
 
+  scope :with_subscription, -> { joins(:payola_subscriptions) }
+  scope :with_public_token, -> { where("users.public_repo_token <> ''") }
+  scope :with_private_token, -> { where("users.private_repo_token <> ''") }
+
   after_commit :update_repo_permissions_async, :download_self, :create_api_key, on: :create
 
   ADMIN_USERS = ['andrew', 'barisbalic', 'malditogeek', 'olizilla', 'thattommyhall']
