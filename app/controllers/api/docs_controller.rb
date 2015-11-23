@@ -2,7 +2,7 @@ class Api::DocsController < ApplicationController
   before_action :ensure_logged_in
 
   def index
-    @project = Project.platform('npm').find_by_name('grunt') || Project.first
+    @project = Project.platform('npm').find_by_name('grunt') || Project.platform('rubygems').first
 
     @version = @project.versions.newest_first.first
 
