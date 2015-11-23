@@ -1,0 +1,79 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1>API Docs</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h3>Authentication</h3>
+
+    <p>
+      All API requests much include <code>api_key</code> parameter, get your api key from your
+      <%= link_to 'account page', account_path %>, all examples on this page include your API key
+    </p>
+
+    <h3>Project</h3>
+
+    <p>
+      Get information about a project and it's versions.
+    </p>
+
+    <p>
+      <code>https://libraries.io/api/:platform/:name?api_key=<%= current_user.api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt?api_key=#{current_user.api_key}", "https://libraries.io/api/npm/grunt?api_key=#{current_user.api_key}" %> </strong>
+    </p>
+      <pre>
+<%= JSON.pretty_generate @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} }) %></pre>
+
+    <h3>Project Dependencies</h3>
+
+    <p>
+      Get a list of dependencies for a version of a project, pass <code>latest</code> to get dependency info for the latest available version
+    </p>
+
+    <p>
+      <code>https://libraries.io/api/:platform/:name/:version/dependencies?api_key=<%= current_user.api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/latest/dependencies?api_key=#{current_user.api_key}", "https://libraries.io/api/rubygems/rails/4.2.4/dependencies?api_key=#{current_user.api_key}" %> </strong>
+    </p>
+      <pre>
+<%= JSON.pretty_generate @dependencies %></pre>
+
+    <h3>GitHub Repository</h3>
+
+    <p>
+      Get a info for a GitHub repository. Currently only works for open source repositories.
+    </p>
+    <p>
+      <code>https://libraries.io/api/github/:owner/:name?api_key=<%= current_user.api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@github_repository.full_name}?api_key=#{current_user.api_key}", "https://libraries.io/api/github/#{@github_repository.full_name}?api_key=#{current_user.api_key}" %> </strong>
+    </p>
+      <pre>
+<%= JSON.pretty_generate @github_repository.as_json({except: [:id, :github_organisation_id, :owner_id]}) %></pre>
+
+    <h3>GitHub Repository Dependencies</h3>
+
+    <p>
+      Get a list of dependencies for a GitHub repositories. Currently only works for open source repositories.
+    </p>
+    <p>
+      <code>https://libraries.io/api/:platform/:name/:version/dependencies?api_key=<%= current_user.api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@github_repository.full_name}/dependencies?api_key=#{current_user.api_key}", "https://libraries.io/api/github/#{@github_repository.full_name}/dependencies?api_key=#{current_user.api_key}" %> </strong>
+    </p>
+
+      <pre>
+<%= JSON.pretty_generate @repo_dependencies %></pre>
+
+  </div>
+</div>
