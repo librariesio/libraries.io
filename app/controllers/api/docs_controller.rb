@@ -2,7 +2,7 @@ class Api::DocsController < ApplicationController
   before_action :ensure_logged_in
 
   def index
-    @project = Project.platform('rubygems').find_by_name('rails') || Project.first
+    @project = Project.platform('npm').find_by_name('grunt') || Project.first
 
     @version = @project.versions.newest_first.first
 
@@ -23,7 +23,7 @@ class Api::DocsController < ApplicationController
     @dependencies = @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses])
     @dependencies[:dependencies] = deps
 
-    @github_repository = GithubRepository.find_by_full_name('rails/rails') || GithubRepository.first
+    @github_repository = GithubRepository.find_by_full_name('gruntjs/grunt') || GithubRepository.first
 
     @repo_dependencies = []
 
