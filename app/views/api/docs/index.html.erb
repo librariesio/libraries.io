@@ -12,6 +12,12 @@
       <%= link_to 'account page', account_path %>, all examples on this page include your API key
     </p>
 
+    <h3 id='rate-limit'>Rate limit</h3>
+
+    <p>
+      All requests are subject to a 60/request/minute rate limit based on your api_key, any further requests within that timeframe will result in a <code>403</code> response.
+    </p>
+
     <h3 id='project'>Project</h3>
 
     <p>
@@ -158,6 +164,7 @@
       <h3>API Methods</h3>
       <ul>
         <li><a href="#authentication">Authentication</a></li>
+        <li><a href="#rate-limit">Rate limit</a></li>
         <li><a href="#project">Project</a></li>
         <li><a href="#project-dependencies">Project Dependencies</a></li>
         <li><a href="#project-dependents">Project Dependents</a></li>
