@@ -45,5 +45,7 @@ class Api::DocsController < ApplicationController
       except: [:id, :github_organisation_id, :owner_id]
     })
     @repo_dependencies[:dependencies] = deps
+
+    @search = Project.search('grunt').records
   end
 end

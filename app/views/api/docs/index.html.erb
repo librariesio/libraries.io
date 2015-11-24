@@ -88,8 +88,22 @@
     <h3 id="project-search">Project Search</h3>
 
     <p>
-      TODO
+      Search for projects
     </p>
+
+    <p>
+      Pagination parameter: <code>page</code>
+    </p>
+
+    <p>
+      <code>GET https://libraries.io/api/search?q=grunt&api_key=<%= current_user.api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/search?q=grunt&api_key=#{current_user.api_key}", "https://libraries.io/api/search?q=grunt&api_key=#{current_user.api_key}" %> </strong>
+    </p>
+      <pre>
+<%= JSON.pretty_generate @search.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} }) %></pre>
 
     <h3 id='github-repository'>GitHub Repository</h3>
 
