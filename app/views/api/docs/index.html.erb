@@ -112,7 +112,7 @@
       Get a list of dependencies for a GitHub repositories. Currently only works for open source repositories.
     </p>
     <p>
-      <code>GET https://libraries.io/api/:platform/:name/:version/dependencies?api_key=<%= current_user.api_key %></code>
+      <code>GET https://libraries.io/api/github/:owner/:name/dependencies?api_key=<%= current_user.api_key %></code>
     </p>
     <hr>
     <p>
@@ -125,8 +125,18 @@
     <h3 id="github-repository-projects">GitHub Repository Projects</h3>
 
     <p>
-      TODO
+      Get a list of projects referencing the given GitHub repository.
     </p>
+    <p>
+      <code>GET https://libraries.io/api/github/:owner/:name/projects?api_key=<%= current_user.api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@github_repository.full_name}/projects?api_key=#{current_user.api_key}", "https://libraries.io/api/github/#{@github_repository.full_name}/projects?api_key=#{current_user.api_key}" %> </strong>
+    </p>
+
+      <pre>
+<%= JSON.pretty_generate @github_repository.projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} }) %></pre>
 
   </div>
   <div class="col-md-4">
