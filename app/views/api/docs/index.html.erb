@@ -64,11 +64,26 @@
       <pre>
 <%= JSON.pretty_generate @project.dependent_projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} }) %></pre>
 
-    <h3 href="project-dependent-repositories">Project Dependent Repositories</h3>
+    <h3 id="project-dependent-repositories">Project Dependent Repositories</h3>
 
     <p>
-      TODO
+      Get github repositories that depend on a given project.
     </p>
+
+    <p>
+      Pagination parameter: <code>page</code>
+    </p>
+
+    <p>
+      <code>GET https://libraries.io/api/:platform/:name/dependent_repositories?api_key=<%= current_user.api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/dependent_repositories?api_key=#{current_user.api_key}", "https://libraries.io/api/npm/grunt/dependent_repositories?api_key=#{current_user.api_key}" %> </strong>
+    </p>
+      <pre>
+<%= JSON.pretty_generate @project.dependent_repositories.paginate(page: params[:page]).as_json(except: [:id, :github_organisation_id, :owner_id]) %></pre>
+
 
     <h3 id="project-search">Project Search</h3>
 
