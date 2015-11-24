@@ -100,4 +100,6 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
 
   config.lograge.enabled = true
+
+  config.middleware.use ApiRateLimit, :cache => Rails.cache, :key_prefix => :throttle, :max => 60
 end

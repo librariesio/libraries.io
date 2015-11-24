@@ -359,6 +359,8 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
+    rack-throttle (0.4.0)
+      rack (>= 1.0.0)
     rack-timeout (0.3.2)
     rails (4.2.5)
       actionmailer (= 4.2.5)
@@ -534,6 +536,7 @@ DEPENDENCIES
   pushover
   quiet_assets
   rack-canonical-host
+  rack-throttle
   rack-timeout
   rails (= 4.2.5)
   rails_12factor

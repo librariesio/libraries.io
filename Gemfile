@@ -62,6 +62,7 @@ gem 'puma'
 gem 'payola-payments'
 gem 'rack-timeout'
 gem 'semantic_range'
+gem 'rack-throttle'
 
 group :development do
   gem 'bundler'
