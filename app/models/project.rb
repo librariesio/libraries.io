@@ -2,6 +2,7 @@ class Project < ActiveRecord::Base
   include Searchable
   include SourceRank
   HAS_DEPENDENCIES = false
+  STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
 
   validates_presence_of :name, :platform
 
@@ -17,7 +18,9 @@ class Project < ActiveRecord::Base
   has_many :dependent_manifests, through: :repository_dependencies, source: :manifest
   has_many :dependent_repositories, -> { group('github_repositories.id').order('github_repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :github_repository
   has_many :subscriptions
+  has_many :project_suggestions
   belongs_to :github_repository
+  has_one :readme, through: :github_repository
 
   scope :platform, ->(platform) { where('lower(platform) = ?', platform.try(:downcase)) }
   scope :with_homepage, -> { where("homepage <> ''") }
@@ -25,6 +28,10 @@ class Project < ActiveRecord::Base
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
   scope :with_repo, -> { joins(:github_repository).where('github_repositories.id IS NOT NULL') }
   scope :without_repo, -> { where(github_repository_id: nil) }
+
+  scope :with_license, -> { where("licenses <> ''") }
+  scope :without_license, -> { where("licenses IS ? OR licenses = ''", nil) }
+  scope :unlicensed, -> { not_deprecated.without_license.with_repo.where("github_repositories.license IS ? OR github_repositories.license = ''", nil) }
 
   scope :with_versions, -> { where('versions_count > 0') }
   scope :without_versions, -> { where('versions_count < 1') }
@@ -42,8 +49,13 @@ class Project < ActiveRecord::Base
   scope :most_watched, -> { joins(:subscriptions).group('projects.id').order("COUNT(subscriptions.id) DESC") }
   scope :most_dependents, -> { with_dependents.order('dependents_count DESC') }
 
-  scope :bus_factor, -> { joins(:github_repository)
-                         .where('projects.dependents_count > 25')
+  scope :not_deprecated, -> { where('projects."status" != ? OR projects."status" != ? OR projects."status" IS NULL', "Deprecated", "Removed")}
+  scope :deprecated, -> { where('projects."status" = ?', "Deprecated")}
+  scope :removed, -> { where('projects."status" = ?', "Removed")}
+
+
+  scope :bus_factor, -> { not_deprecated.
+                          joins(:github_repository)
                          .where('github_repositories.github_contributions_count < 6')
                          .where('github_repositories.github_contributions_count > 0')
                          .where('github_repositories.stargazers_count > 0')
@@ -63,6 +75,51 @@ class Project < ActiveRecord::Base
 
   def to_s
     name
+  end
+
+  def follows_semver?
+    if versions.all.length > 0
+      versions.all?(&:follows_semver?)
+    elsif github_tags.published.length > 0
+      github_tags.published.all?(&:follows_semver?)
+    end
+  end
+
+  def is_deprecated?
+    status == 'Deprecated'
+  end
+
+  def is_removed?
+    status == 'Removed'
+  end
+
+  def not_deprecated?
+    !is_deprecated? && !is_removed?
+  end
+
+  def stable_releases
+    versions.newest_first.select(&:stable?)
+  end
+
+  def prereleases
+    versions.newest_first.select(&:prerelease?)
+  end
+
+  def latest_stable_version
+    @latest_version ||= stable_releases.sort.first
+  end
+
+  def latest_stable_tag
+    return nil if github_repository.nil?
+    github_tags.published.select(&:stable?).sort.first
+  end
+
+  def latest_stable_release
+    latest_stable_version || latest_stable_tag
+  end
+
+  def latest_stable_release_number
+    latest_stable_release.try(:number)
   end
 
   def latest_version
@@ -172,6 +229,10 @@ class Project < ActiveRecord::Base
     self.update_columns(dependents_count: dependents.joins(:version).pluck('DISTINCT versions.project_id').count)
   end
 
+  def needs_suggestions?
+    repository_url.blank? || normalized_licenses.blank?
+  end
+
   def self.undownloaded_repos
     with_github_url.without_repo
   end
@@ -274,7 +335,7 @@ class Project < ActiveRecord::Base
   end
 
   def github_name_with_owner
-    GithubRepository.extract_full_name(repository_url)
+    GithubRepository.extract_full_name(repository_url) || GithubRepository.extract_full_name(homepage)
   end
 
   def subscribed_repos(user)

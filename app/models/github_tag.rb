@@ -1,5 +1,5 @@
 class GithubTag < ActiveRecord::Base
-  belongs_to :github_repository, touch: true
+  belongs_to :github_repository#, touch: true
   validates_presence_of :name, :sha, :github_repository
 
   scope :published, -> { where('published_at IS NOT NULL') }
@@ -11,6 +11,7 @@ class GithubTag < ActiveRecord::Base
   end
 
   def send_notifications_async
+    return if published_at && published_at < 1.week.ago
     TagNotificationsWorker.perform_async(self.id) if has_projects?
   end
 
@@ -18,6 +19,18 @@ class GithubTag < ActiveRecord::Base
     if has_projects?
       notify_subscribers
       notify_firehose
+      notify_web_hooks
+    end
+  end
+
+  def notify_web_hooks
+    github_repository.projects.without_versions.each do |project|
+      repos = project.subscriptions.map(&:github_repository).compact.uniq
+      repos.each do |repo|
+        repo.web_hooks.each do |web_hook|
+          web_hook.send_new_version(project, project.platform, self)
+        end
+      end
     end
   end
 
@@ -37,7 +50,7 @@ class GithubTag < ActiveRecord::Base
 
   def notify_firehose
     github_repository.projects.without_versions.each do |project|
-      Firehose.new_version(project, project.platform, number)
+      Firehose.new_version(project, project.platform, self)
     end
   end
 
@@ -50,7 +63,27 @@ class GithubTag < ActiveRecord::Base
   end
 
   def parsed_number
-    Semantic::Version.new(number) rescue number
+    semantic_version || number
+  end
+
+  def semantic_version
+    Semantic::Version.new(number) rescue nil
+  end
+
+  def stable?
+    !prerelease?
+  end
+
+  def prerelease?
+    !!parsed_number.try(:pre)
+  end
+
+  def valid_number?
+    !!semantic_version
+  end
+
+  def follows_semver?
+    valid_number?
   end
 
   def number

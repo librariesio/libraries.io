@@ -1,21 +1,32 @@
 class Repositories
   class NuGet < Base
     HAS_VERSIONS = true
-    HAS_DEPENDENCIES = false
+    HAS_DEPENDENCIES = true
     LIBRARIAN_SUPPORT = true
     URL = 'https://www.nuget.org'
     COLOR = '#178600'
 
     def self.load_names(limit = nil)
-      segment_index = Repositories::NuGet.get_json "http://preview.nuget.org/ver3-ctp1/islatest/segment_index.json"
-      segment_count = limit || segment_index['segmentNumber'].to_i - 1
+      endpoints = name_endpoints
+      segment_count = limit || endpoints.length - 1
 
-      (0..segment_count).to_a.reverse.each do |number|
-        page = Repositories::NuGet.get_json "http://nugetprod0.blob.core.windows.net/ver3-ctp1/islatest/segment_#{number}.json"
-        package_ids = page['entry'].map{|entry| entry['id'] }
+      endpoints.reverse[0..segment_count].each do |endpoint|
+        package_ids = get_names(endpoint)
         package_ids.each { |id| REDIS.sadd 'nuget-names', id }
       end
       puts "Loaded all the names"
+    end
+
+    def self.recent_names
+      name_endpoints.reverse[0..2].map{|url| get_names(url) }.flatten.uniq
+    end
+
+    def self.name_endpoints
+      get('https://api.nuget.org/v3/catalog0/index.json')['items'].map{|i| i['@id']}
+    end
+
+    def self.get_names(endpoint)
+      get(endpoint)['items'].map{|i| i["nuget:id"]}
     end
 
     def self.project_names
@@ -31,8 +42,8 @@ class Repositories
     end
 
     def self.mapping(project)
-      latest_version = get_json("https://az320820.vo.msecnd.net/registrations-0/#{project[:name].downcase}/index.json")
-      item = latest_version['items'].first['items'].first['catalogEntry']
+      latest_version = get_json("https://api.nuget.org/v3/registration1/#{project[:name].downcase}/index.json")
+      item = latest_version['items'].last['items'].last['catalogEntry']
 
       {
         name: project[:name],
@@ -48,13 +59,66 @@ class Repositories
     end
 
     def self.versions(project)
-      latest_version = get_json("https://az320820.vo.msecnd.net/registrations-0/#{project[:name].downcase}/index.json")
+      latest_version = get_json("https://api.nuget.org/v3/registration1/#{project[:name].downcase}/index.json")
       latest_version['items'].first['items'].map do |item|
         {
           number: item['catalogEntry']['version'],
           published_at: item['catalogEntry']['published']
         }
       end
+    end
+
+    def self.dependencies(name, version)
+      versions = get_json("https://api.nuget.org/v3/registration1/#{name.downcase}/index.json")
+      all_versions = versions['items'].first['items']
+      current_version = all_versions.find{|v| v['catalogEntry']['version'] == version }
+      dep_groups = current_version['catalogEntry']['dependencyGroups'] || []
+
+      deps = dep_groups.map do |dep_group|
+        dep_group["dependencies"].map do |dependency|
+          {
+            name: dependency['id'],
+            requirements: parse_requirements(dependency['range'])
+          }
+        end
+      end.flatten.compact
+
+      deps.map do |dep|
+        {
+          project_name: dep[:name],
+          requirements: dep[:requirements],
+          kind: 'normal',
+          optional: false,
+          platform: self.name.demodulize
+        }
+      end
+    end
+
+    def self.parse_requirements(range)
+      parts = range[1..-2].split(',')
+      requirements = []
+      low_bound = range[0]
+      high_bound = range[-1]
+      low_number = parts[0].strip
+      high_number = parts[1].try(:strip)
+
+      # lowest
+      low_sign = low_bound == '[' ? '>=' : '>'
+      high_sign = high_bound == ']' ? '<=' : '<'
+
+      # highest
+      if high_number
+        if high_number != low_number
+          requirements << "#{low_sign} #{low_number}" if low_number.present?
+          requirements << "#{high_sign} #{high_number}" if high_number.present?
+        elsif high_number == low_number
+          requirements << "= #{high_number}"
+        end
+      else
+        requirements << "#{low_sign} #{low_number}" if low_number.present?
+      end
+      requirements << '>= 0' if requirements.empty?
+      requirements.join(' ')
     end
   end
 end

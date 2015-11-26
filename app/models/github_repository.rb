@@ -7,15 +7,16 @@ class GithubRepository < ActiveRecord::Base
    :subscribers_count, :private]
 
   has_many :projects
-  has_many :github_contributions, dependent: :destroy
+  has_many :github_contributions, dependent: :delete_all
   has_many :contributors, through: :github_contributions, source: :github_user
-  has_many :github_tags, dependent: :destroy
+  has_many :github_tags, dependent: :delete_all
   has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :repository_subscriptions
-  has_one :readme, dependent: :destroy
-  belongs_to :github_organisation
-  belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
+  has_many :web_hooks
+  has_one :readme, dependent: :delete
+  belongs_to :github_organisation#, touch: true
+  belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id#, touch: true
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
   has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
 
@@ -26,14 +27,25 @@ class GithubRepository < ActiveRecord::Base
 
   scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
-  scope :with_manifests, -> { joins(:manifests) }
+  scope :without_projects, -> { includes(:projects).where(projects: { github_repository_id: nil }) }
+  scope :without_subscriptons, -> { includes(:repository_subscriptions).where(repository_subscriptions: { github_repository_id: nil }) }
+
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
+
   scope :open_source, -> { where(private: false) }
   scope :from_org, lambda{ |org_id|  where(github_organisation_id: org_id) }
+
+  scope :with_manifests, -> { joins(:manifests) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {github_repository_id: nil}) }
 
+  scope :with_license, -> { where("github_repositories.license <> ''") }
+  scope :without_license, -> {where("github_repositories.license IS ? OR github_repositories.license = ''", nil)}
+
   scope :interesting, -> { where('github_repositories.stargazers_count > 0').order('github_repositories.stargazers_count DESC, github_repositories.pushed_at DESC') }
+
+  scope :recently_created, -> { where('created_at > ?', 7.days.ago)}
+  scope :hacker_news, -> { order("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC") }
 
   def self.language(language)
     where('lower(github_repositories.language) = ?', language.try(:downcase))
@@ -52,6 +64,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_owner
+    return true if github_user.present? || github_organisation.present?
     o = github_client.user(owner_name)
     if o.type == "Organization"
       if go = GithubOrganisation.create_from_github(owner_id.to_i)
@@ -66,7 +79,7 @@ class GithubRepository < ActiveRecord::Base
       user.download_from_github
       user
     end
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::RepositoryUnavailable, Octokit::InvalidRepository, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
@@ -146,6 +159,10 @@ class GithubRepository < ActiveRecord::Base
     "#{url}/commits"
   end
 
+  def readme_url
+    "#{url}#readme"
+  end
+
   def tags_url
     "#{url}/tags"
   end
@@ -169,7 +186,7 @@ class GithubRepository < ActiveRecord::Base
     else
       readme.update_attributes(contents)
     end
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway
     nil
   end
 
@@ -184,7 +201,7 @@ class GithubRepository < ActiveRecord::Base
       self.source_name = r[:parent][:full_name] if r[:fork]
       assign_attributes r.slice(*API_FIELDS)
       save! if self.changed?
-    rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       nil
     end
   end
@@ -205,7 +222,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_fork_source(token = nil)
-    return true unless self.fork?
+    return true unless self.fork? && self.source.nil?
     GithubRepository.create_from_github(source_name, token)
   end
 
@@ -225,14 +242,28 @@ class GithubRepository < ActiveRecord::Base
   def self.extract_full_name(url)
     return nil if url.nil?
     github_regex = /(git\+)?(((https|http|git|ssh)?:\/\/(www\.)?)|ssh:\/\/git@|https:\/\/git@|scm:git:git@|git@)(github.com|raw.githubusercontent.com)(:|\/)/i
-    return nil unless url.match(github_regex)
+    if !url.match(github_regex)
+      return extract_github_io_name(url)
+    end
     url = url.gsub(github_regex, '').strip
     url = url.gsub(/(\.git|\/)$/i, '')
+    url = url.gsub(/(#\S*)$/i, '')
+    url = url.gsub(/(\?\S*)$/i, '')
     url = url.gsub(' ', '')
-    url = url.gsub(/^scm:git:/, '')
+    url = url.gsub('>', '').gsub('<', '')
+    url = url.gsub('(', '').gsub(')', '')
+    url = url.gsub('[', '').gsub(']', '')
+    url = url.gsub(/^scm:git:/, '').gsub(/^scm:/, '')
     url = url.split('/').reject(&:blank?)[0..1]
     return nil unless url.length == 2
     url.join('/')
+  end
+
+  def self.extract_github_io_name(url)
+    return nil if url.nil?
+    match = url.match(/\/([\w\.@\:-~]+).github.io\/([\w\.@\:-~]+)/i)
+    return nil unless match && match.length == 3
+    "#{match[1]}/#{match[2]}"
   end
 
   def download_github_contributions(token = nil)
@@ -243,7 +274,7 @@ class GithubRepository < ActiveRecord::Base
     contributions.each do |c|
       return unless c['id']
 
-      unless cont = existing_github_contributions.find{|c| c.github_user.github_id = c.id }
+      unless cont = existing_github_contributions.find{|c| c.github_user.try(:github_id) == c.id }
         user = GithubUser.find_or_create_by(github_id: c.id) do |u|
           u.login = c.login
           u.user_type = c.type
@@ -256,7 +287,7 @@ class GithubRepository < ActiveRecord::Base
       cont.save! if cont.changed?
     end
     true
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
@@ -289,7 +320,7 @@ class GithubRepository < ActiveRecord::Base
         end
       end
     end
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 
@@ -359,7 +390,7 @@ class GithubRepository < ActiveRecord::Base
     repo_hash = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
     return false if repo_hash.nil? || repo_hash.empty?
     create_from_hash(repo_hash)
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
 

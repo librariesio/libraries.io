@@ -62,16 +62,16 @@
           <% active = term['term'] == params[name.to_sym] %>
           <li class='<%= 'active' if active %>'>
             <% if active %>
-              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => nil)) %>
+              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => nil, page: nil)) %>
             <% else %>
-              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => term['term'])) %>
+              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => term['term'], page: nil)) %>
               <small><%= number_to_human term['count'] %></small>
             <% end %>
           </li>
         <% end %>
         <% if params[name.to_sym].present? && !facet['terms'].map{|t| t['term']}.include?(params[name.to_sym]) %>
           <li class='active'>
-            <%= link_to platform_name(params[name.to_sym]), url_for(params.merge(name.to_sym => nil)) %>
+            <%= link_to platform_name(params[name.to_sym]), url_for(params.merge(name.to_sym => nil, page: nil)) %>
           </li>
         <% end %>
       </ul>

@@ -2,7 +2,20 @@
 <%= page_entries_info @projects %>
 <div class="row">
   <div class="col-md-8">
-    <%= render collection: @projects, partial: 'projects/project' %>
+    <% @projects.each do |project| %>
+      <div class="row">
+        <div class="col-md-8">
+          <%= render object: project, partial: 'projects/project' %>
+        </div>
+        <div class="col-md-4">
+          <% if project.description.present? %>
+            <%= link_to "Google", "https://www.google.com/search?q="+URI.escape('site:github.com "' + project.description.to_s + '"'), class: 'btn btn-success', target: :blank %>
+          <% end %>
+          <%= link_to 'Edit in Admin', admin_project_path(project.id), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+
     <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
   </div>
   <div class="col-md-4">

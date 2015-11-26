@@ -1,0 +1,35 @@
+<% title "New GitHub Repositories - Libraries" %>
+<h1><i class="fa fa-bullhorn"></i> New GitHub Repositories</h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <%= render @repos %>
+    <%= will_paginate @repos, renderer: BootstrapPagination::Rails, page_links: false %>
+  </div>
+  <div class="col-md-4">
+    <div class='row'>
+      <% if @languages.any? %>
+        <div class='col-md-12 facets'>
+          <h4>Filter by language</h4>
+          <ul class='filter'>
+            <% @languages.each do |language| %>
+              <li class='<%= 'active' if language[0].downcase == params[:language].try(:downcase) %>'>
+                <% if language[0].downcase == params[:language].try(:downcase) %>
+                  <%= link_to format_language(language[0]), new_repos_path(language: nil, license: params[:license]) %>
+                <% else %>
+                  <%= link_to format_language(language[0]), new_repos_path(language: format_language(language[0]), license: params[:license]) %>
+                  <small><%= pluralize number_to_human(language[1]), 'repos' %></small>
+                <% end %>
+              </li>
+            <% end %>
+            <% if @language && !@languages.map{|l| l[0].downcase }.include?(@language.name.downcase) %>
+              <li class='active'>
+                <%= link_to format_language(@language.name), new_repos_path(language: nil, license: params[:license]) %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

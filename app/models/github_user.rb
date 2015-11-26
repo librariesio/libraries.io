@@ -1,5 +1,5 @@
 class GithubUser < ActiveRecord::Base
-  has_many :github_contributions, dependent: :destroy
+  has_many :github_contributions, dependent: :delete_all
   has_many :github_repositories, primary_key: :github_id, foreign_key: :owner_id
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
   has_many :dependencies, through: :source_github_repositories
@@ -14,7 +14,7 @@ class GithubUser < ActiveRecord::Base
   scope :visible, -> { where(hidden: false) }
 
   def top_favourite_projects
-    Project.where(id: top_favourite_project_ids).order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
+    Project.where(id: top_favourite_project_ids).not_deprecated.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
   end
 
   def top_favourite_project_ids

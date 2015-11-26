@@ -30,10 +30,12 @@ class Repositories
     end
 
     def self.mapping(project)
+      metadata = project['metadata']
+      repo = metadata['repository'].is_a?(Hash) ? metadata['repository']['url'] : metadata['repository']
       {
         :name => project['name'],
-        :description => project['metadata']['description'],
-        :repository_url => project['metadata']['repository']
+        :description => metadata['description'],
+        :repository_url => repo_fallback(repo, '')
       }
     end
 
@@ -47,7 +49,7 @@ class Repositories
     end
 
     def self.dependencies(name, version)
-      deps = get("https://atom.io/api/packages/#{name}/versions/#{version}")["dependencies"]
+      deps = get("https://atom.io/api/packages/#{name}/versions/#{version}")["dependencies"] || []
       deps.map do |name,req|
         {
           project_name: name,

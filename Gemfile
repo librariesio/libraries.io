@@ -3,7 +3,7 @@ ruby '2.2.3'
 
 gem 'rb-readline'
 gem 'oj'
-gem 'rails', '4.2.4'
+gem 'rails', '4.2.5'
 gem 'pg'
 gem 'sass-rails'
 gem 'uglifier'
@@ -40,7 +40,7 @@ gem 'bigquery', require: 'big_query'
 gem 'sprockets'
 gem 'simple_form'
 gem 'sidekiq'
-gem 'sidekiq-unique-jobs'
+gem 'sidekiq-unique-jobs', '~> 3.0.15'
 gem 'sinatra', require: nil
 gem 'sassc-rails'
 gem 'hirefire-resource'
@@ -59,7 +59,10 @@ gem 'js-cookie-rails'
 gem 'postgres_ext'
 gem 'foreman', require: false
 gem 'puma'
+gem 'payola-payments'
 gem 'rack-timeout'
+gem 'semantic_range'
+gem 'rack-throttle'
 
 group :development do
   gem 'bundler'

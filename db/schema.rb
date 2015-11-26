@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151005230308) do
+ActiveRecord::Schema.define(version: 20151120151142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,8 +82,8 @@ ActiveRecord::Schema.define(version: 20151005230308) do
     t.integer  "owner_id"
     t.string   "description"
     t.boolean  "fork"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.datetime "pushed_at"
     t.string   "homepage"
     t.integer  "size"
@@ -102,17 +102,12 @@ ActiveRecord::Schema.define(version: 20151005230308) do
     t.string   "license"
     t.integer  "github_organisation_id"
     t.boolean  "private"
-    t.integer  "github_contributions_count", default: 0,     null: false
-    t.boolean  "has_readme",                 default: false
-    t.boolean  "has_changelog",              default: false
-    t.boolean  "has_contributing",           default: false
-    t.boolean  "has_license",                default: false
-    t.boolean  "has_coc",                    default: false
-    t.boolean  "has_threat_model",           default: false
+    t.integer  "github_contributions_count", default: 0, null: false
   end
 
   add_index "github_repositories", ["github_id"], name: "index_github_repositories_on_github_id", unique: true, using: :btree
   add_index "github_repositories", ["owner_id"], name: "index_github_repositories_on_owner_id", using: :btree
+  add_index "github_repositories", ["source_name"], name: "index_github_repositories_on_source_name", using: :btree
 
   create_table "github_tags", force: :cascade do |t|
     t.integer  "github_repository_id"
@@ -147,17 +142,114 @@ ActiveRecord::Schema.define(version: 20151005230308) do
 
   create_table "manifests", force: :cascade do |t|
     t.integer  "github_repository_id"
-    t.string   "platform"
-    t.string   "filepath"
+    t.string   "name"
+    t.string   "path"
     t.string   "sha"
     t.string   "branch"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
-    t.string   "kind"
   end
 
   add_index "manifests", ["created_at"], name: "index_manifests_on_created_at", using: :btree
   add_index "manifests", ["github_repository_id"], name: "index_manifests_on_github_repository_id", using: :btree
+
+  create_table "payola_affiliates", force: :cascade do |t|
+    t.string   "code"
+    t.string   "email"
+    t.integer  "percent"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "payola_coupons", force: :cascade do |t|
+    t.string   "code"
+    t.integer  "percent_off"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "active",      default: true
+  end
+
+  create_table "payola_sales", force: :cascade do |t|
+    t.string   "email",                limit: 191
+    t.string   "guid",                 limit: 191
+    t.integer  "product_id"
+    t.string   "product_type",         limit: 100
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "state"
+    t.string   "stripe_id"
+    t.string   "stripe_token"
+    t.string   "card_last4"
+    t.date     "card_expiration"
+    t.string   "card_type"
+    t.text     "error"
+    t.integer  "amount"
+    t.integer  "fee_amount"
+    t.integer  "coupon_id"
+    t.boolean  "opt_in"
+    t.integer  "download_count"
+    t.integer  "affiliate_id"
+    t.text     "customer_address"
+    t.text     "business_address"
+    t.string   "stripe_customer_id",   limit: 191
+    t.string   "currency"
+    t.text     "signed_custom_fields"
+    t.integer  "owner_id"
+    t.string   "owner_type",           limit: 100
+  end
+
+  add_index "payola_sales", ["coupon_id"], name: "index_payola_sales_on_coupon_id", using: :btree
+  add_index "payola_sales", ["email"], name: "index_payola_sales_on_email", using: :btree
+  add_index "payola_sales", ["guid"], name: "index_payola_sales_on_guid", using: :btree
+  add_index "payola_sales", ["owner_id", "owner_type"], name: "index_payola_sales_on_owner_id_and_owner_type", using: :btree
+  add_index "payola_sales", ["product_id", "product_type"], name: "index_payola_sales_on_product", using: :btree
+  add_index "payola_sales", ["stripe_customer_id"], name: "index_payola_sales_on_stripe_customer_id", using: :btree
+
+  create_table "payola_stripe_webhooks", force: :cascade do |t|
+    t.string   "stripe_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "payola_subscriptions", force: :cascade do |t|
+    t.string   "plan_type"
+    t.integer  "plan_id"
+    t.datetime "start"
+    t.string   "status"
+    t.string   "owner_type"
+    t.integer  "owner_id"
+    t.string   "stripe_customer_id"
+    t.boolean  "cancel_at_period_end"
+    t.datetime "current_period_start"
+    t.datetime "current_period_end"
+    t.datetime "ended_at"
+    t.datetime "trial_start"
+    t.datetime "trial_end"
+    t.datetime "canceled_at"
+    t.integer  "quantity"
+    t.string   "stripe_id"
+    t.string   "stripe_token"
+    t.string   "card_last4"
+    t.date     "card_expiration"
+    t.string   "card_type"
+    t.text     "error"
+    t.string   "state"
+    t.string   "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "currency"
+    t.integer  "amount"
+    t.string   "guid",                 limit: 191
+    t.string   "stripe_status"
+    t.integer  "affiliate_id"
+    t.string   "coupon"
+    t.text     "signed_custom_fields"
+    t.text     "customer_address"
+    t.text     "business_address"
+    t.integer  "setup_fee"
+  end
+
+  add_index "payola_subscriptions", ["guid"], name: "index_payola_subscriptions_on_guid", using: :btree
 
   create_table "project_mutes", force: :cascade do |t|
     t.integer  "user_id",    null: false
@@ -167,6 +259,17 @@ ActiveRecord::Schema.define(version: 20151005230308) do
   end
 
   add_index "project_mutes", ["project_id", "user_id"], name: "index_project_mutes_on_project_id_and_user_id", unique: true, using: :btree
+
+  create_table "project_suggestions", force: :cascade do |t|
+    t.integer  "project_id"
+    t.integer  "user_id"
+    t.string   "licenses"
+    t.string   "repository_url"
+    t.text     "notes"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "status"
+  end
 
   create_table "projects", force: :cascade do |t|
     t.string   "name"
@@ -188,6 +291,7 @@ ActiveRecord::Schema.define(version: 20151005230308) do
     t.string   "keywords_array",              default: [],              array: true
     t.integer  "dependents_count",            default: 0,  null: false
     t.string   "language"
+    t.string   "status"
   end
 
   add_index "projects", ["created_at"], name: "index_projects_on_created_at", using: :btree
@@ -245,6 +349,16 @@ ActiveRecord::Schema.define(version: 20151005230308) do
 
   add_index "repository_subscriptions", ["created_at"], name: "index_repository_subscriptions_on_created_at", using: :btree
 
+  create_table "subscription_plans", force: :cascade do |t|
+    t.integer  "amount"
+    t.string   "interval"
+    t.string   "stripe_id"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "repo_count"
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.integer  "project_id"
     t.integer  "user_id"
@@ -287,5 +401,17 @@ ActiveRecord::Schema.define(version: 20151005230308) do
 
   add_index "versions", ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true, using: :btree
   add_index "versions", ["project_id"], name: "index_versions_on_project_id", using: :btree
+
+  create_table "web_hooks", force: :cascade do |t|
+    t.integer  "github_repository_id"
+    t.integer  "user_id"
+    t.string   "url"
+    t.string   "last_response"
+    t.datetime "last_sent_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "web_hooks", ["github_repository_id"], name: "index_web_hooks_on_github_repository_id", using: :btree
 
 end

@@ -23,16 +23,27 @@ class Version < ActiveRecord::Base
   end
 
   def notify_firehose
-    Firehose.new_version(project, project.platform, number)
+    Firehose.new_version(project, project.platform, self)
+  end
+
+  def notify_web_hooks
+    repos = project.subscriptions.map(&:github_repository).compact.uniq
+    repos.each do |repo|
+      repo.web_hooks.each do |web_hook|
+        web_hook.send_new_version(project, project.platform, self)
+      end
+    end
   end
 
   def send_notifications_async
+    return if published_at && published_at < 1.week.ago
     VersionNotificationsWorker.perform_async(self.id)
   end
 
   def send_notifications
     notify_subscribers
     notify_firehose
+    notify_web_hooks
   end
 
   def published_at
@@ -48,7 +59,44 @@ class Version < ActiveRecord::Base
   end
 
   def parsed_number
-    Semantic::Version.new(number) rescue number
+    semantic_version || number
+  end
+
+  def semantic_version
+    Semantic::Version.new(number) rescue nil
+  end
+
+  def stable?
+    !prerelease?
+  end
+
+  def prerelease?
+    !!parsed_number.try(:pre)
+  end
+
+  def valid_number?
+    !!semantic_version
+  end
+
+  def follows_semver_for_dependency_requirements?
+    dependencies.all?(&:valid_requirements?)
+  end
+
+  def follows_semver?
+    valid_number? && follows_semver_for_dependency_requirements?
+  end
+
+  def any_outdated_dependencies?
+    dependencies.any?(&:outdated?)
+  end
+
+  def greater_than_1?
+    return nil unless follows_semver?
+    begin
+      SemanticRange.gte(number, '1.0.0')
+    rescue
+      false
+    end
   end
 
   def to_param

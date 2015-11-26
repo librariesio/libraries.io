@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount Payola::Engine => '/payola', as: :payola
   require 'sidekiq/web'
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
@@ -6,15 +7,32 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
 
   namespace :api do
+    get '/', to: 'docs#index'
     get '/search', to: 'search#index'
     get '/searchcode', to: 'projects#searchcode'
-    get '/github/:owner/:name', to: 'github_repositories#show', constraints: { :name => /.*/ }
-    post '/:platform/projects', to: 'projects#list'
-    get '/:platform/:name', to: 'projects#show', constraints: { :name => /.*/ }
+
+    get '/github/:owner/:name/dependencies', to: 'github_repositories#dependencies'
+    get '/github/:owner/:name/projects', to: 'github_repositories#projects'
+    get '/github/:owner/:name', to: 'github_repositories#show'
+
+    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\-\_\%]+/, :version => /[\w\-\_\.]+/ }
+    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories'
+    get '/:platform/:name/dependents', to: 'projects#dependents'
+    get '/:platform/:name', to: 'projects#show'
   end
 
   namespace :admin do
-    resources :projects
+    resources :projects do
+      collection do
+        get 'deprecated'
+      end
+    end
+    resources :project_suggestions
+    resources :github_repositories do
+      collection do
+        get 'mit'
+      end
+    end
     resources :users do
       member do
         post 'sync'
@@ -23,6 +41,9 @@ Rails.application.routes.draw do
     get '/stats', to: 'stats#index', as: :stats
     get '/stats/github', to: 'stats#github', as: :github_stats
   end
+
+  get '/pricing', to: 'account_subscriptions#plans', as: :pricing
+  resources :account_subscriptions
 
   get '/recommendations', to: 'recommendations#index', as: :recommendations
 
@@ -55,19 +76,29 @@ Rails.application.routes.draw do
   get '/stats', to: redirect('/admin/stats')
 
   get 'bus-factor', to: 'projects#bus_factor', as: :bus_factor
+  get '/unlicensed-libraries', to: 'projects#unlicensed', as: :unlicensed
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
+  get '/github/trending', to: 'github_repositories#hacker_news', as: :trending
+  get 'hacker_news' => redirect('/github/trending')
+  get '/github/new', to: 'github_repositories#new', as: :new_repos
+
   get '/github/organisations', to: 'github_organisations#index', as: :github_organisations
+  get '/github/timeline', to: 'github_repositories#timeline', as: :github_timeline
 
   get '/github/:login/repositories', to: 'users#repositories', as: :user_repositories
   get '/github/:login/contributions', to: 'users#contributions', as: :user_contributions
   get '/github/:login', to: 'users#show', as: :user
 
+  get '/mozilla', to: 'github_organisations#mozilla', as: :mozilla
+
   get '/search', to: 'search#index'
 
   get '/sitemap.xml.gz', to: redirect("https://#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com/sitemaps/sitemap.xml.gz")
 
+  get '/enable_private', to: 'sessions#enable_private', as: :enable_private
+  get '/enable_public', to: 'sessions#enable_public', as: :enable_public
   get '/login',  to: 'sessions#new',     as: 'login'
   get '/logout', to: 'sessions#destroy', as: 'logout'
 
@@ -77,6 +108,14 @@ Rails.application.routes.draw do
   get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/contributors', to: 'github_repositories#contributors', as: :github_repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/forks', to: 'github_repositories#forks', as: :github_repository_forks, format: false, constraints: { :name => /[^\/]+/ }
+
+  get '/github/:owner/:name/web_hooks', to: 'web_hooks#index', as: :github_repository_web_hooks, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/web_hooks/new', to: 'web_hooks#new', as: :new_github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  delete '/github/:owner/:name/web_hooks/:id', to: 'web_hooks#destroy', as: :github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  patch '/github/:owner/:name/web_hooks/:id', to: 'web_hooks#update', format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/web_hooks/:id/edit', to: 'web_hooks#edit', as: :edit_github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  post '/github/:owner/:name/web_hooks/:id/test', to: 'web_hooks#test', as: :test_github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  post '/github/:owner/:name/web_hooks', to: 'web_hooks#create', format: false, constraints: { :name => /[^\/]+/ }
 
   get '/github', to: 'github_repositories#index', as: :github
 
@@ -94,6 +133,9 @@ Rails.application.routes.draw do
     get '/rails/mailers/*path'   => "rails/mailers#preview"
   end
 
+  get '/:platform/:name/suggestions', to: 'project_suggestions#new', as: :project_suggestions, constraints: { :name => /.*/ }
+  post '/:platform/:name/suggestions', to: 'project_suggestions#create', constraints: { :name => /.*/ }
+
   # project routes
   post '/:platform/:name/mute', to: 'projects#mute', as: :mute_project, constraints: { :name => /.*/ }
   delete '/:platform/:name/unmute', to: 'projects#unmute', as: :unmute_project, constraints: { :name => /.*/ }
@@ -103,7 +145,11 @@ Rails.application.routes.draw do
   get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repos', as: :legacy_project_dependent_repos, constraints: { :name => /.*/ }
   get '/:platform/:name/dependent-repositories', to: 'projects#dependent_repos', as: :project_dependent_repos, constraints: { :name => /.*/ }
   get '/:platform/:name/dependent-repositories/yours', to: 'projects#your_dependent_repos', as: :your_project_dependent_repos, constraints: { :name => /.*/ }
+  get '/:platform/:name/:number.about', to: 'projects#about', as: :about_version, constraints: { :number => /.*/, :name => /.*/ }
+  get '/:platform/:name/:number.ABOUT', to: 'projects#about', constraints: { :number => /.*/, :name => /.*/ }
   get '/:platform/:name/:number', to: 'projects#show', as: :version, constraints: { :number => /.*/, :name => /.*/ }
+  get '/:platform/:name.about', to: 'projects#about', as: :about_project, constraints: { :name => /.*/ }
+  get '/:platform/:name.ABOUT', to: 'projects#about', constraints: { :name => /.*/ }
   get '/:platform/:name', to: 'projects#show', as: :project, constraints: { :name => /.*/ }
   get '/:id', to: 'platforms#show', as: :platform
 end

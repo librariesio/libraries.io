@@ -1,4 +1,6 @@
-<p class='list'>
-  <strong><%= link_to keyword.term, search_path(platforms: @platform_name, languages: @language, licenses: @license.try(:id), keywords: keyword.term) %></strong>
-  <small><%= pluralize number_to_human(keyword['count']), 'project' %></small>
-</p>
+<% if keyword.term.present? %>
+  <p class='list'>
+    <strong><%= link_to keyword.term, search_path(platforms: @platform_name, languages: @language, licenses: @license.try(:id), keywords: keyword.term) %></strong>
+    <small><%= pluralize number_to_human(keyword['count']), 'project' %></small>
+  </p>
+<% end %>

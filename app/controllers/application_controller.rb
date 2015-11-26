@@ -42,9 +42,16 @@ class ApplicationController < ActionController::Base
     !logged_in?
   end
 
-  def find_platform
-    @platform = Download.platforms.find{|p| p.to_s.demodulize.downcase == params[:id].downcase }
+  def find_platform(param = :id)
+    @platform = Download.platforms.find{|p| p.to_s.demodulize.downcase == params[param].downcase }
     raise ActiveRecord::RecordNotFound if @platform.nil?
     @platform_name = @platform.to_s.demodulize
+  end
+
+  def find_project
+    @project = Project.platform(params[:platform]).where(name: params[:name]).includes(:github_repository).first
+    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes(:github_repository).first if @project.nil?
+    raise ActiveRecord::RecordNotFound if @project.nil?
+    @color = @project.color
   end
 end

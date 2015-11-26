@@ -21,7 +21,7 @@ class GithubOrganisation < ActiveRecord::Base
   end
 
   def top_favourite_projects
-    Project.where(id: top_favourite_project_ids).order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
+    Project.where(id: top_favourite_project_ids).not_deprecated.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
   end
 
   def top_favourite_project_ids

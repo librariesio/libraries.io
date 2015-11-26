@@ -31,11 +31,29 @@ module SourceRank
     # more than one version
     r +=1 if versions_present?
 
+    # all versions/tags are valid semver numbers
+    r +=1 if follows_semver?
+
     # a version released within the last X months
     r +=1 if recent_release?
 
     # at least X months old
     r +=1 if not_brand_new?
+
+    # has the project been marked as deprecated?
+    r -=5 if is_deprecated?
+
+    # has the project been marked as deprecated?
+    r -=5 if is_removed?
+
+    # does the latest version have any outdated dependencies
+    r -=1 if any_outdated_dependencies?
+
+    # any releases greater than or equal to 1.0.0
+    r +=1 if one_point_oh?
+
+    # every version is a prerelease?
+    r -=2 if all_prereleases?
 
     # number of github stars
     r += log_scale(stars)
@@ -57,6 +75,8 @@ module SourceRank
     # number of downloads
 
     # documentation available?
+
+    r = 0 if r < 0
 
     return r
   end
@@ -89,6 +109,18 @@ module SourceRank
   def not_brand_new?
     versions.any? {|v| v.published_at && v.published_at < 6.months.ago } ||
       (github_tags.published.any? {|v| v.published_at && v.published_at < 6.months.ago })
+  end
+
+  def any_outdated_dependencies?
+    latest_version.try(:any_outdated_dependencies?)
+  end
+
+  def all_prereleases?
+    prereleases.length == versions.length
+  end
+
+  def one_point_oh?
+    versions.any?(&:greater_than_1?)
   end
 
   def log_scale(number)

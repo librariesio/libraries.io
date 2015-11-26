@@ -8,6 +8,16 @@ class SessionsController < ApplicationController
     redirect_to "/auth/github"
   end
 
+  def enable_public
+    session[:pre_login_destination] = repositories_path
+    redirect_to "/auth/github_public"
+  end
+
+  def enable_private
+    session[:pre_login_destination] = repositories_path
+    redirect_to "/auth/github_private"
+  end
+
   def create
     auth_hash = request.env['omniauth.auth']
     user      = User.find_by_auth_hash(auth_hash) || User.new

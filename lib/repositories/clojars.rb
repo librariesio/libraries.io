@@ -2,26 +2,35 @@ class Repositories
   class Clojars < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    LIBRARIAN_PLANNED = true
+    LIBRARIAN_SUPPORT = true
     URL = 'https://clojars.org'
     COLOR = '#db5855'
 
     def self.project_names
-      projects.keys
+      @names ||= get("http://clojars-json.herokuapp.com/packages.json").keys
     end
 
     def self.projects
-      @projects ||= get("http://clojars-json.herokuapp.com/feed.json")
+      @projects ||= begin
+        projs = {}
+        get("http://clojars-json.herokuapp.com/feed.json").each do |k,v|
+          v.each do |proj|
+            group = proj['group-id']
+            key = (group == k ? k : "#{group}/#{k}")
+            projs[key] = proj
+          end
+        end
+        projs
+      end
     end
 
     def self.project(name)
-      projects[name.downcase].try(:first).merge(name: name)
+      projects[name.downcase].merge(name: name)
     end
 
     def self.mapping(project)
-      name = project[:name] == project["group-id"] ? project[:name] : "#{project["group-id"]}/#{project[:name]}"
       {
-        :name => name,
+        :name => project[:name],
         :description => project["description"],
         :repository_url => repo_fallback(project["scm"]["url"], '')
       }
@@ -30,7 +39,7 @@ class Repositories
     def self.versions(project)
       project['versions'].map do |v|
         {
-          :number => v['version']
+          :number => v
         }
       end
     end

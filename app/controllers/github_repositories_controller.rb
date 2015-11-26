@@ -20,6 +20,27 @@ class GithubRepositoriesController < ApplicationController
     @licenses = language_scope.group('lower(license)').count.reject{|k,v| k.blank? || k == 'other' }.sort_by{|k,v| v }.reverse.first(25)
   end
 
+  def hacker_news
+    @language = Languages::Language[params[:language]] if params[:language].present?
+    @license = Spdx.find(params[:license]) if params[:license].present?
+
+    orginal_scope = GithubRepository.open_source.where.not(pushed_at: nil).recently_created.where('stargazers_count > 0')
+    scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
+    @repos = scope.hacker_news.paginate(page: params[:page])
+
+    @languages = orginal_scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(40)
+  end
+
+  def new
+    @language = Languages::Language[params[:language]] if params[:language].present?
+
+    orginal_scope = GithubRepository.open_source.source.where.not(pushed_at: nil)
+    scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
+    @repos = scope.recently_created.order('created_at DESC').paginate(page: params[:page])
+
+    @languages = orginal_scope.recently_created.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(40)
+  end
+
   def show
     load_repo
     @contributors = @github_repository.contributors.order('count DESC').visible.limit(20)
