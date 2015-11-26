@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     get '/github/:owner/:name/projects', to: 'github_repositories#projects'
     get '/github/:owner/:name', to: 'github_repositories#show'
 
-    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\-\_]+/, :version => /[\w\-\_\.]+/ }
+    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\-\_\%]+/, :version => /[\w\-\_\.]+/ }
     get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories'
     get '/:platform/:name/dependents', to: 'projects#dependents'
     get '/:platform/:name', to: 'projects#show'
