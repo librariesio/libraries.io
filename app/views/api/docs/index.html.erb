@@ -19,7 +19,7 @@
     </p>
 
     <h3 id='project'>Project</h3>
-
+    <% cache 'api-docs-v1', :expires_in => 1.day do %>
     <p>
       Get information about a project and it's versions.
     </p>
@@ -157,7 +157,7 @@
 
       <pre>
 <%= JSON.pretty_generate @github_repository.projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} }) %></pre>
-
+  <% end %>
   </div>
   <div class="col-md-4">
     <div style="position:fixed">
