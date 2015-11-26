@@ -358,13 +358,13 @@ class GithubRepository < ActiveRecord::Base
     end
    
     if body.metadata 
-      self.has_readme       = body.metadata.readme.file
-      self.has_changelog    = body.metadata.changelog.file   
-      self.has_contributing = body.metadata.contributing.file
-      self.has_license      = body.metadata.license.file
-      self.has_coc          = body.metadata.codeofconduct.file
-      self.has_threat_model = body.metadata.threatmodel.file
-      self.has_audit        = body.metadata.audit.file
+      self.has_readme       = body.metadata.readme.path
+      self.has_changelog    = body.metadata.changelog.path   
+      self.has_contributing = body.metadata.contributing.path
+      self.has_license      = body.metadata.license.path
+      self.has_coc          = body.metadata.codeofconduct.path
+      self.has_threat_model = body.metadata.threatmodel.path
+      self.has_audit        = body.metadata.audit.path
 
       save! if self.changed?
     end
