@@ -356,7 +356,21 @@ class GithubRepository < ActiveRecord::Base
     rescue Oj::ParseError
       new_manifests = nil
     end
+   
+    if body.metadata 
+      self.has_readme       = body.metadata.readme.file
+      self.has_changelog    = body.metadata.changelog.file   
+      self.has_contributing = body.metadata.contributing.file
+      self.has_license      = body.metadata.license.file
+      self.has_coc          = body.metadata.codeofconduct.file
+      self.has_threat_model = body.metadata.threatmodel.file
+      self.has_audit        = body.metadata.audit.file
+
+      save! if self.changed?
+    end
+    
     return if new_manifests.nil?
+
     new_manifests.each do |m|
       #args = m.slice('platform','kind','filepath', 'sha')
       args = {platform: m['platform'], kind: m['type'], filepath: m['filepath'], sha: m['sha']}
