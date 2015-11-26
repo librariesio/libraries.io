@@ -10,7 +10,7 @@
   <div class="col-md-12">
     <h5><strong>Recent Signups</strong></h5>
     <% @recent_users.each do |user| %>
-      <%= link_to image_tag(user.avatar_url, width: 60, height: 60, alt: user, class: 'pull-left'), user_path(user.nickname), class: 'tip', style: 'display:block; float:left;', title: "#{user.nickname}: #{pluralize(user.subscriptions.count, 'subs')}, #{pluralize(user.github_repositories.count, 'repo')}, #{pluralize(user.repository_subscriptions.count, 'track')}" %>
+      <%= link_to image_tag(user.avatar_url(120), width: 60, height: 60, alt: user, class: 'pull-left'), user_path(user.nickname), class: 'tip', style: 'display:block; float:left;', title: "#{user.nickname}: #{pluralize(user.subscriptions.count, 'subs')}, #{pluralize(user.github_repositories.count, 'repo')}, #{pluralize(user.repository_subscriptions.count, 'track')}" %>
     <% end %>
   </div>
 </div>
@@ -20,7 +20,7 @@
     <% @recent_subscriptions.each do |sub| %>
       <div style='min-height:30px;'>
         <% if sub.user %>
-        <%= link_to image_tag(sub.user.avatar_url, width: 20, height: 20, alt: sub.user, class: 'pull-left'), user_path(sub.user.nickname), class: 'tip', style: 'display:block; float:left; margin-right:5px;', title: "#{sub.user.nickname}: #{pluralize(sub.user.subscriptions.count, 'subs')}, #{pluralize(sub.user.github_repositories.count, 'repo')}, #{pluralize(sub.user.repository_subscriptions.count, 'track')}" %>
+        <%= link_to image_tag(sub.user.avatar_url(40), width: 20, height: 20, alt: sub.user, class: 'pull-left'), user_path(sub.user.nickname), class: 'tip', style: 'display:block; float:left; margin-right:5px;', title: "#{sub.user.nickname}: #{pluralize(sub.user.subscriptions.count, 'subs')}, #{pluralize(sub.user.github_repositories.count, 'repo')}, #{pluralize(sub.user.repository_subscriptions.count, 'track')}" %>
          <%= link_to sub.user, user_path(sub.user.nickname) %>
         <% else %>Deleted<% end %>
         subscribed to <%= link_to sub.project, project_path(sub.project.to_param) %>
@@ -36,7 +36,7 @@
     <% @recent_watches.each do |sub| %>
       <div style='min-height:30px;'>
         <% if sub.user %>
-        <%= link_to image_tag(sub.user.avatar_url, width: 20, height: 20, alt: sub.user, class: 'pull-left'), user_path(sub.user.nickname), class: 'tip', style: 'display:block; float:left; margin-right:5px;', title: "#{sub.user.nickname}: #{pluralize(sub.user.subscriptions.count, 'subs')}, #{pluralize(sub.user.github_repositories.count, 'repo')}, #{pluralize(sub.user.repository_subscriptions.count, 'track')}" %>
+        <%= link_to image_tag(sub.user.avatar_url(40), width: 20, height: 20, alt: sub.user, class: 'pull-left'), user_path(sub.user.nickname), class: 'tip', style: 'display:block; float:left; margin-right:5px;', title: "#{sub.user.nickname}: #{pluralize(sub.user.subscriptions.count, 'subs')}, #{pluralize(sub.user.github_repositories.count, 'repo')}, #{pluralize(sub.user.repository_subscriptions.count, 'track')}" %>
          <%= link_to sub.user, user_path(sub.user.nickname) %>
         <% else %>Deleted<% end %>
         watched
