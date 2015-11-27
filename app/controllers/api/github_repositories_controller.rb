@@ -17,6 +17,7 @@ class Api::GithubRepositoriesController < Api::ApplicationController
     deps = dependencies.map do |dependency|
       {
         project_name: dependency.project_name,
+        name: dependency.project_name,
         platform: dependency.platform,
         requirements: dependency.requirements,
         latest_stable: dependency.try(:project).try(:latest_stable_release_number),

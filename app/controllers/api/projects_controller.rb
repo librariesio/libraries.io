@@ -18,7 +18,7 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def dependencies
-    version = if params[:version] == 'latest' 
+    version = if params[:version] == 'latest'
       @project.versions.newest_first.first
     else
       @project.versions.find_by_number(params[:version])
@@ -31,6 +31,7 @@ class Api::ProjectsController < Api::ApplicationController
     deps = dependencies.map do |dependency|
       {
         project_name: dependency.project_name,
+        name: dependency.project_name,
         platform: dependency.platform,
         requirements: dependency.requirements,
         latest_stable: dependency.try(:project).try(:latest_stable_release_number),
