@@ -103,6 +103,13 @@ ActiveRecord::Schema.define(version: 20151120151142) do
     t.integer  "github_organisation_id"
     t.boolean  "private"
     t.integer  "github_contributions_count", default: 0, null: false
+    t.string   "has_readme"
+    t.string   "has_changelog"
+    t.string   "has_contributing"
+    t.string   "has_license"
+    t.string   "has_coc"
+    t.string   "has_threat_model"
+    t.string   "has_audit"
   end
 
   add_index "github_repositories", ["github_id"], name: "index_github_repositories_on_github_id", unique: true, using: :btree
@@ -142,12 +149,13 @@ ActiveRecord::Schema.define(version: 20151120151142) do
 
   create_table "manifests", force: :cascade do |t|
     t.integer  "github_repository_id"
-    t.string   "name"
-    t.string   "path"
+    t.string   "platform"
+    t.string   "filepath"
     t.string   "sha"
     t.string   "branch"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.string   "kind"
   end
 
   add_index "manifests", ["created_at"], name: "index_manifests_on_created_at", using: :btree
