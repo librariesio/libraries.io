@@ -1,5 +1,6 @@
 class Api::DocsController < ApplicationController
   def index
+    @cache_version = 'v1.1'
     @api_key = logged_in? ? current_user.api_key : 'YOUR_API_KEY'
     @project = Project.platform('npm').find_by_name('grunt') || Project.platform('rubygems').first
 
@@ -20,7 +21,7 @@ class Api::DocsController < ApplicationController
       }
     end
 
-    @dependencies = @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses])
+    @dependencies = @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank])
     @dependencies[:dependencies] = deps
 
     @github_repository = GithubRepository.find_by_full_name('gruntjs/grunt') || GithubRepository.first

@@ -34,9 +34,9 @@
     <p>
       Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt?api_key=#{@api_key}", "https://libraries.io/api/npm/grunt?api_key=#{@api_key}" %> </strong>
     </p>
-    <% cache 'api-docs-v1-project', :expires_in => 1.day do %>
+    <% cache "api-docs-#{@cache_version}-project", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank], include: {versions: {only: [:number, :published_at]} }) %></pre>
     <% end %>
     <h3 id='project-dependencies'>Project Dependencies</h3>
 
@@ -51,7 +51,7 @@
     <p>
       Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/latest/dependencies?api_key=#{@api_key}", "https://libraries.io/api/rubygems/rails/4.2.4/dependencies?api_key=#{@api_key}" %> </strong>
     </p>
-    <% cache 'api-docs-v1-project-dependencies', :expires_in => 1.day do %>
+    <% cache "api-docs-#{@cache_version}-project-dependencies", :expires_in => 1.day do %>
       <pre>
 <%= JSON.pretty_generate @dependencies %></pre>
     <% end %>
@@ -72,9 +72,9 @@
     <p>
       Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/dependents?api_key=#{@api_key}", "https://libraries.io/api/npm/grunt/dependents?api_key=#{@api_key}" %> </strong>
     </p>
-    <% cache 'api-docs-v1-project-dependents', :expires_in => 1.day do %>
+    <% cache "api-docs-#{@cache_version}-project-dependents", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @project.dependent_projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate @project.dependent_projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank], include: {versions: {only: [:number, :published_at]} }) %></pre>
     <% end %>
     <h3 id="project-dependent-repositories">Project Dependent Repositories</h3>
 
@@ -93,7 +93,7 @@
     <p>
       Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/dependent_repositories?api_key=#{@api_key}", "https://libraries.io/api/npm/grunt/dependent_repositories?api_key=#{@api_key}" %> </strong>
     </p>
-    <% cache 'api-docs-v1-project-dependent-repositories', :expires_in => 1.day do %>
+    <% cache "api-docs-#{@cache_version}-project-dependent-repositories", :expires_in => 1.day do %>
       <pre>
 <%= JSON.pretty_generate @project.dependent_repositories.paginate(page: params[:page]).as_json(except: [:id, :github_organisation_id, :owner_id]) %></pre>
     <% end %>
@@ -115,9 +115,9 @@
     <p>
       Example: <strong> <%= link_to "https://libraries.io/api/search?q=grunt&api_key=#{@api_key}", "https://libraries.io/api/search?q=grunt&api_key=#{@api_key}" %> </strong>
     </p>
-    <% cache 'api-docs-v1-project-search', :expires_in => 1.day do %>
+    <% cache "api-docs-#{@cache_version}-project-search", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @search.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate @search.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank], include: {versions: {only: [:number, :published_at]} }) %></pre>
     <% end %>
     <h3 id='github-repository'>GitHub Repository</h3>
 
@@ -131,7 +131,7 @@
     <p>
       Example: <strong> <%= link_to "https://libraries.io/api/github/#{@github_repository.full_name}?api_key=#{@api_key}", "https://libraries.io/api/github/#{@github_repository.full_name}?api_key=#{@api_key}" %> </strong>
     </p>
-    <% cache 'api-docs-v1-github-repository', :expires_in => 1.day do %>
+    <% cache "api-docs-#{@cache_version}-github-repository", :expires_in => 1.day do %>
       <pre>
 <%= JSON.pretty_generate @github_repository.as_json({except: [:id, :github_organisation_id, :owner_id]}) %></pre>
     <% end %>
@@ -147,7 +147,7 @@
     <p>
       Example: <strong> <%= link_to "https://libraries.io/api/github/#{@github_repository.full_name}/dependencies?api_key=#{@api_key}", "https://libraries.io/api/github/#{@github_repository.full_name}/dependencies?api_key=#{@api_key}" %> </strong>
     </p>
-    <% cache 'api-docs-v1-github-repository-dependencies', :expires_in => 1.day do %>
+    <% cache "api-docs-#{@cache_version}-github-repository-dependencies", :expires_in => 1.day do %>
       <pre>
 <%= JSON.pretty_generate @repo_dependencies %></pre>
     <% end %>
@@ -163,9 +163,9 @@
     <p>
       Example: <strong> <%= link_to "https://libraries.io/api/github/#{@github_repository.full_name}/projects?api_key=#{@api_key}", "https://libraries.io/api/github/#{@github_repository.full_name}/projects?api_key=#{@api_key}" %> </strong>
     </p>
-    <% cache 'api-docs-v1-github-repository-projects', :expires_in => 1.day do %>
+    <% cache "api-docs-#{@cache_version}-github-repository-projects", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @github_repository.projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate @github_repository.projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank], include: {versions: {only: [:number, :published_at]} }) %></pre>
     <% end %>
   </div>
   <div class="col-md-4">
