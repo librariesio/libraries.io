@@ -8,7 +8,7 @@ class GithubOrganisationsController < ApplicationController
   def mozilla
     @org_logins = ['mozilla', 'mozilla-it', 'bugzilla', 'drumbeat-badge-sprint', 'hackasaurus', 'jetpack-labs', 'mdn', 'mozbrick', 'mozilla-appmaker', 'mozilla-b2g', 'mozilla-comm', 'mozilla-cordova', 'mozilla-metrics', 'mozilla-raptor', 'mozilla-services', 'mozilla-svcops', 'mozillatw', 'Mozilla-TWQA', 'mozillahispano', 'MozillaSecurity', 'MozillaWiki', 'mozillayvr', 'mozfr', 'OpenNews', 'rust-lang', 'servo', 'tabulapdf', 'webcompat']
     @orgs = GithubOrganisation.where(login: @org_logins).includes(:source_github_repositories).sort_by{|o| -o.source_github_repositories.length }
-    @repositories = GithubRepository.source.where(github_organisation_id: @orgs.map(&:id)).includes(:dependencies)
+    @repositories = GithubRepository.open_source.source.where(github_organisation_id: @orgs.map(&:id)).includes(:dependencies)
     @licenses = @repositories.group('license').count
     @languages = @repositories.group('language').count
 
