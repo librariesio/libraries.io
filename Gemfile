@@ -63,6 +63,7 @@ gem 'payola-payments'
 gem 'rack-timeout'
 gem 'semantic_range'
 gem 'rack-throttle'
+gem 'license-compatibility'
 
 group :development do
   gem 'bundler'
