@@ -1,7 +1,7 @@
 <h1>Project Suggestions</h1>
 
 <% @project_suggestions.each do |project_suggestion| %>
-
+<% next if project_suggestion.project.nil? %>
 <h3>
   <%= link_to project_suggestion.project, project_path(project_suggestion.project.to_param) %>
   <small>
