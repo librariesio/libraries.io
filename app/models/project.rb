@@ -51,6 +51,7 @@ class Project < ActiveRecord::Base
 
   scope :not_deprecated, -> { where('projects."status" != ? OR projects."status" != ? OR projects."status" IS NULL', "Deprecated", "Removed")}
   scope :deprecated, -> { where('projects."status" = ?', "Deprecated")}
+  scope :not_removed, -> { where('projects."status" != ? OR projects."status" IS NULL', "Removed")}
   scope :removed, -> { where('projects."status" = ?', "Removed")}
 
 

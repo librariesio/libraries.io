@@ -25,4 +25,13 @@ namespace :projects do
     Dependency.without_project_id.find_each(&:update_project_id)
     RepositoryDependency.without_project_id.find_each(&:update_project_id)
   end
+
+  task check_status: :environment do
+    ['npm', 'rubygems', 'packagist', 'nuget', 'wordpress', 'cpan', 'clojars', 'cocoapods',
+    'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
+      Project.platform(platform).not_removed.select('id, name').find_each do |project|
+        CheckStatusWorker.perform_async(project.id, platform, project.name)
+      end
+    end
+  end
 end
