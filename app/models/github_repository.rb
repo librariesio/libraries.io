@@ -357,14 +357,16 @@ class GithubRepository < ActiveRecord::Base
       new_manifests = nil
     end
    
-    if body.metadata 
-      self.has_readme       = body.metadata.readme.path
-      self.has_changelog    = body.metadata.changelog.path   
-      self.has_contributing = body.metadata.contributing.path
-      self.has_license      = body.metadata.license.path
-      self.has_coc          = body.metadata.codeofconduct.path
-      self.has_threat_model = body.metadata.threatmodel.path
-      self.has_audit        = body.metadata.audit.path
+    if body['metadata']
+      meta = body['metadata']
+
+      self.has_readme       = meta['readme']['path']        if meta['readme']
+      self.has_changelog    = meta['changelog']['path']     if meta['changelog']
+      self.has_contributing = meta['contributing']['path']  if meta['contributing']
+      self.has_license      = meta['license']['path']       if meta['license']
+      self.has_coc          = meta['codeofconduct']['path'] if meta['codeofconduct']
+      self.has_threat_model = meta['threatmodel']['path']   if meta['threatmodel']
+      self.has_audit        = meta['audit']['path']         if meta['audit']
 
       save! if self.changed?
     end
