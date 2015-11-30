@@ -6,6 +6,8 @@ class Dependency < ActiveRecord::Base
 
   scope :without_project_id, -> { where(project_id: nil) }
 
+  after_create :update_project_id
+
   def find_project_id
     Project.platform(platform).where('lower(name) = ?', project_name.downcase).limit(1).pluck(:id).first
   end

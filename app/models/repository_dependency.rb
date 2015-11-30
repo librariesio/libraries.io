@@ -5,6 +5,8 @@ class RepositoryDependency < ActiveRecord::Base
   scope :with_project, -> { joins(:project).where('projects.id IS NOT NULL') }
   scope :without_project_id, -> { where(project_id: nil) }
 
+  after_create :update_project_id
+
   def github_repository
     manifest.try(:github_repository)
   end
