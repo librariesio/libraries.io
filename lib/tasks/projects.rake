@@ -34,4 +34,12 @@ namespace :projects do
       end
     end
   end
+
+  task update_repos: :environment do
+    repo_names = Project.not_deprecated.with_repo.pluck('github_repositories.full_name').uniq.compact
+
+    repo_names.find_each do |repo_name|
+      GithubUpdateWorker.perform_async(repo_name)
+    end
+  end
 end
