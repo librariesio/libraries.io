@@ -1,7 +1,7 @@
 <% title "#{@user}'s Open Source Contributions - Libraries" %>
 
 <h1>
-  <%= image_tag @user.avatar_url, width: 60, height: 60, alt: @user %>
+  <%= image_tag @user.avatar_url(120), width: 60, height: 60, alt: @user %>
   <%= link_to @user, user_path(@user) %>'s Open Source Contributions
 </h1>
 <hr>

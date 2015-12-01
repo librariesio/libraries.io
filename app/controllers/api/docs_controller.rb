@@ -1,7 +1,7 @@
 class Api::DocsController < ApplicationController
-  before_action :ensure_logged_in
-
   def index
+    @cache_version = 'v1.1'
+    @api_key = logged_in? ? current_user.api_key : 'YOUR_API_KEY'
     @project = Project.platform('npm').find_by_name('grunt') || Project.platform('rubygems').first
 
     @version = @project.versions.newest_first.first
@@ -11,6 +11,7 @@ class Api::DocsController < ApplicationController
     deps = dependencies.map do |dependency|
       {
         project_name: dependency.project_name,
+        name: dependency.project_name,
         platform: dependency.platform,
         requirements: dependency.requirements,
         latest_stable: dependency.try(:project).try(:latest_stable_release_number),
@@ -20,7 +21,7 @@ class Api::DocsController < ApplicationController
       }
     end
 
-    @dependencies = @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses])
+    @dependencies = @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank])
     @dependencies[:dependencies] = deps
 
     @github_repository = GithubRepository.find_by_full_name('gruntjs/grunt') || GithubRepository.first
@@ -32,6 +33,7 @@ class Api::DocsController < ApplicationController
     deps = dependencies.map do |dependency|
       {
         project_name: dependency.project_name,
+        name: dependency.project_name,
         platform: dependency.platform,
         requirements: dependency.requirements,
         latest_stable: dependency.try(:project).try(:latest_stable_release_number),

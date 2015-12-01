@@ -6,8 +6,29 @@ class Dependency < ActiveRecord::Base
 
   scope :without_project_id, -> { where(project_id: nil) }
 
+  after_create :update_project_id
+
   def find_project_id
     Project.platform(platform).where('lower(name) = ?', project_name.downcase).limit(1).pluck(:id).first
+  end
+
+  def incompatible_license?
+    compatible_license? == false
+  end
+
+  def compatible_license?
+    return nil unless project
+    return nil if project.normalized_licenses.empty?
+    return nil if version.project.normalized_licenses.empty?
+    project.normalized_licenses.any? do |license|
+      version.project.normalized_licenses.any? do |other_license|
+        begin
+          License::Compatibility.forward_compatiblity(license, other_license)
+        rescue
+          true
+        end
+      end
+    end
   end
 
   def platform

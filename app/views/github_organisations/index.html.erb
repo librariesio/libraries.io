@@ -15,7 +15,7 @@
       </h4>
       <% @most_repos.each do |org| %>
         <div class="org">
-          <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
+          <%= link_to image_tag(org.avatar_url(120), width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
           <strong><%= link_to org, user_path(org) %></strong>
           <p>
             <small><%= pluralize number_to_human(org.repo_count), 'repository' %></small>
@@ -31,7 +31,7 @@
       </h4>
       <% @most_stars.each do |org| %>
         <div class="org">
-          <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
+          <%= link_to image_tag(org.avatar_url(120), width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
           <strong><%= link_to org, user_path(org) %></strong>
           <p>
             <small><%= number_to_human org.star_count %> stars on <%= pluralize number_to_human(org.repo_count), 'repository' %></small>
@@ -47,7 +47,7 @@
       </h4>
       <% @newest.each do |org| %>
         <div class="org">
-          <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
+          <%= link_to image_tag(org.avatar_url(120), width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
           <strong><%= link_to org, user_path(org) %></strong>
           <p>
             <small><%= pluralize number_to_human(org.repo_count), 'repository' %></small>

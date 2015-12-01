@@ -5,7 +5,7 @@
   <div class="row">
     <div class='col-md-8'>
       <h1>
-        <%= link_to image_tag(repo.avatar_url, width: 50, height: 50, alt: repo), user_path(repo.owner_name) %>
+        <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo), user_path(repo.owner_name) %>
         <%= repo %>
         <%= link_to fa_icon('github'), repo.url, class: 'tip', title: "View #{repo} on GitHub" %>
         <%= fa_icon("lock", title: 'This repo is private', class: 'tip') if repo.private? %>
@@ -132,6 +132,8 @@
                       <% if dependency.project %>
                         <% if dependency.project.is_removed? %>
                           <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: "This project is no longer available on #{dependency.project.platform}" %>
+                        <% elsif dependency.incompatible_license? %>
+                          <%= fa_icon 'exclamation-triangle', class: 'text-info tip', title: 'This project may have a conflicting license' %>
                         <% elsif dependency.project.is_deprecated? %>
                           <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
                         <% elsif dependency.outdated? %>

@@ -8,7 +8,7 @@ class Api::GithubRepositoriesController < Api::ApplicationController
   end
 
   def projects
-    render json: @github_repository.projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} })
+    render json: @github_repository.projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank], include: {versions: {only: [:number, :published_at]} })
   end
 
   def dependencies
@@ -17,6 +17,7 @@ class Api::GithubRepositoriesController < Api::ApplicationController
     deps = dependencies.map do |dependency|
       {
         project_name: dependency.project_name,
+        name: dependency.project_name,
         platform: dependency.platform,
         requirements: dependency.requirements,
         latest_stable: dependency.try(:project).try(:latest_stable_release_number),

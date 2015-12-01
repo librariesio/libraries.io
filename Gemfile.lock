@@ -47,7 +47,7 @@ GEM
       addressable (>= 2.3.1)
       extlib (>= 0.9.15)
       multi_json (>= 1.0.0)
-    autoprefixer-rails (6.1.1)
+    autoprefixer-rails (6.1.2)
       execjs
       json
     bigquery (0.8.3)
@@ -153,7 +153,7 @@ GEM
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
       ipaddress (~> 0.8)
-    fog-brightbox (0.9.0)
+    fog-brightbox (0.10.0)
       fog-core (~> 1.22)
       fog-json
       inflecto (~> 0.0.2)
@@ -281,6 +281,7 @@ GEM
       escape_utils (~> 1.1)
     launchy (2.4.3)
       addressable (~> 2.3)
+    license-compatibility (1.1.0)
     little-plugger (1.1.4)
     logging (2.0.0)
       little-plugger (~> 1.1)
@@ -293,9 +294,9 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    memoist (0.12.0)
+    memoist (0.13.0)
     mime-types (2.6.2)
-    mini_portile (0.6.2)
+    mini_portile2 (2.0.0)
     minitest (5.8.3)
     moneta (0.8.0)
     multi_json (1.11.2)
@@ -303,8 +304,8 @@ GEM
     multipart-post (2.0.0)
     netrc (0.11.0)
     newrelic_rpm (3.14.0.305)
-    nokogiri (1.6.6.4)
-      mini_portile (~> 0.6.0)
+    nokogiri (1.6.7)
+      mini_portile2 (~> 2.0.0.rc2)
     oauth2 (1.0.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -452,8 +453,8 @@ GEM
       spdx-licenses (~> 1.0)
     spdx-licenses (1.0.0)
       json
-    spring (1.4.4)
-    sprockets (3.4.0)
+    spring (1.5.0)
+    sprockets (3.4.1)
       rack (> 1, < 3)
     sprockets-rails (2.3.3)
       actionpack (>= 3.0)
@@ -518,6 +519,7 @@ DEPENDENCIES
   jquery-rails
   js-cookie-rails
   languages
+  license-compatibility
   lograge
   mime-types (~> 2.6.1)
   newrelic_rpm

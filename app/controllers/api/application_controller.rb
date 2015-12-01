@@ -1,7 +1,18 @@
 class Api::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
+  before_filter :set_headers
 
   protected
+
+  private
+
+  def set_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Expose-Headers'] = 'ETag'
+    headers['Access-Control-Allow-Methods'] = 'GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD'
+    headers['Access-Control-Allow-Headers'] = '*,x-requested-with,Content-Type,If-Modified-Since,If-None-Match'
+    headers['Access-Control-Max-Age'] = '86400'
+  end
 
   def check_api_key
     render :json => error_message, :status => :bad_request unless api_key_present?

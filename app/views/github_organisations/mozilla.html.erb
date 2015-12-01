@@ -1,49 +1,51 @@
-<% title "Mozilla Open Source Statistics" %>
-<div class="row">
-  <div class="col-md-12">
-    <h1>Mozilla Open Source Statistics</h1>
+<% cache 'mozilla-v2', :expires_in => 1.day do %>
+  <% title "Mozilla Open Source Statistics" %>
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Mozilla Open Source Statistics</h1>
 
-    <h3>Organisations</h3>
-  </div>
-
-  <% @orgs.each do |org| %>
-    <% next if org.source_github_repositories.length.zero? %>
-    <div class="col-sm-4 org">
-      <%= link_to image_tag(org.avatar_url, width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
-      <strong><%= link_to org, user_path(org) %></strong>
-      <p>
-        <small><%= pluralize number_to_human(org.source_github_repositories.length), 'repository' %></small>
-      </p>
+      <h3>Organisations</h3>
     </div>
-  <% end %>
-</div>
-<hr>
-<div class="row">
-  <div class="col-md-4">
-    <h3>Most used libraries</h3>
-    <%= render @projects %>
+
+    <% @orgs.each do |org| %>
+      <% next if org.source_github_repositories.length.zero? %>
+      <div class="col-sm-4 org">
+        <%= link_to image_tag(org.avatar_url(120), width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org) %>
+        <strong><%= link_to org, user_path(org) %></strong>
+        <p>
+          <small><%= pluralize number_to_human(org.source_github_repositories.length), 'repository' %></small>
+        </p>
+      </div>
+    <% end %>
   </div>
-  <div class="col-md-4 facets">
-    <h3>Languages</h3>
-    <ul class=''>
-      <% @languages.sort_by{|k,v| -v }.each do |k,v| %>
-        <% next if k.nil? %>
-        <li>
-          <%= link_to k, language_path(k) %>
-          <small><%= v %></small>
-        </li>
-      <% end %>
-    </ul>
+  <hr>
+  <div class="row">
+    <div class="col-md-4">
+      <h3>Most used libraries</h3>
+      <%= render @projects %>
+    </div>
+    <div class="col-md-4 facets">
+      <h3>Languages</h3>
+      <ul class=''>
+        <% @languages.sort_by{|k,v| -v }.each do |k,v| %>
+          <% next if k.nil? %>
+          <li>
+            <%= link_to k, language_path(k) %>
+            <small><%= v %></small>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-md-4 facets">
+      <h3>Licenses</h3>
+      <ul class=''>
+        <% @licenses.sort_by{|k,v| -v }.each do |k,v| %>
+          <li>
+            <%= linked_licenses [k] %>
+            <small><%= v %></small>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
-  <div class="col-md-4 facets">
-    <h3>Licenses</h3>
-    <ul class=''>
-      <% @licenses.sort_by{|k,v| -v }.each do |k,v| %>
-        <li>
-          <%= linked_licenses [k] %>
-          <small><%= v %></small>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-</div>
+<% end %>

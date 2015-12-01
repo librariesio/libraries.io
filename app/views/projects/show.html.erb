@@ -182,6 +182,8 @@
                       <% if dependency.project %>
                         <% if dependency.project.is_removed? %>
                           <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: "This project is no longer available on #{dependency.project.platform}" %>
+                        <% elsif dependency.incompatible_license? %>
+                          <%= fa_icon 'exclamation-triangle', class: 'text-info tip', title: 'This project may have a conflicting license' %>
                         <% elsif dependency.project.is_deprecated? %>
                           <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
                         <% elsif dependency.outdated? %>

@@ -18,7 +18,7 @@
     <% @contributors.each do |user| %>
       <% next if user.nil? %>
       <div class="contributor">
-        <%= link_to image_tag(user.avatar_url, width: 60, height: 60, alt: user), user_path(user) %>
+        <%= link_to image_tag(user.avatar_url(120), width: 60, height: 60, alt: user), user_path(user) %>
         <h4>
           <%= link_to user, user_path(user) %>
           <% if user.name.present? %>
