@@ -382,10 +382,9 @@ class GithubRepository < ActiveRecord::Base
       else
         manifest = manifests.create(args)
         m['dependencies'].each do |dep|
-          p [:dep, dep]
           platform = manifest.platform
 
-          project = Project.platform(platform).find_by_name(dep)
+          project = Project.platform(platform).find_by_name(dep['name'])
 
           manifest.repository_dependencies.create({
             project_id: project.try(:id),
