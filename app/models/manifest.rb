@@ -5,6 +5,6 @@ class Manifest < ActiveRecord::Base
   scope :latest, -> { order("manifests.filepath, manifests.created_at DESC").select("DISTINCT on (manifests.filepath) *") }
 
   def github_link
-    github_repository.blob_url + path
+    github_repository.blob_url + filepath
   end
 end
