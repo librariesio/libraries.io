@@ -342,7 +342,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_manifests(token = nil)
-    r = Typhoeus::Request.new("http://ci.libraries.io/repos/#{full_name}",
+    r = Typhoeus::Request.new("http://ci.libraries.io/v2/repos/#{full_name}",
       method: :get,
       params: { token: token },
       headers: { 'Accept' => 'application/json' }).run
@@ -356,22 +356,42 @@ class GithubRepository < ActiveRecord::Base
     rescue Oj::ParseError
       new_manifests = nil
     end
+   
+    if body['metadata']
+      meta = body['metadata']
+
+      self.has_readme       = meta['readme']['path']        if meta['readme']
+      self.has_changelog    = meta['changelog']['path']     if meta['changelog']
+      self.has_contributing = meta['contributing']['path']  if meta['contributing']
+      self.has_license      = meta['license']['path']       if meta['license']
+      self.has_coc          = meta['codeofconduct']['path'] if meta['codeofconduct']
+      self.has_threat_model = meta['threatmodel']['path']   if meta['threatmodel']
+      self.has_audit        = meta['audit']['path']         if meta['audit']
+
+      save! if self.changed?
+    end
+    
     return if new_manifests.nil?
+
     new_manifests.each do |m|
-      args = m.slice('name', 'path', 'sha')
+      #args = m.slice('platform','kind','filepath', 'sha')
+      args = {platform: m['platform'], kind: m['type'], filepath: m['filepath'], sha: m['sha']}
+
       if manifests.find_by(args)
         # not much
       else
         manifest = manifests.create(args)
-        m['deps'].each do |dep, requirements|
-          platform = manifest.name
-          project = Project.platform(platform).find_by_name(dep)
+        m['dependencies'].each do |dep|
+          platform = manifest.platform
+
+          project = Project.platform(platform).find_by_name(dep['name'])
+
           manifest.repository_dependencies.create({
             project_id: project.try(:id),
-            project_name: dep,
+            project_name: dep['name'],
             platform: platform,
-            requirements: requirements,
-            kind: 'normal'
+            requirements: dep['version'],
+            kind: dep['type']
           })
         end
       end
