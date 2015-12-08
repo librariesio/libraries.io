@@ -44,7 +44,7 @@
         Unlimited public repositories
       </p>
       <p>
-        <strong><%= plan.repo_count %></strong> private repositories
+        <strong><%= plan.repo_count %></strong> private <%= pluralize(plan.repo_count, 'repository') %>
       </p>
       <% if @interval == 'year' %>
       <p>
