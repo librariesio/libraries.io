@@ -5,6 +5,13 @@ class SubscriptionPlan < ActiveRecord::Base
 
   PLANS = [
     {
+      amount: 2500,
+      interval: 'month',
+      stripe_id: '7',
+      name: 'Startup Monthly',
+      repo_count: 1
+    },
+    {
       amount: 4999,
       interval: 'month',
       stripe_id: '1',
@@ -24,6 +31,13 @@ class SubscriptionPlan < ActiveRecord::Base
       stripe_id: '3',
       name: 'Gold Monthly',
       repo_count: 15
+    },
+    {
+      amount: 27500,
+      interval: 'year',
+      stripe_id: '8',
+      name: 'Startup Yearly',
+      repo_count: 1
     },
     {
       amount: 54999,
