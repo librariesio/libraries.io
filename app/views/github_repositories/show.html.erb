@@ -42,7 +42,7 @@
             Monitor dependencies
           <% end %>
         <% end %>
-        <%= link_to github_repository_web_hooks_path(repo.owner_name, repo.project_name), class: 'btn btn-info pull-right' do %>
+        <%= link_to github_repository_web_hooks_path(repo.owner_name, repo.project_name), class: 'btn btn-info pull-right', id: 'webhooks' do %>
           <%= fa_icon 'plug' %>
           Web Hooks
         <% end %>
