@@ -156,6 +156,7 @@ module ApplicationHelper
   end
 
   def dependency_platform(platform_string)
+    return platform_string if platform_string.nil?
     case platform_string.downcase
     when 'rubygemslockfile'
       'rubygems'
