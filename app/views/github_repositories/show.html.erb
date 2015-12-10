@@ -112,7 +112,11 @@
                 <% deps.each do |dependency| %>
                   <tr>
                     <td>
-                      <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
+                      <% if dependency.platform.present? %>
+                        <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
+                      <% else %>
+                        <%= dependency.project_name %>
+                      <% end %>
                     </td>
                     <td>
                       <%= dependency.requirements %>
