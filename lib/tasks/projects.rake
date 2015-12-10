@@ -42,4 +42,13 @@ namespace :projects do
       GithubUpdateWorker.perform_async(repo_name)
     end
   end
+
+  task chech_repo_status: :environment do
+    ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].each do |platform|
+      repo_names = Project.platform(platform).not_deprecated.with_repo.pluck('github_repositories.full_name').uniq.compact
+      repo_names.each do |repo_name|
+        CheckRepoStatusWorker.perform_async(repo_name)
+      end
+    end
+  end
 end
