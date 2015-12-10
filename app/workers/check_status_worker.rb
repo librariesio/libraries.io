@@ -5,39 +5,39 @@ class CheckStatusWorker
   def perform(project_id, platform, project_name)
     case platform.downcase
     when 'npm'
-      response = Typhoeus.get("https://www.npmjs.com/package/#{project_name}")
+      response = Typhoeus.head("https://www.npmjs.com/package/#{project_name}")
     when 'rubygems'
-      response = Typhoeus.get("https://rubygems.org/gems/#{project_name}")
+      response = Typhoeus.head("https://rubygems.org/gems/#{project_name}")
     when 'packagist'
-      response = Typhoeus.get("https://packagist.org/packages/#{project_name}")
+      response = Typhoeus.head("https://packagist.org/packages/#{project_name}")
     when 'nuget'
-      response = Typhoeus.get("https://www.nuget.org/packages/#{project_name}")
+      response = Typhoeus.head("https://www.nuget.org/packages/#{project_name}")
     when 'wordpress'
-      response = Typhoeus.get("https://wordpress.org/plugins/#{project_name}")
+      response = Typhoeus.head("https://wordpress.org/plugins/#{project_name}")
     when 'cpan'
-      response = Typhoeus.get("https://metacpan.org/release/#{project_name}")
+      response = Typhoeus.head("https://metacpan.org/release/#{project_name}")
     when 'clojars'
-      response = Typhoeus.get("https://clojars.org/#{project_name}")
+      response = Typhoeus.head("https://clojars.org/#{project_name}")
     when 'cocoapods'
-      response = Typhoeus.get("http://cocoapods.org/pods/#{project_name}")
+      response = Typhoeus.head("http://cocoapods.org/pods/#{project_name}")
     when 'hackage'
-      response = Typhoeus.get("http://hackage.haskell.org/package/#{project_name}")
+      response = Typhoeus.head("http://hackage.haskell.org/package/#{project_name}")
     when 'cran'
-      response = Typhoeus.get("http://cran.r-project.org/web/packages/#{project_name}/index.html")
+      response = Typhoeus.head("http://cran.r-project.org/web/packages/#{project_name}/index.html")
     when 'atom'
-      response = Typhoeus.get("https://atom.io/packages/#{project_name}")
+      response = Typhoeus.head("https://atom.io/packages/#{project_name}")
     when 'cargo'
-      response = Typhoeus.get("https://crates.io/crates/#{project_name}")
+      response = Typhoeus.head("https://crates.io/crates/#{project_name}")
     when 'sublime'
-      response = Typhoeus.get("https://packagecontrol.io/packages/#{project_name}")
+      response = Typhoeus.head("https://packagecontrol.io/packages/#{project_name}")
     when 'pub'
-      response = Typhoeus.get("https://pub.dartlang.org/packages/#{project_name}")
+      response = Typhoeus.head("https://pub.dartlang.org/packages/#{project_name}")
     when 'hex'
-      response = Typhoeus.get("https://hex.pm/packages/#{project_name}")
+      response = Typhoeus.head("https://hex.pm/packages/#{project_name}")
     when 'elm'
-      response = Typhoeus.get("http://package.elm-lang.org/packages/#{project_name}/latest")
+      response = Typhoeus.head("http://package.elm-lang.org/packages/#{project_name}/latest")
     when 'dub'
-      response = Typhoeus.get("http://code.dlang.org/packages/#{project_name}")
+      response = Typhoeus.head("http://code.dlang.org/packages/#{project_name}")
     end
 
     if platform == 'packagist' && response.response_code == 302
