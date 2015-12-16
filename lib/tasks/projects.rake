@@ -18,7 +18,7 @@ namespace :projects do
   end
 
   task update_source_ranks: :environment do
-    Project.where('updated_at < ?', 1.week.ago).find_each(&:update_source_rank_async) if Date.today.sunday?
+    Project.where('projects.updated_at < ?', 1.week.ago).find_each(&:update_source_rank_async) if Date.today.sunday?
   end
 
   task link_dependencies: :environment do
@@ -29,14 +29,14 @@ namespace :projects do
   task check_status: :environment do
     ['npm', 'rubygems', 'packagist', 'nuget', 'wordpress', 'cpan', 'clojars', 'cocoapods',
     'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
-      Project.platform(platform).not_removed.where('updated_at < ?', 1.week.ago).select('id, name').find_each do |project|
+      Project.platform(platform).not_removed.where('projects.updated_at < ?', 1.week.ago).select('id, name').find_each do |project|
         CheckStatusWorker.perform_async(project.id, platform, project.name)
       end
     end
   end
 
   task update_repos: :environment do
-    repo_names = Project.not_deprecated.where('updated_at < ?', 1.week.ago).with_repo.pluck('github_repositories.full_name').uniq.compact
+    repo_names = Project.not_deprecated.where('projects.updated_at < ?', 1.week.ago).with_repo.pluck('github_repositories.full_name').uniq.compact
 
     repo_names.each do |repo_name|
       GithubUpdateWorker.perform_async(repo_name)
@@ -45,7 +45,7 @@ namespace :projects do
 
   task chech_repo_status: :environment do
     ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].each do |platform|
-      repo_names = Project.platform(platform).not_deprecated.where('updated_at < ?', 1.week.ago).with_repo.pluck('github_repositories.full_name').uniq.compact
+      repo_names = Project.platform(platform).not_deprecated.where('projects.updated_at < ?', 1.week.ago).with_repo.pluck('github_repositories.full_name').uniq.compact
       repo_names.each do |repo_name|
         CheckRepoStatusWorker.perform_async(repo_name)
       end
