@@ -14,6 +14,10 @@ class Version < ActiveRecord::Base
     super({ only: [:number, :published_at] }.merge(options || {}))
   end
 
+  def platform
+    project.try(:platform)
+  end
+
   def notify_subscribers
     project.subscriptions.group_by(&:notification_user).each do |user, subscriptions|
       next if user.nil?
@@ -71,7 +75,13 @@ class Version < ActiveRecord::Base
   end
 
   def prerelease?
-    !!parsed_number.try(:pre)
+    if semantic_version
+      !!semantic_version.pre
+    elsif platform.try(:downcase) == 'rubygems'
+      !!(number =~ /[a-zA-Z]/)
+    else
+      false
+    end
   end
 
   def valid_number?
