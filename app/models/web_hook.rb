@@ -17,7 +17,7 @@ class WebHook < ActiveRecord::Base
     send_new_version(v.project, v.project.platform, v)
   end
 
-  def send_new_version(project, platform, version_or_tag)
+  def send_new_version(project, platform, version_or_tag, requirements = [])
     send_payload({
       event: 'new_version',
       repository: github_repository.full_name,
@@ -27,6 +27,7 @@ class WebHook < ActiveRecord::Base
       default_branch: github_repository.default_branch,
       package_manager_url: Repositories::Base.package_link(project, version_or_tag),
       published_at: version_or_tag.published_at,
+      requirements: requirements,
       project: project.as_json(only: [:name, :platform, :description,  :homepage, :language, :repository_url, :stars, :latest_release_published_at, :normalized_licenses])
     })
   end
@@ -40,7 +41,8 @@ class WebHook < ActiveRecord::Base
   end
 
   def send_payload(data)
-    response = request(data).run
-    update_attributes(last_sent_at: Time.now.utc, last_response: response.response_code)
+    p data
+    # response = request(data).run
+    # update_attributes(last_sent_at: Time.now.utc, last_response: response.response_code)
   end
 end
