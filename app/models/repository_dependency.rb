@@ -35,7 +35,7 @@ class RepositoryDependency < ActiveRecord::Base
   def platform
     plat = read_attribute(:platform)
     case plat
-    when 'rubygemslockfile'
+    when 'rubygemslockfile', 'gemspec'
       'Rubygems'
     when 'cocoapodslockfile'
       'CocoaPods'
@@ -43,8 +43,6 @@ class RepositoryDependency < ActiveRecord::Base
       'NuGet'
     when 'packagistlockfile'
       'Packagist'
-    when 'gemspec'
-      'Rubygems'
     when 'npmshrinkwrap'
       'NPM'
     else
