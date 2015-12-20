@@ -9,7 +9,7 @@ class Dependency < ActiveRecord::Base
   after_create :update_project_id
 
   def find_project_id
-    Project.platform(platform).where('lower(name) = ?', project_name.downcase).limit(1).pluck(:id).first
+    Project.platform(platform).where('lower(name) = ?', project_name.downcase.strip).limit(1).pluck(:id).first
   end
 
   def incompatible_license?

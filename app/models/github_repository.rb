@@ -356,7 +356,7 @@ class GithubRepository < ActiveRecord::Base
     rescue Oj::ParseError
       new_manifests = nil
     end
-   
+
     if body['metadata']
       meta = body['metadata']
 
@@ -370,7 +370,7 @@ class GithubRepository < ActiveRecord::Base
 
       save! if self.changed?
     end
-    
+
     return if new_manifests.nil?
 
     new_manifests.each do |m|
@@ -388,7 +388,7 @@ class GithubRepository < ActiveRecord::Base
 
           manifest.repository_dependencies.create({
             project_id: project.try(:id),
-            project_name: dep['name'],
+            project_name: dep['name'].try(:strip),
             platform: platform,
             requirements: dep['version'],
             kind: dep['type']
