@@ -4,7 +4,9 @@ class Dependency < ActiveRecord::Base
 
   validates_presence_of :project_name, :version_id, :requirements, :platform
 
+  scope :with_project, -> { joins(:project).where('projects.id IS NOT NULL') }
   scope :without_project_id, -> { where(project_id: nil) }
+  scope :with_project_name, -> { where("project_name <> ''") }
 
   after_create :update_project_id
 
