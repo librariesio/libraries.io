@@ -68,7 +68,9 @@ class GithubTag < ActiveRecord::Base
   end
 
   def semantic_version
-    Semantic::Version.new(number) rescue nil
+    Semantic::Version.new(number)
+  rescue ArgumentError
+    nil
   end
 
   def stable?
