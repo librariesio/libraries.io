@@ -39,8 +39,8 @@ class ProjectsController < ApplicationController
       scope = Project
     end
 
-    @platforms = Project.unlicensed.group('platform').order('platform').pluck('platform').compact
-    @projects = scope.unlicensed.order('rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+    @platforms = Project.unlicensed.with_dependents.group('platform').order('platform').pluck('platform').compact
+    @projects = scope.unlicensed.with_dependents.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
   end
 
   def show
