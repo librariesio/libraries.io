@@ -61,7 +61,16 @@ module Searchable
             query: {
               filtered: {
                  query: {match_all: {}},
-                 filter:{ bool: { must: [] } }
+                 filter:{
+                   bool: {
+                     must: [],
+                     must_not: [
+                       {
+                         term: { "status" => "Removed" }
+                       }
+                     ]
+                  }
+                }
               }
             },
             field_value_factor: {
