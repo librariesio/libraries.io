@@ -21,6 +21,7 @@ module Searchable
         indexes :language, :analyzer => 'keyword'
         indexes :normalized_licenses, :analyzer => 'keyword'
         indexes :platform, :analyzer => 'keyword'
+        indexes :status, :index => :not_analyzed
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
@@ -37,7 +38,7 @@ module Searchable
     after_touch() { __elasticsearch__.update_document }
 
     def as_indexed_json(options = {})
-      as_json methods: [:stars, :repo_name, :exact_name], except: [:status]
+      as_json methods: [:stars, :repo_name, :exact_name]
     end
 
     def exact_name
