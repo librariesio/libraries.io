@@ -6,6 +6,7 @@
     </h2>
 
     <%= form.input :license, include_blank: true, selected: @github_repository.license, label: 'License', collection: Project.popular_licenses(:facet_limit => 100).map{|l| format_license(l.term) } %>
+    <%= form.input :status, include_blank: true, collection: GithubRepository::STATUSES %>
 
     <%= form.submit class: 'btn btn-primary' %>
   <% end %>

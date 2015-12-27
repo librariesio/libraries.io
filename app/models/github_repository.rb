@@ -1,5 +1,5 @@
 class GithubRepository < ActiveRecord::Base
-  # validations (presense and uniqueness)
+  STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
 
   API_FIELDS = [:description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
    :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
