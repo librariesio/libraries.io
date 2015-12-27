@@ -3,12 +3,12 @@
 <% cache_if(logged_out?, [@github_repository, 'show', 'v1'], :expires_in => 1.week) do %>
   <% repo = @github_repository %>
 
-  <% if @repo.is_removed? %>
+  <% if repo.is_removed? %>
   <div class="alert alert-danger" role="alert">
     <%= fa_icon 'exclamation-triangle' %>
     This project has been removed from GitHub and cannot be used anymore.
   </div>
-  <% elsif @repo.is_deprecated? %>
+  <% elsif repo.is_deprecated? %>
   <div class="alert alert-danger" role="alert">
     <%= fa_icon 'exclamation-triangle' %>
     This project has been marked as deprecated and is not recommended for use anymore.
