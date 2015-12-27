@@ -5,7 +5,7 @@
       <%= link_to fa_icon('github'), @github_repository.url, target: :blank %>
     </h2>
 
-    <%= form.input :licenses, include_blank: true, selected: @github_repository.license, label: 'License', collection: Project.popular_licenses(:facet_limit => 100).map{|l| format_license(l.term) } %>
+    <%= form.input :license, include_blank: true, selected: @github_repository.license, label: 'License', collection: Project.popular_licenses(:facet_limit => 100).map{|l| format_license(l.term) } %>
 
     <%= form.submit class: 'btn btn-primary' %>
   <% end %>
