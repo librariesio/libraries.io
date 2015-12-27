@@ -39,7 +39,7 @@ class ProjectsController < ApplicationController
       scope = Project
     end
 
-    @platforms = Project.unlicensed.not_deprecated.group('platform').count
+    @platforms = Project.unlicensed.not_deprecated.group('platform').count.sort_by(&:last).reverse
     @projects = scope.unlicensed.not_deprecated.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
   end
 
@@ -52,7 +52,7 @@ class ProjectsController < ApplicationController
       scope = Project
     end
 
-    @platforms = Project.deprecated.group('platform').count
+    @platforms = Project.deprecated.group('platform').count.sort_by(&:last).reverse
     @projects = scope.deprecated.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
   end
 
@@ -65,7 +65,7 @@ class ProjectsController < ApplicationController
       scope = Project
     end
 
-    @platforms = Project.removed.group('platform').count
+    @platforms = Project.removed.group('platform').count.sort_by(&:last).reverse
     @projects = scope.removed.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
   end
 
