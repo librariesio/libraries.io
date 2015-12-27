@@ -51,6 +51,7 @@ Rails.application.routes.draw do
 
   get '/repositories', to: 'dashboard#index', as: :repositories
   get '/dashboard', to: redirect("/repositories")
+  get '/muted', to: 'dashboard#muted', as: :muted
   post '/repositories/sync', to: 'dashboard#sync', as: :sync
   post '/watch/:github_repository_id', to: 'dashboard#watch', as: :watch
   post '/unwatch/:github_repository_id', to: 'dashboard#unwatch', as: :unwatch

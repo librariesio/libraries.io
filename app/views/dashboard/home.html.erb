@@ -13,6 +13,7 @@
               Not showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
               <%= link_to 'Show muted projects', url_for(params.merge(include_muted: true)) %> -
             <% end %>
+            <%= link_to 'Manage muted projects', muted_path %> -
           <% end %>
           <%= link_to 'Manage your subscriptions', subscriptions_path %>
         </small>

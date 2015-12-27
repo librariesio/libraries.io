@@ -12,6 +12,10 @@ class DashboardController < ApplicationController
     end
   end
 
+  def muted
+    @projects = current_user.muted_projects.paginate(page: params[:page])
+  end
+
   def sync
     current_user.update_column(:currently_syncing, true)
     current_user.update_repo_permissions_async
