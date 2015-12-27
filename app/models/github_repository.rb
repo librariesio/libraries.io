@@ -47,10 +47,10 @@ class GithubRepository < ActiveRecord::Base
   scope :recently_created, -> { where('created_at > ?', 7.days.ago)}
   scope :hacker_news, -> { order("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC") }
 
-  scope :not_deprecated, -> { where('projects."status" != ? OR projects."status" != ? OR projects."status" IS NULL', "Deprecated", "Removed")}
-  scope :deprecated, -> { where('projects."status" = ?', "Deprecated")}
-  scope :not_removed, -> { where('projects."status" != ? OR projects."status" IS NULL', "Removed")}
-  scope :removed, -> { where('projects."status" = ?', "Removed")}
+  scope :not_deprecated, -> { where('github_repositories."status" != ? OR github_repositories."status" != ? OR github_repositories."status" IS NULL', "Deprecated", "Removed")}
+  scope :deprecated, -> { where('github_repositories."status" = ?', "Deprecated")}
+  scope :not_removed, -> { where('github_repositories."status" != ? OR github_repositories."status" IS NULL', "Removed")}
+  scope :removed, -> { where('github_repositories."status" = ?', "Removed")}
 
   def self.language(language)
     where('lower(github_repositories.language) = ?', language.try(:downcase))
