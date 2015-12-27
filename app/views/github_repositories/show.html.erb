@@ -46,6 +46,9 @@
           <%= fa_icon 'plug' %>
           Web Hooks
         <% end %>
+        <% if logged_in? && current_user.admin? %>
+          <%= link_to 'Edit in Admin', admin_github_repository_path(repo.id), class: 'btn btn-primary', rel: 'nofollow' %>
+        <% end %>
       </p>
       <% end %>
     </div>
