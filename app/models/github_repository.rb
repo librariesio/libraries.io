@@ -56,6 +56,18 @@ class GithubRepository < ActiveRecord::Base
     where('lower(github_repositories.language) = ?', language.try(:downcase))
   end
 
+  def is_deprecated?
+    status == 'Deprecated'
+  end
+
+  def is_removed?
+    status == 'Removed'
+  end
+
+  def not_deprecated?
+    !is_deprecated? && !is_removed?
+  end
+
   def touch_projects
     projects.find_each(&:save)
   end
