@@ -39,8 +39,34 @@ class ProjectsController < ApplicationController
       scope = Project
     end
 
-    @platforms = Project.unlicensed.with_dependents.not_deprecated.group('platform').order('platform').pluck('platform').compact
-    @projects = scope.unlicensed.with_dependents.not_deprecated.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+    @platforms = Project.unlicensed.not_deprecated.group('platform').count
+    @projects = scope.unlicensed.not_deprecated.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+  end
+
+  def deprecated
+    if params[:platform].present?
+      find_platform(:platform)
+      raise ActiveRecord::RecordNotFound if @platform_name.nil?
+      scope = Project.platform(@platform_name)
+    else
+      scope = Project
+    end
+
+    @platforms = Project.deprecated.group('platform').count
+    @projects = scope.deprecated.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+  end
+
+  def removed
+    if params[:platform].present?
+      find_platform(:platform)
+      raise ActiveRecord::RecordNotFound if @platform_name.nil?
+      scope = Project.platform(@platform_name)
+    else
+      scope = Project
+    end
+
+    @platforms = Project.removed.group('platform').count
+    @projects = scope.removed.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
   end
 
   def show

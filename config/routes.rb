@@ -77,6 +77,8 @@ Rails.application.routes.draw do
 
   get 'bus-factor', to: 'projects#bus_factor', as: :bus_factor
   get '/unlicensed-libraries', to: 'projects#unlicensed', as: :unlicensed
+  get 'deprecated-libraries', to: 'projects#deprecated', as: :deprecated
+  get 'removed-libraries', to: 'projects#removed', as: :removed
 
   get '/platforms', to: 'platforms#index', as: :platforms
 

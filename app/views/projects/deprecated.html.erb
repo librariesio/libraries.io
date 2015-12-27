@@ -1,0 +1,37 @@
+<% title "#{@platform_name} Deprecated Libraries - Libraries" %>
+<% description "Projects marked as deprecated which are no longer maintained or suitable for use" %>
+<div class="row">
+  <h1><i class="fa fa-clock-o"></i> <%= @platform_name %> Deprecated Libraries</h1>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-md-8">
+    <%= render @projects %>
+    <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
+    <p>
+      <small><%= page_entries_info @projects, model: 'deprecated libraries' %></small>
+    </p>
+  </div>
+  <div class="col-md-4">
+    <h3>
+      <strong>
+        Filter by package manager
+      </strong>
+    </h3>
+    <div class="facets">
+      <ul class='filter'>
+        <% @platforms.each do |platform, count| %>
+          <li class='<%= 'active' if platform.downcase == params[:platform].try(:downcase) %>'>
+            <% if platform.downcase == params[:platform].try(:downcase) %>
+              <%= link_to platform, unlicensed_path(platform: nil) %>
+            <% else %>
+              <%= link_to platform, unlicensed_path(platform: platform) %>
+            <% end %>
+            <small><%= number_to_human count %></small>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
