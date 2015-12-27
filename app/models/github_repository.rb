@@ -206,8 +206,10 @@ class GithubRepository < ActiveRecord::Base
       self.source_name = r[:parent][:full_name] if r[:fork]
       assign_attributes r.slice(*API_FIELDS)
       save! if self.changed?
-    rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       nil
+    rescue Octokit::NotFound
+      update_attribute(:status, 'Removed')
     end
   end
 
