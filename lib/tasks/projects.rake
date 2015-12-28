@@ -53,7 +53,7 @@ namespace :projects do
   end
 
   task check_removed_status: :environment do
-    ['npm', 'rubygems', 'packagist', 'nuget', 'wordpress', 'cpan', 'clojars', 'cocoapods',
+    ['npm', 'rubygems', 'packagist', 'wordpress', 'cpan', 'clojars', 'cocoapods',
     'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
       Project.platform(platform).removed.select('id, name').find_each do |project|
         CheckStatusWorker.perform_async(project.id, platform, project.name, true)
@@ -64,6 +64,14 @@ namespace :projects do
       repo_names = Project.platform(platform).removed.with_repo.pluck('github_repositories.full_name').uniq.compact
       repo_names.each do |repo_name|
         CheckRepoStatusWorker.perform_async(repo_name, true)
+      end
+    end
+  end
+
+  task check_nuget_yanks: :environment do
+    Project.platform('nuget').not_removed.includes(:versions).find_each do |project|
+      if project.versions.all? { |version| version.published_at < 100.years.ago  }
+        project.update_attribute(:status, 'Removed')
       end
     end
   end
