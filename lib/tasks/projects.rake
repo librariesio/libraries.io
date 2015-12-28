@@ -69,9 +69,11 @@ namespace :projects do
   end
 
   task check_nuget_yanks: :environment do
-    Project.platform('nuget').not_removed.includes(:versions).find_each do |project|
-      if project.versions.all? { |version| version.published_at < 100.years.ago  }
-        project.update_attribute(:status, 'Removed')
+    if Date.today.wday.zero?
+      Project.platform('nuget').not_removed.includes(:versions).find_each do |project|
+        if project.versions.all? { |version| version.published_at < 100.years.ago  }
+          project.update_attribute(:status, 'Removed')
+        end
       end
     end
   end
