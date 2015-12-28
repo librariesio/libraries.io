@@ -11,7 +11,7 @@ class Api::SearchController < Api::ApplicationController
     }, sort: params[:sort], order: params[:order]).paginate(page: params[:page])
     @projects = @search.records
 
-    render json: @projects.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses], include: {versions: {only: [:number, :published_at]} })
+    render json: @projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars], include: {versions: {only: [:number, :published_at]} })
   end
 
   def searchcode

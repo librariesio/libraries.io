@@ -2,11 +2,11 @@ class Api::ProjectsController < Api::ApplicationController
   before_action :find_project, :check_api_key, except: :searchcode
 
   def show
-    render json: @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank], include: {versions: {only: [:number, :published_at]} })
+    render json: @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars], include: {versions: {only: [:number, :published_at]} })
   end
 
   def dependents
-    render json: @project.dependent_projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank], include: {versions: {only: [:number, :published_at]} })
+    render json: @project.dependent_projects.paginate(page: params[:page]).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars], include: {versions: {only: [:number, :published_at]} })
   end
 
   def dependent_repositories
@@ -41,7 +41,7 @@ class Api::ProjectsController < Api::ApplicationController
       }
     end
 
-    project_json = @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank])
+    project_json = @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars])
     project_json[:dependencies] = deps
 
     render json: project_json

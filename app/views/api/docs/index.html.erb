@@ -36,7 +36,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @project.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars], include: {versions: {only: [:number, :published_at]} }) %></pre>
     <% end %>
     <h3 id='project-dependencies'>Project Dependencies</h3>
 
@@ -74,7 +74,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependents", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @project.dependent_projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate @project.dependent_projects.paginate(page: params[:page]).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars], include: {versions: {only: [:number, :published_at]} }) %></pre>
     <% end %>
     <h3 id="project-dependent-repositories">Project Dependent Repositories</h3>
 
@@ -117,7 +117,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-search", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @search.as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate @search.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars], include: {versions: {only: [:number, :published_at]} }) %></pre>
     <% end %>
     <h3 id='github-repository'>GitHub Repository</h3>
 
@@ -165,7 +165,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-github-repository-projects", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @github_repository.projects.paginate(page: params[:page]).as_json(only: [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate @github_repository.projects.paginate(page: params[:page]).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars], include: {versions: {only: [:number, :published_at]} }) %></pre>
     <% end %>
   </div>
   <div class="col-md-4">

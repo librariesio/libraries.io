@@ -3,6 +3,7 @@ class Project < ActiveRecord::Base
   include SourceRank
   HAS_DEPENDENCIES = false
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
+  API_FIELDS = [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank]
 
   validates_presence_of :name, :platform
 
@@ -163,6 +164,10 @@ class Project < ActiveRecord::Base
 
   def latest_release_number
     read_attribute(:latest_release_number) || latest_release.try(:number)
+  end
+
+  def package_manager_url
+    Repositories::Base.package_link(self)
   end
 
   def owner
