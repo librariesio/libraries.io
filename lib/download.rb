@@ -5,6 +5,11 @@ class Download
       .sort_by(&:name)
   end
 
+  def self.format_name(platform)
+    return nil if platform.nil?
+    platforms.find{|p| p.to_s.demodulize.downcase == platform.downcase }.to_s.demodulize
+  end
+
   def self.new_github_repos
     Project.undownloaded_repos.order('created_at DESC').find_each(&:update_github_repo_async)
   end

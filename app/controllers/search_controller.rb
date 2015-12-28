@@ -2,9 +2,9 @@ class SearchController < ApplicationController
   def index
     @query = params[:q]
     @search = Project.search(params[:q], filters: {
-      platform: params[:platforms],
-      normalized_licenses: params[:licenses],
-      language: params[:languages],
+      platform: current_platform,
+      normalized_licenses: current_license,
+      language: current_language,
       keywords_array: params[:keywords]
     }, sort: format_sort, order: params[:order]).paginate(page: params[:page])
     @suggestion = @search.response.suggest.did_you_mean.first
@@ -17,6 +17,18 @@ class SearchController < ApplicationController
   end
 
   private
+
+  def current_platform
+    Download.format_name(params[:platforms])
+  end
+
+  def current_language
+    Languages::Language[params[:languages]].to_s if params[:languages].present?
+  end
+
+  def current_license
+    Spdx.find(params[:licenses]).try(:id) if params[:licenses].present?
+  end
 
   def format_sort
     return nil unless params[:sort].present?
@@ -31,9 +43,9 @@ class SearchController < ApplicationController
     return "Search for #{params[:q]} - Libraries" if params[:q].present?
 
     modifiers = []
-    modifiers << params[:licenses] if params[:licenses].present?
-    modifiers << params[:platforms] if params[:platforms].present?
-    modifiers << params[:languages] if params[:languages].present?
+    modifiers << current_license if current_license.present?
+    modifiers << current_platform if current_platform.present?
+    modifiers << current_language if current_language.present?
     modifiers << params[:keywords] if params[:keywords].present?
 
     modifier = " #{modifiers.compact.join(' ')} "
