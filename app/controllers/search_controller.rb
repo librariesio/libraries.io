@@ -20,7 +20,7 @@ class SearchController < ApplicationController
 
   def format_sort
     return nil unless params[:sort].present?
-    allowed_sorts.includes? params[:sort] ? params[:sort] : nil
+    allowed_sorts.include? params[:sort] ? params[:sort] : nil
   end
 
   def allowed_sorts
