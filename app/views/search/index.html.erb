@@ -1,9 +1,8 @@
 <% title @title %>
 <% content_for :atom, auto_discovery_link_tag(:atom, url_for({format: "atom"}.merge(params))) %>
-<div class="row">
-  <div class='col-md-8'>
-    <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
-
+<%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
+  <div class="row">
+    <div class='col-md-8'>
       <div class="input-group input-group-lg">
         <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search...', class: 'form-control', size: 40 %>
         <span class="input-group-btn">
@@ -14,32 +13,34 @@
       <% [:platforms, :licenses, :languages, :keywords].each do |field| %>
         <%= hidden_field_tag field, params[field] if params[field].present? %>
       <% end %>
-    <% end %>
-    <% if @suggestion && @suggestion.options.any? %>
-      <p>
-        Did you mean
-        <strong><%= link_to "#{@suggestion.options.first.text}?", search_path(q: @suggestion.options.first.text) %></strong>
-      </p>
-    <% end %>
+      <% if @suggestion && @suggestion.options.any? %>
+        <p>
+          Did you mean
+          <strong><%= link_to "#{@suggestion.options.first.text}?", search_path(q: @suggestion.options.first.text) %></strong>
+        </p>
+      <% end %>
+    </div>
+    <div class='col-md-4 hidden-sm'>
+      <h3>
+        <small>Sort by: <%= select_tag 'sort', options_for_select(sort_options, params[:sort]), onchange: "this.form.submit()" %></small>
+      </h3>
+    </div>
   </div>
-  <div class='col-md-4'>
-    <h3>
-      <small>
-        <%= page_entries_info @search, model: 'project' %>
-      </small>
-    </h3>
-  </div>
-</div>
+<% end %>
 <div class='row'>
   <div class='col-md-8'>
     <% if @projects.length > 0 %>
       <%= render @projects %>
       <%= will_paginate @search, renderer: BootstrapPagination::Rails, page_links: false %>
       <p>
-        <%= link_to url_for(params.merge(format: :atom, sort: 'created_at', order: 'desc')) do %>
-          <%= fa_icon "rss-square" %>
-          Subscribe to an RSS feed of this search
-        <% end %>
+        <small>
+          <%= page_entries_info @search, model: 'project' %>
+          -
+          <%= link_to url_for(params.merge(format: :atom, sort: 'created_at', order: 'desc')) do %>
+            <%= fa_icon "rss-square" %>
+            Subscribe to an RSS feed of this search
+          <% end %>
+        </small>
       </p>
     <% else %>
       <p>

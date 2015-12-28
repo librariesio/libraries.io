@@ -18,6 +18,14 @@ class SearchController < ApplicationController
 
   private
 
+  def format_sort
+    allowed_sorts.includes? params[:sort] ? params[:sort] : nil
+  end
+
+  def allowed_sorts
+    ['rank','stars','dependents_count','latest_release_published_at', 'created_at']
+  end
+
   def page_title
     return "Search for #{params[:q]} - Libraries" if params[:q].present?
 
