@@ -10,7 +10,7 @@ module Searchable
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
       mapping do
         indexes :name, :analyzer => 'snowball', :boost => 6
-        indexes :exact_name, :index => :not_analyzed, :boost => 10
+        indexes :exact_name, :index => :not_analyzed, :boost => 2
 
         indexes :description, :analyzer => 'snowball'
         indexes :homepage
