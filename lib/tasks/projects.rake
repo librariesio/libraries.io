@@ -51,4 +51,20 @@ namespace :projects do
       end
     end
   end
+
+  task check_removed_status: :environment do
+    ['npm', 'rubygems', 'packagist', 'nuget', 'wordpress', 'cpan', 'clojars', 'cocoapods',
+    'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
+      Project.platform(platform).removed.select('id, name').find_each do |project|
+        CheckStatusWorker.perform_async(project.id, platform, project.name, true)
+      end
+    end
+
+    ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].each do |platform|
+      repo_names = Project.platform(platform).removed.with_repo.pluck('github_repositories.full_name').uniq.compact
+      repo_names.each do |repo_name|
+        CheckRepoStatusWorker.perform_async(repo_name, true)
+      end
+    end
+  end
 end

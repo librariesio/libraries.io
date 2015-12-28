@@ -2,7 +2,7 @@ class CheckStatusWorker
   include Sidekiq::Worker
   sidekiq_options queue: :low, unique: true
 
-  def perform(project_id, platform, project_name)
+  def perform(project_id, platform, project_name, removed = false)
     case platform.downcase
     when 'npm'
       response = Typhoeus.head("https://www.npmjs.com/package/#{project_name}")
@@ -46,6 +46,9 @@ class CheckStatusWorker
     elsif platform != 'packagist' && response.response_code == 404
       project = Project.find_by_id project_id
       project.update_attribute(:status, 'Removed') if project
+    elsif removed
+      project = Project.find_by_id project_id
+      project.update_attribute(:status, nil) if project
     end
   end
 end
