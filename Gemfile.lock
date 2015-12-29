@@ -258,7 +258,7 @@ GEM
       moneta
       multi_json (>= 1.9.2)
       netrc
-    hiredis (0.6.0)
+    hiredis (0.6.1)
     hirefire-resource (0.3.8)
     htmlentities (4.3.4)
     http-cookie (1.0.2)
