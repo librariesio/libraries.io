@@ -1,2 +1,2 @@
-Rack::Timeout.timeout = 29  # seconds
+Rack::Timeout.timeout = 25  # seconds
 Rack::Timeout::Logger.disable
