@@ -393,7 +393,6 @@ class GithubRepository < ActiveRecord::Base
     return if new_manifests.nil?
 
     new_manifests.each do |m|
-      #args = m.slice('platform','kind','filepath', 'sha')
       args = {platform: m['platform'], kind: m['type'], filepath: m['filepath'], sha: m['sha']}
 
       if manifests.find_by(args)
@@ -416,7 +415,13 @@ class GithubRepository < ActiveRecord::Base
       end
     end
 
+    delete_old_manifests
+
     repository_subscriptions.each(&:update_subscriptions)
+  end
+
+  def delete_old_manifests
+    manifests.where.not(id: manifests.latest.map(&:id)).each(&:destroy)
   end
 
   def self.create_from_github(full_name, token = nil)
