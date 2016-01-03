@@ -435,16 +435,18 @@ class GithubRepository < ActiveRecord::Base
 
   def self.create_from_hash(repo_hash)
     repo_hash = repo_hash.to_hash
-    g = GithubRepository.find_by(github_id: repo_hash[:id])
-    g = GithubRepository.find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
-    g = GithubRepository.new(github_id: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
-    g.owner_id = repo_hash[:owner][:id]
-    g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
-    g.github_id = repo_hash[:id] if g.github_id.nil?
-    g.license = repo_hash[:license][:key] if repo_hash[:license]
-    g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
-    g.assign_attributes repo_hash.slice(*GithubRepository::API_FIELDS)
-    g.save! if g.changed?
-    g
+    ActiveRecord::Base.transaction do
+      g = GithubRepository.find_by(github_id: repo_hash[:id])
+      g = GithubRepository.find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
+      g = GithubRepository.new(github_id: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
+      g.owner_id = repo_hash[:owner][:id]
+      g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
+      g.github_id = repo_hash[:id] if g.github_id.nil?
+      g.license = repo_hash[:license][:key] if repo_hash[:license]
+      g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
+      g.assign_attributes repo_hash.slice(*GithubRepository::API_FIELDS)
+      g.save! if g.changed?
+      g
+    end
   end
 end
