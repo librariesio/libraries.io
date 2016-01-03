@@ -97,12 +97,12 @@
         <%== repo.readme %>
       <% end %>
 
-      <% if repo.manifests.latest.length > 0 %>
+      <% if @manifests.length > 0 %>
         <hr>
         <div id="dependencies" class="table-responsive">
           <h4>Dependencies</h4>
-          <% repo.manifests.limit(20).latest.each do |manifest| %>
-            <% deps = manifest.repository_dependencies.limit(500).order(:project_name).includes(:project) %>
+          <% @manifests.each do |manifest| %>
+            <% deps = manifest.repository_dependencies %>
             <% if deps.length > 0 %>
               <table class='table table-hover table-condensed'>
                 <thead>
@@ -125,7 +125,7 @@
 
                   </th>
                 </thead>
-                <% deps.each do |dependency| %>
+                <% deps.first(200).each do |dependency| %>
                   <tr>
                     <td>
                       <% if dependency.platform.present? %>

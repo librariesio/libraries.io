@@ -47,6 +47,7 @@ class GithubRepositoriesController < ApplicationController
     @projects = @github_repository.projects
     @color = @github_repository.color
     @forks = @github_repository.forked_repositories.interesting.limit(5)
+    @manifests = @github_repository.manifests.latest.limit(10).includes(repository_dependencies: :project)
   end
 
   def contributors
