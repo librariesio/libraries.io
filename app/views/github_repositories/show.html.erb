@@ -125,7 +125,7 @@
 
                   </th>
                 </thead>
-                <% deps.first(200).each do |dependency| %>
+                <% deps.first(200).sort_by(&:project_name).each do |dependency| %>
                   <tr>
                     <td>
                       <% if dependency.platform.present? %>
