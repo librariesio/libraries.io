@@ -452,5 +452,7 @@ class GithubRepository < ActiveRecord::Base
         return g
       end
     end
+  rescue ActiveRecord::RecordNotUnique
+    nil
   end
 end
