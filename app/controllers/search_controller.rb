@@ -6,7 +6,7 @@ class SearchController < ApplicationController
       normalized_licenses: current_license,
       language: current_language,
       keywords_array: params[:keywords]
-    }, sort: format_sort, order: params[:order]).paginate(page: params[:page])
+    }, sort: format_sort, order: format_order).paginate(page: params[:page])
     @suggestion = @search.response.suggest.did_you_mean.first
     @projects = @search.records.includes(:github_repository)
     @title = page_title
@@ -33,6 +33,11 @@ class SearchController < ApplicationController
   def format_sort
     return nil unless params[:sort].present?
     allowed_sorts.include?(params[:sort]) ? params[:sort] : nil
+  end
+
+  def format_order
+    return nil unless params[:order].present?
+    ['desc', 'asc'].include?(params[:order]) ? params[:order] : nil
   end
 
   def allowed_sorts

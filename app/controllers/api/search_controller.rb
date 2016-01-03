@@ -8,7 +8,7 @@ class Api::SearchController < Api::ApplicationController
       normalized_licenses: current_license,
       language: current_language,
       keywords_array: params[:keywords]
-    }, sort: params[:sort], order: params[:order]).paginate(page: params[:page])
+    }, sort: format_sort, order: format_order).paginate(page: params[:page])
     @projects = @search.records.includes(:github_repository)
 
     render json: @projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars], include: {versions: {only: [:number, :published_at]} })
@@ -19,6 +19,16 @@ class Api::SearchController < Api::ApplicationController
   end
 
   private
+
+  def format_sort
+    return nil unless params[:sort].present?
+    allowed_sorts.include?(params[:sort]) ? params[:sort] : nil
+  end
+
+  def format_order
+    return nil unless params[:order].present?
+    ['desc', 'asc'].include?(params[:order]) ? params[:order] : nil
+  end
 
   def current_platform
     Download.format_name(params[:platforms])
