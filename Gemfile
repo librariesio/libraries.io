@@ -70,6 +70,7 @@ group :development do
   gem 'bundler'
   gem 'spring'
   gem 'quiet_assets'
+  gem 'sql_queries_count'
 end
 
 group :development, :test do
