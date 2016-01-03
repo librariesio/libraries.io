@@ -445,8 +445,12 @@ class GithubRepository < ActiveRecord::Base
       g.license = repo_hash[:license][:key] if repo_hash[:license]
       g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
       g.assign_attributes repo_hash.slice(*GithubRepository::API_FIELDS)
-      g.save! if g.changed?
-      g
+
+      if g.changed?
+        return g.save ? g : nil
+      else
+        return g
+      end
     end
   end
 end
