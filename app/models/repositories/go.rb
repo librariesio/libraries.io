@@ -1,4 +1,4 @@
-class Repositories
+module Repositories
   class Go < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false

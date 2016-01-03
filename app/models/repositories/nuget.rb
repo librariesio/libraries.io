@@ -1,4 +1,4 @@
-class Repositories
+module Repositories
   class NuGet < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true

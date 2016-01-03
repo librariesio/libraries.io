@@ -1,5 +1,5 @@
 require 'repositories/base'
-class Repositories
+module Repositories
   class Alcatraz < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false

@@ -323,10 +323,6 @@ class Project < ActiveRecord::Base
     can_have_versions? ? 'releases' : 'tags'
   end
 
-  def platform_class
-    Download.platforms.find{|p| p.to_s.demodulize.downcase == platform.downcase }
-  end
-
   def update_github_repo
     name_with_owner = github_name_with_owner
     return false unless name_with_owner.present?

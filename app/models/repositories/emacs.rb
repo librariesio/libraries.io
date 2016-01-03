@@ -1,4 +1,4 @@
-class Repositories
+module Repositories
   class Emacs < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false

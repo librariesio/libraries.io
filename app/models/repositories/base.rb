@@ -1,4 +1,4 @@
-class Repositories
+module Repositories
   class Base
     COLOR = '#fff'
     LIBRARIAN_SUPPORT = false

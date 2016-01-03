@@ -42,4 +42,6 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
   config.middleware.use ApiRateLimit, :cache => Rails.cache, :key_prefix => :throttle, :max => 60
+
+  Dir["app/models/repositories/*.rb"].each {|file| require "./#{file}" }
 end

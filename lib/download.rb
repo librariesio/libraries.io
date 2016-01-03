@@ -1,7 +1,8 @@
 class Download
   def self.platforms
-    Repositories.descendants
-      .reject { |platform| platform == Repositories::Base }
+    @platforms ||= Repositories.constants
+      .reject { |platform| platform == :Base }
+      .map{|sym| "Repositories::#{sym}".constantize }
       .sort_by(&:name)
   end
 

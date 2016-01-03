@@ -1,4 +1,4 @@
-class Repositories
+module Repositories
   class NPM < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
