@@ -6,7 +6,7 @@ class SearchController < ApplicationController
       normalized_licenses: current_license,
       language: current_language,
       keywords_array: params[:keywords]
-    }, sort: format_sort, order: format_order).paginate(page: params[:page])
+    }, sort: format_sort, order: format_order).paginate(page: params[:page], per_page: params[:per_page])
     @suggestion = @search.response.suggest.did_you_mean.first
     @projects = @search.records.includes(:github_repository)
     @title = page_title
