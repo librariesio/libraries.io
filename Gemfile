@@ -65,6 +65,7 @@ gem 'rack-timeout'
 gem 'semantic_range'
 gem 'rack-throttle'
 gem 'license-compatibility'
+gem 'escape_utils'
 
 group :development do
   gem 'bundler'

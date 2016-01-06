@@ -514,6 +514,7 @@ DEPENDENCIES
   dotenv-rails
   elasticsearch-model
   elasticsearch-rails
+  escape_utils
   faraday-http-cache
   fast_blank
   fast_xor
