@@ -20,6 +20,10 @@ class Api::SearchController < Api::ApplicationController
 
   private
 
+  def allowed_sorts
+    ['rank', 'stars', 'dependents_count', 'latest_release_published_at', 'created_at']
+  end
+
   def format_sort
     return nil unless params[:sort].present?
     allowed_sorts.include?(params[:sort]) ? params[:sort] : nil
