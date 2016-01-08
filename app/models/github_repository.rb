@@ -376,7 +376,7 @@ class GithubRepository < ActiveRecord::Base
       new_manifests = nil
     end
 
-    if body['metadata']
+    if body && body['metadata']
       meta = body['metadata']
 
       self.has_readme       = meta['readme']['path']        if meta['readme']
