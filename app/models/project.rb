@@ -50,7 +50,7 @@ class Project < ActiveRecord::Base
   scope :most_watched, -> { joins(:subscriptions).group('projects.id').order("COUNT(subscriptions.id) DESC") }
   scope :most_dependents, -> { with_dependents.order('dependents_count DESC') }
 
-  scope :not_deprecated, -> { where('projects."status" != ? OR projects."status" != ? OR projects."status" IS NULL', "Deprecated", "Removed")}
+  scope :not_deprecated, -> { where('projects."status" not in (?) OR projects."status" IS NULL', ["Deprecated", "Removed"])}
   scope :deprecated, -> { where('projects."status" = ?', "Deprecated")}
   scope :not_removed, -> { where('projects."status" != ? OR projects."status" IS NULL', "Removed")}
   scope :removed, -> { where('projects."status" = ?', "Removed")}
