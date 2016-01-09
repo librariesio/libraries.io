@@ -460,7 +460,7 @@ GEM
       spdx-licenses (~> 1.0)
     spdx-licenses (1.0.0)
       json
-    spring (1.6.1)
+    spring (1.6.2)
     sprockets (3.5.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
