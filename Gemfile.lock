@@ -52,8 +52,6 @@ GEM
       json
     bigquery (0.8.3)
       google-api-client (= 0.8.6)
-    bini (0.7.0)
-      sys-proctable
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -264,9 +262,6 @@ GEM
     htmlentities (4.3.4)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
-    httparty (0.11.0)
-      multi_json (~> 1.0)
-      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     inflecto (0.0.2)
     ipaddress (0.8.2)
@@ -350,10 +345,6 @@ GEM
       actionmailer (>= 3, < 5)
       premailer (~> 1.7, >= 1.7.9)
     puma (2.15.3)
-    pushover (1.0.4)
-      bini (= 0.7.0)
-      httparty (= 0.11.0)
-      yajl-ruby (= 1.1.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
@@ -477,7 +468,6 @@ GEM
     stripe_event (1.5.0)
       activesupport (>= 3.1)
       stripe (~> 1.6)
-    sys-proctable (0.9.9)
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.2)
@@ -499,7 +489,6 @@ GEM
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
     xml-simple (1.1.5)
-    yajl-ruby (1.1.0)
 
 PLATFORMS
   ruby
@@ -546,7 +535,6 @@ DEPENDENCIES
   postgres_ext
   premailer-rails
   puma
-  pushover
   quiet_assets
   rack-canonical-host
   rack-throttle

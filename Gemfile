@@ -48,7 +48,6 @@ gem 'hirefire-resource'
 gem 'rails_12factor'
 gem 'font-awesome-rails'
 gem 'platform-api', require: nil
-gem 'pushover'
 gem 'tipsy-rails'
 gem 'mime-types', '~> 2.6.1', require: 'mime/types/columnar'
 gem 'fast_blank'
