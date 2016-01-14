@@ -221,7 +221,7 @@ class GithubRepository < ActiveRecord::Base
     rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
       nil
     rescue Octokit::NotFound
-      update_attribute(:status, 'Removed')
+      update_attribute(:status, 'Removed') if !self.private?
     end
   end
 

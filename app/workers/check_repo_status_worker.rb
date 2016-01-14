@@ -9,7 +9,7 @@ class CheckRepoStatusWorker
       repo = GithubRepository.includes(:projects).find_by_full_name(repo_full_name)
       if repo
         status = removed ? nil : 'Removed'
-        repo.update_attribute(:status, status)
+        repo.update_attribute(:status, status) if !repo.private?
         repo.projects.each do |project|
           next unless ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].include?(project.platform.downcase)
           project.update_attribute(:status, status)
