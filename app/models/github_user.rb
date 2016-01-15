@@ -14,7 +14,7 @@ class GithubUser < ActiveRecord::Base
   scope :visible, -> { where(hidden: false) }
 
   def top_favourite_projects
-    Project.where(id: top_favourite_project_ids).not_deprecated.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
+    Project.where(id: top_favourite_project_ids).maintained.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
   end
 
   def top_favourite_project_ids

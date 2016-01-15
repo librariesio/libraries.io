@@ -6,7 +6,7 @@ class GithubRepositoriesController < ApplicationController
     postfix = [@language, @license.try(:id)].compact.any? ? 'Repos' : 'Repositories'
     @title = [@language, @license.try(:id), postfix].compact.join(' ')
 
-    orginal_scope = GithubRepository.not_deprecated.open_source.source.where.not(pushed_at: nil)
+    orginal_scope = GithubRepository.maintained.open_source.source.where.not(pushed_at: nil)
     language_scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
     license_scope = @license.present? ? orginal_scope.where('lower(license) = ?', @license.id.downcase) : orginal_scope
     scope = @license.present? ? language_scope.where('lower(license) = ?', @license.id.downcase) : language_scope
@@ -24,7 +24,7 @@ class GithubRepositoriesController < ApplicationController
     @language = Languages::Language[params[:language]] if params[:language].present?
     @license = Spdx.find(params[:license]) if params[:license].present?
 
-    orginal_scope = GithubRepository.not_deprecated.open_source.where.not(pushed_at: nil).recently_created.where('stargazers_count > 0')
+    orginal_scope = GithubRepository.maintained.open_source.where.not(pushed_at: nil).recently_created.where('stargazers_count > 0')
     scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
     @repos = scope.hacker_news.paginate(page: params[:page])
 
@@ -34,7 +34,7 @@ class GithubRepositoriesController < ApplicationController
   def new
     @language = Languages::Language[params[:language]] if params[:language].present?
 
-    orginal_scope = GithubRepository.not_deprecated.open_source.source.where.not(pushed_at: nil)
+    orginal_scope = GithubRepository.maintained.open_source.source.where.not(pushed_at: nil)
     scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
     @repos = scope.recently_created.order('created_at DESC').paginate(page: params[:page])
 
@@ -57,7 +57,7 @@ class GithubRepositoriesController < ApplicationController
 
   def forks
     load_repo
-    @forks = @github_repository.forked_repositories.not_deprecated.order('stargazers_count DESC').paginate(page: params[:page])
+    @forks = @github_repository.forked_repositories.maintained.order('stargazers_count DESC').paginate(page: params[:page])
   end
 
   def load_repo

@@ -32,7 +32,7 @@ class Project < ActiveRecord::Base
 
   scope :with_license, -> { where("licenses <> ''") }
   scope :without_license, -> { where("licenses IS ? OR licenses = ''", nil) }
-  scope :unlicensed, -> { not_deprecated.without_license.with_repo.where("github_repositories.license IS ? OR github_repositories.license = ''", nil) }
+  scope :unlicensed, -> { maintained.without_license.with_repo.where("github_repositories.license IS ? OR github_repositories.license = ''", nil) }
 
   scope :with_versions, -> { where('versions_count > 0') }
   scope :without_versions, -> { where('versions_count < 1') }
@@ -50,13 +50,14 @@ class Project < ActiveRecord::Base
   scope :most_watched, -> { joins(:subscriptions).group('projects.id').order("COUNT(subscriptions.id) DESC") }
   scope :most_dependents, -> { with_dependents.order('dependents_count DESC') }
 
-  scope :not_deprecated, -> { where('projects."status" not in (?) OR projects."status" IS NULL', ["Deprecated", "Removed"])}
+  scope :maintained, -> { where('projects."status" not in (?) OR projects."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
   scope :deprecated, -> { where('projects."status" = ?', "Deprecated")}
   scope :not_removed, -> { where('projects."status" != ? OR projects."status" IS NULL', "Removed")}
   scope :removed, -> { where('projects."status" = ?', "Removed")}
+  scope :unmaintained, -> { where('projects."status" = ?', "Unmaintained")}
 
 
-  scope :bus_factor, -> { not_deprecated.
+  scope :bus_factor, -> { maintained.
                           joins(:github_repository)
                          .where('github_repositories.github_contributions_count < 6')
                          .where('github_repositories.github_contributions_count > 0')
@@ -95,8 +96,12 @@ class Project < ActiveRecord::Base
     status == 'Removed'
   end
 
-  def not_deprecated?
-    !is_deprecated? && !is_removed?
+  def is_unmaintained?
+    status == 'Unmaintained'
+  end
+
+  def maintained?
+    !is_deprecated? && !is_removed? && !is_unmaintained?
   end
 
   def stable_releases

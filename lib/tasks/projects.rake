@@ -36,7 +36,7 @@ namespace :projects do
   end
 
   task update_repos: :environment do
-    repo_names = Project.not_deprecated.where('projects.updated_at < ?', 1.week.ago).with_repo.pluck('github_repositories.full_name').uniq.compact
+    repo_names = Project.maintained.where('projects.updated_at < ?', 1.week.ago).with_repo.pluck('github_repositories.full_name').uniq.compact
 
     repo_names.each do |repo_name|
       GithubUpdateWorker.perform_async(repo_name)
@@ -45,7 +45,7 @@ namespace :projects do
 
   task chech_repo_status: :environment do
     ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].each do |platform|
-      repo_names = Project.platform(platform).not_deprecated.where('projects.updated_at < ?', 1.week.ago).with_repo.pluck('github_repositories.full_name').uniq.compact
+      repo_names = Project.platform(platform).maintained.where('projects.updated_at < ?', 1.week.ago).with_repo.pluck('github_repositories.full_name').uniq.compact
       repo_names.each do |repo_name|
         CheckRepoStatusWorker.perform_async(repo_name)
       end

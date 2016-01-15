@@ -47,10 +47,11 @@ class GithubRepository < ActiveRecord::Base
   scope :recently_created, -> { where('created_at > ?', 7.days.ago)}
   scope :hacker_news, -> { order("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC") }
 
-  scope :not_deprecated, -> { where('github_repositories."status" != ? OR github_repositories."status" != ? OR github_repositories."status" IS NULL', "Deprecated", "Removed")}
+  scope :maintained, -> { where('github_repositories."status" not in (?) OR github_repositories."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
   scope :deprecated, -> { where('github_repositories."status" = ?', "Deprecated")}
   scope :not_removed, -> { where('github_repositories."status" != ? OR github_repositories."status" IS NULL', "Removed")}
   scope :removed, -> { where('github_repositories."status" = ?', "Removed")}
+  scope :unmaintained, -> { where('github_repositories."status" = ?', "Unmaintained")}
 
   def self.language(language)
     where('lower(github_repositories.language) = ?', language.try(:downcase))
@@ -62,10 +63,6 @@ class GithubRepository < ActiveRecord::Base
 
   def is_removed?
     status == 'Removed'
-  end
-
-  def not_deprecated?
-    !is_deprecated? && !is_removed?
   end
 
   def touch_projects

@@ -6,12 +6,13 @@ class LanguagesController < ApplicationController
   def show
     find_language
 
-    @created = Project.language(@language).not_deprecated.few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository)
-    @updated = Project.language(@language).not_deprecated.many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
+    scope = Project.language(@language).maintained
+    @created = scope.few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository)
+    @updated = scope.many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
     @color = Languages::Language[@language].try(:color)
-    @watched = Project.language(@language).not_deprecated.most_watched.limit(5)
-    @dependend = Project.language(@language).not_deprecated.most_dependents.limit(5).includes(:github_repository)
-    @popular = Project.language(@language).not_deprecated.order('projects.rank DESC').limit(5).includes(:github_repository)
+    @watched = scope.most_watched.limit(5)
+    @dependend = scope.most_dependents.limit(5).includes(:github_repository)
+    @popular = scope.order('projects.rank DESC').limit(5).includes(:github_repository)
 
     facets = Project.facets(filters: { language: @language }, :facet_limit => 10)
 

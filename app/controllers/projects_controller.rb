@@ -34,12 +34,12 @@ class ProjectsController < ApplicationController
     if params[:platform].present?
       find_platform(:platform)
       raise ActiveRecord::RecordNotFound if @platform_name.nil?
-      scope = Project.not_deprecated.platform(@platform_name)
+      scope = Project.platform(@platform_name)
     else
-      scope = Project.not_deprecated
+      scope = Project
     end
 
-    @platforms = Project.unlicensed.not_deprecated.group('platform').count.sort_by(&:last).reverse
+    @platforms = Project.unlicensed.group('platform').count.sort_by(&:last).reverse
     @projects = scope.unlicensed.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
   end
 
