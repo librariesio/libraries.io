@@ -69,6 +69,19 @@ class ProjectsController < ApplicationController
     @projects = scope.removed.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
   end
 
+  def unmaintained
+    if params[:platform].present?
+      find_platform(:platform)
+      raise ActiveRecord::RecordNotFound if @platform_name.nil?
+      scope = Project.platform(@platform_name)
+    else
+      scope = Project
+    end
+
+    @platforms = Project.unmaintained.group('platform').count.sort_by(&:last).reverse
+    @projects = scope.unmaintained.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+  end
+
   def show
     find_project
     if incorrect_case?
