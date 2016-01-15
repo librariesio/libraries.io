@@ -4,6 +4,8 @@ class Readme < ActiveRecord::Base
 
   after_validation :reformat
 
+  after_commit :check_unmaintained
+
   def to_s
     html_body
   end
@@ -22,6 +24,18 @@ class Readme < ActiveRecord::Base
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+  end
+
+  def check_unmaintained
+    return unless unmaintained?
+    github_repository.update_attribute(:status, 'Unmaintained')
+    github_repository.projects.each do |project|
+      project.update_attribute(:status, 'Unmaintained')
+    end
+  end
+
+  def unmaintained?
+    html_body.downcase.gsub("\n", '').include?('unmaintained.tech/badge.svg')
   end
 
   def reformat
