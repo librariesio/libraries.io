@@ -65,6 +65,14 @@ class GithubRepository < ActiveRecord::Base
     status == 'Removed'
   end
 
+  def is_unmaintained?
+    status == 'Unmaintained'
+  end
+
+  def maintained?
+    !is_deprecated? && !is_removed? && !is_unmaintained?
+  end
+
   def touch_projects
     projects.find_each(&:save)
   end
