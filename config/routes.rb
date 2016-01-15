@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     resources :projects do
       collection do
         get 'deprecated'
+        get 'unmaintained'
       end
     end
     resources :project_suggestions
