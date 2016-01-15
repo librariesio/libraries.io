@@ -13,6 +13,11 @@
     <%= fa_icon 'exclamation-triangle' %>
     This project has been marked as deprecated and is not recommended for use anymore.
   </div>
+  <% elsif !repo.private? && repo.is_unmaintained? %>
+  <div class="alert alert-danger" role="alert">
+    <%= fa_icon 'exclamation-triangle' %>
+    This project has been marked as unmaintained and is no longer being updated.
+  </div>
   <% end %>
 
   <div class="row">
@@ -156,6 +161,8 @@
                           <%= fa_icon 'exclamation-triangle', class: 'text-info tip', title: 'This project may have a conflicting license' %>
                         <% elsif dependency.project.is_deprecated? %>
                           <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
+                        <% elsif dependency.project.is_unmaintained? %>
+                          <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project is no longer maintained' %>
                         <% elsif dependency.outdated? %>
                           <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: 'Out of date' %>
                         <% elsif !dependency.project.license_present? %>
