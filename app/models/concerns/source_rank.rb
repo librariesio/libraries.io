@@ -43,6 +43,9 @@ module SourceRank
     # has the project been marked as deprecated?
     r -=5 if is_deprecated?
 
+    # has the project been marked as unmaintained?
+    r -=5 if is_unmaintained?
+
     # has the project been marked as deprecated?
     r -=5 if is_removed?
 
