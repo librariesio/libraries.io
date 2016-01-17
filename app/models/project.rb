@@ -3,7 +3,7 @@ class Project < ActiveRecord::Base
   include SourceRank
   HAS_DEPENDENCIES = false
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
-  API_FIELDS = [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank]
+  API_FIELDS = [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank, :status]
 
   validates_presence_of :name, :platform
 
