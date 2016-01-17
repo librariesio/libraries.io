@@ -47,7 +47,7 @@ GEM
       addressable (>= 2.3.1)
       extlib (>= 0.9.15)
       multi_json (>= 1.0.0)
-    autoprefixer-rails (6.3.0)
+    autoprefixer-rails (6.3.1)
       execjs
       json
     bigquery (0.8.3)
