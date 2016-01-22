@@ -286,7 +286,7 @@ GEM
     memoist (0.14.0)
     mime-types (2.6.2)
     mini_portile2 (2.0.0)
-    minitest (5.8.3)
+    minitest (5.8.4)
     moneta (0.8.0)
     multi_json (1.11.2)
     multi_xml (0.5.5)
