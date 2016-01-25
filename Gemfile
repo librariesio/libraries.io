@@ -3,7 +3,7 @@ ruby '2.3.0'
 
 gem 'rb-readline'
 gem 'oj'
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.5.1'
 gem 'pg'
 gem 'sass-rails'
 gem 'uglifier'
