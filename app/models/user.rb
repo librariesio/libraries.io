@@ -191,7 +191,8 @@ class User < ActiveRecord::Base
       unless github_repo = existing_repos.find{|r| r.github_id == repo.id}
         github_repo = GithubRepository.find_by('lower(full_name) = ?', repo.full_name.downcase) || GithubRepository.create_from_hash(repo)
       end
-      current_repo_ids << github_repo.id unless github_repo.nil?
+      next if github_repo.nil?
+      current_repo_ids << github_repo.id
 
       unless rp = existing_permissions.find{|p| p.github_repository_id == github_repo.id}
         rp = repository_permissions.build(github_repository_id: github_repo.id)
