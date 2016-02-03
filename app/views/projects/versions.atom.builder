@@ -3,7 +3,7 @@ atom_feed do |feed|
   feed.updated(@versions[0].published_at) if @versions.length > 0
 
   @versions.each do |version|
-    feed.entry(version, url: version_path(version.to_param)) do |entry|
+    feed.entry(version, url: version_url(version.to_param)) do |entry|
       entry.title(version.number)
       entry.published Time.at(version.published_at).rfc822
       entry.content "", :type => "html"
