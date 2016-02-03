@@ -3,7 +3,7 @@ class Project < ActiveRecord::Base
   include SourceRank
   HAS_DEPENDENCIES = false
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
-  API_FIELDS = [:name, :platform, :description, :language, :homepage, :repository_url,  :normalized_licenses, :rank, :status]
+  API_FIELDS = [:name, :platform, :description, :language, :homepage, :repository_url, :normalized_licenses, :rank, :status]
 
   validates_presence_of :name, :platform
 
@@ -169,6 +169,10 @@ class Project < ActiveRecord::Base
 
   def latest_release_number
     read_attribute(:latest_release_number) || latest_release.try(:number)
+  end
+
+  def keywords
+    keywords_array
   end
 
   def package_manager_url
