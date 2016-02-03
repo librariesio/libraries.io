@@ -1,3 +1,4 @@
+<% content_for :atom, auto_discovery_link_tag(:atom, home_url({format: "atom", api_key: current_user.api_key})) %>
 <div class="row">
   <div class="col-sm 6 col-md-8" id='newsfeed'>
     <% if @versions.length > 0 %>
@@ -16,6 +17,14 @@
             <%= link_to 'Manage muted projects', muted_path %> -
           <% end %>
           <%= link_to 'Manage your subscriptions', subscriptions_path %>
+        </small>
+      </p>
+      <p>
+        <small>
+          <%= link_to home_url({format: "atom", api_key: current_user.api_key}) do %>
+            <%= fa_icon "rss-square" %>
+            Subscribe to an RSS feed of new versions
+          <% end %>
         </small>
       </p>
     <% else %>

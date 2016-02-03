@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   end if Rails.env.production?
   mount Sidekiq::Web => '/sidekiq'
 
+  get '/home', to: 'dashboard#home'
+
   namespace :api do
     get '/', to: 'docs#index'
     get '/search', to: 'search#index'

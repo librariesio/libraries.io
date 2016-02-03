@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
-  before_action :ensure_logged_in
+  before_action :ensure_logged_in, except: :home
 
   def index
     @orgs = current_user.adminable_github_orgs.order(:login)
@@ -9,6 +9,22 @@ class DashboardController < ApplicationController
       @repos = @repos.from_org(@org)
     else
       @repos =  @repos.from_org(nil)
+    end
+  end
+
+  def home
+    respond_to do |format|
+      format.atom do
+        if params[:api_key].present? && api_key = ApiKey.active.find_by_access_token(params[:api_key])
+          @user = api_key.user
+          @versions = @user.all_subscribed_versions.where.not(project_id: @user.muted_project_ids).where.not(published_at: nil).newest_first.includes(:project).paginate(per_page: 100, page: params[:page])
+        else
+          raise ActiveRecord::RecordNotFound
+        end
+      end
+      format.html do
+        redirect_to root_path
+      end
     end
   end
 
