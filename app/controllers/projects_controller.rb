@@ -40,7 +40,8 @@ class ProjectsController < ApplicationController
     end
 
     @platforms = Project.unlicensed.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.unlicensed.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+    order = params[:newest] ? 'projects.created_at DESC' : 'dependents_count DESC, rank DESC, projects.created_at DESC'
+    @projects = scope.unlicensed.order(order).paginate(page: params[:page], per_page: 20)
   end
 
   def deprecated
