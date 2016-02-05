@@ -6,6 +6,7 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   def update
     @github_repository = GithubRepository.find(params[:id])
     if @github_repository.update_attributes(github_repository_params)
+      @github_repository.update_all_info_async
       redirect_to github_repository_path(@github_repository.owner_name, @github_repository.project_name)
     else
       redirect_to admin_github_repository_path(@github_repository.id)
