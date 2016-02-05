@@ -140,7 +140,13 @@
                       <% end %>
                     </td>
                     <td>
-                      <%= dependency.requirements %>
+                      <% if dependency.requirements.length > 20 %>
+                      <span class='tip' title='<%= dependency.requirements %>'>
+                        <%= truncate(dependency.requirements, length: 20)  %>
+                      </span>
+                      <% else %>
+                        <%= dependency.requirements %>
+                      <% end %>
                     </td>
                     <td>
                       <%= dependency.try(:project).try(:latest_stable_release_number) %>
