@@ -134,19 +134,13 @@
                   <tr>
                     <td>
                       <% if dependency.platform.present? %>
-                        <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
+                        <%= link_to  truncate_with_tip(dependency.project_name, 30), project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
                       <% else %>
-                        <%= dependency.project_name %>
+                        <%= truncate_with_tip(dependency.project_name, 30) %>
                       <% end %>
                     </td>
                     <td>
-                      <% if dependency.requirements.length > 20 %>
-                      <span class='tip' title='<%= dependency.requirements %>'>
-                        <%= truncate(dependency.requirements, length: 20)  %>
-                      </span>
-                      <% else %>
-                        <%= dependency.requirements %>
-                      <% end %>
+                      <%= truncate_with_tip(dependency.requirements, 15) %>
                     </td>
                     <td>
                       <%= dependency.try(:project).try(:latest_stable_release_number) %>

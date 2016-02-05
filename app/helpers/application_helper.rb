@@ -208,4 +208,12 @@ module ApplicationHelper
     text += " - #{version}" if version
     text += " - a #{project.language} library on #{project.platform_name} - Libraries.io"
   end
+
+  def truncate_with_tip(text, length)
+    if text && text.length > length
+      content_tag(:span, truncate(text, length: length), class: 'tip', title: text)
+    else
+      text
+    end
+  end
 end
