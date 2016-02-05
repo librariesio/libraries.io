@@ -2,7 +2,7 @@ module Repositories
   class Go < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    LIBRARIAN_PLANNED = true
+    LIBRARIAN_SUPPORT = true
     URL = 'http://go-search.org/'
     COLOR = '#375eab'
 
