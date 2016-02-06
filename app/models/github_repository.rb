@@ -217,7 +217,7 @@ class GithubRepository < ActiveRecord::Base
     begin
       r = github_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
       return if r.nil? || r.empty?
-      self.github_id = r[:id]
+      self.github_id = r[:id] unless self.github_id == r[:id]
       self.full_name = r[:full_name] if self.full_name.downcase != r[:full_name].downcase
       self.owner_id = r[:owner][:id]
       self.license = Project.format_license(r[:license][:key]) if r[:license]
