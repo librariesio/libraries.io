@@ -7,7 +7,8 @@ class GithubUser < ActiveRecord::Base
   has_many :contributed_repositories, -> { GithubRepository.source.open_source }, through: :github_contributions, source: :github_repository
   has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('github_users.id').order("COUNT(github_users.id) DESC") }, through: :contributed_repositories, source: :contributors
 
-  validates_uniqueness_of :github_id, :login
+  validates :login, uniqueness: true, if: lambda { self.login_changed? }
+  validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
 
   # after_commit :download_orgs, :download_repos, on: :create
 

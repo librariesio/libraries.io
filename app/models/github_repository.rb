@@ -20,7 +20,8 @@ class GithubRepository < ActiveRecord::Base
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
   has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
 
-  validates_uniqueness_of :github_id, :full_name
+  validates :full_name, uniqueness: true, if: lambda { self.full_name_changed? }
+  validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
 
   after_commit :update_all_info_async, on: :create
   # after_save :touch_projects

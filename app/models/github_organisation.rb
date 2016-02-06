@@ -8,7 +8,8 @@ class GithubOrganisation < ActiveRecord::Base
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :contributors, -> { group('github_users.id').order("sum(github_contributions.count) DESC") }, through: :open_source_github_repositories, source: :contributors
 
-  validates_uniqueness_of :github_id, :login
+  validates :login, uniqueness: true, if: lambda { self.login_changed? }
+  validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
 
   after_commit :download_repos, on: :create
 
