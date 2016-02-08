@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151227185025) do
+ActiveRecord::Schema.define(version: 20160208090357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,23 @@ ActiveRecord::Schema.define(version: 20151227185025) do
   add_index "github_contributions", ["github_repository_id"], name: "index_github_contributions_on_github_repository_id", using: :btree
   add_index "github_contributions", ["github_user_id"], name: "index_github_contributions_on_github_user_id", using: :btree
 
+  create_table "github_issues", force: :cascade do |t|
+    t.integer  "github_repository_id"
+    t.integer  "github_id"
+    t.integer  "number"
+    t.string   "state"
+    t.string   "title"
+    t.text     "body"
+    t.integer  "github_user_id"
+    t.boolean  "locked"
+    t.integer  "comments_count"
+    t.datetime "closed_at"
+    t.string   "labels",               default: [],              array: true
+    t.string   "string",               default: [],              array: true
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
   create_table "github_organisations", force: :cascade do |t|
     t.string   "login"
     t.integer  "github_id"
@@ -76,6 +93,7 @@ ActiveRecord::Schema.define(version: 20151227185025) do
 
   add_index "github_organisations", ["created_at"], name: "index_github_organisations_on_created_at", using: :btree
   add_index "github_organisations", ["github_id"], name: "index_github_organisations_on_github_id", unique: true, using: :btree
+  add_index "github_organisations", ["login"], name: "index_github_organisations_on_login", using: :btree
 
   create_table "github_repositories", force: :cascade do |t|
     t.string   "full_name"
@@ -125,6 +143,7 @@ ActiveRecord::Schema.define(version: 20151227185025) do
     t.datetime "published_at"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.boolean  "stable"
   end
 
   add_index "github_tags", ["github_repository_id", "name"], name: "index_github_tags_on_github_repository_id_and_name", using: :btree
@@ -179,10 +198,10 @@ ActiveRecord::Schema.define(version: 20151227185025) do
   end
 
   create_table "payola_sales", force: :cascade do |t|
-    t.string   "email",                limit: 191
-    t.string   "guid",                 limit: 191
+    t.string   "email"
+    t.string   "guid"
     t.integer  "product_id"
-    t.string   "product_type",         limit: 100
+    t.string   "product_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "state"
@@ -200,11 +219,11 @@ ActiveRecord::Schema.define(version: 20151227185025) do
     t.integer  "affiliate_id"
     t.text     "customer_address"
     t.text     "business_address"
-    t.string   "stripe_customer_id",   limit: 191
+    t.string   "stripe_customer_id"
     t.string   "currency"
     t.text     "signed_custom_fields"
     t.integer  "owner_id"
-    t.string   "owner_type",           limit: 100
+    t.string   "owner_type"
   end
 
   add_index "payola_sales", ["coupon_id"], name: "index_payola_sales_on_coupon_id", using: :btree
@@ -248,7 +267,7 @@ ActiveRecord::Schema.define(version: 20151227185025) do
     t.datetime "updated_at"
     t.string   "currency"
     t.integer  "amount"
-    t.string   "guid",                 limit: 191
+    t.string   "guid"
     t.string   "stripe_status"
     t.integer  "affiliate_id"
     t.string   "coupon"
@@ -256,6 +275,7 @@ ActiveRecord::Schema.define(version: 20151227185025) do
     t.text     "customer_address"
     t.text     "business_address"
     t.integer  "setup_fee"
+    t.integer  "tax_percent"
   end
 
   add_index "payola_subscriptions", ["guid"], name: "index_payola_subscriptions_on_guid", using: :btree
@@ -377,6 +397,7 @@ ActiveRecord::Schema.define(version: 20151227185025) do
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
+  add_index "subscriptions", ["project_id"], name: "index_subscriptions_on_project_id", using: :btree
   add_index "subscriptions", ["user_id", "project_id"], name: "index_subscriptions_on_user_id_and_project_id", using: :btree
 
   create_table "users", force: :cascade do |t|
@@ -392,8 +413,8 @@ ActiveRecord::Schema.define(version: 20151227185025) do
     t.datetime "updated_at"
     t.string   "public_repo_token"
     t.string   "private_repo_token"
-    t.boolean  "token_upgrade"
-    t.boolean  "currently_syncing",  default: false, null: false
+    t.boolean  "token_upgrade",      default: false
+    t.boolean  "currently_syncing",  default: false
     t.datetime "last_synced_at"
   end
 
@@ -406,6 +427,7 @@ ActiveRecord::Schema.define(version: 20151227185025) do
     t.datetime "published_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "stable"
   end
 
   add_index "versions", ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true, using: :btree
