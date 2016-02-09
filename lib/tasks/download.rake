@@ -14,7 +14,7 @@ namespace :download do
   end
 
   task atom_all: :environment do
-    Repositories::Atom.import
+    Repositories::Atom.import_async
   end
 
   task biicode: :environment do
@@ -38,7 +38,7 @@ namespace :download do
   end
 
   task cpan_all: :environment do
-    Repositories::CPAN.import
+    Repositories::CPAN.import_async
   end
 
   task cocoapods: :environment do
@@ -50,7 +50,7 @@ namespace :download do
   end
 
   task cran_all: :environment do
-    Repositories::CRAN.import
+    Repositories::CRAN.import_async
   end
 
   task dub: :environment do
@@ -96,7 +96,7 @@ namespace :download do
 
   task maven_all: :environment do
     Repositories::Maven.load_names
-    Repositories::Maven.import
+    Repositories::Maven.import_async
   end
 
   task meteor: :environment do
@@ -130,7 +130,7 @@ namespace :download do
   end
 
   task packagist_all: :environment do
-    Repositories::Packagist.import
+    Repositories::Packagist.import_async
   end
 
   task platformio: :environment do
@@ -146,7 +146,7 @@ namespace :download do
   end
 
   task pypi_all: :environment do
-    Repositories::Pypi.import
+    Repositories::Pypi.import_async
   end
 
   task rubygems: :environment do
@@ -154,7 +154,7 @@ namespace :download do
   end
 
   task rubygems_all: :environment do
-    Repositories::Rubygems.import
+    Repositories::Rubygems.import_async
   end
 
   task sublime: :environment do
@@ -166,7 +166,7 @@ namespace :download do
   end
 
   task wordpress_all: :environment do
-    Repositories::Wordpress.import
+    Repositories::Wordpress.import_async
   end
 
   task go: :environment do
@@ -174,6 +174,6 @@ namespace :download do
   end
 
   task go_all: :environment do
-    Repositories::Go.import
+    Repositories::Go.import_async
   end
 end
