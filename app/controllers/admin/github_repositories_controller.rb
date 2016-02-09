@@ -14,7 +14,7 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   end
 
   def index
-    @github_repositories = GithubRepository.without_license.with_projects.order("COUNT(projects.id) DESC").group("github_repositories.id").paginate(page: params[:page])
+    @github_repositories = GithubRepository.maintained.without_license.with_projects.order("COUNT(projects.id) DESC").group("github_repositories.id").paginate(page: params[:page])
   end
 
   def mit
