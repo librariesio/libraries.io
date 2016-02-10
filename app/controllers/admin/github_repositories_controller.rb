@@ -24,6 +24,6 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   private
 
   def github_repository_params
-    params.require(:github_repository).permit(:license)
+    params.require(:github_repository).permit(:license, :status)
   end
 end
