@@ -22,7 +22,7 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
       scope = GithubRepository
     end
 
-    @languages = GithubRepository.maintained.without_license.with_projects.group('github_repositories.language').count.sort_by(&:last).reverse
+    @languages = GithubRepository.maintained.without_license.with_projects.group('github_repositories.language').count.sort_by(&:last).reverse.first(20)
     @github_repositories = scope.maintained.without_license.with_projects.order("COUNT(projects.id) DESC").group("github_repositories.id").paginate(page: params[:page])
   end
 
