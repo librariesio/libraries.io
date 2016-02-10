@@ -18,7 +18,7 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   end
 
   def mit
-    @github_repositories = GithubRepository.with_projects.language('Go').without_license.group('github_repositories.id').includes(:readme).order("COUNT(projects.id) DESC".paginate(page: params[:page], per_page: 20)
+    @github_repositories = GithubRepository.with_projects.language('Go').without_license.group('github_repositories.id').includes(:readme).order("COUNT(projects.id) DESC").paginate(page: params[:page], per_page: 20)
   end
 
   private
