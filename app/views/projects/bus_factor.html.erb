@@ -69,15 +69,18 @@
     </h3>
     <div class="facets">
       <ul class='filter'>
-        <% @languages.each do |language| %>
-          <li class='<%= 'active' if language.downcase == params[:language].try(:downcase) %>'>
-            <% if language.downcase == params[:language].try(:downcase) %>
+        <% @languages.each do |language, count| %>
+          <% next unless language.present? %>
+          <li class='<%= 'active' if language.try(:downcase) == params[:language].try(:downcase) %>'>
+            <% if language.try(:downcase) == params[:language].try(:downcase) %>
               <%= link_to language, bus_factor_path(language: nil) %>
             <% else %>
               <%= link_to language, bus_factor_path(language: language) %>
             <% end %>
+            <small><%= number_to_human count %></small>
           </li>
         <% end %>
+      </ul>
       </ul>
     </div>
   </div>
