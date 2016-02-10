@@ -6,7 +6,7 @@ class AccountSubscriptionsController < ApplicationController
   def plans
     default_interval = current_user.try(:current_plan).try(:interval) || 'month'
     @interval = params[:interval] == 'year' ? 'year' : default_interval
-    @plans = SubscriptionPlan.interval(@interval)
+    @plans = SubscriptionPlan.visible.interval(@interval)
   end
 
   def new

@@ -1,16 +1,10 @@
 class SubscriptionPlan < ActiveRecord::Base
   include Payola::Plan
 
+  scope :visible, -> { where(hidden: false) }
   scope :interval, -> (interval){ where(interval: interval).order('amount ASC') }
 
   PLANS = [
-    {
-      amount: 2500,
-      interval: 'month',
-      stripe_id: '7',
-      name: 'Startup Monthly',
-      repo_count: 1
-    },
     {
       amount: 4999,
       interval: 'month',
@@ -33,13 +27,6 @@ class SubscriptionPlan < ActiveRecord::Base
       repo_count: 15
     },
     {
-      amount: 27500,
-      interval: 'year',
-      stripe_id: '8',
-      name: 'Startup Yearly',
-      repo_count: 1
-    },
-    {
       amount: 54999,
       interval: 'year',
       stripe_id: '4',
@@ -59,6 +46,28 @@ class SubscriptionPlan < ActiveRecord::Base
       stripe_id: '6',
       name: 'Gold Yearly',
       repo_count: 15
+    },
+    {
+      amount: 2500,
+      interval: 'month',
+      stripe_id: '7',
+      name: 'Startup Monthly',
+      repo_count: 1
+    },
+    {
+      amount: 27500,
+      interval: 'year',
+      stripe_id: '8',
+      name: 'Startup Yearly',
+      repo_count: 1
+    },
+    {
+      amount: 0,
+      interval: 'year',
+      stripe_id: '9',
+      name: 'Educational',
+      repo_count: 15,
+      hidden: true
     }
   ]
 
