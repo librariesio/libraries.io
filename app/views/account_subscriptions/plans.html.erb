@@ -12,67 +12,83 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-sm-1">
-
-  </div>
+<div class="row plans">
   <div class="plan col-sm-2  text-center">
-    <h4>Open Source</h4>
-    <p>
-      Free forever
-    </p>
-    <p>
-      Unlimited public repositories
-    </p>
-    <% if @interval == 'year' %>
-    <p>
-      &nbsp;
-    </p>
-    <% end %>
-    <p>
-      &nbsp;
-    </p>
-    <%= link_to 'Get started', repositories_path, class: 'btn btn-primary' %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class='panel-title'>Open Source</h3>
+      </div>
+      <div class="panel-body">
+        <p>
+          Free forever
+        </p>
+        <p>
+          Unlimited public repositories
+        </p>
+        <% if @interval == 'year' %>
+        <p>
+          &nbsp;
+        </p>
+        <% end %>
+        <p>
+          &nbsp;
+        </p>
+        <%= link_to 'Get started', repositories_path, class: 'btn btn-primary' %>
+      </div>
+    </div>
+
+
   </div>
   <% @plans.each do |plan| %>
     <div class="plan col-sm-2 text-center">
-      <h4><%= plan.short_name %></h4>
-      <p>
-        <%= number_to_currency plan.amount/100.0, unit: '£' %> per <%= plan.interval %>
-      </p>
-      <p>
-        Unlimited public repositories
-      </p>
-      <p>
-        <strong><%= plan.repo_count %></strong> private <%= 'repository'.pluralize(plan.repo_count) %>
-      </p>
-      <% if @interval == 'year' %>
-      <p>
-        One Month Free
-      </p>
-      <% end %>
-      <% if current_user && current_user.current_plan == plan %>
-        <%= link_to 'Your Current Plan', repositories_path, class: 'btn btn-success' %>
-      <% else %>
-        <% if current_user %>
-          <% if current_user.has_active_subscription? %>
-            <%= mail_to 'support@libraries.io','Contact us to change plan', subject: 'Change Plan', class: 'btn btn-primary' %>
-          <% else %>
-            <% button_text = current_user && current_user.has_active_subscription? ? 'Switch Plan' : 'Subscribe Now'  %>
-            <%= render 'payola/subscriptions/checkout', plan: plan, email: current_user.email, button_text: button_text, currency: 'gbp', billing_address: true, allow_remember_me: true, verify_zip_code: true, plan_image_path: asset_path('stripe-logo.png'), name: 'Libraries.io Subscription', description: "#{plan.short_name} - #{formatted_price(plan.amount, unit: '£')} per #{plan.interval}" %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class='panel-title'><%= plan.short_name %></h3>
+        </div>
+        <div class="panel-body">
+          <p>
+            <%= number_to_currency plan.amount/100.0, unit: '£' %> per <%= plan.interval %>
+          </p>
+          <p>
+            Unlimited public repositories
+          </p>
+          <p>
+            <strong><%= plan.repo_count %></strong> private <%= 'repository'.pluralize(plan.repo_count) %>
+          </p>
+          <% if @interval == 'year' %>
+          <p>
+            One Month Free
+          </p>
           <% end %>
-        <% else %>
-          <%= link_to 'Subscribe Now', login_path(return_to: pricing_path), class: 'btn btn-primary' %>
-        <% end %>
-      <% end %>
+          <% if current_user && current_user.current_plan == plan %>
+            <%= link_to 'Your Current Plan', repositories_path, class: 'btn btn-success' %>
+          <% else %>
+            <% if current_user %>
+              <% if current_user.has_active_subscription? %>
+                <%= mail_to 'support@libraries.io','Contact us to change plan', subject: 'Change Plan', class: 'btn btn-primary' %>
+              <% else %>
+                <% button_text = current_user && current_user.has_active_subscription? ? 'Switch Plan' : 'Subscribe Now'  %>
+                <%= render 'payola/subscriptions/checkout', plan: plan, email: current_user.email, button_text: button_text, currency: 'gbp', billing_address: true, allow_remember_me: true, verify_zip_code: true, plan_image_path: asset_path('stripe-logo.png'), name: 'Libraries.io Subscription', description: "#{plan.short_name} - #{formatted_price(plan.amount, unit: '£')} per #{plan.interval}" %>
+              <% end %>
+            <% else %>
+              <%= link_to 'Subscribe Now', login_path(return_to: pricing_path), class: 'btn btn-primary' %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
     </div>
   <% end %>
 </div>
 <div class="row">
   <div class="col-md-12">
     <p class='text-center'>
-      <br><br>
+      <br>
       We're also offering custom plans if you need to track even more repositories. For any questions, <%= mail_to 'support@libraries.io', 'contact us!', subject: 'Custom Libraries.io Plan' %>
+    </p>
+    <p class='text-center'>
+      <small>
+        Work for a non-profit or in education? <%= mail_to 'support@libraries.io', 'Get in touch', subject: 'Not-for-profit Libraries.io Plan' %> for discounts.
+      </small>
     </p>
   </div>
 </div>
