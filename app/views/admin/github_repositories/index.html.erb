@@ -1,4 +1,28 @@
-<h1>Unlicensed Github repos</h1>
+<div class="row">
+  <div class="col-md-8">
+    <h1>Unlicensed Github repos</h1>
+    <%= render @github_repositories %>
+    <%= will_paginate @github_repositories, renderer: BootstrapPagination::Rails, page_links: false %>
+  </div>
 
-<%= render @github_repositories %>
-<%= will_paginate @github_repositories, renderer: BootstrapPagination::Rails, page_links: false %>
+  <div class="col-md-4">
+    <h3>
+      <strong>
+        Filter by language
+      </strong>
+    </h3>
+    <div class="facets">
+      <ul class='filter'>
+        <% @languages.each do |language| %>
+          <li class='<%= 'active' if language.downcase == params[:language].try(:downcase) %>'>
+            <% if language.downcase == params[:language].try(:downcase) %>
+              <%= link_to language, admin_github_repositories_path(language: nil) %>
+            <% else %>
+              <%= link_to language, admin_github_repositories_path(language: language) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

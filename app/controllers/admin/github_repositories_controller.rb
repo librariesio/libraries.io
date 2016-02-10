@@ -14,7 +14,16 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   end
 
   def index
-    @github_repositories = GithubRepository.maintained.without_license.with_projects.order("COUNT(projects.id) DESC").group("github_repositories.id").paginate(page: params[:page])
+    if params[:language].present?
+      @language = GithubRepository.language(params[:language].downcase).first.try(:language)
+      raise ActiveRecord::RecordNotFound if @language.nil?
+      scope = GithubRepository.language(@language)
+    else
+      scope = GithubRepository
+    end
+
+    @languages = GithubRepository.maintained.without_license.with_projects.group('language').order('language').pluck('language').compact
+    @github_repositories = scope.maintained.without_license.with_projects.order("COUNT(projects.id) DESC").group("github_repositories.id").paginate(page: params[:page])
   end
 
   def mit
