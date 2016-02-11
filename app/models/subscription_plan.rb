@@ -72,7 +72,6 @@ class SubscriptionPlan < ActiveRecord::Base
   ]
 
   def self.setup_plans
-    delete_all
     PLANS.each do |plan|
       self.find_or_create_by(plan)
     end
