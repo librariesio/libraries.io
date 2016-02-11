@@ -47,7 +47,7 @@ GEM
       addressable (>= 2.3.1)
       extlib (>= 0.9.15)
       multi_json (>= 1.0.0)
-    autoprefixer-rails (6.3.1)
+    autoprefixer-rails (6.3.2)
       execjs
       json
     bigquery (0.9.0)
@@ -555,5 +555,8 @@ DEPENDENCIES
   will_paginate
   will_paginate-bootstrap
 
+RUBY VERSION
+   ruby 2.3.0p0
+
 BUNDLED WITH
-   1.11.2
+   1.12.0.pre.1
