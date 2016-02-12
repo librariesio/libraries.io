@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_many :repository_subscriptions, dependent: :destroy
   has_many :api_keys, dependent: :destroy
   has_many :repository_permissions, dependent: :destroy
+  has_many :all_github_repositories, through: :repository_permissions, source: :github_repository
   has_many :adminable_repository_permissions, -> { where admin: true }, anonymous_class: RepositoryPermission
   has_many :adminable_github_repositories, through: :adminable_repository_permissions, source: :github_repository
   has_many :adminable_github_orgs, -> { group('github_organisations.id') }, through: :adminable_github_repositories, source: :github_organisation
@@ -18,6 +19,7 @@ class User < ActiveRecord::Base
 
   has_many :dependencies, through: :source_github_repositories
   has_many :all_dependencies, through: :github_repositories, source: :dependencies
+  has_many :really_all_dependencies, through: :all_github_repositories, source: :dependencies
   has_many :all_dependent_projects, -> { group('projects.id') }, through: :all_dependencies, source: :project
 
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
@@ -87,8 +89,13 @@ class User < ActiveRecord::Base
   end
 
   def your_dependent_repos(project)
-    ids = all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
-    github_repositories.where(id: ids).order('stargazers_count DESC')
+    if admin?
+      ids = really_all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
+      all_github_repositories.where(id: ids).order('pushed_at DESC, stargazers_count DESC')
+    else
+      ids = all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
+      github_repositories.where(id: ids).order('stargazers_count DESC, pushed_at DESC')
+    end
   end
 
   def all_subscribed_projects
