@@ -89,13 +89,8 @@ class User < ActiveRecord::Base
   end
 
   def your_dependent_repos(project)
-    if admin?
-      ids = really_all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
-      all_github_repositories.where(id: ids).order('pushed_at DESC, stargazers_count DESC')
-    else
-      ids = all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
-      github_repositories.where(id: ids).order('stargazers_count DESC, pushed_at DESC')
-    end
+    ids = really_all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
+    all_github_repositories.where(id: ids).order('fork ASC, pushed_at DESC, stargazers_count DESC')
   end
 
   def all_subscribed_projects
