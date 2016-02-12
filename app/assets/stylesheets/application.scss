@@ -257,6 +257,15 @@ a.rss{
   }
   h5 {
     line-height: 40px;
+    &.with_dependent_repos{
+      line-height: 20px;
+    }
+  }
+  .your_dependent_repos small{
+    color: #aaa;
+    a{
+      color: #888;
+    }
   }
   .mute{
     display: none;
