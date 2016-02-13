@@ -78,7 +78,7 @@ module Repositories
     end
 
     def self.save(project, include_versions = true)
-      mapped_project = mapping(project)
+      mapped_project = mapping(project).delete_if { |key, value| value.blank? }
       return false unless mapped_project
       puts "Saving #{mapped_project[:name]}"
       dbproject = Project.find_or_initialize_by({:name => mapped_project[:name], :platform => self.name.demodulize})
