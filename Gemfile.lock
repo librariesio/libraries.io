@@ -266,7 +266,7 @@ GEM
       railties (>= 3.2.0, < 5.0)
     json (1.8.3)
     jwt (1.5.1)
-    languages (1.3.4)
+    languages (1.3.5)
       escape_utils (~> 1.1)
     launchy (2.4.3)
       addressable (~> 2.3)
