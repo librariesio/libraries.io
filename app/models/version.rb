@@ -4,7 +4,7 @@ class Version < ActiveRecord::Base
 
   belongs_to :project, touch: true
   counter_culture :project
-  has_many :dependencies, dependent: :destroy
+  has_many :dependencies, dependent: :delete_all
 
   after_commit :send_notifications_async, on: :create
 
