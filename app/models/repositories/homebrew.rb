@@ -16,7 +16,7 @@ module Repositories
         projects += r
         page +=1
       end
-      projects.map{|project| project['name'] }.sort.uniq
+      projects.map{|project| project['formula'] }.uniq
     end
 
     def self.recent_names
