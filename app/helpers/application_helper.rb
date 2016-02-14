@@ -85,6 +85,8 @@ module ApplicationHelper
       "platformio lib install #{project.pm_id}"
     when 'Inqlude'
       "inqlude install #{name}"
+    when 'Homebrew'
+      "brew install #{name}"
     end
   end
 

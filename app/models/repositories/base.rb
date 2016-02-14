@@ -76,6 +76,8 @@ module Repositories
         "https://atmospherejs.com/#{name.gsub(':', '/')}"
       when 'PlatformIO'
         "http://platformio.org/#!/lib/show/#{project.pm_id}/#{name}"
+      when 'Homebrew'
+        "http://brewformulas.org/#{name}"
       end
     end
 
