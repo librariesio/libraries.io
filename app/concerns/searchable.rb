@@ -52,7 +52,7 @@ module Searchable
     end
 
     def self.search(query, options = {})
-      facet_limit = options.fetch(:facet_limit, 30)
+      facet_limit = options.fetch(:facet_limit, 35)
       query = sanitize_query(query)
       options[:filters] ||= []
       search_definition = {
