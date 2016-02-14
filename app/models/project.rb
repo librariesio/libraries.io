@@ -72,6 +72,8 @@ class Project < ActiveRecord::Base
                :set_source_rank,
                :set_language
 
+  before_destroy :destroy_versions
+
   def to_param
     { name: name, platform: platform.downcase }
   end
@@ -209,6 +211,10 @@ class Project < ActiveRecord::Base
       results = Project.__elasticsearch__.client.mlt(id: self.id, index: 'projects', type: 'project', mlt_fields: 'keywords_array,platform,description,repository_url', min_term_freq: 1, min_doc_freq: 2)
       ids = results['hits']['hits'].map{|h| h['_id']}
     end
+  end
+
+  def destroy_versions
+    versions.each(&:destroy)
   end
 
   def stars
