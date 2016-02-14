@@ -1,31 +1,14 @@
 <h1>Project Suggestions</h1>
 
-<% @project_suggestions.each do |project_suggestion| %>
-<% next if project_suggestion.project.nil? %>
-<h3>
-  <%= link_to project_suggestion.project, project_path(project_suggestion.project.to_param) %>
-  <small>
-    By <%= link_to project_suggestion.user, user_path(project_suggestion.user.nickname) %>
-  </small>
-</h3>
-<% if project_suggestion.repository_url != project_suggestion.project.repository_url %>
-<p>
-  <strong>repository_url</strong>: <%= project_suggestion.repository_url %>
-</p>
-<% end %>
-<% if project_suggestion.licenses != project_suggestion.project.licenses %>
-<p>
-  <strong>license</strong>: <%= project_suggestion.licenses %>
-</p>
-<% end %>
-<% if project_suggestion.status.present? && project_suggestion.status != project_suggestion.project.status %>
-<p>
-  <strong>status</strong>: <%= project_suggestion.status %>
-</p>
-<% end %>
-<p>
-  <strong>notes</strong>: <%= project_suggestion.notes %>
-</p>
-<hr>
-<% end %>
-<%= will_paginate @project_suggestions %>
+<div class="row">
+  <div class="col-md-6">
+    <% if @project_suggestions.reject(&:done?).any? %>
+      <%= render @project_suggestions.reject(&:done?) %>
+      <%= will_paginate @project_suggestions %>
+    <% else %>
+      <p>
+        No pending suggestions!
+      </p>
+    <% end %>
+  </div>
+</div>
