@@ -4,7 +4,7 @@
 <hr>
 <% if @dependents.any? %>
   <%= render @dependents %>
-  <%= will_paginate @dependents, renderer: BootstrapPagination::Rails, page_links: false %>
+  <%= will_paginate @dependents, page_links: false %>
 <% else %>
   <p>
     No projects found, go back to <%= link_to @project, project_path(@project.to_param) %>.

@@ -25,7 +25,7 @@
         </div>
       </div>
     <% end %>
-    <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
+    <%= will_paginate @projects, page_links: false %>
     <p>
       <small><%= page_entries_info @projects, model: 'libraries without licenses' %></small>
     </p>

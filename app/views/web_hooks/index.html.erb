@@ -27,7 +27,7 @@
         </tr>
         <%= render @web_hooks %>
       </table>
-      <%= will_paginate @repos, renderer: BootstrapPagination::Rails, page_links: false %>
+      <%= will_paginate @repos, page_links: false %>
     <% else %>
       <p>
         No web hooks added to this repositories yet.

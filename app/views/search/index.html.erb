@@ -31,7 +31,7 @@
   <div class='col-md-8'>
     <% if @projects.length > 0 %>
       <%= render @projects %>
-      <%= will_paginate @search, renderer: BootstrapPagination::Rails, page_links: false %>
+      <%= will_paginate @search, page_links: false %>
       <p>
         <small>
           <%= page_entries_info @search, model: 'project' %>

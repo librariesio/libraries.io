@@ -9,7 +9,7 @@
   <% if @contributions.any? %>
     <div class="col-md-6">
       <%= render @contributions.map(&:github_repository)  %>
-      <%= will_paginate @contributions, renderer: BootstrapPagination::Rails, page_links: false %>
+      <%= will_paginate @contributions, page_links: false %>
     </div>
   <% else %>
     <p>

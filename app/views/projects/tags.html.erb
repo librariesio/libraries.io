@@ -14,7 +14,7 @@
     </li>
     <% end %>
   </ul>
-  <%= will_paginate @tags, renderer: BootstrapPagination::Rails, page_links: false %>
+  <%= will_paginate @tags, page_links: false %>
   <%= link_to project_tags_path(@project.to_param.merge(format: :atom)) do %>
     <%= fa_icon "rss-square" %>
     Subscribe to an RSS feed of <%= @project %> releases

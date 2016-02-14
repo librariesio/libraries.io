@@ -4,7 +4,7 @@
 <hr>
 <% if @dependent_repos.any? %>
   <%= render @dependent_repos %>
-  <%= will_paginate @dependent_repos, renderer: BootstrapPagination::Rails, page_links: false %>
+  <%= will_paginate @dependent_repos, page_links: false %>
 <% else %>
   <p>
     No repositories found, go back to <%= link_to @project, project_path(@project.to_param) %>.
