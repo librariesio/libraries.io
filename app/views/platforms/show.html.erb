@@ -24,9 +24,9 @@
 <hr>
 <div class="row">
   <div class="col-md-8">
-    <div class='row'>
+    <div class="row">
       <% if @popular.any? %>
-        <div class='col-md-6'>
+        <div class='col-md-6 platform-column'>
           <h4>
             Popular <%= platform_name(@platform_name) %> Projects
             <small class='more'>
@@ -38,16 +38,13 @@
       <% end %>
 
       <% if @dependend.any? %>
-        <div class='col-md-6'>
+        <div class='col-md-6 platform-column'>
           <h4>Most Depended upon <%= platform_name(@platform_name) %> Projects</h4>
           <%= render @dependend %>
         </div>
       <% end %>
-    </div>
-    <hr>
-    <div class='row'>
       <% if @updated.any? %>
-      <div class='col-md-6'>
+      <div class='col-md-6 platform-column'>
         <h4>
           <%= link_to search_url(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
@@ -61,7 +58,7 @@
       </div>
       <% end %>
       <% if @created.any? %>
-        <div class='col-md-6'>
+        <div class='col-md-6 platform-column'>
           <h4>
             <%= link_to search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
               <%= fa_icon "rss-square" %>
@@ -74,17 +71,14 @@
           <%= render @created %>
         </div>
       <% end %>
-      </div>
+
       <% if @watched.any? %>
-        <hr>
-        <div class="row">
-          <div class='col-md-6'>
+          <div class='col-md-6 platform-column'>
             <h4>Most Watched <%= platform_name(@platform_name) %> Projects</h4>
             <%= render @watched %>
           </div>
-        </div>
       <% end %>
-
+    </div>
   </div>
   <div class="col-md-4">
     <div class='row'>

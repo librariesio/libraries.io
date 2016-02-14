@@ -36,6 +36,11 @@ footer{
     position: absolute;
     bottom: 0;
   }
+  .platform-column{
+    min-height: 640px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
