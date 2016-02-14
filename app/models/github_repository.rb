@@ -24,7 +24,7 @@ class GithubRepository < ActiveRecord::Base
   validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
 
   after_commit :update_all_info_async, on: :create
-  # after_save :touch_projects
+  after_save :touch_projects
 
   scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
