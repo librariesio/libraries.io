@@ -17,6 +17,8 @@ module Repositories
       name = project.name
       platform = project.platform
       case platform
+      when 'Inqlude'
+        "https://inqlude.org/libraries/#{name}.html"
       when 'Hex'
         "https://hex.pm/packages/#{name}/#{version}"
       when 'Dub'

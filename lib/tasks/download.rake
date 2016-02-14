@@ -81,6 +81,10 @@ namespace :download do
     Repositories::Hex.import
   end
 
+  task inqlude: :environment do
+    Repositories::Inqlude.import
+  end
+
   task jam: :environment do
     Repositories::Jam.import_async
   end

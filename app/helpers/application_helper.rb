@@ -83,6 +83,8 @@ module ApplicationHelper
       "elm-package install #{name} #{version}"
     when 'PlatformIO'
       "platformio lib install #{project.pm_id}"
+    when 'Inqlude'
+      "inqlude install #{name}"
     end
   end
 
