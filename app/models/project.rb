@@ -214,7 +214,7 @@ class Project < ActiveRecord::Base
   end
 
   def destroy_versions
-    versions.each(&:destroy)
+    versions.find_each(&:destroy)
   end
 
   def stars
