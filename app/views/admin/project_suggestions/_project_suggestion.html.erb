@@ -3,6 +3,7 @@
   <%= link_to project_suggestion.project, project_path(project_suggestion.project.to_param) %>
   <small>
     By <%= link_to project_suggestion.user, user_path(project_suggestion.user.nickname) %>
+    <%= time_ago_in_words project_suggestion.created_at %> ago
   </small>
 </h3>
 <% if project_suggestion.repository_url.present? && project_suggestion.repository_url != project_suggestion.project.repository_url %>
