@@ -81,6 +81,14 @@ namespace :download do
     Repositories::Hex.import
   end
 
+  task homebrew: :environment do
+    Repositories::Homebrew.import_recent_async
+  end
+
+  task homebrew_all: :environment do
+    Repositories::Homebrew.import_async
+  end
+
   task inqlude: :environment do
     Repositories::Inqlude.import
   end
