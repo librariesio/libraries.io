@@ -286,7 +286,7 @@ class GithubRepository < ActiveRecord::Base
 
   def self.extract_github_io_name(url)
     return nil if url.nil?
-    match = url.match(/\/([\w\.@\:-~]+).github.io\/([\w\.@\:-~]+)/i)
+    match = url.match(/\/([\w\.@\:\-_~]+).github.io\/([\w\.@\:\-\_\~]+)/i)
     return nil unless match && match.length == 3
     "#{match[1]}/#{match[2]}"
   end
