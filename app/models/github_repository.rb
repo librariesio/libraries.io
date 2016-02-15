@@ -266,7 +266,7 @@ class GithubRepository < ActiveRecord::Base
 
   def self.extract_full_name(url)
     return nil if url.nil?
-    github_regex = /(git\+)?(((https|http|git|ssh)?:\/\/(www\.)?)|ssh:\/\/git@|https:\/\/git@|scm:git:git@|git@)(github.com|raw.githubusercontent.com)(:|\/)/i
+    github_regex = /(git\+)?(((https|http|git|ssh)?:\/\/(www\.)?(wiki\.)?)|ssh:\/\/git@|https:\/\/git@|scm:git:git@|git@)(github.com|raw.githubusercontent.com)(:|\/)/i
     if !url.match(github_regex)
       return extract_github_io_name(url)
     end
