@@ -49,7 +49,7 @@ SitemapGenerator::Sitemap.create do
   end
 
   puts "Generating Orgs"
-  GithubOrganisation.find_each do |org|
+  GithubOrganisation.visible.find_each do |org|
     add user_path(org), :lastmod => org.updated_at
     add user_repositories_path(org), :lastmod => org.updated_at
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160210192845) do
+ActiveRecord::Schema.define(version: 20160216203601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,12 +87,14 @@ ActiveRecord::Schema.define(version: 20160210192845) do
     t.string   "email"
     t.string   "location"
     t.string   "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "hidden",      default: false
   end
 
   add_index "github_organisations", ["created_at"], name: "index_github_organisations_on_created_at", using: :btree
   add_index "github_organisations", ["github_id"], name: "index_github_organisations_on_github_id", unique: true, using: :btree
+  add_index "github_organisations", ["hidden"], name: "index_github_organisations_on_hidden", using: :btree
   add_index "github_organisations", ["login"], name: "index_github_organisations_on_login", using: :btree
 
   create_table "github_repositories", force: :cascade do |t|

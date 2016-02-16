@@ -16,6 +16,7 @@ class GithubOrganisation < ActiveRecord::Base
   scope :most_repos, -> { joins(:open_source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('repo_count DESC') }
   scope :most_stars, -> { joins(:open_source_github_repositories).select('github_organisations.*, sum(github_repositories.stargazers_count) AS star_count, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('star_count DESC') }
   scope :newest, -> { joins(:open_source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('created_at DESC').having('count(github_repositories.id) > 0') }
+  scope :visible, -> { where(hidden: false) }
 
   def github_contributions
     GithubContribution.none
