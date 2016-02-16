@@ -190,8 +190,8 @@ module Repositories
     def self.repo_fallback(repo, homepage)
       repo = '' if repo.nil?
       homepage = '' if homepage.nil?
-      repo_gh = GithubRepository.extract_full_name(repo)
-      homepage_gh = GithubRepository.extract_full_name(homepage)
+      repo_gh = GithubUrls.parse(repo)
+      homepage_gh = GithubUrls.parse(homepage)
       if repo_gh.present?
         return "https://github.com/#{repo_gh}"
       elsif homepage_gh.present?

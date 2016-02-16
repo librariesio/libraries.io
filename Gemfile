@@ -63,6 +63,7 @@ gem 'semantic_range'
 gem 'rack-throttle'
 gem 'license-compatibility'
 gem 'escape_utils'
+gem 'github_urls'
 
 group :development do
   gem 'bundler'
