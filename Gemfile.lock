@@ -325,7 +325,7 @@ GEM
     pg_array_parser (0.0.9)
     platform-api (0.5.0)
       heroics
-    postgres_ext (2.4.1)
+    postgres_ext (3.0.0)
       activerecord (>= 4.0.0)
       arel (>= 4.0.1)
       pg_array_parser (~> 0.0.9)
