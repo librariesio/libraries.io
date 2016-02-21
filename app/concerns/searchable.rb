@@ -75,7 +75,7 @@ module Searchable
             },
             field_value_factor: {
               field: "rank",
-              "modifier": "log2p"
+              "modifier": "square"
             }
           }
         },
