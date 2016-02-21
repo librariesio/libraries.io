@@ -267,7 +267,7 @@ module ApplicationHelper
 
   def source_rank_explainations
     {
-      basic_info_present:         'Description, homepage/repository links and keywords present?',
+      basic_info_present:         'Description, homepage/repository link and keywords present?',
       versions_present:           'Has the project had more than one release?',
       follows_semver:             'Every version has a valid SemVer number',
       recent_release:             'Within the past 6 months?',
