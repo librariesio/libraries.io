@@ -269,7 +269,7 @@ module ApplicationHelper
     {
       basic_info_present:         'Description, homepage/repository links and keywords present?',
       versions_present:           'Has the project had more than one release?',
-      follows_semver:             'http://semver.org',
+      follows_semver:             'Every version has a valid SemVer number',
       recent_release:             'Within the past 6 months?',
       not_brand_new:              'Existed for at least 6 months',
       is_deprecated:              'Marked as deprecated by the maintainer',
