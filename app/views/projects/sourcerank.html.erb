@@ -6,28 +6,32 @@
   </div>
 </div>
 <hr>
+
 <div class="row">
-  <div class="col-md-8">
-    <ul class="list-group">
-      <% @breakdown.each do |key, value| %>
-        <li class="list-group-item">
-          <span class="badge <%= source_rank_badge_class(value) %>">
-            <%= value %>
+  <% cache(['SourceRank', project]) do  %>
+    <% @breakdown = @project.source_rank_breakdown %>
+    <div class="col-md-8">
+      <ul class="list-group">
+        <% @breakdown.each do |key, value| %>
+          <li class="list-group-item">
+            <span class="badge <%= source_rank_badge_class(value) %>">
+              <%= value %>
+            </span>
+            <%= source_rank_titles[key] || key %>
+            <% if source_rank_explainations[key].present? %>
+            &nbsp;<small class='text-muted'><%= fa_icon('question-circle', title: source_rank_explainations[key], class: 'tip') %></small>
+            <% end %>
+          </li>
+        <% end %>
+        <li class='list-group-item'>
+          <span class='badge alert-info'>
+            <%= @breakdown.values.sum > 0 ? @breakdown.values.sum : 0 %>
           </span>
-          <%= source_rank_titles[key] || key %>
-          <% if source_rank_explainations[key].present? %>
-          &nbsp;<small class='text-muted'><%= fa_icon('question-circle', title: source_rank_explainations[key], class: 'tip') %></small>
-          <% end %>
+          <strong>Total</strong>
         </li>
-      <% end %>
-      <li class='list-group-item'>
-        <span class='badge alert-info'>
-          <%= @breakdown.values.sum > 0 ? @breakdown.values.sum : 0 %>
-        </span>
-        <strong>Total</strong>
-      </li>
-    </ul>
-  </div>
+      </ul>
+    </div>
+  <% end %>
   <div class="col-md-4">
     <h3>
       <strong>

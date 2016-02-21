@@ -99,7 +99,6 @@ class ProjectsController < ApplicationController
 
   def sourcerank
     find_project
-    @breakdown = @project.source_rank_breakdown
   end
 
   def about
