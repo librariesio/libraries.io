@@ -84,6 +84,30 @@ module SourceRank
     return r
   end
 
+  def source_rank_breakdown
+    {
+      basic_info_present:         basic_info_present? ? 1 : 0,
+      repository_present:         repository_present? ? 1 : 0,
+      readme_present:             readme_present? ? 1 : 0,
+      license_present:            license_present? ? 1 : 0,
+      versions_present:           versions_present? ? 1 : 0,
+      follows_semver:             follows_semver? ? 1 : 0,
+      recent_release:             recent_release? ? 1 : 0,
+      not_brand_new:              not_brand_new? ? 1 : 0,
+      one_point_oh:               one_point_oh? ? 1 : 0,
+      dependent_projects:         log_scale(dependents_count) * 2,
+      dependent_repositories:     log_scale(dependent_repositories.open_source.length),
+      github_stars:               log_scale(stars),
+      contributors:               (log_scale(github_contributions.length) / 2.0).ceil,
+      subscribers:                (log_scale(subscriptions.length) / 2.0).ceil,
+      is_deprecated:              is_deprecated? ? -5 : 0,
+      is_unmaintained:            is_unmaintained? ? -5 : 0,
+      is_removed:                 is_removed? ? -5 : 0,
+      any_outdated_dependencies:  any_outdated_dependencies? ? -1 : 0,
+      all_prereleases:            all_prereleases? ? -2 : 0
+    }
+  end
+
   def basic_info_present?
     [description.presence, homepage.presence, repository_url.presence, keywords_array.presence].compact.length > 1
   end

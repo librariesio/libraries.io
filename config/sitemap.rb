@@ -15,6 +15,7 @@ SitemapGenerator::Sitemap.create do
   puts "Generating Projects"
   Project.not_removed.find_each do |project|
     add project_path(project.to_param), :lastmod => project.updated_at
+    add project_sourcerank_path(project.to_param), :lastmod => project.updated_at
     add project_dependents_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
     add project_dependent_repos_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
     add project_versions_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4

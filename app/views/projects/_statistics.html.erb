@@ -6,7 +6,7 @@
         SourceRank
       </td>
       <td>
-        <strong><%= @project.rank %></strong>
+        <strong><%= link_to @project.rank, project_sourcerank_path(@project.to_param) %></strong>
       </td>
     </tr>
     <% if @project.can_have_dependencies? %>

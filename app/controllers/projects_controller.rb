@@ -97,6 +97,11 @@ class ProjectsController < ApplicationController
     @contributors = @project.contributors.order('count DESC').visible.limit(20)
   end
 
+  def sourcerank
+    find_project
+    @breakdown = @project.source_rank_breakdown
+  end
+
   def about
     find_project
     find_version
