@@ -113,9 +113,14 @@
     <% end %>
 
     <% if link = documentation_url(@project.name, @project.platform, @version.try(:number) || @project.latest_version ) %>
-    <p>
-      Documentation: <%= link_to truncate(link, length: 70), link %>
-    </p>
+      <p>
+        Documentation: <%= link_to truncate(link, length: 70), link %>
+      </p>
+    <% elsif @project.platform.downcase == 'bower' && @project.language.try(:downcase) == 'purescript' %>
+      <% link = "https://pursuit.purescript.org/packages/#{@project.name}" %>
+      <p>
+        Documentation: <%= link_to truncate(link, length: 70), link %>
+      </p>
     <% end %>
 
     <% if install_instructions(@project, @project.platform, @version.try(:number)) %>
