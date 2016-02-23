@@ -3,7 +3,7 @@ class AuthToken < ActiveRecord::Base
     if @auth_token && @auth_token.high_rate_limit?
       return @auth_token.github_client
     end
-    auth_token = limit(500).sample
+    auth_token = order("RANDOM()").limit(100).sample
     if auth_token.high_rate_limit?
       @auth_token = auth_token
       return auth_token.github_client
