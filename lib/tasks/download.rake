@@ -17,10 +17,6 @@ namespace :download do
     Repositories::Atom.import_async
   end
 
-  task biicode: :environment do
-    Repositories::Biicode.import_async
-  end
-
   task bower: :environment do
     Repositories::Bower.import_new_async
   end

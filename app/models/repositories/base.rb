@@ -49,8 +49,6 @@ module Repositories
         "https://wordpress.org/plugins/#{name}/#{version}"
       when 'NuGet'
         "https://www.nuget.org/packages/#{name}/#{version}"
-      when 'Biicode'
-        "https://www.biicode.com/#{name}/#{version}"
       when 'CPAN'
         "https://metacpan.org/release/#{name}"
       when 'CRAN'

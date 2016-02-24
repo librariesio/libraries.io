@@ -123,8 +123,6 @@ module ApplicationHelper
   def platform_name(platform)
     if platform.downcase == 'npm'
       return 'npm'
-    elsif platform.downcase == 'biicode'
-      return 'biicode'
     elsif platform.downcase == 'wordpress'
       return 'WordPress'
     else
