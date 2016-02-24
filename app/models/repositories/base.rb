@@ -4,6 +4,7 @@ module Repositories
     LIBRARIAN_SUPPORT = false
     LIBRARIAN_PLANNED = false
     SECURITY_PLANNED = false
+    HIDDEN = false
 
     def self.color
       self::COLOR

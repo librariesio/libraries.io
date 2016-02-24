@@ -3,6 +3,7 @@ class Download
     @platforms ||= Repositories.constants
       .reject { |platform| platform == :Base }
       .map{|sym| "Repositories::#{sym}".constantize }
+      .reject { |platform| platform::HIDDEN }
       .sort_by(&:name)
   end
 

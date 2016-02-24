@@ -281,7 +281,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.popular_platforms(options = {})
-    facets(options)[:platforms][:terms]
+    facets(options)[:platforms][:terms].reject{ |t| t.term.downcase == 'biicode' }
   end
 
   def self.popular_keywords(options = {})
