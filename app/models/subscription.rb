@@ -8,6 +8,7 @@ class Subscription < ActiveRecord::Base
 
   scope :with_user, -> { joins(:user) }
   scope :with_repository_subscription, -> { joins(:repository_subscription) }
+  scope :include_preleases, -> { where(include_prerelease: true) }
 
   def notification_user
     repository_subscription.try(:user) || user

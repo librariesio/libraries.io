@@ -41,7 +41,10 @@ class GithubTag < ActiveRecord::Base
 
   def notify_subscribers
     github_repository.projects.without_versions.each do |project|
-      project.subscriptions.group_by(&:notification_user).each do |user, subscriptions|
+      subscriptions = project.subscriptions
+      subscriptions = subscriptions.include_preleases if prerelease?
+
+      subscriptions.group_by(&:notification_user).each do |user, subscriptions|
         next if user.nil?
         next if user.muted?(project)
         VersionsMailer.new_version(user, project, self).deliver_later
