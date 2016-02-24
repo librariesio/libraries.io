@@ -10,6 +10,7 @@ module Repositories
       page = 1
       projects = []
       while true
+        sleep 1
         r = Repositories::Base.get("http://api.platformio.org/lib/search?page=#{page}")
         break if page > r['total'].to_f/r['perpage'].to_f
         projects += r['items']
@@ -19,6 +20,7 @@ module Repositories
     end
 
     def self.project(id)
+      sleep 1
       get("http://api.platformio.org/lib/info/#{id}")
     end
 
