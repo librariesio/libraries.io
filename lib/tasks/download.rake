@@ -121,7 +121,7 @@ namespace :download do
 
   task nuget: :environment do
     Repositories::NuGet.load_names(3)
-    Repositories::NuGet.import_async
+    Repositories::NuGet.import_recent_async
   end
 
   task nuget_all: :environment do

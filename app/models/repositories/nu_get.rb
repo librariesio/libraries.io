@@ -14,7 +14,6 @@ module Repositories
         package_ids = get_names(endpoint)
         package_ids.each { |id| REDIS.sadd 'nuget-names', id }
       end
-      puts "Loaded all the names"
     end
 
     def self.recent_names
