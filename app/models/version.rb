@@ -20,7 +20,7 @@ class Version < ActiveRecord::Base
 
   def notify_subscribers
     subscriptions = project.subscriptions
-    subscriptions = subscriptions.include_preleases if prerelease?
+    subscriptions = subscriptions.include_prereleases if prerelease?
 
     subscriptions.group_by(&:notification_user).each do |user, subscriptions|
       next if user.nil?

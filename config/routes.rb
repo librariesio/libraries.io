@@ -75,6 +75,7 @@ Rails.application.routes.draw do
   resources :languages
   resources :keywords, constraints: { :id => /.*/ }
   resources :subscriptions
+  resources :repository_subscriptions
   get '/subscribe/:project_id', to: 'subscriptions#subscribe', as: :subscribe
 
   get '/stats', to: redirect('/admin/stats')

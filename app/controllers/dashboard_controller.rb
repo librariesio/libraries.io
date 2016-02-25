@@ -53,4 +53,10 @@ class DashboardController < ApplicationController
     current_user.unsubscribe_from_repo(github_repository)
     redirect_to_back_or_default repositories_path
   end
+
+  private
+
+  def repository_subscription_params
+    params.require(:repository_subscription).permit(:include_prerelease)
+  end
 end

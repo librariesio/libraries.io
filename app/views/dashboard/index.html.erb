@@ -79,11 +79,14 @@
               <small><%= pluralize(github_repository.repository_dependencies.count, 'dependencies') %></small>
             </td>
             <td>
-              <% if current_user.subscribed_to_repo?(github_repository) %>
-                <%= button_to unwatch_path(github_repository.id), method: :post, class: 'tip btn btn-sm btn-success pull-right', title: 'Stop watching' do %>
-                  <%= fa_icon('check') %>
-                  Monitoring
-                <% end %>
+              <% if sub = current_user.subscribed_to_repo?(github_repository) %>
+                <div class="btn-group pull-right">
+                  <%= link_to unwatch_path(github_repository.id), method: :post, class: 'tip btn btn-sm btn-success', title: 'Stop watching' do %>
+                    <%= fa_icon('check') %>
+                    Monitoring
+                  <% end %>
+                  <%= link_to fa_icon('cog'), edit_repository_subscription_path(sub), class: 'btn btn-sm btn-success' %>
+                </div>
               <% else %>
                 <%= button_to watch_path(github_repository.id), method: :post, class: 'btn btn-sm btn-default  pull-right' do %>
                   <%= fa_icon('eye') %>

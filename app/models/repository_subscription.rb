@@ -3,6 +3,8 @@ class RepositorySubscription < ActiveRecord::Base
   belongs_to :github_repository
   has_many :subscriptions
 
+  after_commit :update_subscriptions, on: :update
+
   def update_subscriptions
     projects = []
     github_repository.repository_dependencies.each do |dep|
@@ -19,7 +21,8 @@ class RepositorySubscription < ActiveRecord::Base
 
     subscriptions.where(project_id: (existing - projects)).delete_all
     (projects - existing).each do |project_id|
-      subscriptions.create(project_id: project_id)
+      subscriptions.create(project_id: project_id, include_prerelease: include_prerelease)
     end
+    subscriptions.update_all(include_prerelease: include_prerelease)
   end
 end
