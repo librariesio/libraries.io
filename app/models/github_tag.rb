@@ -42,7 +42,7 @@ class GithubTag < ActiveRecord::Base
   def notify_subscribers
     github_repository.projects.without_versions.each do |project|
       subscriptions = project.subscriptions
-      subscriptions = subscriptions.include_prerelease if prerelease?
+      subscriptions = subscriptions.include_prereleases if prerelease?
 
       subscriptions.group_by(&:notification_user).each do |user, subscriptions|
         next if user.nil?
