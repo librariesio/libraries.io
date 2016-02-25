@@ -221,7 +221,7 @@ GEM
     fuzzy_match (2.1.0)
     gemoji (2.1.0)
     gems (0.8.3)
-    github_urls (0.2.0)
+    github_urls (0.2.1)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     google-api-client (0.8.6)
