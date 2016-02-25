@@ -11,6 +11,23 @@
     <h5><small>Last updated <%= time_ago_in_words(subscription.project.latest_release_published_at) %> ago</small></h5>
   </td>
   <td>
-    <%= link_to 'Stop watching', subscription_path(subscription), method: :delete, class: 'btn btn-default pull-right' %>
+    <div class="btn-group">
+      <span class='btn btn-success'>Subscribed to <%= 'stable' unless subscription.include_prerelease? %> releases</span>
+      <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <%= form_for subscription do |form| %>
+            <label class='include_prerelease'><%= form.check_box :include_prerelease %> &nbsp;Include prereleases</label>
+          <% end %>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li>
+          <%= link_to 'Unsubscribe from updates', subscription_path(subscription), class: 'text-danger', method: :delete %>
+        </li>
+      </ul>
+    </div>
   </td>
 </tr>

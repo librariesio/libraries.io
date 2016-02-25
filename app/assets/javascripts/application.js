@@ -33,6 +33,6 @@ $('#welcome-alert').on('closed.bs.alert', function() {
   Cookies.set('hide_welcome_alert', 'true');
 });
 
-$('#subscription_include_prerelease').on('change',function(){
-  $('.edit_subscription').submit();
+$('input[name="subscription[include_prerelease]"]').on('change',function(){
+  $(this).parents('form').submit();
 });
