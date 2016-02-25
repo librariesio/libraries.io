@@ -512,6 +512,7 @@ DEPENDENCIES
   languages
   license-compatibility
   lograge
+  mail
   mime-types (~> 2.6.1)
   newrelic_rpm
   nokogiri

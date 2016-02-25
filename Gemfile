@@ -64,6 +64,7 @@ gem 'rack-throttle'
 gem 'license-compatibility'
 gem 'escape_utils'
 gem 'github_urls'
+gem 'mail', require: ['mail', 'mail/utilities', 'mail/parsers']
 
 group :development do
   gem 'bundler'
