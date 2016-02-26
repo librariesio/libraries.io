@@ -25,6 +25,10 @@ namespace :download do
     Repositories::Cargo.import_async
   end
 
+  task carthage: :environment do
+    Repositories::Carthage.import_async
+  end
+
   task clojars: :environment do
     Repositories::Clojars.import_async
   end
