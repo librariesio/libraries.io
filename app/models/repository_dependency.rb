@@ -13,7 +13,7 @@ class RepositoryDependency < ActiveRecord::Base
   end
 
   def find_project_id
-    Project.platform(platform).where('lower(name) = ?', project_name.try(:downcase).strip).limit(1).pluck(:id).first
+    Project.platform(platform).where('lower(name) = ?', project_name.try(:downcase).try(:strip)).limit(1).pluck(:id).first
   end
 
   def incompatible_license?
