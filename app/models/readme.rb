@@ -43,7 +43,7 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     doc.xpath('//a').each do |d|
       rel_url = d.get_attribute('href')
       begin
-        if rel_url.present? && URI.parse(rel_url)
+        if rel_url.present? && !rel_url.match(/^#/) && URI.parse(rel_url) 
           d.set_attribute('href', URI.join(github_repository.blob_url, rel_url))
         end
       rescue NoMethodError, URI::InvalidURIError, URI::InvalidComponentError
