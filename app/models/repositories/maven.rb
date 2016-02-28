@@ -2,7 +2,8 @@ module Repositories
   class Maven < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    LIBRARIAN_PLANNED = true
+    LIBRARIAN_SUPPORT = true
+    SECURITY_PLANNED = true
     URL = "http://maven.org"
     BASE_URL = "https://maven-repository.com"
     COLOR = '#b07219'
