@@ -243,6 +243,7 @@ class GithubRepository < ActiveRecord::Base
     download_manifests(token)
     download_owner
     download_fork_source(token)
+    touch_projects
     # download_forks_async(token) unless fork?
   end
 
