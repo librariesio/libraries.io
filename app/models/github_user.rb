@@ -10,7 +10,7 @@ class GithubUser < ActiveRecord::Base
   validates :login, uniqueness: true, if: lambda { self.login_changed? }
   validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
 
-  # after_commit :download_orgs, :download_repos, on: :create
+  after_commit :async_sync, on: :create
 
   scope :visible, -> { where(hidden: false) }
 
@@ -50,6 +50,17 @@ class GithubUser < ActiveRecord::Base
 
   def github_client
     AuthToken.client
+  end
+
+  def async_sync
+    GithubUpdateUserWorker.perform_async(self.login)
+  end
+
+  def sync
+    download_from_github
+    download_orgs
+    download_repos
+    update_attributes(last_synced_at: Time.now)
   end
 
   def download_from_github

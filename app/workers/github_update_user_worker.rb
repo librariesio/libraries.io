@@ -5,11 +5,6 @@ class GithubUpdateUserWorker
 
   def perform(login)
     user = GithubUser.find_by_login(login)
-    if user
-      user.download_from_github
-      user.download_orgs
-      user.download_repos
-      user.touch
-    end
+    user.sync if user
   end
 end

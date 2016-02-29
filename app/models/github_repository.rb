@@ -95,12 +95,10 @@ class GithubRepository < ActiveRecord::Base
         save
       end
     else
-      user = GithubUser.find_or_create_by(github_id: o.id) do |u|
+      GithubUser.find_or_create_by(github_id: o.id) do |u|
         u.login = o.login
         u.user_type = o.type
       end
-      user.download_from_github
-      user
     end
   rescue Octokit::RepositoryUnavailable, Octokit::InvalidRepository, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
