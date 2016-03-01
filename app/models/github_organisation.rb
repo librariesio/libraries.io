@@ -96,7 +96,7 @@ class GithubOrganisation < ActiveRecord::Base
   end
 
   def download_from_github
-    update_attributes(github_client.org(github_id).to_hash.slice(:login, :name, :company, :blog, :location, :description))
+    update_attributes(github_client.org(github_id).to_hash.slice(:login, :name, :email, :blog, :location, :description))
   rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
     nil
   end
