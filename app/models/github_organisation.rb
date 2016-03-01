@@ -11,7 +11,7 @@ class GithubOrganisation < ActiveRecord::Base
   validates :login, uniqueness: true, if: lambda { self.login_changed? }
   validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
 
-  after_commit :download_repos, on: :create
+  after_commit :async_sync, on: :create
 
   scope :most_repos, -> { joins(:open_source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('repo_count DESC') }
   scope :most_stars, -> { joins(:open_source_github_repositories).select('github_organisations.*, sum(github_repositories.stargazers_count) AS star_count, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('star_count DESC') }
@@ -79,6 +79,22 @@ class GithubOrganisation < ActiveRecord::Base
       p e
       false
     end
+  end
+
+  def async_sync
+    GithubUpdateOrgWorker.perform_async(self.login)
+  end
+
+  def sync
+    download_from_github
+    download_repos
+    update_attributes(last_synced_at: Time.now)
+  end
+
+  def download_from_github
+    update_attributes(github_client.org(github_id).to_hash.slice(:login, :name, :company, :blog, :location, :description))
+  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    nil
   end
 
   def download_repos
