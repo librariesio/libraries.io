@@ -66,6 +66,10 @@ class GithubOrganisation < ActiveRecord::Base
     nil
   end
 
+  def github_client
+    AuthToken.client
+  end
+
   def self.create_from_github(login_or_id)
     begin
       r = AuthToken.client.org(login_or_id).to_hash
@@ -98,7 +102,7 @@ class GithubOrganisation < ActiveRecord::Base
   end
 
   def download_repos
-    AuthToken.client.org_repos(login).each do |repo|
+    github_client.org_repos(login).each do |repo|
       GithubCreateWorker.perform_async(repo.full_name)
     end
   rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
