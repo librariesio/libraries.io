@@ -87,7 +87,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_owner
-    return true if github_user.present? || github_organisation.present?
+    # return true if github_user.present? || github_organisation.present?
     o = github_client.user(owner_name)
     if o.type == "Organization"
       if go = GithubOrganisation.create_from_github(owner_id.to_i)
