@@ -3,7 +3,7 @@ namespace :download do
     Download.new_github_repos
   end
 
-  task small_registries: [:emacs, :hackage, :sublime, :inqlude]
+  task small_registries: [:emacs, :hackage, :sublime, :inqlude, :shards]
 
   task alcatraz: :environment do
     Repositories::Alcatraz.import_async
@@ -168,6 +168,11 @@ namespace :download do
   task rubygems_all: :environment do
     Repositories::Rubygems.import_async
   end
+
+  task shards: :environment do
+    Repositories::Shards.import_async
+  end
+
 
   task sublime: :environment do
     Repositories::Sublime.import_async

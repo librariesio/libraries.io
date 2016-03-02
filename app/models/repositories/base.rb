@@ -77,6 +77,8 @@ module Repositories
         "http://platformio.org/#!/lib/show/#{project.pm_id}/#{name}"
       when 'Homebrew'
         "http://brewformulas.org/#{name}"
+      when 'Shards'
+        "https://crystal-shards-registry.herokuapp.com/shards/#{name}"
       end
     end
 
