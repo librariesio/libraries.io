@@ -4,7 +4,7 @@ class DashboardController < ApplicationController
   def index
     @orgs = current_user.adminable_github_orgs.order(:login)
     @org = @orgs.find{|org| org.login == params[:org] }
-    @repos = current_user.adminable_github_repositories.order('fork ASC, pushed_at DESC').paginate(per_page: 30, page: params[:page])
+    @repos = current_user.adminable_github_repositories.order('fork ASC, pushed_at DESC').paginate(per_page: 30, page: page_number)
     if @org
       @repos = @repos.from_org(@org)
     else
@@ -17,7 +17,7 @@ class DashboardController < ApplicationController
       format.atom do
         if params[:api_key].present? && api_key = ApiKey.active.find_by_access_token(params[:api_key])
           @user = api_key.user
-          @versions = @user.all_subscribed_versions.where.not(project_id: @user.muted_project_ids).where.not(published_at: nil).newest_first.includes(:project).paginate(per_page: 100, page: params[:page])
+          @versions = @user.all_subscribed_versions.where.not(project_id: @user.muted_project_ids).where.not(published_at: nil).newest_first.includes(:project).paginate(per_page: 100, page: page_number)
         else
           raise ActiveRecord::RecordNotFound
         end
@@ -29,7 +29,7 @@ class DashboardController < ApplicationController
   end
 
   def muted
-    @projects = current_user.muted_projects.paginate(page: params[:page])
+    @projects = current_user.muted_projects.paginate(page: page_number)
   end
 
   def sync

@@ -25,6 +25,6 @@ class RecommendationsController < ApplicationController
     @languages = current_user.recommended_projects.pluck('language').compact.uniq
     @licenses = current_user.recommended_projects.pluck('normalized_licenses').compact.flatten.uniq
     @platforms = current_user.recommended_projects.pluck('platform').compact.uniq
-    @projects = scope.paginate(page: params[:page], per_page: 20)
+    @projects = scope.paginate(page: page_number, per_page: 20)
   end
 end

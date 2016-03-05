@@ -74,7 +74,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependents", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @project.dependent_projects.paginate(page: params[:page]).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate @project.dependent_projects.paginate(page: 1).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords], include: {versions: {only: [:number, :published_at]} }) %></pre>
     <% end %>
     <h3 id="project-dependent-repositories">Project Dependent Repositories</h3>
 
@@ -95,7 +95,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependent-repositories", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @project.dependent_repositories.paginate(page: params[:page]).as_json(except: [:id, :github_organisation_id, :owner_id]) %></pre>
+<%= JSON.pretty_generate @project.dependent_repositories.paginate(page: 1).as_json(except: [:id, :github_organisation_id, :owner_id]) %></pre>
     <% end %>
 
     <h3 id="project-search">Project Search</h3>
@@ -165,7 +165,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-github-repository-projects", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @github_repository.projects.paginate(page: params[:page]).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate @github_repository.projects.paginate(page: 1).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords], include: {versions: {only: [:number, :published_at]} }) %></pre>
     <% end %>
   </div>
   <div class="col-md-4">

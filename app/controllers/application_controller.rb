@@ -9,6 +9,20 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def page_number
+    @page_number = params[:page].to_i rescue 1
+    @page_number = 1 if @page_number < 2
+    raise ActiveRecord::RecordNotFound if @page_number > 100
+    @page_number
+  end
+
+  def per_page_number
+    @per_page_number = params[:per_page].to_i rescue 1
+    @per_page_number = 1 if @per_page_number < 2
+    raise ActiveRecord::RecordNotFound if @per_page_number > 100
+    @per_page_number
+  end
+
   def welcome_new_users
     if not logged_in? and not cookies[:hide_welcome_alert]
       flash.now[:show_welcome] = true # Actual content is at views/shared/_flash

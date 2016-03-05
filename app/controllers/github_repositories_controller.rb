@@ -26,7 +26,7 @@ class GithubRepositoriesController < ApplicationController
 
     orginal_scope = GithubRepository.maintained.open_source.where.not(pushed_at: nil).recently_created.where('stargazers_count > 0')
     scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
-    @repos = scope.hacker_news.paginate(page: params[:page])
+    @repos = scope.hacker_news.paginate(page: page_number)
 
     @languages = orginal_scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(40)
   end
@@ -36,7 +36,7 @@ class GithubRepositoriesController < ApplicationController
 
     orginal_scope = GithubRepository.maintained.open_source.source.where.not(pushed_at: nil)
     scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
-    @repos = scope.recently_created.order('created_at DESC').paginate(page: params[:page])
+    @repos = scope.recently_created.order('created_at DESC').paginate(page: page_number)
 
     @languages = orginal_scope.recently_created.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(40)
   end
@@ -52,12 +52,12 @@ class GithubRepositoriesController < ApplicationController
 
   def contributors
     load_repo
-    @contributors = @github_repository.contributors.order('count DESC').visible.paginate(page: params[:page])
+    @contributors = @github_repository.contributors.order('count DESC').visible.paginate(page: page_number)
   end
 
   def forks
     load_repo
-    @forks = @github_repository.forked_repositories.maintained.order('stargazers_count DESC').paginate(page: params[:page])
+    @forks = @github_repository.forked_repositories.maintained.order('stargazers_count DESC').paginate(page: page_number)
   end
 
   def load_repo

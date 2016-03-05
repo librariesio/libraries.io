@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
   def repositories
     find_user
-    @repositories = @user.github_repositories.open_source.source.order('stargazers_count DESC').paginate(page: params[:page])
+    @repositories = @user.github_repositories.open_source.source.order('stargazers_count DESC').paginate(page: page_number)
   end
 
   def contributions
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
                           .where('github_repositories.fork = ?', false)
                           .where('github_repositories.private = ?', false)
                           .includes(:github_repository)
-                          .order('count DESC').paginate(page: params[:page])
+                          .order('count DESC').paginate(page: page_number)
   end
 
   private

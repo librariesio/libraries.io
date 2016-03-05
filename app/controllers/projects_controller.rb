@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   def index
     if current_user
       muted_ids = params[:include_muted].present? ? [] : current_user.muted_project_ids
-      @versions = current_user.all_subscribed_versions.where.not(project_id: muted_ids).where.not(published_at: nil).newest_first.includes(:project).paginate(per_page: 20, page: params[:page])
+      @versions = current_user.all_subscribed_versions.where.not(project_id: muted_ids).where.not(published_at: nil).newest_first.includes(:project).paginate(per_page: 20, page: page_number)
       @projects = current_user.recommended_projects.limit(7)
       render 'dashboard/home'
     else
@@ -27,7 +27,7 @@ class ProjectsController < ApplicationController
     end
 
     @languages = Project.bus_factor.group('projects.language').count.sort_by(&:last).reverse.first(20)
-    @projects = scope.bus_factor.order('github_repositories.github_contributions_count ASC, projects.rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+    @projects = scope.bus_factor.order('github_repositories.github_contributions_count ASC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def unlicensed
@@ -41,7 +41,7 @@ class ProjectsController < ApplicationController
 
     @platforms = Project.unlicensed.group('platform').count.sort_by(&:last).reverse
     order = params[:newest] ? 'projects.created_at DESC' : 'dependents_count DESC, rank DESC, projects.created_at DESC'
-    @projects = scope.unlicensed.order(order).paginate(page: params[:page], per_page: 20)
+    @projects = scope.unlicensed.order(order).paginate(page: page_number, per_page: 20)
   end
 
   def deprecated
@@ -54,7 +54,7 @@ class ProjectsController < ApplicationController
     end
 
     @platforms = Project.deprecated.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.deprecated.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+    @projects = scope.deprecated.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def removed
@@ -67,7 +67,7 @@ class ProjectsController < ApplicationController
     end
 
     @platforms = Project.removed.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.removed.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+    @projects = scope.removed.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def unmaintained
@@ -80,7 +80,7 @@ class ProjectsController < ApplicationController
     end
 
     @platforms = Project.unmaintained.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.unmaintained.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: params[:page], per_page: 20)
+    @projects = scope.unmaintained.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def show
@@ -109,20 +109,19 @@ class ProjectsController < ApplicationController
 
   def dependents
     find_project
-    page = params[:page].to_i > 0 ? params[:page].to_i : 1
     @dependents = WillPaginate::Collection.create(page, 30, @project.dependents_count) do |pager|
-      pager.replace(@project.dependent_projects(page: page))
+      pager.replace(@project.dependent_projects(page: page_number))
     end
   end
 
   def dependent_repos
     find_project
-    @dependent_repos = @project.dependent_repositories.open_source.paginate(page: params[:page])
+    @dependent_repos = @project.dependent_repositories.open_source.paginate(page: page_number)
   end
 
   def your_dependent_repos
     find_project
-    @dependent_repos = current_user.your_dependent_repos(@project).paginate(page: params[:page])
+    @dependent_repos = current_user.your_dependent_repos(@project).paginate(page: page_number)
   end
 
   def versions
@@ -130,7 +129,7 @@ class ProjectsController < ApplicationController
     if incorrect_case?
       return redirect_to(project_versions_path(@project.to_param), :status => :moved_permanently)
     else
-      @versions = @project.versions.newest_first.paginate(page: params[:page])
+      @versions = @project.versions.newest_first.paginate(page: page_number)
       respond_to do |format|
         format.html
         format.atom
@@ -146,7 +145,7 @@ class ProjectsController < ApplicationController
       if @project.github_repository.nil?
         @tags = []
       else
-        @tags = @project.github_tags.published.order('published_at DESC').paginate(page: params[:page])
+        @tags = @project.github_tags.published.order('published_at DESC').paginate(page: page_number)
       end
       respond_to do |format|
         format.html
