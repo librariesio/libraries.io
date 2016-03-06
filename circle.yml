@@ -1,0 +1,5 @@
+machine:
+  services:
+    - elasticsearch
+    - redis
+    - postgresql
