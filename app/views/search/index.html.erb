@@ -36,7 +36,7 @@
         <small>
           <%= page_entries_info @search, model: 'project' %>
           -
-          <%= link_to url_for(params.merge(format: :atom, sort: 'created_at', order: 'desc')) do %>
+          <%= link_to url_for(params.merge(format: :atom, sort: 'created_at', order: 'desc')), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
             Subscribe to an RSS feed of this search
           <% end %>
