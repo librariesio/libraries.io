@@ -40,6 +40,13 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.around :each, elasticsearch: true do |example|
+    Project.__elasticsearch__.create_index!(force: true)
+    Project.__elasticsearch__.refresh_index!
+    example.run
+    Project.__elasticsearch__.client.indices.delete index: Project.index_name
+  end
+
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
 =begin
