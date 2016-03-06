@@ -40,11 +40,12 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-  config.around :each, elasticsearch: true do |example|
-    Project.__elasticsearch__.create_index!(force: true)
-    Project.__elasticsearch__.refresh_index!
-    example.run
-    Project.__elasticsearch__.client.indices.delete index: Project.index_name
+  config.before :each, elasticsearch: true do
+    Elasticsearch::Extensions::Test::Cluster.start(port: 9200, nodes: 1) unless Elasticsearch::Extensions::Test::Cluster.running?
+  end
+
+  config.after :suite do
+    Elasticsearch::Extensions::Test::Cluster.stop(port: 9200, nodes: 1) if Elasticsearch::Extensions::Test::Cluster.running?
   end
 
 # The settings below are suggested to provide a good initial experience

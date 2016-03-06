@@ -81,6 +81,7 @@ end
 group :test do
   gem 'factory_girl'
   gem 'database_cleaner'
+  gem 'elasticsearch-extensions'
 end
 
 group :production do
