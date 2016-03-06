@@ -2,7 +2,8 @@ class GithubUser < ActiveRecord::Base
   has_many :github_contributions, dependent: :delete_all
   has_many :github_repositories, primary_key: :github_id, foreign_key: :owner_id
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
-  has_many :dependencies, through: :source_github_repositories
+  has_many :open_source_github_repositories, -> { where fork: false, private: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
+  has_many :dependencies, through: :open_source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :contributed_repositories, -> { GithubRepository.source.open_source }, through: :github_contributions, source: :github_repository
   has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('github_users.id').order("COUNT(github_users.id) DESC") }, through: :contributed_repositories, source: :contributors
@@ -19,7 +20,7 @@ class GithubUser < ActiveRecord::Base
   end
 
   def top_favourite_project_ids
-    Rails.cache.fetch "user:#{self.id}:top_favourite_project_ids", :expires_in => 1.week do
+    Rails.cache.fetch "user:#{self.id}:top_favourite_project_ids:v2", :expires_in => 1.week do
       favourite_projects.limit(10).pluck(:id)
     end
   end
