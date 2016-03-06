@@ -33,7 +33,7 @@ module Repositories
         :homepage => project[:info].fetch('URL:', '').split(',').first,
         :description => project[:html].css('h2').text.split(':')[1..-1].join(':').strip,
         :licenses => project[:info]['License:'],
-        :repository_url => repo_fallback('', (project[:info]['URL:'] || project[:info]['BugReports:']))
+        :repository_url => repo_fallback('', (project[:info].fetch('URL:', '').split(',').first.presence || project[:info]['BugReports:']))
       }
     end
 
