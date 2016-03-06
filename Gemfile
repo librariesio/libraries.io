@@ -71,6 +71,7 @@ group :development do
   gem 'spring'
   gem 'quiet_assets'
   gem 'sql_queries_count'
+  gem 'brakeman', :require => false
 end
 
 group :development, :test do
