@@ -17,8 +17,8 @@ class ApplicationController < ActionController::Base
   end
 
   def per_page_number
-    @per_page_number = params[:per_page].to_i rescue 1
-    @per_page_number = 1 if @per_page_number < 2
+    @per_page_number = params[:per_page].to_i rescue 30
+    @per_page_number = 30 if @per_page_number < 1
     raise ActiveRecord::RecordNotFound if @per_page_number > 100
     @per_page_number
   end
