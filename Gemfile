@@ -81,6 +81,7 @@ end
 group :test do
   gem 'factory_girl_rails'
   gem 'database_cleaner'
+  gem 'rspec_junit_formatter', '0.2.2'
 end
 
 group :production do

@@ -394,6 +394,9 @@ GEM
       rspec-mocks (~> 3.4.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
+    rspec_junit_formatter (0.2.2)
+      builder (< 4)
+      rspec-core (>= 2, < 4, != 2.12.0)
     ruby2ruby (2.3.0)
       ruby_parser (~> 3.1)
       sexp_processor (~> 4.0)
@@ -547,6 +550,7 @@ DEPENDENCIES
   rb-readline
   redis
   rspec-rails (~> 3.0)
+  rspec_junit_formatter (= 0.2.2)
   sanitize-url
   sass-rails
   sassc-rails
