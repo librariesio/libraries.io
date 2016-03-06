@@ -57,7 +57,7 @@
       <%= render @favourite_projects %>
     </div>
   <% end %>
-  <% if @user.org? %>
+  <% if @user.org? && @user.top_contributors.any? %>
     <div class="col-md-4">
       <h4>Top Contributors</h4>
       <%= render @user.top_contributors %>
