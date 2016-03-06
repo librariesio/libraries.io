@@ -79,9 +79,8 @@ group :development, :test do
 end
 
 group :test do
-  gem 'factory_girl'
+  gem 'factory_girl_rails'
   gem 'database_cleaner'
-  gem 'elasticsearch-extensions'
 end
 
 group :production do

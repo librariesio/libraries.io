@@ -42,7 +42,6 @@ GEM
     after_commit_action (1.0.1)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-    ansi (1.5.0)
     arel (6.0.3)
     autoprefixer-rails (6.3.3.1)
       execjs
@@ -84,9 +83,6 @@ GEM
       elasticsearch-transport (= 1.0.15)
     elasticsearch-api (1.0.15)
       multi_json
-    elasticsearch-extensions (0.0.20)
-      ansi
-      ruby-prof
     elasticsearch-model (0.1.8)
       activesupport (> 3)
       elasticsearch (> 0.4)
@@ -103,6 +99,9 @@ GEM
     execjs (2.6.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
+    factory_girl_rails (4.6.0)
+      factory_girl (~> 4.5.0)
+      railties (>= 3.0.0)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (1.2.2)
@@ -395,7 +394,6 @@ GEM
       rspec-mocks (~> 3.4.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
-    ruby-prof (0.15.9)
     ruby2ruby (2.3.0)
       ruby_parser (~> 3.1)
       sexp_processor (~> 4.0)
@@ -504,11 +502,10 @@ DEPENDENCIES
   dalli
   database_cleaner
   dotenv-rails
-  elasticsearch-extensions
   elasticsearch-model
   elasticsearch-rails
   escape_utils
-  factory_girl
+  factory_girl_rails
   faraday-http-cache
   fast_blank
   fast_xor
