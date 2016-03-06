@@ -30,7 +30,7 @@ module Repositories
     def self.mapping(project)
       {
         :name => project[:name],
-        :homepage => project[:info]['URL:'],
+        :homepage => project[:info].fetch('URL:', '').split(',').first,
         :description => project[:html].css('h2').text.split(':')[1..-1].join(':').strip,
         :licenses => project[:info]['License:'],
         :repository_url => repo_fallback('', (project[:info]['URL:'] || project[:info]['BugReports:']))
