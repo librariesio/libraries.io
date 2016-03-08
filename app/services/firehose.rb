@@ -4,6 +4,9 @@ class Firehose
       return unless Rails.env.production?
       Typhoeus::Request.new('http://libfirehose.herokuapp.com/events',
         method: :post,
+        params: {
+          api_key: ENV['FIREHOSE_KEY']
+        },
         body: Oj.dump({
           platform: platform,
           name: project.name,
