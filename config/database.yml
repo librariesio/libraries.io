@@ -84,3 +84,4 @@ production:
   username: libraries
   password: <%= ENV['LIBRARIES_DATABASE_PASSWORD'] %>
   pool: 20
+  prepared_statements: false
