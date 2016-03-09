@@ -15,6 +15,10 @@ class GithubUser < ActiveRecord::Base
 
   scope :visible, -> { where(hidden: false) }
 
+  def open_source_contributions
+    github_contributions.joins(:github_repository).where("github_repositories.fork = ? AND github_repositories.private = ?", false, false)
+  end
+
   def top_favourite_projects
     Project.where(id: top_favourite_project_ids).maintained.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
   end

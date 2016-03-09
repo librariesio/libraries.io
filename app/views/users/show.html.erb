@@ -9,10 +9,20 @@
       <%= @user %>
       <%= link_to fa_icon('github'), @user.github_url, class: 'tip', title: "View #{@user.login} on GitHub" %>
     </h1>
-    <% if @user.description.present? %>
-      <p>
-        <%= @user.description %>
-      </p>
+    <% if @user.org? %>
+      <% if @user.description.present? %>
+        <p>
+          <%= @user.description %>
+        </p>
+      <% end %>
+    <% else %>
+      <% count = @user.open_source_contributions.count %>
+      <% if count > 0 %>
+        <p>
+          <%= fa_icon 'code' %>
+          Tracking <%= number_to_human @user.open_source_contributions.sum(:count) %> commits to <%= number_to_human count %> open source projects
+        </p>
+      <% end %>
     <% end %>
   </div>
   <div class="col-md-6">
