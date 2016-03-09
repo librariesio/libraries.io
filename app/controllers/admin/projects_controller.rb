@@ -46,7 +46,7 @@ class Admin::ProjectsController < Admin::ApplicationController
     else
       repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%deprecated%'").pluck(:id)
       @projects = scope.where(github_repository_id: repo_ids).order('rank DESC, name DESC').paginate(page: params[:page])
-      if projects.any?
+      if @projects.any?
         @platforms = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).pluck('platform').compact.uniq
       else
         @platforms = []
