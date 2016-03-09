@@ -6,14 +6,24 @@
 </h1>
 <hr>
 <div class="row">
-  <% if @projects.any? %>
-    <div class="col-md-6">
+  <div class="col-md-8">
+    <% if @projects.any? %>
       <%= render @projects  %>
       <%= will_paginate @projects, page_links: false %>
-    </div>
-  <% else %>
+    <% else %>
+      <p>
+        No projects found, go back to <%= link_to @user, user_path(@user) %>.
+      </p>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+    <h3>
+      <strong>
+        Where do these come from?
+      </strong>
+    </h3>
     <p>
-      No projects found, go back to <%= link_to @user, user_path(@user) %>.
+      This is a list of every project published to a package manager that references one of <%= link_to @user, user_path(@user) %>'s GitHub repositories as it's source.
     </p>
-  <% end %>
+  </div>
 </div>
