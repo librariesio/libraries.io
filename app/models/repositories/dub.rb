@@ -20,7 +20,7 @@ module Repositories
         :name => project["name"],
         :description => latest_version['description'],
         :homepage => latest_version['homepage'],
-        :keywords_array => Array.wrap(project["categories"]),
+        :keywords_array => format_keywords(project["categories"]),
         :licenses => latest_version['license'],
         :repository_url => repo_fallback(repository(project["repository"]),latest_version['homepage'])
       }
@@ -49,6 +49,10 @@ module Repositories
       else
         ''
       end
+    end
+
+    def self.format_keywords(categories)
+      Array.wrap(categories).join('.').split('.').map(&:downcase).uniq
     end
 
     def self.dependencies(name, version)
