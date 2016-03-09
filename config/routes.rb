@@ -97,6 +97,7 @@ Rails.application.routes.draw do
 
   get '/github/:login/repositories', to: 'users#repositories', as: :user_repositories
   get '/github/:login/contributions', to: 'users#contributions', as: :user_contributions
+  get '/github/:login/projects', to: 'users#projects', as: :user_projects
   get '/github/:login', to: 'users#show', as: :user
 
   get '/search', to: 'search#index'

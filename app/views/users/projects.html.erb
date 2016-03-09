@@ -1,0 +1,19 @@
+<% title "Projects referencing #{@user}'s GitHub Repositories - Libraries" %>
+
+<h1>
+  <%= image_tag @user.avatar_url(120), width: 60, height: 60, alt: @user %>
+  Projects referencing <%= link_to @user, user_path(@user) %>'s GitHub Repositories
+</h1>
+<hr>
+<div class="row">
+  <% if @projects.any? %>
+    <div class="col-md-6">
+      <%= render @projects  %>
+      <%= will_paginate @projects, page_links: false %>
+    </div>
+  <% else %>
+    <p>
+      No projects found, go back to <%= link_to @user, user_path(@user) %>.
+    </p>
+  <% end %>
+</div>

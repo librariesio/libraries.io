@@ -28,6 +28,11 @@ class UsersController < ApplicationController
                           .order('count DESC').paginate(page: page_number)
   end
 
+  def projects
+    find_user
+    @projects = @user.projects.order('rank DESC').paginate(page: page_number)
+  end
+
   private
 
   def find_user
