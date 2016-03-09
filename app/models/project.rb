@@ -276,6 +276,10 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def self.all_languages
+    @all_languages ||= Languages::Language.all.map{|l| l.name.downcase}
+  end
+
   def self.popular_languages(options = {})
     facets(options)[:languages][:terms]
   end
@@ -284,8 +288,12 @@ class Project < ActiveRecord::Base
     facets(options)[:platforms][:terms].reject{ |t| t.term.downcase == 'biicode' }
   end
 
+  def self.keywords_blacklist
+    ['bsd3']
+  end
+
   def self.popular_keywords(options = {})
-    facets(options)[:keywords][:terms]
+    facets(options)[:keywords][:terms].reject{ |t| all_languages.include?(t.term.downcase) }.reject{|t| keywords_blacklist.include?(t.term.downcase) }
   end
 
   def self.popular_licenses(options = {})
