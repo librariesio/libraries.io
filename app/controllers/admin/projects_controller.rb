@@ -41,11 +41,16 @@ class Admin::ProjectsController < Admin::ApplicationController
     end
 
     @projects = @search.records.where("status IS ? OR status = ''", nil).order('rank DESC, name DESC').paginate(page: params[:page])
-    @platforms = @search.records.where("status IS ? OR status = ''", nil).pluck('platform').compact.uniq
-    if @projects.empty?
+    if @projects.any?
+      @platforms = @search.records.where("status IS ? OR status = ''", nil).pluck('platform').compact.uniq
+    else
       repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%deprecated%'").pluck(:id)
       @projects = scope.where(github_repository_id: repo_ids).order('rank DESC, name DESC').paginate(page: params[:page])
-      @platforms = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).pluck('platform').compact.uniq
+      if projects.any?
+        @platforms = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).pluck('platform').compact.uniq
+      else
+        @platforms = []
+      end
     end
   end
 
@@ -63,11 +68,16 @@ class Admin::ProjectsController < Admin::ApplicationController
     end
 
     @projects = @search.records.where("status IS ? OR status = ''", nil).order('rank DESC, name DESC').paginate(page: params[:page])
-    @platforms = @search.records.where("status IS ? OR status = ''", nil).pluck('platform').compact.uniq
-    if @projects.empty?
+    if @projects.any?
+      @platforms = @search.records.where("status IS ? OR status = ''", nil).pluck('platform').compact.uniq
+    else
       repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%maintained%'").pluck(:id)
       @projects = scope.where(github_repository_id: repo_ids).order('rank DESC, name DESC').paginate(page: params[:page])
-      @platforms = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).pluck('platform').compact.uniq
+      if @projects.any?
+        @platforms = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).pluck('platform').compact.uniq
+      else
+        @platforms = []
+      end
     end
   end
 
