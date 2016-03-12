@@ -115,7 +115,6 @@ module Repositories
       rescue Exception => e
         p name
         p e
-        # raise e
       end
     end
 

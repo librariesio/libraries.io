@@ -15,8 +15,8 @@ class GithubRepository < ActiveRecord::Base
   has_many :repository_subscriptions
   has_many :web_hooks
   has_one :readme, dependent: :delete
-  belongs_to :github_organisation#, touch: true
-  belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id#, touch: true
+  belongs_to :github_organisation
+  belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
   has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
 
@@ -86,7 +86,6 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_owner
-    # return true if github_user.present? || github_organisation.present?
     o = github_client.user(owner_name)
     if o.type == "Organization"
       if go = GithubOrganisation.create_from_github(owner_id.to_i)
@@ -241,7 +240,6 @@ class GithubRepository < ActiveRecord::Base
     download_owner
     download_fork_source(token)
     touch_projects
-    # download_forks_async(token) unless fork?
   end
 
   def download_fork_source(token = nil)
@@ -372,9 +370,7 @@ class GithubRepository < ActiveRecord::Base
     new_manifests.each do |m|
       args = {platform: m['platform'], kind: m['type'], filepath: m['filepath'], sha: m['sha']}
 
-      if manifests.find_by(args)
-        # not much
-      else
+      unless manifests.find_by(args)
         manifest = manifests.create(args)
         m['dependencies'].each do |dep|
           platform = manifest.platform
