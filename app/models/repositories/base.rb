@@ -74,7 +74,7 @@ module Repositories
       when 'Meteor'
         "https://atmospherejs.com/#{name.gsub(':', '/')}"
       when 'PlatformIO'
-        "http://platformio.org/#!/lib/show/#{project.pm_id}/#{name}"
+        "http://platformio.org/lib/show/#{project.pm_id}/#{name}"
       when 'Homebrew'
         "http://brewformulas.org/#{name}"
       when 'Shards'
