@@ -21,6 +21,8 @@ class LanguagesController < ApplicationController
     @keywords = facets[:keywords][:terms]
   end
 
+  private
+
   def find_language
     @language = Project.language(params[:id]).first.try(:language)
     raise ActiveRecord::RecordNotFound if @language.nil?

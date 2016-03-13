@@ -68,6 +68,8 @@ class GithubRepositoriesController < ApplicationController
     redirect_to github_repository_path(@github_repository.owner_name, @github_repository.project_name), :status => :moved_permanently if full_name != @github_repository.full_name
   end
 
+  private
+
   def authorized?
     if @github_repository.private?
       current_user && current_user.can_read?(@github_repository)

@@ -19,6 +19,8 @@ class KeywordsController < ApplicationController
     @licenses = facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
   end
 
+  private
+
   def find_keyword
     @keyword = params[:id].downcase if Project.keyword(params[:id].downcase).any?
     raise ActiveRecord::RecordNotFound if @keyword.nil?
