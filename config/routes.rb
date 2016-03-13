@@ -128,13 +128,6 @@ Rails.application.routes.draw do
 
   get '/about', to: 'pages#about', as: :about
 
-  # legacy
-  get '/platforms/:id', to: 'legacy#platform'
-  get '/users/:id', to: 'legacy#user'
-  get '/users/github/:login', to: 'legacy#github_user'
-  get '/projects/:id', to: 'legacy#project'
-  get '/projects/:project_id/versions/:id', to: 'legacy#version', constraints: { :id => /.*/ }
-
   if Rails.env.development?
     get '/rails/mailers'         => "rails/mailers#index"
     get '/rails/mailers/*path'   => "rails/mailers#preview"
