@@ -222,6 +222,7 @@ class Project < ActiveRecord::Base
   end
 
   def set_language
+    return unless github_repository
     self.language = github_repository.try(:language)
   end
 
