@@ -36,11 +36,6 @@ Rails.application.routes.draw do
         get 'mit'
       end
     end
-    resources :users do
-      member do
-        post 'sync'
-      end
-    end
     get '/stats', to: 'stats#index', as: :stats
     get '/stats/github', to: 'stats#github', as: :github_stats
   end
