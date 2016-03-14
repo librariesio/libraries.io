@@ -363,7 +363,7 @@ GEM
       activesupport (= 4.2.5.2)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (11.1.0)
+    rake (11.1.1)
     rake-compiler (0.9.6)
       rake
     rb-readline (0.5.3)
