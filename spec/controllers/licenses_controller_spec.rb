@@ -3,11 +3,11 @@ require "rails_helper"
 RSpec.describe LicensesController, elasticsearch: true do
   let(:project) { create(:project) }
 
-  before :all do
+  before :each do
     Project.__elasticsearch__.create_index! index: Project.index_name
   end
 
-  after :all do
+  after :each do
     Project.__elasticsearch__.client.indices.delete index: Project.index_name
   end
 
