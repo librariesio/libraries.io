@@ -190,7 +190,7 @@ class ProjectsController < ApplicationController
         raise ActiveRecord::RecordNotFound if params[:number].present?
       end
     else
-      @versions = @project.versions.newest_first.to_a.first(10).sort
+      @versions = @project.versions.newest_first.to_a.sort.first(10)
       if params[:number].present?
         @version = @project.versions.find_by_number(params[:number])
         raise ActiveRecord::RecordNotFound if @version.nil?
