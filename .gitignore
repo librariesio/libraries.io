@@ -28,3 +28,5 @@ METADATA.jl
 inqlude-data
 
 node_modules
+
+coverage
