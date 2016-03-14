@@ -129,7 +129,7 @@ class ProjectsController < ApplicationController
     if incorrect_case?
       return redirect_to(project_versions_path(@project.to_param), :status => :moved_permanently)
     else
-      @versions = @project.versions.newest_first.paginate(page: page_number)
+      @versions = @project.versions.newest_first.sort.paginate(page: page_number)
       respond_to do |format|
         format.html
         format.atom
