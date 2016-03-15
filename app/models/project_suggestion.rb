@@ -9,8 +9,8 @@ class ProjectSuggestion < ActiveRecord::Base
   end
 
   def pending
-    (repository_url.present? && repository_url != project.repository_url) ||
-    (licenses.present? && licenses != project.licenses) ||
-    (status.present? && status != project.status)
+    (repository_url.present? && repository_url != project.try(:repository_url)) ||
+    (licenses.present? && licenses != project.try(:licenses)) ||
+    (status.present? && status != project.try(:status))
   end
 end
