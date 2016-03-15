@@ -1,3 +1,4 @@
+<%= render 'admin/nav' %>
 <div class="row">
   <%= simple_form_for(@project, url: admin_project_path(@project.id), html: { class: 'form-vertical col-md-6' }) do |form| %>
     <h2>

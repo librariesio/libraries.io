@@ -1,3 +1,4 @@
+<%= render 'admin/nav' %>
 <div class="row">
   <%= simple_form_for(@github_repository, url: admin_github_repository_path(@github_repository.id), html: { class: 'form-vertical col-md-6' }) do |form| %>
     <h2>

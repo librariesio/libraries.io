@@ -1,0 +1,20 @@
+<div class="row">
+  <br>
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="<%= cp('/admin/stats') %>"><a href="/admin/stats">Stats</a></li>
+    <li role="presentation" class="<%= cp('/admin/stats/github') %>"><a href="/admin/stats/github">GitHub Stats</a></li>
+    <li role="presentation" class="<%= cp('/admin/project_suggestions') %>">
+      <a href="/admin/project_suggestions">
+        Suggestions
+        <% count = ProjectSuggestion.all.select(&:pending).length %>
+        <% if count > 0 %>
+          <span class="badge"><%= count %></span>
+        <% end %>
+      </a>
+    </li>
+    <li role="presentation" class="<%= cp('/admin/projects/deprecated') %>"><a href="/admin/projects/deprecated">Deprecated</a></li>
+    <li role="presentation" class="<%= cp('/admin/projects/unmaintained') %>"><a href="/admin/projects/unmaintained">Unmaintained</a></li>
+    <li role="presentation" class="<%= cp('/admin/github_repositories/deprecated') %>"><a href="/admin/github_repositories/deprecated">Deprecated Repos</a></li>
+    <li role="presentation" class="<%= cp('/admin/github_repositories/unmaintained') %>"><a href="/admin/github_repositories/unmaintained">Unmaintained Repos</a></li>
+  </ul>
+</div>
