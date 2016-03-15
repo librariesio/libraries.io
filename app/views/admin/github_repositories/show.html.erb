@@ -5,6 +5,10 @@
       <%= link_to fa_icon('github'), @github_repository.url, target: :blank %>
     </h2>
 
+    <p>
+      <%= @github_repository.description %>
+    </p>
+
     <%= form.input :license, include_blank: true, selected: @github_repository.license, label: 'License', collection: Project.popular_licenses(:facet_limit => 100).map{|l| format_license(l.term) } %>
     <%= form.input :status, include_blank: true, collection: GithubRepository::STATUSES %>
 

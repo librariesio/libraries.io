@@ -33,7 +33,8 @@ Rails.application.routes.draw do
     resources :project_suggestions
     resources :github_repositories do
       collection do
-        get 'mit'
+        get 'deprecated'
+        get 'unmaintained'
       end
     end
     get '/stats', to: 'stats#index', as: :stats

@@ -26,6 +26,14 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
     @github_repositories = scope.maintained.without_license.with_projects.order("COUNT(projects.id) DESC").group("github_repositories.id").paginate(page: params[:page])
   end
 
+  def deprecated
+    @github_repositories = GithubRepository.maintained.where("github_repositories.description ilike '%deprecated%'").order('stargazers_count DESC').paginate(page: params[:page])
+  end
+
+  def unmaintained
+    @github_repositories = GithubRepository.maintained.where("github_repositories.description ilike '%maintained%'").order('stargazers_count DESC').paginate(page: params[:page])
+  end
+
   private
 
   def github_repository_params
