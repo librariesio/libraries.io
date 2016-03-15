@@ -6,7 +6,7 @@
     <li role="presentation" class="<%= cp('/admin/project_suggestions') %>">
       <a href="/admin/project_suggestions">
         Suggestions
-        <% count = ProjectSuggestion.all.select(&:pending).length %>
+        <% count = ProjectSuggestion.all.joins(:project).reject(&:done?).length %>
         <% if count > 0 %>
           <span class="badge"><%= count %></span>
         <% end %>
