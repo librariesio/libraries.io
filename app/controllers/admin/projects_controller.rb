@@ -32,25 +32,11 @@ class Admin::ProjectsController < Admin::ApplicationController
       platform: params[:platform]
     }, sort: params[:sort], order: params[:order])
 
-    if params[:platform].present?
-      @platform = Project.platform(params[:platform].downcase).first.try(:platform)
-      raise ActiveRecord::RecordNotFound if @platform.nil?
-      scope = Project.platform(@platform).where("status IS ? OR status = ''", nil)
-    else
-      scope = Project.where("status IS ? OR status = ''", nil)
-    end
-
     @projects = @search.records.where("status IS ? OR status = ''", nil).order('rank DESC, name DESC').paginate(page: params[:page])
-    if @projects.any?
-      @platforms = @search.records.where("status IS ? OR status = ''", nil).pluck('platform').compact.uniq
-    else
+
+    if @projects.empty?
       repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%deprecated%'").pluck(:id)
-      @projects = scope.where(github_repository_id: repo_ids).order('rank DESC, name DESC').paginate(page: params[:page])
-      if @projects.any?
-        @platforms = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).pluck('platform').compact.uniq
-      else
-        @platforms = []
-      end
+      @projects = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).order('rank DESC, name DESC').paginate(page: params[:page])
     end
   end
 
@@ -59,25 +45,11 @@ class Admin::ProjectsController < Admin::ApplicationController
       platform: params[:platform]
     }, sort: params[:sort], order: params[:order])
 
-    if params[:platform].present?
-      @platform = Project.platform(params[:platform].downcase).first.try(:platform)
-      raise ActiveRecord::RecordNotFound if @platform.nil?
-      scope = Project.platform(@platform).where("status IS ? OR status = ''", nil)
-    else
-      scope = Project.where("status IS ? OR status = ''", nil)
-    end
-
     @projects = @search.records.where("status IS ? OR status = ''", nil).order('rank DESC, name DESC').paginate(page: params[:page])
-    if @projects.any?
-      @platforms = @search.records.where("status IS ? OR status = ''", nil).pluck('platform').compact.uniq
-    else
+
+    if @projects.empty?
       repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%maintained%'").pluck(:id)
-      @projects = scope.where(github_repository_id: repo_ids).order('rank DESC, name DESC').paginate(page: params[:page])
-      if @projects.any?
-        @platforms = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).pluck('platform').compact.uniq
-      else
-        @platforms = []
-      end
+      @projects = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).order('rank DESC, name DESC').paginate(page: params[:page])
     end
   end
 
