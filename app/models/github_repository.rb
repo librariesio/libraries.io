@@ -25,7 +25,7 @@ class GithubRepository < ActiveRecord::Base
 
   after_commit :update_all_info_async, on: :create
 
-  scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
+  scope :without_readme, -> { where("github_repositories.id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
   scope :without_projects, -> { includes(:projects).where(projects: { github_repository_id: nil }) }
   scope :without_subscriptons, -> { includes(:repository_subscriptions).where(repository_subscriptions: { github_repository_id: nil }) }
