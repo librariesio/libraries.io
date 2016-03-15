@@ -19,7 +19,7 @@ class Project < ActiveRecord::Base
   has_many :dependent_manifests, through: :repository_dependencies, source: :manifest
   has_many :dependent_repositories, -> { group('github_repositories.id').order('github_repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :github_repository
   has_many :subscriptions
-  has_many :project_suggestions
+  has_many :project_suggestions, dependent: :delete_all
   belongs_to :github_repository
   has_one :readme, through: :github_repository
 
