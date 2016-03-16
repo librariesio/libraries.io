@@ -85,3 +85,5 @@ production:
   password: <%= ENV['LIBRARIES_DATABASE_PASSWORD'] %>
   pool: 20
   prepared_statements: false
+  variables:
+    statement_timeout: 20_000
