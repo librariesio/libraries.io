@@ -3,7 +3,7 @@
 [![Build Status](https://circleci.com/gh/librariesio/libraries.io.svg?style=shield)](https://circleci.com/gh/librariesio/libraries.io)
 [![Gitter chat](https://badges.gitter.im/librariesio/support.svg)](https://gitter.im/librariesio/support)
 [![Code Climate](https://img.shields.io/codeclimate/github/librariesio/libraries.io.svg?style=flat)](https://codeclimate.com/github/librariesio/libraries.io)
-[![Test Coverage](https://img.shields.io/codeclimate/coverage/github/librariesio/libraries.io.svg?style=flat)](https://codeclimate.com/github/librariesio/libraries.io)
+[![Coverage Status](https://coveralls.io/repos/github/librariesio/libraries.io/badge.svg?branch=master)](https://coveralls.io/github/librariesio/libraries.io?branch=master)
 
 All the package managers
 
