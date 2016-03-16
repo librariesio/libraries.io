@@ -115,7 +115,7 @@
               <table class='table table-hover table-condensed'>
                 <thead>
                   <th>
-                    <div class="pictogram tip pictogram-<%= manifest.platform.downcase %>" title='<%= manifest.platform %>'></div>
+                    <div class="pictogram tip pictogram-<%= manifest.platform.try(:downcase) %>" title='<%= manifest.platform %>'></div>
                     <%= link_to manifest.filepath, manifest.github_link %>
                   </th>
                   <th>
