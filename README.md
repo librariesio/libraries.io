@@ -44,7 +44,7 @@ Lure rails into slurping down some data
 
 ```sh
  rails c
- irb> AuthToken.new(token: "<ure github token here>").save
+ irb> AuthToken.new(token: "<secure github token here>").save
  irb> Repositories::NPM.update "pictogram"
  irb> Repositories::Rubygems.update "split"
  irb> Repositories::Bower.update "sbteclipse"
