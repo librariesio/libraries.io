@@ -1,4 +1,7 @@
-SubscriptionPlan.first if Rails.env.development? # have to force load the SubscriptionPlan class for development
+# have to force load the SubscriptionPlan class for development
+if Rails.env.development? && defined? SubscriptionPlan
+  SubscriptionPlan.first
+end
 
 Payola.background_worker = :sidekiq
 Payola.default_currency = 'gbp'
