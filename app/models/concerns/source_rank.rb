@@ -15,77 +15,11 @@ module SourceRank
   end
 
   def source_rank
-    r = 0
-    # basic information available
-    r +=1 if basic_info_present?
-
-    # repo present
-    r +=1 if repository_present?
-
-    # readme present
-    r +=1 if readme_present?
-
-    # valid license present
-    r +=1 if license_present?
-
-    # more than one version
-    r +=1 if versions_present?
-
-    # all versions/tags are valid semver numbers
-    r +=1 if follows_semver?
-
-    # a version released within the last X months
-    r +=1 if recent_release?
-
-    # at least X months old
-    r +=1 if not_brand_new?
-
-    # has the project been marked as deprecated?
-    r -=5 if is_deprecated?
-
-    # has the project been marked as unmaintained?
-    r -=5 if is_unmaintained?
-
-    # has the project been marked as deprecated?
-    r -=5 if is_removed?
-
-    # does the latest version have any outdated dependencies
-    r -=1 if any_outdated_dependencies?
-
-    # any releases greater than or equal to 1.0.0
-    r +=1 if one_point_oh?
-
-    # every version is a prerelease?
-    r -=2 if all_prereleases?
-
-    # number of github stars
-    r += log_scale(stars)
-
-    # number of dependent projects
-    r += log_scale(dependents_count) * 2
-
-    # number of dependent repositories
-    r += log_scale(dependent_repositories.open_source.length)
-
-    # number of contributors
-    r += (log_scale(github_contributions.length) / 2.0).ceil
-
-    # number of subscribers
-    r += (log_scale(subscriptions.length) / 2.0).ceil
-
-    # more than one maintainer/owner?
-
-    # number of downloads
-
-    # documentation available?
-
-    r = 0 if r < 0
-
-    return r
+    source_rank_breakdown.values.sum > 0 ? source_rank_breakdown.values.sum : 0
   end
 
   def source_rank_breakdown
-    {
+    @source_rank_breakdown ||= {
       basic_info_present:         basic_info_present? ? 1 : 0,
       repository_present:         repository_present? ? 1 : 0,
       readme_present:             readme_present? ? 1 : 0,
