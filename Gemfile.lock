@@ -309,12 +309,6 @@ GEM
     safe_yaml (1.0.4)
     sanitize-url (0.1.4)
     sass (3.4.21)
-    sass-rails (5.0.4)
-      railties (>= 4.0.0, < 5.0)
-      sass (~> 3.1)
-      sprockets (>= 2.8, < 4.0)
-      sprockets-rails (>= 2.0, < 4.0)
-      tilt (>= 1.1, < 3)
     sassc (1.8.4)
       bundler
       ffi (~> 1.9.6)
@@ -386,9 +380,6 @@ GEM
     thread_safe (0.3.5)
     tilt (2.0.2)
     tins (1.6.0)
-    tipsy-rails (1.0.5)
-      railties (>= 3.0)
-      sass-rails
     typhoeus (1.0.1)
       ethon (>= 0.8.0)
     tzinfo (1.2.2)
@@ -463,7 +454,6 @@ DEPENDENCIES
   rspec-rails (~> 3.0)
   rspec_junit_formatter (= 0.2.2)
   sanitize-url
-  sass-rails
   sassc-rails
   semantic
   semantic_range
@@ -478,7 +468,6 @@ DEPENDENCIES
   sprockets
   sprockets-rails (= 2.3.3)
   sql_queries_count
-  tipsy-rails
   typhoeus
   uglifier
   will_paginate
