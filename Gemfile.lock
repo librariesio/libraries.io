@@ -434,7 +434,6 @@ DEPENDENCIES
   nokogiri
   octokit
   oj
-  omniauth
   omniauth-github
   payola-payments
   pg
@@ -465,12 +464,9 @@ DEPENDENCIES
   sitemap_generator
   spdx
   spring
-  sprockets
-  sprockets-rails (= 2.3.3)
   sql_queries_count
   typhoeus
   uglifier
-  will_paginate
   will_paginate-bootstrap
 
 BUNDLED WITH
