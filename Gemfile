@@ -67,14 +67,14 @@ end
 
 group :development, :test do
   gem 'dotenv-rails'
-  gem 'rspec-rails', '~> 3.0'
+  gem 'rspec-rails'
   gem 'coveralls', require: false
 end
 
 group :test do
   gem 'factory_girl_rails'
   gem 'database_cleaner'
-  gem 'rspec_junit_formatter', '0.2.2'
+  gem 'rspec_junit_formatter'
 end
 
 group :production do
