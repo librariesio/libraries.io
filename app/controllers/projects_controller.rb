@@ -109,7 +109,7 @@ class ProjectsController < ApplicationController
 
   def dependents
     find_project
-    @dependents = WillPaginate::Collection.create(page, 30, @project.dependents_count) do |pager|
+    @dependents = WillPaginate::Collection.create(page_number, 30, @project.dependents_count) do |pager|
       pager.replace(@project.dependent_projects(page: page_number))
     end
   end
