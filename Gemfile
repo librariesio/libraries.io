@@ -39,7 +39,7 @@ gem 'hirefire-resource'
 gem 'rails_12factor'
 gem 'font-awesome-rails'
 gem 'platform-api', require: nil
-gem 'mime-types', '~> 2.6.1', require: 'mime/types/columnar'
+gem 'mime-types', require: 'mime/types/columnar'
 gem 'fast_blank'
 gem 'fast_xs'
 gem 'fast_xor'

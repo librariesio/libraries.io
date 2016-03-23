@@ -177,9 +177,10 @@ GEM
       railties (>= 3)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
-    mime-types (2.6.2)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    mime-types (2.99.1)
+    mime-types-data (3.2016.0221)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     moneta (0.8.0)
@@ -428,7 +429,7 @@ DEPENDENCIES
   license-compatibility
   lograge
   mail
-  mime-types (~> 2.6.1)
+  mime-types
   newrelic_rpm
   nokogiri
   octokit
