@@ -41,7 +41,7 @@ class ProjectsController < ApplicationController
 
     @platforms = Project.unlicensed.group('platform').count.sort_by(&:last).reverse
     order = params[:newest] ? 'projects.created_at DESC' : 'dependents_count DESC, rank DESC, projects.created_at DESC'
-    @projects = scope.unlicensed.order(order).paginate(page: page_number, per_page: 20)
+    @projects = scope.unlicensed.includes(:github_repository).order(order).paginate(page: page_number, per_page: 20)
   end
 
   def deprecated
