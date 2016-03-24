@@ -7,6 +7,7 @@ class Version < ActiveRecord::Base
   has_many :dependencies, dependent: :delete_all
 
   after_commit :send_notifications_async, on: :create
+  after_commit :update_github_repo_async, on: :create
 
   scope :newest_first, -> { order('versions.published_at DESC') }
 
@@ -46,6 +47,10 @@ class Version < ActiveRecord::Base
   def send_notifications_async
     return if published_at && published_at < 1.week.ago
     VersionNotificationsWorker.perform_async(self.id)
+  end
+
+  def update_github_repo_async
+    project.update_github_repo_async
   end
 
   def send_notifications
