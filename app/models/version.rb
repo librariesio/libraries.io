@@ -50,7 +50,8 @@ class Version < ActiveRecord::Base
   end
 
   def update_github_repo_async
-    project.update_github_repo_async
+    return unless project.github_repository
+    GithubDownloadWorker.perform_async(project.github_repository_id)
   end
 
   def send_notifications

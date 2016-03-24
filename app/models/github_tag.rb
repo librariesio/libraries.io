@@ -12,7 +12,7 @@ class GithubTag < ActiveRecord::Base
   end
 
   def update_github_repo_async
-    GithubUpdateWorker.perform_async(github_repository.full_name)
+    GithubDownloadWorker.perform_async(github_repository_id)
   end
 
   def send_notifications_async
