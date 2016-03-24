@@ -11,7 +11,7 @@
         <div class='project col-xs-8' style="border-color: <%= project.color %>;">
           <h5>
             <%= link_to project.name, project_path(project.to_param) %>
-            <small><%= project.latest_version %></small>
+            <small><%= project.latest_release_number %></small>
           </h5>
 
           <div class="">

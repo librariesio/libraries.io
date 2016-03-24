@@ -36,7 +36,7 @@
         <% if @version %>
           <%= @version %>
         <% else %>
-          <%= @project.latest_version %>
+          <%= @project.latest_release_number %>
         <% end %>
       </small>
     </h1>
@@ -130,7 +130,7 @@
     </p>
     <% end %>
 
-    <% if link = documentation_url(@project.name, @project.platform, @version.try(:number) || @project.latest_version ) %>
+    <% if link = documentation_url(@project.name, @project.platform, @version.try(:number) || @project.latest_release_number ) %>
       <p>
         Documentation: <%= link_to truncate(link, length: 70), link %>
       </p>
