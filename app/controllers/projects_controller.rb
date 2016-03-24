@@ -18,16 +18,16 @@ class ProjectsController < ApplicationController
   end
 
   def bus_factor
-    if params[:language].present?
-      @language = Project.language(params[:language].downcase).first.try(:language)
-      raise ActiveRecord::RecordNotFound if @language.nil?
-      scope = Project.language(@language)
-    else
-      scope = Project
-    end
+    # if params[:language].present?
+    #   @language = Project.language(params[:language].downcase).first.try(:language)
+    #   raise ActiveRecord::RecordNotFound if @language.nil?
+    #   scope = Project.language(@language)
+    # else
+      # scope = Project
+    # end
 
-    @languages = Project.bus_factor.group('projects.language').count.sort_by(&:last).reverse.first(20)
-    @projects = scope.bus_factor.order('github_repositories.github_contributions_count ASC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @languages = [] # Project.bus_factor.group('projects.language').count.sort_by(&:last).reverse.first(20)
+    @projects = Project.bus_factor.order('github_repositories.github_contributions_count ASC, projects.rank DESC, projects.created_at DESC').includes(:github_repository).paginate(page: page_number, per_page: 20)
   end
 
   def unlicensed
