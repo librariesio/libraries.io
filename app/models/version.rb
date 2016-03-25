@@ -7,7 +7,7 @@ class Version < ActiveRecord::Base
   has_many :dependencies, dependent: :delete_all
 
   after_commit :send_notifications_async, on: :create
-  after_commit :update_github_repo_async, on: :create
+  # after_commit :update_github_repo_async, on: :create
 
   scope :newest_first, -> { order('versions.published_at DESC') }
 
