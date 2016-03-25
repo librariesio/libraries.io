@@ -30,3 +30,5 @@ inqlude-data
 node_modules
 
 coverage
+
+*.dump
