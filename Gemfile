@@ -33,7 +33,7 @@ gem 'dalli'
 gem 'counter_culture'
 gem 'simple_form'
 gem 'sidekiq'
-gem 'sidekiq-unique-jobs', '~> 3.0.15'
+gem 'sidekiq-unique-jobs'
 gem 'sinatra', require: nil
 gem 'hirefire-resource'
 gem 'rails_12factor'

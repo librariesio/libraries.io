@@ -331,8 +331,9 @@ GEM
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       redis (~> 3.2, >= 3.2.1)
-    sidekiq-unique-jobs (3.0.15)
+    sidekiq-unique-jobs (4.0.17)
       sidekiq (>= 2.6)
+      thor
     simple-rss (1.3.1)
     simple_form (3.2.1)
       actionpack (> 4, < 5.1)
@@ -457,7 +458,7 @@ DEPENDENCIES
   semantic
   semantic_range
   sidekiq
-  sidekiq-unique-jobs (~> 3.0.15)
+  sidekiq-unique-jobs
   simple-rss
   simple_form
   sinatra
