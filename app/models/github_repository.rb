@@ -287,13 +287,13 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_tags(token = nil)
-    existing_tags = github_tags.to_a
+    existing_tag_names = github_tags.pluck(:name)
     github_client(token).refs(full_name, 'tags').each do |tag|
       return unless tag['ref']
       match = tag.ref.match(/refs\/tags\/(.*)/)
       if match
         name = match[1]
-        if existing_tags.find{|t| t.name == name }.nil?
+        unless existing_tag_names.include?(name)
 
           object = github_client(token).get(tag.object.url)
 
