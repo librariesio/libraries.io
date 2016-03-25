@@ -5,7 +5,6 @@ class GithubTag < ActiveRecord::Base
   scope :published, -> { where('published_at IS NOT NULL') }
 
   after_commit :send_notifications_async, on: :create
-  # after_commit :update_github_repo_async, on: :create
 
   def to_s
     name
