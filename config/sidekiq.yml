@@ -8,5 +8,5 @@ production:
   - [low, 1]
   - [default, 2]
   - [mailers, 4]
-  - [critical, 8]
-  - [user, 16]
+  - [critical, 16]
+  - [user, 20]
