@@ -236,11 +236,11 @@ class GithubRepository < ActiveRecord::Base
     update_from_github(token)
     download_readme(token)
     download_tags(token)
-    # download_github_contributions(token)
+    download_github_contributions(token)
     download_manifests(token)
-    # download_owner
-    # download_fork_source(token)
-    # touch_projects
+    download_owner
+    download_fork_source(token)
+    touch_projects
   end
 
   def download_fork_source(token = nil)
