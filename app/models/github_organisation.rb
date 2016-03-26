@@ -28,7 +28,7 @@ class GithubOrganisation < ActiveRecord::Base
   end
 
   def top_favourite_project_ids
-    Rails.cache.fetch "org:#{self.id}:top_favourite_project_ids:v2", :expires_in => 1.week do
+    Rails.cache.fetch "org:#{self.id}:top_favourite_project_ids:v2", :expires_in => 1.week, race_condition_ttl: 2.minutes do
       favourite_projects.limit(10).pluck(:id)
     end
   end
@@ -38,7 +38,7 @@ class GithubOrganisation < ActiveRecord::Base
   end
 
   def top_contributor_ids
-    Rails.cache.fetch "org:#{self.id}:top_contributor_ids", :expires_in => 1.week do
+    Rails.cache.fetch "org:#{self.id}:top_contributor_ids", :expires_in => 1.week, race_condition_ttl: 2.minutes do
       contributors.visible.limit(50).pluck(:id)
     end
   end

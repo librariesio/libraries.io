@@ -25,7 +25,7 @@ class GithubUser < ActiveRecord::Base
   end
 
   def top_favourite_project_ids
-    Rails.cache.fetch "user:#{self.id}:top_favourite_project_ids:v2", :expires_in => 1.week do
+    Rails.cache.fetch "user:#{self.id}:top_favourite_project_ids:v2", :expires_in => 1.week, race_condition_ttl: 2.minutes do
       favourite_projects.limit(10).pluck(:id)
     end
   end
