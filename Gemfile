@@ -56,6 +56,7 @@ gem 'license-compatibility'
 gem 'escape_utils'
 gem 'github_urls'
 gem 'mail', require: ['mail', 'mail/utilities', 'mail/parsers']
+gem 'pictogram'
 
 group :development do
   gem 'bundler'
