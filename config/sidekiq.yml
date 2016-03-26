@@ -1,7 +1,7 @@
 ---
 :concurrency: 5
 production:
-  :concurrency: 8
+  :concurrency: 5
 :timeout: 8
 :verbose: true
 :queues:
