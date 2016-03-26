@@ -80,7 +80,7 @@ class GithubOrganisation < ActiveRecord::Base
       g.assign_attributes r.slice(*GithubOrganisation::API_FIELDS)
       g.save
       g
-    rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
       p e
       false
     end
@@ -98,7 +98,7 @@ class GithubOrganisation < ActiveRecord::Base
 
   def download_from_github
     update_attributes(github_client.org(github_id).to_hash.slice(:login, :name, :email, :blog, :location, :description))
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
     nil
   end
 
@@ -106,7 +106,7 @@ class GithubOrganisation < ActiveRecord::Base
     github_client.org_repos(login).each do |repo|
       GithubCreateWorker.perform_async(repo.full_name)
     end
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
     nil
   end
 

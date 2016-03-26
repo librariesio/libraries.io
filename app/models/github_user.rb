@@ -71,7 +71,7 @@ class GithubUser < ActiveRecord::Base
 
   def download_from_github
     update_attributes(github_client.user(github_id).to_hash.slice(:login, :name, :company, :blog, :location))
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
     nil
   end
 
@@ -80,7 +80,7 @@ class GithubUser < ActiveRecord::Base
       GithubCreateOrgWorker.perform_async(org.login)
     end
     true
-  rescue Octokit::Unauthorized, Octokit::UnprocessableEntity, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::UnprocessableEntity, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
     nil
   end
 
@@ -90,7 +90,7 @@ class GithubUser < ActiveRecord::Base
     end
 
     true
-  rescue Octokit::Unauthorized, Octokit::UnprocessableEntity, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::UnprocessableEntity, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
     nil
   end
 end
