@@ -1,6 +1,6 @@
 class GithubHookWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :critical, unique: true
+  sidekiq_options queue: :critical, unique: :until_executed
 
   def perform(github_id, sender_id)
     github_repository = GithubRepository.find_by_github_id(github_id)

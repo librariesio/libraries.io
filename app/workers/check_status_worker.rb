@@ -1,6 +1,6 @@
 class CheckStatusWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :low, unique: true
+  sidekiq_options queue: :low, unique: :until_executed
 
   def perform(project_id, platform, project_name, removed = false)
     case platform.downcase

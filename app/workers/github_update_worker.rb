@@ -1,6 +1,6 @@
 class GithubUpdateWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :low, unique: true
+  sidekiq_options queue: :low, unique: :until_executed
 
   def perform(repo_name, token = nil)
     token = token || AuthToken.token

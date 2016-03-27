@@ -1,6 +1,6 @@
 class GithubProjectWorker
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
 
   def perform(project_id)
     project = Project.find_by_id(project_id)

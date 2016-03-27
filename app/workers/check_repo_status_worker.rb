@@ -1,6 +1,6 @@
 class CheckRepoStatusWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :low, unique: true
+  sidekiq_options queue: :low, unique: :until_executed
 
   def perform(repo_full_name, removed = false)
     response = Typhoeus.head("https://github.com/#{repo_full_name}")
