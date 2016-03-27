@@ -1,5 +1,5 @@
 <% title "#{@language} - Libraries" %>
-<% description "New and popular projects written in #{@language}" %>
+<% description "A detailed listing of the most popular, recently updated and most watched #{@language} projects online" %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(languages: @language, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@language} Projects") %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(languages: @language, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@language} Projects") %>
 
