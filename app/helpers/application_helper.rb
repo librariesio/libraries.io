@@ -319,6 +319,10 @@ module ApplicationHelper
       hash = record.meta_tags.merge({
         url: github_repository_url(record.owner_name, record.project_name)
       })
+    when 'GithubUser', 'GithubOrganisation'
+      hash = record.meta_tags.merge({
+        url: user_url(record.login)
+      })
     else
       hash = {}
     end

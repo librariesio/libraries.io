@@ -16,6 +16,14 @@ class GithubUser < ActiveRecord::Base
 
   scope :visible, -> { where(hidden: false) }
 
+  def meta_tags
+    {
+      title: "#{to_s} on GitHub",
+      description: "GitHub repositories created and contributed to by #{to_s}",
+      image: avatar_url(200)
+    }
+  end
+
   def open_source_contributions
     github_contributions.joins(:github_repository).where("github_repositories.fork = ? AND github_repositories.private = ?", false, false)
   end

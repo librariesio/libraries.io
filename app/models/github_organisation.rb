@@ -19,6 +19,14 @@ class GithubOrganisation < ActiveRecord::Base
   scope :newest, -> { joins(:open_source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('created_at DESC').having('count(github_repositories.id) > 0') }
   scope :visible, -> { where(hidden: false) }
 
+  def meta_tags
+    {
+      title: "#{to_s} on GitHub",
+      description: "GitHub repositories created and contributed to by #{to_s}",
+      image: avatar_url(200)
+    }
+  end
+
   def github_contributions
     GithubContribution.none
   end
