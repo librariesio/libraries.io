@@ -286,4 +286,42 @@ module ApplicationHelper
   def cp(path)
     "active" if current_page?(path)
   end
+
+  def shareable_image_url(platform)
+    "https://librariesio.github.io/pictogram/#{platform.downcase}/#{platform.downcase}.png"
+  end
+
+  def render_meta(record = nil)
+    render(partial: 'meta/facebook', locals: { meta: meta_tags_for(record) }) +
+    render(partial: 'meta/twitter', locals: { meta: meta_tags_for(record) })
+  end
+
+  def default_meta_tags
+    {
+      title: "Libraries - The Open Source Discovery Service",
+      url: "https://libraries.io",
+      description: "Discover new modules and libraries you can use in your projects",
+      image: "https://libraries.io/apple-touch-icon-152x152.png",
+      site_name: "Libraries.io",
+      site_twitter: "@librariesio"
+    }
+  end
+
+  def meta_tags_for(record)
+    return default_meta_tags if record.nil?
+    case record.class.name
+    when 'Project'
+      hash = record.meta_tags.merge({
+        url: project_url(record.to_param),
+        image: shareable_image_url(record.platform)
+      })
+    when 'GithubRepository'
+      hash = record.meta_tags.merge({
+        url: github_repository_url(record.owner_name, record.project_name)
+      })
+    else
+      hash = {}
+    end
+    default_meta_tags.merge(hash)
+  end
 end

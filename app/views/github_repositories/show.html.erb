@@ -1,5 +1,6 @@
 <% title "#{@github_repository.full_name} on GitHub - Libraries" %>
 <% description @github_repository.description %>
+<%= content_for :meta, render_meta(@github_repository) %>
 <% cache_if(logged_out?, [@github_repository, 'show', 'v1'], :expires_in => 1.week) do %>
   <% repo = @github_repository %>
 

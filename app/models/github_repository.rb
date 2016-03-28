@@ -58,6 +58,14 @@ class GithubRepository < ActiveRecord::Base
     where('lower(github_repositories.language) = ?', language.try(:downcase))
   end
 
+  def meta_tags
+    {
+      title: "#{full_name} on GitHub",
+      description: description,
+      image: avatar_url(200)
+    }
+  end
+
   def is_deprecated?
     status == 'Deprecated'
   end

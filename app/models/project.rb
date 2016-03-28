@@ -82,6 +82,13 @@ class Project < ActiveRecord::Base
     name
   end
 
+  def meta_tags
+    {
+      title: "#{name} on #{platform}",
+      description: description,
+    }
+  end
+
   def follows_semver?
     if versions.all.length > 0
       versions.all?(&:follows_semver?)
