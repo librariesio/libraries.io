@@ -214,7 +214,7 @@ class GithubRepository < ActiveRecord::Base
     else
       readme.update_attributes(contents)
     end
-  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError
     nil
   end
 
