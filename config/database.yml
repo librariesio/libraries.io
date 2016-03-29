@@ -81,6 +81,3 @@ test:
 production:
   <<: *default
   pool: 20
-  prepared_statements: false
-  variables:
-    statement_timeout: 20_000
