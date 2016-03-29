@@ -137,6 +137,7 @@ ActiveRecord::Schema.define(version: 20160329211344) do
   add_index "github_repositories", ["github_id"], name: "index_github_repositories_on_github_id", unique: true, using: :btree
   add_index "github_repositories", ["owner_id"], name: "index_github_repositories_on_owner_id", using: :btree
   add_index "github_repositories", ["source_name"], name: "index_github_repositories_on_source_name", using: :btree
+  add_index "github_repositories", ["status"], name: "index_github_repositories_on_status", using: :btree
 
   create_table "github_tags", force: :cascade do |t|
     t.integer  "github_repository_id"
