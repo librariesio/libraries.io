@@ -42,7 +42,7 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     arel (6.0.3)
-    autoprefixer-rails (6.3.5)
+    autoprefixer-rails (6.3.6)
       execjs
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
