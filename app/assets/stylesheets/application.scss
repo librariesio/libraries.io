@@ -41,6 +41,11 @@ footer{
     border-bottom: 1px solid #eee;
     margin-bottom: 20px;
   }
+
+  .user-column{
+    min-height: 700px;
+    margin-bottom: 20px;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 979px) {

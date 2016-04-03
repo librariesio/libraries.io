@@ -1,15 +1,16 @@
 class UsersController < ApplicationController
   def show
     find_user
-    @repositories = @user.github_repositories.open_source.source.order('stargazers_count DESC').limit(10)
-    @favourite_projects = @user.top_favourite_projects
+    @repositories = @user.github_repositories.open_source.source.order('stargazers_count DESC').limit(6)
+    @favourite_projects = @user.top_favourite_projects.limit(6)
+    @projects = @user.projects.joins(:github_repository).order('projects.rank DESC, projects.created_at DESC').limit(6)
     @contributions = @user.github_contributions.with_repo
                           .joins(:github_repository)
                           .where('github_repositories.owner_id != ?', @user.github_id.to_s)
                           .where('github_repositories.fork = ?', false)
                           .where('github_repositories.private = ?', false)
                           .includes(:github_repository)
-                          .order('count DESC').limit(10)
+                          .order('count DESC').limit(6)
   end
 
   def repositories

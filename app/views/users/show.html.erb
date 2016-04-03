@@ -1,7 +1,7 @@
 <% title "#{github_user_title(@user)} on GitHub - Libraries" %>
 <% description "GitHub repositories created and contributed to by #{github_user_title(@user)}" %>
 <%= content_for :meta, render_meta(@user) %>
-<% cache([@user, 'users:show', 'v2'], :expires_in => 1.week) do %>
+<% cache([@user, 'users:show', 'v3'], :expires_in => 1.week) do %>
 <div class="row">
   <div class="col-md-6">
     <h1>
@@ -46,43 +46,47 @@
 </div>
 
 <hr>
+
 <div class="row">
-  <% if @repositories.length > 0 %>
-    <div class="col-md-4">
-      <h4>Repositories</h4>
-      <%= render @repositories %>
-      <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
-    </div>
-  <% end %>
-  <% if @contributions.length > 0 %>
-    <div class="col-md-4">
-      <h4>Repositories Contributed To</h4>
-      <%= render @contributions.map(&:github_repository)  %>
-      <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
-    </div>
-  <% end %>
-  <% if @favourite_projects.length > 0 %>
-    <div class="col-md-4">
-      <h4>Most Used Projects</h4>
-      <%= render @favourite_projects %>
-    </div>
-  <% end %>
-  <% if @user.org? && @user.top_contributors.any? %>
-    <div class="col-md-4">
+  <div class="col-md-8">
+    <% if @repositories.length > 0 %>
+      <div class="col-md-6 user-column">
+        <h4>Repositories</h4>
+        <%= render @repositories %>
+        <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
+      </div>
+    <% end %>
+    <% if @contributions.length > 0 %>
+      <div class="col-md-6 user-column">
+        <h4>Repositories Contributed To</h4>
+        <%= render @contributions.map(&:github_repository)  %>
+        <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
+      </div>
+    <% end %>
+    <% if @projects.length > 0 %>
+      <div class="col-md-6 user-column">
+        <h4>Projects</h4>
+        <%= render @projects %>
+        <%= link_to "See all #{@user}'s projects", user_projects_path(@user) %>
+      </div>
+    <% end %>
+    <% if @favourite_projects.length > 0 %>
+      <div class="col-md-6 user-column">
+        <h4>Most Used Projects</h4>
+        <%= render @favourite_projects %>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+    <% if @user.org? && @user.top_contributors.any? %>
       <h4>Top Contributors</h4>
       <%= render @user.top_contributors %>
-    </div>
-  <% end %>
-</div>
-
-<% if !@user.org? %>
-  <div class="row">
-    <div class="col-md-12">
-      <h4>People <%= @user %> often collaborates with</h4>
+    <% else %>
+      <h4>Related Users</h4>
       <% cache("users:#{@user.id}:similar", :expires_in => 1.week) do  %>
-        <%= render @user.fellow_contributors.visible.limit(38) %>
+        <%= render @user.fellow_contributors.visible.limit(40) %>
       <% end %>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>
 <% end %>
