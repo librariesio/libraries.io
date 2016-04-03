@@ -49,33 +49,35 @@
 
 <div class="row">
   <div class="col-md-8">
-    <% if @repositories.length > 0 %>
-      <div class="col-md-6 user-column">
-        <h4>Repositories</h4>
-        <%= render @repositories %>
-        <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
-      </div>
-    <% end %>
-    <% if @contributions.length > 0 %>
-      <div class="col-md-6 user-column">
-        <h4>Repositories Contributed To</h4>
-        <%= render @contributions.map(&:github_repository)  %>
-        <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
-      </div>
-    <% end %>
-    <% if @projects.length > 0 %>
-      <div class="col-md-6 user-column">
-        <h4>Projects</h4>
-        <%= render @projects %>
-        <%= link_to "See all #{@user}'s projects", user_projects_path(@user) %>
-      </div>
-    <% end %>
-    <% if @favourite_projects.length > 0 %>
-      <div class="col-md-6 user-column">
-        <h4>Most Used Projects</h4>
-        <%= render @favourite_projects %>
-      </div>
-    <% end %>
+    <div class="row">
+      <% if @repositories.length > 0 %>
+        <div class="col-md-6 user-column">
+          <h4>Repositories</h4>
+          <%= render @repositories %>
+          <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
+        </div>
+      <% end %>
+      <% if @contributions.length > 0 %>
+        <div class="col-md-6 user-column">
+          <h4>Repositories Contributed To</h4>
+          <%= render @contributions.map(&:github_repository)  %>
+          <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
+        </div>
+      <% end %>
+      <% if @projects.length > 0 %>
+        <div class="col-md-6 user-column">
+          <h4>Projects</h4>
+          <%= render @projects %>
+          <%= link_to "See all #{@user}'s projects", user_projects_path(@user) %>
+        </div>
+      <% end %>
+      <% if @favourite_projects.length > 0 %>
+        <div class="col-md-6 user-column">
+          <h4>Most Used Projects</h4>
+          <%= render @favourite_projects %>
+        </div>
+      <% end %>
+    </div>
   </div>
   <div class="col-md-4">
     <% if @user.org? && @user.top_contributors.any? %>
