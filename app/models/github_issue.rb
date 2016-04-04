@@ -2,7 +2,7 @@ class GithubIssue < ActiveRecord::Base
   belongs_to :github_repository
   belongs_to :github_user
 
-  API_FIELDS = [:number, :state, :title, :body, :locked, :closed_at]
+  API_FIELDS = [:number, :state, :title, :body, :locked, :closed_at, :created_at, :updated_at]
 
   def github_client(token = nil)
     AuthToken.fallback_client(token)
