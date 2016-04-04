@@ -37,7 +37,7 @@ class GithubIssue < ActiveRecord::Base
     issue_hash = issue_hash.to_hash
     i = repo.github_issues.find_or_create_by(github_id: issue_hash[:id])
     i.github_user_id = issue_hash[:user][:id]
-    i.github_repository_id =
+    i.github_repository_id = repo.id
     i.comments_count = issue_hash[:comments]
     i.assign_attributes issue_hash.slice(*GithubIssue::API_FIELDS)
     i.save! if i.changed?
