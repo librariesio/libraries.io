@@ -11,7 +11,7 @@ class CreateGithubIssues < ActiveRecord::Migration
       t.boolean :locked
       t.integer :comments_count
       t.datetime :closed_at
-      t.string :labels, :string, array: true, default: []
+      t.string :labels, array: true, default: []
 
       t.timestamps null: false
     end
