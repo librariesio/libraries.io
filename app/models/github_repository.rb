@@ -413,6 +413,8 @@ class GithubRepository < ActiveRecord::Base
     issues.each do |issue|
       GithubIssue.create_from_hash(self, issue)
     end
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError => e
+    nil
   end
 
   def self.create_from_github(full_name, token = nil)
