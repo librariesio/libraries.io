@@ -407,6 +407,14 @@ class GithubRepository < ActiveRecord::Base
     manifests.where.not(id: manifests.latest.map(&:id)).each(&:destroy)
   end
 
+  def download_issues(token = nil)
+    github_client = AuthToken.new_client(token)
+    issues = github_client.issues(full_name, state: 'all')
+    issues.each do |issue|
+      GithubIssue.create_from_hash(self, issue)
+    end
+  end
+
   def self.create_from_github(full_name, token = nil)
     github_client = AuthToken.new_client(token)
     repo_hash = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
