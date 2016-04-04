@@ -40,6 +40,7 @@ class GithubIssue < ActiveRecord::Base
     i.github_repository_id = repo.id
     i.comments_count = issue_hash[:comments]
     i.assign_attributes issue_hash.slice(*GithubIssue::API_FIELDS)
+    i.last_synced_at = Time.now
     i.save! if i.changed?
     i
   end
