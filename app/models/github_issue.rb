@@ -1,6 +1,6 @@
 class GithubIssue < ActiveRecord::Base
   belongs_to :github_repository
-  belongs_to :github_user
+  belongs_to :github_user, primary_key: :github_id
 
   API_FIELDS = [:number, :state, :title, :body, :locked, :closed_at, :created_at, :updated_at]
 
