@@ -38,6 +38,7 @@ class GithubIssue < ActiveRecord::Base
     i = repo.github_issues.find_or_create_by(github_id: issue_hash[:id])
     i.github_user_id = issue_hash[:user][:id]
     i.github_repository_id = repo.id
+    i.pull_request = issue_hash[:pull_request].present?
     i.comments_count = issue_hash[:comments]
     i.assign_attributes issue_hash.slice(*GithubIssue::API_FIELDS)
     i.last_synced_at = Time.now
