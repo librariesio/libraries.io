@@ -80,9 +80,11 @@
     </div>
   </div>
   <div class="col-md-4">
-    <% if @user.org? && @user.top_contributors.any? %>
-      <h4>Top Contributors</h4>
-      <%= render @user.top_contributors %>
+    <% if @user.org? %>
+      <% if @user.top_contributors.any?  %>
+        <h4>Top Contributors</h4>
+        <%= render @user.top_contributors %>
+      <% end %>
     <% else %>
       <h4>Related Users</h4>
       <% cache("users:#{@user.id}:similar", :expires_in => 1.week) do  %>
