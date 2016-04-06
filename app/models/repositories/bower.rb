@@ -14,18 +14,18 @@ module Repositories
     def self.projects
       @projects ||= begin
         projects = {}
-        p1 = get("https://bower-component-list.herokuapp.com")
+        # p1 = get("https://bower-component-list.herokuapp.com")
         p2 = get("https://bower.herokuapp.com/packages")
 
         p2.each do |hash|
           projects[hash['name'].downcase] = hash.slice('name', 'url', 'hits')
         end
 
-        p1.each do |hash|
-          if projects[hash['name'].downcase]
-            projects[hash['name'].downcase].merge! hash.slice('description', "owner", "website", "forks", "stars", "created", "updated","keywords")
-          end
-        end
+        # p1.each do |hash|
+        #   if projects[hash['name'].downcase]
+        #     projects[hash['name'].downcase].merge! hash.slice('description', "owner", "website", "forks", "stars", "created", "updated","keywords")
+        #   end
+        # end
         projects
       end
     end
