@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160329211344) do
+ActiveRecord::Schema.define(version: 20160405065854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,7 +77,11 @@ ActiveRecord::Schema.define(version: 20160329211344) do
     t.string   "string",               default: [],              array: true
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
+    t.datetime "last_synced_at"
+    t.boolean  "pull_request"
   end
+
+  add_index "github_issues", ["github_repository_id"], name: "index_github_issues_on_github_repository_id", using: :btree
 
   create_table "github_organisations", force: :cascade do |t|
     t.string   "login"
@@ -132,6 +136,7 @@ ActiveRecord::Schema.define(version: 20160329211344) do
     t.string   "has_threat_model"
     t.string   "has_audit"
     t.string   "status"
+    t.datetime "last_synced_at"
   end
 
   add_index "github_repositories", ["github_id"], name: "index_github_repositories_on_github_id", unique: true, using: :btree

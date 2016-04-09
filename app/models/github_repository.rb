@@ -14,6 +14,7 @@ class GithubRepository < ActiveRecord::Base
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :repository_subscriptions
   has_many :web_hooks
+  has_many :github_issues, dependent: :delete_all
   has_one :readme, dependent: :delete
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
@@ -248,7 +249,9 @@ class GithubRepository < ActiveRecord::Base
     download_manifests(token)
     download_owner
     download_fork_source(token)
+    download_issues(token)
     touch_projects
+    update_attributes(last_synced_at: Time.now)
   end
 
   def download_fork_source(token = nil)
@@ -404,6 +407,16 @@ class GithubRepository < ActiveRecord::Base
 
   def delete_old_manifests
     manifests.where.not(id: manifests.latest.map(&:id)).each(&:destroy)
+  end
+
+  def download_issues(token = nil)
+    github_client = AuthToken.new_client(token)
+    issues = github_client.issues(full_name, state: 'all')
+    issues.each do |issue|
+      GithubIssue.create_from_hash(self, issue)
+    end
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError => e
+    nil
   end
 
   def self.create_from_github(full_name, token = nil)
