@@ -250,6 +250,7 @@ class GithubRepository < ActiveRecord::Base
     download_owner
     download_fork_source(token)
     touch_projects
+    update_attributes(last_synced_at: Time.now)
   end
 
   def download_fork_source(token = nil)
