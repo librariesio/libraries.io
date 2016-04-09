@@ -4,12 +4,12 @@ namespace :github do
   end
 
   task sync_users: :environment do
-    ids = GithubUser.visible.where(last_synced_at: nil).order('updated_at DESC').limit(50_000).pluck(:id)
+    ids = GithubUser.visible.where(last_synced_at: nil).order('github_users.updated_at DESC').limit(50_000).pluck(:id)
     GithubUser.where(id: ids).find_each(&:async_sync)
   end
 
   task sync_project_repos: :environment do
-    ids = GithubRepository.with_projects.where(last_synced_at: nil).order('updated_at DESC').limit(10_000).pluck(:id)
+    ids = GithubRepository.with_projects.where(last_synced_at: nil).order('github_repositories.updated_at DESC').limit(10_000).pluck(:id)
     GithubRepository.where(id: ids).find_each(&:update_all_info_async)
   end
 
