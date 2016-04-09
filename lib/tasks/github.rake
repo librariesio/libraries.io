@@ -5,7 +5,7 @@ namespace :github do
   end
 
   task sync_project_repos: :environment do
-    ids = GithubRepository.with_projects.where(last_synced_at: nil).order('github_repositories.updated_at DESC').limit(10_000).pluck(:id)
+    ids = GithubRepository.with_projects.where(last_synced_at: nil).order('github_repositories.updated_at DESC').limit(50_000).pluck(:id)
     GithubRepository.where(id: ids).find_each(&:update_all_info_async)
   end
 
