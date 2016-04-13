@@ -57,7 +57,7 @@ GEM
       sass (~> 3.0)
       slim (>= 1.3.6, < 4.0)
       terminal-table (~> 1.4)
-    bugsnag (4.0.1)
+    bugsnag (4.0.2)
     builder (3.2.2)
     concurrent-ruby (1.0.1)
     connection_pool (2.2.0)
