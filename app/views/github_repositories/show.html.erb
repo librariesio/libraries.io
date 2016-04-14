@@ -135,7 +135,7 @@
 
                   </th>
                 </thead>
-                <% deps.first(200).sort_by(&:project_name).each do |dependency| %>
+                <% deps.first(200).reject{|dep| dep.project_name.blank? }.sort_by(&:project_name).each do |dependency| %>
                   <tr>
                     <td>
                       <% if dependency.platform.present? %>
