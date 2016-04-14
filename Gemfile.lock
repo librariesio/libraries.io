@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/sschuberth/spdx-licenses.git
+  revision: 89de25c2134ab5258263cd82f8a72e0948af0533
+  specs:
+    spdx-licenses (1.0.0)
+      json
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -180,7 +187,6 @@ GEM
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
     mime-types (2.99.1)
-    mime-types-data (3.2016.0221)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     moneta (0.8.0)
@@ -357,8 +363,6 @@ GEM
     spdx (1.2.8)
       fuzzy_match (~> 2.1)
       spdx-licenses (~> 1.0)
-    spdx-licenses (1.0.0)
-      json
     spring (1.7.1)
     sprockets (3.6.0)
       concurrent-ruby (~> 1.0)
@@ -467,6 +471,7 @@ DEPENDENCIES
   sinatra
   sitemap_generator
   spdx
+  spdx-licenses!
   spring
   sql_queries_count
   typhoeus
