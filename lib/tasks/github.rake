@@ -1,7 +1,7 @@
 namespace :github do
   task recreate_index: :environment do
     # If the index doesn't exists can't be deleted, returns 404, carry on
-    GithubRepository.__elasticsearch__.client.indices.delete index: 'projects' rescue nil
+    GithubRepository.__elasticsearch__.client.indices.delete index: 'github_repositories' rescue nil
     GithubRepository.__elasticsearch__.create_index! force: true
   end
 
