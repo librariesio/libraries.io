@@ -10,7 +10,7 @@
         </span>
       </div>
 
-      <% [:licenses, :languages].each do |field| %>
+      <% [:license, :language, :sort].each do |field| %>
         <%= hidden_field_tag field, params[field] if params[field].present? %>
       <% end %>
       <% if @suggestion && @suggestion.options.any? %>
