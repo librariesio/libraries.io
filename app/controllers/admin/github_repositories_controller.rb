@@ -27,11 +27,13 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   end
 
   def deprecated
-    @github_repositories = GithubRepository.maintained.where("github_repositories.description ilike '%deprecated%'").order('stargazers_count DESC').paginate(page: params[:page])
+    @search = GithubRepository.search('deprecated').paginate(page: params[:page])
+    @github_repositories = @search.records
   end
 
   def unmaintained
-    @github_repositories = GithubRepository.maintained.where("github_repositories.description ilike '%maintained%'").order('stargazers_count DESC').paginate(page: params[:page])
+    @search = GithubRepository.search('maintained').paginate(page: params[:page])
+    @github_repositories = @search.records
   end
 
   private
