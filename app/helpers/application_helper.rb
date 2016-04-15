@@ -14,6 +14,19 @@ module ApplicationHelper
     ]
   end
 
+  def repo_sort_options
+    [
+      ['Stars', 'stargazers_count'],
+      ['Forks', 'forks_count'],
+      ['Watchers', 'subscribers_count'],
+      ['Open issues', 'open_issues_count'],
+      ['Contributors', 'github_contributions_count'],
+      ['Repo size', 'size'],
+      ['Newest', 'created_at'],
+      ['Recently pushed', 'pushed_at']
+    ]
+  end
+
   def package_link(project, version = nil)
     Repositories::Base.package_link(project, version)
   end

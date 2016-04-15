@@ -81,10 +81,12 @@ module RepoSearch
                      must: [],
                      must_not: [
                        {
-                         term: { "status" => "Removed" }
-                       },
-                       {
-                         "term": { "private" => 0 }
+                         term: {
+                           "status" => "Removed",
+                           "private" => 0,
+                           "fork" => 0,
+                           "pushed_at" => nil
+                         }
                        }
                      ]
                   }
@@ -156,7 +158,7 @@ module RepoSearch
           }
         }
       elsif options[:sort].blank?
-        search_definition[:sort]  = [{'stars' => 'desc'}]
+        search_definition[:sort]  = [{'stargazers_count' => 'desc'}]
       end
 
       __elasticsearch__.search(search_definition)

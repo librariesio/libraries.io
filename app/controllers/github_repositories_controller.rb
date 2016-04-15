@@ -20,6 +20,21 @@ class GithubRepositoriesController < ApplicationController
     @licenses = language_scope.group('lower(license)').count.reject{|k,v| k.blank? || k == 'other' }.sort_by{|k,v| v }.reverse.first(25)
   end
 
+  def search
+    @query = params[:q]
+    @search = GithubRepository.search(params[:q], filters: {
+      license: current_license,
+      language: current_language
+    }, sort: format_sort, order: format_order).paginate(page: page_number, per_page: per_page_number)
+    @suggestion = @search.response.suggest.did_you_mean.first
+    @github_repositories = @search.records
+    @title = page_title
+    respond_to do |format|
+      format.html
+      format.atom
+    end
+  end
+
   def hacker_news
     @language = Languages::Language[params[:language]] if params[:language].present?
     @license = Spdx.find(params[:license]) if params[:license].present?
@@ -75,6 +90,50 @@ class GithubRepositoriesController < ApplicationController
       current_user && current_user.can_read?(@github_repository)
     else
       true
+    end
+  end
+
+  def current_language
+    Languages::Language[params[:languages]].to_s if params[:languages].present?
+  end
+
+  helper_method :current_license
+  def current_license
+    Spdx.find(params[:licenses]).try(:id) if params[:licenses].present?
+  end
+
+  def format_sort
+    return nil unless params[:sort].present?
+    allowed_sorts.include?(params[:sort]) ? params[:sort] : nil
+  end
+
+  def format_order
+    return nil unless params[:order].present?
+    ['desc', 'asc'].include?(params[:order]) ? params[:order] : nil
+  end
+
+  def allowed_sorts
+    ['stargazers_count', 'github_contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
+  end
+
+  def page_title
+    return "Search for #{params[:q]} - Libraries" if params[:q].present?
+
+    modifiers = []
+    modifiers << current_license if current_license.present?
+    modifiers << current_language if current_language.present?
+
+    modifier = " #{modifiers.compact.join(' ')} "
+
+    case params[:sort]
+    when 'created_at'
+      "New#{modifier}Github Repositories - Libraries"
+    when 'updated_at'
+      "Updated#{modifier}Github Repositories - Libraries"
+    when 'latest_release_published_at'
+      "Updated#{modifier}Github Repositories - Libraries"
+    else
+      "Popular#{modifier}Github Repositories - Libraries"
     end
   end
 end
