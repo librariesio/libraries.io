@@ -3,7 +3,7 @@ module RepoSearch
 
   included do
     include Elasticsearch::Model
-    include Elasticsearch::Model::Callbacks
+    #include Elasticsearch::Model::Callbacks
 
     FIELDS = ['full_name^2', 'exact_name^2', 'description', 'homepage', 'language', 'license']
 
@@ -49,6 +49,8 @@ module RepoSearch
         indexes :private
       end
     end
+
+    # after_save() { __elasticsearch__.index_document }
 
     def as_indexed_json(options = {})
       as_json methods: [:exact_name]
