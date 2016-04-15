@@ -94,12 +94,11 @@ class GithubRepositoriesController < ApplicationController
   end
 
   def current_language
-    Languages::Language[params[:languages]].to_s if params[:languages].present?
+    Languages::Language[params[:language]].to_s if params[:language].present?
   end
 
-  helper_method :current_license
   def current_license
-    Spdx.find(params[:licenses]).try(:id) if params[:licenses].present?
+    params[:license] if params[:license].present?
   end
 
   def format_sort

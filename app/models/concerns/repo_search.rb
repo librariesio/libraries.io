@@ -113,7 +113,7 @@ module RepoSearch
           }
         },
         facets: {
-          languages: { terms: {
+          language: { terms: {
               field: "language",
               size: facet_limit
             },
@@ -123,7 +123,7 @@ module RepoSearch
               }
             }
           },
-          licenses: {
+          license: {
             terms: {
               field: "license",
               size: facet_limit
