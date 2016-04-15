@@ -1,4 +1,6 @@
 class GithubRepository < ActiveRecord::Base
+  include RepoSearch
+
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
 
   API_FIELDS = [:description, :fork, :created_at, :updated_at, :pushed_at, :homepage,

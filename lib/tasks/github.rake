@@ -1,4 +1,15 @@
 namespace :github do
+  task recreate_index: :environment do
+    # If the index doesn't exists can't be deleted, returns 404, carry on
+    GithubRepository.__elasticsearch__.client.indices.delete index: 'projects' rescue nil
+    GithubRepository.__elasticsearch__.create_index! force: true
+  end
+
+  desc 'Reindex the search'
+  task reindex: [:environment, :recreate_index] do
+    GithubRepository.import
+  end
+
   task sync_users: :environment do
     ids = GithubUser.visible.where(last_synced_at: nil).order('github_users.updated_at DESC').limit(50_000).pluck(:id)
     GithubUser.where(id: ids).find_each(&:async_sync)
