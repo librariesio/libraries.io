@@ -27,12 +27,20 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   end
 
   def deprecated
-    @search = GithubRepository.search('deprecated').paginate(page: params[:page])
+    @search = GithubRepository.search('deprecated', must_not: {
+      term: {
+        "status" => "Deprecated"
+      }
+    }).paginate(page: params[:page])
     @github_repositories = @search.records
   end
 
   def unmaintained
-    @search = GithubRepository.search('maintained').paginate(page: params[:page])
+    @search = GithubRepository.search('maintained', must_not: {
+      term: {
+        "status" => "Unmaintained"
+      }
+    }).paginate(page: params[:page])
     @github_repositories = @search.records
   end
 
