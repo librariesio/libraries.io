@@ -84,7 +84,7 @@ module RepoSearch
                          term: {
                            "status" => "Removed",
                            "private" => 0,
-                           "fork" => 0,
+                           "fork" => 1,
                            "pushed_at" => nil
                          }
                        }
