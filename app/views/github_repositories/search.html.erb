@@ -16,7 +16,7 @@
       <% if @suggestion && @suggestion.options.any? %>
         <p>
           Did you mean
-          <strong><%= link_to "#{@suggestion.options.first.text}?", search_path(q: @suggestion.options.first.text) %></strong>
+          <strong><%= link_to "#{@suggestion.options.first.text}?", github_search_path(q: @suggestion.options.first.text) %></strong>
         </p>
       <% end %>
     </div>
