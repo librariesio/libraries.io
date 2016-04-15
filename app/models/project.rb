@@ -82,6 +82,10 @@ class Project < ActiveRecord::Base
     name
   end
 
+  def github_contributions_count
+    github_repository.try(:github_contributions_count) || 0
+  end
+
   def meta_tags
     {
       title: "#{name} on #{platform}",
