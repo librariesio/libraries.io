@@ -16,6 +16,7 @@ module ApplicationHelper
 
   def repo_sort_options
     [
+      ['Relevance', nil],
       ['Stars', 'stargazers_count'],
       ['Forks', 'forks_count'],
       ['Watchers', 'subscribers_count'],
