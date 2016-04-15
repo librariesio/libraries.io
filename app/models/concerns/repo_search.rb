@@ -70,6 +70,7 @@ module RepoSearch
       facet_limit = options.fetch(:facet_limit, 35)
       query = sanitize_query(query)
       options[:filters] ||= []
+      options[:must_not] ||= []
       search_definition = {
         query: {
           function_score: {
@@ -137,7 +138,8 @@ module RepoSearch
         },
         filter: {
           bool: {
-            must: []
+            must: [],
+            must_not: options[:must_not]
           }
         },
         suggest: {
