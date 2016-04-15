@@ -26,6 +26,7 @@ class GithubRepository < ActiveRecord::Base
   validates :full_name, uniqueness: true, if: lambda { self.full_name_changed? }
   validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
 
+  before_save  :normalize_license
   after_commit :update_all_info_async, on: :create
 
   scope :without_readme, -> { where("github_repositories.id NOT IN (SELECT github_repository_id FROM readmes)") }
@@ -67,6 +68,17 @@ class GithubRepository < ActiveRecord::Base
       description: description,
       image: avatar_url(200)
     }
+  end
+
+  def normalize_license
+    return if license.blank?
+    if license.downcase == 'other'
+      self.license = 'Other'
+    else
+      l = Spdx.find(license).try(:id)
+      l = 'Other' if l.blank?
+      self.license = l
+    end
   end
 
   def is_deprecated?
