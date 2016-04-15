@@ -7,7 +7,7 @@ module Repositories
     COLOR = '#ffac45'
 
     def self.project_names
-      Manifest.platform('Carthage').includes(:repository_dependencies).map{|m| m.repository_dependencies.map(&:project_name).map(&:downcase)}.flatten.uniq
+      Manifest.platform('Carthage').includes(:repository_dependencies).map{|m| m.repository_dependencies.map(&:project_name).compact.map(&:downcase)}.flatten.uniq
     end
 
     def self.project(name)
