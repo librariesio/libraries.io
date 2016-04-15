@@ -14,7 +14,7 @@ module RepoSearch
 
         indexes :description, :analyzer => 'snowball'
         indexes :homepage
-        indexes :language, :analyzer => 'keyword'
+        indexes :language, :index => :not_analyzed
         indexes :license, :index => :not_analyzed
 
         indexes :status, :index => :not_analyzed
