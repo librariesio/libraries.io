@@ -78,14 +78,27 @@ module RepoSearch
                  query: {match_all: {}},
                  filter:{
                    bool: {
-                     must: [],
+                     must: [
+                       {
+                         exists: {
+                           "field" => "pushed_at"
+                         }
+                       }
+                     ],
                      must_not: [
                        {
                          term: {
-                           "status" => "Removed",
-                           "private" => 0,
-                           "fork" => 1,
-                           "pushed_at" => nil
+                          "fork" => true
+                         }
+                       },
+                       {
+                         term: {
+                          "private" => true
+                         }
+                       },
+                       {
+                         term: {
+                           "status" => "Removed"
                          }
                        }
                      ]
