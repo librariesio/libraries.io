@@ -18,11 +18,10 @@ module Repositories
     def self.recent_names
       u = 'http://registry.npmjs.org/-/rss?descending=true&limit=50'
       titles = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
-      titles.map { |t| t.split('@').first }
     end
 
     def self.project(name)
-      get("http://registry.npmjs.org/#{name}")
+      get("http://registry.npmjs.org/#{name.gsub('/', '%2F')}")
     end
 
     def self.keys
@@ -79,7 +78,7 @@ module Repositories
     end
 
     def self.version_invalid?(name, version)
-      get("http://registry.npmjs.org/#{name}/#{version}").has_key?('error')
+      get("http://registry.npmjs.org/#{name.gsub('/', '%2F')}/#{version}").try(:has_key?, 'error')
     end
 
     def self.dependencies(name, version)
