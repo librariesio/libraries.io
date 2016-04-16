@@ -50,6 +50,8 @@ module RepoSearch
       end
     end
 
+    after_save() { __elasticsearch__.index_document }
+
     def as_indexed_json(options = {})
       as_json methods: [:exact_name]
     end
