@@ -2,7 +2,7 @@ module Repositories
   class CRAN < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    LIBRARIAN_PLANNED = true
+    LIBRARIAN_SUPPORT = true
     URL = 'http://cran.r-project.org/'
     COLOR = '#198ce7'
 
