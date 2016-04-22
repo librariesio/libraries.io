@@ -103,6 +103,7 @@ module Repositories
       if self::HAS_DEPENDENCIES
         save_dependencies(mapped_project[:name])
       end
+      dbproject.last_synced_at = Time.now
       dbproject.save
       dbproject
     end
