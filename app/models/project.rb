@@ -82,6 +82,14 @@ class Project < ActiveRecord::Base
     name
   end
 
+  def sync
+    platform_class.update(name)
+  end
+
+  def async_sync
+    RepositoryDownloadWorker.perform_async(platform, name)
+  end
+
   def github_contributions_count
     github_repository.try(:github_contributions_count) || 0
   end
