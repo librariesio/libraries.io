@@ -17,6 +17,11 @@ namespace :projects do
     end
   end
 
+  task sync: :environment do
+    ids = Project.where(last_synced_at: nil).order('projects.updated_at DESC').limit(10_000).pluck(:id)
+    Project.where(id: ids).find_each(&:async_sync)
+  end
+
   task update_source_ranks: :environment do
     Project.where('projects.updated_at < ?', 1.week.ago).find_each(&:update_source_rank_async) if Date.today.sunday?
   end
