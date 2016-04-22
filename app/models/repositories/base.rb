@@ -163,10 +163,6 @@ module Repositories
       end
     end
 
-    def self.download_dependencies
-      project_names.each { |name| save_dependencies(name) }
-    end
-
     def self.dependencies(_name, _version)
       []
     end
