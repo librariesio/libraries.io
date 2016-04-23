@@ -61,7 +61,7 @@ GEM
     builder (3.2.2)
     concurrent-ruby (1.0.1)
     connection_pool (2.2.0)
-    counter_culture (0.1.34)
+    counter_culture (0.2.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
       after_commit_action (~> 1.0.0)
@@ -74,7 +74,7 @@ GEM
     css_parser (1.4.1)
       addressable
     dalli (2.7.6)
-    database_cleaner (1.5.2)
+    database_cleaner (1.5.3)
     diff-lcs (1.2.5)
     docile (1.1.5)
     domain_name (0.5.20160310)
