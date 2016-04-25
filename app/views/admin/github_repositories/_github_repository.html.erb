@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-xs-8">
-    <% cache(['v1', github_repository]) do  %>
+    <% cache(['v2', github_repository]) do  %>
       <div class='project' style="border-color: <%= github_repository.color %>;">
         <h5>
           <%= link_to github_repository.full_name, github_repository_path(github_repository.owner_name, github_repository.project_name) %>
