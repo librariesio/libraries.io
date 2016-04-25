@@ -20,7 +20,7 @@
     <% your_dependent_repos = current_user.your_dependent_repos(version.project) %>
     <h5 class='<%= 'with_dependent_repos' if your_dependent_repos.length > 0 %>'>
       <%= link_to project, project_path(project.to_param) %> - <%= link_to version, version_url(version.to_param) %>
-      <small>published <%= time_ago_in_words(version.published_at).gsub('about','') %> ago</small>
+      <small>published <%= timeago_tag(version.published_at) %></small>
 
       <% if your_dependent_repos.length > 0 %>
         <div class="your_dependent_repos">

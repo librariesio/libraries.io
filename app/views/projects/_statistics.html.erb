@@ -54,7 +54,7 @@
         Latest <%= @project.release_or_tag %>
       </td>
       <td>
-        <strong><%= time_ago_in_words(@project.latest_release.try(:published_at).presence || @project.updated_at) %> ago</strong>
+        <strong><%= timeago_tag(@project.latest_release.try(:published_at).presence || @project.updated_at) %></strong>
       </td>
     </tr>
     <tr>
@@ -62,7 +62,7 @@
         First <%= @project.release_or_tag %>
       </td>
       <td>
-        <strong><%= time_ago_in_words(@project.first_release.try(:published_at).presence || @project.github_repository.try(:created_at).presence || @project.created_at) %> ago</strong>
+        <strong><%= timeago_tag(@project.first_release.try(:published_at).presence || @project.github_repository.try(:created_at).presence || @project.created_at) %></strong>
       </td>
     </tr>
     <% if @project.github_repository.present? %>

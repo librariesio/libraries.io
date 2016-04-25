@@ -255,7 +255,7 @@
             Created
           </td>
           <td>
-            <strong><%= time_ago_in_words repo.created_at %> ago</strong>
+            <strong><%= timeago_tag repo.created_at %></strong>
           </td>
         </tr>
         <tr>
@@ -263,7 +263,7 @@
             Last updated
           </td>
           <td>
-            <strong><%= time_ago_in_words repo.updated_at %> ago</strong>
+            <strong><%= timeago_tag repo.updated_at %></strong>
           </td>
         </tr>
         <tr>
@@ -271,7 +271,7 @@
             Last pushed
           </td>
           <td>
-            <strong><%= repo.pushed_at.present? ? time_ago_in_words(repo.pushed_at) : 'Never'  %> ago</strong>
+            <strong><%= repo.pushed_at.present? ? timeago_tag(repo.pushed_at) : 'Never'  %></strong>
           </td>
         </tr>
       </table>
