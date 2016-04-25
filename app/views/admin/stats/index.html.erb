@@ -24,7 +24,7 @@
         subscribed to <%= link_to sub.project, project_path(sub.project.to_param) %>
         <br>
         <small>
-          <%= time_ago_in_words(sub.created_at) %> ago
+          <%= timeago_tag(sub.created_at) %>
         </small>
       </div>
     <% end %>
@@ -43,7 +43,7 @@
         <% else %>deleted repo<% end %>
         <br>
         <small>
-          <%= time_ago_in_words(sub.created_at) %> ago
+          <%= timeago_tag(sub.created_at) %>
           <% if sub.github_repository %>
             - <%= link_to pluralize(sub.github_repository.repository_dependencies.count, 'dependencies'), github_repository_path(sub.github_repository.owner_name, sub.github_repository.project_name, anchor: 'dependencies') %>
           <% end %>

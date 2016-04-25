@@ -49,7 +49,7 @@
         <% else %>
           <%= link_to 'Sync', sync_path, method: :post, class: 'btn btn-sm btn-info' %>
           <% if current_user.last_synced_at.present? %>
-            <small>Last updated <%= time_ago_in_words current_user.last_synced_at %> ago</small>
+            <small>Last updated <%= timeago_tag current_user.last_synced_at %></small>
           <% end %>
         <% end %>
       </div>

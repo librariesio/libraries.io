@@ -18,16 +18,16 @@
       <% elsif github_repository.is_deprecated? %>
         <%= fa_icon('exclamation-triangle') %> This repository is deprecated -
         <% if github_repository.pushed_at && github_repository.pushed_at > github_repository.created_at + 1.minute %>
-          Last pushed <%= time_ago_in_words github_repository.pushed_at %> ago
+          Last pushed <%= timeago_tag github_repository.pushed_at %>
         <% else %>
-          Published <%= time_ago_in_words github_repository.created_at %> ago
+          Published <%= timeago_tag github_repository.created_at %>
         <% end %>
       <% elsif github_repository.is_unmaintained? %>
         <%= fa_icon('exclamation-triangle') %> This repository is no longer maintained -
         <% if github_repository.pushed_at && github_repository.pushed_at > github_repository.created_at + 1.minute %>
-          Last pushed <%= time_ago_in_words github_repository.pushed_at %> ago
+          Last pushed <%= timeago_tag github_repository.pushed_at %>
         <% else %>
-          Published <%= time_ago_in_words github_repository.created_at %> ago
+          Published <%= timeago_tag github_repository.created_at %>
         <% end %>
       <% else %>
         <% if github_repository.language.present? %>
@@ -37,9 +37,9 @@
           <%= linked_licenses [github_repository.license] %> -
         <% end %>
         <% if github_repository.pushed_at && github_repository.pushed_at > github_repository.created_at + 1.minute %>
-          Last pushed <%= time_ago_in_words github_repository.pushed_at %> ago
+          Last pushed <%= timeago_tag github_repository.pushed_at %>
         <% else %>
-          Published <%= time_ago_in_words github_repository.created_at %> ago
+          Published <%= timeago_tag github_repository.created_at %>
         <% end %> - <%= number_to_human github_repository.stars %> stars
         <% if github_repository.fork? %>
         - Fork

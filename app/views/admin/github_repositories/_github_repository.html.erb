@@ -22,9 +22,9 @@
             <%= link_to github_repository.license, license_path(github_repository.license) %> -
           <% end %>
           <% if github_repository.pushed_at && github_repository.pushed_at > github_repository.created_at + 1.minute %>
-            Last pushed <%= time_ago_in_words github_repository.pushed_at %> ago
+            Last pushed <%= timeago_tag github_repository.pushed_at %>
           <% else %>
-            Published <%= time_ago_in_words github_repository.created_at %> ago
+            Published <%= timeago_tag github_repository.created_at %>
           <% end %> - <%= number_to_human github_repository.stars %> stars
           <% if github_repository.fork? %>
           - Fork

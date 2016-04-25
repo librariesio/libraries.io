@@ -8,7 +8,7 @@
     <h5><small><%= subscription.project.latest_release_number %></small></h5>
   </td>
   <td>
-    <h5><small>Last updated <%= time_ago_in_words(subscription.project.latest_release_published_at) %> ago</small></h5>
+    <h5><small>Last updated <%= timeago_tag(subscription.project.latest_release_published_at) %></small></h5>
   </td>
   <td>
     <div class="btn-group">

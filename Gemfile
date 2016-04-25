@@ -57,6 +57,7 @@ gem 'escape_utils'
 gem 'github_urls'
 gem 'mail', require: ['mail', 'mail/utilities', 'mail/parsers']
 gem 'pictogram'
+gem 'rails-timeago', github: 'librariesio/rails-timeago'
 
 group :development do
   gem 'bundler'
