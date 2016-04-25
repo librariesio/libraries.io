@@ -18,7 +18,7 @@ namespace :projects do
   end
 
   task sync: :environment do
-    ids = Project.where(last_synced_at: nil).order('projects.updated_at DESC').limit(10_000).pluck(:id)
+    ids = Project.where(last_synced_at: nil).order('projects.updated_at DESC').limit(50_000).pluck(:id)
     Project.where(id: ids).find_each(&:async_sync)
   end
 
