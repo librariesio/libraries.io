@@ -142,7 +142,7 @@ GEM
       nokogiri (~> 1.5, >= 1.5.11)
     font-awesome-rails (4.6.1.0)
       railties (>= 3.2, < 5.1)
-    foreman (0.80.2)
+    foreman (0.81.0)
       thor (~> 0.19.1)
     formatador (0.2.5)
     fuzzy_match (2.1.0)
