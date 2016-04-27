@@ -227,7 +227,7 @@ GEM
     pg_array_parser (0.0.9)
     pictogram (2.0.1)
       railties
-    platform-api (0.6.0)
+    platform-api (0.7.0)
       heroics
     postgres_ext (3.0.0)
       activerecord (>= 4.0.0)
