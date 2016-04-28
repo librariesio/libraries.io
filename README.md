@@ -25,7 +25,7 @@ Install and run the deps
 Perform the sacred ruby voodoo
 
 ```sh
- rbenv install 2.3.0
+ rbenv install 2.3.1
  gem install bundler
  rbenv rehash
  bundle
