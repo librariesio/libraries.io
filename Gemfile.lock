@@ -188,7 +188,6 @@ GEM
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
     mime-types (2.99.1)
-    mime-types-data (3.2016.0221)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     moneta (0.8.0)
@@ -481,5 +480,8 @@ DEPENDENCIES
   uglifier
   will_paginate-bootstrap
 
+RUBY VERSION
+   ruby 2.3.1p112
+
 BUNDLED WITH
-   1.11.2
+   1.12.0
