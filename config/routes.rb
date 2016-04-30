@@ -41,6 +41,8 @@ Rails.application.routes.draw do
     get '/stats/github', to: 'stats#github', as: :github_stats
   end
 
+  get '/issues', to: 'github_issues#index', as: :issues
+
   get '/pricing', to: 'account_subscriptions#plans', as: :pricing
   resources :account_subscriptions
 
