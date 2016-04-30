@@ -32,11 +32,11 @@ class Admin::ProjectsController < Admin::ApplicationController
       platform: params[:platform]
     }, sort: params[:sort], order: params[:order])
 
-    @projects = @search.records.where("status IS ? OR status = ''", nil).order('rank DESC, name DESC').paginate(page: params[:page])
+    @projects = @search.records.where("status IS ? OR status = ''", nil).order('projects.rank DESC, name DESC').paginate(page: params[:page])
 
     if @projects.empty?
       repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%deprecated%'").pluck(:id)
-      @projects = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).order('rank DESC, name DESC').paginate(page: params[:page])
+      @projects = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).order('projects.rank DESC, name DESC').paginate(page: params[:page])
     end
   end
 
@@ -45,11 +45,11 @@ class Admin::ProjectsController < Admin::ApplicationController
       platform: params[:platform]
     }, sort: params[:sort], order: params[:order])
 
-    @projects = @search.records.where("status IS ? OR status = ''", nil).order('rank DESC, name DESC').paginate(page: params[:page])
+    @projects = @search.records.where("status IS ? OR status = ''", nil).order('projects.rank DESC, name DESC').paginate(page: params[:page])
 
     if @projects.empty?
       repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%maintained%'").pluck(:id)
-      @projects = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).order('rank DESC, name DESC').paginate(page: params[:page])
+      @projects = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).order('projects.rank DESC, name DESC').paginate(page: params[:page])
     end
   end
 

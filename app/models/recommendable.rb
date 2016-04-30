@@ -2,7 +2,7 @@ module Recommendable
   extend ActiveSupport::Concern
 
   def recommended_projects
-    projects = Project.where(id: recommended_project_ids).order("position(','||projects.id::text||',' in '#{recommended_project_ids.join(',')}'), rank DESC")
+    projects = Project.where(id: recommended_project_ids).order("position(','||projects.id::text||',' in '#{recommended_project_ids.join(',')}'), projects.rank DESC")
     projects = unfiltered_recommendations if projects.empty?
     projects.where.not(id: already_watching_ids).maintained.includes(:github_repository)
   end
@@ -41,7 +41,7 @@ module Recommendable
   def unfiltered_recommendations
     ids = Project.maintained.most_dependents.limit(50).pluck(:id) + Project.maintained.most_watched.limit(50).pluck(:id)
     ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.map(&:first)
-    Project.where(id: ids).order('rank DESC').maintained
+    Project.where(id: ids).order('projects.rank DESC').maintained
   end
 
   def favourite_platforms

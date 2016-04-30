@@ -40,7 +40,7 @@ class ProjectsController < ApplicationController
     # end
 
     @platforms = [] #Project.unlicensed.group('platform').count.sort_by(&:last).reverse
-    order = params[:newest] ? 'projects.created_at DESC' : 'dependents_count DESC, rank DESC, projects.created_at DESC'
+    order = params[:newest] ? 'projects.created_at DESC' : 'projects.dependents_count DESC, projects.rank DESC, projects.created_at DESC'
     @projects = Project.unlicensed.includes(:github_repository).order(order).paginate(page: page_number, per_page: 20)
   end
 
@@ -54,7 +54,7 @@ class ProjectsController < ApplicationController
     end
 
     @platforms = Project.deprecated.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.deprecated.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = scope.deprecated.order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def removed
@@ -67,7 +67,7 @@ class ProjectsController < ApplicationController
     end
 
     @platforms = Project.removed.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.removed.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = scope.removed.order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def unmaintained
@@ -80,7 +80,7 @@ class ProjectsController < ApplicationController
     end
 
     @platforms = Project.unmaintained.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.unmaintained.order('dependents_count DESC, rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = scope.unmaintained.order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def show
