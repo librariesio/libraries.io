@@ -434,7 +434,7 @@ DEPENDENCIES
   hirefire-resource
   jquery-rails
   js-cookie-rails
-  languages (= 1.4.0)
+  languages
   license-compatibility
   lograge
   mail
