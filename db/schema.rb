@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(version: 20160430125837) do
     t.string   "has_audit"
     t.string   "status"
     t.datetime "last_synced_at"
-    t.integer  "rank",                       default: 0
+    t.integer  "rank"
   end
 
   add_index "github_repositories", ["github_id"], name: "index_github_repositories_on_github_id", unique: true, using: :btree
