@@ -4,6 +4,14 @@ class GithubIssue < ActiveRecord::Base
 
   API_FIELDS = [:number, :state, :title, :body, :locked, :closed_at, :created_at, :updated_at]
 
+  scope :open, -> { where(state: 'open') }
+  scope :closed, -> { where(state: 'closed') }
+  scope :issue, -> { where(pull_request: false) }
+  scope :pull_request, -> { where(pull_request: true) }
+  scope :locked, -> { where(locked: true) }
+  scope :unlocked, -> { where(locked: false) }
+  scope :actionable, -> { open.issue.unlocked }
+
   def github_client(token = nil)
     AuthToken.fallback_client(token)
   end
