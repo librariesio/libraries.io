@@ -12,6 +12,11 @@ class GithubIssue < ActiveRecord::Base
   scope :unlocked, -> { where(locked: false) }
   scope :actionable, -> { open.issue.unlocked }
 
+  def url
+    path = pull_request ? 'pull' : 'issues'
+    "#{github_repository.url}/#{path}/#{number}"
+  end
+
   def github_client(token = nil)
     AuthToken.fallback_client(token)
   end
