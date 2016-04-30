@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160422073453) do
+ActiveRecord::Schema.define(version: 20160430125837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,6 +137,7 @@ ActiveRecord::Schema.define(version: 20160422073453) do
     t.string   "has_audit"
     t.string   "status"
     t.datetime "last_synced_at"
+    t.integer  "rank",                       default: 0
   end
 
   add_index "github_repositories", ["github_id"], name: "index_github_repositories_on_github_id", unique: true, using: :btree
