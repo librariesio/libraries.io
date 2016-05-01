@@ -38,7 +38,7 @@ module Searchable
     after_save() { __elasticsearch__.index_document }
 
     def as_indexed_json(options = {})
-      as_json methods: [:stars, :repo_name, :exact_name]
+      as_json methods: [:stars, :repo_name, :exact_name, :github_contributions_count]
     end
 
     def exact_name
