@@ -15,5 +15,11 @@
 
   <small>
     Created <%= timeago_tag github_issue.created_at %>
+    <% if github_issue.labels.any? %>
+      -
+      <% github_issue.labels.each do |label| %>
+        <%= link_to label, "#{github_repository.url}/labels/#{label}", class: 'label label-default'%>
+      <% end %>
+    <% end %>
   </small>
 </div>
