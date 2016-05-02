@@ -67,7 +67,7 @@ GEM
       terminal-table (~> 1.4)
     bugsnag (4.0.2)
     builder (3.2.2)
-    concurrent-ruby (1.0.1)
+    concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
     counter_culture (0.2.0)
       activerecord (>= 3.0.0)
