@@ -336,7 +336,7 @@ GEM
     semantic (1.4.1)
     semantic_range (1.0.0)
     sexp_processor (4.7.0)
-    sidekiq (4.1.1)
+    sidekiq (4.1.2)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       redis (~> 3.2, >= 3.2.1)
