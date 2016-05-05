@@ -14,7 +14,7 @@
         </div>
         <div class="col-xs-4">
           <br>
-          <%= link_to project.github_repository.try(:url), class: 'btn btn-primary', target: :blank do %>
+          <%= link_to project.github_repository.try(:url), class: 'btn btn-primary' do %>
           Suggest a License
           <% end %>
           <% if current_user && current_user.admin? %>
@@ -49,7 +49,7 @@
       This is a list of the most popular/important libraries that we couldn't find a license for, you can help the community by encouraging the authors to add a <code>LICENSE</code> file to their repositories.
     </p>
     <p>
-      Find out more about open source licensing at <%= link_to 'ChooseALicense.com','http://choosealicense.com/', target: :blank %>
+      Find out more about open source licensing at <%= link_to 'ChooseALicense.com','http://choosealicense.com/' %>
     </p>
     <h3>
       <strong>
