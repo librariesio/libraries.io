@@ -1,6 +1,6 @@
 <%= render 'admin/nav' %>
 <div class="row">
-  <%= simple_form_for(@github_repository, url: admin_github_repository_path(@github_repository.id), html: { class: 'form-vertical col-md-6' }) do |form| %>
+  <div class="col-md-6">
     <h2>
       Admin / <%= link_to @github_repository.full_name, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %>
       <%= link_to fa_icon('github'), @github_repository.url, target: :blank %>
@@ -10,6 +10,17 @@
       <%= @github_repository.description %>
     </p>
 
+    <p>
+      <%= link_to "Deprecate", deprecate_admin_github_repository_path(@github_repository.id), class: 'btn btn-danger', method: :put, target: :blank %>
+      <%= link_to "Unmaintain", unmaintain_admin_github_repository_path(@github_repository.id), class: 'btn btn-warning', method: :put, target: :blank %>
+    </p>
+
+    <hr>
+
+  </div>
+</div>
+<div class='row'>
+  <%= simple_form_for(@github_repository, url: admin_github_repository_path(@github_repository.id), html: { class: 'form-vertical col-md-6' }) do |form| %>
     <%= form.input :license, include_blank: true, selected: @github_repository.license, label: 'License', collection: Project.popular_licenses(:facet_limit => 100).map{|l| format_license(l.term) } %>
     <%= form.input :status, include_blank: true, collection: GithubRepository::STATUSES %>
 
