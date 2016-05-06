@@ -32,6 +32,10 @@ Rails.application.routes.draw do
     end
     resources :project_suggestions
     resources :github_repositories do
+      member do
+        put 'deprecate'
+        put 'unmaintain'
+      end
       collection do
         get 'deprecated'
         get 'unmaintained'

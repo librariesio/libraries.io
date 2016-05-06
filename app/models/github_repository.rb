@@ -97,6 +97,20 @@ class GithubRepository < ActiveRecord::Base
     !is_deprecated? && !is_removed? && !is_unmaintained?
   end
 
+  def deprecate!
+    update_attribute(:status, 'Deprecated')
+    projects.each do |project|
+      project.update_attribute(:status, 'Deprecated')
+    end
+  end
+
+  def unmaintain!
+    update_attribute(:status, 'Unmaintained')
+    projects.each do |project|
+      project.update_attribute(:status, 'Unmaintained')
+    end
+  end
+
   def touch_projects
     projects.find_each(&:save)
   end

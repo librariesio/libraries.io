@@ -13,6 +13,20 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
     end
   end
 
+  def deprecate
+    @github_repository = GithubRepository.find(params[:id])
+    @github_repository.deprecate!
+    @github_repository.update_all_info_async
+    redirect_to github_repository_path(@github_repository.owner_name, @github_repository.project_name)
+  end
+
+  def unmaintain
+    @github_repository = GithubRepository.find(params[:id])
+    @github_repository.unmaintain!
+    @github_repository.update_all_info_async
+    redirect_to github_repository_path(@github_repository.owner_name, @github_repository.project_name)
+  end
+
   def index
     if params[:language].present?
       @language = GithubRepository.language(params[:language].downcase).first.try(:language)

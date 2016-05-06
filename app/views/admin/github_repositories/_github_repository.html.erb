@@ -39,6 +39,8 @@
     <% end %>
   </div>
   <div class="col-xs-4">
+    <%= link_to "Deprecate", deprecate_admin_github_repository_path(github_repository.id), class: 'btn btn-danger', method: :put, target: :blank %>
+    <%= link_to "Unmaintain", unmaintain_admin_github_repository_path(github_repository.id), class: 'btn btn-warning', method: :put, target: :blank %>
     <%= link_to 'Edit Details', admin_github_repository_path(github_repository.id), class: 'btn btn-primary' %>
   </div>
 </div>
