@@ -1,4 +1,4 @@
-class RepositoryDependency < ActiveRecord::Base
+class RepositoryDependency < ApplicationRecord
   belongs_to :manifest
   belongs_to :project
 
