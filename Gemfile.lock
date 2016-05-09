@@ -269,6 +269,10 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 5.0.0.rc1)
       sprockets-rails (>= 2.0.0)
+    rails-controller-testing (0.1.1)
+      actionpack (~> 5.x)
+      actionview (~> 5.x)
+      activesupport (~> 5.x)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.7)
@@ -450,6 +454,7 @@ DEPENDENCIES
   rack-throttle
   rack-timeout
   rails (= 5.0.0.rc1)
+  rails-controller-testing
   rails-timeago!
   rails_12factor
   rails_safe_tasks
