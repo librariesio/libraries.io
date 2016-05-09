@@ -69,7 +69,7 @@ end
 
 group :development, :test do
   gem 'dotenv-rails'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '3.5.0.beta3'
   gem 'coveralls', require: false
 end
 
