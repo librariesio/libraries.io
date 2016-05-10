@@ -9,10 +9,14 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def max_page
+    100
+  end
+
   def page_number
     @page_number = params[:page].to_i rescue 1
     @page_number = 1 if @page_number < 2
-    raise ActiveRecord::RecordNotFound if @page_number > 100
+    raise ActiveRecord::RecordNotFound if @page_number > max_page
     @page_number
   end
 

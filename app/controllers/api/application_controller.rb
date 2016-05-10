@@ -4,6 +4,10 @@ class Api::ApplicationController < ApplicationController
 
   private
 
+  def max_page
+    1000
+  end
+
   def set_headers
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Expose-Headers'] = 'ETag'
