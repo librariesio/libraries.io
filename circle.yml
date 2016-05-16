@@ -4,6 +4,9 @@ machine:
     - postgresql
 
 dependencies:
+  pre:
+    - gem update --system 2.6.4
+
   cache_directories:
     - elasticsearch-1.7.5
   post:

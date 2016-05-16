@@ -1,4 +1,4 @@
-class GithubIssue < ActiveRecord::Base
+class GithubIssue < ApplicationRecord
   belongs_to :github_repository
   belongs_to :github_user, primary_key: :github_id
 

@@ -1,4 +1,4 @@
-class AuthToken < ActiveRecord::Base
+class AuthToken < ApplicationRecord
   def self.client
     if @auth_token && @auth_token.high_rate_limit?
       return @auth_token.github_client

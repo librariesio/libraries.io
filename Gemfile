@@ -3,7 +3,7 @@ ruby '2.3.1'
 
 gem 'rb-readline'
 gem 'oj'
-gem 'rails', '4.2.6'
+gem 'rails', '5.0.0.rc1'
 gem 'pg'
 gem 'sassc-rails'
 gem 'uglifier'
@@ -34,7 +34,7 @@ gem 'counter_culture'
 gem 'simple_form'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
-gem 'sinatra', require: nil
+gem 'sinatra', require: nil, git: 'https://github.com/sinatra/sinatra'
 gem 'hirefire-resource'
 gem 'rails_12factor'
 gem 'font-awesome-rails'
@@ -69,7 +69,7 @@ end
 
 group :development, :test do
   gem 'dotenv-rails'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '3.5.0.beta3'
   gem 'coveralls', require: false
 end
 
@@ -77,6 +77,7 @@ group :test do
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'rspec_junit_formatter'
+  gem 'rails-controller-testing'
 end
 
 group :production do
