@@ -230,7 +230,7 @@ GEM
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
-    rack-canonical-host (0.2.1)
+    rack-canonical-host (0.2.2)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
     rack-protection (1.5.3)
@@ -460,4 +460,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.12.2
+   1.12.4
