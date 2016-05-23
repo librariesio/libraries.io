@@ -6,7 +6,11 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def dependents
-    render json: @project.dependent_projects.paginate(page: page_number).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords], include: {versions: {only: [:number, :published_at]} })
+    @dependents = WillPaginate::Collection.create(page_number, per_page_number, @project.dependents_count) do |pager|
+      pager.replace(@project.dependent_projects(page: page_number))
+    end
+
+    render json: @dependents.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords], include: {versions: {only: [:number, :published_at]} })
   end
 
   def dependent_repositories
