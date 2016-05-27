@@ -32,7 +32,7 @@ namespace :github do
   end
 
   task update_repos: :environment do
-    ids = GithubRepository.open_source.maintained.where('last_synced_at < ?', Date.parse('2016-05-01T15:37:07Z')).where(has_issues: true).source.pluck(:github_repository_id)
+    ids = GithubRepository.open_source.maintained.where('last_synced_at < ?', Date.parse('2016-05-01T15:37:07Z')).where(has_issues: true).source.pluck(:id)
     ids.each{|id| GithubDownloadWorker.perform_async(id) }
   end
 end
