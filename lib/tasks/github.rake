@@ -25,4 +25,9 @@ namespace :github do
     brand_new = GithubRepository.open_source.where.not(pushed_at: nil).maintained.recently_created.order('created_at DESC').limit(60).select('id')
     (trending + brand_new).uniq.each{|g| GithubDownloadWorker.perform_async(g.id) }
   end
+
+  task update_issues: :environment do
+    ids = GithubIssue.where('last_synced_at < ?', Date.parse('2016-05-02T15:37:07Z')).uniq.pluck(:github_repository_id)
+    ids.each{|id| GithubDownloadWorker.perform_async(id) }
+  end
 end
