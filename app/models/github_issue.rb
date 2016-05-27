@@ -11,6 +11,8 @@ class GithubIssue < ActiveRecord::Base
   scope :locked, -> { where(locked: true) }
   scope :unlocked, -> { where(locked: false) }
   scope :actionable, -> { open.issue.unlocked }
+  scope :labeled, -> (label) { where.contains(labels: [label]) }
+  scope :help_wanted, -> { labeled('help wanted') }
 
   def url
     path = pull_request ? 'pull' : 'issues'
