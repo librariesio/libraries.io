@@ -24,6 +24,7 @@ module IssueSearch
         indexes :github_repository_license
 
         indexes :number
+        indexes :labels
         indexes :state
 
       end
@@ -41,9 +42,11 @@ module IssueSearch
 
     def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
+
       query = sanitize_query(query)
       options[:filters] ||= []
       options[:must_not] ||= []
+
       search_definition = {
         query: {
           function_score: {
@@ -79,7 +82,9 @@ module IssueSearch
         },
         filter: {
           bool: {
-            must: [],
+            must: [
+               { "term": { "labels": "help" }},
+            ],
             must_not: options[:must_not]
           }
         },
@@ -95,7 +100,6 @@ module IssueSearch
       }
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
       search_definition[:track_scores] = true
-      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
 
       if query.present?
         search_definition[:query][:function_score][:query][:filtered][:query] = {
