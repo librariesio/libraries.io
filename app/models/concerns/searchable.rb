@@ -142,7 +142,7 @@ module Searchable
                    bool: {
                      must_not: [
                        {
-                         missing: {
+                         exists: {
                            field: "normalized_licenses"
                          },
                        },
