@@ -104,9 +104,9 @@ module Searchable
               }
             }
           },
-          license: {
+          licenses: {
             terms: {
-              field: "license",
+              field: "normalized_licenses",
               size: facet_limit
             },
             facet_filter: {
