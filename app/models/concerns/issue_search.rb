@@ -24,7 +24,7 @@ module IssueSearch
         indexes :github_repository_license
 
         indexes :number
-        indexes :labels
+        indexes :labels, :analyzer => 'keyword'
         indexes :state
 
       end
