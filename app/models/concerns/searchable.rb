@@ -97,16 +97,32 @@ module Searchable
           language: { terms: {
               field: "language",
               size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :language)
+              }
             }
           },
           license: {
             terms: {
               field: "license",
               size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :normalized_licenses)
+              }
             }
+          }
+        },
+        filter: {
+          bool: {
+            must: []
           }
         }
       }
+      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       search_definition[:sort] = { (options[:sort] || '_score') => (options[:order] || 'desc') }
       __elasticsearch__.search(search_definition)
     end

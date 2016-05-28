@@ -202,10 +202,10 @@ class ProjectsController < ApplicationController
   end
 
   def current_language
-    Languages::Language[params[:languages]].to_s if params[:languages].present?
+    Languages::Language[params[:language]].to_s if params[:language].present?
   end
 
   def current_license
-    Spdx.find(params[:licenses]).try(:id) if params[:licenses].present?
+    Spdx.find(params[:license]).try(:id) if params[:license].present?
   end
 end
