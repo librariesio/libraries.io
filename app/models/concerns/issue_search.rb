@@ -6,21 +6,22 @@ module IssueSearch
     include Elasticsearch::Model::Callbacks
 
 
-    FIELDS = ['full_title^2', 'exact_title^2', 'body']
+    FIELDS = ['title^2', 'body']
 
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
       mapping do
-        indexes :full_title, :analyzer => 'snowball', :boost => 6
-        indexes :exact_title, :index => :not_analyzed, :boost => 2
+        indexes :title, :analyzer => 'snowball', :boost => 6
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
         indexes :closed_at, type: 'date'
 
-        indexes :owner_id, type: 'integer'
         indexes :stargazers_count, type: 'integer'
         indexes :github_id, type: 'integer'
         indexes :github_contributions_count, type: 'integer'
+
+        indexes :github_repository_language
+        indexes :github_repository_license
 
         indexes :number
         indexes :state
@@ -31,17 +32,11 @@ module IssueSearch
     after_save() { __elasticsearch__.index_document }
 
     def as_indexed_json(options = {})
-      as_json methods: [:exact_title]
+      as_json methods: [:title, :github_contributions_count, :stars]
     end
 
     def exact_title
       full_title
-    end
-
-    def self.total
-      Rails.cache.fetch 'github_issues:total', :expires_in => 1.hour, race_condition_ttl: 2.minutes do
-        __elasticsearch__.client.count(index: 'github_issues')["count"]
-      end
     end
 
     def self.search(query, options = {})
@@ -55,40 +50,8 @@ module IssueSearch
             query: {
               filtered: {
                  query: {match_all: {}},
-                #  filter:{
-                #    bool: {
-                #      must: [
-                #        {
-                #          exists: {
-                #            "field" => "pushed_at"
-                #          }
-                #        }
-                #      ],
-                #      must_not: [
-                #        {
-                #          term: {
-                #           "fork" => true
-                #          }
-                #        },
-                #        {
-                #          term: {
-                #           "private" => true
-                #          }
-                #        },
-                #        {
-                #          term: {
-                #            "status" => "Removed"
-                #          }
-                #        }
-                #      ]
-                #   }
-                # }
               }
             },
-            field_value_factor: {
-              field: "stargazers_count",
-              "modifier": "square"
-            }
           }
         },
         facets: {

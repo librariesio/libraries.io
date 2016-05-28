@@ -38,4 +38,25 @@ class GithubIssue < ActiveRecord::Base
     i.save! if i.changed?
     i
   end
+
+  def stargazers_count
+      github_repository.try(:stargazers_count) || 0
+  end
+
+  def github_contributions_count
+      github_repository.try(:github_contributions_count) || 0
+  end
+
+  def github_repository_language
+      github_repository.try(:language) || ''
+  end
+
+  def github_repository_license
+      github_repository.try(:license) || ''
+  end
+
+  def stars
+    github_repository.try(:stargazers_count) || 0
+  end
+
 end
