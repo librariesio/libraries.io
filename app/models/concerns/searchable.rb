@@ -52,6 +52,65 @@ module Searchable
       end
     end
 
+    def self.bus_factor_search(options = {})
+      facet_limit = options.fetch(:facet_limit, 35)
+      query = sanitize_query(query)
+      options[:filters] ||= []
+      search_definition = {
+        query: {
+          function_score: {
+            query: {
+              filtered: {
+                 query: {match_all: {}},
+                 filter:{
+                   bool: {
+                     must: [
+                      {
+                        range: {
+                          github_contributions_count: {
+                            lte: 5
+                          }
+                        }
+                      }
+                     ],
+                     must_not: [
+                       {
+                         term: {
+                           "status" => "Removed"
+                         },
+                         term: {
+                           "status" => "Unmaintained"
+                         }
+                       }
+                     ]
+                  }
+                }
+              }
+            },
+            field_value_factor: {
+              field: "rank",
+              "modifier": "square"
+            }
+          }
+        },
+        facets: {
+          language: { terms: {
+              field: "language",
+              size: facet_limit
+            }
+          },
+          license: {
+            terms: {
+              field: "license",
+              size: facet_limit
+            }
+          }
+        }
+      }
+      search_definition[:sort] = { (options[:sort] || '_score') => (options[:order] || 'desc') }
+      __elasticsearch__.search(search_definition)
+    end
+
     def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
       query = sanitize_query(query)

@@ -18,16 +18,12 @@ class ProjectsController < ApplicationController
   end
 
   def bus_factor
-    # if params[:language].present?
-    #   @language = Project.language(params[:language].downcase).first.try(:language)
-    #   raise ActiveRecord::RecordNotFound if @language.nil?
-    #   scope = Project.language(@language)
-    # else
-      # scope = Project
-    # end
-
-    @languages = [] # Project.bus_factor.group('projects.language').count.sort_by(&:last).reverse.first(20)
-    @projects = Project.bus_factor.order('github_repositories.github_contributions_count ASC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @search = Project.bus_factor_search(filters: {
+      platform: current_platform,
+      normalized_licenses: current_license,
+      language: current_language
+    }).paginate(page: page_number)
+    @projects = @search.records.includes(:github_repository)
   end
 
   def unlicensed
@@ -197,5 +193,19 @@ class ProjectsController < ApplicationController
       end
     end
     @version_number = @version.try(:number) || @project.latest_release_number
+  end
+
+  private
+
+  def current_platform
+    Download.format_name(params[:platforms])
+  end
+
+  def current_language
+    Languages::Language[params[:languages]].to_s if params[:languages].present?
+  end
+
+  def current_license
+    Spdx.find(params[:licenses]).try(:id) if params[:licenses].present?
   end
 end

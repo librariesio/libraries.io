@@ -32,19 +32,19 @@
               <% if project.stars > 0 %>
                - <%= number_to_human project.stars %> stars
               <% end %>
-              - <%= link_to pluralize(project.github_repository.github_contributions_count, 'contributor'), project.github_repository.contributors_url %>
+              - <%= link_to pluralize(project.github_repository.try(:github_contributions_count), 'contributor'), project.github_repository.try(:contributors_url) %>
             </small>
           </div>
           <div class="col-xs-4">
             <br>
-            <%= link_to project.github_repository.url, class: 'btn btn-primary' do %>
+            <%= link_to project.github_repository.try(:url), class: 'btn btn-primary' do %>
             Contribute<span class='hidden-xs'> on GitHub</span>
             <% end %>
           </div>
         </div>
       <% end %>
     <% end %>
-    <%= will_paginate @projects, page_links: false %>
+    <%= will_paginate @search, page_links: false %>
   </div>
   <div class="col-md-4">
     <h3>
@@ -64,26 +64,29 @@
     <p>
       <em>This is an experiment based on GitHub contributions and available dependency data from package manager repositories that make it easily available.</em>
     </p>
-    <!-- <h3>
-      <strong>
-        Filter by language
-      </strong>
-    </h3>
-    <div class="facets">
+    <% @search.response.facets.each do |name, facet| %>
+      <% next if facet['terms'].empty? %>
+      <h4><%= name.humanize %></h4>
       <ul class='filter'>
-        <% @languages.each do |language, count| %>
-          <% next unless language.present? %>
-          <li class='<%= 'active' if language.try(:downcase) == params[:language].try(:downcase) %>'>
-            <% if language.try(:downcase) == params[:language].try(:downcase) %>
-              <%= link_to language, bus_factor_path(language: nil) %>
+        <% facet['terms'].each do |term| %>
+          <% next if term['term'].blank? %>
+          <% active = term['term'] == params[name.to_sym] %>
+          <li class='<%= 'active' if active %>'>
+            <% if active %>
+              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => nil, page: nil)) %>
             <% else %>
-              <%= link_to language, bus_factor_path(language: language) %>
+              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => term['term'], page: nil)) %>
+              <small><%= number_to_human term['count'] %></small>
             <% end %>
-            <small><%= number_to_human count %></small>
+          </li>
+        <% end %>
+        <% if params[name.to_sym].present? && !facet['terms'].map{|t| t['term']}.include?(params[name.to_sym]) %>
+          <li class='active'>
+            <%= link_to platform_name(params[name.to_sym]), url_for(params.merge(name.to_sym => nil, page: nil)) %>
           </li>
         <% end %>
       </ul>
-      </ul>
-    </div> -->
+    <% end %>
+
   </div>
 </div>
