@@ -150,7 +150,7 @@ GEM
       multi_json (>= 1.9.2)
       netrc
     hiredis (0.6.1)
-    hirefire-resource (0.3.10)
+    hirefire-resource (0.3.11)
     htmlentities (4.3.4)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
