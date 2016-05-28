@@ -83,7 +83,7 @@ module IssueSearch
         filter: {
           bool: {
             must: [
-               { "term": { "labels": "help" }},
+               { "term": { "labels": "help wanted" }},
             ],
             must_not: options[:must_not]
           }
