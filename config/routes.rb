@@ -88,7 +88,7 @@ Rails.application.routes.draw do
   get 'deprecated-libraries', to: 'projects#deprecated', as: :deprecated
   get 'removed-libraries', to: 'projects#removed', as: :removed
 
-  get '/issues/help-wanted', to: 'help_wanted#index', as: :help_wanted
+  get '/help-wanted', to: 'help_wanted#index', as: :help_wanted
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
