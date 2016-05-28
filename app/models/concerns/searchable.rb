@@ -68,7 +68,8 @@ module Searchable
                       {
                         range: {
                           github_contributions_count: {
-                            lte: 5
+                            lte: 5,
+                            gte: 1
                           }
                         }
                       }
