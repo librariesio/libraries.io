@@ -123,7 +123,7 @@ module Searchable
         }
       }
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
-      search_definition[:sort] = { (options[:sort] || '_score') => (options[:order] || 'desc') }
+      search_definition[:sort]  = [{'github_contributions_count' => 'asc'}, {'rank' => 'desc'}]
       __elasticsearch__.search(search_definition)
     end
 
