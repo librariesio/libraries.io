@@ -22,10 +22,10 @@ Rails.application.routes.draw do
 
     get '/github/:login', to: 'github_users#show'
 
-    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\-\_\%]+/, :version => /[\w\-\_\.]+/ }
-    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\-\_\%]+/ }
-    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\-\_\%]+/ }
-    get '/:platform/:name', to: 'projects#show', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\-\_\%]+/ }
+    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\-\_\%]+/, :version => /[\w\.\-\_\.]+/ }
+    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\.\-\_\%]+/ }
+    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\.\-\_\%]+/ }
+    get '/:platform/:name', to: 'projects#show', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\.\-\_\%]+/ }
   end
 
   namespace :admin do
