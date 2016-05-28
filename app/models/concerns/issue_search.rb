@@ -118,7 +118,9 @@ module IssueSearch
           }
         }
       elsif options[:sort].blank?
-        search_definition[:sort]  = [{'stargazers_count' => 'desc'}]
+        search_definition[:sort]  = [{'stargazers_count' => 'desc'},
+                                     {'created_at' => 'desc'},
+                                     {'github_contributions_count' => 'asc'}]
       end
 
       __elasticsearch__.search(search_definition)
