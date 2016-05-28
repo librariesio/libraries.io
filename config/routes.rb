@@ -13,9 +13,13 @@ Rails.application.routes.draw do
     get '/search', to: 'search#index'
     get '/searchcode', to: 'projects#searchcode'
 
+    get '/github/:login/repositories', to: 'github_users#repositories'
+
     get '/github/:owner/:name/dependencies', to: 'github_repositories#dependencies', constraints: { :name => /[^\/]+/ }
     get '/github/:owner/:name/projects', to: 'github_repositories#projects', constraints: { :name => /[^\/]+/ }
     get '/github/:owner/:name', to: 'github_repositories#show', constraints: { :name => /[^\/]+/ }
+
+    get '/github/:login', to: 'github_users#show'
 
     get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\-\_\%]+/, :version => /[\w\-\_\.]+/ }
     get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :platform => /[\w\-\_]+/, :name => /[\w\-\_\%]+/ }
