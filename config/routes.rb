@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     get '/searchcode', to: 'projects#searchcode'
 
     get '/github/:login/repositories', to: 'github_users#repositories'
+    get '/github/:login/projects', to: 'github_users#projects'
 
     get '/github/:owner/:name/dependencies', to: 'github_repositories#dependencies', constraints: { :name => /[^\/]+/ }
     get '/github/:owner/:name/projects', to: 'github_repositories#projects', constraints: { :name => /[^\/]+/ }
