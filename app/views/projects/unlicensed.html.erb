@@ -25,12 +25,12 @@
         </div>
       </div>
     <% end %>
-    <%= will_paginate @projects, page_links: false %>
+    <%= will_paginate @search, page_links: false %>
     <p>
-      <small><%= page_entries_info @projects, model: 'libraries without licenses' %></small>
+      <small><%= page_entries_info @search, model: 'libraries without licenses' %></small>
     </p>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-4 facets">
     <h3>
       <strong>
         What's the deal with licenses?
@@ -56,19 +56,29 @@
         Filter by package manager
       </strong>
     </h3>
-    <div class="facets">
+    <% @search.response.facets.each do |name, facet| %>
+      <% next if facet['terms'].empty? %>
+      <h4><%= name.humanize %></h4>
       <ul class='filter'>
-        <% @platforms.each do |platform, count| %>
-          <li class='<%= 'active' if platform.downcase == params[:platform].try(:downcase) %>'>
-            <% if platform.downcase == params[:platform].try(:downcase) %>
-              <%= link_to platform, unlicensed_path(platform: nil) %>
+        <% facet['terms'].each do |term| %>
+          <% next if term['term'].blank? %>
+          <% active = term['term'] == params[name.to_sym] %>
+          <li class='<%= 'active' if active %>'>
+            <% if active %>
+              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => nil, page: nil)) %>
             <% else %>
-              <%= link_to platform, unlicensed_path(platform: platform) %>
+              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => term['term'], page: nil)) %>
+              <small><%= number_to_human term['count'] %></small>
             <% end %>
-            <small><%= number_to_human count %></small>
+          </li>
+        <% end %>
+        <% if params[name.to_sym].present? && !facet['terms'].map{|t| t['term']}.include?(params[name.to_sym]) %>
+          <li class='active'>
+            <%= link_to platform_name(params[name.to_sym]), url_for(params.merge(name.to_sym => nil, page: nil)) %>
           </li>
         <% end %>
       </ul>
-    </div>
+    <% end %>
+
   </div>
 </div>

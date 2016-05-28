@@ -27,17 +27,12 @@ class ProjectsController < ApplicationController
   end
 
   def unlicensed
-    # if params[:platform].present?
-    #   find_platform(:platform)
-    #   raise ActiveRecord::RecordNotFound if @platform_name.nil?
-    #   scope = Project.platform(@platform_name)
-    # else
-    #   scope = Project
-    # end
-
-    @platforms = [] #Project.unlicensed.group('platform').count.sort_by(&:last).reverse
-    order = params[:newest] ? 'projects.created_at DESC' : 'projects.dependents_count DESC, projects.rank DESC, projects.created_at DESC'
-    @projects = Project.unlicensed.includes(:github_repository).order(order).paginate(page: page_number, per_page: 20)
+    @search = Project.unlicensed_search(filters: {
+      platform: current_platform,
+      normalized_licenses: current_license,
+      language: current_language
+    }).paginate(page: page_number)
+    @projects = @search.records.includes(:github_repository)
   end
 
   def deprecated

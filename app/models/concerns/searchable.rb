@@ -128,6 +128,79 @@ module Searchable
       __elasticsearch__.search(search_definition)
     end
 
+    def self.unlicensed_search(options = {})
+      facet_limit = options.fetch(:facet_limit, 35)
+      query = sanitize_query(query)
+      options[:filters] ||= []
+      search_definition = {
+        query: {
+          function_score: {
+            query: {
+              filtered: {
+                 query: {match_all: {}},
+                 filter:{
+                   bool: {
+                     must_not: [
+                       {
+                         missing: {
+                           field: "normalized_licenses"
+                         },
+                       },
+                       {
+                         term: {
+                           "status" => "Removed"
+                         },
+                       },
+                       {
+                         term: {
+                           "status" => "Unmaintained"
+                         }
+                       }
+                     ]
+                  }
+                }
+              }
+            },
+            field_value_factor: {
+              field: "rank",
+              "modifier": "square"
+            }
+          }
+        },
+        facets: {
+          language: { terms: {
+              field: "language",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :language)
+              }
+            }
+          },
+          licenses: {
+            terms: {
+              field: "normalized_licenses",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :normalized_licenses)
+              }
+            }
+          }
+        },
+        filter: {
+          bool: {
+            must: []
+          }
+        }
+      }
+      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
+      search_definition[:sort]  = [{'github_contributions_count' => 'asc'}, {'rank' => 'desc'}]
+      __elasticsearch__.search(search_definition)
+    end
+
     def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
       query = sanitize_query(query)
