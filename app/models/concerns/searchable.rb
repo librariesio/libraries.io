@@ -178,14 +178,12 @@ module Searchable
               }
             }
           },
-          licenses: {
-            terms: {
-              field: "normalized_licenses",
-              size: facet_limit
-            },
+          platforms: { terms: {
+            field: "platform",
+            size: facet_limit},
             facet_filter: {
               bool: {
-                must: filter_format(options[:filters], :normalized_licenses)
+                must: filter_format(options[:filters], :platform)
               }
             }
           }
