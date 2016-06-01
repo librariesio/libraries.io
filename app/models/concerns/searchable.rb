@@ -26,6 +26,7 @@ module Searchable
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
         indexes :latest_release_published_at, type: 'date'
+        indexes :pushed_at, type: 'date'
 
         indexes :rank, type: 'integer'
         indexes :stars, type: 'integer'
@@ -39,11 +40,15 @@ module Searchable
     after_save() { __elasticsearch__.index_document }
 
     def as_indexed_json(options = {})
-      as_json methods: [:stars, :repo_name, :exact_name, :github_contributions_count]
+      as_json methods: [:stars, :repo_name, :exact_name, :github_contributions_count, :pushed_at]
     end
 
     def exact_name
       name
+    end
+
+    def pushed_at
+      github_repository.try(:pushed_at)
     end
 
     def self.total
