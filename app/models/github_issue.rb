@@ -45,15 +45,14 @@ class GithubIssue < ActiveRecord::Base
   end
 
   def language
-      github_repository.try(:language) || ''
+      github_repository.try(:language)
   end
 
   def license
-      github_repository.try(:license) || ''
+      github_repository.try(:license)
   end
 
   def stars
     github_repository.try(:stargazers_count) || 0
   end
-
 end
