@@ -49,5 +49,7 @@ class Api::DocsController < ApplicationController
     @repo_dependencies[:dependencies] = deps
 
     @search = Project.search('grunt').records
+
+    @github_user = GithubUser.find_by_login('andrew')
   end
 end
