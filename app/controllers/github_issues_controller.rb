@@ -9,7 +9,7 @@ class GithubIssuesController < ApplicationController
       language: current_language,
       labels: "help wanted"
     }).paginate(page: page_number, per_page: per_page_number)
-    @github_issues = @search.records
+    @github_issues = @search.records.includes(:github_repository)
     @title = 'Help Wanted'
   end
 
