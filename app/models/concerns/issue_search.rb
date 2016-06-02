@@ -109,7 +109,6 @@ module IssueSearch
           }
         }
       }
-      search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
       search_definition[:track_scores] = true
 
       if query.present?
@@ -129,7 +128,8 @@ module IssueSearch
           }
         }
       elsif options[:sort].blank?
-        search_definition[:sort]  = [{'stars' => 'desc'},
+        search_definition[:sort]  = [{'comments_count' => 'asc'},
+                                     {'stars' => 'desc'},
                                      {'created_at' => 'desc'},
                                      {'contributions_count' => 'asc'}]
       end
