@@ -15,6 +15,9 @@
 
   <small>
     Created <%= timeago_tag github_issue.created_at %>
+    <% if github_issue.comments_count > 0 %>
+      - <%= pluralize(github_issue.comments_count, 'comment') %>
+    <% end %>
     <% if github_issue.labels.any? %>
       -
       <% github_issue.labels.each do |label| %>
