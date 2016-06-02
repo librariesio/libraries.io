@@ -15,6 +15,7 @@ class GithubIssue < ActiveRecord::Base
   scope :actionable, -> { open.issue.unlocked }
   scope :labeled, -> (label) { where.contains(labels: [label]) }
   scope :help_wanted, -> { labeled('help wanted') }
+  scope :indexable, -> { actionable.includes(:github_repository) }
 
   def url
     path = pull_request ? 'pull' : 'issues'
@@ -39,19 +40,15 @@ class GithubIssue < ActiveRecord::Base
     i
   end
 
-  def stargazers_count
-      github_repository.try(:stargazers_count) || 0
-  end
-
-  def github_contributions_count
+  def contributions_count
       github_repository.try(:github_contributions_count) || 0
   end
 
-  def github_repository_language
+  def language
       github_repository.try(:language) || ''
   end
 
-  def github_repository_license
+  def license
       github_repository.try(:license) || ''
   end
 

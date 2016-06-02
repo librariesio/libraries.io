@@ -16,16 +16,17 @@ module IssueSearch
         indexes :updated_at, type: 'date'
         indexes :closed_at, type: 'date'
 
-        indexes :stargazers_count, type: 'integer'
+        indexes :stars, type: 'integer'
         indexes :github_id, type: 'integer'
-        indexes :github_contributions_count, type: 'integer'
+        indexes :contributions_count, type: 'integer'
 
-        indexes :github_repository_language
-        indexes :github_repository_license
+        indexes :language, :analyzer => 'keyword'
+        indexes :license, :analyzer => 'keyword'
 
         indexes :number
+        indexes :locked
         indexes :labels, :analyzer => 'keyword'
-        indexes :state
+        indexes :state, :analyzer => 'keyword'
 
       end
     end
@@ -33,7 +34,7 @@ module IssueSearch
     after_save() { __elasticsearch__.index_document }
 
     def as_indexed_json(options = {})
-      as_json methods: [:title, :github_contributions_count, :stars]
+      as_json methods: [:title, :contributions_count, :stars, :language, :license]
     end
 
     def exact_title
@@ -53,8 +54,20 @@ module IssueSearch
             query: {
               filtered: {
                  query: {match_all: {}},
+                 filter: {
+                   bool: {
+                     must: [
+                        { "term": { "state": "open"}},
+                        { "term": { "locked": false}}
+                     ]
+                   }
+                 }
               }
             },
+            field_value_factor: {
+              field: "stars",
+              "modifier": "square"
+            }
           }
         },
         facets: {
@@ -82,9 +95,7 @@ module IssueSearch
         },
         filter: {
           bool: {
-            must: [
-               { "term": { "labels": "help wanted" }},
-            ],
+            must: [],
             must_not: options[:must_not]
           }
         },
@@ -118,11 +129,11 @@ module IssueSearch
           }
         }
       elsif options[:sort].blank?
-        search_definition[:sort]  = [{'stargazers_count' => 'desc'},
+        search_definition[:sort]  = [{'stars' => 'desc'},
                                      {'created_at' => 'desc'},
-                                     {'github_contributions_count' => 'asc'}]
+                                     {'contributions_count' => 'asc'}]
       end
-
+      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       __elasticsearch__.search(search_definition)
     end
 
