@@ -83,5 +83,5 @@ group :production do
   gem 'bugsnag'
   gem 'lograge'
   gem 'rails_safe_tasks'
-  gem 'rack-throttle'
+  gem 'improved-rack-throttle'
 end
