@@ -56,6 +56,7 @@ class Project < ActiveRecord::Base
   scope :removed, -> { where('projects."status" = ?', "Removed")}
   scope :unmaintained, -> { where('projects."status" = ?', "Unmaintained")}
 
+  scope :indexable, -> { maintained.includes(:versions, github_repository: :github_tags) }
 
   scope :bus_factor, -> { maintained.
                           joins(:github_repository)
