@@ -17,6 +17,8 @@
       <ul class='filter'>
         <% facet['terms'].each do |term| %>
           <% next if term['term'].blank? %>
+          <% next if term['term'] == 'help wanted' %>
+          <% next if term['term'] == 'Other' %>
           <% active = term['term'] == params[name.to_sym] %>
           <li class='<%= 'active' if active %>'>
             <% if active %>
