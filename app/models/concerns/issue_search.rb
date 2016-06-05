@@ -155,6 +155,127 @@ module IssueSearch
       __elasticsearch__.search(search_definition)
     end
 
+    def self.first_pr_search(query, options = {})
+      facet_limit = options.fetch(:facet_limit, 35)
+
+      query = sanitize_query(query)
+      options[:filters] ||= []
+      options[:must_not] ||= []
+
+      search_definition = {
+        query: {
+          function_score: {
+            query: {
+              filtered: {
+                 query: {match_all: {}},
+                 filter: {
+                   bool: {
+                     must: [
+                        { "term": { "state": "open"}},
+                        { "term": { "locked": false}}
+                     ],
+                     must_not: [
+                       {
+                         term: {
+                          "labels": "wontfix"
+                         }
+                       }
+                     ],
+                     should: GithubIssue::FIRST_PR_LABELS.map do |label|
+                       {
+                         term: {
+                          "labels": label
+                         }
+                       }
+                     end
+                   }
+                 }
+              }
+            },
+            field_value_factor: {
+              field: "stars",
+              "modifier": "square"
+            }
+          }
+        },
+        facets: {
+          language: { terms: {
+              field: "language",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :language)
+              }
+            }
+          },
+          labels: {
+            terms: {
+              field: "labels",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: label_filter_format(options[:filters], GithubIssue::FIRST_PR_LABELS)
+              }
+            }
+          },
+          license: {
+            terms: {
+              field: "license",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :license)
+              }
+            }
+          }
+        },
+        filter: {
+          bool: {
+            must: [],
+            must_not: options[:must_not]
+          }
+        },
+        suggest: {
+          did_you_mean: {
+            text: query,
+            term: {
+              size: 1,
+              field: "full_name"
+            }
+          }
+        }
+      }
+      search_definition[:track_scores] = true
+
+      if query.present?
+        search_definition[:query][:function_score][:query][:filtered][:query] = {
+          bool: {
+            should: [
+              { multi_match: {
+                  query: query,
+                  fields: FIELDS,
+                  fuzziness: 1.2,
+                  slop: 2,
+                  type: 'cross_fields',
+                  operator: 'and'
+                }
+              }
+            ]
+          }
+        }
+      elsif options[:sort].blank?
+        search_definition[:sort]  = [{'comments_count' => 'asc'},
+                                     {'stars' => 'desc'},
+                                     {'created_at' => 'asc'},
+                                     {'contributions_count' => 'asc'}]
+      end
+      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
+      __elasticsearch__.search(search_definition)
+    end
+
     def self.filter_format(filters, except = nil)
       filters.select { |k, v| v.present? && k != except }.map do |k, v|
         if v.is_a?(Array)
