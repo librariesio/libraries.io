@@ -10,7 +10,8 @@ class GithubIssue < ActiveRecord::Base
                      'easy first bug', 'your first pr', 'firstbug', 'good-first-pr',
                      '[Type] Good First Bug', 'good first patch', 'first bug',
                      'good first step', 'good-first-issue', 'IdealFirstBug',
-                     'first contribution', 'first timers only', 'your-first-pr']
+                     'first contribution', 'first timers only', 'your-first-pr',
+                     'starter', 'beginner', 'easy', 'E-easy']
 
   scope :open, -> { where(state: 'open') }
   scope :closed, -> { where(state: 'closed') }
