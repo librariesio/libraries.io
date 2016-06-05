@@ -81,6 +81,17 @@ module IssueSearch
               }
             }
           },
+          labels: {
+            terms: {
+              field: "labels",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: label_filter_format(options[:filters])
+              }
+            }
+          },
           license: {
             terms: {
               field: "license",
@@ -139,9 +150,31 @@ module IssueSearch
 
     def self.filter_format(filters, except = nil)
       filters.select { |k, v| v.present? && k != except }.map do |k, v|
-        {
-          term: { k => v }
-        }
+        if v.is_a?(Array)
+          v.map do |value|
+            {
+              term: { k => value }
+            }
+          end
+        else
+          {
+            term: { k => v }
+          }
+        end
+      end.flatten
+    end
+
+    def self.label_filter_format(filters)
+      filters.select { |k, v| v.present? }.map do |k, v|
+        if k == :labels
+          {
+            term: { labels: 'help wanted' }
+          }
+        else
+          {
+            term: { k => v }
+          }
+        end
       end
     end
 

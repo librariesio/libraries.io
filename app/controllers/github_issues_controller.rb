@@ -7,13 +7,17 @@ class GithubIssuesController < ApplicationController
     @search = GithubIssue.search('', filters: {
       license: current_license,
       language: current_language,
-      labels: "help wanted"
+      labels: current_labels
     }).paginate(page: page_number, per_page: per_page_number)
     @github_issues = @search.records.includes(:github_repository)
     @title = 'Help Wanted'
   end
 
   private
+
+  def current_labels
+    ["help wanted", params[:labels]].compact
+  end
 
   def current_language
     params[:language] if params[:language].present?
