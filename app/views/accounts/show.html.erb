@@ -29,7 +29,8 @@
   <div class="panel-body">
     <%= simple_form_for(current_user, url: account_path, html: { class: 'form-vertical' }) do |form| %>
       <%= form.input :email, label: false, input_html: {size: 40} %>
-      <%= form.submit 'Update Email', class: 'btn btn-primary' %>
+      <%= form.input :emails_enabled %>
+      <%= form.submit 'Update Email Preferences', class: 'btn btn-primary' %>
     <% end %>
   </div>
 </div>
