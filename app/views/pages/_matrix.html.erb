@@ -10,7 +10,7 @@
       Versions
     </th>
     <th class='text-center'>
-      Tags
+      Git Tags
     </th>
     <th class='text-center'>
       Dependencies
@@ -38,7 +38,7 @@
         <%= feature_flag platform::HAS_VERSIONS %>
       </td>
       <td class='text-center'>
-        <%= feature_flag true %>
+        <%= feature_flag !platform::HAS_VERSIONS %>
       </td>
       <td class='text-center'>
         <%= feature_flag platform::HAS_DEPENDENCIES %>
