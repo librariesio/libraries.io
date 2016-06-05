@@ -51,6 +51,7 @@ class GithubTag < ActiveRecord::Base
       subscriptions.group_by(&:notification_user).each do |user, subscriptions|
         next if user.nil?
         next if user.muted?(project)
+        next if !user.emails_enabled?
         VersionsMailer.new_version(user, project, self).deliver_later
       end
     end
