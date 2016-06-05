@@ -126,11 +126,11 @@ class Project < ActiveRecord::Base
   end
 
   def stable_releases
-    versions.newest_first.select(&:stable?)
+    versions.select(&:stable?)
   end
 
   def prereleases
-    versions.newest_first.select(&:prerelease?)
+    versions.select(&:prerelease?)
   end
 
   def latest_stable_version
@@ -151,7 +151,7 @@ class Project < ActiveRecord::Base
   end
 
   def latest_version
-    @latest_version ||= versions.newest_first.sort.first
+    @latest_version ||= versions.sort.first
   end
 
   def latest_tag
