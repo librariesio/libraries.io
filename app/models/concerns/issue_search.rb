@@ -171,12 +171,15 @@ module IssueSearch
       end.flatten
     end
 
-    def self.label_filter_format(filters, labels_to_keep = 'help wanted')
+    def self.label_filter_format(filters, labels_to_keep = ['help wanted'])
+      labels_to_keep ||= ['help wanted']
       filters.select { |k, v| v.present? }.map do |k, v|
         if k == :labels
-          {
-            term: { labels: labels_to_keep }
-          }
+          labels_to_keep.map do |value|
+            {
+              term: { k => value }
+            }
+          end
         else
           {
             term: { k => v }
