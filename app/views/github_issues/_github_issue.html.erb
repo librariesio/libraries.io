@@ -9,20 +9,20 @@
     </small>
   </h5>
 
-  <div>
+  <p>
     <%= emojify truncate(github_issue.body, :length => 200) %>
-  </div>
+  </p>
 
-  <small>
-    Created <%= timeago_tag github_issue.created_at %>
-    <% if github_issue.comments_count > 0 %>
+  <p>
+    <small>
+      Created <%= timeago_tag github_issue.created_at %>
       - <%= pluralize(github_issue.comments_count, 'comment') %>
-    <% end %>
-    <% if github_issue.labels.any? %>
-      -
-      <% github_issue.labels.each do |label| %>
-        <%= link_to label, "#{github_repository.url}/labels/#{label}", class: 'label label-default'%>
+      <% if github_issue.labels.any? %>
+        -
+        <% github_issue.labels.each do |label| %>
+          <%= link_to label, "#{github_repository.url}/labels/#{label}", class: 'label label-info label-pill'%>
+        <% end %>
       <% end %>
-    <% end %>
-  </small>
+    </small>
+  </p>
 </div>
