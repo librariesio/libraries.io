@@ -84,6 +84,8 @@ module Searchable
                          term: {
                            "status" => "Removed"
                          },
+                       },
+                       {
                          term: {
                            "status" => "Unmaintained"
                          }
