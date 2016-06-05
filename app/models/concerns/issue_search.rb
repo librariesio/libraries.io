@@ -141,7 +141,7 @@ module IssueSearch
       elsif options[:sort].blank?
         search_definition[:sort]  = [{'comments_count' => 'asc'},
                                      {'stars' => 'desc'},
-                                     {'created_at' => 'desc'},
+                                     {'created_at' => 'asc'},
                                      {'contributions_count' => 'asc'}]
       end
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
