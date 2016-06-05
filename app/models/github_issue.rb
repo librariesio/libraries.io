@@ -5,6 +5,12 @@ class GithubIssue < ActiveRecord::Base
   belongs_to :github_user, primary_key: :github_id
 
   API_FIELDS = [:number, :state, :title, :body, :locked, :closed_at, :created_at, :updated_at]
+  FIRST_PR_LABELS = ['good first bug', 'good first contribution', 'good-first-bug',
+                     'first-timers-only', 'good first issue', 'good first task',
+                     'easy first bug', 'your first pr', 'firstbug', 'good-first-pr',
+                     '[Type] Good First Bug', 'good first patch', 'first bug',
+                     'good first step', 'good-first-issue', 'IdealFirstBug',
+                     'first contribution', 'first timers only', 'your-first-pr']
 
   scope :open, -> { where(state: 'open') }
   scope :closed, -> { where(state: 'closed') }

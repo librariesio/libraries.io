@@ -10,13 +10,21 @@ class GithubIssuesController < ApplicationController
       labels: current_labels
     }).paginate(page: page_number, per_page: per_page_number)
     @github_issues = @search.records.includes(:github_repository)
-    @title = 'Help Wanted'
+  end
+
+  def first_pull_request
+    @search = GithubIssue.search('', filters: {
+      license: current_license,
+      language: current_language,
+      labels: current_labels
+    }, labels_to_keep: GithubIssue::FIRST_PR_LABELS).paginate(page: page_number, per_page: per_page_number)
+    @github_issues = @search.records.includes(:github_repository)
   end
 
   private
 
   def current_labels
-    ["help wanted", params[:labels]].compact
+    (GithubIssue::FIRST_PR_LABELS + [params[:labels]]).compact
   end
 
   def current_language

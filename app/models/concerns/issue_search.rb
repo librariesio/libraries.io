@@ -95,7 +95,7 @@ module IssueSearch
             },
             facet_filter: {
               bool: {
-                must: label_filter_format(options[:filters])
+                must: label_filter_format(options[:filters], options[:labels_to_keep])
               }
             }
           },
@@ -171,11 +171,11 @@ module IssueSearch
       end.flatten
     end
 
-    def self.label_filter_format(filters)
+    def self.label_filter_format(filters, labels_to_keep = 'help wanted')
       filters.select { |k, v| v.present? }.map do |k, v|
         if k == :labels
           {
-            term: { labels: 'help wanted' }
+            term: { labels: labels_to_keep }
           }
         else
           {

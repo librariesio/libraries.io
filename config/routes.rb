@@ -94,6 +94,7 @@ Rails.application.routes.draw do
   get 'removed-libraries', to: 'projects#removed', as: :removed
 
   get '/help-wanted', to: 'github_issues#help_wanted', as: :help_wanted
+  get '/first-pull-request', to: 'github_issues#first_pull_request', as: :first_pull_request
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
