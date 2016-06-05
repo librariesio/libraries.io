@@ -7,7 +7,7 @@ namespace :projects do
 
   desc 'Reindex the search'
   task reindex: [:environment, :recreate_index] do
-    Project.import query: -> { includes(:github_repository => :github_tags) }
+    Project.import query: -> { indexable }
   end
 
   desc 'Update the sitemap every other day'
