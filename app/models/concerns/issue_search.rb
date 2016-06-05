@@ -59,6 +59,13 @@ module IssueSearch
                      must: [
                         { "term": { "state": "open"}},
                         { "term": { "locked": false}}
+                     ],
+                     must_not: [
+                       {
+                         term: {
+                          "labels": "wontfix"
+                         }
+                       }
                      ]
                    }
                  }
