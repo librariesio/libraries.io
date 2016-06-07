@@ -25,14 +25,14 @@
     <div class="col-md-3">
       <div class='org-filter <%= 'active' unless @org %>'>
         <%= link_to url_for(org: nil) do %>
-          <%= image_tag current_user.avatar_url(60), width: 30 %>
+          <%= image_tag current_user.avatar_url(60), width: 30, height: 30 %>
           <%= current_user.nickname %>
         <% end %>
       </div>
       <% @orgs.each do |org| %>
         <div class='org-filter <%= 'active' if @org && org.login == @org.login %>'>
           <%= link_to url_for(org: org) do %>
-            <%= image_tag org.avatar_url(60), width: 30 %>
+            <%= image_tag org.avatar_url(60), width: 30, height: 30 %>
             <%= org.login %>
           <% end %>
         </div>
@@ -66,7 +66,7 @@
         <% @repos.each do |github_repository| %>
           <tr>
             <td>
-                <%= link_to image_tag(github_repository.avatar_url(40), width: 20), github_repository_path(github_repository.owner_name, github_repository.project_name) %>
+                <%= link_to image_tag(github_repository.avatar_url(40), width: 20, height: 20), github_repository_path(github_repository.owner_name, github_repository.project_name) %>
                 <strong>
                   <%= link_to github_repository.full_name, github_repository_path(github_repository.owner_name, github_repository.project_name) %>
                 </strong>
