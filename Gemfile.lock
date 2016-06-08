@@ -49,6 +49,8 @@ GEM
     after_commit_action (1.0.1)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
+    airbrussh (1.0.2)
+      sshkit (>= 1.6.1, != 1.7.0)
     arel (6.0.3)
     autoprefixer-rails (6.3.6.2)
       execjs
@@ -58,6 +60,22 @@ GEM
     brakeman (3.3.2)
     bugsnag (4.1.0)
     builder (3.2.2)
+    capistrano (3.5.0)
+      airbrussh (>= 1.0.0)
+      capistrano-harrow
+      i18n
+      rake (>= 10.0.0)
+      sshkit (>= 1.9.0)
+    capistrano-bundler (1.1.4)
+      capistrano (~> 3.1)
+      sshkit (~> 1.2)
+    capistrano-foreman (1.2.0)
+      capistrano (~> 3.1)
+      capistrano-bundler (~> 1.1)
+    capistrano-harrow (0.5.1)
+    capistrano-rails (1.1.6)
+      capistrano (~> 3.1)
+      capistrano-bundler (~> 1.1)
     concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
     counter_culture (0.2.0)
@@ -182,6 +200,9 @@ GEM
     multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (3.1.1)
     netrc (0.11.0)
     newrelic_rpm (3.15.2.317)
     nokogiri (1.6.8)
@@ -355,6 +376,9 @@ GEM
       sprockets (>= 3.0.0)
     sql_queries_count (0.0.1)
       rails (> 3.0.0)
+    sshkit (1.10.0)
+      net-scp (>= 1.1.2)
+      net-ssh (>= 2.8.0)
     stripe (1.20.1)
       json (~> 1.8.1)
       mime-types (>= 1.25, < 3.0)
@@ -389,6 +413,9 @@ DEPENDENCIES
   brakeman
   bugsnag
   bundler
+  capistrano
+  capistrano-foreman
+  capistrano-rails
   counter_culture
   coveralls
   dalli
