@@ -13,7 +13,10 @@
 //= require jquery
 //= require payola
 //= require jquery_ujs
-//= require bootstrap-sprockets
+//= require bootstrap/alert
+//= require bootstrap/collapse
+//= require bootstrap/dropdown
+//= require bootstrap/transition
 //= require tipsy
 //= require js.cookie
 //= require rails-timeago
