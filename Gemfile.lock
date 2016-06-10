@@ -143,7 +143,7 @@ GEM
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     hashie (3.4.4)
-    heroics (0.0.16)
+    heroics (0.0.17)
       erubis (~> 2.0)
       excon
       moneta
@@ -216,8 +216,8 @@ GEM
     pictogram (2.0.1)
       railties
     pkg-config (1.1.7)
-    platform-api (0.7.0)
-      heroics
+    platform-api (0.8.0)
+      heroics (~> 0.0.17)
     postgres_ext (3.0.0)
       activerecord (>= 4.0.0)
       arel (>= 4.0.1)
