@@ -71,6 +71,9 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'rspec-rails'
   gem 'coveralls', require: false
+  gem 'capistrano'
+  gem 'capistrano-rails'
+  gem 'capistrano-foreman'
 end
 
 group :test do
