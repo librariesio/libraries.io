@@ -9,13 +9,13 @@
         <strong><%= link_to @project.rank, project_sourcerank_path(@project.to_param) %></strong>
       </td>
     </tr>
-    <% if @project.can_have_dependencies? %>
+    <% if @project.can_have_dependencies? && @project.latest_release %>
       <tr>
         <td>
           Dependencies
         </td>
         <td>
-          <strong><%= number_to_human(@project.dependencies.count.keys.length) %></strong>
+          <strong><%= number_to_human(@project.latest_release.dependencies.count) %></strong>
         </td>
       </tr>
       <tr>
