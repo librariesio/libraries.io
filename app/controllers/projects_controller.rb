@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
       normalized_licenses: current_license,
       language: current_language
     }).paginate(page: page_number)
-    @projects = @search.records.includes(:github_repository)
+    @projects = @search.records.includes(:github_repository, :versions)
   end
 
   def unlicensed
@@ -32,7 +32,7 @@ class ProjectsController < ApplicationController
       normalized_licenses: current_license,
       language: current_language
     }).paginate(page: page_number)
-    @projects = @search.records.includes(:github_repository)
+    @projects = @search.records.includes(:github_repository, :versions)
   end
 
   def deprecated
@@ -45,7 +45,7 @@ class ProjectsController < ApplicationController
     end
 
     @platforms = Project.deprecated.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.deprecated.order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = scope.deprecated.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def removed
@@ -58,7 +58,7 @@ class ProjectsController < ApplicationController
     end
 
     @platforms = Project.removed.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.removed.order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = scope.removed.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def unmaintained
@@ -71,7 +71,7 @@ class ProjectsController < ApplicationController
     end
 
     @platforms = Project.unmaintained.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.unmaintained.order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = scope.unmaintained.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def show

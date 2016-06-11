@@ -8,7 +8,7 @@ class SearchController < ApplicationController
       keywords_array: params[:keywords]
     }, sort: format_sort, order: format_order).paginate(page: page_number, per_page: per_page_number)
     @suggestion = @search.response.suggest.did_you_mean.first
-    @projects = @search.records.includes(:github_repository)
+    @projects = @search.records.includes(:github_repository, :versions)
     @title = page_title
     respond_to do |format|
       format.html
