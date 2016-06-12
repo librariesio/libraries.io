@@ -13,6 +13,9 @@ Rails.application.routes.draw do
     get '/search', to: 'search#index'
     get '/searchcode', to: 'projects#searchcode'
 
+    get '/github/issues/help-wanted', to: 'github_issues#help_wanted'
+    get '/github/issues/first-pull-request', to: 'github_issues#first_pull_request'
+
     get '/github/:login/repositories', to: 'github_users#repositories'
     get '/github/:login/projects', to: 'github_users#projects'
 
