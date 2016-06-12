@@ -295,7 +295,7 @@
           Interesting Forks
           <small><%= link_to 'See all', github_repository_forks_path(@github_repository.owner_name, @github_repository.project_name) %></small>
         </h4>
-        <%= render @forks %>
+        <%= render @forks, cache: true %>
       <% end %>
 
       <% if repo.github_tags.published.length > 0 %>

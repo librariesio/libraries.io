@@ -53,14 +53,14 @@
       <% if @repositories.length > 0 %>
         <div class="col-md-6 user-column">
           <h4>Repositories</h4>
-          <%= render @repositories %>
+          <%= render @repositories, cache: true %>
           <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
         </div>
       <% end %>
       <% if @contributions.length > 0 %>
         <div class="col-md-6 user-column">
           <h4>Repositories Contributed To</h4>
-          <%= render @contributions.map(&:github_repository)  %>
+          <%= render @contributions.map(&:github_repository), cache: true  %>
           <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
         </div>
       <% end %>

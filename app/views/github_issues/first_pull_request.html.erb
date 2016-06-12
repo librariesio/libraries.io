@@ -7,7 +7,7 @@
 <hr>
 <div class='row'>
   <div class='col-md-8'>
-      <%= render @github_issues %>
+      <%= render @github_issues, cache: true %>
       <%= will_paginate @search, page_links: false %>
       <p>
         <small>

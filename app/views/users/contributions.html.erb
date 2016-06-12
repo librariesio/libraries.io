@@ -8,7 +8,7 @@
 <div class="row">
   <% if @contributions.any? %>
     <div class="col-md-6">
-      <%= render @contributions.map(&:github_repository)  %>
+      <%= render @contributions.map(&:github_repository), cache: true  %>
       <%= will_paginate @contributions, page_links: false %>
     </div>
   <% else %>

@@ -30,7 +30,7 @@
 <div class='row'>
   <div class='col-md-8'>
     <% if @github_repositories.length > 0 %>
-      <%= render @github_repositories %>
+      <%= render @github_repositories, cache: true %>
       <%= will_paginate @search, page_links: false %>
       <p>
         <small>
