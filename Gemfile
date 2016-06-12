@@ -71,6 +71,7 @@ group :development do
   gem 'brakeman', :require => false
   gem 'capistrano'
   gem 'capistrano-rails'
+  gem 'capistrano3-nginx'
 end
 
 group :development, :test do

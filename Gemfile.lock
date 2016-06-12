@@ -74,6 +74,8 @@ GEM
     capistrano-rails (1.1.7)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
+    capistrano3-nginx (2.1.4)
+      capistrano (>= 3.0.0)
     concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
     counter_culture (0.2.0)
@@ -417,6 +419,7 @@ DEPENDENCIES
   bundler
   capistrano
   capistrano-rails
+  capistrano3-nginx
   counter_culture
   coveralls
   dalli
