@@ -105,7 +105,7 @@ module ApplicationHelper
   end
 
   def rss_url(project)
-    if project.versions.count > 0
+    if project.versions.size > 0
       project_versions_url({format: "atom"}.merge(project.to_param))
     elsif project.github_repository && project.github_tags.length > 0
       project_tags_url({format: "atom"}.merge(project.to_param))

@@ -77,7 +77,7 @@ module SourceRank
   end
 
   def all_prereleases?
-    prereleases.length == versions.length
+    prereleases.size == versions.size
   end
 
   def one_point_oh?

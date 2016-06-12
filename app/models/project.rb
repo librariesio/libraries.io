@@ -167,7 +167,7 @@ class Project < ActiveRecord::Base
   end
 
   def first_version
-    @first_version ||= versions.order('published_at ASC').first
+    @first_version ||= versions.sort.first
   end
 
   def first_tag

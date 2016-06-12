@@ -84,7 +84,7 @@ class ProjectsController < ApplicationController
       end
     end
     find_version
-    @dependencies = (@versions.length > 0 ? (@version || @versions.first).dependencies.includes(:project).order('project_name ASC').limit(100) : [])
+    @dependencies = (@versions.size > 0 ? (@version || @versions.first).dependencies.includes(:project).order('project_name ASC').limit(100) : [])
     @contributors = @project.contributors.order('count DESC').visible.limit(20)
   end
 
@@ -164,7 +164,7 @@ class ProjectsController < ApplicationController
   end
 
   def find_version
-    @version_count = @project.versions.count
+    @version_count = @project.versions.size
     @github_repository = @project.github_repository
     if @version_count.zero?
       @versions = []
@@ -181,7 +181,7 @@ class ProjectsController < ApplicationController
         raise ActiveRecord::RecordNotFound if params[:number].present?
       end
     else
-      @versions = @project.versions.to_a.sort.first(10)
+      @versions = @project.versions.sort.first(10)
       if params[:number].present?
         @version = @project.versions.find_by_number(params[:number])
         raise ActiveRecord::RecordNotFound if @version.nil?

@@ -312,8 +312,8 @@
         </li>
         <% end %>
       </ul>
-      <% if @project.versions.count > 10 %>
-        <%= link_to "See all #{pluralize(@project.versions.count, 'releases')}", project_versions_path(@project.to_param) %>
+      <% if @project.versions.size > 10 %>
+        <%= link_to "See all #{pluralize(@project.versions.size, 'releases')}", project_versions_path(@project.to_param) %>
       <% end %>
     <% elsif @github_repository && @github_tags.length > 0 %>
       <h4>
