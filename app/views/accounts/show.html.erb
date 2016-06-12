@@ -49,7 +49,7 @@
     </div>
     <p>
       <small>
-        Rate limit: <strong><%= current_user.current_api_key.rate_limit %> requests per minute</strong>
+        Rate limit: <strong><%= current_user.current_api_key.try(:rate_limit) || 0 %> requests per minute</strong>
       </small>
     </p>
   </div>
