@@ -4,7 +4,7 @@ class Api::DocsController < ApplicationController
     @api_key = logged_in? ? current_user.api_key : 'YOUR_API_KEY'
     @project = Project.platform('npm').find_by_name('grunt') || Project.platform('rubygems').first
 
-    @version = @project.versions.newest_first.first
+    @version = @project.versions.first
 
     dependencies = @version.dependencies || []
 

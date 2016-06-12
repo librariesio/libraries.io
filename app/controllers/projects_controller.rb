@@ -120,7 +120,7 @@ class ProjectsController < ApplicationController
     if incorrect_case?
       return redirect_to(project_versions_path(@project.to_param), :status => :moved_permanently)
     else
-      @versions = @project.versions.newest_first.sort.paginate(page: page_number)
+      @versions = @project.versions.sort.paginate(page: page_number)
       respond_to do |format|
         format.html
         format.atom
@@ -164,7 +164,7 @@ class ProjectsController < ApplicationController
   end
 
   def find_version
-    @version_count = @project.versions.newest_first.count
+    @version_count = @project.versions.count
     @github_repository = @project.github_repository
     if @version_count.zero?
       @versions = []
@@ -181,7 +181,7 @@ class ProjectsController < ApplicationController
         raise ActiveRecord::RecordNotFound if params[:number].present?
       end
     else
-      @versions = @project.versions.newest_first.to_a.sort.first(10)
+      @versions = @project.versions.to_a.sort.first(10)
       if params[:number].present?
         @version = @project.versions.find_by_number(params[:number])
         raise ActiveRecord::RecordNotFound if @version.nil?
