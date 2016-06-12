@@ -290,7 +290,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.keywords(keywords)
-    where.any(keywords_array: keywords)
+    where.overlap(keywords_array: keywords)
   end
 
   def self.language(language)
