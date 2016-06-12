@@ -3,7 +3,7 @@ class UsersController < ApplicationController
     find_user
     @repositories = @user.github_repositories.open_source.source.order('stargazers_count DESC').limit(6)
     @favourite_projects = @user.top_favourite_projects.limit(6)
-    @projects = @user.projects.joins(:github_repository).order('projects.rank DESC, projects.created_at DESC').limit(6)
+    @projects = @user.projects.joins(:github_repository).includes(:versions).order('projects.rank DESC, projects.created_at DESC').limit(6)
     if @user.org?
       @contributions = []
     else

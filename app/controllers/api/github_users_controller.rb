@@ -12,7 +12,7 @@ class Api::GithubUsersController < Api::ApplicationController
   end
 
   def projects
-    @projects = @github_user.projects.joins(:github_repository).order('projects.rank DESC, projects.created_at DESC').paginate(page: page_number)
+    @projects = @github_user.projects.joins(:github_repository).includes(:versions).order('projects.rank DESC, projects.created_at DESC').paginate(page: page_number)
 
     render json: @projects.paginate(page: page_number, per_page: per_page_number)
   end
