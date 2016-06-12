@@ -62,6 +62,7 @@ gem 'multi_fetch_fragments'
 gem 'rack-attack'
 gem 'rack-attack-rate-limit', require: 'rack/attack/rate-limit'
 gem 'api-pagination'
+gem 'dotenv-rails'
 
 group :development do
   gem 'bundler'
@@ -75,7 +76,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'dotenv-rails'
   gem 'rspec-rails'
   gem 'coveralls', require: false
 end
