@@ -39,12 +39,19 @@
   <div class="panel-heading">API Key</div>
   <div class="panel-body">
     <p>
-      Your private token is used to access application resources without authentication.
-Soon it will be used for private atom feeds and API access. <strong>Keep it secret!</strong>
+      Your private token is used to access application resources without authentication.<strong>Keep it secret!</strong>
+    </p>
+    <p>
+      View API documentation here: <%= link_to 'libraries.io/api', api_path %>
     </p>
     <div class="well">
       <%= current_user.api_key %>
     </div>
+    <p>
+      <small>
+        Rate limit: <strong><%= current_user.current_api_key.rate_limit %> requests per minute</strong>
+      </small>
+    </p>
   </div>
 </div>
 

@@ -130,7 +130,11 @@ class User < ActiveRecord::Base
   end
 
   def api_key
-    api_keys.first.try(:access_token)
+    current_api_key.try(:access_token)
+  end
+
+  def current_api_key
+    api_keys.active.first
   end
 
   def github_settings_url
