@@ -3,12 +3,12 @@ class Api::SearchController < Api::ApplicationController
 
   def index
     @query = params[:q]
-    @search = Project.search(params[:q], filters: {
+    @search = paginate Project.search(params[:q], filters: {
       platform: current_platform,
       normalized_licenses: current_license,
       language: current_language,
       keywords_array: params[:keywords]
-    }, sort: format_sort, order: format_order).paginate(page: page_number, per_page: per_page_number)
+    }, sort: format_sort, order: format_order)
     @projects = @search.records.includes(:github_repository, :versions)
 
     render json: @projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords], include: {versions: {only: [:number, :published_at]} })

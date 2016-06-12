@@ -8,15 +8,14 @@ class Api::GithubUsersController < Api::ApplicationController
   def repositories
     @repositories = @github_user.github_repositories.open_source.source.order('stargazers_count DESC')
 
-    render json: @repositories.paginate(page: page_number, per_page: per_page_number)
+    paginate json: @repositories
   end
 
   def projects
-    scope = @github_user.projects.joins(:github_repository).includes(:versions).order('projects.rank DESC, projects.created_at DESC')
-    scope = scope.keywords(params[:keywords].split(',')) if params[:keywords].present?
-    @projects = scope.paginate(page: page_number)
+    @projects = @github_user.projects.joins(:github_repository).includes(:versions).order('projects.rank DESC, projects.created_at DESC')
+    @projects = @projects.keywords(params[:keywords].split(',')) if params[:keywords].present?
 
-    render json: @projects.paginate(page: page_number, per_page: per_page_number)
+    paginate json: @projects
   end
 
   private
