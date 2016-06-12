@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.3.1'
 
+gem 'dotenv-rails', :require => 'dotenv/rails-now'
 gem 'rb-readline'
 gem 'oj'
 gem 'rails', '4.2.6'
@@ -62,7 +63,6 @@ gem 'multi_fetch_fragments'
 gem 'rack-attack'
 gem 'rack-attack-rate-limit', require: 'rack/attack/rate-limit'
 gem 'api-pagination'
-gem 'dotenv-rails'
 
 group :development do
   gem 'bundler'
