@@ -289,6 +289,10 @@ class Project < ActiveRecord::Base
     where.contains(keywords_array: [keyword])
   end
 
+  def self.keywords(keywords)
+    where.any(keywords_array: keywords)
+  end
+
   def self.language(language)
     where('lower(projects.language) = ?', language.try(:downcase))
   end

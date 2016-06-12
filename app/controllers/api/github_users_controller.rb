@@ -13,7 +13,7 @@ class Api::GithubUsersController < Api::ApplicationController
 
   def projects
     scope = @github_user.projects.joins(:github_repository).includes(:versions).order('projects.rank DESC, projects.created_at DESC')
-    scope = scope.keyword(params[:keyword]) if params[:keyword].present?
+    scope = scope.keywords(params[:keywords].split(',')) if params[:keywords].present?
     @projects = scope.paginate(page: page_number)
 
     render json: @projects.paginate(page: page_number, per_page: per_page_number)
