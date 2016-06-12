@@ -69,14 +69,14 @@ group :development do
   gem 'quiet_assets'
   gem 'sql_queries_count'
   gem 'brakeman', :require => false
+  gem 'capistrano'
+  gem 'capistrano-rails'
 end
 
 group :development, :test do
   gem 'dotenv-rails'
   gem 'rspec-rails'
   gem 'coveralls', require: false
-  gem 'capistrano'
-  gem 'capistrano-rails'
 end
 
 group :test do
