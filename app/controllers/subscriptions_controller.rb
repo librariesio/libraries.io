@@ -2,7 +2,7 @@ class SubscriptionsController < ApplicationController
   before_action :ensure_logged_in
 
   def index
-    @subscriptions = current_user.subscriptions.includes(:project).order('projects.latest_release_published_at DESC').paginate(page: params[:page])
+    @subscriptions = current_user.subscriptions.includes(project: :versions).order('projects.latest_release_published_at DESC').paginate(page: params[:page])
     @projects = current_user.recommended_projects.limit(5)
   end
 

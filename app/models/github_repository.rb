@@ -116,7 +116,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def repository_dependencies
-    manifests.latest.includes(repository_dependencies: :project).map(&:repository_dependencies).flatten.uniq
+    manifests.latest.includes({repository_dependencies: {project: :versions}}).map(&:repository_dependencies).flatten.uniq
   end
 
   def owner
