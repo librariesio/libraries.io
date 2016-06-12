@@ -7,7 +7,7 @@
 
 <div class="row">
   <div class="col-md-8">
-    <%= render @projects %>
+    <%= render @projects, cache: true %>
     <%= will_paginate @projects, page_links: false %>
     <p>
       <small><%= page_entries_info @projects, model: 'deprecated libraries' %></small>

@@ -58,6 +58,7 @@ gem 'github_urls'
 gem 'mail', require: ['mail', 'mail/utilities', 'mail/parsers']
 gem 'pictogram'
 gem 'rails-timeago', github: 'librariesio/rails-timeago'
+gem 'multi_fetch_fragments'
 
 group :development do
   gem 'bundler'

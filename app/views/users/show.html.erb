@@ -69,14 +69,14 @@
       <% if @projects.length > 0 %>
         <div class="col-md-6 user-column">
           <h4>Published Projects</h4>
-          <%= render @projects %>
+          <%= render @projects, cache: true %>
           <%= link_to "See all #{@user}'s projects", user_projects_path(@user) %>
         </div>
       <% end %>
       <% if @favourite_projects.length > 0 %>
         <div class="col-md-6 user-column">
           <h4>Most Used Projects</h4>
-          <%= render @favourite_projects %>
+          <%= render @favourite_projects, cache: true %>
         </div>
       <% end %>
     </div>

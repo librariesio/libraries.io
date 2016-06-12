@@ -33,14 +33,14 @@
               <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'rank', order: 'desc') %>
             </small>
           </h4>
-          <%= render @popular %>
+          <%= render @popular, cache: true %>
         </div>
       <% end %>
 
       <% if @dependend.any? %>
         <div class='col-md-6 platform-column'>
           <h4>Most Depended upon <%= platform_name(@platform_name) %> Projects</h4>
-          <%= render @dependend %>
+          <%= render @dependend, cache: true %>
         </div>
       <% end %>
       <% if @updated.any? %>
@@ -54,7 +54,7 @@
             <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc') %>
           </small>
         </h4>
-        <%= render @updated %>
+        <%= render @updated, cache: true %>
       </div>
       <% end %>
       <% if @created.any? %>
@@ -68,14 +68,14 @@
               <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc') %>
             </small>
           </h4>
-          <%= render @created %>
+          <%= render @created, cache: true %>
         </div>
       <% end %>
 
       <% if @watched.any? %>
           <div class='col-md-6 platform-column'>
             <h4>Most Watched <%= platform_name(@platform_name) %> Projects</h4>
-            <%= render @watched %>
+            <%= render @watched, cache: true %>
           </div>
       <% end %>
     </div>
