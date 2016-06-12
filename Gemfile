@@ -59,6 +59,8 @@ gem 'mail', require: ['mail', 'mail/utilities', 'mail/parsers']
 gem 'pictogram'
 gem 'rails-timeago', github: 'librariesio/rails-timeago'
 gem 'multi_fetch_fragments'
+gem 'rack-attack'
+gem 'rack-attack-rate-limit', require: 'rack/attack/rate-limit'
 gem 'api-pagination'
 
 group :development do
@@ -88,5 +90,4 @@ group :production do
   gem 'bugsnag'
   gem 'lograge'
   gem 'rails_safe_tasks'
-  gem 'rack-throttle'
 end

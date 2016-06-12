@@ -255,6 +255,10 @@ GEM
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
+    rack-attack (4.4.1)
+      rack
+    rack-attack-rate-limit (1.1.0)
+      rack
     rack-canonical-host (0.2.2)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
@@ -262,8 +266,6 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rack-throttle (0.4.0)
-      rack (>= 1.0.0)
     rack-timeout (0.4.2)
     rails (4.2.6)
       actionmailer (= 4.2.6)
@@ -461,8 +463,9 @@ DEPENDENCIES
   premailer-rails
   puma
   quiet_assets
+  rack-attack
+  rack-attack-rate-limit
   rack-canonical-host
-  rack-throttle
   rack-timeout
   rails (= 4.2.6)
   rails-timeago!
