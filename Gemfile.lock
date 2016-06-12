@@ -70,9 +70,6 @@ GEM
     capistrano-bundler (1.1.4)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
-    capistrano-foreman (1.2.0)
-      capistrano (~> 3.1)
-      capistrano-bundler (~> 1.1)
     capistrano-harrow (0.5.1)
     capistrano-rails (1.1.7)
       capistrano (~> 3.1)
@@ -419,7 +416,6 @@ DEPENDENCIES
   bugsnag
   bundler
   capistrano
-  capistrano-foreman
   capistrano-rails
   counter_culture
   coveralls
