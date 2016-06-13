@@ -235,7 +235,7 @@ GEM
       stripe_event (>= 1.3.0)
     pg (0.18.4)
     pg_array_parser (0.0.9)
-    pictogram (2.0.1)
+    pictogram (2.0.2)
       railties
     pkg-config (1.1.7)
     platform-api (0.8.0)
