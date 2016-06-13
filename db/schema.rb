@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(version: 20160610083954) do
     t.string   "location"
     t.boolean  "hidden",         default: false
     t.datetime "last_synced_at"
+    t.string   "email"
   end
 
   add_index "github_users", ["created_at"], name: "index_github_users_on_created_at", using: :btree
