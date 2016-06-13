@@ -69,10 +69,10 @@ class Project < ActiveRecord::Base
 
   after_commit :update_github_repo_async, on: :create
   after_commit :set_dependents_count
+  after_commit :update_source_rank_async
   before_save  :normalize_licenses,
                :set_latest_release_published_at,
                :set_latest_release_number,
-               :set_source_rank,
                :set_language
 
   before_destroy :destroy_versions
