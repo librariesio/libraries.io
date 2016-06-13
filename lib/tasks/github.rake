@@ -35,4 +35,9 @@ namespace :github do
     ids = GithubRepository.open_source.maintained.where('last_synced_at < ?', Date.parse('2016-05-01T15:37:07Z')).where(has_issues: true).source.pluck(:id)
     ids.each{|id| GithubDownloadWorker.perform_async(id) }
   end
+
+  task sync_issues: :environment do
+    GithubIssue.search('').records.includes(:github_repository).find_each(&:sync)
+    GithubIssue.first_pr_search('').records.includes(:github_repository).find_each(&:sync)
+  end
 end
