@@ -80,7 +80,7 @@ class GithubUser < ActiveRecord::Base
   end
 
   def download_from_github
-    update_attributes(github_client.user(github_id).to_hash.slice(:login, :name, :company, :blog, :location, :email))
+    update_attributes(github_client.user(github_id).to_hash.slice(:login, :name, :company, :blog, :location, :email, :bio))
   rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
     nil
   end
