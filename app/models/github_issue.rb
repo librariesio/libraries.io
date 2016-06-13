@@ -33,6 +33,10 @@ class GithubIssue < ActiveRecord::Base
     AuthToken.fallback_client(token)
   end
 
+  def sync(token = nil)
+    GithubIssueWorker.perform_async(github_repository.full_name, number, token)
+  end
+
   def self.create_from_hash(repo, issue_hash)
     issue_hash = issue_hash.to_hash
     i = repo.github_issues.find_or_create_by(github_id: issue_hash[:id])
