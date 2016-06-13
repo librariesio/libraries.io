@@ -5,7 +5,7 @@ class Project < ActiveRecord::Base
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
   API_FIELDS = [:name, :platform, :description, :language, :homepage,
                 :repository_url, :normalized_licenses, :rank, :status,
-                :latest_release_number, :latest_release_published_at, :keywords_array]
+                :latest_release_number, :latest_release_published_at]
 
   validates_presence_of :name, :platform
 
@@ -241,6 +241,10 @@ class Project < ActiveRecord::Base
 
   def stars
     github_repository.try(:stargazers_count) || 0
+  end
+
+  def forks
+    github_repository.try(:forks_count) || 0
   end
 
   def set_language

@@ -13,7 +13,7 @@ class Firehose
           version: version_or_tag.number,
           package_manager_url: Repositories::Base.package_link(project, version_or_tag),
           published_at: version_or_tag.published_at,
-          project: project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords])
+          project: project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords])
         }, mode: :compat),
         headers: { 'Content-Type' => 'application/json' }).run
     end

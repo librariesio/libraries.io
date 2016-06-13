@@ -2,15 +2,15 @@ class Api::ProjectsController < Api::ApplicationController
   before_action :find_project, :check_api_key, except: :searchcode
 
   def show
-    render json: @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords], include: {versions: {only: [:number, :published_at]} })
+    render json: @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} })
   end
 
   def dependents
     @dependents = WillPaginate::Collection.create(page_number, per_page_number, @project.dependents_count) do |pager|
-      pager.replace(@project.dependent_projects(page: page_number))
+      pager.replace(@project.dependent_projects(page: page_number).includes(:versions, :github_repository))
     end
 
-    render json: @dependents.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords], include: {versions: {only: [:number, :published_at]} })
+    render json: @dependents.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} })
   end
 
   def dependent_repositories
@@ -45,7 +45,7 @@ class Api::ProjectsController < Api::ApplicationController
       }
     end
 
-    project_json = @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords])
+    project_json = @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords])
     project_json[:dependencies] = deps
 
     render json: project_json

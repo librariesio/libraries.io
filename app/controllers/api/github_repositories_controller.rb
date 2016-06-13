@@ -8,7 +8,7 @@ class Api::GithubRepositoriesController < Api::ApplicationController
   end
 
   def projects
-    paginate json: @github_repository.projects.includes(:versions).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :keywords], include: {versions: {only: [:number, :published_at]} })
+    paginate json: @github_repository.projects.includes(:versions, :github_repository).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} })
   end
 
   def dependencies
