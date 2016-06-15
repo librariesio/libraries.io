@@ -167,7 +167,7 @@ class Project < ActiveRecord::Base
   end
 
   def first_version
-    @first_version ||= versions.sort.first
+    @first_version ||= versions.sort.last
   end
 
   def first_tag
