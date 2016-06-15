@@ -2,7 +2,7 @@ class Api::ProjectsController < Api::ApplicationController
   before_action :find_project, :check_api_key, except: :searchcode
 
   def show
-    render json: @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release, :latest_stable_release_published_at], include: {versions: {only: [:number, :published_at]} })
+    render json: @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} })
   end
 
   def dependents
