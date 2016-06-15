@@ -153,6 +153,10 @@ class Project < ActiveRecord::Base
     latest_stable_release.try(:number)
   end
 
+  def latest_stable_release_published_at
+    latest_stable_release.try(:published_at)
+  end
+
   def latest_version
     @latest_version ||= versions.sort.first
   end
