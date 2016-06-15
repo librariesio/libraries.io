@@ -51,7 +51,7 @@
     </tr>
     <tr>
       <td>
-        Latest <%= @project.release_or_tag %>
+        Latest <%= @project.release_or_tag.singularize %>
       </td>
       <td>
         <strong><%= timeago_tag(@project.latest_release.try(:published_at).presence || @project.updated_at) %></strong>
@@ -59,7 +59,7 @@
     </tr>
     <tr>
       <td>
-        First <%= @project.release_or_tag %>
+        First <%= @project.release_or_tag.singularize %>
       </td>
       <td>
         <strong><%= timeago_tag(@project.first_release.try(:published_at).presence || @project.github_repository.try(:created_at).presence || @project.created_at) %></strong>
