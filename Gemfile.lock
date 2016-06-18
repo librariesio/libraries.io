@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/librariesio/rails-timeago.git
-  revision: f62bab993cba8ba15bdf5c5911d8bbc3697b9be8
+  revision: 55fa55f038fd413bc79567d03a718eefe41a2414
   specs:
-    rails-timeago (2.13.0)
+    rails-timeago (2.14.0)
       actionpack (>= 3.1)
       activesupport (>= 3.1)
 
