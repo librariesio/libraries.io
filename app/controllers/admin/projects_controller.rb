@@ -41,7 +41,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def unmaintained
-    @search = Project.search('maintained', filters: {
+    @search = Project.search('unmaintained', filters: {
       platform: params[:platform]
     }, sort: params[:sort], order: params[:order])
 
