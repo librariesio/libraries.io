@@ -1,5 +1,5 @@
 class Api::GithubRepositoriesController < Api::ApplicationController
-  before_action :check_api_key, :find_repo
+  before_action :check_api_key, :find_repo, except: :search
 
   def show
     render json: @github_repository.as_json({
@@ -33,6 +33,16 @@ class Api::GithubRepositoriesController < Api::ApplicationController
     repo_json[:dependencies] = deps
 
     render json: repo_json
+  end
+
+  def search
+    @search = paginate GithubRepository.search(params[:q], filters: {
+      license: current_licenses,
+      language: current_languages,
+      keywords: current_keywords
+    }, sort: format_sort, order: format_order)
+    @github_repositories = @search.records
+    render json: @github_repositories.as_json({ except: [:id, :github_organisation_id, :owner_id] })
   end
 
   private
