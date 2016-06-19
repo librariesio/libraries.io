@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :logged_in?, :logged_out?
 
-  before_filter :welcome_new_users
+  before_action :welcome_new_users
 
   private
 
