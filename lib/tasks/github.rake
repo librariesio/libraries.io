@@ -7,7 +7,7 @@ namespace :github do
 
   desc 'Reindex the search'
   task reindex: [:environment, :recreate_index] do
-    GithubRepository.import
+    GithubRepository.indexable.import
   end
 
   task sync_users: :environment do

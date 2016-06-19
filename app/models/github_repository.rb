@@ -58,6 +58,8 @@ class GithubRepository < ActiveRecord::Base
   scope :removed, -> { where('github_repositories."status" = ?', "Removed")}
   scope :unmaintained, -> { where('github_repositories."status" = ?', "Unmaintained")}
 
+  scope :indexable, -> { open_source.not_removed.includes(:projects) }
+
   def self.language(language)
     where('lower(github_repositories.language) = ?', language.try(:downcase))
   end
