@@ -23,8 +23,8 @@ class GithubRepositoriesController < ApplicationController
   def search
     @query = params[:q]
     @search = GithubRepository.search(params[:q], filters: {
-      license: current_license,
-      language: current_language
+      license: current_licenses,
+      language: current_languages
     }, sort: format_sort, order: format_order).paginate(page: page_number, per_page: per_page_number)
     @suggestion = @search.response.suggest.did_you_mean.first
     @github_repositories = @search.records
