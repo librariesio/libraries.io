@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   namespace :api do
     get '/', to: 'docs#index'
     get '/search', to: 'search#index'
+    get '/bower-search', to: 'bower_search#index'
     get '/searchcode', to: 'projects#searchcode'
 
     get '/subscriptions', to: 'subscriptions#index'

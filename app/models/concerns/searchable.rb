@@ -316,6 +316,12 @@ module Searchable
         search_definition[:sort]  = [{'rank' => 'desc'}, {'stars' => 'desc'}]
       end
 
+      if options[:prefix].present?
+        search_definition[:query][:function_score][:query][:filtered][:query] = {
+          prefix: { name: query }
+        }
+      end
+
       __elasticsearch__.search(search_definition)
     end
 
