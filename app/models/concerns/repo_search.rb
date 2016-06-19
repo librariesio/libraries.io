@@ -63,7 +63,7 @@ module RepoSearch
     end
 
     def keywords
-      projects.map(&:keywords_array).flatten.uniq(&:downcase)
+      projects.map(&:keywords_array).flatten.compact.uniq(&:downcase)
     end
 
     def platforms
