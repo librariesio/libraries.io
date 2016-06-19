@@ -318,7 +318,7 @@ module Searchable
 
       if options[:prefix].present?
         search_definition[:query][:function_score][:query][:filtered][:query] = {
-          prefix: { name: query }
+          prefix: { exact_name: query }
         }
       end
 
