@@ -67,7 +67,7 @@ module RepoSearch
     end
 
     def platforms
-      projects.map(&:platform).uniq
+      projects.map(&:platform).compact.uniq(&:downcase)
     end
 
     def self.total
