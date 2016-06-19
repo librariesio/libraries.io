@@ -19,12 +19,24 @@ class Api::ApplicationController < ApplicationController
   end
 
   def check_api_key
-    render :json => error_message, :status => :bad_request unless api_key_present?
+    return true if params[:api_key].nil?
+    render :json => error_message, :status => :bad_request unless valid_api_key_present?
   end
 
-  def api_key_present?
-    return true if params[:api_key].nil?
-    params[:api_key].present? && ApiKey.active.find_by_access_token(params[:api_key])
+  def require_api_key
+    render :json => error_message, :status => :bad_request unless valid_api_key_present?
+  end
+
+  def valid_api_key_present?
+    params[:api_key].present? && current_api_key
+  end
+
+  def current_api_key
+    ApiKey.active.find_by_access_token(params[:api_key])
+  end
+
+  def current_user
+    current_api_key.try(:user)
   end
 
   def error_message

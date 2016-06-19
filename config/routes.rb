@@ -13,6 +13,12 @@ Rails.application.routes.draw do
     get '/search', to: 'search#index'
     get '/searchcode', to: 'projects#searchcode'
 
+    get '/subscriptions', to: 'subscriptions#index'
+    get '/subscription/:platform/:name', to: 'subscriptions#show'
+    post '/subscription/:platform/:name', to: 'subscriptions#create'
+    put '/subscription/:platform/:name', to: 'subscriptions#update'
+    delete '/subscription/:platform/:name', to: 'subscriptions#destroy'
+
     get '/github/issues/help-wanted', to: 'github_issues#help_wanted'
     get '/github/issues/first-pull-request', to: 'github_issues#first_pull_request'
 
