@@ -2,7 +2,13 @@ class Api::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :check_api_key, :set_headers
 
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
   private
+
+  def record_not_found(error)
+    render json: { error: "404 Not Found" }, status: :not_found
+  end
 
   def set_headers
     headers['Access-Control-Allow-Origin'] = '*'
