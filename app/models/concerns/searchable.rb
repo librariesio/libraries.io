@@ -321,9 +321,11 @@ module Searchable
 
     def self.filter_format(filters, except = nil)
       filters.select { |k, v| v.present? && k != except }.map do |k, v|
-        {
-          term: { k => v }
-        }
+        Array(v).map do |value|
+          {
+            terms: { k => v }
+          }
+        end
       end
     end
 

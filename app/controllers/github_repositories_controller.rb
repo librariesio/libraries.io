@@ -101,16 +101,6 @@ class GithubRepositoriesController < ApplicationController
     params[:license] if params[:license].present?
   end
 
-  def format_sort
-    return nil unless params[:sort].present?
-    allowed_sorts.include?(params[:sort]) ? params[:sort] : nil
-  end
-
-  def format_order
-    return nil unless params[:order].present?
-    ['desc', 'asc'].include?(params[:order]) ? params[:order] : nil
-  end
-
   def allowed_sorts
     ['stargazers_count', 'github_contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
   end

@@ -72,4 +72,34 @@ class ApplicationController < ActionController::Base
     raise ActiveRecord::RecordNotFound if @project.nil?
     @color = @project.color
   end
+
+  def current_platforms
+    return [] if params[:platforms].blank?
+    params[:platforms].split(',').map{|p| Download.format_name(p) }.compact
+  end
+
+  def current_languages
+    return [] if params[:languages].blank?
+    params[:languages].split(',').map{|l| Languages::Language[l].to_s }.compact
+  end
+
+  def current_licenses
+    return [] if params[:licenses].blank?
+    params[:licenses].split(',').map{|l| Spdx.find(l).try(:id) }.compact
+  end
+
+  def current_keywords
+    return [] if params[:keywords].blank?
+    params[:keywords].split(',').compact
+  end
+
+  def format_sort
+    return nil unless params[:sort].present?
+    allowed_sorts.include?(params[:sort]) ? params[:sort] : nil
+  end
+
+  def format_order
+    return nil unless params[:order].present?
+    ['desc', 'asc'].include?(params[:order]) ? params[:order] : nil
+  end
 end
