@@ -54,4 +54,8 @@ class Api::GithubRepositoriesController < Api::ApplicationController
 
     raise ActiveRecord::RecordNotFound if @github_repository.nil?
   end
+
+  def allowed_sorts
+    ['stargazers_count', 'github_contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
+  end
 end
