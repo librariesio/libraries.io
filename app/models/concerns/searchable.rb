@@ -206,9 +206,9 @@ module Searchable
       __elasticsearch__.search(search_definition)
     end
 
-    def self.search(query, options = {})
+    def self.search(original_query, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
-      query = sanitize_query(query)
+      query = sanitize_query(original_query)
       options[:filters] ||= []
       search_definition = {
         query: {
@@ -318,7 +318,7 @@ module Searchable
 
       if options[:prefix].present?
         search_definition[:query][:function_score][:query][:filtered][:query] = {
-          prefix: { exact_name: query }
+          prefix: { exact_name: original_query }
         }
       end
 
