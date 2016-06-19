@@ -1,6 +1,4 @@
 class Api::GithubIssuesController < Api::ApplicationController
-  before_action :check_api_key
-
   def help_wanted
     @search = paginate GithubIssue.search('', filters: {
       license: current_license,

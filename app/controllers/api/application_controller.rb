@@ -1,12 +1,8 @@
 class Api::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_filter :set_headers
+  before_action :check_api_key, :set_headers
 
   private
-
-  def max_page
-    1000
-  end
 
   def set_headers
     headers['Access-Control-Allow-Origin'] = '*'
@@ -21,11 +17,7 @@ class Api::ApplicationController < ApplicationController
   end
 
   def api_key_present?
-    return true if Rails.env.development?
-
-    # FIXME temporary, shields.io is not sending a key at the moment
     return true if params[:api_key].nil?
-
     params[:api_key].present? && ApiKey.active.find_by_access_token(params[:api_key])
   end
 

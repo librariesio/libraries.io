@@ -1,5 +1,5 @@
 class Api::SearchController < Api::ApplicationController
-  before_action :check_api_key
+  skip_before_action :check_api_key, only: :searchcode
 
   def index
     @query = params[:q]

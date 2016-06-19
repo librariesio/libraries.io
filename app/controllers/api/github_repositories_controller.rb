@@ -1,5 +1,5 @@
 class Api::GithubRepositoriesController < Api::ApplicationController
-  before_action :check_api_key, :find_repo, except: :search
+  before_action :find_repo, except: :search
 
   def show
     render json: @github_repository.as_json({

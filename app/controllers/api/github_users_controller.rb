@@ -1,5 +1,5 @@
 class Api::GithubUsersController < Api::ApplicationController
-  before_action :check_api_key, :find_user
+  before_action :find_user
 
   def show
     render json: @github_user.as_json
