@@ -130,7 +130,7 @@ module RepoSearch
             },
             facet_filter: {
               bool: {
-                must: filter_format(options[:filters], :language)
+                must: Project.filter_format(options[:filters], :language)
               }
             }
           },
@@ -141,7 +141,18 @@ module RepoSearch
             },
             facet_filter: {
               bool: {
-                must: filter_format(options[:filters], :license)
+                must: Project.filter_format(options[:filters], :license)
+              }
+            }
+          },
+          keywords: {
+            terms: {
+              field: "keywords",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: Project.filter_format(options[:filters], :keywords)
               }
             }
           }
@@ -164,7 +175,7 @@ module RepoSearch
       }
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
       search_definition[:track_scores] = true
-      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
+      search_definition[:filter][:bool][:must] = Project.filter_format(options[:filters])
 
       if query.present?
         search_definition[:query][:function_score][:query][:filtered][:query] = {
@@ -187,14 +198,6 @@ module RepoSearch
       end
 
       __elasticsearch__.search(search_definition)
-    end
-
-    def self.filter_format(filters, except = nil)
-      filters.select { |k, v| v.present? && k != except }.map do |k, v|
-        {
-          term: { k => v }
-        }
-      end
     end
   end
 end
