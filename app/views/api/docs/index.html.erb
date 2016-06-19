@@ -225,6 +225,91 @@
       <pre>
 <%= JSON.pretty_generate @github_user.projects.includes(:versions, :github_repository).paginate(page: 1).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} }) %></pre>
     <% end %>
+
+    <h3 id='subscriptions-index'>User Subscriptions</h3>
+    <p>
+      List projects that a user is subscribed to recieved notifications about new releases
+    </p>
+    <p>
+      Pagination parameter: <code>page</code>
+    </p>
+    <p>
+      <code>GET https://libraries.io/api/subscriptions?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/subscriptions?api_key=#{@api_key}", "https://libraries.io/api/subscriptions?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}-subscriptions-index", :expires_in => 1.day do %>
+      <pre>
+<%= JSON.pretty_generate Subscription.limit(2).as_json(only: [:include_prerelease, :created_at, :updated_at], include: {project: {methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} }}}) %></pre>
+    <% end %>
+
+    <h3 id='subscriptions-create'>Subscribe to a project</h3>
+    <p>
+      Subscribe to recieved notifications about new releases of a project
+    </p>
+    <p>
+      Parameters: <code>include_prerelease</code>
+    </p>
+    <p>
+      <code>POST https://libraries.io/api/subscriptions/:platform/:name?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}", "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}-subscriptions-create", :expires_in => 1.day do %>
+      <pre>
+<%= JSON.pretty_generate Subscription.first.as_json(only: [:include_prerelease, :created_at, :updated_at], include: {project: {methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} }}}) %></pre>
+    <% end %>
+
+    <h3 id='subscriptions-show'>Check if subscribed to a project</h3>
+    <p>
+      Check if a users is subscribed to recieved notifications about new releases of a project
+    </p>
+    <p>
+      <code>GET https://libraries.io/api/subscriptions/:platform/:name?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}", "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}-subscriptions-show", :expires_in => 1.day do %>
+      <pre>
+<%= JSON.pretty_generate Subscription.first.as_json(only: [:include_prerelease, :created_at, :updated_at], include: {project: {methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} }}}) %></pre>
+    <% end %>
+
+    <h3 id='subscriptions-update'>Update a subscription</h3>
+    <p>
+      Update the options for a subscription
+    </p>
+    <p>
+      Parameters: <code>include_prerelease</code>
+    </p>
+    <p>
+      <code>PUT https://libraries.io/api/subscriptions/:platform/:name?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}", "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}-subscriptions-update", :expires_in => 1.day do %>
+      <pre>
+    <%= JSON.pretty_generate Subscription.first.as_json(only: [:include_prerelease, :created_at, :updated_at], include: {project: {methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} }}}) %></pre>
+    <% end %>
+
+    <h3 id='subscriptions-destroy'>Unsubscribe from a project</h3>
+    <p>
+      Stop recieving release notifications from a project
+    </p>
+    <p>
+      <code>DELETE https://libraries.io/api/subscriptions/:platform/:name?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}", "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
+    </p>
   </div>
   <div class="col-md-4">
     <div style="position:fixed">
@@ -249,6 +334,13 @@
         <li><a href="#github-user">GitHub User</a></li>
         <li><a href="#github-user-repositories">GitHub User Repositories</a></li>
         <li><a href="#github-user-projects">GitHub User Projects</a></li>
+      </ul>
+      <ul>
+        <li><a href="#subscriptions-index">User Subscriptions</a></li>
+        <li><a href="#subscriptions-create">Subscribe to a project</a></li>
+        <li><a href="#subscriptions-show">Check if subscribed to a project</a></li>
+        <li><a href="#subscriptions-update">Update a subscription</a></li>
+        <li><a href="#subscriptions-destroy">Unsubscribe from a project</a></li>
       </ul>
       <p>
         For any questions, feature requests or bug reports<br/>
