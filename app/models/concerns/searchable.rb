@@ -320,7 +320,7 @@ module Searchable
         search_definition[:query][:function_score][:query][:filtered][:query] = {
           prefix: { exact_name: original_query }
         }
-        search_definition[:sort]  = [{'stars' => 'desc'}, {'rank' => 'desc'}]
+        search_definition[:sort]  = [{'rank' => 'desc'}, {'stars' => 'desc'}]
       end
 
       __elasticsearch__.search(search_definition)
