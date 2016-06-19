@@ -63,11 +63,11 @@ module RepoSearch
     end
 
     def keywords
-      projects.pluck(:keywords_array).flatten.uniq
+      projects.map(&:keywords_array).flatten.uniq
     end
 
     def platforms
-      projects.pluck(:platform).uniq
+      projects.map(&:platform).uniq
     end
 
     def self.total
