@@ -323,7 +323,7 @@ module Searchable
       filters.select { |k, v| v.present? && k != except }.map do |k, v|
         Array(v).map do |value|
           {
-            terms: { k => v }
+            terms: { k => v.split(',') }
           }
         end
       end
