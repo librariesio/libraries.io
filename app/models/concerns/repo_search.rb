@@ -16,6 +16,8 @@ module RepoSearch
         indexes :homepage
         indexes :language, :index => :not_analyzed
         indexes :license, :index => :not_analyzed
+        indexes :keywords, :index => :not_analyzed
+        indexes :platforms, :index => :not_analyzed
 
         indexes :status, :index => :not_analyzed
         indexes :default_branch, :index => :not_analyzed
@@ -53,11 +55,19 @@ module RepoSearch
     after_save() { __elasticsearch__.index_document }
 
     def as_indexed_json(options = {})
-      as_json methods: [:exact_name]
+      as_json methods: [:exact_name, :keywords, :platforms]
     end
 
     def exact_name
       full_name
+    end
+
+    def keywords
+      projects.pluck(:keywords_array).flatten.uniq
+    end
+
+    def platforms
+      projects.pluck(:platform).uniq
     end
 
     def self.total
