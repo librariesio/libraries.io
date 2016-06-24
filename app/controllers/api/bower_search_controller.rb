@@ -3,7 +3,7 @@ class Api::BowerSearchController < Api::ApplicationController
 
   def index
     @query = params[:q]
-    @search = paginate Project.search(params[:q], filters: {
+    @search = paginate Project.search(params[:q] || '', filters: {
       platform: 'Bower',
     }, prefix: true, sort: format_sort, order: format_order)
     @projects = @search.records.includes(:github_repository, :versions)
