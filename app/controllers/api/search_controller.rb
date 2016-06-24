@@ -8,7 +8,7 @@ class Api::SearchController < Api::ApplicationController
       normalized_licenses: current_licenses,
       language: current_languages,
       keywords_array: current_keywords
-    }, sort: format_sort, order: format_order)
+    }, sort: format_sort, order: format_order), page: page_number, per_page: per_page_number
     @projects = @search.records.includes(:github_repository, :versions)
 
     render json: @projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} })

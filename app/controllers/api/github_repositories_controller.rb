@@ -41,7 +41,7 @@ class Api::GithubRepositoriesController < Api::ApplicationController
       language: current_languages,
       keywords: current_keywords,
       platforms: current_platforms
-    }, sort: format_sort, order: format_order)
+    }, sort: format_sort, order: format_order), page: page_number, per_page: per_page_number
     @github_repositories = @search.records
     render json: @github_repositories.as_json({ except: [:id, :github_organisation_id, :owner_id] })
   end

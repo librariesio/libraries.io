@@ -4,7 +4,7 @@ class Api::GithubIssuesController < Api::ApplicationController
       license: current_license,
       language: current_language,
       labels: (['help wanted'] + [params[:labels]]).compact
-    })
+    }), page: page_number, per_page: per_page_number
     @github_issues = @search.records.includes(:github_repository)
     render json: @github_issues.as_json(only: GithubIssue::API_FIELDS, include: {:github_repository => {only: GithubRepository::API_FIELDS}})
   end
@@ -14,7 +14,7 @@ class Api::GithubIssuesController < Api::ApplicationController
       license: current_license,
       language: current_language,
       labels: params[:labels]
-    })
+    }), page: page_number, per_page: per_page_number
     @github_issues = @search.records.includes(:github_repository)
     render json: @github_issues.as_json(only: GithubIssue::API_FIELDS, include: {:github_repository => {only: GithubRepository::API_FIELDS}})
   end

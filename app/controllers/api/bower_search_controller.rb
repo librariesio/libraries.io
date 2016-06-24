@@ -5,7 +5,7 @@ class Api::BowerSearchController < Api::ApplicationController
     @query = params[:q]
     @search = paginate Project.search(params[:q] || '', filters: {
       platform: 'Bower',
-    }, prefix: true, sort: format_sort, order: format_order)
+    }, prefix: true, sort: format_sort, order: format_order), page: page_number, per_page: per_page_number
     @projects = @search.records.includes(:github_repository, :versions)
 
     render json: @projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} })
