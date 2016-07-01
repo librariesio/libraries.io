@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get '/home', to: 'dashboard#home'
 
   namespace :api do
+    post '/check', to: 'status#check'
+
     get '/', to: 'docs#index'
     get '/search', to: 'search#index'
     get '/bower-search', to: 'bower_search#index'
