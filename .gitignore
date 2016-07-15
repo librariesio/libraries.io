@@ -26,6 +26,7 @@ public/sitemap*
 Specs
 METADATA.jl
 inqlude-data
+swift-package-crawler-data
 
 node_modules
 
