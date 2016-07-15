@@ -173,6 +173,9 @@ namespace :download do
     Repositories::Shards.import_async
   end
 
+  task swift: :environment do
+    Repositories::Swift.import
+  end
 
   task sublime: :environment do
     Repositories::Sublime.import_async
