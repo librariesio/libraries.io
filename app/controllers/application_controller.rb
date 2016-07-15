@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :logged_in?, :logged_out?
 
-  before_action :welcome_new_users
+  before_action :mention_dependencyci
 
   private
 
@@ -30,6 +30,12 @@ class ApplicationController < ActionController::Base
   def welcome_new_users
     if not logged_in? and not cookies[:hide_welcome_alert]
       flash.now[:show_welcome] = true # Actual content is at views/shared/_flash
+    end
+  end
+
+  def mention_dependencyci
+    if not cookies[:mention_dependencyci]
+      flash.now[:show_dependencyci] = true # Actual content is at views/shared/_flash
     end
   end
 

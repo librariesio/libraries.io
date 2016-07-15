@@ -40,7 +40,7 @@
   </div>
 <%- end %>
 
-<%- if flash[:show_welcome] && !current_page?('/') && !current_page?('/about') && !current_page?('/pricing') %>
+<!-- <%- if flash[:show_welcome] && !current_page?('/') && !current_page?('/about') && !current_page?('/pricing') %>
   <div class="row">
     <div class="col-md-12">
       <div id="welcome-alert" class="alert alert-info" role="alert">
@@ -53,7 +53,22 @@
       </div>
     </div>
   </div>
-<%- end %>
+<%- end %> -->
+
+<% if flash[:show_dependencyci] %>
+<div class="row">
+  <div class="col-md-12">
+    <div id="dependencyci-alert" class="alert alert-info" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <%= fa_icon 'ship' %>
+      We've just launched a new service, <strong><%= link_to 'Dependency CI', 'https://dependencyci.com' %></strong>, that does automatic compliance testing for all of the dependencies in your application.
+      <a href="https://dependencyci.com" class="btn btn-primary btn-xs learn-more" data-dismiss="alert" aria-label="Close">Check it out</a>
+    </div>
+  </div>
+</div>
+<% end %>
 
 <% if current_user && current_user.token_upgrade? %>
   <div class="row">
