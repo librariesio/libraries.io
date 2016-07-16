@@ -14,8 +14,8 @@ class GithubRepository < ActiveRecord::Base
   has_many :github_tags, dependent: :delete_all
   has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
-  has_many :repository_subscriptions
-  has_many :web_hooks
+  has_many :repository_subscriptions, dependent: :delete_all
+  has_many :web_hooks, dependent: :delete_all
   has_many :github_issues, dependent: :delete_all
   has_one :readme, dependent: :delete
   belongs_to :github_organisation

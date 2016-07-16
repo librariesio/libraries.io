@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_one :github_user, primary_key: :uid, foreign_key: :github_id
 
-  has_many :project_mutes
+  has_many :project_mutes, dependent: :delete_all
   has_many :muted_projects, through: :project_mutes, source: :project
 
   has_many :payola_subscriptions, anonymous_class: Payola::Subscription, as: :owner
