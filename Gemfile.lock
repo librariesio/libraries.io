@@ -6,6 +6,12 @@ GIT
       actionpack (>= 3.1)
       activesupport (>= 3.1)
 
+GIT
+  remote: git://github.com/librariesio/semantic.git
+  revision: a384735af9469eb23e2730026f30568be287681d
+  specs:
+    semantic (1.4.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -341,7 +347,6 @@ GEM
     sawyer (0.7.0)
       addressable (>= 2.3.5, < 2.5)
       faraday (~> 0.8, < 0.10)
-    semantic (1.4.1)
     semantic_range (1.0.0)
     sidekiq (4.1.4)
       concurrent-ruby (~> 1.0)
@@ -477,7 +482,7 @@ DEPENDENCIES
   rspec_junit_formatter
   sanitize-url
   sassc-rails
-  semantic
+  semantic!
   semantic_range
   sidekiq
   sidekiq-unique-jobs
