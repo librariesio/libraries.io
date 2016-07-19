@@ -306,7 +306,7 @@ GEM
     rake-compiler (1.0.1)
       rake
     rb-readline (0.5.3)
-    redis (3.2.2)
+    redis (3.3.1)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
@@ -477,7 +477,7 @@ DEPENDENCIES
   rails_12factor
   rails_safe_tasks
   rb-readline
-  redis (= 3.2.2)
+  redis
   rspec-rails
   rspec_junit_formatter
   sanitize-url
