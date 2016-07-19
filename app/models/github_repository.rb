@@ -416,7 +416,7 @@ class GithubRepository < ActiveRecord::Base
         manifest = manifests.create(args)
         m['dependencies'].each do |dep|
           platform = manifest.platform
-
+          next unless dep.is_a?(Hash)
           project = Project.platform(platform).find_by_name(dep['name'])
 
           manifest.repository_dependencies.create({
