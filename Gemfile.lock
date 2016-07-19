@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/librariesio/semantic.git
-  revision: a384735af9469eb23e2730026f30568be287681d
+  revision: a5374ac095868cf79444c1506bbbe3a8c3ad4379
   specs:
     semantic (1.4.2)
 
@@ -256,7 +256,7 @@ GEM
     premailer-rails (1.9.4)
       actionmailer (>= 3, < 6)
       premailer (~> 1.7, >= 1.7.9)
-    puma (3.4.0)
+    puma (3.5.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
