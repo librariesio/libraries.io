@@ -431,6 +431,7 @@ DEPENDENCIES
   dalli
   database_cleaner
   dotenv-rails
+  elasticsearch (~> 1.1)
   elasticsearch-model
   elasticsearch-rails
   escape_utils
