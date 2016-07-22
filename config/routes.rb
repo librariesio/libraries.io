@@ -158,11 +158,17 @@ Rails.application.routes.draw do
     get '/rails/mailers/*path'   => "rails/mailers#preview"
   end
 
+  # legacy swift rename redirects
   get '/swift/', to: redirect("/SwiftPM")
   get '/Swift/', to: redirect("/SwiftPM")
-
-  get '/swift/:name', to: redirect("/SwiftPM/%{name}"), constraints: { :name => /.*/ }
-  get '/Swift/:name', to: redirect("/SwiftPM/%{name}"), constraints: { :name => /.*/ }
+  get '/swift/:name', constraints: { :name => /.*/ }, to: redirect { |params, request|
+    path = "SwiftPM/#{Rack::Utils.escape(params[:name])}"
+    "http://#{request.host_with_port}/#{path}"
+  }
+  get '/swift/:name', constraints: { :name => /.*/ }, to: redirect { |params, request|
+    path = "SwiftPM/#{Rack::Utils.escape(params[:name])}"
+    "http://#{request.host_with_port}/#{path}"
+  }
 
   get '/:platform/:name/suggestions', to: 'project_suggestions#new', as: :project_suggestions, constraints: { :name => /.*/ }
   post '/:platform/:name/suggestions', to: 'project_suggestions#create', constraints: { :name => /.*/ }
