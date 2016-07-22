@@ -209,7 +209,6 @@ class Project < ActiveRecord::Base
   end
 
   def platform_class
-    platform = 'SwiftPM' if platform == 'Swift'
     "Repositories::#{platform}".constantize
   end
 
