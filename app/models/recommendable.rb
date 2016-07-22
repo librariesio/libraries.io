@@ -69,7 +69,7 @@ module Recommendable
       'Go': 'Go',
       'JavaScript': 'NPM',
       'Objective-C': 'CocoaPods',
-      'Swift': 'CocoaPods',
+      'Swift': 'SwiftPM',
       'HTML': 'Bower',
       'CSS': 'Bower',
       'CoffeeScript': 'NPM',

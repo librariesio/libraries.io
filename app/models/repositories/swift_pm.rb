@@ -1,5 +1,5 @@
 module Repositories
-  class Swift < Base
+  class SwiftPM < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
     LIBRARIAN_SUPPORT = false

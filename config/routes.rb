@@ -158,6 +158,12 @@ Rails.application.routes.draw do
     get '/rails/mailers/*path'   => "rails/mailers#preview"
   end
 
+  get '/swift/', to: redirect("/SwiftPM")
+  get '/Swift/', to: redirect("/SwiftPM")
+
+  get '/swift/:name', to: redirect("/SwiftPM/%{name}"), constraints: { :name => /.*/ }
+  get '/Swift/:name', to: redirect("/SwiftPM/%{name}"), constraints: { :name => /.*/ }
+
   get '/:platform/:name/suggestions', to: 'project_suggestions#new', as: :project_suggestions, constraints: { :name => /.*/ }
   post '/:platform/:name/suggestions', to: 'project_suggestions#create', constraints: { :name => /.*/ }
 

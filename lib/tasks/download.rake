@@ -174,7 +174,7 @@ namespace :download do
   end
 
   task swift: :environment do
-    Repositories::Swift.import
+    Repositories::SwiftPM.import
   end
 
   task sublime: :environment do
