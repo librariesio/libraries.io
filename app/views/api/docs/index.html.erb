@@ -21,6 +21,18 @@
       All requests are subject to a 60/request/minute rate limit based on your api_key, any further requests within that timeframe will result in a <code>403</code> response.
     </p>
 
+    <h3 id='pagination'>Pagination</h3>
+
+    <p>
+      All requests that return multiple results can be paginated using the
+      `page` and `per_page` query parameters.
+    </p>
+
+    <ul>
+      <li><code>page</code> (default is `1`)</li>
+      <li><code>per_page</code> (default is `30`)</li>
+    </ul>
+
     <h3 id='project'>Project</h3>
 
     <p>
@@ -61,9 +73,7 @@
       Get projects that have at least one version that depends on a given project.
     </p>
 
-    <p>
-      Pagination parameter: <code>page</code>
-    </p>
+
 
     <p>
       <code>GET https://libraries.io/api/:platform/:name/dependents?api_key=<%= @api_key %></code>
@@ -82,9 +92,7 @@
       Get github repositories that depend on a given project.
     </p>
 
-    <p>
-      Pagination parameter: <code>page</code>
-    </p>
+
 
     <p>
       <code>GET https://libraries.io/api/:platform/:name/dependent_repositories?api_key=<%= @api_key %></code>
@@ -102,10 +110,6 @@
 
     <p>
       Search for projects
-    </p>
-
-    <p>
-      Pagination parameter: <code>page</code>
     </p>
 
     <p>
@@ -190,9 +194,7 @@
       Get github repositories owned by a Github User
     </p>
 
-    <p>
-      Pagination parameter: <code>page</code>
-    </p>
+
 
     <p>
       <code>GET https://libraries.io/api/github/:login/repositories?api_key=<%= @api_key %></code>
@@ -211,9 +213,7 @@
     <p>
       Get a list of projects referencing the given GitHub users repositories.
     </p>
-    <p>
-      Pagination parameter: <code>page</code>
-    </p>
+
     <p>
       <code>GET https://libraries.io/api/github/:login/projects?api_key=<%= @api_key %></code>
     </p>
@@ -230,9 +230,7 @@
     <p>
       List projects that a user is subscribed to recieved notifications about new releases
     </p>
-    <p>
-      Pagination parameter: <code>page</code>
-    </p>
+
     <p>
       <code>GET https://libraries.io/api/subscriptions?api_key=<%= @api_key %></code>
     </p>
@@ -317,6 +315,7 @@
       <ul>
         <li><a href="#authentication">Authentication</a></li>
         <li><a href="#rate-limit">Rate limit</a></li>
+        <li><a href="#pagination">Pagination</a></li>
       </ul>
       <ul>
         <li><a href="#project">Project</a></li>
