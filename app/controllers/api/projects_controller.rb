@@ -9,7 +9,7 @@ class Api::ProjectsController < Api::ApplicationController
     @dependents = paginate(WillPaginate::Collection.create(page_number, per_page_number, @project.dependents_count) do |pager|
       pager.replace(@project.dependent_projects(page: page_number, per_page: per_page_number).includes(:versions, :github_repository))
     end)
-
+    headers['Total'] = @project.dependents_count
     render json: @dependents.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} })
   end
 
