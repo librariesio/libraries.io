@@ -44,3 +44,16 @@ $('#dependencyci-alert').on('closed.bs.alert', function() {
 $('input[name="subscription[include_prerelease]"]').on('change',function(){
   $(this).parents('form').submit();
 });
+
+stickFooter()
+$(window).on('resize', function() {
+  stickFooter()
+});
+
+function stickFooter() {
+  if ($(document).height() <= $(window).height()) {
+      $('footer').addClass("navbar-fixed-bottom");
+  } else {
+      $('footer').removeClass("navbar-fixed-bottom");
+  }
+}
