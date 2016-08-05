@@ -6,6 +6,10 @@ class Api::ApplicationController < ApplicationController
 
   private
 
+  def max_page
+    1000
+  end
+
   def record_not_found(error)
     render json: { error: "404 Not Found" }, status: :not_found
   end
