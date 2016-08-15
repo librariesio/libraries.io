@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ProjectsController, elasticsearch: true do
+RSpec.describe ProjectsController do
   describe "GET #index" do
     before do
       Project.__elasticsearch__.create_index! index: Project.index_name

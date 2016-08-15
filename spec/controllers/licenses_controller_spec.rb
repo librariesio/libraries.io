@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LicensesController, elasticsearch: true do
+RSpec.describe LicensesController do
   let(:project) { create(:project) }
 
   before :each do

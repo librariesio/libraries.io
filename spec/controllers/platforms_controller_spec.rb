@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe PlatformsController, elasticsearch: true do
+RSpec.describe PlatformsController do
   let!(:project) { create(:project) }
 
   before :each do

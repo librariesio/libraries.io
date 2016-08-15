@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LanguagesController, elasticsearch: true do
+RSpec.describe LanguagesController do
   let(:project) { create(:project) }
 
   before :each do
