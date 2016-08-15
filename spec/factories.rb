@@ -9,26 +9,3 @@ FactoryGirl.define do
     repository_url  'https://github.com/rails/rails'
   end
 end
-
-# ApiKey
-# AuthToken
-# Dependency
-# GithubContribution
-# GithubOrganisation
-# GithubRepository
-# GithubTag
-# GithubUser
-# Manifest
-# ProjectMute
-# ProjectSuggestion
-# Project
-# Readme
-# Recommendable
-# RepositoryDependency
-# RepositoryPermission
-# RepositorySubscription
-# SubscriptionPlan
-# Subscription
-# User
-# Version
-# WebHook
