@@ -85,6 +85,8 @@ group :test do
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'rspec_junit_formatter'
+  gem 'webmock'
+  gem 'vcr'
 end
 
 group :production do

@@ -1,16 +1,11 @@
 require "rails_helper"
 
 RSpec.describe ProjectsController do
-  describe "GET #index" do
-    before do
-      Project.__elasticsearch__.create_index! index: Project.index_name
-
-      create(:project)
-      sleep 1
-    end
-
-    after do
-      Project.__elasticsearch__.client.indices.delete index: Project.index_name
+  describe "GET #index", :vcr do
+    before :each do
+      @project = create(:project)
+      Project.__elasticsearch__.import force: true
+      Project.__elasticsearch__.refresh_index!
     end
 
     it "responds successfully with an HTTP 200 status code" do
@@ -25,8 +20,13 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #bus_factor" do
-    let!(:project) { create(:project) }
+  describe "GET #bus_factor", :vcr do
+    before :each do
+      @project = create(:project)
+      Project.__elasticsearch__.import force: true
+      Project.__elasticsearch__.refresh_index!
+    end
+
     it "responds successfully with an HTTP 200 status code" do
       get :bus_factor
       expect(response).to be_success
@@ -52,11 +52,15 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #unlicensed" do
-    let!(:project) { create(:project) }
+  describe "GET #unlicensed", :vcr do
+    before :each do
+      @project = create(:project)
+      Project.__elasticsearch__.import force: true
+      Project.__elasticsearch__.refresh_index!
+    end
 
     before do
-      project.platform_class
+      @project.platform_class
     end
 
     it "responds successfully with an HTTP 200 status code" do
@@ -84,11 +88,15 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #deprecated" do
-    let!(:project) { create(:project) }
+  describe "GET #deprecated", :vcr do
+    before :each do
+      @project = create(:project)
+      Project.__elasticsearch__.import force: true
+      Project.__elasticsearch__.refresh_index!
+    end
 
     before do
-      project.platform_class
+      @project.platform_class
     end
 
     it "responds successfully with an HTTP 200 status code" do
@@ -116,11 +124,15 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #removed" do
-    let!(:project) { create(:project) }
+  describe "GET #removed", :vcr do
+    before :each do
+      @project = create(:project)
+      Project.__elasticsearch__.import force: true
+      Project.__elasticsearch__.refresh_index!
+    end
 
     before do
-      project.platform_class
+      @project.platform_class
     end
 
     it "responds successfully with an HTTP 200 status code" do
@@ -148,11 +160,15 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #unmaintained" do
-    let!(:project) { create(:project) }
+  describe "GET #unmaintained", :vcr do
+    before :each do
+      @project = create(:project)
+      Project.__elasticsearch__.import force: true
+      Project.__elasticsearch__.refresh_index!
+    end
 
     before do
-      project.platform_class
+      @project.platform_class
     end
 
     it "responds successfully with an HTTP 200 status code" do
