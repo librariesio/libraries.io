@@ -65,9 +65,9 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
     brakeman (3.3.5)
-    bugsnag (4.2.1)
+    bugsnag (5.0.0)
     builder (3.2.2)
-    capistrano (3.6.0)
+    capistrano (3.6.1)
       airbrussh (>= 1.0.0)
       capistrano-harrow
       i18n
