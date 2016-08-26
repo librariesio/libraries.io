@@ -24,7 +24,7 @@ SitemapGenerator::Sitemap.create do
   add first_pull_request_path
 
   add github_path
-  add github_issues_path
+  add issues_path
   add github_organisations_path
   add github_search_path
   add trending_path
