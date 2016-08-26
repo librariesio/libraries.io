@@ -12,6 +12,30 @@ SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
 SitemapGenerator::Sitemap.create do
   add root_path, :priority => 1, :changefreq => 'daily'
 
+  add search_path
+  add about_path
+
+  add bus_factor_path
+  add unlicensed_path
+  add unmaintained_path
+  add deprecated_path
+  add removed_path
+  add help_wanted_path
+  add first_pull_request_path
+
+  add github_path
+  add github_issues_path
+  add github_organisations_path
+  add github_search_path
+  add trending_path
+  add new_repos_path
+  add github_timeline_path
+
+  add platforms_path, :changefreq => 'daily'
+  add licenses_path, :changefreq => 'daily'
+  add languages_path, :changefreq => 'daily'
+  add keywords_path, :changefreq => 'daily'
+
   puts "Generating Projects"
   Project.not_removed.find_each do |project|
     add project_path(project.to_param), :lastmod => project.updated_at
@@ -47,38 +71,31 @@ SitemapGenerator::Sitemap.create do
     add user_path(user), :lastmod => user.updated_at
     add user_contributions_path(user), :lastmod => user.updated_at
     add user_repositories_path(user), :lastmod => user.updated_at
+    add user_projects_path(user), :lastmod => user.updated_at
   end
 
   puts "Generating Orgs"
   GithubOrganisation.visible.find_each do |org|
     add user_path(org), :lastmod => org.updated_at
     add user_repositories_path(org), :lastmod => org.updated_at
+    add user_projects_path(org), :lastmod => org.updated_at
   end
 
-  add search_path
-
-  add github_path
-  add github_organisations_path
-
-  add platforms_path, :priority => 0.7, :changefreq => 'daily'
   Download.platforms.each do |platform|
     name = platform.to_s.demodulize
     add platform_path(name.downcase), :lastmod => Project.platform(name).order('updated_at DESC').first.try(:updated_at)
   end
 
-  add licenses_path, :priority => 0.7, :changefreq => 'daily'
-  Project.popular_licenses(:facet_limit => 150).each do |license|
+  Project.popular_licenses(:facet_limit => 200).each do |license|
     name = license.term
     add license_path(name), :lastmod => Project.license(name).order('updated_at DESC').first.try(:updated_at)
   end
 
-  add languages_path, :priority => 0.7, :changefreq => 'daily'
-  Project.popular_languages(:facet_limit => 150).each do |language|
+  Project.popular_languages(:facet_limit => 200).each do |language|
     name = language.term
     add language_path(name), :lastmod => Project.language(name).order('updated_at DESC').first.try(:updated_at)
   end
 
-  add keywords_path, :priority => 0.7, :changefreq => 'daily'
   Project.popular_keywords(:facet_limit => 1000).each do |keyword|
     name = keyword.term
     add keyword_path(name), :lastmod => Project.keyword(name).order('updated_at DESC').first.try(:updated_at)
