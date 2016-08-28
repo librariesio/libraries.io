@@ -74,6 +74,7 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano3-nginx'
+  gem 'capistrano-maintenance'
 end
 
 group :development, :test do
