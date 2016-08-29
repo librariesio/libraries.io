@@ -3,7 +3,7 @@ server ENV['SIDEKIQ_SERVER'], user: ENV['SIDEKIQ_USER'], roles: %w{app}
 
 namespace :deploy do
   task :restart do
-    on roles(:web) do |host|
+    on roles(:app) do |host|
       execute "restart librariesio"
     end
   end
