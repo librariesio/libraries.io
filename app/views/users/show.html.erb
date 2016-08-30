@@ -29,7 +29,7 @@
     <br>
     <% if @user.blog.present? %>
       <p>
-        Homepage: <%= link_to @user.blog, sanitize_url(@user.blog) %>
+        Homepage: <%= link_to @user.blog, sanitize_url(@user.blog), :rel => 'nofollow' %>
       </p>
     <% end %>
     <% if @user.company.present? %>

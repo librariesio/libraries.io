@@ -83,7 +83,7 @@
       </p>
       <% if repo.homepage.present? %>
         <p>
-          <%= link_to repo.homepage, sanitize_url(repo.homepage) %>
+          <%= link_to repo.homepage, sanitize_url(repo.homepage), :rel => 'nofollow' %>
         </p>
       <% end %>
       <% if repo.license.present? %>
@@ -98,7 +98,7 @@
       <% end %>
       <% if repo.mirror_url.present? %>
       <p>
-        Mirror of <%= repo.mirror_url %>
+        Mirror of <%= repo.mirror_url, :rel => 'nofollow' %>
       </p>
       <% end %>
       <% if repo.readme.present? %>

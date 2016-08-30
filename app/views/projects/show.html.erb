@@ -94,7 +94,7 @@
 
     <% if @project.homepage.present? && @project.homepage != package_link(@project) %>
     <p>
-      Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage)) %>
+      Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage), :rel => 'nofollow') %>
     </p>
     <% end %>
 
@@ -122,7 +122,7 @@
 
     <% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
     <p>
-      Repository: <%= link_to @project.repository_url, @project.repository_url %>
+      Repository: <%= link_to @project.repository_url, @project.repository_url, :rel => 'nofollow' %>
     </p>
     <% end %>
 
