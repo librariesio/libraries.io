@@ -20,7 +20,7 @@
       <% if github_issue.labels.any? %>
         -
         <% github_issue.labels.each do |label| %>
-          <%= link_to label, "#{github_repository.url}/labels/#{label}", class: 'label label-info label-pill'%>
+          <%= link_to label, "#{github_repository.url}/labels/#{ERB::Util.url_encode(label)}", class: 'label label-info label-pill'%>
         <% end %>
       <% end %>
     </small>

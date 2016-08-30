@@ -39,7 +39,7 @@
     <% end %>
     <% if @user.location.present? %>
       <p>
-        Location: <%= link_to @user.location, "http://maps.google.com/?q=#{@user.location}" %>
+        Location: <%= link_to @user.location, "http://maps.google.com/?q=#{ERB::Util.url_encode(@user.location)}" %>
       </p>
     <% end %>
   </div>
