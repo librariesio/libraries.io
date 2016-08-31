@@ -64,6 +64,9 @@ Rails.application.routes.draw do
     get '/stats/github', to: 'stats#github', as: :github_stats
   end
 
+  get '/tree/:platform/:name', to: 'tree#show'
+  get '/reverse-tree/:platform/:name', to: 'tree#reverse'
+
   get '/github/issues', to: 'github_issues#index', as: :issues
 
   get '/pricing', to: 'account_subscriptions#plans', as: :pricing

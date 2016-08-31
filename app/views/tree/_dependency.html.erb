@@ -1,0 +1,20 @@
+<% requirements ||= '' %>
+<% @license_names << project.normalize_licenses %>
+<li>
+  <%= project %> - <%= version.number  %> <em class='text-muted'><%= requirements %> - <%= project.normalize_licenses.join(', ') %> <% if project.status.present? && project.status.downcase != 'active' %>- <%= project.status %><% end %></em>
+  <% dependencies = version.dependencies.kind('normal').includes(:project) %>
+  <% if dependencies.any? %>
+    <ul>
+      <%dependencies.each do |dependency| %>
+        <% if dependency.project && index < 10 && !@project_names.include?(dependency.project_name) %>
+          <% @project_names << dependency.project_name %>
+          <%= render partial: 'tree/dependency', locals: {project: dependency.project, version: dependency.project.latest_stable_release, requirements: dependency.requirements, index: index + 1} %>
+        <% else %>
+        <li>
+          <%= dependency.project_name %> <em class='text-muted'><%= dependency.requirements %></em>
+        </li>
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>
+</li>
