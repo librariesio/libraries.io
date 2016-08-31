@@ -37,7 +37,6 @@ gem 'simple_form'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'sinatra', require: nil
-gem 'hirefire-resource'
 gem 'rails_12factor'
 gem 'font-awesome-rails'
 gem 'platform-api', require: nil

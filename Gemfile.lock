@@ -179,7 +179,6 @@ GEM
       multi_json (>= 1.9.2)
       netrc
     hiredis (0.6.1)
-    hirefire-resource (0.3.11)
     htmlentities (4.3.4)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
@@ -459,7 +458,6 @@ DEPENDENCIES
   gems
   github_urls
   hiredis
-  hirefire-resource
   jquery-rails
   js-cookie-rails
   languages
