@@ -48,16 +48,16 @@ SitemapGenerator::Sitemap.create do
       return if project.github_repository.nil?
       add project_tags_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
 
-      project.github_tags.published.each do |tag|
+      project.github_tags.published.find_each do |tag|
         add version_path(project.to_param.merge(number: tag.name)), :lastmod => project.updated_at
       end
     end
   end
 
   Version.includes(:project).find_each do |version|
-    next if version.project.nil?
-    next if version.project.is_removed?
-    add version_path(version.to_param), :lastmod => version.project.updated_at
+    if version.project && !version.project.is_removed?
+      add version_path(version.to_param), :lastmod => version.project.updated_at
+    end
   end
 
   GithubRepository.open_source.not_removed.find_each do |repo|
