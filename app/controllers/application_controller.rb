@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
   end
 
   def mention_dependencyci
-    if not cookies[:mention_dependencyci]
+    if not cookies[:hide_dependencyci_alert]
       flash.now[:show_dependencyci] = true # Actual content is at views/shared/_flash
     end
   end
