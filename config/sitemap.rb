@@ -45,11 +45,12 @@ SitemapGenerator::Sitemap.create do
     add project_versions_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
 
     if project.versions_count.zero? && project.github_repository_id.present?
-      return if project.github_repository.nil?
-      add project_tags_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
+      if project.github_repository.present?
+        add project_tags_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
 
-      project.github_tags.published.find_each do |tag|
-        add version_path(project.to_param.merge(number: tag.name)), :lastmod => project.updated_at
+        project.github_tags.published.find_each do |tag|
+          add version_path(project.to_param.merge(number: tag.name)), :lastmod => project.updated_at
+        end
       end
     end
   end
