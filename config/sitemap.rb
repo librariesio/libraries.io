@@ -61,7 +61,7 @@ SitemapGenerator::Sitemap.create do
     end
   end
 
-  GithubRepository.open_source.not_removed.find_each do |repo|
+  GithubRepository.open_source.source.not_removed.find_each do |repo|
     add github_repository_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
     add github_repository_contributors_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
     add github_repository_forks_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
