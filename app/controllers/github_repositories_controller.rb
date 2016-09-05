@@ -38,7 +38,7 @@ class GithubRepositoriesController < ApplicationController
   end
 
   def languages
-    @languages = GithubRepository.search('').response.facets[:language][:terms]
+    @languages = GithubRepository.search('', :facet_limit => 150).response.facets[:language][:terms]
   end
 
   def hacker_news
