@@ -37,6 +37,10 @@ class GithubRepositoriesController < ApplicationController
     end
   end
 
+  def languages
+    @languages = GithubRepository.search('').response.facets[:language][:terms]
+  end
+
   def hacker_news
     @language = Languages::Language[params[:language]] if params[:language].present?
     @license = Spdx.find(params[:license]) if params[:license].present?

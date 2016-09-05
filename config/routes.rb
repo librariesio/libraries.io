@@ -115,6 +115,7 @@ Rails.application.routes.draw do
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
+  get '/github/languages', to: 'github_repositories#languages', as: :github_languages
   get '/github/search', to: 'github_repositories#search', as: :github_search
   get '/github/trending', to: 'github_repositories#hacker_news', as: :trending
   get 'hacker_news' => redirect('/github/trending')
