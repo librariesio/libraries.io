@@ -23,7 +23,7 @@ namespace :projects do
   end
 
   task update_source_ranks: :environment do
-    Project.where('projects.updated_at < ?', 1.week.ago).find_each(&:update_source_rank_async) if Date.today.sunday?
+    Project.where('projects.updated_at < ?', 1.week.ago).order('projects.updated_at ASC').limit(1000).each(&:update_source_rank_async)
   end
 
   task link_dependencies: :environment do
