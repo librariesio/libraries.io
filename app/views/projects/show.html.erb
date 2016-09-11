@@ -295,6 +295,7 @@
   </div>
 
   <div class='col-md-4'>
+    <%= render 'adsense/sidebar' %>
     <% if @version_count > 0 %>
       <h4>
         <%= link_to project_versions_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
