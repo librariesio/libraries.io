@@ -5,15 +5,19 @@
   <%= link_to @user, user_path(@user) %>'s Repositories
 </h1>
 <hr>
+
 <div class="row">
-  <% if @repositories.any? %>
-    <div class="col-md-6">
+  <div class="col-md-8">
+    <% if @repositories.any? %>
       <%= render @repositories, cache: true  %>
       <%= will_paginate @repositories, page_links: false %>
-    </div>
-  <% else %>
-    <p>
-      No projects found, go back to <%= link_to @user, user_path(@user) %>.
-    </p>
-  <% end %>
+    <% else %>
+      <p>
+        No projects found, go back to <%= link_to @user, user_path(@user) %>.
+      </p>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
+  </div>
 </div>

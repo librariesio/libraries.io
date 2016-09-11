@@ -5,15 +5,19 @@
   <%= link_to @user, user_path(@user) %>'s Open Source Contributions
 </h1>
 <hr>
+
 <div class="row">
-  <% if @contributions.any? %>
-    <div class="col-md-6">
+  <div class="col-md-8">
+    <% if @contributions.any? %>
       <%= render @contributions.map(&:github_repository), cache: true  %>
       <%= will_paginate @contributions, page_links: false %>
-    </div>
-  <% else %>
-    <p>
-      No projects found, go back to <%= link_to @user, user_path(@user) %>.
-    </p>
-  <% end %>
+    <% else %>
+      <p>
+        No projects found, go back to <%= link_to @user, user_path(@user) %>.
+      </p>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
+  </div>
 </div>

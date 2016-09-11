@@ -14,26 +14,31 @@
 </div>
 <hr>
 <div class="row">
-  <% if @contributors.length > 0 %>
-    <% @contributors.each do |user| %>
-      <% next if user.nil? %>
-      <div class="contributor">
-        <%= link_to image_tag(user.avatar_url(120), width: 60, height: 60, alt: user), user_path(user) %>
-        <h4>
-          <%= link_to user, user_path(user) %>
-          <% if user.name.present? %>
-            <small>
-              <%= user.login %>
-            </small>
-          <% end %>
-        </h4>
+  <div class="col-md-8">
+    <% if @contributors.length > 0 %>
+      <% @contributors.each do |user| %>
+        <% next if user.nil? %>
+        <div class="contributor">
+          <%= link_to image_tag(user.avatar_url(120), width: 60, height: 60, alt: user), user_path(user) %>
+          <h4>
+            <%= link_to user, user_path(user) %>
+            <% if user.name.present? %>
+              <small>
+                <%= user.login %>
+              </small>
+            <% end %>
+          </h4>
 
-      </div>
+        </div>
+      <% end %>
+      <%= will_paginate @contributors, page_links: false %>
+    <% else %>
+      <p>
+        No contributors found, go back to <%= link_to @github_repository.full_name, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %>.
+      </p>
     <% end %>
-    <%= will_paginate @contributors, page_links: false %>
-  <% else %>
-    <p>
-      No contributors found, go back to <%= link_to @github_repository.full_name, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %>.
-    </p>
-  <% end %>
+  </div>
+  <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
+  </div>
 </div>
