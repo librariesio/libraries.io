@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :ensure_logged_in, only: [:your_dependent_repos, :mute, :unmute]
+  etag { current_user.try :id }
 
   def index
     if current_user
@@ -84,6 +85,7 @@ class ProjectsController < ApplicationController
       end
     end
     find_version
+    fresh_when([@project, @version])
     @dependencies = (@versions.size > 0 ? (@version || @versions.first).dependencies.includes(project: :versions).order('project_name ASC').limit(100) : [])
     @contributors = @project.contributors.order('count DESC').visible.limit(20)
   end
