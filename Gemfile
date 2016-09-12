@@ -39,7 +39,6 @@ gem 'sidekiq-unique-jobs'
 gem 'sinatra', require: nil
 gem 'rails_12factor'
 gem 'font-awesome-rails'
-gem 'platform-api', require: nil
 gem 'mime-types', require: 'mime/types/columnar'
 gem 'fast_blank'
 gem 'fast_xs'
