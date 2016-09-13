@@ -1,7 +1,10 @@
 <% title "Explore - Libraries" %>
 <% description "Find popular and trending libraries by language and keyword" %>
 
-<h1>Explore</h1>
+<h1>
+  <%= fa_icon 'binoculars' %>
+  Explore
+</h1>
 
 <% cache 'collections:index', expires_in: 1.day do  %>
   <div class="row">
