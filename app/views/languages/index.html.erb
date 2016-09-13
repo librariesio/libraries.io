@@ -3,5 +3,12 @@
 <h1>Languages</h1>
 <hr>
 <div class='row'>
-  <%= render partial: 'language', collection: @languages %>
+  <div class="col-md-8">
+    <div class="row">
+      <%= render partial: 'language', collection: @languages %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
+  </div>
 </div>

@@ -77,10 +77,14 @@
             <h4>Most Watched <%= platform_name(@platform_name) %> Projects</h4>
             <%= render @watched, cache: true %>
           </div>
+          <div class="col-md-6">
+            <%= render 'adsense/sidebar' %>
+          </div>
       <% end %>
     </div>
   </div>
   <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
     <div class='row'>
       <% if @languages.any? %>
         <div class='col-md-12'>

@@ -2,5 +2,12 @@
 <% description "All the open source platforms that projects have been published to" %>
 <h1>Platforms</h1><hr>
 <div class='row'>
-  <%= render partial: 'platform', collection: @platforms %>
+  <div class="col-md-8">
+    <div class="row">
+      <%= render partial: 'platform', collection: @platforms %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
+  </div>
 </div>

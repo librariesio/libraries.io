@@ -79,10 +79,14 @@
           <h4>Most Depended upon <%= @language %> Projects</h4>
           <%= render @dependend, cache: true %>
         </div>
+        <div class="col-md-6">
+          <%= render 'adsense/sidebar' %>
+        </div>
       </div>
     <% end %>
   </div>
   <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
     <% if @licenses.any? %>
       <div class='col-md-12'>
         <h4>Popular <%= @language %> Licenses</h4>

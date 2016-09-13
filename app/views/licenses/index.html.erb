@@ -2,5 +2,12 @@
 <% description "All the open source licenses that projects have been licensed with" %>
 <h1>Open Source Licenses</h1><hr>
 <div class='row'>
-  <%= render partial: 'license', collection: @licenses %>
+  <div class="col-md-8">
+    <div class="row">
+      <%= render partial: 'license', collection: @licenses %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
+  </div>
 </div>

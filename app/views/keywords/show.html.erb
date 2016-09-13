@@ -80,11 +80,15 @@
           <h4>Most Depended upon "<%= @keyword %>" Projects</h4>
           <%= render @dependend, cache: true %>
         </div>
+        <div class="col-md-6">
+          <%= render 'adsense/sidebar' %>
+        </div>
       </div>
     <% end %>
   </div>
   <div class="col-md-4">
     <div class='row'>
+      <%= render 'adsense/sidebar' %>
       <% if @languages.any? %>
       <div class='col-md-12'>
         <h4>Popular "<%= @keyword %>" Languages</h4>
