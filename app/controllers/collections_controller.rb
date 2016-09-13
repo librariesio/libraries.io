@@ -4,7 +4,21 @@ class CollectionsController < ApplicationController
   end
 
   def show
-    @search = Project.search(params[:keyword], {filters: {language: [params[:language]]}}).paginate(page: page_number, per_page: per_page_number)
+    find_language
+    @search = Project.search(params[:keyword], {filters: {
+        language: [@language],
+        keywords: current_keywords,
+        platform: current_platforms,
+        normalized_licenses: current_licenses
+      }}).paginate(page: page_number, per_page: per_page_number)
     @projects = @search.records.includes(:github_repository, :versions)
+    raise ActiveRecord::RecordNotFound if @projects.empty?
+  end
+
+  private
+
+  def find_language
+    @language = Project.language(params[:language]).first.try(:language)
+    raise ActiveRecord::RecordNotFound if @language.nil?
   end
 end

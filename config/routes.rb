@@ -64,8 +64,8 @@ Rails.application.routes.draw do
     get '/stats/github', to: 'stats#github', as: :github_stats
   end
 
-  get '/collections', to: 'collections#index'
-  get '/collections/:language-:keyword-libraries', to: 'collections#show'
+  get '/explore', to: 'collections#index'
+  get '/explore/:language-:keyword-libraries', to: 'collections#show'
 
   get '/tree/:platform/:name', to: 'tree#show'
   get '/reverse-tree/:platform/:name', to: 'tree#reverse'
