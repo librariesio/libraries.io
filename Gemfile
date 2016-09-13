@@ -63,6 +63,10 @@ gem 'rack-attack'
 gem 'rack-attack-rate-limit', require: 'rack/attack/rate-limit'
 gem 'api-pagination'
 
+gem 'highscore'
+gem 'fast-stemmer'
+gem 'bloomfilter-rb'
+
 group :development do
   gem 'bundler'
   gem 'spring'
