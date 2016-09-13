@@ -63,7 +63,16 @@ module RepoSearch
     end
 
     def keywords
+      (project_keywords + readme_keywords).uniq.first(10)
+    end
+
+    def project_keywords
       projects.map(&:keywords_array).flatten.compact.uniq(&:downcase)
+    end
+
+    def readme_keywords
+      return [] unless readme.present?
+      readme.keywords
     end
 
     def platforms
