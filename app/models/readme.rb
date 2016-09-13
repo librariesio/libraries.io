@@ -53,11 +53,11 @@ class Readme < ActiveRecord::Base
   def keywords
     text = Highscore::Content.new(Nokogiri::HTML(html_body).text, badlist)
     text.configure { set :ignore_case, true }
-    text.keywords.top(5).select{|k| k.weight > 7 && k.text.length < 20 }.map(&:text)
+    text.keywords.top(5).select{|k| k.weight > 9 && k.text.length < 20 }.map(&:text)
   end
 
   def badlist
-    badlist_words = %w{library software create value href script scripts same foo from char function var method string nim} +
+    badlist_words = %w{library software create value more know what how between would have install com code like change project href script scripts same foo from char function var method string nim} +
     Highscore::Blacklist.load_default_file.words +
     Languages::Language.all.map{|l| l.name.downcase } +
     Download.platforms.map{|p| p.to_s.demodulize.downcase }
