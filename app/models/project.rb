@@ -320,7 +320,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.keywords_badlist
-    ['bsd3']
+    ['bsd3', 'library']
   end
 
   def self.popular_keywords(options = {})
