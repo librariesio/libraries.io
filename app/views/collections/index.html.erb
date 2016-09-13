@@ -1,0 +1,20 @@
+<% @languages.each do |language| %>
+  <% keywords = Project.popular_keywords({filters: {language: [language]}}).map{|k| k[:term].downcase }.uniq.first(10) %>
+  <% next if keywords.empty? %>
+  <div class="col-md-4 collection">
+    <h3>
+      <div class="pictogram pictogram pictogram-<%= language.downcase %>"></div>
+      <%= language %>
+    </h3>
+    <ul>
+      <% keywords.each do |keyword| %>
+        <% next if keyword.blank? %>
+        <li>
+          <a href="/collections/<%= ERB::Util.url_encode(language) %>-<%= keyword %>-libraries">
+            <%= keyword %> libraries
+          </a>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
