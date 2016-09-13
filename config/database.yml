@@ -80,7 +80,5 @@ test:
 #
 production:
   <<: *default
-  database: libraries_production
-  username: libraries
-  password: <%= ENV['LIBRARIES_DATABASE_PASSWORD'] %>
-  pool: 20
+  pool: 50
+  prepared_statements: false

@@ -1,12 +1,33 @@
+<%= render 'admin/nav' %>
 <div class="row">
   <%= simple_form_for(@project, url: admin_project_path(@project.id), html: { class: 'form-vertical col-md-6' }) do |form| %>
-    <h1>Admin</h1>
-    <h2><%= @project.platform %> - <%= link_to @project, project_path(@project.to_param) %> </h2>
+    <h2>
+      Admin / <%= @project.platform_name %> / <%= link_to @project, project_path(@project.to_param) %>
+      <% if @project.github_repository.present? %>
+        <%= link_to fa_icon('github'), @project.github_repository.url, target: :blank %>
+      <% end %>
+    </h2>
+    <% if @project.description.present? %>
+    <p>
+      description: <%= @project.description %>
+    </p>
+    <% end %>
+    <% if @project.github_repository.present? && @project.github_repository.description != @project.description %>
+    <p>
+      github description: <%= @project.github_repository.description %>
+    </p>
+    <% end %>
     <p>
       <strong>Rank:</strong> <%= @project.rank %>
     </p>
+    <p>
+      <strong>Subscribers:</strong> <%= @project.subscriptions.count %>
+    </p>
 
     <%= form.input :repository_url %>
+    <%= form.input :licenses, include_blank: true, selected: @project.licenses, label: 'License', collection: Project.popular_licenses(:facet_limit => 100).map{|l| format_license(l.term) } %>
+    <%= form.input :status, include_blank: true, collection: Project::STATUSES %>
+
     <%= form.submit class: 'btn btn-primary' %>
   <% end %>
 </div>

@@ -1,0 +1,83 @@
+<% title @title %>
+<% content_for :atom, auto_discovery_link_tag(:atom, url_for({format: "atom"}.merge(params))) %>
+<%= form_tag github_search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
+  <div class="row">
+    <div class='col-md-8'>
+      <div class="input-group input-group-lg">
+        <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search repos...', class: 'form-control', size: 40 %>
+        <span class="input-group-btn">
+          <button class="btn btn-primary btn-large " type="submit">Search</button>
+        </span>
+      </div>
+
+      <% [:license, :language, :sort].each do |field| %>
+        <%= hidden_field_tag field, params[field] if params[field].present? %>
+      <% end %>
+      <% if @suggestion && @suggestion.options.any? %>
+        <p>
+          Did you mean
+          <strong><%= link_to "#{@suggestion.options.first.text}?", github_search_path(q: @suggestion.options.first.text) %></strong>
+        </p>
+      <% end %>
+    </div>
+    <div class='col-md-4 hidden-sm'>
+      <h3>
+        <small>Sort by: <%= select_tag 'sort', options_for_select(repo_sort_options, params[:sort]), onchange: "this.form.submit()" %></small>
+      </h3>
+    </div>
+  </div>
+<% end %>
+<div class='row'>
+  <div class='col-md-8'>
+    <% if @github_repositories.length > 0 %>
+      <%= render @github_repositories, cache: true %>
+      <%= will_paginate @search, page_links: false %>
+      <p>
+        <small>
+          <%= page_entries_info @search, model: 'repositories' %>
+          -
+          <%= link_to url_for(params.merge(format: :atom, sort: 'created_at', order: 'desc')), class: 'rss' do %>
+            <%= fa_icon "rss-square" %>
+            Subscribe to an RSS feed of this search
+          <% end %>
+        </small>
+      </p>
+    <% else %>
+
+      <p>
+        No repositories found.
+      </p>
+      <p>
+        <% if params[:licenses].present? ||  params[:languages].present? %>
+          <%= link_to 'Try removing some filters.', search_path(q: params[:q]) %>
+        <% end %>
+      </p>
+    <% end %>
+  </div>
+
+  <div class='col-md-4 facets'>
+    <% @search.response.facets.each do |name, facet| %>
+      <% next if facet['terms'].empty? %>
+      <h4><%= name.humanize %></h4>
+      <ul class='filter'>
+        <% facet['terms'].each do |term| %>
+          <% next if term['term'].blank? %>
+          <% active = term['term'] == params[name.to_sym] %>
+          <li class='<%= 'active' if active %>'>
+            <% if active %>
+              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => nil, page: nil)) %>
+            <% else %>
+              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => term['term'], page: nil)) %>
+              <small><%= number_to_human term['count'] %></small>
+            <% end %>
+          </li>
+        <% end %>
+        <% if params[name.to_sym].present? && !facet['terms'].map{|t| t['term']}.include?(params[name.to_sym]) %>
+          <li class='active'>
+            <%= link_to platform_name(params[name.to_sym]), url_for(params.merge(name.to_sym => nil, page: nil)) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>

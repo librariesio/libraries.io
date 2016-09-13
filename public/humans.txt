@@ -1,20 +1,21 @@
-/* TEAM */
-  Andrew Nesbitt (andrew)
-  Site: http://nesbitt.io
-  Location: Bath, UK
+/* CORE TEAM */
+Andrew Nesbitt (andrew)
+Site: http://nesbitt.io
+Location: Bath, UK
 
-  Baris Balic (barisbalic)
-  Location: London, UK
+Mauro Pompilio (malditogeek)
+Site: https://vmux.co
+Location: London, UK
 
-  Mauro Pompilio (malditogeek)
-  Site: https://vmux.co
-  Location: London, UK
+/* CONTRIBUTORS */
 
-  Oli Evans (olizilla)
-  Site: http://oli.zilla.org.uk
-  Location: London, UK
+Baris Balic (barisbalic)
+Location: London, UK
 
-  thattommyhall (thattommyhall)
-  Site: www.thattommyhall.com
-  Location: London
+Oli Evans (olizilla)
+Site: http://oli.zilla.org.uk
+Location: London, UK
 
+Tom Hall (thattommyhall)
+Site: www.thattommyhall.com
+Location: London

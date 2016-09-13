@@ -1,10 +1,21 @@
 namespace :one_off do
   # put your one off tasks here and delete them once they've been ran
-  desc 'get popular repos'
-  task update_popular_repos: :environment do
-    Project.popular_languages(:facet_limit => 25).map(&:term).each do |language|
-      AuthToken.client.search_repos("language:#{language} stars:<500", sort: 'stars').items.each do |repo|
-        GithubRepository.create_from_hash repo.to_hash
+  task set_stable_versions: :environment do
+    Version.find_in_batches do |versions|
+      ActiveRecord::Base.transaction do
+        versions.each do |v|
+          v.update_column(:stable, v.stable_release?)
+        end
+      end
+    end
+  end
+
+  task set_stable_tags: :environment do
+    GithubTag.find_in_batches do |tags|
+      ActiveRecord::Base.transaction do
+        tags.each do |t|
+          t.update_column(:stable, t.stable_release?)
+        end
       end
     end
   end

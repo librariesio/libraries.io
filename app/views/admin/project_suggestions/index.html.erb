@@ -1,0 +1,15 @@
+<%= render 'admin/nav' %>
+<h1>Project Suggestions</h1>
+
+<div class="row">
+  <div class="col-md-6">
+    <% if @project_suggestions.reject(&:done?).any? %>
+      <%= render @project_suggestions.reject(&:done?) %>
+      <%= will_paginate @project_suggestions, page_links: false %>
+    <% else %>
+      <p>
+        No pending suggestions!
+      </p>
+    <% end %>
+  </div>
+</div>

@@ -2,7 +2,7 @@ module SourceRank
   extend ActiveSupport::Concern
 
   def update_source_rank
-    update_attribute :rank, source_rank
+    update_column :rank, source_rank
     touch
   end
 
@@ -15,50 +15,31 @@ module SourceRank
   end
 
   def source_rank
-    r = 0
-    # basic information available
-    r +=1 if basic_info_present?
+    source_rank_breakdown.values.sum > 0 ? source_rank_breakdown.values.sum : 0
+  end
 
-    # repo present
-    r +=1 if repository_present?
-
-    # readme present
-    r +=1 if readme_present?
-
-    # valid license present
-    r +=1 if license_present?
-
-    # more than one version
-    r +=1 if versions_present?
-
-    # a version released within the last X months
-    r +=1 if recent_release?
-
-    # at least X months old
-    r +=1 if not_brand_new?
-
-    # number of github stars
-    r += log_scale(stars)
-
-    # number of dependent projects
-    r += log_scale(dependents_count) * 2
-
-    # number of dependent repositories
-    r += log_scale(dependent_repositories_count)
-
-    # number of contributors
-    r += (log_scale(github_contributions.length) / 2.0).ceil
-
-    # number of subscribers
-    r += (log_scale(subscriptions.length) / 2.0).ceil
-
-    # more than one maintainer/owner?
-
-    # number of downloads
-
-    # documentation available?
-
-    return r
+  def source_rank_breakdown
+    @source_rank_breakdown ||= {
+      basic_info_present:         basic_info_present? ? 1 : 0,
+      repository_present:         repository_present? ? 1 : 0,
+      readme_present:             readme_present? ? 1 : 0,
+      license_present:            license_present? ? 1 : 0,
+      versions_present:           versions_present? ? 1 : 0,
+      follows_semver:             follows_semver? ? 1 : 0,
+      recent_release:             recent_release? ? 1 : 0,
+      not_brand_new:              not_brand_new? ? 1 : 0,
+      one_point_oh:               one_point_oh? ? 1 : 0,
+      dependent_projects:         log_scale(dependents_count) * 2,
+      dependent_repositories:     log_scale(dependent_repositories.open_source.length),
+      github_stars:               log_scale(stars),
+      contributors:               (log_scale(github_contributions_count) / 2.0).ceil,
+      subscribers:                (log_scale(subscriptions.length) / 2.0).ceil,
+      all_prereleases:            all_prereleases? ? -2 : 0,
+      any_outdated_dependencies:  any_outdated_dependencies? ? -1 : 0,
+      is_deprecated:              is_deprecated? ? -5 : 0,
+      is_unmaintained:            is_unmaintained? ? -5 : 0,
+      is_removed:                 is_removed? ? -5 : 0
+    }
   end
 
   def basic_info_present?
@@ -78,17 +59,29 @@ module SourceRank
   end
 
   def versions_present?
-    versions_count > 1 || (github_repository && github_repository.github_tags.published.any?)
+    versions_count > 1 || (github_tags.published.length > 0)
   end
 
   def recent_release?
     versions.any? {|v| v.published_at && v.published_at > 6.months.ago } ||
-      (github_repository && github_repository.github_tags.published.any? {|v| v.published_at && v.published_at > 6.months.ago })
+      (github_tags.published.any? {|v| v.published_at && v.published_at > 6.months.ago })
   end
 
   def not_brand_new?
     versions.any? {|v| v.published_at && v.published_at < 6.months.ago } ||
-      (github_repository && github_repository.github_tags.published.any? {|v| v.published_at && v.published_at < 6.months.ago })
+      (github_tags.published.any? {|v| v.published_at && v.published_at < 6.months.ago })
+  end
+
+  def any_outdated_dependencies?
+    latest_version.try(:any_outdated_dependencies?)
+  end
+
+  def all_prereleases?
+    prereleases.size == versions.size
+  end
+
+  def one_point_oh?
+    versions.any?(&:greater_than_1?)
   end
 
   def log_scale(number)

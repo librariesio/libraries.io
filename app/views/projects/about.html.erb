@@ -1,0 +1,36 @@
+name: <%= @project.name %>
+<%- if @project.description.present? -%>
+description: <%= @project.description %>
+<%- end -%>
+<%- if about_licenses(@project.normalized_licenses).present? -%>
+license_spdx: <%= about_licenses(@project.normalized_licenses) %>
+<%- end -%>
+<%- if @version_number -%>
+version: <%= @version_number %>
+<%- end -%>
+spec_version: 1.0
+<%- if dl_url = download_url(@project.name, @project.platform, @version_number) -%>
+download_url: <%= dl_url %>
+<%- end -%>
+<%- if @project.homepage.present? -%>
+home_url: <%= @project.homepage %>
+<%- end -%>
+<%- if rss_url(@project) -%>
+news_url: <%= rss_url(@project) %>
+<%- end -%>
+<%- if @version -%>
+date: <%= @version.published_at.to_date.iso8601 %>
+<%- else -%>
+date: <%= @project.updated_at.to_date.iso8601 %>
+<%- end -%>
+about_resource: NONE
+<%- if @version -%>
+libraries_io_url: <%= project_url(@project.to_param.merge(number: params[:number])) %>
+<%- else -%>
+libraries_io_url: <%= project_url(@project.to_param) %>
+<%- end -%>
+<%- if @project.github_repository.present? -%>
+vcs_tool: git
+vcs_repository: <%= @project.github_repository.url %>
+vcs_branch: <%= @project.github_repository.default_branch %>
+<%- end -%>

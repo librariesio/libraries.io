@@ -1,9 +1,10 @@
-<div class='platform col-xs-6 col-sm-4 col-md-3'>
+<div class='platform col-xs-6 col-sm-4 col-md-4'>
   <h4>
     <div class="pictogram pictogram-<%= platform.term.downcase %>"></div>
     <div class="blurb">
-    <%= link_to platform_name(platform.term), platform_path(platform.term.downcase) %>
-    <small><%= number_to_human platform['count'] %> Projects</small>
+      <%= link_to platform_name(platform.term), platform_path(platform.term.downcase) %>
+      <small><%= number_to_human platform['count'] %> Projects</small>
+    </div>
   </h4>
 
 </div>

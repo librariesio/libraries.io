@@ -1,5 +1,5 @@
 class GithubTag < ActiveRecord::Base
-  belongs_to :github_repository
+  belongs_to :github_repository#, touch: true
   validates_presence_of :name, :sha, :github_repository
 
   scope :published, -> { where('published_at IS NOT NULL') }
@@ -10,39 +10,56 @@ class GithubTag < ActiveRecord::Base
     name
   end
 
+  def update_github_repo_async
+    GithubDownloadWorker.perform_async(github_repository_id)
+  end
+
   def send_notifications_async
+    return if published_at && published_at < 1.week.ago
     TagNotificationsWorker.perform_async(self.id) if has_projects?
   end
 
   def send_notifications
     if has_projects?
       notify_subscribers
-      notify_gitter
       notify_firehose
+      notify_web_hooks
     end
   end
 
-  def has_projects?
-    github_repository && github_repository.projects.without_versions.any?
-  end
-
-  def notify_subscribers
+  def notify_web_hooks
     github_repository.projects.without_versions.each do |project|
-      project.subscriptions.each do |subscription|
-        VersionsMailer.new_version(subscription.notification_user, project, self).deliver_later rescue nil
+      repos = project.subscriptions.map(&:github_repository).compact.uniq
+      repos.each do |repo|
+        requirements = repo.repository_dependencies.select{|rd| rd.project == project }.map(&:requirements)
+        repo.web_hooks.each do |web_hook|
+          web_hook.send_new_version(project, project.platform, self, requirements)
+        end
       end
     end
   end
 
-  def notify_gitter
+  def has_projects?
+    github_repository && github_repository.projects.without_versions.length > 0
+  end
+
+  def notify_subscribers
     github_repository.projects.without_versions.each do |project|
-      GitterNotifications.new_version(project.name, project.platform, number)
+      subscriptions = project.subscriptions
+      subscriptions = subscriptions.include_prereleases if prerelease?
+
+      subscriptions.group_by(&:notification_user).each do |user, subscriptions|
+        next if user.nil?
+        next if user.muted?(project)
+        next if !user.emails_enabled?
+        VersionsMailer.new_version(user, project, self).deliver_later
+      end
     end
   end
 
   def notify_firehose
     github_repository.projects.without_versions.each do |project|
-      Firehose.new_version(project, project.platform, number)
+      Firehose.new_version(project, project.platform, self)
     end
   end
 
@@ -55,7 +72,31 @@ class GithubTag < ActiveRecord::Base
   end
 
   def parsed_number
-    Semantic::Version.new(number) rescue number
+    semantic_version || number
+  end
+
+  def semantic_version
+    @semantic_version ||= begin
+      Semantic::Version.new(number)
+    rescue ArgumentError
+      nil
+    end
+  end
+
+  def stable?
+    !prerelease?
+  end
+
+  def prerelease?
+    !!parsed_number.try(:pre)
+  end
+
+  def valid_number?
+    !!semantic_version
+  end
+
+  def follows_semver?
+    valid_number?
   end
 
   def number

@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-md-6">
+    <h1><%= title 'Delete your account' %></h1>
+
+    <p>
+      Are you really sure you want to delete your account? This is a non-reversable
+      action, once you delete your account, there is no going back. Please be sure.
+    </p>
+
+    <p>
+      If you'd like speak to someone about the issues you're having, please email me
+       at Email us at <%= mail_to 'andrew@libraries.io', 'andrew@libraries.io' %> and I'll
+       do all I can to help.
+    </p>
+
+    <p>
+      <%= button_to 'Delete Account', account_path, method: :delete, class: 'btn btn-danger', data: {confirm: 'Really sure? Last chance to change your mind.'} %>
+    </p>
+  </div>
+</div>

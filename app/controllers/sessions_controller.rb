@@ -1,11 +1,19 @@
 class SessionsController < ApplicationController
-  unless Rails.env.production?
-    skip_before_action :verify_authenticity_token, only: [:create]
-  end
+  skip_before_action :verify_authenticity_token, only: [:create, :failure]
 
   def new
     session[:pre_login_destination] = params[:return_to] if params[:return_to].present?
     redirect_to "/auth/github"
+  end
+
+  def enable_public
+    session[:pre_login_destination] = repositories_path
+    redirect_to "/auth/github_public"
+  end
+
+  def enable_private
+    session[:pre_login_destination] = repositories_path
+    redirect_to "/auth/github_private"
   end
 
   def create

@@ -7,57 +7,54 @@
 <div class="row">
   <div class="col-md-8">
     <% @projects.each do |project| %>
-      <div class="row">
-        <div class='project col-xs-8' style="border-color: <%= project.color %>;">
-          <h5>
-            <%= link_to project.name, project_path(project.to_param) %>
-            <small><%= project.latest_version %></small>
-          </h5>
+      <% cache(['bus-factor', project]) do  %>
+        <div class="row">
+          <div class='project col-xs-8' style="border-color: <%= project.color %>;">
+            <h5>
+              <%= link_to project.name, project_path(project.to_param) %>
+              <small><%= project.latest_release_number %></small>
+            </h5>
 
-          <div class="">
-            <%= truncate project.description, :length => 100 %>
-          </div>
+            <div class="">
+              <%= truncate project.description, :length => 100 %>
+            </div>
 
-          <small>
-            <%= link_to platform_name(project.platform), platform_path(project.platform.downcase) %> -
-            <% if project.language.present? && project.language != project.platform %>
-              <%= link_to project.language, language_path(project.language) %> -
-            <% end %>
-            <% if project.normalized_licenses.present? %>
-              <%= linked_licenses project.normalized_licenses %> -
-            <% end %>
-            <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
-            <%= time_ago_in_words project.latest_release_published_at %> ago
-            <% if project.stars > 0 %>
-             - <%= number_to_human project.stars %> stars
-            <% end %>
-          </small>
-
-          <p>
             <small>
-              <%= link_to pluralize(project.dependents_count, 'dependent release'), project_dependents_path(project.to_param) %> -
-              <%= link_to pluralize(project.github_repository.github_contributions_count, 'contributor'), project.github_repository.contributors_url, target: :blank %>
+              <%= link_to project.platform_name, platform_path(project.platform.downcase) %> -
+              <% if project.language.present? && project.language != project.platform %>
+                <%= link_to project.language, language_path(project.language) %> -
+              <% end %>
+              <% if project.normalized_licenses.present? %>
+                <%= linked_licenses project.normalized_licenses %> -
+              <% end %>
+              <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+              <%= timeago_tag project.latest_release_published_at %>
+              <% if project.stars > 0 %>
+               - <%= number_to_human project.stars %> stars
+              <% end %>
+              - <%= link_to pluralize(project.github_repository.try(:github_contributions_count), 'contributor'), project.github_repository.try(:contributors_url) %>
             </small>
-          </p>
+          </div>
+          <div class="col-xs-4">
+            <br>
+            <%= link_to project.github_repository.try(:url), class: 'btn btn-primary' do %>
+            Contribute<span class='hidden-xs'> on GitHub</span>
+            <% end %>
+          </div>
         </div>
-        <div class="col-xs-4">
-          <br>
-          <%= link_to project.github_repository.url, class: 'btn btn-primary', target: :blank do %>
-          Contribute<span class='hidden-xs'> on GitHub</span>
-          <% end %>
-        </div>
-      </div>
+      <% end %>
     <% end %>
-    <%= will_paginate @projects, renderer: BootstrapPagination::Rails, page_links: false %>
+    <%= will_paginate @search, page_links: false %>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-4 facets">
+    <%= render 'adsense/sidebar' %>
     <h3>
       <strong>
         What's the bus factor?
       </strong>
     </h3>
     <p>
-      The <%= link_to 'Bus factor', 'https://en.wikipedia.org/wiki/Bus_factor', target: :blank %> is the number of key developers who would need to be incapacitated to make a project unable to proceed.
+      The <%= link_to 'Bus factor', 'https://en.wikipedia.org/wiki/Bus_factor' %> is the number of key developers who would need to be incapacitated to make a project unable to proceed.
     </p>
     <p>
       This page shows libraries that are depended upon by many other libraries but have only ever had a handful of contributors commit to the project.
@@ -68,21 +65,29 @@
     <p>
       <em>This is an experiment based on GitHub contributions and available dependency data from package manager repositories that make it easily available.</em>
     </p>
-    <h3>
-      <strong>
-        Filter by language
-      </strong>
-    </h3>
-    <ul>
-      <% @languages.each do |language| %>
-        <li class='<%= 'active' if language.downcase == params[:language].try(:downcase) %>'>
-          <% if language.downcase == params[:language].try(:downcase) %>
-            <%= link_to language, bus_factor_path(language: nil) %>
-          <% else %>
-            <%= link_to language, bus_factor_path(language: language) %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
+    <% @search.response.facets.each do |name, facet| %>
+      <% next if facet['terms'].empty? %>
+      <h4><%= name.humanize %></h4>
+      <ul class='filter'>
+        <% facet['terms'].each do |term| %>
+          <% next if term['term'].blank? %>
+          <% active = term['term'] == params[name.to_sym] %>
+          <li class='<%= 'active' if active %>'>
+            <% if active %>
+              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => nil, page: nil)) %>
+            <% else %>
+              <%= link_to platform_name(term['term']), url_for(params.merge(name.to_sym => term['term'], page: nil)) %>
+              <small><%= number_to_human term['count'] %></small>
+            <% end %>
+          </li>
+        <% end %>
+        <% if params[name.to_sym].present? && !facet['terms'].map{|t| t['term']}.include?(params[name.to_sym]) %>
+          <li class='active'>
+            <%= link_to platform_name(params[name.to_sym]), url_for(params.merge(name.to_sym => nil, page: nil)) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
   </div>
 </div>

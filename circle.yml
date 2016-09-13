@@ -1,0 +1,16 @@
+machine:
+  services:
+    - redis
+    - postgresql
+
+dependencies:
+  cache_directories:
+    - elasticsearch-1.7.5
+  post:
+    - wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.5.tar.gz
+    - tar -xvf elasticsearch-1.7.5.tar.gz
+    - elasticsearch-1.7.5/bin/elasticsearch: {background: true}
+
+test:
+  override:
+    - RAILS_ENV=test bundle exec rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml

@@ -3,34 +3,42 @@ namespace :download do
     Download.new_github_repos
   end
 
-  task small_registries: [:alcatraz, :cargo, :dub, :emacs, :hackage, :jam, :nimble, :platformio, :sublime]
+  task small_registries: [:emacs, :hackage, :sublime, :inqlude, :shards]
 
   task alcatraz: :environment do
-    Repositories::Alcatraz.import
+    Repositories::Alcatraz.import_async
   end
 
   task atom: :environment do
-    Repositories::Atom.import_recent
+    Repositories::Atom.import_recent_async
   end
 
-  task biicode: :environment do
-    Repositories::Biicode.import
+  task atom_all: :environment do
+    Repositories::Atom.import_async
   end
 
   task bower: :environment do
-    Repositories::Bower.import_new
+    Repositories::Bower.import_new_async
   end
 
   task cargo: :environment do
-    Repositories::Cargo.import
+    Repositories::Cargo.import_async
+  end
+
+  task carthage: :environment do
+    Repositories::Carthage.import_async
   end
 
   task clojars: :environment do
-    Repositories::Clojars.import
+    Repositories::Clojars.import_async
   end
 
   task cpan: :environment do
-    Repositories::CPAN.import_recent
+    Repositories::CPAN.import_recent_async
+  end
+
+  task cpan_all: :environment do
+    Repositories::CPAN.import_async
   end
 
   task cocoapods: :environment do
@@ -38,57 +46,91 @@ namespace :download do
   end
 
   task cran: :environment do
-    Repositories::CPAN.import_recent
+    Repositories::CRAN.import_recent_async
+  end
+
+  task cran_all: :environment do
+    Repositories::CRAN.import_async
   end
 
   task dub: :environment do
-    Repositories::Dub.import
+    Repositories::Dub.import_async
   end
 
   task elm: :environment do
-    Repositories::Elm.import
+    Repositories::Elm.import_async
   end
 
   task emacs: :environment do
-    Repositories::Emacs.import
+    Repositories::Emacs.import_async
   end
 
   task hackage: :environment do
-    Repositories::Hackage.import_recent
+    Repositories::Hackage.import_recent_async
+  end
+
+  task hackage_all: :environment do
+    Repositories::Hackage.import_async
   end
 
   task hex: :environment do
-    Repositories::Hex.import_recent
+    Repositories::Hex.import_recent_async
+  end
+
+  task hex_all: :environment do
+    Repositories::Hex.import
+  end
+
+  task homebrew: :environment do
+    Repositories::Homebrew.import_recent_async
+  end
+
+  task homebrew_all: :environment do
+    Repositories::Homebrew.import_async
+  end
+
+  task inqlude: :environment do
+    Repositories::Inqlude.import
   end
 
   task jam: :environment do
-    Repositories::Jam.import
+    Repositories::Jam.import_async
   end
 
   task julia: :environment do
-    Repositories::Julia.import
+    Repositories::Julia.import_async
   end
 
   task maven: :environment do
     Repositories::Maven.load_names(50)
-    Repositories::Maven.import_recent
+    Repositories::Maven.import_recent_async
+  end
+
+  task maven_all: :environment do
+    Repositories::Maven.load_names
+    Repositories::Maven.import_async
   end
 
   task meteor: :environment do
-    Repositories::Meteor.import
+    Repositories::Meteor.import_async
   end
 
   task nimble: :environment do
-    Repositories::Nimble.import
+    Repositories::Nimble.import_async
   end
 
   task nuget: :environment do
+    Repositories::NuGet.load_names(3)
+    Repositories::NuGet.import_recent_async
+  end
+
+  task nuget_all: :environment do
     Repositories::NuGet.load_names
     Repositories::NuGet.import
   end
 
   task npm: :environment do
-    Repositories::NPM.import_recent
+    Repositories::NPM.import_recent_async
   end
 
   task npm_all: :environment do
@@ -96,11 +138,11 @@ namespace :download do
   end
 
   task packagist: :environment do
-    Repositories::Packagist.import_recent
+    Repositories::Packagist.import_recent_async
   end
 
   task packagist_all: :environment do
-    Repositories::Packagist.import
+    Repositories::Packagist.import_async
   end
 
   task platformio: :environment do
@@ -108,26 +150,50 @@ namespace :download do
   end
 
   task pub: :environment do
-    Repositories::Pub.import
+    Repositories::Pub.import_async
   end
 
   task pypi: :environment do
-    Repositories::Pypi.import_recent
+    Repositories::Pypi.import_recent_async
+  end
+
+  task pypi_all: :environment do
+    Repositories::Pypi.import_async
   end
 
   task rubygems: :environment do
-    Repositories::Rubygems.import_recent
+    Repositories::Rubygems.import_recent_async
+  end
+
+  task rubygems_all: :environment do
+    Repositories::Rubygems.import_async
+  end
+
+  task shards: :environment do
+    Repositories::Shards.import_async
+  end
+
+  task swift: :environment do
+    Repositories::SwiftPM.import
   end
 
   task sublime: :environment do
-    Repositories::Sublime.import
+    Repositories::Sublime.import_async
   end
 
   task wordpress: :environment do
-    Repositories::Wordpress.import_recent
+    Repositories::Wordpress.import_recent_async
+  end
+
+  task wordpress_all: :environment do
+    Repositories::Wordpress.import_async
   end
 
   task go: :environment do
-    Repositories::Go.import_new
+    Repositories::Go.import_new_async
+  end
+
+  task go_all: :environment do
+    Repositories::Go.import_async
   end
 end

@@ -3,13 +3,20 @@
 </p>
 
 <p>
-  I detected a new release (<%= link_to @version.number, version_url(@project.to_param.merge(number: @version.number)) %>)
-  of <%= link_to @project, project_url(@project.to_param) %>
-  on <%= link_to @project.platform, platform_url(@project.platform.downcase) %>
+  I detected that version <%= link_to @version.number, version_url(@project.to_param.merge(number: @version.number)) %>
+  of <%= link_to @project, project_url(@project.to_param) %> was released
+  on <%= @project.platform_name %>
   <% if @version.published_at.present? %>
   at <%= @version.published_at.to_s(:long) %>
   <% end %>
 </p>
+
+<% if @repos.any? %>
+<p>
+  You depend on <%= @project %> in the following repos:
+  <%= @repos.map{|repo| link_to repo.full_name, github_repository_url(repo.owner_name, repo.project_name) }.to_sentence.html_safe %>
+</p>
+<% end %>
 
 <p>
   Check out all the details here: <%= link_to version_url(@project.to_param.merge(number: @version.number)), version_url(@project.to_param.merge(number: @version.number)) %>
@@ -27,4 +34,5 @@
 <hr>
 <p>
   <em>p.s. You can manage and unsubscribe from subscriptions here: <%= link_to subscriptions_url, subscriptions_url %></em>
+  <em>You can opt out of emails from your account here: <%= link_to account_url, account_url %></em>
 </p>

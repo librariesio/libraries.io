@@ -1,5 +1,7 @@
 class GithubRepository < ActiveRecord::Base
-  # validations (presense and uniqueness)
+  include RepoSearch
+
+  STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
 
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
    :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
@@ -7,31 +9,116 @@ class GithubRepository < ActiveRecord::Base
    :subscribers_count, :private]
 
   has_many :projects
-  has_many :github_contributions
-  has_many :github_tags
-  has_many :manifests
+  has_many :github_contributions, dependent: :delete_all
+  has_many :contributors, through: :github_contributions, source: :github_user
+  has_many :github_tags, dependent: :delete_all
+  has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
-  has_many :repository_subscriptions
-  has_one :readme
+  has_many :repository_subscriptions, dependent: :delete_all
+  has_many :web_hooks, dependent: :delete_all
+  has_many :github_issues, dependent: :delete_all
+  has_one :readme, dependent: :delete
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
+  belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
+  has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: GithubRepository
 
+  validates :full_name, uniqueness: true, if: lambda { self.full_name_changed? }
+  validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
+
+  before_save  :normalize_license
   after_commit :update_all_info_async, on: :create
-  # after_save :touch_projects
 
-  scope :without_readme, -> { where("id NOT IN (SELECT github_repository_id FROM readmes)") }
+  scope :without_readme, -> { where("github_repositories.id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
-  scope :with_manifests, -> { joins(:manifests) }
+  scope :without_projects, -> { includes(:projects).where(projects: { github_repository_id: nil }) }
+  scope :without_subscriptons, -> { includes(:repository_subscriptions).where(repository_subscriptions: { github_repository_id: nil }) }
+
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
+
   scope :open_source, -> { where(private: false) }
+  scope :from_org, lambda{ |org_id|  where(github_organisation_id: org_id) }
+
+  scope :with_manifests, -> { joins(:manifests) }
+  scope :without_manifests, -> { includes(:manifests).where(manifests: {github_repository_id: nil}) }
+
+  scope :with_license, -> { where("github_repositories.license <> ''") }
+  scope :without_license, -> {where("github_repositories.license IS ? OR github_repositories.license = ''", nil)}
+
+  scope :interesting, -> { where('github_repositories.stargazers_count > 0').order('github_repositories.stargazers_count DESC, github_repositories.pushed_at DESC') }
+  scope :uninteresting, -> { without_readme.without_manifests.without_license.where('github_repositories.stargazers_count = 0').where('github_repositories.forks_count = 0') }
+
+  scope :recently_created, -> { where('created_at > ?', 7.days.ago)}
+  scope :hacker_news, -> { order("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC") }
+
+  scope :maintained, -> { where('github_repositories."status" not in (?) OR github_repositories."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
+  scope :deprecated, -> { where('github_repositories."status" = ?', "Deprecated")}
+  scope :not_removed, -> { where('github_repositories."status" != ? OR github_repositories."status" IS NULL', "Removed")}
+  scope :removed, -> { where('github_repositories."status" = ?', "Removed")}
+  scope :unmaintained, -> { where('github_repositories."status" = ?', "Unmaintained")}
+
+  scope :indexable, -> { open_source.not_removed.includes(:projects) }
+
+  def self.language(language)
+    where('lower(github_repositories.language) = ?', language.try(:downcase))
+  end
+
+  def meta_tags
+    {
+      title: "#{full_name} on GitHub",
+      description: description,
+      image: avatar_url(200)
+    }
+  end
+
+  def normalize_license
+    return if license.blank?
+    if license.downcase == 'other'
+      self.license = 'Other'
+    else
+      l = Spdx.find(license).try(:id)
+      l = 'Other' if l.blank?
+      self.license = l
+    end
+  end
+
+  def is_deprecated?
+    status == 'Deprecated'
+  end
+
+  def is_removed?
+    status == 'Removed'
+  end
+
+  def is_unmaintained?
+    status == 'Unmaintained'
+  end
+
+  def maintained?
+    !is_deprecated? && !is_removed? && !is_unmaintained?
+  end
+
+  def deprecate!
+    update_attribute(:status, 'Deprecated')
+    projects.each do |project|
+      project.update_attribute(:status, 'Deprecated')
+    end
+  end
+
+  def unmaintain!
+    update_attribute(:status, 'Unmaintained')
+    projects.each do |project|
+      project.update_attribute(:status, 'Unmaintained')
+    end
+  end
 
   def touch_projects
     projects.find_each(&:save)
   end
 
   def repository_dependencies
-    manifests.latest.includes(:repository_dependencies).map(&:repository_dependencies).flatten.uniq
+    manifests.latest.includes({repository_dependencies: {project: :versions}}).map(&:repository_dependencies).flatten.uniq
   end
 
   def owner
@@ -46,14 +133,12 @@ class GithubRepository < ActiveRecord::Base
         save
       end
     else
-      user = GithubUser.find_or_create_by(github_id: o.id) do |u|
+      GithubUser.find_or_create_by(github_id: o.id) do |u|
         u.login = o.login
         u.user_type = o.type
       end
-      user.dowload_from_github
-      user
     end
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::RepositoryUnavailable, Octokit::InvalidRepository, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError => e
     nil
   end
 
@@ -78,11 +163,11 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def stars
-    stargazers_count
+    stargazers_count || 0
   end
 
   def forks
-    forks_count
+    forks_count || 0
   end
 
   def pages_url
@@ -133,6 +218,14 @@ class GithubRepository < ActiveRecord::Base
     "#{url}/commits"
   end
 
+  def readme_url
+    "#{url}#readme"
+  end
+
+  def tags_url
+    "#{url}/tags"
+  end
+
   def avatar_url(size = 60)
     "https://avatars.githubusercontent.com/u/#{owner_id}?size=#{size}"
   end
@@ -152,7 +245,7 @@ class GithubRepository < ActiveRecord::Base
     else
       readme.update_attributes(contents)
     end
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError
     nil
   end
 
@@ -160,22 +253,17 @@ class GithubRepository < ActiveRecord::Base
     begin
       r = github_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
       return if r.nil? || r.empty?
-      self.github_id = r[:id]
+      self.github_id = r[:id] unless self.github_id == r[:id]
+      self.full_name = r[:full_name] if self.full_name.downcase != r[:full_name].downcase
       self.owner_id = r[:owner][:id]
       self.license = Project.format_license(r[:license][:key]) if r[:license]
       self.source_name = r[:parent][:full_name] if r[:fork]
       assign_attributes r.slice(*API_FIELDS)
-      save
-    rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
-      begin
-        response = Net::HTTP.get_response(URI(url))
-        if response.code.to_i == 301
-          self.full_name = GithubRepository.extract_full_name URI(response['location']).to_s
-          update_from_github(token)
-        end
-      rescue URI::InvalidURIError => e
-        p e
-      end
+      save! if self.changed?
+    rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
+      nil
+    rescue Octokit::NotFound
+      update_attribute(:status, 'Removed') if !self.private?
     end
   end
 
@@ -190,48 +278,63 @@ class GithubRepository < ActiveRecord::Base
     download_github_contributions(token)
     download_manifests(token)
     download_owner
-  rescue
-    nil
+    download_fork_source(token)
+    download_issues(token)
+    touch_projects
+    update_attributes(last_synced_at: Time.now)
   end
 
-  def self.extract_full_name(url)
-    return nil if url.nil?
-    github_regex = /(((https|http|git|ssh)?:\/\/(www\.)?)|ssh:\/\/git@|https:\/\/git@|scm:git:git@|git@)(github.com|raw.githubusercontent.com)(:|\/)/i
-    return nil unless url.match(github_regex)
-    url = url.gsub(github_regex, '').strip
-    url = url.gsub(/(\.git|\/)$/i, '')
-    url = url.gsub(' ', '')
-    url = url.gsub(/^scm:git:/, '')
-    url = url.split('/').reject(&:blank?)[0..1]
-    return nil unless url.length == 2
-    url.join('/')
+  def download_fork_source(token = nil)
+    return true unless self.fork? && self.source.nil?
+    GithubRepository.create_from_github(source_name, token)
+  end
+
+  def download_forks_async(token = nil)
+    GithubDownloadForkWorker.perform_async(self.id, token)
+  end
+
+  def download_forks(token = nil)
+    return true if fork?
+    return true unless forks_count && forks_count > 0 && forks_count < 100
+    return true if forks_count == forked_repositories.count
+    AuthToken.new_client(token).forks(full_name).each do |fork|
+      GithubRepository.create_from_hash(fork)
+    end
   end
 
   def download_github_contributions(token = nil)
     contributions = github_client(token).contributors(full_name)
     return if contributions.empty?
+    existing_github_contributions = github_contributions.includes(:github_user).to_a
+    platform = projects.first.try(:platform)
     contributions.each do |c|
       return unless c['id']
-      user = GithubUser.find_or_create_by(github_id: c.id) do |u|
-        u.login = c.login
-        u.user_type = c.type
+
+      unless cont = existing_github_contributions.find{|c| c.github_user.try(:github_id) == c.id }
+        user = GithubUser.find_or_create_by(github_id: c.id) do |u|
+          u.login = c.login
+          u.user_type = c.type
+        end
+        cont = github_contributions.find_or_create_by(github_user: user)
       end
-      cont = github_contributions.find_or_create_by(github_user: user)
+
       cont.count = c.contributions
-      cont.platform = projects.first.platform if projects.any?
-      cont.save
+      cont.platform = platform
+      cont.save! if cont.changed?
     end
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+    true
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
     nil
   end
 
   def download_tags(token = nil)
+    existing_tag_names = github_tags.pluck(:name)
     github_client(token).refs(full_name, 'tags').each do |tag|
       return unless tag['ref']
       match = tag.ref.match(/refs\/tags\/(.*)/)
       if match
         name = match[1]
-        if github_tags.find_by_name(name).nil?
+        unless existing_tag_names.include?(name)
 
           object = github_client(token).get(tag.object.url)
 
@@ -253,7 +356,7 @@ class GithubRepository < ActiveRecord::Base
         end
       end
     end
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
     nil
   end
 
@@ -270,40 +373,80 @@ class GithubRepository < ActiveRecord::Base
         :active => true
       }
     )
-  end
-
-  def remove_hook(id, token)
-    github_client(token).remove_hook(full_name, id)
+  rescue Octokit::UnprocessableEntity => e
+    nil
   end
 
   def download_manifests(token = nil)
-    r = Typhoeus::Request.new("http://ci.libraries.io/repos/#{full_name}",
+    r = Typhoeus::Request.new("http://libhooks.herokuapp.com/v2/repos/#{full_name}",
       method: :get,
       params: { token: token },
       headers: { 'Accept' => 'application/json' }).run
-    new_manifests = Oj.load(r.body)["manifests"]
-    return if new_manifests.nil?
-    new_manifests.each do |m|
-      args = m.slice('name', 'path', 'sha')
-      if manifests.find_by(args)
-        # not much
+    begin
+      body = Oj.load(r.body)
+      if body
+        new_manifests = body["manifests"]
       else
+        new_manifests = nil
+      end
+    rescue Oj::ParseError
+      new_manifests = nil
+    end
+
+    if body && body['metadata']
+      meta = body['metadata']
+
+      self.has_readme       = meta['readme']['path']        if meta['readme']
+      self.has_changelog    = meta['changelog']['path']     if meta['changelog']
+      self.has_contributing = meta['contributing']['path']  if meta['contributing']
+      self.has_license      = meta['license']['path']       if meta['license']
+      self.has_coc          = meta['codeofconduct']['path'] if meta['codeofconduct']
+      self.has_threat_model = meta['threatmodel']['path']   if meta['threatmodel']
+      self.has_audit        = meta['audit']['path']         if meta['audit']
+
+      save! if self.changed?
+    end
+
+    return if new_manifests.nil?
+
+    new_manifests.each do |m|
+      args = {platform: m['platform'], kind: m['type'], filepath: m['filepath'], sha: m['sha']}
+
+      unless manifests.find_by(args)
         manifest = manifests.create(args)
-        m['deps'].each do |dep, requirements|
-          platform = manifest.name
-          project = Project.platform(platform).find_by_name(dep)
+        m['dependencies'].each do |dep|
+          platform = manifest.platform
+          next unless dep.is_a?(Hash)
+          project = Project.platform(platform).find_by_name(dep['name'])
+
           manifest.repository_dependencies.create({
             project_id: project.try(:id),
-            project_name: dep,
+            project_name: dep['name'].try(:strip),
             platform: platform,
-            requirements: requirements,
-            kind: 'normal'
+            requirements: dep['version'],
+            kind: dep['type']
           })
         end
       end
     end
 
+    delete_old_manifests
+
     repository_subscriptions.each(&:update_subscriptions)
+  end
+
+  def delete_old_manifests
+    manifests.where.not(id: manifests.latest.map(&:id)).each(&:destroy)
+  end
+
+  def download_issues(token = nil)
+    github_client = AuthToken.new_client(token)
+    issues = github_client.issues(full_name, state: 'all')
+    issues.each do |issue|
+      GithubIssue.create_from_hash(self, issue)
+    end
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError => e
+    nil
   end
 
   def self.create_from_github(full_name, token = nil)
@@ -311,19 +454,30 @@ class GithubRepository < ActiveRecord::Base
     repo_hash = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
     return false if repo_hash.nil? || repo_hash.empty?
     create_from_hash(repo_hash)
-  rescue Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway => e
+  rescue Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError => e
     nil
   end
 
   def self.create_from_hash(repo_hash)
     repo_hash = repo_hash.to_hash
-    g = GithubRepository.find_or_initialize_by(repo_hash.slice(:full_name))
-    g.owner_id = repo_hash[:owner][:id]
-    g.github_id = repo_hash[:id]
-    g.license = repo_hash[:license][:key] if repo_hash[:license]
-    g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork]
-    g.assign_attributes repo_hash.slice(*GithubRepository::API_FIELDS)
-    g.save
-    g
+    ActiveRecord::Base.transaction do
+      g = GithubRepository.find_by(github_id: repo_hash[:id])
+      g = GithubRepository.find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
+      g = GithubRepository.new(github_id: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
+      g.owner_id = repo_hash[:owner][:id]
+      g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
+      g.github_id = repo_hash[:id] if g.github_id.nil?
+      g.license = repo_hash[:license][:key] if repo_hash[:license]
+      g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
+      g.assign_attributes repo_hash.slice(*GithubRepository::API_FIELDS)
+
+      if g.changed?
+        return g.save ? g : nil
+      else
+        return g
+      end
+    end
+  rescue ActiveRecord::RecordNotUnique
+    nil
   end
 end

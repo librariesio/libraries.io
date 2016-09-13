@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1>
+      <%= link_to image_tag(@github_repository.avatar_url(100), width: 50, height: 50, alt: @github_repository), user_path(@github_repository.owner_name) %>
+      <%= link_to @github_repository.full_name, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %> -
+      Edit Web Hook
+    </h1>
+  </div>
+  <div class="col-md-6">
+    <%= simple_form_for @web_hook, url: github_repository_web_hook_path(@github_repository.owner_name, @github_repository.project_name, @web_hook) do |form| %>
+      <%= form.input :url, hint: 'Where the web hook will post data', placeholder: 'https://my-webhook.com/endpoint', label: 'Web Hook URL' %>
+      <%= form.submit class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>

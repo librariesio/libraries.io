@@ -1,19 +1,22 @@
 <div class="row">
-  <div class="col-md-8">
-    <h1>Subscriptions</h1>
+  <div class="col-md-12">
+    <h2>Projects you're watching</h2>
     <% if @subscriptions.any? %>
-      <table class='table table-striped table-hover'>
+      <table id='subscriptions' class='table table-striped table-hover'>
         <%= render @subscriptions %>
       </table>
-      <%= will_paginate @subscriptions, renderer: BootstrapPagination::Rails, page_links: false %>
+      <%= will_paginate @subscriptions, page_links: false %>
     <% else %>
       <p>
         Libraries lets you watch libraries that you depend on and notifies you by email when there's a new release.
       </p>
-      <h4>
-        Most watched Projects
-      </h4>
-      <%= render @projects %>
+      <p>
+        Below are some recommended projects for you to watch:
+      </p>
+      <%= render collection: @projects, partial: 'subscriptions/project' %>
+      <p>
+        <%= link_to 'Browse and filter more recommendations &raquo;'.html_safe, recommendations_path %>
+      </p>
     <% end %>
   </div>
 </div>

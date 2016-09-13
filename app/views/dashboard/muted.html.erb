@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-md-12">
+    <h2>Muted Projects</h2>
+    <br>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    <% @projects.each do |project| %>
+      <div class="row">
+        <div class="col-xs-10">
+          <%= render project %>
+        </div>
+        <div class="col-xs-2">
+          <br>
+          <%= link_to unmute_project_path(project.to_param), method: :delete, class: 'tip', title: "Unmute #{project.name} notifications" do %>
+            <i class='fa fa-microphone-slash'></i>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <%= will_paginate @projects, page_links: false %>
+  </div>
+</div>

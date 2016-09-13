@@ -1,0 +1,28 @@
+<% github_repository = github_issue.github_repository %>
+<div class='project' style="border-color: <%= github_repository.color %>;">
+  <h5>
+    <%= link_to emojify(truncate(github_issue.title, :length => 100)), github_issue.url %>
+    <small>
+      <%= link_to github_repository.full_name, github_repository_path(github_repository.owner_name, github_repository.project_name) %>
+      <%= fa_icon("lock") if github_repository.private? %>
+      <%= fa_icon("code-fork") if github_repository.fork? %>
+    </small>
+  </h5>
+
+  <p>
+    <%= emojify truncate(github_issue.body, :length => 200) %>
+  </p>
+
+  <p>
+    <small>
+      Created <%= timeago_tag github_issue.created_at %>
+      - <%= pluralize(github_issue.comments_count, 'comment') %>
+      <% if github_issue.labels.any? %>
+        -
+        <% github_issue.labels.each do |label| %>
+          <%= link_to label, "#{github_repository.url}/labels/#{ERB::Util.url_encode(label)}", class: 'label label-info label-pill'%>
+        <% end %>
+      <% end %>
+    </small>
+  </p>
+</div>

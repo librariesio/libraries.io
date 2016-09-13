@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-xs-8">
+    <% cache(['v2', github_repository]) do  %>
+      <div class='project' style="border-color: <%= github_repository.color %>;">
+        <h5>
+          <%= link_to github_repository.full_name, github_repository_path(github_repository.owner_name, github_repository.project_name) %>
+          <small>
+            <%= fa_icon("lock") if github_repository.private? %>
+            <%= fa_icon("code-fork") if github_repository.fork? %>
+          </small>
+        </h5>
+
+        <div>
+          <%= emojify truncate(github_repository.description, :length => 100) %>
+        </div>
+
+        <small>
+          <% if github_repository.language.present? %>
+            <%= link_to github_repository.language, language_path(github_repository.language) %> -
+          <% end %>
+          <% if github_repository.license.present? %>
+            <%= link_to github_repository.license, license_path(github_repository.license) %> -
+          <% end %>
+          <% if github_repository.pushed_at && github_repository.pushed_at > github_repository.created_at + 1.minute %>
+            Last pushed <%= timeago_tag github_repository.pushed_at %>
+          <% else %>
+            Published <%= timeago_tag github_repository.created_at %>
+          <% end %> - <%= number_to_human github_repository.stars %> stars
+          <% if github_repository.fork? %>
+          - Fork
+            <% if github_repository.source.present? || github_repository.source_name.present? %>
+            of <%= link_to github_repository.source_name, source_path(github_repository) %>
+            <% end %>
+          <% elsif github_repository.forks > 0 %>
+            - <%= number_to_human github_repository.forks %> forks
+          <% end %>
+        </small>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-xs-4">
+    <%= link_to "Deprecate", deprecate_admin_github_repository_path(github_repository.id), class: 'btn btn-danger', method: :put, target: :blank %>
+    <%= link_to "Unmaintain", unmaintain_admin_github_repository_path(github_repository.id), class: 'btn btn-warning', method: :put, target: :blank %>
+    <%= link_to 'Edit Details', admin_github_repository_path(github_repository.id), class: 'btn btn-primary' %>
+  </div>
+</div>

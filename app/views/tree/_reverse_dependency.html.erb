@@ -1,0 +1,16 @@
+<li>
+  <%= project.name %> - <em class='text-muted'><%= project.normalize_licenses.join(', ') %></em>
+  <% dependents = project.dependent_projects %>
+  <% if dependents.any? %>
+    <ul>
+      <% dependents.each do |dependent| %>
+        <% if index < 3 && !@project_names.include?(dependent.name) %>
+          <% @project_names << dependent.name %>
+          <%= render partial: 'tree/reverse_dependency', locals: {project: dependent, index: index + 1} %>
+        <% else %>
+          <li><%= dependent.name %>  - <em class='text-muted'><%= project.normalize_licenses.join(', ') %></em></li>
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>
+</li>

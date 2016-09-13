@@ -30,17 +30,41 @@
   <meta name="msapplication-wide310x150logo" content="/mstile-310x150.png" />
   <meta name="msapplication-square310x310logo" content="/mstile-310x310.png" />
   <meta property="fb:admins" content="508462908" />
+  <%= content_for(:meta).presence || render_meta %>
   <link href="/opensearch.xml" title="Libraries.io" rel="search" type="application/opensearchdescription+xml">
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-265870-38', 'auto');
+    <% if logged_in? %>
+      ga('create', 'UA-265870-38', 'auto', { 'userId': <%= current_user.id %> });
+    <% else %>
+      ga('create', 'UA-265870-38', 'auto');
+    <% end %>
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "url": "https://libraries.io/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://libraries.io/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
   </script>
 </head>
 <body>
-  <div class="navbar navbar-default navbar-fixed-top">
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <a href="https://github.com/librariesio/libraries.io" class="github-corner">
+      <svg width="50" height="50" viewBox="0 0 250 250" style="fill:#fff; color:#151513; position: absolute; top: 0; border: 0; left: 0;transform: scale(-1, 1);">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+      </svg>
+    </a>
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
@@ -49,25 +73,43 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <%= link_to image_tag('logo.svg'), root_path, class: 'navbar-brand' %>
+        <%= link_to image_tag('logo.svg', width: 116, height: 22), root_path, class: 'navbar-brand' %>
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav navbar-right">
           <% if logged_in? %>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= image_tag current_user.avatar_url(40), width: 20, height: 20 %> Account <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><%= link_to 'Repository Monitoring', repositories_path %></li>
+                <li><%= link_to 'Subscriptions', subscriptions_path %></li>
+                <% if current_user.github_user.present? %>
+                  <li><%= link_to 'Profile', user_path(current_user.github_user) %></li>
+                <% end %>
+                <li><%= link_to 'Settings', account_path %></li>
+                <li><%= link_to 'Logout', logout_path %></li>
+              </ul>
+            </li>
+          <% else %>
             <li>
-              <%= link_to 'Subscriptions', subscriptions_path %>
+              <%= link_to 'Features', about_path %>
             </li>
             <li>
-              <%= link_to 'Logout', logout_path %>
+              <%= link_to 'Pricing', pricing_path %>
             </li>
           <% end %>
           <li>
             <%= form_tag search_path, method: :get, class: 'navbar-form', enforce_utf8: false do |f| %>
-              <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 40 %>
+              <div class="input-group input-group">
+                <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 40 %>
+                <span class="input-group-btn">
+                  <button class="btn btn-primary" type="submit">Search</button>
+                </span>
+              </div>
             <% end %>
           </li>
         </ul>
-        <%= link_to('Login with GitHub', login_path(return_to: request.original_url), class: 'pull-right btn btn-primary navbar-btn') unless logged_in? %>
+        <%= link_to('Login with GitHub', login_path(return_to: request.original_url), class: 'pull-right btn btn-success navbar-btn', rel: 'nofollow') unless logged_in? %>
       </div>
     </div>
   </div>
@@ -79,7 +121,7 @@
   <footer>
     <div class="container">
       <div class='row'>
-        <div class="col-xs-12 col-sm-6 col-md-7">
+        <div class="col-xs-12 col-sm-6 col-md-4">
             <p>
               <%= link_to 'Libraries', root_path %> helps you find new open source libraries, modules and frameworks and keep track of ones you depend upon.
             </p>
@@ -88,20 +130,42 @@
               from across <%= link_to Download.platforms.length, platforms_path %> platforms.
             </p>
             <p>
-              <%= link_to 'About', '/about' %> -
-              <%= link_to 'Support', 'https://github.com/librariesio/support/issues/new' %> -
-              <%= link_to 'Twitter', 'https://twitter.com/librariesio' %> -
-              <%= link_to 'GitHub', 'https://github.com/librariesio' %> -
-              <%= link_to 'Contact', 'mailto:support@libraries.io' %> -
-              <%= link_to 'Increase the Bus Factor', bus_factor_path %>
+              Sponsored by:
+            </p>
+            <p>
+              <%= link_to image_tag('safestack.png', width: 180), 'https://safestack.io' %>
             </p>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-5">
-          <form action="//libraries.us10.list-manage.com/subscribe/post?u=15c11768c94674bc6f18d079f&amp;id=848ac04a44" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="navbar-form" target="_blank" novalidate>
+        <div class="col-xs-12 col-md-2">
+          <strong>About Us</strong>
+          <ul>
+            <li><%= link_to 'About Libraries.io', '/about' %></li>
+            <li><%= link_to 'API', '/api' %></li>
+            <li><%= link_to 'Support', 'https://github.com/librariesio/support/issues/new' %></li>
+            <li><%= link_to 'Twitter', 'https://twitter.com/librariesio' %></li>
+            <li><%= link_to 'GitHub', 'https://github.com/librariesio' %></li>
+            <li><%= link_to 'Email', 'mailto:support@libraries.io' %></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-md-2">
+          <strong>Explore</strong>
+          <ul>
+            <li><%= link_to 'Platforms', '/platforms' %></li>
+            <li><%= link_to 'Languages', '/languages' %></li>
+            <li><%= link_to 'Licenses', '/licenses' %></li>
+            <li><%= link_to 'Help Wanted', help_wanted_path %></li>
+            <li><%= link_to 'First Pull Request', first_pull_request_path %></li>
+            <li><%= link_to 'Bus Factor', bus_factor_path %></li>
+            <li><%= link_to 'Unlicensed Libraries', unlicensed_path %></li>
+            <li><%= link_to 'Trending Repositories', trending_path %></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <form action="//libraries.us10.list-manage.com/subscribe/post?u=15c11768c94674bc6f18d079f&amp;id=848ac04a44" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="navbar-form" novalidate>
             <p>
               Subscribe to the Libraries newsletter:
             </p>
-          	<input type="email" value="" name="EMAIL" size='40' placeholder='Your email...' class="form-control" id="mce-EMAIL">
+          	<input type="email" value="" name="EMAIL" size='20' placeholder='Your email...' class="form-control" id="mce-EMAIL">
             <div style="position: absolute; left: -5000px;"><input type="text" name="b_15c11768c94674bc6f18d079f_848ac04a44" tabindex="-1" value=""></div>
             <input type="submit" value="Get Updates" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary"></div>
           </form>

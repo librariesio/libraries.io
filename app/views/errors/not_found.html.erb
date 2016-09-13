@@ -1,6 +1,12 @@
-<h2>We can't find whatever it was you were looking for.</h2>
-<p>In truth, we may never have had what you are looking for, but you should try our search below!</p>
-
-<%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
-  <%= text_field_tag 'q', request.original_fullpath.gsub('/', ' '), placeholder: 'Search..', class: 'form-control' %>
-<% end %>
+<div class="row">
+  <div class="col-md-8">
+    <h2>We can't find whatever it was you were looking for.</h2>
+    <p>In truth, we may never have had what you are looking for, it could have been removed or never existed.</p>
+    <p>
+      Email us at <%= mail_to 'support@libraries.io', 'support@libraries.io' %> if this is ruining your day.
+    </p>
+  </div>
+  <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
+  </div>
+</div>

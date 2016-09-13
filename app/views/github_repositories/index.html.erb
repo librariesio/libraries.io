@@ -3,72 +3,96 @@
 
 <div class='row'>
   <div class='col-md-12'>
-    <h1>GitHub Repositories</h1>
+    <h1><i class="fa fa-github"></i> GitHub <%= @title %></h1>
   </div>
 </div>
 <hr>
-<div class="col-md-8">
-  <div class='row'>
-    <% if @popular.any? %>
+<div class="row">
+  <div class="col-md-8">
+    <div class='row'>
+      <% if @popular.any? %>
+        <div class='col-md-6'>
+          <h4>
+            Most Starred <%= @title %>
+          </h4>
+          <%= render @popular, cache: true %>
+        </div>
+      <% end %>
+      <% if @forked.any? %>
+        <div class='col-md-6'>
+          <h4>
+            Most Forked <%= @title %>
+          </h4>
+          <%= render @forked, cache: true %>
+        </div>
+      <% end %>
+    </div>
+    <hr>
+    <div class='row'>
+      <% if @created.any? %>
       <div class='col-md-6'>
         <h4>
-          Most Starred Repositories
+          New <%= @title %>
         </h4>
-        <%= render @popular %>
+        <%= render @created, cache: true %>
       </div>
-    <% end %>
-    <% if @forked.any? %>
+      <% end %>
+      <% if @updated.any? %>
       <div class='col-md-6'>
         <h4>
-          Most Forked Repositories
+          Recently Pushed <%= @title %>
         </h4>
-        <%= render @forked %>
+        <%= render @updated, cache: true %>
       </div>
-    <% end %>
-  </div>
-  <hr>
-  <div class='row'>
-    <% if @created.any? %>
-    <div class='col-md-6'>
-      <h4>
-        New Repositories
-      </h4>
-      <%= render @created %>
+      <% end %>
     </div>
-    <% end %>
-    <% if @updated.any? %>
-    <div class='col-md-6'>
-      <h4>
-        Updated Repositories
-      </h4>
-      <%= render @updated %>
-    </div>
-    <% end %>
   </div>
-</div>
-<div class="col-md-4">
-  <div class='row'>
-    <% if @languages.any? %>
-      <div class='col-md-12'>
-        <h4>Popular Languages</h4>
-        <% @languages.each do |language| %>
-          <p class='list'>
-            <strong><%= link_to format_language(language[0]), github_path(language: format_language(language[0]), license: params[:license]) %></strong>
-            <small><%= pluralize number_to_human(language[1]), 'repos' %></small>
-          </p>
-        <% end %>
-      </div>
-    <% end %>
-    <% if @licenses.any? %>
-      <div class='col-md-12'>
-        <h4>Popular Licenses</h4>
-        <% @licenses.each do |license| %>
-          <p class='list'>
-            <strong><%= link_to format_license(license[0]), github_path(license: format_license(license[0]), language: params[:language]) %></strong>
-            <small><%= pluralize number_to_human(license[1]), 'repos' %></small>
-          </p>
-        <% end %>
-      </div>
-    <% end %>
+  <div class="col-md-4">
+    <div class='row'>
+      <% if @languages.any? %>
+        <div class='col-md-12 facets'>
+          <h4>Popular Languages</h4>
+          <ul class='filter'>
+            <% @languages.each do |language| %>
+              <li class='<%= 'active' if language[0].downcase == params[:language].try(:downcase) %>'>
+                <% if language[0].downcase == params[:language].try(:downcase) %>
+                  <%= link_to format_language(language[0]), github_path(language: nil, license: params[:license]) %>
+                <% else %>
+                  <%= link_to format_language(language[0]), github_path(language: format_language(language[0]), license: params[:license]) %>
+                  <small><%= pluralize number_to_human(language[1]), 'repos' %></small>
+                <% end %>
+              </li>
+            <% end %>
+            <% if @language && !@languages.map{|l| l[0].downcase }.include?(@language.name.downcase) %>
+              <li class='active'>
+                <%= link_to format_language(@language.name), github_path(language: nil, license: params[:license]) %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <% if @licenses.any? %>
+        <div class='col-md-12 facets'>
+          <h4>Popular Licenses</h4>
+          <ul class='filter'>
+            <% @licenses.each do |license| %>
+              <li class='<%= 'active' if license[0].downcase == params[:license].try(:downcase) %>'>
+                <% if license[0].downcase == params[:license].try(:downcase) %>
+                  <%= link_to format_license(license[0]), github_path(language: params[:language], license: nil) %>
+                <% else %>
+                <%= link_to format_license(license[0]), github_path(license: format_license(license[0]), language: params[:language]) %>
+                <small><%= pluralize number_to_human(license[1]), 'repos' %></small>
+                <% end %>
+              </li>
+            <% end %>
+            <% if @license && !@licenses.map{|l| l[0].downcase }.include?(@license.id.downcase) %>
+              <li class='active'>
+                <%= link_to format_license(@license.id), github_path(language: params[:language], license: nil) %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

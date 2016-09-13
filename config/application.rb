@@ -22,16 +22,23 @@ module Libraries
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.middleware.use Rack::Deflater
+    # config.middleware.use Rack::Deflater
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.active_job.queue_adapter = :sidekiq
 
     config.exceptions_app = routes
 
     config.assets.paths << Emoji.images_path
     config.assets.precompile << "emoji/**/*.png"
 
+    Rails::Timeago.default_options :limit => proc { 60.days.ago }, :nojs => true
+
     GC::Profiler.enable
+
+    config.middleware.use Rack::Attack
+    config.middleware.use Rack::Attack::RateLimit, throttle: ['api']
   end
 end

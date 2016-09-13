@@ -5,12 +5,12 @@ class PlatformsController < ApplicationController
 
   def show
     find_platform
-
-    @created = Project.platform(@platform_name).few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository)
-    @updated = Project.platform(@platform_name).many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
-    @watched = Project.platform(@platform_name).most_watched.limit(5)
-    @dependend = Project.platform(@platform_name).most_dependents.limit(5).includes(:github_repository)
-    @popular = Project.platform(@platform_name).order('projects.rank DESC').limit(5).includes(:github_repository)
+    scope = Project.platform(@platform_name).maintained
+    @created = scope.few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository, :versions)
+    @updated = scope.many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository, :versions)
+    @watched = scope.most_watched.limit(5).includes(:github_repository, :versions)
+    @dependend = scope.most_dependents.limit(5).includes(:github_repository, :versions)
+    @popular = scope.order('projects.rank DESC').limit(5).includes(:github_repository, :versions)
 
     @color = @platform.color
 

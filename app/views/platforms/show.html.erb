@@ -1,8 +1,9 @@
 <% title "#{platform_name(@platform_name)} - Libraries" %>
-<% description "New and popular projects published on #{platform_name(@platform_name)}" %>
+<% description "A detailed listing of the most popular, recently updated and most watched #{platform_name(@platform_name)} projects online" %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{platform_name(@platform_name)} Projects") %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), title: "New #{platform_name(@platform_name)} Projects") %>
 
+<% cache([@platform_name, 'platforms:show', 'v1'], :expires_in => 1.hour) do %>
 <div class='row'>
   <div class='col-md-6'>
     <h1>
@@ -16,100 +17,94 @@
       Website: <%= link_to @platform::URL, @platform::URL %>
     </p>
     <p>
-      Total Packages: <%= number_with_delimiter Project.platform(@platform_name).count %>
+      Total Packages: <%= number_with_delimiter Project.platform(@platform_name).not_removed.count %>
     </p>
   </div>
 </div>
 <hr>
-<div class="col-md-8">
-  <div class='row'>
-    <% if @popular.any? %>
-      <div class='col-md-6'>
+<div class="row">
+  <div class="col-md-8">
+    <div class="row">
+      <% if @popular.any? %>
+        <div class='col-md-6 platform-column'>
+          <h4>
+            Popular <%= platform_name(@platform_name) %> Projects
+            <small class='more'>
+              <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'rank', order: 'desc') %>
+            </small>
+          </h4>
+          <%= render @popular, cache: true %>
+        </div>
+      <% end %>
+
+      <% if @dependend.any? %>
+        <div class='col-md-6 platform-column'>
+          <h4>Most Depended upon <%= platform_name(@platform_name) %> Projects</h4>
+          <%= render @dependend, cache: true %>
+        </div>
+      <% end %>
+      <% if @updated.any? %>
+      <div class='col-md-6 platform-column'>
         <h4>
-          Popular <%= platform_name(@platform_name) %> Projects
+          <%= link_to search_url(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
+            <%= fa_icon "rss-square" %>
+          <% end %>
+          Updated <%= platform_name(@platform_name) %> Projects
           <small class='more'>
-            <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'rank', order: 'desc') %>
+            <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc') %>
           </small>
         </h4>
-        <%= render @popular %>
+        <%= render @updated, cache: true %>
       </div>
-    <% end %>
+      <% end %>
+      <% if @created.any? %>
+        <div class='col-md-6 platform-column'>
+          <h4>
+            <%= link_to search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
+              <%= fa_icon "rss-square" %>
+            <% end %>
+            New <%= platform_name(@platform_name) %> Projects
+            <small class='more'>
+              <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc') %>
+            </small>
+          </h4>
+          <%= render @created, cache: true %>
+        </div>
+      <% end %>
 
-    <% if @created.any? %>
-    <div class='col-md-6'>
-      <h4>
-        <%= link_to search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
-          <%= fa_icon "rss-square" %>
-        <% end %>
-        New <%= platform_name(@platform_name) %> Projects
-        <small class='more'>
-          <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc') %>
-        </small>
-      </h4>
-      <%= render @created %>
+      <% if @watched.any? %>
+          <div class='col-md-6 platform-column'>
+            <h4>Most Watched <%= platform_name(@platform_name) %> Projects</h4>
+            <%= render @watched, cache: true %>
+          </div>
+          <div class="col-md-6">
+            <%= render 'adsense/sidebar' %>
+          </div>
+      <% end %>
     </div>
-    <% end %>
   </div>
-  <hr>
-  <div class='row'>
-    <% if @updated.any? %>
-    <div class='col-md-6'>
-      <h4>
-        <%= link_to search_url(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
-          <%= fa_icon "rss-square" %>
-        <% end %>
-        Updated <%= platform_name(@platform_name) %> Projects
-        <small class='more'>
-          <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc') %>
-        </small>
-      </h4>
-      <%= render @updated %>
+  <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
+    <div class='row'>
+      <% if @languages.any? %>
+        <div class='col-md-12'>
+          <h4>Popular <%= platform_name(@platform_name) %> Languages</h4>
+          <%= render partial: 'languages/list_language', collection: @languages, as: :language %>
+        </div>
+      <% end %>
+      <% if @licenses.any? %>
+        <div class='col-md-12'>
+          <h4>Popular <%= platform_name(@platform_name) %> Licenses</h4>
+          <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
+        </div>
+      <% end %>
+      <% if @keywords.length > 1 %>
+        <div class='col-md-12'>
+          <h4>Popular <%= platform_name(@platform_name) %> Keywords</h4>
+          <%= render partial: 'keywords/list_keyword', collection: @keywords, as: :keyword %>
+        </div>
+      <% end %>
     </div>
-    <% elsif @dependend.any? %>
-    <div class='col-md-6'>
-      <h4>Most Depended upon <%= platform_name(@platform_name) %> Projects</h4>
-      <%= render @dependend %>
-    </div>
-    <% end %>
-
-    <% if @watched.any? %>
-    <div class='col-md-6'>
-      <h4>Most Watched <%= platform_name(@platform_name) %> Projects</h4>
-      <%= render @watched %>
-    </div>
-    <% end %>
-  </div>
-
-  <% if @dependend.any? && @updated.any? %>
-    <hr>
-    <div class="row">
-      <div class='col-md-6'>
-        <h4>Most Depended upon <%= platform_name(@platform_name) %> Projects</h4>
-        <%= render @dependend %>
-      </div>
-    </div>
-  <% end %>
-
-</div>
-<div class="col-md-4">
-  <div class='row'>
-    <% if @languages.any? %>
-      <div class='col-md-12'>
-        <h4>Popular <%= platform_name(@platform_name) %> Languages</h4>
-        <%= render partial: 'languages/list_language', collection: @languages, as: :language %>
-      </div>
-    <% end %>
-    <% if @licenses.any? %>
-      <div class='col-md-12'>
-        <h4>Popular <%= platform_name(@platform_name) %> Licenses</h4>
-        <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
-      </div>
-    <% end %>
-    <% if @keywords.length > 1 %>
-      <div class='col-md-12'>
-        <h4>Popular <%= platform_name(@platform_name) %> Keywords</h4>
-        <%= render partial: 'keywords/list_keyword', collection: @keywords, as: :keyword %>
-      </div>
-    <% end %>
   </div>
 </div>
+<% end %>

@@ -25,5 +25,11 @@ public/sitemap*
 # cloned repo folders
 Specs
 METADATA.jl
+inqlude-data
+swift-package-crawler-data
 
 node_modules
+
+coverage
+
+*.dump

@@ -11,13 +11,18 @@
 // about supported directives.
 //
 //= require jquery
+//= require payola
 //= require jquery_ujs
-//= require bootstrap-sprockets
+//= require bootstrap/alert
+//= require bootstrap/collapse
+//= require bootstrap/dropdown
+//= require bootstrap/transition
 //= require tipsy
 //= require js.cookie
+//= require rails-timeago
 //= require_tree .
 
-$('.tip').tipsy();
+$('.tip').tipsy({gravity: 's'});
 
 $('.rss').on('click', function(){
   subtome($(this).attr('href'))
@@ -31,3 +36,24 @@ $('.learn-more').on('click', function(){
 $('#welcome-alert').on('closed.bs.alert', function() {
   Cookies.set('hide_welcome_alert', 'true');
 });
+
+$('#dependencyci-alert').on('closed.bs.alert', function() {
+  Cookies.set('hide_dependencyci_alert', 'true');
+});
+
+$('input[name="subscription[include_prerelease]"]').on('change',function(){
+  $(this).parents('form').submit();
+});
+
+stickFooter()
+$(window).on('resize', function() {
+  stickFooter()
+});
+
+function stickFooter() {
+  if ($(document).height() <= $(window).height()) {
+      $('footer').addClass("navbar-fixed-bottom");
+  } else {
+      $('footer').removeClass("navbar-fixed-bottom");
+  }
+}

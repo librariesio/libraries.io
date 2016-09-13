@@ -1,0 +1,9 @@
+<div class="row">
+  <div class="col-xs-10">
+    <%= render project %>
+  </div>
+  <div class="col-xs-2">
+    <br>
+    <%= link_to fa_icon('eye'), subscribe_path(project_id: project.id), class: 'tip btn btn-default', rel: 'nofollow', title: "Watch for new releases of #{project.name}" %>
+  </div>
+</div>

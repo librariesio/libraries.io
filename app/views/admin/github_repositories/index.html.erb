@@ -1,0 +1,31 @@
+<%= render 'admin/nav' %>
+<div class="row">
+  <div class="col-md-8">
+    <h1>Unlicensed Github repos</h1>
+    <%= render @github_repositories %>
+    <%= will_paginate @github_repositories, page_links: false %>
+  </div>
+
+  <div class="col-md-4">
+    <h3>
+      <strong>
+        Filter by language
+      </strong>
+    </h3>
+    <div class="facets">
+      <ul class='filter'>
+        <% @languages.each do |language, count| %>
+          <% next unless language.present? %>
+          <li class='<%= 'active' if language.try(:downcase) == params[:language].try(:downcase) %>'>
+            <% if language.try(:downcase) == params[:language].try(:downcase) %>
+              <%= link_to language, admin_github_repositories_path(language: nil) %>
+            <% else %>
+              <%= link_to language, admin_github_repositories_path(language: language) %>
+            <% end %>
+            <small><%= number_to_human count %></small>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -6,12 +6,13 @@ class LanguagesController < ApplicationController
   def show
     find_language
 
-    @created = Project.language(@language).few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository)
-    @updated = Project.language(@language).many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
+    scope = Project.language(@language).maintained
+    @created = scope.few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository, :versions)
+    @updated = scope.many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository, :versions)
     @color = Languages::Language[@language].try(:color)
-    @watched = Project.language(@language).most_watched.limit(5)
-    @dependend = Project.language(@language).most_dependents.limit(5).includes(:github_repository)
-    @popular = Project.language(@language).order('projects.rank DESC').limit(5).includes(:github_repository)
+    @watched = scope.most_watched.limit(5).includes(:github_repository, :versions)
+    @dependend = scope.most_dependents.limit(5).includes(:github_repository, :versions)
+    @popular = scope.order('projects.rank DESC').limit(5).includes(:github_repository, :versions)
 
     facets = Project.facets(filters: { language: @language }, :facet_limit => 10)
 
@@ -19,6 +20,8 @@ class LanguagesController < ApplicationController
     @licenses = facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
     @keywords = facets[:keywords][:terms]
   end
+
+  private
 
   def find_language
     @language = Project.language(params[:id]).first.try(:language)

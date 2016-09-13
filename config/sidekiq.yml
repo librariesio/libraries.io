@@ -1,10 +1,12 @@
 ---
 :concurrency: 5
 production:
-  :concurrency: 20
+  :concurrency: 50
 :timeout: 8
 :verbose: true
 :queues:
-  - low
+  - [low, 1]
   - [default, 2]
-  - [critical, 10]
+  - [mailers, 4]
+  - [critical, 16]
+  - [user, 20]

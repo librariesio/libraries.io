@@ -1,12 +1,20 @@
-<% title "Projects that depend on #{@project} - Libraries" %>
+<% title "Projects that depend on #{@project} on #{@project.platform_name} - Libraries" %>
 
 <h1>Projects that depend on <%= link_to @project, project_path(@project.to_param) %></h1>
 <hr>
-<% if @dependents.any? %>
-  <%= render @dependents %>
-  <%= will_paginate @dependents, renderer: BootstrapPagination::Rails, page_links: false %>
-<% else %>
-  <p>
-    No projects found, go back to <%= link_to @project, project_path(@project.to_param) %>.
-  </p>
-<% end %>
+
+<div class="row">
+  <div class="col-md-8">
+    <% if @dependents.any? %>
+      <%= render @dependents, cache: true %>
+      <%= will_paginate @dependents, page_links: false %>
+    <% else %>
+      <p>
+        No projects found, go back to <%= link_to @project, project_path(@project.to_param) %>.
+      </p>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
+  </div>
+</div>

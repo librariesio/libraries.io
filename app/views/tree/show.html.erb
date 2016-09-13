@@ -1,0 +1,17 @@
+<h1>Dependency Tree for <%= link_to @project, project_path(@project.to_param) %> on <%= link_to @project.platform, platform_path(@project.platform) %> </h1>
+
+<% version = @project.latest_version %>
+<% project = @project %>
+<% @project_names = [@project.name] %>
+<% @license_names = @project.normalize_licenses %>
+
+<ul class='tree'>
+  <%= render partial: 'tree/dependency', locals: {project: project, version: version, requirements: '', index: 0} %>
+</ul>
+<hr>
+<p>
+  Unique dependencies: <%= @project_names.uniq.length %>
+</p>
+<p>
+  Unique licenses: <%= @license_names.flatten.uniq.length %> <em class='text-muted'><%= @license_names.flatten.uniq.join(', ') %></em>
+</p>

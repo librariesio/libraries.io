@@ -4,8 +4,26 @@ class Readme < ActiveRecord::Base
 
   after_validation :reformat
 
+  after_commit :check_unmaintained
+
   def to_s
     html_body
+  end
+
+  def plain_text
+    @plain_text ||= Nokogiri::HTML(html_body).text
+  end
+
+  def check_unmaintained
+    return unless unmaintained?
+    github_repository.update_attribute(:status, 'Unmaintained')
+    github_repository.projects.each do |project|
+      project.update_attribute(:status, 'Unmaintained')
+    end
+  end
+
+  def unmaintained?
+    html_body.downcase.gsub("\n", '').include?('unmaintained.tech/badge.svg')
   end
 
   def reformat
@@ -13,7 +31,7 @@ class Readme < ActiveRecord::Base
     doc.xpath('//a').each do |d|
       rel_url = d.get_attribute('href')
       begin
-        if rel_url.present? && URI.parse(rel_url)
+        if rel_url.present? && !rel_url.match(/^#/) && URI.parse(rel_url)
           d.set_attribute('href', URI.join(github_repository.blob_url, rel_url))
         end
       rescue NoMethodError, URI::InvalidURIError, URI::InvalidComponentError

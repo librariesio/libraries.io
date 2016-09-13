@@ -1,0 +1,12 @@
+<%= render 'admin/nav' %>
+<% title 'GitHub Stats - Libraries' %>
+<h1>
+  GitHub Stats
+</h1>
+
+<div class="row">
+  <%= stats_for('Orgs', @new_orgs) %>
+  <%= stats_for('Readmes', @new_readmes) %>
+  <%= stats_for('GitHub Users', @new_github_users) %>
+  <%= stats_for('Manifests', @new_manifests) %>
+</div>

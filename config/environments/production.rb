@@ -23,6 +23,7 @@ Rails.application.configure do
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.static_cache_control = "public, max-age=2592000"
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -42,7 +43,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  config.force_ssl = ENV['FORCE_SSL']
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -84,12 +85,13 @@ Rails.application.configure do
                     {:username => ENV["MEMCACHIER_USERNAME"],
                      :password => ENV["MEMCACHIER_PASSWORD"],
                      :failover => true,
+                     :compress => true,
                      :socket_timeout => 1.5,
                      :socket_failure_delay => 0.2
                     }
   config.action_mailer.smtp_settings = {
     address:              'smtp.sendgrid.net',
-    port:                 '587',
+    port:                 '2525',
     authentication:       :plain,
     user_name:            ENV['SENDGRID_USERNAME'],
     password:             ENV['SENDGRID_PASSWORD'],
@@ -97,4 +99,6 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
   config.action_mailer.delivery_method = :smtp
+
+  config.lograge.enabled = true
 end

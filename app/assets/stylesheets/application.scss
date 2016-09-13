@@ -1,12 +1,12 @@
 @import "bootstrap-sprockets";
-@import "bootstrap";
+@import "bootstrap-custom";
 @import "font-awesome";
 @import "tipsy";
-@import url("https://librariesio.github.io/pictogram/pictogram.css");
+@import "pictogram";
 
 body {
   padding: 60px 0 0;
-  background-color: #fdfdfd;
+  background-color: #fff;
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -17,30 +17,68 @@ html {
 }
 
 footer{
-  position: absolute;
-  bottom: 0;
   width: 100%;
   min-height: 60px;
   background-color: #555;
   padding: 20px 0;
   color: #999;
+  margin-top: 20px;
+  ul{
+    padding-left: 20px;
+  }
 }
 
 @media (min-width: 980px) {
   body {
-    padding: 60px 0 180px;
+    padding: 60px 0 270px;
+  }
+  footer{
+    position: absolute;
+    bottom: 0;
+  }
+  .platform-column{
+    min-height: 640px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+  }
+
+  .user-column{
+    min-height: 700px;
+    margin-bottom: 20px;
   }
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
   body {
-    padding: 60px 0 230px;
+    padding: 60px 0 0;
   }
 }
 
 @media (max-width: 767px) {
   body {
-    padding: 60px 0 370px;
+    padding: 60px 0 0;
+  }
+
+  .leaderboard{
+    h1{
+      font-size: 30px;
+      a {
+        display: inline !important;
+      }
+    }
+    .search-form .form-control {
+      font-size: 18px;
+    }
+    .search-form {
+      .input-group-lg > .input-group-btn > .btn{
+        height: auto;
+      }
+    }
+
+  }
+
+  .github-corner{
+    display: none;
   }
 }
 
@@ -53,10 +91,10 @@ footer{
   }
 }
 
-.active {
+.filter .active {
   font-weight: bold;
 }
-.active:after {
+.filter .active:after {
    content: '✔';
    margin-left: 0.5em; margin-right: .100em;
 }
@@ -99,12 +137,6 @@ footer {
   padding: 15px 10px;
 }
 
-.jumbotron {
-  background: none;
-  padding-bottom:0;
-  margin-bottom: 0;
-}
-
 h3,h4{
   color:#555;
   font-weight: normal;
@@ -132,19 +164,30 @@ h3,h4{
   margin-bottom: 30px;
   small{
     color: #999;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.3;
     a {
       color: #777;
     }
+    .label{
+      color: #000;
+    }
   }
 }
 
-.search-form .form-control {
-  font-size:28px;
-  height: auto;
-  width: 100%;
-  margin: 20px 0;
+.search-form{
+  .input-group-lg > .input-group-btn > .btn{
+    height: 59px
+  }
+  .form-control {
+   font-size:28px;
+   height: auto;
+   width: 100%;
+   margin: 20px 0;
+ }
+ p{
+   font-size: 18px;
+ }
 }
 
 .list, .facets {
@@ -193,15 +236,238 @@ h3,h4{
   box-shadow: none;
 }
 
-html.turbolinks-progress-bar::before {
-  background-color: #fff !important;
-  height: 1px !important;
-}
-
 a.rss{
   color: #FF6600;
 }
 
 .alert {
   margin-top: 10px;
+}
+
+.contributor {
+  height:60px;
+  img {
+    float:left;
+    margin-right: 10px;
+  }
+  h4{
+    line-height: 19px;
+  }
+}
+
+.org {
+  height:60px;
+  margin-bottom: 10px;
+  img {
+    float:left;
+    margin-right: 10px;
+  }
+}
+
+.notification{
+  min-height: 50px;
+
+  border-bottom: 1px solid #eee;
+  .pictogram {
+    float: left;
+    margin-right: 12px;
+  }
+  h5 {
+    line-height: 40px;
+    &.with_dependent_repos{
+      line-height: 20px;
+    }
+  }
+  .your_dependent_repos small{
+    color: #aaa;
+    a{
+      color: #888;
+    }
+  }
+  .mute{
+    display: none;
+    line-height: 40px;
+    color: #aaa;
+    margin-right: 15px;
+  }
+  &:hover{
+    .mute{
+      display: block;
+    }
+  }
+}
+
+#newsfeed {
+  margin-top: 28px;
+}
+
+.mini-project{
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #eee;
+  small{
+    color: #aaa;
+    font-size: 10px;
+    line-height: 20px;
+    a {
+      color: #777;
+    }
+  }
+  img {
+    margin-right: 5px;
+  }
+
+}
+
+#subscriptions {
+  table-layout: fixed;
+}
+
+.org-filter{
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #eee;
+  a{
+    display: block;
+  }
+  img{
+    margin-right: 5px;
+  }
+  &.active{
+    font-weight: bold;
+  }
+}
+
+.syncing{
+  margin: 10px 0;
+}
+
+.table.repositories td, #matrix td, #web_hooks td{
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+tr.top td{
+  border: none !important;
+}
+
+.avatar{
+  margin-right: 10px;
+}
+.text-warning{
+  color: #C3B028;
+}
+#webhooks{
+  margin-right: 10px;
+}
+
+.plans{
+  margin-top:20px;
+  .col-sm-2{
+    width: 20% !important;
+  }
+}
+
+.include_prerelease {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857;
+  color: #333333;
+  white-space: nowrap;
+}
+
+#dependencies{
+  .pictogram{
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.github-corner:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out
+}
+@keyframes octocat-wave {
+    0%, 100% {
+        transform: rotate(0)
+    }
+    20%,
+    60% {
+        transform: rotate(-25deg)
+    }
+    40%,
+    80% {
+        transform: rotate(10deg)
+    }
+}
+@media (max-width: 500px) {
+    .github-corner:hover .octo-arm {
+        animation: none;
+    }
+    .github-corner .octo-arm {
+        animation: octocat-wave 560ms ease-in-out;
+    }
+}
+
+.featured-org{
+  margin: 5px;
+  display: block;
+  float: left;
+}
+
+/*
+ Tree structure using CSS:
+ http://stackoverflow.com/questions/14922247/how-to-get-a-tree-in-html-using-pure-css
+*/
+
+.tree, .tree ul{
+  list-style-type: none;
+  margin-left: 0 0 0 10px;
+  padding: 0;
+  position: relative;
+  overflow:hidden;
+}
+
+.tree li{
+  margin: 0;
+  padding: 0 12px;
+  position: relative;
+}
+
+.tree li::before, .tree li::after{
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+/* horizontal line on inner list items */
+.tree li::before{
+  border-top: 1px solid #999;
+  top: 10px;
+  width: 10px;
+  height: 0;
+}
+
+/* vertical line on list items */
+.tree li:after{
+  border-left: 1px solid #999;
+  height: 100%;
+  width: 0px;
+  top: -10px;
+}
+
+/* lower line on list items from the first level because they don't have parents */
+.tree > li::after{
+  top: 10px;
+}
+
+/* hide line from the last of the first level list items */
+.tree > li:last-child::after{
+  display: none;
+}
+
+
+.tree ul:last-child li:last-child:after{
+height:20px;
 }
