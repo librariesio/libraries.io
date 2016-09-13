@@ -172,12 +172,6 @@ GEM
       activesupport (>= 4.1.0)
     hashdiff (0.3.0)
     hashie (3.4.4)
-    heroics (0.0.17)
-      erubis (~> 2.0)
-      excon
-      moneta
-      multi_json (>= 1.9.2)
-      netrc
     hiredis (0.6.1)
     htmlentities (4.3.4)
     http-cookie (1.0.2)
@@ -206,7 +200,6 @@ GEM
     mime-types (2.99.3)
     mini_portile2 (2.1.0)
     minitest (5.9.0)
-    moneta (0.8.0)
     multi_fetch_fragments (0.0.17)
     multi_json (1.12.1)
     multi_xml (0.5.5)
@@ -248,8 +241,6 @@ GEM
     pictogram (2.0.3)
       railties
     pkg-config (1.1.7)
-    platform-api (0.8.0)
-      heroics (~> 0.0.17)
     postgres_ext (3.0.0)
       activerecord (>= 4.0.0)
       arel (>= 4.0.1)
@@ -474,7 +465,6 @@ DEPENDENCIES
   payola-payments
   pg
   pictogram
-  platform-api
   postgres_ext
   premailer-rails
   puma
