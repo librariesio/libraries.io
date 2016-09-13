@@ -319,12 +319,12 @@ class Project < ActiveRecord::Base
     facets(options)[:platforms][:terms].reject{ |t| t.term.downcase == 'biicode' }
   end
 
-  def self.keywords_blacklist
+  def self.keywords_badlist
     ['bsd3']
   end
 
   def self.popular_keywords(options = {})
-    facets(options)[:keywords][:terms].reject{ |t| all_languages.include?(t.term.downcase) }.reject{|t| keywords_blacklist.include?(t.term.downcase) }
+    facets(options)[:keywords][:terms].reject{ |t| all_languages.include?(t.term.downcase) }.reject{|t| keywords_badlist.include?(t.term.downcase) }
   end
 
   def self.popular_licenses(options = {})
