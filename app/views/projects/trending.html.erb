@@ -17,16 +17,16 @@
             <% @languages.each do |language| %>
               <li class='<%= 'active' if language[0].downcase == params[:language].try(:downcase) %>'>
                 <% if language[0].downcase == params[:language].try(:downcase) %>
-                  <%= link_to format_language(language[0]), trending_path(language: nil, license: params[:license]) %>
+                  <%= link_to format_language(language[0]), trending_projects_path(language: nil, license: params[:license]) %>
                 <% else %>
-                  <%= link_to format_language(language[0]), trending_path(language: format_language(language[0]), license: params[:license]) %>
+                  <%= link_to format_language(language[0]), trending_projects_path(language: format_language(language[0]), license: params[:license]) %>
                   <small><%= pluralize number_to_human(language[1]), 'repos' %></small>
                 <% end %>
               </li>
             <% end %>
             <% if @language && !@languages.map{|l| l[0].downcase }.include?(@language.name.downcase) %>
               <li class='active'>
-                <%= link_to format_language(@language.name), trending_path(language: nil, license: params[:license]) %>
+                <%= link_to format_language(@language.name), trending_projects_path(language: nil, license: params[:license]) %>
               </li>
             <% end %>
           </ul>
