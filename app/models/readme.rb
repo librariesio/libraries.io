@@ -57,7 +57,11 @@ class Readme < ActiveRecord::Base
   end
 
   def badlist
-    badlist_words = %w{library software create value more know what how between would have install com code like change project href script scripts same foo from char function var method string nim} +
+    badlist_words = %w{library bsd3 mit gpl which software create value license
+      public more know what how between name files class also true false type
+      default would have install com code like change project href script scripts
+      same foo from char function var method string nim agpl case def let func
+      return key try txt chr set nil int} +
     Highscore::Blacklist.load_default_file.words +
     Languages::Language.all.map{|l| l.name.downcase } +
     Download.platforms.map{|p| p.to_s.demodulize.downcase }
