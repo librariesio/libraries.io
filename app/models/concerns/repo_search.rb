@@ -54,6 +54,12 @@ module RepoSearch
 
     after_save() { __elasticsearch__.index_document }
 
+    def self.facets(options = {})
+      Rails.cache.fetch "repo_facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
+        search('', options).response.facets
+      end
+    end
+
     def as_indexed_json(options = {})
       as_json methods: [:exact_name, :keywords, :platforms]
     end

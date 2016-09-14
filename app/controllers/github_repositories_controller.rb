@@ -1,23 +1,18 @@
 class GithubRepositoriesController < ApplicationController
   def index
-    @language = Languages::Language[params[:language]] if params[:language].present?
-    @license = Spdx.find(params[:license]) if params[:license].present?
+    postfix = [current_language, current_license, current_keywords].any?(&:present?) ? 'Repos' : 'Repositories'
+    @title = [current_language, current_license, current_keywords, postfix].compact.join(' ')
 
-    postfix = [@language, @license.try(:id)].compact.any? ? 'Repos' : 'Repositories'
-    @title = [@language, @license.try(:id), postfix].compact.join(' ')
+    @popular = repo_search('stargazers_count')
+    @forked = repo_search('forks_count')
+    @created = repo_search('created_at')
+    @updated = repo_search('pushed_at')
 
-    orginal_scope = GithubRepository.maintained.open_source.source.where.not(pushed_at: nil)
-    language_scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
-    license_scope = @license.present? ? orginal_scope.where('lower(license) = ?', @license.id.downcase) : orginal_scope
-    scope = @license.present? ? language_scope.where('lower(license) = ?', @license.id.downcase) : language_scope
+    facets = GithubRepository.facets(filters: {language: current_language, license: current_license, keywords: current_keywords}, :facet_limit => 20)
 
-    @popular = scope.where('stargazers_count > 0').order('stargazers_count DESC').limit(6)
-    @forked = scope.where('forks_count > 0').order('forks_count DESC').limit(6)
-    @created = scope.order('created_at DESC').limit(6)
-    @updated = scope.order('pushed_at DESC').limit(6)
-
-    @languages = license_scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(40)
-    @licenses = language_scope.group('lower(license)').count.reject{|k,v| k.blank? || k == 'other' }.sort_by{|k,v| v }.reverse.first(25)
+    @languages = facets[:language][:terms]
+    @licenses = facets[:license][:terms].reject{ |t| t.term.downcase == 'other' }
+    @keywords = facets[:keywords][:terms]
   end
 
   def search
@@ -130,5 +125,15 @@ class GithubRepositoriesController < ApplicationController
     else
       "Popular#{modifier}Github Repositories - Libraries"
     end
+  end
+
+  def repo_search(sort)
+    search = GithubRepository.search('', filters: {
+      license: current_license,
+      language: current_language,
+      keywords: current_keywords,
+      platforms: current_platforms
+    }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
+    search.records
   end
 end
