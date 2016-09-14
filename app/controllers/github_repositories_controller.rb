@@ -38,7 +38,6 @@ class GithubRepositoriesController < ApplicationController
 
   def hacker_news
     @language = Languages::Language[params[:language]] if params[:language].present?
-    @license = Spdx.find(params[:license]) if params[:license].present?
 
     orginal_scope = GithubRepository.maintained.open_source.where.not(pushed_at: nil).recently_created.where('stargazers_count > 0')
     scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
