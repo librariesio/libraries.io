@@ -154,6 +154,7 @@
 
     <% if @github_repository.present? && @github_repository.readme.present? %>
     <hr>
+    <%= render 'adsense/banner' %>
     <%== @github_repository.readme %>
     <% end %>
 
