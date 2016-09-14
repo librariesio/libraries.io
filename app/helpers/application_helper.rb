@@ -134,6 +134,10 @@ module ApplicationHelper
     keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/keywords/#{k}" }.join(', ').html_safe
   end
 
+  def linked_repo_keywords(keywords)
+    keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/github/search?keywords=#{k}" }.join(', ').html_safe
+  end
+
   def platform_name(platform)
     if platform.downcase == 'npm'
       return 'npm'

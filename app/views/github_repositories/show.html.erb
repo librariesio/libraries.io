@@ -96,6 +96,11 @@
         Language: <%= link_to repo.language, language_path(repo.language) %>
       </p>
       <% end %>
+      <% if repo.keywords.any? %>
+      <p>
+        Keywords: <%= linked_repo_keywords repo.keywords %>
+      </p>
+      <% end %>
       <% if repo.mirror_url.present? %>
       <p>
         Mirror of <%= repo.mirror_url %>
