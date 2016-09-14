@@ -192,8 +192,6 @@ class ProjectsController < ApplicationController
     @version_number = @version.try(:number) || @project.latest_release_number
   end
 
-  private
-
   def current_platform
     Download.format_name(params[:platforms])
   end
