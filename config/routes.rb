@@ -64,6 +64,7 @@ Rails.application.routes.draw do
     get '/stats/github', to: 'stats#github', as: :github_stats
   end
 
+  get '/trending', to: 'projects#trending', as: :trending_projects
   get '/explore', to: 'collections#index'
   get '/explore/:language-:keyword-libraries', to: 'collections#show'
 

@@ -159,6 +159,13 @@ class ProjectsController < ApplicationController
     redirect_to_back_or_default project_path(@project.to_param)
   end
 
+  def trending
+    orginal_scope = Project.recently_created.where('projects.rank > 0')
+    scope = current_language.present? ? orginal_scope.language(current_language) : orginal_scope
+    @repos = scope.hacker_news.paginate(page: page_number)
+    @languages = orginal_scope.group('lower(projects.language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(20)
+  end
+
   private
 
   def incorrect_case?

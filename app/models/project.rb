@@ -67,6 +67,9 @@ class Project < ActiveRecord::Base
                          .where('github_repositories.stargazers_count > 0')
                           }
 
+  scope :hacker_news, -> { with_repo.where('github_repositories.stargazers_count > 0').order("((github_repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-github_repositories.created_at)/3600)+2,1.8)) DESC") }
+  scope :recently_created, -> { with_repo.where('github_repositories.created_at > ?', 7.days.ago)}
+
   after_commit :update_github_repo_async, on: :create
   after_commit :set_dependents_count
   after_commit :update_source_rank_async
