@@ -69,6 +69,7 @@
     <hr>
   </div>
   <div class="col-md-4">
+    <%= render 'adsense/sidebar' %>
     <h3>
       <strong>Contact us</strong>
     </h3>
@@ -115,6 +116,7 @@
 </div>
 <div class="row">
   <div class="col-md-12">
+    <%= render 'adsense/banner' %>
     <% cache("matrix:v1.4", :expires_in => 1.day) do  %>
       <h2>Package Manager Compatibility Matrix</h2>
       <%= render 'matrix' %>

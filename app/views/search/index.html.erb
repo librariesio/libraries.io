@@ -29,6 +29,7 @@
 <% end %>
 <div class='row'>
   <div class='col-md-8'>
+    <%= render 'adsense/banner' %>
     <% if @projects.length > 0 %>
       <%= render @projects, cache: true %>
       <%= will_paginate @search, page_links: false %>
