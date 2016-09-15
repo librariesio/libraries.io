@@ -5,7 +5,6 @@
 @import "pictogram";
 
 body {
-  padding: 60px 0 0;
   background-color: #fff;
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -29,9 +28,6 @@ footer{
 }
 
 @media (min-width: 980px) {
-  body {
-    padding: 60px 0 270px;
-  }
   .platform-column{
     min-height: 640px;
     border-bottom: 1px solid #eee;
@@ -44,17 +40,7 @@ footer{
   }
 }
 
-@media (min-width: 768px) and (max-width: 979px) {
-  body {
-    padding: 60px 0 0;
-  }
-}
-
 @media (max-width: 767px) {
-  body {
-    padding: 60px 0 0;
-  }
-
   .leaderboard{
     h1{
       font-size: 30px;
