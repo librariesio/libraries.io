@@ -1,81 +1,81 @@
 <% title "#{@github_repository.full_name} on GitHub - Libraries" %>
 <% description @github_repository.description %>
 <%= content_for :meta, render_meta(@github_repository) %>
-<% cache_if(logged_out?, [@github_repository, 'show', 'v1'], :expires_in => 1.week) do %>
-  <% repo = @github_repository %>
+<% repo = @github_repository %>
 
-  <% if !repo.private? && repo.is_removed? %>
-  <div class="alert alert-danger" role="alert">
-    <%= fa_icon 'exclamation-triangle' %>
-    This project has been removed from GitHub and cannot be used anymore.
-  </div>
-  <% elsif !repo.private? && repo.is_deprecated? %>
-  <div class="alert alert-danger" role="alert">
-    <%= fa_icon 'exclamation-triangle' %>
-    This project has been marked as deprecated and is not recommended for use anymore.
-  </div>
-  <% elsif !repo.private? && repo.is_unmaintained? %>
-  <div class="alert alert-danger" role="alert">
-    <%= fa_icon 'exclamation-triangle' %>
-    This project has been marked as unmaintained and is no longer being updated.
-  </div>
-  <% end %>
+<% if !repo.private? && repo.is_removed? %>
+<div class="alert alert-danger" role="alert">
+  <%= fa_icon 'exclamation-triangle' %>
+  This project has been removed from GitHub and cannot be used anymore.
+</div>
+<% elsif !repo.private? && repo.is_deprecated? %>
+<div class="alert alert-danger" role="alert">
+  <%= fa_icon 'exclamation-triangle' %>
+  This project has been marked as deprecated and is not recommended for use anymore.
+</div>
+<% elsif !repo.private? && repo.is_unmaintained? %>
+<div class="alert alert-danger" role="alert">
+  <%= fa_icon 'exclamation-triangle' %>
+  This project has been marked as unmaintained and is no longer being updated.
+</div>
+<% end %>
 
-  <div class="row">
-    <div class='col-md-8'>
-      <h1>
-        <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo), user_path(repo.owner_name) %>
-        <%= repo %>
-        <%= link_to fa_icon('github'), repo.url, class: 'tip', title: "View #{repo} on GitHub" %>
-        <%= fa_icon("lock", title: 'This repo is private', class: 'tip') if repo.private? %>
-        <% if repo.fork? %>
-          <% if repo.source.present? || repo.source_name.present? %>
-            <%= link_to fa_icon('code-fork'), source_path(repo), class: 'tip', title: "Forked from #{repo.source_name}" %>
-          <% else %>
-            <%= fa_icon("code-fork", title: 'This repo is a fork', class: 'tip') %>
-          <% end %>
-        <% end %>
-      </h1>
+<div class="row">
+  <div class='col-md-8'>
+    <h1>
+      <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo), user_path(repo.owner_name) %>
+      <%= repo %>
+      <%= link_to fa_icon('github'), repo.url, class: 'tip', title: "View #{repo} on GitHub" %>
+      <%= fa_icon("lock", title: 'This repo is private', class: 'tip') if repo.private? %>
       <% if repo.fork? %>
-        <small>
-          Forked
-          <% if repo.source.present? || repo.source_name.present? %>
-            from
-            <%= link_to repo.source_name, source_path(repo) %>
-          <% end %>
-        </small>
-      <% end %>
-    </div>
-    <div class="col-md-4">
-
-      <% if current_user && current_user.can_monitor?(repo) %>
-        <br>
-          <br>
-        <% if sub = current_user.subscribed_to_repo?(repo) %>
-          <div class="btn-group pull-right">
-            <%= link_to unwatch_path(repo.id), method: :post, class: 'tip btn btn-success', title: 'Stop watching' do %>
-              <%= fa_icon('check') %>
-              Monitoring
-            <% end %>
-            <%= link_to fa_icon('cog'), edit_repository_subscription_path(sub), class: 'btn btn-success' %>
-          </div>
+        <% if repo.source.present? || repo.source_name.present? %>
+          <%= link_to fa_icon('code-fork'), source_path(repo), class: 'tip', title: "Forked from #{repo.source_name}" %>
         <% else %>
-          <%= button_to watch_path(repo.id), method: :post, class: 'btn btn-primary btn-default  pull-right tip', title: 'Automatically watch every dependency of this project' do %>
-            <%= fa_icon('eye') %>
-            Monitor dependencies
-          <% end %>
-        <% end %>
-        <%= link_to github_repository_web_hooks_path(repo.owner_name, repo.project_name), class: 'btn btn-info pull-right', id: 'webhooks' do %>
-          <%= fa_icon 'plug' %>
-          Web Hooks
+          <%= fa_icon("code-fork", title: 'This repo is a fork', class: 'tip') %>
         <% end %>
       <% end %>
-      <% if logged_in? && current_user.admin? %>
-        <%= link_to 'Admin', admin_github_repository_path(repo.id), class: 'btn btn-primary pull-right', rel: 'nofollow' %>
-      <% end %>
-    </div>
+    </h1>
+    <% if repo.fork? %>
+      <small>
+        Forked
+        <% if repo.source.present? || repo.source_name.present? %>
+          from
+          <%= link_to repo.source_name, source_path(repo) %>
+        <% end %>
+      </small>
+    <% end %>
   </div>
-  <hr>
+  <div class="col-md-4">
+
+    <% if current_user && current_user.can_monitor?(repo) %>
+      <br>
+        <br>
+      <% if sub = current_user.subscribed_to_repo?(repo) %>
+        <div class="btn-group pull-right">
+          <%= link_to unwatch_path(repo.id), method: :post, class: 'tip btn btn-success', title: 'Stop watching' do %>
+            <%= fa_icon('check') %>
+            Monitoring
+          <% end %>
+          <%= link_to fa_icon('cog'), edit_repository_subscription_path(sub), class: 'btn btn-success' %>
+        </div>
+      <% else %>
+        <%= button_to watch_path(repo.id), method: :post, class: 'btn btn-primary btn-default  pull-right tip', title: 'Automatically watch every dependency of this project' do %>
+          <%= fa_icon('eye') %>
+          Monitor dependencies
+        <% end %>
+      <% end %>
+      <%= link_to github_repository_web_hooks_path(repo.owner_name, repo.project_name), class: 'btn btn-info pull-right', id: 'webhooks' do %>
+        <%= fa_icon 'plug' %>
+        Web Hooks
+      <% end %>
+    <% end %>
+    <% if logged_in? && current_user.admin? %>
+      <%= link_to 'Admin', admin_github_repository_path(repo.id), class: 'btn btn-primary pull-right', rel: 'nofollow' %>
+    <% end %>
+  </div>
+</div>
+<hr>
+<% cache([@github_repository, 'show', 'v1'], :expires_in => 1.week) do %>
   <div class='row'>
     <div class='col-md-8'>
       <p>

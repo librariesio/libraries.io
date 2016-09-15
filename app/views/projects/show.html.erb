@@ -28,7 +28,6 @@
 </div>
 <% end %>
 
-<% cache_if(logged_out?, [@project, @version, 'projects:show', 'v1'], :expires_in => 1.week) do %>
 <div class="row">
   <div class='col-md-8'>
     <h1>
@@ -83,162 +82,161 @@
     </h1>
   </div>
 </div>
-
 <div class='row'>
-  <div class='col-md-8'>
-    <% if @project.description.present? %>
-    <p>
-      <%= @project.description %>
-    </p>
-    <% end %>
-
-    <% if @project.homepage.present? && @project.homepage != package_link(@project) %>
-    <p>
-      Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage), :rel => 'nofollow') %>
-    </p>
-    <% end %>
-
-    <p>
-      Platform: <%= link_to @project.platform_name, platform_path(@project.platform.downcase) %>
-    </p>
-
-    <% if @project.language.present? %>
-    <p>
-      Language: <%= link_to @project.language, language_path(@project.language) %>
-    </p>
-    <% end %>
-
-    <% if @project.normalized_licenses.present? %>
-    <p>
-      <%= 'License'.pluralize(@project.normalized_licenses.length) %>: <%= linked_licenses @project.normalized_licenses %>
-    </p>
-    <% end %>
-
-    <% if @project.keywords_array.present? %>
-    <p>
-      Keywords: <%= linked_keywords @project.keywords_array %>
-    </p>
-    <% end %>
-
-    <% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
-    <p>
-      Repository: <%= link_to @project.repository_url, @project.repository_url, :rel => 'nofollow' %>
-    </p>
-    <% end %>
-
-    <% if link = package_link(@project, @version.try(:number)) %>
-    <p>
-      View on registry: <%= link_to truncate(link, length: 70), link %>
-    </p>
-    <% end %>
-
-    <% if link = documentation_url(@project.name, @project.platform, @version.try(:number) || @project.latest_release_number ) %>
+  <% cache([@project, @version, 'projects:show', 'v1'], :expires_in => 1.week) do %>
+    <div class='col-md-8'>
+      <% if @project.description.present? %>
       <p>
-        Documentation: <%= link_to truncate(link, length: 70), link %>
+        <%= @project.description %>
       </p>
-    <% elsif @project.platform.downcase == 'bower' && @project.language.try(:downcase) == 'purescript' %>
-      <% link = "https://pursuit.purescript.org/packages/#{@project.name}" %>
+      <% end %>
+
+      <% if @project.homepage.present? && @project.homepage != package_link(@project) %>
       <p>
-        Documentation: <%= link_to truncate(link, length: 70), link %>
+        Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage), :rel => 'nofollow') %>
       </p>
-    <% end %>
+      <% end %>
 
-    <% if install_instructions(@project, @project.platform, @version.try(:number)) %>
       <p>
-        Install:
-        <code>
-          <%= install_instructions(@project, @project.platform, @version.try(:number)) %>
-        </code>
+        Platform: <%= link_to @project.platform_name, platform_path(@project.platform.downcase) %>
       </p>
-    <% end %>
 
-    <% if @github_repository.present? && @github_repository.readme.present? %>
-    <hr>
-    <%= render 'adsense/banner' %>
-    <%== @github_repository.readme %>
-    <% end %>
+      <% if @project.language.present? %>
+      <p>
+        Language: <%= link_to @project.language, language_path(@project.language) %>
+      </p>
+      <% end %>
 
-    <div class="row">
-      <% cache("projects:#{@project.id}:#{@version.try(:id)}:dependents:v2", :expires_in => 1.day) do  %>
-        <% dependents = @project.dependent_projects(per_page: 10) %>
-        <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
-        <% if dependent_repos.length > 0 || dependents.length > 0 || @dependencies.length > 0 %>
-          <hr>
-        <% end %>
-        <% if @dependencies.length > 0 %>
-          <div class="col-md-12 table-responsive">
-          <% @dependencies.group_by(&:kind).each do |kind, deps| %>
-            <% if deps.length > 0 %>
-              <table class='table table-hover table-condensed'>
-                <thead>
-                  <th>
-                    <%= kind.humanize unless kind == 'normal' %> Dependencies
-                  </th>
-                  <th>
-                    Requirements
-                  </th>
-                  <th>
-                    Latest Stable
-                  </th>
-                  <th>
-                    Latest Release
-                  </th>
-                  <th>
-                    Licenses
-                  </th>
-                  <th>
+      <% if @project.normalized_licenses.present? %>
+      <p>
+        <%= 'License'.pluralize(@project.normalized_licenses.length) %>: <%= linked_licenses @project.normalized_licenses %>
+      </p>
+      <% end %>
 
-                  </th>
-                </thead>
-                <% deps.each do |dependency| %>
-                  <tr>
-                    <td>
-                      <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
-                    </td>
-                    <td>
-                      <%= dependency.requirements %>
-                    </td>
-                    <td>
-                      <%= dependency.try(:project).try(:latest_stable_release_number) %>
-                    </td>
-                    <td>
-                      <%= dependency.try(:project).try(:latest_release_number) %>
-                    </td>
-                    <td>
-                      <% if dependency.project %>
-                        <%= linked_licenses dependency.project.normalized_licenses %>
-                      <% end %>
-                    </td>
-                    <td>
-                      <% if dependency.project %>
-                        <% if dependency.project.is_removed? %>
-                          <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: "This project is no longer available on #{dependency.project.platform}" %>
-                        <% elsif dependency.incompatible_license? %>
-                          <%= fa_icon 'exclamation-triangle', class: 'text-info tip', title: 'This project may have a conflicting license' %>
-                        <% elsif dependency.project.is_deprecated? %>
-                          <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
-                        <% elsif dependency.project.is_unmaintained? %>
-                          <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project is no longer maintained' %>
-                        <% elsif dependency.outdated? %>
-                          <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: 'Out of date version' %>
-                        <% elsif !dependency.project.license_present? %>
-                          <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: "This project doesn't appear to have a license" %>
-                        <% end %>
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </table>
-            <% end %>
+      <% if @project.keywords_array.present? %>
+      <p>
+        Keywords: <%= linked_keywords @project.keywords_array %>
+      </p>
+      <% end %>
+
+      <% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
+      <p>
+        Repository: <%= link_to @project.repository_url, @project.repository_url, :rel => 'nofollow' %>
+      </p>
+      <% end %>
+
+      <% if link = package_link(@project, @version.try(:number)) %>
+      <p>
+        View on registry: <%= link_to truncate(link, length: 70), link %>
+      </p>
+      <% end %>
+
+      <% if link = documentation_url(@project.name, @project.platform, @version.try(:number) || @project.latest_release_number ) %>
+        <p>
+          Documentation: <%= link_to truncate(link, length: 70), link %>
+        </p>
+      <% elsif @project.platform.downcase == 'bower' && @project.language.try(:downcase) == 'purescript' %>
+        <% link = "https://pursuit.purescript.org/packages/#{@project.name}" %>
+        <p>
+          Documentation: <%= link_to truncate(link, length: 70), link %>
+        </p>
+      <% end %>
+
+      <% if install_instructions(@project, @project.platform, @version.try(:number)) %>
+        <p>
+          Install:
+          <code>
+            <%= install_instructions(@project, @project.platform, @version.try(:number)) %>
+          </code>
+        </p>
+      <% end %>
+
+      <% if @github_repository.present? && @github_repository.readme.present? %>
+      <hr>
+      <%= render 'adsense/banner' %>
+      <%== @github_repository.readme %>
+      <% end %>
+
+      <div class="row">
+        <% cache("projects:#{@project.id}:#{@version.try(:id)}:dependents:v2", :expires_in => 1.day) do  %>
+          <% dependents = @project.dependent_projects(per_page: 10) %>
+          <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
+          <% if dependent_repos.length > 0 || dependents.length > 0 || @dependencies.length > 0 %>
+            <hr>
           <% end %>
-        </div>
-        <hr>
-        <% end %>
+          <% if @dependencies.length > 0 %>
+            <div class="col-md-12 table-responsive">
+            <% @dependencies.group_by(&:kind).each do |kind, deps| %>
+              <% if deps.length > 0 %>
+                <table class='table table-hover table-condensed'>
+                  <thead>
+                    <th>
+                      <%= kind.humanize unless kind == 'normal' %> Dependencies
+                    </th>
+                    <th>
+                      Requirements
+                    </th>
+                    <th>
+                      Latest Stable
+                    </th>
+                    <th>
+                      Latest Release
+                    </th>
+                    <th>
+                      Licenses
+                    </th>
+                    <th>
 
-        <% if dependent_repos.length > 0 || dependents.length > 0 %>
-          <div class="col-sm-6">
+                    </th>
+                  </thead>
+                  <% deps.each do |dependency| %>
+                    <tr>
+                      <td>
+                        <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
+                      </td>
+                      <td>
+                        <%= dependency.requirements %>
+                      </td>
+                      <td>
+                        <%= dependency.try(:project).try(:latest_stable_release_number) %>
+                      </td>
+                      <td>
+                        <%= dependency.try(:project).try(:latest_release_number) %>
+                      </td>
+                      <td>
+                        <% if dependency.project %>
+                          <%= linked_licenses dependency.project.normalized_licenses %>
+                        <% end %>
+                      </td>
+                      <td>
+                        <% if dependency.project %>
+                          <% if dependency.project.is_removed? %>
+                            <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: "This project is no longer available on #{dependency.project.platform}" %>
+                          <% elsif dependency.incompatible_license? %>
+                            <%= fa_icon 'exclamation-triangle', class: 'text-info tip', title: 'This project may have a conflicting license' %>
+                          <% elsif dependency.project.is_deprecated? %>
+                            <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
+                          <% elsif dependency.project.is_unmaintained? %>
+                            <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project is no longer maintained' %>
+                          <% elsif dependency.outdated? %>
+                            <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: 'Out of date version' %>
+                          <% elsif !dependency.project.license_present? %>
+                            <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: "This project doesn't appear to have a license" %>
+                          <% end %>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </table>
+              <% end %>
+            <% end %>
+          </div>
+          <hr>
+          <% end %>
+
+          <% if dependent_repos.length > 0 || dependents.length > 0 %>
             <% if dependents.length > 0 %>
-              <div>
+              <div class="col-sm-6">
                 <h4>Dependent Projects</h4>
                 <ul>
                   <% dependents.each do |project| %>
@@ -251,7 +249,7 @@
               </div>
             <% end %>
             <% if dependent_repos.length > 0 %>
-              <div>
+              <div class="col-sm-6">
                 <h4>Dependent Repositories</h4>
                 <ul>
                   <% dependent_repos.each do |repo| %>
@@ -267,13 +265,73 @@
                 <%= link_to "See all dependent repositories", project_dependent_repos_path(@project.to_param) %>
               </div>
             <% end %>
-          </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <div class='col-md-4'>
+    <%= render 'adsense/sidebar' %>
+    <% cache([@project, @version, 'projects:sidebar', 'v1'], :expires_in => 1.week) do %>
+      <% if @version_count > 0 %>
+        <h4>
+          <%= link_to project_versions_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
+            <%= fa_icon "rss-square" %>
+          <% end %>
+          Releases
+        </h4>
+        <ul>
+          <% @versions.each do |version| %>
+          <li>
+            <%= link_to version, version_path(version.to_param) %>
+            <% if version.published_at.present? %>
+            - <%= version.published_at.to_s(:long) %>
+            <% end %>
+          </li>
+          <% end %>
+        </ul>
+        <% if @project.versions.size > 10 %>
+          <%= link_to "See all #{pluralize(@project.versions.size, 'releases')}", project_versions_path(@project.to_param) %>
+        <% end %>
+      <% elsif @github_repository && @github_tags.length > 0 %>
+        <h4>
+          <%= link_to project_tags_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
+            <%= fa_icon "rss-square" %>
+          <% end %>
+          Tagged Releases
+        </h4>
+        <ul>
+          <% @github_tags.each do |tag| %>
+          <li>
+            <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
+            <% if tag.published_at.present? %>
+            - <%= tag.published_at.to_s(:long) %>
+            <% end %>
+          </li>
+          <% end %>
+        </ul>
+        <% if @github_repository.github_tags.published.count > 10 %>
+          <%= link_to "See all #{pluralize(@github_repository.github_tags.published.count, 'tags')}", project_tags_path(@project.to_param) %>
         <% end %>
       <% end %>
-      <div class="col-sm-6">
-        <% if current_user %>
-          <% your_dependent_repos = current_user.your_dependent_repos(@project) %>
-          <% if your_dependent_repos.length > 0 %>
+
+      <%= render 'statistics' %>
+
+      <% if @contributors.length > 0 %>
+        <div class="row">
+          <div class="col-md-12">
+            <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
+            <%= render @contributors %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if current_user %>
+      <% your_dependent_repos = current_user.your_dependent_repos(@project) %>
+      <% if your_dependent_repos.length > 0 %>
+        <div class="row">
+          <div class="col-md-12">
             <h4>Your Dependent Repositories</h4>
             <ul>
               <% your_dependent_repos.limit(10).each do |repo| %>
@@ -289,66 +347,11 @@
             <% if your_dependent_repos.count > 10 %>
               <%= link_to "See all your dependent repositories", your_project_dependent_repos_path(@project.to_param) %>
             <% end %>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-  </div>
-
-  <div class='col-md-4'>
-    <%= render 'adsense/sidebar' %>
-    <% if @version_count > 0 %>
-      <h4>
-        <%= link_to project_versions_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
-          <%= fa_icon "rss-square" %>
-        <% end %>
-        Releases
-      </h4>
-      <ul>
-        <% @versions.each do |version| %>
-        <li>
-          <%= link_to version, version_path(version.to_param) %>
-          <% if version.published_at.present? %>
-          - <%= version.published_at.to_s(:long) %>
-          <% end %>
-        </li>
-        <% end %>
-      </ul>
-      <% if @project.versions.size > 10 %>
-        <%= link_to "See all #{pluralize(@project.versions.size, 'releases')}", project_versions_path(@project.to_param) %>
-      <% end %>
-    <% elsif @github_repository && @github_tags.length > 0 %>
-      <h4>
-        <%= link_to project_tags_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
-          <%= fa_icon "rss-square" %>
-        <% end %>
-        Tagged Releases
-      </h4>
-      <ul>
-        <% @github_tags.each do |tag| %>
-        <li>
-          <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
-          <% if tag.published_at.present? %>
-          - <%= tag.published_at.to_s(:long) %>
-          <% end %>
-        </li>
-        <% end %>
-      </ul>
-      <% if @github_repository.github_tags.published.count > 10 %>
-        <%= link_to "See all #{pluralize(@github_repository.github_tags.published.count, 'tags')}", project_tags_path(@project.to_param) %>
-      <% end %>
-    <% end %>
-
-    <%= render 'statistics' %>
-
-    <% if @contributors.length > 0 %>
-      <div class="row">
-        <div class="col-md-12">
-          <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
-          <%= render @contributors %>
+          </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
+
     <div class="row">
       <div class="col-md-12">
         <br>
@@ -365,4 +368,3 @@
     </div>
   </div>
 </div>
-<% end %>
