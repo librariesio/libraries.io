@@ -6,14 +6,15 @@
 <hr>
 
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-sm-8">
     <%= render @projects, cache: true %>
     <%= will_paginate @projects, page_links: false %>
     <p>
       <small><%= page_entries_info @projects, model: 'removed libraries' %></small>
     </p>
   </div>
-  <div class="col-md-4">
+  <div class="col-sm-4">
+    <%= render 'adsense/sidebar' %>
     <h3>
       <strong>
         Filter by package manager

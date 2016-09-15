@@ -3,7 +3,7 @@
 <%= content_for :meta, render_meta(@user) %>
 <% cache([@user, 'users:show', 'v3'], :expires_in => 1.week) do %>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-sm-6">
     <h1>
       <%= image_tag @user.avatar_url(100), width: 50, height: 50, alt: @user %>
       <%= @user %>
@@ -25,7 +25,7 @@
       <% end %>
     <% end %>
   </div>
-  <div class="col-md-6">
+  <div class="col-sm-6">
     <br>
     <% if @user.blog.present? %>
       <p>
@@ -51,14 +51,14 @@
   <div class="col-md-8">
     <div class="row">
       <% if @repositories.length > 0 %>
-        <div class="col-md-6 user-column">
+        <div class="col-sm-6 user-column">
           <h4>Repositories</h4>
           <%= render @repositories, cache: true %>
           <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
         </div>
       <% end %>
       <% if @contributions.length > 0 %>
-        <div class="col-md-6 user-column">
+        <div class="col-sm-6 user-column">
           <h4>Repositories Contributed To</h4>
           <%= render @contributions.map(&:github_repository), cache: true  %>
           <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
@@ -67,14 +67,14 @@
     </div>
     <div class="row">
       <% if @projects.length > 0 %>
-        <div class="col-md-6 user-column">
+        <div class="col-sm-6 user-column">
           <h4>Published Projects</h4>
           <%= render @projects, cache: true %>
           <%= link_to "See all #{@user}'s projects", user_projects_path(@user) %>
         </div>
       <% end %>
       <% if @favourite_projects.length > 0 %>
-        <div class="col-md-6 user-column">
+        <div class="col-sm-6 user-column">
           <h4>Most Used Projects</h4>
           <%= render @favourite_projects, cache: true %>
         </div>

@@ -7,7 +7,7 @@
 <hr>
 
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-sm-8">
     <% if @contributions.any? %>
       <%= render @contributions.map(&:github_repository), cache: true  %>
       <%= will_paginate @contributions, page_links: false %>
@@ -17,7 +17,7 @@
       </p>
     <% end %>
   </div>
-  <div class="col-md-4">
+  <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
   </div>
 </div>

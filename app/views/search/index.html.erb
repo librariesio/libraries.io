@@ -2,11 +2,11 @@
 <% content_for :atom, auto_discovery_link_tag(:atom, url_for({format: "atom"}.merge(params))) %>
 <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
   <div class="row">
-    <div class='col-md-8'>
+    <div class='col-sm-8'>
       <div class="input-group input-group-lg">
         <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search...', class: 'form-control', size: 40 %>
         <span class="input-group-btn">
-          <button class="btn btn-primary btn-large " type="submit">Search</button>
+          <button class="btn btn-primary btn-large" type="submit"><%= fa_icon 'search' %></button>
         </span>
       </div>
 
@@ -20,7 +20,7 @@
         </p>
       <% end %>
     </div>
-    <div class='col-md-4 hidden-sm'>
+    <div class='col-sm-4 hidden-xs'>
       <h3>
         <small>Sort by: <%= select_tag 'sort', options_for_select(sort_options, params[:sort]), onchange: "this.form.submit()" %></small>
       </h3>

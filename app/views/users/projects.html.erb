@@ -6,7 +6,7 @@
 </h1>
 <hr>
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-sm-8">
     <% if @projects.any? %>
       <%= render @projects, cache: true  %>
       <%= will_paginate @projects, page_links: false %>
@@ -16,7 +16,7 @@
       </p>
     <% end %>
   </div>
-  <div class="col-md-4">
+  <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
     <h3>
       <strong>

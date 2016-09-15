@@ -3,7 +3,7 @@
 <h1>Repositories that depend on <%= link_to @project, project_path(@project.to_param) %></h1>
 <hr>
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-sm-8">
     <% if @dependent_repos.any? %>
       <%= render @dependent_repos, cache: true %>
       <%= will_paginate @dependent_repos, page_links: false %>
@@ -13,7 +13,7 @@
       </p>
     <% end %>
   </div>
-  <div class="col-md-4">
+  <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
   </div>
 </div>

@@ -2,11 +2,18 @@
 
 <h1>Your repositories that depend on <%= link_to @project, project_path(@project.to_param) %></h1>
 <hr>
-<% if @dependent_repos.any? %>
-  <%= render @dependent_repos, cache: true %>
-  <%= will_paginate @dependent_repos, page_links: false %>
-<% else %>
-  <p>
-    No repositories found, go back to <%= link_to @project, project_path(@project.to_param) %>.
-  </p>
-<% end %>
+<div class="row">
+  <div class="col-sm-8">
+    <% if @dependent_repos.any? %>
+      <%= render @dependent_repos, cache: true %>
+      <%= will_paginate @dependent_repos, page_links: false %>
+    <% else %>
+      <p>
+        No repositories found, go back to <%= link_to @project, project_path(@project.to_param) %>.
+      </p>
+    <% end %>
+  </div>
+  <div class="col-sm-4">
+    <%= render 'adsense/sidebar' %>
+  </div>
+</div>

@@ -6,11 +6,11 @@
   <%= params[:keyword].humanize %> libraries written in <%= @language %>
 </h1>
 
-<div class="col-md-8">
+<div class="col-sm-8">
   <%= render @projects %>
   <%= will_paginate @search %>
 </div>
-<div class='col-md-4 facets'>
+<div class='col-sm-4 facets'>
   <%= render 'adsense/sidebar' %>
   <% @search.response.facets.each do |name, facet| %>
     <% next if facet['terms'].empty? %>

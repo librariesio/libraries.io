@@ -10,7 +10,7 @@
 <div class="row">
   <% cache(['SourceRank', @project]) do  %>
     <% @breakdown = @project.source_rank_breakdown %>
-    <div class="col-md-8">
+    <div class="col-sm-8">
       <ul class="list-group">
         <% @breakdown.each do |key, value| %>
           <li class="list-group-item">
@@ -32,7 +32,7 @@
       </ul>
     </div>
   <% end %>
-  <div class="col-md-4">
+  <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
     <h3>
       <strong>
