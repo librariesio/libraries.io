@@ -2,11 +2,11 @@
 <h1><i class="fa fa-line-chart"></i> Trending GitHub Repositories</h1>
 
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-sm-8">
     <%= render @repos, cache: true %>
     <%= will_paginate @repos, page_links: false %>
   </div>
-  <div class="col-md-4">
+  <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
     <h3>
       <strong>

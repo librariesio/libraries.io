@@ -6,7 +6,7 @@
 </div>
 <hr>
 <div class='row'>
-  <div class='col-md-8'>
+  <div class='col-sm-8'>
       <%= render @github_issues, cache: true %>
       <%= will_paginate @search, page_links: false %>
       <p>
@@ -15,7 +15,7 @@
         </small>
       </p>
   </div>
-  <div class="col-md-4 facets">
+  <div class="col-sm-4 facets">
     <%= render 'adsense/sidebar' %>
     <% @search.response.facets.each do |name, facet| %>
       <% next if facet['terms'].empty? %>

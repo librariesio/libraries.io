@@ -5,18 +5,14 @@
   <%= fa_icon 'binoculars' %>
   Explore
 </h1>
-
+<hr>
+<%= render 'adsense/banner' %>
 <% cache 'collections:index', expires_in: 1.day do  %>
   <div class="row">
     <% @languages.each_with_index do |language, index| %>
-      <% if ((index + 6) % 8).zero? %>
-        <div class="col-md-4 collection">
-          <%= render 'adsense/sidebar' %>
-        </div>
-      <% end %>
       <% keywords = Project.popular_keywords({filters: {language: [language]}}).map{|k| k[:term].downcase }.uniq.first(10) %>
       <% next if keywords.length < 5 %>
-      <div class="col-md-4 collection">
+      <div class="col-sm-4 collection">
         <h3>
           <%= link_to language_path(language.downcase) do %>
             <div class="pictogram pictogram pictogram-<%= language.downcase %>"></div>
@@ -37,3 +33,4 @@
     <% end %>
   </div>
 <% end %>
+<%= render 'adsense/banner' %>

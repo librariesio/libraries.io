@@ -236,7 +236,7 @@
         <% end %>
 
         <% if dependent_repos.length > 0 || dependents.length > 0 %>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <% if dependents.length > 0 %>
               <div>
                 <h4>Dependent Projects</h4>
@@ -270,7 +270,7 @@
           </div>
         <% end %>
       <% end %>
-      <div class="col-md-6">
+      <div class="col-sm-6">
         <% if current_user %>
           <% your_dependent_repos = current_user.your_dependent_repos(@project) %>
           <% if your_dependent_repos.length > 0 %>

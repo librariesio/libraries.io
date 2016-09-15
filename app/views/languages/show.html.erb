@@ -5,13 +5,13 @@
 
 <% cache([@language, 'languages:show', 'v1'], :expires_in => 1.hour) do %>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-sm-6">
     <h1>
       <div class="pictogram pictogram-lg pictogram-<%= @language.downcase %>"></div>
       <%= @language %>
     </h1>
   </div>
-  <div class="col-md-6">
+  <div class="col-sm-6">
     <br>
     <p>
       Total Packages: <%= number_with_delimiter Project.language(@language).count %>
@@ -25,7 +25,7 @@
   <div class="col-md-8">
     <div class='row'>
       <% if @popular.any? %>
-      <div class='col-md-6'>
+      <div class='col-sm-6'>
         <h4>
           Popular <%= @language %> Projects
           <small class='more'>
@@ -37,7 +37,7 @@
       <% end %>
 
       <% if @created.any? %>
-      <div class='col-md-6'>
+      <div class='col-sm-6'>
         <h4>
           <%= link_to search_url(languages: @language, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
@@ -52,7 +52,7 @@
     <hr>
     <div class='row'>
       <% if @updated.any? %>
-      <div class='col-md-6'>
+      <div class='col-sm-6'>
         <h4>
           <%= link_to search_url(languages: @language, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
@@ -66,7 +66,7 @@
       </div>
       <% end %>
       <% if @watched.any? %>
-        <div class='col-md-6'>
+        <div class='col-sm-6'>
           <h4>Most Watched <%= @language %> Projects</h4>
           <%= render @watched, cache: true %>
         </div>
@@ -75,11 +75,11 @@
     <% if @dependend.any? %>
       <hr>
       <div class="row">
-        <div class='col-md-6'>
+        <div class='col-sm-6'>
           <h4>Most Depended upon <%= @language %> Projects</h4>
           <%= render @dependend, cache: true %>
         </div>
-        <div class="col-md-6">
+        <div class="col-sm-6">
           <%= render 'adsense/sidebar' %>
         </div>
       </div>
@@ -87,26 +87,28 @@
   </div>
   <div class="col-md-4">
     <%= render 'adsense/sidebar' %>
-    <% if @licenses.any? %>
-      <div class='col-md-12'>
-        <h4>Popular <%= @language %> Licenses</h4>
-        <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
-      </div>
-    <% end %>
+    <div class="row">
+      <% if @licenses.any? %>
+        <div class='col-md-12 col-sm-4'>
+          <h4>Popular <%= @language %> Licenses</h4>
+          <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
+        </div>
+      <% end %>
 
-    <% if @platforms.length > 1 %>
-      <div class='col-md-12'>
-        <h4>Popular <%= @language %> Platforms</h4>
-        <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
-      </div>
-    <% end %>
+      <% if @platforms.length > 1 %>
+        <div class='col-md-12 col-sm-4'>
+          <h4>Popular <%= @language %> Platforms</h4>
+          <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
+        </div>
+      <% end %>
 
-    <% if @keywords.length > 1 %>
-      <div class='col-md-12'>
-        <h4>Popular <%= @language %> Keywords</h4>
-        <%= render partial: 'keywords/list_keyword', collection: @keywords, as: :keyword %>
-      </div>
-    <% end %>
+      <% if @keywords.length > 1 %>
+        <div class='col-md-12 col-sm-4'>
+          <h4>Popular <%= @language %> Keywords</h4>
+          <%= render partial: 'keywords/list_keyword', collection: @keywords, as: :keyword %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
 <% end %>

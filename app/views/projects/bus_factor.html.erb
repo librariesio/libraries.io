@@ -5,7 +5,7 @@
 <hr>
 
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-sm-8">
     <% @projects.each do |project| %>
       <% cache(['bus-factor', project]) do  %>
         <div class="row">
@@ -38,7 +38,7 @@
           <div class="col-xs-4">
             <br>
             <%= link_to project.github_repository.try(:url), class: 'btn btn-primary' do %>
-            Contribute<span class='hidden-xs'> on GitHub</span>
+            Contribute<span class='hidden-sm'> on GitHub</span>
             <% end %>
           </div>
         </div>
@@ -46,7 +46,7 @@
     <% end %>
     <%= will_paginate @search, page_links: false %>
   </div>
-  <div class="col-md-4 facets">
+  <div class="col-sm-4 facets">
     <%= render 'adsense/sidebar' %>
     <h3>
       <strong>
