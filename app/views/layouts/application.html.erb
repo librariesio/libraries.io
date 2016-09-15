@@ -71,12 +71,24 @@
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav navbar-right">
+          <li>
+            <%= link_to 'Explore', explore_path %>
+          </li>
+          <li>
+            <%= form_tag search_path, method: :get, class: 'navbar-form', enforce_utf8: false do |f| %>
+              <div class="input-group input-group">
+                <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 40 %>
+                <span class="input-group-btn">
+                  <button class="btn btn-primary" type="submit">
+                    <%= fa_icon 'search' %>
+                  </button>
+                </span>
+              </div>
+            <% end %>
+          </li>
           <% if logged_in? %>
-            <li>
-              <%= link_to 'Explore', explore_path %>
-            </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= image_tag current_user.avatar_url(40), width: 20, height: 20 %> Account <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= image_tag current_user.avatar_url(40), width: 20, height: 20 %> <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><%= link_to 'Repository Monitoring', repositories_path %></li>
                 <li><%= link_to 'Subscriptions', subscriptions_path %></li>
@@ -88,25 +100,15 @@
               </ul>
             </li>
           <% else %>
-            <li>
-              <%= link_to 'Features', about_path %>
-            </li>
-            <li>
-              <%= link_to 'Explore', explore_path %>
-            </li>
-          <% end %>
           <li>
-            <%= form_tag search_path, method: :get, class: 'navbar-form', enforce_utf8: false do |f| %>
-              <div class="input-group input-group">
-                <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 40 %>
-                <span class="input-group-btn">
-                  <button class="btn btn-primary" type="submit">Search</button>
-                </span>
-              </div>
-            <% end %>
+            <p class="navbar-btn">
+              <%= link_to login_path(return_to: request.original_url), class: 'btn btn-success', rel: 'nofollow' do %>
+                <%= fa_icon('github') %> Login
+              <% end %>
+            </p>
           </li>
+          <% end %>
         </ul>
-        <%= link_to('Login with GitHub', login_path(return_to: request.original_url), class: 'pull-right btn btn-success navbar-btn', rel: 'nofollow') unless logged_in? %>
       </div>
     </div>
   </div>
