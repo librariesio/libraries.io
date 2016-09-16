@@ -275,10 +275,6 @@ a.rss{
   }
 }
 
-#newsfeed {
-  margin-top: 28px;
-}
-
 .mini-project{
   margin-bottom: 4px;
   padding-bottom: 4px;
@@ -294,7 +290,6 @@ a.rss{
   img {
     margin-right: 5px;
   }
-
 }
 
 #subscriptions {
@@ -363,7 +358,6 @@ tr.top td{
   }
 }
 
-
 .featured-org{
   margin: 5px;
   display: block;
@@ -420,7 +414,6 @@ tr.top td{
 .tree > li:last-child::after{
   display: none;
 }
-
 
 .tree ul:last-child li:last-child:after{
 height:20px;

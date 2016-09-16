@@ -1,6 +1,6 @@
 <% content_for :atom, auto_discovery_link_tag(:atom, home_url({format: "atom", api_key: current_user.api_key})) %>
 <div class="row">
-  <div class="col-sm 6 col-md-8" id='newsfeed'>
+  <div class="col-sm 6 col-md-8">
     <% if @versions.length > 0 %>
       <%= render collection: @versions, partial: 'dashboard/new_version', as: :version  %>
       <%= will_paginate @versions, page_links: false %>
