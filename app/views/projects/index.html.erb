@@ -23,7 +23,7 @@
 </div>
 
 <hr>
-
+<%= render 'adsense/banner' %>
 <h3>
   Search Projects by Language
   <small class='more'>
@@ -35,7 +35,7 @@
 </div>
 
 <hr>
-
+<%= render 'adsense/banner' %>
 <h3>
   Search Projects by License
   <small class='more'>
@@ -47,7 +47,7 @@
 </div>
 
 <hr>
-
+<%= render 'adsense/banner' %>
 <h3>
   Search Projects by Keyword
   <small class='more'>
@@ -56,17 +56,4 @@
 </h3>
 <div class='row'>
   <%= render partial: 'keywords/keyword', collection: @keywords %>
-</div>
-
-<hr>
-
-<div class="row">
-  <div class="col-md-12">
-    <h3>Used by Developers from Top Organisations</h3>
-    <% featured_orgs.each do |org| %>
-      <%= link_to "/github/#{org}", class: 'featured-org' do %>
-        <%= image_tag("https://github.com/#{org}.png?size=100", width: 50, height: 50, title: org, class: 'tip') %>
-      <% end %>
-    <% end %>
-  </div>
 </div>
