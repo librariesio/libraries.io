@@ -12,6 +12,7 @@ class GithubRepository < ActiveRecord::Base
   has_many :github_contributions, dependent: :delete_all
   has_many :contributors, through: :github_contributions, source: :github_user
   has_many :github_tags, dependent: :delete_all
+  has_many :published_github_tags, -> { published }, anonymous_class: GithubTag
   has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :repository_subscriptions, dependent: :delete_all

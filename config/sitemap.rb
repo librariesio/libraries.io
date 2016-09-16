@@ -37,7 +37,7 @@ SitemapGenerator::Sitemap.create do
   add keywords_path, :changefreq => 'daily'
 
   puts "Generating Projects"
-  Project.not_removed.find_each do |project|
+  Project.not_removed.includes(github_repository: :published_github_tags).find_each do |project|
     add project_path(project.to_param), :lastmod => project.updated_at
     add project_sourcerank_path(project.to_param), :lastmod => project.updated_at
     add project_dependents_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
@@ -48,7 +48,7 @@ SitemapGenerator::Sitemap.create do
       if project.github_repository.present?
         add project_tags_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
 
-        project.github_tags.published.find_each do |tag|
+        project.github_repository.published_github_tags.each do |tag|
           add version_path(project.to_param.merge(number: tag.name)), :lastmod => project.updated_at
         end
       end
