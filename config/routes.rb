@@ -148,6 +148,7 @@ Rails.application.routes.draw do
   get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/contributors', to: 'github_repositories#contributors', as: :github_repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/forks', to: 'github_repositories#forks', as: :github_repository_forks, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/tags', to: 'github_repositories#tags', as: :github_repository_tags, format: false, constraints: { :name => /[^\/]+/ }
 
   get '/github/:owner/:name/web_hooks', to: 'web_hooks#index', as: :github_repository_web_hooks, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/web_hooks/new', to: 'web_hooks#new', as: :new_github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }

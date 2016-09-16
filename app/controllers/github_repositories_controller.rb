@@ -65,6 +65,11 @@ class GithubRepositoriesController < ApplicationController
     @manifests = @github_repository.manifests.latest.limit(10).includes(repository_dependencies: {project: :versions})
   end
 
+  def tags
+    load_repo
+    @tags = @github_repository.github_tags.published.order('published_at DESC, name DESC').paginate(page: page_number)
+  end
+
   def contributors
     load_repo
     @contributors = @github_repository.contributors.order('count DESC').visible.paginate(page: page_number)

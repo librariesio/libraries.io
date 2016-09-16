@@ -247,7 +247,7 @@
             Contributors
           </td>
           <td>
-            <strong><%= link_to number_with_delimiter(repo.contributors.count), repo.contributors_url  %></strong>
+            <strong><%= link_to number_with_delimiter(repo.contributors.count), github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name)  %></strong>
           </td>
         </tr>
         <tr>
@@ -309,9 +309,12 @@
       <% if repo.github_tags.published.length > 0 %>
         <div class="row"></div>
         <hr>
-        <h4>Tags</h4>
+        <h4>
+          Tags
+          <small><%= link_to 'See all', github_repository_tags_path(@github_repository.owner_name, @github_repository.project_name) %></small>
+        </h4>
         <ul>
-          <% repo.github_tags.published.order('published_at DESC, name DESC').limit(100).to_a.each do |tag| %>
+          <% repo.github_tags.published.order('published_at DESC, name DESC').limit(30).to_a.each do |tag| %>
             <li>
               <%= link_to tag, tag.github_url %>
               <% if tag.published_at.present? %>
