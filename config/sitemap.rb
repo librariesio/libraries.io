@@ -44,13 +44,13 @@ SitemapGenerator::Sitemap.create do
   Project.not_removed.includes(github_repository: :published_github_tags).find_each do |project|
     add project_path(project.to_param), :lastmod => project.updated_at
     add project_sourcerank_path(project.to_param), :lastmod => project.updated_at
-    add project_dependents_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
-    add project_dependent_repos_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
-    add project_versions_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
+    add project_dependents_path(project.to_param), :lastmod => project.updated_at
+    add project_dependent_repos_path(project.to_param), :lastmod => project.updated_at
+    add project_versions_path(project.to_param), :lastmod => project.updated_at
 
     if project.versions_count.zero? && project.github_repository_id.present?
       if project.github_repository.present?
-        add project_tags_path(project.to_param), :lastmod => project.updated_at, :priority => 0.4
+        add project_tags_path(project.to_param), :lastmod => project.updated_at
 
         project.github_repository.published_github_tags.each do |tag|
           add version_path(project.to_param.merge(number: tag.name)), :lastmod => project.updated_at
