@@ -349,7 +349,7 @@ GEM
       addressable (>= 2.3.5, < 2.5)
       faraday (~> 0.8, < 0.10)
     semantic_range (1.0.0)
-    sidekiq (4.2.0)
+    sidekiq (4.2.1)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (~> 1.5)
