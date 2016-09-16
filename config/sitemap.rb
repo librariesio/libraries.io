@@ -28,8 +28,12 @@ SitemapGenerator::Sitemap.create do
   add github_organisations_path
   add github_search_path
   add trending_path
+  add trending_projects_path
   add new_repos_path
   add github_timeline_path
+  add github_languages_path
+
+  add explore_path
 
   add platforms_path, :changefreq => 'daily'
   add licenses_path, :changefreq => 'daily'
@@ -65,6 +69,7 @@ SitemapGenerator::Sitemap.create do
     add github_repository_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
     add github_repository_contributors_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
     add github_repository_forks_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
+    add github_repository_tags_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
   end
 
   puts "Generating Users"
