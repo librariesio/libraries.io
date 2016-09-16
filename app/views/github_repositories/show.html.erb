@@ -255,7 +255,7 @@
             Tags
           </td>
           <td>
-            <strong><%= link_to number_with_delimiter(repo.github_tags.count), repo.tags_url  %></strong>
+            <strong><%= link_to number_with_delimiter(repo.github_tags.count), github_repository_tags_path(@github_repository.owner_name, @github_repository.project_name)  %></strong>
           </td>
         </tr>
         <tr>
