@@ -379,7 +379,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def download_manifests(token = nil)
-    r = Typhoeus::Request.new("http://libhooks.herokuapp.com/v2/repos/#{full_name}",
+    r = Typhoeus::Request.new("http://librarian.libraries.io/v2/repos/#{full_name}",
       method: :get,
       params: { token: token },
       headers: { 'Accept' => 'application/json' }).run
