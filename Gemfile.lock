@@ -204,7 +204,7 @@ GEM
       mime-types (>= 1.16, < 4)
     mime-types (2.99.3)
     mini_portile2 (2.1.0)
-    minitest (5.9.0)
+    minitest (5.9.1)
     multi_fetch_fragments (0.0.17)
     multi_json (1.12.1)
     multi_xml (0.5.5)
