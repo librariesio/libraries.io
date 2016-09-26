@@ -2,7 +2,7 @@ class Firehose
   class << self
     def new_version(project, platform, version_or_tag)
       return unless Rails.env.production?
-      Typhoeus::Request.new('http://libfirehose.herokuapp.com/events',
+      Typhoeus::Request.new('http://firehose.libraries.io/events',
         method: :post,
         params: {
           api_key: ENV['FIREHOSE_KEY']
