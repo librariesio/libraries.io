@@ -86,8 +86,8 @@ Rails.application.configure do
                      :password => ENV["MEMCACHIER_PASSWORD"],
                      :failover => true,
                      :compress => true,
-                     :socket_timeout => 1.5,
-                     :socket_failure_delay => 0.2
+                     :socket_timeout => 0.5,
+                     :socket_failure_delay => 0.1
                     }
   config.action_mailer.smtp_settings = {
     address:              'smtp.sendgrid.net',
