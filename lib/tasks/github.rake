@@ -40,4 +40,29 @@ namespace :github do
     GithubIssue.search('').records.includes(:github_repository).find_each(&:sync)
     GithubIssue.first_pr_search('').records.includes(:github_repository).find_each(&:sync)
   end
+
+  task download_all_users: :environment do
+    since = REDIS.get('githubuserid').to_i
+
+    while true
+      users = AuthToken.client(auto_paginate: false).all_users(since: since)
+      users.each do |o|
+        if o.type == "Organization"
+          GithubOrganisation.find_or_create_by(github_id: o.id) do |u|
+            u.login = o.login
+          end
+        else
+          GithubUser.find_or_create_by(github_id: o.id) do |u|
+            u.login = o.login
+            u.user_type = o.type
+          end
+        end
+      end
+      since = users.last.id + 1
+      REDIS.set('githubuserid', since)
+      puts '*'*20
+      puts "#{since} - #{'%.4f' % (since.to_f/226000)}%"
+      puts '*'*20
+    end
+  end
 end
