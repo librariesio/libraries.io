@@ -59,7 +59,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     api-pagination (4.4.0)
     arel (6.0.3)
-    autoprefixer-rails (6.5.0.1)
+    autoprefixer-rails (6.5.0.2)
       execjs
     bloomfilter-rb (2.1.1)
       redis
@@ -214,9 +214,8 @@ GEM
     net-ssh (3.2.0)
     netrc (0.11.0)
     newrelic_rpm (3.16.3.323)
-    nokogiri (1.6.8)
+    nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
-      pkg-config (~> 1.1.7)
     oauth2 (1.2.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -245,7 +244,6 @@ GEM
     pg_array_parser (0.0.9)
     pictogram (2.0.3)
       railties
-    pkg-config (1.1.7)
     postgres_ext (3.0.0)
       activerecord (>= 4.0.0)
       arel (>= 4.0.1)
@@ -334,7 +332,7 @@ GEM
     safe_yaml (1.0.4)
     sanitize-url (0.1.4)
     sass (3.4.22)
-    sassc (1.10.0)
+    sassc (1.10.1)
       bundler
       ffi (~> 1.9.6)
       sass (>= 3.3.0)
