@@ -67,4 +67,11 @@ class Dependency < ActiveRecord::Base
   rescue
     nil
   end
+
+  def latest_resolvable_version
+    versions = project.versions
+    version_numbers = versions.map {|v| SemanticRange.clean(v.number) }
+    number = SemanticRange.max_satisfying(version_numbers, requirements)
+    versions.find{|v| SemanticRange.clean(v.number) == number }
+  end
 end
