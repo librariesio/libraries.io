@@ -7,7 +7,7 @@
 <div class="row">
   <div class="col-sm-8">
     <ul class='tree'>
-      <%= render partial: 'tree/dependency', locals: {project: @project, version: @version, requirements: '', index: 0} %>
+      <%= render partial: 'tree/dependency', locals: {project: @project, version: @version, requirements: '', dependency: nil, index: 0} %>
     </ul>
     <hr>
     <p>

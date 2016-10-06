@@ -6,7 +6,10 @@
   <% else %>
     <%= project %> - <%= version %>
   <% end %>
-  <em class='text-muted'><%= requirements %> - <%= project.normalize_licenses.join(', ') %> <% if project.status.present? && project.status.downcase != 'active' %>- <%= project.status %><% end %></em>
+  <em class='text-muted'><%= requirements %> - <%= project.normalize_licenses.join(', ') %></em>
+  <% if dependency %>
+    <%= render 'dependencies/flags', dependency: dependency %>
+  <% end %>
   <% if version %>
     <% dependencies = version.dependencies.kind('normal').includes(project: :versions).limit(100) %>
     <% if dependencies.length > 0 %>
@@ -14,7 +17,7 @@
         <%dependencies.each do |dependency| %>
           <% if dependency.project && index < 10 && !@project_names.include?(dependency.project_name) %>
             <% @project_names << dependency.project_name %>
-            <%= render partial: 'tree/dependency', locals: {project: dependency.project, version: dependency.latest_resolvable_version, requirements: dependency.requirements, index: index + 1} %>
+            <%= render partial: 'tree/dependency', locals: {project: dependency.project, version: dependency.latest_resolvable_version, requirements: dependency.requirements, dependency: dependency, index: index + 1} %>
           <% else %>
           <li>
             <%= link_to dependency.project_name, project_path(platform: dependency.platform.downcase, name: dependency.project_name) %> <em class='text-muted'><%= dependency.requirements %></em>
