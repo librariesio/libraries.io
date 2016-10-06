@@ -16,20 +16,20 @@ class TreeController < ApplicationController
       @github_repository = @project.github_repository
       if @github_repository.present?
         @github_tags = @github_repository.github_tags.published.order('published_at DESC').limit(10).to_a.sort
-        if params[:version].present?
-          @version = @github_repository.github_tags.published.find_by_name(params[:version])
+        if params[:number].present?
+          @version = @github_repository.github_tags.published.find_by_name(params[:number])
           raise ActiveRecord::RecordNotFound if @version.nil?
         end
       else
         @github_tags = []
       end
       if @github_tags.empty?
-        raise ActiveRecord::RecordNotFound if params[:version].present?
+        raise ActiveRecord::RecordNotFound if params[:number].present?
       end
     else
       @versions = @project.versions.sort.first(10)
-      if params[:version].present?
-        @version = @project.versions.find_by_number(params[:version])
+      if params[:number].present?
+        @version = @project.versions.find_by_number(params[:number])
         raise ActiveRecord::RecordNotFound if @version.nil?
       end
     end
