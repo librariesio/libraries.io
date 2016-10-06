@@ -3,6 +3,7 @@ class TreeController < ApplicationController
 
   def show
     find_version
+    @kind = params[:kind] || 'normal'
     @project_names = [@project.name]
     @license_names = @project.normalize_licenses
   end

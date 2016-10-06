@@ -11,7 +11,8 @@
     <%= render 'dependencies/flags', dependency: dependency %>
   <% end %>
   <% if version %>
-    <% dependencies = version.dependencies.kind('normal').includes(project: :versions).limit(100) %>
+    <% kind = index.zero? ? @kind : 'normal' %>
+    <% dependencies = version.dependencies.kind(kind).includes(project: :versions).limit(100) %>
     <% if dependencies.length > 0 %>
       <ul>
         <%dependencies.each do |dependency| %>

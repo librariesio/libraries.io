@@ -1,5 +1,6 @@
 <h1>
   <%= fa_icon 'code-fork' %>
+  <%= @kind if @kind != 'normal' %>
   Dependency Tree for <%= link_to "#{@project} #{@version}", version_path(@version.to_param) %> on <%= link_to @project.platform, platform_path(@project.platform) %>
 </h1>
 
