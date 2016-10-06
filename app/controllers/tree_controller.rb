@@ -34,7 +34,7 @@ class TreeController < ApplicationController
       end
     end
     if @version.nil?
-      @version = @project.latest_release
+      @version = @project.latest_stable_release
       raise ActiveRecord::RecordNotFound if @version.nil?
     end
   end
