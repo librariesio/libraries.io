@@ -68,7 +68,7 @@ Rails.application.routes.draw do
   get '/explore', to: 'collections#index'
   get '/explore/:language-:keyword-libraries', to: 'collections#show'
 
-  get '/tree/:platform/:name', to: 'tree#show', constraints: { :name => /.*/ }, to: redirect { |params, request|
+  get '/tree/:platform/:name', constraints: { :name => /.*/ }, to: redirect { |params, request|
     path = "#{Rack::Utils.escape(params[:platform])}/#{Rack::Utils.escape(params[:name])}/tree"
     "http://#{request.host_with_port}/#{path}"
   }
