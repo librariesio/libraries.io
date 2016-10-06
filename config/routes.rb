@@ -68,7 +68,10 @@ Rails.application.routes.draw do
   get '/explore', to: 'collections#index'
   get '/explore/:language-:keyword-libraries', to: 'collections#show'
 
-  get '/tree/:platform/:name', to: 'tree#show'
+  get '/tree/:platform/:name', to: 'tree#show', constraints: { :name => /.*/ }, to: redirect { |params, request|
+    path = "#{Rack::Utils.escape(params[:platform])}/#{Rack::Utils.escape(params[:name])}/tree"
+    "http://#{request.host_with_port}/#{path}"
+  }
   get '/reverse-tree/:platform/:name', to: 'tree#reverse'
 
   get '/github/issues', to: 'github_issues#index', as: :issues
@@ -185,6 +188,7 @@ Rails.application.routes.draw do
   # project routes
   post '/:platform/:name/mute', to: 'projects#mute', as: :mute_project, constraints: { :name => /.*/ }
   delete '/:platform/:name/unmute', to: 'projects#unmute', as: :unmute_project, constraints: { :name => /.*/ }
+  get '/:platform/:name/tree', to: 'tree#show', constraints: { :name => /.*/ }, as: :tree
   get '/:platform/:name/sourcerank', to: 'projects#sourcerank', as: :project_sourcerank, constraints: { :name => /.*/ }
   get '/:platform/:name/versions', to: 'projects#versions', as: :project_versions, constraints: { :name => /.*/ }
   get '/:platform/:name/tags', to: 'projects#tags', as: :project_tags, constraints: { :name => /.*/ }
