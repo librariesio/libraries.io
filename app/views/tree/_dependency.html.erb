@@ -1,7 +1,8 @@
 <% requirements ||= '' %>
 <% @license_names << project.normalize_licenses %>
 <li>
-  <%= project %> - <%= version.number  %> <em class='text-muted'><%= requirements %> - <%= project.normalize_licenses.join(', ') %> <% if project.status.present? && project.status.downcase != 'active' %>- <%= project.status %><% end %></em>
+  <%= link_to project, version_path(version.to_param) %> - <%= link_to version.number, version_path(version.to_param) %>
+  <em class='text-muted'><%= requirements %> - <%= project.normalize_licenses.join(', ') %> <% if project.status.present? && project.status.downcase != 'active' %>- <%= project.status %><% end %></em>
   <% dependencies = version.dependencies.kind('normal').includes(:project) %>
   <% if dependencies.any? %>
     <ul>
@@ -11,7 +12,7 @@
           <%= render partial: 'tree/dependency', locals: {project: dependency.project, version: dependency.project.latest_stable_release, requirements: dependency.requirements, index: index + 1} %>
         <% else %>
         <li>
-          <%= dependency.project_name %> <em class='text-muted'><%= dependency.requirements %></em>
+          <%= link_to dependency.project_name, project_path(platform: dependency.platform.downcase, name: dependency.project_name) %> <em class='text-muted'><%= dependency.requirements %></em>
         </li>
         <% end %>
       <% end %>
