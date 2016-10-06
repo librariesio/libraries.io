@@ -192,7 +192,7 @@ Rails.application.routes.draw do
   get '/:platform/:name/dependent-repositories/yours', to: 'projects#your_dependent_repos', as: :your_project_dependent_repos, constraints: { :name => /.*/ }
   get '/:platform/:name/:number.about', to: 'projects#about', as: :about_version, constraints: { :number => /.*/, :name => /.*/ }
   get '/:platform/:name/:number.ABOUT', to: 'projects#about', constraints: { :number => /.*/, :name => /.*/ }
-  get '/:platform/:name/:number/tree', to: 'tree#show', constraints: { :number => /[\w\.\-\_\%]+/, :name => /[\w\.\-\_\%]+/ }
+  get '/:platform/:name/:number/tree', to: 'tree#show', constraints: { :number => /[\w\.\-\_\%]+/, :name => /[\w\.\-\_\%]+/ }, as: :version_tree
   get '/:platform/:name/:number', to: 'projects#show', as: :version, constraints: { :number => /.*/, :name => /.*/ }
   get '/:platform/:name.about', to: 'projects#about', as: :about_project, constraints: { :name => /.*/ }
   get '/:platform/:name.ABOUT', to: 'projects#about', constraints: { :name => /.*/ }
