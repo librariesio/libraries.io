@@ -358,4 +358,12 @@ module ApplicationHelper
      'saltstack','baremetrics','vmware','uswitch','gocardless','ucl','Leanstack',
      'airbrake','18f','joyent','liferay']
   end
+
+  def tree_path(options={})
+    project_path(options.except(:kind)) + "/tree#{options[:kind].present? ? '?kind='+options[:kind] : '' }"
+  end
+
+  def version_tree_path(options={})
+    version_path(options.except(:kind)) + "/tree#{options[:kind].present? ? '?kind='+options[:kind] : '' }"
+  end
 end
