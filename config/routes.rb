@@ -68,12 +68,6 @@ Rails.application.routes.draw do
   get '/explore', to: 'collections#index'
   get '/explore/:language-:keyword-libraries', to: 'collections#show'
 
-  get '/tree/:platform/:name', constraints: { :name => /.*/ }, to: redirect { |params, request|
-    path = "#{Rack::Utils.escape(params[:platform])}/#{Rack::Utils.escape(params[:name])}/tree"
-    "http://#{request.host_with_port}/#{path}"
-  }
-  get '/reverse-tree/:platform/:name', to: 'tree#reverse'
-
   get '/github/issues', to: 'github_issues#index', as: :issues
 
   get '/pricing', to: 'account_subscriptions#plans', as: :pricing
