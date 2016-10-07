@@ -6,6 +6,9 @@
 </h1>
 
 <hr>
+
+<%= debug generate_dependency_tree(@project, @version, @kind) %>
+<% @project_names =[] %>
 <div class="row">
   <% cache ['tree', @project, @version, @kind], expires_in: 1.day do  %>
     <div class="col-sm-8">
