@@ -7,24 +7,24 @@
 
 <hr>
 <div class="row">
-  <div class="col-sm-8">
-    <% cache ['tree', @project, @version, @kind], expires_in: 1.hour do  %>
+  <% cache ['tree', @project, @version, @kind], expires_in: 1.hour do  %>
+    <div class="col-sm-8">
       <div class="tree">
         <ul class="top-level">
           <%= render partial: 'tree/dependency', locals: {project: @project, version: @version, requirements: '', dependency: nil, index: 0} %>
         </ul>
       </div>
-    <% end %>
-  </div>
-  <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
-    <div>
-      <p class="h4">Unique dependencies:</p>
-      <p class="h1"><%= @project_names.uniq.length %></p>
-      <hr/>
-      <p class="h4">Unique licenses:</p>
-      <p class="h1"><%= @license_names.flatten.uniq.length %></p>
-      <p class="h5"><%= @license_names.flatten.uniq.join(', ') %></p>
     </div>
-  </div>
+    <div class="col-sm-4">
+      <%= render 'adsense/sidebar' %>
+      <div>
+        <p class="h4">Unique dependencies:</p>
+        <p class="h1"><%= @project_names.uniq.length %></p>
+        <hr/>
+        <p class="h4">Unique licenses:</p>
+        <p class="h1"><%= @license_names.flatten.uniq.length %></p>
+        <p class="h5"><%= @license_names.flatten.uniq.join(', ') %></p>
+      </div>
+    </div>
+  <% end %>
 </div>
