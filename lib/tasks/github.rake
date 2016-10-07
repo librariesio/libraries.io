@@ -47,15 +47,19 @@ namespace :github do
     while true
       users = AuthToken.client(auto_paginate: false).all_users(since: since)
       users.each do |o|
-        if o.type == "Organization"
-          GithubOrganisation.find_or_create_by(github_id: o.id) do |u|
-            u.login = o.login
+        begin
+          if o.type == "Organization"
+            GithubOrganisation.find_or_create_by(github_id: o.id) do |u|
+              u.login = o.login
+            end
+          else
+            GithubUser.find_or_create_by(github_id: o.id) do |u|
+              u.login = o.login
+              u.user_type = o.type
+            end
           end
-        else
-          GithubUser.find_or_create_by(github_id: o.id) do |u|
-            u.login = o.login
-            u.user_type = o.type
-          end
+        rescue
+          nil
         end
       end
       since = users.last.id + 1
