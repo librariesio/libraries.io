@@ -1,0 +1,66 @@
+// Styling the readme markup
+
+#readme {
+  .markdown-body {
+    word-break: break-word;
+
+    // Show the title anchors on hover
+
+    h1, h2, h3, h4, h5, h6 {
+      position: relative;
+
+      .anchor {
+        display: none;
+        height: 100%;
+        align-items: center;
+        position: absolute;
+        right: 100%;
+        padding-right: 10px;
+        svg {
+          height: 100%;
+        }
+      }
+
+      @media (min-width: 768px) {
+        &:hover .anchor {
+          display: block;
+        }
+      }
+
+    }
+
+    h1, h2 {
+      padding-bottom: 0.25em;
+      border-bottom: 1px solid #eee;
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+
+    h3, h4 {
+      color: #555;
+      font-weight: normal;
+      line-height: 1.1;
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+
+    h3 {
+      font-size: 21px;
+    }
+
+    h4 {
+      font-size: 18px;
+    }
+
+    p {
+      margin-bottom: 1.25em;
+    }
+
+    pre {
+      border: none;
+      padding: 15px;
+      margin: 0 0 1.5em 0;
+    }
+
+  }
+}

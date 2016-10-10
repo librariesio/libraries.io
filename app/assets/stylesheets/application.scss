@@ -5,6 +5,7 @@
 @import "pictogram";
 @import "highlight";
 @import "tree";
+@import "readme";
 
 body {
   background-color: #fff;
@@ -174,13 +175,6 @@ h3,h4{
   small{
     color: #999;
     margin-left: 5px;
-  }
-}
-
-#readme{
-  overflow: hidden;
-  .markdown-body {
-    word-break: break-word;
   }
 }
 
@@ -372,4 +366,9 @@ tr.top td{
 
 .tip {
   cursor: default;
+}
+
+.adsbygoogle {
+  display: block;
+  margin: 10px 0 20px;
 }
