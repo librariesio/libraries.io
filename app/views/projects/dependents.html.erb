@@ -1,7 +1,13 @@
 <% title "Projects that depend on #{@project} on #{@project.platform_name} - Libraries" %>
 
-<h1>Projects that depend on <%= link_to @project, project_path(@project.to_param) %></h1>
+<h1>
+  <div class="pictogram pictogram-<%= @project.platform.downcase %>"></div>
+  <%= link_to @project, project_path(@project.to_param) %>
+</h1>
 <hr>
+<% if @dependents.any? %>
+  <p class="lead"><strong><%= @project.dependents.length %></strong> projects depend on <%= link_to @project, project_path(@project.to_param) %>:</p>
+<% end %>
 
 <div class="row">
   <div class="col-sm-8">
