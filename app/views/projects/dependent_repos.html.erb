@@ -1,7 +1,14 @@
 <% title "Repositories that depend on #{@project}  on #{@project.platform_name} - Libraries" %>
 
-<h1>Repositories that depend on <%= link_to @project, project_path(@project.to_param) %></h1>
+<h1>
+  <div class="pictogram pictogram-<%= @project.platform.downcase %>"></div>
+  <%= link_to @project, project_path(@project.to_param) %>
+</h1>
 <hr>
+<% if @dependent_repos.any? %>
+  <p class="lead"><strong><%= @dependent_repos.total_entries %></strong> <%= 'repository'.pluralize(@dependent_repos.total_entries) %> depend on <%= link_to @project, project_path(@project.to_param) %>:</p>
+<% end %>
+
 <div class="row">
   <div class="col-sm-8">
     <% if @dependent_repos.any? %>
