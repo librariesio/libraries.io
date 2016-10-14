@@ -6,7 +6,7 @@
 </h1>
 <hr>
 <% if @dependents.any? %>
-  <p class="lead"><strong><%= @project.dependents.length %></strong> projects depend on <%= link_to @project, project_path(@project.to_param) %>:</p>
+  <p class="lead"><strong><%= @dependents.total_entries %></strong> <%= 'projects'.pluralize(@dependents.total_entries) %> depend on <%= link_to @project, project_path(@project.to_param) %>:</p>
 <% end %>
 
 <div class="row">

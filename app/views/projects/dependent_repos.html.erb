@@ -6,7 +6,7 @@
 </h1>
 <hr>
 <% if @dependent_repos.any? %>
-  <p class="lead"><strong><%= @project.dependent_repositories.open_source.length %></strong> repositories depend on <%= link_to @project, project_path(@project.to_param) %>:</p>
+  <p class="lead"><strong><%= @dependent_repos.total_entries %></strong> <%= 'repository'.pluralize(@dependent_repos.total_entries) %> depend on <%= link_to @project, project_path(@project.to_param) %>:</p>
 <% end %>
 
 <div class="row">
