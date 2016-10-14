@@ -59,7 +59,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     api-pagination (4.4.0)
     arel (6.0.3)
-    autoprefixer-rails (6.5.0.2)
+    autoprefixer-rails (6.5.1)
       execjs
     bloomfilter-rb (2.1.1)
       redis
@@ -512,4 +512,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.13.3
+   1.13.4
