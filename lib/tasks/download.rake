@@ -93,10 +93,6 @@ namespace :download do
     Repositories::Inqlude.import
   end
 
-  task jam: :environment do
-    Repositories::Jam.import_async
-  end
-
   task julia: :environment do
     Repositories::Julia.import_async
   end

@@ -26,8 +26,6 @@ module Repositories
         "http://code.dlang.org/packages/#{name}" + (version ? "/#{version}" : "")
       when 'Emacs'
         "http://melpa.org/#/#{name}"
-      when 'Jam'
-        "http://jamjs.org/packages/#/details/#{name}/#{version}"
       when 'Pub'
         "https://pub.dartlang.org/packages/#{name}"
       when 'NPM'

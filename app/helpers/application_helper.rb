@@ -73,8 +73,6 @@ module ApplicationHelper
       "gem install #{name}" + (version ? " -v #{version}" : "")
     when 'NPM'
       "npm install #{name}" + (version ? "@#{version}" : "")
-    when 'Jam'
-      "jam install #{name}" + (version ? "@#{version}" : "")
     when 'Bower'
       "bower install #{name}" + (version ? "##{version}" : "")
     when 'Dub'
