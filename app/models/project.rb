@@ -319,7 +319,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.popular_platforms(options = {})
-    facets(options)[:platforms][:terms].reject{ |t| t.term.downcase == 'biicode' }
+    facets(options)[:platforms][:terms].reject{ |t| ['biicode', 'jam'].include?(t.term.downcase) }
   end
 
   def self.keywords_badlist
