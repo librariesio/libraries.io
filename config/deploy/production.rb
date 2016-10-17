@@ -1,6 +1,7 @@
 server ENV['WEB_SERVER'], user: ENV['WEB_USER'], roles: %w{app web}
 server ENV['SIDEKIQ_SERVER'], user: ENV['SIDEKIQ_USER'], roles: %w{app}
 server ENV['SIDEKIQ_SERVER2'], user: ENV['SIDEKIQ_USER'], roles: %w{app}
+server ENV['SIDEKIQ_SERVER3'], user: ENV['SIDEKIQ_USER'], roles: %w{app}
 
 namespace :deploy do
   task :restart do
