@@ -9,7 +9,6 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 
 set :keep_assets, 2
 set :keep_releases, 2
-set :bundle_jobs, 4
 
 set :nginx_domains, "libraries.io staging.libraries.io"
 set :nginx_read_timeout, 60
