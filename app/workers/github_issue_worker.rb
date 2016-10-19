@@ -8,5 +8,7 @@ class GithubIssueWorker
     return unless repo
     issue_hash = AuthToken.fallback_client(token).issue(repo.full_name, issue_number)
     GithubIssue.create_from_hash(repo, issue_hash)
+  rescue Octokit::NotFound
+    nil
   end
 end
