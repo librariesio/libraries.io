@@ -1,9 +1,8 @@
-# server ENV['WEB_SERVER'], user: ENV['WEB_USER'], roles: %w{app web}
-# server '163.172.185.77', user: ENV['WEB_USER'], roles: %w{app web}
-# server '163.172.149.206', user: ENV['WEB_USER'], roles: %w{app web}
-server ENV['SIDEKIQ_SERVER'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
-server ENV['SIDEKIQ_SERVER2'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
-server ENV['SIDEKIQ_SERVER3'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
+server ENV['WEB_SERVER_1'],     user: ENV['WEB_USER'],     roles: %w{app web}
+server ENV['WEB_SERVER_2'],     user: ENV['WEB_USER'],     roles: %w{app web}
+server ENV['SIDEKIQ_SERVER_1'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
+server ENV['SIDEKIQ_SERVER_2'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
+server ENV['SIDEKIQ_SERVER_3'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
 
 namespace :deploy do
   task :restart do
