@@ -316,7 +316,7 @@ module ApplicationHelper
     {
       title: "Libraries - The Open Source Discovery Service",
       url: "https://libraries.io",
-      description: "Discover new modules and libraries you can use in your projects",
+      description: "Discover open source libraries, modules and frameworks you can use in your code",
       image: "https://libraries.io/apple-touch-icon-152x152.png",
       site_name: "Libraries.io",
       site_twitter: "@librariesio"
