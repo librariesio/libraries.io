@@ -120,7 +120,7 @@ class GithubRepository < ActiveRecord::Base
   end
 
   def touch_projects
-    projects.find_each(&:save)
+    projects.find_each(&:touch)
   end
 
   def repository_dependencies
