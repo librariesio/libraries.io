@@ -68,9 +68,14 @@ class GithubRepository < ActiveRecord::Base
   def meta_tags
     {
       title: "#{full_name} on GitHub",
-      description: description,
+      description: description_with_language,
       image: avatar_url(200)
     }
+  end
+
+  def description_with_language
+    language_text = [language, "repository"].compact.join(' ').with_indefinite_article
+    [description, "#{language_text} on GitHub"].compact.join(' - ')
   end
 
   def normalize_license
