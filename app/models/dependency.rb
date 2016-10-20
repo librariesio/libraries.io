@@ -65,7 +65,9 @@ class Dependency < ActiveRecord::Base
 
   def outdated?
     return nil unless valid_requirements? && project && project.latest_stable_release_number
-    !SemanticRange.satisfies(project.latest_stable_release_number, requirements)
+    !(SemanticRange.satisfies(project.latest_stable_release_number, requirements) ||
+      SemanticRange.satisfies(project.latest_release_number, requirements) ||
+      SemanticRange.ltr(project.latest_release_number, requirements))
   rescue
     nil
   end
