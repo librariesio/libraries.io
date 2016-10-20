@@ -4,9 +4,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="msvalidate.01" content="3667D2FEB238C1BF174F3CB1AE0D3C16" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <title><%= content_for?(:title) ? content_for(:title) : "Libraries.io - The Open Source Discovery Service" %></title>
   <meta name="description" content="<%= content_for?(:description) ? content_for(:description) : "Discover open source libraries, modules and frameworks you can use in your code." %>">
-  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <%= content_for :atom %>
   <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/apple-touch-icon-57x57.png" />
