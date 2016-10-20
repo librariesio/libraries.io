@@ -62,6 +62,7 @@ gem 'multi_fetch_fragments'
 gem 'rack-attack'
 gem 'rack-attack-rate-limit', require: 'rack/attack/rate-limit'
 gem 'api-pagination'
+gem 'indefinite_article'
 
 gem 'highscore'
 gem 'fast-stemmer'

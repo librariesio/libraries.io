@@ -224,7 +224,8 @@ module ApplicationHelper
   def project_description(project, version)
     text = project.description || project.name
     text += " - #{version}" if version
-    text += " - a #{project.language} library on #{project.platform_name} - Libraries.io"
+    library_text = [project.language, "library"].join(' ').with_indefinite_article
+    text += " - #{library_text} on #{project.platform_name} - Libraries.io"
   end
 
   def truncate_with_tip(text, length)
