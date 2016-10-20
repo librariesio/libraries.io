@@ -111,7 +111,7 @@ class GithubRepositoriesController < ApplicationController
   end
 
   def page_title
-    return "Search for #{params[:q]} - Libraries" if params[:q].present?
+    return "Search for #{params[:q]} - Libraries.io" if params[:q].present?
 
     modifiers = []
     modifiers << current_license if current_license.present?
@@ -121,13 +121,13 @@ class GithubRepositoriesController < ApplicationController
 
     case params[:sort]
     when 'created_at'
-      "New#{modifier}Github Repositories - Libraries"
+      "New#{modifier}Github Repositories - Libraries.io"
     when 'updated_at'
-      "Updated#{modifier}Github Repositories - Libraries"
+      "Updated#{modifier}Github Repositories - Libraries.io"
     when 'latest_release_published_at'
-      "Updated#{modifier}Github Repositories - Libraries"
+      "Updated#{modifier}Github Repositories - Libraries.io"
     else
-      "Popular#{modifier}Github Repositories - Libraries"
+      "Popular#{modifier}Github Repositories - Libraries.io"
     end
   end
 

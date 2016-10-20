@@ -23,7 +23,7 @@ class SearchController < ApplicationController
   end
 
   def page_title
-    return "Search for #{params[:q]} - Libraries" if params[:q].present?
+    return "Search for #{params[:q]} - Libraries.io" if params[:q].present?
 
     modifiers = []
     modifiers << current_licenses if current_licenses.present?
@@ -35,13 +35,13 @@ class SearchController < ApplicationController
 
     case params[:sort]
     when 'created_at'
-      "New#{modifier}Projects - Libraries"
+      "New#{modifier}Projects - Libraries.io"
     when 'updated_at'
-      "Updated#{modifier}Projects - Libraries"
+      "Updated#{modifier}Projects - Libraries.io"
     when 'latest_release_published_at'
-      "Updated#{modifier}Projects - Libraries"
+      "Updated#{modifier}Projects - Libraries.io"
     else
-      "Popular#{modifier}Projects - Libraries"
+      "Popular#{modifier}Projects - Libraries.io"
     end
   end
 end
