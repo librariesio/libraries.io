@@ -100,7 +100,7 @@ GEM
       tins (>= 1.6.0, < 2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    css_parser (1.4.5)
+    css_parser (1.4.6)
       addressable
     dalli (2.7.6)
     database_cleaner (1.5.3)
