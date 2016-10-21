@@ -4,6 +4,7 @@
 <hr>
 <div class="row">
   <div class="col-sm-8">
+    <%= render 'adsense/banner' %>
     <% if @tags.any? %>
       <ul>
         <% @tags.each do |tag| %>
@@ -16,6 +17,7 @@
         <% end %>
       </ul>
       <%= will_paginate @tags, page_links: false %>
+      <%= render 'adsense/banner' %>
     <% else %>
       <p>
         No tags found, go back to <%= link_to @github_repository.full_name, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %>.

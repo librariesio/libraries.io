@@ -11,9 +11,11 @@
 
 <div class="row">
   <div class="col-sm-8">
+    <%= render 'adsense/banner' %>
     <% if @dependent_repos.any? %>
       <%= render @dependent_repos, cache: true %>
       <%= will_paginate @dependent_repos, page_links: false %>
+      <%= render 'adsense/banner' %>
     <% else %>
       <p>
         No repositories found, go back to <%= link_to @project, project_path(@project.to_param) %>.

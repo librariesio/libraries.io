@@ -8,9 +8,11 @@
 
 <div class="row">
   <div class="col-sm-8">
+    <%= render 'adsense/banner' %>
     <% if @contributions.any? %>
       <%= render @contributions.map(&:github_repository), cache: true  %>
       <%= will_paginate @contributions, page_links: false %>
+      <%= render 'adsense/banner' %>
     <% else %>
       <p>
         No projects found, go back to <%= link_to @user, user_path(@user) %>.

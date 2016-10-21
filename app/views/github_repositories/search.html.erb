@@ -29,6 +29,7 @@
 <% end %>
 <div class='row'>
   <div class='col-sm-8'>
+    <%= render 'adsense/banner' %>
     <% if @github_repositories.length > 0 %>
       <%= render @github_repositories, cache: true %>
       <%= will_paginate @search, page_links: false %>
@@ -42,6 +43,7 @@
           <% end %>
         </small>
       </p>
+      <%= render 'adsense/banner' %>
     <% else %>
 
       <p>
@@ -56,6 +58,7 @@
   </div>
 
   <div class='col-sm-4 facets'>
+    <%= render 'adsense/sidebar' %>
     <% @search.response.facets.each do |name, facet| %>
       <% next if facet['terms'].empty? %>
       <h4><%= name.humanize %></h4>

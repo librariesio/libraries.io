@@ -11,6 +11,7 @@
   <% cache(['SourceRank', @project]) do  %>
     <% @breakdown = @project.source_rank_breakdown %>
     <div class="col-sm-8">
+      <%= render 'adsense/banner' %>
       <ul class="list-group">
         <% @breakdown.each do |key, value| %>
           <li class="list-group-item">
@@ -30,6 +31,7 @@
           <strong>Total</strong>
         </li>
       </ul>
+      <%= render 'adsense/banner' %>
     </div>
   <% end %>
   <div class="col-sm-4">

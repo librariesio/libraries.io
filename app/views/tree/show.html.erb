@@ -9,11 +9,13 @@
 <div class="row">
   <% cache ['tree', @project, @version, @kind], expires_in: 1.hour do  %>
     <div class="col-sm-8">
+      <%= render 'adsense/banner' %>
       <div class="tree">
         <ul class="top-level">
           <%= render partial: 'tree/dependency', locals: {project: @project, version: @version, requirements: '', dependency: nil, index: 0} %>
         </ul>
       </div>
+      <%= render 'adsense/banner' %>
     </div>
     <div class="col-sm-4">
       <%= render 'adsense/sidebar' %>
