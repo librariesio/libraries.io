@@ -86,6 +86,8 @@ GEM
       capistrano-bundler (~> 1.1)
     capistrano3-nginx (2.1.5)
       capistrano (>= 3.0.0)
+    codeclimate-test-reporter (0.6.0)
+      simplecov (>= 0.7.1, < 1.0.0)
     concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
     counter_culture (0.2.3)
@@ -436,6 +438,7 @@ DEPENDENCIES
   capistrano-maintenance
   capistrano-rails
   capistrano3-nginx
+  codeclimate-test-reporter
   counter_culture
   coveralls
   dalli
