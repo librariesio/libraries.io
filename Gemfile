@@ -91,6 +91,7 @@ group :test do
   gem 'rspec_junit_formatter'
   gem 'webmock'
   gem 'vcr'
+  gem 'shoulda'
   gem 'codeclimate-test-reporter', require: nil
 end
 
