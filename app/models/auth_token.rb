@@ -1,4 +1,6 @@
 class AuthToken < ActiveRecord::Base
+  validates_presence_of :token
+
   def self.client(options = {})
     if @auth_token && @auth_token.high_rate_limit?
       return @auth_token.github_client(options)
