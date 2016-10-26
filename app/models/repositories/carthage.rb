@@ -11,7 +11,7 @@ module Repositories
     end
 
     def self.project(name)
-      if name.match(/^([-\w]+)\/([-_.\w]+)$/)
+      if name.match(/^([-\w]+)\/([-.\w]+)$/)
         begin
           repo = AuthToken.client.repo(name, accept: 'application/vnd.github.drax-preview+json')
           return repo.to_hash

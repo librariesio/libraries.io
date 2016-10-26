@@ -194,7 +194,7 @@ class User < ActiveRecord::Base
     existing_repos = GithubRepository.where(github_id: new_repo_ids).select(:id, :github_id)
 
     r.each do |repo|
-      unless github_repo = existing_repos.find{|r| r.github_id == repo.id}
+      unless github_repo = existing_repos.find{|re| re.github_id == repo.id}
         github_repo = GithubRepository.find_by('lower(full_name) = ?', repo.full_name.downcase) || GithubRepository.create_from_hash(repo)
       end
       next if github_repo.nil?
@@ -214,14 +214,14 @@ class User < ActiveRecord::Base
     remove_ids = existing_repo_ids - current_repo_ids
     repository_permissions.where(github_repository_id: remove_ids).delete_all if remove_ids.any?
 
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError
     nil
   ensure
     self.update_columns(last_synced_at: Time.now, currently_syncing: false)
   end
 
   def download_self
-    user = GithubUser.find_or_create_by(github_id: self.uid) do |u|
+    GithubUser.find_or_create_by(github_id: self.uid) do |u|
       u.login = self.nickname
       u.user_type = 'User'
     end
@@ -232,7 +232,7 @@ class User < ActiveRecord::Base
     github_client.orgs.each do |org|
       GithubCreateOrgWorker.perform_async(org.login)
     end
-  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError=> e
+  rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError
     nil
   end
 

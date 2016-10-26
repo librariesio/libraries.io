@@ -243,7 +243,7 @@ module ApplicationHelper
     unless options[:renderer]
       options = options.merge :renderer => BootstrapPagination::Rails
     end
-    super *[collection_or_options, options].compact
+    super(*[collection_or_options, options].compact)
   end
 
   def source_rank_badge_class(value)

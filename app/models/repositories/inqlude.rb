@@ -13,7 +13,7 @@ module Repositories
     def self.project(name)
       versions = `ls inqlude-data/#{name}`.split("\n").sort
       version = versions.last
-      json = Oj.load `cat inqlude-data/#{name}/#{version}`
+      Oj.load `cat inqlude-data/#{name}/#{version}`
     end
 
     def self.mapping(project)

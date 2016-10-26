@@ -23,7 +23,7 @@ class Version < ActiveRecord::Base
     subscriptions = project.subscriptions
     subscriptions = subscriptions.include_prereleases if prerelease?
 
-    subscriptions.group_by(&:notification_user).each do |user, subscriptions|
+    subscriptions.group_by(&:notification_user).each do |user, user_subscriptions|
       next if user.nil?
       next if user.muted?(project)
       next if !user.emails_enabled?
