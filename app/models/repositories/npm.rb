@@ -17,7 +17,7 @@ module Repositories
 
     def self.recent_names
       u = 'http://registry.npmjs.org/-/rss?descending=true&limit=50'
-      titles = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
+      SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
     end
 
     def self.project(name)
@@ -51,11 +51,11 @@ module Repositories
         end
       else
         licenses = Array(latest_version.fetch('licenses', []))
-        licenses.map do |license|
-          if license.is_a?(Hash)
-            license.fetch('type', '')
+        licenses.map do |lice|
+          if lice.is_a?(Hash)
+            lice.fetch('type', '')
           else
-            license
+            lice
           end
         end.join(',')
       end

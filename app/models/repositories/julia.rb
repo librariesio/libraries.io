@@ -12,7 +12,6 @@ module Repositories
 
     def self.project(name)
       versions = `ls METADATA.jl/#{name}/versions`.split("\n").sort
-      version = versions.last
       repository_url = `cat METADATA.jl/#{name}/url`
       {
         name: name,
