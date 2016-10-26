@@ -420,7 +420,8 @@ class GithubRepository < ActiveRecord::Base
 
       unless manifests.find_by(args)
         manifest = manifests.create(args)
-        m['dependencies'].each do |dep|
+        dependencies = m['dependencies'].uniq{|dep| [dep['name'].try(:strip), dep['version'], dep['type']]}
+        dependencies.each do |dep|
           platform = manifest.platform
           next unless dep.is_a?(Hash)
           project = Project.platform(platform).find_by_name(dep['name'])
