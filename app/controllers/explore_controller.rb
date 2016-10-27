@@ -17,8 +17,7 @@ class ExploreController < ApplicationController
   private
 
   def trending_projects
-    scope = Project.with_repo.includes(:github_repository).recently_created.where('projects.rank > 0')
-    scope.hacker_news.limit(6)
+    Project.includes(:github_repository).recently_created.hacker_news.limit(6)
   end
 
   def trending_repos
