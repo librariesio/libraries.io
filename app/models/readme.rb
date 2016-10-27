@@ -51,12 +51,16 @@ class Readme < ActiveRecord::Base
   end
 
   def keywords
-    text = Highscore::Content.new(Nokogiri::HTML(html_body).text, badlist)
+    text = Highscore::Content.new(Nokogiri::HTML(html_body).text, Readme.badlist)
     text.configure { set :ignore_case, true }
     text.keywords.top(5).select{|k| k.weight > 9 && k.text.length < 20 }.map(&:text)
   end
 
-  def badlist
+  def self.badlist
+    @blacklist ||= init_blacklist
+  end
+
+  def self.init_blacklist
     badlist_words = %w{library bsd3 mit gpl which software create value license
       public more know what how between name files class also true false type
       default would have install com code like change project href script scripts
