@@ -19,7 +19,7 @@ class SearchController < ApplicationController
   private
 
   def allowed_sorts
-    ['rank', 'stars', 'dependents_count', 'latest_release_published_at', 'created_at']
+    ['rank', 'stars', 'dependents_count', 'latest_release_published_at', 'created_at', 'github_contributions_count']
   end
 
   def page_title
