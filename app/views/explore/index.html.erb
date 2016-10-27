@@ -21,13 +21,19 @@
 
     <div class="tab-content ">
       <div class="tab-pane active" id="trending_projects">
-        <%= render @trending_projects, cache: true %>
+        <% cache 'explore-trending_projects', expires_in: 1.hour, race_condition_ttl: 2.minutes do %>
+          <%= render @trending_projects, cache: true %>
+        <% end %>
       </div>
       <div class="tab-pane" id="dependend_projects">
-        <%= render @dependend_projects, cache: true %>
+        <% cache 'explore-dependend_projects', expires_in: 1.week, race_condition_ttl: 2.minutes do %>
+          <%= render @dependend_projects, cache: true %>
+        <% end %>
       </div>
       <div class="tab-pane" id="popular_projects">
-        <%= render @popular_projects, cache: true %>
+        <% cache 'explore-popular_projects', expires_in: 1.week, race_condition_ttl: 2.minutes do %>
+          <%= render @popular_projects, cache: true %>
+        <% end %>
       </div>
     </div>
 
@@ -49,49 +55,25 @@
 
 		<div class="tab-content ">
 		  <div class="tab-pane active" id="trending_repos">
-        <%= render @popular_repos, cache: true %>
+        <% cache 'explore-trending_repos', expires_in: 1.hour, race_condition_ttl: 2.minutes do %>
+          <%= render @trending_repos, cache: true %>
+        <% end %>
 			</div>
 			<div class="tab-pane" id="popular_repos">
-        <%= render @popular_projects, cache: true %>
+        <% cache 'explore-popular_repos', expires_in: 1.week, race_condition_ttl: 2.minutes do %>
+          <%= render @popular_projects, cache: true %>
+        <% end %>
 			</div>
       <div class="tab-pane" id="forked_repos">
-        <%= render @forked_repos, cache: true %>
+        <% cache 'explore-forked_repos', expires_in: 1.week, race_condition_ttl: 2.minutes do %>
+          <%= render @forked_repos, cache: true %>
+        <% end %>
 			</div>
 		</div>
   </div>
   <div class="col-sm-4">
-    <h4>
-      <%= fa_icon 'archive' %>
-      Package Managers
-    </h4>
-    <div class='pictogram-list'>
-      <% @platforms.each do |platform| %>
-        <% next if platform.term.downcase == 'go' %>
-        <a class="pictogram tip pictogram-<%= platform.term.downcase %>" href='<%= platform.term %>' title='<%= platform.term %>'></a>
-      <% end %>
-    </div>
-    <hr>
-
-    <h4>
-      <%= fa_icon 'code' %>
-      Popular languages
-    </h4>
-    <div class='pictogram-list'>
-      <% @languages.each do |language| %>
-        <a class="pictogram tip pictogram-<%= language.term.downcase %>" title='<%= language.term %>'></a>
-      <% end %>
-    </div>
-
-    <h4>
-      <%= fa_icon 'gavel' %>
-      Popular Licenses
-    </h4>
-    <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
-
-    <h4>
-      <%= fa_icon 'tags' %>
-      Popular Keywords
-    </h4>
-    <%= render partial: 'keywords/list_keyword', collection: @keywords, as: :keyword %>
+    <% cache 'explore-sidebar', expires_in: 1.week do %>
+      <%= render 'sidebar' %>
+    <% end %>
   </div>
 </div>

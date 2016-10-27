@@ -1,0 +1,32 @@
+<h4>
+  <%= fa_icon 'archive' %>
+  <%= link_to 'Package Managers', platforms_path %>
+</h4>
+<div class='pictogram-list'>
+  <% @platforms.each do |platform| %>
+    <% next if platform.term.downcase == 'go' %>
+    <a class="pictogram tip pictogram-<%= platform.term.downcase %>" href='<%= platform.term %>' title='<%= platform.term %>'></a>
+  <% end %>
+</div>
+<hr>
+<h4>
+  <%= fa_icon 'code' %>
+  <%= link_to 'Package Languages', languages_path %>
+</h4>
+<div class='pictogram-list'>
+  <% @languages.each do |language| %>
+    <a class="pictogram tip pictogram-<%= language.term.downcase %>" title='<%= language.term %>'></a>
+  <% end %>
+</div>
+<hr>
+<h4>
+  <%= fa_icon 'gavel' %>
+  <%= link_to 'Package Licenses', licenses_path %>
+</h4>
+<%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
+<hr>
+<h4>
+  <%= fa_icon 'tags' %>
+  <%= link_to 'Package Keywords', keywords_path %>
+</h4>
+<%= render partial: 'keywords/list_keyword', collection: @keywords, as: :keyword %>
