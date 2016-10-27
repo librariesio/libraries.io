@@ -14,7 +14,7 @@ task counts: :environment do
 end
 
 # {"META.json"=>14.549211759693225, "META.yml"=>5.202832574607992}
-# {"package.json"=>10.973721162602589, "npm-shrinkwrap.json"=>160}
+# {"package.json"=>10.973721162602589, "npm-shrinkwrap.json"=>573.2219876338411, "yarn.lock"=>474.5843023255814}
 # {"Gemfile"=>9.586365548257676, "Gemfile.lock"=>50.590976576755914
 # {"bower.json"=>4.475359275000414}
 # {"composer.json"=>4.666775216385294, "composer.lock"=>0.0}
