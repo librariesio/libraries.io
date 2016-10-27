@@ -47,11 +47,14 @@ class GithubRepository < ActiveRecord::Base
   scope :with_license, -> { where("github_repositories.license <> ''") }
   scope :without_license, -> {where("github_repositories.license IS ? OR github_repositories.license = ''", nil)}
 
+  scope :pushed, -> { where.not(pushed_at: nil) }
+  scope :good_quality, -> { maintained.open_source.pushed }
   scope :interesting, -> { where('github_repositories.stargazers_count > 0').order('github_repositories.stargazers_count DESC, github_repositories.pushed_at DESC') }
   scope :uninteresting, -> { without_readme.without_manifests.without_license.where('github_repositories.stargazers_count = 0').where('github_repositories.forks_count = 0') }
 
   scope :recently_created, -> { where('created_at > ?', 7.days.ago)}
   scope :hacker_news, -> { order("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC") }
+  scope :trending, -> { good_quality.recently_created.where('stargazers_count > 0') }
 
   scope :maintained, -> { where('github_repositories."status" not in (?) OR github_repositories."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
   scope :deprecated, -> { where('github_repositories."status" = ?', "Deprecated")}

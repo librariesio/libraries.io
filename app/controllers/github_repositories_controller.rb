@@ -39,7 +39,7 @@ class GithubRepositoriesController < ApplicationController
   def hacker_news
     @language = Languages::Language[params[:language]] if params[:language].present?
 
-    orginal_scope = GithubRepository.maintained.open_source.where.not(pushed_at: nil).recently_created.where('stargazers_count > 0')
+    orginal_scope = GithubRepository.trending
     scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
     @repos = scope.hacker_news.paginate(page: page_number)
 
@@ -49,7 +49,7 @@ class GithubRepositoriesController < ApplicationController
   def new
     @language = Languages::Language[params[:language]] if params[:language].present?
 
-    orginal_scope = GithubRepository.maintained.open_source.source.where.not(pushed_at: nil)
+    orginal_scope = GithubRepository.interesting
     scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
     @repos = scope.recently_created.order('created_at DESC').paginate(page: page_number)
 

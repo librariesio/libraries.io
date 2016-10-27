@@ -21,8 +21,7 @@ class ExploreController < ApplicationController
   end
 
   def trending_repos
-    scope = GithubRepository.maintained.open_source.where.not(pushed_at: nil).recently_created.where('stargazers_count > 0')
-    scope.hacker_news.limit(6)
+    GithubRepository.trending.hacker_news.limit(6)
   end
 
   def repo_search(sort)

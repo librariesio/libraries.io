@@ -21,8 +21,8 @@ namespace :github do
   end
 
   task update_trending: :environment do
-    trending = GithubRepository.open_source.where.not(pushed_at: nil).maintained.recently_created.hacker_news.limit(30).select('id')
-    brand_new = GithubRepository.open_source.where.not(pushed_at: nil).maintained.recently_created.order('created_at DESC').limit(60).select('id')
+    trending = GithubRepository.open_source.pushed.maintained.recently_created.hacker_news.limit(30).select('id')
+    brand_new = GithubRepository.open_source.pushed.maintained.recently_created.order('created_at DESC').limit(60).select('id')
     (trending + brand_new).uniq.each{|g| GithubDownloadWorker.perform_async(g.id) }
   end
 
