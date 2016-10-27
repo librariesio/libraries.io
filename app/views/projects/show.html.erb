@@ -83,7 +83,7 @@
   </div>
 </div>
 <div class='row'>
-  <% cache([@project, @version, 'projects:show', 'v1'], :expires_in => 1.week) do %>
+  <% cache([@project, @version, 'projects:show', 'v1'], :expires_in => 1.day) do %>
     <div class='col-md-8'>
       <% if @project.description.present? %>
       <p>
@@ -267,7 +267,7 @@
   <% end %>
   <div class='col-md-4'>
     <%= render 'adsense/sidebar' %>
-    <% cache([@project, @version, 'projects:sidebar', 'v1'], :expires_in => 1.week) do %>
+    <% cache([@project, @version, 'projects:sidebar', 'v1'], :expires_in => 1.day) do %>
       <% if @version_count > 0 %>
         <h4>
           <%= link_to project_versions_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>

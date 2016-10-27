@@ -42,7 +42,7 @@
         <% end %>
       </div>
       <div class="tab-pane" id="dependend_projects">
-        <% cache 'explore-dependend_projects', expires_in: 1.week, race_condition_ttl: 2.minutes do %>
+        <% cache 'explore-dependend_projects', expires_in: 1.day, race_condition_ttl: 2.minutes do %>
           <%= render @dependend_projects, cache: true %>
         <% end %>
         <%= link_to search_path(sort: 'dependents_count'), class: 'text-muted' do %>
@@ -50,7 +50,7 @@
         <% end %>
       </div>
       <div class="tab-pane" id="popular_projects">
-        <% cache 'explore-popular_projects', expires_in: 1.week, race_condition_ttl: 2.minutes do %>
+        <% cache 'explore-popular_projects', expires_in: 1.day, race_condition_ttl: 2.minutes do %>
           <%= render @popular_projects, cache: true %>
         <% end %>
         <%= link_to search_path(sort: 'rank'), class: 'text-muted' do %>
@@ -94,7 +94,7 @@
         <% end %>
 			</div>
 			<div class="tab-pane" id="popular_repos">
-        <% cache 'explore-popular_repos', expires_in: 1.week, race_condition_ttl: 2.minutes do %>
+        <% cache 'explore-popular_repos', expires_in: 1.day, race_condition_ttl: 2.minutes do %>
           <%= render @popular_projects, cache: true %>
         <% end %>
         <%= link_to github_search_path(sort: 'stargazers_count'), class: 'text-muted' do %>
@@ -102,7 +102,7 @@
         <% end %>
 			</div>
       <div class="tab-pane" id="forked_repos">
-        <% cache 'explore-forked_repos', expires_in: 1.week, race_condition_ttl: 2.minutes do %>
+        <% cache 'explore-forked_repos', expires_in: 1.day, race_condition_ttl: 2.minutes do %>
           <%= render @forked_repos, cache: true %>
         <% end %>
         <%= link_to github_search_path(sort: 'forks_count'), class: 'text-muted' do %>
@@ -112,7 +112,7 @@
 		</div>
   </div>
   <div class="col-sm-4">
-    <% cache 'explore-sidebar', expires_in: 1.week do %>
+    <% cache 'explore-sidebar', expires_in: 1.day do %>
       <%= render 'sidebar' %>
     <% end %>
   </div>
