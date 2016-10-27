@@ -1,21 +1,31 @@
 <% title "Explore - Libraries.io" %>
 <% description "Find popular and trending libraries by language and keyword" %>
 
+<h1>
+  <%= fa_icon 'binoculars' %>
+  Explore Libraries.io
+</h1>
+<hr>
 <div class="row">
   <div class="col-sm-8">
-    <h3>
-      <%= fa_icon 'book' %>
-      Explore Libraries, Frameworks and Modules
-    </h3>
     <ul class="nav nav-tabs">
       <li class="active">
-        <a href="#trending_projects" data-toggle="tab">Trending</a>
+        <a href="#trending_projects" data-toggle="tab">
+          <%= fa_icon 'line-chart' %>
+          Trending
+        </a>
       </li>
       <li>
-        <a href="#dependend_projects" data-toggle="tab">Most Used</a>
+        <a href="#dependend_projects" data-toggle="tab">
+          <%= fa_icon 'users' %>
+          Most Used
+        </a>
       </li>
       <li>
-        <a href="#popular_projects" data-toggle="tab">Popular</a>
+        <a href="#popular_projects" data-toggle="tab">
+          <%= fa_icon 'star' %>
+          Popular
+        </a>
       </li>
     </ul>
 
@@ -36,20 +46,29 @@
         <% end %>
       </div>
     </div>
-
+    <hr>
     <h3>
       <%= fa_icon 'github' %>
-      Explore GitHub Repositories
+      <%= link_to 'GitHub Repositories', github_path %>
     </h3>
     <ul class="nav nav-tabs">
 			<li class="active">
-        <a href="#trending_repos" data-toggle="tab">Trending</a>
+        <a href="#trending_repos" data-toggle="tab">
+          <%= fa_icon 'line-chart' %>
+          Trending Repos
+        </a>
 			</li>
 			<li>
-        <a href="#popular_repos" data-toggle="tab">Popular</a>
+        <a href="#popular_repos" data-toggle="tab">
+          <%= fa_icon 'star' %>
+          Popular Repos
+        </a>
 			</li>
 			<li>
-        <a href="#forked_repos" data-toggle="tab">Most Forked</a>
+        <a href="#forked_repos" data-toggle="tab">
+          <%= fa_icon 'code-fork' %>
+          Most Forked Repos
+        </a>
 			</li>
 		</ul>
 
