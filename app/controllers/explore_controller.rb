@@ -12,7 +12,7 @@ class ExploreController < ApplicationController
   private
 
   def trending_projects
-    Project.includes(:github_repository).recently_created.hacker_news.limit(6)
+    Project.includes(:github_repository).recently_created.maintained.hacker_news.limit(6)
   end
 
   def trending_repos
