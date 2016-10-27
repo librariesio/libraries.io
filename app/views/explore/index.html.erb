@@ -1,0 +1,97 @@
+<% title "Explore - Libraries.io" %>
+<% description "Find popular and trending libraries by language and keyword" %>
+
+<div class="row">
+  <div class="col-sm-8">
+    <h3>
+      <%= fa_icon 'book' %>
+      Explore Libraries, Frameworks and Modules
+    </h3>
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="#trending_projects" data-toggle="tab">Trending</a>
+      </li>
+      <li>
+        <a href="#dependend_projects" data-toggle="tab">Most Used</a>
+      </li>
+      <li>
+        <a href="#popular_projects" data-toggle="tab">Popular</a>
+      </li>
+    </ul>
+
+    <div class="tab-content ">
+      <div class="tab-pane active" id="trending_projects">
+        <%= render @trending_projects, cache: true %>
+      </div>
+      <div class="tab-pane" id="dependend_projects">
+        <%= render @dependend_projects, cache: true %>
+      </div>
+      <div class="tab-pane" id="popular_projects">
+        <%= render @popular_projects, cache: true %>
+      </div>
+    </div>
+
+    <h3>
+      <%= fa_icon 'github' %>
+      Explore GitHub Repositories
+    </h3>
+    <ul class="nav nav-tabs">
+			<li class="active">
+        <a href="#trending_repos" data-toggle="tab">Trending</a>
+			</li>
+			<li>
+        <a href="#popular_repos" data-toggle="tab">Popular</a>
+			</li>
+			<li>
+        <a href="#forked_repos" data-toggle="tab">Most Forked</a>
+			</li>
+		</ul>
+
+		<div class="tab-content ">
+		  <div class="tab-pane active" id="trending_repos">
+        <%= render @popular_repos, cache: true %>
+			</div>
+			<div class="tab-pane" id="popular_repos">
+        <%= render @popular_projects, cache: true %>
+			</div>
+      <div class="tab-pane" id="forked_repos">
+        <%= render @forked_repos, cache: true %>
+			</div>
+		</div>
+  </div>
+  <div class="col-sm-4">
+    <h4>
+      <%= fa_icon 'archive' %>
+      Package Managers
+    </h4>
+    <div class='pictogram-list'>
+      <% @platforms.each do |platform| %>
+        <% next if platform.term.downcase == 'go' %>
+        <a class="pictogram tip pictogram-<%= platform.term.downcase %>" href='<%= platform.term %>' title='<%= platform.term %>'></a>
+      <% end %>
+    </div>
+    <hr>
+
+    <h4>
+      <%= fa_icon 'code' %>
+      Popular languages
+    </h4>
+    <div class='pictogram-list'>
+      <% @languages.each do |language| %>
+        <a class="pictogram tip pictogram-<%= language.term.downcase %>" title='<%= language.term %>'></a>
+      <% end %>
+    </div>
+
+    <h4>
+      <%= fa_icon 'gavel' %>
+      Popular Licenses
+    </h4>
+    <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
+
+    <h4>
+      <%= fa_icon 'tags' %>
+      Popular Keywords
+    </h4>
+    <%= render partial: 'keywords/list_keyword', collection: @keywords, as: :keyword %>
+  </div>
+</div>

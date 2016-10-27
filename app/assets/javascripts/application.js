@@ -17,6 +17,7 @@
 //= require bootstrap/collapse
 //= require bootstrap/dropdown
 //= require bootstrap/transition
+//= require bootstrap/tab
 //= require tipsy
 //= require js.cookie
 //= require rails-timeago
