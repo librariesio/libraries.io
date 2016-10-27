@@ -43,7 +43,7 @@
       </div>
       <div class="tab-pane" id="dependend_projects">
         <% cache 'explore-dependend_projects', expires_in: 1.day, race_condition_ttl: 2.minutes do %>
-          <%= render @dependend_projects, cache: true %>
+          <%= render project_search('dependents_count'), cache: true %>
         <% end %>
         <%= link_to search_path(sort: 'dependents_count'), class: 'text-muted' do %>
           See more most used projects &raquo;
@@ -51,7 +51,7 @@
       </div>
       <div class="tab-pane" id="popular_projects">
         <% cache 'explore-popular_projects', expires_in: 1.day, race_condition_ttl: 2.minutes do %>
-          <%= render @popular_projects, cache: true %>
+          <%= render project_search('rank'), cache: true %>
         <% end %>
         <%= link_to search_path(sort: 'rank'), class: 'text-muted' do %>
           See more popular projects &raquo;
@@ -95,7 +95,7 @@
 			</div>
 			<div class="tab-pane" id="popular_repos">
         <% cache 'explore-popular_repos', expires_in: 1.day, race_condition_ttl: 2.minutes do %>
-          <%= render @popular_projects, cache: true %>
+          <%= render repo_search('stargazers_count'), cache: true %>
         <% end %>
         <%= link_to github_search_path(sort: 'stargazers_count'), class: 'text-muted' do %>
           See more popular repos &raquo;
@@ -103,7 +103,7 @@
 			</div>
       <div class="tab-pane" id="forked_repos">
         <% cache 'explore-forked_repos', expires_in: 1.day, race_condition_ttl: 2.minutes do %>
-          <%= render @forked_repos, cache: true %>
+          <%= render repo_search('forks_count'), cache: true %>
         <% end %>
         <%= link_to github_search_path(sort: 'forks_count'), class: 'text-muted' do %>
           See more forked repos &raquo;
