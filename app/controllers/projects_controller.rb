@@ -161,9 +161,10 @@ class ProjectsController < ApplicationController
 
   def trending
     orginal_scope = Project.includes(:github_repository).recently_created.maintained
-    scope = current_language.present? ? orginal_scope.language(current_language) : orginal_scope
-    @repos = scope.hacker_news.paginate(page: page_number)
-    @languages = orginal_scope.where('github_repositories.stargazers_count > 0').group('lower(projects.language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(20)
+    scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
+    scope = current_language.present? ? scope.language(current_language) : scope
+    @projects = scope.hacker_news.paginate(page: page_number)
+    @platforms = orginal_scope.where('github_repositories.stargazers_count > 0').group('projects.platform').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(20)
   end
 
   private

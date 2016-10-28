@@ -3,30 +3,30 @@
 
 <div class="row">
   <div class="col-sm-8">
-    <%= render @repos, cache: true %>
-    <%= will_paginate @repos, page_links: false %>
+    <%= render @projects, cache: true %>
+    <%= will_paginate @projects, page_links: false %>
   </div>
   <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
 
     <div class='row'>
-      <% if @languages.any? %>
+      <% if @platforms.any? %>
         <div class='col-md-12 facets'>
-          <h4>Filter by language</h4>
+          <h4>Filter by Package Manager</h4>
           <ul class='filter'>
-            <% @languages.each do |language| %>
-              <li class='<%= 'active' if language[0].downcase == params[:language].try(:downcase) %>'>
-                <% if language[0].downcase == params[:language].try(:downcase) %>
-                  <%= link_to format_language(language[0]), trending_projects_path(language: nil, license: params[:license]) %>
+            <% @platforms.each do |platform| %>
+              <li class='<%= 'active' if platform[0].downcase == params[:platform].try(:downcase) %>'>
+                <% if platform[0].downcase == params[:platform].try(:downcase) %>
+                  <%= link_to platform_name(platform[0]), trending_projects_path(platforms: nil, license: params[:license]) %>
                 <% else %>
-                  <%= link_to format_language(language[0]), trending_projects_path(language: format_language(language[0]), license: params[:license]) %>
-                  <small><%= pluralize number_to_human(language[1]), 'repos' %></small>
+                  <%= link_to platform_name(platform[0]), trending_projects_path(platforms: platform_name(platform[0]), license: params[:license]) %>
+                  <small><%= pluralize number_to_human(platform[1]), 'projects' %></small>
                 <% end %>
               </li>
             <% end %>
-            <% if @language && !@languages.map{|l| l[0].downcase }.include?(@language.name.downcase) %>
+            <% if @platform && !@platforms.map{|l| l[0].downcase }.include?(@platform.name.downcase) %>
               <li class='active'>
-                <%= link_to format_language(@language.name), trending_projects_path(language: nil, license: params[:license]) %>
+                <%= link_to platform_name(@platform.name), trending_projects_path(platforms: nil, license: params[:license]) %>
               </li>
             <% end %>
           </ul>
