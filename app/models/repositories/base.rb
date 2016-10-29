@@ -171,7 +171,13 @@ module Repositories
     end
 
     def self.get_raw(url, options = {})
-      Typhoeus.get(url, options).body
+      connection = Faraday.new url, options do |builder|
+        builder.use :http_cache, store: Rails.cache, logger: Rails.logger, shared_cache: false, serializer: Marshal
+        builder.use FaradayMiddleware::Gzip
+        builder.use FaradayMiddleware::FollowRedirects, limit: 3
+        builder.adapter :typhoeus
+      end
+      connection.get.body
     end
 
     def self.get_html(url, options = {})
