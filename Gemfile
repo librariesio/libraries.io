@@ -63,6 +63,7 @@ gem 'rack-attack'
 gem 'rack-attack-rate-limit', require: 'rack/attack/rate-limit'
 gem 'api-pagination'
 gem 'indefinite_article'
+gem 'faraday_middleware'
 
 gem 'highscore'
 gem 'fast-stemmer'
