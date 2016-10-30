@@ -26,7 +26,7 @@ module Repositories
           return nil
         end
       elsif name.match(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)
-        response = Typhoeus.get(name, followlocation: true)
+        response = request(name)
         if response.code == 200
           {
             full_name: name.sub(/^https?\:\/\//, ''),

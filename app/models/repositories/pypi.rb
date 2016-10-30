@@ -17,9 +17,9 @@ module Repositories
 
     def self.recent_names
       u = 'https://pypi.python.org/pypi?%3Aaction=rss'
-      updated = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
+      updated = SimpleRSS.parse(get_raw(u)).items.map(&:title)
       u = 'https://pypi.python.org/pypi?%3Aaction=packages_rss'
-      new_packages = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
+      new_packages = SimpleRSS.parse(get_raw(u)).items.map(&:title)
       (updated.map { |t| t.split(' ').first } + new_packages.map { |t| t.split(' ').first }).uniq
     end
 

@@ -12,7 +12,7 @@ module Repositories
 
     def self.recent_names
       u = 'http://hackage.haskell.org/packages/recent.rss'
-      titles = SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
+      titles = SimpleRSS.parse(get_raw(u)).items.map(&:title)
       titles.map { |t| t.split(' ').first }
     end
 

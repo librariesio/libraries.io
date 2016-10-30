@@ -17,7 +17,7 @@ module Repositories
 
     def self.recent_names
       u = 'http://registry.npmjs.org/-/rss?descending=true&limit=50'
-      SimpleRSS.parse(Typhoeus.get(u).body).items.map(&:title)
+      SimpleRSS.parse(get_raw(u)).items.map(&:title)
     end
 
     def self.project(name)
