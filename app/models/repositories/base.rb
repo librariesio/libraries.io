@@ -112,6 +112,7 @@ module Repositories
       rescue SystemExit, Interrupt
         exit 0
       rescue Exception => e
+        raise unless ENV["RACK_ENV"] == "production"
         p name
         p e
       end
