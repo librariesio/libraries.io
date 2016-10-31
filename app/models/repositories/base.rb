@@ -171,7 +171,7 @@ module Repositories
     end
 
     def self.get_raw(url, options = {})
-      request.body
+      request(url, options).body
     end
 
     def self.request(url, options = {})
