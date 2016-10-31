@@ -55,7 +55,7 @@ module Repositories
       Array.wrap(categories).join('.').split('.').map(&:downcase).uniq
     end
 
-    def self.dependencies(name, version)
+    def self.dependencies(name, version, project)
       vers = project(name)['versions'].find{|v| v['version'] == version}
       return [] if vers.nil?
       deps = vers['dependencies']

@@ -81,7 +81,7 @@ module Repositories
       get("http://registry.npmjs.org/#{name.gsub('/', '%2F')}/#{version}").try(:has_key?, 'error')
     end
 
-    def self.dependencies(name, version)
+    def self.dependencies(name, version, project)
       proj = project(name)
       vers = proj['versions'][version]
       return [] if vers.nil?

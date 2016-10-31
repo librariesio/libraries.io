@@ -86,10 +86,10 @@ module Repositories
       puts "Saving #{mapped_project[:name]}"
       dbproject = Project.find_or_initialize_by({:name => mapped_project[:name], :platform => self.name.demodulize})
       if dbproject.new_record?
-        dbproject.assign_attributes(mapped_project.except(:name))
+        dbproject.assign_attributes(mapped_project.except(:name, :releases))
         dbproject.save
       else
-        dbproject.update_attributes(mapped_project.except(:name))
+        dbproject.update_attributes(mapped_project.except(:name, :releases))
       end
 
       if include_versions && self::HAS_VERSIONS
@@ -99,7 +99,7 @@ module Repositories
       end
 
       if self::HAS_DEPENDENCIES
-        save_dependencies(mapped_project[:name])
+        save_dependencies(mapped_project)
       end
       dbproject.last_synced_at = Time.now
       dbproject.save
@@ -149,10 +149,12 @@ module Repositories
       new_names.each { |name| update(name) }
     end
 
-    def self.save_dependencies(name)
+    def self.save_dependencies(mapped_project)
+      name = mapped_project[:name]
       proj = Project.find_by(name: name, platform: self.name.demodulize)
       proj.versions.each do |version|
-        deps = dependencies(name, version.number)
+        p mapped_project.keys
+        deps = dependencies(name, version.number, mapped_project)
         next unless deps.any? && version.dependencies.empty?
         deps.each do |dep|
           unless version.dependencies.find_by_project_name dep[:project_name]
@@ -163,7 +165,7 @@ module Repositories
       end
     end
 
-    def self.dependencies(_name, _version)
+    def self.dependencies(_name, _version, _project)
       []
     end
 

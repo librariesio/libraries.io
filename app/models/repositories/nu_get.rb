@@ -36,20 +36,36 @@ module Repositories
       h = {
         name: name
       }
+      h[:releases] = get_releases(name)
       h[:versions] = versions(h)
       h
     end
 
+    def self.get_releases(name)
+      latest_version = Repositories::NuGet.get_json("https://api.nuget.org/v3/registration1/#{name.downcase}/index.json")
+      releases = latest_version['items'][0]['items']
+
+      if releases.nil?
+        releases = []
+        latest_version['items'].each do |page|
+          json = Repositories::NuGet.get_json(page['@id'])
+          releases << json['items']
+        end
+        releases.flatten!
+      end
+      releases
+    end
+
     def self.mapping(project)
-      latest_version = get_json("https://api.nuget.org/v3/registration1/#{project[:name].downcase}/index.json")
-      item = latest_version['items'].last['items'].last['catalogEntry']
+      item = project[:releases].last['catalogEntry']
 
       {
         name: project[:name],
         description: description(item),
         homepage: item['projectUrl'],
         keywords_array: Array(item['tags']),
-        repository_url: repo_fallback('', item['projectUrl'])
+        repository_url: repo_fallback('', item['projectUrl']),
+        releases: project[:releases]
       }
     end
 
@@ -58,8 +74,7 @@ module Repositories
     end
 
     def self.versions(project)
-      latest_version = get_json("https://api.nuget.org/v3/registration1/#{project[:name].downcase}/index.json")
-      latest_version['items'].first['items'].map do |item|
+      project[:releases].map do |item|
         {
           number: item['catalogEntry']['version'],
           published_at: item['catalogEntry']['published']
@@ -67,10 +82,8 @@ module Repositories
       end
     end
 
-    def self.dependencies(name, version)
-      versions = get_json("https://api.nuget.org/v3/registration1/#{name.downcase}/index.json")
-      all_versions = versions['items'].first['items']
-      current_version = all_versions.find{|v| v['catalogEntry']['version'] == version }
+    def self.dependencies(name, version, project)
+      current_version = project[:releases].find{|v| v['catalogEntry']['version'] == version }
       dep_groups = current_version['catalogEntry']['dependencyGroups'] || []
 
       deps = dep_groups.map do |dep_group|

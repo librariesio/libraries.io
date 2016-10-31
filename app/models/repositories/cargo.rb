@@ -42,7 +42,7 @@ module Repositories
       end
     end
 
-    def self.dependencies(name, version)
+    def self.dependencies(name, version, project)
       deps = get("https://crates.io/api/v1/crates/#{name}/#{version}/dependencies")['dependencies']
       return [] if deps.nil?
       deps.map do |dep|

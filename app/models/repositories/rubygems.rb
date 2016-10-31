@@ -41,7 +41,7 @@ module Repositories
       end
     end
 
-    def self.dependencies(name, version)
+    def self.dependencies(name, version, project)
       g = Gems.info(name)
       return [] unless g['version'] == version
 
