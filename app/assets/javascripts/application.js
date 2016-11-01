@@ -19,7 +19,7 @@
 //= require bootstrap/transition
 //= require bootstrap/tab
 //= require tipsy
-//= require jscookie
+//= require js.cookie
 //= require rails-timeago
 //= require_tree .
 
