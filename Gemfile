@@ -4,7 +4,7 @@ ruby '2.3.1'
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
 gem 'rb-readline'
 gem 'oj'
-gem 'rails', '4.2.7.1'
+gem 'rails', '5.0.0.1'
 gem 'pg'
 gem 'sassc-rails'
 gem 'uglifier'
@@ -36,7 +36,6 @@ gem 'counter_culture'
 gem 'simple_form'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
-gem 'sinatra', require: nil
 gem 'rails_12factor'
 gem 'font-awesome-rails'
 gem 'mime-types', require: 'mime/types/columnar'
@@ -45,7 +44,7 @@ gem 'fast_xs'
 gem 'fast_xor'
 gem 'premailer-rails'
 gem 'gemoji'
-gem 'js-cookie-rails'
+gem 'jscookie-rails'
 gem 'postgres_ext'
 gem 'foreman', require: false
 gem 'puma'
@@ -72,7 +71,6 @@ gem 'bloomfilter-rb'
 group :development do
   gem 'bundler'
   gem 'spring'
-  gem 'quiet_assets'
   gem 'sql_queries_count'
   gem 'brakeman', :require => false
   gem 'capistrano'
@@ -94,6 +92,7 @@ group :test do
   gem 'vcr'
   gem 'shoulda'
   gem 'codeclimate-test-reporter', require: nil
+  gem 'rails-controller-testing'
 end
 
 group :production do
