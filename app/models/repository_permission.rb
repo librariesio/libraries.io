@@ -1,4 +1,4 @@
-class RepositoryPermission < ActiveRecord::Base
+class RepositoryPermission < ApplicationRecord
   belongs_to :user
   belongs_to :github_repository
 

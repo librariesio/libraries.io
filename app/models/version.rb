@@ -1,4 +1,4 @@
-class Version < ActiveRecord::Base
+class Version < ApplicationRecord
   validates_presence_of :project_id, :number
   validates_uniqueness_of :number, scope: :project_id
 
