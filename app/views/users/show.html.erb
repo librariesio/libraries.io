@@ -87,7 +87,12 @@
     <%= render 'adsense/sidebar' %>
     <% if @user.org? %>
       <% if @user.top_contributors.any?  %>
-        <h4>Top Contributors</h4>
+        <h4>
+          Top Contributors
+          <small>
+            <%= link_to "See all", user_contributors_path(@user) %>
+          </small>
+        </h4>
         <%= render @user.top_contributors %>
       <% end %>
     <% else %>

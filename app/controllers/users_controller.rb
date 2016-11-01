@@ -39,6 +39,11 @@ class UsersController < ApplicationController
     @projects = @user.projects.joins(:github_repository).includes(:github_repository, :versions).order(order).paginate(page: page_number)
   end
 
+  def contributors
+    find_user
+    @contributors = @user.contributors.paginate(page: params[:page])
+  end
+
   private
 
   def find_user
