@@ -1,4 +1,4 @@
-class Readme < ApplicationRecord
+class Readme < ActiveRecord::Base
   belongs_to :github_repository
   validates_presence_of :html_body, :github_repository
 

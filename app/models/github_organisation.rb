@@ -1,4 +1,4 @@
-class GithubOrganisation < ApplicationRecord
+class GithubOrganisation < ActiveRecord::Base
   API_FIELDS = [:name, :login, :blog, :email, :location, :description]
 
   has_many :github_repositories

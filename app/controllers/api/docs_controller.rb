@@ -1,6 +1,5 @@
 class Api::DocsController < ApplicationController
-  skip_before_action :check_api_key, raise: false
-
+  skip_before_action :check_api_key
   def index
     @cache_version = 'v1.1'
     @api_key = logged_in? ? current_user.api_key : 'YOUR_API_KEY'

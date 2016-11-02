@@ -1,4 +1,4 @@
-class AuthToken < ApplicationRecord
+class AuthToken < ActiveRecord::Base
   validates_presence_of :token
 
   def self.client(options = {})
