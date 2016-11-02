@@ -1,4 +1,4 @@
-class Project < ActiveRecord::Base
+class Project < ApplicationRecord
   include Searchable
   include SourceRank
   HAS_DEPENDENCIES = false
