@@ -108,7 +108,7 @@ class Version < ActiveRecord::Base
   end
 
   def follows_semver?
-    valid_number? && follows_semver_for_dependency_requirements?
+    valid_number?
   end
 
   def any_outdated_dependencies?
