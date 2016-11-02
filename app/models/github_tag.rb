@@ -1,4 +1,4 @@
-class GithubTag < ActiveRecord::Base
+class GithubTag < ApplicationRecord
   belongs_to :github_repository#, touch: true
   validates_presence_of :name, :sha, :github_repository
 

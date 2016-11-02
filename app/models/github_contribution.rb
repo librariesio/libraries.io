@@ -1,4 +1,4 @@
-class GithubContribution < ActiveRecord::Base
+class GithubContribution < ApplicationRecord
   belongs_to :github_user#, touch: true
   belongs_to :github_repository#, touch: true
   counter_culture :github_repository

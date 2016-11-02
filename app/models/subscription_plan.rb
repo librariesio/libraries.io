@@ -1,4 +1,4 @@
-class SubscriptionPlan < ActiveRecord::Base
+class SubscriptionPlan < ApplicationRecord
   include Payola::Plan
 
   scope :visible, -> { where(hidden: false) }
