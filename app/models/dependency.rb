@@ -1,4 +1,4 @@
-class Dependency < ApplicationRecord
+class Dependency < ActiveRecord::Base
   belongs_to :version
   belongs_to :project#, touch: true
 
