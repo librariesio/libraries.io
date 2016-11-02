@@ -1,4 +1,4 @@
-class GithubRepository < ApplicationRecord
+class GithubRepository < ActiveRecord::Base
   include RepoSearch
 
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
