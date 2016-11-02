@@ -1,4 +1,4 @@
-class GithubIssue < ActiveRecord::Base
+class GithubIssue < ApplicationRecord
   include IssueSearch
 
   belongs_to :github_repository

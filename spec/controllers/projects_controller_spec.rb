@@ -40,13 +40,13 @@ RSpec.describe ProjectsController do
 
     context "filtered by language" do
       it "responds successfully with an HTTP 200 status code" do
-        get :bus_factor, language: 'Ruby'
+        get :bus_factor, params: { language: 'Ruby' }
         expect(response).to be_success
         expect(response).to have_http_status(200)
       end
 
       it "renders the index template" do
-        get :bus_factor, language: 'Ruby'
+        get :bus_factor, params: { language: 'Ruby' }
         expect(response).to render_template("bus_factor")
       end
     end
@@ -76,13 +76,13 @@ RSpec.describe ProjectsController do
 
     context "filtered by platform" do
       it "responds successfully with an HTTP 200 status code" do
-        get :unlicensed, platform: 'Rubygems'
+        get :unlicensed, params: { platform: 'Rubygems' }
         expect(response).to be_success
         expect(response).to have_http_status(200)
       end
 
       it "renders the index template" do
-        get :unlicensed, platform: 'Rubygems'
+        get :unlicensed, params: { platform: 'Rubygems' }
         expect(response).to render_template("unlicensed")
       end
     end
@@ -112,13 +112,13 @@ RSpec.describe ProjectsController do
 
     context "filtered by platform" do
       it "responds successfully with an HTTP 200 status code" do
-        get :deprecated, platform: 'Rubygems'
+        get :deprecated, params: { platform: 'Rubygems' }
         expect(response).to be_success
         expect(response).to have_http_status(200)
       end
 
       it "renders the index template" do
-        get :deprecated, platform: 'Rubygems'
+        get :deprecated, params: { platform: 'Rubygems' }
         expect(response).to render_template("deprecated")
       end
     end
@@ -148,13 +148,13 @@ RSpec.describe ProjectsController do
 
     context "filtered by platform" do
       it "responds successfully with an HTTP 200 status code" do
-        get :removed, platform: 'Rubygems'
+        get :removed, params: { platform: 'Rubygems' }
         expect(response).to be_success
         expect(response).to have_http_status(200)
       end
 
       it "renders the index template" do
-        get :removed, platform: 'Rubygems'
+        get :removed, params: { platform: 'Rubygems' }
         expect(response).to render_template("removed")
       end
     end
@@ -184,13 +184,13 @@ RSpec.describe ProjectsController do
 
     context "filtered by platform" do
       it "responds successfully with an HTTP 200 status code" do
-        get :unmaintained, platform: 'Rubygems'
+        get :unmaintained, params: { platform: 'Rubygems' }
         expect(response).to be_success
         expect(response).to have_http_status(200)
       end
 
       it "renders the index template" do
-        get :unmaintained, platform: 'Rubygems'
+        get :unmaintained, params: { platform: 'Rubygems' }
         expect(response).to render_template("unmaintained")
       end
     end

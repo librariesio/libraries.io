@@ -1,4 +1,4 @@
-class WebHook < ActiveRecord::Base
+class WebHook < ApplicationRecord
   belongs_to :github_repository
   belongs_to :user
   validates_presence_of :url
