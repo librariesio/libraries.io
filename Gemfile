@@ -4,7 +4,7 @@ ruby '2.3.1'
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
 gem 'rb-readline'
 gem 'oj'
-gem 'rails', '4.2.7.1'
+gem 'rails', '5.0.0.1'
 gem 'pg'
 gem 'sassc-rails'
 gem 'uglifier'
@@ -45,7 +45,7 @@ gem 'fast_xor'
 gem 'premailer-rails'
 gem 'gemoji'
 gem 'js_cookie_rails'
-gem 'postgres_ext'
+gem 'postgres_ext', git: 'https://github.com/shaneog/postgres_ext', branch: 'rails-5'
 gem 'foreman', require: false
 gem 'puma'
 gem 'payola-payments'
@@ -92,6 +92,7 @@ group :test do
   gem 'vcr'
   gem 'shoulda'
   gem 'codeclimate-test-reporter', require: nil
+  gem 'rails-controller-testing'
 end
 
 group :production do

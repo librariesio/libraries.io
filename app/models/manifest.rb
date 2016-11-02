@@ -1,4 +1,4 @@
-class Manifest < ActiveRecord::Base
+class Manifest < ApplicationRecord
   belongs_to :github_repository
   has_many :repository_dependencies, dependent: :delete_all
 

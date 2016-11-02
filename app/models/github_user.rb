@@ -1,4 +1,4 @@
-class GithubUser < ActiveRecord::Base
+class GithubUser < ApplicationRecord
   include Profile
 
   has_many :github_contributions, dependent: :delete_all
