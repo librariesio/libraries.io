@@ -30,9 +30,9 @@
         <% @platforms.each do |platform| %>
           <li class='<%= 'active' if platform.downcase == params[:platform].try(:downcase) %>'>
             <% if platform.downcase == params[:platform].try(:downcase) %>
-              <%= link_to platform, url_for(params.merge(platform: nil)) %>
+              <%= link_to platform, url_for(params.slice(:platform).merge(platform: nil).permit!) %>
             <% else %>
-              <%= link_to platform, url_for(params.merge(platform: platform)) %>
+              <%= link_to platform, url_for(params.slice(:platform).merge(platform: platform).permit!) %>
             <% end %>
           </li>
         <% end %>

@@ -9,10 +9,10 @@
           <% if current_user.muted_projects.length > 0 %>
             <% if params[:include_muted].present? %>
               Showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
-              <%= link_to 'Hide muted projects', url_for(params.except(:include_muted)) %> -
+              <%= link_to 'Hide muted projects', url_for(params.except(:include_muted).permit!) %> -
             <% else %>
               Not showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
-              <%= link_to 'Show muted projects', url_for(params.merge(include_muted: true)) %> -
+              <%= link_to 'Show muted projects', url_for(params.except(:host).merge(include_muted: true).permit!) %> -
             <% end %>
             <%= link_to 'Manage muted projects', muted_path %> -
           <% end %>

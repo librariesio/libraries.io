@@ -1,0 +1,9 @@
+<% active = term['term'] == params[name.to_sym] %>
+<li class='<%= 'active' if active %>'>
+  <% if active %>
+    <%= link_to platform_name(term['term']), url_for(params.except(:host).merge(name.to_sym => nil, page: nil).permit!) %>
+  <% else %>
+    <%= link_to platform_name(term['term']), url_for(params.except(:host).merge(name.to_sym => term['term'], page: nil).permit!) %>
+    <small><%= number_to_human term['count'] %></small>
+  <% end %>
+</li>
