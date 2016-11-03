@@ -36,7 +36,6 @@ gem 'counter_culture'
 gem 'simple_form'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
-gem 'sinatra', require: nil
 gem 'rails_12factor'
 gem 'font-awesome-rails'
 gem 'mime-types', require: 'mime/types/columnar'
