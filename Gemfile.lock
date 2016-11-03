@@ -1,4 +1,14 @@
 GIT
+  remote: https://github.com/gocardless/postgres_ext
+  revision: 17e4358fe013c05fed530af58cb4bd96225d79fb
+  branch: rails-5
+  specs:
+    postgres_ext (3.0.0)
+      activerecord (>= 4.0.0)
+      arel (>= 4.0.1)
+      pg_array_parser (~> 0.0.9)
+
+GIT
   remote: https://github.com/librariesio/rails-timeago
   revision: 55fa55f038fd413bc79567d03a718eefe41a2414
   specs:
@@ -11,16 +21,6 @@ GIT
   revision: a5374ac095868cf79444c1506bbbe3a8c3ad4379
   specs:
     semantic (1.4.2)
-
-GIT
-  remote: https://github.com/shaneog/postgres_ext
-  revision: 88d46f6c145ef573e055e4d860ba2dea3264d11c
-  branch: rails-5
-  specs:
-    postgres_ext (3.0.0)
-      activerecord (>= 4.0.0)
-      arel (>= 4.0.1)
-      pg_array_parser (~> 0.0.9)
 
 GEM
   remote: https://rubygems.org/
