@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
   end
 
   def find_platform(param = :id)
-    @platform = Download.platforms.find{|p| p.to_s.demodulize.downcase == params[param].downcase }
+    @platform = Repositories::Base.platforms.find{|p| p.to_s.demodulize.downcase == params[param].downcase }
     raise ActiveRecord::RecordNotFound if @platform.nil?
     @platform_name = @platform.to_s.demodulize
   end
@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
 
   def current_platforms
     return [] if params[:platforms].blank?
-    params[:platforms].split(',').map{|p| Download.format_name(p) }.compact
+    params[:platforms].split(',').map{|p| Repositories::Base.format_name(p) }.compact
   end
 
   def current_languages

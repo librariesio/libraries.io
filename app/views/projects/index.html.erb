@@ -9,7 +9,7 @@
           <button class="btn btn-primary" type="submit">Search</button>
         </span>
       </div>
-      <p class='hidden-xs'>Libraries.io monitors <strong><%= number_with_delimiter(Project.total) %></strong> open source libraries across <strong><%= Download.platforms.length %></strong> different package managers.
+      <p class='hidden-xs'>Libraries.io monitors <strong><%= number_with_delimiter(Project.total) %></strong> open source libraries across <strong><%= Repositories::Base.platforms.length %></strong> different package managers.
           You can discover new libraries to use in your software projects as well as be notified of new releases to keep your applications secure and up to date.
       <%= link_to 'Find out more', about_path %>
       </p>

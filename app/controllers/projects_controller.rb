@@ -201,7 +201,7 @@ class ProjectsController < ApplicationController
   end
 
   def current_platform
-    Download.format_name(params[:platforms])
+    Repositories::Base.format_name(params[:platforms])
   end
 
   def current_language

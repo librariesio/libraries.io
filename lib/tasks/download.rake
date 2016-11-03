@@ -1,6 +1,6 @@
 namespace :download do
   task new_github_repos: :environment do
-    Download.new_github_repos
+    Project.undownloaded_repos.order('created_at DESC').find_each(&:update_github_repo_async)
   end
 
   task small_registries: [:emacs, :hackage, :sublime, :inqlude, :shards]

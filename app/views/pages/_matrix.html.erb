@@ -25,7 +25,7 @@
       License checking
     </th>
   </thead>
-  <% Download.platforms.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
+  <% Repositories::Base.platforms.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
     <tr>
       <td>
         <div class="pictogram pictogram-<%= platform.formatted_name.downcase %>"></div>

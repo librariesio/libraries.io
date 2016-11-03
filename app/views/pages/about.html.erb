@@ -25,7 +25,7 @@
     </p>
 
     <p>
-      Within Libraries.io we’ve aggregated <strong><%= number_with_delimiter(Project.total) %></strong> projects, written in <strong>160</strong> languages from across <strong><%= Download.platforms.length %></strong> package managers, including dependencies, releases, license information and source code repository infomation. This results in a rich index of almost every open source library available for use today.
+      Within Libraries.io we’ve aggregated <strong><%= number_with_delimiter(Project.total) %></strong> projects, written in <strong>160</strong> languages from across <strong><%= Repositories::Base.platforms.length %></strong> package managers, including dependencies, releases, license information and source code repository infomation. This results in a rich index of almost every open source library available for use today.
     </p>
 
     <p>
@@ -54,7 +54,7 @@
     <p>
       <a href="<%= platforms_path %>" class="btn btn-success">
         <%= fa_icon 'star' %>
-        Explore all <%= Download.platforms.count %> package managers
+        Explore all <%= Repositories::Base.platforms.count %> package managers
       </a>
     </p>
     <% else %>

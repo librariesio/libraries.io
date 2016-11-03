@@ -87,7 +87,7 @@ SitemapGenerator::Sitemap.create do
     add user_projects_path(org), :lastmod => org.updated_at
   end
 
-  Download.platforms.each do |platform|
+  Repositories::Base.platforms.each do |platform|
     name = platform.to_s.demodulize
     add platform_path(name.downcase), :lastmod => Project.platform(name).order('updated_at DESC').first.try(:updated_at)
   end
