@@ -44,7 +44,7 @@ gem 'fast_xs'
 gem 'fast_xor'
 gem 'premailer-rails'
 gem 'gemoji'
-gem 'js-cookie-rails'
+gem 'js_cookie_rails'
 gem 'postgres_ext'
 gem 'foreman', require: false
 gem 'puma'
