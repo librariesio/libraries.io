@@ -170,4 +170,14 @@ class ApplicationController < ActionController::Base
     raise ActiveRecord::RecordNotFound unless authorized?
     redirect_to github_repository_path(@github_repository.owner_name, @github_repository.project_name), :status => :moved_permanently if full_name != @github_repository.full_name
   end
+
+  def platform_scope(scope = Project)
+    if params[:platform].present?
+      find_platform(:platform)
+      raise ActiveRecord::RecordNotFound if @platform_name.nil?
+      scope.platform(@platform_name)
+    else
+      scope
+    end
+  end
 end

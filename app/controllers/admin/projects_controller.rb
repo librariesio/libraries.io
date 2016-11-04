@@ -17,11 +17,7 @@ class Admin::ProjectsController < Admin::ApplicationController
 
   def index
     scope = Project.maintained.without_repository_url.without_repo.most_dependents.where('latest_release_published_at > ?', 2.years.ago)
-    if params[:platform].present?
-      @platform = Project.platform(params[:platform].downcase).first.try(:platform)
-      raise ActiveRecord::RecordNotFound if @platform.nil?
-      scope = scope.platform(@platform)
-    end
+    scope = platform_scope(scope)
 
     @platforms = Project.without_repository_url.most_dependents.pluck('platform').compact.uniq
     @projects = scope.paginate(page: params[:page])

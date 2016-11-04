@@ -158,16 +158,6 @@ class ProjectsController < ApplicationController
     Spdx.find(params[:license]).try(:id) if params[:license].present?
   end
 
-  def platform_scope
-    if params[:platform].present?
-      find_platform(:platform)
-      raise ActiveRecord::RecordNotFound if @platform_name.nil?
-      Project.platform(@platform_name)
-    else
-      Project
-    end
-  end
-
   def project_scope(scope_name)
     @platforms = Project.send(scope_name).group('platform').count.sort_by(&:last).reverse
     @projects = platform_scope.send(scope_name).includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)

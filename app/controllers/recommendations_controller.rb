@@ -16,11 +16,7 @@ class RecommendationsController < ApplicationController
       scope = scope.license(@license.id)
     end
 
-    if params[:platform].present?
-      @platform = Project.platform(params[:platform].downcase).first.try(:platform)
-      raise ActiveRecord::RecordNotFound if @platform.nil?
-      scope = scope.platform(@platform)
-    end
+    scope = platform_scope(scope)
 
     @languages = current_user.recommended_projects.pluck('language').compact.uniq
     @licenses = current_user.recommended_projects.pluck('normalized_licenses').compact.flatten.uniq
