@@ -23,10 +23,10 @@ class Api::ProjectsController < Api::ApplicationController
 
   def dependencies
     version = if params[:version] == 'latest'
-      @project.versions.first
-    else
-      @project.versions.find_by_number(params[:version])
-    end
+                @project.versions.first
+              else
+                @project.versions.find_by_number(params[:version])
+              end
 
     raise ActiveRecord::RecordNotFound if version.nil?
 
