@@ -226,7 +226,7 @@ module ApplicationHelper
     text = project.description || project.name
     text += " - #{version}" if version
     library_text = [project.language, "library"].compact.join(' ').with_indefinite_article
-    text += " - #{library_text} on #{project.platform_name} - Libraries.io"
+    text + " - #{library_text} on #{project.platform_name} - Libraries.io"
   end
 
   def truncate_with_tip(text, length)
