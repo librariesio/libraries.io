@@ -2,7 +2,7 @@ class Api::ProjectsController < Api::ApplicationController
   before_action :find_project, except: :searchcode
 
   def show
-    render json: @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} })
+    render json: project_json_response(@project)
   end
 
   def dependents
@@ -10,7 +10,7 @@ class Api::ProjectsController < Api::ApplicationController
       pager.replace(@project.dependent_projects(page: page_number, per_page: per_page_number).includes(:versions, :github_repository))
     end)
     headers['Total'] = @project.dependents_count
-    render json: @dependents.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} })
+    render json: project_json_response(@dependents)
   end
 
   def dependent_repositories
