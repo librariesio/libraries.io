@@ -125,7 +125,8 @@ class GithubRepository < ActiveRecord::Base
   def download_owner
     o = github_client.user(owner_name)
     if o.type == "Organization"
-      if go = GithubOrganisation.create_from_github(owner_id.to_i)
+      go = GithubOrganisation.create_from_github(owner_id.to_i)
+      if go
         self.github_organisation_id = go.id
         save
       end
@@ -249,9 +250,9 @@ class GithubRepository < ActiveRecord::Base
     existing_github_contributions = github_contributions.includes(:github_user).to_a
     platform = projects.first.try(:platform)
     contributions.each do |c|
-      return unless c['id']
-
-      unless cont = existing_github_contributions.find{|cnt| cnt.github_user.try(:github_id) == c.id }
+      next unless c['id']
+      cont = existing_github_contributions.find{|cnt| cnt.github_user.try(:github_id) == c.id }
+      unless cont
         user = GithubUser.find_or_create_by(github_id: c.id) do |u|
           u.login = c.login
           u.user_type = c.type
@@ -271,7 +272,7 @@ class GithubRepository < ActiveRecord::Base
   def download_tags(token = nil)
     existing_tag_names = github_tags.pluck(:name)
     github_client(token).refs(full_name, 'tags').each do |tag|
-      return unless tag['ref']
+      next unless tag['ref']
       match = tag.ref.match(/refs\/tags\/(.*)/)
       if match
         name = match[1]
