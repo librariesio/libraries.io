@@ -186,4 +186,9 @@ class ApplicationController < ActionController::Base
       scope
     end
   end
+
+  helper_method :project_json_response
+  def project_json_response(projects)
+    projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} })
+  end
 end
