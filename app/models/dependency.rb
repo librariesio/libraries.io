@@ -37,8 +37,11 @@ class Dependency < ActiveRecord::Base
   end
 
   def platform
-    plat = self.read_attribute(:platform)
-    case plat
+    Dependency.platform_name(read_attribute(:platform))
+  end
+
+  def self.platform_name(platform)
+    case platform
     when 'rubygemslockfile', 'gemspec'
       'Rubygems'
     when 'cocoapodslockfile'
@@ -50,7 +53,7 @@ class Dependency < ActiveRecord::Base
     when 'npmshrinkwrap'
       'NPM'
     else
-      plat
+      platform
     end
   end
 

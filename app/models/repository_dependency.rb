@@ -34,21 +34,7 @@ class RepositoryDependency < ActiveRecord::Base
   end
 
   def platform
-    plat = read_attribute(:platform)
-    case plat
-    when 'rubygemslockfile', 'gemspec'
-      'Rubygems'
-    when 'cocoapodslockfile'
-      'CocoaPods'
-    when 'nugetlockfile', 'nuspec'
-      'NuGet'
-    when 'packagistlockfile'
-      'Packagist'
-    when 'npmshrinkwrap'
-      'NPM'
-    else
-      plat
-    end
+    Dependency.platform_name(read_attribute(:platform))
   end
 
   def update_project_id
