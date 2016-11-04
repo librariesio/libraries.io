@@ -2,6 +2,7 @@ class GithubRepository < ActiveRecord::Base
   include RepoSearch
   include Status
   include RepoUrls
+  include RepoManifests
 
   IGNORABLE_GITHUB_EXCEPTIONS = [Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError]
 
@@ -317,69 +318,6 @@ class GithubRepository < ActiveRecord::Base
     )
   rescue Octokit::UnprocessableEntity
     nil
-  end
-
-  def download_manifests(token = nil)
-    r = Typhoeus::Request.new("http://librarian.libraries.io/v2/repos/#{full_name}",
-      method: :get,
-      params: { token: token },
-      headers: { 'Accept' => 'application/json' }).run
-    begin
-      body = Oj.load(r.body)
-      if body
-        new_manifests = body["manifests"]
-      else
-        new_manifests = nil
-      end
-    rescue Oj::ParseError
-      new_manifests = nil
-    end
-
-    if body && body['metadata']
-      meta = body['metadata']
-
-      self.has_readme       = meta['readme']['path']        if meta['readme']
-      self.has_changelog    = meta['changelog']['path']     if meta['changelog']
-      self.has_contributing = meta['contributing']['path']  if meta['contributing']
-      self.has_license      = meta['license']['path']       if meta['license']
-      self.has_coc          = meta['codeofconduct']['path'] if meta['codeofconduct']
-      self.has_threat_model = meta['threatmodel']['path']   if meta['threatmodel']
-      self.has_audit        = meta['audit']['path']         if meta['audit']
-
-      save! if self.changed?
-    end
-
-    return if new_manifests.nil?
-
-    new_manifests.each do |m|
-      args = {platform: m['platform'], kind: m['type'], filepath: m['filepath'], sha: m['sha']}
-
-      unless manifests.find_by(args)
-        manifest = manifests.create(args)
-        dependencies = m['dependencies'].uniq{|dep| [dep['name'].try(:strip), dep['version'], dep['type']]}
-        dependencies.each do |dep|
-          platform = manifest.platform
-          next unless dep.is_a?(Hash)
-          project = Project.platform(platform).find_by_name(dep['name'])
-
-          manifest.repository_dependencies.create({
-            project_id: project.try(:id),
-            project_name: dep['name'].try(:strip),
-            platform: platform,
-            requirements: dep['version'],
-            kind: dep['type']
-          })
-        end
-      end
-    end
-
-    delete_old_manifests
-
-    repository_subscriptions.each(&:update_subscriptions)
-  end
-
-  def delete_old_manifests
-    manifests.where.not(id: manifests.latest.map(&:id)).each(&:destroy)
   end
 
   def download_issues(token = nil)
