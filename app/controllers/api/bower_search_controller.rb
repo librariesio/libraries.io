@@ -2,7 +2,6 @@ class Api::BowerSearchController < Api::ApplicationController
   skip_before_action :check_api_key
 
   def index
-    @query = params[:q]
     @search = paginate Project.search(params[:q] || '', filters: {
       platform: 'Bower',
     }, prefix: true, sort: format_sort, order: format_order), page: page_number, per_page: per_page_number
