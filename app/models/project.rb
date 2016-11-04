@@ -58,12 +58,13 @@ class Project < ActiveRecord::Base
 
   scope :indexable, -> { not_removed.includes(:versions, github_repository: :github_tags) }
 
-  scope :bus_factor, -> { maintained.
-                          joins(:github_repository)
-                         .where('github_repositories.github_contributions_count < 6')
-                         .where('github_repositories.github_contributions_count > 0')
-                         .where('github_repositories.stargazers_count > 0')
-                          }
+  scope :bus_factor, -> {
+                          maintained
+                          .joins(:github_repository)
+                          .where('github_repositories.github_contributions_count < 6')
+                          .where('github_repositories.github_contributions_count > 0')
+                          .where('github_repositories.stargazers_count > 0')
+                        }
 
   scope :hacker_news, -> { with_repo.where('github_repositories.stargazers_count > 0').order("((github_repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-github_repositories.created_at)/3600)+2,1.8)) DESC") }
   scope :recently_created, -> { with_repo.where('github_repositories.created_at > ?', 14.days.ago)}
