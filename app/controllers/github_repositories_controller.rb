@@ -75,14 +75,6 @@ class GithubRepositoriesController < ApplicationController
     @forks = @github_repository.forked_repositories.maintained.order('stargazers_count DESC').paginate(page: page_number)
   end
 
-  def load_repo
-    full_name = [params[:owner], params[:name]].join('/')
-    @github_repository = GithubRepository.where('lower(full_name) = ?', full_name.downcase).first
-    raise ActiveRecord::RecordNotFound if @github_repository.nil?
-    raise ActiveRecord::RecordNotFound unless authorized?
-    redirect_to github_repository_path(@github_repository.owner_name, @github_repository.project_name), :status => :moved_permanently if full_name != @github_repository.full_name
-  end
-
   private
 
   def authorized?
