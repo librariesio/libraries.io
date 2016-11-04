@@ -110,7 +110,7 @@ class ApplicationController < ActionController::Base
   end
 
   def search_issues(labels)
-    @search = paginate GithubIssue.search('', filters: {
+    @search = paginate GithubIssue.search(filters: {
       license: current_license,
       language: current_language,
       labels: labels

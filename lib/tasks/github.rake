@@ -36,11 +36,6 @@ namespace :github do
     ids.each{|id| GithubDownloadWorker.perform_async(id) }
   end
 
-  task sync_issues: :environment do
-    GithubIssue.search('').records.includes(:github_repository).find_each(&:sync)
-    GithubIssue.first_pr_search('').records.includes(:github_repository).find_each(&:sync)
-  end
-
   task download_all_users: :environment do
     since = REDIS.get('githubuserid').to_i
 
