@@ -108,4 +108,13 @@ class ApplicationController < ActionController::Base
     return nil unless params[:order].present?
     ['desc', 'asc'].include?(params[:order]) ? params[:order] : nil
   end
+
+  def search_issues(labels)
+    @search = paginate GithubIssue.search('', filters: {
+      license: current_license,
+      language: current_language,
+      labels: labels
+    }), page: page_number, per_page: per_page_number
+    @github_issues = @search.records.includes(:github_repository)
+  end
 end

@@ -19,13 +19,4 @@ class Api::GithubIssuesController < Api::ApplicationController
   def current_license
     params[:license] if params[:license].present?
   end
-
-  def search_issues(labels)
-    @search = paginate GithubIssue.search('', filters: {
-      license: current_license,
-      language: current_language,
-      labels: labels
-    }), page: page_number, per_page: per_page_number
-    @github_issues = @search.records.includes(:github_repository)
-  end
 end
