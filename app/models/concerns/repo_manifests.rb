@@ -13,7 +13,7 @@ module RepoManifests
 
     new_manifests.each {|m| sync_manifest(m) }
 
-    delete_old_manifests
+    delete_old_manifests(new_manifests)
 
     repository_subscriptions.each(&:update_subscriptions)
   end
@@ -68,7 +68,12 @@ module RepoManifests
     end
   end
 
-  def delete_old_manifests
+  def delete_old_manifests(new_manifests)
+    existing_manifests = manifests.map{|m| [m.platform, m.filepath] }
+    to_be_removed = existing_manifests - new_manifests.map{|m| [m["platform"], m["filepath"]] }
+    to_be_removed.each do |m|
+      manifests.where(platform: m[0], filepath: m[1]).each(&:destroy)
+    end
     manifests.where.not(id: manifests.latest.map(&:id)).each(&:destroy)
   end
 end
