@@ -37,42 +37,18 @@ class ProjectsController < ApplicationController
   end
 
   def deprecated
-    if params[:platform].present?
-      find_platform(:platform)
-      raise ActiveRecord::RecordNotFound if @platform_name.nil?
-      scope = Project.platform(@platform_name)
-    else
-      scope = Project
-    end
-
     @platforms = Project.deprecated.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.deprecated.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = platform_scope.deprecated.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def removed
-    if params[:platform].present?
-      find_platform(:platform)
-      raise ActiveRecord::RecordNotFound if @platform_name.nil?
-      scope = Project.platform(@platform_name)
-    else
-      scope = Project
-    end
-
     @platforms = Project.removed.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.removed.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = platform_scope.removed.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def unmaintained
-    if params[:platform].present?
-      find_platform(:platform)
-      raise ActiveRecord::RecordNotFound if @platform_name.nil?
-      scope = Project.platform(@platform_name)
-    else
-      scope = Project
-    end
-
     @platforms = Project.unmaintained.group('platform').count.sort_by(&:last).reverse
-    @projects = scope.unmaintained.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = v.unmaintained.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 
   def show
@@ -210,5 +186,15 @@ class ProjectsController < ApplicationController
 
   def current_license
     Spdx.find(params[:license]).try(:id) if params[:license].present?
+  end
+
+  def platform_scope
+    if params[:platform].present?
+      find_platform(:platform)
+      raise ActiveRecord::RecordNotFound if @platform_name.nil?
+      Project.platform(@platform_name)
+    else
+      Project
+    end
   end
 end
