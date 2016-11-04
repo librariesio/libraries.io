@@ -124,10 +124,8 @@ module Repositories
         save(project(name), include_versions)
       rescue SystemExit, Interrupt
         exit 0
-      rescue Exception => e
+      rescue Exception
         raise unless ENV["RACK_ENV"] == "production"
-        p name
-        p e
       end
     end
 
@@ -166,7 +164,6 @@ module Repositories
       name = mapped_project[:name]
       proj = Project.find_by(name: name, platform: self.name.demodulize)
       proj.versions.each do |version|
-        p mapped_project.keys
         deps = dependencies(name, version.number, mapped_project)
         next unless deps.any? && version.dependencies.empty?
         deps.each do |dep|
