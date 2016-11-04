@@ -1,4 +1,4 @@
-class GithubOrganisation < ActiveRecord::Base
+class GithubOrganisation < ApplicationRecord
   include Profile
 
   API_FIELDS = [:name, :login, :blog, :email, :location, :description]

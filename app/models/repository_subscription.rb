@@ -1,4 +1,4 @@
-class RepositorySubscription < ActiveRecord::Base
+class RepositorySubscription < ApplicationRecord
   belongs_to :user
   belongs_to :github_repository
   has_many :subscriptions

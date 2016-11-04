@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include Recommendable
 
   has_many :subscriptions, dependent: :destroy

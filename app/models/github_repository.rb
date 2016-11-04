@@ -1,4 +1,4 @@
-class GithubRepository < ActiveRecord::Base
+class GithubRepository < ApplicationRecord
   include RepoSearch
   include Status
   include RepoUrls
