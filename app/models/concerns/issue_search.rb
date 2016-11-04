@@ -294,7 +294,7 @@ module IssueSearch
 
     def self.label_filter_format(filters, labels_to_keep = ['help wanted'])
       labels_to_keep ||= ['help wanted']
-      filters.select { |k, v| v.present? }.map do |k, v|
+      filters.select { |_k, v| v.present? }.map do |k, v|
         if k == :labels
           labels_to_keep.map do |value|
             {
