@@ -10,9 +10,6 @@ namespace :deploy do
     on roles(:app) do |host|
       execute "restart librariesio"
     end
-    # on roles(:web) do |host|
-    #   execute "cd #{current_path} && bundle exec pumactl -P #{fetch(:puma_state)} restart"
-    # end
   end
   after :publishing, :restart
 end
