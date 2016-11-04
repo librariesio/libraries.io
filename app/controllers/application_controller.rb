@@ -119,21 +119,27 @@ class ApplicationController < ActionController::Base
   end
 
   def search_repos(query)
-    GithubRepository.search(query, filters: {
+    es_query(GithubRepository, query, {
       license: current_licenses,
       language: current_language,
       keywords: current_keywords,
       platforms: current_platforms
-    }, sort: format_sort, order: format_order).paginate(page: page_number, per_page: per_page_number)
+    })
   end
 
   def search_projects(query)
-    Project.search(query, filters: {
+    es_query(Project, query, {
       platform: current_platforms,
       normalized_licenses: current_licenses,
       language: current_languages,
       keywords_array: current_keywords
-    }, sort: format_sort, order: format_order).paginate(page: page_number, per_page: per_page_number)
+    })
+  end
+
+  def es_query(klass, query, filters)
+    klass.search(query, filters: filters,
+                        sort: format_sort,
+                        order: format_order).paginate(page: page_number, per_page: per_page_number)
   end
 
   def find_version
