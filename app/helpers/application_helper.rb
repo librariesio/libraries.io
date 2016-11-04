@@ -29,80 +29,6 @@ module ApplicationHelper
     ]
   end
 
-  def package_link(project, version = nil)
-    Repositories::Base.package_link(project, version)
-  end
-
-  def download_url(name, platform, version = nil)
-    case platform
-    when 'Rubygems'
-      "https://rubygems.org/downloads/#{name}-#{version}.gem"
-    when 'Atom'
-      "https://www.atom.io/api/packages/#{name}/versions/#{version}/tarball"
-    when 'Cargo'
-      "https://crates.io/api/v1/crates/#{name}/#{version}/download"
-    when 'CRAN'
-      "https://cran.r-project.org/src/contrib/#{name}_#{version}.tar.gz"
-    when 'Emacs'
-      "http://melpa.org/packages/#{name}-#{version}.tar"
-    when 'Hackage'
-      "http://hackage.haskell.org/package/#{name}-#{version}/#{name}-#{version}.tar.gz"
-    end
-  end
-
-  def documentation_url(name, platform, version = nil)
-    case platform
-    when 'Rubygems'
-      "http://www.rubydoc.info/gems/#{name}/#{version}"
-    when 'Go'
-      "http://godoc.org/#{name}"
-    when 'Pub'
-      "http://www.dartdocs.org/documentation/#{name}/#{version}"
-    when 'CRAN'
-      "http://cran.r-project.org/web/packages/#{name}/#{name}.pdf"
-    when 'Hex'
-      "http://hexdocs.pm/#{name}/#{version}"
-    when 'CocoaPods'
-      "http://cocoadocs.org/docsets/#{name}/#{version}"
-    end
-  end
-
-  def install_instructions(project, platform, version = nil)
-    name = project.name
-    case platform
-    when 'Rubygems'
-      "gem install #{name}" + (version ? " -v #{version}" : "")
-    when 'NPM'
-      "npm install #{name}" + (version ? "@#{version}" : "")
-    when 'Bower'
-      "bower install #{name}" + (version ? "##{version}" : "")
-    when 'Dub'
-      "dub fetch #{name}" + (version ? " --version #{version}" : "")
-    when 'Hackage'
-      "cabal install #{name}" + (version ? "-#{version}" : "")
-    when 'PyPi'
-      "pip install #{name}" + (version ? "==#{version}" : "")
-    when 'Atom'
-      "apm install #{name}" + (version ? "@#{version}" : "")
-    when 'Nimble'
-      "nimble install #{name}" + (version ? "@##{version}" : "")
-    when 'Go'
-      "go get #{name}"
-    when 'NuGet'
-      "Install-Package #{name}" + (version ? " -Version #{version}" : "")
-    when 'Meteor'
-      "meteor add #{name}" + (version ? "@=#{version}" : "")
-    when 'Elm'
-      "elm-package install #{name} #{version}"
-    when 'PlatformIO'
-      "platformio lib install #{project.pm_id}"
-    when 'Inqlude'
-      "inqlude install #{name}"
-    when 'Homebrew'
-      "brew install #{name}"
-    end
-  end
-
   def rss_url(project)
     if project.versions.size > 0
       project_versions_url({format: "atom"}.merge(project.to_param))
@@ -137,21 +63,6 @@ module ApplicationHelper
     keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/github/search?keywords=#{k}" }.join(', ').html_safe
   end
 
-  def platform_name(platform)
-    if platform.downcase == 'npm'
-      return 'npm'
-    elsif platform.downcase == 'wordpress'
-      return 'WordPress'
-    else
-      return platform
-    end
-  end
-
-  def favicon(size)
-    libicon = "https://libicons.herokuapp.com/favicon.ico"
-    @color ? "#{libicon}?hex=#{URI::escape(@color)}&size=#{size}" : "/favicon-#{size}.png"
-  end
-
   def format_license(license)
     return 'Unknown' if license.blank?
     Project.format_license(license)
@@ -184,26 +95,6 @@ module ApplicationHelper
     color = bool ? 'green' : 'red'
     tag = content_tag :i, '', class: "fa fa-#{icon_class}", style: "color:#{color}"
     !bool && negative ? content_tag(:i, negative) : tag
-  end
-
-  def dependency_platform(platform_string)
-    return platform_string if platform_string.nil?
-    case platform_string.downcase
-    when 'rubygemslockfile'
-      'rubygems'
-    when 'cocoapodslockfile'
-      'cocoapods'
-    when 'nugetlockfile', 'nuspec'
-      'nuget'
-    when 'packagistlockfile'
-      'packagist'
-    when 'gemspec'
-      'rubygems'
-    when 'npmshrinkwrap'
-      'npm'
-    else
-      platform_string.downcase
-    end
   end
 
   def source_path(github_repository)
@@ -246,60 +137,6 @@ module ApplicationHelper
       options = options.merge :renderer => BootstrapPagination::Rails
     end
     super(*[collection_or_options, options].compact)
-  end
-
-  def source_rank_badge_class(value)
-    if value > 0
-      'alert-success'
-    elsif value < 0
-      'alert-danger'
-    else
-      'alert-warning'
-    end
-  end
-
-  def source_rank_titles
-    {
-      basic_info_present:         'Basic info present?',
-      repository_present:         'GitHub repository present?',
-      readme_present:             'Readme present?',
-      license_present:            'License present?',
-      versions_present:           'Has multiple versions?',
-      follows_semver:             'Follows SemVer?',
-      recent_release:             'Recent release?',
-      not_brand_new:              'Not brand new?',
-      is_deprecated:              'Deprecated?',
-      is_unmaintained:            'Unmaintained?',
-      is_removed:                 'Removed?',
-      any_outdated_dependencies:  'Outdated dependencies?',
-      one_point_oh:               '1.0.0 or greater?',
-      all_prereleases:            'Prerelease?',
-      github_stars:               'GitHub stars',
-      dependent_projects:         'Dependent Projects',
-      dependent_repositories:     'Dependent Repositories',
-      contributors:               'Contributors',
-      subscribers:                'Libraries.io subscribers'
-    }
-  end
-
-  def source_rank_explainations
-    {
-      basic_info_present:         'Description, homepage/repository link and keywords present?',
-      versions_present:           'Has the project had more than one release?',
-      follows_semver:             'Every version has a valid SemVer number',
-      recent_release:             'Within the past 6 months?',
-      not_brand_new:              'Existed for at least 6 months',
-      is_deprecated:              'Marked as deprecated by the maintainer',
-      is_unmaintained:            'Marked as unmaintained by the maintainer',
-      is_removed:                 'Removed from the package manager',
-      all_prereleases:            'All versions are prerelease',
-      any_outdated_dependencies:  'At least one dependency is behind the latest version',
-      github_stars:               'Logarithmic scale',
-      dependent_projects:         'Logarithmic scale times two',
-      dependent_repositories:     'Logarithmic scale',
-      contributors:               'Logarithmic scale divided by two',
-      subscribers:                'Logarithmic scale divided by two'
-    }
   end
 
   def cp(path)
