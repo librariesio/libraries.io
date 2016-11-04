@@ -21,13 +21,17 @@ class ExploreController < ApplicationController
 
   helper_method :repo_search
   def repo_search(sort)
-    search = GithubRepository.search('', sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
+    search = search(GithubRepository)
     search.records
   end
 
   helper_method :project_search
   def project_search(sort)
-    search = Project.search('', sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
+    search = search(Project)
     search.records
+  end
+
+  def search(klass)
+    klass.search('', sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
   end
 end
