@@ -82,7 +82,7 @@ class GithubUser < ActiveRecord::Base
 
   def download_from_github
     update_attributes(github_client.user(github_id).to_hash.slice(:login, :name, :company, :blog, :location, :email, :bio, :followers, :following))
-  rescue GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -91,7 +91,7 @@ class GithubUser < ActiveRecord::Base
       GithubCreateOrgWorker.perform_async(org.login)
     end
     true
-  rescue GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -101,7 +101,7 @@ class GithubUser < ActiveRecord::Base
     end
 
     true
-  rescue GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 end

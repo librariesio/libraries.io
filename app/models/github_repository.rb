@@ -149,7 +149,7 @@ class GithubRepository < ActiveRecord::Base
         u.user_type = o.type
       end
     end
-  rescue IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -256,7 +256,7 @@ class GithubRepository < ActiveRecord::Base
     else
       readme.update_attributes(contents)
     end
-  rescue IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -273,7 +273,7 @@ class GithubRepository < ActiveRecord::Base
       save! if self.changed?
     rescue Octokit::NotFound
       update_attribute(:status, 'Removed') if !self.private?
-    rescue IGNORABLE_GITHUB_EXCEPTIONS
+    rescue *IGNORABLE_GITHUB_EXCEPTIONS
       nil
     end
   end
@@ -334,7 +334,7 @@ class GithubRepository < ActiveRecord::Base
       cont.save! if cont.changed?
     end
     true
-  rescue IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -367,7 +367,7 @@ class GithubRepository < ActiveRecord::Base
         end
       end
     end
-  rescue IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -457,7 +457,7 @@ class GithubRepository < ActiveRecord::Base
     issues.each do |issue|
       GithubIssue.create_from_hash(self, issue)
     end
-  rescue IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -466,7 +466,7 @@ class GithubRepository < ActiveRecord::Base
     repo_hash = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
     return false if repo_hash.nil? || repo_hash.empty?
     create_from_hash(repo_hash)
-  rescue IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
