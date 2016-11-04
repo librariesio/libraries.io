@@ -7,50 +7,35 @@ class Api::DocsController < ApplicationController
 
     @version = @project.versions.first
 
-    dependencies = @version.dependencies || []
-
-    deps = dependencies.map do |dependency|
-      {
-        project_name: dependency.project_name,
-        name: dependency.project_name,
-        platform: dependency.platform,
-        requirements: dependency.requirements,
-        latest_stable: dependency.try(:project).try(:latest_stable_release_number),
-        latest: dependency.try(:project).try(:latest_release_number),
-        deprecated: dependency.try(:project).try(:is_deprecated?),
-        outdated: dependency.outdated?
-      }
-    end
-
     @dependencies = @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords])
-    @dependencies[:dependencies] = deps
+    @dependencies[:dependencies] = map_dependencies(@version.dependencies || [])
 
     @github_repository = GithubRepository.find_by_full_name('gruntjs/grunt') || GithubRepository.first
-
-    @repo_dependencies = []
-
-    dependencies = @github_repository.repository_dependencies || []
-
-    deps = dependencies.map do |dependency|
-      {
-        project_name: dependency.project_name,
-        name: dependency.project_name,
-        platform: dependency.platform,
-        requirements: dependency.requirements,
-        latest_stable: dependency.try(:project).try(:latest_stable_release_number),
-        latest: dependency.try(:project).try(:latest_release_number),
-        deprecated: dependency.try(:project).try(:is_deprecated?),
-        outdated: dependency.outdated?
-      }
-    end
 
     @repo_dependencies = @github_repository.as_json({
       except: [:id, :github_organisation_id, :owner_id]
     })
-    @repo_dependencies[:dependencies] = deps
+    @repo_dependencies[:dependencies] = map_dependencies(@github_repository.repository_dependencies || [])
 
     @search = Project.search('grunt').records
 
     @github_user = GithubUser.find_by_login('andrew')
+  end
+
+  private
+
+  def map_dependencies(dependencies)
+    dependencies.map do |dependency|
+      {
+        project_name: dependency.project_name,
+        name: dependency.project_name,
+        platform: dependency.platform,
+        requirements: dependency.requirements,
+        latest_stable: dependency.try(:project).try(:latest_stable_release_number),
+        latest: dependency.try(:project).try(:latest_release_number),
+        deprecated: dependency.try(:project).try(:is_deprecated?),
+        outdated: dependency.outdated?
+      }
+    end
   end
 end
