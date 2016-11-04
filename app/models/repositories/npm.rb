@@ -63,17 +63,17 @@ module Repositories
 
     def self.versions(project)
       versions = if project['time']
-        project['time'].except("modified", "created").map do |k,v|
-          {
-            :number => k,
-            :published_at => v
-          }
-        end
-      else
-        project['versions'].map do |_k, v|
-          { :number => v['version'] }
-        end
-      end
+                   project['time'].except("modified", "created").map do |k,v|
+                     {
+                       :number => k,
+                       :published_at => v
+                     }
+                   end
+                 else
+                   project['versions'].map do |_k, v|
+                     { :number => v['version'] }
+                   end
+                 end
       versions.reject {|version,date| version_invalid?(project['name'], version[:number]) }
     end
 
