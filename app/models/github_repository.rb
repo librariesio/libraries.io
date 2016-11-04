@@ -3,6 +3,7 @@ class GithubRepository < ActiveRecord::Base
   include Status
   include RepoUrls
   include RepoManifests
+  include RepoTags
 
   IGNORABLE_GITHUB_EXCEPTIONS = [Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError]
 
@@ -266,39 +267,6 @@ class GithubRepository < ActiveRecord::Base
       cont.save! if cont.changed?
     end
     true
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
-  end
-
-  def download_tags(token = nil)
-    existing_tag_names = github_tags.pluck(:name)
-    github_client(token).refs(full_name, 'tags').each do |tag|
-      next unless tag['ref']
-      match = tag.ref.match(/refs\/tags\/(.*)/)
-      if match
-        name = match[1]
-        unless existing_tag_names.include?(name)
-
-          object = github_client(token).get(tag.object.url)
-
-          tag_hash = {
-            name: name,
-            kind: tag.object.type,
-            sha: tag.object.sha
-          }
-
-          # map depending on if its a commit or a tag
-          case tag.object.type
-          when 'commit'
-            tag_hash[:published_at] = object.committer.date
-          when 'tag'
-            tag_hash[:published_at] = object.tagger.date
-          end
-
-          github_tags.create!(tag_hash)
-        end
-      end
-    end
   rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
