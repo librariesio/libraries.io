@@ -191,4 +191,19 @@ class ApplicationController < ActionController::Base
   def project_json_response(projects)
     projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} })
   end
+
+  def map_dependencies(dependencies)
+    dependencies.map do |dependency|
+      {
+        project_name: dependency.project_name,
+        name: dependency.project_name,
+        platform: dependency.platform,
+        requirements: dependency.requirements,
+        latest_stable: dependency.try(:project).try(:latest_stable_release_number),
+        latest: dependency.try(:project).try(:latest_release_number),
+        deprecated: dependency.try(:project).try(:is_deprecated?),
+        outdated: dependency.outdated?
+      }
+    end
+  end
 end

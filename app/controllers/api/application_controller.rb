@@ -46,19 +46,4 @@ class Api::ApplicationController < ApplicationController
   def error_message
     { error: "Error 403, you don't have permissions for this operation." }
   end
-
-  def map_dependencies(dependencies)
-    dependencies.map do |dependency|
-      {
-        project_name: dependency.project_name,
-        name: dependency.project_name,
-        platform: dependency.platform,
-        requirements: dependency.requirements,
-        latest_stable: dependency.try(:project).try(:latest_stable_release_number),
-        latest: dependency.try(:project).try(:latest_release_number),
-        deprecated: dependency.try(:project).try(:is_deprecated?),
-        outdated: dependency.outdated?
-      }
-    end
-  end
 end
