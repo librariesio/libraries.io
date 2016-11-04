@@ -1,6 +1,7 @@
 class WebHooksController < ApplicationController
   before_action :ensure_logged_in
   before_action :load_repo
+  before_action :find_web_hook, only: [:test, :edit, :update, :destroy]
 
   def index
     @web_hooks = @github_repository.web_hooks.paginate(page: params[:page])
@@ -20,17 +21,11 @@ class WebHooksController < ApplicationController
   end
 
   def test
-    @web_hook = @github_repository.web_hooks.find(params[:id])
     @web_hook.send_test_payload
     redirect_to github_repository_web_hooks_path(@github_repository.owner_name, @github_repository.project_name), notice: 'Web hook test sent'
   end
 
-  def edit
-    @web_hook = @github_repository.web_hooks.find(params[:id])
-  end
-
   def update
-    @web_hook = @github_repository.web_hooks.find(params[:id])
     if @web_hook.update_attributes(web_hook_params)
       redirect_to github_repository_web_hooks_path(@github_repository.owner_name, @github_repository.project_name), notice: 'Web hook updated'
     else
@@ -39,12 +34,15 @@ class WebHooksController < ApplicationController
   end
 
   def destroy
-    @web_hook = @github_repository.web_hooks.find(params[:id])
     @web_hook.destroy
     redirect_to github_repository_web_hooks_path(@github_repository.owner_name, @github_repository.project_name), notice: 'Web hook deleted'
   end
 
   private
+
+  def find_web_hook
+    @web_hook = @github_repository.web_hooks.find(params[:id])
+  end
 
   def web_hook_params
     params.require(:web_hook).permit(:url)
