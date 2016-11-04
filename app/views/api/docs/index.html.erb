@@ -48,7 +48,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate project_json_response(@project) %></pre>
     <% end %>
     <h3 id='project-dependencies'>Project Dependencies</h3>
 
@@ -84,7 +84,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependents", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @project.dependent_projects.paginate(page: 1).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate project_json_response(@project.dependent_projects.paginate(page: 1)) %></pre>
     <% end %>
     <h3 id="project-dependent-repositories">Project Dependent Repositories</h3>
 
@@ -121,7 +121,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-search", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @search.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate project_json_response(@search) %></pre>
     <% end %>
     <h3 id='github-repository'>GitHub Repository</h3>
 
@@ -169,7 +169,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-github-repository-projects", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @github_repository.projects.includes(:versions, :github_repository).paginate(page: 1).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate project_json_response(@github_repository.projects.includes(:versions, :github_repository).paginate(page: 1)) %></pre>
     <% end %>
 
     <h3 id='github-user'>Github User</h3>
@@ -223,7 +223,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-projects", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @github_user.projects.includes(:versions, :github_repository).paginate(page: 1).as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} }) %></pre>
+<%= JSON.pretty_generate project_json_response(@github_user.projects.includes(:versions, :github_repository).paginate(page: 1)) %></pre>
     <% end %>
 
     <h3 id='subscriptions-index'>User Subscriptions</h3>

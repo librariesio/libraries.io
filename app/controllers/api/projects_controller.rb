@@ -30,7 +30,7 @@ class Api::ProjectsController < Api::ApplicationController
 
     raise ActiveRecord::RecordNotFound if version.nil?
 
-    project_json = @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords])
+    project_json = project_json_response(@project)
     project_json[:dependencies] = map_dependencies(version.dependencies || [])
 
     render json: project_json

@@ -7,7 +7,7 @@ class Api::DocsController < ApplicationController
 
     @version = @project.versions.first
 
-    @dependencies = @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords])
+    @dependencies = project_json_response(@project)
     @dependencies[:dependencies] = map_dependencies(@version.dependencies || [])
 
     @github_repository = GithubRepository.find_by_full_name('gruntjs/grunt') || GithubRepository.first
