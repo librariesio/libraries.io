@@ -11,6 +11,6 @@ class Api::StatusController < Api::ApplicationController
     else
       @projects = []
     end
-    render json: @projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords], include: {versions: {only: [:number, :published_at]} })
+    render json: project_json_response(@projects)
   end
 end
