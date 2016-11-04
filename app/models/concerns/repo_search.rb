@@ -85,12 +85,6 @@ module RepoSearch
       projects.map(&:platform).compact.uniq(&:downcase)
     end
 
-    def self.total
-      Rails.cache.fetch 'github_repositories:total', :expires_in => 1.hour, race_condition_ttl: 2.minutes do
-        __elasticsearch__.client.count(index: 'github_repositories')["count"]
-      end
-    end
-
     def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
       query = Project.sanitize_query(query)
