@@ -135,4 +135,31 @@ class ApplicationController < ActionController::Base
       keywords_array: current_keywords
     }, sort: format_sort, order: format_order).paginate(page: page_number, per_page: per_page_number)
   end
+
+  def find_version
+    @version_count = @project.versions.size
+    @github_repository = @project.github_repository
+    if @version_count.zero?
+      @versions = []
+      if @github_repository.present?
+        @github_tags = @github_repository.github_tags.published.order('published_at DESC').limit(10).to_a.sort
+        if params[:number].present?
+          @version = @github_repository.github_tags.published.find_by_name(params[:number])
+          raise ActiveRecord::RecordNotFound if @version.nil?
+        end
+      else
+        @github_tags = []
+      end
+      if @github_tags.empty?
+        raise ActiveRecord::RecordNotFound if params[:number].present?
+      end
+    else
+      @versions = @project.versions.sort.first(10)
+      if params[:number].present?
+        @version = @project.versions.find_by_number(params[:number])
+        raise ActiveRecord::RecordNotFound if @version.nil?
+      end
+    end
+    @version_number = @version.try(:number) || @project.latest_release_number
+  end
 end
