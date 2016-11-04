@@ -43,7 +43,7 @@ class GithubRepositoriesController < ApplicationController
     scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
     @repos = scope.hacker_news.paginate(page: page_number)
 
-    @languages = orginal_scope.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(40)
+    @languages = orginal_scope.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
   end
 
   def new
@@ -53,7 +53,7 @@ class GithubRepositoriesController < ApplicationController
     scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
     @repos = scope.recently_created.order('created_at DESC').paginate(page: page_number)
 
-    @languages = orginal_scope.recently_created.group('lower(language)').count.reject{|k,v| k.blank? }.sort_by{|k,v| v }.reverse.first(40)
+    @languages = orginal_scope.recently_created.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
   end
 
   def show
