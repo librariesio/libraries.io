@@ -100,29 +100,7 @@ module Searchable
             }
           }
         },
-        facets: {
-          language: { terms: {
-              field: "language",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :language)
-              }
-            }
-          },
-          licenses: {
-            terms: {
-              field: "normalized_licenses",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :normalized_licenses)
-              }
-            }
-          }
-        },
+        facets: facets_options(facet_limit, options),
         filter: {
           bool: {
             must: []
@@ -172,27 +150,7 @@ module Searchable
             }
           }
         },
-        facets: {
-          language: { terms: {
-              field: "language",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :language)
-              }
-            }
-          },
-          platforms: { terms: {
-            field: "platform",
-            size: facet_limit},
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :platform)
-              }
-            }
-          }
-        },
+        facets: facets_options(facet_limit, options),
         filter: {
           bool: {
             must: []
@@ -202,6 +160,32 @@ module Searchable
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       search_definition[:sort]  = [{'github_contributions_count' => 'asc'}, {'rank' => 'desc'}]
       __elasticsearch__.search(search_definition)
+    end
+
+    def self.facets_options(facet_limit, options)
+      {
+        language: { terms: {
+            field: "language",
+            size: facet_limit
+          },
+          facet_filter: {
+            bool: {
+              must: filter_format(options[:filters], :language)
+            }
+          }
+        },
+        licenses: {
+          terms: {
+            field: "normalized_licenses",
+            size: facet_limit
+          },
+          facet_filter: {
+            bool: {
+              must: filter_format(options[:filters], :normalized_licenses)
+            }
+          }
+        }
+      }
     end
 
     def self.search(original_query, options = {})
