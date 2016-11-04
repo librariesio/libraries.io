@@ -1,4 +1,6 @@
 class GithubUser < ActiveRecord::Base
+  include Profile
+
   has_many :github_contributions, dependent: :delete_all
   has_many :github_repositories, primary_key: :github_id, foreign_key: :owner_id
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
@@ -31,34 +33,8 @@ class GithubUser < ActiveRecord::Base
     github_contributions.joins(:github_repository).where("github_repositories.fork = ? AND github_repositories.private = ?", false, false)
   end
 
-  def top_favourite_projects
-    Project.where(id: top_favourite_project_ids).maintained.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
-  end
-
-  def top_favourite_project_ids
-    Rails.cache.fetch "user:#{self.id}:top_favourite_project_ids:v2", :expires_in => 1.week, race_condition_ttl: 2.minutes do
-      favourite_projects.limit(10).pluck(:id)
-    end
-  end
-
-  def avatar_url(size = 60)
-    "https://avatars.githubusercontent.com/u/#{github_id}?size=#{size}"
-  end
-
   def org?
     false
-  end
-
-  def github_url
-    "https://github.com/#{login}"
-  end
-
-  def to_s
-    name.presence || login
-  end
-
-  def to_param
-    login
   end
 
   def description
