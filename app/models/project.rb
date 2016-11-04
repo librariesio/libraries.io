@@ -1,6 +1,8 @@
 class Project < ActiveRecord::Base
   include Searchable
   include SourceRank
+  include Status
+
   HAS_DEPENDENCIES = false
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
   API_FIELDS = [:name, :platform, :description, :language, :homepage,
@@ -58,13 +60,11 @@ class Project < ActiveRecord::Base
 
   scope :indexable, -> { not_removed.includes(:versions, github_repository: :github_tags) }
 
-  scope :bus_factor, -> {
-                          maintained
+  scope :bus_factor, -> { maintained
                           .joins(:github_repository)
                           .where('github_repositories.github_contributions_count < 6')
                           .where('github_repositories.github_contributions_count > 0')
-                          .where('github_repositories.stargazers_count > 0')
-                        }
+                          .where('github_repositories.stargazers_count > 0')}
 
   scope :hacker_news, -> { with_repo.where('github_repositories.stargazers_count > 0').order("((github_repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-github_repositories.created_at)/3600)+2,1.8)) DESC") }
   scope :recently_created, -> { with_repo.where('github_repositories.created_at > ?', 14.days.ago)}
@@ -112,22 +112,6 @@ class Project < ActiveRecord::Base
     elsif github_tags.published.length > 0
       github_tags.published.all?(&:follows_semver?)
     end
-  end
-
-  def is_deprecated?
-    status == 'Deprecated'
-  end
-
-  def is_removed?
-    status == 'Removed'
-  end
-
-  def is_unmaintained?
-    status == 'Unmaintained'
-  end
-
-  def maintained?
-    !is_deprecated? && !is_removed? && !is_unmaintained?
   end
 
   def stable_releases

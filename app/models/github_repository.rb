@@ -1,5 +1,7 @@
 class GithubRepository < ActiveRecord::Base
   include RepoSearch
+  include Status
+  include RepoUrls
 
   IGNORABLE_GITHUB_EXCEPTIONS = [Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError]
 
@@ -94,22 +96,6 @@ class GithubRepository < ActiveRecord::Base
     end
   end
 
-  def is_deprecated?
-    status == 'Deprecated'
-  end
-
-  def is_removed?
-    status == 'Removed'
-  end
-
-  def is_unmaintained?
-    status == 'Unmaintained'
-  end
-
-  def maintained?
-    !is_deprecated? && !is_removed? && !is_unmaintained?
-  end
-
   def deprecate!
     update_attribute(:status, 'Deprecated')
     projects.each do |project|
@@ -179,62 +165,6 @@ class GithubRepository < ActiveRecord::Base
 
   def forks
     forks_count || 0
-  end
-
-  def pages_url
-    "http://#{owner_name}.github.io/#{project_name}"
-  end
-
-  def wiki_url
-    "#{url}/wiki"
-  end
-
-  def watchers_url
-    "#{url}/watchers"
-  end
-
-  def forks_url
-    "#{url}/network"
-  end
-
-  def stargazers_url
-    "#{url}/stargazers"
-  end
-
-  def issues_url
-    "#{url}/issues"
-  end
-
-  def contributors_url
-    "#{url}/graphs/contributors"
-  end
-
-  def url
-    "https://github.com/#{full_name}"
-  end
-
-  def source_url
-    "https://github.com/#{source_name}"
-  end
-
-  def blob_url
-    "#{url}/blob/#{default_branch}/"
-  end
-
-  def raw_url
-    "#{url}/raw/#{default_branch}/"
-  end
-
-  def commits_url
-    "#{url}/commits"
-  end
-
-  def readme_url
-    "#{url}#readme"
-  end
-
-  def tags_url
-    "#{url}/tags"
   end
 
   def avatar_url(size = 60)
