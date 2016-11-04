@@ -214,7 +214,7 @@ class User < ActiveRecord::Base
     remove_ids = existing_repo_ids - current_repo_ids
     repository_permissions.where(github_repository_id: remove_ids).delete_all if remove_ids.any?
 
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   ensure
     self.update_columns(last_synced_at: Time.now, currently_syncing: false)
@@ -232,7 +232,7 @@ class User < ActiveRecord::Base
     github_client.orgs.each do |org|
       GithubCreateOrgWorker.perform_async(org.login)
     end
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 

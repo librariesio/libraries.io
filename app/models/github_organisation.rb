@@ -88,7 +88,7 @@ class GithubOrganisation < ActiveRecord::Base
       g.assign_attributes r.slice(*GithubOrganisation::API_FIELDS)
       g.save
       g
-    rescue *IGNORABLE_GITHUB_EXCEPTIONS
+    rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
       false
     end
   end
@@ -105,7 +105,7 @@ class GithubOrganisation < ActiveRecord::Base
 
   def download_from_github
     update_attributes(github_client.org(github_id).to_hash.slice(:login, :name, :email, :blog, :location, :description))
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -113,7 +113,7 @@ class GithubOrganisation < ActiveRecord::Base
     github_client.org_repos(login).each do |repo|
       GithubCreateWorker.perform_async(repo.full_name)
     end
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 end
