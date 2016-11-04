@@ -36,12 +36,7 @@ class Api::GithubRepositoriesController < Api::ApplicationController
   end
 
   def search
-    @search = paginate GithubRepository.search(params[:q], filters: {
-      license: current_licenses,
-      language: current_languages,
-      keywords: current_keywords,
-      platforms: current_platforms
-    }, sort: format_sort, order: format_order), page: page_number, per_page: per_page_number
+    @search = paginate(search_repos(params[:q]))
     @github_repositories = @search.records
     render json: @github_repositories.as_json({ except: [:id, :github_organisation_id, :owner_id] })
   end

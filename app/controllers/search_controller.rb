@@ -1,12 +1,7 @@
 class SearchController < ApplicationController
   def index
     @query = params[:q]
-    @search = Project.search(params[:q], filters: {
-      platform: current_platforms,
-      normalized_licenses: current_licenses,
-      language: current_languages,
-      keywords_array: current_keywords
-    }, sort: format_sort, order: format_order).paginate(page: page_number, per_page: per_page_number)
+    @search = search_projects(@query)
     @suggestion = @search.response.suggest.did_you_mean.first
     @projects = @search.records.includes(:github_repository, :versions)
     @title = page_title

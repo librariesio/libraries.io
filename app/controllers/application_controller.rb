@@ -117,4 +117,22 @@ class ApplicationController < ActionController::Base
     }), page: page_number, per_page: per_page_number
     @github_issues = @search.records.includes(:github_repository)
   end
+
+  def search_repos(query)
+    GithubRepository.search(query, filters: {
+      license: current_licenses,
+      language: current_language,
+      keywords: current_keywords,
+      platforms: current_platforms
+    }, sort: format_sort, order: format_order).paginate(page: page_number, per_page: per_page_number)
+  end
+
+  def search_projects(query)
+    Project.search(query, filters: {
+      platform: current_platforms,
+      normalized_licenses: current_licenses,
+      language: current_languages,
+      keywords_array: current_keywords
+    }, sort: format_sort, order: format_order).paginate(page: page_number, per_page: per_page_number)
+  end
 end
