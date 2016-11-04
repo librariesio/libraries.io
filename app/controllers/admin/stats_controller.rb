@@ -25,6 +25,6 @@ class Admin::StatsController < Admin::ApplicationController
 
   def stats_for(klass)
     period = 3.days.ago.beginning_of_day
-    klass.where('created_at > ?', period).group("date(created_at)").count.sort_by{|k,v| k }.reverse
+    klass.where('created_at > ?', period).group("date(created_at)").count.sort_by{|k,_v| k }.reverse
   end
 end

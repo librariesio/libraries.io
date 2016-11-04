@@ -10,7 +10,7 @@ module Recommendable
   def recommended_project_ids
     Rails.cache.fetch "recommendations:#{self.id}", :expires_in => 1.day do
       ids = favourite_recommendation_ids + most_depended_on_recommendation_ids + most_watched_recommendation_ids
-      ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.map(&:first)
+      ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|_k,v| -v}.map(&:first)
     end
   end
 
@@ -40,7 +40,7 @@ module Recommendable
 
   def unfiltered_recommendations
     ids = Project.maintained.most_dependents.limit(50).pluck(:id) + Project.maintained.most_watched.limit(50).pluck(:id)
-    ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.map(&:first)
+    ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|_k,v| -v}.map(&:first)
     Project.where(id: ids).order('projects.rank DESC').maintained
   end
 
@@ -59,7 +59,7 @@ module Recommendable
       # Repositories your subscribed to (twice to bump those languages)
       languages += subscribed_projects.pluck(:language).compact + subscribed_projects.pluck(:language).compact
 
-      languages = languages.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|k,v| -v}.first(limit).map(&:first)
+      languages = languages.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|_k,v| -v}.first(limit).map(&:first)
       languages ||= []
     end
   end

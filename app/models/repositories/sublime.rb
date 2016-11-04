@@ -5,7 +5,7 @@ module Repositories
     URL = 'https://packagecontrol.io'
 
     def self.project_names
-      get("https://packagecontrol.io/channel.json")['packages_cache'].map{|k,v| v[0]['name']}
+      get("https://packagecontrol.io/channel.json")['packages_cache'].map{|_k,v| v[0]['name']}
     end
 
     def self.project(name)

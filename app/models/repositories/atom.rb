@@ -40,7 +40,7 @@ module Repositories
     end
 
     def self.versions(project)
-      project['versions'].map do |k,v|
+      project['versions'].map do |k,_v|
         {
           :number => k,
           :published_at => nil
