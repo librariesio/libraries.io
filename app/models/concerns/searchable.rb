@@ -59,7 +59,6 @@ module Searchable
 
     def self.bus_factor_search(options = {})
       facet_limit = options.fetch(:facet_limit, 35)
-      query = sanitize_query(query)
       options[:filters] ||= []
       search_definition = {
         query: {
@@ -137,7 +136,6 @@ module Searchable
 
     def self.unlicensed_search(options = {})
       facet_limit = options.fetch(:facet_limit, 35)
-      query = sanitize_query(query)
       options[:filters] ||= []
       search_definition = {
         query: {
@@ -328,11 +326,7 @@ module Searchable
 
     def self.filter_format(filters, except = nil)
       filters.select { |k, v| v.present? && k != except }.map do |k, v|
-        Array(v).map do |value|
-          {
-            terms: { k => v.split(',') }
-          }
-        end
+        Array(v).map { { terms: { k => v.split(',') } } }
       end
     end
 
