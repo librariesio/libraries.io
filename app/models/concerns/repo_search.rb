@@ -158,21 +158,7 @@ module RepoSearch
       search_definition[:filter][:bool][:must] = Project.filter_format(options[:filters])
 
       if query.present?
-        search_definition[:query][:function_score][:query][:filtered][:query] = {
-          bool: {
-            should: [
-              { multi_match: {
-                  query: query,
-                  fields: FIELDS,
-                  fuzziness: 1.2,
-                  slop: 2,
-                  type: 'cross_fields',
-                  operator: 'and'
-                }
-              }
-            ]
-          }
-        }
+        search_definition[:query][:function_score][:query][:filtered][:query] = Project.query_options(query, FIELDS)
       elsif options[:sort].blank?
         search_definition[:sort]  = [{'stargazers_count' => 'desc'}]
       end

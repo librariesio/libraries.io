@@ -181,21 +181,7 @@ module Searchable
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
 
       if query.present?
-        search_definition[:query][:function_score][:query][:filtered][:query] = {
-          bool: {
-            should: [
-              { multi_match: {
-                  query: query,
-                  fields: FIELDS,
-                  fuzziness: 1.2,
-                  slop: 2,
-                  type: 'cross_fields',
-                  operator: 'and'
-                }
-              }
-            ]
-          }
-        }
+        search_definition[:query][:function_score][:query][:filtered][:query] = query_options(query, FIELDS)
       elsif options[:sort].blank?
         search_definition[:sort]  = [{'rank' => 'desc'}, {'stars' => 'desc'}]
       end
@@ -208,6 +194,25 @@ module Searchable
       end
 
       __elasticsearch__.search(search_definition)
+    end
+
+    def self.query_options(query, fields)
+      {
+        bool: {
+          should: [
+            {
+              multi_match: {
+                query: query,
+                fields: fields,
+                fuzziness: 1.2,
+                slop: 2,
+                type: 'cross_fields',
+                operator: 'and'
+              }
+            }
+          ]
+        }
+      }
     end
 
     def self.filter_format(filters, except = nil)
