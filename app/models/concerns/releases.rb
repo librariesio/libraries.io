@@ -1,0 +1,68 @@
+module Releases
+  def stable_releases
+    versions.select(&:stable?)
+  end
+
+  def prereleases
+    versions.select(&:prerelease?)
+  end
+
+  def latest_stable_version
+    @latest_version ||= stable_releases.sort.first
+  end
+
+  def latest_stable_tag
+    return nil if github_repository.nil?
+    github_tags.published.select(&:stable?).sort.first
+  end
+
+  def latest_stable_release
+    latest_stable_version || latest_stable_tag
+  end
+
+  def latest_stable_release_number
+    latest_stable_release.try(:number)
+  end
+
+  def latest_version
+    @latest_version ||= versions.sort.first
+  end
+
+  def latest_tag
+    return nil if github_repository.nil?
+    github_tags.published.order('published_at DESC').first
+  end
+
+  def latest_release
+    latest_version || latest_tag
+  end
+
+  def first_version
+    @first_version ||= versions.sort.last
+  end
+
+  def first_tag
+    return nil if github_repository.nil?
+    github_tags.published.order('published_at ASC').first
+  end
+
+  def first_release
+    first_version || first_tag
+  end
+
+  def latest_release_published_at
+    read_attribute(:latest_release_published_at) || (latest_release.try(:published_at).presence || updated_at)
+  end
+
+  def set_latest_release_published_at
+    self.latest_release_published_at = (latest_release.try(:published_at).presence || updated_at)
+  end
+
+  def set_latest_release_number
+    self.latest_release_number = latest_release.try(:number)
+  end
+
+  def latest_release_number
+    read_attribute(:latest_release_number) || latest_release.try(:number)
+  end
+end
