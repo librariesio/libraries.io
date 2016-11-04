@@ -7,13 +7,7 @@ class UsersController < ApplicationController
     if @user.org?
       @contributions = []
     else
-      @contributions = @user.github_contributions.with_repo
-                          .joins(:github_repository)
-                          .where('github_repositories.owner_id != ?', @user.github_id.to_s)
-                          .where('github_repositories.fork = ?', false)
-                          .where('github_repositories.private = ?', false)
-                          .includes(:github_repository)
-                          .order('count DESC').limit(6)
+      @contributions = find_contributions.limit(6)
     end
   end
 
@@ -24,13 +18,7 @@ class UsersController < ApplicationController
 
   def contributions
     find_user
-    @contributions = @user.github_contributions.with_repo
-                          .joins(:github_repository)
-                          .where('github_repositories.owner_id != ?', @user.github_id.to_s)
-                          .where('github_repositories.fork = ?', false)
-                          .where('github_repositories.private = ?', false)
-                          .includes(:github_repository)
-                          .order('count DESC').paginate(page: page_number)
+    @contributions = find_contributions.paginate(page: page_number)
   end
 
   def projects
@@ -51,5 +39,15 @@ class UsersController < ApplicationController
     @user = GithubOrganisation.visible.where("lower(login) = ?", params[:login].downcase).first if @user.nil?
     raise ActiveRecord::RecordNotFound if @user.nil?
     redirect_to user_path(@user), :status => :moved_permanently if params[:login] != @user.login
+  end
+
+  def find_contributions
+    @user.github_contributions.with_repo
+                              .joins(:github_repository)
+                              .where('github_repositories.owner_id != ?', @user.github_id.to_s)
+                              .where('github_repositories.fork = ?', false)
+                              .where('github_repositories.private = ?', false)
+                              .includes(:github_repository)
+                              .order('count DESC')
   end
 end
