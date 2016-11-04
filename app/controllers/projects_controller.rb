@@ -37,18 +37,15 @@ class ProjectsController < ApplicationController
   end
 
   def deprecated
-    @platforms = Project.deprecated.group('platform').count.sort_by(&:last).reverse
-    @projects = platform_scope.deprecated.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    project_scope(:deprecated)
   end
 
   def removed
-    @platforms = Project.removed.group('platform').count.sort_by(&:last).reverse
-    @projects = platform_scope.removed.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    project_scope(:removed)
   end
 
   def unmaintained
-    @platforms = Project.unmaintained.group('platform').count.sort_by(&:last).reverse
-    @projects = v.unmaintained.includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    project_scope(:unmaintained)
   end
 
   def show
@@ -169,5 +166,10 @@ class ProjectsController < ApplicationController
     else
       Project
     end
+  end
+
+  def project_scope(scope_name)
+    @platforms = Project.send(scope_name).group('platform').count.sort_by(&:last).reverse
+    @projects = platform_scope.send(scope_name).includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 end
