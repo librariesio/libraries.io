@@ -101,11 +101,7 @@ module Searchable
           }
         },
         facets: facets_options(facet_limit, options),
-        filter: {
-          bool: {
-            must: []
-          }
-        }
+        filter: { bool: { must: [] } }
       }
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       search_definition[:sort]  = [{'github_contributions_count' => 'asc'}, {'rank' => 'desc'}]
@@ -151,11 +147,7 @@ module Searchable
           }
         },
         facets: facets_options(facet_limit, options),
-        filter: {
-          bool: {
-            must: []
-          }
-        }
+        filter: { bool: { must: [] } }
       }
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       search_definition[:sort]  = [{'github_contributions_count' => 'asc'}, {'rank' => 'desc'}]
@@ -259,11 +251,7 @@ module Searchable
             }
           }
         },
-        filter: {
-          bool: {
-            must: []
-          }
-        },
+        filter: { bool: { must: [] } },
         suggest: {
           did_you_mean: {
             text: query,
