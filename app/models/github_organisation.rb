@@ -117,6 +117,4 @@ class GithubOrganisation < ActiveRecord::Base
   rescue Octokit::Unauthorized, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError
     nil
   end
-
-  # TODO download members
 end
