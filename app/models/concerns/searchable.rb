@@ -57,7 +57,7 @@ module Searchable
       end
     end
 
-    def self.bus_factor_search(options = {})
+    def self.cta_search(filters, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
       options[:filters] ||= []
       search_definition = {
@@ -65,33 +65,8 @@ module Searchable
           function_score: {
             query: {
               filtered: {
-                 query: {match_all: {}},
-                 filter:{
-                   bool: {
-                     must: [
-                      {
-                        range: {
-                          github_contributions_count: {
-                            lte: 5,
-                            gte: 1
-                          }
-                        }
-                      }
-                     ],
-                     must_not: [
-                       {
-                         term: {
-                           "status" => "Removed"
-                         },
-                       },
-                       {
-                         term: {
-                           "status" => "Unmaintained"
-                         }
-                       }
-                     ]
-                  }
-                }
+                query: { match_all: {} },
+                filter:{ bool: filters }
               }
             },
             field_value_factor: {
@@ -108,50 +83,26 @@ module Searchable
       __elasticsearch__.search(search_definition)
     end
 
+    def self.bus_factor_search(options = {})
+      cta_search({
+        must: [
+          { range: { github_contributions_count: { lte: 5, gte: 1 } } }
+        ],
+        must_not: [
+          { term: { "status" => "Removed" } },
+          { term: { "status" => "Unmaintained" } }
+        ]
+      }, options)
+    end
+
     def self.unlicensed_search(options = {})
-      facet_limit = options.fetch(:facet_limit, 35)
-      options[:filters] ||= []
-      search_definition = {
-        query: {
-          function_score: {
-            query: {
-              filtered: {
-                 query: {match_all: {}},
-                 filter:{
-                   bool: {
-                     must_not: [
-                       {
-                         exists: {
-                           field: "normalized_licenses"
-                         },
-                       },
-                       {
-                         term: {
-                           "status" => "Removed"
-                         },
-                       },
-                       {
-                         term: {
-                           "status" => "Unmaintained"
-                         }
-                       }
-                     ]
-                  }
-                }
-              }
-            },
-            field_value_factor: {
-              field: "rank",
-              "modifier": "square"
-            }
-          }
-        },
-        facets: facets_options(facet_limit, options),
-        filter: { bool: { must: [] } }
-      }
-      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
-      search_definition[:sort]  = [{'github_contributions_count' => 'asc'}, {'rank' => 'desc'}]
-      __elasticsearch__.search(search_definition)
+      cta_search({
+        must_not: [
+          { exists: { field: "normalized_licenses" } },
+          { term: { "status" => "Removed" } },
+          { term: { "status" => "Unmaintained" } }
+        ]
+      }, options)
     end
 
     def self.facets_options(facet_limit, options)
