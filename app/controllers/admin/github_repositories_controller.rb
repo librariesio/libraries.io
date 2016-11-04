@@ -14,17 +14,11 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   end
 
   def deprecate
-    @github_repository = GithubRepository.find(params[:id])
-    @github_repository.deprecate!
-    @github_repository.update_all_info_async
-    redirect_to github_repository_path(@github_repository.owner_name, @github_repository.project_name)
+    change(:deprecate!)
   end
 
   def unmaintain
-    @github_repository = GithubRepository.find(params[:id])
-    @github_repository.unmaintain!
-    @github_repository.update_all_info_async
-    redirect_to github_repository_path(@github_repository.owner_name, @github_repository.project_name)
+    change(:unmaintain!)
   end
 
   def index
@@ -41,22 +35,30 @@ class Admin::GithubRepositoriesController < Admin::ApplicationController
   end
 
   def deprecated
-    @search = GithubRepository.search('deprecated', must_not: [
-      terms: { "status" => ["Unmaintained","Active","Deprecated"] }
-    ], sort: 'stargazers_count').paginate(page: params[:page])
-    @github_repositories = @search.records
+    search('deprecated')
   end
 
   def unmaintained
-    @search = GithubRepository.search('unmaintained', must_not: [
-      terms: { "status" => ["Unmaintained","Active","Deprecated"] }
-    ], sort: 'stargazers_count').paginate(page: params[:page])
-    @github_repositories = @search.records
+    search('unmaintained')
   end
 
   private
 
   def github_repository_params
     params.require(:github_repository).permit(:license, :status)
+  end
+
+  def search(query)
+    @search = GithubRepository.search(query, must_not: [
+      terms: { "status" => ["Unmaintained","Active","Deprecated"] }
+    ], sort: 'stargazers_count').paginate(page: params[:page])
+    @github_repositories = @search.records
+  end
+
+  def change(method)
+    @github_repository = GithubRepository.find(params[:id])
+    @github_repository.send(method)
+    @github_repository.update_all_info_async
+    redirect_to github_repository_path(@github_repository.owner_name, @github_repository.project_name)
   end
 end
