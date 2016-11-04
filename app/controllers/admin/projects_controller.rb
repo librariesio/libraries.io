@@ -28,34 +28,24 @@ class Admin::ProjectsController < Admin::ApplicationController
   end
 
   def deprecated
-    @search = Project.search('deprecated', filters: {
-      platform: params[:platform]
-    }, sort: params[:sort], order: params[:order])
-
-    @projects = @search.records.where("status IS ? OR status = ''", nil).order('projects.rank DESC, name DESC').paginate(page: params[:page])
-
-    # if @projects.empty?
-    #   repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%deprecated%'").pluck(:id)
-    #   @projects = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).order('projects.rank DESC, name DESC').paginate(page: params[:page])
-    # end
+    search('deprecated')
   end
 
   def unmaintained
-    @search = Project.search('unmaintained', filters: {
-      platform: params[:platform]
-    }, sort: params[:sort], order: params[:order])
-
-    @projects = @search.records.where("status IS ? OR status = ''", nil).order('projects.rank DESC, name DESC').paginate(page: params[:page])
-
-    # if @projects.empty?
-    #   repo_ids = GithubRepository.with_projects.where("github_repositories.description ilike '%maintained%'").pluck(:id)
-    #   @projects = Project.where("status IS ? OR status = ''", nil).where(github_repository_id: repo_ids).order('projects.rank DESC, name DESC').paginate(page: params[:page])
-    # end
+    search('unmaintained')
   end
 
   private
 
   def project_params
     params.require(:project).permit(:repository_url, :licenses, :status)
+  end
+
+  def search(query)
+    @search = Project.search(query, filters: {
+      platform: params[:platform]
+    }, sort: params[:sort], order: params[:order])
+
+    @projects = @search.records.where("status IS ? OR status = ''", nil).order('projects.rank DESC, name DESC').paginate(page: params[:page])
   end
 end
