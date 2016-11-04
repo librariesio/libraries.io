@@ -4,20 +4,11 @@ class GithubIssuesController < ApplicationController
   end
 
   def help_wanted
-    @search = GithubIssue.search('', filters: {
-      license: current_license,
-      language: current_language,
-      labels: (['help wanted'] + [params[:labels]]).compact
-    }).paginate(page: page_number, per_page: per_page_number)
-    @github_issues = @search.records.includes(:github_repository)
+    search_issues((['help wanted'] + [params[:labels]]).compact)
   end
 
   def first_pull_request
-    @search = GithubIssue.first_pr_search('', filters: {
-      license: current_license,
-      language: current_language,
-      labels: params[:labels]
-    }).paginate(page: page_number, per_page: per_page_number)
+    search_issues(params[:labels])
     @github_issues = @search.records.includes(:github_repository)
   end
 
@@ -29,5 +20,14 @@ class GithubIssuesController < ApplicationController
 
   def current_license
     params[:license] if params[:license].present?
+  end
+
+  def search_issues(labels)
+    @search = paginate GithubIssue.search('', filters: {
+      license: current_license,
+      language: current_language,
+      labels: labels
+    }), page: page_number, per_page: per_page_number
+    @github_issues = @search.records.includes(:github_repository)
   end
 end
