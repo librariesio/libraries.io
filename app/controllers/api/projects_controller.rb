@@ -30,23 +30,8 @@ class Api::ProjectsController < Api::ApplicationController
 
     raise ActiveRecord::RecordNotFound if version.nil?
 
-    dependencies = version.dependencies || []
-
-    deps = dependencies.map do |dependency|
-      {
-        project_name: dependency.project_name,
-        name: dependency.project_name,
-        platform: dependency.platform,
-        requirements: dependency.requirements,
-        latest_stable: dependency.try(:project).try(:latest_stable_release_number),
-        latest: dependency.try(:project).try(:latest_release_number),
-        deprecated: dependency.try(:project).try(:is_deprecated?),
-        outdated: dependency.outdated?
-      }
-    end
-
     project_json = @project.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords])
-    project_json[:dependencies] = deps
+    project_json[:dependencies] = map_dependencies(version.dependencies || [])
 
     render json: project_json
   end

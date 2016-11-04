@@ -21,21 +21,4 @@ class Api::DocsController < ApplicationController
 
     @github_user = GithubUser.find_by_login('andrew')
   end
-
-  private
-
-  def map_dependencies(dependencies)
-    dependencies.map do |dependency|
-      {
-        project_name: dependency.project_name,
-        name: dependency.project_name,
-        platform: dependency.platform,
-        requirements: dependency.requirements,
-        latest_stable: dependency.try(:project).try(:latest_stable_release_number),
-        latest: dependency.try(:project).try(:latest_release_number),
-        deprecated: dependency.try(:project).try(:is_deprecated?),
-        outdated: dependency.outdated?
-      }
-    end
-  end
 end

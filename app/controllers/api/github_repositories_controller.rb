@@ -12,25 +12,10 @@ class Api::GithubRepositoriesController < Api::ApplicationController
   end
 
   def dependencies
-    dependencies = @github_repository.repository_dependencies || []
-
-    deps = dependencies.map do |dependency|
-      {
-        project_name: dependency.project_name,
-        name: dependency.project_name,
-        platform: dependency.platform,
-        requirements: dependency.requirements,
-        latest_stable: dependency.try(:project).try(:latest_stable_release_number),
-        latest: dependency.try(:project).try(:latest_release_number),
-        deprecated: dependency.try(:project).try(:is_deprecated?),
-        outdated: dependency.outdated?
-      }
-    end
-
     repo_json = @github_repository.as_json({
       except: [:id, :github_organisation_id, :owner_id]
     })
-    repo_json[:dependencies] = deps
+    repo_json[:dependencies] = map_dependencies(@github_repository.repository_dependencies || [])
 
     render json: repo_json
   end
