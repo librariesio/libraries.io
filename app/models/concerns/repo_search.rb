@@ -133,38 +133,9 @@ module RepoSearch
           }
         },
         facets: {
-          language: { terms: {
-              field: "language",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: Project.filter_format(options[:filters], :language)
-              }
-            }
-          },
-          license: {
-            terms: {
-              field: "license",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: Project.filter_format(options[:filters], :license)
-              }
-            }
-          },
-          keywords: {
-            terms: {
-              field: "keywords",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: Project.filter_format(options[:filters], :keywords)
-              }
-            }
-          }
+          language: Project.facet_filter(:language, facet_limit, options),
+          license: Project.facet_filter(:license, facet_limit, options),
+          keywords: Project.facet_filter(:keywords, facet_limit, options)
         },
         filter: {
           bool: {

@@ -160,47 +160,10 @@ module Searchable
           }
         },
         facets: {
-          platforms: { terms: {
-            field: "platform",
-            size: facet_limit},
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :platform)
-              }
-            }
-          },
-          languages: { terms: {
-              field: "language",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :language)
-              }
-            }
-          },
-          keywords: {
-            terms: {
-              field: "keywords_array",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :keywords_array)
-              }
-            }
-          },
-          licenses: {
-            terms: {
-              field: "normalized_licenses",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :normalized_licenses)
-              }
-            }
-          }
+          platforms: facet_filter(:platform, facet_limit, options),
+          languages: facet_filter(:language, facet_limit, options),
+          keywords: facet_filter(:keywords_array, facet_limit, options),
+          licenses: facet_filter(:normalized_licenses, facet_limit, options)
         },
         filter: { bool: { must: [] } },
         suggest: {
@@ -272,6 +235,20 @@ module Searchable
       str = str.gsub(/(.*)"(.*)/, '\1\"\3') if quote_count % 2 == 1
 
       str
+    end
+
+    def self.facet_filter(name, limit, options)
+      {
+        terms: {
+          field: name.to_s,
+          size: limit
+        },
+        facet_filter: {
+          bool: {
+            must: filter_format(options[:filters], name.to_sym)
+          }
+        }
+      }
     end
   end
 end
