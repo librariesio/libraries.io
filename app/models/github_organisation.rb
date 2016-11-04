@@ -24,7 +24,7 @@ class GithubOrganisation < ActiveRecord::Base
   def meta_tags
     {
       title: "#{self} on GitHub",
-      description: "GitHub repositories created and contributed to by #{self}",
+      description: "GitHub repositories created by #{self}",
       image: avatar_url(200)
     }
   end
