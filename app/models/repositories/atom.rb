@@ -48,7 +48,7 @@ module Repositories
       end
     end
 
-    def self.dependencies(name, version, project)
+    def self.dependencies(name, version, _project)
       deps = get("https://atom.io/api/packages/#{name}/versions/#{version}")["dependencies"] || []
       deps.map do |dep_name,req|
         {

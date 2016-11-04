@@ -82,8 +82,8 @@ module Repositories
       end
     end
 
-    def self.dependencies(name, version, project)
-      current_version = project[:releases].find{|v| v['catalogEntry']['version'] == version }
+    def self.dependencies(name, version, mapped_project)
+      current_version = mapped_project[:releases].find{|v| v['catalogEntry']['version'] == version }
       dep_groups = current_version['catalogEntry']['dependencyGroups'] || []
 
       deps = dep_groups.map do |dep_group|

@@ -51,7 +51,7 @@ module Repositories
       end
     end
 
-    def self.dependencies(name, version, project)
+    def self.dependencies(name, version, _project)
       vers = project(name)['versions'][version]
       return [] if vers.nil?
       vers.fetch('require', {}).reject{|k,v| k == 'php' }.map do |k,v|

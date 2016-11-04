@@ -40,7 +40,7 @@ module Repositories
       end
     end
 
-    def self.dependencies(name, version, project)
+    def self.dependencies(name, version, _project)
       proj = project(name)
       vers = proj['versions'].find{|v| v['version'] == version }
 
