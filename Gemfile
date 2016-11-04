@@ -81,7 +81,6 @@ end
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'coveralls', require: false
 end
 
 group :test do
@@ -91,7 +90,8 @@ group :test do
   gem 'webmock'
   gem 'vcr'
   gem 'shoulda'
-  gem 'codeclimate-test-reporter', require: nil
+  gem 'simplecov', require: false
+  gem 'codeclimate-test-reporter', require: false
   gem 'rails-controller-testing'
 end
 
