@@ -60,7 +60,7 @@ module RepoSearch
       end
     end
 
-    def as_indexed_json
+    def as_indexed_json(_options)
       as_json methods: [:exact_name, :keywords, :platforms]
     end
 

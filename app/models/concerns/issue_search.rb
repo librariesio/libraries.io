@@ -33,7 +33,7 @@ module IssueSearch
 
     after_save() { __elasticsearch__.index_document }
 
-    def as_indexed_json
+    def as_indexed_json(_options)
       as_json methods: [:title, :contributions_count, :stars, :language, :license]
     end
 
