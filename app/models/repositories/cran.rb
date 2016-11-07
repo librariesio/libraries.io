@@ -3,11 +3,11 @@ module Repositories
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     LIBRARIAN_SUPPORT = true
-    URL = 'http://cran.r-project.org/'
+    URL = 'https://cran.r-project.org/'
     COLOR = '#198ce7'
 
     def self.project_names
-      html = get_html("http://cran.r-project.org/web/packages/available_packages_by_date.html")
+      html = get_html("https://cran.r-project.org/web/packages/available_packages_by_date.html")
       html.css('tr')[1..-1].map{|tr| tr.css('td')[1].text.strip}
     end
 
@@ -16,7 +16,7 @@ module Repositories
     end
 
     def self.project(name)
-      html = get_html("http://cran.r-project.org/web/packages/#{name}/index.html")
+      html = get_html("https://cran.r-project.org/web/packages/#{name}/index.html")
       info = {}
       table = html.css('table')[0]
       table.css('tr').each do |tr|
