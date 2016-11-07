@@ -64,7 +64,7 @@ module Repositories
       when 'CPAN'
         "https://metacpan.org/release/#{name}"
       when 'CRAN'
-        "http://cran.r-project.org/web/packages/#{name}/index.html"
+        "https://CRAN.R-project.org/package=#{name}"
       when 'CocoaPods'
         "http://cocoapods.org/pods/#{name}"
       when 'Julia'
