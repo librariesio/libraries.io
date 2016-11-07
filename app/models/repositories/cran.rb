@@ -41,7 +41,21 @@ module Repositories
       [{
         :number => project[:info]['Version:'],
         :published_at => project[:info]['Published:']
-      }]
+      }] + find_old_versions(project)
+    end
+
+    def self.find_old_versions(project)
+      archive_page = get_html("https://cran.r-project.org/src/contrib/Archive/#{project[:name]}/")
+      archive_page.css('table').css('tr').select do |tr|
+        tds = tr.css('td')
+        tds[1] && tds[1].text.match(/tar\.gz$/)
+      end.map do |tr|
+        tds = tr.css('td')
+        {
+          :number => tds[1].text.strip.split('_').last.gsub('.tar.gz', ''),
+          :published_at => tds[2].text.strip
+        }
+      end
     end
   end
 end
