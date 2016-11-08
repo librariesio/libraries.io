@@ -16,12 +16,6 @@ GIT
       actionpack (>= 3.1)
       activesupport (>= 3.1)
 
-GIT
-  remote: https://github.com/librariesio/semantic
-  revision: a5374ac095868cf79444c1506bbbe3a8c3ad4379
-  specs:
-    semantic (1.4.2)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -360,6 +354,7 @@ GEM
     sawyer (0.8.0)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 0.10)
+    semantic (1.5.0)
     semantic_range (1.0.0)
     shoulda (3.5.0)
       shoulda-context (~> 1.0, >= 1.0.1)
@@ -507,7 +502,7 @@ DEPENDENCIES
   rspec_junit_formatter
   sanitize-url
   sassc-rails
-  semantic!
+  semantic
   semantic_range
   shoulda
   sidekiq
