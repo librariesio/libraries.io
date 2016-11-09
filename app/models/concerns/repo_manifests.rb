@@ -19,7 +19,7 @@ module RepoManifests
   end
 
   def parse_manifests(token)
-    r = Typhoeus::Request.new("http://librarian.libraries.io/v2/repos/#{full_name}",
+    r = Typhoeus::Request.new("https://librarian.libraries.io/v2/repos/#{full_name}",
       method: :get,
       params: { token: token },
       headers: { 'Accept' => 'application/json' }).run
