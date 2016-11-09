@@ -63,14 +63,14 @@ class Dependency < ApplicationRecord
   end
 
   def valid_requirements?
-    !!SemanticRange.valid_range(requirements)
+    !!SemanticRange.valid_range(semantic_requirements)
   end
 
   def outdated?
     return nil unless valid_requirements? && project && project.latest_stable_release_number
-    !(SemanticRange.satisfies(project.latest_stable_release_number, requirements) ||
-      SemanticRange.satisfies(project.latest_release_number, requirements) ||
-      SemanticRange.ltr(project.latest_release_number, requirements))
+    !(SemanticRange.satisfies(project.latest_stable_release_number, semantic_requirements) ||
+      SemanticRange.satisfies(project.latest_release_number, semantic_requirements) ||
+      SemanticRange.ltr(project.latest_release_number, semantic_requirements))
   rescue
     nil
   end
@@ -78,7 +78,17 @@ class Dependency < ApplicationRecord
   def latest_resolvable_version
     versions = project.versions
     version_numbers = versions.map {|v| SemanticRange.clean(v.number) }
-    number = SemanticRange.max_satisfying(version_numbers, requirements)
+    number = SemanticRange.max_satisfying(version_numbers, semantic_requirements)
     versions.find{|v| SemanticRange.clean(v.number) == number }
+  end
+
+  def semantic_requirements
+    case platform.downcase
+    when 'elm'
+      numbers = requirements.split('<= v')
+      ">=#{numbers[0].strip} #{numbers[1].strip}"
+    else
+      requirements
+    end
   end
 end
