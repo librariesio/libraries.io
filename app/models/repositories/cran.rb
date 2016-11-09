@@ -60,7 +60,7 @@ module Repositories
 
     def self.dependencies(name, version, _project)
       dependencies =find_dependencies(name, version)
-      return unless dependencies.any?
+      return [] unless dependencies.any?
       dependencies.map do |dependency|
         {
           project_name: dependency["name"],
@@ -107,11 +107,12 @@ module Repositories
         begin
           return Oj.load(r.body)
         rescue Oj::ParseError
-          nil
+          []
         end
 
       ensure
         `rm -rf /tmp/#{folder_name} /tmp/#{tarball_name}`
+        []
       end
     end
   end

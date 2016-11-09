@@ -165,7 +165,7 @@ module Repositories
       proj = Project.find_by(name: name, platform: self.name.demodulize)
       proj.versions.each do |version|
         deps = dependencies(name, version.number, mapped_project)
-        next unless deps.any? && version.dependencies.empty?
+        next unless deps && deps.any? && version.dependencies.empty?
         deps.each do |dep|
           unless version.dependencies.find_by_project_name dep[:project_name]
             named_project = Project.platform(self.name.demodulize).where('lower(name) = ?', dep[:project_name].downcase).first.try(:id)
