@@ -57,5 +57,62 @@ module Repositories
         }
       end
     end
+
+    def self.dependencies(name, version, _project)
+      dependencies =find_dependencies(name, version)
+      return unless dependencies.any?
+      dependencies.map do |dependency|
+        {
+          project_name: dependency["name"],
+          requirements: dependency["version"],
+          kind: dependency["type"],
+          platform: self.name.demodulize
+        }
+      end
+    end
+
+    def self.find_dependencies(name, version)
+      begin
+        begin
+          url = "https://cran.rstudio.com/src/contrib/#{name}_#{version}.tar.gz"
+          head_response = Typhoeus.head(url)
+          raise if head_response.code != 200
+        rescue
+          url = "https://cran.rstudio.com/src/contrib/Archive/#{name}/#{name}_#{version}.tar.gz"
+        end
+
+        folder_name = "#{name}_#{version}"
+        tarball_name = "#{folder_name}.tar.gz"
+        downloaded_file = File.open "/tmp/#{tarball_name}", 'wb'
+        request = Typhoeus::Request.new(url)
+        request.on_headers do |response|
+          if response.code != 200
+            raise "Request failed"
+          end
+        end
+        request.on_body {|chunk| downloaded_file.write(chunk) }
+        request.on_complete { downloaded_file.close }
+        request.run
+
+        `mkdir /tmp/#{folder_name} && tar xvzf /tmp/#{tarball_name} -C /tmp/#{folder_name}  --strip-components 1`
+
+        contents = `cat /tmp/#{folder_name}/DESCRIPTION`
+
+        `rm -rf /tmp/#{folder_name} /tmp/#{tarball_name}`
+
+        r = Typhoeus::Request.new("https://librarian.libraries.io/v2/parse_file?filepath=DESCRIPTION",
+          method: :post,
+          body: {contents: contents},
+          headers: { 'Accept' => 'application/json' }).run
+        begin
+          return Oj.load(r.body)
+        rescue Oj::ParseError
+          nil
+        end
+
+      ensure
+        `rm -rf /tmp/#{folder_name} /tmp/#{tarball_name}`
+      end
+    end
   end
 end
