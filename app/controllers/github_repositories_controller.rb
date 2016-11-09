@@ -44,7 +44,7 @@ class GithubRepositoriesController < ApplicationController
   def new
     @language = Languages::Language[params[:language]] if params[:language].present?
 
-    orginal_scope = GithubRepository.interesting
+    orginal_scope = GithubRepository.with_stars
     scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
     @repos = scope.recently_created.order('created_at DESC').paginate(page: page_number)
 
