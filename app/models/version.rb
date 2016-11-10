@@ -1,4 +1,6 @@
 class Version < ApplicationRecord
+  include Releaseable
+
   validates_presence_of :project_id, :number
   validates_uniqueness_of :number, scope: :project_id
 
@@ -73,26 +75,6 @@ class Version < ApplicationRecord
     end
   end
 
-  def parsed_number
-    @parsed_number ||= semantic_version || number
-  end
-
-  def clean_number
-    @clean_number ||= (SemanticRange.clean(number) || number)
-  end
-
-  def semantic_version
-    @semantic_version ||= begin
-      Semantic::Version.new(clean_number)
-    rescue ArgumentError
-      nil
-    end
-  end
-
-  def stable?
-    !prerelease?
-  end
-
   def prerelease?
     if semantic_version
       !!semantic_version.pre
@@ -103,32 +85,11 @@ class Version < ApplicationRecord
     end
   end
 
-  def valid_number?
-    !!semantic_version
-  end
-
-  def follows_semver?
-    @follows_semver ||= valid_number?
-  end
-
   def any_outdated_dependencies?
     @any_outdated_dependencies ||= dependencies.any?(&:outdated?)
   end
 
-  def greater_than_1?
-    return nil unless follows_semver?
-    begin
-      SemanticRange.gte(clean_number, '1.0.0')
-    rescue
-      false
-    end
-  end
-
   def to_param
     project.to_param.merge(number: number)
-  end
-
-  def to_s
-    number
   end
 end

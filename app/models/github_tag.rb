@@ -1,14 +1,12 @@
 class GithubTag < ApplicationRecord
+  include Releaseable
+
   belongs_to :github_repository#, touch: true
   validates_presence_of :name, :sha, :github_repository
 
   scope :published, -> { where('published_at IS NOT NULL') }
 
   after_commit :send_notifications_async, on: :create
-
-  def to_s
-    name
-  end
 
   def update_github_repo_async
     GithubDownloadWorker.perform_async(github_repository_id)
@@ -71,36 +69,8 @@ class GithubTag < ApplicationRecord
     end
   end
 
-  def parsed_number
-    @parsed_number ||= semantic_version || number
-  end
-
-  def clean_number
-    @clean_number ||= (SemanticRange.clean(number) || number)
-  end
-
-  def semantic_version
-    @semantic_version ||= begin
-      Semantic::Version.new(clean_number)
-    rescue ArgumentError
-      nil
-    end
-  end
-
-  def stable?
-    !prerelease?
-  end
-
   def prerelease?
     !!parsed_number.try(:pre)
-  end
-
-  def valid_number?
-    !!semantic_version
-  end
-
-  def follows_semver?
-    @follows_semver ||= valid_number?
   end
 
   def number
