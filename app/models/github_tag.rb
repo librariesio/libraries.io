@@ -72,12 +72,16 @@ class GithubTag < ApplicationRecord
   end
 
   def parsed_number
-    semantic_version || number
+    @parsed_number ||= semantic_version || number
+  end
+
+  def clean_number
+    @clean_number ||= (SemanticRange.clean(number) || number)
   end
 
   def semantic_version
     @semantic_version ||= begin
-      Semantic::Version.new(number)
+      Semantic::Version.new(clean_number)
     rescue ArgumentError
       nil
     end
@@ -96,11 +100,20 @@ class GithubTag < ApplicationRecord
   end
 
   def follows_semver?
-    valid_number?
+    @follows_semver ||= valid_number?
   end
 
   def number
     name
+  end
+
+  def greater_than_1?
+    return nil unless follows_semver?
+    begin
+      SemanticRange.gte(clean_number, '1.0.0')
+    rescue
+      false
+    end
   end
 
   def github_url

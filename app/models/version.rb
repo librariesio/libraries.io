@@ -62,7 +62,7 @@ class Version < ApplicationRecord
   end
 
   def published_at
-    read_attribute(:published_at).presence || created_at
+    @published_at ||= read_attribute(:published_at).presence || created_at
   end
 
   def <=>(other)
@@ -74,12 +74,16 @@ class Version < ApplicationRecord
   end
 
   def parsed_number
-    semantic_version || number
+    @parsed_number ||= semantic_version || number
+  end
+
+  def clean_number
+    @clean_number ||= (SemanticRange.clean(number) || number)
   end
 
   def semantic_version
     @semantic_version ||= begin
-      Semantic::Version.new(number)
+      Semantic::Version.new(clean_number)
     rescue ArgumentError
       nil
     end
@@ -103,22 +107,18 @@ class Version < ApplicationRecord
     !!semantic_version
   end
 
-  def follows_semver_for_dependency_requirements?
-    dependencies.all?(&:valid_requirements?)
-  end
-
   def follows_semver?
-    valid_number?
+    @follows_semver ||= valid_number?
   end
 
   def any_outdated_dependencies?
-    dependencies.any?(&:outdated?)
+    @any_outdated_dependencies ||= dependencies.any?(&:outdated?)
   end
 
   def greater_than_1?
     return nil unless follows_semver?
     begin
-      SemanticRange.gte(number, '1.0.0')
+      SemanticRange.gte(clean_number, '1.0.0')
     rescue
       false
     end

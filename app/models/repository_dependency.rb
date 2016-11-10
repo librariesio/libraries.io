@@ -48,7 +48,9 @@ class RepositoryDependency < ApplicationRecord
 
   def outdated?
     return nil unless valid_requirements? && project && project.latest_stable_release_number
-    !SemanticRange.satisfies(project.latest_stable_release_number, requirements)
+    !(SemanticRange.satisfies(SemanticRange.clean(project.latest_stable_release_number), semantic_requirements) ||
+      SemanticRange.satisfies(SemanticRange.clean(project.latest_release_number), semantic_requirements) ||
+      SemanticRange.ltr(SemanticRange.clean(project.latest_release_number), semantic_requirements))
   rescue
     nil
   end

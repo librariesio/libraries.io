@@ -68,16 +68,16 @@ class Dependency < ApplicationRecord
 
   def outdated?
     return nil unless valid_requirements? && project && project.latest_stable_release_number
-    !(SemanticRange.satisfies(project.latest_stable_release_number, semantic_requirements) ||
-      SemanticRange.satisfies(project.latest_release_number, semantic_requirements) ||
-      SemanticRange.ltr(project.latest_release_number, semantic_requirements))
+    !(SemanticRange.satisfies(SemanticRange.clean(project.latest_stable_release_number), semantic_requirements) ||
+      SemanticRange.satisfies(SemanticRange.clean(project.latest_release_number), semantic_requirements) ||
+      SemanticRange.ltr(SemanticRange.clean(project.latest_release_number), semantic_requirements))
   rescue
     nil
   end
 
   def latest_resolvable_version
     versions = project.versions
-    version_numbers = versions.map {|v| SemanticRange.clean(v.number) }
+    version_numbers = versions.map {|v| SemanticRange.clean(v.number) }.compact
     number = SemanticRange.max_satisfying(version_numbers, semantic_requirements)
     versions.find{|v| SemanticRange.clean(v.number) == number }
   end
