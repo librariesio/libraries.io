@@ -2,7 +2,7 @@ module RepoTags
   def download_tags(token = nil)
     existing_tag_names = github_tags.pluck(:name)
     github_client(token).refs(full_name, 'tags').each do |tag|
-      next unless tag['ref']
+      next unless tag && tag['ref']
       download_tag(token, tag, existing_tag_names)
     end
   rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
