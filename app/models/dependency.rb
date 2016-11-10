@@ -1,4 +1,6 @@
 class Dependency < ApplicationRecord
+  include DependencyChecks
+
   belongs_to :version
   belongs_to :project#, touch: true
 
@@ -17,10 +19,6 @@ class Dependency < ApplicationRecord
     Project.platform(platform).where('lower(name) = ?', project_name.downcase.strip).limit(1).pluck(:id).first
   end
 
-  def incompatible_license?
-    compatible_license? == false
-  end
-
   def compatible_license?
     return nil unless project
     return nil if project.normalized_licenses.empty?
@@ -36,59 +34,8 @@ class Dependency < ApplicationRecord
     end
   end
 
-  def platform
-    Dependency.platform_name(read_attribute(:platform))
-  end
-
-  def self.platform_name(platform)
-    case platform
-    when 'rubygemslockfile', 'gemspec'
-      'Rubygems'
-    when 'cocoapodslockfile'
-      'CocoaPods'
-    when 'nugetlockfile', 'nuspec'
-      'NuGet'
-    when 'packagistlockfile'
-      'Packagist'
-    when 'npmshrinkwrap'
-      'NPM'
-    else
-      platform
-    end
-  end
-
   def update_project_id
     proj_id = find_project_id
     update_attribute(:project_id, proj_id) if proj_id.present?
-  end
-
-  def valid_requirements?
-    !!SemanticRange.valid_range(semantic_requirements)
-  end
-
-  def outdated?
-    return nil unless valid_requirements? && project && project.latest_stable_release_number
-    !(SemanticRange.satisfies(SemanticRange.clean(project.latest_stable_release_number), semantic_requirements) ||
-      SemanticRange.satisfies(SemanticRange.clean(project.latest_release_number), semantic_requirements) ||
-      SemanticRange.ltr(SemanticRange.clean(project.latest_release_number), semantic_requirements))
-  rescue
-    nil
-  end
-
-  def latest_resolvable_version
-    versions = project.versions
-    version_numbers = versions.map {|v| SemanticRange.clean(v.number) }.compact
-    number = SemanticRange.max_satisfying(version_numbers, semantic_requirements)
-    versions.find{|v| SemanticRange.clean(v.number) == number }
-  end
-
-  def semantic_requirements
-    case platform.downcase
-    when 'elm'
-      numbers = requirements.split('<= v')
-      ">=#{numbers[0].strip} #{numbers[1].strip}"
-    else
-      requirements
-    end
   end
 end
