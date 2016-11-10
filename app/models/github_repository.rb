@@ -33,7 +33,7 @@ class GithubRepository < ApplicationRecord
   validates :full_name, uniqueness: true, if: lambda { self.full_name_changed? }
   validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
 
-  before_save  :normalize_license
+  before_save  :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
 
   scope :without_readme, -> { where("github_repositories.id NOT IN (SELECT github_repository_id FROM readmes)") }
@@ -88,7 +88,8 @@ class GithubRepository < ApplicationRecord
     [description, "#{language_text} on GitHub"].compact.join(' - ')
   end
 
-  def normalize_license
+  def normalize_license_and_language
+    self.language = 'Haxe' if self.language == 'HaXe' # 😐
     return if license.blank?
     if license.downcase == 'other'
       self.license = 'Other'
