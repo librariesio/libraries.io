@@ -25,7 +25,7 @@ class Version < ApplicationRecord
     subscriptions = project.subscriptions
     subscriptions = subscriptions.include_prereleases if prerelease?
 
-    subscriptions.group_by(&:notification_user).each do |user, user_subscriptions|
+    subscriptions.group_by(&:notification_user).each do |user, _user_subscriptions|
       next if user.nil?
       next if user.muted?(project)
       next if !user.emails_enabled?
