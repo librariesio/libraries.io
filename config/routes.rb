@@ -143,7 +143,7 @@ Rails.application.routes.draw do
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   post '/auth/failure',             to: 'sessions#failure'
 
-  get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
   get '/github/:owner/:name/contributors', to: 'github_repositories#contributors', as: :github_repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/forks', to: 'github_repositories#forks', as: :github_repository_forks, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/tags', to: 'github_repositories#tags', as: :github_repository_tags, format: false, constraints: { :name => /[^\/]+/ }
@@ -197,6 +197,6 @@ Rails.application.routes.draw do
   get '/:platform/:name/:number', to: 'projects#show', as: :version, constraints: { :number => /.*/, :name => /.*/ }
   get '/:platform/:name.about', to: 'projects#about', as: :about_project, constraints: { :name => /.*/ }
   get '/:platform/:name.ABOUT', to: 'projects#about', constraints: { :name => /.*/ }
-  get '/:platform/:name', to: 'projects#show', as: :project, constraints: { :name => /.*/ }
+  get '/:platform/:name', to: 'projects#show', as: :project, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
   get '/:id', to: 'platforms#show', as: :platform
 end
