@@ -17,6 +17,8 @@ module PlatformsHelper
       "http://melpa.org/packages/#{name}-#{version}.tar"
     when 'Hackage'
       "http://hackage.haskell.org/package/#{name}-#{version}/#{name}-#{version}.tar.gz"
+    when 'Haxelib'
+      "https://lib.haxe.org/p/#{name}/#{version}/download/"
     end
   end
 
@@ -70,6 +72,8 @@ module PlatformsHelper
       "inqlude install #{name}"
     when 'Homebrew'
       "brew install #{name}"
+    when 'Haxelib'
+      "haxelib install #{name} " + (version ? " #{version}" : "")
     end
   end
 

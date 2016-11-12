@@ -90,6 +90,8 @@ module Repositories
         "http://brewformulas.org/#{name}"
       when 'Shards'
         "https://crystal-shards-registry.herokuapp.com/shards/#{name}"
+      when 'Haxelib'
+        "https://lib.haxe.org/p/#{name}/#{version}"
       end
     end
 

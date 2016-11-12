@@ -73,6 +73,14 @@ namespace :download do
     Repositories::Hackage.import_async
   end
 
+  task haxelib: :environment do
+    Repositories::Haxelib.import_recent_async
+  end
+
+  task haxelib_all: :environment do
+    Repositories::Haxelib.import
+  end
+
   task hex: :environment do
     Repositories::Hex.import_recent_async
   end
