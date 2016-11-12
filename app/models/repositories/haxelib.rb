@@ -1,7 +1,7 @@
 module Repositories
   class Haxelib < Base
     HAS_VERSIONS = true
-    HAS_DEPENDENCIES = false
+    HAS_DEPENDENCIES = true
     LIBRARIAN_PLANNED = true
     URL = 'https://lib.haxe.org'
     COLOR = '#df7900'
@@ -39,5 +39,19 @@ module Repositories
       end
     end
 
+    def self.dependencies(name, version, _project)
+      json = get_json("https://lib.haxe.org/p/#{name}/#{version}/raw-files/haxelib.json")
+      return [] unless json['dependencies']
+      json['dependencies'].map do |dep_name, dep_version|
+        {
+          project_name: dep_name,
+          requirements: dep_version.empty? ? '*' : dep_version,
+          kind: 'normal',
+          platform: self.name.demodulize
+        }
+      end
+    rescue
+      []
+    end
   end
 end
