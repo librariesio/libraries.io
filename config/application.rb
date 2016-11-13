@@ -33,7 +33,7 @@ module Libraries
 
     Rails::Timeago.default_options :limit => proc { 60.days.ago }, :nojs => true
 
-    GC::Profiler.enable
+    # GC::Profiler.enable
 
     config.middleware.use Rack::Attack
     config.middleware.use Rack::Attack::RateLimit, throttle: ['api']
