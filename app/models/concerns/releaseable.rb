@@ -21,7 +21,7 @@ module Releaseable
   end
 
   def stable?
-    !prerelease?
+    valid_number? && !prerelease?
   end
 
   def valid_number?
