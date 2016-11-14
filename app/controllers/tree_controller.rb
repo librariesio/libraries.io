@@ -8,7 +8,5 @@ class TreeController < ApplicationController
       raise ActiveRecord::RecordNotFound if @version.nil?
     end
     @kind = params[:kind] || 'normal'
-    @project_names = [@project.name]
-    @license_names = @project.normalize_licenses
   end
 end

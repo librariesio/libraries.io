@@ -2,7 +2,7 @@ module TreeHelper
   def generate_dependency_tree(project, version, kind)
     @project_names = []
     @license_names = []
-    full_graph = load_dependencies_for(version, nil, kind, 0)
+    load_dependencies_for(version, nil, kind, 0)
     # if any of the same dependency twice in the tree
 
     # flatten tree
