@@ -38,10 +38,13 @@ module Repositories
     end
 
     def self.versions(project)
-      [{
-        :number => project['version'],
-        :published_at => project['date']
-      }]
+      versions = get("http://api.metacpan.org/v0/release/_search?q=distribution:#{project['distribution']}&size=5000&fields=version,date")['hits']['hits']
+      versions.map do |version|
+        {
+          :number => version['fields']['version'],
+          :published_at => version['fields']['date']
+        }
+      end
     end
   end
 end
