@@ -42,10 +42,9 @@ module Repositories
     end
 
     def self.dependencies(name, version, _project)
-      g = Gems.info(name)
-      return [] unless g['version'] == version
+      json = get_json("https://rubygems.org/api/v2/rubygems/#{name}/versions/#{version}.json")
 
-      deps = g['dependencies']
+      deps = json['dependencies']
       d = []
       deps['development'].each do |dep|
         d <<  {
