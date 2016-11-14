@@ -19,6 +19,7 @@ module TreeHelper
       dependencies = version.dependencies.kind(kind).includes(project: :versions).limit(100).order(:project_name)
       {
         version: version,
+        dependency: dependency,
         requirements: dependency.try(:requirements),
         dependencies: dependencies.map do |dep|
           if dep.project && !@project_names.include?(dep.project_name)
@@ -28,6 +29,7 @@ module TreeHelper
             {
               version: dep.latest_resolvable_version,
               requirements: dep.try(:requirements),
+              dependency: dep,
               dependencies: []
             }
           end
