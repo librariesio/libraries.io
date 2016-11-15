@@ -20,6 +20,10 @@ module Repositories
       end
     end
 
+    def self.recent_names
+      get("http://package.elm-lang.org/new-packages")
+    end
+
     def self.project(name)
       projects[name]
     end

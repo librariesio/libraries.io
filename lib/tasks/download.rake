@@ -58,6 +58,10 @@ namespace :download do
   end
 
   task elm: :environment do
+    Repositories::Elm.import_recent_async
+  end
+
+  task elm_all: :environment do
     Repositories::Elm.import_async
   end
 
