@@ -1,7 +1,7 @@
 module Repositories
   class CPAN < Base
     HAS_VERSIONS = true
-    HAS_DEPENDENCIES = false
+    HAS_DEPENDENCIES = true
     LIBRARIAN_SUPPORT = true
     URL = 'https://metacpan.org'
     COLOR = '#0298c3'
@@ -43,6 +43,19 @@ module Repositories
         {
           :number => version['fields']['version'],
           :published_at => version['fields']['date']
+        }
+      end
+    end
+
+    def self.dependencies(name, version, _project)
+      versions = get("http://api.metacpan.org/v0/release/_search?q=distribution:#{name}&size=5000&fields=version,dependency")['hits']['hits']
+      version_data = versions.find{|v| v['fields']['version'] == version }
+      version_data['fields']['dependency'].select{|dep| dep['relationship'] == 'requires' }.map do |dep|
+        {
+          project_name: dep['module'].gsub('::', '-'),
+          requirements: dep['version'],
+          kind: dep['phase'],
+          platform: self.name.demodulize
         }
       end
     end
