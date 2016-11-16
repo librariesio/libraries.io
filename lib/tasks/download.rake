@@ -22,7 +22,7 @@ namespace :download do
   end
 
   task cargo: :environment do
-    Repositories::Cargo.import_async
+    Repositories::Cargo.import_recent_async
   end
 
   task carthage: :environment do

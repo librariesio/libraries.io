@@ -18,6 +18,13 @@ module Repositories
       projects.map{|project| project['name'] }
     end
 
+    def self.recent_names
+      json = get("https://crates.io/summary")
+      updated_names = json['just_updated'].map{|c| c['name']}
+      new_names = json['new_crates'].map{|c| c['name']}
+      (updated_names + new_names).uniq
+    end
+
     def self.project(name)
       get("https://crates.io/api/v1/crates/#{name}")
     end
