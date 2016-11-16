@@ -30,7 +30,7 @@ namespace :download do
   end
 
   task clojars: :environment do
-    Repositories::Clojars.import
+    Repositories::Clojars.import_recent
   end
 
   task cpan: :environment do

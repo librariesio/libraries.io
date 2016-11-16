@@ -10,6 +10,10 @@ module Repositories
       @names ||= get("http://clojars-json.herokuapp.com/packages.json").keys
     end
 
+    def self.recent_names
+      get_html("https://clojars.org/").css('.recent-jar-title a').map(&:text)
+    end
+
     def self.projects
       @projects ||= begin
         projs = {}
