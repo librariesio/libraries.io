@@ -7,7 +7,13 @@ module Repositories
     COLOR = '#438eff'
 
     def self.project_names
-      @project_names ||= get_json("http://cocoapods.libraries.io/pods.json")
+      get_json("http://cocoapods.libraries.io/pods.json")
+    end
+
+    def self.recent_names
+      u = 'http://cocoapods.libraries.io/feed.rss'
+      titles = SimpleRSS.parse(get_raw(u)).items.map(&:title)
+      titles.map { |t| t.split(' ')[1] }.uniq
     end
 
     def self.project(name)
