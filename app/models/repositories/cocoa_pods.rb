@@ -7,14 +7,13 @@ module Repositories
     COLOR = '#438eff'
 
     def self.project_names
-      @project_names ||= `rm -rf Specs;git clone https://github.com/CocoaPods/Specs.git --depth 1; ls Specs/Specs`.split("\n")
+      @project_names ||= get_json("http://cocoapods.libraries.io/pods.json")
     end
 
     def self.project(name)
-      versions = `ls Specs/Specs/#{name}`.split("\n").sort
-      version = versions.last
-      json = Oj.load `cat Specs/Specs/#{name}/#{version}/#{name}.podspec.json`
-      json.merge('versions' => versions)
+      versions = get_json("http://cocoapods.libraries.io/pods/#{name}.json")
+      latest_version = versions.keys.sort_by{|version| version.split('.').map{|v| v.to_i}}.last
+      versions[latest_version].merge('versions' => versions)
     end
 
     def self.mapping(project)
@@ -28,9 +27,9 @@ module Repositories
     end
 
     def self.versions(project)
-      project['versions'].map do |v|
+      project['versions'].keys.map do |v|
         {
-          :number => v
+          :number => v.to_s
         }
       end
     end
