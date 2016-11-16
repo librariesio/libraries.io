@@ -12,7 +12,7 @@ module Repositories
     end
 
     def self.recent_names
-      project_names[0..30].uniq
+      project_names[0..15].uniq
     end
 
     def self.project(name)
