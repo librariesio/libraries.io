@@ -312,6 +312,17 @@
           <% end %>
         </ul>
       <% end %>
+
+      <p>
+        <%= fa_icon 'question-circle' %>
+        Something wrong with this page?
+        <%= link_to 'Make a suggestion', 'https://github.com/librariesio/support' %>
+      </p>
+      <% if repo.last_synced_at.present? %>
+        <p>
+          <small class='text-muted'>Last synced: <%= repo.last_synced_at %></small>
+        </p>
+      <% end %>
     </div>
   </div>
 <% end %>
