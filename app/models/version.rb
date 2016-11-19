@@ -19,7 +19,7 @@ class Version < ApplicationRecord
   end
 
   def save_project
-    project.try(:save)
+    project.try(:forced_save)
   end
 
   def platform

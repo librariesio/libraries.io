@@ -7,6 +7,11 @@ class GithubTag < ApplicationRecord
   scope :published, -> { where('published_at IS NOT NULL') }
 
   after_commit :send_notifications_async, on: :create
+  after_commit :save_projects
+
+  def save_projects
+    github_repository.try(:save_projects)
+  end
 
   def update_github_repo_async
     GithubDownloadWorker.perform_async(github_repository_id)

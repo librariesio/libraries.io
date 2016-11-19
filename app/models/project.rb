@@ -84,6 +84,11 @@ class Project < ApplicationRecord
     name
   end
 
+  def forced_save
+    self.updated_at = Time.zone.now
+    save
+  end
+
   def sync
     platform_class.update(name)
   end
@@ -307,7 +312,7 @@ class Project < ApplicationRecord
     return if g.nil?
     unless self.new_record?
       self.github_repository_id = g.id
-      self.save
+      self.forced_save
     end
   end
 

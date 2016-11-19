@@ -116,7 +116,7 @@ class GithubRepository < ApplicationRecord
   end
 
   def save_projects
-    projects.find_each(&:save)
+    projects.find_each(&:forced_save)
   end
 
   def repository_dependencies
