@@ -73,11 +73,7 @@ class Project < ApplicationRecord
   after_commit :update_github_repo_async, on: :create
   after_commit :set_dependents_count
   after_commit :update_source_rank_async
-  before_save  :normalize_licenses,
-               :set_latest_release_published_at,
-               :set_latest_release_number,
-               :set_language
-
+  before_save  :update_details
   before_destroy :destroy_versions
 
   def to_param
@@ -113,6 +109,13 @@ class Project < ApplicationRecord
     elsif github_tags.published.length > 0
       github_tags.published.all?(&:follows_semver?)
     end
+  end
+
+  def update_details
+    normalize_licenses
+    set_latest_release_published_at
+    set_latest_release_number
+    set_language
   end
 
   def keywords
