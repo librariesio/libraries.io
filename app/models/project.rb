@@ -303,8 +303,8 @@ class Project < ApplicationRecord
     g = GithubRepository.create_from_github(name_with_owner)
     return if g.nil?
     unless self.new_record?
-      self.update_columns(github_repository_id: g.id)
-      self.touch
+      self.github_repository_id = g.id
+      self.save
     end
   end
 
