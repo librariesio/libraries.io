@@ -41,6 +41,16 @@ module Repositories
       end
     end
 
+    def self.update_versions(name)
+      p = project(name)
+      dbproject = Project.find_by({:name => name, :platform => self.name.demodulize})
+      versions(p).each do |version|
+        v = dbproject.versions.find_by_number(version[:number])
+        v.update_attribute(:published_at, version[:published_at]) if v
+      end
+      dbproject.save
+    end
+
     def self.dependencies(name, version, _project)
       json = get_json("https://rubygems.org/api/v2/rubygems/#{name}/versions/#{version}.json")
 
