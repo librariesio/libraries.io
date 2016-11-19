@@ -58,7 +58,15 @@ class GithubUser < ApplicationRecord
   end
 
   def download_from_github
-    update_attributes(github_client.user(github_id).to_hash.slice(:login, :name, :company, :blog, :location, :email, :bio, :followers, :following))
+    download_from_github_by(github_id)
+  end
+
+  def download_from_github_by_login
+    download_from_github_by(login)
+  end
+
+  def download_from_github_by(id_or_login)
+    update_attributes(github_client.user(id_or_login).to_hash.slice(:login, :name, :company, :blog, :location, :email, :bio, :followers, :following))
   rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
@@ -96,14 +104,10 @@ class GithubUser < ApplicationRecord
         user = user_by_id
       end
     elsif user_by_login # conflict
-      if user_by_login.download_from_github
+      if user_by_login.download_from_github_by_login
         user = user_by_login if user_by_login.github_id == github_user.id
       end
-      if user.nil?
-        # user_by_login not on github
-        user_by_login.login = ''
-        user_by_login.save
-      end
+      user_by_login.destroy if user.nil?
     end
     if user.nil?
       user = GithubUser.create!(github_id: github_user.id, login: github_user.login, user_type: github_user.type)
