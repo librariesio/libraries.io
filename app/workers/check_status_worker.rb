@@ -7,7 +7,7 @@ class CheckStatusWorker
     when 'npm'
       response = Typhoeus.head("https://www.npmjs.com/package/#{project_name}")
     when 'rubygems'
-      response = Typhoeus.head("https://rubygems.org/gems/#{project_name}")
+      response = Typhoeus.head("https://rubygems.org/api/v1/versions/#{project_name}")
     when 'packagist'
       response = Typhoeus.head("https://packagist.org/packages/#{project_name}")
     when 'nuget'
