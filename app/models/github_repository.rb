@@ -35,6 +35,7 @@ class GithubRepository < ApplicationRecord
 
   before_save  :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
+  after_commit :touch_projects, on: :update
 
   scope :without_readme, -> { where("github_repositories.id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
