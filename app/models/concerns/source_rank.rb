@@ -4,6 +4,7 @@ module SourceRank
   def update_source_rank
     update_column :rank, source_rank
     touch
+    __elasticsearch__.index_document
   end
 
   def update_source_rank_async
