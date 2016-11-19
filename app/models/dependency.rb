@@ -2,7 +2,7 @@ class Dependency < ApplicationRecord
   include DependencyChecks
 
   belongs_to :version
-  belongs_to :project#, touch: true
+  belongs_to :project
 
   validates_presence_of :project_name, :version_id, :requirements, :platform
 

@@ -1,6 +1,6 @@
 class GithubContribution < ApplicationRecord
-  belongs_to :github_user#, touch: true
-  belongs_to :github_repository#, touch: true
+  belongs_to :github_user
+  belongs_to :github_repository
   counter_culture :github_repository
 
   scope :with_repo, -> { joins(:github_repository).where('github_repositories.id IS NOT NULL') }
