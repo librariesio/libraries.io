@@ -35,7 +35,7 @@ class GithubRepository < ApplicationRecord
 
   before_save  :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
-  after_commit :touch_projects, on: :update
+  after_commit :save_projects, on: :update
 
   scope :without_readme, -> { where("github_repositories.id NOT IN (SELECT github_repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
@@ -115,8 +115,8 @@ class GithubRepository < ApplicationRecord
     end
   end
 
-  def touch_projects
-    projects.find_each(&:touch)
+  def save_projects
+    projects.find_each(&:save)
   end
 
   def repository_dependencies
@@ -224,7 +224,7 @@ class GithubRepository < ApplicationRecord
     download_owner
     download_fork_source(token)
     download_issues(token)
-    touch_projects
+    save_projects
     update_attributes(last_synced_at: Time.now)
   end
 
