@@ -4,17 +4,22 @@ class Version < ApplicationRecord
   validates_presence_of :project_id, :number
   validates_uniqueness_of :number, scope: :project_id
 
-  belongs_to :project, touch: true
+  belongs_to :project
   counter_culture :project
   has_many :dependencies, dependent: :delete_all
 
   after_commit :send_notifications_async, on: :create
   after_commit :update_github_repo_async, on: :create
+  after_commit :save_project
 
   scope :newest_first, -> { order('versions.published_at DESC') }
 
   def as_json(options = nil)
     super({ only: [:number, :published_at] }.merge(options || {}))
+  end
+
+  def save_project
+    project.try(:save)
   end
 
   def platform
