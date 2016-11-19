@@ -352,9 +352,9 @@ GEM
       sprockets (> 2.11)
       sprockets-rails
       tilt
-    sawyer (0.8.0)
+    sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
-      faraday (~> 0.8, < 0.10)
+      faraday (~> 0.8, < 1.0)
     semantic (1.5.0)
     semantic_range (1.0.0)
     shoulda (3.5.0)

@@ -25,7 +25,7 @@ module Releases
   end
 
   def latest_version
-    @latest_version ||= versions.sort.first
+    versions.sort.first
   end
 
   def latest_tag
