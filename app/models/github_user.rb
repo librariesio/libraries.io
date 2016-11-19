@@ -93,7 +93,7 @@ class GithubUser < ApplicationRecord
   def self.create_from_github(github_user)
     user = nil
     user_by_id = GithubUser.find_by_github_id(github_user.id)
-    user_by_login = GithubUser.where("lower(login) = ?", github_user.login).first
+    user_by_login = GithubUser.where("lower(login) = ?", github_user.login.downcase).first
     if user_by_id # its fine
       if user_by_id.login == github_user.login && user_by_id.user_type == github_user.type
         user = user_by_id
