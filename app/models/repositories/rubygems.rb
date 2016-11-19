@@ -33,7 +33,9 @@ module Repositories
     end
 
     def self.versions(project)
-      Gems.versions(project['name']).map do |v|
+      versions_response = Gems.versions(project['name'])
+      return [] if versions_response.is_a?(String)
+      versions_response.map do |v|
         {
           :number => v['number'],
           :published_at => v['created_at']
