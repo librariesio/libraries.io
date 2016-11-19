@@ -221,10 +221,7 @@ class User < ApplicationRecord
   end
 
   def download_self
-    GithubUser.find_or_create_by(github_id: self.uid) do |u|
-      u.login = self.nickname
-      u.user_type = 'User'
-    end
+    GithubUser.create_from_github(OpenStruct.new({id: self.uid, login: self.nickname, type: 'User'}))
     GithubUpdateUserWorker.perform_async(nickname)
   end
 

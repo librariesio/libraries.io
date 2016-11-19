@@ -48,10 +48,7 @@ namespace :github do
               u.login = o.login
             end
           else
-            GithubUser.find_or_create_by(github_id: o.id) do |u|
-              u.login = o.login
-              u.user_type = o.type
-            end
+            GithubUser.create_from_github(o)
           end
         rescue
           nil

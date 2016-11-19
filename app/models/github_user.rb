@@ -16,6 +16,7 @@ class GithubUser < ApplicationRecord
 
   validates :login, uniqueness: true, if: lambda { self.login_changed? }
   validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
+  validates :github_id, presence: true
 
   after_commit :async_sync, on: :create
 
@@ -79,5 +80,34 @@ class GithubUser < ApplicationRecord
     true
   rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
+  end
+
+  def self.create_from_github(github_user)
+    user = nil
+    user_by_id = GithubUser.find_by_github_id(github_user.id)
+    user_by_login = GithubUser.where("lower(login) = ?", github_user.login).first
+    if user_by_id # its fine
+      if user_by_id.login == github_user.login && user_by_id.user_type == github_user.type
+        user = user_by_id
+      else
+        user_by_id.login = github_user.login
+        user_by_id.user_type = github_user.type
+        user_by_id.save
+        user = user_by_id
+      end
+    elsif user_by_login # conflict
+      if user_by_login.download_from_github
+        user = user_by_login if user_by_login.github_id == github_user.id
+      end
+      if user.nil?
+        # user_by_login not on github
+        user_by_login.login = ''
+        user_by_login.save
+      end
+    end
+    if user.nil?
+      user = GithubUser.create!(github_id: github_user.id, login: github_user.login, user_type: github_user.type)
+    end
+    user
   end
 end

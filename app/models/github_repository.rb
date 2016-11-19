@@ -136,10 +136,7 @@ class GithubRepository < ApplicationRecord
         save
       end
     else
-      GithubUser.find_or_create_by(github_id: o.id) do |u|
-        u.login = o.login
-        u.user_type = o.type
-      end
+      GithubUser.create_from_github(o)
     end
   rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
@@ -258,10 +255,7 @@ class GithubRepository < ApplicationRecord
       next unless c['id']
       cont = existing_github_contributions.find{|cnt| cnt.github_user.try(:github_id) == c.id }
       unless cont
-        user = GithubUser.find_or_create_by(github_id: c.id) do |u|
-          u.login = c.login
-          u.user_type = c.type
-        end
+        user = GithubUser.create_from_github(c)
         cont = github_contributions.find_or_create_by(github_user: user)
       end
 
