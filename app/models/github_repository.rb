@@ -198,7 +198,13 @@ class GithubRepository < ApplicationRecord
       r = github_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
       return if r.nil? || r.empty?
       self.github_id = r[:id] unless self.github_id == r[:id]
-      self.full_name = r[:full_name] if self.full_name.downcase != r[:full_name].downcase
+       if self.full_name.downcase != r[:full_name].downcase
+         clash = GithubRepository.where('lower(full_name) = ?', r[:full_name].downcase).first
+         unless clash && clash.update_from_github(token)
+           clash.destroy
+         end
+         self.full_name = r[:full_name]
+       end
       self.owner_id = r[:owner][:id]
       self.license = Project.format_license(r[:license][:key]) if r[:license]
       self.source_name = r[:parent][:full_name] if r[:fork]
