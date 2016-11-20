@@ -200,7 +200,7 @@ class GithubRepository < ApplicationRecord
       self.github_id = r[:id] unless self.github_id == r[:id]
        if self.full_name.downcase != r[:full_name].downcase
          clash = GithubRepository.where('lower(full_name) = ?', r[:full_name].downcase).first
-         unless clash && clash.update_from_github(token)
+         if clash && !clash.update_from_github(token)
            clash.destroy
          end
          self.full_name = r[:full_name]
