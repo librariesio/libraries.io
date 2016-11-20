@@ -1,6 +1,6 @@
 atom_feed do |feed|
   feed.title(@title)
-  feed.updated(@github_repositories[0].created_at) if @github_repositories.length > 0
+  feed.updated(@github_repositories[0].try(:created_at)) if @github_repositories.length > 0
 
   @github_repositories.each do |github_repository|
     feed.entry(github_repository, url: github_repository_url(github_repository.owner_name, github_repository.project_name)) do |entry|
