@@ -4,7 +4,7 @@ class TreeController < ApplicationController
   def show
     find_version
     if @version.nil?
-      @version = @project.latest_stable_release
+      @version = @project.latest_stable_version
       raise ActiveRecord::RecordNotFound if @version.nil?
     end
     @kind = params[:kind] || 'normal'
