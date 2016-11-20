@@ -100,7 +100,7 @@ class GithubUser < ApplicationRecord
       else
         user_by_id.login = github_user.login
         user_by_id.user_type = github_user.type
-        user_by_id.save
+        user_by_id.save!
         user = user_by_id
       end
     elsif user_by_login # conflict
