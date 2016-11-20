@@ -94,6 +94,14 @@ class GithubOrganisation < ApplicationRecord
   end
 
   def download_from_github
+    download_from_github_by(github_id)
+  end
+
+  def download_from_github_by_login
+    download_from_github_by(login)
+  end
+
+  def download_from_github_by(id_or_login)
     update_attributes(github_client.org(github_id).to_hash.slice(:login, :name, :email, :blog, :location, :description))
   rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
