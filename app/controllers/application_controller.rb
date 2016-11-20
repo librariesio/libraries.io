@@ -166,6 +166,8 @@ class ApplicationController < ActionController::Base
       if params[:number].present?
         @version = @project.versions.find_by_number(params[:number])
         raise ActiveRecord::RecordNotFound if @version.nil?
+      else
+        @version = @project.latest_release
       end
     end
     @version_number = @version.try(:number) || @project.latest_release_number
