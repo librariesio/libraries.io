@@ -49,11 +49,35 @@ class GithubOrganisation < ApplicationRecord
     begin
       r = AuthToken.client.org(login_or_id).to_hash
       return false if r.blank?
-      g = GithubOrganisation.find_or_initialize_by(github_id: r[:id])
-      g.github_id = r[:id]
-      g.assign_attributes r.slice(*GithubOrganisation::API_FIELDS)
-      g.save
-      g
+
+      org = nil
+      org_by_id = GithubOrganisation.find_by_github_id(r[:id])
+      org_by_login = GithubOrganisation.where("lower(login) = ?", r[:login].downcase).first
+
+      if org_by_id # its fine
+        if org_by_id.login.try(:downcase) == r.login.downcase
+          org = org_by_id
+        else
+          if org_by_login && !org_by_login.download_from_github
+            org_by_login.destroy
+          end
+          org_by_id.login = r[:login]
+          org_by_id.save!
+          org = org_by_id
+        end
+      elsif org_by_login # conflict
+        if org_by_login.download_from_github_by_login
+          org = org_by_login if org_by_login.github_id == r[:id]
+        end
+        org_by_login.destroy if org.nil?
+      end
+      if org.nil?
+        org = GithubOrganisation.create!(github_id: r[:id], login: r[:login])
+      end
+
+      org.assign_attributes r.slice(*GithubOrganisation::API_FIELDS)
+      org.save
+      org
     rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
       false
     end
