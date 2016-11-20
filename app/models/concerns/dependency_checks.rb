@@ -50,6 +50,7 @@ module DependencyChecks
   end
 
   def latest_resolvable_version
+    return nil unless project.present?
     versions = project.versions
     version_numbers = versions.map {|v| SemanticRange.clean(v.number) }.compact
     number = SemanticRange.max_satisfying(version_numbers, semantic_requirements)
