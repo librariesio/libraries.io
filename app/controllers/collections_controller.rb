@@ -1,6 +1,6 @@
 class CollectionsController < ApplicationController
   def index
-    @languages = Project.popular_languages.first(28).map(&:term)
+    @languages = Project.popular_languages.first(40).map(&:term)
   end
 
   def show
