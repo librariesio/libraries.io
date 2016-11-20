@@ -55,7 +55,7 @@ class GithubOrganisation < ApplicationRecord
       org_by_login = GithubOrganisation.where("lower(login) = ?", r[:login].downcase).first
 
       if org_by_id # its fine
-        if org_by_id.login.try(:downcase) == r.login.downcase
+        if org_by_id.login.try(:downcase) == r[:login].downcase
           org = org_by_id
         else
           if org_by_login && !org_by_login.download_from_github
