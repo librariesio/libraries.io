@@ -34,7 +34,7 @@
             <% if platform.downcase == params[:platform].try(:downcase) %>
               <%= link_to platform, url_for(params.merge(platform: nil)) %>
             <% else %>
-              <%= link_to platform, url_for(params.merge(platform: platform)) %>
+              <%= link_to platform, url_for(params.merge(platform: platform)).permit! %>
             <% end %>
           </li>
         <% end %>
@@ -53,7 +53,7 @@
             <% if language.downcase == params[:language].try(:downcase) %>
               <%= link_to language, url_for(params.merge(language: nil)) %>
             <% else %>
-              <%= link_to language, url_for(params.merge(language: language)) %>
+              <%= link_to language, url_for(params.merge(language: language)).permit! %>
             <% end %>
           </li>
         <% end %>
@@ -72,7 +72,7 @@
             <% if license.downcase == params[:license].try(:downcase) %>
               <%= link_to license, url_for(params.merge(license: nil)) %>
             <% else %>
-              <%= link_to license, url_for(params.merge(license: license)) %>
+              <%= link_to license, url_for(params.merge(license: license)).permit! %>
             <% end %>
           </li>
         <% end %>
