@@ -95,10 +95,10 @@ class GithubUser < ApplicationRecord
     user_by_id = GithubUser.find_by_github_id(github_user.id)
     user_by_login = GithubUser.where("lower(login) = ?", github_user.login.downcase).first
     if user_by_id # its fine
-      if user_by_id.login.downcase == github_user.login.downcase && user_by_id.user_type == github_user.type
+      if user_by_id.login.try(:downcase) == github_user.login.downcase && user_by_id.user_type == github_user.type
         user = user_by_id
       else
-        unless user_by_login.download_from_github
+        if user_by_login && !user_by_login.download_from_github
           user_by_login.destroy
         end
         user_by_id.login = github_user.login
