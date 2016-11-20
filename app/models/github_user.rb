@@ -98,6 +98,9 @@ class GithubUser < ApplicationRecord
       if user_by_id.login.downcase == github_user.login.downcase && user_by_id.user_type == github_user.type
         user = user_by_id
       else
+        unless user_by_login.download_from_github_by_login
+          user_by_login.destroy
+        end
         user_by_id.login = github_user.login
         user_by_id.user_type = github_user.type
         user_by_id.save!
