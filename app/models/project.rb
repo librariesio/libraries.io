@@ -260,7 +260,10 @@ class Project < ApplicationRecord
   end
 
   def self.popular(options = {})
-    search('*', options.merge(sort: 'rank', order: 'desc')).records.includes(:github_repository, :versions).reject{|p| p.github_repository.nil? }
+    results = search('*', options.merge(sort: 'rank', order: 'desc'))
+    ids = results.map{|r| r.id.to_i }
+    indexes = Hash[ids.each_with_index.to_a]
+    results.records.includes(:github_repository, :versions).reject{|p| p.github_repository.nil? }.sort_by { |u| indexes[u.id] }
   end
 
   def normalized_licenses

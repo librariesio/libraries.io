@@ -19,7 +19,9 @@ class GithubRepositoriesController < ApplicationController
     @query = params[:q]
     @search = search_repos(@query)
     @suggestion = @search.response.suggest.did_you_mean.first
-    @github_repositories = @search.records
+    ids = @search.map{|r| r.id.to_i }
+    indexes = Hash[ids.each_with_index.to_a]
+    @github_repositories = @search.records.sort_by { |u| indexes[u.id] }
     @title = page_title
     respond_to do |format|
       format.html
@@ -125,6 +127,8 @@ class GithubRepositoriesController < ApplicationController
       keywords: current_keywords,
       platforms: current_platforms
     }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
-    search.records
+    ids = search.map{|r| r.id.to_i }
+    indexes = Hash[ids.each_with_index.to_a]
+    search.records.sort_by { |u| indexes[u.id] }
   end
 end

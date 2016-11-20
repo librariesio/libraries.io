@@ -24,7 +24,9 @@ class ProjectsController < ApplicationController
       normalized_licenses: current_license,
       language: current_language
     }).paginate(page: page_number)
-    @projects = @search.records.includes(:github_repository, :versions)
+    ids = @search.map{|r| r.id.to_i }
+    indexes = Hash[ids.each_with_index.to_a]
+    @projects = @search.records.includes(:github_repository, :versions).sort_by { |u| indexes[u.id] }
   end
 
   def unlicensed
@@ -33,7 +35,9 @@ class ProjectsController < ApplicationController
       normalized_licenses: current_license,
       language: current_language
     }).paginate(page: page_number)
-    @projects = @search.records.includes(:github_repository, :versions)
+    ids = @search.map{|r| r.id.to_i }
+    indexes = Hash[ids.each_with_index.to_a]
+    @projects = @search.records.includes(:github_repository, :versions).sort_by { |u| indexes[u.id] }
   end
 
   def deprecated

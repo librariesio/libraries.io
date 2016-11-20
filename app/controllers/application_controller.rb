@@ -115,7 +115,9 @@ class ApplicationController < ActionController::Base
       language: current_language,
       labels: labels
     }), page: page_number, per_page: per_page_number
-    @github_issues = @search.records.includes(:github_repository)
+    ids = @search.map{|r| r.id.to_i }
+    indexes = Hash[ids.each_with_index.to_a]
+    @github_issues = @search.records.includes(:github_repository).sort_by { |u| indexes[u.id] }
   end
 
   def search_repos(query)

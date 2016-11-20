@@ -3,7 +3,9 @@ class Api::SearchController < Api::ApplicationController
 
   def index
     @search = paginate search_projects(params[:q])
-    @projects = @search.records.includes(:github_repository, :versions)
+    ids = @search.map{|r| r.id.to_i }
+    indexes = Hash[ids.each_with_index.to_a]
+    @projects = @search.records.includes(:github_repository, :versions).sort_by { |u| indexes[u.id] }
 
     render json: project_json_response(@projects)
   end

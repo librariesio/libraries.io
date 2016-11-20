@@ -9,7 +9,9 @@ class GithubIssuesController < ApplicationController
 
   def first_pull_request
     search_issues(params[:labels])
-    @github_issues = @search.records.includes(:github_repository)
+    ids = @search.map{|r| r.id.to_i }
+    indexes = Hash[ids.each_with_index.to_a]
+    @github_issues = @search.records.includes(:github_repository).sort_by { |u| indexes[u.id] }
   end
 
   private

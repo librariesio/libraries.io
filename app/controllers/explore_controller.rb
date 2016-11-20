@@ -22,13 +22,17 @@ class ExploreController < ApplicationController
   helper_method :repo_search
   def repo_search(sort)
     search = search(GithubRepository, sort)
-    search.records
+    ids = search.map{|r| r.id.to_i }
+    indexes = Hash[ids.each_with_index.to_a]
+    search.records.sort_by { |u| indexes[u.id] }
   end
 
   helper_method :project_search
   def project_search(sort)
     search = search(Project, sort)
-    search.records
+    ids = search.map{|r| r.id.to_i }
+    indexes = Hash[ids.each_with_index.to_a]
+    search.records.sort_by { |u| indexes[u.id] }
   end
 
   def search(klass, sort)
