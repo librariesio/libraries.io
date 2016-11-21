@@ -12,7 +12,7 @@
     <%= project.normalize_licenses.join(', ') %>
   </em>
   <% if dep[:dependency] %>
-    <%= render 'dependencies/flags', dependency: dep[:dependency] %>
+    <%#= render 'dependencies/flags', dependency: dep[:dependency] %>
   <% end %>
   <% if dep[:dependencies] && dep[:dependencies].any? %>
     <ul>
