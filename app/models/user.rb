@@ -46,6 +46,14 @@ class User < ApplicationRecord
     active_subscription.present?
   end
 
+  def hidden
+    github_user.hidden
+  end
+
+  def hidden=(val)
+    github_user.update_attributes(hidden: val)
+  end
+
   def current_plan
     @current_plan ||= payola_subscriptions.active.select{|sub| sub.plan.present? }.sort{|sub| sub.plan.amount }.last.try(:plan)
   end

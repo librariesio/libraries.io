@@ -58,6 +58,19 @@
     </div>
 
     <div class="panel panel-default">
+      <div class="panel-heading">Hide profile</div>
+      <div class="panel-body">
+        <p>
+          Hide your profile if you do not wish for your profile to be visible on the site or by search engines.
+        </p>
+        <%= simple_form_for(current_user, url: account_path, html: { class: 'form-vertical' }) do |form| %>
+          <%= form.input :hidden, as: :boolean, label: 'Hide my profile' %>
+          <%= form.submit 'Update visibility preferences', class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
       <div class="panel-heading">Account deletion</div>
       <div class="panel-body">
         <p>
