@@ -29,8 +29,8 @@ workers ENV.fetch("WEB_CONCURRENCY") { 2 }
 # process behavior so workers use less memory. If you use this option
 # you need to make sure to reconnect any threads in the `on_worker_boot`
 # block.
-#
-preload_app!
+
+# preload_app!
 
 # The code in the `on_worker_boot` will be called if you are using
 # clustered mode by specifying a number of `workers`. After each worker
