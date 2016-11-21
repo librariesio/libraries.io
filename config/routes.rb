@@ -36,9 +36,11 @@ Rails.application.routes.draw do
 
     get '/github/:login', to: 'github_users#show'
 
+    get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }
     get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }
     get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
     get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
+    get '/:platform/:name/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
     get '/:platform/:name', to: 'projects#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
   end
 
