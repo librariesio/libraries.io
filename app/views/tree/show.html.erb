@@ -8,26 +8,7 @@
 <hr>
 
 <div class="row">
-  <% cache ['tree', @project, @version, @kind], expires_in: 1.day do  %>
-    <div class="col-sm-8">
-      <%= render 'adsense/banner' %>
-      <div class="tree">
-        <ul class="top-level">
-          <%= render 'dep', dep: @tree %>
-        </ul>
-      </div>
-      <%= render 'adsense/banner' %>
-    </div>
-    <div class="col-sm-4">
-      <%= render 'adsense/sidebar' %>
-      <div>
-        <p class="h4">Unique dependencies:</p>
-        <p class="h1"><%= @project_names.uniq.length %></p>
-        <hr/>
-        <p class="h4">Unique licenses:</p>
-        <p class="h1"><%= @license_names.flatten.uniq.length %></p>
-        <p class="h5"><%= @license_names.flatten.uniq.sort.join(', ') %></p>
-      </div>
-    </div>
-  <% end %>
+  <div id="tree">
+    <%= render 'tree/tree', tree: @tree %>
+  </div>
 </div>

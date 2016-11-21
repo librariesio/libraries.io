@@ -8,19 +8,31 @@ class TreeResolver
     @kind = kind
     @project_names = []
     @license_names = []
-    @tree = load_dependencies_tree
+    @tree = nil
   end
 
-  private
+  def cached?
+    Rails.cache.exist?(cache_key)
+  end
+
+  def tree
+    @tree ||= load_dependencies_tree
+  end
+
+  def enqueue_tree_resolution
+    TreeResolverWorker.perform_async(@version.id, @kind)
+  end
 
   def load_dependencies_tree
-    tree_data = Rails.cache.fetch [@version, @kind], :expires_in => 1.day, race_condition_ttl: 2.minutes do
+    tree_data = Rails.cache.fetch cache_key, :expires_in => 1.day, race_condition_ttl: 2.minutes do
       generate_dependency_tree
     end
     @project_names = tree_data[:project_names]
     @license_names = tree_data[:license_names]
     @tree = tree_data[:tree]
   end
+
+  private
 
   def generate_dependency_tree
     {
@@ -54,5 +66,9 @@ class TreeResolver
         end
       }
     end
+  end
+
+  def cache_key
+    ['tree', @version, @kind]
   end
 end
