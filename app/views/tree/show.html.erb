@@ -13,7 +13,7 @@
       <%= render 'adsense/banner' %>
       <div class="tree">
         <ul class="top-level">
-          <%= render 'dep', dep: generate_dependency_tree(@project, @version, @kind) %>
+          <%= render 'dep', dep: @tree %>
         </ul>
       </div>
       <%= render 'adsense/banner' %>
