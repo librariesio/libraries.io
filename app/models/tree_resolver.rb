@@ -2,8 +2,7 @@ class TreeResolver
   attr_accessor :project_names
   attr_accessor :license_names
 
-  def initialize(project, version, kind)
-    @project = project
+  def initialize(version, kind)
     @version = version
     @kind = kind
     @project_names = []
