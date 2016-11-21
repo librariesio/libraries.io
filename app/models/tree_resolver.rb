@@ -1,19 +1,34 @@
 class TreeResolver
   attr_accessor :project_names
   attr_accessor :license_names
+  attr_accessor :tree
 
   def initialize(version, kind)
     @version = version
     @kind = kind
     @project_names = []
     @license_names = []
-  end
-
-  def generate_dependency_tree
-    load_dependencies_for(@version, nil, @kind, 0)
+    @tree = load_dependencies_tree
   end
 
   private
+
+  def load_dependencies_tree
+    tree_data = Rails.cache.fetch [@version, @kind], :expires_in => 1.day, race_condition_ttl: 2.minutes do
+      generate_dependency_tree
+    end
+    @project_names = tree_data[:project_names]
+    @license_names = tree_data[:license_names]
+    @tree = tree_data[:tree]
+  end
+
+  def generate_dependency_tree
+    {
+      tree: load_dependencies_for(@version, nil, @kind, 0),
+      project_names: project_names,
+      license_names: license_names
+    }
+  end
 
   def load_dependencies_for(version, dependency, kind, index)
     if version
