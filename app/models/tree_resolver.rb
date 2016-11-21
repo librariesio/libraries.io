@@ -1,16 +1,19 @@
-module TreeHelper
-  def generate_dependency_tree(project, version, kind)
+class TreeResolver
+  attr_accessor :project_names
+  attr_accessor :license_names
+
+  def initialize(version, kind)
+    @version = version
+    @kind = kind
     @project_names = []
     @license_names = []
-    load_dependencies_for(version, nil, kind, 0)
-    # if any of the same dependency twice in the tree
-
-    # flatten tree
-
-    # try to find common version number between all requirements
-
-    # otherwise warn
   end
+
+  def generate_dependency_tree
+    load_dependencies_for(@version, nil, @kind, 0)
+  end
+
+  private
 
   def load_dependencies_for(version, dependency, kind, index)
     if version
