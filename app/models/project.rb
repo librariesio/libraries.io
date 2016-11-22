@@ -43,6 +43,7 @@ class Project < ApplicationRecord
   scope :many_versions, -> { where('versions_count > 2') }
 
   scope :with_dependents, -> { where('dependents_count > 0') }
+  scope :with_dependent_repos, -> { where('most_dependent_repos > 0') }
 
   scope :with_github_url, -> { where('repository_url ILIKE ?', '%github.com%') }
   scope :with_gitlab_url, -> { where('repository_url ILIKE ?', '%gitlab.com%') }
@@ -52,6 +53,7 @@ class Project < ApplicationRecord
 
   scope :most_watched, -> { joins(:subscriptions).group('projects.id').order("COUNT(subscriptions.id) DESC") }
   scope :most_dependents, -> { with_dependents.order('dependents_count DESC') }
+  scope :most_dependent_repos, -> { with_dependents.order('dependent_repos_count DESC') }
 
   scope :maintained, -> { where('projects."status" not in (?) OR projects."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
   scope :deprecated, -> { where('projects."status" = ?', "Deprecated")}
