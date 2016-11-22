@@ -202,7 +202,8 @@ class Project < ApplicationRecord
   end
 
   def set_dependents_count
-    self.update_columns(dependents_count: dependents.joins(:version).pluck('DISTINCT versions.project_id').count)
+    self.update_columns(dependents_count: dependents.joins(:version).pluck('DISTINCT versions.project_id').count,
+                        dependent_repos_count: dependent_repositories.open_source.count.length)
   end
 
   def needs_suggestions?
