@@ -89,23 +89,32 @@
   <div class="col-md-4">
     <div class='row'>
       <%= render 'adsense/sidebar' %>
-      <% if @languages.any? %>
+      <% if @languages.many? %>
       <div class='col-md-12 col-sm-4'>
-        <h4>Popular "<%= @keyword %>" Languages</h4>
+        <h4>
+          <%= fa_icon 'code' %>
+          Top "<%= @keyword %>" Languages
+        </h4>
         <%= render partial: 'languages/list_language', collection: @languages, as: :language %>
       </div>
       <% end %>
 
-      <% if @platforms.any? %>
+      <% if @platforms.many? %>
       <div class='col-md-12 col-sm-4'>
-        <h4>Popular "<%= @keyword %>" Platforms</h4>
+        <h4>
+          <%= fa_icon 'archive' %>
+          Top "<%= @keyword %>" Package Managers
+        </h4>
         <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
       </div>
       <% end %>
 
-      <% if @licenses.any? %>
+      <% if @licenses.many? %>
       <div class='col-md-12 col-sm-4'>
-        <h4>Popular "<%= @keyword %>" Licenses</h4>
+        <h4>
+          <%= fa_icon 'gavel' %>
+          Top "<%= @keyword %>" Licenses
+        </h4>
         <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
       </div>
       <% end %>
