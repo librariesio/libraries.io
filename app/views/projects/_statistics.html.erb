@@ -32,7 +32,7 @@
         Dependent repositories
       </td>
       <td>
-        <strong><%= link_to number_to_human(@project.dependent_repositories.open_source.length), project_dependent_repos_path(@project.to_param) %></strong>
+        <strong><%= link_to number_to_human(@project.dependent_repositories.open_source.count.length), project_dependent_repos_path(@project.to_param) %></strong>
       </td>
     </tr>
     <tr>
