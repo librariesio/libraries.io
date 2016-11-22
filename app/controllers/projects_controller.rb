@@ -26,7 +26,7 @@ class ProjectsController < ApplicationController
     }).paginate(page: page_number)
     ids = @search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
-    @projects = @search.records.includes(:github_repository, :versions).sort_by { |u| indexes[u.id] }
+    @projects = @search.records.includes(:github_repository).sort_by { |u| indexes[u.id] }
   end
 
   def unlicensed
@@ -37,7 +37,7 @@ class ProjectsController < ApplicationController
     }).paginate(page: page_number)
     ids = @search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
-    @projects = @search.records.includes(:github_repository, :versions).sort_by { |u| indexes[u.id] }
+    @projects = @search.records.includes(:github_repository).sort_by { |u| indexes[u.id] }
   end
 
   def deprecated
@@ -164,6 +164,6 @@ class ProjectsController < ApplicationController
 
   def project_scope(scope_name)
     @platforms = Project.send(scope_name).group('platform').count.sort_by(&:last).reverse
-    @projects = platform_scope.send(scope_name).includes(:github_repository, :versions).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = platform_scope.send(scope_name).includes(:github_repository).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 end

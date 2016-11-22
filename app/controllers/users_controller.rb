@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
   def projects
     order = params[:sort] == "contributions" ? "github_repositories.github_contributions_count ASC, projects.rank DESC, projects.created_at DESC" : 'projects.rank DESC, projects.created_at DESC'
-    @projects = @user.projects.joins(:github_repository).includes(:github_repository, :versions).order(order).paginate(page: page_number)
+    @projects = @user.projects.joins(:github_repository).includes(:github_repository).order(order).paginate(page: page_number)
   end
 
   def contributors
