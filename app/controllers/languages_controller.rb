@@ -13,6 +13,7 @@ class LanguagesController < ApplicationController
     @watched = scope.most_watched.limit(5).includes(:github_repository)
     @dependend = scope.most_dependents.limit(5).includes(:github_repository)
     @popular = scope.order('projects.rank DESC').limit(5).includes(:github_repository)
+    @dependent_repos = scope.most_dependent_repos.limit(5).includes(:github_repository)
 
     facets = Project.facets(filters: { language: @language }, :facet_limit => 10)
 
