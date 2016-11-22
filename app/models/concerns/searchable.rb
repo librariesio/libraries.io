@@ -32,6 +32,7 @@ module Searchable
         indexes :stars, type: 'integer'
         indexes :versions_count, type: 'integer'
         indexes :dependents_count, type: 'integer'
+        indexes :dependent_repos_count, type: 'integer'
         indexes :github_repository_id, type: 'integer'
         indexes :github_contributions_count, type: 'integer'
       end
@@ -40,7 +41,11 @@ module Searchable
     after_save() { __elasticsearch__.index_document }
 
     def as_indexed_json(_options)
-      as_json methods: [:stars, :repo_name, :exact_name, :github_contributions_count, :pushed_at]
+      as_json methods: [:stars, :repo_name, :exact_name, :github_contributions_count, :pushed_at, :dependent_repos_count]
+    end
+
+    def dependent_repos_count
+      read_attribute(:dependent_repos_count) || 0
     end
 
     def exact_name
