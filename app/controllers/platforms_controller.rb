@@ -12,6 +12,7 @@ class PlatformsController < ApplicationController
     @dependend = scope.most_dependents.limit(5).includes(:github_repository)
     @popular = scope.order('projects.rank DESC').limit(5).includes(:github_repository)
     @trending = scope.includes(:github_repository).recently_created.hacker_news.limit(5)
+    @dependent_repos = scope.most_dependent_repos.limit(5).includes(:github_repository)
 
     @color = @platform.color
 

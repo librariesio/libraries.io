@@ -6,11 +6,13 @@ class KeywordsController < ApplicationController
   def show
     find_keyword
 
-    @created = Project.keyword(@keyword).few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository)
-    @updated = Project.keyword(@keyword).many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
-    @watched = Project.keyword(@keyword).most_watched.limit(5).includes(:github_repository)
-    @popular = Project.keyword(@keyword).order('projects.rank DESC').limit(5).includes(:github_repository)
-    @dependend = Project.keyword(@keyword).most_dependents.limit(5).includes(:github_repository)
+    scope = Project.keyword(@keyword).maintained
+    @created = scope.few_versions.order('projects.created_at DESC').limit(5).includes(:github_repository)
+    @updated = scope.many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:github_repository)
+    @watched = scope.most_watched.limit(5).includes(:github_repository)
+    @popular = scope.order('projects.rank DESC').limit(5).includes(:github_repository)
+    @dependend = scope.most_dependents.limit(5).includes(:github_repository)
+    @dependent_repos = scope.most_dependent_repos.limit(5).includes(:github_repository)
 
     facets = Project.facets(filters: {keywords_array: @keyword}, :facet_limit => 10)
 

@@ -31,7 +31,7 @@ module SourceRank
       not_brand_new:              not_brand_new? ? 1 : 0,
       one_point_oh:               one_point_oh? ? 1 : 0,
       dependent_projects:         log_scale(dependents_count) * 2,
-      dependent_repositories:     log_scale(dependent_repositories.open_source.count.length),
+      dependent_repositories:     log_scale(dependent_repos_count),
       github_stars:               log_scale(stars),
       contributors:               (log_scale(github_contributions_count) / 2.0).ceil,
       subscribers:                (log_scale(subscriptions.length) / 2.0).ceil,

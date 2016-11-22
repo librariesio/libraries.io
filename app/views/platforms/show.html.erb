@@ -49,12 +49,20 @@
         </div>
       <% end %>
 
+      <% if @dependent_repos.any? %>
+        <div class='col-sm-6 platform-column'>
+          <h4>Most Used <%= platform_name(@platform_name) %> Projects</h4>
+          <%= render @dependent_repos, cache: true %>
+        </div>
+      <% end %>
+
       <% if @dependend.any? %>
         <div class='col-sm-6 platform-column'>
           <h4>Most Depended upon <%= platform_name(@platform_name) %> Projects</h4>
           <%= render @dependend, cache: true %>
         </div>
       <% end %>
+
       <% if @updated.any? %>
       <div class='col-sm-6 platform-column'>
         <h4>

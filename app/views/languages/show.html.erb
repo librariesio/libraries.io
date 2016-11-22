@@ -23,9 +23,9 @@
 
 <div class="row">
   <div class="col-md-8">
-    <div class='row'>
+    <div class="row">
       <% if @popular.any? %>
-      <div class='col-sm-6'>
+      <div class='col-sm-6 platform-column'>
         <h4>
           Popular <%= @language %> Projects
           <small class='more'>
@@ -37,7 +37,7 @@
       <% end %>
 
       <% if @created.any? %>
-      <div class='col-sm-6'>
+      <div class='col-sm-6 platform-column'>
         <h4>
           <%= link_to search_url(languages: @language, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
@@ -48,11 +48,8 @@
         <%= render @created, cache: true %>
       </div>
       <% end %>
-    </div>
-    <hr>
-    <div class='row'>
       <% if @updated.any? %>
-      <div class='col-sm-6'>
+      <div class='col-sm-6 platform-column'>
         <h4>
           <%= link_to search_url(languages: @language, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
@@ -66,24 +63,24 @@
       </div>
       <% end %>
       <% if @watched.any? %>
-        <div class='col-sm-6'>
+        <div class='col-sm-6 platform-column'>
           <h4>Most Watched <%= @language %> Projects</h4>
           <%= render @watched, cache: true %>
         </div>
       <% end %>
-    </div>
-    <% if @dependend.any? %>
-      <hr>
-      <div class="row">
-        <div class='col-sm-6'>
+      <% if @dependent_repos.any? %>
+        <div class='col-sm-6 platform-column'>
+          <h4>Most Used <%= @language %> Projects</h4>
+          <%= render @dependent_repos, cache: true %>
+        </div>
+      <% end %>
+      <% if @dependend.any? %>
+        <div class='col-sm-6 platform-column'>
           <h4>Most Depended upon <%= @language %> Projects</h4>
           <%= render @dependend, cache: true %>
         </div>
-        <div class="col-sm-6">
-          <%= render 'adsense/sidebar' %>
-        </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
   <div class="col-md-4">
     <%= render 'adsense/sidebar' %>
