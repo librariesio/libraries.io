@@ -1,0 +1,13 @@
+<h1>Usage stats for <%= link_to @project, project_path(@project.to_param) %></h1>
+<dl>
+  <dt>
+    Required version breakdown across <%= @total %> Dependent Repositories
+  </dt>
+  <% @counts.sort_by{|k,v| k}.each do |requirement, count| %>
+    <% percentage = count.to_f/@total*100 %>
+    <% next if percentage < 1 %>
+    <li>
+      <dd class="percentage percentage-<%= (percentage.round/@highest_percentage.to_f*100).round %>"><span class="text"><%= requirement %>: <%= percentage.round(2) %>%</span></dd>
+    </li>
+  <% end %>
+</dl>
