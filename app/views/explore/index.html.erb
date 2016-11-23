@@ -19,15 +19,15 @@
         </a>
       </li>
       <li>
-        <a href="#dependend_projects" data-toggle="tab">
-          <%= fa_icon 'users' %>
-          Most Used
+        <a href="#new_projects" data-toggle="tab">
+          <%= fa_icon 'bullhorn' %>
+          New
         </a>
       </li>
       <li>
-        <a href="#popular_projects" data-toggle="tab">
-          <%= fa_icon 'star' %>
-          Popular
+        <a href="#dependend_projects" data-toggle="tab">
+          <%= fa_icon 'users' %>
+          Most Used
         </a>
       </li>
     </ul>
@@ -41,20 +41,20 @@
           See more trending projects &raquo;
         <% end %>
       </div>
+      <div class="tab-pane" id="new_projects">
+        <% cache 'explore-new_projects', expires_in: 1.hour, race_condition_ttl: 1.minute do %>
+          <%= render @new_projects, cache: true %>
+        <% end %>
+        <%= link_to search_path(sort: 'created_at'), class: 'text-muted' do %>
+          See more new projects &raquo;
+        <% end %>
+      </div>
       <div class="tab-pane" id="dependend_projects">
         <% cache 'explore-dependend_projects', expires_in: 1.day, race_condition_ttl: 1.minute do %>
           <%= render project_search('dependents_count'), cache: true %>
         <% end %>
         <%= link_to search_path(sort: 'dependents_count'), class: 'text-muted' do %>
           See more most used projects &raquo;
-        <% end %>
-      </div>
-      <div class="tab-pane" id="popular_projects">
-        <% cache 'explore-popular_projects', expires_in: 1.day, race_condition_ttl: 1.minute do %>
-          <%= render project_search('rank'), cache: true %>
-        <% end %>
-        <%= link_to search_path(sort: 'rank'), class: 'text-muted' do %>
-          See more popular projects &raquo;
         <% end %>
       </div>
     </div>
@@ -67,19 +67,25 @@
 			<li class="active">
         <a href="#trending_repos" data-toggle="tab">
           <%= fa_icon 'line-chart' %>
-          Trending Repos
+          Trending
         </a>
 			</li>
+      <li>
+        <a href="#new_repos" data-toggle="tab">
+          <%= fa_icon 'bullhorn' %>
+          New
+        </a>
+      </li>
 			<li>
         <a href="#popular_repos" data-toggle="tab">
           <%= fa_icon 'star' %>
-          Popular Repos
+          Popular
         </a>
 			</li>
 			<li>
         <a href="#forked_repos" data-toggle="tab">
           <%= fa_icon 'code-fork' %>
-          Most Forked Repos
+          Most Forked
         </a>
 			</li>
 		</ul>
@@ -93,6 +99,14 @@
           See more trending repos &raquo;
         <% end %>
 			</div>
+      <div class="tab-pane" id="new_repos">
+        <% cache 'explore-new_repos', expires_in: 30.minutes, race_condition_ttl: 1.minute do %>
+          <%= render @new_repos, cache: true %>
+        <% end %>
+        <%= link_to new_repos_path, class: 'text-muted' do %>
+          See more new repos &raquo;
+        <% end %>
+      </div>
 			<div class="tab-pane" id="popular_repos">
         <% cache 'explore-popular_repos', expires_in: 1.day, race_condition_ttl: 1.minute do %>
           <%= render repo_search('stargazers_count'), cache: true %>
