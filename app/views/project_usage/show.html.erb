@@ -1,7 +1,7 @@
 <h1>Usage stats for <%= link_to @project, project_path(@project.to_param) %></h1>
 
 <table id="q-graph">
-    <caption>Required version breakdown across <%= number_to_human(@total) %> Dependent Repositories</caption>
+    <caption>Required version breakdown across <%= number_to_human(@total) %> open source repositories</caption>
     <tbody>
     <% max_height = 400 %>
     <% @counts.each_with_index do |(requirement, count), index| %>
