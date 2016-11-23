@@ -61,8 +61,4 @@ module Releases
   def set_latest_release_number
     self.latest_release_number = latest_release.try(:number)
   end
-
-  def latest_release_number
-    read_attribute(:latest_release_number) || latest_release.try(:number)
-  end
 end

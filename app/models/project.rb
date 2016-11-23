@@ -61,7 +61,7 @@ class Project < ApplicationRecord
   scope :removed, -> { where('projects."status" = ?', "Removed")}
   scope :unmaintained, -> { where('projects."status" = ?', "Unmaintained")}
 
-  scope :indexable, -> { not_removed.includes(:versions, github_repository: :github_tags) }
+  scope :indexable, -> { not_removed.includes(:github_repository) }
 
   scope :bus_factor, -> { maintained
                           .joins(:github_repository)
