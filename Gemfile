@@ -47,7 +47,7 @@ gem 'gemoji'
 gem 'js_cookie_rails'
 gem 'postgres_ext', git: 'https://github.com/gocardless/postgres_ext', branch: 'rails-5'
 gem 'foreman', require: false
-gem 'puma', '3.6.0'
+gem 'puma'
 gem 'payola-payments'
 gem 'rack-timeout'
 gem 'semantic_range'
