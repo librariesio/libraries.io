@@ -9,6 +9,7 @@ module ApplicationHelper
       ['SourceRank', 'rank'],
       ['GitHub Stars', 'stars'],
       ['Dependents', 'dependents_count'],
+      ['Most Used', 'dependent_repos_count'],
       ['Latest Release', 'latest_release_published_at'],
       ['Contributors', 'github_contributions_count'],
       ['Newest', 'created_at']
