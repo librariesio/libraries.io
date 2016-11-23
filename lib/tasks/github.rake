@@ -1,13 +1,24 @@
 namespace :github do
-  task recreate_index: :environment do
+  task recreate_repos_index: :environment do
     # If the index doesn't exists can't be deleted, returns 404, carry on
     GithubRepository.__elasticsearch__.client.indices.delete index: 'github_repositories' rescue nil
     GithubRepository.__elasticsearch__.create_index! force: true
   end
 
-  desc 'Reindex the search'
-  task reindex: [:environment, :recreate_index] do
+  desc 'Reindex the repo search'
+  task reindex_repos: [:environment, :recreate_repos_index] do
     GithubRepository.indexable.import
+  end
+
+  task recreate_issues_index: :environment do
+    # If the index doesn't exists can't be deleted, returns 404, carry on
+    GithubIssue.__elasticsearch__.client.indices.delete index: 'github_issues' rescue nil
+    GithubIssue.__elasticsearch__.create_index! force: true
+  end
+
+  desc 'Reindex the issues search'
+  task reindex_issues: [:environment, :recreate_issues_index] do
+    GithubIssue.indexable.import
   end
 
   task sync_users: :environment do
