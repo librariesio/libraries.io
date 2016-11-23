@@ -12,5 +12,15 @@ namespace :deploy do
       execute "restart librariesio"
     end
   end
+  task :stop do
+    on roles(:worker) do |host|
+      execute "stop librariesio"
+    end
+  end
+  task :start do
+    on roles(:worker) do |host|
+      execute "start librariesio"
+    end
+  end
   after :publishing, :restart
 end

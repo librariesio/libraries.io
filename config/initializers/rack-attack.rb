@@ -8,5 +8,7 @@ limit_proc = proc do |req|
 end
 
 Rack::Attack.throttle('api', :limit => limit_proc, :period => 1.minute) do |req|
-  (req.params['api_key'] || req.ip) if req.path.match(/^\/api/i)
+  if req.path.match(/^\/api\/.+/) && !req.path.match(/^\/api\/bower-search/)
+    req.params['api_key'] || req.ip
+  end
 end
