@@ -3,7 +3,7 @@
   <div class="col-md-10">
     <h1>Deprecated Github repos</h1>
     <%= page_entries_info @github_repositories %>
-    <%= render @github_repositories %>
+    <%= render @github_repositories, cache: true %>
     <%= will_paginate @github_repositories, page_links: false %>
   </div>
 </div>

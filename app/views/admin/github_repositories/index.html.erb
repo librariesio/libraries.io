@@ -2,7 +2,7 @@
 <div class="row">
   <div class="col-md-8">
     <h1>Unlicensed Github repos</h1>
-    <%= render @github_repositories %>
+    <%= render @github_repositories, cache: true %>
     <%= will_paginate @github_repositories, page_links: false %>
   </div>
 
