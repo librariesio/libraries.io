@@ -229,7 +229,7 @@ class GithubRepository < ApplicationRecord
     download_manifests(token)
     download_owner
     download_fork_source(token)
-    download_issues(token)
+    # download_issues(token)
     save_projects
     update_attributes(last_synced_at: Time.now)
   end
