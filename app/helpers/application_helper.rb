@@ -3,6 +3,10 @@ require 'uri'
 module ApplicationHelper
   include SanitizeUrl
 
+  def colours
+    Languages::Language.all.map(&:color).compact.uniq.shuffle(random: Random.new(12))
+  end
+
   def sort_options
     [
       ['Relevance', nil],

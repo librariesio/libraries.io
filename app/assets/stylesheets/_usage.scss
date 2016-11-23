@@ -1,72 +1,54 @@
-dl {
-  display: flex;
-  background-color: white;
-  flex-direction: column;
-  width: 100%;
-  max-width: 700px;
-  position: relative;
-  padding: 20px;
-}
-
-dt {
-  align-self: flex-start;
-  width: 100%;
+#q-graph {
   display: block;
-  text-align: center;
-  margin-bottom: 20px;
-  margin-left: 130px;
+  position: relative;
+  height: 400px;
+  margin: 70px 0 30px;
+  padding: 0;
+  background: transparent;
+  font-size: 12px;
 }
 
-.text {
-  display: flex;
-  align-items: center;
-  height: 40px;
-  width: 130px;
-  background-color: white;
+#q-graph caption {
+  caption-side: top;
+  width: 600px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  top: -60px;
+  position: relative;
+  z-index: 10;
+  font-weight: bold;
+}
+
+#q-graph tr, #q-graph th, #q-graph td {
   position: absolute;
-  left: 0;
-  justify-content: flex-end;
+  bottom: 0;
+  width: 60px;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  text-align: center;
 }
 
-.percentage {
-  line-height: 1;
-  width: 100%;
-  height: 40px;
-  margin-left: 130px;
-  background: repeating-linear-gradient(
-  to right,
-  #ddd,
-  #ddd 1px,
-  #fff 1px,
-  #fff 5%
-);
-
-  &:after {
-    content: "";
-    display: block;
-    background-color: #3d9970;
-    width: 50px;
-    margin-bottom: 10px;
-    height: 90%;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: background-color .3s ease;
-    cursor: pointer;
-  }
-  &:hover,
-  &:focus {
-    &:after {
-       background-color: #aaa;
-    }
-  }
+#q-graph tbody tr {
+  height: 400px;
+  padding-top: 2px;
+  border-right: 1px dotted #C4C4C4;
+  color: #AAA;
 }
 
-@for $i from 1 through 100 {
-  .percentage-#{$i} {
-    &:after {
-      $value: ($i * 1%);
-      width: $value;
-    }
-  }
+#q-graph tbody th {bottom: -1.75em; vertical-align: top;
+font-weight: normal; color: #333;}
+#q-graph .bar {
+  width: 40px;
+  border: 1px solid;
+  border-bottom: none;
+  color: #000;
+}
+#q-graph .bar p {
+  margin: -20px 0 0;
+  opacity: .6;
+}
+#q-graph .sent {
+  left: 10px;
+  border-color: transparent;
 }
