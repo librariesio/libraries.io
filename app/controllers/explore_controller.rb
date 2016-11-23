@@ -12,11 +12,11 @@ class ExploreController < ApplicationController
   private
 
   def trending_projects
-    Project.includes(:github_repository).recently_created.maintained.hacker_news.limit(6)
+    Project.includes(:github_repository).recently_created.maintained.hacker_news.to_a.uniq(&:name).first(6)
   end
 
   def trending_repos
-    GithubRepository.trending.hacker_news.limit(6)
+    GithubRepository.trending.hacker_news.limit(10).to_a.uniq(&:name).first(6)
   end
 
   helper_method :repo_search
