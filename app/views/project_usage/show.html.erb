@@ -8,7 +8,7 @@
 </h1>
 
 <% if @all_counts.any? %>
-  <% cache ['usage', @project.id], expires_in: usage_cache_length(@total).week, race_condition_ttl: 1.minute do %>
+  <% cache ['usage', @project.id, 'v2'], expires_in: usage_cache_length(@total).week, race_condition_ttl: 1.minute do %>
     <table id="q-graph">
         <caption>Required version breakdown across <%= number_to_human(@total) %> open source repositories</caption>
         <tbody>
