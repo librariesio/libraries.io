@@ -51,6 +51,7 @@ class GithubRepository < ApplicationRecord
   scope :with_manifests, -> { joins(:manifests) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {github_repository_id: nil}) }
 
+  scope :with_description, -> { where("github_repositories.description <> ''") }
   scope :with_license, -> { where("github_repositories.license <> ''") }
   scope :without_license, -> {where("github_repositories.license IS ? OR github_repositories.license = ''", nil)}
 
