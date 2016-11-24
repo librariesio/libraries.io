@@ -1,83 +1,87 @@
 <h1>Usage stats for <%= link_to @project, project_path(@project.to_param) %></h1>
 
-<table id="q-graph">
-    <caption>Required version breakdown across <%= number_to_human(@total) %> open source repositories</caption>
-    <tbody>
-    <% max_height = 400 %>
-    <% @counts.each_with_index do |(requirement, count), index| %>
-      <% percentage = count.to_f/@total*100 %>
+<% if @all_counts.any? %>
+  <table id="q-graph">
+      <caption>Required version breakdown across <%= number_to_human(@total) %> open source repositories</caption>
+      <tbody>
+      <% max_height = 400 %>
+      <% @counts.each_with_index do |(requirement, count), index| %>
+        <% percentage = count.to_f/@total*100 %>
 
-      <tr class="qtr" style='left:<%= index*60 %>px; <% if index == @counts.length - 1 %>border-right:none;<% end %>'>
-          <th scope="row">
-            <% if requirement.length > 10 %>
-              <span class='tip' title='<%= requirement %>'><%= truncate(requirement, length: 10) %></span>
+        <tr class="qtr" style='left:<%= index*60 %>px; <% if index == @counts.length - 1 %>border-right:none;<% end %>'>
+            <th scope="row">
+              <% if requirement.length > 10 %>
+                <span class='tip' title='<%= requirement %>'><%= truncate(requirement, length: 10) %></span>
+              <% else %>
+                <%= requirement %>
+              <% end %>
+            </th>
+            <td class="bar" style='height:<%= (percentage.round/@highest_percentage.to_f*max_height).round %>px; background-color: <%= colours[index] %>;'>
+              <p>
+                <a href='<%= url_for(params.permit(:name, :platform, :kind).merge(requirements: requirement)) %>' class='tip' title="<%= number_to_human(count) %> <%= "repo".pluralize(count) %> specifies this version">
+                  <%= percentage.round(2) %>%
+                </a>
+              </p>
+            </td>
+        </tr>
+      <% end %>
+      </tbody>
+  </table>
+  <hr>
+  <div class="row">
+    <div class="col-sm-8">
+      <h4>
+        GitHub Repositories that depend on <%= link_to @project, project_path(@project.to_param) %>
+        <% if params[:requirements].present? %>
+          <code><%= params[:requirements] %></code>
+        <% end %>
+      </h4>
+
+      <%= render @repos, cache: true %>
+      <%= will_paginate @repos, page_links: false %>
+    </div>
+    <div class="col-sm-4">
+      <%= render 'adsense/banner' %>
+
+      <h4>
+        <%= fa_icon 'link' %>
+        Filter by requirement kind
+      </h4>
+      <ul class='filter'>
+        <% @kinds.sort_by{|k,v| -v}.each do |kind, count| %>
+          <% next unless kind.present? %>
+          <% active = kind == params[:kind] %>
+          <li class='<%= 'active' if active %>'>
+            <% if active %>
+              <%= link_to kind, url_for(params.permit(:name, :platform, :requirements).merge(kind: nil, page: nil)) %>
             <% else %>
-              <%= requirement %>
+              <%= link_to kind, url_for(params.permit(:name, :platform, :requirements).merge(kind: kind)) %>
+              <small><%= number_to_human(count) %></small>
             <% end %>
-          </th>
-          <td class="bar" style='height:<%= (percentage.round/@highest_percentage.to_f*max_height).round %>px; background-color: <%= colours[index] %>;'>
-            <p>
-              <a href='<%= url_for(params.permit(:name, :platform, :kind).merge(requirements: requirement)) %>' class='tip' title="<%= number_to_human(count) %> <%= "repo".pluralize(count) %> specifies this version">
-                <%= percentage.round(2) %>%
-              </a>
-            </p>
-          </td>
-      </tr>
-    <% end %>
-    </tbody>
-</table>
-<hr>
-<div class="row">
-  <div class="col-sm-8">
-    <h4>
-      GitHub Repositories that depend on <%= link_to @project, project_path(@project.to_param) %>
-      <% if params[:requirements].present? %>
-        <code><%= params[:requirements] %></code>
-      <% end %>
-    </h4>
+          </li>
+        <% end %>
+      </ul>
 
-    <%= render @repos, cache: true %>
-    <%= will_paginate @repos, page_links: false %>
+      <h4>
+        <%= fa_icon 'arrows-h' %>
+        Filter by required version range
+      </h4>
+      <ul class='filter'>
+        <% @all_counts.sort_by{|k,v| -v}.first(40).sort_by{|k,v| k.gsub(/\~|\>|\<|\^|\=|\*|\s/,'').split('.').map{|v| v.to_i} }.each do |requirements,count| %>
+          <% next unless requirements.present? %>
+          <% active = requirements == params[:requirements] %>
+          <li class='<%= 'active' if active %>'>
+            <% if active %>
+              <%= link_to requirements, url_for(params.permit(:name, :platform, :kind).merge(requirements: nil, page: nil)) %>
+            <% else %>
+              <%= link_to requirements, url_for(params.permit(:name, :platform, :kind).merge(requirements: requirements)) %>
+              <small><%= number_to_human(count) %></small>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
-  <div class="col-sm-4">
-    <%= render 'adsense/banner' %>
-
-    <h4>
-      <%= fa_icon 'link' %>
-      Filter by requirement kind
-    </h4>
-    <ul class='filter'>
-      <% @kinds.sort_by{|k,v| -v}.each do |kind, count| %>
-        <% next unless kind.present? %>
-        <% active = kind == params[:kind] %>
-        <li class='<%= 'active' if active %>'>
-          <% if active %>
-            <%= link_to kind, url_for(params.permit(:name, :platform, :requirements).merge(kind: nil, page: nil)) %>
-          <% else %>
-            <%= link_to kind, url_for(params.permit(:name, :platform, :requirements).merge(kind: kind)) %>
-            <small><%= number_to_human(count) %></small>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
-
-    <h4>
-      <%= fa_icon 'arrows-h' %>
-      Filter by required version range
-    </h4>
-    <ul class='filter'>
-      <% @all_counts.sort_by{|k,v| -v}.first(40).sort_by{|k,v| k.gsub(/\~|\>|\<|\^|\=|\*|\s/,'').split('.').map{|v| v.to_i} }.each do |requirements,count| %>
-        <% next unless requirements.present? %>
-        <% active = requirements == params[:requirements] %>
-        <li class='<%= 'active' if active %>'>
-          <% if active %>
-            <%= link_to requirements, url_for(params.permit(:name, :platform, :kind).merge(requirements: nil, page: nil)) %>
-          <% else %>
-            <%= link_to requirements, url_for(params.permit(:name, :platform, :kind).merge(requirements: requirements)) %>
-            <small><%= number_to_human(count) %></small>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-</div>
+<% else %>
+  No dependent repositories found.
+<% end %>
