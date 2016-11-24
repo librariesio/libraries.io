@@ -21,7 +21,7 @@
                   <%= requirement %>
                 <% end %>
               </th>
-              <td class="bar" style='height:<%= (percentage.round/@highest_percentage.to_f*max_height).round %>px; background-color: <%= colours[index] %>;'>
+              <td class="bar" style='height:<%= (percentage/@highest_percentage.to_f*max_height).round %>px; background-color: <%= colours[index] %>;'>
                 <p>
                   <a href='<%= url_for(params.permit(:name, :platform).merge(requirements: requirement)) %>' class='tip' title="<%= number_to_human(count) %> <%= "repo".pluralize(count) %> specifies this version">
                     <%= percentage.round(2) %>%
