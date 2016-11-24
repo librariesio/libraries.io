@@ -2,7 +2,10 @@
 <% description "Required version breakdown across #{number_to_human(@total)} open source repositories that depend on #{@project} on #{@project.platform_name}" %>
 <% content_for :meta, render_meta(@project) %>
 
-<h1>Usage stats for <%= link_to @project, project_path(@project.to_param) %></h1>
+<h1>
+  <%= fa_icon 'bar-chart' %>
+  Usage stats for <%= link_to @project, project_path(@project.to_param) %>
+</h1>
 
 <% if @all_counts.any? %>
   <% cache ['usage', @project.id], expires_in: usage_cache_length(@total).week, race_condition_ttl: 1.minute do %>
