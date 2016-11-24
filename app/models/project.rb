@@ -32,6 +32,7 @@ class Project < ApplicationRecord
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
   scope :with_repo, -> { joins(:github_repository).where('github_repositories.id IS NOT NULL') }
   scope :without_repo, -> { where(github_repository_id: nil) }
+  scope :with_description, -> { where("projects.description <> ''") }
 
   scope :with_license, -> { where("licenses <> ''") }
   scope :without_license, -> { where("licenses IS ? OR licenses = ''", nil) }
