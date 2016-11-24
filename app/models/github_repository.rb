@@ -41,6 +41,8 @@ class GithubRepository < ApplicationRecord
   scope :with_projects, -> { joins(:projects) }
   scope :without_projects, -> { includes(:projects).where(projects: { github_repository_id: nil }) }
   scope :without_subscriptons, -> { includes(:repository_subscriptions).where(repository_subscriptions: { github_repository_id: nil }) }
+  scope :with_tags, -> { joins(:github_tags) }
+  scope :without_tags, -> { includes(:github_tags).where(github_tags: { github_repository_id: nil }) }
 
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
