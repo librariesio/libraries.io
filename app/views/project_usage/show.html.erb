@@ -1,3 +1,7 @@
+<% title "Usage stats for #{@project} on #{@project.platform_name} - Libraries.io" %>
+<% description "Required version breakdown across #{number_to_human(@total)} open source repositories that depend on #{@project} on #{@project.platform_name}" %>
+<% content_for :meta, render_meta(@project) %>
+
 <h1>Usage stats for <%= link_to @project, project_path(@project.to_param) %></h1>
 
 <% if @all_counts.any? %>
