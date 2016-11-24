@@ -209,4 +209,9 @@ module ApplicationHelper
   def version_tree_path(options={})
     version_path(options.except(:kind)) + "/tree#{options[:kind].present? ? '?kind='+options[:kind] : '' }"
   end
+
+  def usage_cache_length(total)
+    return 1 if total <= 0
+    (Math.log10(total).round+1)*2
+  end
 end
