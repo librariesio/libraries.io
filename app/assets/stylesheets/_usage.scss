@@ -36,19 +36,20 @@
   color: #AAA;
 }
 
-#q-graph tbody th {bottom: -1.75em; vertical-align: top;
-font-weight: normal; color: #333;}
+#q-graph tbody th {
+  bottom: -1.75em;
+  vertical-align: top;
+  font-weight: normal;
+  color: #333;
+  overflow: hidden;
+}
 #q-graph .bar {
+  left: 10px;
   width: 40px;
-  border: 1px solid;
   border-bottom: none;
   color: #000;
 }
 #q-graph .bar p {
   margin: -20px 0 0;
   opacity: .6;
-}
-#q-graph .sent {
-  left: 10px;
-  border-color: transparent;
 }
