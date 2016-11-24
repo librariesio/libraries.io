@@ -82,4 +82,11 @@ namespace :projects do
       end
     end
   end
+
+  task download_missing: :environment do
+    ['Atom', 'Cargo', 'CocoaPods', 'CPAN', 'CRAN', 'Elm', 'Hackage', 'Haxelib',
+      'Hex', 'Packagist', 'Pypi', 'Rubygems'].each do |platform|
+      "Repositories::#{platform}".constantize.import_new_async
+    end
+  end
 end
