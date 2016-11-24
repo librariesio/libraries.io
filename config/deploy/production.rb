@@ -9,7 +9,7 @@ server ENV['SIDEKIQ_SERVER_4'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
 namespace :deploy do
   task :restart do
     on roles(:app) do |host|
-      execute "restart librariesio"
+      execute "sleep #{rand(100)} && restart librariesio"
     end
   end
   task :stop do
