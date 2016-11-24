@@ -8,7 +8,7 @@ module SourceRank
   end
 
   def update_source_rank_async
-    UpdateSourceRankWorker.perform_async(self.id)
+    UpdateSourceRankWorker.perform_async(self.id) if updated_at.present? && updated_at < 1.day.ago
   end
 
   def set_source_rank
