@@ -2,21 +2,10 @@
   display: block;
   position: relative;
   height: 400px;
-  margin: 70px 0 30px;
+  margin: 30px 0;
   padding: 0;
   background: transparent;
   font-size: 12px;
-}
-
-#q-graph caption {
-  caption-side: top;
-  width: 600px;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-  top: -60px;
-  position: relative;
-  z-index: 10;
-  font-weight: bold;
 }
 
 #q-graph tr, #q-graph th, #q-graph td {
