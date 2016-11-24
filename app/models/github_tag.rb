@@ -13,10 +13,6 @@ class GithubTag < ApplicationRecord
     github_repository.try(:save_projects)
   end
 
-  def update_github_repo_async
-    GithubDownloadWorker.perform_async(github_repository_id)
-  end
-
   def send_notifications_async
     return if published_at && published_at < 1.week.ago
     TagNotificationsWorker.perform_async(self.id) if has_projects?
