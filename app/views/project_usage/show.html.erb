@@ -5,6 +5,7 @@
 <h1>
   <%= fa_icon 'bar-chart' %>
   Usage stats for <%= link_to @project, project_path(@project.to_param) %>
+  on <%= link_to platform_name(@project.platform), platform_path(@project.platform) %>
 </h1>
 
 <p>
