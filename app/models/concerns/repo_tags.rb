@@ -3,7 +3,7 @@ module RepoTags
     existing_tag_names = github_tags.pluck(:name)
     tags = github_client(token).refs(full_name, 'tags')
     Array(tags).each do |tag|
-      next unless tag && tag.is_a?(Hash) && tag['ref']
+      next unless tag && tag.is_a?(Sawyer::Resource) && tag['ref']
       download_tag(token, tag, existing_tag_names)
     end
   rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
