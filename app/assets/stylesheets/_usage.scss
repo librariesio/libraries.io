@@ -1,0 +1,55 @@
+#q-graph {
+  display: block;
+  position: relative;
+  height: 400px;
+  margin: 70px 0 30px;
+  padding: 0;
+  background: transparent;
+  font-size: 12px;
+}
+
+#q-graph caption {
+  caption-side: top;
+  width: 600px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  top: -60px;
+  position: relative;
+  z-index: 10;
+  font-weight: bold;
+}
+
+#q-graph tr, #q-graph th, #q-graph td {
+  position: absolute;
+  bottom: 0;
+  width: 60px;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+#q-graph tbody tr {
+  height: 400px;
+  padding-top: 2px;
+  border-right: 1px dotted #C4C4C4;
+  color: #AAA;
+}
+
+#q-graph tbody th {
+  bottom: -1.75em;
+  vertical-align: top;
+  font-weight: normal;
+  color: #333;
+  overflow: hidden;
+}
+#q-graph .bar {
+  left: 10px;
+  width: 40px;
+  border-bottom: none;
+  color: #000;
+}
+#q-graph .bar p {
+  margin: -20px 0 0;
+  opacity: .6;
+}

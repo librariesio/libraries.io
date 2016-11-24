@@ -3,6 +3,10 @@ require 'uri'
 module ApplicationHelper
   include SanitizeUrl
 
+  def colours
+    Languages::Language.all.map(&:color).compact.uniq.shuffle(random: Random.new(12))
+  end
+
   def sort_options
     [
       ['Relevance', nil],
@@ -204,5 +208,10 @@ module ApplicationHelper
 
   def version_tree_path(options={})
     version_path(options.except(:kind)) + "/tree#{options[:kind].present? ? '?kind='+options[:kind] : '' }"
+  end
+
+  def usage_cache_length(total)
+    return 1 if total <= 0
+    (Math.log10(total).round+1)*2
   end
 end
