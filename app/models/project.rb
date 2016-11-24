@@ -294,7 +294,7 @@ class Project < ApplicationRecord
   end
 
   def update_github_repo_async
-    GithubProjectWorker.perform_async(self.id)
+    GithubProjectWorker.perform_async(self.id) if github_name_with_owner.present?
   end
 
   def can_have_dependencies?

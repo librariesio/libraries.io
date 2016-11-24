@@ -4,9 +4,6 @@ class GithubProjectWorker
 
   def perform(project_id)
     project = Project.find_by_id(project_id)
-    if project
-      project.update_github_repo
-      project.update_source_rank_async
-    end
+    project.update_github_repo if project
   end
 end
