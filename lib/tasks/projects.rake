@@ -27,8 +27,8 @@ namespace :projects do
   end
 
   task link_dependencies: :environment do
-    Dependency.without_project_id.with_project_name.find_each(&:update_project_id)
-    RepositoryDependency.without_project_id.with_project_name.find_each(&:update_project_id)
+    Dependency.where('created_at > ?', 1.day.ago).without_project_id.with_project_name.find_each(&:update_project_id)
+    RepositoryDependency.where('created_at > ?', 1.day.ago).without_project_id.with_project_name.find_each(&:update_project_id)
   end
 
   task check_status: :environment do
