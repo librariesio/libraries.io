@@ -20,15 +20,7 @@ module Repositories
     end
 
     def self.recent_names
-      page = 1
-      projects = []
-      while true
-        r = get("http://brewformulas.org/?format=json&page=#{page}")['new_formulas']
-        break if  r == []
-        projects += r
-        page +=1
-      end
-      projects.map{|project| project['formula'] }.uniq
+      get("http://brewformulas.org/?format=json&page=#{page}")['new_formulas'].map{|project| project['formula'] }.uniq
     end
 
     def self.project(name)
