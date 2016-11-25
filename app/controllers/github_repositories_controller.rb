@@ -69,7 +69,12 @@ class GithubRepositoriesController < ApplicationController
 
   def contributors
     load_repo
-    @contributors = @github_repository.contributors.order('count DESC').visible.paginate(page: page_number)
+    scope = @github_repository.github_contributions.joins(:github_user)
+    visible_scope = scope.where('github_users.hidden = ?', false).order('count DESC')
+    @total = scope.sum(:count)
+    @top_count = visible_scope.first.count
+    @contributions = visible_scope.paginate(page: page_number)
+    @any_hidden = scope.count > @contributions.total_entries
   end
 
   def forks
