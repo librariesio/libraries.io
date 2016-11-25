@@ -47,16 +47,18 @@
   <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
 
-    <p class="h4">Total commits:</p>
-    <p class="h1"><%= number_to_human @total %></p>
-    <hr/>
-    <p class="h4">Total contributors:</p>
-    <p class="h1"><%= number_to_human @contributions.total_entries %></p>
-    <hr>
-    <p class="h4">Average commits:</p>
-    <% days = (Time.now - @github_repository.created_at)/1.day %>
-    <p class="h1"><%= ((@total/days.to_f)).round(2) %> per day</p>
-    <small class='tip' title='<%= number_to_human days %> days since repo creation'>Across <%= distance_of_time_in_words(Time.now, @github_repository.created_at) %></small>
+    <% if @contributions.any? %>
+      <p class="h4">Total commits:</p>
+      <p class="h1"><%= number_to_human @total %></p>
+      <hr/>
+      <p class="h4">Total contributors:</p>
+      <p class="h1"><%= number_to_human @contributions.total_entries %></p>
+      <hr>
+      <p class="h4">Average commits:</p>
+      <% days = (Time.now - @github_repository.created_at)/1.day %>
+      <p class="h1"><%= ((@total/days.to_f)).round(2) %> per day</p>
+      <small class='tip' title='<%= number_to_human days %> days since repo creation'>Across <%= distance_of_time_in_words(Time.now, @github_repository.created_at) %></small>
+    <% end %>
     <% if @any_hidden %>
       <hr>
       <p>
