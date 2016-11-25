@@ -43,8 +43,9 @@ module RepoUrls
     "#{url}/raw/#{default_branch}/"
   end
 
-  def commits_url
-    "#{url}/commits"
+  def commits_url(author = nil)
+    author_param = author.present? ? "?author=#{author}" : ''
+    "#{url}/commits#{author_param}"
   end
 
   def readme_url
