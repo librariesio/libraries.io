@@ -20,6 +20,7 @@ class Version < ApplicationRecord
 
   def save_project
     project.try(:forced_save)
+    project.try(:update_github_repo_async)
   end
 
   def platform
