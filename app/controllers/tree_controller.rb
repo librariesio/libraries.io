@@ -8,7 +8,8 @@ class TreeController < ApplicationController
       raise ActiveRecord::RecordNotFound if @version.nil?
     end
     @kind = params[:kind] || 'normal'
-    @tree_resolver = TreeResolver.new(@version, @kind)
+    @date = Date.parse(params[:date]) rescue nil
+    @tree_resolver = TreeResolver.new(@version, @kind, @date)
 
     if @tree_resolver.cached?
       @tree = @tree_resolver.tree

@@ -49,9 +49,13 @@ module DependencyChecks
     !!SemanticRange.valid_range(semantic_requirements)
   end
 
-  def latest_resolvable_version
+  def latest_resolvable_version(date = nil)
     return nil unless project.present?
     versions = project.versions
+    if date
+      p date
+      versions = versions.where('versions.published_at < ?', date)
+    end
     version_numbers = versions.map {|v| SemanticRange.clean(v.number) }.compact
     number = SemanticRange.max_satisfying(version_numbers, semantic_requirements)
     versions.find{|v| SemanticRange.clean(v.number) == number }
