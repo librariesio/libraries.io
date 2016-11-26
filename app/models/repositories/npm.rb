@@ -12,7 +12,7 @@ module Repositories
     end
 
     def self.project_names
-      get("http://registry.npmjs.org/-/all/").keys[1..-1]
+      get("https://registry.npmjs.org/-/all").keys[1..-1]
     end
 
     def self.recent_names
