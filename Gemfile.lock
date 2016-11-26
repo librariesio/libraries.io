@@ -178,7 +178,7 @@ GEM
     github_urls (0.2.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
-    hashdiff (0.3.0)
+    hashdiff (0.3.1)
     hashie (3.4.6)
     highscore (1.2.1)
       whatlanguage (>= 1.0.0)
