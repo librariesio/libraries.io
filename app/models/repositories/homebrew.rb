@@ -20,7 +20,7 @@ module Repositories
     end
 
     def self.recent_names
-      get("http://brewformulas.org/?format=json&page=#{page}")['new_formulas'].map{|project| project['formula'] }.uniq
+      get("http://brewformulas.org/?format=json&page=1")['new_formulas'].map{|project| project['formula'] }.uniq
     end
 
     def self.project(name)
