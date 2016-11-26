@@ -18,6 +18,10 @@ module Repositories
       projects.map{|project| project['name'] }.sort
     end
 
+    def self.recent_names
+      get("https://pub.dartlang.org/api/packages?page=1")['packages'].map{|project| project['name'] }
+    end
+
     def self.project(name)
       get("https://pub.dartlang.org/api/packages/#{name}")
     end

@@ -158,7 +158,7 @@ namespace :download do
   end
 
   task pub: :environment do
-    Repositories::Pub.import_async
+    Repositories::Pub.import_recent_async
   end
 
   task pypi: :environment do
