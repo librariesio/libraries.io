@@ -89,4 +89,8 @@ namespace :projects do
       "Repositories::#{platform}".constantize.import_new_async
     end
   end
+
+  # clojars, nuget, maven
+  # alcatraz, clojars, maven, nuget, shards, swift_pm, wordpress, sublime
+
 end
