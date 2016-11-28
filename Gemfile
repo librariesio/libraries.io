@@ -67,7 +67,6 @@ gem 'faraday_middleware'
 gem 'highscore'
 gem 'fast-stemmer'
 gem 'bloomfilter-rb'
-gem 'thor', '0.19.1'
 
 group :development do
   gem 'bundler'
