@@ -36,6 +36,8 @@ module PlatformsHelper
       "http://hexdocs.pm/#{name}/#{version}"
     when 'CocoaPods'
       "http://cocoadocs.org/docsets/#{name}/#{version}"
+    when 'Cargo'
+      "https://docs.rs/#{name}/#{version}"
     end
   end
 
