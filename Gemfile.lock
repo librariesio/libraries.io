@@ -109,7 +109,7 @@ GEM
     database_cleaner (1.5.3)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    domain_name (0.5.20161021)
+    domain_name (0.5.20161129)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.1.1)
     dotenv-rails (2.1.1)
