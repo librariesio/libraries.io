@@ -1,7 +1,7 @@
 module Repositories
   class Pypi < Base
     HAS_VERSIONS = true
-    HAS_DEPENDENCIES = false
+    HAS_DEPENDENCIES = true
     LIBRARIAN_SUPPORT = true
     SECURITY_PLANNED = true
     URL = 'https://pypi.python.org'
@@ -43,6 +43,21 @@ module Repositories
         {
           :number => k,
           :published_at => v[0]['upload_time']
+        }
+      end
+    end
+
+    def self.dependencies(name, version, _project)
+      deps = get("http://pip.libraries.io/#{name}/#{version}.json")
+      return [] if deps.is_a?(Hash) && deps['error'].present?
+
+      deps.map do |dep|
+        {
+          project_name: dep['name'],
+          requirements: dep['requirements'] || '*',
+          kind: 'runtime',
+          optional: false,
+          platform: self.name.demodulize
         }
       end
     end
