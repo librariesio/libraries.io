@@ -64,13 +64,13 @@ describe "Admin::ProjectController" do
     let(:project) { create(:project) }
 
     it "denies access when logged out" do
-      get admin_projects_path(project.id)
+      get admin_project_path(project.id)
       expect(response).to redirect_to(login_path)
     end
 
     it "denies access for non-admins" do
       login(user)
-      expect { visit admin_projects_path(project.id) }.to raise_exception ActiveRecord::RecordNotFound
+      expect { visit admin_project_path(project.id) }.to raise_exception ActiveRecord::RecordNotFound
     end
 
     it "renders successfully for admins" do
