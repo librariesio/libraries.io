@@ -1,0 +1,161 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:9200/projects/_count
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '62'
+    body:
+      encoding: UTF-8
+      string: '{"count":8031,"_shards":{"total":1,"successful":1,"failed":0}}'
+    http_version: 
+  recorded_at: Wed, 30 Nov 2016 21:50:08 GMT
+- request:
+    method: put
+    uri: http://localhost:9200/github_repositories/github_repository/3
+    body:
+      encoding: UTF-8
+      string: '{"id":3,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2016-11-30T21:50:08.826Z","updated_at":"2016-11-30T21:50:08.826Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":null,"stargazers_count":null,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":3,"private":null,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '99'
+    body:
+      encoding: UTF-8
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"3","_version":6,"created":false}'
+    http_version: 
+  recorded_at: Wed, 30 Nov 2016 21:50:08 GMT
+- request:
+    method: put
+    uri: http://localhost:9200/github_repositories/github_repository/3
+    body:
+      encoding: UTF-8
+      string: '{"id":3,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2016-11-30T21:50:08.826Z","updated_at":"2016-11-30T21:50:08.826Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":null,"stargazers_count":null,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":3,"private":null,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '99'
+    body:
+      encoding: UTF-8
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"3","_version":7,"created":false}'
+    http_version: 
+  recorded_at: Wed, 30 Nov 2016 21:50:08 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/projects/project/_search
+    body:
+      encoding: UTF-8
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[],"must_not":[{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"facets":{"platforms":{"terms":{"field":"platform","size":100},"facet_filter":{"bool":{"must":[]}}},"languages":{"terms":{"field":"language","size":100},"facet_filter":{"bool":{"must":[]}}},"keywords":{"terms":{"field":"keywords_array","size":100},"facet_filter":{"bool":{"must":[]}}},"licenses":{"terms":{"field":"normalized_licenses","size":100},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"name"}}},"sort":[{"rank":"desc"},{"stars":"desc"}],"track_scores":true}'
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '15263'
+    body:
+      encoding: UTF-8
+      string: '{"took":9,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":8031,"max_score":529.0,"hits":[{"_index":"projects","_type":"project","_id":"909","_score":529.0,"_source":{"id":909,"name":"poison","platform":"Hex","created_at":"2015-01-12T00:01:16.640Z","updated_at":"2016-07-03T00:01:33.977Z","description":"An
+        incredibly fast, pure Elixir JSON library","keywords":[],"homepage":"","licenses":"Unlicense","repository_url":"https://github.com/devinus/poison","github_repository_id":4216,"normalized_licenses":["Unlicense"],"versions_count":18,"rank":23,"latest_release_published_at":"2016-06-21T10:48:52.674Z","latest_release_number":"2.2.0","pm_id":null,"keywords_array":[],"dependents_count":405,"language":"Elixir","status":null,"last_synced_at":null,"dependent_repos_count":2757,"stars":646,"repo_name":"devinus/poison","exact_name":"poison","github_contributions_count":22,"pushed_at":"2016-06-30T08:42:06.000Z"},"sort":[23,646]},{"_index":"projects","_type":"project","_id":"819","_score":484.0,"_source":{"id":819,"name":"httpoison","platform":"Hex","created_at":"2015-01-12T00:01:05.507Z","updated_at":"2016-07-10T00:00:59.861Z","description":"Yet
+        Another HTTP client for Elixir powered by hackney","keywords":[],"homepage":"https://hex.pm/packages/httpoison","licenses":"MIT","repository_url":"https://github.com/edgurgel/httpoison","github_repository_id":4231,"normalized_licenses":["MIT"],"versions_count":23,"rank":22,"latest_release_published_at":"2016-06-26T03:36:06.840Z","latest_release_number":"0.9.0","pm_id":null,"keywords_array":[],"dependents_count":328,"language":"Elixir","status":null,"last_synced_at":null,"dependent_repos_count":1257,"stars":560,"repo_name":"edgurgel/httpoison","exact_name":"httpoison","github_contributions_count":42,"pushed_at":"2016-07-02T23:17:40.000Z"},"sort":[22,560]},{"_index":"projects","_type":"project","_id":"888","_score":441.0,"_source":{"id":888,"name":"phoenix","platform":"Hex","created_at":"2015-01-12T00:01:13.867Z","updated_at":"2016-07-03T00:01:34.713Z","description":"Productive.
+        Reliable. Fast. A productive web framework that\ndoes not compromise speed
+        and maintainability.","keywords":[],"homepage":"http://www.phoenixframework.org","licenses":"MIT","repository_url":"https://github.com/phoenixframework/phoenix","github_repository_id":4249,"normalized_licenses":["MIT"],"versions_count":52,"rank":21,"latest_release_published_at":"2016-06-23T15:55:44.182Z","latest_release_number":"1.2.0","pm_id":null,"keywords_array":[],"dependents_count":49,"language":"Elixir","status":null,"last_synced_at":null,"dependent_repos_count":2432,"stars":6965,"repo_name":"phoenixframework/phoenix","exact_name":"phoenix","github_contributions_count":276,"pushed_at":"2016-07-14T16:03:42.000Z"},"sort":[21,6965]},{"_index":"projects","_type":"project","_id":"680","_score":441.0,"_source":{"id":680,"name":"cowboy","platform":"Hex","created_at":"2015-01-12T00:00:44.814Z","updated_at":"2016-07-03T00:01:12.182Z","description":"Small,
+        fast, modular HTTP server written in Erlang.","keywords":[],"homepage":"http://ninenines.eu","licenses":"ISC","repository_url":"https://github.com/ninenines/cowboy","github_repository_id":3993,"normalized_licenses":["ISC"],"versions_count":5,"rank":21,"latest_release_published_at":"2015-11-17T02:15:09.000Z","latest_release_number":"1.0.4","pm_id":null,"keywords_array":[],"dependents_count":98,"language":"Erlang","status":null,"last_synced_at":null,"dependent_repos_count":2907,"stars":3309,"repo_name":"ninenines/cowboy","exact_name":"cowboy","github_contributions_count":84,"pushed_at":"2016-07-02T17:48:28.000Z"},"sort":[21,3309]},{"_index":"projects","_type":"project","_id":"895","_score":441.0,"_source":{"id":895,"name":"plug","platform":"Hex","created_at":"2015-01-12T00:01:14.815Z","updated_at":"2016-07-15T14:03:26.594Z","description":"A
+        specification and conveniences for composable modules between web applications","keywords":[],"homepage":"","licenses":"Apache
+        2","repository_url":"https://github.com/elixir-lang/plug","github_repository_id":4298,"normalized_licenses":["Apache-2.0"],"versions_count":39,"rank":21,"latest_release_published_at":"2016-07-13T10:09:53.551Z","latest_release_number":"1.2.0-rc.0","pm_id":null,"keywords_array":[],"dependents_count":167,"language":"Elixir","status":null,"last_synced_at":null,"dependent_repos_count":1911,"stars":930,"repo_name":"elixir-lang/plug","exact_name":"plug","github_contributions_count":111,"pushed_at":"2016-07-13T10:09:19.000Z"},"sort":[21,930]},{"_index":"projects","_type":"project","_id":"713","_score":400.0,"_source":{"id":713,"name":"ecto","platform":"Hex","created_at":"2015-01-12T00:00:49.182Z","updated_at":"2016-07-15T14:03:44.926Z","description":"Ecto
+        is a domain specific language for writing queries and interacting with databases
+        in Elixir.","keywords":[],"homepage":"https://hexdocs.pm/ecto","licenses":"Apache
+        2.0","repository_url":"https://github.com/elixir-lang/ecto","github_repository_id":4070,"normalized_licenses":["Apache-2.0"],"versions_count":71,"rank":20,"latest_release_published_at":"2016-06-27T17:37:47.505Z","latest_release_number":"2.0.2","pm_id":null,"keywords_array":[],"dependents_count":105,"language":"Elixir","status":null,"last_synced_at":null,"dependent_repos_count":1664,"stars":1938,"repo_name":"elixir-ecto/ecto","exact_name":"ecto","github_contributions_count":231,"pushed_at":"2016-07-16T00:39:11.000Z"},"sort":[20,1938]},{"_index":"projects","_type":"project","_id":"970","_score":400.0,"_source":{"id":970,"name":"timex","platform":"Hex","created_at":"2015-01-12T00:01:23.476Z","updated_at":"2016-07-15T14:03:26.279Z","description":"Timex
+        is a rich, comprehensive Date/Time library for Elixir projects, with full
+        timezone support via the :tzdata package.\nIf you need to manipulate dates,
+        times, datetimes, timestamps, etc., then Timex is for you!","keywords":[],"homepage":"https://hexdocs.pm/timex","licenses":"MIT","repository_url":"https://github.com/bitwalker/timex","github_repository_id":4290,"normalized_licenses":["MIT"],"versions_count":66,"rank":20,"latest_release_published_at":"2016-07-13T16:51:19.522Z","latest_release_number":"3.0.2","pm_id":null,"keywords_array":[],"dependents_count":83,"language":"Elixir","status":null,"last_synced_at":null,"dependent_repos_count":422,"stars":407,"repo_name":"bitwalker/timex","exact_name":"timex","github_contributions_count":52,"pushed_at":"2016-07-15T16:12:17.000Z"},"sort":[20,407]},{"_index":"projects","_type":"project","_id":"711","_score":400.0,"_source":{"id":711,"name":"earmark","platform":"Hex","created_at":"2015-01-12T00:00:48.804Z","updated_at":"2016-07-11T14:02:56.493Z","description":"Earmark
+        is a pure-Elixir Markdown converter.\n\nIt is intended to be used as a library
+        (just call Earmark.to_html),\nbut can also be used as a command-line tool
+        (just run mix escript.build\nfirst).\n\nOutput generation is pluggable.","keywords":[],"homepage":null,"licenses":"See
+        the file LICENSE","repository_url":"https://github.com/pragdave/earmark","github_repository_id":4000,"normalized_licenses":["Sendmail"],"versions_count":23,"rank":20,"latest_release_published_at":"2016-07-06T18:59:16.716Z","latest_release_number":"1.0.1","pm_id":null,"keywords_array":[],"dependents_count":56,"language":"Elixir","status":null,"last_synced_at":null,"dependent_repos_count":1531,"stars":179,"repo_name":"pragdave/earmark","exact_name":"earmark","github_contributions_count":18,"pushed_at":"2016-07-16T07:48:36.000Z"},"sort":[20,179]},{"_index":"projects","_type":"project","_id":"910","_score":361.0,"_source":{"id":910,"name":"poolboy","platform":"Hex","created_at":"2015-01-12T00:01:16.848Z","updated_at":"2016-07-10T00:01:10.189Z","description":"A
+        hunky Erlang worker pool factory","keywords":[],"homepage":"http://github.com/devinus/poolboy","licenses":"Unlicense,Apache
+        2.0","repository_url":"https://github.com/devinus/poolboy","github_repository_id":4300,"normalized_licenses":["Unlicense","Apache-2.0"],"versions_count":8,"rank":19,"latest_release_published_at":"2015-04-12T19:11:53.000Z","latest_release_number":"1.5.1","pm_id":null,"keywords_array":[],"dependents_count":55,"language":"Erlang","status":null,"last_synced_at":null,"dependent_repos_count":1624,"stars":733,"repo_name":"devinus/poolboy","exact_name":"poolboy","github_contributions_count":24,"pushed_at":"2016-06-30T22:35:46.000Z"},"sort":[19,733]},{"_index":"projects","_type":"project","_id":"805","_score":361.0,"_source":{"id":805,"name":"hackney","platform":"Hex","created_at":"2015-01-12T00:01:02.512Z","updated_at":"2016-07-15T14:03:27.731Z","description":"simple
+        HTTP client","keywords":[],"homepage":"","licenses":"Apache 2.0","repository_url":"https://github.com/benoitc/hackney","github_repository_id":4137,"normalized_licenses":["Apache-2.0"],"versions_count":36,"rank":19,"latest_release_published_at":"2016-07-10T18:56:07.921Z","latest_release_number":"1.6.1","pm_id":null,"keywords_array":[],"dependents_count":47,"language":"Erlang","status":null,"last_synced_at":null,"dependent_repos_count":1223,"stars":535,"repo_name":"benoitc/hackney","exact_name":"hackney","github_contributions_count":68,"pushed_at":"2016-07-13T18:47:46.000Z"},"sort":[19,535]}]},"facets":{"platforms":{"_type":"terms","missing":0,"total":8031,"other":0,"terms":[{"term":"Bower","count":6351},{"term":"Jam","count":680},{"term":"Hex","count":392},{"term":"Dub","count":370},{"term":"Alcatraz","count":196},{"term":"Pub","count":25},{"term":"Emacs","count":11},{"term":"Elm","count":2},{"term":"CPAN","count":2},{"term":"Pypi","count":1},{"term":"Haxelib","count":1}]},"languages":{"_type":"terms","missing":1206,"total":6825,"other":0,"terms":[{"term":"JavaScript","count":4579},{"term":"CSS","count":716},{"term":"D","count":341},{"term":"CoffeeScript","count":311},{"term":"Elixir","count":305},{"term":"HTML","count":244},{"term":"Objective-C","count":119},{"term":"Erlang","count":64},{"term":"C","count":25},{"term":"TypeScript","count":18},{"term":"PHP","count":16},{"term":"Shell","count":13},{"term":"Ruby","count":13},{"term":"Dart","count":13},{"term":"ApacheConf","count":11},{"term":"ActionScript","count":6},{"term":"Emacs
+        Lisp","count":5},{"term":"Swift","count":4},{"term":"Java","count":4},{"term":"C++","count":3},{"term":"TeX","count":2},{"term":"Python","count":2},{"term":"Perl","count":2},{"term":"Makefile","count":2},{"term":"Elm","count":2},{"term":"Pascal","count":1},{"term":"Objective-J","count":1},{"term":"LiveScript","count":1},{"term":"Clojure","count":1},{"term":"Cirru","count":1}]},"keywords":{"_type":"terms","missing":3851,"total":18378,"other":11241,"terms":[{"term":"angular","count":1118},{"term":"angularjs","count":409},{"term":"library","count":312},{"term":"bootstrap","count":299},{"term":"backbone","count":233},{"term":"css","count":202},{"term":"javascript","count":195},{"term":"directive","count":169},{"term":"jquery","count":166},{"term":"js","count":117},{"term":"browser","count":116},{"term":"binding","count":104},{"term":"web-components","count":96},{"term":"plugin","count":93},{"term":"AngularJS","count":90},{"term":"framework","count":89},{"term":"form","count":88},{"term":"sass","count":81},{"term":"web","count":75},{"term":"ui","count":73},{"term":"responsive","count":67},{"term":"client","count":66},{"term":"input","count":65},{"term":"data","count":64},{"term":"development","count":59},{"term":"polymer","count":58},{"term":"model","count":58},{"term":"application","count":56},{"term":"scss","count":55},{"term":"async","count":53},{"term":"ajax","count":52},{"term":"oocss","count":51},{"term":"filter","count":51},{"term":"less","count":50},{"term":"image","count":49},{"term":"api","count":49},{"term":"service","count":48},{"term":"grid","count":48},{"term":"json","count":46},{"term":"mobile","count":45},{"term":"validation","count":44},{"term":"template","count":44},{"term":"events","count":44},{"term":"animation","count":44},{"term":"bem","count":43},{"term":"html","count":42},{"term":"server","count":40},{"term":"graphics","count":40},{"term":"slider","count":39},{"term":"select","count":39},{"term":"d3","count":39},{"term":"desktop","count":38},{"term":"angular.js","count":38},{"term":"Angular","count":38},{"term":"html5","count":37},{"term":"event","count":37},{"term":"router","count":36},{"term":"object","count":35},{"term":"module","count":34},{"term":"view","count":33},{"term":"class","count":33},{"term":"map","count":32},{"term":"visualization","count":31},{"term":"test","count":31},{"term":"svg","count":31},{"term":"file","count":31},{"term":"dom","count":31},{"term":"Backbone","count":31},{"term":"scroll","count":30},{"term":"scientific","count":30},{"term":"rest","count":30},{"term":"promise","count":30},{"term":"bricks","count":30},{"term":"array","count":30},{"term":"twitter","count":29},{"term":"modal","count":29},{"term":"general","count":29},{"term":"ender","count":29},{"term":"date","count":29},{"term":"canvas","count":29},{"term":"amd","count":29},{"term":"time","count":28},{"term":"markdown","count":28},{"term":"loader","count":28},{"term":"datepicker","count":28},{"term":"audio","count":28},{"term":"video","count":27},{"term":"vibed","count":27},{"term":"testing","count":27},{"term":"google","count":27},{"term":"cache","count":27},{"term":"autocomplete","count":27},{"term":"charts","count":26},{"term":"blank","count":26},{"term":"table","count":25},{"term":"network","count":25},{"term":"loading","count":25},{"term":"forms","count":25},{"term":"chart","count":25},{"term":"calendar","count":25}]},"licenses":{"_type":"terms","missing":1945,"total":6123,"other":0,"terms":[{"term":"MIT","count":4848},{"term":"Apache-2.0","count":301},{"term":"BSD-3-Clause","count":178},{"term":"Other","count":161},{"term":"BSL-1.0","count":127},{"term":"GPL-3.0","count":92},{"term":"AGPL-3.0","count":48},{"term":"WTFPL","count":46},{"term":"Unlicense","count":45},{"term":"GPL-2.0+","count":34},{"term":"LGPL-3.0","count":25},{"term":"GPL-2.0","count":24},{"term":"BSD-3-Clause-Clear","count":24},{"term":"ISC","count":23},{"term":"Zed","count":20},{"term":"BSD-2-Clause","count":20},{"term":"CC0-1.0","count":15},{"term":"MPL-2.0","count":14},{"term":"BSD-3-Clause-Attribution","count":10},{"term":"Zlib","count":7},{"term":"GPL-3.0+","count":6},{"term":"LGPL-2.1","count":5},{"term":"0BSD","count":5},{"term":"CC-BY-NC-4.0","count":4},{"term":"CC-BY-4.0","count":4},{"term":"Libpng","count":3},{"term":"LGPL-2.0","count":3},{"term":"CC-BY-SA-4.0","count":3},{"term":"BSD-2-Clause-NetBSD","count":3},{"term":"QPL-1.0","count":2},{"term":"CNRI-Python-GPL-Compatible","count":2},{"term":"CC-BY-SA-3.0","count":2},{"term":"Artistic-1.0-cl8","count":2},{"term":"xpp","count":1},{"term":"bzip2-1.0.6","count":1},{"term":"X11","count":1},{"term":"Sendmail","count":1},{"term":"PDDL-1.0","count":1},{"term":"OpenSSL","count":1},{"term":"OML","count":1},{"term":"NetCDF","count":1},{"term":"NCSA","count":1},{"term":"MirOS","count":1},{"term":"MPL-1.1","count":1},{"term":"LGPL-3.0+","count":1},{"term":"GPL-2.0-with-font-exception","count":1},{"term":"GPL-1.0+","count":1},{"term":"EPL-1.0","count":1},{"term":"Artistic-1.0-Perl","count":1},{"term":"Apache-1.0","count":1}]}},"suggest":{"did_you_mean":[]}}'
+    http_version: 
+  recorded_at: Wed, 30 Nov 2016 21:50:08 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/projects/_count
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '62'
+    body:
+      encoding: UTF-8
+      string: '{"count":8031,"_shards":{"total":1,"successful":1,"failed":0}}'
+    http_version: 
+  recorded_at: Wed, 30 Nov 2016 21:50:08 GMT
+recorded_with: VCR 3.0.3

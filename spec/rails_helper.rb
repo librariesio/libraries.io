@@ -9,6 +9,17 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
+require 'capybara/poltergeist'
+Capybara.javascript_driver = :poltergeist
+Capybara.default_max_wait_time = 10
+
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, window_size: [1280, 600])
+end
+
+OmniAuth.config.test_mode = true
+
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
+  config.include Capybara::DSL
 end

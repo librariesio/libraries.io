@@ -93,6 +93,8 @@ group :test do
   gem 'simplecov', require: false
   gem 'codeclimate-test-reporter', require: false
   gem 'rails-controller-testing'
+  gem 'faker'
+  gem 'poltergeist'
 end
 
 group :production do
