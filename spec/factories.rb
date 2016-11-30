@@ -15,6 +15,12 @@ FactoryGirl.define do
     repository_url  'https://github.com/rails/rails'
   end
 
+  factory :project_suggestion do
+    project
+    user
+    notes "Details in the readme"
+  end
+
   factory :project_mute do
     project_id 1
     user_id 1
