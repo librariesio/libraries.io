@@ -35,6 +35,7 @@ FactoryGirl.define do
     fork        false
     homepage    'http://rubyonrails.org'
     github_organisation
+    stargazers_count 10_000
   end
 
   factory :user do
