@@ -1,0 +1,59 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: http://localhost:9200/github_repositories/github_repository/3
+    body:
+      encoding: UTF-8
+      string: '{"id":3,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2016-11-30T22:26:16.729Z","updated_at":"2016-11-30T22:26:16.729Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":null,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":3,"private":null,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '100'
+    body:
+      encoding: UTF-8
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"3","_version":18,"created":false}'
+    http_version: 
+  recorded_at: Wed, 30 Nov 2016 22:26:16 GMT
+- request:
+    method: put
+    uri: http://localhost:9200/github_repositories/github_repository/3
+    body:
+      encoding: UTF-8
+      string: '{"id":3,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2016-11-30T22:26:16.729Z","updated_at":"2016-11-30T22:26:16.729Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":null,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":3,"private":null,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '100'
+    body:
+      encoding: UTF-8
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"3","_version":19,"created":false}'
+    http_version: 
+  recorded_at: Wed, 30 Nov 2016 22:26:16 GMT
+recorded_with: VCR 3.0.3
