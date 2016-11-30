@@ -5,4 +5,5 @@ VCR.configure do |config|
   config.hook_into :webmock
   config.configure_rspec_metadata!
   config.ignore_hosts 'codeclimate.com'
+  config.ignore_localhost = true
 end
