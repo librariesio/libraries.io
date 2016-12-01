@@ -144,6 +144,101 @@ module IssueSearch
       end.flatten
     end
 
+    def self.first_pr_search(options = {})
+      facet_limit = options.fetch(:facet_limit, 35)
+
+      options[:filters] ||= []
+      options[:must_not] ||= []
+
+      search_definition = {
+        query: {
+          function_score: {
+            query: {
+              filtered: {
+                 query: {match_all: {}},
+                 filter: {
+                   bool: {
+                     must: [
+                        { "term": { "state": "open"}},
+                        { "term": { "locked": false}}
+                     ],
+                     must_not: [
+                       {
+                         term: {
+                          "labels": "wontfix"
+                         }
+                       }
+                     ],
+                     should: GithubIssue::FIRST_PR_LABELS.map do |label|
+                       {
+                         term: {
+                          "labels": label
+                         }
+                       }
+                     end
+                   }
+                 }
+              }
+            },
+            field_value_factor: {
+              field: "stars",
+              "modifier": "square"
+            }
+          }
+        },
+        facets: {
+          language: { terms: {
+              field: "language",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :language)
+              }
+            }
+          },
+          labels: {
+            terms: {
+              field: "labels",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: label_filter_format(options[:filters], GithubIssue::FIRST_PR_LABELS)
+              }
+            }
+          },
+          license: {
+            terms: {
+              field: "license",
+              size: facet_limit
+            },
+            facet_filter: {
+              bool: {
+                must: filter_format(options[:filters], :license)
+              }
+            }
+          }
+        },
+        filter: {
+          bool: {
+            must: [],
+            must_not: options[:must_not]
+          }
+        }
+      }
+      search_definition[:track_scores] = true
+
+      if options[:sort].blank?
+        search_definition[:sort]  = [{'comments_count' => 'asc'},
+                                     {'stars' => 'desc'},
+                                     {'created_at' => 'asc'},
+                                     {'contributions_count' => 'asc'}]
+      end
+      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
+      __elasticsearch__.search(search_definition)
+    end
+
     def self.label_filter_format(filters, labels_to_keep = ['help wanted'])
       labels_to_keep ||= ['help wanted']
       filters.select { |_k, v| v.present? }.map do |k, v|
