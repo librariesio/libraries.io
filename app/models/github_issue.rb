@@ -22,6 +22,7 @@ class GithubIssue < ApplicationRecord
   scope :actionable, -> { open.issue.unlocked }
   scope :labeled, -> (label) { where.contains(labels: [label]) }
   scope :help_wanted, -> { labeled('help wanted') }
+  scope :first_pull_request, -> { where.overlap(labels: FIRST_PR_LABELS) }
   scope :indexable, -> { actionable.includes(:github_repository) }
 
   def url
