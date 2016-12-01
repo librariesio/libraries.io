@@ -52,15 +52,15 @@ class GithubIssue < ApplicationRecord
   end
 
   def contributions_count
-      github_repository.try(:github_contributions_count) || 0
+    github_repository.try(:github_contributions_count) || 0
   end
 
   def language
-      github_repository.try(:language)
+    github_repository.try(:language)
   end
 
   def license
-      github_repository.try(:license)
+    github_repository.try(:license)
   end
 
   def stars
