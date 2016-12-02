@@ -130,7 +130,7 @@ Rails.application.routes.draw do
   get '/github/timeline', to: 'github_repositories#timeline', as: :github_timeline
 
   get '/github/:login/issues', to: 'users#issues'
-  get '/github/:login/issues/dependencies', to: 'users#dependency_issues'
+  get '/github/:login/dependency-issues', to: 'users#dependency_issues'
   get '/github/:login/repositories', to: 'users#repositories', as: :user_repositories
   get '/github/:login/contributions', to: 'users#contributions', as: :user_contributions
   get '/github/:login/projects', to: 'users#projects', as: :user_projects
