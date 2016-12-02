@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   end
 
   def dependency_issues
-    @repo_ids = @user.all_dependent_repos.pluck(:id)
+    @repo_ids = @user.all_dependent_repos.open_source.pluck(:id)
     search_issues(repo_ids: @repo_ids)
   end
 
