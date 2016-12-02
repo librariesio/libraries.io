@@ -72,6 +72,7 @@ Rails.application.routes.draw do
   get '/explore/:language-:keyword-libraries', to: 'collections#show'
 
   get '/github/issues', to: 'github_issues#index', as: :issues
+  get '/github/issues/your-dependencies', to: 'github_issues#your_dependencies', as: :your_dependencies_issues
 
   get '/pricing', to: 'account_subscriptions#plans', as: :pricing
   resources :account_subscriptions
