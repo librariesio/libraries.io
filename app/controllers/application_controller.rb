@@ -109,12 +109,12 @@ class ApplicationController < ActionController::Base
     ['desc', 'asc'].include?(params[:order]) ? params[:order] : nil
   end
 
-  def search_issues(labels)
+  def search_issues(options = {})
     @search = paginate GithubIssue.search(filters: {
       license: current_license,
       language: current_language,
-      labels: labels
-    }), page: page_number, per_page: per_page_number
+      labels: options[:labels]
+    }, repo_ids: options[:repo_ids]), page: page_number, per_page: per_page_number
     ids = @search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
     @github_issues = @search.records.includes(:github_repository).sort_by { |u| indexes[u.id] }
