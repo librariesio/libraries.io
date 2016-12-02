@@ -129,6 +129,8 @@ Rails.application.routes.draw do
   get '/github/organisations', to: 'github_organisations#index', as: :github_organisations
   get '/github/timeline', to: 'github_repositories#timeline', as: :github_timeline
 
+  get '/github/:login/issues', to: 'users#issues'
+  get '/github/:login/issues/dependencies', to: 'users#dependency_issues'
   get '/github/:login/repositories', to: 'users#repositories', as: :user_repositories
   get '/github/:login/contributions', to: 'users#contributions', as: :user_contributions
   get '/github/:login/projects', to: 'users#projects', as: :user_projects
@@ -147,10 +149,12 @@ Rails.application.routes.draw do
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   post '/auth/failure',             to: 'sessions#failure'
 
+
   get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
   get '/github/:owner/:name/contributors', to: 'github_repositories#contributors', as: :github_repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/forks', to: 'github_repositories#forks', as: :github_repository_forks, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/tags', to: 'github_repositories#tags', as: :github_repository_tags, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/dependency-issues', to: 'github_repositories#dependency_issues', format: false, constraints: { :name => /[^\/]+/ }
 
   get '/github/:owner/:name/web_hooks', to: 'web_hooks#index', as: :github_repository_web_hooks, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/web_hooks/new', to: 'web_hooks#new', as: :new_github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }

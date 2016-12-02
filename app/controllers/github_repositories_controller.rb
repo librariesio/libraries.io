@@ -82,6 +82,12 @@ class GithubRepositoriesController < ApplicationController
     @forks = @github_repository.forked_repositories.maintained.order('stargazers_count DESC').paginate(page: page_number)
   end
 
+  def dependency_issues
+    load_repo
+    @repo_ids = @github_repository.dependency_repos.pluck(:id)
+    search_issues(repo_ids: @repo_ids)
+  end
+
   private
 
   def authorized?
