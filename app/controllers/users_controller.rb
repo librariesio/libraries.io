@@ -12,6 +12,16 @@ class UsersController < ApplicationController
     end
   end
 
+  def issues
+    @repo_ids = @user.github_repositories.open_source.source.pluck(:id)
+    search_issues(repo_ids: @repo_ids)
+  end
+
+  def dependency_issues
+    @repo_ids = @user.all_dependent_repos.open_source.pluck(:id)
+    search_issues(repo_ids: @repo_ids)
+  end
+
   def repositories
     @repositories = @user.github_repositories.open_source.source.order('stargazers_count DESC').paginate(page: page_number)
   end
@@ -46,5 +56,13 @@ class UsersController < ApplicationController
                               .where('github_repositories.private = ?', false)
                               .includes(:github_repository)
                               .order('count DESC')
+  end
+
+  def current_language
+    params[:language] if params[:language].present?
+  end
+
+  def current_license
+    params[:license] if params[:license].present?
   end
 end

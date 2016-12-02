@@ -8,6 +8,7 @@ class GithubOrganisation < ApplicationRecord
   has_many :open_source_github_repositories, -> { where fork: false, private: false }, anonymous_class: GithubRepository
   has_many :dependencies, through: :open_source_github_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
+  has_many :all_dependent_repos, -> { group('github_repositories.id') }, through: :favourite_projects, source: :github_repository
   has_many :contributors, -> { group('github_users.id').order("sum(github_contributions.count) DESC") }, through: :open_source_github_repositories, source: :contributors
   has_many :projects, through: :open_source_github_repositories
 

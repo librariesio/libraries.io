@@ -21,6 +21,9 @@ class GithubRepository < ApplicationRecord
   has_many :published_github_tags, -> { published }, anonymous_class: GithubTag
   has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
+  has_many :dependency_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
+  has_many :dependency_repos, -> { group('github_repositories.id') }, through: :dependency_projects, source: :github_repository
+
   has_many :repository_subscriptions, dependent: :delete_all
   has_many :web_hooks, dependent: :delete_all
   has_many :github_issues, dependent: :delete_all
