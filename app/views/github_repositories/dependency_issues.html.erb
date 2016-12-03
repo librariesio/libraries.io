@@ -4,7 +4,7 @@
     <h1>
       <i class="fa fa-bug"></i> Issues on <%= link_to @github_repository.full_name, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %>'s Dependencies</h1>
     <p>
-      Showing <%= number_to_human @search.total_entries %> open issues across <%= number_to_human @repo_ids.length %> repositories that <%= link_to @github_repository.full_name, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %>'s repositories depend upon.
+      Showing <%= number_to_human @search.total_entries %> open issues across <%= number_to_human @repo_ids.length %> repositories that <%= link_to @github_repository.full_name, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %> depends upon.
     </p>
   </div>
 </div>
