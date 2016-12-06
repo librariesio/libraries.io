@@ -84,7 +84,7 @@ class GithubRepositoriesController < ApplicationController
 
   def dependency_issues
     load_repo
-    @repo_ids = @github_repository.dependency_repos.open_source.pluck(:id) - @github_repository.id
+    @repo_ids = @github_repository.dependency_repos.open_source.pluck(:id) - [@github_repository.id]
     search_issues(repo_ids: @repo_ids)
   end
 
