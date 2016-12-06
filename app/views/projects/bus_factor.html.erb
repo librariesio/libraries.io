@@ -38,7 +38,7 @@
           <div class="col-xs-4">
             <br>
             <%= link_to project.github_repository.try(:url), class: 'btn btn-primary' do %>
-            Contribute<span class='hidden-sm'> on GitHub</span>
+            Contribute
             <% end %>
           </div>
         </div>
@@ -63,7 +63,7 @@
       You can help out by reviewing the code for these projects, helping out with open issues and pull requests and lending the maintainers a helping hand if required.
     </p>
     <p>
-      <em>This is an experiment based on GitHub contributions and available dependency data from package manager repositories that make it easily available.</em>
+      <em>This is an experiment based on contributions and available dependency data from package manager repositories that make it easily available.</em>
     </p>
     <% @search.response.facets.each do |name, facet| %>
       <% next if facet['terms'].empty? %>

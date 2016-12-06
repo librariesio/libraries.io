@@ -1,11 +1,11 @@
-<% title "Committers to #{@github_repository.full_name} on GitHub - Libraries.io" %>
+<% title "Committers to #{@github_repository.full_name} - Libraries.io" %>
 
 <div class="row">
   <div class='col-sm-12'>
     <h1>
       <%= fa_icon 'keyboard-o' %>
       Committers to
-      <%= link_to @github_repository.full_name, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %> on GitHub</h1>
+      <%= link_to @github_repository.full_name, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %></h1>
   </div>
 </div>
 <hr>

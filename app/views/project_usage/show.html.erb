@@ -43,7 +43,7 @@
   <div class="row">
     <div class="col-sm-8">
       <h4>
-        GitHub Repositories that depend on <%= link_to @project, project_path(@project.to_param) %>
+        Repositories that depend on <%= link_to @project, project_path(@project.to_param) %>
         <% if params[:requirements].present? %>
           <code><%= params[:requirements] %></code>
         <% end %>

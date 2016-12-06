@@ -1,11 +1,11 @@
 <p>
   Libraries.io can automatically keep track of all
-  of the libraries that your GitHub projects depend upon across many different package managers.
+  of the libraries that your repositories depend upon across many different package managers.
 </p>
 <p>
   Once synced, Libraries.io will email you about new versions of your dependencies,
   if you add or remove a new dependency it will change the notifications settings for that library
-  as soon as you push to GitHub.
+  as soon as you push to your repositories.
 </p>
 <p><strong>Supported Package Managers:</strong></p>
 <div class="">
@@ -22,12 +22,12 @@
 <% elsif current_user %>
   <%= link_to repositories_path, class: 'btn btn-primary' do %>
     <%= fa_icon 'github' %>
-    Manage your GitHub Repositories
+    Manage your Repositories
   <% end %>
 <% else %>
   <%= link_to repositories_path, class: 'btn btn-primary' do %>
     <%= fa_icon 'github' %>
-    Start monitoring your GitHub Repositories
+    Start monitoring your Repositories
   <% end %>
 <% end %>
 </p>

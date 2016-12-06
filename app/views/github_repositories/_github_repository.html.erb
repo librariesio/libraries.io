@@ -13,7 +13,7 @@
 
   <small>
     <% if github_repository.is_removed? %>
-      <%= fa_icon('exclamation-triangle') %> This repository is no longer available on GitHub
+      <%= fa_icon('exclamation-triangle') %> This repository is no longer available
     <% elsif github_repository.is_deprecated? %>
       <%= fa_icon('exclamation-triangle') %> This repository is deprecated -
       <% if github_repository.pushed_at && github_repository.pushed_at > github_repository.created_at + 1.minute %>
