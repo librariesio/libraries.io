@@ -60,7 +60,7 @@ gem 'rails-timeago', git: 'https://github.com/librariesio/rails-timeago'
 gem 'multi_fetch_fragments'
 gem 'rack-attack'
 gem 'rack-attack-rate-limit', require: 'rack/attack/rate-limit'
-gem 'api-pagination'
+gem 'api-pagination', '4.4.0'
 gem 'indefinite_article'
 gem 'faraday_middleware'
 

@@ -64,7 +64,7 @@ GEM
       activesupport (>= 3.0.0)
     airbrussh (1.1.1)
       sshkit (>= 1.6.1, != 1.7.0)
-    api-pagination (4.5.0)
+    api-pagination (4.4.0)
     arel (7.1.4)
     autoprefixer-rails (6.5.3.1)
       execjs
@@ -432,7 +432,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.2)
     vcr (3.0.3)
-    webmock (2.3.0)
+    webmock (2.3.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -450,7 +450,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  api-pagination
+  api-pagination (= 4.4.0)
   bloomfilter-rb
   bootstrap-sass
   brakeman
