@@ -1,4 +1,4 @@
-<%- if flash[:notice] %>
+<% if flash[:notice] %>
   <div class="row">
     <div class="col-md-12">
       <div class="alert alert-info" role="alert">
@@ -10,9 +10,9 @@
       </div>
     </div>
   </div>
-<%- end %>
+<% end %>
 
-<%- if flash[:error] %>
+<% if flash[:error] %>
   <div class="row">
     <div class="col-md-12">
       <div class="alert alert-danger" role="alert">
@@ -24,9 +24,9 @@
       </div>
     </div>
   </div>
-<%- end %>
+<% end %>
 
-<%- if flash[:success] %>
+<% if flash[:success] %>
   <div class="row">
     <div class="col-md-12">
       <div class="alert alert-success" role="alert">
@@ -35,21 +35,6 @@
         </button>
         <%= fa_icon 'check-circle' %>
         <%= flash[:success] %>
-      </div>
-    </div>
-  </div>
-<%- end %>
-
-<% if current_user && current_user.token_upgrade? %>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="alert alert-info" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <%= fa_icon 'info-circle' %>
-        We've tweaked our GitHub OAuth permissions and need you to re-authorize your account to get the best experience, thanks for beta testing Libraries.io!
-        <a href="/auth/<%= current_user.private_repo_token.present? ? 'github_private' : 'github_public' %>" class="btn btn-info btn-xs learn-more" data-dismiss="alert" aria-label="Close">Re-oauthorize Now</a>
       </div>
     </div>
   </div>
