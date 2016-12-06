@@ -85,12 +85,12 @@ namespace :projects do
 
   task download_missing: :environment do
     ['Atom', 'Cargo', 'CocoaPods', 'NPM', 'CPAN', 'CRAN', 'Elm', 'Hackage', 'Haxelib',
-      'Hex', 'Packagist', 'Pypi', 'Rubygems'].each do |platform|
+      'Hex', 'Packagist', 'Rubygems'].each do |platform|
       "Repositories::#{platform}".constantize.import_new_async
     end
   end
 
-  # clojars, nuget, maven
+  # clojars, nuget, maven, pypi
   # alcatraz, clojars, maven, nuget, shards, swift_pm, wordpress, sublime
 
 end
