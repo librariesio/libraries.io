@@ -90,7 +90,7 @@ namespace :projects do
     end
   end
 
-  # clojars, nuget, maven, pypi
-  # alcatraz, clojars, maven, nuget, shards, swift_pm, wordpress, sublime
-
+  task sync_pypi_deps: :environment do
+    Project.platform('pypi').where('last_synced_at < ?', '2016-11-29 15:30:45').order(:last_synced_at).limit(10).each(&:async_sync)
+  end
 end
