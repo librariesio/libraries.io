@@ -1,7 +1,7 @@
 # Libraries.io &#128218;
 
 [![Build Status](https://circleci.com/gh/librariesio/libraries.io.svg?style=shield)](https://circleci.com/gh/librariesio/libraries.io)
-[![Gitter chat](https://badges.gitter.im/librariesio/support.svg)](https://gitter.im/librariesio/support)
+[![Slack chat](https://slack.libraries.io/badge.svg)](https://slack.libraries.io)
 [![Code Climate](https://img.shields.io/codeclimate/github/librariesio/libraries.io.svg?style=flat)](https://codeclimate.com/github/librariesio/libraries.io)
 [![Test Coverage](https://codeclimate.com/github/librariesio/libraries.io/badges/coverage.svg)](https://codeclimate.com/github/librariesio/libraries.io/coverage)
 
