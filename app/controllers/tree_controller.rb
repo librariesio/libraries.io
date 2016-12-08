@@ -2,13 +2,17 @@ class TreeController < ApplicationController
   before_action :find_project
 
   def show
-    find_version
-    if @version.nil?
-      @version = @project.latest_stable_version
-      raise ActiveRecord::RecordNotFound if @version.nil?
+    @date = Date.parse(params[:date]) rescue Date.today
+
+    if params[:number].present?
+      @version = @project.versions.find_by_number(params[:number])
+    else
+      @version = @project.versions.where('versions.published_at < ?', @date).select(&:stable?).sort.first
     end
+    raise ActiveRecord::RecordNotFound if @version.nil?
+
     @kind = params[:kind] || 'normal'
-    @date = Date.parse(params[:date]) rescue nil
+
     @tree_resolver = TreeResolver.new(@version, @kind, @date)
 
     if @tree_resolver.cached?
