@@ -45,7 +45,7 @@ FactoryGirl.define do
   end
 
   factory :user do
-    uid { SecureRandom.random_number(1000) }
+    sequence(:uid)
     nickname { Faker::Name.name.parameterize }
     email
     token { SecureRandom.hex }
