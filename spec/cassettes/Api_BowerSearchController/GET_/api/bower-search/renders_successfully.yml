@@ -1,0 +1,30 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:9200/projects/project/_search?from=0&size=30
+    body:
+      encoding: UTF-8
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"prefix":{"exact_name":""}},"filter":{"bool":{"must":[],"must_not":[{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"facets":{"platforms":{"terms":{"field":"platform","size":35},"facet_filter":{"bool":{"must":[]}}},"languages":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[[{"terms":{"platform":["Bower"]}}]]}}},"keywords":{"terms":{"field":"keywords_array","size":35},"facet_filter":{"bool":{"must":[[{"terms":{"platform":["Bower"]}}]]}}},"licenses":{"terms":{"field":"normalized_licenses","size":35},"facet_filter":{"bool":{"must":[[{"terms":{"platform":["Bower"]}}]]}}}},"filter":{"bool":{"must":[[{"terms":{"platform":["Bower"]}}]]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"name"}}},"sort":[{"rank":"desc"},{"stars":"desc"}],"track_scores":true}'
+    headers:
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '507'
+    body:
+      encoding: UTF-8
+      string: '{"took":2,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"facets":{"platforms":{"_type":"terms","missing":0,"total":4,"other":0,"terms":[{"term":"Rubygems","count":3},{"term":"npm","count":1}]},"languages":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"keywords":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"licenses":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]}},"suggest":{"did_you_mean":[]}}'
+    http_version: 
+  recorded_at: Fri, 09 Dec 2016 17:21:22 GMT
+recorded_with: VCR 3.0.3

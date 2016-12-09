@@ -15,6 +15,11 @@ FactoryGirl.define do
     repository_url  'https://github.com/rails/rails'
   end
 
+  factory :version do
+    project
+    number '1.0.0'
+  end
+
   factory :project_suggestion do
     project
     user
@@ -28,6 +33,7 @@ FactoryGirl.define do
 
   factory :github_user do
     login 'andrew'
+    sequence(:github_id)
   end
 
   factory :github_organisation do
