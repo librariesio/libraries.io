@@ -1,6 +1,4 @@
 class Api::ApplicationController < ApplicationController
-  include Rails::Pagination
-
   skip_before_action :verify_authenticity_token
   before_action :check_api_key, :set_headers
 
