@@ -3,12 +3,13 @@ class TreeResolver
   attr_accessor :license_names
   attr_accessor :tree
 
-  def initialize(version, kind)
+  def initialize(version, kind, date = nil)
     @version = version
     @kind = kind
     @project_names = []
     @license_names = []
     @tree = nil
+    @date = date
   end
 
   def cached?
@@ -20,7 +21,7 @@ class TreeResolver
   end
 
   def enqueue_tree_resolution
-    TreeResolverWorker.perform_async(@version.id, @kind)
+    TreeResolverWorker.perform_async(@version.id, @kind, @date)
   end
 
   def load_dependencies_tree
@@ -54,10 +55,10 @@ class TreeResolver
         dependencies: dependencies.map do |dep|
           if dep.project && !@project_names.include?(dep.project_name)
             @project_names << dep.project_name
-            index < 10 ? load_dependencies_for(dep.latest_resolvable_version, dep, kind, index + 1) : ['MORE']
+            index < 10 ? load_dependencies_for(dep.latest_resolvable_version(@date), dep, kind, index + 1) : ['MORE']
           else
             {
-              version: dep.latest_resolvable_version,
+              version: dep.latest_resolvable_version(@date),
               requirements: dep.try(:requirements),
               dependency: dep,
               dependencies: []
@@ -69,6 +70,6 @@ class TreeResolver
   end
 
   def cache_key
-    ['tree', @version, @kind]
+    ['tree', @version, @kind, @date].compact
   end
 end
