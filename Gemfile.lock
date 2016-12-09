@@ -64,7 +64,7 @@ GEM
       activesupport (>= 3.0.0)
     airbrussh (1.1.1)
       sshkit (>= 1.6.1, != 1.7.0)
-    api-pagination (4.4.0)
+    api-pagination (4.5.1)
     arel (7.1.4)
     autoprefixer-rails (6.5.3.1)
       execjs
@@ -450,7 +450,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  api-pagination (= 4.4.0)
+  api-pagination
   bloomfilter-rb
   bootstrap-sass
   brakeman
