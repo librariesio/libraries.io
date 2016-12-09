@@ -95,6 +95,7 @@ group :test do
   gem 'rails-controller-testing'
   gem 'faker'
   gem 'poltergeist'
+  gem 'json_spec'
 end
 
 group :production do
