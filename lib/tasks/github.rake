@@ -70,6 +70,7 @@ namespace :github do
       puts '*'*20
       puts "#{since} - #{'%.4f' % (since.to_f/226000)}%"
       puts '*'*20
+      sleep 1
     end
   end
 end
