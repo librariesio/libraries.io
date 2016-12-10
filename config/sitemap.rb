@@ -41,50 +41,23 @@ SitemapGenerator::Sitemap.create do
   add keywords_path, :changefreq => 'daily'
 
   puts "Generating Projects"
-  Project.not_removed.includes(github_repository: :published_github_tags).find_each do |project|
+  Project.not_removed.find_each do |project|
     add project_path(project.to_param), :lastmod => project.updated_at
-    add project_sourcerank_path(project.to_param), :lastmod => project.updated_at
-    add project_dependents_path(project.to_param), :lastmod => project.updated_at
-    add project_dependent_repos_path(project.to_param), :lastmod => project.updated_at
-    add project_versions_path(project.to_param), :lastmod => project.updated_at
-
-    if project.versions_count.zero? && project.github_repository_id.present?
-      if project.github_repository.present?
-        add project_tags_path(project.to_param), :lastmod => project.updated_at
-
-        project.github_repository.published_github_tags.each do |tag|
-          add version_path(project.to_param.merge(number: tag.name)), :lastmod => project.updated_at
-        end
-      end
-    end
-  end
-
-  Version.includes(:project).find_each do |version|
-    if version.project && !version.project.is_removed?
-      add version_path(version.to_param), :lastmod => version.project.updated_at
-    end
   end
 
   GithubRepository.open_source.source.not_removed.find_each do |repo|
     add github_repository_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
     add github_repository_contributors_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
-    add github_repository_forks_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
-    add github_repository_tags_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
   end
 
   puts "Generating Users"
   GithubUser.visible.find_each do |user|
     add user_path(user), :lastmod => user.updated_at
-    add user_contributions_path(user), :lastmod => user.updated_at
-    add user_repositories_path(user), :lastmod => user.updated_at
-    add user_projects_path(user), :lastmod => user.updated_at
   end
 
   puts "Generating Orgs"
   GithubOrganisation.visible.find_each do |org|
     add user_path(org), :lastmod => org.updated_at
-    add user_repositories_path(org), :lastmod => org.updated_at
-    add user_projects_path(org), :lastmod => org.updated_at
   end
 
   Repositories::Base.platforms.each do |platform|
