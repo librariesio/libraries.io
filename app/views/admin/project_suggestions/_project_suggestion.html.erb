@@ -1,10 +1,12 @@
 <%= link_to 'Delete', admin_project_suggestion_path(project_suggestion), method: :delete, class: 'btn btn-danger pull-right'  %>
 <h3>
   <%= link_to project_suggestion.project, project_path(project_suggestion.project.to_param) %>
-  <small>
-    By <%= link_to project_suggestion.user, user_path(project_suggestion.user.nickname) %>
-    <%= timeago_tag project_suggestion.created_at %>
-  </small>
+  <% if project_suggestion.user %>
+    <small>
+      By <%= link_to project_suggestion.user, user_path(project_suggestion.user.nickname) %>
+      <%= timeago_tag project_suggestion.created_at %>
+    </small>
+  <% end %>
 </h3>
 <% if project_suggestion.repository_url.present? && project_suggestion.repository_url != project_suggestion.project.repository_url %>
   <p>
