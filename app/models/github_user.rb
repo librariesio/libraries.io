@@ -22,6 +22,7 @@ class GithubUser < ApplicationRecord
   after_commit :async_sync, on: :create
 
   scope :visible, -> { where(hidden: false) }
+  scope :with_login, -> { where("github_users.login <> ''") }
 
   def meta_tags
     {

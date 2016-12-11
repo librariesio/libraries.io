@@ -51,12 +51,12 @@ SitemapGenerator::Sitemap.create do
   end
 
   puts "Generating Users"
-  GithubUser.visible.find_each do |user|
+  GithubUser.visible.with_login.find_each do |user|
     add user_path(user), :lastmod => user.updated_at
   end
 
   puts "Generating Orgs"
-  GithubOrganisation.visible.find_each do |org|
+  GithubOrganisation.visible.with_login.find_each do |org|
     add user_path(org), :lastmod => org.updated_at
   end
 
