@@ -57,7 +57,6 @@ gem 'github_urls'
 gem 'mail', require: ['mail', 'mail/utilities', 'mail/parsers']
 gem 'pictogram'
 gem 'rails-timeago', git: 'https://github.com/librariesio/rails-timeago'
-gem 'multi_fetch_fragments'
 gem 'rack-attack'
 gem 'rack-attack-rate-limit', require: 'rack/attack/rate-limit'
 gem 'api-pagination'
