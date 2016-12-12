@@ -69,7 +69,7 @@ class GithubRepositoriesController < ApplicationController
 
   def contributors
     load_repo
-    scope = @github_repository.github_contributions.joins(:github_user)
+    scope = @github_repository.github_contributions.where('count > 0').joins(:github_user)
     visible_scope = scope.where('github_users.hidden = ?', false).order('count DESC')
     @total = scope.sum(:count)
     @top_count = visible_scope.first.try(:count)
