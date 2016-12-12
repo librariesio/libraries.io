@@ -92,7 +92,6 @@ group :test do
   gem 'shoulda'
   gem 'simplecov', require: false
   gem 'codeclimate-test-reporter', require: false
-  gem 'rails-controller-testing'
   gem 'faker'
   gem 'poltergeist'
   gem 'json_spec'

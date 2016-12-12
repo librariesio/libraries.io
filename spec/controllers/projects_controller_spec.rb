@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe ProjectsController do
-  describe "GET #index", :vcr do
+RSpec.describe ProjectsController, :vcr do
+  describe "GET #index" do
     before :each do
       @project = create(:project)
       Project.__elasticsearch__.import force: true
@@ -20,7 +20,7 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #bus_factor", :vcr do
+  describe "GET #bus_factor" do
     before :each do
       @project = create(:project)
       Project.__elasticsearch__.import force: true
@@ -52,7 +52,7 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #unlicensed", :vcr do
+  describe "GET #unlicensed" do
     before :each do
       @project = create(:project)
       Project.__elasticsearch__.import force: true
@@ -88,7 +88,7 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #deprecated", :vcr do
+  describe "GET #deprecated" do
     before :each do
       @project = create(:project)
       Project.__elasticsearch__.import force: true
@@ -124,7 +124,7 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #removed", :vcr do
+  describe "GET #removed" do
     before :each do
       @project = create(:project)
       Project.__elasticsearch__.import force: true
@@ -160,7 +160,7 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #unmaintained", :vcr do
+  describe "GET #unmaintained" do
     before :each do
       @project = create(:project)
       Project.__elasticsearch__.import force: true
