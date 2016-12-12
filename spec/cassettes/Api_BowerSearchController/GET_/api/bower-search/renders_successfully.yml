@@ -21,10 +21,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '507'
+      - '482'
     body:
       encoding: UTF-8
-      string: '{"took":2,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"facets":{"platforms":{"_type":"terms","missing":0,"total":4,"other":0,"terms":[{"term":"Rubygems","count":3},{"term":"npm","count":1}]},"languages":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"keywords":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"licenses":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]}},"suggest":{"did_you_mean":[]}}'
+      string: '{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"facets":{"platforms":{"_type":"terms","missing":0,"total":1,"other":0,"terms":[{"term":"Rubygems","count":1}]},"languages":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"keywords":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"licenses":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]}},"suggest":{"did_you_mean":[]}}'
     http_version: 
-  recorded_at: Fri, 09 Dec 2016 17:21:22 GMT
+  recorded_at: Mon, 12 Dec 2016 15:47:36 GMT
 recorded_with: VCR 3.0.3
