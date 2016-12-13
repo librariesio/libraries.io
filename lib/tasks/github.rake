@@ -73,4 +73,23 @@ namespace :github do
       sleep 1
     end
   end
+
+  task remove_duplicate_tags: :environment do
+    since = REDIS.get('duplicate_tags_repo_id').to_i
+
+    GithubRepository.find_in_batches(start: since).with_index do |repos, batch|
+      puts "Processing group ##{batch}"
+      repos.each do |repo|
+        valid_ids = repo.github_tags.select("MIN(id) as id").group(:name,:github_repository_id).collect(&:id)
+        if valid_ids.any?
+          deleted = repo.github_tags.where("id NOT IN (?)",valid_ids).delete_all
+          repo.touch if deleted > 0
+        end
+      end
+
+      since = repos.last.id + 1
+      REDIS.set('duplicate_tags_repo_id', since)
+    end
+
+  end
 end
