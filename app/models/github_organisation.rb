@@ -1,7 +1,7 @@
 class GithubOrganisation < ApplicationRecord
   include Profile
 
-  API_FIELDS = [:name, :login, :blog, :email, :location, :description]
+  API_FIELDS = [:name, :login, :blog, :email, :location, :bio]
 
   has_many :github_repositories
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository
@@ -40,6 +40,10 @@ class GithubOrganisation < ApplicationRecord
   end
 
   def company
+    nil
+  end
+
+  def bio
     nil
   end
 
@@ -104,7 +108,7 @@ class GithubOrganisation < ApplicationRecord
   end
 
   def download_from_github_by(id_or_login)
-    update_attributes(github_client.org(github_id).to_hash.slice(:login, :name, :email, :blog, :location, :description))
+    update_attributes(github_client.org(github_id).to_hash.slice(:login, :name, :email, :blog, :location, :bio))
   rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end

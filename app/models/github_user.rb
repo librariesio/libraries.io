@@ -40,7 +40,7 @@ class GithubUser < ApplicationRecord
     false
   end
 
-  def description
+  def bio
     nil
   end
 
