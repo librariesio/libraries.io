@@ -3,6 +3,7 @@ class GithubTag < ApplicationRecord
 
   belongs_to :github_repository, touch: true
   validates_presence_of :name, :sha, :github_repository
+  validates_uniqueness_of :name, scope: :github_repository_id
 
   scope :published, -> { where('published_at IS NOT NULL') }
 
