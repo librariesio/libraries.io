@@ -40,10 +40,6 @@ class GithubUser < ApplicationRecord
     false
   end
 
-  def bio
-    nil
-  end
-
   def github_client
     AuthToken.client
   end
