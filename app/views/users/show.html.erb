@@ -10,9 +10,9 @@
       <%= link_to fa_icon('github'), @user.github_url, class: 'tip', title: "View #{@user.login} on GitHub" %>
     </h1>
     <% if @user.org? %>
-      <% if @user.description.present? %>
+      <% if @user.bio.present? %>
         <p>
-          <%= @user.description %>
+          <%= @user.bio %>
         </p>
       <% end %>
     <% else %>
