@@ -43,10 +43,6 @@ class GithubOrganisation < ApplicationRecord
     nil
   end
 
-  def bio
-    nil
-  end
-
   def github_client
     AuthToken.client
   end
