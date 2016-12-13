@@ -45,7 +45,7 @@ class UsersController < ApplicationController
     @user = GithubUser.visible.where("lower(login) = ?", params[:login].downcase).first
     @user = GithubOrganisation.visible.where("lower(login) = ?", params[:login].downcase).first if @user.nil?
     raise ActiveRecord::RecordNotFound if @user.nil?
-    redirect_to user_path(@user), :status => :moved_permanently if params[:login] != @user.login
+    redirect_to url_for(login: @user.login), :status => :moved_permanently if params[:login] != @user.login
   end
 
   def find_contributions

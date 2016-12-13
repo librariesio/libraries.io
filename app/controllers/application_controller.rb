@@ -190,7 +190,7 @@ class ApplicationController < ActionController::Base
     @github_repository = GithubRepository.where('lower(full_name) = ?', full_name.downcase).first
     raise ActiveRecord::RecordNotFound if @github_repository.nil?
     raise ActiveRecord::RecordNotFound unless authorized?
-    redirect_to github_repository_path(@github_repository.owner_name, @github_repository.project_name), :status => :moved_permanently if full_name != @github_repository.full_name
+    redirect_to url_for(owner: @github_repository.owner_name, name: @github_repository.project_name), :status => :moved_permanently if full_name != @github_repository.full_name
   end
 
   def platform_scope(scope = Project)
