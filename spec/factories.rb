@@ -58,4 +58,16 @@ FactoryGirl.define do
     token { SecureRandom.hex }
     location { Faker::Address.country unless [0,1,2].sample == 0 }
   end
+
+  factory :repository_permission do
+    user
+    github_repository
+    pull true
+  end
+
+  factory :web_hook do
+    github_repository
+    user
+    url 'http://google.com'
+  end
 end
