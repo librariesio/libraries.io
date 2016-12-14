@@ -18,6 +18,7 @@ FactoryGirl.define do
   factory :version do
     project
     number '1.0.0'
+    published_at 1.day.ago
   end
 
   factory :project_suggestion do
