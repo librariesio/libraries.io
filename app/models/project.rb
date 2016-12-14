@@ -18,6 +18,8 @@ class Project < ApplicationRecord
   has_many :contributors, through: :github_contributions, source: :github_user
   has_many :github_tags, through: :github_repository
   has_many :dependents, class_name: 'Dependency'
+  has_many :dependent_versions, through: :dependents, source: :version, class_name: 'Version'
+  has_many :dependent_projects, -> { group('projects.id') }, through: :dependent_versions, source: :project, class_name: 'Project'
   has_many :repository_dependencies
   has_many :dependent_manifests, through: :repository_dependencies, source: :manifest
   has_many :dependent_repositories, -> { group('github_repositories.id').order('github_repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :github_repository
@@ -197,11 +199,6 @@ class Project < ApplicationRecord
 
   def homepage
     read_attribute(:homepage).presence || github_repository.try(:homepage)
-  end
-
-  def dependent_projects(options = {})
-    options = {per_page: 30, page: 1}.merge(options)
-    Project.where(id: dependents.joins(:version).limit(options[:per_page]).offset(options[:per_page]*(options[:page].to_i-1)).pluck('DISTINCT versions.project_id')).order('projects.rank DESC')
   end
 
   def set_dependents_count

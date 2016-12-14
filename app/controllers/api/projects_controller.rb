@@ -6,11 +6,8 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def dependents
-    @dependents = paginate(WillPaginate::Collection.create(page_number, per_page_number, @project.dependents_count) do |pager|
-      pager.replace(@project.dependent_projects(page: page_number, per_page: per_page_number).includes(:versions, :github_repository))
-    end)
-    headers['Total'] = @project.dependents_count
-    render json: project_json_response(@dependents)
+    dependents = paginate(@project.dependent_projects).includes(:versions, :github_repository)
+    render json: project_json_response(dependents)
   end
 
   def dependent_repositories

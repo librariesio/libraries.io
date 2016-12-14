@@ -159,7 +159,7 @@
       <%= render 'adsense/banner' %>
       <div class="row">
         <% cache([@project, @version, 'dependents:v3'], :expires_in => 1.day) do  %>
-          <% dependents = @project.dependent_projects(per_page: 10) %>
+          <% dependents = @project.dependent_projects.limit(10) %>
           <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
           <% if dependent_repos.length > 0 || dependents.length > 0 || @dependencies.length > 0 %>
             <hr>
