@@ -11,6 +11,7 @@ class Project < ApplicationRecord
                 :latest_release_number, :latest_release_published_at]
 
   validates_presence_of :name, :platform
+  validates_uniqueness_of :name, scope: :platform, case_sensitive: true
 
   has_many :versions
   has_many :dependencies, -> { group 'project_name' }, through: :versions
