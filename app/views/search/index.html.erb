@@ -51,6 +51,9 @@
       <p>
         <% if params[:platforms].present? || params[:licenses].present? ||  params[:languages].present? ||  params[:keywords].present? %>
           <%= link_to 'Try removing some filters.', search_path(q: params[:q]) %>
+        <% else %>
+          Can't find what you're looking for?
+          <%= link_to 'Report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>
         <% end %>
       </p>
     <% end %>
