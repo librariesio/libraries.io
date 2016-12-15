@@ -21,6 +21,12 @@ namespace :download do
     Repositories::Bower.import_new_async
   end
 
+  task bower_all: :environment do
+    if Date.today.wday.zero?
+      Repositories::Bower.import
+    end
+  end
+
   task cargo: :environment do
     Repositories::Cargo.import_recent_async
   end
