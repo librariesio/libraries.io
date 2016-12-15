@@ -228,13 +228,16 @@ class GithubRepository < ApplicationRecord
   end
 
   def update_all_info(token = nil)
+    previous_pushed_at = self.pushed_at
     update_from_github(token)
-    download_readme(token)
-    download_tags(token)
-    download_github_contributions(token)
-    download_manifests(token)
-    download_owner
-    download_fork_source(token)
+    if self.pushed_at && previous_pushed_at < self.pushed_at
+      download_readme(token)
+      download_tags(token)
+      download_github_contributions(token)
+      download_manifests(token)
+      download_owner
+      download_fork_source(token)
+    end
     # download_issues(token)
     save_projects
     update_attributes(last_synced_at: Time.now)
