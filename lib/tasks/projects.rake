@@ -10,13 +10,6 @@ namespace :projects do
     Project.import query: -> { indexable }
   end
 
-  desc 'Update the sitemap every other day'
-  task update_sitemap: :environment do
-    if Date.today.wday.zero?
-      Rake::Task["sitemap:refresh"].invoke
-    end
-  end
-
   task sync: :environment do
     ids = Project.where(last_synced_at: nil).order('projects.updated_at DESC').limit(100_000).pluck(:id)
     Project.where(id: ids).find_each(&:async_sync)
