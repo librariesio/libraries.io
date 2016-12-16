@@ -16,26 +16,41 @@
     <table id="q-graph">
         <tbody>
         <% max_height = 400 %>
-        <% @counts.each_with_index do |(requirement, count), index| %>
-          <% percentage = count.to_f/@total*100 %>
+          <% @counts.each_with_index do |(requirement, count), index| %>
+            <% percentage = count.to_f/@total*100 %>
 
-          <tr class="qtr" style='left:<%= index*60 %>px; <% if index == @counts.length - 1 %>border-right:none;<% end %>'>
-              <th scope="row">
-                <% if requirement.length > 10 %>
-                  <span class='tip' title='<%= requirement %>'><%= truncate(requirement, length: 10) %></span>
-                <% else %>
-                  <%= requirement %>
-                <% end %>
-              </th>
-              <td class="bar" style='height:<%= (percentage/@highest_percentage.to_f*max_height).round %>px; background-color: <%= colours[index] %>;'>
-                <p>
-                  <a href='<%= url_for(params.permit(:name, :platform).merge(requirements: requirement)) %>' class='tip' title="<%= number_to_human(count) %> <%= "repo".pluralize(count) %> specifies this version">
-                    <%= percentage.round(2) %>%
-                  </a>
-                </p>
-              </td>
-          </tr>
-        <% end %>
+            <tr class="qtr" style='left:<%= index*60 %>px; <% if index == @counts.length - 1 && @all_counts.length == @counts.length %>border-right:none;<% end %>'>
+                <th scope="row">
+                  <% if requirement.length > 10 %>
+                    <span class='tip' title='<%= requirement %>'><%= truncate(requirement, length: 10) %></span>
+                  <% else %>
+                    <%= requirement %>
+                  <% end %>
+                </th>
+                <td class="bar" style='height:<%= (percentage/@highest_percentage.to_f*max_height).round %>px; background-color: <%= colours[index] %>;'>
+                  <p>
+                    <a href='<%= url_for(params.permit(:name, :platform).merge(requirements: requirement)) %>' class='tip' title="<%= number_to_human(count) %> <%= "repo".pluralize(count) %> specifies this version">
+                      <%= percentage.round(2) %>%
+                    </a>
+                  </p>
+                </td>
+            </tr>
+          <% end %>
+          <% if @all_counts.length > @counts.length %>
+            <% count = @total - @counts.sum{|_req, count| count } %>
+            <% index = @counts.length %>
+            <% percentage = count.to_f/@total*100 %>
+            <tr class="qtr" style='left:<%= index*60 %>px; border-right:none;'>
+                <th scope="row">
+                  <span class='tip' title='All other lesser used requirements including <%= (@all_counts.map{|r,c| r } - @counts.map{|r,c| r }).first(20).join(', ') %>'>Other</span>
+                </th>
+                <td class="bar" style='height:<%= (percentage/@highest_percentage.to_f*max_height).round %>px; max_height: <%= max_height.round %>px; background-color: #ddd;'>
+                  <p>
+                      <%= percentage.round(2) %>%
+                  </p>
+                </td>
+            </tr>
+          <% end %>
         </tbody>
     </table>
   <% end %>
