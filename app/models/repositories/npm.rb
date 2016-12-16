@@ -93,31 +93,9 @@ module Repositories
       proj = project(name)
       vers = proj['versions'][version]
       return [] if vers.nil?
-      vers.fetch('dependencies', {}).map do |k,v|
-        {
-          project_name: k,
-          requirements: v,
-          kind: 'normal',
-          optional: false,
-          platform: self.name.demodulize
-        }
-      end + vers.fetch('devDependencies', {}).map do |k,v|
-        {
-          project_name: k,
-          requirements: v,
-          kind: 'Development',
-          optional: false,
-          platform: self.name.demodulize
-        }
-      end + vers.fetch('optionalDependencies', {}).map do |k,v|
-        {
-          project_name: k,
-          requirements: v,
-          kind: 'Optional',
-          optional: true,
-          platform: self.name.demodulize
-        }
-      end
+      map_dependencies(vers.fetch('dependencies', {}), 'normal') +
+      map_dependencies(vers.fetch('devDependencies', {}), 'Development') +
+      map_dependencies(vers.fetch('optionalDependencies', {}), 'Optional', true)
     end
   end
 end

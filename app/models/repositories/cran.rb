@@ -71,16 +71,7 @@ module Repositories
     end
 
     def self.dependencies(name, version, _project)
-      dependencies =find_dependencies(name, version)
-      return [] unless dependencies.any?
-      dependencies.map do |dependency|
-        {
-          project_name: dependency["name"],
-          requirements: dependency["version"],
-          kind: dependency["type"],
-          platform: self.name.demodulize
-        }
-      end
+      find_and_map_dependencies(name, version, _project)
     end
 
     def self.find_dependencies(name, version)

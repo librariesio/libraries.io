@@ -73,24 +73,18 @@ module Repositories
       json = get_json("https://rubygems.org/api/v2/rubygems/#{name}/versions/#{version}.json")
 
       deps = json['dependencies']
-      d = []
-      deps['development'].each do |dep|
-        d <<  {
-          project_name: dep['name'],
-          requirements: dep['requirements'],
-          kind: 'Development',
-          platform: self.name.demodulize
-        }
-      end
-      deps['runtime'].each do |dep|
-        d <<  {
-          project_name: dep['name'],
-          requirements: dep['requirements'],
-          kind: 'normal',
-          platform: self.name.demodulize
-        }
-      end
-      d
+      map_dependencies(deps['development'], 'Development') + map_dependencies(deps['runtime'], 'normal')
+    end
+  end
+
+  def self.map_dependencies(deps, kind)
+    deps.map do |dep|
+      {
+        project_name: dep['name'],
+        requirements: dep['requirements'],
+        kind: kind,
+        platform: self.name.demodulize
+      }
     end
   end
 end

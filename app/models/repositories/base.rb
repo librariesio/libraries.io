@@ -160,6 +160,31 @@ module Repositories
       []
     end
 
+    def self.map_dependencies(deps, kind, optional = false)
+      deps.map do |k,v|
+        {
+          project_name: k,
+          requirements: v,
+          kind: kind,
+          optional: optional,
+          platform: self.name.demodulize
+        }
+      end
+    end
+
+    def self.find_and_map_dependencies(name, version, _project)
+      dependencies =find_dependencies(name, version)
+      return [] unless dependencies.any?
+      dependencies.map do |dependency|
+        {
+          project_name: dependency["name"],
+          requirements: dependency["version"],
+          kind: dependency["type"],
+          platform: self.name.demodulize
+        }
+      end
+    end
+
     def self.get(url, options = {})
       Oj.load(get_raw(url, options))
     end

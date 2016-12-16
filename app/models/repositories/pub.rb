@@ -6,7 +6,7 @@ module Repositories
     URL = 'https://pub.dartlang.org'
     COLOR = '#98BAD6'
 
-    def self.package_link(name, version = nil)
+    def self.package_link(name, _version = nil)
       "https://pub.dartlang.org/packages/#{name}"
     end
 
@@ -57,23 +57,8 @@ module Repositories
       vers = proj['versions'].find{|v| v['version'] == version }
 
       return [] if vers.nil?
-      vers['pubspec'].fetch('dependencies', {}).map do |k,v|
-        {
-          project_name: k,
-          requirements: v,
-          kind: 'normal',
-          optional: false,
-          platform: self.name.demodulize
-        }
-      end + vers['pubspec'].fetch('dev_dependencies', {}).map do |k,v|
-        {
-          project_name: k,
-          requirements: v,
-          kind: 'normal',
-          optional: false,
-          platform: self.name.demodulize
-        }
-      end
+      map_dependencies(vers['pubspec'].fetch('dependencies', {}), 'normal') +
+      map_dependencies(vers['pubspec'].fetch('dev_dependencies', {}), 'Development')
     end
   end
 end

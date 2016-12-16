@@ -58,23 +58,8 @@ module Repositories
     def self.dependencies(name, version, _project)
       vers = project(name)['versions'][version]
       return [] if vers.nil?
-      vers.fetch('require', {}).reject{|k,_v| k == 'php' }.map do |k,v|
-        {
-          project_name: k,
-          requirements: v,
-          kind: 'normal',
-          optional: false,
-          platform: self.name.demodulize
-        }
-      end + vers.fetch('require-dev', {}).reject{|k,_v| k == 'php' }.map do |k,v|
-        {
-          project_name: k,
-          requirements: v,
-          kind: 'Development',
-          optional: false,
-          platform: self.name.demodulize
-        }
-      end
+      map_dependencies(vers.fetch('require', {}).reject{|k,_v| k == 'php' }, 'normal') +
+      map_dependencies(vers.fetch('require-dev', {}).reject{|k,_v| k == 'php' }, 'Development')
     end
   end
 end
