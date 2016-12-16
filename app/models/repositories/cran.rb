@@ -70,8 +70,8 @@ module Repositories
       end
     end
 
-    def self.dependencies(name, version, _project)
-      find_and_map_dependencies(name, version, _project)
+    def self.dependencies(name, version, project)
+      find_and_map_dependencies(name, version, project)
     end
 
     def self.find_dependencies(name, version)
