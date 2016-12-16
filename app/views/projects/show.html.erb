@@ -91,7 +91,7 @@
       </p>
       <% end %>
 
-      <% if @project.homepage.present? && @project.homepage != package_link(@project) %>
+      <% if @project.homepage.present? && @project.homepage != @project.package_manager_url %>
       <p>
         Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage), :rel => 'nofollow') %>
       </p>
@@ -125,13 +125,13 @@
       </p>
       <% end %>
 
-      <% if link = package_link(@project, @version.try(:number)) %>
+      <% if link = @project.package_manager_url(@version.try(:number)) %>
       <p>
         View on registry: <%= link_to truncate(link, length: 70), link %>
       </p>
       <% end %>
 
-      <% if link = documentation_url(@project.name, @project.platform, @version.try(:number) || @project.latest_release_number ) %>
+      <% if link = Repositories::Base.documentation_url(@project.name, @project.platform, @version.try(:number) || @project.latest_release_number ) %>
         <p>
           Documentation: <%= link_to truncate(link, length: 70), link %>
         </p>
@@ -142,11 +142,11 @@
         </p>
       <% end %>
 
-      <% if install_instructions(@project, @project.platform, @version.try(:number)) %>
+      <% if Repositories::Base.install_instructions(@project, @project.platform, @version.try(:number)) %>
         <p>
           Install:
           <code>
-            <%= install_instructions(@project, @project.platform, @version.try(:number)) %>
+            <%= Repositories::Base.install_instructions(@project, @project.platform, @version.try(:number)) %>
           </code>
         </p>
       <% end %>
@@ -192,7 +192,7 @@
                   <% deps.each do |dependency| %>
                     <tr>
                       <td>
-                        <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency_platform(dependency.platform)) %>
+                        <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: Repositories::Base.dependency_platform(dependency.platform)) %>
                       </td>
                       <td>
                         <%= dependency.requirements %>

@@ -3,6 +3,10 @@ require 'uri'
 module ApplicationHelper
   include SanitizeUrl
 
+  def platform_name(platform)
+    Repositories::Base.platform_name(platform)
+  end
+
   def colours
     Languages::Language.all.map(&:color).compact.uniq.shuffle(random: Random.new(12))
   end

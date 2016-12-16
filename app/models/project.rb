@@ -133,8 +133,8 @@ class Project < ApplicationRecord
     keywords_array
   end
 
-  def package_manager_url
-    Repositories::Base.package_link(self)
+  def package_manager_url(version = nil)
+    Repositories::Base.package_link(self, version)
   end
 
   def owner
