@@ -230,7 +230,7 @@ class GithubRepository < ApplicationRecord
   def update_all_info(token = nil)
     previous_pushed_at = self.pushed_at
     update_from_github(token)
-    if self.pushed_at && previous_pushed_at < self.pushed_at
+    if (previous_pushed_at.nil? && self.pushed_at) || (self.pushed_at && previous_pushed_at < self.pushed_at)
       download_readme(token)
       download_tags(token)
       download_github_contributions(token)
