@@ -19,25 +19,11 @@ class ProjectsController < ApplicationController
   end
 
   def bus_factor
-    @search = Project.bus_factor_search(filters: {
-      platform: current_platform,
-      normalized_licenses: current_license,
-      language: current_language
-    }).paginate(page: page_number)
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @projects = @search.records.includes(:github_repository).sort_by { |u| indexes[u.id] }
+    problem_repos(:bus_factor_search)
   end
 
   def unlicensed
-    @search = Project.unlicensed_search(filters: {
-      platform: current_platform,
-      normalized_licenses: current_license,
-      language: current_language
-    }).paginate(page: page_number)
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @projects = @search.records.includes(:github_repository).sort_by { |u| indexes[u.id] }
+    problem_repos(:unlicensed_search)
   end
 
   def deprecated
@@ -143,6 +129,16 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def problem_repos(method_name)
+    @search = Project.send(method_name, filters: {
+      platform: current_platform,
+      normalized_licenses: current_license,
+      language: current_language
+    }).paginate(page: page_number)
+    indexes = Hash[@search.map{|r| r.id.to_i }.each_with_index.to_a]
+    @projects = @search.records.includes(:github_repository).sort_by { |u| indexes[u.id] }
+  end
 
   def incorrect_case?
     params[:platform] != params[:platform].downcase || (@project && params[:name] != @project.name)
