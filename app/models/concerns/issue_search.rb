@@ -40,8 +40,6 @@ module IssueSearch
     end
 
     def self.search(options = {})
-      facet_limit = options.fetch(:facet_limit, 35)
-
       options[:filters] ||= []
       options[:must_not] ||= []
 
@@ -74,40 +72,7 @@ module IssueSearch
             }
           }
         },
-        facets: {
-          language: { terms: {
-              field: "language",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :language)
-              }
-            }
-          },
-          labels: {
-            terms: {
-              field: "labels",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: label_filter_format(options[:filters], options[:labels_to_keep])
-              }
-            }
-          },
-          license: {
-            terms: {
-              field: "license",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :license)
-              }
-            }
-          }
-        },
+        facets: issues_facet_filters(options, options[:labels_to_keep]),
         filter: {
           bool: {
             must: [],
@@ -145,8 +110,6 @@ module IssueSearch
     end
 
     def self.first_pr_search(options = {})
-      facet_limit = options.fetch(:facet_limit, 35)
-
       options[:filters] ||= []
       options[:must_not] ||= []
 
@@ -186,40 +149,7 @@ module IssueSearch
             }
           }
         },
-        facets: {
-          language: { terms: {
-              field: "language",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :language)
-              }
-            }
-          },
-          labels: {
-            terms: {
-              field: "labels",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: label_filter_format(options[:filters], GithubIssue::FIRST_PR_LABELS)
-              }
-            }
-          },
-          license: {
-            terms: {
-              field: "license",
-              size: facet_limit
-            },
-            facet_filter: {
-              bool: {
-                must: filter_format(options[:filters], :license)
-              }
-            }
-          }
-        },
+        facets: issues_facet_filters(options, GithubIssue::FIRST_PR_LABELS),
         filter: {
           bool: {
             must: [],
@@ -238,6 +168,30 @@ module IssueSearch
                                    {'stars' => 'desc'},
                                    {'created_at' => 'asc'},
                                    {'contributions_count' => 'asc'}]
+    end
+
+    def self.issues_facet_filters(options, labels)
+      facet_limit = options.fetch(:facet_limit, 35)
+      {
+        language: {
+          terms: { field: "language", size: facet_limit },
+          facet_filter: {
+            bool: { must: filter_format(options[:filters], :language) }
+          }
+        },
+        labels: {
+          terms: { field: "labels", size: facet_limit },
+          facet_filter: {
+            bool: { must: label_filter_format(options[:filters], labels) }
+          }
+        },
+        license: {
+          terms: { field: "license", size: facet_limit },
+          facet_filter: {
+            bool: { must: filter_format(options[:filters], :license) }
+          }
+        }
+      }
     end
 
     def self.label_filter_format(filters, labels_to_keep = ['help wanted'])
