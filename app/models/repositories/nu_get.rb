@@ -6,6 +6,14 @@ module Repositories
     URL = 'https://www.nuget.org'
     COLOR = '#178600'
 
+    def self.package_link(name, version = nil)
+      "https://www.nuget.org/packages/#{name}/#{version}"
+    end
+
+    def self.install_instructions(project, version = nil)
+      "Install-Package #{project.name}" + (version ? " -Version #{version}" : "")
+    end
+
     def self.load_names(limit = nil)
       endpoints = name_endpoints
       segment_count = limit || endpoints.length - 1

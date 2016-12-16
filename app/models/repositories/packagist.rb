@@ -7,6 +7,10 @@ module Repositories
     URL = 'https://packagist.org'
     COLOR = '#4F5D95'
 
+    def self.package_link(name, version = nil)
+      "https://packagist.org/packages/#{name}##{version}"
+    end
+
     def self.project_names
       get("https://packagist.org/packages/list.json")['packageNames']
     end

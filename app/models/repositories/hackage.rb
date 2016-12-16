@@ -6,6 +6,18 @@ module Repositories
     URL = 'http://hackage.haskell.org'
     COLOR = '#29b544'
 
+    def self.package_link(name, version = nil)
+      "http://hackage.haskell.org/package/#{name}" + (version ? "-#{version}" : "")
+    end
+
+    def self.download_url(name, version = nil)
+      "http://hackage.haskell.org/package/#{name}-#{version}/#{name}-#{version}.tar.gz"
+    end
+
+    def self.install_instructions(project, version = nil)
+      "cabal install #{project.name}" + (version ? "-#{version}" : "")
+    end
+
     def self.project_names
       get_json("http://hackage.haskell.org/packages/").map{ |h| h['packageName'] }
     end

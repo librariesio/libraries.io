@@ -6,6 +6,10 @@ module Repositories
     URL = 'https://clojars.org'
     COLOR = '#db5855'
 
+    def self.package_link(name, version = nil)
+      "https://clojars.org/#{name}" + (version ? "/versions/#{version}" : "")
+    end
+
     def self.project_names
       @names ||= get("http://clojars-json.herokuapp.com/packages.json").keys
     end

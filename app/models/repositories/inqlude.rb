@@ -6,6 +6,14 @@ module Repositories
     URL = 'https://inqlude.org/'
     COLOR = '#f34b7d'
 
+    def self.package_link(name, version = nil)
+      "https://inqlude.org/libraries/#{name}.html"
+    end
+
+    def self.install_instructions(project, version = nil)
+      "inqlude install #{project.name}"
+    end
+
     def self.project_names
       @project_names ||= `rm -rf inqlude-data;git clone https://github.com/cornelius/inqlude-data.git --depth 1; ls -l inqlude-data/ | grep "^d" | awk -F" " '{print $9}'`.split("\n")
     end

@@ -6,6 +6,18 @@ module Repositories
     URL = 'http://go-search.org/'
     COLOR = '#375eab'
 
+    def self.package_link(name, version = nil)
+      "http://go-search.org/view?id=#{name}"
+    end
+
+    def self.documentation_url(name, version = nil)
+      "http://godoc.org/#{name}"
+    end
+
+    def self.install_instructions(project, version = nil)
+      "go get #{project.name}"
+    end
+
     def self.project_names
       get("http://go-search.org/api?action=packages")
     end

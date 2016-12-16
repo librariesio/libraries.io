@@ -131,7 +131,7 @@
       </p>
       <% end %>
 
-      <% if link = Repositories::Base.documentation_url(@project.name, @project.platform, @version.try(:number) || @project.latest_release_number ) %>
+      <% if link = @project.documentation_url(@version.try(:number) || @project.latest_release_number) %>
         <p>
           Documentation: <%= link_to truncate(link, length: 70), link %>
         </p>
@@ -142,11 +142,11 @@
         </p>
       <% end %>
 
-      <% if Repositories::Base.install_instructions(@project, @project.platform, @version.try(:number)) %>
+      <% if @project.install_instructions(@version.try(:number)).present? %>
         <p>
           Install:
           <code>
-            <%= Repositories::Base.install_instructions(@project, @project.platform, @version.try(:number)) %>
+            <%= @project.install_instructions(@version.try(:number)) %>
           </code>
         </p>
       <% end %>

@@ -8,6 +8,15 @@ module Repositories
     BASE_URL = "https://maven-repository.com"
     COLOR = '#b07219'
 
+    def self.package_link(name, version = nil)
+      if version
+        "http://search.maven.org/#artifactdetails%7C#{name.gsub(':', '%7C')}%7C#{version}%7Cjar"
+      else
+        group, artifact = name.split(':')
+        "http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22#{group}%22%20AND%20a%3A%22#{artifact}%22"
+      end
+    end
+
     def self.load_names(limit = nil)
       num = REDIS.get('maven-page')
       if limit

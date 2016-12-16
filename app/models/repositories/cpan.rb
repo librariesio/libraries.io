@@ -6,6 +6,10 @@ module Repositories
     URL = 'https://metacpan.org'
     COLOR = '#0298c3'
 
+    def self.package_link(name, version = nil)
+      "https://metacpan.org/release/#{name}"
+    end
+
     def self.project_names
       page = 1
       projects = []

@@ -6,6 +6,18 @@ module Repositories
     URL = 'https://lib.haxe.org'
     COLOR = '#df7900'
 
+    def self.package_link(name, version = nil)
+      "https://lib.haxe.org/p/#{name}/#{version}"
+    end
+
+    def self.download_url(name, version = nil)
+      "https://lib.haxe.org/p/#{name}/#{version}/download/"
+    end
+
+    def self.install_instructions(project, version = nil)
+      "haxelib install #{project.name} " + (version ? " #{version}" : "")
+    end
+
     def self.project_names
       get_html("https://lib.haxe.org/all/").css('.project-list tbody th').map{|th| th.css('a').first.try(:text) }
     end

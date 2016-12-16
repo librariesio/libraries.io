@@ -134,7 +134,19 @@ class Project < ApplicationRecord
   end
 
   def package_manager_url(version = nil)
-    Repositories::Base.package_link(self, version)
+    platform_class.package_link(name, version)
+  end
+
+  def download_url(version = nil)
+    platform_class.download_url(name, version)
+  end
+
+  def documentation_url(version = nil)
+    platform_class.documentation_url(name, version)
+  end
+
+  def install_instructions(version = nil)
+    platform_class.install_instructions(self, version)
   end
 
   def owner
