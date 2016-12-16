@@ -44,7 +44,7 @@
                 <th scope="row">
                   <span class='tip' title='All other lesser used requirements including <%= (@all_counts.map{|r,c| r } - @counts.map{|r,c| r }).first(20).join(', ') %>'>Other</span>
                 </th>
-                <td class="bar" style='height:<%= (percentage/@highest_percentage.to_f*max_height).round %>px; max_height: <%= max_height.round %>px; background-color: #ddd;'>
+                <td class="bar" style='height:<%= (percentage/@highest_percentage.to_f*max_height).round %>px; max-height: <%= max_height.round %>px; background-color: #ddd;'>
                   <p>
                       <%= percentage.round(2) %>%
                   </p>
