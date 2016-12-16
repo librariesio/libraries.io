@@ -4,11 +4,11 @@ class Api::TreeController < Api::ApplicationController
 
   def show
     @date = Date.parse(params[:date]) rescue Date.today
-
+    p 'HELLO?'
     if params[:number].present?
       @version = @project.versions.find_by_number(params[:number])
     else
-      @version = @project.versions.where('versions.published_at < ?', @date).select(&:stable?).sort.first
+      @version = @project.versions.where('versions.published_at <= ?', @date).select(&:stable?).sort.first
     end
     raise ActiveRecord::RecordNotFound if @version.nil?
 
