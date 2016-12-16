@@ -27,19 +27,19 @@ module Repositories
       self.to_s.demodulize
     end
 
-    def self.package_link(name, version = nil)
+    def self.package_link(_name, _version = nil)
       nil
     end
 
-    def self.download_url(name, version = nil)
+    def self.download_url(_name, _version = nil)
       nil
     end
 
-    def self.documentation_url(name, version = nil)
+    def self.documentation_url(_name, _version = nil)
       nil
     end
 
-    def self.install_instructions(project, version = nil)
+    def self.install_instructions(_project, _version = nil)
       nil
     end
 
