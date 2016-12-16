@@ -21,12 +21,12 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '59'
+      - '60'
     body:
       encoding: UTF-8
-      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
+      string: '{"count":54,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Mon, 12 Dec 2016 15:47:36 GMT
+  recorded_at: Fri, 16 Dec 2016 14:15:44 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/_count
@@ -48,10 +48,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '59'
+      - '60'
     body:
       encoding: UTF-8
-      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
+      string: '{"count":54,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Mon, 12 Dec 2016 15:47:36 GMT
+  recorded_at: Fri, 16 Dec 2016 14:15:44 GMT
 recorded_with: VCR 3.0.3

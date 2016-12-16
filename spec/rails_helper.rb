@@ -23,3 +23,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.include Capybara::DSL
 end
+
+def project_json_response(projects)
+  projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} })
+end
