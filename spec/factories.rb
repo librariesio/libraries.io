@@ -50,6 +50,7 @@ FactoryGirl.define do
     github_organisation
     private false
     stargazers_count 10_000
+    size 1000
   end
 
   factory :user do
