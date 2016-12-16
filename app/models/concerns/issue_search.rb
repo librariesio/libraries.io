@@ -116,13 +116,7 @@ module IssueSearch
         }
       }
       search_definition[:track_scores] = true
-
-      if options[:sort].blank?
-        search_definition[:sort]  = [{'comments_count' => 'asc'},
-                                     {'stars' => 'desc'},
-                                     {'created_at' => 'asc'},
-                                     {'contributions_count' => 'asc'}]
-      end
+      search_definition[:sort] = default_sort if options[:sort].blank?
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       if options[:repo_ids].present?
         search_definition[:query][:function_score][:query][:filtered][:filter][:bool][:must] << {
@@ -234,15 +228,16 @@ module IssueSearch
         }
       }
       search_definition[:track_scores] = true
-
-      if options[:sort].blank?
-        search_definition[:sort]  = [{'comments_count' => 'asc'},
-                                     {'stars' => 'desc'},
-                                     {'created_at' => 'asc'},
-                                     {'contributions_count' => 'asc'}]
-      end
+      search_definition[:sort] = default_sort if options[:sort].blank?
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       __elasticsearch__.search(search_definition)
+    end
+
+    def self.default_sort
+      [{'comments_count' => 'asc'},
+                                   {'stars' => 'desc'},
+                                   {'created_at' => 'asc'},
+                                   {'contributions_count' => 'asc'}]
     end
 
     def self.label_filter_format(filters, labels_to_keep = ['help wanted'])
