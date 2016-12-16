@@ -51,44 +51,24 @@ module IssueSearch
                  query: {match_all: {}},
                  filter: {
                    bool: {
-                     must: [
-                        { "term": { "state": "open"}},
-                        { "term": { "locked": false}}
-                     ],
-                     must_not: [
-                       {
-                         term: {
-                          "labels": "wontfix"
-                         }
-                       }
-                     ]
+                     must: [ { "term": { "state": "open"}}, { "term": { "locked": false}} ],
+                     must_not: [ { term: { "labels": "wontfix" } } ],
                    }
                  }
               }
             },
-            field_value_factor: {
-              field: "stars",
-              "modifier": "square"
-            }
+            field_value_factor: { field: "stars", "modifier": "square" }
           }
         },
         facets: issues_facet_filters(options, options[:labels_to_keep]),
-        filter: {
-          bool: {
-            must: [],
-            must_not: options[:must_not]
-          }
-        }
+        filter: { bool: { must: [], must_not: options[:must_not] } }
       }
       search_definition[:track_scores] = true
       search_definition[:sort] = default_sort if options[:sort].blank?
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       if options[:repo_ids].present?
         search_definition[:query][:function_score][:query][:filtered][:filter][:bool][:must] << {
-          terms: {
-           "github_repository_id": options[:repo_ids]
-          }
-        }
+          terms: { "github_repository_id": options[:repo_ids] } }
       end
       __elasticsearch__.search(search_definition)
     end
@@ -96,15 +76,9 @@ module IssueSearch
     def self.filter_format(filters, except = nil)
       filters.select { |k, v| v.present? && k != except }.map do |k, v|
         if v.is_a?(Array)
-          v.map do |value|
-            {
-              term: { k => value }
-            }
-          end
+          v.map { |value| { term: { k => value } } }
         else
-          {
-            term: { k => v }
-          }
+          { term: { k => v } }
         end
       end.flatten
     end
@@ -121,41 +95,20 @@ module IssueSearch
                  query: {match_all: {}},
                  filter: {
                    bool: {
-                     must: [
-                        { "term": { "state": "open"}},
-                        { "term": { "locked": false}}
-                     ],
-                     must_not: [
-                       {
-                         term: {
-                          "labels": "wontfix"
-                         }
-                       }
-                     ],
+                     must: [ { "term": { "state": "open"}}, { "term": { "locked": false}} ],
+                     must_not: [ { term: { "labels": "wontfix" } } ],
                      should: GithubIssue::FIRST_PR_LABELS.map do |label|
-                       {
-                         term: {
-                          "labels": label
-                         }
-                       }
+                       { term: { "labels": label } }
                      end
                    }
                  }
               }
             },
-            field_value_factor: {
-              field: "stars",
-              "modifier": "square"
-            }
+            field_value_factor: { field: "stars", "modifier": "square" }
           }
         },
         facets: issues_facet_filters(options, GithubIssue::FIRST_PR_LABELS),
-        filter: {
-          bool: {
-            must: [],
-            must_not: options[:must_not]
-          }
-        }
+        filter: { bool: { must: [], must_not: options[:must_not] } }
       }
       search_definition[:track_scores] = true
       search_definition[:sort] = default_sort if options[:sort].blank?
@@ -164,10 +117,7 @@ module IssueSearch
     end
 
     def self.default_sort
-      [{'comments_count' => 'asc'},
-                                   {'stars' => 'desc'},
-                                   {'created_at' => 'asc'},
-                                   {'contributions_count' => 'asc'}]
+      [{'comments_count' => 'asc'}, {'stars' => 'desc'}, {'created_at' => 'asc'}, {'contributions_count' => 'asc'}]
     end
 
     def self.issues_facet_filters(options, labels)
@@ -198,15 +148,9 @@ module IssueSearch
       labels_to_keep ||= ['help wanted']
       filters.select { |_k, v| v.present? }.map do |k, v|
         if k == :labels
-          labels_to_keep.map do |value|
-            {
-              term: { k => value }
-            }
-          end
+          labels_to_keep.map { |value| { term: { k => value } } }
         else
-          {
-            term: { k => v }
-          }
+          { term: { k => v } }
         end
       end
     end
