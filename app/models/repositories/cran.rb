@@ -6,6 +6,18 @@ module Repositories
     URL = 'https://cran.r-project.org/'
     COLOR = '#198ce7'
 
+    def self.package_link(name, version = nil)
+      "https://CRAN.R-project.org/package=#{name}"
+    end
+
+    def self.download_url(name, version = nil)
+      "https://cran.r-project.org/src/contrib/#{name}_#{version}.tar.gz"
+    end
+
+    def self.documentation_url(name, version = nil)
+      "http://cran.r-project.org/web/packages/#{name}/#{name}.pdf"
+    end
+
     def self.project_names
       html = get_html("https://cran.r-project.org/web/packages/available_packages_by_date.html")
       html.css('tr')[1..-1].map{|tr| tr.css('td')[1].text.strip}

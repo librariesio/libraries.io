@@ -6,6 +6,14 @@ module Repositories
     URL = 'http://code.dlang.org'
     COLOR = '#fcd46d'
 
+    def self.package_link(name, version = nil)
+      "http://code.dlang.org/packages/#{name}" + (version ? "/#{version}" : "")
+    end
+
+    def self.install_instructions(project, version = nil)
+      "dub fetch #{project.name}" + (version ? " --version #{version}" : "")
+    end
+
     def self.project_names
       get("http://code.dlang.org/packages/index.json").sort
     end

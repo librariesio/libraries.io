@@ -6,6 +6,14 @@ module Repositories
     URL = 'http://package.elm-lang.org/'
     COLOR = '#60B5CC'
 
+    def self.package_link(name, version = nil)
+      "http://package.elm-lang.org/packages/#{name}/#{version || 'latest'}"
+    end
+
+    def self.install_instructions(project, version = nil)
+      "elm-package install #{project.name} #{version}"
+    end
+
     def self.project_names
       projects.keys
     end

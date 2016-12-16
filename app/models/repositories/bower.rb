@@ -7,6 +7,10 @@ module Repositories
     URL = 'http://bower.io'
     COLOR = '#563d7c'
 
+    def self.install_instructions(project, version = nil)
+      "bower install #{project.name}" + (version ? "##{version}" : "")
+    end
+
     def self.project_names
       projects.keys
     end

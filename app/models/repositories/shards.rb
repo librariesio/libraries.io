@@ -6,6 +6,10 @@ module Repositories
     URL = 'https://crystal-shards-registry.herokuapp.com/'
     COLOR = '#776791'
 
+    def self.package_link(name, version = nil)
+      "https://crystal-shards-registry.herokuapp.com/shards/#{name}"
+    end
+
     def self.project_names
       html = get_html("https://crystal-shards-registry.herokuapp.com/shards")
       html.css('.lead a').map(&:text)

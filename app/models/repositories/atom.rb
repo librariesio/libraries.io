@@ -7,6 +7,18 @@ module Repositories
     URL = 'https://atom.io'
     COLOR = '#244776'
 
+    def self.package_link(name, version = nil)
+      "https://atom.io/packages/#{name}"
+    end
+
+    def self.download_url(name, version = nil)
+      "https://www.atom.io/api/packages/#{name}/versions/#{version}/tarball"
+    end
+
+    def self.install_instructions(project, version = nil)
+      "apm install #{project.name}" + (version ? "@#{version}" : "")
+    end
+
     def self.project_names
       page = 1
       projects = []

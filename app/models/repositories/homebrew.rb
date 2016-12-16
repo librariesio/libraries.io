@@ -7,6 +7,14 @@ module Repositories
     URL = 'http://brew.sh/'
     COLOR = '#a1804c'
 
+    def self.package_link(name, version = nil)
+      "http://brewformulas.org/#{name}"
+    end
+
+    def self.install_instructions(project, version = nil)
+      "brew install #{project.name}"
+    end
+
     def self.project_names
       page = 1
       projects = []

@@ -25,7 +25,7 @@ class WebHook < ApplicationRecord
       name: project.name,
       version: version_or_tag.number,
       default_branch: github_repository.default_branch,
-      package_manager_url: Repositories::Base.package_link(project, version_or_tag),
+      package_manager_url: project.package_manager_url(version_or_tag.number),
       published_at: version_or_tag.published_at,
       requirements: requirements,
       project: project.as_json(only: [:name, :platform, :description,  :homepage, :language, :repository_url, :stars, :latest_release_published_at, :normalized_licenses])

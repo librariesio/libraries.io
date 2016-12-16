@@ -6,6 +6,14 @@ module Repositories
     URL = 'https://pub.dartlang.org'
     COLOR = '#98BAD6'
 
+    def self.package_link(name, version = nil)
+      "https://pub.dartlang.org/packages/#{name}"
+    end
+
+    def self.documentation_url(name, version = nil)
+      "http://www.dartdocs.org/documentation/#{name}/#{version}"
+    end
+
     def self.project_names
       page = 1
       projects = []

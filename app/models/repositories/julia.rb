@@ -6,6 +6,10 @@ module Repositories
     URL = 'http://pkg.julialang.org/'
     COLOR = '#a270ba'
 
+    def self.package_link(name, version = nil)
+      "http://pkg.julialang.org/?pkg=#{name}&ver=release"
+    end
+
     def self.project_names
       @project_names ||= `rm -rf Specs;git clone https://github.com/JuliaLang/METADATA.jl --depth 1; ls METADATA.jl`.split("\n")
     end

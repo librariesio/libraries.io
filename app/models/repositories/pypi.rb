@@ -7,6 +7,14 @@ module Repositories
     URL = 'https://pypi.python.org'
     COLOR = '#3581ba'
 
+    def self.package_link(name, version = nil)
+      "https://pypi.python.org/pypi/#{name}/#{version}"
+    end
+
+    def self.install_instructions(project, version = nil)
+      "pip install #{project.name}" + (version ? "==#{version}" : "")
+    end
+
     def self.formatted_name
       'PyPI'
     end

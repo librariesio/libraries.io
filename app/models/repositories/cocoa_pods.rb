@@ -6,6 +6,14 @@ module Repositories
     URL = 'http://cocoapods.org/'
     COLOR = '#438eff'
 
+    def self.package_link(name, version = nil)
+      "http://cocoapods.org/pods/#{name}"
+    end
+
+    def self.documentation_url(name, version = nil)
+      "http://cocoadocs.org/docsets/#{name}/#{version}"
+    end
+
     def self.project_names
       get_json("http://cocoapods.libraries.io/pods.json")
     end

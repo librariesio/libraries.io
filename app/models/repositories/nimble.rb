@@ -6,6 +6,10 @@ module Repositories
     URL = 'https://github.com/nim-lang/nimble'
     COLOR = '#37775b'
 
+    def self.install_instructions(project, version = nil)
+      "nimble install #{project.name}" + (version ? "@##{version}" : "")
+    end
+
     def self.project_names
       projects.keys.sort
     end

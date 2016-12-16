@@ -7,6 +7,22 @@ module Repositories
     URL = 'https://rubygems.org'
     COLOR = '#701516'
 
+    def self.package_link(name, version = nil)
+      "https://rubygems.org/gems/#{name}" + (version ? "/versions/#{version}" : "")
+    end
+
+    def self.download_url(name, version = nil)
+      "https://rubygems.org/downloads/#{name}-#{version}.gem"
+    end
+
+    def self.documentation_url(name, version = nil)
+      "http://www.rubydoc.info/gems/#{name}/#{version}"
+    end
+
+    def self.install_instructions(project, version = nil)
+      "gem install #{project.name}" + (version ? " -v #{version}" : "")
+    end
+
     def self.project_names
       gems = Marshal.load(Gem.gunzip(get_raw("http://production.cf.rubygems.org/specs.4.8.gz")))
       gems.map(&:first).uniq
