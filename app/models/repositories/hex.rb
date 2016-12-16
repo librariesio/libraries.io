@@ -17,7 +17,7 @@ module Repositories
     def self.project_names
       page = 1
       projects = []
-      while true
+      while page < 1000
         r = get("https://hex.pm/api/packages?page=#{page}")
         break if r == []
         projects += r

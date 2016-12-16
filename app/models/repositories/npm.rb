@@ -7,7 +7,7 @@ module Repositories
     URL = 'https://www.npmjs.com'
     COLOR = '#f1e05a'
 
-    def self.package_link(name, version = nil)
+    def self.package_link(name, _version = nil)
       "https://www.npmjs.com/package/#{name}"
     end
 
@@ -82,7 +82,7 @@ module Repositories
                      { :number => v['version'] }
                    end
                  end
-      versions.reject {|version,date| version_invalid?(project['name'], version[:number]) }
+      versions.reject {|version,_date| version_invalid?(project['name'], version[:number]) }
     end
 
     def self.version_invalid?(name, version)

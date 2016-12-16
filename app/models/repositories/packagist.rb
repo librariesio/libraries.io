@@ -50,7 +50,7 @@ module Repositories
     end
 
     def self.acceptable_versions(project)
-      project['versions'].select do |k, v|
+      project['versions'].select do |k, _v|
         (k =~ /^dev-.*/i).nil?
       end
     end
@@ -58,7 +58,7 @@ module Repositories
     def self.dependencies(name, version, _project)
       vers = project(name)['versions'][version]
       return [] if vers.nil?
-      vers.fetch('require', {}).reject{|k,v| k == 'php' }.map do |k,v|
+      vers.fetch('require', {}).reject{|k,_v| k == 'php' }.map do |k,v|
         {
           project_name: k,
           requirements: v,
@@ -66,7 +66,7 @@ module Repositories
           optional: false,
           platform: self.name.demodulize
         }
-      end + vers.fetch('require-dev', {}).reject{|k,v| k == 'php' }.map do |k,v|
+      end + vers.fetch('require-dev', {}).reject{|k,_v| k == 'php' }.map do |k,v|
         {
           project_name: k,
           requirements: v,

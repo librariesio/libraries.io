@@ -18,21 +18,17 @@ class ExploreController < ApplicationController
 
   helper_method :repo_search
   def repo_search(sort)
-    search = search(GithubRepository, sort)
-    ids = search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    search.records.sort_by { |u| indexes[u.id] }
+    search(GithubRepository, sort)
   end
 
   helper_method :project_search
   def project_search(sort)
-    search = search(Project, sort)
-    ids = search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    search.records.sort_by { |u| indexes[u.id] }
+    search(Project, sort)
   end
 
   def search(klass, sort)
-    klass.search('', sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
+    search = klass.search('', sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
+    indexes = Hash[search.map{|r| r.id.to_i }.each_with_index.to_a]
+    search.records.sort_by { |u| indexes[u.id] }
   end
 end
