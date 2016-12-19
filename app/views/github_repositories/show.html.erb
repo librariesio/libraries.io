@@ -126,6 +126,7 @@
                     <div class="pictogram tip pictogram-<%= manifest.platform.try(:downcase) %>" title='<%= manifest.platform %>'></div>
                     <%= link_to manifest.filepath, manifest.github_link %>
                   </th>
+                  <th>Kind</th>
                   <th>
                     Requirements
                   </th>
@@ -150,6 +151,9 @@
                       <% else %>
                         <%= truncate_with_tip(dependency.project_name, 30) %>
                       <% end %>
+                    </td>
+                    <td>
+                      <%= truncate_with_tip(dependency.kind, 15) %>
                     </td>
                     <td>
                       <%= truncate_with_tip(dependency.requirements, 15) %>
