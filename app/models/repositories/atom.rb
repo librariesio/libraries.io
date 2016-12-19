@@ -7,8 +7,8 @@ module Repositories
     URL = 'https://atom.io'
     COLOR = '#244776'
 
-    def self.package_link(name, version = nil)
-      "https://atom.io/packages/#{name}"
+    def self.package_link(project, version = nil)
+      "https://atom.io/packages/#{project.name}"
     end
 
     def self.download_url(name, version = nil)

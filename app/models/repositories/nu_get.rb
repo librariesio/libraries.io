@@ -6,8 +6,8 @@ module Repositories
     URL = 'https://www.nuget.org'
     COLOR = '#178600'
 
-    def self.package_link(name, version = nil)
-      "https://www.nuget.org/packages/#{name}/#{version}"
+    def self.package_link(project, version = nil)
+      "https://www.nuget.org/packages/#{project.name}/#{version}"
     end
 
     def self.install_instructions(project, version = nil)

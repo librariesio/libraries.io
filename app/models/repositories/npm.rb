@@ -7,8 +7,8 @@ module Repositories
     URL = 'https://www.npmjs.com'
     COLOR = '#f1e05a'
 
-    def self.package_link(name, _version = nil)
-      "https://www.npmjs.com/package/#{name}"
+    def self.package_link(project, _version = nil)
+      "https://www.npmjs.com/package/#{project.name}"
     end
 
     def self.install_instructions(project, version = nil)

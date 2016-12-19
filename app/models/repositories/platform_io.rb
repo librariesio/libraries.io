@@ -6,8 +6,8 @@ module Repositories
     URL = 'http://platformio.org'
     COLOR = '#f34b7d'
 
-    def self.package_link(name, version = nil)
-      "http://platformio.org/lib/show/#{project.pm_id}/#{name}"
+    def self.package_link(project, version = nil)
+      "http://platformio.org/lib/show/#{project.pm_id}/#{project.name}"
     end
 
     def self.install_instructions(project, version = nil)

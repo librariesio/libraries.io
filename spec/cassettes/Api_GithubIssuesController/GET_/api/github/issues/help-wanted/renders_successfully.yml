@@ -24,10 +24,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '34231'
+      - '34232'
     body:
       encoding: UTF-8
-      string: '{"took":4,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":259,"max_score":1.6360407E9,"hits":[{"_index":"github_issues","_type":"github_issue","_id":"2695858","_score":1.6360407E9,"_source":{"id":2695858,"github_repository_id":2736,"github_id":57065702,"number":2078,"state":"open","title":"Setup
+      string: '{"took":35,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":259,"max_score":1.6360407E9,"hits":[{"_index":"github_issues","_type":"github_issue","_id":"2695858","_score":1.6360407E9,"_source":{"id":2695858,"github_repository_id":2736,"github_id":57065702,"number":2078,"state":"open","title":"Setup
         integration testing infrastructure","body":"This will allow us to use webdriver
         for those times we''d prefer an e2e test.","github_user_id":945528,"locked":false,"comments_count":0,"closed_at":null,"labels":["Build","help
         wanted"],"created_at":"2015-02-09T17:54:42.000Z","updated_at":"2016-07-15T23:18:15.827Z","last_synced_at":"2016-07-15T23:18:15.806Z","pull_request":false,"contributions_count":265,"stars":40448,"language":"JavaScript","license":"Other"},"sort":[0,40448,1423504482000,265]},{"_index":"github_issues","_type":"github_issue","_id":"1014044","_score":5.6102662E8,"_source":{"id":1014044,"github_repository_id":48385,"github_id":144301811,"number":8479,"state":"open","title":"Interchange
@@ -259,5 +259,5 @@ http_interactions:
         pr","count":2},{"term":"codebase","count":2},{"term":"babel","count":2},{"term":"audio","count":2},{"term":"assigned","count":2},{"term":"Feature
         Request","count":2},{"term":"research","count":1}]},"license":{"_type":"terms","missing":4,"total":255,"other":0,"terms":[{"term":"MIT","count":232},{"term":"BSD-3-Clause","count":7},{"term":"Apache-2.0","count":7},{"term":"Other","count":6},{"term":"AGPL-3.0","count":3}]}}}'
     http_version: 
-  recorded_at: Fri, 16 Dec 2016 14:35:44 GMT
+  recorded_at: Mon, 19 Dec 2016 13:05:11 GMT
 recorded_with: VCR 3.0.3

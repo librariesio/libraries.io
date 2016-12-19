@@ -1,7 +1,19 @@
 require 'rails_helper'
 
-describe Repositories::Wordpress do
+describe Repositories::Wordpress, :vcr do
   it 'has formatted name of "WordPress"' do
-    expect(Repositories::Wordpress.formatted_name).to eq('WordPress')
+    expect(described_class.formatted_name).to eq('WordPress')
+  end
+
+  describe '#package_link' do
+    let(:project) { create(:project, name: 'foo', platform: described_class.name) }
+
+    it 'returns a link to project website' do
+      expect(described_class.package_link(project)).to eq("https://wordpress.org/plugins/foo/")
+    end
+
+    it 'handles version' do
+      expect(described_class.package_link(project, '2.0.0')).to eq("https://wordpress.org/plugins/foo/2.0.0")
+    end
   end
 end

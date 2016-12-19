@@ -8,11 +8,11 @@ module Repositories
     BASE_URL = "https://maven-repository.com"
     COLOR = '#b07219'
 
-    def self.package_link(name, version = nil)
+    def self.package_link(project, version = nil)
       if version
-        "http://search.maven.org/#artifactdetails%7C#{name.gsub(':', '%7C')}%7C#{version}%7Cjar"
+        "http://search.maven.org/#artifactdetails%7C#{project.name.gsub(':', '%7C')}%7C#{version}%7Cjar"
       else
-        group, artifact = name.split(':')
+        group, artifact = project.name.split(':')
         "http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22#{group}%22%20AND%20a%3A%22#{artifact}%22"
       end
     end

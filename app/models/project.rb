@@ -134,7 +134,7 @@ class Project < ApplicationRecord
   end
 
   def package_manager_url(version = nil)
-    platform_class.package_link(name, version)
+    platform_class.package_link(self, version)
   end
 
   def download_url(version = nil)

@@ -6,8 +6,8 @@ module Repositories
     URL = 'http://pkg.julialang.org/'
     COLOR = '#a270ba'
 
-    def self.package_link(name, version = nil)
-      "http://pkg.julialang.org/?pkg=#{name}&ver=release"
+    def self.package_link(project, version = nil)
+      "http://pkg.julialang.org/?pkg=#{project.name}&ver=release"
     end
 
     def self.project_names

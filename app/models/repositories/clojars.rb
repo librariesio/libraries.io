@@ -6,8 +6,8 @@ module Repositories
     URL = 'https://clojars.org'
     COLOR = '#db5855'
 
-    def self.package_link(name, version = nil)
-      "https://clojars.org/#{name}" + (version ? "/versions/#{version}" : "")
+    def self.package_link(project, version = nil)
+      "https://clojars.org/#{project.name}" + (version ? "/versions/#{version}" : "")
     end
 
     def self.project_names

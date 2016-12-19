@@ -6,8 +6,8 @@ module Repositories
     URL = 'http://hackage.haskell.org'
     COLOR = '#29b544'
 
-    def self.package_link(name, version = nil)
-      "http://hackage.haskell.org/package/#{name}" + (version ? "-#{version}" : "")
+    def self.package_link(project, version = nil)
+      "http://hackage.haskell.org/package/#{project.name}" + (version ? "-#{version}" : "")
     end
 
     def self.download_url(name, version = nil)

@@ -6,8 +6,8 @@ module Repositories
     URL = 'https://crates.io'
     COLOR = '#dea584'
 
-    def self.package_link(name, version = nil)
-      "https://crates.io/crates/#{name}/#{version}"
+    def self.package_link(project, version = nil)
+      "https://crates.io/crates/#{project.name}/#{version}"
     end
 
     def self.download_url(name, version = nil)

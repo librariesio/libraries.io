@@ -1,7 +1,19 @@
 require 'rails_helper'
 
-describe Repositories::Elm do
+describe Repositories::Elm, :vcr do
   it 'has formatted name of "Elm"' do
-    expect(Repositories::Elm.formatted_name).to eq('Elm')
+    expect(described_class.formatted_name).to eq('Elm')
+  end
+
+  describe '#package_link' do
+    let(:project) { create(:project, name: 'foo', platform: described_class.name) }
+
+    it 'returns a link to project website' do
+      expect(described_class.package_link(project)).to eq("http://package.elm-lang.org/packages/foo/latest")
+    end
+
+    it 'handles version' do
+      expect(described_class.package_link(project, '2.0.0')).to eq("http://package.elm-lang.org/packages/foo/2.0.0")
+    end
   end
 end

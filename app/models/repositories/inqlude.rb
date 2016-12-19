@@ -6,8 +6,8 @@ module Repositories
     URL = 'https://inqlude.org/'
     COLOR = '#f34b7d'
 
-    def self.package_link(name, version = nil)
-      "https://inqlude.org/libraries/#{name}.html"
+    def self.package_link(project, version = nil)
+      "https://inqlude.org/libraries/#{project.name}.html"
     end
 
     def self.install_instructions(project, version = nil)

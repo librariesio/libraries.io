@@ -6,8 +6,8 @@ module Repositories
     URL = 'http://code.dlang.org'
     COLOR = '#fcd46d'
 
-    def self.package_link(name, version = nil)
-      "http://code.dlang.org/packages/#{name}" + (version ? "/#{version}" : "")
+    def self.package_link(project, version = nil)
+      "http://code.dlang.org/packages/#{project.name}" + (version ? "/#{version}" : "")
     end
 
     def self.install_instructions(project, version = nil)

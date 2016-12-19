@@ -4,8 +4,8 @@ module Repositories
     HAS_DEPENDENCIES = false
     URL = 'https://packagecontrol.io'
 
-    def self.package_link(name, version = nil)
-      "https://packagecontrol.io/packages/#{name}"
+    def self.package_link(project, version = nil)
+      "https://packagecontrol.io/packages/#{project.name}"
     end
 
     def self.project_names

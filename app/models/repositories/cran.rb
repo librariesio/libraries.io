@@ -6,8 +6,8 @@ module Repositories
     URL = 'https://cran.r-project.org/'
     COLOR = '#198ce7'
 
-    def self.package_link(name, _version = nil)
-      "https://CRAN.R-project.org/package=#{name}"
+    def self.package_link(project, _version = nil)
+      "https://CRAN.R-project.org/package=#{project.name}"
     end
 
     def self.download_url(name, version = nil)

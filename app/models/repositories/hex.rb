@@ -6,8 +6,8 @@ module Repositories
     URL = 'https://hex.pm'
     COLOR = '#6e4a7e'
 
-    def self.package_link(name, version = nil)
-      "https://hex.pm/packages/#{name}/#{version}"
+    def self.package_link(project, version = nil)
+      "https://hex.pm/packages/#{project.name}/#{version}"
     end
 
     def self.documentation_url(name, version = nil)

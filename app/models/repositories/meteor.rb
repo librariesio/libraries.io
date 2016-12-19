@@ -6,8 +6,8 @@ module Repositories
     URL = 'https://atmospherejs.com'
     COLOR = '#f1e05a'
 
-    def self.package_link(name, version = nil)
-      "https://atmospherejs.com/#{name.tr(':', '/')}"
+    def self.package_link(project, version = nil)
+      "https://atmospherejs.com/#{project.name.tr(':', '/')}"
     end
 
     def self.install_instructions(project, version = nil)

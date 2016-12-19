@@ -6,8 +6,8 @@ module Repositories
     URL = 'https://lib.haxe.org'
     COLOR = '#df7900'
 
-    def self.package_link(name, version = nil)
-      "https://lib.haxe.org/p/#{name}/#{version}"
+    def self.package_link(project, version = nil)
+      "https://lib.haxe.org/p/#{project.name}/#{version}"
     end
 
     def self.download_url(name, version = nil)

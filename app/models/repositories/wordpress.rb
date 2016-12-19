@@ -6,8 +6,8 @@ module Repositories
     URL = 'https://wordpress.org/plugins'
     COLOR = '#4F5D95'
 
-    def self.package_link(name, version = nil)
-      "https://wordpress.org/plugins/#{name}/#{version}"
+    def self.package_link(project, version = nil)
+      "https://wordpress.org/plugins/#{project.name}/#{version}"
     end
 
     def self.formatted_name

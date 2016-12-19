@@ -7,8 +7,8 @@ module Repositories
     URL = 'https://rubygems.org'
     COLOR = '#701516'
 
-    def self.package_link(name, version = nil)
-      "https://rubygems.org/gems/#{name}" + (version ? "/versions/#{version}" : "")
+    def self.package_link(project, version = nil)
+      "https://rubygems.org/gems/#{project.name}" + (version ? "/versions/#{version}" : "")
     end
 
     def self.download_url(name, version = nil)

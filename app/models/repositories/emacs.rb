@@ -5,8 +5,8 @@ module Repositories
     URL = 'http://melpa.org'
     COLOR = '#c065db'
 
-    def self.package_link(name, version = nil)
-      "http://melpa.org/#/#{name}"
+    def self.package_link(project, version = nil)
+      "http://melpa.org/#/#{project.name}"
     end
 
     def self.download_url(name, version = nil)

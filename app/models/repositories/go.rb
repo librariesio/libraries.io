@@ -6,8 +6,8 @@ module Repositories
     URL = 'http://go-search.org/'
     COLOR = '#375eab'
 
-    def self.package_link(name, version = nil)
-      "http://go-search.org/view?id=#{name}"
+    def self.package_link(project, version = nil)
+      "http://go-search.org/view?id=#{project.name}"
     end
 
     def self.documentation_url(name, version = nil)

@@ -6,8 +6,8 @@ module Repositories
     URL = 'https://crystal-shards-registry.herokuapp.com/'
     COLOR = '#776791'
 
-    def self.package_link(name, version = nil)
-      "https://crystal-shards-registry.herokuapp.com/shards/#{name}"
+    def self.package_link(project, version = nil)
+      "https://crystal-shards-registry.herokuapp.com/shards/#{project.name}"
     end
 
     def self.project_names

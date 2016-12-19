@@ -1,7 +1,19 @@
 require 'rails_helper'
 
-describe Repositories::Emacs do
+describe Repositories::Emacs, :vcr do
   it 'has formatted name of "Emacs"' do
-    expect(Repositories::Emacs.formatted_name).to eq('Emacs')
+    expect(described_class.formatted_name).to eq('Emacs')
+  end
+
+  describe '#package_link' do
+    let(:project) { create(:project, name: 'foo', platform: described_class.name) }
+
+    it 'returns a link to project website' do
+      expect(described_class.package_link(project)).to eq("http://melpa.org/#/foo")
+    end
+
+    it 'ignores version' do
+      expect(described_class.package_link(project, '2.0.0')).to eq("http://melpa.org/#/foo")
+    end
   end
 end

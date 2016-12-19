@@ -27,7 +27,7 @@ module Repositories
       self.to_s.demodulize
     end
 
-    def self.package_link(_name, _version = nil)
+    def self.package_link(_project, _version = nil)
       nil
     end
 
