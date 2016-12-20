@@ -101,4 +101,10 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
 
   config.lograge.enabled = true
+
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
+    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
+  end
 end
