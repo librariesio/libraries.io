@@ -28,9 +28,9 @@ module DependencyChecks
 
   def outdated?
     return nil unless valid_requirements? && project && project.latest_stable_release_number
-    !(SemanticRange.satisfies(SemanticRange.clean(project.latest_stable_release_number), semantic_requirements) ||
-      SemanticRange.satisfies(SemanticRange.clean(project.latest_release_number), semantic_requirements) ||
-      SemanticRange.ltr(SemanticRange.clean(project.latest_release_number), semantic_requirements))
+    !(SemanticRange.satisfies(SemanticRange.clean(project.latest_stable_release_number), semantic_requirements, false, platform) ||
+      SemanticRange.satisfies(SemanticRange.clean(project.latest_release_number), semantic_requirements, false, platform) ||
+      SemanticRange.ltr(SemanticRange.clean(project.latest_release_number), semantic_requirements, false, platform))
   rescue
     nil
   end
@@ -57,7 +57,7 @@ module DependencyChecks
       versions = versions.where('versions.published_at < ?', date)
     end
     version_numbers = versions.map {|v| SemanticRange.clean(v.number) }.compact
-    number = SemanticRange.max_satisfying(version_numbers, semantic_requirements)
+    number = SemanticRange.max_satisfying(version_numbers, semantic_requirements, false, platform)
     versions.find{|v| SemanticRange.clean(v.number) == number }
   end
 end
