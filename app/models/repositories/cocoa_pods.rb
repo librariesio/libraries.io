@@ -14,6 +14,10 @@ module Repositories
       "http://cocoadocs.org/docsets/#{name}/#{version}"
     end
 
+    def self.install_instructions(project, version = nil)
+      "pod try #{project.name}"
+    end
+
     def self.project_names
       get_json("http://cocoapods.libraries.io/pods.json")
     end

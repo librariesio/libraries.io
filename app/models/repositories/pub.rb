@@ -10,6 +10,10 @@ module Repositories
       "https://pub.dartlang.org/packages/#{project.name}"
     end
 
+    def self.download_url(name, version = nil)
+      "https://storage.googleapis.com/pub.dartlang.org/packages/#{name}-#{version}.tar.gz"
+    end
+
     def self.documentation_url(name, version = nil)
       "http://www.dartdocs.org/documentation/#{name}/#{version}"
     end

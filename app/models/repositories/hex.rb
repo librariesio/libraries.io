@@ -10,6 +10,10 @@ module Repositories
       "https://hex.pm/packages/#{project.name}/#{version}"
     end
 
+    def self.download_url(name, version = nil)
+      "https://repo.hex.pm/tarballs/#{name}-#{version}.tar"
+    end
+
     def self.documentation_url(name, version = nil)
       "http://hexdocs.pm/#{name}/#{version}"
     end

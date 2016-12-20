@@ -10,6 +10,10 @@ module Repositories
       "https://www.nuget.org/packages/#{project.name}/#{version}"
     end
 
+    def self.download_url(name, version = nil)
+      "https://www.nuget.org/api/v2/package/#{name}/#{version}"
+    end
+
     def self.install_instructions(project, version = nil)
       "Install-Package #{project.name}" + (version ? " -Version #{version}" : "")
     end

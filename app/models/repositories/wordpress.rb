@@ -10,6 +10,10 @@ module Repositories
       "https://wordpress.org/plugins/#{project.name}/#{version}"
     end
 
+    def self.download_url(name, version = nil)
+      "https://downloads.wordpress.org/plugin/#{name}.#{version}.zip"
+    end
+
     def self.formatted_name
       'WordPress'
     end

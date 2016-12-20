@@ -16,4 +16,10 @@ describe Repositories::Pub, :vcr do
       expect(described_class.package_link(project, '2.0.0')).to eq("https://pub.dartlang.org/packages/foo")
     end
   end
+
+  describe 'download_url' do
+    it 'returns a link to project tarball' do
+      expect(described_class.download_url('foo', '1.0.0')).to eq("https://storage.googleapis.com/pub.dartlang.org/packages/foo-1.0.0.tar.gz")
+    end
+  end
 end

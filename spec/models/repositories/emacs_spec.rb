@@ -16,4 +16,10 @@ describe Repositories::Emacs, :vcr do
       expect(described_class.package_link(project, '2.0.0')).to eq("http://melpa.org/#/foo")
     end
   end
+
+  describe 'download_url' do
+    it 'returns a link to project tarball' do
+      expect(described_class.download_url('foo', '1.0.0')).to eq("http://melpa.org/packages/foo-1.0.0.tar")
+    end
+  end
 end

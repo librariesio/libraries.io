@@ -10,6 +10,10 @@ module Repositories
       "http://package.elm-lang.org/packages/#{project.name}/#{version || 'latest'}"
     end
 
+    def self.download_url(name, version = 'master')
+      "https://github.com/#{name}/archive/#{version}.zip"
+    end
+
     def self.install_instructions(project, version = nil)
       "elm-package install #{project.name} #{version}"
     end

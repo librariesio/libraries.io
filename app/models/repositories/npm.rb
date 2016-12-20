@@ -11,6 +11,10 @@ module Repositories
       "https://www.npmjs.com/package/#{project.name}"
     end
 
+    def self.download_url(name, version = nil)
+      "https://registry.npmjs.org/#{name}/-/#{name}-#{version}.tgz"
+    end
+
     def self.install_instructions(project, version = nil)
       "npm install #{project.name}" + (version ? "@#{version}" : "")
     end
