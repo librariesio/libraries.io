@@ -1,0 +1,70 @@
+<% title "Unsubscribe from #{@project} notifications" %>
+
+<h1>Unsubscribe from <%= link_to @project, project_path(@project.to_param) %> notifications</h1>
+
+<div class="row">
+  <div class="col-md-6">
+
+    <% if subscription = current_user.subscriptions.where(repository_subscription_id: nil).find_by_project_id(@project.id) %>
+      <p>
+        You're currently subscribed to updates for any new versions of <%= @project %>:
+      </p>
+      <p>
+        <%= link_to subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'btn btn-success', title: 'Stop being notified of new releases of this library' do %>
+          <%= fa_icon('times') %>
+          Unsubscribe from updates to <strong><%= @project %></strong>
+        <% end %>
+      </p>
+    <% end %>
+
+    <% your_dependent_repos = current_user.your_dependent_repos(@project).joins(:repository_subscriptions).uniq.select{|r| current_user.subscribed_to_repo?(r) } %>
+    <% if your_dependent_repos.any? %>
+      <% if subscription %>
+        <hr>
+      <% end %>
+
+      <p><%= 'Also' if subscription %> <%= pluralize(your_dependent_repos.length, 'repository') %> that you are watching has <%= @project %> as a dependency:</p>
+
+      <table class='table'>
+        <% your_dependent_repos.each do |repo| %>
+          <tr>
+            <td>
+              <%= link_to image_tag(repo.avatar_url(60), width: 30, height: 30, alt: repo), user_path(repo.owner_name) %>
+              <strong><%= link_to repo, github_repository_path(owner: repo.owner_name, name: repo.project_name) %></strong>
+            </td>
+            <td>
+              <%= link_to unwatch_path(repo.id), method: :post, class: 'tip btn btn-xs btn-success', title: 'Stop watching' do %>
+                <%= fa_icon('times') %>
+                Stop Watching this repository
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+
+      <p>
+        or <%= link_to mute_project_path(@project.to_param), method: :post, class: 'btn btn-xs btn-primary tip', title: "Mute #{@project.name}" do %>
+          <i class='fa fa-microphone-slash'></i> Mute <strong><%= @project %></strong> updates for all watched repositories
+        <% end %>
+      </p>
+
+    <% end %>
+
+    <% if your_dependent_repos.empty? && subscription.nil? %>
+      <p>It doesn't look like you're subscribed to this project, let us know if you're still getting emails about it: <%= link_to 'https://github.com/librariesio/libraries.io/issues/new', 'https://github.com/librariesio/libraries.io/issues/new' %></p>
+    <% end %>
+    <hr>
+    <p>
+      If you wish to stop recieving any emails then:
+      <%= link_to disable_emails_account_path, method: :put, class: 'btn btn-xs btn-danger' do %>
+        Disable all Libraries.io emails
+      <% end %>
+    </p>
+    <p>
+      <small>
+        You can always reenable them from your <%= link_to 'account settings', account_path %>
+      </small>
+    </p>
+
+  </div>
+</div>

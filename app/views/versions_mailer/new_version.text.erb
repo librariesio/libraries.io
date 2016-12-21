@@ -16,5 +16,5 @@ From your friendly neighborhood robot, Libby.
 
 -----
 
-p.s. You can manage and unsubscribe from subscriptions here: <%= subscriptions_url %>
+p.s. You can unsubscribe from notifications about <%= @project %> here: <%= unsubscribe_project_url(@project.to_param) %>
 You can opt out of emails from your account here: <%= account_url %>

@@ -33,6 +33,6 @@
 </p>
 <hr>
 <p>
-  <em>p.s. You can manage and unsubscribe from subscriptions here: <%= link_to subscriptions_url, subscriptions_url %></em>
+  <em>p.s. You can unsubscribe from notifications about <%= @project %> here: <%= link_to unsubscribe_project_url(@project.to_param), unsubscribe_project_url(@project.to_param) %></em>
   <em>You can opt out of emails from your account here: <%= link_to account_url, account_url %></em>
 </p>

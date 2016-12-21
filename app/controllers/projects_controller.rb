@@ -130,6 +130,10 @@ class ProjectsController < ApplicationController
     @platforms = orginal_scope.where('github_repositories.stargazers_count > 0').group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
   end
 
+  def unsubscribe
+    find_project
+  end
+
   private
 
   def problem_repos(method_name)
