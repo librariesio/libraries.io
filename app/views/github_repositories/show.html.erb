@@ -6,17 +6,17 @@
 <% if !repo.private? && repo.is_removed? %>
 <div class="alert alert-danger" role="alert">
   <%= fa_icon 'exclamation-triangle' %>
-  This project has been removed and cannot be used anymore.
+  This repository has been removed and cannot be used anymore.
 </div>
 <% elsif !repo.private? && repo.is_deprecated? %>
 <div class="alert alert-danger" role="alert">
   <%= fa_icon 'exclamation-triangle' %>
-  This project has been marked as deprecated and is not recommended for use anymore.
+  This repository has been marked as deprecated and is not recommended for use anymore.
 </div>
 <% elsif !repo.private? && repo.is_unmaintained? %>
 <div class="alert alert-danger" role="alert">
   <%= fa_icon 'exclamation-triangle' %>
-  This project has been marked as unmaintained and is no longer being updated.
+  This repository has been marked as unmaintained and is no longer being updated.
 </div>
 <% end %>
 
