@@ -12,6 +12,7 @@ FactoryGirl.define do
     homepage        'http://rubyonrails.org/'
     language        'Ruby'
     licenses        'MIT'
+    keywords_array  ['web']
     repository_url  'https://github.com/rails/rails'
   end
 

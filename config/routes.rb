@@ -68,8 +68,8 @@ Rails.application.routes.draw do
 
   get '/trending', to: 'projects#trending', as: :trending_projects
   get '/explore', to: 'explore#index'
-  get '/collections', to: 'collections#index'
-  get '/explore/:language-:keyword-libraries', to: 'collections#show'
+  get '/collections', to: 'collections#index', as: :collections
+  get '/explore/:language-:keyword-libraries', to: 'collections#show', as: :collection
 
   get '/github/issues', to: 'github_issues#index', as: :issues
   get '/github/issues/your-dependencies', to: 'github_issues#your_dependencies', as: :your_dependencies_issues
