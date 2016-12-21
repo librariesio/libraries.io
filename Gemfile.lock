@@ -183,7 +183,7 @@ GEM
       thor (~> 0.19.1)
     formatador (0.2.5)
     fuzzy_match (2.1.0)
-    gemoji (2.1.0)
+    gemoji (3.0.0)
     gems (0.8.3)
     github_urls (0.2.2)
     globalid (0.3.7)
