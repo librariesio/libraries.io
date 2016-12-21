@@ -111,13 +111,15 @@ class ProjectsController < ApplicationController
   def mute
     find_project
     current_user.mute(@project)
-    redirect_to_back_or_default project_path(@project.to_param)
+    flash[:notice] = "Muted #{@project} notifications"
+    redirect_back fallback_location: project_path(@project.to_param)
   end
 
   def unmute
     find_project
     current_user.unmute(@project)
-    redirect_to_back_or_default project_path(@project.to_param)
+    flash[:notice] = "Unmuted #{@project} notifications"
+    redirect_back fallback_location: project_path(@project.to_param)
   end
 
   def trending

@@ -9,18 +9,21 @@ class SubscriptionsController < ApplicationController
   def update
     @subscription = current_user.subscriptions.find(params[:id])
     @subscription.update_attributes(subscription_params)
-    redirect_to_back_or_default project_path(@subscription.project.to_param)
+    flash[:notice] = "Updated #{@subscription.project} subscription options"
+    redirect_back fallback_location: project_path(@subscription.project.to_param)
   end
 
   def subscribe
     @subscription = current_user.subscriptions.create(project_id: params[:project_id])
-    redirect_to_back_or_default project_path(@subscription.project.to_param)
+    flash[:notice] = "Subscribed from #{@subscription.project} notifications"
+    redirect_back fallback_location: project_path(@subscription.project.to_param)
   end
 
   def destroy
     @subscription = current_user.subscriptions.find(params[:id])
     @subscription.destroy!
-    redirect_to_back_or_default project_path(@subscription.project.to_param)
+    flash[:notice] = "Unsubscribed from #{@subscription.project} notifications"
+    redirect_back fallback_location: project_path(@subscription.project.to_param)
   end
 
   private
