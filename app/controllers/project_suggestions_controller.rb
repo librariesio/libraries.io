@@ -1,13 +1,12 @@
 class ProjectSuggestionsController < ApplicationController
   before_action :ensure_logged_in
+  before_action :find_project, only: [:new, :create]
 
   def new
-    find_project
     @project_suggestions = @project.project_suggestions.build(user: current_user)
   end
 
   def create
-    find_project
     @project_suggestions = @project.project_suggestions.build(user: current_user)
     if @project_suggestions.update_attributes(project_suggestion_params)
       flash[:notice] = "Thanks for the suggestion, we'll update the project shortly"

@@ -1,6 +1,9 @@
 class ProjectsController < ApplicationController
   before_action :ensure_logged_in, only: [:your_dependent_repos, :mute, :unmute]
   etag { current_user.try :id }
+  before_action :find_project, only: [:show, :sourcerank, :about, :dependents,
+                                      :dependent_repos, :your_dependent_repos,
+                                      :versions, :tags, :mute, :unmute, :unsubscribe]
 
   def index
     if current_user
@@ -39,7 +42,6 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    find_project
     if incorrect_case?
       if params[:number].present?
         return redirect_to(version_path(@project.to_param.merge(number: params[:number])), :status => :moved_permanently)
@@ -54,32 +56,27 @@ class ProjectsController < ApplicationController
   end
 
   def sourcerank
-    find_project
+
   end
 
   def about
-    find_project
     find_version
     send_data render_to_string(:about, layout: false), filename: "#{@project.platform.downcase}-#{@project}.ABOUT", type: 'application/text', disposition: 'attachment'
   end
 
   def dependents
-    find_project
     @dependents = @project.dependent_projects.paginate(page: page_number)
   end
 
   def dependent_repos
-    find_project
     @dependent_repos = @project.dependent_repositories.open_source.paginate(page: page_number)
   end
 
   def your_dependent_repos
-    find_project
     @dependent_repos = current_user.your_dependent_repos(@project).paginate(page: page_number)
   end
 
   def versions
-    find_project
     if incorrect_case?
       return redirect_to(project_versions_path(@project.to_param), :status => :moved_permanently)
     else
@@ -92,7 +89,6 @@ class ProjectsController < ApplicationController
   end
 
   def tags
-    find_project
     if incorrect_case?
       return redirect_to(project_tags_path(@project.to_param), :status => :moved_permanently)
     else
@@ -109,14 +105,12 @@ class ProjectsController < ApplicationController
   end
 
   def mute
-    find_project
     current_user.mute(@project)
     flash[:notice] = "Muted #{@project} notifications"
     redirect_back fallback_location: project_path(@project.to_param)
   end
 
   def unmute
-    find_project
     current_user.unmute(@project)
     flash[:notice] = "Unmuted #{@project} notifications"
     redirect_back fallback_location: project_path(@project.to_param)
@@ -131,7 +125,7 @@ class ProjectsController < ApplicationController
   end
 
   def unsubscribe
-    find_project
+
   end
 
   private
