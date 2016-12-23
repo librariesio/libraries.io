@@ -66,7 +66,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     api-pagination (4.5.1)
     arel (7.1.4)
-    autoprefixer-rails (6.5.4)
+    autoprefixer-rails (6.6.0)
       execjs
     bloomfilter-rb (2.1.1)
       redis
