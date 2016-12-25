@@ -36,7 +36,7 @@ class WebHook < ApplicationRecord
     Typhoeus::Request.new(url,
       method: :post,
       timeout_ms: 10000,
-      body: Oj.dump(data, mode: :compat),
+      body: JSON.dump(data, mode: :compat),
       headers: { 'Content-Type' => 'application/json', 'Accept-Encoding' => 'application/json' })
   end
 

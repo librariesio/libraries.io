@@ -7,7 +7,7 @@ class Firehose
         params: {
           api_key: ENV['FIREHOSE_KEY']
         },
-        body: Oj.dump({
+        body: JSON.dump({
           platform: platform,
           name: project.name,
           version: version_or_tag.number,
