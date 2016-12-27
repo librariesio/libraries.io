@@ -124,7 +124,6 @@ Rails.application.routes.draw do
   get '/github/languages', to: 'github_repositories#languages', as: :github_languages
   get '/github/search', to: 'github_repositories#search', as: :github_search
   get '/github/trending', to: 'github_repositories#hacker_news', as: :trending
-  get 'hacker_news' => redirect('/github/trending')
   get '/github/new', to: 'github_repositories#new', as: :new_repos
 
   get '/github/organisations', to: 'github_organisations#index', as: :github_organisations
@@ -173,18 +172,6 @@ Rails.application.routes.draw do
     get '/rails/mailers'         => "rails/mailers#index"
     get '/rails/mailers/*path'   => "rails/mailers#preview"
   end
-
-  # legacy swift rename redirects
-  get '/swift/', to: redirect("/SwiftPM")
-  get '/Swift/', to: redirect("/SwiftPM")
-  get '/swift/:name', constraints: { :name => /.*/ }, to: redirect { |params, request|
-    path = "SwiftPM/#{Rack::Utils.escape(params[:name])}"
-    "http://#{request.host_with_port}/#{path}"
-  }
-  get '/swift/:name', constraints: { :name => /.*/ }, to: redirect { |params, request|
-    path = "SwiftPM/#{Rack::Utils.escape(params[:name])}"
-    "http://#{request.host_with_port}/#{path}"
-  }
 
   get '/:platform/:name/suggestions', to: 'project_suggestions#new', as: :project_suggestions, constraints: { :name => /.*/ }
   post '/:platform/:name/suggestions', to: 'project_suggestions#create', constraints: { :name => /.*/ }
