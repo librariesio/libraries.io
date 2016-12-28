@@ -7,7 +7,7 @@
           </p>
           <p>
             Currently tracking <%= link_to number_with_delimiter(Project.total), search_path %> open source projects
-            from across <%= link_to Repositories::Base.platforms.length, platforms_path %> platforms.
+            from across <%= link_to PackageManager::Base.platforms.length, platforms_path %> platforms.
           </p>
           <p>
             <a href="https://twitter.com/librariesio" title='Twitter'><%= fa_icon('twitter') %></a>&nbsp;

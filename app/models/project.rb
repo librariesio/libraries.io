@@ -155,7 +155,7 @@ class Project < ApplicationRecord
   end
 
   def platform_class
-    "Repositories::#{platform}".constantize
+    "PackageManager::#{platform}".constantize
   end
 
   def platform_name

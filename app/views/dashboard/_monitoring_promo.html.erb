@@ -9,7 +9,7 @@
 </p>
 <p><strong>Supported Package Managers:</strong></p>
 <div class="">
-  <% Repositories::Base.platforms.select{|p| p::LIBRARIAN_SUPPORT }.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
+  <% PackageManager::Base.platforms.select{|p| p::LIBRARIAN_SUPPORT }.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
     <a class="pictogram tip pictogram-<%= platform.formatted_name.downcase %>" href="/<%= platform.formatted_name %>" title='<%= platform.formatted_name %>'></a>
   <% end %>
 </div>

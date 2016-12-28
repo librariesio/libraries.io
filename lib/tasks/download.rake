@@ -6,208 +6,208 @@ namespace :download do
   task small_registries: [:emacs, :hackage, :sublime, :inqlude, :shards]
 
   task alcatraz: :environment do
-    Repositories::Alcatraz.import_async
+    PackageManager::Alcatraz.import_async
   end
 
   task atom: :environment do
-    Repositories::Atom.import_recent_async
+    PackageManager::Atom.import_recent_async
   end
 
   task atom_all: :environment do
-    Repositories::Atom.import_async
+    PackageManager::Atom.import_async
   end
 
   task bower: :environment do
-    Repositories::Bower.import_new_async
+    PackageManager::Bower.import_new_async
   end
 
   task bower_all: :environment do
     if Date.today.wday.zero?
-      Repositories::Bower.import
+      PackageManager::Bower.import
     end
   end
 
   task cargo: :environment do
-    Repositories::Cargo.import_recent_async
+    PackageManager::Cargo.import_recent_async
   end
 
   task carthage: :environment do
-    Repositories::Carthage.import_async
+    PackageManager::Carthage.import_async
   end
 
   task clojars: :environment do
-    Repositories::Clojars.import_recent
+    PackageManager::Clojars.import_recent
   end
 
   task cpan: :environment do
-    Repositories::CPAN.import_recent_async
+    PackageManager::CPAN.import_recent_async
   end
 
   task cpan_all: :environment do
-    Repositories::CPAN.import_async
+    PackageManager::CPAN.import_async
   end
 
   task cocoapods: :environment do
-    Repositories::CocoaPods.import_recent_async
+    PackageManager::CocoaPods.import_recent_async
   end
 
   task cran: :environment do
-    Repositories::CRAN.import_recent_async
+    PackageManager::CRAN.import_recent_async
   end
 
   task cran_all: :environment do
-    Repositories::CRAN.import_async
+    PackageManager::CRAN.import_async
   end
 
   task dub: :environment do
-    Repositories::Dub.import_async
+    PackageManager::Dub.import_async
   end
 
   task elm: :environment do
-    Repositories::Elm.import_recent_async
+    PackageManager::Elm.import_recent_async
   end
 
   task elm_all: :environment do
-    Repositories::Elm.import_async
+    PackageManager::Elm.import_async
   end
 
   task emacs: :environment do
-    Repositories::Emacs.import_async
+    PackageManager::Emacs.import_async
   end
 
   task hackage: :environment do
-    Repositories::Hackage.import_recent_async
+    PackageManager::Hackage.import_recent_async
   end
 
   task hackage_all: :environment do
-    Repositories::Hackage.import_async
+    PackageManager::Hackage.import_async
   end
 
   task haxelib: :environment do
-    Repositories::Haxelib.import_recent_async
+    PackageManager::Haxelib.import_recent_async
   end
 
   task haxelib_all: :environment do
-    Repositories::Haxelib.import
+    PackageManager::Haxelib.import
   end
 
   task hex: :environment do
-    Repositories::Hex.import_recent_async
+    PackageManager::Hex.import_recent_async
   end
 
   task hex_all: :environment do
-    Repositories::Hex.import
+    PackageManager::Hex.import
   end
 
   task homebrew: :environment do
-    Repositories::Homebrew.import_recent_async
+    PackageManager::Homebrew.import_recent_async
   end
 
   task homebrew_all: :environment do
-    Repositories::Homebrew.import_async
+    PackageManager::Homebrew.import_async
   end
 
   task inqlude: :environment do
-    Repositories::Inqlude.import
+    PackageManager::Inqlude.import
   end
 
   task julia: :environment do
-    Repositories::Julia.import_async
+    PackageManager::Julia.import_async
   end
 
   task maven: :environment do
-    Repositories::Maven.load_names(50)
-    Repositories::Maven.import_recent_async
+    PackageManager::Maven.load_names(50)
+    PackageManager::Maven.import_recent_async
   end
 
   task maven_all: :environment do
-    Repositories::Maven.load_names
-    Repositories::Maven.import_async
+    PackageManager::Maven.load_names
+    PackageManager::Maven.import_async
   end
 
   task meteor: :environment do
-    Repositories::Meteor.import_async
+    PackageManager::Meteor.import_async
   end
 
   task nimble: :environment do
-    Repositories::Nimble.import_async
+    PackageManager::Nimble.import_async
   end
 
   task nuget: :environment do
-    Repositories::NuGet.load_names(3)
-    Repositories::NuGet.import_recent_async
+    PackageManager::NuGet.load_names(3)
+    PackageManager::NuGet.import_recent_async
   end
 
   task nuget_all: :environment do
-    Repositories::NuGet.load_names
-    Repositories::NuGet.import
+    PackageManager::NuGet.load_names
+    PackageManager::NuGet.import
   end
 
   task npm: :environment do
-    Repositories::NPM.import_recent_async
+    PackageManager::NPM.import_recent_async
   end
 
   task npm_all: :environment do
-    Repositories::NPM.import
+    PackageManager::NPM.import
   end
 
   task packagist: :environment do
-    Repositories::Packagist.import_recent_async
+    PackageManager::Packagist.import_recent_async
   end
 
   task packagist_all: :environment do
-    Repositories::Packagist.import_async
+    PackageManager::Packagist.import_async
   end
 
   task platformio: :environment do
-    Repositories::PlatformIO.import
+    PackageManager::PlatformIO.import
   end
 
   task pub: :environment do
-    Repositories::Pub.import_recent_async
+    PackageManager::Pub.import_recent_async
   end
 
   task pypi: :environment do
-    Repositories::Pypi.import_recent_async
+    PackageManager::Pypi.import_recent_async
   end
 
   task pypi_all: :environment do
-    Repositories::Pypi.import_async
+    PackageManager::Pypi.import_async
   end
 
   task rubygems: :environment do
-    Repositories::Rubygems.import_recent_async
+    PackageManager::Rubygems.import_recent_async
   end
 
   task rubygems_all: :environment do
-    Repositories::Rubygems.import_async
+    PackageManager::Rubygems.import_async
   end
 
   task shards: :environment do
-    Repositories::Shards.import_async
+    PackageManager::Shards.import_async
   end
 
   task swift: :environment do
-    Repositories::SwiftPM.import
+    PackageManager::SwiftPM.import
   end
 
   task sublime: :environment do
-    Repositories::Sublime.import_async
+    PackageManager::Sublime.import_async
   end
 
   task wordpress: :environment do
-    Repositories::Wordpress.import_recent_async
+    PackageManager::Wordpress.import_recent_async
   end
 
   task wordpress_all: :environment do
-    Repositories::Wordpress.import_async
+    PackageManager::Wordpress.import_async
   end
 
   task go: :environment do
-    Repositories::Go.import_new_async
+    PackageManager::Go.import_new_async
   end
 
   task go_all: :environment do
-    Repositories::Go.import_async
+    PackageManager::Go.import_async
   end
 end
