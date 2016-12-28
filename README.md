@@ -35,7 +35,7 @@ Next, you'll need to make sure that you have PostgreSQL installed. This can be
 done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or by using [http://postgresapp.com](http://postgresapp.com). Please see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
 
 ```bash
-brew install postgres phantomjs elasticsearch
+brew install postgres phantomjs elasticsearch@1.7
 ```
 
 On Debian-based Linux distributions you can use apt-get to install Postgres:
