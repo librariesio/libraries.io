@@ -111,15 +111,15 @@ module PackageManager
     end
 
     def self.import_async
-      project_names.each { |name| RepositoryDownloadWorker.perform_async(self.name.demodulize, name) }
+      project_names.each { |name| PackageManagerDownloadWorker.perform_async(self.name.demodulize, name) }
     end
 
     def self.import_recent_async
-      recent_names.each { |name| RepositoryDownloadWorker.perform_async(self.name.demodulize, name) }
+      recent_names.each { |name| PackageManagerDownloadWorker.perform_async(self.name.demodulize, name) }
     end
 
     def self.import_new_async
-      new_names.each { |name| RepositoryDownloadWorker.perform_async(self.name.demodulize, name) }
+      new_names.each { |name| PackageManagerDownloadWorker.perform_async(self.name.demodulize, name) }
     end
 
     def self.import(include_versions = true)

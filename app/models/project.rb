@@ -100,7 +100,7 @@ class Project < ApplicationRecord
   end
 
   def async_sync
-    RepositoryDownloadWorker.perform_async(platform, name)
+    PackageManagerDownloadWorker.perform_async(platform, name)
   end
 
   def github_contributions_count
