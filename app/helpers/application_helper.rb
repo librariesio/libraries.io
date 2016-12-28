@@ -4,7 +4,7 @@ module ApplicationHelper
   include SanitizeUrl
 
   def platform_name(platform)
-    Repositories::Base.platform_name(platform)
+    PackageManager::Base.platform_name(platform)
   end
 
   def colours

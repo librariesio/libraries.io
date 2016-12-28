@@ -68,7 +68,7 @@ class Readme < ApplicationRecord
       return key try txt chr set nil int} +
     Highscore::Blacklist.load_default_file.words +
     Languages::Language.all.map{|l| l.name.downcase } +
-    Repositories::Base.platforms.map{|p| p.to_s.demodulize.downcase }
+    PackageManager::Base.platforms.map{|p| p.to_s.demodulize.downcase }
     Highscore::Blacklist.load badlist_words
   end
 end

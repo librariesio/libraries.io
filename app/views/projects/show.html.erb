@@ -198,7 +198,7 @@
                   <% deps.each do |dependency| %>
                     <tr>
                       <td>
-                        <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: Repositories::Base.dependency_platform(dependency.platform)) %>
+                        <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: PackageManager::Base.dependency_platform(dependency.platform)) %>
                       </td>
                       <td>
                         <%= dependency.requirements %>

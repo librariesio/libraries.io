@@ -46,6 +46,7 @@ SitemapGenerator::Sitemap.create(:create_index => false) do
     group.sitemap.write unless group.sitemap.written?
   }
 
+
   misc = lambda {
     group = sitemap.group(:filename => :misc, :sitemaps_path => 'sitemaps/misc') do
       add root_path, :priority => 1, :changefreq => 'daily'
@@ -78,7 +79,7 @@ SitemapGenerator::Sitemap.create(:create_index => false) do
       add languages_path, :changefreq => 'daily'
       add keywords_path, :changefreq => 'daily'
 
-      Repositories::Base.platforms.each do |platform|
+      PackageManager::Base.platforms.each do |platform|
         name = platform.to_s.demodulize
         add platform_path(name.downcase), :lastmod => Project.platform(name).order('updated_at DESC').first.try(:updated_at)
       end

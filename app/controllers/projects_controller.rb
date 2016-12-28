@@ -145,7 +145,7 @@ class ProjectsController < ApplicationController
   end
 
   def current_platform
-    Repositories::Base.format_name(params[:platforms])
+    PackageManager::Base.format_name(params[:platforms])
   end
 
   def current_language

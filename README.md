@@ -65,9 +65,9 @@ Go create a Personal access token on GitHub, then we can download some sample da
 ```sh
  rails c
  irb> AuthToken.new(token: "<secure github token here>").save
- irb> Repositories::NPM.update "pictogram"
- irb> Repositories::Rubygems.update "split"
- irb> Repositories::Bower.update "sbteclipse"
+ irb> PackageManager::NPM.update "pictogram"
+ irb> PackageManager::Rubygems.update "split"
+ irb> PackageManager::Bower.update "sbteclipse"
 ```
 
 You can then index that data into elasticsearch with the following rake task:
