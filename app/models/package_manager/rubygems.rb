@@ -75,16 +75,16 @@ module PackageManager
       deps = json['dependencies']
       map_dependencies(deps['development'], 'Development') + map_dependencies(deps['runtime'], 'normal')
     end
-  end
 
-  def self.map_dependencies(deps, kind)
-    deps.map do |dep|
-      {
-        project_name: dep['name'],
-        requirements: dep['requirements'],
-        kind: kind,
-        platform: self.name.demodulize
-      }
+    def self.map_dependencies(deps, kind)
+      deps.map do |dep|
+        {
+          project_name: dep['name'],
+          requirements: dep['requirements'],
+          kind: kind,
+          platform: self.name.demodulize
+        }
+      end
     end
   end
 end
