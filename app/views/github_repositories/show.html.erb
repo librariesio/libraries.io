@@ -186,6 +186,16 @@
       <%= render 'adsense/sidebar' %>
       <h4>Project Statistics</h4>
       <table class='table table-striped'>
+        <% if repo.rank %>
+        <tr>
+          <td>
+            Sourcerank
+          </td>
+          <td>
+            <strong><%= link_to repo.rank, github_repository_sourcerank_path(repo.owner_name, repo.project_name) %></strong>
+          </td>
+        </tr>
+        <% end %>
         <tr>
           <td>
             Size
