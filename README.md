@@ -31,12 +31,13 @@ rbenv install 2.3.3
 rbenv global 2.3.3
 ```
 
-Next, you'll need to make sure that you have PostgreSQL installed. This can be
-done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or by using [http://postgresapp.com](http://postgresapp.com). Please see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
+Next, you'll need to make sure that you have PostgreSQL and Redis installed. This can be done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or postgres can be installed by using [http://postgresapp.com](http://postgresapp.com). Please also see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
 
 ```bash
-brew install postgres phantomjs elasticsearch@1.7
+brew install postgres phantomjs elasticsearch@1.7 redis
 ```
+
+Remember to start the services!
 
 On Debian-based Linux distributions you can use apt-get to install Postgres:
 
@@ -59,10 +60,10 @@ tables. Rails makes this easy through the use of "Rake" tasks.
 bundle exec rake db:create db:migrate
 ```
 
-Go create a Personal access token on GitHub, then we can download some sample data:
+Go create a Personal access token on GitHub (only requires `public_repo` access), then we can download some sample data:
 
 ```sh
- rails c
+ bundle exec rails c
  irb> AuthToken.new(token: "<secure github token here>").save
  irb> PackageManager::NPM.update "pictogram"
  irb> PackageManager::Rubygems.update "split"
@@ -73,6 +74,14 @@ You can then index that data into elasticsearch with the following rake task:
 
 ```bash
 rake projects:reindex github:reindex_repos github:reindex_issues
+```
+
+It is normal to see:
+
+```bash
+[!!!] Index does not exist (Elasticsearch::Transport::Transport::Errors::NotFound)
+[!!!] Index does not exist (Elasticsearch::Transport::Transport::Errors::NotFound)
+[!!!] Index does not exist (Elasticsearch::Transport::Transport::Errors::NotFound)
 ```
 
 If you are working on anything related to the email-generation code, you can use [MailCatcher](https://github.com/sj26/mailcatcher).
