@@ -4,6 +4,7 @@ class GithubRepository < ApplicationRecord
   include RepoUrls
   include RepoManifests
   include RepoTags
+  include RepositorySourceRank
 
   IGNORABLE_GITHUB_EXCEPTIONS = [Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError]
 

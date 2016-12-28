@@ -1,0 +1,54 @@
+<% title "SourceRank Breakdown for #{@github_repository} on GitHub - Libraries.io" %>
+
+<div class="row">
+  <div class="col-md-12">
+    <h1><i class="fa fa-star"></i> SourceRank Breakdown for <%= link_to @github_repository, github_repository_path(@github_repository.owner_name, @github_repository.project_name) %></h1>
+  </div>
+</div>
+<hr>
+
+<div class="row">
+  <% cache(['SourceRank', @github_repository]) do  %>
+    <% @breakdown = @github_repository.source_rank_breakdown %>
+    <div class="col-sm-8">
+      <%= render 'adsense/banner' %>
+      <ul class="list-group">
+        <% @breakdown.each do |key, value| %>
+          <li class="list-group-item">
+            <span class="badge <%= source_rank_badge_class(value) %>">
+              <%= value %>
+            </span>
+            <%= source_rank_titles[key] || key %>
+            <% if source_rank_explainations[key].present? %>
+            &nbsp;<small class='text-muted'><%= fa_icon('question-circle', title: source_rank_explainations[key], class: 'tip') %></small>
+            <% end %>
+          </li>
+        <% end %>
+        <li class='list-group-item'>
+          <span class='badge alert-info'>
+            <%= @breakdown.values.sum > 0 ? @breakdown.values.sum : 0 %>
+          </span>
+          <strong>Total</strong>
+        </li>
+      </ul>
+      <%= render 'adsense/banner' %>
+    </div>
+  <% end %>
+  <div class="col-sm-4">
+    <%= render 'adsense/sidebar' %>
+    <h3>
+      <strong>
+        What's SourceRank used for?
+      </strong>
+    </h3>
+    <p>
+      SourceRank is the score for a project based on a number of metrics, it's used across the site to boost high quality projects.
+    </p>
+    <p>
+      The factors are based on attributes of a project that make it appear like a dependable library and can be handy to compare different projects.
+    </p>
+    <p>
+      Got a question or suggestion to improve SourceRank? Open an <%= link_to 'issue', 'https://github.com/librariesio/support/issues' %>, <%= link_to 'tweet us', 'https://twitter.com/librariesio' %> or email <%= mail_to 'support@libraries.io', 'support@libraries.io' %>
+    </p>
+  </div>
+</div>

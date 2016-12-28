@@ -29,7 +29,8 @@ module SourcerankHelper
       dependent_projects:         'Dependent Projects',
       dependent_repositories:     'Dependent Repositories',
       contributors:               'Contributors',
-      subscribers:                'Libraries.io subscribers'
+      subscribers:                'Libraries.io subscribers',
+      recently_pushed:            'Recently pushed?'
     }
   end
 
@@ -49,7 +50,8 @@ module SourcerankHelper
       dependent_projects:         'Logarithmic scale times two',
       dependent_repositories:     'Logarithmic scale',
       contributors:               'Logarithmic scale divided by two',
-      subscribers:                'Logarithmic scale divided by two'
+      subscribers:                'Logarithmic scale divided by two',
+      recently_pushed:            'Pushed to within the past 6 months?'
     }
   end
 end

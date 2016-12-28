@@ -62,6 +62,10 @@ class GithubRepositoriesController < ApplicationController
     @manifests = @github_repository.manifests.latest.limit(10).includes(repository_dependencies: {project: :versions})
   end
 
+  def sourcerank
+    load_repo
+  end
+
   def tags
     load_repo
     @tags = @github_repository.github_tags.published.order('published_at DESC, name DESC').paginate(page: page_number)

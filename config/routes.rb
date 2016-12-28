@@ -152,6 +152,7 @@ Rails.application.routes.draw do
 
   get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
   get '/github/:owner/:name/contributors', to: 'github_repositories#contributors', as: :github_repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/sourcerank', to: 'github_repositories#sourcerank', as: :github_repository_sourcerank, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/forks', to: 'github_repositories#forks', as: :github_repository_forks, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/tags', to: 'github_repositories#tags', as: :github_repository_tags, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/dependency-issues', to: 'github_repositories#dependency_issues', format: false, constraints: { :name => /[^\/]+/ }
