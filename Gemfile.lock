@@ -257,6 +257,7 @@ GEM
     omniauth-oauth2 (1.4.0)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
+    parallel (1.10.0)
     payola-payments (1.5.0)
       aasm (>= 4.0.7)
       jquery-rails
@@ -496,6 +497,7 @@ DEPENDENCIES
   octokit
   oj
   omniauth-github
+  parallel
   payola-payments
   pg
   pictogram

@@ -61,7 +61,7 @@ gem 'rack-attack-rate-limit', require: 'rack/attack/rate-limit'
 gem 'api-pagination'
 gem 'indefinite_article'
 gem 'faraday_middleware'
-
+gem 'parallel', require: nil
 gem 'highscore'
 gem 'fast-stemmer'
 gem 'bloomfilter-rb'
