@@ -94,6 +94,39 @@ our browser to <http://localhost:3000>
 bundle exec rails s
 ```
 
+### Github authentication and connection
+
+To enable Github authentication go and register a new [GitHub OAuth Application](https://github.com/settings/applications/new). Your development configuration should look something like this:
+
+<img width="561" alt="screen shot 2016-12-18 at 21 54 35" src="https://cloud.githubusercontent.com/assets/564113/21299762/a7bfaace-c56c-11e6-834c-ff893f79cec3.png">
+
+If you're deploying this to production, just replace `http://localhost:3000` with your application's URL.
+
+You'll need to register an additional application to enable each of public and private projects, using `http://localhost:3000/auth/github_public/callback` and `http://localhost:3000/auth/github_private/callback` as the callbacks respectively. You do not need to do private projects unless you require that functionality.
+
+Once you've created your application you can then then add the following to your `.env`:
+
+```bash
+GITHUB_KEY=yourclientidhere
+GITHUB_SECRET=yourclientsecrethere
+GITHUB_PUBLIC_KEY=yourpublicclientidhere
+GITHUB_PUBLIC_SECRET=yourpublicclientsecrethere
+GITHUB_PRIVATE_KEY=yourprivateclientidhere
+GITHUB_PRIVATE_SECRET=yourprivateclientsecrethere
+```
+
+### Repository sync
+
+To enable repository sync you will need to run a sidekiq worker:
+
+```bash
+bundle exec sidekiq -C config/sidekiq.yml
+```
+
+Note that if you start the sync before starting sidekiq you will probably need to stop the jobs and delete the queues then restart sidekiq and start the sync again to make it work. It should take seconds to complete.
+
+To monitor sidekiq jobs, and administer them go to [the sidekiq admin screen](http://localhost:3000/sidekiq/).
+
 ### Tests
 
 Standard RSpec/Capybara tests are used for testing the application. The tests can be run with `bundle exec rake`.
