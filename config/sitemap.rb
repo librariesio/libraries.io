@@ -113,6 +113,6 @@ SitemapGenerator::Sitemap.create do
   xml_file_paths = Dir.glob(xml_files)
 
   xml_file_paths.each do |file|
-    add file
+    add_to_index file
   end
 end
