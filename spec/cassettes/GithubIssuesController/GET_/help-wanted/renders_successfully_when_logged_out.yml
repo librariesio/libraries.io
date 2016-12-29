@@ -1,0 +1,290 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:9200/github_issues/github_issue/_search?from=0&size=30
+    body:
+      encoding: UTF-8
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"term":{"state":"open"}},{"term":{"locked":false}}],"must_not":[{"term":{"labels":"wontfix"}}]}}}},"field_value_factor":{"field":"stars","modifier":"square"}}},"facets":{"language":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[{"term":{"labels":"help
+        wanted"}}]}}},"labels":{"terms":{"field":"labels","size":35},"facet_filter":{"bool":{"must":[[{"term":{"labels":"help
+        wanted"}}]]}}},"license":{"terms":{"field":"license","size":35},"facet_filter":{"bool":{"must":[{"term":{"labels":"help
+        wanted"}}]}}}},"filter":{"bool":{"must":[{"term":{"labels":"help wanted"}}],"must_not":[]}},"track_scores":true,"sort":[{"comments_count":"asc"},{"stars":"desc"},{"created_at":"asc"},{"contributions_count":"asc"}]}'
+    headers:
+      User-Agent:
+      - Faraday v0.10.0
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '34231'
+    body:
+      encoding: UTF-8
+      string: '{"took":5,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":259,"max_score":1.6360407E9,"hits":[{"_index":"github_issues","_type":"github_issue","_id":"2695858","_score":1.6360407E9,"_source":{"id":2695858,"github_repository_id":2736,"github_id":57065702,"number":2078,"state":"open","title":"Setup
+        integration testing infrastructure","body":"This will allow us to use webdriver
+        for those times we''d prefer an e2e test.","github_user_id":945528,"locked":false,"comments_count":0,"closed_at":null,"labels":["Build","help
+        wanted"],"created_at":"2015-02-09T17:54:42.000Z","updated_at":"2016-07-15T23:18:15.827Z","last_synced_at":"2016-07-15T23:18:15.806Z","pull_request":false,"contributions_count":265,"stars":40448,"language":"JavaScript","license":"Other"},"sort":[0,40448,1423504482000,265]},{"_index":"github_issues","_type":"github_issue","_id":"1014044","_score":5.6102662E8,"_source":{"id":1014044,"github_repository_id":48385,"github_id":144301811,"number":8479,"state":"open","title":"Interchange
+        does not support JS fallback","body":"Hi y''all,\r\n\r\nThis construct works
+        perfectly when JS is disabled:\r\n````HTML\r\n<a href=\"/assets/img/logos/large/type.png\">\r\n       <img
+        data-interchange=\"[/assets/img/logos/small/type.png, small], [/assets/img/logos/medium/type.png,
+        medium], [/assets/img/logos/large/type.png, large]\" class=\"thumbnail\" alt=\"Type
+        Logo\" src=\"/assets/img/logos/small/type.png\">\r\n      </a>\r\n````\r\n\r\nHowever,
+        with JS enabled, both the media dependent image is loaded *and* the fallback
+        image referenced in the <img /> \"src\" attribute. If Interchange were to
+        ignore the \"src\" attribute, then this would be resolved.\r\n\r\nEDIT: removed
+        extraneous markup.","github_user_id":7539871,"locked":false,"comments_count":0,"closed_at":null,"labels":["bug","help
+        wanted","javascript"],"created_at":"2016-03-29T15:35:37.000Z","updated_at":"2016-04-17T03:22:52.000Z","last_synced_at":"2016-05-28T08:23:01.755Z","pull_request":false,"contributions_count":568,"stars":23686,"language":"JavaScript","license":"MIT"},"sort":[0,23686,1459265737000,568]},{"_index":"github_issues","_type":"github_issue","_id":"436300","_score":4.8479232E8,"_source":{"id":436300,"github_repository_id":904755,"github_id":101904144,"number":1435,"state":"open","title":"Looking
+        at using Noto Sans for other languages","body":"I''ve just started looking
+        at how other languages could be supported in MDL.\r\n\r\nThis is super early
+        and I''m looking for early feedback and ideas. I''ve been following guidance
+        on the material design spec: https://www.google.com/design/spec/style/typography.html#typography-styles
+        to add in difference sizes and switch to using noto sans for languages where
+        appropriate.\r\n\r\nhttps://github.com/google/material-design-lite/compare/master...gauntface:internationalisation\r\n\r\nAll
+        I''ve done is add in additional styles for each mixin which sets heights and
+        preferred fonts for a particular language. At the moment out of the three
+        categories defined in the spec, 2 of the categories have the same size and
+        line height differences.\r\n\r\nMajor points of concern for me:\r\n\r\n1.
+        This requires another web font. The request for noto sans could be joined
+        with Roboto and then allow the browser to handle fetching the font only when
+        it''s needed (In this case, only when another language is present on the screen
+        - assuming the browser is smart enough to know it''s not needed).\r\n1. The
+        current approach adds an extra class selector to each use of the typography
+        mixins - is this ok? Only alternative I can think of at the moment is figuring
+        out some way to produce a duplicate of the current _typography.scss but within
+        a single language selector, this is fine, but will likely require some re-working
+        of everything in typography at the moment.\r\n1. In an ideal world I''d have
+        multiple demo files for different languages to test the html elements (Something
+        I''m expecting to need to test RTL, but it looks like the current build process
+        only supports a single demo.html file - is that the case? If so should I invest
+        time in supporting multiple files, just grow the typography test.html or .
+        . . . ?","github_user_id":139760,"locked":false,"comments_count":0,"closed_at":null,"labels":["enhancement","help
+        wanted"],"created_at":"2015-08-19T14:15:18.000Z","updated_at":"2015-08-19T14:15:18.000Z","last_synced_at":"2016-05-27T18:00:41.871Z","pull_request":false,"contributions_count":149,"stars":22018,"language":"HTML","license":"Apache-2.0"},"sort":[0,22018,1439993718000,149]},{"_index":"github_issues","_type":"github_issue","_id":"409755","_score":3.0492484E7,"_source":{"id":409755,"github_repository_id":1149316,"github_id":122741402,"number":345,"state":"open","title":"Use
+        the programmatic API in the gulp & grunt plugins","body":"Posting here for
+        visibility. Introduced in https://github.com/sindresorhus/ava/pull/279.\r\n\r\nhttps://github.com/sindresorhus/grunt-ava\r\nhttps://github.com/sindresorhus/gulp-ava\r\n\r\nThe
+        API doesn''t have any docs yet as it''s private, but lots of tests to learn
+        from here: https://github.com/sindresorhus/ava/blob/master/test/api.js","github_user_id":170270,"locked":false,"comments_count":0,"closed_at":null,"labels":["enhancement","good
+        for beginner","help wanted"],"created_at":"2015-12-17T14:09:01.000Z","updated_at":"2016-07-14T02:43:00.404Z","last_synced_at":"2016-07-14T02:43:00.383Z","pull_request":false,"contributions_count":78,"stars":5522,"language":"JavaScript","license":"MIT"},"sort":[0,5522,1450361341000,78]},{"_index":"github_issues","_type":"github_issue","_id":"400414","_score":3.0492484E7,"_source":{"id":400414,"github_repository_id":1149316,"github_id":129669140,"number":483,"state":"open","title":"Limit
+        stack traces","body":"Infinity depth stack traces hardly seem necessary, but
+        [that is what we are currently doing](https://github.com/sindresorhus/ava/blob/761c2e349b306769e9c8f090a2cef6cb0c933664/index.js#L32).\r\n\r\n#482
+        fixes that for `t.plan()`, which I think is important, since `t.plan()` generates
+        a stack trace whether there is a test failure or not.\r\n\r\nMy remaining
+        question is whether or not we should shorten them globally. I am not overly
+        concerned about the performance impact of failing assertions, more so other
+        libraries (like bluebird longStackTrace support) that might be creating overly
+        long stacks and slowing things down. \r\n\r\nSome investigation is needed
+        here. If an `Infinity` value does not hurt the speed of a passing test suite,
+        then let''s leave it there. Otherwise we should bikeshed on how long it should
+        be.","github_user_id":4082216,"locked":false,"comments_count":0,"closed_at":null,"labels":["help
+        wanted","performance","question"],"created_at":"2016-01-29T05:13:32.000Z","updated_at":"2016-07-14T02:42:37.519Z","last_synced_at":"2016-07-14T02:42:37.498Z","pull_request":false,"contributions_count":78,"stars":5522,"language":"JavaScript","license":"MIT"},"sort":[0,5522,1454044412000,78]},{"_index":"github_issues","_type":"github_issue","_id":"400066","_score":3.0492484E7,"_source":{"id":400066,"github_repository_id":1149316,"github_id":130281823,"number":500,"state":"open","title":"Bench
+        - Automate comparing workingtree against latest commit","body":"Follow-up
+        to https://github.com/sindresorhus/ava/pull/496\r\n\r\n> I think it would
+        be useful with a quick script to automate gathering data from workingtree
+        and the last commit and then run the tests. This would be the most common
+        operation, so would be good to automate it, but we can do that later.\r\n\r\n\r\nSomething
+        like:\r\n\r\n```console\r\n$ node bench/compare-head\r\n```","github_user_id":170270,"locked":false,"comments_count":0,"closed_at":null,"labels":["help
+        wanted","low priority"],"created_at":"2016-02-01T07:22:56.000Z","updated_at":"2016-04-05T15:21:51.000Z","last_synced_at":"2016-07-14T02:42:34.774Z","pull_request":false,"contributions_count":78,"stars":5522,"language":"JavaScript","license":"MIT"},"sort":[0,5522,1454311376000,78]},{"_index":"github_issues","_type":"github_issue","_id":"399938","_score":3.0492484E7,"_source":{"id":399938,"github_repository_id":1149316,"github_id":130831936,"number":505,"state":"open","title":"Bench
+        - gather more data","body":"Using `time ava ...` has some advantages over
+        our current benchmark utility.\r\n\r\nSpecifically, it allows you to see additional
+        data beyond just how long it took to run (the most important being CPU time
+        and % utilization).\r\n\r\nIt would be nice to figure out a way to extract
+        that data as well.\r\n\r\nIt''s probably doable just by parsing the last line
+        of output. There may be a module on `npm` that does this for us already.","github_user_id":4082216,"locked":false,"comments_count":0,"closed_at":null,"labels":["help
+        wanted"],"created_at":"2016-02-02T22:02:11.000Z","updated_at":"2016-04-05T15:22:19.000Z","last_synced_at":"2016-07-14T02:42:33.994Z","pull_request":false,"contributions_count":78,"stars":5522,"language":"JavaScript","license":"MIT"},"sort":[0,5522,1454450531000,78]},{"_index":"github_issues","_type":"github_issue","_id":"392689","_score":3.0492484E7,"_source":{"id":392689,"github_repository_id":1149316,"github_id":139840852,"number":626,"state":"open","title":"test/cli
+        doesn''t test config permutations for --source","body":"`test/cli.js` has
+        a test for watch mode. It doesn''t contain tests for the `--source` and `-S`
+        CLI flags, `package.json` configuration, and precedence.\r\n\r\nThere are
+        tests for other flags (`pkg-conf: pkg-overrides`, `pkg-conf: cli takes precedence`)
+        but the `source` flag isn''t available from the fixtures used by those tests.\r\n\r\nInstead
+        the `watcher works` test needs to be duplicated with fixture setups for the
+        `pkg-overrides` and `cli takes precedence` cases.","github_user_id":33538,"locked":false,"comments_count":0,"closed_at":null,"labels":["enhancement","help
+        wanted"],"created_at":"2016-03-10T10:02:54.000Z","updated_at":"2016-07-14T02:42:14.463Z","last_synced_at":"2016-07-14T02:42:14.443Z","pull_request":false,"contributions_count":78,"stars":5522,"language":"JavaScript","license":"MIT"},"sort":[0,5522,1457604174000,78]},{"_index":"github_issues","_type":"github_issue","_id":"390816","_score":3.0492484E7,"_source":{"id":390816,"github_repository_id":1149316,"github_id":145576429,"number":707,"state":"open","title":"Normalize
+        relative paths in babel.extends, plugins, and presets to package.json directory","body":"Probably
+        best handled along with #700.\r\n\r\nAssuming following config in `package.json`:\r\n\r\n```js\r\n{\r\n  \"ava\":
+        {\r\n    \"babel\": {\r\n       \"extends\": \"./some-config.json\"\r\n     }\r\n  }\r\n}\r\n```\r\n\r\nIt
+        will work as long as `process.cwd()` is the same as `package.json`.\r\n\r\n`cli.js`
+        should normalize the path to `package.json` (`api.js` does not know anything
+        about `package.json`).\r\n\r\nThis should be part of the config normalizing
+        discussed in #700","github_user_id":4082216,"locked":false,"comments_count":0,"closed_at":null,"labels":["enhancement","help
+        wanted"],"created_at":"2016-04-04T03:55:05.000Z","updated_at":"2016-07-14T02:42:01.699Z","last_synced_at":"2016-07-14T02:42:01.673Z","pull_request":false,"contributions_count":78,"stars":5522,"language":"JavaScript","license":"MIT"},"sort":[0,5522,1459742105000,78]},{"_index":"github_issues","_type":"github_issue","_id":"390576","_score":3.0492484E7,"_source":{"id":390576,"github_repository_id":1149316,"github_id":146030041,"number":720,"state":"open","title":"Transpile
+        helper files","body":"From #577:\r\n\r\n> [we] should be supporting transpilation
+        of helper files (files in the test directory prefixed with `_`, or in `test/helpers`).\r\n\r\nThis
+        would be a great feature. Currently it can be pretty frustrating to write
+        helpers in ES5 when you can write tests in ES2016!\r\n\r\nIt wouldn''t be
+        too much effort to change the Api implementation so it finds helper files
+        and precompiles them. I think if they''re then added to [the `precompiled`
+        option](https://github.com/sindresorhus/ava/blob/c4ec8e7e5965e5546d33ecf4fb00d9f4a8c9740c/api.js#L86)
+        the forks will pick it up automatically.","github_user_id":33538,"locked":false,"comments_count":0,"closed_at":null,"labels":["babel","enhancement","help
+        wanted"],"created_at":"2016-04-05T15:49:11.000Z","updated_at":"2016-07-14T02:41:59.439Z","last_synced_at":"2016-07-14T02:41:59.418Z","pull_request":false,"contributions_count":78,"stars":5522,"language":"JavaScript","license":"MIT"},"sort":[0,5522,1459871351000,78]},{"_index":"github_issues","_type":"github_issue","_id":"390446","_score":3.0492484E7,"_source":{"id":390446,"github_repository_id":1149316,"github_id":146236357,"number":727,"state":"open","title":"Document
+        how to use babel-polyfill to polyfill the test environment","body":"AVA does
+        not load polyfills when running tests. This means features like `[''foo'',
+        ''bar''].includes(''foo'')` are not available. We should update the [ES2015](https://github.com/sindresorhus/ava#es2015-support)
+        docs to point this out, and add a recipe explaining how to use `babel-polyfill`
+        with AVA.\r\n\r\nThere should be a caveat to the latter that users shouldn''t
+        load `babel-polyfill` unless they *also* use it in their applications, since
+        the polyfill will apply to both test *and* source files.\r\n\r\nSee #263 for
+        background.","github_user_id":33538,"locked":false,"comments_count":0,"closed_at":null,"labels":["babel","docs","good
+        for beginner","help wanted"],"created_at":"2016-04-06T08:43:33.000Z","updated_at":"2016-07-14T02:41:58.321Z","last_synced_at":"2016-07-14T02:41:58.299Z","pull_request":false,"contributions_count":78,"stars":5522,"language":"JavaScript","license":"MIT"},"sort":[0,5522,1459932213000,78]},{"_index":"github_issues","_type":"github_issue","_id":"9114311","_score":3.0492484E7,"_source":{"id":9114311,"github_repository_id":1149316,"github_id":156580832,"number":867,"state":"open","title":"Failures
+        in macros should show declaration stacktrace","body":"```js\r\nimport test
+        from ''ava'';\r\n\r\nfunction macro(t, input, expected) {\r\n\tt.is(eval(input),
+        expected);\r\n}\r\n\r\ntest(macro, ''2 + 2'', 4);\r\ntest(macro, ''2 + 3'',
+        5);\r\ntest(macro, ''2 + 4'', 7);\r\n```\r\n\r\n```\r\n   2 passed\r\n   1
+        failed\r\n\r\n\r\n   1. [anonymous]\r\n     \r\n  t.is(eval(input), expected)\r\n       |    |       |        \r\n       6    \"2
+        + 4\" 7        \r\n  \r\n      Test.macro (foo.js:4:4)\r\n```\r\n\r\nIdeally,
+        we would show the declaration stacktrace as well (i.e. `foo.js:9:1` in the
+        above example).","github_user_id":4082216,"locked":false,"comments_count":0,"closed_at":null,"labels":["enhancement","help
+        wanted"],"created_at":"2016-05-24T18:44:54.000Z","updated_at":"2016-07-14T02:41:35.522Z","last_synced_at":"2016-07-14T02:41:35.501Z","pull_request":false,"contributions_count":78,"stars":5522,"language":"JavaScript","license":"MIT"},"sort":[0,5522,1464115494000,78]},{"_index":"github_issues","_type":"github_issue","_id":"10679503","_score":3.0492484E7,"_source":{"id":10679503,"github_repository_id":1149316,"github_id":162285850,"number":935,"state":"open","title":"Upgrade
+        tap, ensure asynchronous tests return promises","body":"With `tap@5.8.0`,
+        if a test returns a promise `tap` now ensures the next test isn''t launched
+        until that promise is settled (https://github.com/tapjs/node-tap/pull/249).\r\n\r\nWe
+        should upgrade to `^5.8.0` and review our unit tests, ensuring that correct
+        promises are returned for every asynchronous test (unless `t.end()` is used).
+        This should help with race conditions in the tests and failures being attributed
+        to the wrong test.","github_user_id":33538,"locked":false,"comments_count":0,"closed_at":null,"labels":["help
+        wanted"],"created_at":"2016-06-25T15:19:01.000Z","updated_at":"2016-06-25T15:19:01.000Z","last_synced_at":"2016-07-14T02:41:24.784Z","pull_request":false,"contributions_count":78,"stars":5522,"language":"JavaScript","license":"MIT"},"sort":[0,5522,1466867941000,78]},{"_index":"github_issues","_type":"github_issue","_id":"127311","_score":1.32496E7,"_source":{"id":127311,"github_repository_id":49561,"github_id":35560053,"number":195,"state":"open","title":".delay
+        API","body":"Discussion [here](https://github.com/pgte/nock/issues/192).\r\n\r\nImplement
+        the following (backwards-incompatible) API.\r\n\r\n```javascript\r\n// delay
+        the whole headers + body response 500ms\r\nnock.delay(500)\r\n\r\n/// reply
+        immediately, but just delay the response body\r\nnock.delayBody(500);\r\n\r\n///
+        never respond with body:\r\nnock.delayBody(Infinity);\r\n\r\n/// delay both
+        response headers and body\r\nnock.delay({headers: 500, body: 1000});\r\n//
+        or\r\nnock.delay(500).delayBody(1000);\r\n```","github_user_id":47910,"locked":false,"comments_count":0,"closed_at":null,"labels":["feature","help
+        wanted"],"created_at":"2014-06-12T08:40:05.000Z","updated_at":"2015-10-12T08:36:35.000Z","last_synced_at":"2016-06-10T17:50:27.941Z","pull_request":false,"contributions_count":125,"stars":3640,"language":"JavaScript","license":"MIT"},"sort":[0,3640,1402562405000,125]},{"_index":"github_issues","_type":"github_issue","_id":"115485","_score":1.32496E7,"_source":{"id":115485,"github_repository_id":49561,"github_id":135164333,"number":478,"state":"open","title":"Add
+        support to not nock URLs in nock back","body":"You''d want to do this if for
+        example you are testing a server that you start at the beginning of your tests,
+        and just want to nock all the outgoing requests from that server.","github_user_id":6221537,"locked":false,"comments_count":0,"closed_at":null,"labels":["help
+        wanted","nockback","pending investigation"],"created_at":"2016-02-21T05:46:52.000Z","updated_at":"2016-02-29T11:44:50.000Z","last_synced_at":"2016-06-10T17:49:36.318Z","pull_request":false,"contributions_count":125,"stars":3640,"language":"JavaScript","license":"MIT"},"sort":[0,3640,1456033612000,125]},{"_index":"github_issues","_type":"github_issue","_id":"115006","_score":1.32496E7,"_source":{"id":115006,"github_repository_id":49561,"github_id":137460338,"number":491,"state":"open","title":"allowUnmocked
+        stops working once interceptor is removed","body":"```javascript\r\nvar nock=require(''nock''),\r\nrequest=require(''request'');\r\n\r\nnock(''https://www.google.com'',
+        \r\n\t{ allowUnmocked: true })\r\n\t.log(console.log)\r\n\t.filteringPath(function(path)
+        {\r\n         return path.split(\"?\")[0];\r\n     })\r\n\t.get(\"/abc\")\r\n\t.reply(200,
+        \"Match!\")\r\n\r\nfunction mockRequest(url) {\r\n\trequest(url, function
+        (error, response, body) {\r\n\t\tif (!error && response.statusCode == 200)
+        {\r\n\t    \tconsole.log(body);\r\n\t  \t} else{\r\n\t  \t\tconsole.log(error
+        ? \"error: \" + error : \"response.statusCode: \"+ response.statusCode);\r\n\t  \t}\r\n\t});\r\n}\r\n\r\nmockRequest(''https://www.google.com/123?user=fred'');\r\nmockRequest(''https://www.google.com/abc?user=fred'');\r\nmockRequest(''https://www.google.com/123?user=fred'');\r\n```\r\n\r\nIn
+        the code above, I would expect the first and third request to go through to
+        google.com. However, the third request hits the \"no match\" error from Nock,
+        as seen here:\r\n\r\n$ node nockTest.js \r\nmatching https://www.google.com:443
+        to GET https://www.google.com:443/abc: true\r\nerror: Error: Nock: No match
+        for request GET https://www.google.com/123?user=fred \r\nMatch!\r\nresponse.statusCode:
+        404\r\n\r\nI am able to get around this by using persist() but would not expect
+        to have to do this. Is this a bug or as designed? Thanks!","github_user_id":3698180,"locked":false,"comments_count":0,"closed_at":null,"labels":["help
+        wanted","pending investigation"],"created_at":"2016-03-01T03:51:24.000Z","updated_at":"2016-03-16T12:05:27.000Z","last_synced_at":"2016-06-10T17:49:34.207Z","pull_request":false,"contributions_count":125,"stars":3640,"language":"JavaScript","license":"MIT"},"sort":[0,3640,1456804284000,125]},{"_index":"github_issues","_type":"github_issue","_id":"113618","_score":1.32496E7,"_source":{"id":113618,"github_repository_id":49561,"github_id":141252803,"number":499,"state":"open","title":"extract
+        nock.back","body":"Extract nock.back into it''s own separate repo and package.","github_user_id":47910,"locked":false,"comments_count":0,"closed_at":null,"labels":["chore","help
+        wanted","nockback"],"created_at":"2016-03-16T12:04:03.000Z","updated_at":"2016-03-16T12:04:15.000Z","last_synced_at":"2016-06-10T17:49:32.946Z","pull_request":false,"contributions_count":125,"stars":3640,"language":"JavaScript","license":"MIT"},"sort":[0,3640,1458129843000,125]},{"_index":"github_issues","_type":"github_issue","_id":"3482741","_score":4562496.0,"_source":{"id":3482741,"github_repository_id":300899,"github_id":54667999,"number":591,"state":"open","title":"Run
+        javascript unit tests on CI","body":"At the moment travis is only running
+        ruby related tests (`rake`). There is another suite of tests (`rake test:js`)
+        which only runs locally. I would like to see unit tests run on the cloud.
+        Running on travis with phantom.js is ok, saucelabs would be way better\r\n\r\nAnyone
+        can help on this?\r\n\r\nTIA","github_user_id":556268,"locked":false,"comments_count":0,"closed_at":null,"labels":["help
+        wanted"],"created_at":"2015-01-17T17:17:32.000Z","updated_at":"2016-07-06T13:06:21.205Z","last_synced_at":"2016-07-06T13:06:21.180Z","pull_request":false,"contributions_count":55,"stars":2136,"language":"Ruby","license":"MIT"},"sort":[0,2136,1421515052000,55]},{"_index":"github_issues","_type":"github_issue","_id":"215","_score":3254416.0,"_source":{"id":215,"github_repository_id":21732,"github_id":35037212,"number":254,"state":"open","title":"Improve
+        code documentation coverage","body":"Inch-ci.org is making me feel bad about
+        the amount of code documentation we have on split: http://inch-ci.org/github/andrew/split\r\n\r\nLet''s
+        improve that report by increasing the amount of rdoc coverage across the library.","github_user_id":1060,"locked":false,"comments_count":0,"closed_at":null,"labels":["documentation","help
+        wanted"],"created_at":"2014-06-05T08:34:27.000Z","updated_at":"2014-06-05T08:34:56.000Z","last_synced_at":"2016-06-28T21:21:18.548Z","pull_request":false,"contributions_count":105,"stars":1804,"language":"Ruby","license":"MIT"},"sort":[0,1804,1401957267000,105]},{"_index":"github_issues","_type":"github_issue","_id":"152570","_score":2131600.0,"_source":{"id":152570,"github_repository_id":132376,"github_id":101212803,"number":273,"state":"open","title":"Add
+        support for React Native","body":"I attempted to use this package in an application
+        I started building using React Native, unfortunately it did not work.\r\n\r\nRequiring
+        the package causes the react packager to hang.\r\n```\r\nvar GitHubApi = require(\"github\");\r\n```\r\n\r\nPressing
+        Command-R in the simulator produces (after about a minute):\r\n```\r\nCould
+        not connect to the development server. Ensure node server is running and available
+        on the same network - run ''nom start'' from react-native root.\r\n\r\nURL:
+        http://localhost:8081/index.ios.bundle\r\n\r\nThe request timed out.\r\n```\r\n\r\nThe
+        packager hangs forever when attempting to debug.\r\n\r\nI am told that not
+        all packages run in React Native, mainly ones that designed specifically for
+        Node JS (express for example). ","github_user_id":164221,"locked":false,"comments_count":0,"closed_at":null,"labels":["help
+        wanted"],"created_at":"2015-08-15T21:55:49.000Z","updated_at":"2016-06-26T15:23:15.000Z","last_synced_at":"2016-07-12T20:07:18.039Z","pull_request":false,"contributions_count":100,"stars":1460,"language":"JavaScript","license":"MIT"},"sort":[0,1460,1439675749000,100]},{"_index":"github_issues","_type":"github_issue","_id":"1684839","_score":2096704.0,"_source":{"id":1684839,"github_repository_id":282333,"github_id":106617624,"number":448,"state":"open","title":"Testing
+        errors with in memory database","body":"In order to work around an issue with
+        locked sqlite tables on Rails 4.0 tests the database was switched to using
+        the in memory option for sqlite. I believe this is the cause of the random
+        crashes I am seeing both locally and with Travis. We should switch back to
+        using a traditional on disk database, however we need to fix the issue with
+        locked tables with Rails 4.0","github_user_id":29154,"locked":false,"comments_count":0,"closed_at":null,"labels":["bug","help
+        wanted"],"created_at":"2015-09-15T18:34:57.000Z","updated_at":"2015-09-15T18:34:57.000Z","last_synced_at":"2016-05-31T14:11:53.609Z","pull_request":false,"contributions_count":114,"stars":1448,"language":"Ruby","license":"MIT"},"sort":[0,1448,1442342097000,114]},{"_index":"github_issues","_type":"github_issue","_id":"705319","_score":1411344.0,"_source":{"id":705319,"github_repository_id":19886,"github_id":11719868,"number":50,"state":"open","title":"Validate
+        all inputs","body":"","github_user_id":56631,"locked":false,"comments_count":0,"closed_at":null,"labels":["help
+        wanted","request"],"created_at":"2013-03-06T16:25:57.000Z","updated_at":"2016-06-27T22:44:40.205Z","last_synced_at":"2016-06-27T22:44:40.184Z","pull_request":false,"contributions_count":28,"stars":1188,"language":"JavaScript","license":"BSD-3-Clause"},"sort":[0,1188,1362587157000,28]},{"_index":"github_issues","_type":"github_issue","_id":"704826","_score":1411344.0,"_source":{"id":704826,"github_repository_id":19886,"github_id":13133217,"number":63,"state":"open","title":"Document
+        browser API","body":"","github_user_id":56631,"locked":false,"comments_count":0,"closed_at":null,"labels":["documentation","help
+        wanted"],"created_at":"2013-04-12T18:28:05.000Z","updated_at":"2016-06-27T22:44:38.151Z","last_synced_at":"2016-06-27T22:44:38.130Z","pull_request":false,"contributions_count":28,"stars":1188,"language":"JavaScript","license":"BSD-3-Clause"},"sort":[0,1188,1365791285000,28]},{"_index":"github_issues","_type":"github_issue","_id":"879189","_score":1276900.0,"_source":{"id":879189,"github_repository_id":40951,"github_id":41833268,"number":245,"state":"open","title":"Mac:
+        Inconsistent fullscreen behaviour in (some?) multi-monitor setups","body":"`Gosu::screen_width`,
+        the new `Gosu::available_width` and `Gosu::Window` should all refer to the
+        same screen.\r\n\r\nIn a quick test with SDL 2.0.3 and SDL HEAD (as of today),
+        `[NSScreen screens][0]` and `SDL_GetDisplayMode(..., 0, ...)` both refer to
+        my laptop''s built-in screen. However fullscreen windows (and only fullscreen
+        windows!) are shown as a space on my external screen. This shouldn''t happen
+        - everything should either refer to screen 0, or the `CGMainDisplayID` or
+        whatever.\r\n\r\nThis might be an SDL bug, actually. Gosu uses `SDL_WINDOWPOS_CENTERED`
+        =  `SDL_WINDOWPOS_CENTERED_DISPLAY(0)`, which should not create a window on
+        display 1 (external screen).","github_user_id":70772,"locked":false,"comments_count":0,"closed_at":null,"labels":["graphics","help
+        wanted","platform-mac"],"created_at":"2014-09-03T16:04:22.000Z","updated_at":"2016-06-10T17:44:09.571Z","last_synced_at":"2016-06-10T17:44:09.544Z","pull_request":false,"contributions_count":17,"stars":1130,"language":"C++","license":"MIT"},"sort":[0,1130,1409760262000,17]},{"_index":"github_issues","_type":"github_issue","_id":"878788","_score":1276900.0,"_source":{"id":878788,"github_repository_id":40951,"github_id":54000603,"number":263,"state":"open","title":"Image#subimage
+        silently fails on tiled images","body":"tl;dr: `Gosu::Image.new(\"full_hd_wallpaper.png\").subimage(1,2,3,4)`
+        will always return `nil`\r\n\r\nBackground: Gosu internally splits up images
+        larger than 1024x1024 into several textures. These \"tiled\" `Gosu::Image`
+        instances do not support `#subimage`.\r\n\r\nA good first step would be to
+        raise an exception instead of silently returning `nil`.\r\n\r\nEven better
+        would be to just support it :)","github_user_id":70772,"locked":false,"comments_count":0,"closed_at":null,"labels":["enhancement","graphics","help
+        wanted","platform-linux","platform-mac","platform-rpi","platform-windows"],"created_at":"2015-01-11T18:52:32.000Z","updated_at":"2016-06-10T17:44:06.422Z","last_synced_at":"2016-06-10T17:44:06.399Z","pull_request":false,"contributions_count":17,"stars":1130,"language":"C++","license":"MIT"},"sort":[0,1130,1421002352000,17]},{"_index":"github_issues","_type":"github_issue","_id":"878708","_score":1276900.0,"_source":{"id":878708,"github_repository_id":40951,"github_id":58842985,"number":267,"state":"open","title":"draw_triangle()
+        inside record{} is broken","body":"This program should display the same triangle
+        no matter if the Tab key is down or not:\r\n\r\n```ruby\r\nrequire ''gosu''\r\n\r\nclass
+        GameWindow < Gosu::Window\r\n  def initialize\r\n     super 800, 600, false\r\n     @triangle
+        = record(width, height) do\r\n      draw_triangle(width/10, height/10, Gosu::Color::RED,\r\n                    width*9/10,
+        height/2, Gosu::Color::GREEN,\r\n                    width/2, height*9/10,
+        Gosu::Color::BLUE)\r\n    end\r\n  end\r\n\r\n  def draw\r\n    if button_down?
+        Gosu::KbTab\r\n      draw_triangle(width/10, height/10, Gosu::Color::RED,\r\n                    width*9/10,
+        height/2, Gosu::Color::GREEN,\r\n                    width/2, height*9/10,
+        Gosu::Color::BLUE)\r\n    else\r\n      @triangle.draw(0, 0, 10)\r\n    end\r\n  end\r\nend\r\n\r\nGameWindow.new.show\r\n```\r\n\r\nAs
+        reported here: http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=1178","github_user_id":70772,"locked":false,"comments_count":0,"closed_at":null,"labels":["graphics","help
+        wanted"],"created_at":"2015-02-25T02:57:34.000Z","updated_at":"2016-06-10T17:44:05.764Z","last_synced_at":"2016-06-10T17:44:05.741Z","pull_request":false,"contributions_count":17,"stars":1130,"language":"C++","license":"MIT"},"sort":[0,1130,1424833054000,17]},{"_index":"github_issues","_type":"github_issue","_id":"878236","_score":1276900.0,"_source":{"id":878236,"github_repository_id":40951,"github_id":102321234,"number":292,"state":"open","title":"OpenAL
+        warning on Ubuntu","body":"OpenAL on Ubuntu 15.04 complains because Gosu doesn''t
+        bother freeing all buffers individually on process exit... -_-\r\n\r\n> AL
+        lib: (WW) FreeDevice: (0x21b5810) Deleting 1 Buffer(s)\r\n","github_user_id":70772,"locked":false,"comments_count":0,"closed_at":null,"labels":["help
+        wanted","platform-linux"],"created_at":"2015-08-21T08:03:26.000Z","updated_at":"2016-06-10T17:44:01.573Z","last_synced_at":"2016-06-10T17:44:01.551Z","pull_request":false,"contributions_count":17,"stars":1130,"language":"C++","license":"MIT"},"sort":[0,1130,1440144206000,17]},{"_index":"github_issues","_type":"github_issue","_id":"878190","_score":1276900.0,"_source":{"id":878190,"github_repository_id":40951,"github_id":102549592,"number":294,"state":"open","title":"Bring
+        back Image#async_new","body":"Gosu needs more experimental features! - It
+        used to work, and it should be easy to bring it back.","github_user_id":70772,"locked":false,"comments_count":0,"closed_at":null,"labels":["enhancement","graphics","help
+        wanted"],"created_at":"2015-08-22T16:34:35.000Z","updated_at":"2016-06-10T17:44:01.196Z","last_synced_at":"2016-06-10T17:44:01.151Z","pull_request":false,"contributions_count":17,"stars":1130,"language":"C++","license":"MIT"},"sort":[0,1130,1440261275000,17]},{"_index":"github_issues","_type":"github_issue","_id":"9452891","_score":47961.0,"_source":{"id":9452891,"github_repository_id":163272,"github_id":156308240,"number":69,"state":"open","title":"Upgrade
+        lodash to version 4.13.1","body":"Libraries.io has found that there is a newer
+        version of lodash that this project depends on.\n\nMore info: https://libraries.io/npm/lodash/4.13.1","github_user_id":1060,"locked":false,"comments_count":0,"closed_at":null,"labels":["enhancement","help
+        wanted"],"created_at":"2016-05-23T16:07:03.000Z","updated_at":"2016-06-10T15:57:07.848Z","last_synced_at":"2016-06-10T15:57:07.825Z","pull_request":false,"contributions_count":14,"stars":219,"language":"JavaScript","license":"MIT"},"sort":[0,219,1464019623000,14]},{"_index":"github_issues","_type":"github_issue","_id":"4805","_score":28224.0,"_source":{"id":4805,"github_repository_id":822453,"github_id":145359937,"number":508,"state":"open","title":"Upgrade
+        to rails 5","body":"It''s not released yet but getting close, upgrade guide
+        here: https://medium.com/@tair/how-to-upgrade-to-rails-5-657b3bfd83#.9q30xygkw","github_user_id":1060,"locked":false,"comments_count":0,"closed_at":null,"labels":["help
+        wanted"],"created_at":"2016-04-02T10:25:33.000Z","updated_at":"2016-07-16T08:57:55.800Z","last_synced_at":"2016-07-16T08:57:55.779Z","pull_request":false,"contributions_count":15,"stars":168,"language":"Ruby","license":"AGPL-3.0"},"sort":[0,168,1459592733000,15]}]},"facets":{"language":{"_type":"terms","missing":0,"total":259,"other":0,"terms":[{"term":"JavaScript","count":187},{"term":"Ruby","count":48},{"term":"C++","count":18},{"term":"HTML","count":4},{"term":"CoffeeScript","count":2}]},"labels":{"_type":"terms","missing":0,"total":542,"other":27,"terms":[{"term":"help
+        wanted","count":259},{"term":"enhancement","count":82},{"term":"bug","count":21},{"term":"feature","count":20},{"term":"good
+        for beginner","count":13},{"term":"question","count":11},{"term":"docs","count":11},{"term":"documentation","count":10},{"term":"low
+        priority","count":8},{"term":"pending investigation","count":7},{"term":"javascript","count":6},{"term":"nockback","count":5},{"term":"gulp4","count":5},{"term":"graphics","count":5},{"term":"Convert
+        to PR","count":5},{"term":"ideas","count":4},{"term":"request","count":3},{"term":"plugin","count":3},{"term":"platform-mac","count":3},{"term":"platform-linux","count":3},{"term":"need
+        feedback","count":3},{"term":"Bug","count":3},{"term":"windows","count":2},{"term":"priority","count":2},{"term":"platform-windows","count":2},{"term":"platform-rpi","count":2},{"term":"performance","count":2},{"term":"input","count":2},{"term":"has
+        pr","count":2},{"term":"codebase","count":2},{"term":"babel","count":2},{"term":"audio","count":2},{"term":"assigned","count":2},{"term":"Feature
+        Request","count":2},{"term":"research","count":1}]},"license":{"_type":"terms","missing":4,"total":255,"other":0,"terms":[{"term":"MIT","count":232},{"term":"BSD-3-Clause","count":7},{"term":"Apache-2.0","count":7},{"term":"Other","count":6},{"term":"AGPL-3.0","count":3}]}}}'
+    http_version: 
+  recorded_at: Thu, 29 Dec 2016 11:47:16 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/projects/_count
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.10.0
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '59'
+    body:
+      encoding: UTF-8
+      string: '{"count":3,"_shards":{"total":1,"successful":1,"failed":0}}'
+    http_version: 
+  recorded_at: Thu, 29 Dec 2016 11:47:17 GMT
+recorded_with: VCR 3.0.3
