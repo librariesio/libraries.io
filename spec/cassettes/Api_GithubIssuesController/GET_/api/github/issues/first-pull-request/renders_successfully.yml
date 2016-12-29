@@ -308,5 +308,5 @@ http_interactions:
         2.3","count":1},{"term":"ruby 1.9","count":1},{"term":"jit","count":1},{"term":"java
         integration","count":1},{"term":"ir","count":1},{"term":"help wanted","count":1},{"term":"ffi","count":1},{"term":"encoding","count":1},{"term":"deprecated","count":1},{"term":"cext","count":1}]},"license":{"_type":"terms","missing":0,"total":75,"other":0,"terms":[{"term":"MIT","count":44},{"term":"Other","count":30},{"term":"Apache-2.0","count":1}]}}}'
     http_version: 
-  recorded_at: Wed, 28 Dec 2016 09:55:04 GMT
+  recorded_at: Thu, 29 Dec 2016 11:43:47 GMT
 recorded_with: VCR 3.0.3

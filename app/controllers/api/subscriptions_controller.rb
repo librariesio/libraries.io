@@ -24,7 +24,7 @@ class Api::SubscriptionsController < Api::ApplicationController
 
   def destroy
     @subscription.destroy!
-    render status: 204
+    head :no_content
   end
 
   private

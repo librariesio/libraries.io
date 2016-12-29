@@ -42,6 +42,16 @@ FactoryGirl.define do
     login 'rails'
   end
 
+  factory :subscription do
+    user
+    project
+  end
+
+  factory :repository_subscription do
+    user
+    github_repository
+  end
+
   factory :github_repository do
     full_name   'rails/rails'
     description 'Ruby on Rails'
@@ -60,6 +70,7 @@ FactoryGirl.define do
     email
     token { SecureRandom.hex }
     location { Faker::Address.country unless [0,1,2].sample == 0 }
+    public_repo_token { SecureRandom.hex }
   end
 
   factory :repository_permission do

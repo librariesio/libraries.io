@@ -2,11 +2,11 @@
 http_interactions:
 - request:
     method: put
-    uri: http://localhost:9200/github_repositories/github_repository/27
+    uri: http://localhost:9200/github_repositories/github_repository/28
     body:
       encoding: UTF-8
-      string: '{"id":27,"full_name":"rails/rails","owner_id":null,"description":"Ruby
-        on Rails","fork":false,"created_at":"2016-12-28T09:55:15.529Z","updated_at":"2016-12-28T09:55:15.529Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":28,"private":false,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
+      string: '{"id":28,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2016-12-29T11:43:56.715Z","updated_at":"2016-12-29T11:43:56.715Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":29,"private":false,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
     headers:
       User-Agent:
       - Faraday v0.10.0
@@ -25,16 +25,16 @@ http_interactions:
       - '101'
     body:
       encoding: UTF-8
-      string: '{"_index":"github_repositories","_type":"github_repository","_id":"27","_version":12,"created":false}'
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"28","_version":14,"created":false}'
     http_version: 
-  recorded_at: Wed, 28 Dec 2016 09:55:15 GMT
+  recorded_at: Thu, 29 Dec 2016 11:43:56 GMT
 - request:
     method: put
-    uri: http://localhost:9200/github_repositories/github_repository/27
+    uri: http://localhost:9200/github_repositories/github_repository/28
     body:
       encoding: UTF-8
-      string: '{"id":27,"full_name":"rails/rails","owner_id":null,"description":"Ruby
-        on Rails","fork":false,"created_at":"2016-12-28T09:55:15.529Z","updated_at":"2016-12-28T09:55:15.529Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":28,"private":false,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
+      string: '{"id":28,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2016-12-29T11:43:56.715Z","updated_at":"2016-12-29T11:43:56.715Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":29,"private":false,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
     headers:
       User-Agent:
       - Faraday v0.10.0
@@ -53,7 +53,7 @@ http_interactions:
       - '101'
     body:
       encoding: UTF-8
-      string: '{"_index":"github_repositories","_type":"github_repository","_id":"27","_version":13,"created":false}'
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"28","_version":15,"created":false}'
     http_version: 
-  recorded_at: Wed, 28 Dec 2016 09:55:15 GMT
+  recorded_at: Thu, 29 Dec 2016 11:43:56 GMT
 recorded_with: VCR 3.0.3
