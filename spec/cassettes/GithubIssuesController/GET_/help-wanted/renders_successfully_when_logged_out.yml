@@ -259,7 +259,7 @@ http_interactions:
         pr","count":2},{"term":"codebase","count":2},{"term":"babel","count":2},{"term":"audio","count":2},{"term":"assigned","count":2},{"term":"Feature
         Request","count":2},{"term":"research","count":1}]},"license":{"_type":"terms","missing":4,"total":255,"other":0,"terms":[{"term":"MIT","count":232},{"term":"BSD-3-Clause","count":7},{"term":"Apache-2.0","count":7},{"term":"Other","count":6},{"term":"AGPL-3.0","count":3}]}}}'
     http_version: 
-  recorded_at: Thu, 29 Dec 2016 11:47:16 GMT
+  recorded_at: Fri, 30 Dec 2016 16:00:58 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/_count
@@ -284,7 +284,7 @@ http_interactions:
       - '59'
     body:
       encoding: UTF-8
-      string: '{"count":3,"_shards":{"total":1,"successful":1,"failed":0}}'
+      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Thu, 29 Dec 2016 11:47:17 GMT
+  recorded_at: Fri, 30 Dec 2016 16:00:58 GMT
 recorded_with: VCR 3.0.3

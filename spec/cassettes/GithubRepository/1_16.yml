@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:9200/github_repositories/github_repository/1
     body:
       encoding: UTF-8
-      string: '{"id":1,"full_name":"a","owner_id":null,"description":null,"fork":null,"created_at":"2016-12-29T11:43:37.441Z","updated_at":"2016-12-29T11:43:37.441Z","pushed_at":null,"homepage":null,"size":null,"stargazers_count":null,"language":null,"has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":null,"private":null,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"a","keywords":[],"platforms":[]}'
+      string: '{"id":1,"full_name":"a","owner_id":null,"description":null,"fork":null,"created_at":"2016-12-30T16:00:45.615Z","updated_at":"2016-12-30T16:00:45.615Z","pushed_at":null,"homepage":null,"size":null,"stargazers_count":null,"language":null,"has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":null,"private":null,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"a","keywords":[],"platforms":[]}'
     headers:
       User-Agent:
       - Faraday v0.10.0
@@ -24,15 +24,15 @@ http_interactions:
       - '100'
     body:
       encoding: UTF-8
-      string: '{"_index":"github_repositories","_type":"github_repository","_id":"1","_version":85,"created":false}'
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"1","_version":87,"created":false}'
     http_version: 
-  recorded_at: Thu, 29 Dec 2016 11:43:37 GMT
+  recorded_at: Fri, 30 Dec 2016 16:00:45 GMT
 - request:
     method: put
     uri: http://localhost:9200/github_repositories/github_repository/1
     body:
       encoding: UTF-8
-      string: '{"id":1,"full_name":"a","owner_id":null,"description":null,"fork":null,"created_at":"2016-12-29T11:43:37.441Z","updated_at":"2016-12-29T11:43:37.441Z","pushed_at":null,"homepage":null,"size":null,"stargazers_count":null,"language":null,"has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":null,"private":null,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"a","keywords":[],"platforms":[]}'
+      string: '{"id":1,"full_name":"a","owner_id":null,"description":null,"fork":null,"created_at":"2016-12-30T16:00:45.615Z","updated_at":"2016-12-30T16:00:45.615Z","pushed_at":null,"homepage":null,"size":null,"stargazers_count":null,"language":null,"has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":null,"private":null,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"a","keywords":[],"platforms":[]}'
     headers:
       User-Agent:
       - Faraday v0.10.0
@@ -51,7 +51,7 @@ http_interactions:
       - '100'
     body:
       encoding: UTF-8
-      string: '{"_index":"github_repositories","_type":"github_repository","_id":"1","_version":86,"created":false}'
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"1","_version":88,"created":false}'
     http_version: 
-  recorded_at: Thu, 29 Dec 2016 11:43:37 GMT
+  recorded_at: Fri, 30 Dec 2016 16:00:45 GMT
 recorded_with: VCR 3.0.3

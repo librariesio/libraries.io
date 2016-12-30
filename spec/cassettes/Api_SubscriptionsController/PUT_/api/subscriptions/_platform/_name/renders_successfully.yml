@@ -5,10 +5,10 @@ http_interactions:
     uri: http://localhost:9200/projects/project/67
     body:
       encoding: UTF-8
-      string: '{"id":67,"name":"rails","platform":"Rubygems","created_at":"2016-12-29T11:43:48.623Z","updated_at":"2016-12-29T11:43:48.623Z","description":"Ruby
+      string: '{"id":67,"name":"rails","platform":"Rubygems","created_at":"2016-12-30T16:00:56.350Z","updated_at":"2016-12-30T16:00:56.350Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2016-12-29T11:43:48.623Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2016-12-30T16:00:56.350Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
       - Faraday v0.10.0
@@ -18,27 +18,27 @@ http_interactions:
       - ''
   response:
     status:
-      code: 200
-      message: OK
+      code: 201
+      message: Created
     headers:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '79'
+      - '78'
     body:
       encoding: UTF-8
-      string: '{"_index":"projects","_type":"project","_id":"67","_version":3,"created":false}'
+      string: '{"_index":"projects","_type":"project","_id":"67","_version":1,"created":true}'
     http_version: 
-  recorded_at: Thu, 29 Dec 2016 11:43:48 GMT
+  recorded_at: Fri, 30 Dec 2016 16:00:56 GMT
 - request:
     method: put
     uri: http://localhost:9200/projects/project/67
     body:
       encoding: UTF-8
-      string: '{"id":67,"name":"rails","platform":"Rubygems","created_at":"2016-12-29T11:43:48.623Z","updated_at":"2016-12-29T11:43:48.623Z","description":"Ruby
+      string: '{"id":67,"name":"rails","platform":"Rubygems","created_at":"2016-12-30T16:00:56.350Z","updated_at":"2016-12-30T16:00:56.350Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2016-12-29T11:43:48.623Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2016-12-30T16:00:56.350Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
       - Faraday v0.10.0
@@ -57,7 +57,7 @@ http_interactions:
       - '79'
     body:
       encoding: UTF-8
-      string: '{"_index":"projects","_type":"project","_id":"67","_version":4,"created":false}'
+      string: '{"_index":"projects","_type":"project","_id":"67","_version":2,"created":false}'
     http_version: 
-  recorded_at: Thu, 29 Dec 2016 11:43:48 GMT
+  recorded_at: Fri, 30 Dec 2016 16:00:56 GMT
 recorded_with: VCR 3.0.3

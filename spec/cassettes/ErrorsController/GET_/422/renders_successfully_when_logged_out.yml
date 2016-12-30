@@ -24,7 +24,7 @@ http_interactions:
       - '59'
     body:
       encoding: UTF-8
-      string: '{"count":3,"_shards":{"total":1,"successful":1,"failed":0}}'
+      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Thu, 29 Dec 2016 11:56:08 GMT
+  recorded_at: Fri, 30 Dec 2016 16:00:57 GMT
 recorded_with: VCR 3.0.3

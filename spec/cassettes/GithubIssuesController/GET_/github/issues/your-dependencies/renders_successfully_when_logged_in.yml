@@ -24,9 +24,9 @@ http_interactions:
       - '59'
     body:
       encoding: UTF-8
-      string: '{"count":3,"_shards":{"total":1,"successful":1,"failed":0}}'
+      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Thu, 29 Dec 2016 11:49:59 GMT
+  recorded_at: Fri, 30 Dec 2016 16:00:58 GMT
 - request:
     method: get
     uri: http://localhost:9200/github_issues/github_issue/_search?from=0&size=30
@@ -52,7 +52,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: !binary |-
-        eyJ0b29rIjoxNSwidGltZWRfb3V0IjpmYWxzZSwiX3NoYXJkcyI6eyJ0b3Rh
+        eyJ0b29rIjoxOCwidGltZWRfb3V0IjpmYWxzZSwiX3NoYXJkcyI6eyJ0b3Rh
         bCI6MSwic3VjY2Vzc2Z1bCI6MSwiZmFpbGVkIjowfSwiaGl0cyI6eyJ0b3Rh
         bCI6Mjc3NzgsIm1heF9zY29yZSI6Mi43NzU2MDM5N0U5LCJoaXRzIjpbeyJf
         aW5kZXgiOiJnaXRodWJfaXNzdWVzIiwiX3R5cGUiOiJnaXRodWJfaXNzdWUi
@@ -1175,7 +1175,7 @@ http_interactions:
         IlVubGljZW5zZSIsImNvdW50Ijo4fSx7InRlcm0iOiJXVEZQTCIsImNvdW50
         IjozfV19fX0=
     http_version: 
-  recorded_at: Thu, 29 Dec 2016 11:49:59 GMT
+  recorded_at: Fri, 30 Dec 2016 16:00:58 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/_count
@@ -1200,7 +1200,7 @@ http_interactions:
       - '59'
     body:
       encoding: UTF-8
-      string: '{"count":3,"_shards":{"total":1,"successful":1,"failed":0}}'
+      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Thu, 29 Dec 2016 11:49:59 GMT
+  recorded_at: Fri, 30 Dec 2016 16:00:58 GMT
 recorded_with: VCR 3.0.3
