@@ -54,4 +54,13 @@ module SourcerankHelper
       recently_pushed:            'Pushed to within the past 6 months?'
     }
   end
+
+  def negative_factors
+    [:is_removed, :is_unmaintained, :is_deprecated, :any_outdated_dependencies, :all_prereleases]
+  end
+
+  def skip_showing_if_zero?(key, value)
+    return false unless negative_factors.include?(key)
+    value == 0
+  end
 end

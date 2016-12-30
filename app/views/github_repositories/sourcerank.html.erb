@@ -14,6 +14,7 @@
       <%= render 'adsense/banner' %>
       <ul class="list-group">
         <% @breakdown.each do |key, value| %>
+          <% next if skip_showing_if_zero?(key, value) %>
           <li class="list-group-item">
             <span class="badge <%= source_rank_badge_class(value) %>">
               <%= value %>
