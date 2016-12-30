@@ -4,9 +4,6 @@ describe "ProjectSuggestionsController", :vcr do
   let(:user) { create(:user) }
   let(:project) { create(:project) }
 
-  # get '/:platform/:name/suggestions', to: 'project_suggestions#new', as: :project_suggestions, constraints: { :name => /.*/ }
-  # post '/:platform/:name/suggestions', to: 'project_suggestions#create', constraints: { :name => /.*/ }
-
   describe "GET /:platform/:name/suggestions", type: :request do
     it "redirects to /login" do
       get project_suggestions_path(project.to_param)

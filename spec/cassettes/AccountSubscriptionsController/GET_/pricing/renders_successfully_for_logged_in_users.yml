@@ -26,7 +26,7 @@ http_interactions:
       encoding: UTF-8
       string: '{"count":61,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Fri, 30 Dec 2016 16:00:50 GMT
+  recorded_at: Fri, 30 Dec 2016 16:07:15 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/_count
@@ -53,5 +53,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"count":61,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Fri, 30 Dec 2016 16:00:50 GMT
+  recorded_at: Fri, 30 Dec 2016 16:07:15 GMT
 recorded_with: VCR 3.0.3
