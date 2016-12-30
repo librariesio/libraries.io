@@ -162,7 +162,6 @@
       <%= render 'adsense/banner' %>
       <%== @github_repository.readme %>
       <% end %>
-      <%= render 'adsense/banner' %>
       <div class="row">
         <% cache([@project, @version, 'dependents:v3'], :expires_in => 1.day) do  %>
           <% dependents = @project.dependent_projects.limit(10) %>

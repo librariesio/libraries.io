@@ -15,7 +15,6 @@
     <% if @dependents.any? %>
       <%= render @dependents, cache: true %>
       <%= will_paginate @dependents, page_links: false %>
-      <%= render 'adsense/banner' %>
     <% else %>
       <p>
         No projects found, go back to <%= link_to @project, project_path(@project.to_param) %>.

@@ -22,7 +22,6 @@
         <%= fa_icon "rss-square" %>
         Subscribe to an RSS feed of <%= @project %> releases
       <% end %>
-      <%= render 'adsense/banner' %>
     <% else %>
       <p>
         No tags found, go back to <%= link_to @project, project_path(@project.to_param) %>.
