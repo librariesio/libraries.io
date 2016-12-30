@@ -8,7 +8,7 @@ if Rails.env.production?
   SitemapGenerator::Sitemap.sitemaps_host = "https://#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com/"
 end
 
-SitemapGenerator::Sitemap.create(:create_index => false) do
+SitemapGenerator::Sitemap.create(:create_index => true) do
   projects = lambda {
     group = sitemap.group(:filename => :projects, :sitemaps_path => 'sitemaps/projects') do
       Project.not_removed.find_each do |project|
@@ -105,9 +105,7 @@ SitemapGenerator::Sitemap.create(:create_index => false) do
   Parallel.each([projects, orgs, users, repos, misc]) do |group|
     group.call
   end
-end
 
-SitemapGenerator::Sitemap.create do
   Dir.chdir(sitemap.public_path.to_s)
   xml_files      = File.join("**", "sitemaps", "**", "*.xml.gz")
   xml_file_paths = Dir.glob(xml_files)
