@@ -149,7 +149,7 @@ GEM
       railties (>= 3.0.0)
     faker (1.7.1)
       i18n (~> 0.5)
-    faraday (0.10.0)
+    faraday (0.10.1)
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (2.0.0)
       faraday (~> 0.8)
