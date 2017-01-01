@@ -94,6 +94,7 @@ group :test do
   gem 'poltergeist'
   gem 'json_spec'
   gem 'mocha'
+  gem 'rspec-sidekiq'
 end
 
 group :production do
