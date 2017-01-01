@@ -211,7 +211,7 @@ class ApplicationController < ActionController::Base
         latest: dependency.try(:project).try(:latest_release_number),
         deprecated: dependency.try(:project).try(:is_deprecated?),
         outdated: dependency.outdated?,
-        filepath: dependency.manifest.filepath,
+        filepath: dependency.try(:manifest).try(:filepath),
         kind: dependency.manifest.kind
       }
     end
