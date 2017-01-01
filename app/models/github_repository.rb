@@ -342,4 +342,61 @@ class GithubRepository < ApplicationRecord
   rescue ActiveRecord::RecordNotUnique
     nil
   end
+
+  def self.check_status(repo_full_name, removed = false)
+    response = Typhoeus.head("https://github.com/#{repo_full_name}")
+
+    if response.response_code == 404
+      repo = GithubRepository.includes(:projects).find_by_full_name(repo_full_name)
+      if repo
+        status = removed ? nil : 'Removed'
+        repo.update_attribute(:status, status) if !repo.private?
+        repo.projects.each do |project|
+          next unless ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].include?(project.platform.downcase)
+          project.update_attribute(:status, status)
+        end
+      end
+    end
+  end
+
+  def self.update_from_hook(github_id, sender_id)
+    github_repository = GithubRepository.find_by_github_id(github_id)
+    user = User.find_by_uid(sender_id)
+    if user.present? && github_repository.present?
+      github_repository.download_manifests(user.token)
+      github_repository.update_all_info_async(user.token)
+    end
+  end
+
+  def self.update_from_star(repo_name, token = nil)
+    token = token || AuthToken.token
+
+    github_repository = GithubRepository.find_by_full_name(repo_name)
+    if github_repository
+      github_repository.increment!(:stargazers_count)
+    else
+      GithubRepository.create_from_github(repo_name, token)
+    end
+  end
+
+  def self.update_from_tag(repo_name, token = nil)
+    token = token || AuthToken.token
+
+    github_repository = GithubRepository.find_by_full_name(repo_name)
+    if github_repository
+      github_repository.download_tags(token)
+    else
+      GithubRepository.create_from_github(repo_name, token)
+    end
+  end
+
+  def self.update_from_name(repo_name, token = nil)
+    token = token || AuthToken.token
+    github_repository = GithubRepository.find_by_full_name(repo_name)
+    if github_repository
+      github_repository.update_from_github
+    else
+      GithubRepository.create_from_github(repo_name, token)
+    end
+  end
 end

@@ -3,14 +3,6 @@ class GithubIssueWorker
   sidekiq_options queue: :low, unique: :until_executed
 
   def perform(name_with_owner, issue_number, token = nil)
-    begin
-      token = token || AuthToken.token
-      repo = GithubRepository.create_from_github(name_with_owner, token)
-      return unless repo
-      issue_hash = AuthToken.fallback_client(token).issue(repo.full_name, issue_number)
-      GithubIssue.create_from_hash(repo, issue_hash)
-    rescue Octokit::NotFound, Octokit::ClientError
-      nil
-    end
+    GithubIssue.update_from_github(name_with_owner, issue_number, token)
   end
 end
