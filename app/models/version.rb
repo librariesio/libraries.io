@@ -98,4 +98,8 @@ class Version < ApplicationRecord
   def to_param
     project.to_param.merge(number: number)
   end
+
+  def load_dependencies_tree(kind, date)
+    TreeResolver.new(self, kind, date).load_dependencies_tree
+  end
 end
