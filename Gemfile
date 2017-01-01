@@ -93,7 +93,6 @@ group :test do
   gem 'faker'
   gem 'poltergeist'
   gem 'json_spec'
-  gem 'mocha'
   gem 'rspec-sidekiq'
 end
 

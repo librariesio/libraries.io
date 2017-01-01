@@ -22,6 +22,13 @@ FactoryGirl.define do
     published_at 1.day.ago
   end
 
+  factory :github_tag do
+    github_repository
+    name '1.0.0'
+    sha  { SecureRandom.hex }
+    published_at 1.day.ago
+  end
+
   factory :project_suggestion do
     project
     user

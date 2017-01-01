@@ -8,7 +8,7 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.10.0
+      - Faraday v0.10.1
       Accept-Encoding:
       - gzip,deflate
       Expect:
@@ -24,9 +24,9 @@ http_interactions:
       - '59'
     body:
       encoding: UTF-8
-      string: '{"count":3,"_shards":{"total":1,"successful":1,"failed":0}}'
+      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Fri, 30 Dec 2016 16:11:39 GMT
+  recorded_at: Sun, 01 Jan 2017 18:37:10 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/_count
@@ -35,7 +35,7 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.10.0
+      - Faraday v0.10.1
       Accept-Encoding:
       - gzip,deflate
       Expect:
@@ -51,7 +51,7 @@ http_interactions:
       - '59'
     body:
       encoding: UTF-8
-      string: '{"count":3,"_shards":{"total":1,"successful":1,"failed":0}}'
+      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Fri, 30 Dec 2016 16:11:39 GMT
+  recorded_at: Sun, 01 Jan 2017 18:37:10 GMT
 recorded_with: VCR 3.0.3

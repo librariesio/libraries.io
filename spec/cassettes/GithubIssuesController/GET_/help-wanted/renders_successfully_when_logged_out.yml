@@ -11,7 +11,7 @@ http_interactions:
         wanted"}}]}}}},"filter":{"bool":{"must":[{"term":{"labels":"help wanted"}}],"must_not":[]}},"track_scores":true,"sort":[{"comments_count":"asc"},{"stars":"desc"},{"created_at":"asc"},{"contributions_count":"asc"}]}'
     headers:
       User-Agent:
-      - Faraday v0.10.0
+      - Faraday v0.10.1
       Accept-Encoding:
       - gzip,deflate
       Expect:
@@ -259,7 +259,7 @@ http_interactions:
         pr","count":2},{"term":"codebase","count":2},{"term":"babel","count":2},{"term":"audio","count":2},{"term":"assigned","count":2},{"term":"Feature
         Request","count":2},{"term":"research","count":1}]},"license":{"_type":"terms","missing":4,"total":255,"other":0,"terms":[{"term":"MIT","count":232},{"term":"BSD-3-Clause","count":7},{"term":"Apache-2.0","count":7},{"term":"Other","count":6},{"term":"AGPL-3.0","count":3}]}}}'
     http_version: 
-  recorded_at: Fri, 30 Dec 2016 16:07:25 GMT
+  recorded_at: Sun, 01 Jan 2017 18:37:02 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/_count
@@ -268,7 +268,7 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.10.0
+      - Faraday v0.10.1
       Accept-Encoding:
       - gzip,deflate
       Expect:
@@ -286,5 +286,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Fri, 30 Dec 2016 16:07:25 GMT
+  recorded_at: Sun, 01 Jan 2017 18:37:02 GMT
 recorded_with: VCR 3.0.3

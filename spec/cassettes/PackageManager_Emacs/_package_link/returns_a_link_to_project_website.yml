@@ -5,13 +5,13 @@ http_interactions:
     uri: http://localhost:9200/projects/project/19
     body:
       encoding: UTF-8
-      string: '{"id":19,"name":"foo","platform":"PackageManager::Emacs","created_at":"2016-12-30T16:07:11.709Z","updated_at":"2016-12-30T16:07:11.709Z","description":"Ruby
+      string: '{"id":19,"name":"foo","platform":"PackageManager::Emacs","created_at":"2017-01-01T18:36:51.561Z","updated_at":"2017-01-01T18:36:51.561Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2016-12-30T16:07:11.709Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"foo","github_contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-01T18:36:51.561Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"foo","github_contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
-      - Faraday v0.10.0
+      - Faraday v0.10.1
       Accept-Encoding:
       - gzip,deflate
       Expect:
@@ -29,19 +29,19 @@ http_interactions:
       encoding: UTF-8
       string: '{"_index":"projects","_type":"project","_id":"19","_version":1,"created":true}'
     http_version: 
-  recorded_at: Fri, 30 Dec 2016 16:07:11 GMT
+  recorded_at: Sun, 01 Jan 2017 18:36:51 GMT
 - request:
     method: put
     uri: http://localhost:9200/projects/project/19
     body:
       encoding: UTF-8
-      string: '{"id":19,"name":"foo","platform":"PackageManager::Emacs","created_at":"2016-12-30T16:07:11.709Z","updated_at":"2016-12-30T16:07:11.709Z","description":"Ruby
+      string: '{"id":19,"name":"foo","platform":"PackageManager::Emacs","created_at":"2017-01-01T18:36:51.561Z","updated_at":"2017-01-01T18:36:51.561Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2016-12-30T16:07:11.709Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"foo","github_contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-01T18:36:51.561Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"foo","github_contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
-      - Faraday v0.10.0
+      - Faraday v0.10.1
       Accept-Encoding:
       - gzip,deflate
       Expect:
@@ -59,5 +59,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"_index":"projects","_type":"project","_id":"19","_version":2,"created":false}'
     http_version: 
-  recorded_at: Fri, 30 Dec 2016 16:07:11 GMT
+  recorded_at: Sun, 01 Jan 2017 18:36:51 GMT
 recorded_with: VCR 3.0.3

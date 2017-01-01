@@ -8,7 +8,7 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.10.0
+      - Faraday v0.10.1
       Accept-Encoding:
       - gzip,deflate
       Expect:
@@ -26,7 +26,7 @@ http_interactions:
       encoding: UTF-8
       string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Fri, 30 Dec 2016 16:07:26 GMT
+  recorded_at: Sun, 01 Jan 2017 18:37:03 GMT
 - request:
     method: get
     uri: http://localhost:9200/github_issues/github_issue/_search?from=0&size=30
@@ -35,7 +35,7 @@ http_interactions:
       string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"term":{"state":"open"}},{"term":{"locked":false}}],"must_not":[{"term":{"labels":"wontfix"}}]}}}},"field_value_factor":{"field":"stars","modifier":"square"}}},"facets":{"language":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"labels":{"terms":{"field":"labels","size":35},"facet_filter":{"bool":{"must":[]}}},"license":{"terms":{"field":"license","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[],"must_not":[]}},"track_scores":true,"sort":[{"comments_count":"asc"},{"stars":"desc"},{"created_at":"asc"},{"contributions_count":"asc"}]}'
     headers:
       User-Agent:
-      - Faraday v0.10.0
+      - Faraday v0.10.1
       Accept-Encoding:
       - gzip,deflate
       Expect:
@@ -52,7 +52,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: !binary |-
-        eyJ0b29rIjoxMSwidGltZWRfb3V0IjpmYWxzZSwiX3NoYXJkcyI6eyJ0b3Rh
+        eyJ0b29rIjoxMiwidGltZWRfb3V0IjpmYWxzZSwiX3NoYXJkcyI6eyJ0b3Rh
         bCI6MSwic3VjY2Vzc2Z1bCI6MSwiZmFpbGVkIjowfSwiaGl0cyI6eyJ0b3Rh
         bCI6Mjc3NzgsIm1heF9zY29yZSI6Mi43NzU2MDM5N0U5LCJoaXRzIjpbeyJf
         aW5kZXgiOiJnaXRodWJfaXNzdWVzIiwiX3R5cGUiOiJnaXRodWJfaXNzdWUi
@@ -1175,7 +1175,7 @@ http_interactions:
         IlVubGljZW5zZSIsImNvdW50Ijo4fSx7InRlcm0iOiJXVEZQTCIsImNvdW50
         IjozfV19fX0=
     http_version: 
-  recorded_at: Fri, 30 Dec 2016 16:07:26 GMT
+  recorded_at: Sun, 01 Jan 2017 18:37:03 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/_count
@@ -1184,7 +1184,7 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.10.0
+      - Faraday v0.10.1
       Accept-Encoding:
       - gzip,deflate
       Expect:
@@ -1202,5 +1202,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Fri, 30 Dec 2016 16:07:26 GMT
+  recorded_at: Sun, 01 Jan 2017 18:37:03 GMT
 recorded_with: VCR 3.0.3
