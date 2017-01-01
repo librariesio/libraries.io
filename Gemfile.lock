@@ -490,7 +490,7 @@ DEPENDENCIES
   jquery-rails
   js_cookie_rails
   json_spec
-  languages
+  languages (= 1.4.9)
   license-compatibility
   lograge
   mail
