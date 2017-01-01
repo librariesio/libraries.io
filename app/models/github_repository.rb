@@ -202,7 +202,7 @@ class GithubRepository < ApplicationRecord
 
   def update_from_github(token = nil)
     begin
-      r = github_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
+      r = AuthToken.new_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
       return unless r.present?
       self.github_id = r[:id] unless self.github_id == r[:id]
        if self.full_name.downcase != r[:full_name].downcase

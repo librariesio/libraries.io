@@ -1,6 +1,6 @@
 class UpdateRepositorySourceRankWorker
   include Sidekiq::Worker
-  sidekiq_options :queue => :low, unique: :until_executed
+  sidekiq_options queue: :low, unique: :until_executed
 
   def perform(github_repository_id)
     repo = GithubRepository.find_by_id(github_repository_id)
