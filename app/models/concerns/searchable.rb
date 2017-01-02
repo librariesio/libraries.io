@@ -136,6 +136,29 @@ module Searchable
       }
     end
 
+    def self.lookup_multiple(platform, names)
+      search_definition = {
+        query: {
+          filtered: {
+             query: {match_all: {}},
+             filter:{
+               bool: {
+                 must: [
+                   {
+                     term: { "platform" => platform }
+                   }
+                 ],
+                 should: names.map do |name|
+                   { term: { "exact_name": name } }
+                 end
+              }
+            }
+          }
+        }
+      }
+      __elasticsearch__.search(search_definition)
+    end
+
     def self.search(original_query, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
       query = sanitize_query(original_query)
