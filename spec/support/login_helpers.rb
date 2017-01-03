@@ -11,11 +11,6 @@ module LoginHelpers
         nickname: user.nickname,
         email:    user.email
       },
-      extra:       {
-        raw_info: {
-          gravatar_id: user.gravatar_id
-        }
-      },
       credentials: {
         token: user.token
       }

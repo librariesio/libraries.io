@@ -13,11 +13,9 @@ class AuthHash
       uid:         uid,
       nickname:    nickname,
       email:       email,
-      gravatar_id: gravatar_id
     }
     h.merge!(public_repo_token: public_repo_token) if public_repo_token.present?
     h.merge!(private_repo_token: private_repo_token) if private_repo_token.present?
-    h.merge!(token_upgrade: false) if public_repo_token.present? || private_repo_token.present?
     h
   end
 
@@ -41,20 +39,8 @@ class AuthHash
     info.fetch('email', nil)
   end
 
-  def gravatar_id
-    raw_info.fetch('gravatar_id', nil)
-  end
-
   def name
     raw_info.fetch('name', nil)
-  end
-
-  def blog
-    raw_info.fetch('blog', nil)
-  end
-
-  def location
-    raw_info.fetch('location', nil)
   end
 
   def token

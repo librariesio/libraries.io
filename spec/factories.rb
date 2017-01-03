@@ -76,7 +76,6 @@ FactoryGirl.define do
     nickname { Faker::Name.name.parameterize }
     email
     token { SecureRandom.hex }
-    location { Faker::Address.country unless [0,1,2].sample == 0 }
     public_repo_token { SecureRandom.hex }
   end
 

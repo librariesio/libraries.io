@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   include Recommendable
 
+  has_many :identities, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
   has_many :subscribed_projects, through: :subscriptions, source: :project
   has_many :repository_subscriptions, dependent: :destroy
