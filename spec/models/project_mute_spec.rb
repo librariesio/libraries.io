@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ProjectMute do
+describe ProjectMute, type: :model do
   subject { FactoryGirl.build(:project_mute) }
 
   it { should belong_to(:user) }

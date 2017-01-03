@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-describe ApiKey do
+describe ApiKey, type: :model do
   it { should belong_to(:user) }
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Dependency do
+describe Dependency, type: :model do
   it { should belong_to(:version) }
   it { should belong_to(:project) }
 

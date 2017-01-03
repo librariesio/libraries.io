@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ProjectSuggestion do
+describe ProjectSuggestion, type: :model do
   it { should belong_to(:user) }
   it { should belong_to(:project) }
 

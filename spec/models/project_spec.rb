@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Project, :vcr do
+describe Project, :vcr, type: :model do
   it { should have_many(:versions) }
   it { should have_many(:dependencies) }
   it { should have_many(:github_contributions) }

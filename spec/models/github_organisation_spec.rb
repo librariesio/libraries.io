@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe GithubOrganisation do
+describe GithubOrganisation, type: :model do
   it { should have_many(:github_repositories) }
   it { should have_many(:source_github_repositories) }
   it { should have_many(:open_source_github_repositories) }

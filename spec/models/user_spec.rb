@@ -1,8 +1,6 @@
-
-# has_one :github_user, primary_key: :uid, foreign_key: :github_id
 require 'rails_helper'
 
-describe User do
+describe User, type: :model do
   it { should have_many(:subscriptions) }
   it { should have_many(:subscribed_projects) }
   it { should have_many(:repository_subscriptions) }
