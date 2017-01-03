@@ -21,6 +21,10 @@ class Admin::StatsController < Admin::ApplicationController
     @new_orgs           = stats_for(GithubOrganisation)
   end
 
+  def overview
+
+  end
+
   private
 
   def stats_for(klass)

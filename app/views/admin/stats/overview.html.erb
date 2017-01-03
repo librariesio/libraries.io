@@ -1,0 +1,59 @@
+<%= render 'admin/nav' %>
+<% title 'Stats - Libraries' %>
+<div class="row">
+  <div class="col-md-6">
+    <h2>
+      <%= number_to_human User.fast_total %> Users
+    </h2>
+
+    <h2>
+      <%= number_to_human Project.fast_total %> Projects
+    </h2>
+
+    <h2>
+      <%= number_to_human Version.fast_total %> Versions
+    </h2>
+
+    <h2>
+      <%= number_to_human Dependency.fast_total %> Dependencies
+    </h2>
+
+    <h2>
+      <%= number_to_human Subscription.fast_total %> Subscriptions
+    </h2>
+
+    <h2>
+      <%= number_to_human Manifest.fast_total %> Manifests
+    </h2>
+
+    <h2>
+      <%= number_to_human RepositoryDependency.fast_total %> Repository Dependencies
+    </h2>
+  </div>
+
+  <div class="col-md-6">
+    <h2>
+      <%= number_to_human GithubRepository.fast_total %> Github Repositories
+    </h2>
+
+    <h2>
+      <%= number_to_human GithubUser.fast_total %> Github Users
+    </h2>
+
+    <h2>
+      <%= number_to_human GithubOrganisation.fast_total %> Github Orgs
+    </h2>
+
+    <h2>
+      <%= number_to_human GithubContribution.fast_total %> Github Contributions
+    </h2>
+
+    <h2>
+      <%= number_to_human GithubTag.fast_total %> Github Tags
+    </h2>
+
+    <h2>
+      <%= number_to_human RepositoryPermission.fast_total %> Repository Permissions
+    </h2>
+  </div>
+</div>
