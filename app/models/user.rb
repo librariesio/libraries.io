@@ -150,7 +150,7 @@ class User < ApplicationRecord
   def github_settings_url
     if private_repo_token.present?
       key = ENV['GITHUB_PRIVATE_KEY']
-    elsif
+    elsif public_repo_token.present?
       key = ENV['GITHUB_PUBLIC_KEY']
     else
       key = ENV['GITHUB_KEY']
@@ -158,18 +158,9 @@ class User < ApplicationRecord
     "https://github.com/settings/connections/applications/#{key}"
   end
 
-  def self.create_from_auth_hash(hash)
-    create!(AuthHash.new(hash).user_info)
-  end
-
-  def assign_from_auth_hash(hash)
+  def assign_from_github_auth_hash(hash)
     ignored_fields = new_record? ? [] : %i(email)
-    update_attributes(AuthHash.new(hash).user_info.except(*ignored_fields))
-  end
-
-  def self.find_by_auth_hash(hash)
-    conditions = AuthHash.new(hash).user_info.slice(:provider, :uid)
-    where(conditions).first
+    update_attributes(GithubAuthHash.new(hash).user_info.except(*ignored_fields))
   end
 
   def token

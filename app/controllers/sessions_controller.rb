@@ -17,15 +17,27 @@ class SessionsController < ApplicationController
   end
 
   def create
-    auth_hash = request.env['omniauth.auth']
-    user      = User.find_by_auth_hash(auth_hash) || User.new
+    auth = request.env['omniauth.auth']
 
-    user.assign_from_auth_hash(auth_hash)
+    identity = Identity.find_with_omniauth(auth)
+
+    if identity.nil?
+      identity = Identity.create_with_omniauth(auth)
+    else
+      # update identity
+    end
+
+    if identity.user.nil?
+      user = identity.find_existing_user || User.new
+      user.assign_from_github_auth_hash(auth)
+      identity.user = user
+      identity.save
+    end
 
     flash[:notice] = nil
-    session[:user_id] = user.id
+    session[:user_id] = identity.user.id
 
-    user.update_repo_permissions_async
+    user.update_repo_permissions_async if identity.provider =~ /github/
 
     redirect_to(root_path) && return unless pre_login_destination
     redirect_to pre_login_destination
