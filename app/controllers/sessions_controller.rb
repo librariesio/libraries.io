@@ -37,7 +37,7 @@ class SessionsController < ApplicationController
     flash[:notice] = nil
     session[:user_id] = identity.user.id
 
-    identity.user.update_repo_permissions_async if identity.provider =~ /github/
+    identity.user.update_repo_permissions_async
 
     redirect_to(root_path) && return unless pre_login_destination
     redirect_to pre_login_destination
