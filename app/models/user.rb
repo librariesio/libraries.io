@@ -42,11 +42,6 @@ class User < ApplicationRecord
   validates_presence_of :email, :on => :update
   validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
 
-  def your_dependent_repos(project)
-    ids = really_all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
-    all_github_repositories.where(id: ids).order('fork ASC, pushed_at DESC, stargazers_count DESC')
-  end
-
   def all_subscribed_projects
     Project.where(id: all_subscribed_project_ids)
   end

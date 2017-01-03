@@ -74,4 +74,9 @@ module Monitoring
   def can_read?(github_repository)
     repository_permissions.where(github_repository: github_repository).where(pull: true).any?
   end
+
+  def your_dependent_repos(project)
+    ids = really_all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
+    all_github_repositories.where(id: ids).order('fork ASC, pushed_at DESC, stargazers_count DESC')
+  end
 end
