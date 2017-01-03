@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170103144658) do
+ActiveRecord::Schema.define(version: 20170103160707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -178,8 +178,12 @@ ActiveRecord::Schema.define(version: 20170103144658) do
     t.string   "uid"
     t.string   "provider"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.string   "token"
+    t.string   "nickname"
+    t.string   "public_repo_token"
+    t.string   "private_repo_token"
   end
 
   create_table "manifests", force: :cascade do |t|

@@ -14,4 +14,8 @@ class Identity < ApplicationRecord
     return nil unless provider =~ /github/
     User.find_by_uid(uid)
   end
+
+  def update_from_auth_hash(auth)
+    # save extra fields from auth hash
+  end
 end
