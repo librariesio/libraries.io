@@ -1,6 +1,6 @@
-class AuthHash
+class GithubAuthHash
   def self.extract_user_info(hash)
-    AuthHash.new(hash).user_info
+    GithubAuthHash.new(hash).user_info
   end
 
   def initialize(user_hash)
