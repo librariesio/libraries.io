@@ -1,9 +1,10 @@
 module GithubIdentity
   def hidden
-    github_user.hidden
+    github_user.try(:hidden)
   end
 
   def hidden=(val)
+    return unless github_user
     github_user.update_attributes(hidden: val)
   end
 
