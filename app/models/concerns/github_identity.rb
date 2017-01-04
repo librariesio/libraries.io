@@ -13,8 +13,10 @@ module GithubIdentity
       key = ENV['GITHUB_PRIVATE_KEY']
     elsif public_repo_token.present?
       key = ENV['GITHUB_PUBLIC_KEY']
-    else
+    elsif github_token.present?
       key = ENV['GITHUB_KEY']
+    else
+      return nil
     end
     "https://github.com/settings/connections/applications/#{key}"
   end
@@ -36,6 +38,7 @@ module GithubIdentity
   end
 
   def update_repo_permissions
+    return unless token
     self.update_column(:currently_syncing, true)
     download_orgs
     r = github_client.repos
@@ -74,11 +77,13 @@ module GithubIdentity
   end
 
   def download_self
+    return unless token
     GithubUser.create_from_github(OpenStruct.new({id: self.uid, login: self.nickname, type: 'User'}))
     GithubUpdateUserWorker.perform_async(nickname)
   end
 
   def download_orgs
+    return unless token
     github_client.orgs.each do |org|
       GithubCreateOrgWorker.perform_async(org.login)
     end
@@ -87,7 +92,7 @@ module GithubIdentity
   end
 
   def token
-    private_repo_token.presence || public_repo_token.presence || read_attribute(:token)
+    private_repo_token.presence || public_repo_token.presence || github_token
   end
 
   def uid
@@ -96,6 +101,10 @@ module GithubIdentity
 
   def public_repo_token
     github_public_identity.try(:token).presence || read_attribute(:public_repo_token)
+  end
+
+  def github_token
+    github_identity.try(:token).presence || read_attribute(:token)
   end
 
   def github_identity
