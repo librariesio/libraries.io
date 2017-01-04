@@ -178,12 +178,10 @@ ActiveRecord::Schema.define(version: 20170103160707) do
     t.string   "uid"
     t.string   "provider"
     t.integer  "user_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string   "token"
     t.string   "nickname"
-    t.string   "public_repo_token"
-    t.string   "private_repo_token"
   end
 
   create_table "manifests", force: :cascade do |t|
