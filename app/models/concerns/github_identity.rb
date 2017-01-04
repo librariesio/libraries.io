@@ -30,7 +30,7 @@ module GithubIdentity
 
     user_hash = {
       uid:         hash.fetch('uid'),
-      nickname:    'github-' + hash.fetch('info', {}).fetch('nickname'),
+      nickname:    "github-#{hash.fetch('info', {}).fetch('nickname')}",
       email:       hash.fetch('info', {}).fetch('email', nil),
     }
 
@@ -81,8 +81,8 @@ module GithubIdentity
   end
 
   def download_self
-    return unless token
-    GithubUser.create_from_github(OpenStruct.new({id: self.uid, login: self.nickname, type: 'User'}))
+    return unless github_identity
+    GithubUser.create_from_github(OpenStruct.new({id: github_identity.uid, login: github_identity.nickname, type: 'User'}))
     GithubUpdateUserWorker.perform_async(nickname)
   end
 

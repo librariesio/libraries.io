@@ -79,6 +79,13 @@ FactoryGirl.define do
     public_repo_token { SecureRandom.hex }
   end
 
+  factory :identity do
+    user
+    nickname { Faker::Name.name.parameterize }
+    token { SecureRandom.hex }
+    avatar_url { "http://github.com/#{Faker::Name.name.parameterize}.png" }
+  end
+
   factory :repository_permission do
     user
     github_repository
