@@ -15,7 +15,9 @@ class Identity < ApplicationRecord
     User.find_by_uid(uid)
   end
 
-  def update_from_auth_hash(auth)
-    # save extra fields from auth hash
+  def update_from_auth_hash(auth_hash)
+    self.token = auth_hash.fetch('credentials', {}).fetch('token')
+    self.nickname = auth_hash.fetch('info', {}).fetch('nickname')
+    self.save
   end
 end

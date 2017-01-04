@@ -27,15 +27,24 @@ class SessionsController < ApplicationController
 
     identity.update_from_auth_hash(auth)
 
-    if identity.user.nil?
-      user = identity.find_existing_user || User.new
-      user.assign_from_github_auth_hash(auth)
-      identity.user = user
-      identity.save
-    end
+    if current_user
+      if identity.user.nil?
+        identity.user = current_user
+        identity.save
+      else
+        flash[:notice] = 'Already connected'
+      end
+    else
+      if identity.user.nil?
+        user = identity.find_existing_user || User.new
+        user.assign_from_github_auth_hash(auth)
+        identity.user = user
+        identity.save
+      end
 
-    flash[:notice] = nil
-    session[:user_id] = identity.user.id
+      flash[:notice] = nil
+      session[:user_id] = identity.user.id
+    end
 
     identity.user.update_repo_permissions_async
 

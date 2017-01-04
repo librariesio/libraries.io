@@ -20,7 +20,14 @@ module GithubIdentity
 
   def assign_from_github_auth_hash(hash)
     ignored_fields = new_record? ? [] : %i(email)
-    update_attributes(GithubAuthHash.new(hash).user_info.except(*ignored_fields))
+
+    user_hash = {
+      uid:         hash.fetch('uid'),
+      nickname:    hash.fetch('info', {}).fetch('nickname'),
+      email:       hash.fetch('info', {}).fetch('email', nil),
+    }
+
+    update_attributes(user_hash.except(*ignored_fields))
   end
 
   def update_repo_permissions_async
@@ -80,6 +87,30 @@ module GithubIdentity
 
   def token
     private_repo_token.presence || public_repo_token.presence || read_attribute(:token)
+  end
+
+  def uid
+    github_identity.try(:uid).presence || read_attribute(:uid)
+  end
+
+  def public_repo_token
+    github_public_identity.try(:token).presence || read_attribute(:public_repo_token)
+  end
+
+  def github_identity
+    identities.find_by_provider('github')
+  end
+
+  def github_public_identity
+    identities.find_by_provider('githubpublic')
+  end
+
+  def private_repo_token
+    github_private_identity.try(:token).presence || read_attribute(:private_repo_token)
+  end
+
+  def github_private_identity
+    identities.find_by_provider('githubprivate')
   end
 
   def github_client
