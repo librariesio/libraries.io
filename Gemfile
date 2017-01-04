@@ -66,6 +66,7 @@ gem 'highscore'
 gem 'fast-stemmer'
 gem 'bloomfilter-rb'
 gem 'omniauth-gitlab'
+gem 'omniauth-bitbucket'
 
 group :development do
   gem 'bundler'

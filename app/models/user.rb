@@ -2,6 +2,7 @@ class User < ApplicationRecord
   include Recommendable
   include GithubIdentity
   include GitlabIdentity
+  include BitbucketIdentity
   include Monitoring
 
   has_many :identities, dependent: :destroy
@@ -49,6 +50,8 @@ class User < ApplicationRecord
       assign_from_github_auth_hash(hash)
     when 'gitlab'
       assign_from_gitlab_auth_hash(hash)
+    when 'bitbucket'
+      assign_from_bitbucket_auth_hash(hash)
     end
   end
 
