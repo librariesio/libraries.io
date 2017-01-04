@@ -1,8 +1,6 @@
 class User < ApplicationRecord
   include Recommendable
   include GithubIdentity
-  include GitlabIdentity
-  include BitbucketIdentity
   include Monitoring
 
   has_many :identities, dependent: :destroy
@@ -45,14 +43,8 @@ class User < ApplicationRecord
   validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
 
   def assign_from_auth_hash(hash)
-    case hash.provider
-    when 'github', 'githubprivate', 'githubpublic'
-      assign_from_github_auth_hash(hash)
-    when 'gitlab'
-      assign_from_gitlab_auth_hash(hash)
-    when 'bitbucket'
-      assign_from_bitbucket_auth_hash(hash)
-    end
+    return unless new_record?
+    update_attributes({email: hash.fetch('info', {}).fetch('email', nil)})
   end
 
   def avatar_url(size = 60)
@@ -60,7 +52,7 @@ class User < ApplicationRecord
   end
 
   def nickname
-    identities.first.try(:nickname)
+    identities.first.try(:nickname).presence || read_attribute(:nickname)
   end
 
   def all_subscribed_projects

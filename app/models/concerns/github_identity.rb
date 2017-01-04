@@ -25,18 +25,6 @@ module GithubIdentity
     "https://github.com/settings/connections/applications/#{key}"
   end
 
-  def assign_from_github_auth_hash(hash)
-    ignored_fields = new_record? ? [] : %i(email)
-
-    user_hash = {
-      uid:         hash.fetch('uid'),
-      nickname:    "github-#{hash.fetch('info', {}).fetch('nickname')}",
-      email:       hash.fetch('info', {}).fetch('email', nil),
-    }
-
-    update_attributes(user_hash.except(*ignored_fields))
-  end
-
   def update_repo_permissions_async
     SyncPermissionsWorker.perform_async(self.id)
   end
