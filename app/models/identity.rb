@@ -17,7 +17,7 @@ class Identity < ApplicationRecord
 
   def update_from_auth_hash(auth_hash)
     self.token = auth_hash.fetch('credentials', {}).fetch('token')
-    self.nickname = auth_hash.fetch('info', {}).fetch('nickname')
+    # self.nickname = auth_hash.fetch('info', {}).fetch('nickname')
     self.save
   end
 end

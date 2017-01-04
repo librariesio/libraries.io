@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   include Recommendable
   include GithubIdentity
+  include GitlabIdentity
   include Monitoring
 
   has_many :identities, dependent: :destroy
@@ -42,6 +43,15 @@ class User < ApplicationRecord
   validates_presence_of :email, :on => :update
   validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
 
+  def assign_from_auth_hash(hash)
+    case hash.provider
+    when 'github', 'githubprivate', 'githubpublic'
+      assign_from_github_auth_hash(hash)
+    when 'gitlab'
+      assign_from_gitlab_auth_hash(hash)
+    end
+  end
+
   def all_subscribed_projects
     Project.where(id: all_subscribed_project_ids)
   end
@@ -63,7 +73,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    ADMIN_USERS.include?(nickname)
+    github_enabled? && ADMIN_USERS.include?(nickname)
   end
 
   def create_api_key

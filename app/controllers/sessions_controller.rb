@@ -37,7 +37,7 @@ class SessionsController < ApplicationController
     else
       if identity.user.nil?
         user = identity.find_existing_user || User.new
-        user.assign_from_github_auth_hash(auth)
+        user.assign_from_auth_hash(auth)
         identity.user = user
         identity.save
       end

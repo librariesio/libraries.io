@@ -265,6 +265,9 @@ GEM
     omniauth-github (1.1.2)
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.1)
+    omniauth-gitlab (1.0.2)
+      omniauth (~> 1.0)
+      omniauth-oauth2 (~> 1.0)
     omniauth-oauth2 (1.4.0)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
@@ -505,6 +508,7 @@ DEPENDENCIES
   octokit
   oj
   omniauth-github
+  omniauth-gitlab
   parallel
   payola-payments!
   pg

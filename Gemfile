@@ -65,6 +65,7 @@ gem 'parallel', require: nil
 gem 'highscore'
 gem 'fast-stemmer'
 gem 'bloomfilter-rb'
+gem 'omniauth-gitlab'
 
 group :development do
   gem 'bundler'

@@ -1,4 +1,8 @@
 module GithubIdentity
+  def github_enabled?
+    token
+  end
+
   def hidden
     github_user.try(:hidden)
   end
