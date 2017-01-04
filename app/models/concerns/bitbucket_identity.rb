@@ -4,7 +4,7 @@ module BitbucketIdentity
 
     user_hash = {
       uid:         hash.fetch('uid'),
-      nickname:    hash.fetch('uid'),
+      nickname:    'bitbucket-' + hash.fetch('uid'),
       email:       hash.fetch('info', {}).fetch('email', nil),
     }
 

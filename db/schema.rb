@@ -182,6 +182,7 @@ ActiveRecord::Schema.define(version: 20170103160707) do
     t.datetime "updated_at", null: false
     t.string   "token"
     t.string   "nickname"
+    t.string   "avatar_url"
   end
 
   create_table "manifests", force: :cascade do |t|

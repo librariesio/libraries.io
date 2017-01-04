@@ -30,7 +30,7 @@ module GithubIdentity
 
     user_hash = {
       uid:         hash.fetch('uid'),
-      nickname:    hash.fetch('info', {}).fetch('nickname'),
+      nickname:    'github-' + hash.fetch('info', {}).fetch('nickname'),
       email:       hash.fetch('info', {}).fetch('email', nil),
     }
 

@@ -55,6 +55,14 @@ class User < ApplicationRecord
     end
   end
 
+  def avatar_url(size = 60)
+    identities.first.try(:avatar_url, size)
+  end
+
+  def nickname
+    identities.first.try(:nickname)
+  end
+
   def all_subscribed_projects
     Project.where(id: all_subscribed_project_ids)
   end

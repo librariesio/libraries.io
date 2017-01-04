@@ -4,7 +4,7 @@ module GitlabIdentity
 
     user_hash = {
       uid:         hash.fetch('uid'),
-      nickname:    hash.fetch('info', {}).fetch('username'),
+      nickname:    'gitlab-' + hash.fetch('info', {}).fetch('username'),
       email:       hash.fetch('info', {}).fetch('email', nil),
     }
 
