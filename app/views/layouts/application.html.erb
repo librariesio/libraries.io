@@ -118,13 +118,30 @@
               </ul>
             </li>
           <% else %>
-          <li>
-            <p class="navbar-btn">
-              <%= link_to login_path(return_to: request.original_url), class: 'btn btn-success', rel: 'nofollow' do %>
-                <%= fa_icon('github') %> Login
-              <% end %>
-            </p>
-          </li>
+            <li>
+              <div class="navbar-btn btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Login <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/auth/github">
+                      <%= fa_icon('github') %> GitHub
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/auth/gitlab">
+                      <%= fa_icon('gitlab') %> GitLab
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/auth/bitbucket">
+                      <%= fa_icon('bitbucket') %> Bitbucket
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
           <% end %>
         </ul>
       </div>

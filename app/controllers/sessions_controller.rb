@@ -2,8 +2,7 @@ class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create, :failure]
 
   def new
-    session[:pre_login_destination] = params[:return_to] if params[:return_to].present?
-    redirect_to "/auth/github"
+
   end
 
   def enable_public

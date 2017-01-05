@@ -19,7 +19,7 @@ module LoginHelpers
 
   def login(user)
     mock_github_auth(user)
-    visit login_path
+    visit '/auth/github'
   end
 end
 

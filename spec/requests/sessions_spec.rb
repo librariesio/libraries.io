@@ -3,8 +3,8 @@ require "rails_helper"
 describe "SessionsController", :vcr do
   describe "GET /login", type: :request do
     it "redirects to github" do
-      get login_path
-      expect(response).to redirect_to('/auth/github')
+      visit login_path
+      expect(page).to have_content 'Login to Libraries.io'
     end
   end
 
