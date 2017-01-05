@@ -48,7 +48,7 @@ class User < ApplicationRecord
   end
 
   def avatar_url(size = 60)
-    identities.first.try(:avatar_url, size)
+    identities.first.try(:avatar_url, size) || github_avatar_url(size)
   end
 
   def nickname

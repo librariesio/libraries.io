@@ -119,7 +119,7 @@ module GithubIdentity
     AuthToken.new_client(token)
   end
 
-  def avatar_url(size = 60)
+  def github_avatar_url(size = 60)
     "https://avatars.githubusercontent.com/u/#{uid}?size=#{size}"
   end
 
