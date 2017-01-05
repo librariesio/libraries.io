@@ -69,7 +69,7 @@ class GithubIssue < ApplicationRecord
   end
 
   def self.update_from_github(name_with_owner, issue_number, token = nil)
-    token = token || AuthToken.token
+    token ||= AuthToken.token
     repo = GithubRepository.create_from_github(name_with_owner, token)
     return unless repo
     issue_hash = AuthToken.fallback_client(token).issue(repo.full_name, issue_number)

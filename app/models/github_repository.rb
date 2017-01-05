@@ -369,7 +369,7 @@ class GithubRepository < ApplicationRecord
   end
 
   def self.update_from_star(repo_name, token = nil)
-    token = token || AuthToken.token
+    token ||= AuthToken.token
 
     github_repository = GithubRepository.find_by_full_name(repo_name)
     if github_repository
@@ -380,7 +380,7 @@ class GithubRepository < ApplicationRecord
   end
 
   def self.update_from_tag(repo_name, token = nil)
-    token = token || AuthToken.token
+    token ||= AuthToken.token
 
     github_repository = GithubRepository.find_by_full_name(repo_name)
     if github_repository
@@ -391,7 +391,7 @@ class GithubRepository < ApplicationRecord
   end
 
   def self.update_from_name(repo_name, token = nil)
-    token = token || AuthToken.token
+    token ||= AuthToken.token
     github_repository = GithubRepository.find_by_full_name(repo_name)
     if github_repository
       github_repository.update_from_github
