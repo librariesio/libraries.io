@@ -72,15 +72,16 @@ FactoryGirl.define do
   end
 
   factory :user do
-    sequence(:uid)
-    nickname { Faker::Name.name.parameterize }
     email
-    token { SecureRandom.hex }
-    public_repo_token { SecureRandom.hex }
+    after(:create) do |user, evaluator|
+      create(:identity, user: user)
+    end
   end
 
   factory :identity do
     user
+    sequence(:uid)
+    provider 'github'
     nickname { Faker::Name.name.parameterize }
     token { SecureRandom.hex }
     avatar_url { "http://github.com/#{Faker::Name.name.parameterize}.png" }

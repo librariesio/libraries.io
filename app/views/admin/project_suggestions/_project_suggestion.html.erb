@@ -3,7 +3,7 @@
   <%= link_to project_suggestion.project, project_path(project_suggestion.project.to_param) %>
   <% if project_suggestion.user %>
     <small>
-      By <%= link_to project_suggestion.user, user_path(project_suggestion.user.nickname) %>
+      By <%= link_to project_suggestion.user, mail_to(project_suggestion.user.email) %>
       <%= timeago_tag project_suggestion.created_at %>
     </small>
   <% end %>

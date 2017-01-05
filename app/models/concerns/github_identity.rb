@@ -87,16 +87,12 @@ module GithubIdentity
     private_repo_token.presence || public_repo_token.presence || github_token
   end
 
-  def uid
-    github_identity.try(:uid).presence || read_attribute(:uid)
-  end
-
   def public_repo_token
-    github_public_identity.try(:token).presence || read_attribute(:public_repo_token)
+    github_public_identity.try(:token)
   end
 
   def github_token
-    github_identity.try(:token).presence || read_attribute(:token)
+    github_identity.try(:token)
   end
 
   def github_identity
@@ -108,7 +104,7 @@ module GithubIdentity
   end
 
   def private_repo_token
-    github_private_identity.try(:token).presence || read_attribute(:private_repo_token)
+    github_private_identity.try(:token)
   end
 
   def github_private_identity
@@ -117,10 +113,6 @@ module GithubIdentity
 
   def github_client
     AuthToken.new_client(token)
-  end
-
-  def github_avatar_url(size = 60)
-    "https://avatars.githubusercontent.com/u/#{uid}?size=#{size}"
   end
 
   def github_url
