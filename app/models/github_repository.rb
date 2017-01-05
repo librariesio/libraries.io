@@ -229,6 +229,7 @@ class GithubRepository < ApplicationRecord
   end
 
   def update_all_info(token = nil)
+    token ||= AuthToken.token
     previous_pushed_at = self.pushed_at
     update_from_github(token)
     if (previous_pushed_at.nil? && self.pushed_at) || (self.pushed_at && previous_pushed_at < self.pushed_at)
