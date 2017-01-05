@@ -15,7 +15,7 @@ module PackageManager
     end
 
     def self.install_instructions(project, version = nil)
-      "haxelib install #{project.name} " + (version ? " #{version}" : "")
+      "haxelib install #{project.name} #{version}"
     end
 
     def self.project_names

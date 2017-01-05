@@ -2,43 +2,13 @@
 http_interactions:
 - request:
     method: put
-    uri: http://localhost:9200/projects/project/33
+    uri: http://localhost:9200/projects/project/47
     body:
       encoding: UTF-8
-      string: '{"id":33,"name":"foo","platform":"PackageManager::Homebrew","created_at":"2017-01-01T20:04:42.399Z","updated_at":"2017-01-01T20:04:42.399Z","description":"Ruby
+      string: '{"id":47,"name":"foo","platform":"PackageManager::Homebrew","created_at":"2017-01-05T09:42:48.771Z","updated_at":"2017-01-05T09:42:48.771Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-01T20:04:42.399Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"foo","github_contributions_count":0,"pushed_at":null}'
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 201
-      message: Created
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '78'
-    body:
-      encoding: UTF-8
-      string: '{"_index":"projects","_type":"project","_id":"33","_version":1,"created":true}'
-    http_version: 
-  recorded_at: Sun, 01 Jan 2017 20:04:42 GMT
-- request:
-    method: put
-    uri: http://localhost:9200/projects/project/33
-    body:
-      encoding: UTF-8
-      string: '{"id":33,"name":"foo","platform":"PackageManager::Homebrew","created_at":"2017-01-01T20:04:42.399Z","updated_at":"2017-01-01T20:04:42.399Z","description":"Ruby
-        on Rails is a full-stack web framework optimized for programmer happiness
-        and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-01T20:04:42.399Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"foo","github_contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:42:48.771Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"foo","github_contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -57,7 +27,37 @@ http_interactions:
       - '79'
     body:
       encoding: UTF-8
-      string: '{"_index":"projects","_type":"project","_id":"33","_version":2,"created":false}'
+      string: '{"_index":"projects","_type":"project","_id":"47","_version":7,"created":false}'
     http_version: 
-  recorded_at: Sun, 01 Jan 2017 20:04:42 GMT
+  recorded_at: Thu, 05 Jan 2017 09:42:48 GMT
+- request:
+    method: put
+    uri: http://localhost:9200/projects/project/47
+    body:
+      encoding: UTF-8
+      string: '{"id":47,"name":"foo","platform":"PackageManager::Homebrew","created_at":"2017-01-05T09:42:48.771Z","updated_at":"2017-01-05T09:42:48.771Z","description":"Ruby
+        on Rails is a full-stack web framework optimized for programmer happiness
+        and sustainable productivity. It encourages beautiful code by favoring convention
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:42:48.771Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"foo","github_contributions_count":0,"pushed_at":null}'
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '79'
+    body:
+      encoding: UTF-8
+      string: '{"_index":"projects","_type":"project","_id":"47","_version":8,"created":false}'
+    http_version: 
+  recorded_at: Thu, 05 Jan 2017 09:42:48 GMT
 recorded_with: VCR 3.0.3
