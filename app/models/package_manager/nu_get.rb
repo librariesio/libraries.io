@@ -54,13 +54,13 @@ module PackageManager
     end
 
     def self.get_releases(name)
-      latest_version = PackageManager::NuGet.get_json("https://api.nuget.org/v3/registration1/#{name.downcase}/index.json")
+      latest_version = get_json("https://api.nuget.org/v3/registration1/#{name.downcase}/index.json")
       releases = latest_version['items'][0]['items']
 
       if releases.nil?
         releases = []
         latest_version['items'].each do |page|
-          json = PackageManager::NuGet.get_json(page['@id'])
+          json = get_json(page['@id'])
           releases << json['items']
         end
         releases.flatten!

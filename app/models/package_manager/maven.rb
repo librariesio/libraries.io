@@ -30,7 +30,7 @@ module PackageManager
       end
 
       (1..num).to_a.reverse.each do |number|
-        page = PackageManager::Maven.get_html "https://maven-repository.com/artifact/latest?page=#{number}"
+        page = get_html "https://maven-repository.com/artifact/latest?page=#{number}"
         page.css('tr')[1..-1].each do |tr|
           REDIS.sadd 'maven-names', tr.css('td')[0..1].map(&:text).join(':')
         end
@@ -43,7 +43,7 @@ module PackageManager
     end
 
     def self.recent_names
-      page = PackageManager::Maven.get_html "https://maven-repository.com/artifact/latest?page=1"
+      page = get_html "https://maven-repository.com/artifact/latest?page=1"
       page.css('tr')[1..-1].map do |tr|
         tr.css('td')[0..1].map(&:text).join(':')
       end.uniq

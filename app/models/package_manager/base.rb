@@ -73,7 +73,7 @@ module PackageManager
       end
     end
 
-    def self.save(project, include_versions = true)
+    def self.save(project)
       mapped_project = mapping(project).delete_if { |_key, value| value.blank? }
       return false unless mapped_project
       puts "Saving #{mapped_project[:name]}"
@@ -85,7 +85,7 @@ module PackageManager
         dbproject.update_attributes(mapped_project.except(:name, :releases))
       end
 
-      if include_versions && self::HAS_VERSIONS
+      if self::HAS_VERSIONS
         versions(project).each do |version|
           dbproject.versions.find_or_create_by(version)
         end
@@ -100,9 +100,9 @@ module PackageManager
       dbproject
     end
 
-    def self.update(name, include_versions = true)
+    def self.update(name)
       begin
-        save(project(name), include_versions)
+        save(project(name))
       rescue SystemExit, Interrupt
         exit 0
       rescue Exception
@@ -111,23 +111,27 @@ module PackageManager
     end
 
     def self.import_async
-      project_names.each { |name| PackageManagerDownloadWorker.perform_async(self.name.demodulize, name) }
+      download_async(project_names)
     end
 
     def self.import_recent_async
-      recent_names.each { |name| PackageManagerDownloadWorker.perform_async(self.name.demodulize, name) }
+      download_async(recent_names)
     end
 
     def self.import_new_async
-      new_names.each { |name| PackageManagerDownloadWorker.perform_async(self.name.demodulize, name) }
+      download_async(new_names)
     end
 
-    def self.import(include_versions = true)
-      project_names.each { |name| update(name, include_versions) }
+    def self.import
+      project_names.each { |name| update(name) }
     end
 
     def self.import_recent
       recent_names.each { |name| update(name) }
+    end
+
+    def self.import_new
+      new_names.each { |name| update(name) }
     end
 
     def self.new_names
@@ -135,10 +139,6 @@ module PackageManager
       existing_names = []
       Project.platform(self.name.demodulize).select(:id, :name).find_each {|project| existing_names << project.name }
       names - existing_names
-    end
-
-    def self.import_new
-      new_names.each { |name| update(name) }
     end
 
     def self.save_dependencies(mapped_project)
@@ -185,6 +185,22 @@ module PackageManager
       end
     end
 
+    def self.repo_fallback(repo, homepage)
+      repo = '' if repo.nil?
+      homepage = '' if homepage.nil?
+      repo_gh = GithubUrls.parse(repo)
+      homepage_gh = GithubUrls.parse(homepage)
+      if repo_gh.present?
+        return "https://github.com/#{repo_gh}"
+      elsif homepage_gh.present?
+        return "https://github.com/#{homepage_gh}"
+      else
+        repo
+      end
+    end
+
+    private
+
     def self.get(url, options = {})
       Oj.load(get_raw(url, options))
     end
@@ -211,18 +227,8 @@ module PackageManager
       get(url, headers: { 'Accept' => "application/json"})
     end
 
-    def self.repo_fallback(repo, homepage)
-      repo = '' if repo.nil?
-      homepage = '' if homepage.nil?
-      repo_gh = GithubUrls.parse(repo)
-      homepage_gh = GithubUrls.parse(homepage)
-      if repo_gh.present?
-        return "https://github.com/#{repo_gh}"
-      elsif homepage_gh.present?
-        return "https://github.com/#{homepage_gh}"
-      else
-        repo
-      end
+    def self.download_async(names)
+      names.each { |name| PackageManagerDownloadWorker.perform_async(self.name.demodulize, name) }
     end
   end
 end
