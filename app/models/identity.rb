@@ -10,18 +10,13 @@ class Identity < ApplicationRecord
     create(uid: auth['uid'], provider: auth['provider'])
   end
 
-  def find_existing_user
-    return nil unless provider =~ /github/
-    User.find_by_uid(uid)
-  end
-
   def update_from_auth_hash(auth_hash)
     self.token = auth_hash.fetch('credentials', {}).fetch('token')
 
     case auth_hash['provider']
     when 'github'
       self.nickname   = auth_hash.fetch('info', {}).fetch('nickname')
-      self.avatar_url = "https://avatars1.githubusercontent.com/u/#{self.uid}?v=3"
+      self.avatar_url = "https://avatars1.githubusercontent.com/u/#{self.uid}"
     when 'gitlab'
       self.nickname   = auth_hash.fetch('info', {}).fetch('username')
       self.avatar_url = auth_hash.fetch('info', {}).fetch('image')

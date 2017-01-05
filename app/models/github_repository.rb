@@ -361,7 +361,7 @@ class GithubRepository < ApplicationRecord
 
   def self.update_from_hook(github_id, sender_id)
     github_repository = GithubRepository.find_by_github_id(github_id)
-    user = User.find_by_uid(sender_id)
+    user = Identity.where('provider ILIKE ?', 'github%').where(uid: sender_id).first.try(:user)
     if user.present? && github_repository.present?
       github_repository.download_manifests(user.token)
       github_repository.update_all_info_async(user.token)
