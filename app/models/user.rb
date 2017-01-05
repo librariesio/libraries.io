@@ -13,21 +13,20 @@ class User < ApplicationRecord
   has_many :adminable_repository_permissions, -> { where admin: true }, anonymous_class: RepositoryPermission
   has_many :adminable_github_repositories, through: :adminable_repository_permissions, source: :github_repository
   has_many :adminable_github_orgs, -> { group('github_organisations.id') }, through: :adminable_github_repositories, source: :github_organisation
-  has_many :github_repositories, primary_key: :uid, foreign_key: :owner_id
   has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
+  has_many :public_github_repositories, -> { where private: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
 
   has_many :watched_github_repositories, source: :github_repository, through: :repository_subscriptions
   has_many :watched_dependencies, through: :watched_github_repositories, source: :dependencies
   has_many :watched_dependent_projects, -> { group('projects.id') }, through: :watched_dependencies, source: :project
 
   has_many :dependencies, through: :source_github_repositories
-  has_many :all_dependencies, through: :github_repositories, source: :dependencies
+  has_many :all_dependencies, through: :public_github_repositories, source: :dependencies
   has_many :really_all_dependencies, through: :all_github_repositories, source: :dependencies
   has_many :all_dependent_projects, -> { group('projects.id') }, through: :all_dependencies, source: :project
   has_many :all_dependent_repos, -> { group('github_repositories.id') }, through: :all_dependent_projects, source: :github_repository
 
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
-  has_one :github_user, primary_key: :uid, foreign_key: :github_id
 
   has_many :project_mutes, dependent: :delete_all
   has_many :muted_projects, through: :project_mutes, source: :project
@@ -45,10 +44,6 @@ class User < ApplicationRecord
   def assign_from_auth_hash(hash)
     return unless new_record?
     update_attributes({email: hash.fetch('info', {}).fetch('email', nil)})
-  end
-
-  def uid
-    identities.first.uid
   end
 
   def avatar_url(size = 60)

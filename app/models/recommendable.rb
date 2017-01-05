@@ -51,7 +51,7 @@ module Recommendable
   def favourite_languages(limit = 3)
     @favourite_languages ||= begin
       # your github Repositories
-      languages = github_repositories.pluck(:language).compact
+      languages = all_github_repositories.pluck(:language).compact
 
       # repositories you've contributed to
       languages += github_user.contributed_repositories.pluck(:language).compact if github_user.present?

@@ -3,6 +3,11 @@ module GithubIdentity
     token
   end
 
+  def github_user
+    return unless github_enabled?
+    GithubUser.find_by_id(github_identity.uid)
+  end
+
   def hidden
     github_user.try(:hidden)
   end

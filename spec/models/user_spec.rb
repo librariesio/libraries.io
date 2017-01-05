@@ -10,7 +10,6 @@ describe User, type: :model do
   it { should have_many(:adminable_repository_permissions) }
   it { should have_many(:adminable_github_repositories) }
   it { should have_many(:adminable_github_orgs) }
-  it { should have_many(:github_repositories) }
   it { should have_many(:source_github_repositories) }
   it { should have_many(:watched_github_repositories) }
   it { should have_many(:watched_dependencies) }
@@ -24,8 +23,6 @@ describe User, type: :model do
   it { should have_many(:muted_projects) }
   it { should have_many(:payola_subscriptions) }
   it { should have_many(:project_suggestions) }
-
-  it { should have_one(:github_user) }
 
   it { should validate_presence_of(:email).on(:update) }
 end
