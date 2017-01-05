@@ -17,9 +17,19 @@ describe PackageManager::Cargo, :vcr do
     end
   end
 
-  describe 'download_url' do
+  describe '#download_url' do
     it 'returns a link to project tarball' do
       expect(described_class.download_url('foo', '1.0.0')).to eq("https://crates.io/api/v1/crates/foo/1.0.0/download")
+    end
+  end
+
+  describe '#documentation_url' do
+    it 'returns a link to project website' do
+      expect(described_class.documentation_url('foo')).to eq("https://docs.rs/foo/")
+    end
+
+    it 'handles version' do
+      expect(described_class.documentation_url('foo', '2.0.0')).to eq("https://docs.rs/foo/2.0.0")
     end
   end
 end

@@ -2,6 +2,10 @@ require 'rails_helper'
 
 describe PackageManager::Jam do
   it 'has formatted name of "Jam"' do
-    expect(PackageManager::Jam.formatted_name).to eq('Jam')
+    expect(described_class.formatted_name).to eq('Jam')
+  end
+
+  it 'is hidden' do
+    expect(described_class::HIDDEN).to be true
   end
 end

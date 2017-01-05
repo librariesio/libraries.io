@@ -16,4 +16,14 @@ describe PackageManager::Go, :vcr do
       expect(described_class.package_link(project, '2.0.0')).to eq("http://go-search.org/view?id=foo")
     end
   end
+
+  describe '#documentation_url' do
+    it 'returns a link to project website' do
+      expect(described_class.documentation_url('foo')).to eq("http://godoc.org/foo")
+    end
+
+    it 'ignores version' do
+      expect(described_class.documentation_url('foo', '2.0.0')).to eq("http://godoc.org/foo")
+    end
+  end
 end

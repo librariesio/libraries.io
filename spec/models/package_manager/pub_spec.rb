@@ -22,4 +22,14 @@ describe PackageManager::Pub, :vcr do
       expect(described_class.download_url('foo', '1.0.0')).to eq("https://storage.googleapis.com/pub.dartlang.org/packages/foo-1.0.0.tar.gz")
     end
   end
+
+  describe '#documentation_url' do
+    it 'returns a link to project website' do
+      expect(described_class.documentation_url('foo')).to eq("http://www.dartdocs.org/documentation/foo/")
+    end
+
+    it 'handles version' do
+      expect(described_class.documentation_url('foo', '2.0.0')).to eq("http://www.dartdocs.org/documentation/foo/2.0.0")
+    end
+  end
 end

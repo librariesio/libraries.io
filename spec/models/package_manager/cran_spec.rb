@@ -22,4 +22,10 @@ describe PackageManager::CRAN, :vcr do
       expect(described_class.download_url('foo', '1.0.0')).to eq("https://cran.r-project.org/src/contrib/foo_1.0.0.tar.gz")
     end
   end
+
+  describe '#documentation_url' do
+    it 'returns a link to project website' do
+      expect(described_class.documentation_url('foo')).to eq("http://cran.r-project.org/web/packages/foo/foo.pdf")
+    end
+  end
 end

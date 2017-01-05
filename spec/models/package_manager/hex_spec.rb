@@ -22,4 +22,14 @@ describe PackageManager::Hex, :vcr do
       expect(described_class.download_url('foo', '1.0.0')).to eq("https://repo.hex.pm/tarballs/foo-1.0.0.tar")
     end
   end
+
+  describe '#documentation_url' do
+    it 'returns a link to project website' do
+      expect(described_class.documentation_url('foo')).to eq("http://hexdocs.pm/foo/")
+    end
+
+    it 'handles version' do
+      expect(described_class.documentation_url('foo', '2.0.0')).to eq("http://hexdocs.pm/foo/2.0.0")
+    end
+  end
 end
