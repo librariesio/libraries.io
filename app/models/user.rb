@@ -1,6 +1,9 @@
 class User < ApplicationRecord
   include Recommendable
+  include GithubIdentity
+  include Monitoring
 
+  has_many :identities, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
   has_many :subscribed_projects, through: :subscriptions, source: :project
   has_many :repository_subscriptions, dependent: :destroy
@@ -32,10 +35,6 @@ class User < ApplicationRecord
   has_many :payola_subscriptions, anonymous_class: Payola::Subscription, as: :owner
   has_many :project_suggestions
 
-  scope :with_subscription, -> { joins(:payola_subscriptions) }
-  scope :with_public_token, -> { where("users.public_repo_token <> ''") }
-  scope :with_private_token, -> { where("users.private_repo_token <> ''") }
-
   after_commit :update_repo_permissions_async, :download_self, :create_api_key, on: :create
 
   ADMIN_USERS = ['andrew', 'BenJam']
@@ -43,63 +42,17 @@ class User < ApplicationRecord
   validates_presence_of :email, :on => :update
   validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
 
-  def has_active_subscription?
-    active_subscription.present?
+  def assign_from_auth_hash(hash)
+    return unless new_record?
+    update_attributes({email: hash.fetch('info', {}).fetch('email', nil)})
   end
 
-  def hidden
-    github_user.hidden
+  def avatar_url(size = 60)
+    identities.first.try(:avatar_url, size)
   end
 
-  def hidden=(val)
-    github_user.update_attributes(hidden: val)
-  end
-
-  def current_plan
-    @current_plan ||= payola_subscriptions.active.select{|sub| sub.plan.present? }.sort{|sub| sub.plan.amount }.last.try(:plan)
-  end
-
-  def active_subscription
-    @active_subscription ||= payola_subscriptions.active.select{|sub| sub.plan.present? }.sort{|sub| sub.plan.amount }
-  end
-
-  def max_private_repo_count
-    current_plan.try(:repo_count) || 0
-  end
-
-  def current_private_repo_count
-    watched_github_repositories.where(private: true).count
-  end
-
-  def reached_private_repo_limit?
-    return false if admin?
-    current_private_repo_count >= max_private_repo_count
-  end
-
-  def can_enable_private_repo_tracking?
-    private_repo_token.blank?
-  end
-
-  def can_track_private_repos?
-    admin? || has_active_subscription?
-  end
-
-  def needs_to_enable_github_access?
-    private_repo_token.blank? && public_repo_token.blank?
-  end
-
-  def can_watch?(repo)
-    return true if admin?
-    if repo.private?
-      can_track_private_repos? && !reached_private_repo_limit?
-    else
-      !needs_to_enable_github_access?
-    end
-  end
-
-  def your_dependent_repos(project)
-    ids = really_all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
-    all_github_repositories.where(id: ids).order('fork ASC, pushed_at DESC, stargazers_count DESC')
+  def nickname
+    identities.first.try(:nickname).presence || read_attribute(:nickname)
   end
 
   def all_subscribed_projects
@@ -123,15 +76,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    ADMIN_USERS.include?(nickname)
-  end
-
-  def monitoring_enabled?
-    public_repo_token.present? || private_repo_token.present?
-  end
-
-  def can_monitor?(github_repository)
-    repository_permissions.where(github_repository: github_repository).where(admin: true).any?
+    github_enabled? && ADMIN_USERS.include?(nickname)
   end
 
   def create_api_key
@@ -146,120 +91,6 @@ class User < ApplicationRecord
     api_keys.active.first
   end
 
-  def github_settings_url
-    if private_repo_token.present?
-      key = ENV['GITHUB_PRIVATE_KEY']
-    elsif
-      key = ENV['GITHUB_PUBLIC_KEY']
-    else
-      key = ENV['GITHUB_KEY']
-    end
-    "https://github.com/settings/connections/applications/#{key}"
-  end
-
-  def self.create_from_auth_hash(hash)
-    create!(AuthHash.new(hash).user_info)
-  end
-
-  def assign_from_auth_hash(hash)
-    ignored_fields = new_record? ? [] : %i(email)
-    update_attributes(AuthHash.new(hash).user_info.except(*ignored_fields))
-  end
-
-  def self.find_by_auth_hash(hash)
-    conditions = AuthHash.new(hash).user_info.slice(:provider, :uid)
-    where(conditions).first
-  end
-
-  def token
-    private_repo_token.presence || public_repo_token.presence || read_attribute(:token)
-  end
-
-  def github_client
-    AuthToken.new_client(token)
-  end
-
-  def avatar_url(size = 60)
-    "https://avatars.githubusercontent.com/u/#{uid}?size=#{size}"
-  end
-
-  def github_url
-    "https://github.com/#{nickname}"
-  end
-
-  def update_repo_permissions_async
-    SyncPermissionsWorker.perform_async(self.id)
-  end
-
-  def update_repo_permissions
-    self.update_column(:currently_syncing, true)
-    download_orgs
-    r = github_client.repos
-
-    current_repo_ids = []
-
-    existing_permissions = repository_permissions.all
-    new_repo_ids = r.map(&:id)
-    existing_repos = GithubRepository.where(github_id: new_repo_ids).select(:id, :github_id)
-
-    r.each do |repo|
-      unless github_repo = existing_repos.find{|re| re.github_id == repo.id}
-        github_repo = GithubRepository.find_by('lower(full_name) = ?', repo.full_name.downcase) || GithubRepository.create_from_hash(repo)
-      end
-      next if github_repo.nil?
-      current_repo_ids << github_repo.id
-
-      unless rp = existing_permissions.find{|p| p.github_repository_id == github_repo.id}
-        rp = repository_permissions.build(github_repository_id: github_repo.id)
-      end
-      rp.admin = repo.permissions.admin
-      rp.push = repo.permissions.push
-      rp.pull = repo.permissions.pull
-      rp.save! if rp.changed?
-    end
-
-    # delete missing permissions
-    existing_repo_ids = repository_permissions.pluck(:github_repository_id)
-    remove_ids = existing_repo_ids - current_repo_ids
-    repository_permissions.where(github_repository_id: remove_ids).delete_all if remove_ids.any?
-
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
-    nil
-  ensure
-    self.update_columns(last_synced_at: Time.now, currently_syncing: false)
-  end
-
-  def download_self
-    GithubUser.create_from_github(OpenStruct.new({id: self.uid, login: self.nickname, type: 'User'}))
-    GithubUpdateUserWorker.perform_async(nickname)
-  end
-
-  def download_orgs
-    github_client.orgs.each do |org|
-      GithubCreateOrgWorker.perform_async(org.login)
-    end
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
-    nil
-  end
-
-  def subscribe_to_repo(github_repository)
-    hook = github_repository.create_webhook(token)
-    repository_subscriptions.find_or_create_by(github_repository_id: github_repository.id, hook_id: hook.try(:id))
-  end
-
-  def unsubscribe_from_repo(github_repository)
-    sub = subscribed_to_repo?(github_repository)
-    sub.destroy
-  end
-
-  def subscribed_to?(project)
-    subscriptions.find_by_project_id(project.id)
-  end
-
-  def subscribed_to_repo?(github_repository)
-    repository_subscriptions.find_by_github_repository_id(github_repository.id)
-  end
-
   def muted?(project)
     project_mutes.where(project_id: project.id).any?
   end
@@ -270,9 +101,5 @@ class User < ApplicationRecord
 
   def unmute(project)
     project_mutes.where(project_id: project.id).delete_all
-  end
-
-  def can_read?(github_repository)
-    repository_permissions.where(github_repository: github_repository).where(pull: true).any?
   end
 end

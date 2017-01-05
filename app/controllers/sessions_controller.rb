@@ -2,8 +2,7 @@ class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create, :failure]
 
   def new
-    session[:pre_login_destination] = params[:return_to] if params[:return_to].present?
-    redirect_to "/auth/github"
+
   end
 
   def enable_public
@@ -17,15 +16,36 @@ class SessionsController < ApplicationController
   end
 
   def create
-    auth_hash = request.env['omniauth.auth']
-    user      = User.find_by_auth_hash(auth_hash) || User.new
+    auth = request.env['omniauth.auth']
 
-    user.assign_from_auth_hash(auth_hash)
+    identity = Identity.find_with_omniauth(auth)
 
-    flash[:notice] = nil
-    session[:user_id] = user.id
+    if identity.nil?
+      identity = Identity.create_with_omniauth(auth)
+    end
 
-    user.update_repo_permissions_async
+    identity.update_from_auth_hash(auth)
+
+    if current_user
+      if identity.user.nil?
+        identity.user = current_user
+        identity.save
+      else
+        flash[:notice] = 'Already connected'
+      end
+    else
+      if identity.user.nil?
+        user = identity.find_existing_user || User.new
+        user.assign_from_auth_hash(auth)
+        identity.user = user
+        identity.save
+      end
+
+      flash[:notice] = nil
+      session[:user_id] = identity.user.id
+    end
+
+    identity.user.update_repo_permissions_async
 
     redirect_to(root_path) && return unless pre_login_destination
     redirect_to pre_login_destination

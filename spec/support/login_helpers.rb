@@ -11,11 +11,6 @@ module LoginHelpers
         nickname: user.nickname,
         email:    user.email
       },
-      extra:       {
-        raw_info: {
-          gravatar_id: user.gravatar_id
-        }
-      },
       credentials: {
         token: user.token
       }
@@ -24,7 +19,7 @@ module LoginHelpers
 
   def login(user)
     mock_github_auth(user)
-    visit login_path
+    visit '/auth/github'
   end
 end
 

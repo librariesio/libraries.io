@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe GithubTag do
+describe GithubTag, type: :model do
   it { should belong_to(:github_repository) }
 
   it { should validate_presence_of(:name) }

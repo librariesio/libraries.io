@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Readme do
+describe Readme, type: :model do
   it { should belong_to(:github_repository) }
 
   it { should validate_presence_of(:html_body) }

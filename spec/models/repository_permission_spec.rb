@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe RepositoryPermission do
+describe RepositoryPermission, type: :model do
   it { should belong_to(:github_repository) }
   it { should belong_to(:user) }
 

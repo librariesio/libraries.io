@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe GithubRepository, :vcr do
+describe GithubRepository, :vcr, type: :model do
   it { should have_many(:projects) }
   it { should have_many(:github_contributions) }
   it { should have_many(:contributors) }

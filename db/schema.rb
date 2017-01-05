@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161213123856) do
+ActiveRecord::Schema.define(version: 20170104223028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -172,6 +172,17 @@ ActiveRecord::Schema.define(version: 20161213123856) do
     t.index ["github_id"], name: "index_github_users_on_github_id", unique: true, using: :btree
     t.index ["hidden"], name: "index_github_users_on_hidden", using: :btree
     t.index ["login"], name: "index_github_users_on_login", using: :btree
+  end
+
+  create_table "identities", force: :cascade do |t|
+    t.string   "uid"
+    t.string   "provider"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "token"
+    t.string   "nickname"
+    t.string   "avatar_url"
   end
 
   create_table "manifests", force: :cascade do |t|
@@ -405,24 +416,19 @@ ActiveRecord::Schema.define(version: 20161213123856) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "uid",                                null: false
-    t.string   "nickname",                           null: false
-    t.string   "gravatar_id"
+    t.string   "uid"
+    t.string   "nickname"
     t.string   "token"
     t.string   "name"
-    t.string   "blog"
-    t.string   "location"
     t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "public_repo_token"
     t.string   "private_repo_token"
-    t.boolean  "token_upgrade"
     t.boolean  "currently_syncing",  default: false, null: false
     t.datetime "last_synced_at"
     t.boolean  "emails_enabled",     default: true
     t.index ["created_at"], name: "index_users_on_created_at", using: :btree
-    t.index ["nickname"], name: "index_users_on_nickname", unique: true, using: :btree
   end
 
   create_table "versions", force: :cascade do |t|
