@@ -5,7 +5,7 @@ module GithubIdentity
 
   def github_user
     return unless github_enabled?
-    GithubUser.find_by_id(github_identity.uid)
+    GithubUser.find_by_github_id(github_identity.uid)
   end
 
   def hidden
