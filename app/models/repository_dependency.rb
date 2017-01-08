@@ -35,4 +35,8 @@ class RepositoryDependency < ApplicationRecord
     proj_id = find_project_id
     update_attribute(:project_id, proj_id) if proj_id.present?
   end
+
+  def project_name
+    read_attribute(:project_name).tr(" \n\t\r", '')
+  end
 end
