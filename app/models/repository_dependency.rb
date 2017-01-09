@@ -6,8 +6,8 @@ class RepositoryDependency < ApplicationRecord
 
   scope :with_project, -> { joins(:project).where('projects.id IS NOT NULL') }
   scope :without_project_id, -> { where(project_id: nil) }
-  scope :with_project_name, -> { where("project_name <> ''") }
-  scope :platform, ->(platform) { where('lower(platform) = ?', platform.try(:downcase)) }
+  scope :with_project_name, -> { where("repository_dependencies.project_name <> ''") }
+  scope :platform, ->(platform) { where('lower(repository_dependencies.platform) = ?', platform.try(:downcase)) }
   scope :kind, ->(kind) { where(kind: kind) }
 
   after_create :update_project_id
