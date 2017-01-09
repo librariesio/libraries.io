@@ -60,4 +60,13 @@ module DependencyChecks
     number = SemanticRange.max_satisfying(version_numbers, semantic_requirements, false, platform)
     versions.find{|v| SemanticRange.clean(v.number) == number }
   end
+
+  def update_project
+    return unless project_name.present? && package_manager
+    package_manager.update(project_name)
+  end
+
+  def package_manager
+    PackageManager::Base.platforms.find{|pm| pm.formatted_name.downcase == platform.downcase }
+  end
 end
