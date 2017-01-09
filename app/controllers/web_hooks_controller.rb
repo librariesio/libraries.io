@@ -47,8 +47,4 @@ class WebHooksController < ApplicationController
   def web_hook_params
     params.require(:web_hook).permit(:url)
   end
-
-  def authorized?
-    current_user.can_read?(@github_repository)
-  end
 end

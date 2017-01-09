@@ -94,14 +94,6 @@ class GithubRepositoriesController < ApplicationController
 
   private
 
-  def authorized?
-    if @github_repository.private?
-      current_user && current_user.can_read?(@github_repository)
-    else
-      true
-    end
-  end
-
   def current_language
     params[:language] if params[:language].present?
   end
