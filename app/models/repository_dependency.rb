@@ -39,6 +39,6 @@ class RepositoryDependency < ApplicationRecord
   end
 
   def project_name
-    read_attribute(:project_name).tr(" \n\t\r", '')
+    read_attribute(:project_name).try(:tr, " \n\t\r", '')
   end
 end
