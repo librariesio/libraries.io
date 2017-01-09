@@ -79,7 +79,7 @@ module PackageManager
         {
           project_name: k,
           requirements: req,
-          kind: 'normal',
+          kind: 'runtime',
           optional: optional,
           platform: self.name.demodulize
         }

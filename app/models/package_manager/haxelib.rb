@@ -58,7 +58,7 @@ module PackageManager
         {
           project_name: dep_name,
           requirements: dep_version.empty? ? '*' : dep_version,
-          kind: 'normal',
+          kind: 'runtime',
           platform: self.name.demodulize
         }
       end

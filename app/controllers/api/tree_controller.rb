@@ -12,7 +12,7 @@ class Api::TreeController < Api::ApplicationController
     end
     raise ActiveRecord::RecordNotFound if @version.nil?
 
-    @kind = params[:kind] || 'normal'
+    @kind = params[:kind] || 'runtime'
     render json: TreeResolver.new(@version, @kind, @date).tree
   end
 end

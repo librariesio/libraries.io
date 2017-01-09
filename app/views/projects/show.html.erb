@@ -177,7 +177,7 @@
                 <table class='table table-hover table-condensed'>
                   <thead>
                     <th>
-                      <%= kind.humanize unless kind == 'normal' %> Dependencies
+                      <%= kind.humanize unless kind == 'runtime' %> Dependencies
                     </th>
                     <th>
                       Requirements
@@ -222,11 +222,11 @@
                     </tr>
                   <% end %>
                 </table>
-                <% kind_param = kind == 'normal' ? nil : kind %>
+                <% kind_param = kind == 'runtime' ? nil : kind %>
                 <% link = @version ? version_tree_path(@version.to_param.merge(kind: kind_param)) : tree_path(@project.to_param.merge(kind: kind_param)) %>
                 <%= link_to link, class: 'btn btn-success' do %>
                   <%= fa_icon 'code-fork' %>
-                  Explore the resolved <%= kind.downcase unless kind == 'normal' %> dependency tree for <%= @project %> <%= @version_number %>
+                  Explore the resolved <%= kind.downcase unless kind == 'runtime' %> dependency tree for <%= @project %> <%= @version_number %>
                 <% end %>
                 <hr>
               <% end %>

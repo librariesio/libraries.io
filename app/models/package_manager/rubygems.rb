@@ -73,7 +73,7 @@ module PackageManager
       json = get_json("https://rubygems.org/api/v2/rubygems/#{name}/versions/#{version}.json")
 
       deps = json['dependencies']
-      map_dependencies(deps['development'], 'Development') + map_dependencies(deps['runtime'], 'normal')
+      map_dependencies(deps['development'], 'Development') + map_dependencies(deps['runtime'], 'runtime')
     end
 
     def self.map_dependencies(deps, kind)
