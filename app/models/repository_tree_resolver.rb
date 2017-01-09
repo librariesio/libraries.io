@@ -12,6 +12,10 @@ class RepositoryTreeResolver
     @date = date
   end
 
+  def cached?
+    Rails.cache.exist?(cache_key)
+  end
+
   def platforms
     @platforms ||= @manifests.pluck(:platform).map(&:downcase).uniq.select do |platform|
       package_manager = PackageManager::Base.platforms.find{|pm| pm.formatted_name.downcase == platform }
@@ -21,6 +25,10 @@ class RepositoryTreeResolver
 
   def tree
     @tree ||= load_dependencies_tree
+  end
+
+  def enqueue_tree_resolution
+    RepositoryTreeResolverWorker.perform_async(@repository.id, @date)
   end
 
   def load_dependencies_tree

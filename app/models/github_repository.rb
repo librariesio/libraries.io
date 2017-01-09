@@ -182,6 +182,10 @@ class GithubRepository < ApplicationRecord
     "https://avatars.githubusercontent.com/u/#{owner_id}?size=#{size}"
   end
 
+  def load_dependencies_tree(date = nil)
+    RepositoryTreeResolver.new(self, date).load_dependencies_tree
+  end
+
   def github_client(token = nil)
     AuthToken.fallback_client(token)
   end
