@@ -10,6 +10,7 @@ class Dependency < ApplicationRecord
   scope :without_project_id, -> { where(project_id: nil) }
   scope :with_project_name, -> { where("project_name <> ''") }
   scope :kind, ->(kind) { where(kind: kind) }
+  scope :platform, ->(platform) { where('lower(platform) = ?', platform.try(:downcase)) }
 
   after_create :update_project_id
 
