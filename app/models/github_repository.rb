@@ -135,6 +135,7 @@ class GithubRepository < ApplicationRecord
   end
 
   def download_owner
+    return if owner && owner.login == owner_name
     o = github_client.user(owner_name)
     if o.type == "Organization"
       go = GithubOrganisation.create_from_github(owner_id.to_i)
@@ -232,15 +233,15 @@ class GithubRepository < ApplicationRecord
     token ||= AuthToken.token
     previous_pushed_at = self.pushed_at
     update_from_github(token)
+    download_owner
+    download_fork_source(token)
     if (previous_pushed_at.nil? && self.pushed_at) || (self.pushed_at && previous_pushed_at < self.pushed_at)
       download_readme(token)
       download_tags(token)
       download_github_contributions(token)
       download_manifests(token)
-      download_owner
-      download_fork_source(token)
+      # download_issues(token)
     end
-    # download_issues(token)
     save_projects
     update_attributes(last_synced_at: Time.now)
   end
