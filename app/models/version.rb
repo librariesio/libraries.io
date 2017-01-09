@@ -99,7 +99,7 @@ class Version < ApplicationRecord
     project.to_param.merge(number: number)
   end
 
-  def load_dependencies_tree(kind, date)
+  def load_dependencies_tree(kind, date = nil)
     TreeResolver.new(self, kind, date).load_dependencies_tree
   end
 end
