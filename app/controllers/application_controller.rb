@@ -185,6 +185,14 @@ class ApplicationController < ActionController::Base
     redirect_to url_for(owner: @github_repository.owner_name, name: @github_repository.project_name), :status => :moved_permanently if full_name != @github_repository.full_name
   end
 
+  def authorized?
+    if @github_repository.private?
+      current_user && current_user.can_read?(@github_repository)
+    else
+      true
+    end
+  end
+
   def platform_scope(scope = Project)
     if params[:platform].present?
       find_platform(:platform)
