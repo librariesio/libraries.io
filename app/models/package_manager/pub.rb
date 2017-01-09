@@ -61,7 +61,7 @@ module PackageManager
       vers = proj['versions'].find{|v| v['version'] == version }
 
       return [] if vers.nil?
-      map_dependencies(vers['pubspec'].fetch('dependencies', {}), 'normal') +
+      map_dependencies(vers['pubspec'].fetch('dependencies', {}), 'runtime') +
       map_dependencies(vers['pubspec'].fetch('dev_dependencies', {}), 'Development')
     end
   end

@@ -11,7 +11,7 @@ class TreeController < ApplicationController
     end
     raise ActiveRecord::RecordNotFound if @version.nil?
 
-    @kind = params[:kind] || 'normal'
+    @kind = params[:kind] || 'runtime'
 
     @tree_resolver = TreeResolver.new(@version, @kind, @date)
 

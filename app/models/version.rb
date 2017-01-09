@@ -92,7 +92,7 @@ class Version < ApplicationRecord
   end
 
   def any_outdated_dependencies?
-    @any_outdated_dependencies ||= dependencies.kind('normal').any?(&:outdated?)
+    @any_outdated_dependencies ||= dependencies.kind('runtime').any?(&:outdated?)
   end
 
   def to_param

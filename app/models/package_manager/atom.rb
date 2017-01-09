@@ -66,7 +66,7 @@ module PackageManager
         {
           project_name: dep_name,
           requirements: req,
-          kind: 'normal',
+          kind: 'runtime',
           optional: false,
           platform: 'Npm' # woah!
         }

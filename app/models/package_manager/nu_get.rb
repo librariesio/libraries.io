@@ -111,7 +111,7 @@ module PackageManager
         {
           project_name: dep[:name],
           requirements: dep[:requirements],
-          kind: 'normal',
+          kind: 'runtime',
           optional: false,
           platform: self.name.demodulize
         }

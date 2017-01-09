@@ -15,7 +15,7 @@
           Dependencies
         </td>
         <td>
-          <strong><%= number_to_human(@project.latest_version.dependencies.kind('normal').count) %></strong>
+          <strong><%= number_to_human(@project.latest_version.dependencies.kind('runtime').count) %></strong>
         </td>
       </tr>
       <tr>

@@ -46,7 +46,7 @@ class TreeResolver
   def load_dependencies_for(version, dependency, kind, index)
     if version
       @license_names << version.project.try(:normalize_licenses)
-      kind = index.zero? ? kind : 'normal'
+      kind = index.zero? ? kind : 'runtime'
       dependencies = version.dependencies.kind(kind).includes(project: :versions).limit(100).order(:project_name)
       {
         version: version,

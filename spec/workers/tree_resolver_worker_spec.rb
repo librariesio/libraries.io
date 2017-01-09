@@ -7,7 +7,7 @@ describe TreeResolverWorker, :vcr do
 
   it "should load dependencies tree for version" do
     version = create(:version)
-    kind = 'normal'
+    kind = 'runtime'
     date = nil
     expect(Version).to receive(:find_by_id).with(version.id).and_return(version)
     expect(version).to receive(:load_dependencies_tree).with(kind, date)

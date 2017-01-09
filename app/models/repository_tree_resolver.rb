@@ -65,7 +65,7 @@ class RepositoryTreeResolver
       # resolve tree for each platform
       versions = dependencies.map(&:latest_resolvable_version)
 
-      tree[platform] = versions.map{|version| load_dependencies_for(version, nil, 'normal', 0) }
+      tree[platform] = versions.map{|version| load_dependencies_for(version, nil, 'runtime', 0) }
     end
     tree
   end
@@ -74,7 +74,7 @@ class RepositoryTreeResolver
   def load_dependencies_for(version, dependency, kind, index)
     if version
       @license_names << version.project.try(:normalize_licenses)
-      kind = index.zero? ? kind : 'normal'
+      kind = index.zero? ? kind : 'runtime'
       dependencies = version.dependencies.kind(kind).includes(project: :versions).limit(100).order(:project_name)
       {
         version: version,

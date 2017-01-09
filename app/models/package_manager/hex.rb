@@ -69,7 +69,7 @@ module PackageManager
         {
           project_name: k,
           requirements: v['requirement'],
-          kind: 'normal',
+          kind: 'runtime',
           optional: v['optional'],
           platform: self.name.demodulize
         }

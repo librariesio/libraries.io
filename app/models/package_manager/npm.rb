@@ -97,7 +97,7 @@ module PackageManager
       proj = project(name)
       vers = proj['versions'][version]
       return [] if vers.nil?
-      map_dependencies(vers.fetch('dependencies', {}), 'normal') +
+      map_dependencies(vers.fetch('dependencies', {}), 'runtime') +
       map_dependencies(vers.fetch('devDependencies', {}), 'Development') +
       map_dependencies(vers.fetch('optionalDependencies', {}), 'Optional', true)
     end

@@ -9,7 +9,7 @@ describe "Api::TreesController", :vcr do
       get "/api/#{version.project.platform}/#{version.project.name}/tree?api_key=#{user.api_key}"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq('application/json')
-      expect(response.body).to be_json_eql TreeResolver.new(version, 'normal', Date.today).tree.to_json
+      expect(response.body).to be_json_eql TreeResolver.new(version, 'runtime', Date.today).tree.to_json
     end
   end
 end

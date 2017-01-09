@@ -58,7 +58,7 @@ module PackageManager
     def self.dependencies(name, version, _project)
       vers = project(name)['versions'][version]
       return [] if vers.nil?
-      map_dependencies(vers.fetch('require', {}).reject{|k,_v| k == 'php' }, 'normal') +
+      map_dependencies(vers.fetch('require', {}).reject{|k,_v| k == 'php' }, 'runtime') +
       map_dependencies(vers.fetch('require-dev', {}).reject{|k,_v| k == 'php' }, 'Development')
     end
   end
