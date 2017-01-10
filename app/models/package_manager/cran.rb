@@ -7,7 +7,7 @@ module PackageManager
     COLOR = '#198ce7'
 
     def self.package_link(project, _version = nil)
-      "https://CRAN.R-project.org/package=#{project.name}"
+      "https://cran.r-project.org/package=#{project.name}"
     end
 
     def self.download_url(name, version = nil)
