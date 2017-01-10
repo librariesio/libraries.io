@@ -67,6 +67,7 @@ gem 'fast-stemmer'
 gem 'bloomfilter-rb'
 gem 'omniauth-gitlab'
 gem 'omniauth-bitbucket'
+gem 'turbolinks', '~> 5.0.0'
 
 group :development do
   gem 'bundler'
