@@ -3,7 +3,6 @@ module Searchable
 
   included do
     include Elasticsearch::Model
-    include Elasticsearch::Model::Callbacks
 
     FIELDS = ['name^2', 'exact_name^2', 'repo_name', 'description', 'homepage', 'language', 'keywords_array', 'normalized_licenses', 'platform']
 
@@ -38,7 +37,9 @@ module Searchable
       end
     end
 
-    after_save() { __elasticsearch__.index_document }
+    after_commit lambda { __elasticsearch__.index_document  },  on: :create
+    after_commit lambda { __elasticsearch__.update_document },  on: :update
+    after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def as_indexed_json(_options)
       as_json methods: [:stars, :repo_name, :exact_name, :github_contributions_count, :pushed_at, :dependent_repos_count]

@@ -3,7 +3,6 @@ module IssueSearch
 
   included do
     include Elasticsearch::Model
-    include Elasticsearch::Model::Callbacks
 
     FIELDS = ['title^2', 'body']
 
@@ -29,7 +28,9 @@ module IssueSearch
       end
     end
 
-    after_save() { __elasticsearch__.index_document }
+    after_commit lambda { __elasticsearch__.index_document  },  on: :create
+    after_commit lambda { __elasticsearch__.update_document },  on: :update
+    after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def as_indexed_json(_options)
       as_json methods: [:title, :contributions_count, :stars, :language, :license]

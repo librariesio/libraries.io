@@ -3,7 +3,6 @@ module RepoSearch
 
   included do
     include Elasticsearch::Model
-    include Elasticsearch::Model::Callbacks
 
     FIELDS = ['full_name^2', 'exact_name^2', 'description', 'homepage', 'language', 'license']
 
@@ -52,7 +51,9 @@ module RepoSearch
       end
     end
 
-    after_save() { __elasticsearch__.index_document }
+    after_commit lambda { __elasticsearch__.index_document  },  on: :create
+    after_commit lambda { __elasticsearch__.update_document },  on: :update
+    after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def self.facets(options = {})
       Rails.cache.fetch "repo_facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
