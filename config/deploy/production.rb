@@ -5,6 +5,8 @@ server ENV['SIDEKIQ_SERVER_1'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
 server ENV['SIDEKIQ_SERVER_2'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
 server ENV['SIDEKIQ_SERVER_3'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
 server ENV['SIDEKIQ_SERVER_4'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
+server ENV['SIDEKIQ_SERVER_5'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
+server ENV['SIDEKIQ_SERVER_6'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
 
 namespace :deploy do
   task :restart do
