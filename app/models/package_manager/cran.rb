@@ -90,7 +90,7 @@ module PackageManager
         request = Typhoeus::Request.new(url)
         request.on_headers do |response|
           if response.code != 200
-            raise "Request failed"
+            return []
           end
         end
         request.on_body {|chunk| downloaded_file.write(chunk) }
