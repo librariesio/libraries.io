@@ -153,9 +153,5 @@
     <%= yield %>
   </div>
   <%= render 'layouts/footer' %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <% if Rails.env.production? %>
-    <script>ga('send', 'pageview');</script>
-  <% end %>
 </body>
 </html>
