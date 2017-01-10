@@ -53,7 +53,6 @@ module DependencyChecks
     return nil unless project.present?
     versions = project.versions
     if date
-      p date
       versions = versions.where('versions.published_at < ?', date)
     end
     version_numbers = versions.map {|v| SemanticRange.clean(v.number) }.compact
