@@ -105,8 +105,12 @@ module PackageManager
         save(project(name))
       rescue SystemExit, Interrupt
         exit 0
-      rescue Exception
-        raise unless ENV["RACK_ENV"] == "production"
+      rescue Exception => exception
+        if ENV["RACK_ENV"] == "production"
+          Bugsnag.notify(exception)
+        else
+          raise
+        end
       end
     end
 
