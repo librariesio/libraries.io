@@ -36,10 +36,10 @@ module PackageManager
       {
         :name => project['name'],
         :pm_id => project['id'],
-        :homepage => project['url'],
+        :homepage => project['homepage'],
         :description => project['description'],
         :keywords_array => Array.wrap(project["keywords"]),
-        :repository_url => repo_fallback('', project['url'])
+        :repository_url => repo_fallback('', project['repository'])
       }
     end
 
