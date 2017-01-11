@@ -74,6 +74,7 @@ module PackageManager
     end
 
     def self.save(project)
+      return unless project.present?
       mapped_project = mapping(project).delete_if { |_key, value| value.blank? }
       return false unless mapped_project
       puts "Saving #{mapped_project[:name]}"
