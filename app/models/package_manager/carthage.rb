@@ -26,12 +26,16 @@ module PackageManager
           return nil
         end
       elsif name.match(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)
-        response = request(name)
-        if response.status == 200
-          {
-            full_name: name.sub(/^https?\:\/\//, ''),
-            homepage: name
-          }
+        begin
+          response = request(name)
+          if response.status == 200
+            {
+              full_name: name.sub(/^https?\:\/\//, ''),
+              homepage: name
+            }
+          end
+        rescue
+          nil
         end
       end
     end
