@@ -111,6 +111,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    chartkick (2.2.2)
     cliver (0.3.2)
     codeclimate-test-reporter (1.0.4)
       simplecov
@@ -200,6 +201,8 @@ GEM
     github_urls (0.2.2)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
+    groupdate (3.1.1)
+      activesupport (>= 3)
     hashdiff (0.3.2)
     hashie (3.4.6)
     highscore (1.2.1)
@@ -478,6 +481,7 @@ DEPENDENCIES
   capistrano-maintenance
   capistrano-rails
   capistrano3-nginx
+  chartkick
   codeclimate-test-reporter
   counter_culture
   dalli
@@ -501,6 +505,7 @@ DEPENDENCIES
   gemoji
   gems
   github_urls
+  groupdate
   highscore
   hiredis
   indefinite_article
