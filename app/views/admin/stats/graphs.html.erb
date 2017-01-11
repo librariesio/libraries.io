@@ -21,9 +21,11 @@
       <strong><%= @platform %> Projects by created_at</strong>
     </p>
     <%= line_chart @projects %>
-    <p>
-      <strong><%= @platform %> Versions by created_at</strong>
-    </p>
-    <%= line_chart @versions %>
+    <% if @versions.any? %>
+      <p>
+        <strong><%= @platform %> Versions by created_at</strong>
+      </p>
+      <%= line_chart @versions %>
+    <% end %>
   </div>
 </div>

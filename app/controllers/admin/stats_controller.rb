@@ -27,8 +27,8 @@ class Admin::StatsController < Admin::ApplicationController
 
   def graphs
     @platform = params[:platform] || 'Rubygems'
-    @projects = Project.platform(@platform).where('projects.created_at > ?', 2.months.ago).group_by_day(:created_at).count
-    @versions = Version.joins(:project).where('lower(projects.platform) = ?', @platform.downcase).where('versions.created_at > ?', 2.months.ago).group_by_day('versions.created_at').count
+    @projects = Project.platform(@platform).where('projects.created_at > ?', 3.months.ago).group_by_day(:created_at).count
+    @versions = Version.joins(:project).where('lower(projects.platform) = ?', @platform.downcase).where('versions.created_at > ?', 3.months.ago).group_by_day('versions.created_at').count
   end
 
   private
