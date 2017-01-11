@@ -45,6 +45,7 @@ module PackageManager
 
     def self.versions(project)
       version = project['version']
+      return [] if version.nil?
       [{
         :number => version['name'],
         :published_at => version['released']
