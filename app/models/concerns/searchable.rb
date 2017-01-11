@@ -37,8 +37,7 @@ module Searchable
       end
     end
 
-    after_commit lambda { __elasticsearch__.index_document  },  on: :create
-    after_commit lambda { __elasticsearch__.update_document },  on: :update
+    after_save lambda { __elasticsearch__.index_document  }
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def as_indexed_json(_options)
