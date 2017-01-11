@@ -51,6 +51,10 @@ namespace :download do
     PackageManager::CocoaPods.import_recent_async
   end
 
+  task cocoapods_all: :environment do
+    PackageManager::CocoaPods.import_async
+  end
+
   task cran: :environment do
     PackageManager::CRAN.import_recent_async
   end
