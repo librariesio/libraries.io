@@ -51,8 +51,8 @@ module RepoSearch
       end
     end
 
-    after_commit lambda { __elasticsearch__.index_document  },  on: :create
-    after_commit lambda { __elasticsearch__.update_document },  on: :update
+    after_commit lambda { __elasticsearch__.index_document rescue nil },  on: :create
+    after_commit lambda { __elasticsearch__.update_document rescue nil },  on: :update
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def self.facets(options = {})
