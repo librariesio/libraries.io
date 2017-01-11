@@ -41,7 +41,7 @@ module PackageManager
         :name => project[:full_name],
         :description => project[:description],
         :homepage => project[:homepage],
-        :licenses => project.fetch(:license, {})[:key],
+        :licenses => (project.fetch(:license, {}) || {})[:key],
         :repository_url => project[:html_url]
       }
     end
