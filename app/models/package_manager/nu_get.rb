@@ -50,6 +50,7 @@ module PackageManager
       }
       h[:releases] = get_releases(name)
       h[:versions] = versions(h)
+      return {} unless h[:versions].any?
       h
     end
 
@@ -66,6 +67,8 @@ module PackageManager
         releases.flatten!
       end
       releases
+    rescue
+      []
     end
 
     def self.mapping(project)
