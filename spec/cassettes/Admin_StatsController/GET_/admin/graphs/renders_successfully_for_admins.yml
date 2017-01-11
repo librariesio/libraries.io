@@ -1,0 +1,124 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:9200/projects/_count
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '60'
+    body:
+      encoding: UTF-8
+      string: '{"count":93,"_shards":{"total":1,"successful":1,"failed":0}}'
+    http_version: 
+  recorded_at: Wed, 11 Jan 2017 13:39:15 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/projects/project/_search
+    body:
+      encoding: UTF-8
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[],"must_not":[{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"facets":{"platforms":{"terms":{"field":"platform","size":35},"facet_filter":{"bool":{"must":[]}}},"languages":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"keywords":{"terms":{"field":"keywords_array","size":35},"facet_filter":{"bool":{"must":[]}}},"licenses":{"terms":{"field":"normalized_licenses","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"name"}}},"sort":[{"rank":"desc"},{"stars":"desc"}],"track_scores":true}'
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '12239'
+    body:
+      encoding: UTF-8
+      string: '{"took":2,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":93,"max_score":0.0,"hits":[{"_index":"projects","_type":"project","_id":"131","_score":0.0,"_source":{"id":131,"name":"rails","platform":"Rubygems","created_at":"2017-01-05T09:43:10.383Z","updated_at":"2017-01-05T09:43:10.383Z","description":"Ruby
+        on Rails is a full-stack web framework optimized for programmer happiness
+        and sustainable productivity. It encourages beautiful code by favoring convention
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:43:10.383Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null},"sort":[0,0]},{"_index":"projects","_type":"project","_id":"3","_score":0.0,"_source":{"id":3,"name":"compass-core","platform":"Rubygems","created_at":"2017-01-09T11:22:33.282Z","updated_at":"2017-01-09T11:22:37.633Z","description":"The
+        Compass core stylesheet library and minimum required ruby extensions. This
+        library can be used stand-alone without the compass ruby configuration file
+        or compass command line tools.","keywords":[],"homepage":"http://compass-style.org/reference/compass/","licenses":"MIT","repository_url":null,"github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":17,"rank":0,"latest_release_published_at":"2015-01-16T00:20:59.002Z","latest_release_number":"1.0.3","pm_id":null,"keywords_array":[],"dependents_count":0,"language":null,"status":null,"last_synced_at":"2017-01-09T11:22:37.626Z","dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"compass-core","github_contributions_count":0,"pushed_at":null},"sort":[0,0]},{"_index":"projects","_type":"project","_id":"134","_score":0.0,"_source":{"id":134,"name":"rails","platform":"Rubygems","created_at":"2017-01-05T09:43:14.896Z","updated_at":"2017-01-05T09:43:14.896Z","description":"Ruby
+        on Rails is a full-stack web framework optimized for programmer happiness
+        and sustainable productivity. It encourages beautiful code by favoring convention
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:43:14.896Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null},"sort":[0,0]},{"_index":"projects","_type":"project","_id":"135","_score":0.0,"_source":{"id":135,"name":"rails","platform":"Rubygems","created_at":"2017-01-05T09:43:15.067Z","updated_at":"2017-01-05T09:43:15.101Z","description":"Ruby
+        on Rails is a full-stack web framework optimized for programmer happiness
+        and sustainable productivity. It encourages beautiful code by favoring convention
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:43:15.101Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null},"sort":[0,0]},{"_index":"projects","_type":"project","_id":"136","_score":0.0,"_source":{"id":136,"name":"rails","platform":"Rubygems","created_at":"2017-01-05T09:43:15.185Z","updated_at":"2017-01-05T09:43:15.185Z","description":"Ruby
+        on Rails is a full-stack web framework optimized for programmer happiness
+        and sustainable productivity. It encourages beautiful code by favoring convention
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:43:15.185Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null},"sort":[0,0]},{"_index":"projects","_type":"project","_id":"137","_score":0.0,"_source":{"id":137,"name":"rails","platform":"Rubygems","created_at":"2017-01-05T09:43:15.228Z","updated_at":"2017-01-05T09:43:15.262Z","description":"Ruby
+        on Rails is a full-stack web framework optimized for programmer happiness
+        and sustainable productivity. It encourages beautiful code by favoring convention
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:43:15.262Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null},"sort":[0,0]},{"_index":"projects","_type":"project","_id":"2","_score":0.0,"_source":{"id":2,"name":"chunky_png","platform":"Rubygems","created_at":"2017-01-09T11:22:01.830Z","updated_at":"2017-01-09T11:22:15.241Z","description":"    This
+        pure Ruby library can read and write PNG images without depending on an external\n    image
+        library, like RMagick. It tries to be memory efficient and reasonably fast.\n\n    It
+        supports reading and writing all PNG variants that are defined in the specification,\n    with
+        one limitation: only 8-bit color depth is supported. It supports all transparency,\n    interlacing
+        and filtering options the PNG specifications allows. It can also read and\n    write
+        textual metadata from PNG files. Low-level read/write access to PNG chunks
+        is\n    also possible.\n\n    This library supports simple drawing on the
+        image canvas and simple operations like\n    alpha composition and cropping.
+        Finally, it can import from and export to RMagick for\n    interoperability.\n\n    Also,
+        have a look at OilyPNG at http://github.com/wvanbergen/oily_png. OilyPNG is
+        a\n    drop in mixin module that implements some of the ChunkyPNG algorithms
+        in C, which\n    provides a massive speed boost to encoding and decoding.\n","keywords":[],"homepage":"http://wiki.github.com/wvanbergen/chunky_png","licenses":"MIT","repository_url":"https://github.com/wiki/wvanbergen","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":59,"rank":0,"latest_release_published_at":"2016-11-11T17:51:34.928Z","latest_release_number":"1.3.8","pm_id":null,"keywords_array":[],"dependents_count":0,"language":null,"status":null,"last_synced_at":"2017-01-09T11:22:15.230Z","dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"chunky_png","github_contributions_count":0,"pushed_at":null},"sort":[0,0]},{"_index":"projects","_type":"project","_id":"132","_score":0.0,"_source":{"id":132,"name":"rails","platform":"Rubygems","created_at":"2017-01-05T09:43:10.929Z","updated_at":"2017-01-05T09:43:10.971Z","description":"Ruby
+        on Rails is a full-stack web framework optimized for programmer happiness
+        and sustainable productivity. It encourages beautiful code by favoring convention
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:43:10.971Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null},"sort":[0,0]},{"_index":"projects","_type":"project","_id":"133","_score":0.0,"_source":{"id":133,"name":"rails","platform":"Rubygems","created_at":"2017-01-05T09:43:11.108Z","updated_at":"2017-01-05T09:43:11.148Z","description":"Ruby
+        on Rails is a full-stack web framework optimized for programmer happiness
+        and sustainable productivity. It encourages beautiful code by favoring convention
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:43:11.148Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null},"sort":[0,0]},{"_index":"projects","_type":"project","_id":"6","_score":0.0,"_source":{"id":6,"name":"multi_json","platform":"Rubygems","created_at":"2017-01-09T11:23:12.995Z","updated_at":"2017-01-09T11:23:26.279Z","description":"A
+        common interface to multiple JSON libraries, including Oj, Yajl, the JSON
+        gem (with C-extensions), the pure-Ruby JSON gem, NSJSONSerialization, gson.rb,
+        JrJackson, and OkJson.","keywords":[],"homepage":"http://github.com/intridea/multi_json","licenses":"MIT","repository_url":"https://github.com/intridea/multi_json","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":54,"rank":0,"latest_release_published_at":"2016-05-18T23:05:14.075Z","latest_release_number":"1.12.1","pm_id":null,"keywords_array":[],"dependents_count":0,"language":null,"status":null,"last_synced_at":"2017-01-09T11:23:26.264Z","dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"multi_json","github_contributions_count":0,"pushed_at":null},"sort":[0,0]}]},"facets":{"platforms":{"_type":"terms","missing":0,"total":93,"other":0,"terms":[{"term":"Packagist","count":68},{"term":"Rubygems","count":17},{"term":"NuGet","count":3},{"term":"CRAN","count":2},{"term":"Elm","count":1},{"term":"Carthage","count":1},{"term":"Atom","count":1}]},"languages":{"_type":"terms","missing":86,"total":7,"other":0,"terms":[{"term":"Ruby","count":7}]},"keywords":{"_type":"terms","missing":35,"total":142,"other":71,"terms":[{"term":"zf2","count":10},{"term":"web","count":7},{"term":"parser","count":5},{"term":"json","count":5},{"term":"xunit","count":4},{"term":"testing","count":3},{"term":"phpdoc","count":3},{"term":"xml","count":2},{"term":"schema","count":2},{"term":"php","count":2},{"term":"mock","count":2},{"term":"log","count":2},{"term":"annotations","count":2},{"term":"yaml","count":1},{"term":"validator","count":1},{"term":"validate","count":1},{"term":"update","count":1},{"term":"type","count":1},{"term":"tokenizer","count":1},{"term":"timer","count":1},{"term":"templating","count":1},{"term":"template","count":1},{"term":"stub","count":1},{"term":"stdlib","count":1},{"term":"static
+        analysis","count":1},{"term":"spy","count":1},{"term":"silex-provider","count":1},{"term":"silex","count":1},{"term":"set","count":1},{"term":"servicemanager","count":1},{"term":"service-provider","count":1},{"term":"serializer","count":1},{"term":"serialization","count":1},{"term":"sequence","count":1},{"term":"reflection","count":1}]},"licenses":{"_type":"terms","missing":9,"total":84,"other":0,"terms":[{"term":"MIT","count":45},{"term":"BSD-3-Clause","count":28},{"term":"Apache-2.0","count":8},{"term":"Other","count":1},{"term":"GPL-3.0+","count":1},{"term":"AML","count":1}]}},"suggest":{"did_you_mean":[]}}'
+    http_version: 
+  recorded_at: Wed, 11 Jan 2017 13:39:15 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/projects/_count
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '60'
+    body:
+      encoding: UTF-8
+      string: '{"count":93,"_shards":{"total":1,"successful":1,"failed":0}}'
+    http_version: 
+  recorded_at: Wed, 11 Jan 2017 13:39:15 GMT
+recorded_with: VCR 3.0.3
