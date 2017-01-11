@@ -33,6 +33,8 @@ module PackageManager
 
     def self.project(name)
       get("https://pypi.python.org/pypi/#{name}/json")
+    rescue
+      {}
     end
 
     def self.mapping(project)

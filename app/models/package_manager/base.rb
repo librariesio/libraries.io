@@ -102,7 +102,8 @@ module PackageManager
 
     def self.update(name)
       begin
-        save(project(name))
+        project = project(name)
+        save(project) if project.present?
       rescue SystemExit, Interrupt
         exit 0
       rescue Exception => exception
