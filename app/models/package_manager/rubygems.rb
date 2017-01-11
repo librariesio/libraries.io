@@ -36,6 +36,8 @@ module PackageManager
 
     def self.project(name)
       Gems.info name
+    rescue
+      {}
     end
 
     def self.mapping(project)
