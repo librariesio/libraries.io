@@ -59,16 +59,20 @@ module PackageManager
     end
 
     def self.find_dependencies(name, version)
+      url = "https://raw.githubusercontent.com/#{name}/#{version}/elm-package.json"
+
       begin
-        url = "https://raw.githubusercontent.com/#{name}/#{version}/elm-package.json"
-
-        contents = Typhoeus.get(url).body
-
-        r = Typhoeus::Request.new("https://librarian.libraries.io/v2/parse_file?filepath=elm-package.json",
-          method: :post,
-          body: {contents: contents},
-          headers: { 'Accept' => 'application/json' }).run
-        return Oj.load(r.body)
+        response = request(url)
+        if response.status == 200
+          contents = response.body
+          r = Typhoeus::Request.new("https://librarian.libraries.io/v2/parse_file?filepath=elm-package.json",
+            method: :post,
+            body: {contents: contents},
+            headers: { 'Accept' => 'application/json' }).run
+          return Oj.load(r.body)
+        else
+          return []
+        end
       rescue
         []
       end
