@@ -64,6 +64,7 @@ Rails.application.routes.draw do
     end
     get '/stats', to: 'stats#index', as: :stats
     get '/stats/github', to: 'stats#github', as: :github_stats
+    get '/graphs', to: 'stats#graphs', as: :graphs
     get '/', to: 'stats#overview', as: :overview
   end
 

@@ -21,7 +21,7 @@
 //= require tipsy
 //= require js.cookie
 //= require rails-timeago
-//= require_tree .
+//= require subtome
 
 $('.tip').tipsy({gravity: 's'});
 

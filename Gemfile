@@ -67,6 +67,8 @@ gem 'fast-stemmer'
 gem 'bloomfilter-rb'
 gem 'omniauth-gitlab'
 gem 'omniauth-bitbucket'
+gem 'chartkick'
+gem 'groupdate'
 
 group :development do
   gem 'bundler'
