@@ -27,7 +27,7 @@ module PackageManager
         end
       elsif name.match(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)
         response = request(name)
-        if response.code == 200
+        if response.status == 200
           {
             full_name: name.sub(/^https?\:\/\//, ''),
             homepage: name
