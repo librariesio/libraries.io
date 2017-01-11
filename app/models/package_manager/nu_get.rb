@@ -102,11 +102,13 @@ module PackageManager
       dep_groups = current_version['catalogEntry']['dependencyGroups'] || []
 
       deps = dep_groups.map do |dep_group|
-        dep_group["dependencies"].map do |dependency|
-          {
-            name: dependency['id'],
-            requirements: parse_requirements(dependency['range'])
-          }
+        if dep_group["dependencies"]
+          dep_group["dependencies"].map do |dependency|
+            {
+              name: dependency['id'],
+              requirements: parse_requirements(dependency['range'])
+            }
+          end
         end
       end.flatten.compact
 
@@ -122,6 +124,7 @@ module PackageManager
     end
 
     def self.parse_requirements(range)
+      return unless range.present?
       parts = range[1..-2].split(',')
       requirements = []
       low_bound = range[0]
