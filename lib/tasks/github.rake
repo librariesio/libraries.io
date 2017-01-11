@@ -70,9 +70,9 @@ namespace :github do
       since = users.last.id + 1
       REDIS.set('githubuserid', since)
       puts '*'*20
-      puts "#{since} - #{'%.4f' % (since.to_f/226000)}%"
+      puts "#{since} - #{'%.4f' % (since.to_f/250000)}%"
       puts '*'*20
-      sleep 1
+      sleep 0.5
     end
   end
 end
