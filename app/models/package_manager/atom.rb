@@ -43,6 +43,7 @@ module PackageManager
 
     def self.mapping(project)
       metadata = project['metadata']
+      metadata = project if metadata.nil?
       repo = metadata['repository'].is_a?(Hash) ? metadata['repository']['url'] : metadata['repository']
       {
         :name => project['name'],
