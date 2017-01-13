@@ -99,7 +99,7 @@ module PackageManager
 
     def self.dependencies(name, version, mapped_project)
       current_version = mapped_project[:releases].find{|v| v['catalogEntry']['version'] == version }
-      dep_groups = current_version['catalogEntry']['dependencyGroups'] || []
+      dep_groups = current_version.fetch('catalogEntry', {})['dependencyGroups'] || []
 
       deps = dep_groups.map do |dep_group|
         if dep_group["dependencies"]
