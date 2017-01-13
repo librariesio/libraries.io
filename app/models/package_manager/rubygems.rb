@@ -76,6 +76,8 @@ module PackageManager
 
       deps = json['dependencies']
       map_dependencies(deps['development'], 'Development') + map_dependencies(deps['runtime'], 'runtime')
+    rescue
+      []
     end
 
     def self.map_dependencies(deps, kind)
