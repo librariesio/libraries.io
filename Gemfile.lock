@@ -117,7 +117,7 @@ GEM
       simplecov
     concurrent-ruby (1.0.4)
     connection_pool (2.2.1)
-    counter_culture (1.1.0)
+    counter_culture (1.1.1)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
       after_commit_action (~> 1.0)
@@ -173,7 +173,7 @@ GEM
       rake
       rake-compiler
     fast_xs (0.8.0)
-    ffi (1.9.14)
+    ffi (1.9.15)
     fog-aws (1.1.0)
       fog-core (~> 1.38)
       fog-json (~> 1.0)
@@ -398,7 +398,7 @@ GEM
     shoulda-context (1.2.2)
     shoulda-matchers (2.8.0)
       activesupport (>= 3.0.0)
-    sidekiq (4.2.8)
+    sidekiq (4.2.9)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
