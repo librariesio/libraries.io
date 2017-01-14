@@ -86,7 +86,7 @@ GEM
       sass (>= 3.3.4)
     brakeman (3.4.1)
     bugsnag (5.0.1)
-    builder (3.2.2)
+    builder (3.2.3)
     capistrano (3.7.1)
       airbrussh (>= 1.0.0)
       capistrano-harrow
@@ -165,7 +165,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (2.0.0)
       faraday (~> 0.8)
-    faraday_middleware (0.10.1)
+    faraday_middleware (0.11.0)
       faraday (>= 0.7.4, < 1.0)
     fast-stemmer (1.0.2)
     fast_blank (1.0.0)
@@ -173,7 +173,7 @@ GEM
       rake
       rake-compiler
     fast_xs (0.8.0)
-    ffi (1.9.15)
+    ffi (1.9.17)
     fog-aws (1.1.0)
       fog-core (~> 1.38)
       fog-json (~> 1.0)
