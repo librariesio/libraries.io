@@ -42,6 +42,7 @@
       ga('require', 'linkid');
     </script>
   <% end %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <script type="application/ld+json">
     {
       "@context": "http://schema.org",
@@ -155,6 +156,5 @@
     <%= yield %>
   </div>
   <%= render 'layouts/footer' %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true, 'data-turbolinks-eval': false %>
 </body>
 </html>
