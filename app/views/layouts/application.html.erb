@@ -157,5 +157,9 @@
     <%= yield %>
   </div>
   <%= render 'layouts/footer' %>
+
+  <script>
+    if (typeof ga === 'function') { ga('send', 'pageview', location.pathname) }
+  </script>
 </body>
 </html>
