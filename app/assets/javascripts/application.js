@@ -47,10 +47,18 @@ $('input[name="subscription[include_prerelease]"]').on('change',function(){
   $(this).parents('form').submit();
 });
 
-stickFooter()
+
 $(window).on('resize', function() {
   stickFooter()
 });
+
+document.addEventListener('turbolinks:load', function(event) {
+  stickFooter()
+  if (typeof ga === 'function') {
+    ga('set', 'location', event.data.url)
+    ga('send', 'pageview')
+  }
+})
 
 function stickFooter() {
   if ($(document).height() <= $(window).height()) {
@@ -59,10 +67,3 @@ function stickFooter() {
       $('footer').removeClass("navbar-fixed-bottom");
   }
 }
-// Log page views with turbolinks
-document.addEventListener('turbolinks:load', function(event) {
-  if (typeof ga === 'function') {
-    ga('set', 'location', event.data.url)
-    ga('send', 'pageview')
-  }
-})
