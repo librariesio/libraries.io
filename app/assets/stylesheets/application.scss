@@ -1,7 +1,6 @@
 @import "bootstrap-sprockets";
 @import "bootstrap-custom";
 @import "font-awesome";
-@import "tipsy";
 @import "pictogram";
 @import "highlight";
 @import "tree";
@@ -371,10 +370,6 @@ tr.top td{
 
 .collection{
   min-height: 300px;
-}
-
-.tip {
-  cursor: default;
 }
 
 .adsbygoogle {

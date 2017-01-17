@@ -18,13 +18,16 @@
 //= require bootstrap/dropdown
 //= require bootstrap/transition
 //= require bootstrap/tab
-//= require tipsy
+//= require bootstrap/tooltip
 //= require js.cookie
 //= require rails-timeago
 //= require subtome
 //= require turbolinks
 
-$('.tip').tipsy({gravity: 's'});
+document.addEventListener('turbolinks:load', function(){
+  $('.tip').tooltip({placement: 'bottom'})
+  stickFooter()
+})
 
 $('.rss').on('click', function(){
   subtome($(this).attr('href'))
@@ -48,7 +51,6 @@ $('input[name="subscription[include_prerelease]"]').on('change',function(){
 });
 
 $(window).on('resize', stickFooter);
-document.addEventListener('turbolinks:load', stickFooter)
 
 function stickFooter() {
   if ($(document).height() <= $(window).height()) {
