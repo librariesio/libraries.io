@@ -159,7 +159,7 @@
   <%= render 'layouts/footer' %>
 
   <script>
-    if (typeof ga === 'function') { ga('send', 'pageview', location.pathname) }
+    if (typeof ga === 'function') { ga('send', 'pageview', location.pathname+location.search) }
   </script>
 </body>
 </html>
