@@ -105,12 +105,15 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
   Parallel.each([projects, orgs, users, repos, misc]) do |group|
     group.call
   end
+end
 
+SitemapGenerator::Sitemap.create(:create_index => true) do
   Dir.chdir(sitemap.public_path.to_s)
   xml_files      = File.join("**", "sitemaps", "**", "*.xml.gz")
   xml_file_paths = Dir.glob(xml_files)
 
   xml_file_paths.each do |file|
+    next if file.match(/sitemaps\/sitemap/)
     add_to_index file
   end
 end
