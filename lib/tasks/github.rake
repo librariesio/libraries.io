@@ -1,4 +1,5 @@
 namespace :github do
+  desc 'Recreate repo search index'
   task recreate_repos_index: :environment do
     # If the index doesn't exists can't be deleted, returns 404, carry on
     GithubRepository.__elasticsearch__.client.indices.delete index: 'github_repositories' rescue nil
@@ -10,6 +11,7 @@ namespace :github do
     GithubRepository.indexable.import
   end
 
+  desc 'Recreate issue search index'
   task recreate_issues_index: :environment do
     # If the index doesn't exists can't be deleted, returns 404, carry on
     GithubIssue.__elasticsearch__.client.indices.delete index: 'github_issues' rescue nil
@@ -21,21 +23,25 @@ namespace :github do
     GithubIssue.indexable.import
   end
 
+  desc 'Sync github users'
   task sync_users: :environment do
     GithubUser.visible.where(last_synced_at: nil).limit(100).each(&:async_sync)
     GithubUser.visible.order('last_synced_at ASC').limit(100).each(&:async_sync)
   end
 
+  desc 'Sync github orgs'
   task sync_orgs: :environment do
     GithubOrganisation.visible.order('last_synced_at ASC').limit(200).each(&:async_sync)
   end
 
+  desc 'Sync github repos'
   task sync_repos: :environment do
     scope = GithubRepository.source.open_source
     scope.where(last_synced_at: nil).limit(100).each(&:update_all_info_async)
     scope.order('last_synced_at ASC').limit(100).each(&:update_all_info_async)
   end
 
+  desc 'Sync github issues'
   task sync_issues: :environment do
     scope = GithubIssue.includes(:github_repository)
     scope.help_wanted.indexable.order('last_synced_at ASC').limit(100).each(&:sync)
@@ -43,12 +49,14 @@ namespace :github do
     scope.order('last_synced_at ASC').limit(100).each(&:sync)
   end
 
+  desc 'Sync trending github repositories'
   task update_trending: :environment do
     trending = GithubRepository.open_source.pushed.maintained.recently_created.hacker_news.limit(30).select('id')
     brand_new = GithubRepository.open_source.pushed.maintained.recently_created.order('created_at DESC').limit(60).select('id')
     (trending + brand_new).uniq.each{|g| GithubDownloadWorker.perform_async(g.id) }
   end
 
+  desc 'Download all github users'
   task download_all_users: :environment do
     since = REDIS.get('githubuserid').to_i
 

@@ -1,5 +1,6 @@
 namespace :one_off do
   # put your one off tasks here and delete them once they've been ran
+  desc 'set stable flag on all versions'
   task set_stable_versions: :environment do
     Version.find_in_batches do |versions|
       ActiveRecord::Base.transaction do
@@ -10,6 +11,7 @@ namespace :one_off do
     end
   end
 
+  desc 'set stable flag on all tags'
   task set_stable_tags: :environment do
     GithubTag.find_in_batches do |tags|
       ActiveRecord::Base.transaction do

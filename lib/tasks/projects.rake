@@ -1,4 +1,5 @@
 namespace :projects do
+  desc 'Recreate the search index'
   task recreate_index: :environment do
     # If the index doesn't exists can't be deleted, returns 404, carry on
     Project.__elasticsearch__.client.indices.delete index: 'projects' rescue nil
@@ -10,20 +11,24 @@ namespace :projects do
     Project.import query: -> { indexable }
   end
 
+  desc 'Sync projects'
   task sync: :environment do
     ids = Project.where(last_synced_at: nil).order('projects.updated_at DESC').limit(100_000).pluck(:id)
     Project.where(id: ids).find_each(&:async_sync)
   end
 
+  desc 'Update sourcerank of projects'
   task update_source_ranks: :environment do
     Project.where('projects.updated_at < ?', 1.week.ago).order('projects.updated_at ASC').limit(1000).each(&:update_source_rank_async)
   end
 
+  desc 'Link dependencies to projects'
   task link_dependencies: :environment do
     Dependency.where('created_at > ?', 1.day.ago).without_project_id.with_project_name.find_each(&:update_project_id)
     RepositoryDependency.where('created_at > ?', 1.day.ago).without_project_id.with_project_name.find_each(&:update_project_id)
   end
 
+  desc 'Check status of projects'
   task check_status: :environment do
     ['npm', 'rubygems', 'packagist', 'nuget', 'wordpress', 'cpan', 'clojars', 'cocoapods',
     'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
@@ -33,6 +38,7 @@ namespace :projects do
     end
   end
 
+  desc 'Update project repositoires'
   task update_repos: :environment do
     repo_names = Project.maintained.where('projects.updated_at < ?', 1.week.ago).with_repo.pluck('github_repositories.full_name').uniq.compact
 
@@ -41,6 +47,7 @@ namespace :projects do
     end
   end
 
+desc 'Check project repositoires statuses'
   task chech_repo_status: :environment do
     ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].each do |platform|
       repo_names = Project.platform(platform).maintained.where('projects.updated_at < ?', 1.week.ago).with_repo.pluck('github_repositories.full_name').uniq.compact
@@ -50,6 +57,7 @@ namespace :projects do
     end
   end
 
+  desc 'Check to see if projects have been removed'
   task check_removed_status: :environment do
     ['npm', 'rubygems', 'packagist', 'wordpress', 'cpan', 'clojars', 'cocoapods',
     'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
@@ -66,6 +74,7 @@ namespace :projects do
     end
   end
 
+  desc 'Check to see if nuget projects have been removed'
   task check_nuget_yanks: :environment do
     if Date.today.wday.zero?
       Project.platform('nuget').not_removed.includes(:versions).find_each do |project|
@@ -76,6 +85,7 @@ namespace :projects do
     end
   end
 
+  desc 'Download missing packages'
   task download_missing: :environment do
     ['Atom', 'Cargo', 'CocoaPods', 'NPM', 'CPAN', 'CRAN', 'Elm', 'Hackage', 'Haxelib',
       'Hex', 'Packagist', 'Rubygems'].each do |platform|
@@ -83,6 +93,7 @@ namespace :projects do
     end
   end
 
+  desc 'Slowly sync all pypi dependencies'
   task sync_pypi_deps: :environment do
     Project.maintained.platform('pypi').where('last_synced_at < ?', '2016-11-29 15:30:45').order(:last_synced_at).limit(10).each(&:async_sync)
   end
