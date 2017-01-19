@@ -42,10 +42,6 @@ $('#welcome-alert').on('closed.bs.alert', function() {
   Cookies.set('hide_welcome_alert', 'true');
 });
 
-$('#dependencyci-alert').on('closed.bs.alert', function() {
-  Cookies.set('hide_dependencyci_alert', 'true');
-});
-
 $('input[name="subscription[include_prerelease]"]').on('change',function(){
   $(this).parents('form').submit();
 });
