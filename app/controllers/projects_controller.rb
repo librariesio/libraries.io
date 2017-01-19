@@ -1,6 +1,5 @@
 class ProjectsController < ApplicationController
   before_action :ensure_logged_in, only: [:your_dependent_repos, :mute, :unmute, :unsubscribe]
-  etag { current_user.try :id }
   before_action :find_project, only: [:show, :sourcerank, :about, :dependents,
                                       :dependent_repos, :your_dependent_repos,
                                       :versions, :tags, :mute, :unmute, :unsubscribe]
