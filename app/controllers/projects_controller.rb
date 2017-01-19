@@ -1,8 +1,9 @@
 class ProjectsController < ApplicationController
-  before_action :ensure_logged_in, only: [:your_dependent_repos, :mute, :unmute, :unsubscribe]
+  before_action :ensure_logged_in, only: [:your_dependent_repos, :mute, :unmute,
+                                          :unsubscribe, :sync]
   before_action :find_project, only: [:show, :sourcerank, :about, :dependents,
                                       :dependent_repos, :your_dependent_repos,
-                                      :versions, :tags, :mute, :unmute, :unsubscribe]
+                                      :versions, :tags, :mute, :unmute, :unsubscribe, :sync]
 
   def index
     if current_user
@@ -125,6 +126,16 @@ class ProjectsController < ApplicationController
 
   def unsubscribe
 
+  end
+
+  def sync
+    if @project.recently_synced?
+      flash[:error] = "Project has already been synced recently"
+    else
+      @project.manual_sync
+      flash[:notice] = "Project has been queued to be resynced"
+    end
+    redirect_back fallback_location: project_path(@project.to_param)
   end
 
   private

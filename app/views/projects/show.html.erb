@@ -368,6 +368,22 @@
         <p>
           <small class='text-muted'>Last synced: <%= @project.last_synced_at || @project.created_at %></small>
         </p>
+        <% unless @project.recently_synced? %>
+          <% if logged_in? %>
+            <p>
+              <%= link_to sync_project_path(@project.to_param), class: 'btn btn-primary btn-xs', method: :post do %>
+                <%= fa_icon 'refresh' %>
+                Resync Project
+              <% end %>
+            </p>
+          <% else %>
+            <p>
+              <small class='text-muted'>
+                <%= link_to 'Login', login_path %> to resync this project
+              </small>
+            </p>
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>

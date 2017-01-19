@@ -181,6 +181,7 @@ Rails.application.routes.draw do
   post '/:platform/:name/suggestions', to: 'project_suggestions#create', constraints: { :name => /.*/ }
 
   # project routes
+  post '/:platform/:name/sync', to: 'projects#sync', constraints: { :name => /.*/ }, as: :sync_project
   get '/:platform/:name/unsubscribe', to: 'projects#unsubscribe', constraints: { :name => /.*/ }, as: :unsubscribe_project
   get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
   post '/:platform/:name/mute', to: 'projects#mute', as: :mute_project, constraints: { :name => /.*/ }

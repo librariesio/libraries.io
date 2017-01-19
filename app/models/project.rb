@@ -90,6 +90,13 @@ class Project < ApplicationRecord
     name
   end
 
+  def manual_sync
+    async_sync
+    update_github_repo_async
+    self.last_synced_at = Time.zone.now
+    forced_save
+  end
+
   def forced_save
     self.updated_at = Time.zone.now
     save
@@ -101,6 +108,10 @@ class Project < ApplicationRecord
 
   def async_sync
     PackageManagerDownloadWorker.perform_async(platform, name)
+  end
+
+  def recently_synced?
+    last_synced_at && last_synced_at > 1.day.ago
   end
 
   def github_contributions_count
