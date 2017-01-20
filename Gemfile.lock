@@ -113,7 +113,7 @@ GEM
       xpath (~> 2.0)
     chartkick (2.2.2)
     cliver (0.3.2)
-    codeclimate-test-reporter (1.0.4)
+    codeclimate-test-reporter (1.0.5)
       simplecov
     concurrent-ruby (1.0.4)
     connection_pool (2.2.1)
@@ -376,7 +376,7 @@ GEM
     safe_yaml (1.0.4)
     sanitize-url (0.1.4)
     sass (3.4.23)
-    sassc (1.11.1)
+    sassc (1.11.2)
       bundler
       ffi (~> 1.9.6)
       sass (>= 3.3.0)
@@ -435,7 +435,7 @@ GEM
     sshkit (1.11.5)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
-    stripe (1.57.1)
+    stripe (1.58.0)
       rest-client (>= 1.4, < 4.0)
     stripe_event (1.5.1)
       activesupport (>= 3.1)
