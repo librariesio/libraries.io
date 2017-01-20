@@ -17,6 +17,7 @@ module IssueSearch
         indexes :stars, type: 'integer'
         indexes :github_id, type: 'integer'
         indexes :contributions_count, type: 'integer'
+        indexes :rank, type: 'integer'
 
         indexes :language, :analyzer => 'keyword'
         indexes :license, :analyzer => 'keyword'
@@ -32,7 +33,7 @@ module IssueSearch
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def as_indexed_json(_options)
-      as_json methods: [:title, :contributions_count, :stars, :language, :license]
+      as_json methods: [:title, :contributions_count, :stars, :language, :license, :rank]
     end
 
     def exact_title
@@ -57,7 +58,7 @@ module IssueSearch
                  }
               }
             },
-            field_value_factor: { field: "stars", "modifier": "square" }
+            field_value_factor: { field: "rank", "modifier": "square" }
           }
         },
         facets: issues_facet_filters(options, options[:labels_to_keep]),
@@ -104,7 +105,7 @@ module IssueSearch
                  }
               }
             },
-            field_value_factor: { field: "stars", "modifier": "square" }
+            field_value_factor: { field: "rank", "modifier": "square" }
           }
         },
         facets: issues_facet_filters(options, GithubIssue::FIRST_PR_LABELS),
@@ -117,7 +118,7 @@ module IssueSearch
     end
 
     def self.default_sort
-      [{'comments_count' => 'asc'}, {'stars' => 'desc'}, {'created_at' => 'asc'}, {'contributions_count' => 'asc'}]
+      [{'comments_count' => 'asc'}, {'rank' => 'desc'}, {'created_at' => 'asc'}, {'contributions_count' => 'asc'}]
     end
 
     def self.issues_facet_filters(options, labels)

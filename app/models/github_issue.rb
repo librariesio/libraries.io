@@ -68,6 +68,10 @@ class GithubIssue < ApplicationRecord
     github_repository.try(:stargazers_count) || 0
   end
 
+  def rank
+    github_repository.try(:rank) || 0
+  end
+
   def self.update_from_github(name_with_owner, issue_number, token = nil)
     token ||= AuthToken.token
     repo = GithubRepository.create_from_github(name_with_owner, token)

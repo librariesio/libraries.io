@@ -42,6 +42,7 @@ module RepoSearch
         indexes :subscribers_count, type: 'integer'
         indexes :github_id, type: 'integer'
         indexes :github_contributions_count, type: 'integer'
+        indexes :rank, type: 'integer'
 
         indexes :fork
         indexes :has_issues
@@ -160,7 +161,7 @@ module RepoSearch
       if query.present?
         search_definition[:query][:function_score][:query][:filtered][:query] = Project.query_options(query, FIELDS)
       elsif options[:sort].blank?
-        search_definition[:sort]  = [{'stargazers_count' => 'desc'}]
+        search_definition[:sort]  = [{'rank' => 'desc'}, {'stargazers_count' => 'desc'}]
       end
 
       __elasticsearch__.search(search_definition)
