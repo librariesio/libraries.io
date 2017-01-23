@@ -60,7 +60,7 @@ tables. Rails makes this easy through the use of "Rake" tasks.
 bundle exec rake db:create db:migrate
 ```
 
-Go create a Personal access token on GitHub (only requires `public_repo` access), then we can download some sample data:
+Go create a [Personal access token on GitHub](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) (only requires `public_repo` access), then we can download some sample data:
 
 ```sh
  bundle exec rails c
