@@ -1,7 +1,7 @@
 class GithubIssue < ApplicationRecord
   include IssueSearch
 
-  belongs_to :github_repository
+  belongs_to :repository, foreign_key: "github_repository_id"
   belongs_to :github_user, primary_key: :github_id
 
   API_FIELDS = [:number, :state, :title, :body, :locked, :closed_at, :created_at, :updated_at]
@@ -23,11 +23,11 @@ class GithubIssue < ApplicationRecord
   scope :labeled, -> (label) { where.contains(labels: [label]) }
   scope :help_wanted, -> { labeled('help wanted') }
   scope :first_pull_request, -> { where.overlap(labels: FIRST_PR_LABELS) }
-  scope :indexable, -> { actionable.includes(:github_repository) }
+  scope :indexable, -> { actionable.includes(:repository) }
 
   def url
     path = pull_request ? 'pull' : 'issues'
-    "#{github_repository.url}/#{path}/#{number}"
+    "#{repository.url}/#{path}/#{number}"
   end
 
   def github_client(token = nil)
@@ -35,7 +35,7 @@ class GithubIssue < ApplicationRecord
   end
 
   def sync(token = nil)
-    GithubIssueWorker.perform_async(github_repository.full_name, number, token)
+    GithubIssueWorker.perform_async(repository.full_name, number, token)
   end
 
   def self.create_from_hash(repo, issue_hash)
@@ -53,28 +53,28 @@ class GithubIssue < ApplicationRecord
   end
 
   def contributions_count
-    github_repository.try(:github_contributions_count) || 0
+    repository.try(:github_contributions_count) || 0
   end
 
   def language
-    github_repository.try(:language)
+    repository.try(:language)
   end
 
   def license
-    github_repository.try(:license)
+    repository.try(:license)
   end
 
   def stars
-    github_repository.try(:stargazers_count) || 0
+    repository.try(:stargazers_count) || 0
   end
 
   def rank
-    github_repository.try(:rank) || 0
+    repository.try(:rank) || 0
   end
 
   def self.update_from_github(name_with_owner, issue_number, token = nil)
     token ||= AuthToken.token
-    repo = GithubRepository.create_from_github(name_with_owner, token)
+    repo = Repository.create_from_github(name_with_owner, token)
     return unless repo
     issue_hash = AuthToken.fallback_client(token).issue(repo.full_name, issue_number)
     GithubIssue.create_from_hash(repo, issue_hash)

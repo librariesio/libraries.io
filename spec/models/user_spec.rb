@@ -6,12 +6,12 @@ describe User, type: :model do
   it { should have_many(:repository_subscriptions) }
   it { should have_many(:api_keys) }
   it { should have_many(:repository_permissions) }
-  it { should have_many(:all_github_repositories) }
+  it { should have_many(:all_repositories) }
   it { should have_many(:adminable_repository_permissions) }
-  it { should have_many(:adminable_github_repositories) }
+  it { should have_many(:adminable_repositories) }
   it { should have_many(:adminable_github_orgs) }
-  it { should have_many(:source_github_repositories) }
-  it { should have_many(:watched_github_repositories) }
+  it { should have_many(:source_repositories) }
+  it { should have_many(:watched_repositories) }
   it { should have_many(:watched_dependencies) }
   it { should have_many(:watched_dependent_projects) }
   it { should have_many(:dependencies) }

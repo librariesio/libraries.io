@@ -1,8 +1,8 @@
 class GithubTag < ApplicationRecord
   include Releaseable
 
-  belongs_to :github_repository, touch: true
-  validates_presence_of :name, :sha, :github_repository
+  belongs_to :repository, foreign_key: "github_repository_id", touch: true
+  validates_presence_of :name, :sha, :repository
   validates_uniqueness_of :name, scope: :github_repository_id
 
   scope :published, -> { where('published_at IS NOT NULL') }
@@ -11,7 +11,7 @@ class GithubTag < ApplicationRecord
   after_commit :save_projects
 
   def save_projects
-    github_repository.try(:save_projects)
+    repository.try(:save_projects)
   end
 
   def send_notifications_async
@@ -28,8 +28,8 @@ class GithubTag < ApplicationRecord
   end
 
   def notify_web_hooks
-    github_repository.projects.without_versions.each do |project|
-      repos = project.subscriptions.map(&:github_repository).compact.uniq
+    repository.projects.without_versions.each do |project|
+      repos = project.subscriptions.map(&:repository).compact.uniq
       repos.each do |repo|
         requirements = repo.repository_dependencies.select{|rd| rd.project == project }.map(&:requirements)
         repo.web_hooks.each do |web_hook|
@@ -40,11 +40,11 @@ class GithubTag < ApplicationRecord
   end
 
   def has_projects?
-    github_repository && github_repository.projects.without_versions.length > 0
+    repository && repository.projects.without_versions.length > 0
   end
 
   def notify_subscribers
-    github_repository.projects.without_versions.each do |project|
+    repository.projects.without_versions.each do |project|
       subscriptions = project.subscriptions
       subscriptions = subscriptions.include_prereleases if prerelease?
 
@@ -58,7 +58,7 @@ class GithubTag < ApplicationRecord
   end
 
   def notify_firehose
-    github_repository.projects.without_versions.each do |project|
+    repository.projects.without_versions.each do |project|
       Firehose.new_version(project, project.platform, self)
     end
   end
@@ -89,6 +89,6 @@ class GithubTag < ApplicationRecord
   end
 
   def github_url
-    "#{github_repository.url}/releases/tag/#{name}"
+    "#{repository.url}/releases/tag/#{name}"
   end
 end

@@ -5,8 +5,8 @@ class ExploreController < ApplicationController
     @languages = Project.popular_languages(:facet_limit => 40).first(21)
     @licenses = Project.popular_licenses(:facet_limit => 40).first(10)
 
-    project_scope = Project.includes(:github_repository).maintained.with_description
-    repo_scope = GithubRepository.source.with_description.open_source.limit(6)
+    project_scope = Project.includes(:repository).maintained.with_description
+    repo_scope = Repository.source.with_description.open_source.limit(6)
 
     @trending_projects = project_scope.recently_created.hacker_news.limit(10).to_a.uniq(&:name).first(6)
     @trending_repos = repo_scope.trending.hacker_news
@@ -18,7 +18,7 @@ class ExploreController < ApplicationController
 
   helper_method :repo_search
   def repo_search(sort)
-    search(GithubRepository, sort)
+    search(Repository, sort)
   end
 
   helper_method :project_search

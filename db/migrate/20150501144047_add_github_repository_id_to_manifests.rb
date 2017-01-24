@@ -1,5 +1,5 @@
-class AddGithubRepositoryIdToManifests < ActiveRecord::Migration
+class AddRepositoryIdToManifests < ActiveRecord::Migration
   def change
-    add_column :manifests, :github_repository_id, :integer
+    add_column :manifests, :repository_id, :integer
   end
 end

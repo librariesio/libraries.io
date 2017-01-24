@@ -1,13 +1,13 @@
 class RepositorySubscription < ApplicationRecord
   belongs_to :user
-  belongs_to :github_repository
+  belongs_to :repository, foreign_key: "github_repository_id"
   has_many :subscriptions
 
   after_commit :update_subscriptions, on: :update
 
   def update_subscriptions
     projects = []
-    github_repository.repository_dependencies.each do |dep|
+    repository.repository_dependencies.each do |dep|
       if dep.project.present?
         project = dep.project.try(:id)
       else

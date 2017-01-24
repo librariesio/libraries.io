@@ -3,6 +3,9 @@ module RepoSearch
 
   included do
     include Elasticsearch::Model
+    
+    index_name    "github_repositories"
+    document_type "github_repository"
 
     FIELDS = ['full_name^2', 'exact_name^2', 'description', 'homepage', 'language', 'license']
 

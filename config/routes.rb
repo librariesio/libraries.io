@@ -25,14 +25,14 @@ Rails.application.routes.draw do
     get '/github/issues/help-wanted', to: 'github_issues#help_wanted'
     get '/github/issues/first-pull-request', to: 'github_issues#first_pull_request'
 
-    get '/github/search', to: 'github_repositories#search'
+    get '/github/search', to: 'repositories#search'
 
     get '/github/:login/repositories', to: 'github_users#repositories'
     get '/github/:login/projects', to: 'github_users#projects'
 
-    get '/github/:owner/:name/dependencies', to: 'github_repositories#dependencies', constraints: { :name => /[^\/]+/ }
-    get '/github/:owner/:name/projects', to: 'github_repositories#projects', constraints: { :name => /[^\/]+/ }
-    get '/github/:owner/:name', to: 'github_repositories#show', constraints: { :name => /[^\/]+/ }
+    get '/github/:owner/:name/dependencies', to: 'repositories#dependencies', constraints: { :name => /[^\/]+/ }
+    get '/github/:owner/:name/projects', to: 'repositories#projects', constraints: { :name => /[^\/]+/ }
+    get '/github/:owner/:name', to: 'repositories#show', constraints: { :name => /[^\/]+/ }
 
     get '/github/:login', to: 'github_users#show'
 
@@ -52,7 +52,7 @@ Rails.application.routes.draw do
       end
     end
     resources :project_suggestions
-    resources :github_repositories do
+    resources :repositories do
       member do
         put 'deprecate'
         put 'unmaintain'
@@ -87,8 +87,8 @@ Rails.application.routes.draw do
   get '/dashboard', to: redirect("/repositories")
   get '/muted', to: 'dashboard#muted', as: :muted
   post '/repositories/sync', to: 'dashboard#sync', as: :sync
-  post '/watch/:github_repository_id', to: 'dashboard#watch', as: :watch
-  post '/unwatch/:github_repository_id', to: 'dashboard#unwatch', as: :unwatch
+  post '/watch/:repository_id', to: 'dashboard#watch', as: :watch
+  post '/unwatch/:repository_id', to: 'dashboard#unwatch', as: :unwatch
 
   resource :account do
     member do
@@ -123,13 +123,13 @@ Rails.application.routes.draw do
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
-  get '/github/languages', to: 'github_repositories#languages', as: :github_languages
-  get '/github/search', to: 'github_repositories#search', as: :github_search
-  get '/github/trending', to: 'github_repositories#hacker_news', as: :trending
-  get '/github/new', to: 'github_repositories#new', as: :new_repos
+  get '/github/languages', to: 'repositories#languages', as: :github_languages
+  get '/github/search', to: 'repositories#search', as: :github_search
+  get '/github/trending', to: 'repositories#hacker_news', as: :trending
+  get '/github/new', to: 'repositories#new', as: :new_repos
 
   get '/github/organisations', to: 'github_organisations#index', as: :github_organisations
-  get '/github/timeline', to: 'github_repositories#timeline', as: :github_timeline
+  get '/github/timeline', to: 'repositories#timeline', as: :github_timeline
 
   get '/github/:login/issues', to: 'users#issues'
   get '/github/:login/dependency-issues', to: 'users#dependency_issues'
@@ -152,23 +152,23 @@ Rails.application.routes.draw do
   post '/auth/failure',             to: 'sessions#failure'
 
 
-  get '/github/:owner/:name', to: 'github_repositories#show', as: :github_repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
-  get '/github/:owner/:name/contributors', to: 'github_repositories#contributors', as: :github_repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/sourcerank', to: 'github_repositories#sourcerank', as: :github_repository_sourcerank, format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/forks', to: 'github_repositories#forks', as: :github_repository_forks, format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/tags', to: 'github_repositories#tags', as: :github_repository_tags, format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/dependency-issues', to: 'github_repositories#dependency_issues', format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/tree', to: 'repository_tree#show', as: :github_repository_tree, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name', to: 'repositories#show', as: :repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
+  get '/github/:owner/:name/contributors', to: 'repositories#contributors', as: :repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/sourcerank', to: 'repositories#sourcerank', as: :repository_sourcerank, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/forks', to: 'repositories#forks', as: :repository_forks, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/tags', to: 'repositories#tags', as: :repository_tags, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/dependency-issues', to: 'repositories#dependency_issues', format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/tree', to: 'repository_tree#show', as: :repository_tree, format: false, constraints: { :name => /[^\/]+/ }
 
-  get '/github/:owner/:name/web_hooks', to: 'web_hooks#index', as: :github_repository_web_hooks, format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/web_hooks/new', to: 'web_hooks#new', as: :new_github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
-  delete '/github/:owner/:name/web_hooks/:id', to: 'web_hooks#destroy', as: :github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/web_hooks', to: 'web_hooks#index', as: :repository_web_hooks, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/web_hooks/new', to: 'web_hooks#new', as: :new_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  delete '/github/:owner/:name/web_hooks/:id', to: 'web_hooks#destroy', as: :repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
   patch '/github/:owner/:name/web_hooks/:id', to: 'web_hooks#update', format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/web_hooks/:id/edit', to: 'web_hooks#edit', as: :edit_github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
-  post '/github/:owner/:name/web_hooks/:id/test', to: 'web_hooks#test', as: :test_github_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  get '/github/:owner/:name/web_hooks/:id/edit', to: 'web_hooks#edit', as: :edit_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+  post '/github/:owner/:name/web_hooks/:id/test', to: 'web_hooks#test', as: :test_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
   post '/github/:owner/:name/web_hooks', to: 'web_hooks#create', format: false, constraints: { :name => /[^\/]+/ }
 
-  get '/github', to: 'github_repositories#index', as: :github
+  get '/github', to: 'repositories#index', as: :github
 
   get '/about', to: 'pages#about', as: :about
 

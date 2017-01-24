@@ -5,7 +5,7 @@ describe "API::DocController" do
     it "renders successfully" do
       project = create(:project, name: 'base62', platform: 'NPM')
       create(:version, project: project)
-      create(:github_repository, full_name: 'gruntjs/grunt')
+      create(:repository, full_name: 'gruntjs/grunt')
       create(:github_user)
 
       visit '/api'

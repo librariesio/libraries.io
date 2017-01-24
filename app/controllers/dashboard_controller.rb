@@ -4,7 +4,7 @@ class DashboardController < ApplicationController
   def index
     @orgs = current_user.adminable_github_orgs.order(:login)
     @org = @orgs.find{|org| org.login == params[:org] }
-    @repos = current_user.adminable_github_repositories.order('fork ASC, pushed_at DESC').paginate(per_page: 30, page: page_number)
+    @repos = current_user.adminable_repositories.order('fork ASC, pushed_at DESC').paginate(per_page: 30, page: page_number)
     if @org
       @repos = @repos.from_org(@org)
     else
@@ -39,9 +39,9 @@ class DashboardController < ApplicationController
   end
 
   def watch
-    github_repository = GithubRepository.find(params[:github_repository_id])
-    if current_user.can_watch?(github_repository)
-      current_user.subscribe_to_repo(github_repository)
+    repository = Repository.find(params[:repository_id])
+    if current_user.can_watch?(repository)
+      current_user.subscribe_to_repo(repository)
       redirect_back fallback_location: repositories_path
     else
       redirect_to pricing_path, notice: 'You need to upgrade your plan to track more repositories'
@@ -49,8 +49,8 @@ class DashboardController < ApplicationController
   end
 
   def unwatch
-    github_repository = GithubRepository.find(params[:github_repository_id])
-    current_user.unsubscribe_from_repo(github_repository)
+    repository = Repository.find(params[:repository_id])
+    current_user.unsubscribe_from_repo(repository)
     redirect_back fallback_location: repositories_path
   end
 

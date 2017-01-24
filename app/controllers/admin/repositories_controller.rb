@@ -1,0 +1,64 @@
+class Admin::RepositoriesController < Admin::ApplicationController
+  def show
+    @repository = Repository.find(params[:id])
+  end
+
+  def update
+    @repository = Repository.find(params[:id])
+    if @repository.update_attributes(repository_params)
+      @repository.update_all_info_async
+      redirect_to repository_path(@repository.owner_name, @repository.project_name)
+    else
+      redirect_to admin_repository_path(@repository.id)
+    end
+  end
+
+  def deprecate
+    change(:deprecate!)
+  end
+
+  def unmaintain
+    change(:unmaintain!)
+  end
+
+  def index
+    if params[:language].present?
+      @language = Repository.language(params[:language].downcase).first.try(:language)
+      raise ActiveRecord::RecordNotFound if @language.nil?
+      scope = Repository.language(@language)
+    else
+      scope = Repository
+    end
+
+    @languages = Repository.maintained.without_license.with_projects.group('github_repositories.language').count.sort_by(&:last).reverse.first(20)
+    @repositories = scope.maintained.without_license.with_projects.order("COUNT(projects.id) DESC").group("github_repositories.id").paginate(page: params[:page])
+  end
+
+  def deprecated
+    search('deprecated')
+  end
+
+  def unmaintained
+    search('unmaintained')
+  end
+
+  private
+
+  def repository_params
+    params.require(:repository).permit(:license, :status)
+  end
+
+  def search(query)
+    @search = Repository.search(query, must_not: [
+      terms: { "status" => ["Unmaintained","Active","Deprecated"] }
+    ], sort: 'stargazers_count').paginate(page: params[:page])
+    @repositories = @search.records
+  end
+
+  def change(method)
+    @repository = Repository.find(params[:id])
+    @repository.send(method)
+    @repository.update_all_info_async
+    redirect_to repository_path(@repository.owner_name, @repository.project_name)
+  end
+end

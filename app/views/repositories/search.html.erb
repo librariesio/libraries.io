@@ -1,0 +1,66 @@
+<% title @title %>
+<% content_for :atom, auto_discovery_link_tag(:atom, url_for(params.except(:host).merge(format: :atom, sort: 'created_at', order: 'desc').permit!)) %>
+<%= form_tag github_search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
+  <div class="row">
+    <div class='col-sm-8'>
+      <div class="input-group input-group-lg">
+        <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search repos...', class: 'form-control', size: 40 %>
+        <span class="input-group-btn">
+          <button class="btn btn-primary btn-large " type="submit"><%= fa_icon 'search' %></button>
+        </span>
+      </div>
+
+      <% [:license, :language, :sort].each do |field| %>
+        <%= hidden_field_tag field, params[field] if params[field].present? %>
+      <% end %>
+      <% if @suggestion && @suggestion.options.any? %>
+        <p>
+          Did you mean
+          <strong><%= link_to "#{@suggestion.options.first.text}?", github_search_path(q: @suggestion.options.first.text) %></strong>
+        </p>
+      <% end %>
+    </div>
+    <div class='col-sm-4 hidden-sm'>
+      <h3>
+        <small>Sort by: <%= select_tag 'sort', options_for_select(repo_sort_options, params[:sort]), onchange: "this.form.submit()" %></small>
+      </h3>
+    </div>
+  </div>
+<% end %>
+<div class='row'>
+  <div class='col-sm-8'>
+    <%= render 'adsense/banner' %>
+    <% if @repositories.length > 0 %>
+      <%= render @repositories, cache: true %>
+      <%= will_paginate @search, page_links: false %>
+      <p>
+        <small>
+          <%= page_entries_info @search, model: 'repositories' %>
+          -
+          <%= link_to url_for(params.except(:host).merge(format: :atom, sort: 'created_at', order: 'desc').permit!), class: 'rss' do %>
+            <%= fa_icon "rss-square" %>
+            Subscribe to an RSS feed of this search
+          <% end %>
+        </small>
+      </p>
+    <% else %>
+
+      <p>
+        No repositories found.
+      </p>
+      <p>
+        <% if params[:licenses].present? ||  params[:languages].present? %>
+          <%= link_to 'Try removing some filters.', search_path(q: params[:q]) %>
+        <% end %>
+      </p>
+    <% end %>
+  </div>
+
+  <div class='col-sm-4 facets'>
+    <%= render 'adsense/sidebar' %>
+    <% @search.response.facets.each do |name, facet| %>
+      <% next if facet['terms'].empty? %>
+      <%= render 'search/facet', name: name, facet: facet %>
+    <% end %>
+  </div>
+</div>

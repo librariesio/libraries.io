@@ -1,0 +1,84 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:9200/projects/_count
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '61'
+    body:
+      encoding: UTF-8
+      string: '{"count":101,"_shards":{"total":1,"successful":1,"failed":0}}'
+    http_version: 
+  recorded_at: Tue, 24 Jan 2017 13:35:22 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/github_repositories/github_repository/_search?from=0&size=30
+    body:
+      encoding: UTF-8
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"bool":{"should":[{"multi_match":{"query":"unmaintained","fields":["full_name^2","exact_name^2","description","homepage","language","license"],"fuzziness":1.2,"slop":2,"type":"cross_fields","operator":"and"}}]}},"filter":{"bool":{"must":[{"exists":{"field":"pushed_at"}}],"must_not":[{"term":{"fork":true}},{"term":{"private":true}},{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"stargazers_count","modifier":"square"}}},"facets":{"language":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"license":{"terms":{"field":"license","size":35},"facet_filter":{"bool":{"must":[]}}},"keywords":{"terms":{"field":"keywords","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[],"must_not":[{"terms":{"status":["Unmaintained","Active","Deprecated"]}}]}},"suggest":{"did_you_mean":{"text":"unmaintained","term":{"size":1,"field":"full_name"}}},"sort":{"stargazers_count":"desc"},"track_scores":true}'
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '435'
+    body:
+      encoding: UTF-8
+      string: '{"took":4,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"facets":{"language":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"license":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"keywords":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]}},"suggest":{"did_you_mean":[{"text":"unmaintain","offset":0,"length":12,"options":[]}]}}'
+    http_version: 
+  recorded_at: Tue, 24 Jan 2017 13:35:22 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/projects/_count
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '61'
+    body:
+      encoding: UTF-8
+      string: '{"count":101,"_shards":{"total":1,"successful":1,"failed":0}}'
+    http_version: 
+  recorded_at: Tue, 24 Jan 2017 13:35:22 GMT
+recorded_with: VCR 3.0.3

@@ -48,11 +48,11 @@ module SourceRank
   end
 
   def repository_present?
-    github_repository.present?
+    repository.present?
   end
 
   def readme_present?
-    github_repository.present? && github_repository.readme.present?
+    repository.present? && repository.readme.present?
   end
 
   def license_present?

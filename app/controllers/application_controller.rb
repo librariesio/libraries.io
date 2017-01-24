@@ -58,8 +58,8 @@ class ApplicationController < ActionController::Base
   end
 
   def find_project
-    @project = Project.platform(params[:platform]).where(name: params[:name]).includes(:github_repository, :versions).first
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes(:github_repository, :versions).first if @project.nil?
+    @project = Project.platform(params[:platform]).where(name: params[:name]).includes(:repository, :versions).first
+    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes(:repository, :versions).first if @project.nil?
     raise ActiveRecord::RecordNotFound if @project.nil?
     @color = @project.color
   end
@@ -102,7 +102,7 @@ class ApplicationController < ActionController::Base
     }, repo_ids: options[:repo_ids]), page: page_number, per_page: per_page_number
     ids = @search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
-    @github_issues = @search.records.includes(:github_repository).sort_by { |u| indexes[u.id] }
+    @github_issues = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
   end
 
   def first_pull_request_issues(labels)
@@ -113,11 +113,11 @@ class ApplicationController < ActionController::Base
     }), page: page_number, per_page: per_page_number
     ids = @search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
-    @github_issues = @search.records.includes(:github_repository).sort_by { |u| indexes[u.id] }
+    @github_issues = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
   end
 
   def search_repos(query)
-    es_query(GithubRepository, query, {
+    es_query(Repository, query, {
       license: current_licenses,
       language: current_language,
       keywords: current_keywords,
@@ -142,13 +142,13 @@ class ApplicationController < ActionController::Base
 
   def find_version
     @version_count = @project.versions.size
-    @github_repository = @project.github_repository
+    @repository = @project.repository
     if @version_count.zero?
       @versions = []
-      if @github_repository.present?
-        @github_tags = @github_repository.github_tags.published.order('published_at DESC').limit(10).to_a.sort
+      if @repository.present?
+        @github_tags = @repository.github_tags.published.order('published_at DESC').limit(10).to_a.sort
         if params[:number].present?
-          @version = @github_repository.github_tags.published.find_by_name(params[:number])
+          @version = @repository.github_tags.published.find_by_name(params[:number])
           raise ActiveRecord::RecordNotFound if @version.nil?
         end
       else
@@ -171,15 +171,15 @@ class ApplicationController < ActionController::Base
 
   def load_repo
     full_name = [params[:owner], params[:name]].join('/')
-    @github_repository = GithubRepository.where('lower(full_name) = ?', full_name.downcase).first
-    raise ActiveRecord::RecordNotFound if @github_repository.nil?
+    @repository = Repository.where('lower(full_name) = ?', full_name.downcase).first
+    raise ActiveRecord::RecordNotFound if @repository.nil?
     raise ActiveRecord::RecordNotFound unless authorized?
-    redirect_to url_for(owner: @github_repository.owner_name, name: @github_repository.project_name), :status => :moved_permanently if full_name != @github_repository.full_name
+    redirect_to url_for(owner: @repository.owner_name, name: @repository.project_name), :status => :moved_permanently if full_name != @repository.full_name
   end
 
   def authorized?
-    if @github_repository.private?
-      current_user && current_user.can_read?(@github_repository)
+    if @repository.private?
+      current_user && current_user.can_read?(@repository)
     else
       true
     end

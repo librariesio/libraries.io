@@ -14,7 +14,7 @@
 <% if @repos.any? %>
 <p>
   You depend on <%= @project %> in the following repos:
-  <%= @repos.map{|repo| link_to repo.full_name, github_repository_url(repo.owner_name, repo.project_name) }.to_sentence.html_safe %>
+  <%= @repos.map{|repo| link_to repo.full_name, repository_url(repo.owner_name, repo.project_name) }.to_sentence.html_safe %>
 </p>
 <% end %>
 
@@ -22,9 +22,9 @@
   Check out all the details here: <%= link_to version_url(@project.to_param.merge(number: @version.number)), version_url(@project.to_param.merge(number: @version.number)) %>
 </p>
 
-<% if @project.github_repository.present? %>
+<% if @project.repository.present? %>
 <p>
-  You can also browse the latest commits on GitHub: <%= link_to @project.github_repository.commits_url, @project.github_repository.commits_url %>
+  You can also browse the latest commits on GitHub: <%= link_to @project.repository.commits_url, @project.repository.commits_url %>
 </p>
 <% end %>
 

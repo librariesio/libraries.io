@@ -1,5 +1,5 @@
 class Manifest < ApplicationRecord
-  belongs_to :github_repository
+  belongs_to :repository, foreign_key: "github_repository_id"
   has_many :repository_dependencies, dependent: :delete_all
 
   scope :latest, -> { order("manifests.filepath, manifests.created_at DESC").select("DISTINCT on (manifests.filepath) *") }
@@ -7,6 +7,6 @@ class Manifest < ApplicationRecord
   scope :kind, ->(kind) { where(kind: kind) }
 
   def github_link
-    github_repository.blob_url + filepath
+    repository.blob_url + filepath
   end
 end

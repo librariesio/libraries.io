@@ -16,7 +16,7 @@ describe "Api::GithubUsersController" do
 
   describe "GET /api/github/:login/repositories", :vcr, type: :request do
     it "renders successfully" do
-      repo = create(:github_repository, github_user: @user)
+      repo = create(:repository, github_user: @user)
       get "/api/github/#{@user.login}/repositories"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq('application/json')

@@ -21,10 +21,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '60'
+      - '61'
     body:
       encoding: UTF-8
-      string: '{"count":93,"_shards":{"total":1,"successful":1,"failed":0}}'
+      string: '{"count":101,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Wed, 11 Jan 2017 13:39:15 GMT
+  recorded_at: Tue, 24 Jan 2017 13:35:31 GMT
 recorded_with: VCR 3.0.3

@@ -3,6 +3,6 @@ class UpdateRepositorySourceRankWorker
   sidekiq_options queue: :low, unique: :until_executed
 
   def perform(github_repository_id)
-    GithubRepository.find_by_id(github_repository_id).try(:update_source_rank)
+    Repository.find_by_id(github_repository_id).try(:update_source_rank)
   end
 end

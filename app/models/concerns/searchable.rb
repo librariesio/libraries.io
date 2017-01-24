@@ -32,7 +32,7 @@ module Searchable
         indexes :versions_count, type: 'integer'
         indexes :dependents_count, type: 'integer'
         indexes :dependent_repos_count, type: 'integer'
-        indexes :github_repository_id, type: 'integer'
+        indexes :repository_id, type: 'integer'
         indexes :github_contributions_count, type: 'integer'
       end
     end
@@ -53,7 +53,7 @@ module Searchable
     end
 
     def pushed_at
-      github_repository.try(:pushed_at)
+      repository.try(:pushed_at)
     end
 
     def self.total

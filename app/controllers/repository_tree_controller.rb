@@ -4,7 +4,7 @@ class RepositoryTreeController < ApplicationController
   def show
     @date = Date.parse(params[:date]) rescue Date.today
 
-    @tree_resolver = RepositoryTreeResolver.new(@github_repository, @date)
+    @tree_resolver = RepositoryTreeResolver.new(@repository, @date)
 
     if @tree_resolver.cached?
       @tree = @tree_resolver.tree

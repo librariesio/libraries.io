@@ -9,7 +9,7 @@ class Admin::ProjectsController < Admin::ApplicationController
       @project.normalize_licenses
       @project.update_github_repo_async
       @project.async_sync
-      @project.github_repository.try(:update_all_info_async)
+      @project.repository.try(:update_all_info_async)
       redirect_to project_path(@project.to_param)
     else
       redirect_to admin_project_path(@project.id)

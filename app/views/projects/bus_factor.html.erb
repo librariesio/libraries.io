@@ -32,12 +32,12 @@
               <% if project.stars > 0 %>
                - <%= number_to_human project.stars %> stars
               <% end %>
-              - <%= link_to pluralize(project.github_repository.try(:github_contributions_count), 'contributor'), project.github_repository.try(:contributors_url) %>
+              - <%= link_to pluralize(project.repository.try(:github_contributions_count), 'contributor'), project.repository.try(:contributors_url) %>
             </small>
           </div>
           <div class="col-xs-4">
             <br>
-            <%= link_to project.github_repository.try(:url), class: 'btn btn-primary' do %>
+            <%= link_to project.repository.try(:url), class: 'btn btn-primary' do %>
             Contribute
             <% end %>
           </div>

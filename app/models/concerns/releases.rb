@@ -12,7 +12,7 @@ module Releases
   end
 
   def latest_stable_tag
-    return nil if github_repository.nil?
+    return nil if repository.nil?
     github_tags.published.select(&:stable?).sort.first
   end
 
@@ -29,7 +29,7 @@ module Releases
   end
 
   def latest_tag
-    return nil if github_repository.nil?
+    return nil if repository.nil?
     github_tags.published.order('published_at DESC').first
   end
 
@@ -42,7 +42,7 @@ module Releases
   end
 
   def first_tag
-    return nil if github_repository.nil?
+    return nil if repository.nil?
     github_tags.published.order('published_at ASC').first
   end
 

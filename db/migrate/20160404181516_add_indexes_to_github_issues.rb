@@ -1,5 +1,5 @@
 class AddIndexesToGithubIssues < ActiveRecord::Migration
   def change
-    add_index :github_issues, :github_repository_id
+    add_index :github_issues, :repository_id
   end
 end

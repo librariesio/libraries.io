@@ -6,7 +6,7 @@ module RepoTags
       next unless tag && tag.is_a?(Sawyer::Resource) && tag['ref']
       download_tag(token, tag, existing_tag_names)
     end
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 

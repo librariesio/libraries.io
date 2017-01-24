@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.datetime "updated_at",                        null: false
     t.datetime "last_synced_at"
     t.boolean  "pull_request"
-    t.index ["github_repository_id"], name: "index_github_issues_on_github_repository_id", using: :btree
+    t.index ["github_repository_id"], name: "index_github_issues_on_repository_id", using: :btree
   end
 
   create_table "github_organisations", force: :cascade do |t|
@@ -131,12 +131,12 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.string   "status"
     t.datetime "last_synced_at"
     t.integer  "rank"
-    t.index "lower((full_name)::text)", name: "index_github_repositories_on_lowercase_full_name", unique: true, using: :btree
+    t.index "lower((full_name)::text)", name: "index_repositories_on_lowercase_full_name", unique: true, using: :btree
     t.index "lower((language)::text)", name: "github_repositories_lower_language", using: :btree
-    t.index ["github_id"], name: "index_github_repositories_on_github_id", unique: true, using: :btree
-    t.index ["owner_id"], name: "index_github_repositories_on_owner_id", using: :btree
-    t.index ["source_name"], name: "index_github_repositories_on_source_name", using: :btree
-    t.index ["status"], name: "index_github_repositories_on_status", using: :btree
+    t.index ["github_id"], name: "index_repositories_on_github_id", unique: true, using: :btree
+    t.index ["owner_id"], name: "index_repositories_on_owner_id", using: :btree
+    t.index ["source_name"], name: "index_repositories_on_source_name", using: :btree
+    t.index ["status"], name: "index_repositories_on_status", using: :btree
   end
 
   create_table "github_tags", force: :cascade do |t|
@@ -147,7 +147,7 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.datetime "published_at"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
-    t.index ["github_repository_id", "name"], name: "index_github_tags_on_github_repository_id_and_name", using: :btree
+    t.index ["github_repository_id", "name"], name: "index_github_tags_on_repository_id_and_name", using: :btree
   end
 
   create_table "github_users", force: :cascade do |t|
@@ -195,7 +195,7 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.datetime "updated_at",           null: false
     t.string   "kind"
     t.index ["created_at"], name: "index_manifests_on_created_at", using: :btree
-    t.index ["github_repository_id"], name: "index_manifests_on_github_repository_id", using: :btree
+    t.index ["github_repository_id"], name: "index_manifests_on_repository_id", using: :btree
   end
 
   create_table "payola_affiliates", force: :cascade do |t|
@@ -341,7 +341,7 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.index "lower((platform)::text)", name: "projects_lower_platform", using: :btree
     t.index ["created_at"], name: "index_projects_on_created_at", using: :btree
     t.index ["dependents_count"], name: "index_projects_on_dependents_count", using: :btree
-    t.index ["github_repository_id"], name: "index_projects_on_github_repository_id", using: :btree
+    t.index ["github_repository_id"], name: "index_projects_on_repository_id", using: :btree
     t.index ["keywords_array"], name: "index_projects_on_keywords_array", using: :gin
     t.index ["name", "platform"], name: "index_projects_on_name_and_platform", using: :btree
     t.index ["updated_at"], name: "index_projects_on_updated_at", using: :btree
@@ -354,7 +354,7 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.index ["created_at"], name: "index_readmes_on_created_at", using: :btree
-    t.index ["github_repository_id"], name: "index_readmes_on_github_repository_id", using: :btree
+    t.index ["github_repository_id"], name: "index_readmes_on_repository_id", using: :btree
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
@@ -442,7 +442,7 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.datetime "last_sent_at"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
-    t.index ["github_repository_id"], name: "index_web_hooks_on_github_repository_id", using: :btree
+    t.index ["github_repository_id"], name: "index_web_hooks_on_repository_id", using: :btree
   end
 
 end

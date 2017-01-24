@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Api::GithubRepositoriesController" do
   before :each do
-    @repo = create(:github_repository)
+    @repo = create(:repository)
   end
 
   describe "GET /api/github/search", :vcr, type: :request do

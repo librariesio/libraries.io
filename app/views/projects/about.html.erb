@@ -29,8 +29,8 @@ libraries_io_url: <%= project_url(@project.to_param.merge(number: params[:number
 <%- else -%>
 libraries_io_url: <%= project_url(@project.to_param) %>
 <%- end -%>
-<%- if @project.github_repository.present? -%>
+<%- if @project.repository.present? -%>
 vcs_tool: git
-vcs_repository: <%= @project.github_repository.url %>
-vcs_branch: <%= @project.github_repository.default_branch %>
+vcs_repository: <%= @project.repository.url %>
+vcs_branch: <%= @project.repository.default_branch %>
 <%- end -%>

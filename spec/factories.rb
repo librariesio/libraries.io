@@ -23,7 +23,7 @@ FactoryGirl.define do
   end
 
   factory :github_tag do
-    github_repository
+    association :repository, factory: :repository
     name '1.0.0'
     sha  { SecureRandom.hex }
     published_at 1.day.ago
@@ -56,10 +56,10 @@ FactoryGirl.define do
 
   factory :repository_subscription do
     user
-    github_repository
+    association :repository, factory: :repository
   end
 
-  factory :github_repository do
+  factory :repository do
     full_name   'rails/rails'
     description 'Ruby on Rails'
     language    'Ruby'
@@ -89,12 +89,12 @@ FactoryGirl.define do
 
   factory :repository_permission do
     user
-    github_repository
+    association :repository, factory: :repository
     pull true
   end
 
   factory :web_hook do
-    github_repository
+    association :repository, factory: :repository
     user
     url 'http://google.com'
   end

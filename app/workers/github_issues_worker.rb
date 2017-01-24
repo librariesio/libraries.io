@@ -3,6 +3,6 @@ class GithubIssuesWorker
   sidekiq_options queue: :low, unique: :until_executed
 
   def perform(repo_id, token = nil)
-    GithubRepository.find_by_id(repo_id).try(:download_issues, token)
+    Repository.find_by_id(repo_id).try(:download_issues, token)
   end
 end

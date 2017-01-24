@@ -2,13 +2,13 @@ namespace :github do
   desc 'Recreate repo search index'
   task recreate_repos_index: :environment do
     # If the index doesn't exists can't be deleted, returns 404, carry on
-    GithubRepository.__elasticsearch__.client.indices.delete index: 'github_repositories' rescue nil
-    GithubRepository.__elasticsearch__.create_index! force: true
+    Repository.__elasticsearch__.client.indices.delete index: 'github_repositories' rescue nil
+    Repository.__elasticsearch__.create_index! force: true
   end
 
   desc 'Reindex the repo search'
   task reindex_repos: [:environment, :recreate_repos_index] do
-    GithubRepository.indexable.import
+    Repository.indexable.import
   end
 
   desc 'Recreate issue search index'
@@ -36,14 +36,14 @@ namespace :github do
 
   desc 'Sync github repos'
   task sync_repos: :environment do
-    scope = GithubRepository.source.open_source
+    scope = Repository.source.open_source
     scope.where(last_synced_at: nil).limit(100).each(&:update_all_info_async)
     scope.order('last_synced_at ASC').limit(100).each(&:update_all_info_async)
   end
 
   desc 'Sync github issues'
   task sync_issues: :environment do
-    scope = GithubIssue.includes(:github_repository)
+    scope = GithubIssue.includes(:repository)
     scope.help_wanted.indexable.order('last_synced_at ASC').limit(100).each(&:sync)
     scope.first_pull_request.indexable.order('last_synced_at ASC').limit(100).each(&:sync)
     scope.order('last_synced_at ASC').limit(100).each(&:sync)
@@ -51,8 +51,8 @@ namespace :github do
 
   desc 'Sync trending github repositories'
   task update_trending: :environment do
-    trending = GithubRepository.open_source.pushed.maintained.recently_created.hacker_news.limit(30).select('id')
-    brand_new = GithubRepository.open_source.pushed.maintained.recently_created.order('created_at DESC').limit(60).select('id')
+    trending = Repository.open_source.pushed.maintained.recently_created.hacker_news.limit(30).select('id')
+    brand_new = Repository.open_source.pushed.maintained.recently_created.order('created_at DESC').limit(60).select('id')
     (trending + brand_new).uniq.each{|g| GithubDownloadWorker.perform_async(g.id) }
   end
 
