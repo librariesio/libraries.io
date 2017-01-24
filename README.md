@@ -94,6 +94,12 @@ our browser to <http://localhost:3000>
 bundle exec rails s
 ```
 
+You're now ready to go with the basic libraries.io app setup, to grab more data check out the extensive list of rake tasks with the following command:
+
+```bash
+rake -T
+```
+
 ### Github authentication and connection
 
 To enable Github authentication go and register a new [GitHub OAuth Application](https://github.com/settings/applications/new). Your development configuration should look something like this:
