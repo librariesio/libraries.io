@@ -1,14 +1,26 @@
 namespace :research do
   desc 'civic tech dependency research'
   task civic_tech: :environment do
-    repos = [
-      'DemocracyClub/WhoCanIVoteFor',
-      'MuckRock/muckrock',
-      'okfde/fragdenstaat_de',
-      'codeforamerica/recordtrac'
-    ]
+    org_names = ['mysociety',
+    'DemocracyClub',
+    'opennorth',
+    'alphagov',
+    'gds-operations',
+    '18F',
+    'ciudadanointeligente',
+    'codeforamerica',
+    'okfn',
+    'MuckRock',
+    'ushahidi',
+    'datamade',
+    'loomio',
+    'wikimedia',
+    'WorldBank-Transport',
+    'open-contracting']
 
-    github_repositories = GithubRepository.where(full_name: repos)
+    orgs = GithubOrganisation.where(login: org_names)
+
+    github_repositories = orgs.map{|org| org.github_repositories.source.open_source }.flatten
 
     projects = github_repositories.map(&:dependency_projects).flatten.map {|project| "#{project.platform}/#{project.name}" }
 
