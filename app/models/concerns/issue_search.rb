@@ -18,6 +18,7 @@ module IssueSearch
         indexes :github_id, type: 'integer'
         indexes :contributions_count, type: 'integer'
         indexes :rank, type: 'integer'
+        indexes :comments_count, type: 'integer'
 
         indexes :language, :analyzer => 'keyword'
         indexes :license, :analyzer => 'keyword'
