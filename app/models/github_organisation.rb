@@ -8,7 +8,7 @@ class GithubOrganisation < ApplicationRecord
   has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository
   has_many :dependencies, through: :open_source_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
-  has_many :all_dependent_repos, -> { group('github_repositories.id') }, through: :favourite_projects, source: :repository
+  has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
   has_many :contributors, -> { group('github_users.id').order("sum(github_contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
@@ -17,9 +17,9 @@ class GithubOrganisation < ApplicationRecord
 
   after_commit :async_sync, on: :create
 
-  scope :most_repos, -> { joins(:open_source_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('repo_count DESC') }
-  scope :most_stars, -> { joins(:open_source_repositories).select('github_organisations.*, sum(github_repositories.stargazers_count) AS star_count, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('star_count DESC') }
-  scope :newest, -> { joins(:open_source_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('created_at DESC').having('count(github_repositories.id) > 0') }
+  scope :most_repos, -> { joins(:open_source_repositories).select('github_organisations.*, count(repositories.id) AS repo_count').group('github_organisations.id').order('repo_count DESC') }
+  scope :most_stars, -> { joins(:open_source_repositories).select('github_organisations.*, sum(repositories.stargazers_count) AS star_count, count(repositories.id) AS repo_count').group('github_organisations.id').order('star_count DESC') }
+  scope :newest, -> { joins(:open_source_repositories).select('github_organisations.*, count(repositories.id) AS repo_count').group('github_organisations.id').order('created_at DESC').having('count(repositories.id) > 0') }
   scope :visible, -> { where(hidden: false) }
   scope :with_login, -> { where("github_organisations.login <> ''") }
 

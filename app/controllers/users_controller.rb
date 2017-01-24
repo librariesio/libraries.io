@@ -31,7 +31,7 @@ class UsersController < ApplicationController
   end
 
   def projects
-    order = params[:sort] == "contributions" ? "github_repositories.github_contributions_count ASC, projects.rank DESC, projects.created_at DESC" : 'projects.rank DESC, projects.created_at DESC'
+    order = params[:sort] == "contributions" ? "repositories.github_contributions_count ASC, projects.rank DESC, projects.created_at DESC" : 'projects.rank DESC, projects.created_at DESC'
     @projects = @user.projects.joins(:repository).includes(:repository).order(order).paginate(page: page_number)
   end
 
@@ -51,9 +51,9 @@ class UsersController < ApplicationController
   def find_contributions
     @user.github_contributions.with_repo
                               .joins(:repository)
-                              .where('github_repositories.owner_id != ?', @user.github_id.to_s)
-                              .where('github_repositories.fork = ?', false)
-                              .where('github_repositories.private = ?', false)
+                              .where('repositories.owner_id != ?', @user.github_id.to_s)
+                              .where('repositories.fork = ?', false)
+                              .where('repositories.private = ?', false)
                               .includes(:repository)
                               .order('count DESC')
   end

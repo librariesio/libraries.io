@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Repository, :vcr, type: :model do
-  it { should have_many(:projects).with_foreign_key('github_repository_id') }
+  it { should have_many(:projects) }
   it { should have_many(:github_contributions) }
   it { should have_many(:contributors) }
   it { should have_many(:github_tags) }

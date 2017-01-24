@@ -121,7 +121,7 @@ class ProjectsController < ApplicationController
     scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
     scope = current_language.present? ? scope.language(current_language) : scope
     @projects = scope.hacker_news.paginate(page: page_number)
-    @platforms = orginal_scope.where('github_repositories.stargazers_count > 0').group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
+    @platforms = orginal_scope.where('repositories.stargazers_count > 0').group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
   end
 
   def unsubscribe

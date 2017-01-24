@@ -6,7 +6,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"id":8,"full_name":"rails/rails","owner_id":null,"description":"Ruby
-        on Rails","fork":false,"created_at":"2017-01-24T13:48:32.428Z","updated_at":"2017-01-24T13:48:32.428Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":8,"private":false,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
+        on Rails","fork":false,"created_at":"2017-01-24T14:34:12.747Z","updated_at":"2017-01-24T14:34:12.747Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":8,"private":false,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -25,9 +25,9 @@ http_interactions:
       - '99'
     body:
       encoding: UTF-8
-      string: '{"_index":"github_repositories","_type":"github_repository","_id":"8","_version":6,"created":false}'
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"8","_version":9,"created":false}'
     http_version: 
-  recorded_at: Tue, 24 Jan 2017 13:48:32 GMT
+  recorded_at: Tue, 24 Jan 2017 14:34:12 GMT
 - request:
     method: get
     uri: http://localhost:9200/github_repositories/github_repository/_search?from=0&size=30
@@ -52,7 +52,7 @@ http_interactions:
       - '378'
     body:
       encoding: UTF-8
-      string: '{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"facets":{"language":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"license":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"keywords":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]}},"suggest":{"did_you_mean":[]}}'
+      string: '{"took":4,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"facets":{"language":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"license":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"keywords":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]}},"suggest":{"did_you_mean":[]}}'
     http_version: 
-  recorded_at: Tue, 24 Jan 2017 13:48:32 GMT
+  recorded_at: Tue, 24 Jan 2017 14:34:12 GMT
 recorded_with: VCR 3.0.3

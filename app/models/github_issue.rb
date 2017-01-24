@@ -1,7 +1,7 @@
 class GithubIssue < ApplicationRecord
   include IssueSearch
 
-  belongs_to :repository, foreign_key: "github_repository_id"
+  belongs_to :repository
   belongs_to :github_user, primary_key: :github_id
 
   API_FIELDS = [:number, :state, :title, :body, :locked, :closed_at, :created_at, :updated_at]
@@ -42,7 +42,7 @@ class GithubIssue < ApplicationRecord
     issue_hash = issue_hash.to_hash
     i = repo.github_issues.find_or_create_by(github_id: issue_hash[:id])
     i.github_user_id = issue_hash[:user][:id]
-    i.github_repository_id = repo.id
+    i.repository_id = repo.id
     i.labels = issue_hash[:labels].map{|l| l[:name] }
     i.pull_request = issue_hash[:pull_request].present?
     i.comments_count = issue_hash[:comments]

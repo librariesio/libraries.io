@@ -70,7 +70,7 @@ module IssueSearch
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       if options[:repo_ids].present?
         search_definition[:query][:function_score][:query][:filtered][:filter][:bool][:must] << {
-          terms: { "github_repository_id": options[:repo_ids] } }
+          terms: { "repository_id": options[:repo_ids] } }
       end
       __elasticsearch__.search(search_definition)
     end

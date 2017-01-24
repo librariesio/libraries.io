@@ -24,7 +24,7 @@ class User < ApplicationRecord
   has_many :all_dependencies, through: :public_repositories, source: :dependencies
   has_many :really_all_dependencies, through: :all_repositories, source: :dependencies
   has_many :all_dependent_projects, -> { group('projects.id') }, through: :all_dependencies, source: :project
-  has_many :all_dependent_repos, -> { group('github_repositories.id') }, through: :all_dependent_projects, source: :repository
+  has_many :all_dependent_repos, -> { group('repositories.id') }, through: :all_dependent_projects, source: :repository
 
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
 

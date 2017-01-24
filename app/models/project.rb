@@ -23,23 +23,23 @@ class Project < ApplicationRecord
   has_many :dependent_projects, -> { group('projects.id') }, through: :dependent_versions, source: :project, class_name: 'Project'
   has_many :repository_dependencies
   has_many :dependent_manifests, through: :repository_dependencies, source: :manifest
-  has_many :dependent_repositories, -> { group('github_repositories.id').order('github_repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
+  has_many :dependent_repositories, -> { group('repositories.id').order('repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
   has_many :subscriptions
   has_many :project_suggestions, dependent: :delete_all
-  belongs_to :repository, foreign_key: "github_repository_id"
+  belongs_to :repository
   has_one :readme, through: :repository
 
   scope :platform, ->(platform) { where('lower(platform) = ?', platform.try(:downcase)) }
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
-  scope :with_repo, -> { joins(:repository).where('github_repositories.id IS NOT NULL') }
-  scope :without_repo, -> { where(github_repository_id: nil) }
+  scope :with_repo, -> { joins(:repository).where('repositories.id IS NOT NULL') }
+  scope :without_repo, -> { where(repository_id: nil) }
   scope :with_description, -> { where("projects.description <> ''") }
 
   scope :with_license, -> { where("licenses <> ''") }
   scope :without_license, -> { where("licenses IS ? OR licenses = ''", nil) }
-  scope :unlicensed, -> { maintained.without_license.with_repo.where("github_repositories.license IS ? OR github_repositories.license = ''", nil) }
+  scope :unlicensed, -> { maintained.without_license.with_repo.where("repositories.license IS ? OR repositories.license = ''", nil) }
 
   scope :with_versions, -> { where('versions_count > 0') }
   scope :without_versions, -> { where('versions_count < 1') }
@@ -69,12 +69,12 @@ class Project < ApplicationRecord
 
   scope :bus_factor, -> { maintained
                           .joins(:repository)
-                          .where('github_repositories.github_contributions_count < 6')
-                          .where('github_repositories.github_contributions_count > 0')
-                          .where('github_repositories.stargazers_count > 0')}
+                          .where('repositories.github_contributions_count < 6')
+                          .where('repositories.github_contributions_count > 0')
+                          .where('repositories.stargazers_count > 0')}
 
-  scope :hacker_news, -> { with_repo.where('github_repositories.stargazers_count > 0').order("((github_repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-github_repositories.created_at)/3600)+2,1.8)) DESC") }
-  scope :recently_created, -> { with_repo.where('github_repositories.created_at > ?', 1.month.ago)}
+  scope :hacker_news, -> { with_repo.where('repositories.stargazers_count > 0').order("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC") }
+  scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 1.month.ago)}
 
   after_commit :update_github_repo_async, on: :create
   after_commit :set_dependents_count
@@ -340,7 +340,7 @@ class Project < ApplicationRecord
     g = Repository.create_from_github(name_with_owner)
     return if g.nil?
     unless self.new_record?
-      self.github_repository_id = g.id
+      self.repository_id = g.id
       self.forced_save
     end
   end

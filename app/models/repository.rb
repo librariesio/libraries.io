@@ -1,6 +1,4 @@
 class Repository < ApplicationRecord
-  self.table_name = "github_repositories"
-
   include RepoSearch
   include Status
   include RepoUrls
@@ -17,20 +15,20 @@ class Repository < ApplicationRecord
    :forks_count, :mirror_url, :open_issues_count, :default_branch,
    :subscribers_count, :private]
 
-  has_many :projects, foreign_key: "github_repository_id"
-  has_many :github_contributions, dependent: :delete_all, foreign_key: "github_repository_id"
+  has_many :projects
+  has_many :github_contributions, dependent: :delete_all
   has_many :contributors, through: :github_contributions, source: :github_user
-  has_many :github_tags, dependent: :delete_all, foreign_key: "github_repository_id"
-  has_many :published_github_tags, -> { published }, anonymous_class: GithubTag, foreign_key: "github_repository_id"
-  has_many :manifests, dependent: :destroy, foreign_key: "github_repository_id"
+  has_many :github_tags, dependent: :delete_all
+  has_many :published_github_tags, -> { published }, anonymous_class: GithubTag
+  has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :dependency_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
-  has_many :dependency_repos, -> { group('github_repositories.id') }, through: :dependency_projects, source: :repository
+  has_many :dependency_repos, -> { group('repositories.id') }, through: :dependency_projects, source: :repository
 
-  has_many :repository_subscriptions, dependent: :delete_all, foreign_key: "github_repository_id"
-  has_many :web_hooks, dependent: :delete_all, foreign_key: "github_repository_id"
-  has_many :github_issues, dependent: :delete_all, foreign_key: "github_repository_id"
-  has_one :readme, dependent: :delete, foreign_key: "github_repository_id"
+  has_many :repository_subscriptions, dependent: :delete_all
+  has_many :web_hooks, dependent: :delete_all
+  has_many :github_issues, dependent: :delete_all
+  has_one :readme, dependent: :delete
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
@@ -44,12 +42,12 @@ class Repository < ApplicationRecord
   after_commit :save_projects, on: :update
   after_commit :update_source_rank_async
 
-  scope :without_readme, -> { where("github_repositories.id NOT IN (SELECT github_repository_id FROM readmes)") }
+  scope :without_readme, -> { where("repositories.id NOT IN (SELECT repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
-  scope :without_projects, -> { includes(:projects).where(projects: { github_repository_id: nil }) }
-  scope :without_subscriptons, -> { includes(:repository_subscriptions).where(repository_subscriptions: { github_repository_id: nil }) }
+  scope :without_projects, -> { includes(:projects).where(projects: { repository_id: nil }) }
+  scope :without_subscriptons, -> { includes(:repository_subscriptions).where(repository_subscriptions: { repository_id: nil }) }
   scope :with_tags, -> { joins(:github_tags) }
-  scope :without_tags, -> { includes(:github_tags).where(github_tags: { github_repository_id: nil }) }
+  scope :without_tags, -> { includes(:github_tags).where(github_tags: { repository_id: nil }) }
 
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
@@ -58,32 +56,32 @@ class Repository < ApplicationRecord
   scope :from_org, lambda{ |org_id|  where(github_organisation_id: org_id) }
 
   scope :with_manifests, -> { joins(:manifests) }
-  scope :without_manifests, -> { includes(:manifests).where(manifests: {github_repository_id: nil}) }
+  scope :without_manifests, -> { includes(:manifests).where(manifests: {repository_id: nil}) }
 
-  scope :with_description, -> { where("github_repositories.description <> ''") }
-  scope :with_license, -> { where("github_repositories.license <> ''") }
-  scope :without_license, -> {where("github_repositories.license IS ? OR github_repositories.license = ''", nil)}
+  scope :with_description, -> { where("repositories.description <> ''") }
+  scope :with_license, -> { where("repositories.license <> ''") }
+  scope :without_license, -> {where("repositories.license IS ? OR repositories.license = ''", nil)}
 
   scope :pushed, -> { where.not(pushed_at: nil) }
   scope :good_quality, -> { maintained.open_source.pushed }
-  scope :with_stars, -> { where('github_repositories.stargazers_count > 0') }
-  scope :interesting, -> { with_stars.order('github_repositories.stargazers_count DESC, github_repositories.pushed_at DESC') }
-  scope :uninteresting, -> { without_readme.without_manifests.without_license.where('github_repositories.stargazers_count = 0').where('github_repositories.forks_count = 0') }
+  scope :with_stars, -> { where('repositories.stargazers_count > 0') }
+  scope :interesting, -> { with_stars.order('repositories.stargazers_count DESC, repositories.pushed_at DESC') }
+  scope :uninteresting, -> { without_readme.without_manifests.without_license.where('repositories.stargazers_count = 0').where('repositories.forks_count = 0') }
 
   scope :recently_created, -> { where('created_at > ?', 7.days.ago)}
   scope :hacker_news, -> { order("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC") }
   scope :trending, -> { good_quality.recently_created.with_stars }
 
-  scope :maintained, -> { where('github_repositories."status" not in (?) OR github_repositories."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
-  scope :deprecated, -> { where('github_repositories."status" = ?', "Deprecated")}
-  scope :not_removed, -> { where('github_repositories."status" != ? OR github_repositories."status" IS NULL', "Removed")}
-  scope :removed, -> { where('github_repositories."status" = ?', "Removed")}
-  scope :unmaintained, -> { where('github_repositories."status" = ?', "Unmaintained")}
+  scope :maintained, -> { where('repositories."status" not in (?) OR repositories."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
+  scope :deprecated, -> { where('repositories."status" = ?', "Deprecated")}
+  scope :not_removed, -> { where('repositories."status" != ? OR repositories."status" IS NULL', "Removed")}
+  scope :removed, -> { where('repositories."status" = ?', "Removed")}
+  scope :unmaintained, -> { where('repositories."status" = ?', "Unmaintained")}
 
   scope :indexable, -> { open_source.not_removed.includes(:projects, :readme) }
 
   def self.language(language)
-    where('lower(github_repositories.language) = ?', language.try(:downcase))
+    where('lower(repositories.language) = ?', language.try(:downcase))
   end
 
   def meta_tags

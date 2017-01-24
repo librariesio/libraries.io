@@ -1,9 +1,9 @@
 class GithubTag < ApplicationRecord
   include Releaseable
 
-  belongs_to :repository, foreign_key: "github_repository_id", touch: true
+  belongs_to :repository, touch: true
   validates_presence_of :name, :sha, :repository
-  validates_uniqueness_of :name, scope: :github_repository_id
+  validates_uniqueness_of :name, scope: :repository_id
 
   scope :published, -> { where('published_at IS NOT NULL') }
 

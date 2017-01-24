@@ -53,8 +53,8 @@ module GithubIdentity
       next if github_repo.nil?
       current_repo_ids << github_repo.id
 
-      unless rp = existing_permissions.find{|p| p.github_repository_id == github_repo.id}
-        rp = repository_permissions.build(github_repository_id: github_repo.id)
+      unless rp = existing_permissions.find{|p| p.repository_id == github_repo.id}
+        rp = repository_permissions.build(repository_id: github_repo.id)
       end
       rp.admin = repo.permissions.admin
       rp.push = repo.permissions.push
@@ -65,7 +65,7 @@ module GithubIdentity
     # delete missing permissions
     existing_repo_ids = repository_permissions.pluck(:repository_id)
     remove_ids = existing_repo_ids - current_repo_ids
-    repository_permissions.where(github_repository_id: remove_ids).delete_all if remove_ids.any?
+    repository_permissions.where(repository_id: remove_ids).delete_all if remove_ids.any?
 
   rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil

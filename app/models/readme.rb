@@ -1,5 +1,5 @@
 class Readme < ApplicationRecord
-  belongs_to :repository, foreign_key: "github_repository_id"
+  belongs_to :repository
   validates_presence_of :html_body, :repository
 
   after_validation :reformat

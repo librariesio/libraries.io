@@ -1,6 +1,6 @@
 class RepositorySubscription < ApplicationRecord
   belongs_to :user
-  belongs_to :repository, foreign_key: "github_repository_id"
+  belongs_to :repository
   has_many :subscriptions
 
   after_commit :update_subscriptions, on: :update

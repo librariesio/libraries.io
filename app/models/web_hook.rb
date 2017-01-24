@@ -1,5 +1,5 @@
 class WebHook < ApplicationRecord
-  belongs_to :repository, foreign_key: "github_repository_id"
+  belongs_to :repository
   belongs_to :user
   validates_presence_of :url
   validates :url, :format => URI::regexp(%w(http https))

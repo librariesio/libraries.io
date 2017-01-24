@@ -6,7 +6,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"id":7,"full_name":"rails/rails","owner_id":3,"description":"Ruby
-        on Rails","fork":false,"created_at":"2017-01-24T13:48:31.360Z","updated_at":"2017-01-24T13:48:31.360Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":7,"private":false,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
+        on Rails","fork":false,"created_at":"2017-01-24T14:34:11.639Z","updated_at":"2017-01-24T14:34:11.639Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":7,"private":false,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -22,10 +22,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '99'
+      - '100'
     body:
       encoding: UTF-8
-      string: '{"_index":"github_repositories","_type":"github_repository","_id":"7","_version":7,"created":false}'
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"7","_version":10,"created":false}'
     http_version: 
-  recorded_at: Tue, 24 Jan 2017 13:48:31 GMT
+  recorded_at: Tue, 24 Jan 2017 14:34:11 GMT
 recorded_with: VCR 3.0.3

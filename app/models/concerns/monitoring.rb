@@ -55,7 +55,7 @@ module Monitoring
 
   def subscribe_to_repo(repository)
     hook = repository.create_webhook(token)
-    repository_subscriptions.find_or_create_by(github_repository_id: repository.id, hook_id: hook.try(:id))
+    repository_subscriptions.find_or_create_by(repository_id: repository.id, hook_id: hook.try(:id))
   end
 
   def unsubscribe_from_repo(repository)
@@ -68,7 +68,7 @@ module Monitoring
   end
 
   def subscribed_to_repo?(repository)
-    repository_subscriptions.find_by_github_repository_id(repository.id)
+    repository_subscriptions.find_by_repository_id(repository.id)
   end
 
   def can_read?(repository)
@@ -76,7 +76,7 @@ module Monitoring
   end
 
   def your_dependent_repos(project)
-    ids = really_all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
+    ids = really_all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.repository_id }
     all_repositories.where(id: ids).order('fork ASC, pushed_at DESC, stargazers_count DESC')
   end
 end
