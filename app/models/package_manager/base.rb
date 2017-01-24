@@ -7,11 +7,14 @@ module PackageManager
     HIDDEN = false
 
     def self.platforms
-      @platforms ||= PackageManager.constants
-        .reject { |platform| platform == :Base }
-        .map{|sym| "PackageManager::#{sym}".constantize }
-        .reject { |platform| platform::HIDDEN }
-        .sort_by(&:name)
+      @platforms ||= begin
+        Dir[Rails.root.join('app', 'models', 'package_manager', '*.rb')].each { |file| require file }
+        PackageManager.constants
+          .reject { |platform| platform == :Base }
+          .map{|sym| "PackageManager::#{sym}".constantize }
+          .reject { |platform| platform::HIDDEN }
+          .sort_by(&:name)
+      end
     end
 
     def self.format_name(platform)
