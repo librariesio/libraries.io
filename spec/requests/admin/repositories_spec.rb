@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "Admin::GithubRepositoriesController" do
+describe "Admin::RepositoriesController" do
   let(:user) { create :user }
 
   describe "GET /admin/repositories", :vcr, type: :request do

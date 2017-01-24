@@ -26,7 +26,7 @@ http_interactions:
       encoding: UTF-8
       string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Tue, 24 Jan 2017 13:35:38 GMT
+  recorded_at: Tue, 24 Jan 2017 13:48:42 GMT
 - request:
     method: get
     uri: http://localhost:9200/github_issues/github_issue/_search?from=0&size=30
@@ -52,7 +52,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: !binary |-
-        eyJ0b29rIjoyLCJ0aW1lZF9vdXQiOmZhbHNlLCJfc2hhcmRzIjp7InRvdGFs
+        eyJ0b29rIjo2LCJ0aW1lZF9vdXQiOmZhbHNlLCJfc2hhcmRzIjp7InRvdGFs
         IjoxLCJzdWNjZXNzZnVsIjoxLCJmYWlsZWQiOjB9LCJoaXRzIjp7InRvdGFs
         Ijo0MTcsIm1heF9zY29yZSI6MC4wLCJoaXRzIjpbeyJfaW5kZXgiOiJnaXRo
         dWJfaXNzdWVzIiwiX3R5cGUiOiJnaXRodWJfaXNzdWUiLCJfaWQiOiIxMTkw
@@ -758,7 +758,7 @@ http_interactions:
         OjAsInRlcm1zIjpbeyJ0ZXJtIjoiQlNELTMtQ2xhdXNlIiwiY291bnQiOjQx
         N31dfX19
     http_version: 
-  recorded_at: Tue, 24 Jan 2017 13:35:38 GMT
+  recorded_at: Tue, 24 Jan 2017 13:48:43 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/_count
@@ -785,5 +785,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Tue, 24 Jan 2017 13:35:38 GMT
+  recorded_at: Tue, 24 Jan 2017 13:48:43 GMT
 recorded_with: VCR 3.0.3

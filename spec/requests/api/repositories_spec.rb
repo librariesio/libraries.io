@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "Api::GithubRepositoriesController" do
+describe "Api::RepositoriesController" do
   before :each do
     @repo = create(:repository)
   end
