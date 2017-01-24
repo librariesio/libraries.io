@@ -95,7 +95,7 @@
         Contributors
       </td>
       <td>
-        <strong><%= link_to number_to_human(@project.github_contributions.count), @project.repository.contributors_url %></strong>
+        <strong><%= link_to number_to_human(@project.contributions.count), @project.repository.contributors_url %></strong>
       </td>
     </tr>
     <tr>

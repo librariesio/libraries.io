@@ -53,7 +53,7 @@ class GithubIssue < ApplicationRecord
   end
 
   def contributions_count
-    repository.try(:github_contributions_count) || 0
+    repository.try(:contributions_count) || 0
   end
 
   def language

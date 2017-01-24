@@ -5,10 +5,10 @@ http_interactions:
     uri: http://localhost:9200/projects/project/74
     body:
       encoding: UTF-8
-      string: '{"id":74,"name":"foo","platform":"PackageManager::Packagist","created_at":"2017-01-24T14:33:51.000Z","updated_at":"2017-01-24T14:33:51.000Z","description":"Ruby
+      string: '{"id":74,"name":"foo","platform":"PackageManager::Packagist","created_at":"2017-01-24T18:15:56.675Z","updated_at":"2017-01-24T18:15:56.675Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-24T14:33:51.000Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"foo","github_contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-24T18:15:56.675Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"foo","contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -29,5 +29,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"_index":"projects","_type":"project","_id":"74","_version":1,"created":true}'
     http_version: 
-  recorded_at: Tue, 24 Jan 2017 14:33:51 GMT
+  recorded_at: Tue, 24 Jan 2017 18:15:56 GMT
 recorded_with: VCR 3.0.3

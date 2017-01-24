@@ -1,4 +1,4 @@
-class GithubContribution < ApplicationRecord
+class Contribution < ApplicationRecord
   belongs_to :github_user
   belongs_to :repository
   counter_culture :repository

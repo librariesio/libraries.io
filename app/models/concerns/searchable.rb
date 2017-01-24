@@ -33,7 +33,7 @@ module Searchable
         indexes :dependents_count, type: 'integer'
         indexes :dependent_repos_count, type: 'integer'
         indexes :repository_id, type: 'integer'
-        indexes :github_contributions_count, type: 'integer'
+        indexes :contributions_count, type: 'integer'
       end
     end
 
@@ -41,7 +41,7 @@ module Searchable
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def as_indexed_json(_options)
-      as_json methods: [:stars, :repo_name, :exact_name, :github_contributions_count, :pushed_at, :dependent_repos_count]
+      as_json methods: [:stars, :repo_name, :exact_name, :contributions_count, :pushed_at, :dependent_repos_count]
     end
 
     def dependent_repos_count
@@ -84,14 +84,14 @@ module Searchable
         filter: { bool: { must: [] } }
       }
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
-      search_definition[:sort]  = [{'github_contributions_count' => 'asc'}, {'rank' => 'desc'}]
+      search_definition[:sort]  = [{'contributions_count' => 'asc'}, {'rank' => 'desc'}]
       __elasticsearch__.search(search_definition)
     end
 
     def self.bus_factor_search(options = {})
       cta_search({
         must: [
-          { range: { github_contributions_count: { lte: 5, gte: 1 } } }
+          { range: { contributions_count: { lte: 5, gte: 1 } } }
         ],
         must_not: [
           { term: { "status" => "Removed" } },

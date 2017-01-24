@@ -73,7 +73,7 @@ class RepositoriesController < ApplicationController
 
   def contributors
     load_repo
-    scope = @repository.github_contributions.where('count > 0').joins(:github_user)
+    scope = @repository.contributions.where('count > 0').joins(:github_user)
     visible_scope = scope.where('github_users.hidden = ?', false).order('count DESC')
     @total = scope.sum(:count)
     @top_count = visible_scope.first.try(:count)
@@ -103,7 +103,7 @@ class RepositoriesController < ApplicationController
   end
 
   def allowed_sorts
-    ['rank', 'stargazers_count', 'github_contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
+    ['rank', 'stargazers_count', 'contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
   end
 
   def page_title

@@ -15,8 +15,8 @@ class Project < ApplicationRecord
 
   has_many :versions
   has_many :dependencies, -> { group 'project_name' }, through: :versions
-  has_many :github_contributions, through: :repository
-  has_many :contributors, through: :github_contributions, source: :github_user
+  has_many :contributions, through: :repository
+  has_many :contributors, through: :contributions, source: :github_user
   has_many :github_tags, through: :repository
   has_many :dependents, class_name: 'Dependency'
   has_many :dependent_versions, through: :dependents, source: :version, class_name: 'Version'
@@ -69,8 +69,8 @@ class Project < ApplicationRecord
 
   scope :bus_factor, -> { maintained
                           .joins(:repository)
-                          .where('repositories.github_contributions_count < 6')
-                          .where('repositories.github_contributions_count > 0')
+                          .where('repositories.contributions_count < 6')
+                          .where('repositories.contributions_count > 0')
                           .where('repositories.stargazers_count > 0')}
 
   scope :hacker_news, -> { with_repo.where('repositories.stargazers_count > 0').order("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC") }
@@ -114,8 +114,8 @@ class Project < ApplicationRecord
     last_synced_at && last_synced_at > 1.day.ago
   end
 
-  def github_contributions_count
-    repository.try(:github_contributions_count) || 0
+  def contributions_count
+    repository.try(:contributions_count) || 0
   end
 
   def meta_tags

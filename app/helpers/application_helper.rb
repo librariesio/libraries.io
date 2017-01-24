@@ -19,7 +19,7 @@ module ApplicationHelper
       ['Dependents', 'dependents_count'],
       ['Most Used', 'dependent_repos_count'],
       ['Latest Release', 'latest_release_published_at'],
-      ['Contributors', 'github_contributions_count'],
+      ['Contributors', 'contributions_count'],
       ['Newest', 'created_at']
     ]
   end
@@ -32,7 +32,7 @@ module ApplicationHelper
       ['Forks', 'forks_count'],
       ['Watchers', 'subscribers_count'],
       ['Open issues', 'open_issues_count'],
-      ['Contributors', 'github_contributions_count'],
+      ['Contributors', 'contributions_count'],
       ['Repo size', 'size'],
       ['Newest', 'created_at'],
       ['Recently pushed', 'pushed_at']

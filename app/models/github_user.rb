@@ -1,15 +1,15 @@
 class GithubUser < ApplicationRecord
   include Profile
 
-  has_many :github_contributions, dependent: :delete_all
+  has_many :contributions, dependent: :delete_all
   has_many :repositories, primary_key: :github_id, foreign_key: :owner_id
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
   has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
   has_many :dependencies, through: :open_source_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
-  has_many :contributed_repositories, -> { Repository.source.open_source }, through: :github_contributions, source: :repository
-  has_many :contributors, -> { group('github_users.id').order("sum(github_contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
+  has_many :contributed_repositories, -> { Repository.source.open_source }, through: :contributions, source: :repository
+  has_many :contributors, -> { group('github_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('github_users.id').order("COUNT(github_users.id) DESC") }, through: :contributed_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
@@ -33,7 +33,7 @@ class GithubUser < ApplicationRecord
   end
 
   def open_source_contributions
-    github_contributions.joins(:repository).where("repositories.fork = ? AND repositories.private = ?", false, false)
+    contributions.joins(:repository).where("repositories.fork = ? AND repositories.private = ?", false, false)
   end
 
   def org?

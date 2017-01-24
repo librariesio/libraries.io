@@ -16,8 +16,8 @@ class Repository < ApplicationRecord
    :subscribers_count, :private]
 
   has_many :projects
-  has_many :github_contributions, dependent: :delete_all
-  has_many :contributors, through: :github_contributions, source: :github_user
+  has_many :contributions, dependent: :delete_all
+  has_many :contributors, through: :contributions, source: :github_user
   has_many :github_tags, dependent: :delete_all
   has_many :published_github_tags, -> { published }, anonymous_class: GithubTag
   has_many :manifests, dependent: :destroy
@@ -243,7 +243,7 @@ class Repository < ApplicationRecord
     if (previous_pushed_at.nil? && self.pushed_at) || (self.pushed_at && previous_pushed_at < self.pushed_at)
       download_readme(token)
       download_tags(token)
-      download_github_contributions(token)
+      download_contributions(token)
       download_manifests(token)
       # download_issues(token)
     end
@@ -269,17 +269,17 @@ class Repository < ApplicationRecord
     end
   end
 
-  def download_github_contributions(token = nil)
+  def download_contributions(token = nil)
     contributions = github_client(token).contributors(full_name)
     return if contributions.empty?
-    existing_github_contributions = github_contributions.includes(:github_user).to_a
+    existing_contributions = contributions.includes(:github_user).to_a
     platform = projects.first.try(:platform)
     contributions.each do |c|
       next unless c['id']
-      cont = existing_github_contributions.find{|cnt| cnt.github_user.try(:github_id) == c.id }
+      cont = existing_contributions.find{|cnt| cnt.github_user.try(:github_id) == c.id }
       unless cont
         user = GithubUser.create_from_github(c)
-        cont = github_contributions.find_or_create_by(github_user: user)
+        cont = contributions.find_or_create_by(github_user: user)
       end
 
       cont.count = c.contributions

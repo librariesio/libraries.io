@@ -29,7 +29,7 @@ module RepositorySourceRank
       dependent_projects:         log_scale(dependent_projects_count) * 2,
       dependent_repositories:     log_scale(dependent_repos_count),
       github_stars:               log_scale(stars),
-      contributors:               (log_scale(github_contributions_count) / 2.0).ceil,
+      contributors:               (log_scale(contributions_count) / 2.0).ceil,
       any_outdated_dependencies:  any_outdated_dependencies? ? -1 : 0,
       is_deprecated:              is_deprecated? ? -5 : 0,
       is_unmaintained:            is_unmaintained? ? -5 : 0,

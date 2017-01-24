@@ -3,7 +3,7 @@ module RepoSearch
 
   included do
     include Elasticsearch::Model
-    
+
     index_name    "github_repositories"
     document_type "github_repository"
 
@@ -44,7 +44,7 @@ module RepoSearch
         indexes :open_issues_count, type: 'integer'
         indexes :subscribers_count, type: 'integer'
         indexes :github_id, type: 'integer'
-        indexes :github_contributions_count, type: 'integer'
+        indexes :contributions_count, type: 'integer'
         indexes :rank, type: 'integer'
 
         indexes :fork

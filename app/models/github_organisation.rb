@@ -9,7 +9,7 @@ class GithubOrganisation < ApplicationRecord
   has_many :dependencies, through: :open_source_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
-  has_many :contributors, -> { group('github_users.id').order("sum(github_contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
+  has_many :contributors, -> { group('github_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
   validates :login, uniqueness: true, if: lambda { self.login_changed? }
@@ -31,8 +31,8 @@ class GithubOrganisation < ApplicationRecord
     }
   end
 
-  def github_contributions
-    GithubContribution.none
+  def contributions
+    Contribution.none
   end
 
   def org?

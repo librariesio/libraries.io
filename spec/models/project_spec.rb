@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Project, :vcr, type: :model do
   it { should have_many(:versions) }
   it { should have_many(:dependencies) }
-  it { should have_many(:github_contributions) }
+  it { should have_many(:contributions) }
   it { should have_many(:contributors) }
   it { should have_many(:github_tags) }
   it { should have_many(:dependents) }

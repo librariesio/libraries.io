@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170124141024) do
+ActiveRecord::Schema.define(version: 20170124180946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,17 @@ ActiveRecord::Schema.define(version: 20170124141024) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "contributions", force: :cascade do |t|
+    t.integer  "repository_id"
+    t.integer  "github_user_id"
+    t.integer  "count"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "platform"
+    t.index ["github_user_id"], name: "index_contributions_on_github_user_id", using: :btree
+    t.index ["repository_id", "github_user_id"], name: "index_contributions_on_repository_id_and_user_id", using: :btree
+  end
+
   create_table "dependencies", force: :cascade do |t|
     t.integer  "version_id"
     t.integer  "project_id"
@@ -45,17 +56,6 @@ ActiveRecord::Schema.define(version: 20170124141024) do
     t.datetime "updated_at"
     t.index ["project_id"], name: "index_dependencies_on_project_id", using: :btree
     t.index ["version_id"], name: "index_dependencies_on_version_id", using: :btree
-  end
-
-  create_table "github_contributions", force: :cascade do |t|
-    t.integer  "repository_id"
-    t.integer  "github_user_id"
-    t.integer  "count"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.string   "platform"
-    t.index ["github_user_id"], name: "index_github_contributions_on_github_user_id", using: :btree
-    t.index ["repository_id", "github_user_id"], name: "index_contributions_on_repository_id_and_user_id", using: :btree
   end
 
   create_table "github_issues", force: :cascade do |t|
@@ -318,8 +318,8 @@ ActiveRecord::Schema.define(version: 20170124141024) do
     t.integer  "owner_id"
     t.string   "description"
     t.boolean  "fork"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.datetime "pushed_at"
     t.string   "homepage"
     t.integer  "size"
@@ -338,7 +338,7 @@ ActiveRecord::Schema.define(version: 20170124141024) do
     t.string   "license"
     t.integer  "github_organisation_id"
     t.boolean  "private"
-    t.integer  "github_contributions_count", default: 0, null: false
+    t.integer  "contributions_count",    default: 0, null: false
     t.string   "has_readme"
     t.string   "has_changelog"
     t.string   "has_contributing"
