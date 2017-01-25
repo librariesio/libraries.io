@@ -6,7 +6,7 @@ describe "API::DocController" do
       project = create(:project, name: 'base62', platform: 'NPM')
       create(:version, project: project)
       create(:repository, full_name: 'gruntjs/grunt')
-      create(:github_user)
+      create(:github_user, login: 'andrew')
 
       visit '/api'
       expect(page).to have_content 'API Docs'
