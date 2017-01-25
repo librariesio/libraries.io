@@ -13,7 +13,7 @@ class GithubUser < ApplicationRecord
   has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('github_users.id').order("COUNT(github_users.id) DESC") }, through: :contributed_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
-  has_many :github_issues, primary_key: :github_id
+  has_many :issues, primary_key: :github_id
 
   validates :login, uniqueness: true, if: lambda { self.login_changed? }
   validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }

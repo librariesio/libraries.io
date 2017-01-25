@@ -5,10 +5,10 @@ http_interactions:
     uri: http://localhost:9200/projects/project/99
     body:
       encoding: UTF-8
-      string: '{"id":99,"name":"rails","platform":"Rubygems","created_at":"2017-01-24T18:16:06.547Z","updated_at":"2017-01-24T18:16:06.547Z","description":"Ruby
+      string: '{"id":99,"name":"rails","platform":"Rubygems","created_at":"2017-01-25T09:52:18.205Z","updated_at":"2017-01-25T09:52:18.205Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-24T18:16:06.547Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-25T09:52:18.205Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -29,5 +29,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"_index":"projects","_type":"project","_id":"99","_version":1,"created":true}'
     http_version: 
-  recorded_at: Tue, 24 Jan 2017 18:16:06 GMT
+  recorded_at: Wed, 25 Jan 2017 09:52:18 GMT
 recorded_with: VCR 3.0.3

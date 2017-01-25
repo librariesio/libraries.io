@@ -22,8 +22,8 @@ Rails.application.routes.draw do
     put '/subscription/:platform/:name', to: 'subscriptions#update'
     delete '/subscription/:platform/:name', to: 'subscriptions#destroy'
 
-    get '/github/issues/help-wanted', to: 'github_issues#help_wanted'
-    get '/github/issues/first-pull-request', to: 'github_issues#first_pull_request'
+    get '/github/issues/help-wanted', to: 'issues#help_wanted'
+    get '/github/issues/first-pull-request', to: 'issues#first_pull_request'
 
     get '/github/search', to: 'repositories#search'
 
@@ -73,8 +73,8 @@ Rails.application.routes.draw do
   get '/collections', to: 'collections#index', as: :collections
   get '/explore/:language-:keyword-libraries', to: 'collections#show', as: :collection
 
-  get '/github/issues', to: 'github_issues#index', as: :issues
-  get '/github/issues/your-dependencies', to: 'github_issues#your_dependencies', as: :your_dependencies_issues
+  get '/github/issues', to: 'issues#index', as: :issues
+  get '/github/issues/your-dependencies', to: 'issues#your_dependencies', as: :your_dependencies_issues
 
   get '/pricing', to: 'account_subscriptions#plans', as: :pricing
   resources :account_subscriptions
@@ -118,8 +118,8 @@ Rails.application.routes.draw do
   get 'deprecated-libraries', to: 'projects#deprecated', as: :deprecated
   get 'removed-libraries', to: 'projects#removed', as: :removed
 
-  get '/help-wanted', to: 'github_issues#help_wanted', as: :help_wanted
-  get '/first-pull-request', to: 'github_issues#first_pull_request', as: :first_pull_request
+  get '/help-wanted', to: 'issues#help_wanted', as: :help_wanted
+  get '/first-pull-request', to: 'issues#first_pull_request', as: :first_pull_request
 
   get '/platforms', to: 'platforms#index', as: :platforms
 

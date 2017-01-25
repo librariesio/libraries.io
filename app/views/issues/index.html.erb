@@ -1,0 +1,16 @@
+<% title = 'Github Issues' %>
+<div class='row'>
+  <div class='col-sm-12'>
+    <h1>Issues</h1>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-sm-8">
+    <%= render @issues, cache: true %>
+    <%= will_paginate @issues %>
+  </div>
+  <div class="col-sm-4">
+    <%= render 'adsense/sidebar' %>
+  </div>
+</div>

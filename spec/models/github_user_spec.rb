@@ -10,7 +10,7 @@ describe GithubUser, type: :model do
   it { should have_many(:projects) }
   it { should have_many(:contributed_repositories) }
   it { should have_many(:fellow_contributors) }
-  it { should have_many(:github_issues) }
+  it { should have_many(:issues) }
   it { should have_many(:contributions) }
 
   it { should validate_uniqueness_of(:login) }

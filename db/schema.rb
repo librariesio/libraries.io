@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170124180946) do
+ActiveRecord::Schema.define(version: 20170125094006) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,25 +56,6 @@ ActiveRecord::Schema.define(version: 20170124180946) do
     t.datetime "updated_at"
     t.index ["project_id"], name: "index_dependencies_on_project_id", using: :btree
     t.index ["version_id"], name: "index_dependencies_on_version_id", using: :btree
-  end
-
-  create_table "github_issues", force: :cascade do |t|
-    t.integer  "repository_id"
-    t.integer  "github_id"
-    t.integer  "number"
-    t.string   "state"
-    t.string   "title"
-    t.text     "body"
-    t.integer  "github_user_id"
-    t.boolean  "locked"
-    t.integer  "comments_count"
-    t.datetime "closed_at"
-    t.string   "labels",         default: [],              array: true
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.datetime "last_synced_at"
-    t.boolean  "pull_request"
-    t.index ["repository_id"], name: "index_github_issues_on_repository_id", using: :btree
   end
 
   create_table "github_organisations", force: :cascade do |t|
@@ -139,6 +120,25 @@ ActiveRecord::Schema.define(version: 20170124180946) do
     t.string   "token"
     t.string   "nickname"
     t.string   "avatar_url"
+  end
+
+  create_table "issues", force: :cascade do |t|
+    t.integer  "repository_id"
+    t.integer  "github_id"
+    t.integer  "number"
+    t.string   "state"
+    t.string   "title"
+    t.text     "body"
+    t.integer  "github_user_id"
+    t.boolean  "locked"
+    t.integer  "comments_count"
+    t.datetime "closed_at"
+    t.string   "labels",         default: [],              array: true
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.datetime "last_synced_at"
+    t.boolean  "pull_request"
+    t.index ["repository_id"], name: "index_issues_on_repository_id", using: :btree
   end
 
   create_table "manifests", force: :cascade do |t|

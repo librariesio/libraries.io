@@ -95,25 +95,25 @@ class ApplicationController < ActionController::Base
   end
 
   def search_issues(options = {})
-    @search = paginate GithubIssue.search(filters: {
+    @search = paginate Issue.search(filters: {
       license: current_license,
       language: current_language,
       labels: options[:labels]
     }, repo_ids: options[:repo_ids]), page: page_number, per_page: per_page_number
     ids = @search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
-    @github_issues = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @issues = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
   end
 
   def first_pull_request_issues(labels)
-    @search = paginate GithubIssue.first_pr_search(filters: {
+    @search = paginate Issue.first_pr_search(filters: {
       license: current_license,
       language: current_language,
       labels: labels
     }), page: page_number, per_page: per_page_number
     ids = @search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
-    @github_issues = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @issues = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
   end
 
   def search_repos(query)

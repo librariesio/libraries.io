@@ -27,7 +27,7 @@ class Repository < ApplicationRecord
 
   has_many :repository_subscriptions, dependent: :delete_all
   has_many :web_hooks, dependent: :delete_all
-  has_many :github_issues, dependent: :delete_all
+  has_many :issues, dependent: :delete_all
   has_one :readme, dependent: :delete
   belongs_to :github_organisation
   belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
@@ -312,7 +312,7 @@ class Repository < ApplicationRecord
     github_client = AuthToken.new_client(token)
     issues = github_client.issues(full_name, state: 'all')
     issues.each do |issue|
-      GithubIssue.create_from_hash(self, issue)
+      Issue.create_from_hash(self, issue)
     end
   rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil

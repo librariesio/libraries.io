@@ -4,6 +4,9 @@ module IssueSearch
   included do
     include Elasticsearch::Model
 
+    index_name    "github_issues"
+    document_type "github_issue"
+
     FIELDS = ['title^2', 'body']
 
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
@@ -99,7 +102,7 @@ module IssueSearch
                    bool: {
                      must: [ { "term": { "state": "open"}}, { "term": { "locked": false}} ],
                      must_not: [ { term: { "labels": "wontfix" } } ],
-                     should: GithubIssue::FIRST_PR_LABELS.map do |label|
+                     should: Issue::FIRST_PR_LABELS.map do |label|
                        { term: { "labels": label } }
                      end
                    }
@@ -109,7 +112,7 @@ module IssueSearch
             field_value_factor: { field: "rank", "modifier": "square" }
           }
         },
-        facets: issues_facet_filters(options, GithubIssue::FIRST_PR_LABELS),
+        facets: issues_facet_filters(options, Issue::FIRST_PR_LABELS),
         filter: { bool: { must: [], must_not: options[:must_not] } }
       }
       search_definition[:track_scores] = true

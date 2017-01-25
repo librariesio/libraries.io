@@ -2,7 +2,7 @@ namespace :github do
   desc 'Recreate repo search index'
   task recreate_repos_index: :environment do
     # If the index doesn't exists can't be deleted, returns 404, carry on
-    Repository.__elasticsearch__.client.indices.delete index: 'github_repositories' rescue nil
+    Repository.__elasticsearch__.client.indices.delete index: 'repositories' rescue nil
     Repository.__elasticsearch__.create_index! force: true
   end
 
@@ -14,13 +14,13 @@ namespace :github do
   desc 'Recreate issue search index'
   task recreate_issues_index: :environment do
     # If the index doesn't exists can't be deleted, returns 404, carry on
-    GithubIssue.__elasticsearch__.client.indices.delete index: 'github_issues' rescue nil
-    GithubIssue.__elasticsearch__.create_index! force: true
+    Issue.__elasticsearch__.client.indices.delete index: 'issues' rescue nil
+    Issue.__elasticsearch__.create_index! force: true
   end
 
   desc 'Reindex the issues search'
   task reindex_issues: [:environment, :recreate_issues_index] do
-    GithubIssue.indexable.import
+    Issue.indexable.import
   end
 
   desc 'Sync github users'
@@ -43,7 +43,7 @@ namespace :github do
 
   desc 'Sync github issues'
   task sync_issues: :environment do
-    scope = GithubIssue.includes(:repository)
+    scope = Issue.includes(:repository)
     scope.help_wanted.indexable.order('last_synced_at ASC').limit(100).each(&:sync)
     scope.first_pull_request.indexable.order('last_synced_at ASC').limit(100).each(&:sync)
     scope.order('last_synced_at ASC').limit(100).each(&:sync)
