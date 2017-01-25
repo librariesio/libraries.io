@@ -18,8 +18,8 @@ class Repository < ApplicationRecord
   has_many :projects
   has_many :contributions, dependent: :delete_all
   has_many :contributors, through: :contributions, source: :github_user
-  has_many :github_tags, dependent: :delete_all
-  has_many :published_github_tags, -> { published }, anonymous_class: GithubTag
+  has_many :tags, dependent: :delete_all
+  has_many :published_tags, -> { published }, anonymous_class: Tag
   has_many :manifests, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :dependency_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
@@ -46,8 +46,8 @@ class Repository < ApplicationRecord
   scope :with_projects, -> { joins(:projects) }
   scope :without_projects, -> { includes(:projects).where(projects: { repository_id: nil }) }
   scope :without_subscriptons, -> { includes(:repository_subscriptions).where(repository_subscriptions: { repository_id: nil }) }
-  scope :with_tags, -> { joins(:github_tags) }
-  scope :without_tags, -> { includes(:github_tags).where(github_tags: { repository_id: nil }) }
+  scope :with_tags, -> { joins(:tags) }
+  scope :without_tags, -> { includes(:tags).where(tags: { repository_id: nil }) }
 
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }

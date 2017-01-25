@@ -5,10 +5,10 @@ http_interactions:
     uri: http://localhost:9200/projects/project/105
     body:
       encoding: UTF-8
-      string: '{"id":105,"name":"rails","platform":"Rubygems","created_at":"2017-01-25T09:52:19.825Z","updated_at":"2017-01-25T09:52:19.825Z","description":"Ruby
+      string: '{"id":105,"name":"rails14","platform":"Rubygems","created_at":"2017-01-25T11:33:35.599Z","updated_at":"2017-01-25T11:33:35.599Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-25T09:52:19.825Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-25T11:33:35.599Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails14","contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -29,16 +29,16 @@ http_interactions:
       encoding: UTF-8
       string: '{"_index":"projects","_type":"project","_id":"105","_version":1,"created":true}'
     http_version: 
-  recorded_at: Wed, 25 Jan 2017 09:52:19 GMT
+  recorded_at: Wed, 25 Jan 2017 11:33:35 GMT
 - request:
     method: put
     uri: http://localhost:9200/projects/project/105
     body:
       encoding: UTF-8
-      string: '{"id":105,"name":"rails","platform":"Rubygems","created_at":"2017-01-25T09:52:19.825Z","updated_at":"2017-01-25T09:52:19.865Z","description":"Ruby
+      string: '{"id":105,"name":"rails14","platform":"Rubygems","created_at":"2017-01-25T11:33:35.599Z","updated_at":"2017-01-25T11:33:35.647Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-25T09:52:19.865Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-25T11:33:35.647Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails14","contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -59,5 +59,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"_index":"projects","_type":"project","_id":"105","_version":2,"created":false}'
     http_version: 
-  recorded_at: Wed, 25 Jan 2017 09:52:19 GMT
+  recorded_at: Wed, 25 Jan 2017 11:33:35 GMT
 recorded_with: VCR 3.0.3

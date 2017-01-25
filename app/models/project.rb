@@ -17,7 +17,7 @@ class Project < ApplicationRecord
   has_many :dependencies, -> { group 'project_name' }, through: :versions
   has_many :contributions, through: :repository
   has_many :contributors, through: :contributions, source: :github_user
-  has_many :github_tags, through: :repository
+  has_many :tags, through: :repository
   has_many :dependents, class_name: 'Dependency'
   has_many :dependent_versions, through: :dependents, source: :version, class_name: 'Version'
   has_many :dependent_projects, -> { group('projects.id') }, through: :dependent_versions, source: :project, class_name: 'Project'
@@ -128,8 +128,8 @@ class Project < ApplicationRecord
   def follows_semver?
     if versions.all.length > 0
       versions.all?(&:follows_semver?)
-    elsif github_tags.published.length > 0
-      github_tags.published.all?(&:follows_semver?)
+    elsif tags.published.length > 0
+      tags.published.all?(&:follows_semver?)
     end
   end
 

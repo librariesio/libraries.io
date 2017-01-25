@@ -5,7 +5,7 @@ describe Project, :vcr, type: :model do
   it { should have_many(:dependencies) }
   it { should have_many(:contributions) }
   it { should have_many(:contributors) }
-  it { should have_many(:github_tags) }
+  it { should have_many(:tags) }
   it { should have_many(:dependents) }
   it { should have_many(:repository_dependencies) }
   it { should have_many(:dependent_manifests) }

@@ -146,15 +146,15 @@ class ApplicationController < ActionController::Base
     if @version_count.zero?
       @versions = []
       if @repository.present?
-        @github_tags = @repository.github_tags.published.order('published_at DESC').limit(10).to_a.sort
+        @tags = @repository.tags.published.order('published_at DESC').limit(10).to_a.sort
         if params[:number].present?
-          @version = @repository.github_tags.published.find_by_name(params[:number])
+          @version = @repository.tags.published.find_by_name(params[:number])
           raise ActiveRecord::RecordNotFound if @version.nil?
         end
       else
-        @github_tags = []
+        @tags = []
       end
-      if @github_tags.empty?
+      if @tags.empty?
         raise ActiveRecord::RecordNotFound if params[:number].present?
       end
     else

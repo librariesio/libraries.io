@@ -44,7 +44,7 @@
           <% if @project.can_have_versions? %>
             <%= link_to number_to_human(@project.versions.size), project_versions_path(@project.to_param) %>
           <% else %>
-            <%= link_to number_to_human(@project.github_tags.count), project_tags_path(@project.to_param) %>
+            <%= link_to number_to_human(@project.tags.count), project_tags_path(@project.to_param) %>
           <% end %>
         </strong>
       </td>

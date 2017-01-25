@@ -294,7 +294,7 @@
         <% if @project.versions.size > 10 %>
           <%= link_to "See all #{pluralize(@project.versions.size, 'releases')}", project_versions_path(@project.to_param) %>
         <% end %>
-      <% elsif @repository && @github_tags.length > 0 %>
+      <% elsif @repository && @tags.length > 0 %>
         <h4>
           <%= link_to project_tags_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
@@ -302,7 +302,7 @@
           Tagged Releases
         </h4>
         <ul>
-          <% @github_tags.each do |tag| %>
+          <% @tags.each do |tag| %>
           <li>
             <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
             <% if tag.published_at.present? %>
@@ -311,8 +311,8 @@
           </li>
           <% end %>
         </ul>
-        <% if @repository.github_tags.published.count > 10 %>
-          <%= link_to "See all #{pluralize(@repository.github_tags.published.count, 'tags')}", project_tags_path(@project.to_param) %>
+        <% if @repository.tags.published.count > 10 %>
+          <%= link_to "See all #{pluralize(@repository.tags.published.count, 'tags')}", project_tags_path(@project.to_param) %>
         <% end %>
       <% end %>
 

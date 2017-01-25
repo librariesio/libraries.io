@@ -60,17 +60,17 @@ module SourceRank
   end
 
   def versions_present?
-    versions_count > 1 || (github_tags.published.length > 0)
+    versions_count > 1 || (tags.published.length > 0)
   end
 
   def recent_release?
     versions.any? {|v| v.published_at && v.published_at > 6.months.ago } ||
-      (github_tags.published.any? {|v| v.published_at && v.published_at > 6.months.ago })
+      (tags.published.any? {|v| v.published_at && v.published_at > 6.months.ago })
   end
 
   def not_brand_new?
     versions.any? {|v| v.published_at && v.published_at < 6.months.ago } ||
-      (github_tags.published.any? {|v| v.published_at && v.published_at < 6.months.ago })
+      (tags.published.any? {|v| v.published_at && v.published_at < 6.months.ago })
   end
 
   def any_outdated_dependencies?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125094006) do
+ActiveRecord::Schema.define(version: 20170125110851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,17 +74,6 @@ ActiveRecord::Schema.define(version: 20170125094006) do
     t.index ["created_at"], name: "index_github_organisations_on_created_at", using: :btree
     t.index ["github_id"], name: "index_github_organisations_on_github_id", unique: true, using: :btree
     t.index ["hidden"], name: "index_github_organisations_on_hidden", using: :btree
-  end
-
-  create_table "github_tags", force: :cascade do |t|
-    t.integer  "repository_id"
-    t.string   "name"
-    t.string   "sha"
-    t.string   "kind"
-    t.datetime "published_at"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["repository_id", "name"], name: "index_github_tags_on_repository_id_and_name", using: :btree
   end
 
   create_table "github_users", force: :cascade do |t|
@@ -413,6 +402,17 @@ ActiveRecord::Schema.define(version: 20170125094006) do
     t.index ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
     t.index ["project_id"], name: "index_subscriptions_on_project_id", using: :btree
     t.index ["user_id", "project_id"], name: "index_subscriptions_on_user_id_and_project_id", using: :btree
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.integer  "repository_id"
+    t.string   "name"
+    t.string   "sha"
+    t.string   "kind"
+    t.datetime "published_at"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["repository_id", "name"], name: "index_tags_on_repository_id_and_name", using: :btree
   end
 
   create_table "users", force: :cascade do |t|

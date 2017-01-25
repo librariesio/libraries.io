@@ -13,7 +13,7 @@ namespace :one_off do
 
   desc 'set stable flag on all tags'
   task set_stable_tags: :environment do
-    GithubTag.find_in_batches do |tags|
+    Tag.find_in_batches do |tags|
       ActiveRecord::Base.transaction do
         tags.each do |t|
           t.update_column(:stable, t.stable_release?)

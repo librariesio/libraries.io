@@ -1,4 +1,4 @@
-class GithubTag < ApplicationRecord
+class Tag < ApplicationRecord
   include Releaseable
 
   belongs_to :repository, touch: true

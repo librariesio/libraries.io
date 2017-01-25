@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe GithubTagWorker do
+describe TagWorker do
   it "should use the low priority queue" do
     is_expected.to be_processed_in :low
   end

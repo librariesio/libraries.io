@@ -1,7 +1,7 @@
 class CreateGithubIssues < ActiveRecord::Migration
   def change
     create_table :github_issues do |t|
-      t.integer :repository_id
+      t.integer :github_repository_id
       t.integer :github_id
       t.integer :number
       t.string :state

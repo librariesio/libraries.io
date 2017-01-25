@@ -6,8 +6,8 @@ describe TagNotificationsWorker, :vcr do
   end
 
   it "should send tag notifications" do
-    tag = create(:github_tag)
-    expect(GithubTag).to receive(:find_by_id).with(tag.id).and_return(tag)
+    tag = create(:tag)
+    expect(Tag).to receive(:find_by_id).with(tag.id).and_return(tag)
     expect(tag).to receive(:send_notifications)
     subject.perform(tag.id)
   end

@@ -1,4 +1,4 @@
-class GithubTagWorker
+class TagWorker
   include Sidekiq::Worker
   sidekiq_options queue: :low, unique: :until_executed
 

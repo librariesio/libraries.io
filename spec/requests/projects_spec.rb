@@ -4,6 +4,8 @@ RSpec.describe ProjectsController, :vcr do
   before :each do
     PackageManager::Rubygems::URL
     @project = create(:project)
+    version = create(:version, project: @project)
+    create(:dependency, version: version)
     Project.__elasticsearch__.import force: true
     Project.__elasticsearch__.refresh_index!
   end

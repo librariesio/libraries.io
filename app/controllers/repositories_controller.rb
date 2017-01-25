@@ -68,7 +68,7 @@ class RepositoriesController < ApplicationController
 
   def tags
     load_repo
-    @tags = @repository.github_tags.published.order('published_at DESC, name DESC').paginate(page: page_number)
+    @tags = @repository.tags.published.order('published_at DESC, name DESC').paginate(page: page_number)
   end
 
   def contributors

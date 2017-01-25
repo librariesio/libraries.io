@@ -256,7 +256,7 @@
             Tags
           </td>
           <td>
-            <strong><%= link_to number_with_delimiter(repo.github_tags.count), repository_tags_path(@repository.owner_name, @repository.project_name)  %></strong>
+            <strong><%= link_to number_with_delimiter(repo.tags.count), repository_tags_path(@repository.owner_name, @repository.project_name)  %></strong>
           </td>
         </tr>
         <tr>
@@ -307,7 +307,7 @@
         <%= render @forks, cache: true %>
       <% end %>
 
-      <% if repo.github_tags.published.length > 0 %>
+      <% if repo.tags.published.length > 0 %>
         <div class="row"></div>
         <hr>
         <h4>
@@ -315,7 +315,7 @@
           <small><%= link_to 'See all', repository_tags_path(@repository.owner_name, @repository.project_name) %></small>
         </h4>
         <ul>
-          <% repo.github_tags.published.order('published_at DESC, name DESC').limit(30).to_a.each do |tag| %>
+          <% repo.tags.published.order('published_at DESC, name DESC').limit(30).to_a.each do |tag| %>
             <li>
               <%= link_to tag, tag.github_url %>
               <% if tag.published_at.present? %>

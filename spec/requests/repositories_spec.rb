@@ -2,6 +2,9 @@ require "rails_helper"
 
 describe "RepositoriesController", :vcr do
   let!(:repository) { create(:repository) }
+  let!(:tag) { create(:tag, repository: repository) }
+  let!(:issue) { create(:issue, repository: repository) }
+  let!(:contribution) { create(:contribution, repository: repository) }
 
   describe "GET /github", type: :request do
     it "renders successfully when logged out" do
