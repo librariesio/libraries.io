@@ -84,6 +84,10 @@ class Repository < ApplicationRecord
     where('lower(repositories.language) = ?', language.try(:downcase))
   end
 
+  def github_contributions_count
+    contributions_count # legacy alias
+  end
+
   def meta_tags
     {
       title: "#{full_name} on GitHub",

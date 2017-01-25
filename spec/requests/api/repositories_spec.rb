@@ -19,7 +19,7 @@ describe "Api::RepositoriesController" do
       get "/api/github/#{@repo.full_name}/dependencies"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq('application/json')
-      expect(json.to_json).to be_json_eql @repo.as_json({except: [:id, :github_organisation_id, :owner_id]}).merge(dependencies: []).to_json
+      expect(json.to_json).to be_json_eql @repo.as_json({except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count]}).merge(dependencies: []).to_json
     end
   end
 
@@ -37,7 +37,7 @@ describe "Api::RepositoriesController" do
       get "/api/github/#{@repo.full_name}"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq('application/json')
-      expect(json.to_json).to be_json_eql @repo.to_json({except: [:id, :github_organisation_id, :owner_id]})
+      expect(json.to_json).to be_json_eql @repo.to_json({except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count]})
     end
   end
 end
