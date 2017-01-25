@@ -6,7 +6,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"id":19,"full_name":"rails/rails","owner_id":null,"description":"Ruby
-        on Rails","fork":false,"created_at":"2017-01-25T11:33:58.551Z","updated_at":"2017-01-25T11:33:58.551Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":19,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
+        on Rails","fork":false,"created_at":"2017-01-25T11:48:31.965Z","updated_at":"2017-01-25T11:48:31.965Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":19,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -25,16 +25,16 @@ http_interactions:
       - '101'
     body:
       encoding: UTF-8
-      string: '{"_index":"github_repositories","_type":"github_repository","_id":"19","_version":17,"created":false}'
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"19","_version":18,"created":false}'
     http_version: 
-  recorded_at: Wed, 25 Jan 2017 11:33:58 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:31 GMT
 - request:
     method: put
     uri: http://localhost:9200/github_issues/github_issue/7
     body:
       encoding: UTF-8
       string: '{"id":7,"repository_id":19,"github_id":7,"number":7,"state":"open","title":"I
-        found a bug","body":"Please fix it","github_user_id":17,"locked":null,"comments_count":null,"closed_at":null,"labels":[],"created_at":"2017-01-25T11:33:58.631Z","updated_at":"2017-01-25T11:33:58.631Z","last_synced_at":null,"pull_request":null,"contributions_count":0,"stars":10000,"language":"Ruby","license":null,"rank":0}'
+        found a bug","body":"Please fix it","github_user_id":17,"locked":null,"comments_count":null,"closed_at":null,"labels":[],"created_at":"2017-01-25T11:48:32.069Z","updated_at":"2017-01-25T11:48:32.069Z","last_synced_at":null,"pull_request":null,"contributions_count":0,"stars":10000,"language":"Ruby","license":null,"rank":0}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -53,9 +53,9 @@ http_interactions:
       - '88'
     body:
       encoding: UTF-8
-      string: '{"_index":"github_issues","_type":"github_issue","_id":"7","_version":3,"created":false}'
+      string: '{"_index":"github_issues","_type":"github_issue","_id":"7","_version":4,"created":false}'
     http_version: 
-  recorded_at: Wed, 25 Jan 2017 11:33:58 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:32 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/_count
@@ -82,5 +82,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"count":2,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Wed, 25 Jan 2017 11:33:58 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:32 GMT
 recorded_with: VCR 3.0.3
