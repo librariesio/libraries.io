@@ -35,7 +35,7 @@ class Issue < ApplicationRecord
   end
 
   def sync(token = nil)
-    GithubIssueWorker.perform_async(repository.full_name, number, token)
+    IssueWorker.perform_async(repository.full_name, number, token)
   end
 
   def self.create_from_hash(repo, issue_hash)
