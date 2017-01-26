@@ -342,6 +342,7 @@ class Repository < ApplicationRecord
       g = Repository.find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
       g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
       g.owner_id = repo_hash[:owner][:id]
+      g.host_type = 'github'
       g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
       g.uuid = repo_hash[:id] if g.uuid.nil?
       g.license = repo_hash[:license][:key] if repo_hash[:license]
