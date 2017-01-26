@@ -4,9 +4,24 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_user, :logged_in?, :logged_out?
+  helper_method :current_user, :logged_in?, :logged_out?, :current_host, :formatted_host
 
   private
+
+  def current_host
+    params[:host_type].try(:downcase)
+  end
+
+  def formatted_host
+    case current_host
+    when 'github'
+      'GitHub'
+    when 'gitlab'
+      'GitLab'
+    when 'bitbucket'
+      'Bitbucket'
+    end
+  end
 
   def max_page
     100

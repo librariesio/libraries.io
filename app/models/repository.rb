@@ -49,6 +49,8 @@ class Repository < ApplicationRecord
   scope :with_tags, -> { joins(:tags) }
   scope :without_tags, -> { includes(:tags).where(tags: { repository_id: nil }) }
 
+  scope :host, lambda{ |host_type| where(host_type: host_type.downcase) }
+
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
 

@@ -1,7 +1,7 @@
 class RepositoriesController < ApplicationController
   def index
     postfix = [current_language, current_license, current_keywords].any?(&:present?) ? 'Repos' : 'Repositories'
-    @title = [current_language, current_license, current_keywords, postfix].compact.join(' ')
+    @title = [current_language, current_license, current_keywords, formatted_host, postfix].compact.join(' ')
 
     @popular = repo_search('stargazers_count')
     @forked = repo_search('forks_count')
@@ -107,7 +107,7 @@ class RepositoriesController < ApplicationController
   end
 
   def page_title
-    return "Search for #{params[:q]} - Libraries.io" if params[:q].present?
+    return "Search for #{params[:q]} Repositories - Libraries.io" if params[:q].present?
 
     modifiers = []
     modifiers << current_license if current_license.present?
@@ -117,13 +117,13 @@ class RepositoriesController < ApplicationController
 
     case params[:sort]
     when 'created_at'
-      "New#{modifier}Github Repositories - Libraries.io"
+      "New#{modifier}#{formatted_host} Repositories - Libraries.io"
     when 'updated_at'
-      "Updated#{modifier}Github Repositories - Libraries.io"
+      "Updated#{modifier}#{formatted_host} Repositories - Libraries.io"
     when 'latest_release_published_at'
-      "Updated#{modifier}Github Repositories - Libraries.io"
+      "Updated#{modifier}#{formatted_host} Repositories - Libraries.io"
     else
-      "Popular#{modifier}Github Repositories - Libraries.io"
+      "Popular#{modifier}#{formatted_host} Repositories - Libraries.io"
     end
   end
 
