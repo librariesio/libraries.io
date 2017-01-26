@@ -26,7 +26,7 @@ http_interactions:
       encoding: UTF-8
       string: '{"count":101,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Wed, 25 Jan 2017 11:48:06 GMT
+  recorded_at: Thu, 26 Jan 2017 13:28:03 GMT
 - request:
     method: get
     uri: http://localhost:9200/github_repositories/github_repository/_search?from=0&size=30
@@ -48,12 +48,16 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '435'
+      - '2624'
     body:
       encoding: UTF-8
-      string: '{"took":6,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"facets":{"language":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"license":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"keywords":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]}},"suggest":{"did_you_mean":[{"text":"unmaintain","offset":0,"length":12,"options":[]}]}}'
+      string: '{"took":6,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":2,"max_score":653.0265,"hits":[{"_index":"github_repositories","_type":"github_repository","_id":"1237","_score":653.0265,"_source":{"pushed_at":"2013-03-26T22:50:40.000Z","github_id":6434471,"full_name":"chrisbarrett/elisp-namespaces","owner_id":836504,"description":"UNMAINTAINED","fork":false,"created_at":"2012-10-29T02:01:56.000Z","updated_at":"2017-01-25T12:19:08.802Z","homepage":"","size":460,"stargazers_count":29,"language":"Emacs
+        Lisp","has_issues":true,"has_wiki":true,"has_pages":false,"forks_count":1,"mirror_url":null,"open_issues_count":0,"default_branch":"master","subscribers_count":6,"private":false,"id":1237,"source_name":null,"license":null,"github_organisation_id":null,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:19:08.797Z","rank":2,"exact_name":"chrisbarrett/elisp-namespaces","keywords":[],"platforms":["Emacs"]},"sort":[29]},{"_index":"github_repositories","_type":"github_repository","_id":"506","_score":94.34331,"_source":{"pushed_at":"2016-10-31T09:10:21.000Z","github_id":22385068,"full_name":"lunaryorn/fancy-battery.el","owner_id":224922,"license":"GPL-3.0","description":"UNMAINTAINED!
+        Display battery in Emacs Mode line","fork":false,"created_at":"2014-07-29T15:35:18.000Z","updated_at":"2017-01-25T12:15:06.996Z","homepage":"","size":107,"stargazers_count":18,"language":"Emacs
+        Lisp","has_issues":true,"has_wiki":true,"has_pages":false,"forks_count":3,"mirror_url":null,"open_issues_count":1,"default_branch":"master","subscribers_count":2,"private":false,"id":506,"source_name":null,"github_organisation_id":null,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:15:06.990Z","rank":4,"exact_name":"lunaryorn/fancy-battery.el","keywords":["convenience","tools","hardware"],"platforms":["Emacs"]},"sort":[18]}]},"facets":{"language":{"_type":"terms","missing":0,"total":2,"other":0,"terms":[{"term":"Emacs
+        Lisp","count":2}]},"license":{"_type":"terms","missing":1,"total":1,"other":0,"terms":[{"term":"GPL-3.0","count":1}]},"keywords":{"_type":"terms","missing":1,"total":3,"other":0,"terms":[{"term":"tools","count":1},{"term":"hardware","count":1},{"term":"convenience","count":1}]}},"suggest":{"did_you_mean":[{"text":"unmaintain","offset":0,"length":12,"options":[]}]}}'
     http_version: 
-  recorded_at: Wed, 25 Jan 2017 11:48:06 GMT
+  recorded_at: Thu, 26 Jan 2017 13:28:03 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/_count
@@ -80,5 +84,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"count":101,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Wed, 25 Jan 2017 11:48:06 GMT
+  recorded_at: Thu, 26 Jan 2017 13:28:03 GMT
 recorded_with: VCR 3.0.3

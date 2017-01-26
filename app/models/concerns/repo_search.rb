@@ -44,6 +44,8 @@ module RepoSearch
         indexes :open_issues_count, type: 'integer'
         indexes :subscribers_count, type: 'integer'
         indexes :github_id, type: 'integer'
+        indexes :uuid, type: 'integer'
+        indexes :github_contributions_count, type: 'integer'
         indexes :contributions_count, type: 'integer'
         indexes :rank, type: 'integer'
 
@@ -65,7 +67,7 @@ module RepoSearch
     end
 
     def as_indexed_json(_options)
-      as_json methods: [:exact_name, :keywords, :platforms]
+      as_json methods: [:exact_name, :keywords, :platforms, :github_id, :github_contributions_count]
     end
 
     def exact_name

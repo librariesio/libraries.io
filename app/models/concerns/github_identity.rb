@@ -44,10 +44,10 @@ module GithubIdentity
 
     existing_permissions = repository_permissions.all
     new_repo_ids = r.map(&:id)
-    existing_repos = Repository.where(github_id: new_repo_ids).select(:id, :github_id)
+    existing_repos = Repository.where(uuid: new_repo_ids).select(:id, :uuid)
 
     r.each do |repo|
-      unless github_repo = existing_repos.find{|re| re.github_id == repo.id}
+      unless github_repo = existing_repos.find{|re| re.uuid == repo.id}
         github_repo = Repository.find_by('lower(full_name) = ?', repo.full_name.downcase) || Repository.create_from_hash(repo)
       end
       next if github_repo.nil?

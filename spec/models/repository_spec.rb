@@ -18,5 +18,5 @@ describe Repository, :vcr, type: :model do
   it { should belong_to(:source) }
 
   it { should validate_uniqueness_of(:full_name) }
-  it { should validate_uniqueness_of(:github_id) }
+  it { should validate_uniqueness_of(:uuid) }
 end
