@@ -30,7 +30,7 @@
           <tr>
             <td>
               <%= link_to image_tag(repo.avatar_url(60), width: 30, height: 30, alt: repo), user_path(repo.owner_name) %>
-              <strong><%= link_to repo, github_repository_path(owner: repo.owner_name, name: repo.project_name) %></strong>
+              <strong><%= link_to repo, repository_path(owner: repo.owner_name, name: repo.project_name) %></strong>
             </td>
             <td>
               <%= link_to unwatch_path(repo.id), method: :post, class: 'tip btn btn-xs btn-success', title: 'Stop watching' do %>

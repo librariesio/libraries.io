@@ -6,7 +6,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"id":37,"full_name":"rails/rails","owner_id":null,"description":"Ruby
-        on Rails","fork":false,"created_at":"2017-01-09T13:30:42.526Z","updated_at":"2017-01-09T13:30:42.526Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":39,"private":false,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
+        on Rails","fork":false,"created_at":"2017-01-25T11:48:41.567Z","updated_at":"2017-01-25T11:48:41.567Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":39,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -25,62 +25,7 @@ http_interactions:
       - '101'
     body:
       encoding: UTF-8
-      string: '{"_index":"github_repositories","_type":"github_repository","_id":"37","_version":10,"created":false}'
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"37","_version":17,"created":false}'
     http_version: 
-  recorded_at: Mon, 09 Jan 2017 13:30:42 GMT
-- request:
-    method: put
-    uri: http://localhost:9200/github_repositories/github_repository/37
-    body:
-      encoding: UTF-8
-      string: '{"id":37,"full_name":"rails/rails","owner_id":null,"description":"Ruby
-        on Rails","fork":false,"created_at":"2017-01-09T13:30:42.526Z","updated_at":"2017-01-09T13:30:42.526Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":39,"private":false,"github_contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '101'
-    body:
-      encoding: UTF-8
-      string: '{"_index":"github_repositories","_type":"github_repository","_id":"37","_version":11,"created":false}'
-    http_version: 
-  recorded_at: Mon, 09 Jan 2017 13:30:42 GMT
-- request:
-    method: post
-    uri: http://localhost:9200/github_repositories/github_repository/37/_update
-    body:
-      encoding: UTF-8
-      string: '{"doc":{"full_name":"rails/rails","description":"Ruby on Rails","fork":false,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","github_organisation_id":39,"private":false}}'
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '85'
-    body:
-      encoding: UTF-8
-      string: '{"_index":"github_repositories","_type":"github_repository","_id":"37","_version":12}'
-    http_version: 
-  recorded_at: Mon, 09 Jan 2017 13:30:42 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:41 GMT
 recorded_with: VCR 3.0.3

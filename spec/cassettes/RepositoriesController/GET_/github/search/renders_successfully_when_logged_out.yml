@@ -1,0 +1,113 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: http://localhost:9200/github_repositories/github_repository/14
+    body:
+      encoding: UTF-8
+      string: '{"id":14,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2017-01-25T11:48:30.369Z","updated_at":"2017-01-25T11:48:30.369Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":null,"subscribers_count":null,"github_id":null,"source_name":null,"license":null,"github_organisation_id":14,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"rails/rails","keywords":[],"platforms":[]}'
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '101'
+    body:
+      encoding: UTF-8
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"14","_version":18,"created":false}'
+    http_version: 
+  recorded_at: Wed, 25 Jan 2017 11:48:30 GMT
+- request:
+    method: put
+    uri: http://localhost:9200/github_issues/github_issue/2
+    body:
+      encoding: UTF-8
+      string: '{"id":2,"repository_id":14,"github_id":2,"number":2,"state":"open","title":"I
+        found a bug","body":"Please fix it","github_user_id":7,"locked":null,"comments_count":null,"closed_at":null,"labels":[],"created_at":"2017-01-25T11:48:30.472Z","updated_at":"2017-01-25T11:48:30.472Z","last_synced_at":null,"pull_request":null,"contributions_count":0,"stars":10000,"language":"Ruby","license":null,"rank":0}'
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '88'
+    body:
+      encoding: UTF-8
+      string: '{"_index":"github_issues","_type":"github_issue","_id":"2","_version":4,"created":false}'
+    http_version: 
+  recorded_at: Wed, 25 Jan 2017 11:48:30 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/github_repositories/github_repository/_search?from=0&size=30
+    body:
+      encoding: UTF-8
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"exists":{"field":"pushed_at"}}],"must_not":[{"term":{"fork":true}},{"term":{"private":true}},{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"stargazers_count","modifier":"square"}}},"facets":{"language":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"license":{"terms":{"field":"license","size":35},"facet_filter":{"bool":{"must":[]}}},"keywords":{"terms":{"field":"keywords","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[],"must_not":[]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"full_name"}}},"sort":[{"rank":"desc"},{"stargazers_count":"desc"}],"track_scores":true}'
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '378'
+    body:
+      encoding: UTF-8
+      string: '{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"facets":{"language":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"license":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"keywords":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]}},"suggest":{"did_you_mean":[]}}'
+    http_version: 
+  recorded_at: Wed, 25 Jan 2017 11:48:30 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/projects/_count
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '59'
+    body:
+      encoding: UTF-8
+      string: '{"count":2,"_shards":{"total":1,"successful":1,"failed":0}}'
+    http_version: 
+  recorded_at: Wed, 25 Jan 2017 11:48:30 GMT
+recorded_with: VCR 3.0.3

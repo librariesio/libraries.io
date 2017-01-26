@@ -33,14 +33,14 @@ describe "DashboardController", :vcr do
     end
   end
 
-  describe "POST /unwatch/:github_repository_id", type: :request do
+  describe "POST /unwatch/:repository_id", type: :request do
     it "redirects to /repositories" do
-      github_repository = create(:github_repository)
-      create(:repository_subscription, github_repository: github_repository, user: user)
+      repository = create(:repository)
+      create(:repository_subscription, repository: repository, user: user)
 
       login(user)
       rack_test_session_wrapper = Capybara.current_session.driver
-      rack_test_session_wrapper.submit :post, unwatch_path(github_repository.id), nil
+      rack_test_session_wrapper.submit :post, unwatch_path(repository.id), nil
 
       expect(page.current_path).to eq '/'
     end

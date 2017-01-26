@@ -1,19 +1,19 @@
 class GithubUser < ApplicationRecord
   include Profile
 
-  has_many :github_contributions, dependent: :delete_all
-  has_many :github_repositories, primary_key: :github_id, foreign_key: :owner_id
-  has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
-  has_many :open_source_github_repositories, -> { where fork: false, private: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
-  has_many :dependencies, through: :open_source_github_repositories
+  has_many :contributions, dependent: :delete_all
+  has_many :repositories, primary_key: :github_id, foreign_key: :owner_id
+  has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
+  has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
+  has_many :dependencies, through: :open_source_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
-  has_many :all_dependent_repos, -> { group('github_repositories.id') }, through: :favourite_projects, source: :github_repository
-  has_many :contributed_repositories, -> { GithubRepository.source.open_source }, through: :github_contributions, source: :github_repository
-  has_many :contributors, -> { group('github_users.id').order("sum(github_contributions.count) DESC") }, through: :open_source_github_repositories, source: :contributors
+  has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
+  has_many :contributed_repositories, -> { Repository.source.open_source }, through: :contributions, source: :repository
+  has_many :contributors, -> { group('github_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('github_users.id').order("COUNT(github_users.id) DESC") }, through: :contributed_repositories, source: :contributors
-  has_many :projects, through: :open_source_github_repositories
+  has_many :projects, through: :open_source_repositories
 
-  has_many :github_issues, primary_key: :github_id
+  has_many :issues, primary_key: :github_id
 
   validates :login, uniqueness: true, if: lambda { self.login_changed? }
   validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
@@ -33,7 +33,7 @@ class GithubUser < ApplicationRecord
   end
 
   def open_source_contributions
-    github_contributions.joins(:github_repository).where("github_repositories.fork = ? AND github_repositories.private = ?", false, false)
+    contributions.joins(:repository).where("repositories.fork = ? AND repositories.private = ?", false, false)
   end
 
   def org?
@@ -65,7 +65,7 @@ class GithubUser < ApplicationRecord
 
   def download_from_github_by(id_or_login)
     update_attributes(github_client.user(id_or_login).to_hash.slice(:login, :name, :company, :blog, :location, :email, :bio, :followers, :following))
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -74,17 +74,17 @@ class GithubUser < ApplicationRecord
       GithubCreateOrgWorker.perform_async(org.login)
     end
     true
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
   def download_repos
     AuthToken.client.search_repos("user:#{login}").items.each do |repo|
-      GithubRepository.create_from_hash repo.to_hash
+      Repository.create_from_hash repo.to_hash
     end
 
     true
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 

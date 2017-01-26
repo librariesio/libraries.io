@@ -3,13 +3,13 @@ Hi <%= @user.nickname %>
 I detected a new release (<%= @version.number %>) of <%= @project %> (<%= project_url(@project.to_param) %>) <%= "at #{@version.published_at.to_s(:long)}" if @version.published_at.present? %>
 
 <% if @repos.any? %>
-You depend on <%= @project %> in the following repos: <%= @repos.map{|repo| github_repository_url(repo.owner_name, repo.project_name) }.to_sentence %>
+You depend on <%= @project %> in the following repos: <%= @repos.map{|repo| repository_url(repo.owner_name, repo.project_name) }.to_sentence %>
 <% end %>
 
 Check out all the details here: <%= version_url(@project.to_param.merge(number: @version.number)) %>
 
-<% if @project.github_repository.present? %>
-You can also browse the latest commits on GitHub: <%= @project.github_repository.commits_url %>
+<% if @project.repository.present? %>
+You can also browse the latest commits on GitHub: <%= @project.repository.commits_url %>
 <% end %>
 
 From your friendly neighborhood robot, Libby.

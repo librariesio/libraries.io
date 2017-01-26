@@ -19,7 +19,7 @@ module ApplicationHelper
       ['Dependents', 'dependents_count'],
       ['Most Used', 'dependent_repos_count'],
       ['Latest Release', 'latest_release_published_at'],
-      ['Contributors', 'github_contributions_count'],
+      ['Contributors', 'contributions_count'],
       ['Newest', 'created_at']
     ]
   end
@@ -32,7 +32,7 @@ module ApplicationHelper
       ['Forks', 'forks_count'],
       ['Watchers', 'subscribers_count'],
       ['Open issues', 'open_issues_count'],
-      ['Contributors', 'github_contributions_count'],
+      ['Contributors', 'contributions_count'],
       ['Repo size', 'size'],
       ['Newest', 'created_at'],
       ['Recently pushed', 'pushed_at']
@@ -42,7 +42,7 @@ module ApplicationHelper
   def rss_url(project)
     if project.versions.size > 0
       project_versions_url({format: "atom"}.merge(project.to_param))
-    elsif project.github_repository && project.github_tags.length > 0
+    elsif project.repository && project.tags.length > 0
       project_tags_url({format: "atom"}.merge(project.to_param))
     end
   end
@@ -107,12 +107,12 @@ module ApplicationHelper
     !bool && negative ? content_tag(:i, negative) : tag
   end
 
-  def source_path(github_repository)
-    return nil unless github_repository.fork?
-    if github_repository.source.present?
-      github_repository_path(github_repository.source.owner_name, github_repository.source.project_name)
+  def source_path(repository)
+    return nil unless repository.fork?
+    if repository.source.present?
+      repository_path(repository.source.owner_name, repository.source.project_name)
     else
-      github_repository.source_url
+      repository.source_url
     end
   end
 
@@ -181,9 +181,9 @@ module ApplicationHelper
         url: project_url(record.to_param),
         image: shareable_image_url(record.platform)
       })
-    when 'GithubRepository'
+    when 'Repository'
       hash = record.meta_tags.merge({
-        url: github_repository_url(record.owner_name, record.project_name)
+        url: repository_url(record.owner_name, record.project_name)
       })
     when 'GithubUser', 'GithubOrganisation'
       hash = record.meta_tags.merge({

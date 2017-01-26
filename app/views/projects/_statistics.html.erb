@@ -44,7 +44,7 @@
           <% if @project.can_have_versions? %>
             <%= link_to number_to_human(@project.versions.size), project_versions_path(@project.to_param) %>
           <% else %>
-            <%= link_to number_to_human(@project.github_tags.count), project_tags_path(@project.to_param) %>
+            <%= link_to number_to_human(@project.tags.count), project_tags_path(@project.to_param) %>
           <% end %>
         </strong>
       </td>
@@ -62,16 +62,16 @@
         First <%= @project.release_or_tag.singularize %>
       </td>
       <td>
-        <strong><%= timeago_tag(@project.first_release.try(:published_at).presence || @project.github_repository.try(:created_at).presence || @project.created_at) %></strong>
+        <strong><%= timeago_tag(@project.first_release.try(:published_at).presence || @project.repository.try(:created_at).presence || @project.created_at) %></strong>
       </td>
     </tr>
-    <% if @project.github_repository.present? %>
+    <% if @project.repository.present? %>
     <tr>
       <td>
         Stars
       </td>
       <td>
-        <strong><%= link_to number_to_human(@project.github_repository.stargazers_count), @project.github_repository.stargazers_url %></strong>
+        <strong><%= link_to number_to_human(@project.repository.stargazers_count), @project.repository.stargazers_url %></strong>
       </td>
     </tr>
     <tr>
@@ -79,7 +79,7 @@
         Forks
       </td>
       <td>
-        <strong><%= link_to number_to_human(@project.github_repository.forks_count), @project.github_repository.forks_url %></strong>
+        <strong><%= link_to number_to_human(@project.repository.forks_count), @project.repository.forks_url %></strong>
       </td>
     </tr>
     <tr>
@@ -87,7 +87,7 @@
         Watchers
       </td>
       <td>
-        <strong><%= link_to number_with_delimiter(@project.github_repository.subscribers_count), @project.github_repository.watchers_url %></strong>
+        <strong><%= link_to number_with_delimiter(@project.repository.subscribers_count), @project.repository.watchers_url %></strong>
       </td>
     </tr>
     <tr>
@@ -95,7 +95,7 @@
         Contributors
       </td>
       <td>
-        <strong><%= link_to number_to_human(@project.github_contributions.count), @project.github_repository.contributors_url %></strong>
+        <strong><%= link_to number_to_human(@project.contributions.count), @project.repository.contributors_url %></strong>
       </td>
     </tr>
     <tr>
@@ -103,7 +103,7 @@
         Repo Size:
       </td>
       <td>
-        <strong><%= number_to_human_size @project.github_repository.size*1000 %></strong>
+        <strong><%= number_to_human_size @project.repository.size*1000 %></strong>
       </td>
     </tr>
     <% end %>

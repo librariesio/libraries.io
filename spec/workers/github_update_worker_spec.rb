@@ -7,7 +7,7 @@ describe GithubUpdateWorker do
 
   it "should update repo" do
     repo_full_name = 'rails/rails'
-    expect(GithubRepository).to receive(:update_from_name).with(repo_full_name, nil)
+    expect(Repository).to receive(:update_from_name).with(repo_full_name, nil)
     subject.perform(repo_full_name)
   end
 end

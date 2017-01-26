@@ -158,10 +158,10 @@
         </p>
       <% end %>
 
-      <% if @github_repository.present? && @github_repository.readme.present? %>
+      <% if @repository.present? && @repository.readme.present? %>
       <hr>
       <%= render 'adsense/banner' %>
-      <%== @github_repository.readme %>
+      <%== @repository.readme %>
       <% end %>
       <div class="row">
         <% cache([@project, @version, 'dependents:v3'], :expires_in => 1.day) do  %>
@@ -255,7 +255,7 @@
                 <ul>
                   <% dependent_repos.each do |repo| %>
                   <li>
-                    <%= link_to repo.full_name, github_repository_path(repo.owner_name, repo.project_name) %>
+                    <%= link_to repo.full_name, repository_path(repo.owner_name, repo.project_name) %>
                     <small>
                       <%= fa_icon("lock") if repo.private? %>
                       <%= fa_icon("code-fork") if repo.fork? %>
@@ -294,7 +294,7 @@
         <% if @project.versions.size > 10 %>
           <%= link_to "See all #{pluralize(@project.versions.size, 'releases')}", project_versions_path(@project.to_param) %>
         <% end %>
-      <% elsif @github_repository && @github_tags.length > 0 %>
+      <% elsif @repository && @tags.length > 0 %>
         <h4>
           <%= link_to project_tags_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
@@ -302,7 +302,7 @@
           Tagged Releases
         </h4>
         <ul>
-          <% @github_tags.each do |tag| %>
+          <% @tags.each do |tag| %>
           <li>
             <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
             <% if tag.published_at.present? %>
@@ -311,8 +311,8 @@
           </li>
           <% end %>
         </ul>
-        <% if @github_repository.github_tags.published.count > 10 %>
-          <%= link_to "See all #{pluralize(@github_repository.github_tags.published.count, 'tags')}", project_tags_path(@project.to_param) %>
+        <% if @repository.tags.published.count > 10 %>
+          <%= link_to "See all #{pluralize(@repository.tags.published.count, 'tags')}", project_tags_path(@project.to_param) %>
         <% end %>
       <% end %>
 
@@ -321,7 +321,7 @@
       <% if @contributors.length > 0 %>
         <div class="row">
           <div class="col-md-12">
-            <h4>Top Contributors <small><%= link_to 'See all', github_repository_contributors_path(@github_repository.owner_name, @github_repository.project_name) %></small></h4>
+            <h4>Top Contributors <small><%= link_to 'See all', repository_contributors_path(@repository.owner_name, @repository.project_name) %></small></h4>
             <%= render @contributors %>
           </div>
         </div>
@@ -337,7 +337,7 @@
             <ul>
               <% your_dependent_repos.limit(10).each do |repo| %>
                 <li>
-                  <%= link_to repo.full_name, github_repository_path(repo.owner_name, repo.project_name) %>
+                  <%= link_to repo.full_name, repository_path(repo.owner_name, repo.project_name) %>
                   <small>
                     <%= fa_icon("lock") if repo.private? %>
                     <%= fa_icon("code-fork") if repo.fork? %>

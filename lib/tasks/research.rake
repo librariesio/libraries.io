@@ -20,9 +20,9 @@ namespace :research do
 
     orgs = GithubOrganisation.where(login: org_names)
 
-    github_repositories = orgs.map{|org| org.github_repositories.source.open_source }.flatten
+    repositories = orgs.map{|org| org.repositories.source.open_source }.flatten
 
-    projects = github_repositories.map(&:dependency_projects).flatten.map {|project| "#{project.platform}/#{project.name}" }
+    projects = repositories.map(&:dependency_projects).flatten.map {|project| "#{project.platform}/#{project.name}" }
 
     project_counts = projects.reduce (Hash.new(0)) {|counts, el| counts[el]+=1; counts}
 

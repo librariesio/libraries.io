@@ -9,22 +9,22 @@ class User < ApplicationRecord
   has_many :repository_subscriptions, dependent: :destroy
   has_many :api_keys, dependent: :destroy
   has_many :repository_permissions, dependent: :destroy
-  has_many :all_github_repositories, through: :repository_permissions, source: :github_repository
+  has_many :all_repositories, through: :repository_permissions, source: :repository
   has_many :adminable_repository_permissions, -> { where admin: true }, anonymous_class: RepositoryPermission
-  has_many :adminable_github_repositories, through: :adminable_repository_permissions, source: :github_repository
-  has_many :adminable_github_orgs, -> { group('github_organisations.id') }, through: :adminable_github_repositories, source: :github_organisation
-  has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
-  has_many :public_github_repositories, -> { where private: false }, anonymous_class: GithubRepository, primary_key: :github_id, foreign_key: :owner_id
+  has_many :adminable_repositories, through: :adminable_repository_permissions, source: :repository
+  has_many :adminable_github_orgs, -> { group('github_organisations.id') }, through: :adminable_repositories, source: :github_organisation
+  has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
+  has_many :public_repositories, -> { where private: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
 
-  has_many :watched_github_repositories, source: :github_repository, through: :repository_subscriptions
-  has_many :watched_dependencies, through: :watched_github_repositories, source: :dependencies
+  has_many :watched_repositories, source: :repository, through: :repository_subscriptions
+  has_many :watched_dependencies, through: :watched_repositories, source: :dependencies
   has_many :watched_dependent_projects, -> { group('projects.id') }, through: :watched_dependencies, source: :project
 
-  has_many :dependencies, through: :source_github_repositories
-  has_many :all_dependencies, through: :public_github_repositories, source: :dependencies
-  has_many :really_all_dependencies, through: :all_github_repositories, source: :dependencies
+  has_many :dependencies, through: :source_repositories
+  has_many :all_dependencies, through: :public_repositories, source: :dependencies
+  has_many :really_all_dependencies, through: :all_repositories, source: :dependencies
   has_many :all_dependent_projects, -> { group('projects.id') }, through: :all_dependencies, source: :project
-  has_many :all_dependent_repos, -> { group('github_repositories.id') }, through: :all_dependent_projects, source: :github_repository
+  has_many :all_dependent_repos, -> { group('repositories.id') }, through: :all_dependent_projects, source: :repository
 
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
 

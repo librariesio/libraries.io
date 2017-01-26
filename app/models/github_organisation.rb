@@ -3,23 +3,23 @@ class GithubOrganisation < ApplicationRecord
 
   API_FIELDS = [:name, :login, :blog, :email, :location, :bio]
 
-  has_many :github_repositories
-  has_many :source_github_repositories, -> { where fork: false }, anonymous_class: GithubRepository
-  has_many :open_source_github_repositories, -> { where fork: false, private: false }, anonymous_class: GithubRepository
-  has_many :dependencies, through: :open_source_github_repositories
+  has_many :repositories
+  has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository
+  has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository
+  has_many :dependencies, through: :open_source_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
-  has_many :all_dependent_repos, -> { group('github_repositories.id') }, through: :favourite_projects, source: :github_repository
-  has_many :contributors, -> { group('github_users.id').order("sum(github_contributions.count) DESC") }, through: :open_source_github_repositories, source: :contributors
-  has_many :projects, through: :open_source_github_repositories
+  has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
+  has_many :contributors, -> { group('github_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
+  has_many :projects, through: :open_source_repositories
 
   validates :login, uniqueness: true, if: lambda { self.login_changed? }
   validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
 
   after_commit :async_sync, on: :create
 
-  scope :most_repos, -> { joins(:open_source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('repo_count DESC') }
-  scope :most_stars, -> { joins(:open_source_github_repositories).select('github_organisations.*, sum(github_repositories.stargazers_count) AS star_count, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('star_count DESC') }
-  scope :newest, -> { joins(:open_source_github_repositories).select('github_organisations.*, count(github_repositories.id) AS repo_count').group('github_organisations.id').order('created_at DESC').having('count(github_repositories.id) > 0') }
+  scope :most_repos, -> { joins(:open_source_repositories).select('github_organisations.*, count(repositories.id) AS repo_count').group('github_organisations.id').order('repo_count DESC') }
+  scope :most_stars, -> { joins(:open_source_repositories).select('github_organisations.*, sum(repositories.stargazers_count) AS star_count, count(repositories.id) AS repo_count').group('github_organisations.id').order('star_count DESC') }
+  scope :newest, -> { joins(:open_source_repositories).select('github_organisations.*, count(repositories.id) AS repo_count').group('github_organisations.id').order('created_at DESC').having('count(repositories.id) > 0') }
   scope :visible, -> { where(hidden: false) }
   scope :with_login, -> { where("github_organisations.login <> ''") }
 
@@ -31,8 +31,8 @@ class GithubOrganisation < ApplicationRecord
     }
   end
 
-  def github_contributions
-    GithubContribution.none
+  def contributions
+    Contribution.none
   end
 
   def org?
@@ -80,7 +80,7 @@ class GithubOrganisation < ApplicationRecord
       org.assign_attributes r.slice(*GithubOrganisation::API_FIELDS)
       org.save
       org
-    rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+    rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
       false
     end
   end
@@ -105,15 +105,15 @@ class GithubOrganisation < ApplicationRecord
 
   def download_from_github_by(id_or_login)
     update_attributes(github_client.org(github_id).to_hash.slice(:login, :name, :email, :blog, :location, :bio))
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
   def download_repos
     github_client.org_repos(login).each do |repo|
-      GithubCreateWorker.perform_async(repo.full_name)
+      CreateRepositoryWorker.perform_async(repo.full_name)
     end
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 end

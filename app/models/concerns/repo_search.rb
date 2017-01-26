@@ -4,6 +4,9 @@ module RepoSearch
   included do
     include Elasticsearch::Model
 
+    index_name    "github_repositories"
+    document_type "github_repository"
+
     FIELDS = ['full_name^2', 'exact_name^2', 'description', 'homepage', 'language', 'license']
 
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
@@ -41,7 +44,7 @@ module RepoSearch
         indexes :open_issues_count, type: 'integer'
         indexes :subscribers_count, type: 'integer'
         indexes :github_id, type: 'integer'
-        indexes :github_contributions_count, type: 'integer'
+        indexes :contributions_count, type: 'integer'
         indexes :rank, type: 'integer'
 
         indexes :fork

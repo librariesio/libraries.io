@@ -1,12 +1,12 @@
 module RepoTags
   def download_tags(token = nil)
-    existing_tag_names = github_tags.pluck(:name)
+    existing_tag_names = tags.pluck(:name)
     tags = github_client(token).refs(full_name, 'tags')
     Array(tags).each do |tag|
       next unless tag && tag.is_a?(Sawyer::Resource) && tag['ref']
       download_tag(token, tag, existing_tag_names)
     end
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -31,6 +31,6 @@ module RepoTags
       tag_hash[:published_at] = object.tagger.date
     end
 
-    github_tags.create!(tag_hash)
+    tags.create!(tag_hash)
   end
 end

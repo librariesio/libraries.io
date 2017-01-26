@@ -3,7 +3,7 @@ class RepositorySubscriptionsController < ApplicationController
 
   def edit
     @repository_subscription = current_user.repository_subscriptions.find(params[:id])
-    @github_repository = @repository_subscription.github_repository
+    @repository = @repository_subscription.repository
   end
 
   def update

@@ -6,12 +6,12 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def dependents
-    dependents = paginate(@project.dependent_projects).includes(:versions, :github_repository)
+    dependents = paginate(@project.dependent_projects).includes(:versions, :repository)
     render json: project_json_response(dependents)
   end
 
   def dependent_repositories
-    paginate json: @project.dependent_repositories.as_json(except: [:id, :github_organisation_id, :owner_id])
+    paginate json: @project.dependent_repositories.as_json(except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count])
   end
 
   def searchcode
@@ -36,7 +36,7 @@ class Api::ProjectsController < Api::ApplicationController
   private
 
   def find_project
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes(:versions, :github_repository).first
+    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes(:versions, :repository).first
     raise ActiveRecord::RecordNotFound if @project.nil?
   end
 end

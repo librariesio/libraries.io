@@ -5,8 +5,16 @@ FactoryGirl.define do
     "email#{n}@gmail.com"
   end
 
+  sequence :name do |n|
+    "rails#{n}"
+  end
+
+  sequence :login do |n|
+    "andrew#{n}"
+  end
+
   factory :project do
-    name            'rails'
+    name
     platform        'Rubygems'
     description     'Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'
     homepage        'http://rubyonrails.org/'
@@ -22,11 +30,35 @@ FactoryGirl.define do
     published_at 1.day.ago
   end
 
-  factory :github_tag do
-    github_repository
+  factory :dependency do
+    version
+    project
+    platform 'Rubygems'
+    project_name 'rails'
+    requirements '~> 4.2'
+  end
+
+  factory :tag do
+    repository
     name '1.0.0'
     sha  { SecureRandom.hex }
     published_at 1.day.ago
+  end
+
+  factory :issue do
+    repository
+    sequence(:github_id)
+    sequence(:number)
+    state "open"
+    title "I found a bug"
+    body "Please fix it"
+    github_user
+  end
+
+  factory :contribution do
+    repository
+    github_user
+    count 1
   end
 
   factory :project_suggestion do
@@ -41,12 +73,12 @@ FactoryGirl.define do
   end
 
   factory :github_user do
-    login 'andrew'
+    login
     sequence(:github_id)
   end
 
   factory :github_organisation do
-    login 'rails'
+    login
   end
 
   factory :subscription do
@@ -56,10 +88,10 @@ FactoryGirl.define do
 
   factory :repository_subscription do
     user
-    github_repository
+    repository
   end
 
-  factory :github_repository do
+  factory :repository do
     full_name   'rails/rails'
     description 'Ruby on Rails'
     language    'Ruby'
@@ -89,13 +121,23 @@ FactoryGirl.define do
 
   factory :repository_permission do
     user
-    github_repository
+    repository
     pull true
   end
 
   factory :web_hook do
-    github_repository
+    repository
     user
     url 'http://google.com'
+  end
+
+  factory :api_key do
+    user
+    access_token { SecureRandom.hex }
+  end
+
+  factory :auth_token do
+    login
+    token { SecureRandom.hex }
   end
 end

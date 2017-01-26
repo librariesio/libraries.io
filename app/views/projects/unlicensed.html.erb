@@ -14,7 +14,7 @@
         </div>
         <div class="col-xs-4">
           <br>
-          <%= link_to project.github_repository.try(:url), class: 'btn btn-primary' do %>
+          <%= link_to project.repository.try(:url), class: 'btn btn-primary' do %>
           Suggest a License
           <% end %>
           <% if current_user && current_user.admin? %>

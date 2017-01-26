@@ -2,8 +2,8 @@ require "rails_helper"
 
 describe "RepositorySubscriptionsController" do
   let(:user) { create(:user) }
-  let(:github_repository) { create(:github_repository) }
-  let(:repository_subscription) { create(:repository_subscription, user: user, github_repository: github_repository) }
+  let(:repository) { create(:repository) }
+  let(:repository_subscription) { create(:repository_subscription, user: user, repository: repository) }
 
   describe "GET /repository_subscriptions/:id/edit", type: :request, vcr: true do
     it "redirects to /login if not logged in" do

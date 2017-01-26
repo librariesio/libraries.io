@@ -92,10 +92,10 @@ class ProjectsController < ApplicationController
     if incorrect_case?
       return redirect_to(project_tags_path(@project.to_param), :status => :moved_permanently)
     else
-      if @project.github_repository.nil?
+      if @project.repository.nil?
         @tags = []
       else
-        @tags = @project.github_tags.published.order('published_at DESC').paginate(page: page_number)
+        @tags = @project.tags.published.order('published_at DESC').paginate(page: page_number)
       end
       respond_to do |format|
         format.html
@@ -117,11 +117,11 @@ class ProjectsController < ApplicationController
   end
 
   def trending
-    orginal_scope = Project.includes(:github_repository).recently_created.maintained
+    orginal_scope = Project.includes(:repository).recently_created.maintained
     scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
     scope = current_language.present? ? scope.language(current_language) : scope
     @projects = scope.hacker_news.paginate(page: page_number)
-    @platforms = orginal_scope.where('github_repositories.stargazers_count > 0').group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
+    @platforms = orginal_scope.where('repositories.stargazers_count > 0').group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
   end
 
   def unsubscribe
@@ -147,7 +147,7 @@ class ProjectsController < ApplicationController
       language: current_language
     }).paginate(page: page_number)
     indexes = Hash[@search.map{|r| r.id.to_i }.each_with_index.to_a]
-    @projects = @search.records.includes(:github_repository).sort_by { |u| indexes[u.id] }
+    @projects = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
   end
 
   def incorrect_case?
@@ -168,6 +168,6 @@ class ProjectsController < ApplicationController
 
   def project_scope(scope_name)
     @platforms = Project.send(scope_name).group('platform').count.sort_by(&:last).reverse
-    @projects = platform_scope.send(scope_name).includes(:github_repository).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = platform_scope.send(scope_name).includes(:repository).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 end

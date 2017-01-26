@@ -15,31 +15,31 @@ class Project < ApplicationRecord
 
   has_many :versions
   has_many :dependencies, -> { group 'project_name' }, through: :versions
-  has_many :github_contributions, through: :github_repository
-  has_many :contributors, through: :github_contributions, source: :github_user
-  has_many :github_tags, through: :github_repository
+  has_many :contributions, through: :repository
+  has_many :contributors, through: :contributions, source: :github_user
+  has_many :tags, through: :repository
   has_many :dependents, class_name: 'Dependency'
   has_many :dependent_versions, through: :dependents, source: :version, class_name: 'Version'
   has_many :dependent_projects, -> { group('projects.id') }, through: :dependent_versions, source: :project, class_name: 'Project'
   has_many :repository_dependencies
   has_many :dependent_manifests, through: :repository_dependencies, source: :manifest
-  has_many :dependent_repositories, -> { group('github_repositories.id').order('github_repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :github_repository
+  has_many :dependent_repositories, -> { group('repositories.id').order('repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
   has_many :subscriptions
   has_many :project_suggestions, dependent: :delete_all
-  belongs_to :github_repository
-  has_one :readme, through: :github_repository
+  belongs_to :repository
+  has_one :readme, through: :repository
 
   scope :platform, ->(platform) { where('lower(platform) = ?', platform.try(:downcase)) }
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
-  scope :with_repo, -> { joins(:github_repository).where('github_repositories.id IS NOT NULL') }
-  scope :without_repo, -> { where(github_repository_id: nil) }
+  scope :with_repo, -> { joins(:repository).where('repositories.id IS NOT NULL') }
+  scope :without_repo, -> { where(repository_id: nil) }
   scope :with_description, -> { where("projects.description <> ''") }
 
   scope :with_license, -> { where("licenses <> ''") }
   scope :without_license, -> { where("licenses IS ? OR licenses = ''", nil) }
-  scope :unlicensed, -> { maintained.without_license.with_repo.where("github_repositories.license IS ? OR github_repositories.license = ''", nil) }
+  scope :unlicensed, -> { maintained.without_license.with_repo.where("repositories.license IS ? OR repositories.license = ''", nil) }
 
   scope :with_versions, -> { where('versions_count > 0') }
   scope :without_versions, -> { where('versions_count < 1') }
@@ -65,16 +65,16 @@ class Project < ApplicationRecord
   scope :removed, -> { where('projects."status" = ?', "Removed")}
   scope :unmaintained, -> { where('projects."status" = ?', "Unmaintained")}
 
-  scope :indexable, -> { not_removed.includes(:github_repository) }
+  scope :indexable, -> { not_removed.includes(:repository) }
 
   scope :bus_factor, -> { maintained
-                          .joins(:github_repository)
-                          .where('github_repositories.github_contributions_count < 6')
-                          .where('github_repositories.github_contributions_count > 0')
-                          .where('github_repositories.stargazers_count > 0')}
+                          .joins(:repository)
+                          .where('repositories.contributions_count < 6')
+                          .where('repositories.contributions_count > 0')
+                          .where('repositories.stargazers_count > 0')}
 
-  scope :hacker_news, -> { with_repo.where('github_repositories.stargazers_count > 0').order("((github_repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-github_repositories.created_at)/3600)+2,1.8)) DESC") }
-  scope :recently_created, -> { with_repo.where('github_repositories.created_at > ?', 1.month.ago)}
+  scope :hacker_news, -> { with_repo.where('repositories.stargazers_count > 0').order("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC") }
+  scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 1.month.ago)}
 
   after_commit :update_github_repo_async, on: :create
   after_commit :set_dependents_count
@@ -114,8 +114,8 @@ class Project < ApplicationRecord
     last_synced_at && last_synced_at > 1.day.ago
   end
 
-  def github_contributions_count
-    github_repository.try(:github_contributions_count) || 0
+  def contributions_count
+    repository.try(:contributions_count) || 0
   end
 
   def meta_tags
@@ -128,8 +128,8 @@ class Project < ApplicationRecord
   def follows_semver?
     if versions.all.length > 0
       versions.all?(&:follows_semver?)
-    elsif github_tags.published.length > 0
-      github_tags.published.all?(&:follows_semver?)
+    elsif tags.published.length > 0
+      tags.published.all?(&:follows_semver?)
     end
   end
 
@@ -161,8 +161,8 @@ class Project < ApplicationRecord
   end
 
   def owner
-    return nil unless github_repository
-    GithubUser.visible.find_by_login github_repository.owner_name
+    return nil unless repository
+    GithubUser.visible.find_by_login repository.owner_name
   end
 
   def platform_class
@@ -197,32 +197,32 @@ class Project < ApplicationRecord
   end
 
   def stars
-    github_repository.try(:stargazers_count) || 0
+    repository.try(:stargazers_count) || 0
   end
 
   def forks
-    github_repository.try(:forks_count) || 0
+    repository.try(:forks_count) || 0
   end
 
   def set_language
-    return unless github_repository
-    self.language = github_repository.try(:language)
+    return unless repository
+    self.language = repository.try(:language)
   end
 
   def repo_name
-    github_repository.try(:full_name)
+    repository.try(:full_name)
   end
 
   def description
     if platform == 'Go'
-      github_repository.try(:description).presence || read_attribute(:description)
+      repository.try(:description).presence || read_attribute(:description)
     else
-      read_attribute(:description).presence || github_repository.try(:description)
+      read_attribute(:description).presence || repository.try(:description)
     end
   end
 
   def homepage
-    read_attribute(:homepage).presence || github_repository.try(:homepage)
+    read_attribute(:homepage).presence || repository.try(:homepage)
   end
 
   def set_dependents_count
@@ -289,11 +289,11 @@ class Project < ApplicationRecord
     results = search('*', options.merge(sort: 'rank', order: 'desc'))
     ids = results.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
-    results.records.includes(:github_repository).reject{|p| p.github_repository.nil? }.sort_by { |u| indexes[u.id] }
+    results.records.includes(:repository).reject{|p| p.repository.nil? }.sort_by { |u| indexes[u.id] }
   end
 
   def normalized_licenses
-    read_attribute(:normalized_licenses).presence || [Project.format_license(github_repository.try(:license))].compact
+    read_attribute(:normalized_licenses).presence || [Project.format_license(repository.try(:license))].compact
   end
 
   def self.format_license(license)
@@ -337,10 +337,10 @@ class Project < ApplicationRecord
   def update_github_repo
     name_with_owner = github_name_with_owner
     return false unless name_with_owner.present?
-    g = GithubRepository.create_from_github(name_with_owner)
+    g = Repository.create_from_github(name_with_owner)
     return if g.nil?
     unless self.new_record?
-      self.github_repository_id = g.id
+      self.repository_id = g.id
       self.forced_save
     end
   end
@@ -355,7 +355,7 @@ class Project < ApplicationRecord
   end
 
   def subscribed_repos(user)
-    subscriptions.with_repository_subscription.where('repository_subscriptions.user_id = ?', user.id).map(&:github_repository).uniq
+    subscriptions.with_repository_subscription.where('repository_subscriptions.user_id = ?', user.id).map(&:repository).uniq
   end
 
   def self.check_status(project_id, platform, project_name, removed = false)

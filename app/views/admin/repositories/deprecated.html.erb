@@ -1,0 +1,9 @@
+<%= render 'admin/nav' %>
+<div class="row">
+  <div class="col-md-10">
+    <h1>Deprecated Github repos</h1>
+    <%= page_entries_info @repositories %>
+    <%= render @repositories, cache: true %>
+    <%= will_paginate @repositories, page_links: false %>
+  </div>
+</div>

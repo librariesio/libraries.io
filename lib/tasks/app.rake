@@ -5,7 +5,7 @@ namespace :app do
       User.delete_all
       AuthToken.delete_all
       ApiKey.delete_all
-      GithubRepository.where(private: true).find_each do |repo|
+      Repository.where(private: true).find_each do |repo|
         begin
           repo.destroy
         rescue Elasticsearch::Transport::Transport::Errors::NotFound

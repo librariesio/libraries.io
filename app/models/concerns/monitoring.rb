@@ -16,7 +16,7 @@ module Monitoring
   end
 
   def current_private_repo_count
-    watched_github_repositories.where(private: true).count
+    watched_repositories.where(private: true).count
   end
 
   def reached_private_repo_limit?
@@ -49,17 +49,17 @@ module Monitoring
     public_repo_token.present? || private_repo_token.present?
   end
 
-  def can_monitor?(github_repository)
-    repository_permissions.where(github_repository: github_repository).where(admin: true).any?
+  def can_monitor?(repository)
+    repository_permissions.where(repository: repository).where(admin: true).any?
   end
 
-  def subscribe_to_repo(github_repository)
-    hook = github_repository.create_webhook(token)
-    repository_subscriptions.find_or_create_by(github_repository_id: github_repository.id, hook_id: hook.try(:id))
+  def subscribe_to_repo(repository)
+    hook = repository.create_webhook(token)
+    repository_subscriptions.find_or_create_by(repository_id: repository.id, hook_id: hook.try(:id))
   end
 
-  def unsubscribe_from_repo(github_repository)
-    sub = subscribed_to_repo?(github_repository)
+  def unsubscribe_from_repo(repository)
+    sub = subscribed_to_repo?(repository)
     sub.destroy
   end
 
@@ -67,16 +67,16 @@ module Monitoring
     subscriptions.find_by_project_id(project.id)
   end
 
-  def subscribed_to_repo?(github_repository)
-    repository_subscriptions.find_by_github_repository_id(github_repository.id)
+  def subscribed_to_repo?(repository)
+    repository_subscriptions.find_by_repository_id(repository.id)
   end
 
-  def can_read?(github_repository)
-    repository_permissions.where(github_repository: github_repository).where(pull: true).any?
+  def can_read?(repository)
+    repository_permissions.where(repository: repository).where(pull: true).any?
   end
 
   def your_dependent_repos(project)
-    ids = really_all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.github_repository_id }
-    all_github_repositories.where(id: ids).order('fork ASC, pushed_at DESC, stargazers_count DESC')
+    ids = really_all_dependencies.where(project_id: project.id).includes(:manifest).map{|dep| dep.manifest.repository_id }
+    all_repositories.where(id: ids).order('fork ASC, pushed_at DESC, stargazers_count DESC')
   end
 end

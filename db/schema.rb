@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170105065900) do
+ActiveRecord::Schema.define(version: 20170125110851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,17 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "contributions", force: :cascade do |t|
+    t.integer  "repository_id"
+    t.integer  "github_user_id"
+    t.integer  "count"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "platform"
+    t.index ["github_user_id"], name: "index_contributions_on_github_user_id", using: :btree
+    t.index ["repository_id", "github_user_id"], name: "index_contributions_on_repository_id_and_user_id", using: :btree
+  end
+
   create_table "dependencies", force: :cascade do |t|
     t.integer  "version_id"
     t.integer  "project_id"
@@ -45,36 +56,6 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.datetime "updated_at"
     t.index ["project_id"], name: "index_dependencies_on_project_id", using: :btree
     t.index ["version_id"], name: "index_dependencies_on_version_id", using: :btree
-  end
-
-  create_table "github_contributions", force: :cascade do |t|
-    t.integer  "github_repository_id"
-    t.integer  "github_user_id"
-    t.integer  "count"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.string   "platform"
-    t.index ["github_repository_id", "github_user_id"], name: "index_contributions_on_repository_id_and_user_id", using: :btree
-    t.index ["github_user_id"], name: "index_github_contributions_on_github_user_id", using: :btree
-  end
-
-  create_table "github_issues", force: :cascade do |t|
-    t.integer  "github_repository_id"
-    t.integer  "github_id"
-    t.integer  "number"
-    t.string   "state"
-    t.string   "title"
-    t.text     "body"
-    t.integer  "github_user_id"
-    t.boolean  "locked"
-    t.integer  "comments_count"
-    t.datetime "closed_at"
-    t.string   "labels",               default: [],              array: true
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-    t.datetime "last_synced_at"
-    t.boolean  "pull_request"
-    t.index ["github_repository_id"], name: "index_github_issues_on_github_repository_id", using: :btree
   end
 
   create_table "github_organisations", force: :cascade do |t|
@@ -93,61 +74,6 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.index ["created_at"], name: "index_github_organisations_on_created_at", using: :btree
     t.index ["github_id"], name: "index_github_organisations_on_github_id", unique: true, using: :btree
     t.index ["hidden"], name: "index_github_organisations_on_hidden", using: :btree
-  end
-
-  create_table "github_repositories", force: :cascade do |t|
-    t.string   "full_name"
-    t.integer  "owner_id"
-    t.string   "description"
-    t.boolean  "fork"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-    t.datetime "pushed_at"
-    t.string   "homepage"
-    t.integer  "size"
-    t.integer  "stargazers_count"
-    t.string   "language"
-    t.boolean  "has_issues"
-    t.boolean  "has_wiki"
-    t.boolean  "has_pages"
-    t.integer  "forks_count"
-    t.string   "mirror_url"
-    t.integer  "open_issues_count"
-    t.string   "default_branch"
-    t.integer  "subscribers_count"
-    t.integer  "github_id"
-    t.string   "source_name"
-    t.string   "license"
-    t.integer  "github_organisation_id"
-    t.boolean  "private"
-    t.integer  "github_contributions_count", default: 0, null: false
-    t.string   "has_readme"
-    t.string   "has_changelog"
-    t.string   "has_contributing"
-    t.string   "has_license"
-    t.string   "has_coc"
-    t.string   "has_threat_model"
-    t.string   "has_audit"
-    t.string   "status"
-    t.datetime "last_synced_at"
-    t.integer  "rank"
-    t.index "lower((full_name)::text)", name: "index_github_repositories_on_lowercase_full_name", unique: true, using: :btree
-    t.index "lower((language)::text)", name: "github_repositories_lower_language", using: :btree
-    t.index ["github_id"], name: "index_github_repositories_on_github_id", unique: true, using: :btree
-    t.index ["owner_id"], name: "index_github_repositories_on_owner_id", using: :btree
-    t.index ["source_name"], name: "index_github_repositories_on_source_name", using: :btree
-    t.index ["status"], name: "index_github_repositories_on_status", using: :btree
-  end
-
-  create_table "github_tags", force: :cascade do |t|
-    t.integer  "github_repository_id"
-    t.string   "name"
-    t.string   "sha"
-    t.string   "kind"
-    t.datetime "published_at"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.index ["github_repository_id", "name"], name: "index_github_tags_on_github_repository_id_and_name", using: :btree
   end
 
   create_table "github_users", force: :cascade do |t|
@@ -185,17 +111,36 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.string   "avatar_url"
   end
 
+  create_table "issues", force: :cascade do |t|
+    t.integer  "repository_id"
+    t.integer  "github_id"
+    t.integer  "number"
+    t.string   "state"
+    t.string   "title"
+    t.text     "body"
+    t.integer  "github_user_id"
+    t.boolean  "locked"
+    t.integer  "comments_count"
+    t.datetime "closed_at"
+    t.string   "labels",         default: [],              array: true
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.datetime "last_synced_at"
+    t.boolean  "pull_request"
+    t.index ["repository_id"], name: "index_issues_on_repository_id", using: :btree
+  end
+
   create_table "manifests", force: :cascade do |t|
-    t.integer  "github_repository_id"
+    t.integer  "repository_id"
     t.string   "platform"
     t.string   "filepath"
     t.string   "sha"
     t.string   "branch"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.string   "kind"
     t.index ["created_at"], name: "index_manifests_on_created_at", using: :btree
-    t.index ["github_repository_id"], name: "index_manifests_on_github_repository_id", using: :btree
+    t.index ["repository_id"], name: "index_manifests_on_repository_id", using: :btree
   end
 
   create_table "payola_affiliates", force: :cascade do |t|
@@ -324,7 +269,7 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.string   "homepage"
     t.string   "licenses"
     t.string   "repository_url"
-    t.integer  "github_repository_id"
+    t.integer  "repository_id"
     t.string   "normalized_licenses",         default: [],              array: true
     t.integer  "versions_count",              default: 0,  null: false
     t.integer  "rank",                        default: 0
@@ -341,20 +286,64 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.index "lower((platform)::text)", name: "projects_lower_platform", using: :btree
     t.index ["created_at"], name: "index_projects_on_created_at", using: :btree
     t.index ["dependents_count"], name: "index_projects_on_dependents_count", using: :btree
-    t.index ["github_repository_id"], name: "index_projects_on_github_repository_id", using: :btree
     t.index ["keywords_array"], name: "index_projects_on_keywords_array", using: :gin
     t.index ["name", "platform"], name: "index_projects_on_name_and_platform", using: :btree
+    t.index ["repository_id"], name: "index_projects_on_repository_id", using: :btree
     t.index ["updated_at"], name: "index_projects_on_updated_at", using: :btree
     t.index ["versions_count"], name: "index_projects_on_versions_count", using: :btree
   end
 
   create_table "readmes", force: :cascade do |t|
-    t.integer  "github_repository_id"
+    t.integer  "repository_id"
     t.text     "html_body"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.index ["created_at"], name: "index_readmes_on_created_at", using: :btree
-    t.index ["github_repository_id"], name: "index_readmes_on_github_repository_id", using: :btree
+    t.index ["repository_id"], name: "index_readmes_on_repository_id", using: :btree
+  end
+
+  create_table "repositories", force: :cascade do |t|
+    t.string   "full_name"
+    t.integer  "owner_id"
+    t.string   "description"
+    t.boolean  "fork"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.datetime "pushed_at"
+    t.string   "homepage"
+    t.integer  "size"
+    t.integer  "stargazers_count"
+    t.string   "language"
+    t.boolean  "has_issues"
+    t.boolean  "has_wiki"
+    t.boolean  "has_pages"
+    t.integer  "forks_count"
+    t.string   "mirror_url"
+    t.integer  "open_issues_count"
+    t.string   "default_branch"
+    t.integer  "subscribers_count"
+    t.integer  "github_id"
+    t.string   "source_name"
+    t.string   "license"
+    t.integer  "github_organisation_id"
+    t.boolean  "private"
+    t.integer  "contributions_count",    default: 0, null: false
+    t.string   "has_readme"
+    t.string   "has_changelog"
+    t.string   "has_contributing"
+    t.string   "has_license"
+    t.string   "has_coc"
+    t.string   "has_threat_model"
+    t.string   "has_audit"
+    t.string   "status"
+    t.datetime "last_synced_at"
+    t.integer  "rank"
+    t.index "lower((full_name)::text)", name: "index_github_repositories_on_lowercase_full_name", unique: true, using: :btree
+    t.index "lower((language)::text)", name: "github_repositories_lower_language", using: :btree
+    t.index ["github_id"], name: "index_repositories_on_github_id", unique: true, using: :btree
+    t.index ["owner_id"], name: "index_repositories_on_owner_id", using: :btree
+    t.index ["source_name"], name: "index_repositories_on_source_name", using: :btree
+    t.index ["status"], name: "index_repositories_on_status", using: :btree
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
@@ -373,22 +362,22 @@ ActiveRecord::Schema.define(version: 20170105065900) do
 
   create_table "repository_permissions", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "github_repository_id"
+    t.integer  "repository_id"
     t.boolean  "admin"
     t.boolean  "push"
     t.boolean  "pull"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.index ["user_id", "github_repository_id"], name: "user_repo_unique_repository_permissions", unique: true, using: :btree
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["user_id", "repository_id"], name: "user_repo_unique_repository_permissions", unique: true, using: :btree
   end
 
   create_table "repository_subscriptions", force: :cascade do |t|
-    t.integer  "github_repository_id"
+    t.integer  "repository_id"
     t.integer  "user_id"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.integer  "hook_id"
-    t.boolean  "include_prerelease",   default: true
+    t.boolean  "include_prerelease", default: true
     t.index ["created_at"], name: "index_repository_subscriptions_on_created_at", using: :btree
   end
 
@@ -415,6 +404,17 @@ ActiveRecord::Schema.define(version: 20170105065900) do
     t.index ["user_id", "project_id"], name: "index_subscriptions_on_user_id_and_project_id", using: :btree
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.integer  "repository_id"
+    t.string   "name"
+    t.string   "sha"
+    t.string   "kind"
+    t.datetime "published_at"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["repository_id", "name"], name: "index_tags_on_repository_id_and_name", using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email"
     t.datetime "created_at"
@@ -435,14 +435,14 @@ ActiveRecord::Schema.define(version: 20170105065900) do
   end
 
   create_table "web_hooks", force: :cascade do |t|
-    t.integer  "github_repository_id"
+    t.integer  "repository_id"
     t.integer  "user_id"
     t.string   "url"
     t.string   "last_response"
     t.datetime "last_sent_at"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.index ["github_repository_id"], name: "index_web_hooks_on_github_repository_id", using: :btree
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["repository_id"], name: "index_web_hooks_on_repository_id", using: :btree
   end
 
 end

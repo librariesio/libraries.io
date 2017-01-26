@@ -44,17 +44,17 @@ module GithubIdentity
 
     existing_permissions = repository_permissions.all
     new_repo_ids = r.map(&:id)
-    existing_repos = GithubRepository.where(github_id: new_repo_ids).select(:id, :github_id)
+    existing_repos = Repository.where(github_id: new_repo_ids).select(:id, :github_id)
 
     r.each do |repo|
       unless github_repo = existing_repos.find{|re| re.github_id == repo.id}
-        github_repo = GithubRepository.find_by('lower(full_name) = ?', repo.full_name.downcase) || GithubRepository.create_from_hash(repo)
+        github_repo = Repository.find_by('lower(full_name) = ?', repo.full_name.downcase) || Repository.create_from_hash(repo)
       end
       next if github_repo.nil?
       current_repo_ids << github_repo.id
 
-      unless rp = existing_permissions.find{|p| p.github_repository_id == github_repo.id}
-        rp = repository_permissions.build(github_repository_id: github_repo.id)
+      unless rp = existing_permissions.find{|p| p.repository_id == github_repo.id}
+        rp = repository_permissions.build(repository_id: github_repo.id)
       end
       rp.admin = repo.permissions.admin
       rp.push = repo.permissions.push
@@ -63,11 +63,11 @@ module GithubIdentity
     end
 
     # delete missing permissions
-    existing_repo_ids = repository_permissions.pluck(:github_repository_id)
+    existing_repo_ids = repository_permissions.pluck(:repository_id)
     remove_ids = existing_repo_ids - current_repo_ids
-    repository_permissions.where(github_repository_id: remove_ids).delete_all if remove_ids.any?
+    repository_permissions.where(repository_id: remove_ids).delete_all if remove_ids.any?
 
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   ensure
     self.update_columns(last_synced_at: Time.now, currently_syncing: false)
@@ -84,7 +84,7 @@ module GithubIdentity
     github_client.orgs.each do |org|
       GithubCreateOrgWorker.perform_async(org.login)
     end
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 

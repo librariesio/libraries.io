@@ -4,7 +4,7 @@ module Recommendable
   def recommended_projects
     projects = Project.where(id: recommended_project_ids).order("position(','||projects.id::text||',' in '#{recommended_project_ids.join(',')}'), projects.rank DESC")
     projects = unfiltered_recommendations if projects.empty?
-    projects.where.not(id: already_watching_ids).maintained.includes(:github_repository, :versions)
+    projects.where.not(id: already_watching_ids).maintained.includes(:repository, :versions)
   end
 
   def recommended_project_ids
@@ -51,7 +51,7 @@ module Recommendable
   def favourite_languages(limit = 3)
     @favourite_languages ||= begin
       # your github Repositories
-      languages = all_github_repositories.pluck(:language).compact
+      languages = all_repositories.pluck(:language).compact
 
       # repositories you've contributed to
       languages += github_user.contributed_repositories.pluck(:language).compact if github_user.present?

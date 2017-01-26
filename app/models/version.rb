@@ -44,7 +44,7 @@ class Version < ApplicationRecord
   end
 
   def notify_web_hooks
-    repos = project.subscriptions.map(&:github_repository).compact.uniq
+    repos = project.subscriptions.map(&:repository).compact.uniq
     repos.each do |repo|
       requirements = repo.repository_dependencies.select{|rd| rd.project == project }.map(&:requirements)
       repo.web_hooks.each do |web_hook|
@@ -59,8 +59,8 @@ class Version < ApplicationRecord
   end
 
   def update_github_repo_async
-    return unless project.github_repository
-    GithubDownloadWorker.perform_async(project.github_repository_id)
+    return unless project.repository
+    GithubDownloadWorker.perform_async(project.repository_id)
   end
 
   def send_notifications

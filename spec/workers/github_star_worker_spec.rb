@@ -7,7 +7,7 @@ describe GithubStarWorker do
 
   it "should update from star" do
     repo_full_name = 'rails/rails'
-    expect(GithubRepository).to receive(:update_from_star).with(repo_full_name, nil)
+    expect(Repository).to receive(:update_from_star).with(repo_full_name, nil)
     subject.perform(repo_full_name)
   end
 end

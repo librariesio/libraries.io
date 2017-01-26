@@ -1,5 +1,5 @@
 class WebHook < ApplicationRecord
-  belongs_to :github_repository
+  belongs_to :repository
   belongs_to :user
   validates_presence_of :url
   validates :url, :format => URI::regexp(%w(http https))
@@ -20,11 +20,11 @@ class WebHook < ApplicationRecord
   def send_new_version(project, platform, version_or_tag, requirements = [])
     send_payload({
       event: 'new_version',
-      repository: github_repository.full_name,
+      repository: repository.full_name,
       platform: platform,
       name: project.name,
       version: version_or_tag.number,
-      default_branch: github_repository.default_branch,
+      default_branch: repository.default_branch,
       package_manager_url: project.package_manager_url(version_or_tag.number),
       published_at: version_or_tag.published_at,
       requirements: requirements,

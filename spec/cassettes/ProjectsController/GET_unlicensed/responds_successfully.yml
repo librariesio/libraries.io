@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: put
-    uri: http://localhost:9200/projects/project/123
+    uri: http://localhost:9200/projects/project/126
     body:
       encoding: UTF-8
-      string: '{"id":123,"name":"rails","platform":"Rubygems","created_at":"2017-01-05T09:43:08.131Z","updated_at":"2017-01-05T09:43:08.131Z","description":"Ruby
+      string: '{"id":126,"name":"rails35","platform":"Rubygems","created_at":"2017-01-25T11:48:25.686Z","updated_at":"2017-01-25T11:48:25.686Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:43:08.131Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-25T11:48:25.686Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails35","contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -27,18 +27,18 @@ http_interactions:
       - '79'
     body:
       encoding: UTF-8
-      string: '{"_index":"projects","_type":"project","_id":"123","_version":1,"created":true}'
+      string: '{"_index":"projects","_type":"project","_id":"126","_version":1,"created":true}'
     http_version: 
-  recorded_at: Thu, 05 Jan 2017 09:43:08 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:25 GMT
 - request:
     method: put
-    uri: http://localhost:9200/projects/project/123
+    uri: http://localhost:9200/projects/project/126
     body:
       encoding: UTF-8
-      string: '{"id":123,"name":"rails","platform":"Rubygems","created_at":"2017-01-05T09:43:08.131Z","updated_at":"2017-01-05T09:43:08.131Z","description":"Ruby
+      string: '{"id":126,"name":"rails35","platform":"Rubygems","created_at":"2017-01-25T11:48:25.686Z","updated_at":"2017-01-25T11:48:25.756Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:43:08.131Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-25T11:48:25.756Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails35","contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -57,9 +57,39 @@ http_interactions:
       - '80'
     body:
       encoding: UTF-8
-      string: '{"_index":"projects","_type":"project","_id":"123","_version":2,"created":false}'
+      string: '{"_index":"projects","_type":"project","_id":"126","_version":2,"created":false}'
     http_version: 
-  recorded_at: Thu, 05 Jan 2017 09:43:08 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:25 GMT
+- request:
+    method: put
+    uri: http://localhost:9200/projects/project/127
+    body:
+      encoding: UTF-8
+      string: '{"id":127,"name":"rails36","platform":"Rubygems","created_at":"2017-01-25T11:48:25.825Z","updated_at":"2017-01-25T11:48:25.825Z","description":"Ruby
+        on Rails is a full-stack web framework optimized for programmer happiness
+        and sustainable productivity. It encourages beautiful code by favoring convention
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-25T11:48:25.825Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails36","contributions_count":0,"pushed_at":null}'
+    headers:
+      User-Agent:
+      - Faraday v0.10.1
+      Accept-Encoding:
+      - gzip,deflate
+      Expect:
+      - ''
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '79'
+    body:
+      encoding: UTF-8
+      string: '{"_index":"projects","_type":"project","_id":"127","_version":1,"created":true}'
+    http_version: 
+  recorded_at: Wed, 25 Jan 2017 11:48:25 GMT
 - request:
     method: delete
     uri: http://localhost:9200/projects
@@ -86,7 +116,7 @@ http_interactions:
       encoding: UTF-8
       string: '{"acknowledged":true}'
     http_version: 
-  recorded_at: Thu, 05 Jan 2017 09:43:08 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:25 GMT
 - request:
     method: head
     uri: http://localhost:9200/projects
@@ -113,13 +143,13 @@ http_interactions:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Thu, 05 Jan 2017 09:43:08 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:25 GMT
 - request:
     method: put
     uri: http://localhost:9200/projects
     body:
       encoding: UTF-8
-      string: '{"settings":{"index":{"number_of_shards":1,"number_of_replicas":0}},"mappings":{"project":{"properties":{"name":{"analyzer":"snowball","boost":6,"type":"string"},"exact_name":{"index":"not_analyzed","boost":2,"type":"string"},"description":{"analyzer":"snowball","type":"string"},"homepage":{"type":"string"},"repository_url":{"type":"string"},"repo_name":{"type":"string"},"latest_release_number":{"analyzer":"keyword","type":"string"},"keywords_array":{"analyzer":"keyword","type":"string"},"language":{"analyzer":"keyword","type":"string"},"normalized_licenses":{"analyzer":"keyword","type":"string"},"platform":{"analyzer":"keyword","type":"string"},"status":{"index":"not_analyzed","type":"string"},"created_at":{"type":"date"},"updated_at":{"type":"date"},"latest_release_published_at":{"type":"date"},"pushed_at":{"type":"date"},"rank":{"type":"integer"},"stars":{"type":"integer"},"versions_count":{"type":"integer"},"dependents_count":{"type":"integer"},"dependent_repos_count":{"type":"integer"},"github_repository_id":{"type":"integer"},"github_contributions_count":{"type":"integer"}}}}}'
+      string: '{"settings":{"index":{"number_of_shards":1,"number_of_replicas":0}},"mappings":{"project":{"properties":{"name":{"analyzer":"snowball","boost":6,"type":"string"},"exact_name":{"index":"not_analyzed","boost":2,"type":"string"},"description":{"analyzer":"snowball","type":"string"},"homepage":{"type":"string"},"repository_url":{"type":"string"},"repo_name":{"type":"string"},"latest_release_number":{"analyzer":"keyword","type":"string"},"keywords_array":{"analyzer":"keyword","type":"string"},"language":{"analyzer":"keyword","type":"string"},"normalized_licenses":{"analyzer":"keyword","type":"string"},"platform":{"analyzer":"keyword","type":"string"},"status":{"index":"not_analyzed","type":"string"},"created_at":{"type":"date"},"updated_at":{"type":"date"},"latest_release_published_at":{"type":"date"},"pushed_at":{"type":"date"},"rank":{"type":"integer"},"stars":{"type":"integer"},"versions_count":{"type":"integer"},"dependents_count":{"type":"integer"},"dependent_repos_count":{"type":"integer"},"repository_id":{"type":"integer"},"contributions_count":{"type":"integer"}}}}}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -140,15 +170,17 @@ http_interactions:
       encoding: UTF-8
       string: '{"acknowledged":true}'
     http_version: 
-  recorded_at: Thu, 05 Jan 2017 09:43:08 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:25 GMT
 - request:
     method: post
     uri: http://localhost:9200/projects/project/_bulk
     body:
       encoding: UTF-8
       string: |
-        {"index":{"_id":123}}
-        {"id":123,"name":"rails","platform":"Rubygems","created_at":"2017-01-05T09:43:08.131Z","updated_at":"2017-01-05T09:43:08.131Z","description":"Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","github_repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-05T09:43:08.131Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails","github_contributions_count":0,"pushed_at":null}
+        {"index":{"_id":126}}
+        {"id":126,"name":"rails35","platform":"Rubygems","created_at":"2017-01-25T11:48:25.686Z","updated_at":"2017-01-25T11:48:25.756Z","description":"Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":1,"rank":0,"latest_release_published_at":"2017-01-25T11:48:25.756Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails35","contributions_count":0,"pushed_at":null}
+        {"index":{"_id":127}}
+        {"id":127,"name":"rails36","platform":"Rubygems","created_at":"2017-01-25T11:48:25.825Z","updated_at":"2017-01-25T11:48:25.825Z","description":"Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-25T11:48:25.825Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails36","contributions_count":0,"pushed_at":null}
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -164,12 +196,12 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '123'
+      - '212'
     body:
       encoding: UTF-8
-      string: '{"took":1,"errors":false,"items":[{"index":{"_index":"projects","_type":"project","_id":"123","_version":1,"status":201}}]}'
+      string: '{"took":14,"errors":false,"items":[{"index":{"_index":"projects","_type":"project","_id":"126","_version":1,"status":201}},{"index":{"_index":"projects","_type":"project","_id":"127","_version":1,"status":201}}]}'
     http_version: 
-  recorded_at: Thu, 05 Jan 2017 09:43:08 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:26 GMT
 - request:
     method: post
     uri: http://localhost:9200/projects/_refresh
@@ -198,13 +230,13 @@ http_interactions:
       encoding: UTF-8
       string: '{"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Thu, 05 Jan 2017 09:43:08 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:26 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/project/_search?from=0&size=30
     body:
       encoding: UTF-8
-      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must_not":[{"exists":{"field":"normalized_licenses"}},{"term":{"status":"Removed"}},{"term":{"status":"Unmaintained"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"facets":{"language":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"licenses":{"terms":{"field":"normalized_licenses","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[]}},"sort":[{"github_contributions_count":"asc"},{"rank":"desc"}]}'
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must_not":[{"exists":{"field":"normalized_licenses"}},{"term":{"status":"Removed"}},{"term":{"status":"Unmaintained"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"facets":{"language":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"licenses":{"terms":{"field":"normalized_licenses","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[]}},"sort":[{"contributions_count":"asc"},{"rank":"desc"}]}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -225,7 +257,7 @@ http_interactions:
       encoding: UTF-8
       string: '{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"facets":{"language":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"licenses":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]}}}'
     http_version: 
-  recorded_at: Thu, 05 Jan 2017 09:43:08 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:26 GMT
 - request:
     method: get
     uri: http://localhost:9200/projects/_count
@@ -250,7 +282,7 @@ http_interactions:
       - '59'
     body:
       encoding: UTF-8
-      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
+      string: '{"count":2,"_shards":{"total":1,"successful":1,"failed":0}}'
     http_version: 
-  recorded_at: Thu, 05 Jan 2017 09:43:08 GMT
+  recorded_at: Wed, 25 Jan 2017 11:48:26 GMT
 recorded_with: VCR 3.0.3

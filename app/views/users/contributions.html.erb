@@ -10,7 +10,7 @@
   <div class="col-sm-8">
     <%= render 'adsense/banner' %>
     <% if @contributions.any? %>
-      <%= render @contributions.map(&:github_repository), cache: true  %>
+      <%= render @contributions.map(&:repository), cache: true  %>
       <%= will_paginate @contributions, page_links: false %>
     <% else %>
       <p>

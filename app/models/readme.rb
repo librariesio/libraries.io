@@ -1,6 +1,6 @@
 class Readme < ApplicationRecord
-  belongs_to :github_repository
-  validates_presence_of :html_body, :github_repository
+  belongs_to :repository
+  validates_presence_of :html_body, :repository
 
   after_validation :reformat
 
@@ -16,8 +16,8 @@ class Readme < ApplicationRecord
 
   def check_unmaintained
     return unless unmaintained?
-    github_repository.update_attribute(:status, 'Unmaintained')
-    github_repository.projects.each do |project|
+    repository.update_attribute(:status, 'Unmaintained')
+    repository.projects.each do |project|
       project.update_attribute(:status, 'Unmaintained')
     end
   end
@@ -32,7 +32,7 @@ class Readme < ApplicationRecord
       rel_url = d.get_attribute('href')
       begin
         if rel_url.present? && !rel_url.match(/^#/) && URI.parse(rel_url)
-          d.set_attribute('href', URI.join(github_repository.blob_url, rel_url))
+          d.set_attribute('href', URI.join(repository.blob_url, rel_url))
         end
       rescue NoMethodError, URI::InvalidURIError, URI::InvalidComponentError
       end
@@ -42,7 +42,7 @@ class Readme < ApplicationRecord
 
       begin
         if rel_url.present? && URI.parse(rel_url)
-          d.set_attribute('src', URI.join(github_repository.raw_url, rel_url))
+          d.set_attribute('src', URI.join(repository.raw_url, rel_url))
         end
       rescue NoMethodError, URI::InvalidURIError, URI::InvalidComponentError
       end

@@ -7,7 +7,7 @@ describe VersionsMailer, :vcr, type: :mailer do
     let(:mail) { VersionsMailer.new_version(user, version.project, version) }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq 'New release of rails (1.0.0) on Rubygems'
+      expect(mail.subject).to eq "New release of #{version.project.name} (#{version.number}) on Rubygems"
     end
 
     it 'renders the receiver email' do

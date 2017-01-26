@@ -33,7 +33,7 @@ module SourceRank
       dependent_projects:         log_scale(dependents_count) * 2,
       dependent_repositories:     log_scale(dependent_repos_count),
       github_stars:               log_scale(stars),
-      contributors:               (log_scale(github_contributions_count) / 2.0).ceil,
+      contributors:               (log_scale(contributions_count) / 2.0).ceil,
       subscribers:                (log_scale(subscriptions.length) / 2.0).ceil,
       all_prereleases:            all_prereleases? ? -2 : 0,
       any_outdated_dependencies:  any_outdated_dependencies? ? -1 : 0,
@@ -48,11 +48,11 @@ module SourceRank
   end
 
   def repository_present?
-    github_repository.present?
+    repository.present?
   end
 
   def readme_present?
-    github_repository.present? && github_repository.readme.present?
+    repository.present? && repository.readme.present?
   end
 
   def license_present?
@@ -60,17 +60,17 @@ module SourceRank
   end
 
   def versions_present?
-    versions_count > 1 || (github_tags.published.length > 0)
+    versions_count > 1 || (tags.published.length > 0)
   end
 
   def recent_release?
     versions.any? {|v| v.published_at && v.published_at > 6.months.ago } ||
-      (github_tags.published.any? {|v| v.published_at && v.published_at > 6.months.ago })
+      (tags.published.any? {|v| v.published_at && v.published_at > 6.months.ago })
   end
 
   def not_brand_new?
     versions.any? {|v| v.published_at && v.published_at < 6.months.ago } ||
-      (github_tags.published.any? {|v| v.published_at && v.published_at < 6.months.ago })
+      (tags.published.any? {|v| v.published_at && v.published_at < 6.months.ago })
   end
 
   def any_outdated_dependencies?

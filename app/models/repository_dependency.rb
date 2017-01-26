@@ -12,8 +12,8 @@ class RepositoryDependency < ApplicationRecord
 
   after_create :update_project_id
 
-  def github_repository
-    manifest.try(:github_repository)
+  def repository
+    manifest.try(:repository)
   end
 
   def find_project_id
@@ -23,10 +23,10 @@ class RepositoryDependency < ApplicationRecord
   def compatible_license?
     return nil unless project
     return nil if project.normalized_licenses.empty?
-    return nil if manifest.github_repository.license.blank?
+    return nil if manifest.repository.license.blank?
     project.normalized_licenses.any? do |license|
       begin
-        License::Compatibility.forward_compatiblity(license, manifest.github_repository.license)
+        License::Compatibility.forward_compatiblity(license, manifest.repository.license)
       rescue
         true
       end

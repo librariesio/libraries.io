@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-xs-8">
+    <% cache(['v2', repository]) do  %>
+      <div class='project' style="border-color: <%= repository.color %>;">
+        <h5>
+          <%= link_to repository.full_name, repository_path(repository.owner_name, repository.project_name) %>
+          <small>
+            <%= fa_icon("lock") if repository.private? %>
+            <%= fa_icon("code-fork") if repository.fork? %>
+          </small>
+        </h5>
+
+        <div>
+          <%= emojify truncate(repository.description, :length => 100) %>
+        </div>
+
+        <small>
+          <% if repository.language.present? %>
+            <%= link_to repository.language, language_path(repository.language) %> -
+          <% end %>
+          <% if repository.license.present? %>
+            <%= link_to repository.license, license_path(repository.license) %> -
+          <% end %>
+          <% if repository.pushed_at && repository.pushed_at > repository.created_at + 1.minute %>
+            Last pushed <%= timeago_tag repository.pushed_at %>
+          <% else %>
+            Published <%= timeago_tag repository.created_at %>
+          <% end %> - <%= number_to_human repository.stars %> stars
+          <% if repository.fork? %>
+          - Fork
+            <% if repository.source.present? || repository.source_name.present? %>
+            of <%= link_to repository.source_name, source_path(repository) %>
+            <% end %>
+          <% elsif repository.forks > 0 %>
+            - <%= number_to_human repository.forks %> forks
+          <% end %>
+        </small>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-xs-4">
+    <%= link_to "Deprecate", deprecate_admin_repository_path(repository.id), class: 'btn btn-danger', method: :put, target: :blank %>
+    <%= link_to "Unmaintain", unmaintain_admin_repository_path(repository.id), class: 'btn btn-warning', method: :put, target: :blank %>
+    <%= link_to 'Edit Details', admin_repository_path(repository.id), class: 'btn btn-primary' %>
+  </div>
+</div>

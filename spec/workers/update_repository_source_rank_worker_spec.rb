@@ -6,8 +6,8 @@ describe UpdateRepositorySourceRankWorker, :vcr do
   end
 
   it "should update sourcerank for a repo" do
-    repo = create(:github_repository)
-    expect(GithubRepository).to receive(:find_by_id).with(repo.id).and_return(repo)
+    repo = create(:repository)
+    expect(Repository).to receive(:find_by_id).with(repo.id).and_return(repo)
     expect(repo).to receive(:update_source_rank)
     subject.perform(repo.id)
   end
