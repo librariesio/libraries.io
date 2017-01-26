@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125110851) do
+ActiveRecord::Schema.define(version: 20170126131154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -322,7 +322,7 @@ ActiveRecord::Schema.define(version: 20170125110851) do
     t.integer  "open_issues_count"
     t.string   "default_branch"
     t.integer  "subscribers_count"
-    t.integer  "github_id"
+    t.integer  "uuid"
     t.string   "source_name"
     t.string   "license"
     t.integer  "github_organisation_id"
@@ -338,12 +338,19 @@ ActiveRecord::Schema.define(version: 20170125110851) do
     t.string   "status"
     t.datetime "last_synced_at"
     t.integer  "rank"
+    t.string   "host_type"
+    t.string   "host_domain"
+    t.string   "name"
+    t.string   "scm"
+    t.string   "fork_policy"
+    t.string   "pull_requests_enabled"
+    t.string   "logo_url"
     t.index "lower((full_name)::text)", name: "index_github_repositories_on_lowercase_full_name", unique: true, using: :btree
     t.index "lower((language)::text)", name: "github_repositories_lower_language", using: :btree
-    t.index ["github_id"], name: "index_repositories_on_github_id", unique: true, using: :btree
     t.index ["owner_id"], name: "index_repositories_on_owner_id", using: :btree
     t.index ["source_name"], name: "index_repositories_on_source_name", using: :btree
     t.index ["status"], name: "index_repositories_on_status", using: :btree
+    t.index ["uuid"], name: "index_repositories_on_uuid", unique: true, using: :btree
   end
 
   create_table "repository_dependencies", force: :cascade do |t|

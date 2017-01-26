@@ -35,7 +35,7 @@ class Repository < ApplicationRecord
   has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
 
   validates :full_name, uniqueness: true, if: lambda { self.full_name_changed? }
-  validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
+  validates :uuid, uniqueness: true, if: lambda { self.uuid_changed? }
 
   before_save  :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
@@ -196,7 +196,7 @@ class Repository < ApplicationRecord
   end
 
   def id_or_name
-    github_id || full_name
+    uuid || full_name
   end
 
   def download_readme(token = nil)
@@ -214,7 +214,7 @@ class Repository < ApplicationRecord
     begin
       r = AuthToken.new_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
       return unless r.present?
-      self.github_id = r[:id] unless self.github_id == r[:id]
+      self.uuid = r[:id] unless self.uuid == r[:id]
        if self.full_name.downcase != r[:full_name].downcase
          clash = Repository.where('lower(full_name) = ?', r[:full_name].downcase).first
          if clash && !clash.update_from_github(token)
@@ -334,12 +334,12 @@ class Repository < ApplicationRecord
   def self.create_from_hash(repo_hash)
     repo_hash = repo_hash.to_hash
     ActiveRecord::Base.transaction do
-      g = Repository.find_by(github_id: repo_hash[:id])
+      g = Repository.find_by(uuid: repo_hash[:id])
       g = Repository.find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
-      g = Repository.new(github_id: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
+      g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
       g.owner_id = repo_hash[:owner][:id]
       g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
-      g.github_id = repo_hash[:id] if g.github_id.nil?
+      g.uuid = repo_hash[:id] if g.uuid.nil?
       g.license = repo_hash[:license][:key] if repo_hash[:license]
       g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
       g.assign_attributes repo_hash.slice(*Repository::API_FIELDS)
@@ -370,8 +370,8 @@ class Repository < ApplicationRecord
     end
   end
 
-  def self.update_from_hook(github_id, sender_id)
-    repository = Repository.find_by_github_id(github_id)
+  def self.update_from_hook(uuid, sender_id)
+    repository = Repository.find_by_uuid(uuid)
     user = Identity.where('provider ILIKE ?', 'github%').where(uid: sender_id).first.try(:user)
     if user.present? && repository.present?
       repository.download_manifests(user.token)
