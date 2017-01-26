@@ -1,5 +1,5 @@
 <% title @title %>
-<% content_for :atom, auto_discovery_link_tag(:atom, url_for({format: "atom"}.merge(params))) %>
+<% content_for :atom, auto_discovery_link_tag(:atom, url_for(search_params.merge({format: "atom"}))) %>
 <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
   <div class="row">
     <div class='col-sm-8'>

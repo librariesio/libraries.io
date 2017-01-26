@@ -15,6 +15,11 @@ class SearchController < ApplicationController
 
   private
 
+  helper_method :search_params
+  def search_params
+    params.permit(:q, :sort, :platforms, :languages, :licenses, :keywords)
+  end
+
   def allowed_sorts
     ['rank', 'stars', 'dependents_count', 'dependent_repos_count', 'latest_release_published_at', 'created_at', 'contributions_count']
   end
