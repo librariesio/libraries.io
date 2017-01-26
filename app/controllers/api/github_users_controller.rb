@@ -8,7 +8,7 @@ class Api::GithubUsersController < Api::ApplicationController
   def repositories
     @repositories = @github_user.repositories.open_source.source.order('stargazers_count DESC')
 
-    paginate json: @repositories.as_json({ except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count] })
+    paginate json: @repositories.as_json({ except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id] })
   end
 
   def projects

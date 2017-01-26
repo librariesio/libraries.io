@@ -11,7 +11,7 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def dependent_repositories
-    paginate json: @project.dependent_repositories.as_json(except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count])
+    paginate json: @project.dependent_repositories.as_json(except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id])
   end
 
   def searchcode

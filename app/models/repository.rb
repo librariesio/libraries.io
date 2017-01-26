@@ -88,6 +88,10 @@ class Repository < ApplicationRecord
     contributions_count # legacy alias
   end
 
+  def github_id
+    uuid # legacy alias
+  end
+
   def meta_tags
     {
       title: "#{full_name} on GitHub",
