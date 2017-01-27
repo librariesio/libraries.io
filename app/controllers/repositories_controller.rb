@@ -132,7 +132,8 @@ class RepositoriesController < ApplicationController
       license: current_license,
       language: current_language,
       keywords: current_keywords,
-      platforms: current_platforms
+      platforms: current_platforms,
+      host_type: current_host
     }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
     ids = search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
