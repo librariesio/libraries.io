@@ -141,6 +141,10 @@ for **another** project, you will need to either
 
 as it will use it to learn more about the developers and for pull requests.
 
+### Project Wiki
+
+If you would like to know more about the software you just installed, how it works and our roadmap for future features then you'll find all of this [in the wiki](https://github.com/librariesio/libraries.io/wiki).
+
 ### Note on Patches/Pull Requests
 
  * Fork the project.
