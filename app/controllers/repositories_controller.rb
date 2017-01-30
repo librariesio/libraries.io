@@ -36,21 +36,23 @@ class RepositoriesController < ApplicationController
   def hacker_news
     @language = Languages::Language[params[:language]] if params[:language].present?
 
-    orginal_scope = Repository.trending.open_source
-    scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
+    original_scope = Repository.trending.open_source
+    original_scope = original_scope.host(current_host) if current_host
+    scope = @language.present? ? original_scope.where('lower(language) = ?', @language.name.downcase) : original_scope
     @repos = scope.hacker_news.paginate(page: page_number)
 
-    @languages = orginal_scope.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
+    @languages = original_scope.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
   end
 
   def new
     @language = Languages::Language[params[:language]] if params[:language].present?
 
-    orginal_scope = Repository.with_stars.open_source.source
-    scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
+    original_scope = Repository.with_stars.open_source.source
+    original_scope = original_scope.host(current_host) if current_host
+    scope = @language.present? ? original_scope.where('lower(language) = ?', @language.name.downcase) : original_scope
     @repos = scope.recently_created.order('created_at DESC').paginate(page: page_number)
 
-    @languages = orginal_scope.recently_created.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
+    @languages = original_scope.recently_created.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
   end
 
   def show

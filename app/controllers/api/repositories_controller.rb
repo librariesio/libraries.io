@@ -32,7 +32,7 @@ class Api::RepositoriesController < Api::ApplicationController
 
   def find_repo
     full_name = [params[:owner], params[:name]].join('/')
-    @repository = Repository.open_source.where('lower(full_name) = ?', full_name.downcase).first
+    @repository = Repository.host(current_host).open_source.where('lower(full_name) = ?', full_name.downcase).first
 
     raise ActiveRecord::RecordNotFound if @repository.nil?
   end
