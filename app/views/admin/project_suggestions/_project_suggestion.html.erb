@@ -8,17 +8,17 @@
     </small>
   <% end %>
 </h3>
-<% if project_suggestion.repository_url.present? && project_suggestion.repository_url != project_suggestion.project.repository_url %>
+<% if project_suggestion.valid_repository_change? %>
   <p>
     <strong>repository_url</strong>: <%= project_suggestion.repository_url %>
   </p>
 <% end %>
-<% if project_suggestion.licenses.present? && project_suggestion.licenses != project_suggestion.project.licenses %>
+<% if project_suggestion.valid_license_change? %>
   <p>
     <strong>license</strong>: <%= project_suggestion.licenses %>
   </p>
 <% end %>
-<% if project_suggestion.status.present? && project_suggestion.status.present? && project_suggestion.status != project_suggestion.project.status %>
+<% if project_suggestion.valid_status_change?  %>
   <p>
     <strong>status</strong>: <%= project_suggestion.status %>
   </p>
