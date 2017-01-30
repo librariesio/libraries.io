@@ -34,5 +34,4 @@ module Profile
   def to_param
     login
   end
-
 end

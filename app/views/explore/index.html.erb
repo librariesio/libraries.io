@@ -61,7 +61,7 @@
     <hr>
     <h3>
       <%= fa_icon 'code-fork' %>
-      <%= link_to 'Repositories', github_path %>
+      <%= link_to 'Repositories', repos_path %>
     </h3>
     <ul class="nav nav-tabs">
 			<li class="active">
@@ -105,7 +105,7 @@
         <% cache 'explore-popular_repos', expires_in: 1.week, race_condition_ttl: 1.minute do %>
           <%= render repo_search('stargazers_count'), cache: true %>
         <% end %>
-        <%= link_to github_search_path(sort: 'stargazers_count'), class: 'text-muted' do %>
+        <%= link_to repo_search_path(sort: 'stargazers_count'), class: 'text-muted' do %>
           See more popular repos &raquo;
         <% end %>
 			</div>

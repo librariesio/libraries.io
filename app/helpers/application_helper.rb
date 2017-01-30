@@ -70,7 +70,7 @@ module ApplicationHelper
   end
 
   def linked_repo_keywords(keywords)
-    keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/github/search?keywords=#{k}" }.join(', ').html_safe
+    keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/#{current_host}/search?keywords=#{k}" }.join(', ').html_safe
   end
 
   def format_license(license)
@@ -116,7 +116,7 @@ module ApplicationHelper
     end
   end
 
-  def github_user_title(user)
+  def user_title(user)
     if user.name.present? && user.name.downcase != user.login.downcase
       "#{user.name} (#{user.login})"
     else
@@ -206,5 +206,9 @@ module ApplicationHelper
   def usage_cache_length(total)
     return 1 if total <= 0
     (Math.log10(total).round+1)*2
+  end
+
+  def current_host_icon
+    current_host || 'code-fork'
   end
 end

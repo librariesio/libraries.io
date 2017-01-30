@@ -1,7 +1,11 @@
 <% title "Programming Languages - Libraries.io" %>
 <% description "All the programming languages that every repository has been written in." %>
 <h1>
-  <i class="fa fa-github"></i> Programming Languages
+  <i class="fa fa-<%= current_host_icon %>"></i>
+  Programming Languages
+  <% if current_host %>
+    on <%= formatted_host %>
+  <% end %>
 </h1>
 <hr>
 <div class='row'>

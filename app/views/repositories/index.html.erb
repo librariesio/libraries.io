@@ -3,7 +3,7 @@
 
 <div class='row'>
   <div class='col-md-12'>
-    <h1><i class="fa fa-<%= current_host || 'code-fork' %>"></i> <%= @title %></h1>
+    <h1><i class="fa fa-<%= current_host_icon %>"></i> <%= @title %></h1>
   </div>
 </div>
 <hr>
@@ -57,16 +57,16 @@
             <% @languages.each do |language| %>
               <li class='<%= 'active' if language.term.downcase == params[:language].try(:downcase) %>'>
                 <% if language.term.downcase == params[:language].try(:downcase) %>
-                  <%= link_to format_language(language.term), github_path(language: nil, license: params[:license], keywords: params[:keywords]) %>
+                  <%= link_to format_language(language.term), hosts_path(host_type: current_host, language: nil, license: params[:license], keywords: params[:keywords]) %>
                 <% else %>
-                  <%= link_to format_language(language.term), github_path(language: format_language(language.term), license: params[:license], keywords: params[:keywords]) %>
+                  <%= link_to format_language(language.term), hosts_path(host_type: current_host, language: format_language(language.term), license: params[:license], keywords: params[:keywords]) %>
                   <small><%= pluralize number_to_human(language['count']), 'repos' %></small>
                 <% end %>
               </li>
             <% end %>
             <% if @language && !@languages.map{|l| l[0].downcase }.include?(@language.name.downcase) %>
               <li class='active'>
-                <%= link_to format_language(@language.name), github_path(language: nil, license: params[:license], keywords: params[:keywords]) %>
+                <%= link_to format_language(@language.name), hosts_path(host_type: current_host, language: nil, license: params[:license], keywords: params[:keywords]) %>
               </li>
             <% end %>
           </ul>
@@ -79,16 +79,16 @@
             <% @licenses.each do |license| %>
               <li class='<%= 'active' if license.term.downcase == params[:license].try(:downcase) %>'>
                 <% if license.term.downcase == params[:license].try(:downcase) %>
-                  <%= link_to format_license(license.term), github_path(language: params[:language], license: nil, keywords: params[:keywords]) %>
+                  <%= link_to format_license(license.term), hosts_path(host_type: current_host, language: params[:language], license: nil, keywords: params[:keywords]) %>
                 <% else %>
-                <%= link_to format_license(license.term), github_path(license: format_license(license.term), language: params[:language], keywords: params[:keywords]) %>
+                <%= link_to format_license(license.term), hosts_path(host_type: current_host, license: format_license(license.term), language: params[:language], keywords: params[:keywords]) %>
                 <small><%= pluralize number_to_human(license['count']), 'repos' %></small>
                 <% end %>
               </li>
             <% end %>
             <% if @license && !@licenses.map{|l| l.term.downcase }.include?(@license.id.downcase) %>
               <li class='active'>
-                <%= link_to format_license(@license.id), github_path(language: params[:language], license: nil, keywords: params[:keywords]) %>
+                <%= link_to format_license(@license.id), hosts_path(host_type: current_host, language: params[:language], license: nil, keywords: params[:keywords]) %>
               </li>
             <% end %>
           </ul>
@@ -101,16 +101,16 @@
             <% @keywords.each do |keyword| %>
               <li class='<%= 'active' if keyword.term.downcase == params[:keywords].try(:downcase) %>'>
                 <% if keyword.term.downcase == params[:keywords].try(:downcase) %>
-                  <%= link_to keyword.term, github_path(keywords: nil, license: params[:license], language: params[:language]) %>
+                  <%= link_to keyword.term, hosts_path(host_type: current_host, keywords: nil, license: params[:license], language: params[:language]) %>
                 <% else %>
-                  <%= link_to keyword.term, github_path(license: params[:license], language: params[:language], keywords: keyword.term) %>
+                  <%= link_to keyword.term, hosts_path(host_type: current_host, license: params[:license], language: params[:language], keywords: keyword.term) %>
                   <small><%= pluralize number_to_human(keyword['count']), 'repos' %></small>
                 <% end %>
               </li>
             <% end %>
             <% if @keyword && !@keyword.map{|l| l.term.downcase }.include?(@keyword.downcase) %>
               <li class='active'>
-                <%= link_to @keyword, github_path(keywords: nil, license: params[:license], language: params[:language]) %>
+                <%= link_to @keyword, hosts_path(host_type: current_host, keywords: nil, license: params[:license], language: params[:language]) %>
               </li>
             <% end %>
           </ul>

@@ -65,7 +65,7 @@ Rails.application.routes.draw do
       end
     end
     get '/stats', to: 'stats#index', as: :stats
-    get '/stats/:host_type', to: 'stats#github', as: :github_stats, constraints: {host_type: /(github|gitlab|bitbucket)/i}, defaults: { host_type: 'github' }
+    get '/stats/repositories', to: 'stats#repositories', as: :repositories_stats
     get '/graphs', to: 'stats#graphs', as: :graphs
     get '/', to: 'stats#overview', as: :overview
   end
@@ -156,10 +156,11 @@ Rails.application.routes.draw do
     post '/:host_type/:owner/:name/web_hooks/:id/test', to: 'web_hooks#test', as: :test_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
     post '/:host_type/:owner/:name/web_hooks', to: 'web_hooks#create', format: false, constraints: { :name => /[^\/]+/ }
 
-    get '/:host_type', to: 'repositories#index', as: :github
+    get '/:host_type', to: 'repositories#index', as: :hosts
   end
 
-  get '/repos', to: 'repositories#index'
+  get '/repos/search', to: 'repositories#search', as: :repo_search
+  get '/repos', to: 'repositories#index', as: :repos
 
   get '/search', to: 'search#index'
 
