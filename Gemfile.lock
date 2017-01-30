@@ -87,7 +87,7 @@ GEM
     brakeman (3.4.1)
     bugsnag (5.1.0)
     builder (3.2.3)
-    capistrano (3.7.2)
+    capistrano (3.7.1)
       airbrussh (>= 1.0.0)
       capistrano-harrow
       i18n
@@ -131,9 +131,9 @@ GEM
     docile (1.1.5)
     domain_name (0.5.20161129)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.2.0)
-    dotenv-rails (2.2.0)
-      dotenv (= 2.2.0)
+    dotenv (2.1.2)
+    dotenv-rails (2.1.2)
+      dotenv (= 2.1.2)
       railties (>= 3.2, < 5.1)
     elasticsearch (1.1.2)
       elasticsearch-api (= 1.1.2)
@@ -299,7 +299,7 @@ GEM
       actionmailer (>= 3, < 6)
       premailer (~> 1.7, >= 1.7.9)
     public_suffix (2.0.5)
-    puma (3.7.0)
+    puma (3.6.2)
     rack (2.0.1)
     rack-attack (5.0.1)
       rack
