@@ -77,7 +77,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     api-pagination (4.5.2)
     arel (7.1.4)
-    autoprefixer-rails (6.7.0)
+    autoprefixer-rails (6.7.1)
       execjs
     bloomfilter-rb (2.1.1)
       redis
@@ -87,7 +87,7 @@ GEM
     brakeman (3.4.1)
     bugsnag (5.1.0)
     builder (3.2.3)
-    capistrano (3.7.1)
+    capistrano (3.7.2)
       airbrussh (>= 1.0.0)
       capistrano-harrow
       i18n
@@ -131,9 +131,9 @@ GEM
     docile (1.1.5)
     domain_name (0.5.20161129)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.1.2)
-    dotenv-rails (2.1.2)
-      dotenv (= 2.1.2)
+    dotenv (2.2.0)
+    dotenv-rails (2.2.0)
+      dotenv (= 2.2.0)
       railties (>= 3.2, < 5.1)
     elasticsearch (1.1.2)
       elasticsearch-api (= 1.1.2)
@@ -534,7 +534,7 @@ DEPENDENCIES
   poltergeist
   postgres_ext!
   premailer-rails
-  puma
+  puma (= 3.6.2)
   rack-attack
   rack-attack-rate-limit
   rack-canonical-host
