@@ -60,7 +60,7 @@ tables. Rails makes this easy through the use of "Rake" tasks.
 bundle exec rake db:create db:migrate
 ```
 
-Go create a Personal access token on GitHub (only requires `public_repo` access), then we can download some sample data:
+Go create a [Personal access token on GitHub](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) (only requires `public_repo` access), then we can download some sample data:
 
 ```sh
  bundle exec rails c
@@ -146,6 +146,10 @@ for **another** project, you will need to either
  * reset the omniauth environment variables after creating a GitHub (omniauth) application for this project
 
 as it will use it to learn more about the developers and for pull requests.
+
+### Project Wiki
+
+If you would like to know more about the software you just installed, how it works and our roadmap for future features then you'll find all of this [in the wiki](https://github.com/librariesio/libraries.io/wiki).
 
 ### Note on Patches/Pull Requests
 
