@@ -13,14 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   def formatted_host
-    case current_host
-    when 'github'
-      'GitHub'
-    when 'gitlab'
-      'GitLab'
-    when 'bitbucket'
-      'Bitbucket'
-    end
+    Repository.formatted_host(current_host)
   end
 
   def max_page

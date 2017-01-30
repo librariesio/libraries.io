@@ -76,7 +76,7 @@ class Project < ApplicationRecord
   scope :hacker_news, -> { with_repo.where('repositories.stargazers_count > 0').order("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC") }
   scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 1.month.ago)}
 
-  after_commit :update_github_repo_async, on: :create
+  after_commit :update_repository_async, on: :create
   after_commit :set_dependents_count
   after_commit :update_source_rank_async
   before_save  :update_details
@@ -92,7 +92,7 @@ class Project < ApplicationRecord
 
   def manual_sync
     async_sync
-    update_github_repo_async
+    update_repository_async
     self.last_synced_at = Time.zone.now
     forced_save
   end
@@ -316,7 +316,7 @@ class Project < ApplicationRecord
     self.normalized_licenses = normalized
   end
 
-  def update_github_repo_async
+  def update_repository_async
     GithubProjectWorker.perform_async(self.id) if github_name_with_owner.present?
   end
 

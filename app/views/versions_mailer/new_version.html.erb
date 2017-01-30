@@ -24,7 +24,7 @@
 
 <% if @project.repository.present? %>
 <p>
-  You can also browse the latest commits on GitHub: <%= link_to @project.repository.commits_url, @project.repository.commits_url %>
+  You can also browse the latest commits on <%= @project.repository.formatted_host %>: <%= link_to @project.repository.commits_url, @project.repository.commits_url %>
 </p>
 <% end %>
 

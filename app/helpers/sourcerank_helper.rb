@@ -12,7 +12,7 @@ module SourcerankHelper
   def source_rank_titles
     {
       basic_info_present:         'Basic info present?',
-      repository_present:         'GitHub repository present?',
+      repository_present:         'Source repository present?',
       readme_present:             'Readme present?',
       license_present:            'License present?',
       versions_present:           'Has multiple versions?',
@@ -25,7 +25,7 @@ module SourcerankHelper
       any_outdated_dependencies:  'Outdated dependencies?',
       one_point_oh:               '1.0.0 or greater?',
       all_prereleases:            'Prerelease?',
-      github_stars:               'GitHub stars',
+      github_stars:               'Stars',
       dependent_projects:         'Dependent Projects',
       dependent_repositories:     'Dependent Repositories',
       contributors:               'Contributors',

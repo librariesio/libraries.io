@@ -1,7 +1,7 @@
 namespace :download do
   desc 'Download undownloaded github repositories'
   task new_github_repos: :environment do
-    Project.undownloaded_repos.order('created_at DESC').find_each(&:update_github_repo_async)
+    Project.undownloaded_repos.order('created_at DESC').find_each(&:update_repository_async)
   end
 
   desc 'Download small registries all packages'

@@ -9,7 +9,7 @@ You depend on <%= @project %> in the following repos: <%= @repos.map{|repo| repo
 Check out all the details here: <%= version_url(@project.to_param.merge(number: @version.number)) %>
 
 <% if @project.repository.present? %>
-You can also browse the latest commits on GitHub: <%= @project.repository.commits_url %>
+You can also browse the latest commits on <%= @project.repository.formatted_host %>: <%= @project.repository.commits_url %>
 <% end %>
 
 From your friendly neighborhood robot, Libby.

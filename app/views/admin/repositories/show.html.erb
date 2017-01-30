@@ -3,7 +3,7 @@
   <div class="col-md-6">
     <h2>
       Admin / <%= link_to @repository.full_name, repository_path(@repository.owner_name, @repository.project_name) %>
-      <%= link_to fa_icon('github'), @repository.url, target: :blank %>
+      <%= link_to fa_icon(@repository.host_type), @repository.url, target: :blank %>
     </h2>
 
     <p>

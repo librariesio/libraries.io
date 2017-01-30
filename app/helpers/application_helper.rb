@@ -15,7 +15,7 @@ module ApplicationHelper
     [
       ['Relevance', nil],
       ['SourceRank', 'rank'],
-      ['GitHub Stars', 'stars'],
+      ['Stars', 'stars'],
       ['Dependents', 'dependents_count'],
       ['Most Used', 'dependent_repos_count'],
       ['Latest Release', 'latest_release_published_at'],

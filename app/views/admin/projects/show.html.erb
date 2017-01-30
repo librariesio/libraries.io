@@ -4,7 +4,7 @@
     <h2>
       Admin / <%= @project.platform_name %> / <%= link_to @project, project_path(@project.to_param) %>
       <% if @project.repository.present? %>
-        <%= link_to fa_icon('github'), @project.repository.url, target: :blank %>
+        <%= link_to fa_icon(@project.repository.host_type), @project.repository.url, target: :blank %>
       <% end %>
     </h2>
     <% if @project.description.present? %>
