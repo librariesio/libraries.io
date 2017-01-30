@@ -18,7 +18,7 @@ describe "Admin::RepositoriesController" do
       mock_is_admin
       login(user)
       visit admin_repositories_path
-      expect(page).to have_content 'Unlicensed Github repos'
+      expect(page).to have_content 'Unlicensed Repositories'
     end
   end
 
@@ -37,7 +37,7 @@ describe "Admin::RepositoriesController" do
       mock_is_admin
       login(user)
       visit deprecated_admin_repositories_path
-      expect(page).to have_content 'Deprecated Github repos'
+      expect(page).to have_content 'Deprecated Repositories'
     end
   end
 
@@ -56,7 +56,7 @@ describe "Admin::RepositoriesController" do
       mock_is_admin
       login(user)
       visit unmaintained_admin_repositories_path
-      expect(page).to have_content 'Unmaintained Github repos'
+      expect(page).to have_content 'Unmaintained Repositories'
     end
   end
 

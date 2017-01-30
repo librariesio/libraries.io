@@ -62,7 +62,7 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
       add help_wanted_path
       add first_pull_request_path
 
-      add github_path
+      add hosts_path
       add issues_path
       add github_organisations_path
       add github_search_path
