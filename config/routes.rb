@@ -151,7 +151,6 @@ Rails.application.routes.draw do
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   post '/auth/failure',             to: 'sessions#failure'
 
-
   get '/github/:owner/:name', to: 'repositories#show', as: :repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
   get '/github/:owner/:name/contributors', to: 'repositories#contributors', as: :repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
   get '/github/:owner/:name/sourcerank', to: 'repositories#sourcerank', as: :repository_sourcerank, format: false, constraints: { :name => /[^\/]+/ }

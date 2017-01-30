@@ -2,9 +2,9 @@ class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create, :failure]
 
   def new
-    if !params[:source].nil?
-      session[:pre_login_destination] = '/account'
-      redirect_to "/auth/" + params[:source]
+    if params[:host_type].present?
+      session[:pre_login_destination] = params[:return_to] if params[:return_to].present?
+      redirect_to "/auth/" + params[:host_type]
     end
   end
 

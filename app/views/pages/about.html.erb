@@ -59,7 +59,7 @@
     </p>
     <% else %>
     <p>
-      <a href="<%= login_path %>" class="btn btn-success">
+      <a href="<%= login_path(return_to: request.original_url) %>" class="btn btn-success">
         <%= fa_icon 'star' %>
         Sign up, it's free for Open Source
       </a>

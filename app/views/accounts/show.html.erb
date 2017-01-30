@@ -40,15 +40,18 @@
     <div class="panel panel-default">
       <div class="panel-heading">Accounts</div>
       <div class="panel-body">
-        <%= link_to login_path(:source => "gitlab"), class: 'btn btn-primary' do %>
+        <%= link_to login_path(host_type: 'github', return_to: request.original_url), class: 'btn btn-primary' do %>
+          <%= fa_icon('github') %> Connect GitHub
+        <% end %>
+        <%= link_to login_path(host_type: 'gitlab', return_to: request.original_url), class: 'btn btn-primary' do %>
           <%= fa_icon('gitlab') %> Connect GitLab
         <% end %>
-        <%= link_to login_path(:source => "bitbucket"), class: 'btn btn-primary' do %>
+        <%= link_to login_path(host_type: 'bitbucket', return_to: request.original_url), class: 'btn btn-primary' do %>
           <%= fa_icon('bitbucket') %> Connect Bitbucket
         <% end %>
         <h4>Connected Accounts</h4>
-        <% current_user.identities.each do |identity| %>
-          <button class="btn btn-default">
+        <% current_user.identities.viewable.each do |identity| %>
+          <button class="btn btn-default tip" title="<%= Repository.formatted_host(identity.provider) %>">
             <%= fa_icon(identity.provider) %> <%= identity.nickname %>
           </button>
         <%end %>

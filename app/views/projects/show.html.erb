@@ -379,7 +379,7 @@
           <% else %>
             <p>
               <small class='text-muted'>
-                <%= link_to 'Login', login_path %> to resync this project
+                <%= link_to 'Login', login_path(return_to: request.original_url) %> to resync this project
               </small>
             </p>
           <% end %>

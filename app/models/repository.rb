@@ -84,6 +84,21 @@ class Repository < ApplicationRecord
     where('lower(repositories.language) = ?', language.try(:downcase))
   end
 
+  def self.formatted_host(host_type)
+    case host_type
+    when 'github'
+      'GitHub'
+    when 'gitlab'
+      'GitLab'
+    when 'bitbucket'
+      'Bitbucket'
+    end
+  end
+
+  def formatted_host
+    Repository.formatted_host(host_type)
+  end
+
   def github_contributions_count
     contributions_count # legacy alias
   end

@@ -129,19 +129,19 @@
                 </button>
                 <ul class="dropdown-menu">
                   <li>
-                    <a href="/auth/github">
+                    <%= link_to login_path(host_type: 'github', return_to: request.original_url) do %>
                       <%= fa_icon('github') %> GitHub
-                    </a>
+                    <% end %>
                   </li>
                   <li>
-                    <a href="/auth/gitlab">
+                    <%= link_to login_path(host_type: 'gitlab', return_to: request.original_url) do %>
                       <%= fa_icon('gitlab') %> GitLab
-                    </a>
+                    <% end %>
                   </li>
                   <li>
-                    <a href="/auth/bitbucket">
+                    <%= link_to login_path(host_type: 'bitbucket', return_to: request.original_url) do %>
                       <%= fa_icon('bitbucket') %> Bitbucket
-                    </a>
+                    <% end %>
                   </li>
                 </ul>
               </div>
