@@ -38,6 +38,24 @@
     </div>
 
     <div class="panel panel-default">
+      <div class="panel-heading">Accounts</div>
+      <div class="panel-body">
+        <%= link_to login_path(:source => "gitlab"), class: 'btn btn-primary' do %>
+          <%= fa_icon('gitlab') %> Connect GitLab
+        <% end %>
+        <%= link_to login_path(:source => "bitbucket"), class: 'btn btn-primary' do %>
+          <%= fa_icon('bitbucket') %> Connect Bitbucket
+        <% end %>
+        <h4>Connected Accounts</h4>
+        <% current_user.identities.each do |identity| %>
+          <button class="btn btn-default">
+            <%= fa_icon(identity.provider) %> <%= identity.nickname %>
+          </button>
+        <%end %>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
       <div class="panel-heading">API Key</div>
       <div class="panel-body">
         <p>

@@ -2,7 +2,10 @@ class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create, :failure]
 
   def new
-
+    if !params[:source].nil?
+      session[:pre_login_destination] = '/account'
+      redirect_to "/auth/" + params[:source]
+    end
   end
 
   def enable_public
@@ -46,9 +49,10 @@ class SessionsController < ApplicationController
     end
 
     identity.user.update_repo_permissions_async
+    login_destination = pre_login_destination
 
-    redirect_to(root_path) && return unless pre_login_destination
-    redirect_to pre_login_destination
+    redirect_to(root_path) && return unless login_destination
+    redirect_to login_destination
   end
 
   def destroy
@@ -63,6 +67,8 @@ class SessionsController < ApplicationController
   private
 
   def pre_login_destination
-    session[:pre_login_destination]
+    destination = session[:pre_login_destination]
+    session.delete :pre_login_destination
+    return destination
   end
 end
