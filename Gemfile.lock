@@ -127,6 +127,7 @@ GEM
       addressable
     dalli (2.7.6)
     database_cleaner (1.5.3)
+    debug_inspector (0.0.2)
     diff-lcs (1.3)
     docile (1.1.5)
     domain_name (0.5.20161129)
@@ -229,6 +230,10 @@ GEM
     languages (1.4.9)
       escape_utils (~> 1.1)
     license-compatibility (1.4.0)
+    listen (3.1.5)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
     lograge (0.4.1)
       actionpack (>= 4, < 5.1)
       activesupport (>= 4, < 5.1)
@@ -340,6 +345,9 @@ GEM
     rake (12.0.0)
     rake-compiler (1.0.3)
       rake
+    rb-fsevent (0.9.8)
+    rb-inotify (0.9.8)
+      ffi (>= 0.5.0)
     rb-readline (0.5.3)
     redis (3.3.3)
     rest-client (2.0.0)
@@ -373,6 +381,7 @@ GEM
     rspec_junit_formatter (0.2.3)
       builder (< 4)
       rspec-core (>= 2, < 4, != 2.12.0)
+    ruby_dep (1.5.0)
     safe_yaml (1.0.4)
     sanitize-url (0.1.4)
     sass (3.4.23)
@@ -423,6 +432,9 @@ GEM
     spdx-licenses (1.1.0)
     spring (2.0.1)
       activesupport (>= 4.2)
+    spring-watcher-listen (2.0.1)
+      listen (>= 2.7, < 4.0)
+      spring (>= 1.2, < 3.0)
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -456,6 +468,11 @@ GEM
       unf_ext
     unf_ext (0.0.7.2)
     vcr (3.0.3)
+    web-console (3.4.0)
+      actionview (>= 5.0)
+      activemodel (>= 5.0)
+      debug_inspector
+      railties (>= 5.0)
     webmock (2.3.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -517,6 +534,7 @@ DEPENDENCIES
   json_spec
   languages (= 1.4.9)
   license-compatibility
+  listen
   lograge
   mail
   mime-types
@@ -560,11 +578,13 @@ DEPENDENCIES
   sitemap_generator
   spdx
   spring
+  spring-watcher-listen
   sql_queries_count
   turbolinks
   typhoeus
   uglifier
   vcr
+  web-console
   webmock
   will_paginate-bootstrap
 

@@ -80,6 +80,9 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano3-nginx'
   gem 'capistrano-maintenance', require: nil
+  gem 'listen'
+  gem 'spring-watcher-listen'
+  gem 'web-console'
 end
 
 group :development, :test do
