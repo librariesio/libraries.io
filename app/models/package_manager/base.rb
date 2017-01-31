@@ -46,6 +46,10 @@ module PackageManager
       nil
     end
 
+    def self.check_status_url(project)
+      package_link(project)
+    end
+
     def self.platform_name(platform)
       if platform.downcase == 'npm'
         return 'npm'

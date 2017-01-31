@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: put
-    uri: http://localhost:9200/projects/project/147
+    uri: http://localhost:9200/projects/project/148
     body:
       encoding: UTF-8
-      string: '{"id":147,"name":"rails56","platform":"Rubygems","created_at":"2017-01-26T13:28:28.852Z","updated_at":"2017-01-26T13:28:28.852Z","description":"Ruby
+      string: '{"id":148,"name":"rails57","platform":"Rubygems","created_at":"2017-01-31T10:41:07.741Z","updated_at":"2017-01-31T10:41:07.741Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-26T13:28:28.852Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails56","contributions_count":0,"pushed_at":null}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-31T10:41:07.741Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails57","contributions_count":0,"pushed_at":null}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -18,16 +18,16 @@ http_interactions:
       - ''
   response:
     status:
-      code: 201
-      message: Created
+      code: 200
+      message: OK
     headers:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '79'
+      - '80'
     body:
       encoding: UTF-8
-      string: '{"_index":"projects","_type":"project","_id":"147","_version":1,"created":true}'
+      string: '{"_index":"projects","_type":"project","_id":"148","_version":3,"created":false}'
     http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:28 GMT
+  recorded_at: Tue, 31 Jan 2017 10:41:07 GMT
 recorded_with: VCR 3.0.3
