@@ -110,7 +110,7 @@ module ApplicationHelper
   def source_path(repository)
     return nil unless repository.fork?
     if repository.source.present?
-      repository_path(repository.source.owner_name, repository.source.project_name)
+      repository_path(repository.source.to_param)
     else
       repository.source_url
     end
@@ -183,7 +183,7 @@ module ApplicationHelper
       })
     when 'Repository'
       hash = record.meta_tags.merge({
-        url: repository_url(record.owner_name, record.project_name)
+        url: repository_url(record.to_param)
       })
     when 'GithubUser', 'GithubOrganisation'
       hash = record.meta_tags.merge({

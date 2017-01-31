@@ -255,7 +255,7 @@
                 <ul>
                   <% dependent_repos.each do |repo| %>
                   <li>
-                    <%= link_to repo.full_name, repository_path(repo.owner_name, repo.project_name) %>
+                    <%= link_to repo.full_name, repository_path(repo.to_param) %>
                     <small>
                       <%= fa_icon("lock") if repo.private? %>
                       <%= fa_icon("code-fork") if repo.fork? %>
@@ -321,7 +321,7 @@
       <% if @contributors.length > 0 %>
         <div class="row">
           <div class="col-md-12">
-            <h4>Top Contributors <small><%= link_to 'See all', repository_contributors_path(@repository.owner_name, @repository.project_name) %></small></h4>
+            <h4>Top Contributors <small><%= link_to 'See all', repository_contributors_path(@repository.to_param) %></small></h4>
             <%= render @contributors %>
           </div>
         </div>
@@ -337,7 +337,7 @@
             <ul>
               <% your_dependent_repos.limit(10).each do |repo| %>
                 <li>
-                  <%= link_to repo.full_name, repository_path(repo.owner_name, repo.project_name) %>
+                  <%= link_to repo.full_name, repository_path(repo.to_param) %>
                   <small>
                     <%= fa_icon("lock") if repo.private? %>
                     <%= fa_icon("code-fork") if repo.fork? %>

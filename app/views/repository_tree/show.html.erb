@@ -1,7 +1,7 @@
 <% title "Dependency Tree for #{@repository} - Libraries.io" %>
 <h1>
   <%= fa_icon 'code-fork' %>
-  Dependency Tree for <%= link_to @repository, repository_path(@repository.owner_name, @repository.project_name) %>
+  Dependency Tree for <%= link_to @repository, repository_path(@repository.to_param) %>
 </h1>
 <% if @date && @date != Date.today %>
 <p>

@@ -39,8 +39,8 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
   repos = lambda {
     group = sitemap.group(:filename => :repos, :sitemaps_path => 'sitemaps/repos') do
       Repository.open_source.source.not_removed.find_each do |repo|
-        add repository_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
-        add repository_contributors_path(repo.owner_name, repo.project_name), :lastmod => repo.updated_at
+        add repository_path(repo.to_param), :lastmod => repo.updated_at
+        add repository_contributors_path(repo.to_param), :lastmod => repo.updated_at
       end
     end
     group.sitemap.write unless group.sitemap.written?

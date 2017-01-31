@@ -181,7 +181,11 @@ class Repository < ApplicationRecord
   end
 
   def to_param
-    full_name
+    {
+      host_type: host_type,
+      owner: owner_name,
+      name: project_name
+    }
   end
 
   def owner_name

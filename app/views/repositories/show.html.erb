@@ -64,7 +64,7 @@
           Monitor dependencies
         <% end %>
       <% end %>
-      <%= link_to repository_web_hooks_path(repo.owner_name, repo.project_name), class: 'btn btn-info pull-right', id: 'webhooks' do %>
+      <%= link_to repository_web_hooks_path(repo.to_param), class: 'btn btn-info pull-right', id: 'webhooks' do %>
         <%= fa_icon 'plug' %>
         Web Hooks
       <% end %>
@@ -191,7 +191,7 @@
             Sourcerank
           </td>
           <td>
-            <strong><%= link_to repo.rank, repository_sourcerank_path(repo.owner_name, repo.project_name) %></strong>
+            <strong><%= link_to repo.rank, repository_sourcerank_path(repo.to_param) %></strong>
           </td>
         </tr>
         <% end %>
@@ -248,7 +248,7 @@
             Contributors
           </td>
           <td>
-            <strong><%= link_to number_with_delimiter(repo.contributors.count), repository_contributors_path(@repository.owner_name, @repository.project_name)  %></strong>
+            <strong><%= link_to number_with_delimiter(repo.contributors.count), repository_contributors_path(@repository.to_param)  %></strong>
           </td>
         </tr>
         <tr>
@@ -256,7 +256,7 @@
             Tags
           </td>
           <td>
-            <strong><%= link_to number_with_delimiter(repo.tags.count), repository_tags_path(@repository.owner_name, @repository.project_name)  %></strong>
+            <strong><%= link_to number_with_delimiter(repo.tags.count), repository_tags_path(@repository.to_param)  %></strong>
           </td>
         </tr>
         <tr>
@@ -286,7 +286,7 @@
       </table>
 
       <% if @contributors.length > 0 %>
-        <h4>Top Contributors <small><%= link_to 'See all', repository_contributors_path(@repository.owner_name, @repository.project_name) %></small></h4>
+        <h4>Top Contributors <small><%= link_to 'See all', repository_contributors_path(@repository.to_param) %></small></h4>
         <%= render @contributors %>
       <% end %>
 
@@ -302,7 +302,7 @@
         <hr>
         <h4>
           Interesting Forks
-          <small><%= link_to 'See all', repository_forks_path(@repository.owner_name, @repository.project_name) %></small>
+          <small><%= link_to 'See all', repository_forks_path(@repository.to_param) %></small>
         </h4>
         <%= render @forks, cache: true %>
       <% end %>
@@ -312,7 +312,7 @@
         <hr>
         <h4>
           Tags
-          <small><%= link_to 'See all', repository_tags_path(@repository.owner_name, @repository.project_name) %></small>
+          <small><%= link_to 'See all', repository_tags_path(@repository.to_param) %></small>
         </h4>
         <ul>
           <% repo.tags.published.order('published_at DESC, name DESC').limit(30).to_a.each do |tag| %>
@@ -330,7 +330,7 @@
       <p>
         <%= fa_icon 'question-circle' %>
         Something wrong with this page?
-        <%= link_to 'Make a suggestion', 'https://github.com/librariesio/libraries.io' %>
+        <%= link_to 'Make a suggestion', 'https://github.com/librariesio/libraries.io/issues/new' %>
       </p>
       <% if repo.last_synced_at.present? %>
         <p>

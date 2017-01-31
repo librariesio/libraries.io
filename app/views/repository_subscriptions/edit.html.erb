@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <h1>
       <%= link_to image_tag(@repository.avatar_url(100), width: 50, height: 50, alt: @repository), user_path(@repository.owner_name) %>
-      <%= link_to @repository.full_name, repository_path(@repository.owner_name, @repository.project_name) %> -
+      <%= link_to @repository.full_name, repository_path(@repository.to_param) %> -
       Monitoring settings
     </h1>
   </div>

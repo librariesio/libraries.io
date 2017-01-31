@@ -1,6 +1,6 @@
 <% title "Repositories forked from #{@repository} - Libraries.io" %>
 
-<h1>Repositories forked from <%= link_to @repository.full_name, repository_path(@repository.owner_name, @repository.project_name) %></h1>
+<h1>Repositories forked from <%= link_to @repository.full_name, repository_path(@repository.to_param) %></h1>
 <hr>
 <div class="row">
   <div class="col-sm-8">
@@ -9,7 +9,7 @@
       <%= will_paginate @forks, page_links: false %>
     <% else %>
       <p>
-        No repositories found, go back to <%= link_to @repository.full_name, repository_path(@repository.owner_name, @repository.project_name) %>.
+        No repositories found, go back to <%= link_to @repository.full_name, repository_path(@repository.to_param) %>.
       </p>
     <% end %>
   </div>

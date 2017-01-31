@@ -5,7 +5,7 @@
     <h1>
       <%= fa_icon 'keyboard-o' %>
       Committers to
-      <%= link_to @repository.full_name, repository_path(@repository.owner_name, @repository.project_name) %></h1>
+      <%= link_to @repository.full_name, repository_path(@repository.to_param) %></h1>
   </div>
 </div>
 <hr>
@@ -40,7 +40,7 @@
       <%= render 'adsense/banner' %>
     <% else %>
       <p>
-        No contributors found, go back to <%= link_to @repository.full_name, repository_path(@repository.owner_name, @repository.project_name) %>.
+        No contributors found, go back to <%= link_to @repository.full_name, repository_path(@repository.to_param) %>.
       </p>
     <% end %>
   </div>

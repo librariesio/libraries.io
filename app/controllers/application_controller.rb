@@ -183,7 +183,7 @@ class ApplicationController < ActionController::Base
     @repository = Repository.host(current_host).where('lower(full_name) = ?', full_name.downcase).first
     raise ActiveRecord::RecordNotFound if @repository.nil?
     raise ActiveRecord::RecordNotFound unless authorized?
-    redirect_to url_for(owner: @repository.owner_name, name: @repository.project_name), :status => :moved_permanently if full_name != @repository.full_name
+    redirect_to url_for(@repository.to_param), :status => :moved_permanently if full_name != @repository.full_name
   end
 
   def authorized?

@@ -9,8 +9,8 @@
     <%= web_hook.last_response || 'Never sent' %>
   </td>
   <td>
-    <%= link_to 'Test', test_repository_web_hook_path(@repository.owner_name, @repository.project_name, web_hook.id), method: :post, class: 'btn btn-info' %>
-    <%= link_to 'Edit', edit_repository_web_hook_path(@repository.owner_name, @repository.project_name, web_hook.id), class: 'btn btn-warning' %>
-    <%= link_to 'Delete', repository_web_hook_path(@repository.owner_name, @repository.project_name, web_hook.id), method: :delete, class: 'btn btn-danger' %>
+    <%= link_to 'Test', test_repository_web_hook_path(@repository.to_param.merge(id: web_hook.id)), method: :post, class: 'btn btn-info' %>
+    <%= link_to 'Edit', edit_repository_web_hook_path(@repository.to_param.merge(id: web_hook.id)), class: 'btn btn-warning' %>
+    <%= link_to 'Delete', repository_web_hook_path(@repository.to_param.merge(id: web_hook.id)), method: :delete, class: 'btn btn-danger' %>
   </td>
 </tr>

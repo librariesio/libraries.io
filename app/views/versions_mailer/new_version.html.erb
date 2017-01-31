@@ -14,7 +14,7 @@
 <% if @repos.any? %>
 <p>
   You depend on <%= @project %> in the following repos:
-  <%= @repos.map{|repo| link_to repo.full_name, repository_url(repo.owner_name, repo.project_name) }.to_sentence.html_safe %>
+  <%= @repos.map{|repo| link_to repo.full_name, repository_url(repo.to_param) }.to_sentence.html_safe %>
 </p>
 <% end %>
 
