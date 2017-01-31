@@ -60,8 +60,8 @@
     </div>
     <hr>
     <h3>
-      <%= fa_icon 'github' %>
-      <%= link_to 'Repositories', github_path %>
+      <%= fa_icon 'code-fork' %>
+      <%= link_to 'Repositories', repos_path %>
     </h3>
     <ul class="nav nav-tabs">
 			<li class="active">
@@ -80,12 +80,6 @@
         <a href="#popular_repos" data-toggle="tab">
           <%= fa_icon 'star' %>
           Popular
-        </a>
-			</li>
-			<li class='hidden-xs'>
-        <a href="#forked_repos" data-toggle="tab">
-          <%= fa_icon 'code-fork' %>
-          Most Forked
         </a>
 			</li>
 		</ul>
@@ -111,16 +105,8 @@
         <% cache 'explore-popular_repos', expires_in: 1.week, race_condition_ttl: 1.minute do %>
           <%= render repo_search('stargazers_count'), cache: true %>
         <% end %>
-        <%= link_to github_search_path(sort: 'stargazers_count'), class: 'text-muted' do %>
+        <%= link_to repo_search_path(sort: 'stargazers_count'), class: 'text-muted' do %>
           See more popular repos &raquo;
-        <% end %>
-			</div>
-      <div class="tab-pane" id="forked_repos">
-        <% cache 'explore-forked_repos', expires_in: 1.week, race_condition_ttl: 1.minute do %>
-          <%= render repo_search('forks_count'), cache: true %>
-        <% end %>
-        <%= link_to github_search_path(sort: 'forks_count'), class: 'text-muted' do %>
-          See more forked repos &raquo;
         <% end %>
 			</div>
 		</div>

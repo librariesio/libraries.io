@@ -1,7 +1,7 @@
 class RepositoriesController < ApplicationController
   def index
     postfix = [current_language, current_license, current_keywords].any?(&:present?) ? 'Repos' : 'Repositories'
-    @title = [current_language, current_license, current_keywords, postfix].compact.join(' ')
+    @title = [current_language, current_license, current_keywords, formatted_host, postfix].compact.join(' ')
 
     @popular = repo_search('stargazers_count')
     @forked = repo_search('forks_count')
@@ -36,21 +36,23 @@ class RepositoriesController < ApplicationController
   def hacker_news
     @language = Languages::Language[params[:language]] if params[:language].present?
 
-    orginal_scope = Repository.trending.open_source
-    scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
+    original_scope = Repository.trending.open_source
+    original_scope = original_scope.host(current_host) if current_host
+    scope = @language.present? ? original_scope.where('lower(language) = ?', @language.name.downcase) : original_scope
     @repos = scope.hacker_news.paginate(page: page_number)
 
-    @languages = orginal_scope.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
+    @languages = original_scope.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
   end
 
   def new
     @language = Languages::Language[params[:language]] if params[:language].present?
 
-    orginal_scope = Repository.with_stars.open_source.source
-    scope = @language.present? ? orginal_scope.where('lower(language) = ?', @language.name.downcase) : orginal_scope
+    original_scope = Repository.with_stars.open_source.source
+    original_scope = original_scope.host(current_host) if current_host
+    scope = @language.present? ? original_scope.where('lower(language) = ?', @language.name.downcase) : original_scope
     @repos = scope.recently_created.order('created_at DESC').paginate(page: page_number)
 
-    @languages = orginal_scope.recently_created.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
+    @languages = original_scope.recently_created.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
   end
 
   def show
@@ -107,7 +109,7 @@ class RepositoriesController < ApplicationController
   end
 
   def page_title
-    return "Search for #{params[:q]} - Libraries.io" if params[:q].present?
+    return "Search for #{params[:q]} Repositories - Libraries.io" if params[:q].present?
 
     modifiers = []
     modifiers << current_license if current_license.present?
@@ -117,13 +119,13 @@ class RepositoriesController < ApplicationController
 
     case params[:sort]
     when 'created_at'
-      "New#{modifier}Github Repositories - Libraries.io"
+      "New#{modifier}#{formatted_host} Repositories - Libraries.io"
     when 'updated_at'
-      "Updated#{modifier}Github Repositories - Libraries.io"
+      "Updated#{modifier}#{formatted_host} Repositories - Libraries.io"
     when 'latest_release_published_at'
-      "Updated#{modifier}Github Repositories - Libraries.io"
+      "Updated#{modifier}#{formatted_host} Repositories - Libraries.io"
     else
-      "Popular#{modifier}Github Repositories - Libraries.io"
+      "Popular#{modifier}#{formatted_host} Repositories - Libraries.io"
     end
   end
 
@@ -132,7 +134,8 @@ class RepositoriesController < ApplicationController
       license: current_license,
       language: current_language,
       keywords: current_keywords,
-      platforms: current_platforms
+      platforms: current_platforms,
+      host_type: current_host
     }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
     ids = search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]

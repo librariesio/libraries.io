@@ -7,7 +7,7 @@ class Admin::RepositoriesController < Admin::ApplicationController
     @repository = Repository.find(params[:id])
     if @repository.update_attributes(repository_params)
       @repository.update_all_info_async
-      redirect_to repository_path(@repository.owner_name, @repository.project_name)
+      redirect_to repository_path(@repository.to_param)
     else
       redirect_to admin_repository_path(@repository.id)
     end
@@ -59,6 +59,6 @@ class Admin::RepositoriesController < Admin::ApplicationController
     @repository = Repository.find(params[:id])
     @repository.send(method)
     @repository.update_all_info_async
-    redirect_to repository_path(@repository.owner_name, @repository.project_name)
+    redirect_to repository_path(@repository.to_param)
   end
 end

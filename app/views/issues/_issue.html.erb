@@ -3,7 +3,7 @@
   <h5>
     <%= link_to emojify(truncate(issue.title, :length => 100)), issue.url %>
     <small>
-      <%= link_to repository.full_name, repository_path(repository.owner_name, repository.project_name) %>
+      <%= link_to repository.full_name, repository_path(repository.to_param) %>
       <%= fa_icon("lock") if repository.private? %>
       <%= fa_icon("code-fork") if repository.fork? %>
     </small>

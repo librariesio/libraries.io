@@ -4,9 +4,17 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_user, :logged_in?, :logged_out?
+  helper_method :current_user, :logged_in?, :logged_out?, :current_host, :formatted_host
 
   private
+
+  def current_host
+    params[:host_type].try(:downcase)
+  end
+
+  def formatted_host
+    Repository.formatted_host(current_host)
+  end
 
   def max_page
     100
@@ -170,11 +178,12 @@ class ApplicationController < ActionController::Base
   end
 
   def load_repo
+    raise ActiveRecord::RecordNotFound unless current_host.present?
     full_name = [params[:owner], params[:name]].join('/')
-    @repository = Repository.where('lower(full_name) = ?', full_name.downcase).first
+    @repository = Repository.host(current_host).where('lower(full_name) = ?', full_name.downcase).first
     raise ActiveRecord::RecordNotFound if @repository.nil?
     raise ActiveRecord::RecordNotFound unless authorized?
-    redirect_to url_for(owner: @repository.owner_name, name: @repository.project_name), :status => :moved_permanently if full_name != @repository.full_name
+    redirect_to url_for(@repository.to_param), :status => :moved_permanently if full_name != @repository.full_name
   end
 
   def authorized?

@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <h1>
       <%= link_to image_tag(@repository.avatar_url(100), width: 50, height: 50, alt: @repository), user_path(@repository.owner_name) %>
-      <%= link_to @repository.full_name, repository_path(@repository.owner_name, @repository.project_name) %> -
+      <%= link_to @repository.full_name, repository_path(@repository.to_param) %> -
       Web Hooks
     </h1>
   </div>
@@ -40,7 +40,7 @@
       Libraries will post JSON to your web hook url whenever a new version of a library that your repository depends on is released.
     </p>
     <p class='text-center'>
-      <%= link_to 'Add a web hook', new_repository_web_hook_path(@repository.owner_name, @repository.project_name), class: 'btn btn-primary' %>
+      <%= link_to 'Add a web hook', new_repository_web_hook_path(@repository.to_param), class: 'btn btn-primary' %>
     </p>
     <hr>
     <p>

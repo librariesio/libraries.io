@@ -2,9 +2,9 @@
 <div class="row">
   <div class="col-md-12">
     <h1>
-      <i class="fa fa-bug"></i> Issues on <%= link_to @repository.full_name, repository_path(@repository.owner_name, @repository.project_name) %>'s Dependencies</h1>
+      <i class="fa fa-bug"></i> Issues on <%= link_to @repository.full_name, repository_path(@repository.to_param) %>'s Dependencies</h1>
     <p>
-      Showing <%= number_to_human @search.total_entries %> open issues across <%= number_to_human @repo_ids.length %> repositories that <%= link_to @repository.full_name, repository_path(@repository.owner_name, @repository.project_name) %> depends upon.
+      Showing <%= number_to_human @search.total_entries %> open issues across <%= number_to_human @repo_ids.length %> repositories that <%= link_to @repository.full_name, repository_path(@repository.to_param) %> depends upon.
     </p>
   </div>
 </div>

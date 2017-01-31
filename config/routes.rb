@@ -22,19 +22,21 @@ Rails.application.routes.draw do
     put '/subscription/:platform/:name', to: 'subscriptions#update'
     delete '/subscription/:platform/:name', to: 'subscriptions#destroy'
 
-    get '/github/issues/help-wanted', to: 'issues#help_wanted'
-    get '/github/issues/first-pull-request', to: 'issues#first_pull_request'
+    scope constraints: {host_type: /(github|gitlab|bitbucket)/i}, defaults: { host_type: 'github' } do
+      get '/:host_type/issues/help-wanted', to: 'issues#help_wanted'
+      get '/:host_type/issues/first-pull-request', to: 'issues#first_pull_request'
 
-    get '/github/search', to: 'repositories#search'
+      get '/:host_type/search', to: 'repositories#search'
 
-    get '/github/:login/repositories', to: 'github_users#repositories'
-    get '/github/:login/projects', to: 'github_users#projects'
+      get '/:host_type/:login/repositories', to: 'github_users#repositories'
+      get '/:host_type/:login/projects', to: 'github_users#projects'
 
-    get '/github/:owner/:name/dependencies', to: 'repositories#dependencies', constraints: { :name => /[^\/]+/ }
-    get '/github/:owner/:name/projects', to: 'repositories#projects', constraints: { :name => /[^\/]+/ }
-    get '/github/:owner/:name', to: 'repositories#show', constraints: { :name => /[^\/]+/ }
+      get '/:host_type/:owner/:name/dependencies', to: 'repositories#dependencies', constraints: { :name => /[^\/]+/ }
+      get '/:host_type/:owner/:name/projects', to: 'repositories#projects', constraints: { :name => /[^\/]+/ }
+      get '/:host_type/:owner/:name', to: 'repositories#show', constraints: { :name => /[^\/]+/ }
 
-    get '/github/:login', to: 'github_users#show'
+      get '/:host_type/:login', to: 'github_users#show'
+    end
 
     get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }, as: :version_tree
     get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }
@@ -63,7 +65,7 @@ Rails.application.routes.draw do
       end
     end
     get '/stats', to: 'stats#index', as: :stats
-    get '/stats/github', to: 'stats#github', as: :github_stats
+    get '/stats/repositories', to: 'stats#repositories', as: :repositories_stats
     get '/graphs', to: 'stats#graphs', as: :graphs
     get '/', to: 'stats#overview', as: :overview
   end
@@ -73,15 +75,10 @@ Rails.application.routes.draw do
   get '/collections', to: 'collections#index', as: :collections
   get '/explore/:language-:keyword-libraries', to: 'collections#show', as: :collection
 
-  get '/github/issues', to: 'issues#index', as: :issues
-  get '/github/issues/your-dependencies', to: 'issues#your_dependencies', as: :your_dependencies_issues
-
   get '/pricing', to: 'account_subscriptions#plans', as: :pricing
   resources :account_subscriptions
 
   get '/recommendations', to: 'recommendations#index', as: :recommendations
-
-  post '/hooks/github', to: 'hooks#github'
 
   get '/repositories', to: 'dashboard#index', as: :repositories
   get '/dashboard', to: redirect("/repositories")
@@ -123,21 +120,47 @@ Rails.application.routes.draw do
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
-  get '/github/languages', to: 'repositories#languages', as: :github_languages
-  get '/github/search', to: 'repositories#search', as: :github_search
-  get '/github/trending', to: 'repositories#hacker_news', as: :trending
-  get '/github/new', to: 'repositories#new', as: :new_repos
+  scope constraints: {host_type: /(github|gitlab|bitbucket)/i}, defaults: { host_type: 'github' } do
+    get '/:host_type/issues', to: 'issues#index', as: :issues
+    get '/:host_type/issues/your-dependencies', to: 'issues#your_dependencies', as: :your_dependencies_issues
 
-  get '/github/organisations', to: 'github_organisations#index', as: :github_organisations
-  get '/github/timeline', to: 'repositories#timeline', as: :github_timeline
+    post '/hooks/:host_type', to: 'hooks#github'
 
-  get '/github/:login/issues', to: 'users#issues'
-  get '/github/:login/dependency-issues', to: 'users#dependency_issues'
-  get '/github/:login/repositories', to: 'users#repositories', as: :user_repositories
-  get '/github/:login/contributions', to: 'users#contributions', as: :user_contributions
-  get '/github/:login/projects', to: 'users#projects', as: :user_projects
-  get '/github/:login/contributors', to: 'users#contributors', as: :user_contributors
-  get '/github/:login', to: 'users#show', as: :user
+    get '/:host_type/languages', to: 'repositories#languages', as: :github_languages
+    get '/:host_type/search', to: 'repositories#search', as: :github_search
+    get '/:host_type/trending', to: 'repositories#hacker_news', as: :trending
+    get '/:host_type/new', to: 'repositories#new', as: :new_repos
+    get '/:host_type/organisations', to: 'github_organisations#index', as: :github_organisations
+    get '/:host_type/timeline', to: 'repositories#timeline', as: :github_timeline
+    get '/:host_type/:login/issues', to: 'users#issues'
+    get '/:host_type/:login/dependency-issues', to: 'users#dependency_issues'
+    get '/:host_type/:login/repositories', to: 'users#repositories', as: :user_repositories
+    get '/:host_type/:login/contributions', to: 'users#contributions', as: :user_contributions
+    get '/:host_type/:login/projects', to: 'users#projects', as: :user_projects
+    get '/:host_type/:login/contributors', to: 'users#contributors', as: :user_contributors
+    get '/:host_type/:login', to: 'users#show', as: :user
+
+    get '/:host_type/:owner/:name', to: 'repositories#show', as: :repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
+    get '/:host_type/:owner/:name/contributors', to: 'repositories#contributors', as: :repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
+    get '/:host_type/:owner/:name/sourcerank', to: 'repositories#sourcerank', as: :repository_sourcerank, format: false, constraints: { :name => /[^\/]+/ }
+    get '/:host_type/:owner/:name/forks', to: 'repositories#forks', as: :repository_forks, format: false, constraints: { :name => /[^\/]+/ }
+    get '/:host_type/:owner/:name/tags', to: 'repositories#tags', as: :repository_tags, format: false, constraints: { :name => /[^\/]+/ }
+    get '/:host_type/:owner/:name/dependency-issues', to: 'repositories#dependency_issues', format: false, constraints: { :name => /[^\/]+/ }
+    get '/:host_type/:owner/:name/tree', to: 'repository_tree#show', as: :repository_tree, format: false, constraints: { :name => /[^\/]+/ }
+
+    get '/:host_type/:owner/:name/web_hooks', to: 'web_hooks#index', as: :repository_web_hooks, format: false, constraints: { :name => /[^\/]+/ }
+    get '/:host_type/:owner/:name/web_hooks/new', to: 'web_hooks#new', as: :new_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+    delete '/:host_type/:owner/:name/web_hooks/:id', to: 'web_hooks#destroy', as: :repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+    patch '/:host_type/:owner/:name/web_hooks/:id', to: 'web_hooks#update', format: false, constraints: { :name => /[^\/]+/ }
+    get '/:host_type/:owner/:name/web_hooks/:id/edit', to: 'web_hooks#edit', as: :edit_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+    post '/:host_type/:owner/:name/web_hooks/:id/test', to: 'web_hooks#test', as: :test_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
+    post '/:host_type/:owner/:name/web_hooks', to: 'web_hooks#create', format: false, constraints: { :name => /[^\/]+/ }
+
+    get '/:host_type', to: 'repositories#index', as: :hosts
+  end
+
+  get '/repos/search', to: 'repositories#search', as: :repo_search
+  get '/repos', to: 'repositories#index', as: :repos
 
   get '/search', to: 'search#index'
 
@@ -150,24 +173,6 @@ Rails.application.routes.draw do
 
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   post '/auth/failure',             to: 'sessions#failure'
-
-  get '/github/:owner/:name', to: 'repositories#show', as: :repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
-  get '/github/:owner/:name/contributors', to: 'repositories#contributors', as: :repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/sourcerank', to: 'repositories#sourcerank', as: :repository_sourcerank, format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/forks', to: 'repositories#forks', as: :repository_forks, format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/tags', to: 'repositories#tags', as: :repository_tags, format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/dependency-issues', to: 'repositories#dependency_issues', format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/tree', to: 'repository_tree#show', as: :repository_tree, format: false, constraints: { :name => /[^\/]+/ }
-
-  get '/github/:owner/:name/web_hooks', to: 'web_hooks#index', as: :repository_web_hooks, format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/web_hooks/new', to: 'web_hooks#new', as: :new_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
-  delete '/github/:owner/:name/web_hooks/:id', to: 'web_hooks#destroy', as: :repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
-  patch '/github/:owner/:name/web_hooks/:id', to: 'web_hooks#update', format: false, constraints: { :name => /[^\/]+/ }
-  get '/github/:owner/:name/web_hooks/:id/edit', to: 'web_hooks#edit', as: :edit_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
-  post '/github/:owner/:name/web_hooks/:id/test', to: 'web_hooks#test', as: :test_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
-  post '/github/:owner/:name/web_hooks', to: 'web_hooks#create', format: false, constraints: { :name => /[^\/]+/ }
-
-  get '/github', to: 'repositories#index', as: :github
 
   get '/about', to: 'pages#about', as: :about
 

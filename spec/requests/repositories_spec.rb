@@ -8,7 +8,7 @@ describe "RepositoriesController", :vcr do
 
   describe "GET /github", type: :request do
     it "renders successfully when logged out" do
-      visit github_path
+      visit hosts_path(host_type: 'github')
       expect(page).to have_content 'Repositories'
     end
   end

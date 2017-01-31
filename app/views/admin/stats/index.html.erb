@@ -39,13 +39,13 @@
         <% else %>Deleted<% end %>
         watched
         <% if sub.repository %>
-        <%= link_to sub.repository, repository_path(sub.repository.owner_name, sub.repository.project_name) %>
+        <%= link_to sub.repository, repository_path(sub.repository.to_param) %>
         <% else %>deleted repo<% end %>
         <br>
         <small>
           <%= timeago_tag(sub.created_at) %>
           <% if sub.repository %>
-            - <%= link_to pluralize(sub.repository.repository_dependencies.count, 'dependencies'), repository_path(sub.repository.owner_name, sub.repository.project_name, anchor: 'dependencies') %>
+            - <%= link_to pluralize(sub.repository.repository_dependencies.count, 'dependencies'), repository_path(sub.repository.to_param.merge(anchor: 'dependencies')) %>
           <% end %>
         </small>
       </div>

@@ -32,7 +32,7 @@ module SourceRank
       one_point_oh:               one_point_oh? ? 1 : 0,
       dependent_projects:         log_scale(dependents_count) * 2,
       dependent_repositories:     log_scale(dependent_repos_count),
-      github_stars:               log_scale(stars),
+      stars:                      log_scale(stars),
       contributors:               (log_scale(contributions_count) / 2.0).ceil,
       subscribers:                (log_scale(subscriptions.length) / 2.0).ceil,
       all_prereleases:            all_prereleases? ? -2 : 0,

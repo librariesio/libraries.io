@@ -14,8 +14,8 @@ class Admin::StatsController < Admin::ApplicationController
     @new_web_hooks      = stats_for(WebHook)
   end
 
-  def github
-    @new_github_users   = stats_for(GithubUser)
+  def repositories
+    @new_users          = stats_for(GithubUser)
     @new_manifests      = stats_for(Manifest)
     @new_readmes        = stats_for(Readme)
     @new_orgs           = stats_for(GithubOrganisation)

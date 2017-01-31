@@ -1,6 +1,6 @@
 <% title "All #{@repository.full_name} tags - Libraries.io" %>
 
-<h1><%= link_to @repository.full_name, repository_path(@repository.owner_name, @repository.project_name) %> tags</h1>
+<h1><%= link_to @repository.full_name, repository_path(@repository.to_param) %> tags</h1>
 <hr>
 <div class="row">
   <div class="col-sm-8">
@@ -19,7 +19,7 @@
       <%= will_paginate @tags, page_links: false %>
     <% else %>
       <p>
-        No tags found, go back to <%= link_to @repository.full_name, repository_path(@repository.owner_name, @repository.project_name) %>.
+        No tags found, go back to <%= link_to @repository.full_name, repository_path(@repository.to_param) %>.
       </p>
     <% end %>
   </div>

@@ -15,7 +15,7 @@ module ApplicationHelper
     [
       ['Relevance', nil],
       ['SourceRank', 'rank'],
-      ['GitHub Stars', 'stars'],
+      ['Stars', 'stars'],
       ['Dependents', 'dependents_count'],
       ['Most Used', 'dependent_repos_count'],
       ['Latest Release', 'latest_release_published_at'],
@@ -70,7 +70,7 @@ module ApplicationHelper
   end
 
   def linked_repo_keywords(keywords)
-    keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/github/search?keywords=#{k}" }.join(', ').html_safe
+    keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/#{current_host}/search?keywords=#{k}" }.join(', ').html_safe
   end
 
   def format_license(license)
@@ -110,13 +110,13 @@ module ApplicationHelper
   def source_path(repository)
     return nil unless repository.fork?
     if repository.source.present?
-      repository_path(repository.source.owner_name, repository.source.project_name)
+      repository_path(repository.source.to_param)
     else
       repository.source_url
     end
   end
 
-  def github_user_title(user)
+  def user_title(user)
     if user.name.present? && user.name.downcase != user.login.downcase
       "#{user.name} (#{user.login})"
     else
@@ -183,7 +183,7 @@ module ApplicationHelper
       })
     when 'Repository'
       hash = record.meta_tags.merge({
-        url: repository_url(record.owner_name, record.project_name)
+        url: repository_url(record.to_param)
       })
     when 'GithubUser', 'GithubOrganisation'
       hash = record.meta_tags.merge({
@@ -206,5 +206,9 @@ module ApplicationHelper
   def usage_cache_length(total)
     return 1 if total <= 0
     (Math.log10(total).round+1)*2
+  end
+
+  def current_host_icon
+    current_host || 'code-fork'
   end
 end

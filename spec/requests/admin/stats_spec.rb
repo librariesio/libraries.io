@@ -22,22 +22,22 @@ describe "Admin::StatsController" do
     end
   end
 
-  describe "GET /admin/stats/github", :vcr, type: :request do
+  describe "GET /admin/stats/repositories", :vcr, type: :request do
     it "denies access when logged out" do
-      get admin_github_stats_path
+      get admin_repositories_stats_path
       expect(response).to redirect_to(login_path)
     end
 
     it "denies access for non-admins" do
       login(user)
-      expect { visit admin_github_stats_path }.to raise_exception ActiveRecord::RecordNotFound
+      expect { visit admin_repositories_stats_path }.to raise_exception ActiveRecord::RecordNotFound
     end
 
     it "renders successfully for admins" do
       mock_is_admin
       login(user)
-      visit admin_github_stats_path
-      expect(page).to have_content 'GitHub Stats'
+      visit admin_repositories_stats_path
+      expect(page).to have_content 'Repo Stats'
     end
   end
 

@@ -1,6 +1,6 @@
 <div class='project' style="border-color: <%= repository.color %>;">
   <h5>
-    <%= link_to repository.full_name, repository_path(repository.owner_name, repository.project_name) %>
+    <%= link_to repository.full_name, repository_path(repository.to_param) %>
     <small>
       <%= fa_icon("lock") if repository.private? %>
       <%= fa_icon("code-fork") if repository.fork? %>
@@ -12,6 +12,7 @@
   </div>
 
   <small>
+    <%= fa_icon repository.host_type.downcase %>
     <% if repository.is_removed? %>
       <%= fa_icon('exclamation-triangle') %> This repository is no longer available
     <% elsif repository.is_deprecated? %>

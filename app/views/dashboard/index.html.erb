@@ -66,9 +66,9 @@
         <% @repos.each do |repository| %>
           <tr>
             <td>
-                <%= link_to image_tag(repository.avatar_url(40), width: 20, height: 20), repository_path(repository.owner_name, repository.project_name) %>
+                <%= link_to image_tag(repository.avatar_url(40), width: 20, height: 20), repository_path(repository.to_param) %>
                 <strong>
-                  <%= link_to repository.full_name, repository_path(repository.owner_name, repository.project_name) %>
+                  <%= link_to repository.full_name, repository_path(repository.to_param) %>
                 </strong>
                 <small>
                   <%= fa_icon("lock") if repository.private? %>

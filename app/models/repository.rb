@@ -49,6 +49,8 @@ class Repository < ApplicationRecord
   scope :with_tags, -> { joins(:tags) }
   scope :without_tags, -> { includes(:tags).where(tags: { repository_id: nil }) }
 
+  scope :host, lambda{ |host_type| where(host_type: formatted_host(host_type)) }
+
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
 
@@ -85,7 +87,7 @@ class Repository < ApplicationRecord
   end
 
   def self.formatted_host(host_type)
-    case host_type
+    case host_type.try(:downcase)
     when 'github'
       'GitHub'
     when 'gitlab'
@@ -109,7 +111,7 @@ class Repository < ApplicationRecord
 
   def meta_tags
     {
-      title: "#{full_name} on GitHub",
+      title: "#{full_name} on #{formatted_host}",
       description: description_with_language,
       image: avatar_url(200)
     }
@@ -117,7 +119,7 @@ class Repository < ApplicationRecord
 
   def description_with_language
     language_text = [language, "repository"].compact.join(' ').with_indefinite_article
-    [description, "#{language_text} on GitHub"].compact.join(' - ')
+    [description, "#{language_text} on #{formatted_host}"].compact.join(' - ')
   end
 
   def normalize_license_and_language
@@ -179,7 +181,11 @@ class Repository < ApplicationRecord
   end
 
   def to_param
-    full_name
+    {
+      host_type: host_type.downcase,
+      owner: owner_name,
+      name: project_name
+    }
   end
 
   def owner_name
@@ -357,7 +363,7 @@ class Repository < ApplicationRecord
       g = Repository.find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
       g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
       g.owner_id = repo_hash[:owner][:id]
-      g.host_type = 'github'
+      g.host_type = 'GitHub'
       g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
       g.uuid = repo_hash[:id] if g.uuid.nil?
       g.license = repo_hash[:license][:key] if repo_hash[:license]

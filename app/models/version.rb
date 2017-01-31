@@ -9,7 +9,7 @@ class Version < ApplicationRecord
   has_many :dependencies, dependent: :delete_all
 
   after_commit :send_notifications_async, on: :create
-  after_commit :update_github_repo_async, on: :create
+  after_commit :update_repository_async, on: :create
   after_commit :save_project
 
   scope :newest_first, -> { order('versions.published_at DESC') }
@@ -20,7 +20,7 @@ class Version < ApplicationRecord
 
   def save_project
     project.try(:forced_save)
-    project.try(:update_github_repo_async)
+    project.try(:update_repository_async)
   end
 
   def platform
@@ -58,8 +58,8 @@ class Version < ApplicationRecord
     VersionNotificationsWorker.perform_async(self.id)
   end
 
-  def update_github_repo_async
-    return unless project.repository
+  def update_repository_async
+    return unless project.repository_id.present?
     GithubDownloadWorker.perform_async(project.repository_id)
   end
 

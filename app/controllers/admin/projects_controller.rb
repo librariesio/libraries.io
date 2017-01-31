@@ -7,7 +7,7 @@ class Admin::ProjectsController < Admin::ApplicationController
     @project = Project.find(params[:id])
     if @project.update_attributes(project_params)
       @project.normalize_licenses
-      @project.update_github_repo_async
+      @project.update_repository_async
       @project.async_sync
       @project.repository.try(:update_all_info_async)
       redirect_to project_path(@project.to_param)

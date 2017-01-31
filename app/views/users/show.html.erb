@@ -1,5 +1,5 @@
-<% title "#{github_user_title(@user)} - Libraries.io" %>
-<% description "Repositories created and contributed to by #{github_user_title(@user)}" %>
+<% title "#{user_title(@user)} - Libraries.io" %>
+<% description "Repositories created and contributed to by #{user_title(@user)}" %>
 <%= content_for :meta, render_meta(@user) %>
 <% cache([@user, 'users:show', 'v3'], :expires_in => 1.day) do %>
 <div class="row">

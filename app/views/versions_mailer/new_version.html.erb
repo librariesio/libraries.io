@@ -14,7 +14,7 @@
 <% if @repos.any? %>
 <p>
   You depend on <%= @project %> in the following repos:
-  <%= @repos.map{|repo| link_to repo.full_name, repository_url(repo.owner_name, repo.project_name) }.to_sentence.html_safe %>
+  <%= @repos.map{|repo| link_to repo.full_name, repository_url(repo.to_param) }.to_sentence.html_safe %>
 </p>
 <% end %>
 
@@ -24,7 +24,7 @@
 
 <% if @project.repository.present? %>
 <p>
-  You can also browse the latest commits on GitHub: <%= link_to @project.repository.commits_url, @project.repository.commits_url %>
+  You can also browse the latest commits on <%= @project.repository.formatted_host %>: <%= link_to @project.repository.commits_url, @project.repository.commits_url %>
 </p>
 <% end %>
 
