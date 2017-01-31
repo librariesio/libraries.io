@@ -18,6 +18,10 @@ module PackageManager
       "http://cran.r-project.org/web/packages/#{name}/#{name}.pdf"
     end
 
+    def self.check_status_url(project)
+      "http://cran.r-project.org/web/packages/#{project.name}/index.html"
+    end
+
     def self.project_names
       html = get_html("https://cran.r-project.org/web/packages/available_packages_by_date.html")
       html.css('tr')[1..-1].map{|tr| tr.css('td')[1].text.strip}

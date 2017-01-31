@@ -32,8 +32,8 @@ namespace :projects do
   task check_status: :environment do
     ['npm', 'rubygems', 'packagist', 'nuget', 'wordpress', 'cpan', 'clojars', 'cocoapods',
     'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
-      Project.platform(platform).not_removed.where('projects.updated_at < ?', 1.week.ago).select('id, name').find_each do |project|
-        CheckStatusWorker.perform_async(project.id, platform, project.name)
+      Project.platform(platform).not_removed.where('projects.updated_at < ?', 1.week.ago).select('id').find_each do |project|
+        CheckStatusWorker.perform_async(project.id)
       end
     end
   end
@@ -61,8 +61,8 @@ desc 'Check project repositoires statuses'
   task check_removed_status: :environment do
     ['npm', 'rubygems', 'packagist', 'wordpress', 'cpan', 'clojars', 'cocoapods',
     'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
-      Project.platform(platform).removed.select('id, name').find_each do |project|
-        CheckStatusWorker.perform_async(project.id, platform, project.name, true)
+      Project.platform(platform).removed.select('id').find_each do |project|
+        CheckStatusWorker.perform_async(project.id, true)
       end
     end
 

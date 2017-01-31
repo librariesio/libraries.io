@@ -2,7 +2,7 @@ class CheckStatusWorker
   include Sidekiq::Worker
   sidekiq_options queue: :low, unique: :until_executed
 
-  def perform(project_id, platform, project_name, removed = false)
-    Project.check_status(project_id, platform, project_name, removed)
+  def perform(project_id, removed = false)
+    Project.find_by_id(project_id).try(:check_status, removed)
   end
 end

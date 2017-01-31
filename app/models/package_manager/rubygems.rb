@@ -23,6 +23,10 @@ module PackageManager
       "gem install #{project.name}" + (version ? " -v #{version}" : "")
     end
 
+    def self.check_status_url(project)
+      "https://rubygems.org/api/v1/versions/#{project.name}"
+    end
+
     def self.project_names
       gems = Marshal.load(Gem.gunzip(get_raw("http://production.cf.rubygems.org/specs.4.8.gz")))
       gems.map(&:first).uniq
