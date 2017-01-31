@@ -1,6 +1,6 @@
 <% title @title %>
 <% content_for :atom, auto_discovery_link_tag(:atom, url_for(params.except(:host).merge(format: :atom, sort: 'created_at', order: 'desc').permit!)) %>
-<%= form_tag github_search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
+<%= form_tag url_for(host_type: current_host), method: :get, class: 'search-form', enforce_utf8: false do |f| %>
   <div class="row">
     <div class='col-sm-8'>
       <div class="input-group input-group-lg">
