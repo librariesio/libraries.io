@@ -70,6 +70,7 @@ gem 'omniauth-bitbucket'
 gem 'chartkick'
 gem 'groupdate'
 gem 'turbolinks'
+gem 'hashie', '3.4.6'
 
 group :development do
   gem 'bundler'
