@@ -11,7 +11,7 @@ class Api::DocsController < ApplicationController
     @dependencies = project_json_response(@project)
     @dependencies[:dependencies] = map_dependencies(@version.dependencies || [])
 
-    @repository = Repository.host('github').find_by_full_name('gruntjs/grunt') || Repository.first.host('github')
+    @repository = Repository.host('GitHub').find_by_full_name('gruntjs/grunt') || Repository.first.host('GitHub')
 
     @repo_dependencies = @repository.as_json({
       except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]

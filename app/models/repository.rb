@@ -49,7 +49,7 @@ class Repository < ApplicationRecord
   scope :with_tags, -> { joins(:tags) }
   scope :without_tags, -> { includes(:tags).where(tags: { repository_id: nil }) }
 
-  scope :host, lambda{ |host_type| where(host_type: host_type.downcase) }
+  scope :host, lambda{ |host_type| where(host_type: formatted_host(host_type)) }
 
   scope :fork, -> { where(fork: true) }
   scope :source, -> { where(fork: false) }
@@ -87,7 +87,7 @@ class Repository < ApplicationRecord
   end
 
   def self.formatted_host(host_type)
-    case host_type
+    case host_type.try(:downcase)
     when 'github'
       'GitHub'
     when 'gitlab'
@@ -182,7 +182,7 @@ class Repository < ApplicationRecord
 
   def to_param
     {
-      host_type: host_type,
+      host_type: host_type.downcase,
       owner: owner_name,
       name: project_name
     }
@@ -363,7 +363,7 @@ class Repository < ApplicationRecord
       g = Repository.find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
       g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
       g.owner_id = repo_hash[:owner][:id]
-      g.host_type = 'github'
+      g.host_type = 'GitHub'
       g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
       g.uuid = repo_hash[:id] if g.uuid.nil?
       g.license = repo_hash[:license][:key] if repo_hash[:license]

@@ -12,7 +12,7 @@
   </div>
 
   <small>
-    <%= fa_icon repository.host_type %>
+    <%= fa_icon repository.host_type.downcase %>
     <% if repository.is_removed? %>
       <%= fa_icon('exclamation-triangle') %> This repository is no longer available
     <% elsif repository.is_deprecated? %>

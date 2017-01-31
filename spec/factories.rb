@@ -92,7 +92,7 @@ FactoryGirl.define do
   end
 
   factory :repository do
-    host_type   'github'
+    host_type   'GitHub'
     full_name   'rails/rails'
     description 'Ruby on Rails'
     language    'Ruby'

@@ -25,7 +25,7 @@
     <h1>
       <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo), user_path(repo.owner_name) %>
       <%= repo %>
-      <%= link_to fa_icon(repo.host_type), repo.url, class: 'tip', title: "View #{repo} on #{repo.formatted_host}" %>
+      <%= link_to fa_icon(repo.host_type.downcase), repo.url, class: 'tip', title: "View #{repo} on #{repo.formatted_host}" %>
       <%= fa_icon("lock", title: 'This repo is private', class: 'tip') if repo.private? %>
       <% if repo.fork? %>
         <% if repo.source.present? || repo.source_name.present? %>
