@@ -201,7 +201,7 @@ GEM
     github_urls (0.2.2)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
-    groupdate (3.1.1)
+    groupdate (3.2.0)
       activesupport (>= 3)
     hashdiff (0.3.2)
     hashie (3.4.6)
