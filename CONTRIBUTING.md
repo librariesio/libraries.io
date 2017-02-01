@@ -20,7 +20,7 @@ Want to contribute to Libraries.io? That's great! Here are a couple of guideline
 
 ## Setup instructions
 
-You can find in-depth instructions to install the correct Ruby version, Postgres, and to set up the database in our [README](https://github.com/librariesio/libraries.io/blob/master/Readme.md#getting-started).
+You can find in-depth instructions to install the correct Ruby version, Postgres, and to set up the database in our [README](https://github.com/librariesio/libraries.io/blob/master/README.md#getting-started).
 
 ## Reporting a bug
 
