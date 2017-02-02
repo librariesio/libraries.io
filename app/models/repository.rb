@@ -299,11 +299,11 @@ class Repository < ApplicationRecord
   end
 
   def download_contributions(token = nil)
-    contributions = github_client(token).contributors(full_name)
-    return if contributions.empty?
+    gh_contributions = github_client(token).contributors(full_name)
+    return if gh_contributions.empty?
     existing_contributions = contributions.includes(:github_user).to_a
     platform = projects.first.try(:platform)
-    contributions.each do |c|
+    gh_contributions.each do |c|
       next unless c['id']
       cont = existing_contributions.find{|cnt| cnt.github_user.try(:github_id) == c.id }
       unless cont
