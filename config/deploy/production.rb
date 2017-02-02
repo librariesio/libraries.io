@@ -1,6 +1,7 @@
 server ENV['WEB_SERVER_1'],     user: ENV['WEB_USER'],     roles: %w{app web}
 server ENV['WEB_SERVER_2'],     user: ENV['WEB_USER'],     roles: %w{app web}
 server ENV['WEB_SERVER_3'],     user: ENV['WEB_USER'],     roles: %w{app web}
+server ENV['WEB_SERVER_4'],     user: ENV['WEB_USER'],     roles: %w{app web}
 server ENV['SIDEKIQ_SERVER_1'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
 server ENV['SIDEKIQ_SERVER_2'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
 server ENV['SIDEKIQ_SERVER_3'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
