@@ -1,6 +1,12 @@
-<% title "Unsung Open Source Heroes - Libraries.io" %>
+<% title "Unseen Open Source Infrastructure - Libraries.io" %>
 <div class="row">
-  <h1><i class="fa fa-trophy"></i> Unsung Open Source Heroes</h1>
+  <h1>
+    <i class="fa fa-trophy"></i>
+    Unseen Open Source Infrastructure
+    <% if params[:platforms].present? %>
+      on <%= link_to platform_name(params[:platforms]), platforms_path(params[:platforms]) %>
+    <% end %>
+  </h1>
 </div>
 <hr>
 
@@ -48,11 +54,11 @@
     <%= render 'adsense/sidebar' %>
     <h3>
       <strong>
-        What's an Unsung Hero?
+        What is Unseen Infrastructure?
       </strong>
     </h3>
     <p>
-      An unsung hero is an open source library that's heavily depended upon by the community but doesn't receive much recognition or attention.
+      Unseen infrastructure are open source libraries that are heavily depended upon by the community but don't receive much recognition or attention.
     </p>
     <p>
       This page shows projects that are depended upon by at least 1,000 other open source repositories but has less than 50 stars.
@@ -72,16 +78,16 @@
             <% @platforms.each do |platform| %>
               <li class='<%= 'active' if platform[0].downcase == params[:platform].try(:downcase) %>'>
                 <% if platform[0].downcase == params[:platform].try(:downcase) %>
-                  <%= link_to platform_name(platform[0]), unsung_heroes_path(platforms: nil, license: params[:license]) %>
+                  <%= link_to platform_name(platform[0]), unseen_infrastructure_path(platforms: nil, license: params[:license]) %>
                 <% else %>
-                  <%= link_to platform_name(platform[0]), unsung_heroes_path(platforms: platform_name(platform[0]), license: params[:license]) %>
+                  <%= link_to platform_name(platform[0]), unseen_infrastructure_path(platforms: platform_name(platform[0]), license: params[:license]) %>
                   <small><%= pluralize number_to_human(platform[1]), 'projects' %></small>
                 <% end %>
               </li>
             <% end %>
             <% if @platform && !@platforms.map{|l| l[0].downcase }.include?(@platform.name.downcase) %>
               <li class='active'>
-                <%= link_to platform_name(@platform.name), unsung_heroes_path(platforms: nil, license: params[:license]) %>
+                <%= link_to platform_name(@platform.name), unseen_infrastructure_path(platforms: nil, license: params[:license]) %>
               </li>
             <% end %>
           </ul>

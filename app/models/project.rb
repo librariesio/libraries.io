@@ -70,7 +70,7 @@ class Project < ApplicationRecord
   scope :unsung_heroes, -> { maintained
                              .with_dependent_repos
                              .with_repo
-                             .where('repositories.stargazers_count < 50')
+                             .where('repositories.stargazers_count < 100')
                              .where('projects.dependent_repos_count > 1000') }
 
   scope :bus_factor, -> { maintained

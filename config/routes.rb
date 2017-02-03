@@ -174,7 +174,7 @@ Rails.application.routes.draw do
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   post '/auth/failure',             to: 'sessions#failure'
 
-  get '/unsung-heroes', to: 'projects#unsung_heroes', as: :unsung_heroes
+  get '/unseen-infrastructure', to: 'projects#unseen_infrastructure', as: :unseen_infrastructure
 
   get '/about', to: 'pages#about', as: :about
 
