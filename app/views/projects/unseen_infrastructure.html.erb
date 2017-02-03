@@ -1,52 +1,46 @@
 <% title "Unseen Open Source Infrastructure - Libraries.io" %>
 <div class="row">
-  <h1>
-    <i class="fa fa-map-signs"></i>
-    Unseen Open Source Infrastructure
-    <% if params[:platforms].present? %>
-      on <%= link_to platform_name(params[:platforms]), platforms_path(params[:platforms]) %>
-    <% end %>
-  </h1>
+  <div class="col-md-12">
+    <h1>
+      <i class="fa fa-map-signs"></i>
+      Unseen Open Source Infrastructure
+      <% if params[:platforms].present? %>
+        on <%= link_to platform_name(params[:platforms]), platforms_path(params[:platforms]) %>
+      <% end %>
+    </h1>
+  </div>
 </div>
 <hr>
 
 <div class="row">
   <div class="col-sm-8">
     <% @projects.each do |project| %>
-      <% cache(['bus-factor', project]) do  %>
-        <div class="row">
-          <div class='project col-xs-8' style="border-color: <%= project.color %>;">
-            <h5>
-              <%= link_to project.name, project_path(project.to_param) %>
-              <small><%= project.latest_release_number %></small>
-            </h5>
+      <div class='project' style="border-color: <%= project.color %>;">
+        <h5>
+          <%= link_to project.name, project_path(project.to_param) %>
+          <small><%= project.latest_release_number %></small>
+        </h5>
 
-            <div class="">
-              <%= truncate project.description, :length => 100 %>
-            </div>
-
-            <small>
-              <%= link_to project.platform_name, platform_path(project.platform.downcase) %>
-              <% if project.language.present? && project.language != project.platform %>
-                - <%= link_to project.language, language_path(project.language) %>
-              <% end %>
-              - <%= link_to project.repository.try(:stargazers_url) do %>
-                <%= number_to_human project.stars %> stars
-              <% end %>
-              -  <%= link_to project_dependent_repos_path(project.to_param) do %>
-                <%= number_to_human(project.dependent_repos_count) %> Dependent Repositories
-              <% end %>
-              - <%= link_to pluralize(project.repository.try(:contributions_count), 'contributor'), project.repository.try(:contributors_url) %>
-            </small>
-          </div>
-          <div class="col-xs-4">
-            <br>
-            <%= link_to project.repository.try(:url), class: 'btn btn-primary' do %>
-            Contribute
-            <% end %>
-          </div>
+        <div class="">
+          <%= truncate project.description, :length => 100 %>
         </div>
-      <% end %>
+
+        <small>
+          <%= link_to project.platform_name, platform_path(project.platform.downcase) %>
+          <% if project.language.present? && project.language != project.platform %>
+            - <%= link_to project.language, language_path(project.language) %>
+          <% end %>
+          - <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+          <%= timeago_tag project.latest_release_published_at %>
+          - <%= link_to project.repository.try(:stargazers_url) do %>
+            <%= number_to_human project.stars %> stars
+          <% end %>
+          -  <%= link_to project_dependent_repos_path(project.to_param) do %>
+            <%= number_to_human(project.dependent_repos_count) %> Dependent Repositories
+          <% end %>
+          - <%= link_to pluralize(project.repository.try(:contributions_count), 'contributor'), project.repository.try(:contributors_url) %>
+        </small>
+      </div>
     <% end %>
     <%= will_paginate @projects, page_links: false %>
   </div>
