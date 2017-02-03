@@ -96,7 +96,7 @@ RSpec.describe ProjectsController, :vcr do
     context "filtered by platform" do
       it "responds successfully" do
         visit unseen_infrastructure_path(platform: 'Rubygems')
-        expect(page).to have_content 'Unseen Open Source Infrastructure'
+        expect(page).to have_content 'Unseen Open Source Infrastructure on'
       end
     end
   end
