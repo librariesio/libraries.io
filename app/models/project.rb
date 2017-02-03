@@ -67,6 +67,12 @@ class Project < ApplicationRecord
 
   scope :indexable, -> { not_removed.includes(:repository) }
 
+  scope :unsung_heroes, -> { maintained
+                             .with_dependent_repos
+                             .with_repo
+                             .where('repositories.stargazers_count < 50')
+                             .where('projects.dependent_repos_count > 1000') }
+
   scope :bus_factor, -> { maintained
                           .joins(:repository)
                           .where('repositories.contributions_count < 6')
