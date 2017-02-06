@@ -8,11 +8,11 @@ module PackageManager
     COLOR = '#244776'
 
     def self.package_link(project, version = nil)
-      "https://atom.io/packages/#{project.name}"
+      "https://atom.io/packages/#{URI.encode(project.name.strip)}"
     end
 
     def self.download_url(name, version = nil)
-      "https://www.atom.io/api/packages/#{name}/versions/#{version}/tarball"
+      "https://www.atom.io/api/packages/#{URI.encode(name.strip)}/versions/#{version}/tarball"
     end
 
     def self.install_instructions(project, version = nil)
@@ -38,7 +38,7 @@ module PackageManager
     end
 
     def self.project(name)
-      get("https://atom.io/api/packages/#{name}")
+      get("https://atom.io/api/packages/#{URI.encode(name.strip)}")
     end
 
     def self.mapping(project)
@@ -62,7 +62,7 @@ module PackageManager
     end
 
     def self.dependencies(name, version, _project)
-      deps = get("https://atom.io/api/packages/#{name}/versions/#{version}")["dependencies"] || []
+      deps = get("https://atom.io/api/packages/#{URI.encode(name.strip)}/versions/#{version}")["dependencies"] || []
       deps.map do |dep_name,req|
         {
           project_name: dep_name,
