@@ -46,6 +46,8 @@ $('input[name="subscription[include_prerelease]"]').on('change',function(){
   $(this).parents('form').submit();
 });
 
+$(document).ready(stickFooter);
+
 $(window).on('resize', stickFooter);
 
 function stickFooter() {
