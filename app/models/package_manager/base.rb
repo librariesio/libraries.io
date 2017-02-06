@@ -225,7 +225,7 @@ module PackageManager
     end
 
     def self.request(url, options = {})
-      connection = Faraday.new URI.encode(url.strip), options do |builder|
+      connection = Faraday.new url.strip, options do |builder|
         builder.use :http_cache, store: Rails.cache, logger: Rails.logger, shared_cache: false, serializer: Marshal
         builder.use FaradayMiddleware::Gzip
         builder.use FaradayMiddleware::FollowRedirects, limit: 3
