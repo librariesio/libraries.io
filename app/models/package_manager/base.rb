@@ -84,8 +84,9 @@ module PackageManager
 
     def self.save(project)
       return unless project.present?
-      mapped_project = mapping(project).delete_if { |_key, value| value.blank? }
-      return false unless mapped_project
+      mapped_project = mapping(project)
+      mapped_project = mapped_project.delete_if { |_key, value| value.blank? } if mapped_project.present?
+      return false unless mapped_project.present?
       puts "Saving #{mapped_project[:name]}"
       dbproject = Project.find_or_initialize_by({:name => mapped_project[:name], :platform => self.name.demodulize})
       if dbproject.new_record?
