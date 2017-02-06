@@ -54,7 +54,11 @@ class GithubOrganisation < ApplicationRecord
 
       org = nil
       org_by_id = GithubOrganisation.find_by_github_id(r[:id])
-      org_by_login = GithubOrganisation.where("lower(login) = ?", r[:login].downcase).first
+      if r[:login]
+        org_by_login = GithubOrganisation.where("lower(login) = ?", r[:login].downcase).first
+      else
+        org_by_login = nil
+      end
 
       if org_by_id # its fine
         if org_by_id.login.try(:downcase) == r[:login].downcase
@@ -104,7 +108,7 @@ class GithubOrganisation < ApplicationRecord
   end
 
   def download_from_github_by(id_or_login)
-    update_attributes(github_client.org(github_id).to_hash.slice(:login, :name, :email, :blog, :location, :bio))
+    GithubOrganisation.create_from_github(github_client.org(id_or_login))
   rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
