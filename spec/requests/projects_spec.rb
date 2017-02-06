@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe ProjectsController, :vcr do
   before :each do
-    PackageManager::Rubygems::URL
     @project = create(:project)
     version = create(:version, project: @project)
     create(:dependency, version: version)
@@ -91,13 +90,6 @@ RSpec.describe ProjectsController, :vcr do
     it "responds successfully", type: :request do
       visit unseen_infrastructure_path
       expect(page).to have_content 'Unseen Open Source Infrastructure'
-    end
-
-    context "filtered by platform" do
-      it "responds successfully" do
-        visit unseen_infrastructure_path(platform: 'Rubygems')
-        expect(page).to have_content 'Unseen Open Source Infrastructure on'
-      end
     end
   end
 end
