@@ -242,7 +242,7 @@ class Repository < ApplicationRecord
       self.uuid = r[:id] unless self.uuid == r[:id]
        if self.full_name.downcase != r[:full_name].downcase
          clash = Repository.where('lower(full_name) = ?', r[:full_name].downcase).first
-         if clash && !clash.update_from_github(token)
+         if clash && (!clash.update_from_github(token) || clash.status == "Removed")
            clash.destroy
          end
          self.full_name = r[:full_name]
