@@ -64,7 +64,7 @@ class GithubUser < ApplicationRecord
   end
 
   def download_from_github_by(id_or_login)
-    create_from_github(id_or_login)
+    update_attributes(github_client.user(id_or_login).to_hash.slice(:login, :name, :company, :blog, :location, :email, :bio, :followers, :following))
   rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
