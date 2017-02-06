@@ -43,13 +43,18 @@ module PackageManager
     def self.mapping(project)
       return false unless project["versions"].present?
       latest_version = project["versions"].to_a.last[1]
+
+      repo = latest_version.fetch('repository', {})
+      repo = repo[0] if repo.is_a?(Array)
+      repo_url = repo.fetch('url')
+
       {
         :name => project["name"],
         :description => latest_version["description"],
         :homepage => project["homepage"],
         :keywords_array => Array.wrap(latest_version.fetch("keywords", [])),
         :licenses => licenses(latest_version),
-        :repository_url => repo_fallback(latest_version.fetch('repository', {})['url'],project["homepage"])
+        :repository_url => repo_fallback(repo_url, project["homepage"])
       }
     end
 
