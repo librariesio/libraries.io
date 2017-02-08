@@ -269,7 +269,7 @@ GEM
     octokit (4.6.2)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (2.18.1)
-    omniauth (1.4.0)
+    omniauth (1.4.1)
       hashie (>= 1.2, < 4)
       rack (>= 1.0, < 3)
     omniauth-bitbucket (0.0.2)
