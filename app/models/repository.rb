@@ -246,9 +246,9 @@ class Repository < ApplicationRecord
     when 'GitHub'
       update_from_github(token)
     when 'GitLab'
-
+      update_from_gitlab(token)
     when 'Bitbucket'
-
+      update_from_bitbucket(token)
     end
   end
 
