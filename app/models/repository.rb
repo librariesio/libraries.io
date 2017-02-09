@@ -343,7 +343,7 @@ class Repository < ApplicationRecord
     when 'GitLab'
       create_from_gitlab(full_name, token)
     when 'Bitbucket'
-      raise 'Not Implemented yet'
+      create_from_bitbucket(full_name, token)
     end
   end
 
