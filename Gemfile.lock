@@ -9,6 +9,26 @@ GIT
       pg_array_parser (~> 0.0.9)
 
 GIT
+  remote: https://github.com/librariesio/bitbucket
+  revision: 0de38caad959d37bc228bab837e1a39fe04049a8
+  specs:
+    bitbucket_rest_api (0.1.7)
+      faraday (~> 0.10.1)
+      faraday_middleware (~> 0.11)
+      hashie
+      multi_json (>= 1.7.5, < 2.0)
+      nokogiri (>= 1.5.2)
+      simple_oauth
+
+GIT
+  remote: https://github.com/librariesio/gitlab
+  revision: a060f1939bb776d96e9e9c76a2cf5543f22755f0
+  specs:
+    gitlab (3.7.0)
+      httparty
+      terminal-table
+
+GIT
   remote: https://github.com/librariesio/payola
   revision: 7d4026856edf0cbafc8a188748ba96ced7bad99b
   specs:
@@ -200,9 +220,6 @@ GEM
     gems (1.0.0)
       json
     github_urls (0.2.2)
-    gitlab (3.6.1)
-      httparty
-      terminal-table
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     groupdate (3.2.0)
@@ -424,6 +441,7 @@ GEM
     simple_form (3.4.0)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
+    simple_oauth (0.3.1)
     simplecov (0.13.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -500,6 +518,7 @@ PLATFORMS
 
 DEPENDENCIES
   api-pagination
+  bitbucket_rest_api!
   bloomfilter-rb
   bootstrap-sass
   brakeman
@@ -533,7 +552,7 @@ DEPENDENCIES
   gemoji
   gems
   github_urls
-  gitlab
+  gitlab!
   groupdate
   highscore
   hiredis

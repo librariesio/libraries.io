@@ -70,7 +70,8 @@ gem 'omniauth-bitbucket'
 gem 'chartkick'
 gem 'groupdate'
 gem 'turbolinks'
-gem 'gitlab'
+gem 'gitlab', git: 'https://github.com/librariesio/gitlab'
+gem 'bitbucket_rest_api', git: 'https://github.com/librariesio/bitbucket'
 
 group :development do
   gem 'bundler'
