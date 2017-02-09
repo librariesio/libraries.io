@@ -6,6 +6,10 @@ class Repository < ApplicationRecord
   include RepoTags
   include RepositorySourceRank
 
+  include GithubRepository
+  include GitlabRepository
+  include BitbucketRepository
+
   IGNORABLE_GITHUB_EXCEPTIONS = [Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError]
 
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
@@ -13,7 +17,7 @@ class Repository < ApplicationRecord
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
    :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
    :forks_count, :mirror_url, :open_issues_count, :default_branch,
-   :subscribers_count, :private]
+   :subscribers_count, :private, :logo_url, :pull_requests_enabled, :scm, ]
 
   has_many :projects
   has_many :contributions, dependent: :delete_all
@@ -101,14 +105,6 @@ class Repository < ApplicationRecord
     Repository.formatted_host(host_type)
   end
 
-  def github_contributions_count
-    contributions_count # legacy alias
-  end
-
-  def github_id
-    uuid # legacy alias
-  end
-
   def meta_tags
     {
       title: "#{full_name} on #{formatted_host}",
@@ -157,23 +153,19 @@ class Repository < ApplicationRecord
   end
 
   def owner
+    return nil unless host_type == 'GitHub'
     github_organisation_id.present? ? github_organisation : github_user
   end
 
   def download_owner
-    return if owner && owner.login == owner_name
-    o = github_client.user(owner_name)
-    if o.type == "Organization"
-      go = GithubOrganisation.create_from_github(owner_id.to_i)
-      if go
-        self.github_organisation_id = go.id
-        save
-      end
-    else
-      GithubUser.create_from_github(o)
+    case host_type
+    when 'GitHub'
+      download_github_owner
+    when 'GitLab'
+
+    when 'Bitbucket'
+
     end
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
   end
 
   def to_s
@@ -209,15 +201,25 @@ class Repository < ApplicationRecord
   end
 
   def avatar_url(size = 60)
-    "https://avatars.githubusercontent.com/u/#{owner_id}?size=#{size}"
+    case host_type
+    when 'GitHub'
+      avatar = github_avatar_url(size)
+    when 'GitLab'
+      avatar = gitlab_avatar_url(size)
+    when 'Bitbucket'
+      avatar = bitbucket_avatar_url(size)
+    end
+    return fallback_avatar_url(size) if avatar.blank?
+    avatar
+  end
+
+  def fallback_avatar_url(size = 60)
+    hash = Digest::MD5.hexdigest("#{host_type}-#{full_name}")
+    "https://www.gravatar.com/avatar/#{hash}?s=#{size}&f=y&d=retro"
   end
 
   def load_dependencies_tree(date = nil)
     RepositoryTreeResolver.new(self, date).load_dependencies_tree
-  end
-
-  def github_client(token = nil)
-    AuthToken.fallback_client(token)
   end
 
   def id_or_name
@@ -235,38 +237,25 @@ class Repository < ApplicationRecord
     nil
   end
 
-  def update_from_github(token = nil)
-    begin
-      r = AuthToken.new_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
-      return unless r.present?
-      self.uuid = r[:id] unless self.uuid == r[:id]
-       if self.full_name.downcase != r[:full_name].downcase
-         clash = Repository.where('lower(full_name) = ?', r[:full_name].downcase).first
-         if clash && (!clash.update_from_github(token) || clash.status == "Removed")
-           clash.destroy
-         end
-         self.full_name = r[:full_name]
-       end
-      self.owner_id = r[:owner][:id]
-      self.license = Project.format_license(r[:license][:key]) if r[:license]
-      self.source_name = r[:parent][:full_name] if r[:fork]
-      assign_attributes r.slice(*API_FIELDS)
-      save! if self.changed?
-    rescue Octokit::NotFound
-      update_attribute(:status, 'Removed') if !self.private?
-    rescue *IGNORABLE_GITHUB_EXCEPTIONS
-      nil
-    end
+  def update_all_info_async(token = nil)
+    RepositoryDownloadWorker.perform_async(self.id, token)
   end
 
-  def update_all_info_async(token = nil)
-    GithubDownloadWorker.perform_async(self.id, token)
+  def update_from_repository(token = nil)
+    case host_type
+    when 'GitHub'
+      update_from_github(token)
+    when 'GitLab'
+
+    when 'Bitbucket'
+
+    end
   end
 
   def update_all_info(token = nil)
     token ||= AuthToken.token
     previous_pushed_at = self.pushed_at
-    update_from_github(token)
+    update_from_repository(token)
     download_owner
     download_fork_source(token)
     if (previous_pushed_at.nil? && self.pushed_at) || (self.pushed_at && previous_pushed_at < self.pushed_at)
@@ -347,23 +336,25 @@ class Repository < ApplicationRecord
     nil
   end
 
-  def self.create_from_github(full_name, token = nil)
-    github_client = AuthToken.new_client(token)
-    repo_hash = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
-    return false if repo_hash.nil? || repo_hash.empty?
-    create_from_hash(repo_hash)
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
+  def self.create_from_host(host_type, full_name, token = nil)
+    case host_type
+    when 'GitHub'
+      create_from_github(full_name, token)
+    when 'GitLab'
+      create_from_gitlab(full_name, token)
+    when 'Bitbucket'
+      raise 'Not Implemented yet'
+    end
   end
 
   def self.create_from_hash(repo_hash)
-    repo_hash = repo_hash.to_hash
+    repo_hash = repo_hash.to_hash.with_indifferent_access
     ActiveRecord::Base.transaction do
       g = Repository.find_by(uuid: repo_hash[:id])
       g = Repository.find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
       g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
       g.owner_id = repo_hash[:owner][:id]
-      g.host_type = 'GitHub'
+      g.host_type = repo_hash[:host_type] || 'GitHub'
       g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
       g.uuid = repo_hash[:id] if g.uuid.nil?
       g.license = repo_hash[:license][:key] if repo_hash[:license]
@@ -431,7 +422,7 @@ class Repository < ApplicationRecord
     token ||= AuthToken.token
     repository = Repository.find_by_full_name(repo_name)
     if repository
-      repository.update_from_github
+      repository.update_from_repository(token)
     else
       Repository.create_from_github(repo_name, token)
     end

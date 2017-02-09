@@ -195,6 +195,7 @@
           </td>
         </tr>
         <% end %>
+        <% if repo.size %>
         <tr>
           <td>
             Size
@@ -203,6 +204,7 @@
             <strong><%= number_to_human_size repo.size*1000 %></strong>
           </td>
         </tr>
+        <% end %>
         <tr>
           <td>
             Stars
@@ -219,14 +221,16 @@
             <strong><%= link_to number_with_delimiter(repo.forks_count || 0), repo.forks_url %></strong>
           </td>
         </tr>
+        <% if repo.subscribers_count.present? %>
         <tr>
           <td>
             Watchers
           </td>
           <td>
-            <strong><%= link_to number_with_delimiter(repo.subscribers_count || 0), repo.watchers_url %></strong>
+            <strong><%= link_to number_with_delimiter(repo.subscribers_count), repo.watchers_url %></strong>
           </td>
         </tr>
+        <% end %>
         <tr>
           <td>
             Open issues

@@ -4,6 +4,10 @@ class Project < ApplicationRecord
   include Status
   include Releases
 
+  include GithubProject
+  include GitlabProject
+  include BitbucketProject
+
   HAS_DEPENDENCIES = false
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
   API_FIELDS = [:name, :platform, :description, :language, :homepage,
@@ -167,7 +171,7 @@ class Project < ApplicationRecord
   end
 
   def owner
-    return nil unless repository
+    return nil unless repository && repository.host_type == 'GitHub'
     GithubUser.visible.find_by_login repository.owner_name
   end
 
@@ -242,7 +246,7 @@ class Project < ApplicationRecord
   end
 
   def self.undownloaded_repos
-    with_github_url.without_repo
+    with_github_url.or(with_gitlab_url).or(with_bitbucket_url).without_repo
   end
 
   def self.license(license)
@@ -323,7 +327,17 @@ class Project < ApplicationRecord
   end
 
   def update_repository_async
-    GithubProjectWorker.perform_async(self.id) if github_name_with_owner.present?
+    RepositoryProjectWorker.perform_async(self.id) if known_repository_host_name.present?
+  end
+
+  def known_repository_host_name
+    github_name_with_owner || bitbucket_name_with_owner || gitlab_name_with_owner
+  end
+
+  def known_repository_host
+    return 'GitHub' if github_name_with_owner.present?
+    return 'Bitbucket' if bitbucket_name_with_owner
+    return 'GitLab' if gitlab_name_with_owner
   end
 
   def can_have_dependencies?
@@ -340,24 +354,14 @@ class Project < ApplicationRecord
     can_have_versions? ? 'releases' : 'tags'
   end
 
-  def update_github_repo
-    name_with_owner = github_name_with_owner
-    return false unless name_with_owner.present?
-    g = Repository.create_from_github(name_with_owner)
-    return if g.nil?
+  def update_repository
+    return false unless known_repository_host_name.present?
+    r = Repository.create_from_host(known_repository_host, known_repository_host_name)
+    return if r.nil?
     unless self.new_record?
-      self.repository_id = g.id
+      self.repository_id = r.id
       self.forced_save
     end
-  end
-
-  def github_url
-    return nil if repository_url.blank? || github_name_with_owner.blank?
-    "https://github.com/#{github_name_with_owner}"
-  end
-
-  def github_name_with_owner
-    GithubUrls.parse(repository_url) || GithubUrls.parse(homepage)
   end
 
   def subscribed_repos(user)

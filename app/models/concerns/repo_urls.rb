@@ -27,12 +27,23 @@ module RepoUrls
     "#{url}/graphs/contributors"
   end
 
+  def host_url
+    case host_type
+    when 'GitHub'
+      'https://github.com'
+    when 'GitLab'
+      'https://gitlab.com'
+    when 'Bitbucket'
+      'https://bitbucket.org'
+    end
+  end
+
   def url
-    "https://github.com/#{full_name}"
+    "#{host_url}/#{full_name}"
   end
 
   def source_url
-    "https://github.com/#{source_name}"
+    "#{host_url}/#{source_name}"
   end
 
   def blob_url

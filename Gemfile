@@ -70,6 +70,7 @@ gem 'omniauth-bitbucket'
 gem 'chartkick'
 gem 'groupdate'
 gem 'turbolinks'
+gem 'gitlab'
 
 group :development do
   gem 'bundler'

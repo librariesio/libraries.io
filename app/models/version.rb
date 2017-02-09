@@ -60,7 +60,7 @@ class Version < ApplicationRecord
 
   def update_repository_async
     return unless project.repository_id.present?
-    GithubDownloadWorker.perform_async(project.repository_id)
+    RepositoryDownloadWorker.perform_async(project.repository_id)
   end
 
   def send_notifications

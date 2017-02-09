@@ -53,7 +53,7 @@ namespace :github do
   task update_trending: :environment do
     trending = Repository.open_source.pushed.maintained.recently_created.hacker_news.limit(30).select('id')
     brand_new = Repository.open_source.pushed.maintained.recently_created.order('created_at DESC').limit(60).select('id')
-    (trending + brand_new).uniq.each{|g| GithubDownloadWorker.perform_async(g.id) }
+    (trending + brand_new).uniq.each{|g| RepositoryDownloadWorker.perform_async(g.id) }
   end
 
   desc 'Download all github users'
