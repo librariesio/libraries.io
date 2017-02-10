@@ -28,11 +28,25 @@ module BitbucketRepository
         owner: {},
         homepage: project.website,
         fork: project.fork_of,
-        created_at: project.utc_created_on,
-        updated_at: project.utc_last_updated,
+        created_at: project.created_on,
+        updated_at: project.updated_on,
         stargazers_count: project.followers_count,
         private: project.is_private
       })
+    end
+
+    def recursive_bitbucket_repos(url)
+      r = Typhoeus::Request.new(url,
+        method: :get,
+        headers: { 'Accept' => 'application/json' }).run
+
+      json = Oj.load(r.body)
+
+      json['values'].each do |repo|
+        CreateRepositoryWorker.perform_async('Bitbucket', repo['full_name'])
+      end
+      puts json['next']
+      recursive_bitbucket_repos(json['next']) if json['values'].any? && json['next']
     end
   end
 
