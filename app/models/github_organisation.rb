@@ -115,7 +115,7 @@ class GithubOrganisation < ApplicationRecord
 
   def download_repos
     github_client.org_repos(login).each do |repo|
-      CreateRepositoryWorker.perform_async(repo.full_name)
+      CreateRepositoryWorker.perform_async('GitHub', repo.full_name)
     end
   rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
