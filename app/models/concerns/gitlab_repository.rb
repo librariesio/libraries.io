@@ -35,6 +35,21 @@ module GitlabRepository
         logo_url: project.avatar_url
       })
     end
+
+    def self.recursive_gitlab_repos(page_number = 1)
+      r = Typhoeus.get("https://gitlab.com/explore/projects?&page=#{page_number}&sort=created_asc")
+      page = Nokogiri::HTML(r.body)
+      names = page.css('a.project').map{|project| project.css('span')[0].text.delete(" \t\r\n") }
+      names.each do |name|
+        p name
+        CreateRepositoryWorker.perform_async('GitLab', name)
+      end
+      if names.any?
+        p page_number
+        REDIS.set 'gitlab-page', page_number
+        recursive_gitlab_repos(page_number.to_i + 1)
+      end
+    end
   end
 
   def gitlab_client(token = nil)

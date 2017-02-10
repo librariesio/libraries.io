@@ -35,7 +35,7 @@ module BitbucketRepository
       })
     end
 
-    def recursive_bitbucket_repos(url)
+    def self.recursive_bitbucket_repos(url)
       r = Typhoeus::Request.new(url,
         method: :get,
         headers: { 'Accept' => 'application/json' }).run
