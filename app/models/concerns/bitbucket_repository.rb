@@ -2,7 +2,7 @@ module BitbucketRepository
   extend ActiveSupport::Concern
 
   included do
-    IGNORABLE_BITBUCKET_EXCEPTIONS = []
+    IGNORABLE_BITBUCKET_EXCEPTIONS = [BitBucket::Error::NotFound]
 
     def self.create_from_bitbucket(full_name, token = nil)
       repo_hash = map_from_bitbucket(full_name, token)
@@ -61,8 +61,8 @@ module BitbucketRepository
       self.source_name = r[:parent][:full_name] if r[:fork]
       assign_attributes r.slice(*API_FIELDS)
       save! if self.changed?
-    # rescue Octokit::NotFound
-    #   update_attribute(:status, 'Removed') if !self.private?
+    rescue BitBucket::Error::NotFound
+      update_attribute(:status, 'Removed') if !self.private?
     rescue *IGNORABLE_BITBUCKET_EXCEPTIONS
       nil
     end
