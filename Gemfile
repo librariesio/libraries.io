@@ -72,6 +72,11 @@ gem 'groupdate'
 gem 'turbolinks'
 gem 'gitlab', git: 'https://github.com/librariesio/gitlab'
 gem 'bitbucket_rest_api', git: 'https://github.com/librariesio/bitbucket'
+gem 'github-markup'
+gem 'redcarpet'
+gem 'RedCloth'
+gem 'rdoc'
+gem 'asciidoctor'
 
 group :development do
   gem 'bundler'

@@ -68,6 +68,17 @@ module GitlabRepository
     logo_url
   end
 
+  def download_gitlab_readme(token = nil)
+    # find, download and format contents of readme from gitlab
+    if readme.nil?
+      create_readme(contents)
+    else
+      readme.update_attributes(contents)
+    end
+  rescue *IGNORABLE_GITLAB_EXCEPTIONS
+    nil
+  end
+
   def update_from_gitlab(token = nil)
     begin
       r = Repository.map_from_gitlab(self.full_name)

@@ -227,14 +227,14 @@ class Repository < ApplicationRecord
   end
 
   def download_readme(token = nil)
-    contents = {html_body: github_client(token).readme(full_name, accept: 'application/vnd.github.V3.html')}
-    if readme.nil?
-      create_readme(contents)
-    else
-      readme.update_attributes(contents)
+    case host_type
+    when 'GitHub'
+      download_github_readme(token)
+    when 'GitLab'
+      download_gitlab_readme(token)
+    when 'Bitbucket'
+      download_bitbucket_readme(token)
     end
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
   end
 
   def update_all_info_async(token = nil)
