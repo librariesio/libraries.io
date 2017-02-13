@@ -162,9 +162,9 @@ class Repository < ApplicationRecord
     when 'GitHub'
       download_github_owner
     when 'GitLab'
-
+      # not implemented yet
     when 'Bitbucket'
-
+      # not implemented yet
     end
   end
 
@@ -270,8 +270,14 @@ class Repository < ApplicationRecord
   end
 
   def download_fork_source(token = nil)
-    return true unless self.fork? && self.source.nil?
-    Repository.create_from_github(source_name, token)
+    case host_type
+    when 'GitHub'
+      download_github_fork_source(token)
+    when 'GitLab'
+      download_gitlab_fork_source(token)
+    when 'Bitbucket'
+      download_bitbucket_fork_source(token)
+    end
   end
 
   def download_forks_async(token = nil)

@@ -27,11 +27,14 @@ module BitbucketRepository
         host_type: 'Bitbucket',
         owner: {},
         homepage: project.website,
-        fork: project.fork_of,
+        fork: project.parent.present?,
         created_at: project.created_on,
         updated_at: project.updated_on,
         stargazers_count: project.followers_count,
-        private: project.is_private
+        private: project.is_private,
+        parent: {
+          full_name: project.fetch('parent', {}).fetch('full_name', nil)
+        }
       })
     end
 
@@ -54,13 +57,18 @@ module BitbucketRepository
     Repository.bitbucket_client(token)
   end
 
+  def download_bitbucket_fork_source(token = nil)
+    return true unless self.fork? && self.source.nil?
+    Repository.create_from_bitbucket(source_name, token)
+  end
+
   def bitbucket_avatar_url(size = 60)
     "https://bitbucket.org/#{full_name}/avatar/#{size}"
   end
 
   def update_from_bitbucket(token = nil)
     begin
-      r = map_from_bitbucket(self.full_name)
+      r = Repository.map_from_bitbucket(self.full_name)
       return unless r.present?
       self.uuid = r[:id] unless self.uuid == r[:id]
        if self.full_name.downcase != r[:full_name].downcase
@@ -73,7 +81,7 @@ module BitbucketRepository
       self.owner_id = r[:owner][:id]
       self.license = Project.format_license(r[:license][:key]) if r[:license]
       self.source_name = r[:parent][:full_name] if r[:fork]
-      assign_attributes r.slice(*API_FIELDS)
+      assign_attributes r.slice(*Repository::API_FIELDS)
       save! if self.changed?
     rescue BitBucket::Error::NotFound
       update_attribute(:status, 'Removed') if !self.private?

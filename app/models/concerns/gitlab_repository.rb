@@ -24,7 +24,7 @@ module GitlabRepository
         host_type: 'GitLab',
         full_name: project.path_with_namespace,
         owner: {},
-        fork: !!project.forked_from_project,
+        fork: project.forked_from_project.present?,
         updated_at: project.last_activity_at,
         stargazers_count: project.star_count,
         has_issues: project.issues_enabled,
@@ -32,7 +32,10 @@ module GitlabRepository
         scm: 'git',
         private: !project.public,
         pull_requests_enabled: project.merge_requests_enabled,
-        logo_url: project.avatar_url
+        logo_url: project.avatar_url,
+        parent: {
+          full_name: project.forked_from_project.try(:path_with_namespace)
+        }
       })
     end
 
@@ -52,6 +55,11 @@ module GitlabRepository
     end
   end
 
+  def download_gitlab_fork_source(token = nil)
+    return true unless self.fork? && self.source.nil?
+    Repository.create_from_gitlab(source_name, token)
+  end
+
   def gitlab_client(token = nil)
     Repository.gitlab_client(token)
   end
@@ -62,7 +70,7 @@ module GitlabRepository
 
   def update_from_gitlab(token = nil)
     begin
-      r = map_from_gitlab(self.full_name)
+      r = Repository.map_from_gitlab(self.full_name)
       return unless r.present?
       self.uuid = r[:id] unless self.uuid == r[:id]
        if self.full_name.downcase != r[:full_name].downcase
@@ -75,7 +83,7 @@ module GitlabRepository
       self.owner_id = r[:owner][:id]
       self.license = Project.format_license(r[:license][:key]) if r[:license]
       self.source_name = r[:parent][:full_name] if r[:fork]
-      assign_attributes r.slice(*API_FIELDS)
+      assign_attributes r.slice(*Repository::API_FIELDS)
       save! if self.changed?
     rescue Gitlab::Error::NotFound
       update_attribute(:status, 'Removed') if !self.private?
