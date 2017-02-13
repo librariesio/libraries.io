@@ -20,7 +20,7 @@ module BitbucketRepository
       user_name, repo_name = full_name.split('/')
       project = client.repos.get(user_name, repo_name)
 
-      repo_hash = project.to_hash.with_indifferent_access.slice(:description, :language, :full_name, :name, :forks_count, :has_wiki, :has_issues, :scm, :size)
+      repo_hash = project.to_hash.with_indifferent_access.slice(:description, :language, :full_name, :name, :forks_count, :has_wiki, :has_issues, :scm)
 
       repo_hash.merge!({
         id: project.uuid,
@@ -32,6 +32,7 @@ module BitbucketRepository
         updated_at: project.updated_on,
         stargazers_count: project.followers_count,
         private: project.is_private,
+        size: project.size/1000,
         parent: {
           full_name: project.fetch('parent', {}).fetch('full_name', nil)
         }
