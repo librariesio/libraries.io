@@ -65,10 +65,10 @@ module BitbucketRepository
 
   def download_bitbucket_readme(token = nil)
     user_name, repo_name = full_name.split('/')
-    files = bitbucket_client.repos.sources.list(user_name, repo_name, 'master', '/')
+    files = bitbucket_client(token).repos.sources.list(user_name, repo_name, 'master', '/')
     paths =  files.files.map(&:path)
     readme_path = paths.select{|path| path.match(/^readme/i) }.first
-    raw_content = bitbucket_client.repos.sources.list(user_name, repo_name, 'master', readme_path).data
+    raw_content = bitbucket_client(token).repos.sources.list(user_name, repo_name, 'master', readme_path).data
     contents = {
       html_body: GitHub::Markup.render(readme_path, raw_content)
     }
