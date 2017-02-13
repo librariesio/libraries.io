@@ -3,7 +3,6 @@ class Repository < ApplicationRecord
   include Status
   include RepoUrls
   include RepoManifests
-  include RepoTags
   include RepositorySourceRank
 
   include GithubRepository
@@ -277,6 +276,17 @@ class Repository < ApplicationRecord
       download_gitlab_fork_source(token)
     when 'Bitbucket'
       download_bitbucket_fork_source(token)
+    end
+  end
+
+  def download_tags(token = nil)
+    case host_type
+    when 'GitHub'
+      download_github_tags(token)
+    when 'GitLab'
+      download_gitlab_tags(token)
+    when 'Bitbucket'
+      download_bitbucket_tags(token)
     end
   end
 

@@ -82,6 +82,23 @@ module BitbucketRepository
     nil
   end
 
+  def download_bitbucket_tags(token = nil)
+    user_name, repo_name = full_name.split('/')
+    remote_tags = bitbucket_client(token).repos.tags(user_name, repo_name)
+    existing_tag_names = tags.pluck(:name)
+    remote_tags.each do |name, data|
+      next if existing_tag_names.include?(name)
+      tags.create({
+        name: name,
+        kind: "tag",
+        sha: data.raw_node,
+        published_at: data.utctimestamp
+      })
+    end
+  rescue *IGNORABLE_BITBUCKET_EXCEPTIONS
+    nil
+  end
+
   def bitbucket_avatar_url(size = 60)
     "https://bitbucket.org/#{full_name}/avatar/#{size}"
   end
