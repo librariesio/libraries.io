@@ -7,11 +7,11 @@ class Readme < ApplicationRecord
   after_commit :check_unmaintained
 
   def to_s
-    html_body
+    @body ||= Nokogiri::HTML(html_body).css('body').try(:inner_html)
   end
 
   def plain_text
-    @plain_text ||= Nokogiri::HTML(html_body).text
+    @plain_text ||= Nokogiri::HTML(html_body).try(:text)
   end
 
   def check_unmaintained
