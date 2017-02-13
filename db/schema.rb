@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170126131154) do
+ActiveRecord::Schema.define(version: 20170213104917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -322,7 +322,7 @@ ActiveRecord::Schema.define(version: 20170126131154) do
     t.integer  "open_issues_count"
     t.string   "default_branch"
     t.integer  "subscribers_count"
-    t.integer  "uuid"
+    t.string   "uuid"
     t.string   "source_name"
     t.string   "license"
     t.integer  "github_organisation_id"
