@@ -16,7 +16,7 @@ class Repository < ApplicationRecord
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
    :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
    :forks_count, :mirror_url, :open_issues_count, :default_branch,
-   :subscribers_count, :private, :logo_url, :pull_requests_enabled, :scm, ]
+   :subscribers_count, :private, :logo_url, :pull_requests_enabled, :scm]
 
   has_many :projects
   has_many :contributions, dependent: :delete_all
@@ -252,18 +252,15 @@ class Repository < ApplicationRecord
   end
 
   def update_all_info(token = nil)
-    token ||= AuthToken.token
-    previous_pushed_at = self.pushed_at
+    token ||= AuthToken.token if host_type == 'GitHub'
     update_from_repository(token)
     download_owner
     download_fork_source(token)
-    if (previous_pushed_at.nil? && self.pushed_at) || (self.pushed_at && previous_pushed_at < self.pushed_at)
-      download_readme(token)
-      download_tags(token)
-      download_contributions(token)
-      download_manifests(token)
-      # download_issues(token)
-    end
+    download_readme(token)
+    download_tags(token)
+    download_contributions(token)
+    download_manifests(token)
+    # download_issues(token)
     save_projects
     update_attributes(last_synced_at: Time.now)
   end
@@ -290,39 +287,26 @@ class Repository < ApplicationRecord
     end
   end
 
-  def download_forks_async(token = nil)
-    GithubDownloadForkWorker.perform_async(self.id, token)
-  end
-
-  def download_forks(token = nil)
-    return true if fork?
-    return true unless forks_count && forks_count > 0 && forks_count < 100
-    return true if forks_count == forked_repositories.count
-    AuthToken.new_client(token).forks(full_name).each do |fork|
-      Repository.create_from_hash(fork)
+  def download_tags(token = nil)
+    case host_type
+    when 'GitHub'
+      download_github_tags(token)
+    when 'GitLab'
+      download_gitlab_tags(token)
+    when 'Bitbucket'
+      download_bitbucket_tags(token)
     end
   end
 
   def download_contributions(token = nil)
-    gh_contributions = github_client(token).contributors(full_name)
-    return if gh_contributions.empty?
-    existing_contributions = contributions.includes(:github_user).to_a
-    platform = projects.first.try(:platform)
-    gh_contributions.each do |c|
-      next unless c['id']
-      cont = existing_contributions.find{|cnt| cnt.github_user.try(:github_id) == c.id }
-      unless cont
-        user = GithubUser.create_from_github(c)
-        cont = contributions.find_or_create_by(github_user: user)
-      end
-
-      cont.count = c.contributions
-      cont.platform = platform
-      cont.save! if cont.changed?
+    case host_type
+    when 'GitHub'
+      download_github_contributions(token)
+    when 'GitLab'
+      # not implemented yet
+    when 'Bitbucket'
+      # not implemented yet
     end
-    true
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
   end
 
   def create_webhook(token)

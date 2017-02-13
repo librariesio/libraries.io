@@ -32,7 +32,7 @@ module BitbucketRepository
         updated_at: project.updated_on,
         stargazers_count: project.followers_count,
         private: project.is_private,
-        size: project.size/1000,
+        size: project[:size].to_f/1000,
         parent: {
           full_name: project.fetch('parent', {}).fetch('full_name', nil)
         }
