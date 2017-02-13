@@ -69,7 +69,14 @@ module GitlabRepository
   end
 
   def download_gitlab_readme(token = nil)
-    # find, download and format contents of readme from gitlab
+    files = gitlab_client(token).tree(full_name.gsub('/','%2F'))
+    paths =  files.map(&:path)
+    readme_path = paths.select{|path| path.match(/^readme/i) }.first
+    raw_content =  gitlab_client(token).file_contents(full_name.gsub('/','%2F'), readme_path)
+    contents = {
+      html_body: GitHub::Markup.render(readme_path, raw_content)
+    }
+
     if readme.nil?
       create_readme(contents)
     else
