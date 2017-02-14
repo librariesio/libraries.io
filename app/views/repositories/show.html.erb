@@ -218,7 +218,7 @@
         <ul>
           <% repo.tags.published.order('published_at DESC, name DESC').limit(30).to_a.each do |tag| %>
             <li>
-              <%= link_to tag, tag.github_url %>
+              <%= link_to tag, tag.repository_url %>
               <% if tag.published_at.present? %>
               - <%= tag.published_at.to_s(:long) %>
               <% end %>

@@ -88,7 +88,14 @@ class Tag < ApplicationRecord
     end
   end
 
-  def github_url
-    "#{repository.url}/releases/tag/#{name}"
+  def repository_url
+    case repository.host_type
+    when 'GitHub'
+      "#{repository.url}/releases/tag/#{name}"
+    when 'GitLab'
+      "#{repository.url}/tags/#{name}"
+    when 'Bitbucket'
+      "#{repository.url}/commits/tag/#{name}"
+    end
   end
 end

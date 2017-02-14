@@ -83,8 +83,15 @@ module RepoUrls
   end
 
   def commits_url(author = nil)
-    author_param = author.present? ? "?author=#{author}" : ''
-    "#{url}/commits#{author_param}"
+    case host_type
+    when 'GitHub'
+      author_param = author.present? ? "?author=#{author}" : ''
+      "#{url}/commits#{author_param}"
+    when 'GitLab'
+      "#{url}/commits/#{default_branch}"
+    when 'Bitbucket'
+      "#{url}/commits"
+    end
   end
 
   def readme_url
