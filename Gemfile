@@ -77,9 +77,9 @@ gem 'redcarpet'
 gem 'RedCloth'
 gem 'rdoc'
 gem 'asciidoctor'
+gem 'bundler'
 
 group :development do
-  gem 'bundler'
   gem 'spring'
   gem 'sql_queries_count'
   gem 'brakeman', :require => false
