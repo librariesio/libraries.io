@@ -118,7 +118,7 @@ class Repository < ApplicationRecord
   end
 
   def normalize_license_and_language
-    self.language = 'Haxe' if self.language == 'HaXe' # 😐
+    self.language = Languages::Language[self.language].to_s
     return if license.blank?
     if license.downcase == 'other'
       self.license = 'Other'
