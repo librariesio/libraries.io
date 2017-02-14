@@ -70,9 +70,9 @@ gem 'omniauth-bitbucket'
 gem 'chartkick'
 gem 'groupdate'
 gem 'turbolinks'
+gem 'bundler'
 
 group :development do
-  gem 'bundler'
   gem 'spring'
   gem 'sql_queries_count'
   gem 'brakeman', :require => false
