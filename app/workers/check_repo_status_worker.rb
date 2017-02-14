@@ -2,7 +2,7 @@ class CheckRepoStatusWorker
   include Sidekiq::Worker
   sidekiq_options queue: :low, unique: :until_executed
 
-  def perform(repo_full_name, removed = false)
-    Repository.check_status(repo_full_name, removed)
+  def perform(host_type, repo_full_name, removed = false)
+    Repository.check_status(host_type, repo_full_name, removed)
   end
 end

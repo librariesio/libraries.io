@@ -8,7 +8,8 @@ describe CheckRepoStatusWorker do
   it "should check repo status" do
     repo_full_name = 'rails/rails'
     removed = true
-    expect(Repository).to receive(:check_status).with(repo_full_name, removed)
-    subject.perform(repo_full_name, removed)
+    host_type = 'GitHub'
+    expect(Repository).to receive(:check_status).with(host_type, repo_full_name, removed)
+    subject.perform(host_type, repo_full_name, removed)
   end
 end
