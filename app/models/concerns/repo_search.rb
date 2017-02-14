@@ -20,6 +20,7 @@ module RepoSearch
         indexes :license, :index => :not_analyzed
         indexes :keywords, :index => :not_analyzed
         indexes :platforms, :index => :not_analyzed
+        indexes :host_type, :index => :not_analyzed
 
         indexes :status, :index => :not_analyzed
         indexes :default_branch, :index => :not_analyzed
@@ -104,13 +105,7 @@ module RepoSearch
                  query: {match_all: {}},
                  filter:{
                    bool: {
-                     must: [
-                       {
-                         exists: {
-                           "field" => "pushed_at"
-                         }
-                       }
-                     ],
+                     must: [],
                      must_not: [
                        {
                          term: {
@@ -141,7 +136,8 @@ module RepoSearch
         facets: {
           language: Project.facet_filter(:language, facet_limit, options),
           license: Project.facet_filter(:license, facet_limit, options),
-          keywords: Project.facet_filter(:keywords, facet_limit, options)
+          keywords: Project.facet_filter(:keywords, facet_limit, options),
+          host_type: Project.facet_filter(:host_type, facet_limit, options)
         },
         filter: {
           bool: {

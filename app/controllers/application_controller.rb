@@ -129,7 +129,8 @@ class ApplicationController < ActionController::Base
       license: current_licenses,
       language: current_language,
       keywords: current_keywords,
-      platforms: current_platforms
+      platforms: current_platforms,
+      host_type: current_host
     })
   end
 

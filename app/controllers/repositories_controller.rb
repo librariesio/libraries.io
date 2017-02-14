@@ -8,8 +8,9 @@ class RepositoriesController < ApplicationController
     @created = repo_search('created_at')
     @updated = repo_search('pushed_at')
 
-    facets = Repository.facets(filters: {language: current_language, license: current_license, keywords: current_keywords}, :facet_limit => 20)
+    facets = Repository.facets(filters: {language: current_language, license: current_license, keywords: current_keywords, host_type: formatted_host}, :facet_limit => 20)
 
+    @host_types = facets[:host_type][:terms]
     @languages = facets[:language][:terms]
     @licenses = facets[:license][:terms].reject{ |t| t.term.downcase == 'other' }
     @keywords = facets[:keywords][:terms]
