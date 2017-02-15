@@ -68,7 +68,11 @@ module RepoSearch
     end
 
     def as_indexed_json(_options)
-      as_json methods: [:exact_name, :keywords, :platforms, :github_id, :github_contributions_count]
+      as_json methods: [:exact_name, :keywords, :platforms, :github_id, :github_contributions_count, :rank]
+    end
+
+    def rank
+      read_attribute(:rank) || 0
     end
 
     def exact_name
@@ -128,7 +132,7 @@ module RepoSearch
               }
             },
             field_value_factor: {
-              field: "stargazers_count",
+              field: "rank",
               "modifier": "square"
             }
           }

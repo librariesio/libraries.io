@@ -3,7 +3,7 @@ class RepositoriesController < ApplicationController
     postfix = [current_language, current_license, current_keywords].any?(&:present?) ? 'Repos' : 'Repositories'
     @title = [current_language, current_license, current_keywords, formatted_host, postfix].compact.join(' ')
 
-    @popular = repo_search('stargazers_count')
+    @popular = repo_search('rank')
     @forked = repo_search('forks_count')
     @created = repo_search('created_at')
     @updated = repo_search('pushed_at')
