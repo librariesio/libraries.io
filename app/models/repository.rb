@@ -387,7 +387,7 @@ class Repository < ApplicationRecord
   end
 
   def self.update_from_hook(uuid, sender_id)
-    repository = Repository.find_by_uuid(uuid)
+    repository = Repository.host('GitHub').find_by_uuid(uuid)
     user = Identity.where('provider ILIKE ?', 'github%').where(uid: sender_id).first.try(:user)
     if user.present? && repository.present?
       repository.download_manifests(user.token)
@@ -398,7 +398,7 @@ class Repository < ApplicationRecord
   def self.update_from_star(repo_name, token = nil)
     token ||= AuthToken.token
 
-    repository = Repository.find_by_full_name(repo_name)
+    repository = Repository.host('GitHub').find_by_full_name(repo_name)
     if repository
       repository.increment!(:stargazers_count)
     else
@@ -409,7 +409,7 @@ class Repository < ApplicationRecord
   def self.update_from_tag(repo_name, token = nil)
     token ||= AuthToken.token
 
-    repository = Repository.find_by_full_name(repo_name)
+    repository = Repository.host('GitHub').find_by_full_name(repo_name)
     if repository
       repository.download_tags(token)
     else
