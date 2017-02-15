@@ -72,6 +72,7 @@ module GitlabRepository
     files = gitlab_client(token).tree(full_name.gsub('/','%2F'))
     paths =  files.map(&:path)
     readme_path = paths.select{|path| path.match(/^readme/i) }.first
+    return if readme_path.nil?
     raw_content =  gitlab_client(token).file_contents(full_name.gsub('/','%2F'), readme_path)
     contents = {
       html_body: GitHub::Markup.render(readme_path, raw_content)

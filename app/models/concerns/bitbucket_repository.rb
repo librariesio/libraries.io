@@ -72,6 +72,7 @@ module BitbucketRepository
     files = bitbucket_client(token).repos.sources.list(user_name, repo_name, 'master', '/')
     paths =  files.files.map(&:path)
     readme_path = paths.select{|path| path.match(/^readme/i) }.first
+    return if readme_path.nil?
     raw_content = bitbucket_client(token).repos.sources.list(user_name, repo_name, 'master', readme_path).data
     contents = {
       html_body: GitHub::Markup.render(readme_path, raw_content)
