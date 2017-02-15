@@ -77,6 +77,7 @@ gem 'redcarpet'
 gem 'RedCloth'
 gem 'rdoc'
 gem 'asciidoctor'
+gem 'org-ruby'
 gem 'bundler'
 
 group :development do
