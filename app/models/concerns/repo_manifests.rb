@@ -1,5 +1,6 @@
 module RepoManifests
   def download_manifests(token = nil)
+    return unless host_type == 'GitHub'
     body = parse_manifests(token)
 
     if body

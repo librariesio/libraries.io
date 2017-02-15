@@ -3,8 +3,11 @@ class Repository < ApplicationRecord
   include Status
   include RepoUrls
   include RepoManifests
-  include RepoTags
   include RepositorySourceRank
+
+  include GithubRepository
+  include GitlabRepository
+  include BitbucketRepository
 
   IGNORABLE_GITHUB_EXCEPTIONS = [Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError]
 
@@ -13,7 +16,7 @@ class Repository < ApplicationRecord
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
    :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
    :forks_count, :mirror_url, :open_issues_count, :default_branch,
-   :subscribers_count, :private]
+   :subscribers_count, :private, :logo_url, :pull_requests_enabled, :scm]
 
   has_many :projects
   has_many :contributions, dependent: :delete_all
@@ -101,14 +104,6 @@ class Repository < ApplicationRecord
     Repository.formatted_host(host_type)
   end
 
-  def github_contributions_count
-    contributions_count # legacy alias
-  end
-
-  def github_id
-    uuid # legacy alias
-  end
-
   def meta_tags
     {
       title: "#{full_name} on #{formatted_host}",
@@ -123,7 +118,8 @@ class Repository < ApplicationRecord
   end
 
   def normalize_license_and_language
-    self.language = 'Haxe' if self.language == 'HaXe' # 😐
+    self.language = Languages::Language[self.language].to_s
+    self.language = nil if self.language.blank?
     return if license.blank?
     if license.downcase == 'other'
       self.license = 'Other'
@@ -157,23 +153,19 @@ class Repository < ApplicationRecord
   end
 
   def owner
+    return nil unless host_type == 'GitHub'
     github_organisation_id.present? ? github_organisation : github_user
   end
 
   def download_owner
-    return if owner && owner.login == owner_name
-    o = github_client.user(owner_name)
-    if o.type == "Organization"
-      go = GithubOrganisation.create_from_github(owner_id.to_i)
-      if go
-        self.github_organisation_id = go.id
-        save
-      end
-    else
-      GithubUser.create_from_github(o)
+    case host_type
+    when 'GitHub'
+      download_github_owner
+    when 'GitLab'
+      # not implemented yet
+    when 'Bitbucket'
+      # not implemented yet
     end
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
   end
 
   def to_s
@@ -209,15 +201,25 @@ class Repository < ApplicationRecord
   end
 
   def avatar_url(size = 60)
-    "https://avatars.githubusercontent.com/u/#{owner_id}?size=#{size}"
+    case host_type
+    when 'GitHub'
+      avatar = github_avatar_url(size)
+    when 'GitLab'
+      avatar = gitlab_avatar_url(size)
+    when 'Bitbucket'
+      avatar = bitbucket_avatar_url(size)
+    end
+    return fallback_avatar_url(size) if avatar.blank?
+    avatar
+  end
+
+  def fallback_avatar_url(size = 60)
+    hash = Digest::MD5.hexdigest("#{host_type}-#{full_name}")
+    "https://www.gravatar.com/avatar/#{hash}?s=#{size}&f=y&d=retro"
   end
 
   def load_dependencies_tree(date = nil)
     RepositoryTreeResolver.new(self, date).load_dependencies_tree
-  end
-
-  def github_client(token = nil)
-    AuthToken.fallback_client(token)
   end
 
   def id_or_name
@@ -225,99 +227,87 @@ class Repository < ApplicationRecord
   end
 
   def download_readme(token = nil)
-    contents = {html_body: github_client(token).readme(full_name, accept: 'application/vnd.github.V3.html')}
-    if readme.nil?
-      create_readme(contents)
-    else
-      readme.update_attributes(contents)
-    end
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
-  end
-
-  def update_from_github(token = nil)
-    begin
-      r = AuthToken.new_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
-      return unless r.present?
-      self.uuid = r[:id] unless self.uuid == r[:id]
-       if self.full_name.downcase != r[:full_name].downcase
-         clash = Repository.where('lower(full_name) = ?', r[:full_name].downcase).first
-         if clash && (!clash.update_from_github(token) || clash.status == "Removed")
-           clash.destroy
-         end
-         self.full_name = r[:full_name]
-       end
-      self.owner_id = r[:owner][:id]
-      self.license = Project.format_license(r[:license][:key]) if r[:license]
-      self.source_name = r[:parent][:full_name] if r[:fork]
-      assign_attributes r.slice(*API_FIELDS)
-      save! if self.changed?
-    rescue Octokit::NotFound
-      update_attribute(:status, 'Removed') if !self.private?
-    rescue *IGNORABLE_GITHUB_EXCEPTIONS
-      nil
+    case host_type
+    when 'GitHub'
+      download_github_readme(token)
+    when 'GitLab'
+      download_gitlab_readme(token)
+    when 'Bitbucket'
+      download_bitbucket_readme(token)
     end
   end
 
   def update_all_info_async(token = nil)
-    GithubDownloadWorker.perform_async(self.id, token)
+    RepositoryDownloadWorker.perform_async(self.id, token)
+  end
+
+  def update_from_repository(token = nil)
+    case host_type
+    when 'GitHub'
+      update_from_github(token)
+    when 'GitLab'
+      update_from_gitlab(token)
+    when 'Bitbucket'
+      update_from_bitbucket(token)
+    end
   end
 
   def update_all_info(token = nil)
-    token ||= AuthToken.token
-    previous_pushed_at = self.pushed_at
-    update_from_github(token)
+    token ||= AuthToken.token if host_type == 'GitHub'
+    update_from_repository(token)
     download_owner
     download_fork_source(token)
-    if (previous_pushed_at.nil? && self.pushed_at) || (self.pushed_at && previous_pushed_at < self.pushed_at)
-      download_readme(token)
-      download_tags(token)
-      download_contributions(token)
-      download_manifests(token)
-      # download_issues(token)
-    end
+    download_readme(token)
+    download_tags(token)
+    download_contributions(token)
+    download_manifests(token)
+    # download_issues(token)
     save_projects
     update_attributes(last_synced_at: Time.now)
   end
 
   def download_fork_source(token = nil)
-    return true unless self.fork? && self.source.nil?
-    Repository.create_from_github(source_name, token)
+    case host_type
+    when 'GitHub'
+      download_github_fork_source(token)
+    when 'GitLab'
+      download_gitlab_fork_source(token)
+    when 'Bitbucket'
+      download_bitbucket_fork_source(token)
+    end
   end
 
-  def download_forks_async(token = nil)
-    GithubDownloadForkWorker.perform_async(self.id, token)
+  def download_tags(token = nil)
+    case host_type
+    when 'GitHub'
+      download_github_tags(token)
+    when 'GitLab'
+      download_gitlab_tags(token)
+    when 'Bitbucket'
+      download_bitbucket_tags(token)
+    end
   end
 
-  def download_forks(token = nil)
-    return true if fork?
-    return true unless forks_count && forks_count > 0 && forks_count < 100
-    return true if forks_count == forked_repositories.count
-    AuthToken.new_client(token).forks(full_name).each do |fork|
-      Repository.create_from_hash(fork)
+  def download_tags(token = nil)
+    case host_type
+    when 'GitHub'
+      download_github_tags(token)
+    when 'GitLab'
+      download_gitlab_tags(token)
+    when 'Bitbucket'
+      download_bitbucket_tags(token)
     end
   end
 
   def download_contributions(token = nil)
-    gh_contributions = github_client(token).contributors(full_name)
-    return if gh_contributions.empty?
-    existing_contributions = contributions.includes(:github_user).to_a
-    platform = projects.first.try(:platform)
-    gh_contributions.each do |c|
-      next unless c['id']
-      cont = existing_contributions.find{|cnt| cnt.github_user.try(:github_id) == c.id }
-      unless cont
-        user = GithubUser.create_from_github(c)
-        cont = contributions.find_or_create_by(github_user: user)
-      end
-
-      cont.count = c.contributions
-      cont.platform = platform
-      cont.save! if cont.changed?
+    case host_type
+    when 'GitHub'
+      download_github_contributions(token)
+    when 'GitLab'
+      # not implemented yet
+    when 'Bitbucket'
+      # not implemented yet
     end
-    true
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
   end
 
   def create_webhook(token)
@@ -347,23 +337,25 @@ class Repository < ApplicationRecord
     nil
   end
 
-  def self.create_from_github(full_name, token = nil)
-    github_client = AuthToken.new_client(token)
-    repo_hash = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
-    return false if repo_hash.nil? || repo_hash.empty?
-    create_from_hash(repo_hash)
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
+  def self.create_from_host(host_type, full_name, token = nil)
+    case host_type
+    when 'GitHub'
+      create_from_github(full_name, token)
+    when 'GitLab'
+      create_from_gitlab(full_name, token)
+    when 'Bitbucket'
+      create_from_bitbucket(full_name, token)
+    end
   end
 
   def self.create_from_hash(repo_hash)
-    repo_hash = repo_hash.to_hash
+    repo_hash = repo_hash.to_hash.with_indifferent_access
     ActiveRecord::Base.transaction do
       g = Repository.find_by(uuid: repo_hash[:id])
       g = Repository.find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
       g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
       g.owner_id = repo_hash[:owner][:id]
-      g.host_type = 'GitHub'
+      g.host_type = repo_hash[:host_type] || 'GitHub'
       g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
       g.uuid = repo_hash[:id] if g.uuid.nil?
       g.license = repo_hash[:license][:key] if repo_hash[:license]
@@ -380,8 +372,17 @@ class Repository < ApplicationRecord
     nil
   end
 
-  def self.check_status(repo_full_name, removed = false)
-    response = Typhoeus.head("https://github.com/#{repo_full_name}")
+  def self.check_status(host_type, repo_full_name, removed = false)
+    case host_type
+    when 'GitHub'
+      domain = 'https://github.com'
+    when 'GitLab'
+      domain = 'https://gitlab.com'
+    when 'Bitbucket'
+      domain = 'https://bitbucket.org'
+    end
+
+    response = Typhoeus.head("#{domain}/#{repo_full_name}")
 
     if response.response_code == 404
       repo = Repository.includes(:projects).find_by_full_name(repo_full_name)
@@ -431,7 +432,7 @@ class Repository < ApplicationRecord
     token ||= AuthToken.token
     repository = Repository.find_by_full_name(repo_name)
     if repository
-      repository.update_from_github
+      repository.update_from_repository(token)
     else
       Repository.create_from_github(repo_name, token)
     end

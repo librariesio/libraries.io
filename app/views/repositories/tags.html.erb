@@ -9,7 +9,7 @@
       <ul>
         <% @tags.each do |tag| %>
         <li>
-          <%= link_to tag, tag.github_url %>
+          <%= link_to tag, tag.repository_url %>
           <% if tag.published_at.present? %>
           - <%= tag.published_at.to_s(:long) %>
           <% end %>

@@ -1,22 +1,45 @@
 module RepoUrls
   def pages_url
-    "http://#{owner_name}.github.io/#{project_name}"
+    case host_type
+    when 'GitHub'
+      "http://#{owner_name}.github.io/#{project_name}"
+    when 'GitLab'
+      "http://#{owner_name}.gitlab.io/#{project_name}"
+    end
   end
 
   def wiki_url
-    "#{url}/wiki"
+    case host_type
+    when 'GitHub'
+      "#{url}/wiki"
+    when 'GitLab'
+      "#{url}/wikis"
+    when 'Bitbucket'
+      "#{url}/wiki"
+    end
   end
 
   def watchers_url
-    "#{url}/watchers"
+    case host_type
+    when 'GitHub'
+      "#{url}/watchers"
+    end
   end
 
   def forks_url
-    "#{url}/network"
+    case host_type
+    when 'GitHub'
+      "#{url}/network"
+    when 'GitLab'
+      "#{url}/forks"
+    end
   end
 
   def stargazers_url
-    "#{url}/stargazers"
+    case host_type
+    when 'GitHub'
+      "#{url}/stargazers"
+    end
   end
 
   def issues_url
@@ -24,15 +47,31 @@ module RepoUrls
   end
 
   def contributors_url
-    "#{url}/graphs/contributors"
+    case host_type
+    when 'GitHub'
+      "#{url}/graphs/contributors"
+    when 'GitLab'
+      "#{url}/graphs/#{default_branch}"
+    end
+  end
+
+  def host_url
+    case host_type
+    when 'GitHub'
+      'https://github.com'
+    when 'GitLab'
+      'https://gitlab.com'
+    when 'Bitbucket'
+      'https://bitbucket.org'
+    end
   end
 
   def url
-    "https://github.com/#{full_name}"
+    "#{host_url}/#{full_name}"
   end
 
   def source_url
-    "https://github.com/#{source_name}"
+    "#{host_url}/#{source_name}"
   end
 
   def blob_url
@@ -44,8 +83,15 @@ module RepoUrls
   end
 
   def commits_url(author = nil)
-    author_param = author.present? ? "?author=#{author}" : ''
-    "#{url}/commits#{author_param}"
+    case host_type
+    when 'GitHub'
+      author_param = author.present? ? "?author=#{author}" : ''
+      "#{url}/commits#{author_param}"
+    when 'GitLab'
+      "#{url}/commits/#{default_branch}"
+    when 'Bitbucket'
+      "#{url}/commits"
+    end
   end
 
   def readme_url

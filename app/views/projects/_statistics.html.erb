@@ -82,14 +82,16 @@
         <strong><%= link_to number_to_human(@project.repository.forks_count), @project.repository.forks_url %></strong>
       </td>
     </tr>
-    <tr>
-      <td>
-        Watchers
-      </td>
-      <td>
-        <strong><%= link_to number_with_delimiter(@project.repository.subscribers_count), @project.repository.watchers_url %></strong>
-      </td>
-    </tr>
+    <% if @project.repository.subscribers_count.present? %>
+      <tr>
+        <td>
+          Watchers
+        </td>
+        <td>
+          <strong><%= link_to number_with_delimiter(@project.repository.subscribers_count), @project.repository.watchers_url %></strong>
+        </td>
+      </tr>
+    <% end %>
     <tr>
       <td>
         Contributors
@@ -98,14 +100,16 @@
         <strong><%= link_to number_to_human(@project.contributions.count), @project.repository.contributors_url %></strong>
       </td>
     </tr>
-    <tr>
-      <td>
-        Repo Size:
-      </td>
-      <td>
-        <strong><%= number_to_human_size @project.repository.size*1000 %></strong>
-      </td>
-    </tr>
+    <% if @project.repository.size.present? %>
+      <tr>
+        <td>
+          Repo Size:
+        </td>
+        <td>
+          <strong><%= number_to_human_size @project.repository.size*1000 %></strong>
+        </td>
+      </tr>
+    <% end %>
     <% end %>
   </table>
 <% end %>

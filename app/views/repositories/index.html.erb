@@ -1,5 +1,5 @@
-<% title "Repositories - Libraries.io" %>
-<% description "Explore popular Repositories on Libraries.io" %>
+<% title "#{formatted_host} Repositories - Libraries.io" %>
+<% description "Explore popular #{formatted_host} Repositories on Libraries.io" %>
 
 <div class='row'>
   <div class='col-md-12'>
@@ -13,7 +13,7 @@
       <% if @popular.any? %>
         <div class='col-sm-6'>
           <h4>
-            Most Starred <%= @title %>
+            Highest ranked <%= @title %>
           </h4>
           <%= render @popular, cache: true %>
         </div>
@@ -40,7 +40,7 @@
       <% if @updated.any? %>
       <div class='col-sm-6'>
         <h4>
-          Recently Pushed <%= @title %>
+          Recently Updated <%= @title %>
         </h4>
         <%= render @updated, cache: true %>
       </div>
@@ -61,6 +61,28 @@
                 <% else %>
                   <%= link_to format_language(language.term), url_for(params.except(:host).merge(language: format_language(language.term)).permit!) %>
                   <small><%= pluralize number_to_human(language['count']), 'repos' %></small>
+                <% end %>
+              </li>
+            <% end %>
+            <% if @language && !@languages.map{|l| l[0].downcase }.include?(@language.name.downcase) %>
+              <li class='active'>
+                <%= link_to format_language(@language.name), url_for(params.except(:host).merge(language: nil).permit!) %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <% if current_host.blank? && @host_types.any? %>
+        <div class='col-md-12 col-sm-4 facets'>
+          <h4>Popular Hosts</h4>
+          <ul class='filter'>
+            <% @host_types.each do |host_type| %>
+              <li class='<%= 'active' if host_type.term.downcase == params[:host_type].try(:downcase) %>'>
+                <% if host_type.term.downcase == params[:host_type].try(:downcase) %>
+                  <%= link_to host_type.term, url_for(params.except(:host).merge(host_type: nil).permit!) %>
+                <% else %>
+                  <%= link_to host_type.term, url_for(params.except(:host).merge(host_type: host_type.term.downcase).permit!) %>
+                  <small><%= pluralize number_to_human(host_type['count']), 'repos' %></small>
                 <% end %>
               </li>
             <% end %>

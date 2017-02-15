@@ -2,7 +2,7 @@ namespace :github do
   desc 'Recreate repo search index'
   task recreate_repos_index: :environment do
     # If the index doesn't exists can't be deleted, returns 404, carry on
-    Repository.__elasticsearch__.client.indices.delete index: 'repositories' rescue nil
+    Repository.__elasticsearch__.client.indices.delete index: 'github_repositories' rescue nil
     Repository.__elasticsearch__.create_index! force: true
   end
 
@@ -53,7 +53,7 @@ namespace :github do
   task update_trending: :environment do
     trending = Repository.open_source.pushed.maintained.recently_created.hacker_news.limit(30).select('id')
     brand_new = Repository.open_source.pushed.maintained.recently_created.order('created_at DESC').limit(60).select('id')
-    (trending + brand_new).uniq.each{|g| GithubDownloadWorker.perform_async(g.id) }
+    (trending + brand_new).uniq.each{|g| RepositoryDownloadWorker.perform_async(g.id) }
   end
 
   desc 'Download all github users'

@@ -3,13 +3,14 @@ class RepositoriesController < ApplicationController
     postfix = [current_language, current_license, current_keywords].any?(&:present?) ? 'Repos' : 'Repositories'
     @title = [current_language, current_license, current_keywords, formatted_host, postfix].compact.join(' ')
 
-    @popular = repo_search('stargazers_count')
+    @popular = repo_search('rank')
     @forked = repo_search('forks_count')
     @created = repo_search('created_at')
-    @updated = repo_search('pushed_at')
+    @updated = repo_search('updated_at')
 
-    facets = Repository.facets(filters: {language: current_language, license: current_license, keywords: current_keywords}, :facet_limit => 20)
+    facets = Repository.facets(filters: {language: current_language, license: current_license, keywords: current_keywords, host_type: formatted_host}, :facet_limit => 20)
 
+    @host_types = facets[:host_type][:terms]
     @languages = facets[:language][:terms]
     @licenses = facets[:license][:terms].reject{ |t| t.term.downcase == 'other' }
     @keywords = facets[:keywords][:terms]
@@ -135,7 +136,7 @@ class RepositoriesController < ApplicationController
       language: current_language,
       keywords: current_keywords,
       platforms: current_platforms,
-      host_type: current_host
+      host_type: formatted_host
     }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
     ids = search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]

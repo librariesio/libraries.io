@@ -1,4 +1,4 @@
-class GithubDownloadWorker
+class RepositoryDownloadWorker
   include Sidekiq::Worker
   sidekiq_options queue: :low, unique: :until_executed
 

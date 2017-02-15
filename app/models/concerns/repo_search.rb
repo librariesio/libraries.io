@@ -20,6 +20,7 @@ module RepoSearch
         indexes :license, :index => :not_analyzed
         indexes :keywords, :index => :not_analyzed
         indexes :platforms, :index => :not_analyzed
+        indexes :host_type, :index => :not_analyzed
 
         indexes :status, :index => :not_analyzed
         indexes :default_branch, :index => :not_analyzed
@@ -43,8 +44,8 @@ module RepoSearch
         indexes :forks_count, type: 'integer'
         indexes :open_issues_count, type: 'integer'
         indexes :subscribers_count, type: 'integer'
-        indexes :github_id, type: 'integer'
-        indexes :uuid, type: 'integer'
+        indexes :github_id, type: 'string'
+        indexes :uuid, type: 'string'
         indexes :github_contributions_count, type: 'integer'
         indexes :contributions_count, type: 'integer'
         indexes :rank, type: 'integer'
@@ -67,7 +68,11 @@ module RepoSearch
     end
 
     def as_indexed_json(_options)
-      as_json methods: [:exact_name, :keywords, :platforms, :github_id, :github_contributions_count]
+      as_json methods: [:exact_name, :keywords, :platforms, :github_id, :github_contributions_count, :rank]
+    end
+
+    def rank
+      read_attribute(:rank) || 0
     end
 
     def exact_name
@@ -104,13 +109,7 @@ module RepoSearch
                  query: {match_all: {}},
                  filter:{
                    bool: {
-                     must: [
-                       {
-                         exists: {
-                           "field" => "pushed_at"
-                         }
-                       }
-                     ],
+                     must: [],
                      must_not: [
                        {
                          term: {
@@ -133,7 +132,7 @@ module RepoSearch
               }
             },
             field_value_factor: {
-              field: "stargazers_count",
+              field: "rank",
               "modifier": "square"
             }
           }
@@ -141,7 +140,8 @@ module RepoSearch
         facets: {
           language: Project.facet_filter(:language, facet_limit, options),
           license: Project.facet_filter(:license, facet_limit, options),
-          keywords: Project.facet_filter(:keywords, facet_limit, options)
+          keywords: Project.facet_filter(:keywords, facet_limit, options),
+          host_type: Project.facet_filter(:host_type, facet_limit, options)
         },
         filter: {
           bool: {
