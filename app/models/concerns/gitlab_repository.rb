@@ -42,7 +42,7 @@ module GitlabRepository
     def self.recursive_gitlab_repos(page_number = 1)
       r = Typhoeus.get("https://gitlab.com/explore/projects?&page=#{page_number}&sort=created_asc")
       page = Nokogiri::HTML(r.body)
-      names = page.css('a.project').map{|project| project.css('span')[0].text.delete(" \t\r\n") }
+      names = page.css('a.project').map{|project| project.attributes["href"].value[1..-1] }
       names.each do |name|
         p name
         CreateRepositoryWorker.perform_async('GitLab', name)
