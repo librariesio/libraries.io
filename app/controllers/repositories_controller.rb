@@ -6,7 +6,7 @@ class RepositoriesController < ApplicationController
     @popular = repo_search('rank')
     @forked = repo_search('forks_count')
     @created = repo_search('created_at')
-    @updated = repo_search('pushed_at')
+    @updated = repo_search('updated_at')
 
     facets = Repository.facets(filters: {language: current_language, license: current_license, keywords: current_keywords, host_type: formatted_host}, :facet_limit => 20)
 

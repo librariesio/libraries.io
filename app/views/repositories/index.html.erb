@@ -13,7 +13,7 @@
       <% if @popular.any? %>
         <div class='col-sm-6'>
           <h4>
-            Most Starred <%= @title %>
+            Highest ranked <%= @title %>
           </h4>
           <%= render @popular, cache: true %>
         </div>
@@ -40,7 +40,7 @@
       <% if @updated.any? %>
       <div class='col-sm-6'>
         <h4>
-          Recently Pushed <%= @title %>
+          Recently Updated <%= @title %>
         </h4>
         <%= render @updated, cache: true %>
       </div>
@@ -81,7 +81,7 @@
                 <% if host_type.term.downcase == params[:host_type].try(:downcase) %>
                   <%= link_to host_type.term, url_for(params.except(:host).merge(host_type: nil).permit!) %>
                 <% else %>
-                  <%= link_to host_type.term, url_for(params.except(:host).merge(host_type: host_type).permit!) %>
+                  <%= link_to host_type.term, url_for(params.except(:host).merge(host_type: host_type.term.downcase).permit!) %>
                   <small><%= pluralize number_to_human(host_type['count']), 'repos' %></small>
                 <% end %>
               </li>

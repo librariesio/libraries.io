@@ -17,18 +17,8 @@
       <%= fa_icon('exclamation-triangle') %> This repository is no longer available
     <% elsif repository.is_deprecated? %>
       <%= fa_icon('exclamation-triangle') %> This repository is deprecated -
-      <% if repository.pushed_at && repository.pushed_at > repository.created_at + 1.minute %>
-        Last pushed <%= timeago_tag repository.pushed_at %>
-      <% else %>
-        Published <%= timeago_tag repository.created_at %>
-      <% end %>
     <% elsif repository.is_unmaintained? %>
       <%= fa_icon('exclamation-triangle') %> This repository is no longer maintained -
-      <% if repository.pushed_at && repository.pushed_at > repository.created_at + 1.minute %>
-        Last pushed <%= timeago_tag repository.pushed_at %>
-      <% else %>
-        Published <%= timeago_tag repository.created_at %>
-      <% end %>
     <% else %>
       <% if repository.language.present? %>
         <%= link_to repository.language, language_path(repository.language) %> -
@@ -36,11 +26,17 @@
       <% if repository.license.present? %>
         <%= linked_licenses [repository.license] %> -
       <% end %>
+    <% end %>
+    <% unless repository.is_removed? %>
       <% if repository.pushed_at && repository.pushed_at > repository.created_at + 1.minute %>
         Last pushed <%= timeago_tag repository.pushed_at %>
+      <% elsif repository.updated_at && repository.updated_at > repository.created_at + 1.minute %>
+        Updated <%= timeago_tag repository.updated_at %>
       <% else %>
         Published <%= timeago_tag repository.created_at %>
       <% end %>
+    <% end %>
+    <% unless repository.is_deprecated? || repository.is_unmaintained? %>
       <% if repository.stargazers_count %>
       - <%= number_to_human repository.stars %> stars
       <% end %>

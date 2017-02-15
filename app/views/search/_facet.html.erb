@@ -1,4 +1,4 @@
-<h4><%= name.humanize %></h4>
+<h4><%= format_facet_name(name) %></h4>
 <ul class='filter'>
   <% facet['terms'].each do |term| %>
     <% next if term['term'].blank? %>

@@ -3,6 +3,19 @@ require 'uri'
 module ApplicationHelper
   include SanitizeUrl
 
+  def format_term(term)
+    format_host(platform_name(term)) || term
+  end
+
+  def format_host(host_type)
+    Repository.formatted_host(host_type)
+  end
+
+  def format_facet_name(facet_name)
+    return 'Host' if facet_name == 'host_type'
+    facet_name.humanize
+  end
+
   def platform_name(platform)
     PackageManager::Base.platform_name(platform)
   end
