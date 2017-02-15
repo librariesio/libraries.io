@@ -78,6 +78,8 @@ gem 'RedCloth'
 gem 'rdoc'
 gem 'asciidoctor'
 gem 'org-ruby'
+gem 'wikicloth'
+gem 'creole'
 gem 'bundler'
 
 group :development do
