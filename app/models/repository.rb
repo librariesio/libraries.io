@@ -341,7 +341,7 @@ class Repository < ApplicationRecord
     repo_hash = repo_hash.to_hash.with_indifferent_access
     ActiveRecord::Base.transaction do
       g = Repository.find_by(uuid: repo_hash[:id])
-      g = Repository.find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
+      g = Repository.host(repo_hash[:host_type] || 'GitHub').find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
       g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
       g.owner_id = repo_hash[:owner][:id]
       g.host_type = repo_hash[:host_type] || 'GitHub'
