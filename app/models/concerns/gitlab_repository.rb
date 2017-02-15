@@ -64,7 +64,7 @@ module GitlabRepository
     Repository.gitlab_client(token)
   end
 
-  def gitlab_avatar_url(size = 60)
+  def gitlab_avatar_url(_size = 60)
     logo_url
   end
 

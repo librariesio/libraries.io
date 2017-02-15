@@ -288,17 +288,6 @@ class Repository < ApplicationRecord
     end
   end
 
-  def download_tags(token = nil)
-    case host_type
-    when 'GitHub'
-      download_github_tags(token)
-    when 'GitLab'
-      download_gitlab_tags(token)
-    when 'Bitbucket'
-      download_bitbucket_tags(token)
-    end
-  end
-
   def download_contributions(token = nil)
     case host_type
     when 'GitHub'
@@ -423,16 +412,6 @@ class Repository < ApplicationRecord
     repository = Repository.find_by_full_name(repo_name)
     if repository
       repository.download_tags(token)
-    else
-      Repository.create_from_github(repo_name, token)
-    end
-  end
-
-  def self.update_from_name(repo_name, token = nil)
-    token ||= AuthToken.token
-    repository = Repository.find_by_full_name(repo_name)
-    if repository
-      repository.update_from_repository(token)
     else
       Repository.create_from_github(repo_name, token)
     end

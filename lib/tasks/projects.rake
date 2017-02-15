@@ -40,19 +40,20 @@ namespace :projects do
 
   desc 'Update project repositoires'
   task update_repos: :environment do
-    repo_names = Project.maintained.where('projects.updated_at < ?', 1.week.ago).with_repo.pluck('repositories.full_name').uniq.compact
-
-    repo_names.each do |repo_name|
-      GithubUpdateWorker.perform_async(repo_name)
+    projects = Project.maintained.where('projects.updated_at < ?', 1.week.ago).with_repo
+    repos = projects.map(&:repository)
+    repos.each do |repo|
+      CreateRepositoryWorker.perform_async(repo.host_type, repo.full_name)
     end
   end
 
-desc 'Check project repositoires statuses'
+  desc 'Check project repositoires statuses'
   task chech_repo_status: :environment do
     ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].each do |platform|
-      repo_names = Project.platform(platform).maintained.where('projects.updated_at < ?', 1.week.ago).with_repo.pluck('repositories.full_name').uniq.compact
-      repo_names.each do |repo_name|
-        CheckRepoStatusWorker.perform_async(repo_name)
+      projects = Project.platform(platform).maintained.where('projects.updated_at < ?', 1.week.ago).with_repo
+      repos = projects.map(&:repository)
+      repos.each do |repo|
+        CheckRepoStatusWorker.perform_async(repo.host_type, repo.full_name)
       end
     end
   end
@@ -67,9 +68,10 @@ desc 'Check project repositoires statuses'
     end
 
     ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].each do |platform|
-      repo_names = Project.platform(platform).removed.with_repo.pluck('repositories.full_name').uniq.compact
-      repo_names.each do |repo_name|
-        CheckRepoStatusWorker.perform_async(repo_name, true)
+      projects = Project.platform(platform).removed.with_repo
+      repos = projects.map(&:repository)
+      repos.each do |repo|
+        CheckRepoStatusWorker.perform_async(repo.host_type, repo.full_name)
       end
     end
   end
