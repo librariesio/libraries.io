@@ -2,7 +2,7 @@ module BitbucketRepository
   extend ActiveSupport::Concern
 
   included do
-    IGNORABLE_BITBUCKET_EXCEPTIONS = [BitBucket::Error::NotFound]
+    IGNORABLE_BITBUCKET_EXCEPTIONS = [BitBucket::Error::NotFound, BitBucket::Error::Forbidden]
 
     def self.create_from_bitbucket(full_name, token = nil)
       repo_hash = map_from_bitbucket(full_name, token)
