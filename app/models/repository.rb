@@ -119,6 +119,7 @@ class Repository < ApplicationRecord
 
   def normalize_license_and_language
     self.language = Languages::Language[self.language].to_s
+    self.language = nil if self.language.blank?
     return if license.blank?
     if license.downcase == 'other'
       self.license = 'Other'
