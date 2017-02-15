@@ -51,7 +51,10 @@ module BitbucketRepository
         CreateRepositoryWorker.perform_async('Bitbucket', repo['full_name'])
       end
       puts json['next']
-      recursive_bitbucket_repos(json['next']) if json['values'].any? && json['next']
+      if json['values'].any? && json['next']
+        REDIS.set 'bitbucket-after', Addressable::URI.parse(json['next']).query_values['after']
+        recursive_bitbucket_repos(json['next'])
+      end
     end
   end
 
