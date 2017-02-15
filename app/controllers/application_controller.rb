@@ -130,7 +130,7 @@ class ApplicationController < ActionController::Base
       language: current_language,
       keywords: current_keywords,
       platforms: current_platforms,
-      host_type: current_host
+      host_type: formatted_host
     })
   end
 
