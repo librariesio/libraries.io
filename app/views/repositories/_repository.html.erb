@@ -40,7 +40,10 @@
         Last pushed <%= timeago_tag repository.pushed_at %>
       <% else %>
         Published <%= timeago_tag repository.created_at %>
-      <% end %> - <%= number_to_human repository.stars %> stars
+      <% end %>
+      <% if repository.stargazers_count %>
+      - <%= number_to_human repository.stars %> stars
+      <% end %>
       <% if repository.fork? %>
       - Fork
         <% if repository.source.present? || repository.source_name.present? %>
