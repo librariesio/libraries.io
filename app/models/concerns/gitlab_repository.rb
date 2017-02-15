@@ -2,7 +2,7 @@ module GitlabRepository
   extend ActiveSupport::Concern
 
   included do
-    IGNORABLE_GITLAB_EXCEPTIONS = [Gitlab::Error::NotFound]
+    IGNORABLE_GITLAB_EXCEPTIONS = [Gitlab::Error::NotFound, Gitlab::Error::Forbidden]
 
     def self.create_from_gitlab(full_name, token = nil)
       repo_hash = map_from_gitlab(full_name, token)
