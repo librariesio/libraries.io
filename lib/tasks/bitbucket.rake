@@ -6,6 +6,6 @@ namespace :bitbucket do
   end
 
   task find_existing_repos: :environment do
-    Project.with_bitbucket_url.find_each(&:update_repository_async)
+    Project.with_bitbucket_url.without_repo.find_each(&:update_repository_async)
   end
 end

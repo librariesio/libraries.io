@@ -5,6 +5,6 @@ namespace :gitlab do
   end
 
   task find_existing_repos: :environment do
-    Project.with_gitlab_url.find_each(&:update_repository_async)
+    Project.with_gitlab_url.without_repo.find_each(&:update_repository_async)
   end
 end
