@@ -117,3 +117,5 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
     add_to_index file
   end
 end
+
+SitemapGenerator::Sitemap.ping_search_engines('https://libraries.io/sitemap.xml.gz')
