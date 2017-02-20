@@ -111,8 +111,7 @@ module BitbucketRepository
   end
 
   def get_bitbucket_file_list(token = nil)
-    user_name, repo_name = full_name.split('/')
-    bitbucket_client(token)
+    bitbucket_client(token).get_request("1.0/repositories/#{full_name}/directory/")[:values]
   end
 
   def get_bitbucket_file_contents(path, token = nil)

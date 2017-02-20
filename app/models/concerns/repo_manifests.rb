@@ -21,7 +21,7 @@ module RepoManifests
     when 'GitLab'
       get_gitlab_file_list(token)
     when 'Bitbucket'
-      # not implemented yet
+      get_bitbucket_file_list(token)
     end
   end
 
@@ -32,7 +32,7 @@ module RepoManifests
     when 'GitLab'
       get_gitlab_file_contents(path, token)
     when 'Bitbucket'
-      # not implemented yet
+      get_bitbucket_file_contents(path, token)
     end
   end
 
