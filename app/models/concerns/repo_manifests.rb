@@ -1,11 +1,11 @@
 module RepoManifests
   def download_manifests(token = nil)
     file_list = get_file_list(token)
-    return if file_list.empty?
+    return if file_list.blank?
     new_manifests = parse_manifests(file_list, token)
-    sync_metadata(file_list.map{|file| file.path })
+    sync_metadata(file_list)
 
-    return if new_manifests.empty?
+    return if new_manifests.blank?
 
     new_manifests.each {|m| sync_manifest(m) }
 
@@ -37,11 +37,11 @@ module RepoManifests
   end
 
   def parse_manifests(file_list, token = nil)
-    manifest_paths = Bibliothecary.identify_manifests(file_list.map{|file| file.path })
+    manifest_paths = Bibliothecary.identify_manifests(file_list)
 
     manifest_paths.map do |manifest_path|
       Bibliothecary.analyse_file(manifest_path, get_file_contents(manifest_path)).first
-    end.reject(&:empty?)
+    end.reject(&:blank?)
   end
 
   def sync_metadata(file_list)

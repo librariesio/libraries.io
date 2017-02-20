@@ -83,7 +83,7 @@ module GithubRepository
 
   def get_github_file_list(token = nil)
     tree = AuthToken.fallback_client(token).tree(full_name, default_branch, :recursive => true).tree
-    tree.select{|item| item.type == 'blob' }
+    tree.select{|item| item.type == 'blob' }.map{|file| file.path }
   end
 
   def get_github_file_contents(path, token = nil)
