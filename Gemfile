@@ -79,6 +79,7 @@ gem 'asciidoctor'
 gem 'org-ruby'
 gem 'creole'
 gem 'bundler'
+gem 'bibliothecary'
 
 group :development do
   gem 'spring'
