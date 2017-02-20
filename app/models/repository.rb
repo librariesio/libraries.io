@@ -160,7 +160,7 @@ class Repository < ApplicationRecord
   def download_owner
     case host_type
     when 'GitHub'
-      download_github_owner
+      send("download_#{host_type.downcase}_owner")
     when 'GitLab'
       # not implemented yet
     when 'Bitbucket'
@@ -201,14 +201,7 @@ class Repository < ApplicationRecord
   end
 
   def avatar_url(size = 60)
-    case host_type
-    when 'GitHub'
-      avatar = github_avatar_url(size)
-    when 'GitLab'
-      avatar = gitlab_avatar_url(size)
-    when 'Bitbucket'
-      avatar = bitbucket_avatar_url(size)
-    end
+    avatar = send("#{host_type.downcase}_avatar_url", size)
     return fallback_avatar_url(size) if avatar.blank?
     avatar
   end
@@ -227,14 +220,7 @@ class Repository < ApplicationRecord
   end
 
   def download_readme(token = nil)
-    case host_type
-    when 'GitHub'
-      download_github_readme(token)
-    when 'GitLab'
-      download_gitlab_readme(token)
-    when 'Bitbucket'
-      download_bitbucket_readme(token)
-    end
+    send("download_#{host_type.downcase}_readme", token)
   end
 
   def update_all_info_async(token = nil)
@@ -242,14 +228,7 @@ class Repository < ApplicationRecord
   end
 
   def update_from_repository(token = nil)
-    case host_type
-    when 'GitHub'
-      update_from_github(token)
-    when 'GitLab'
-      update_from_gitlab(token)
-    when 'Bitbucket'
-      update_from_bitbucket(token)
-    end
+    send("update_from_#{host_type.downcase}", token)
   end
 
   def update_all_info(token = nil)
@@ -267,31 +246,17 @@ class Repository < ApplicationRecord
   end
 
   def download_fork_source(token = nil)
-    case host_type
-    when 'GitHub'
-      download_github_fork_source(token)
-    when 'GitLab'
-      download_gitlab_fork_source(token)
-    when 'Bitbucket'
-      download_bitbucket_fork_source(token)
-    end
+    send("download_#{host_type.downcase}_fork_sources", token)
   end
 
   def download_tags(token = nil)
-    case host_type
-    when 'GitHub'
-      download_github_tags(token)
-    when 'GitLab'
-      download_gitlab_tags(token)
-    when 'Bitbucket'
-      download_bitbucket_tags(token)
-    end
+    send("download_#{host_type.downcase}_tags", token)
   end
 
   def download_contributions(token = nil)
     case host_type
     when 'GitHub'
-      download_github_contributions(token)
+      send("download_#{host_type.downcase}_contributions", token)
     when 'GitLab'
       # not implemented yet
     when 'Bitbucket'
@@ -327,14 +292,7 @@ class Repository < ApplicationRecord
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
-    case host_type
-    when 'GitHub'
-      create_from_github(full_name, token)
-    when 'GitLab'
-      create_from_gitlab(full_name, token)
-    when 'Bitbucket'
-      create_from_bitbucket(full_name, token)
-    end
+    send("create_from_#{host_type.downcase}", full_name, token)
   end
 
   def self.create_from_hash(repo_hash)
