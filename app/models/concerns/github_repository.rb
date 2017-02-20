@@ -81,6 +81,15 @@ module GithubRepository
     nil
   end
 
+  def get_github_file_list(token = nil)
+    tree = AuthToken.fallback_client(token).tree(full_name, default_branch, :recursive => true).tree
+    tree.select{|item| item.type == 'blob' }
+  end
+
+  def get_github_file_contents(path, token = nil)
+    Base64.decode64 AuthToken.fallback_client(token).contents(full_name, path: path).content
+  end
+
   def update_from_github(token = nil)
     begin
       r = AuthToken.new_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash

@@ -58,6 +58,10 @@ module GitlabRepository
     end
   end
 
+  def escaped_full_name
+    full_name.gsub('/','%2F')
+  end
+
   def download_gitlab_fork_source(token = nil)
     return true unless self.fork? && self.source.nil?
     Repository.create_from_gitlab(source_name, token)
@@ -72,11 +76,11 @@ module GitlabRepository
   end
 
   def download_gitlab_readme(token = nil)
-    files = gitlab_client(token).tree(full_name.gsub('/','%2F'))
+    files = gitlab_client(token).tree(escaped_full_name)
     paths =  files.map(&:path)
     readme_path = paths.select{|path| path.match(/^readme/i) }.first
     return if readme_path.nil?
-    raw_content =  gitlab_client(token).file_contents(full_name.gsub('/','%2F'), readme_path)
+    raw_content =  gitlab_client(token).file_contents(escaped_full_name, readme_path)
     contents = {
       html_body: GitHub::Markup.render(readme_path, raw_content)
     }
@@ -91,7 +95,7 @@ module GitlabRepository
   end
 
   def download_gitlab_tags(token = nil)
-    remote_tags = gitlab_client(token).tags(full_name.gsub('/','%2F')).auto_paginate
+    remote_tags = gitlab_client(token).tags(escaped_full_name).auto_paginate
     existing_tag_names = tags.pluck(:name)
     remote_tags.each do |tag|
       next if existing_tag_names.include?(tag.name)
