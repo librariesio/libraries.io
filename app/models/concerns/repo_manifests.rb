@@ -79,7 +79,7 @@ module RepoManifests
 
   def delete_old_manifests(new_manifests)
     existing_manifests = manifests.map{|m| [m.platform, m.filepath] }
-    to_be_removed = existing_manifests - new_manifests.map{|m| [m[:platform], m[:filepath]] }
+    to_be_removed = existing_manifests - new_manifests.map{|m| [m[:platform], m[:path]] }
     to_be_removed.each do |m|
       manifests.where(platform: m[0], filepath: m[1]).each(&:destroy)
     end
