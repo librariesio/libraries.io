@@ -1,16 +1,13 @@
 module RepoManifests
   def download_manifests(token = nil)
     return unless host_type == 'GitHub'
-    body = parse_manifests(token)
 
-    if body
-      new_manifests = body["manifests"]
-      sync_metadata(body)
-    else
-      new_manifests = nil
-    end
+    file_list = get_file_list(token)
+    return if file_list.empty?
+    new_manifests = parse_manifests(file_list, token)
+    sync_metadata(file_list.map{|file| file.path })
 
-    return if new_manifests.nil?
+    return if new_manifests.empty?
 
     new_manifests.each {|m| sync_manifest(m) }
 
@@ -19,51 +16,48 @@ module RepoManifests
     repository_subscriptions.each(&:update_subscriptions)
   end
 
-  def parse_manifests(token)
-    r = Typhoeus::Request.new("https://librarian.libraries.io/v2/repos/#{full_name}",
-      method: :get,
-      params: { token: token },
-      headers: { 'Accept' => 'application/json' }).run
-    begin
-      Oj.load(r.body)
-    rescue Oj::ParseError
-      nil
-    end
+  def get_file_list(token)
+    tree = AuthToken.fallback_client(token).tree(full_name, default_branch, :recursive => true).tree
+    tree.select{|item| item.type == 'blob' }
   end
 
-  def sync_metadata(body)
-    if body && body['metadata']
-      meta = body['metadata']
+  def parse_manifests(file_list, token)
+    manifest_paths = Bibliothecary.identify_manifests(file_list.map{|file| file.path })
 
-      self.has_readme       = meta['readme']['path']        if meta['readme']
-      self.has_changelog    = meta['changelog']['path']     if meta['changelog']
-      self.has_contributing = meta['contributing']['path']  if meta['contributing']
-      self.has_license      = meta['license']['path']       if meta['license']
-      self.has_coc          = meta['codeofconduct']['path'] if meta['codeofconduct']
-      self.has_threat_model = meta['threatmodel']['path']   if meta['threatmodel']
-      self.has_audit        = meta['audit']['path']         if meta['audit']
+    manifest_paths.map do |manifest_path|
+      contents = Base64.decode64 AuthToken.fallback_client(token).contents(full_name, path: manifest_path).content
+      Bibliothecary.analyse_file(manifest_path, contents).first
+    end.reject(&:empty?)
+  end
 
-      save! if self.changed?
-    end
+  def sync_metadata(file_list)
+    self.has_readme       = file_list.any?{|file| file.match(/^README/i) }
+    self.has_changelog    = file_list.any?{|file| file.match(/^CHANGELOG/i) }
+    self.has_contributing = file_list.any?{|file| file.match(/^CONTRIBUTING/i) }
+    self.has_license      = file_list.any?{|file| file.match(/^LICENSE/i) }
+    self.has_coc          = file_list.any?{|file| file.match(/^CODE[-_]OF[-_]CONDUCT/i) }
+    self.has_threat_model = file_list.any?{|file| file.match(/^THREAT[-_]MODEL/i) }
+    self.has_audit        = file_list.any?{|file| file.match(/^AUDIT/i) }
+    save if self.changed?
   end
 
   def sync_manifest(m)
-    args = {platform: m['platform'], kind: m['type'], filepath: m['filepath'], sha: m['sha']}
+    args = {platform: m[:platform], kind: m[:type], filepath: m[:path]}
 
     unless manifests.find_by(args)
       manifest = manifests.create(args)
-      dependencies = m['dependencies'].uniq{|dep| [dep['name'].try(:strip), dep['version'], dep['type']]}
+      dependencies = m[:dependencies].uniq{|dep| [dep[:name].try(:strip), dep[:requirement], dep[:type]]}
       dependencies.each do |dep|
         platform = manifest.platform
         next unless dep.is_a?(Hash)
-        project = Project.platform(platform).find_by_name(dep['name'])
+        project = Project.platform(platform).find_by_name(dep[:name])
 
         manifest.repository_dependencies.create({
           project_id: project.try(:id),
-          project_name: dep['name'].try(:strip),
+          project_name: dep[:name].try(:strip),
           platform: platform,
-          requirements: dep['version'],
-          kind: dep['type']
+          requirements: dep[:requirement],
+          kind: dep[:type]
         })
       end
     end
