@@ -9,8 +9,6 @@ class Repository < ApplicationRecord
   include GitlabRepository
   include BitbucketRepository
 
-  IGNORABLE_GITHUB_EXCEPTIONS = [Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError]
-
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
 
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
@@ -265,30 +263,25 @@ class Repository < ApplicationRecord
   end
 
   def create_webhook(token)
-    github_client(token).create_hook(
-      full_name,
-      'web',
-      {
-        :url => 'https://libraries.io/hooks/github',
-        :content_type => 'json'
-      },
-      {
-        :events => ['push', 'pull_request'],
-        :active => true
-      }
-    )
-  rescue Octokit::UnprocessableEntity
-    nil
+    case host_type
+    when 'GitHub'
+      send("#{host_type.downcase}_create_webhook", token)
+    when 'GitLab'
+      # not implemented yet
+    when 'Bitbucket'
+      # not implemented yet
+    end
   end
 
   def download_issues(token = nil)
-    github_client = AuthToken.new_client(token)
-    issues = github_client.issues(full_name, state: 'all')
-    issues.each do |issue|
-      Issue.create_from_hash(self, issue)
+    case host_type
+    when 'GitHub'
+      send("download_#{host_type.downcase}_issues", token)
+    when 'GitLab'
+      # not implemented yet
+    when 'Bitbucket'
+      # not implemented yet
     end
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
   end
 
   def self.create_from_host(host_type, full_name, token = nil)

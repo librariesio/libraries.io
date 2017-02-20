@@ -65,7 +65,7 @@ class GithubUser < ApplicationRecord
 
   def download_from_github_by(id_or_login)
     GithubUser.create_from_github(github_client.user(id_or_login))
-  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -74,7 +74,7 @@ class GithubUser < ApplicationRecord
       GithubCreateOrgWorker.perform_async(org.login)
     end
     true
-  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -84,7 +84,7 @@ class GithubUser < ApplicationRecord
     end
 
     true
-  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
