@@ -195,7 +195,7 @@ module PackageManager
         dependency = dependency.deep_stringify_keys
         {
           project_name: dependency["name"],
-          requirements: dependency["version"],
+          requirements: dependency["requirement"] || '*',
           kind: dependency["type"],
           platform: self.name.demodulize
         }

@@ -65,11 +65,8 @@ module PackageManager
         response = request(url)
         if response.status == 200
           contents = response.body
-          r = Typhoeus::Request.new("https://librarian.libraries.io/v2/parse_file?filepath=elm-package.json",
-            method: :post,
-            body: {contents: contents},
-            headers: { 'Accept' => 'application/json' }).run
-          return Oj.load(r.body)
+          dependencies = Bibliothecary.analyse_file('elm-package.json', contents).first.fetch(:dependencies)
+          return dependencies
         else
           return []
         end
