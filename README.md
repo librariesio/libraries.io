@@ -9,7 +9,7 @@ Libraries.io helps developers find new open source libraries, modules and framew
 
 ## Contributors
 
-Over 20 different people have contributed to the project, you can see them all here: https://github.com/librariesio/libraries.io/graphs/contributors
+Over 25 people have contributed to the project, you can see them all here: https://github.com/librariesio/libraries.io/graphs/contributors
 
 ## Development
 
