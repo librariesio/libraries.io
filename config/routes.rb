@@ -177,6 +177,8 @@ Rails.application.routes.draw do
   get '/unseen-infrastructure', to: 'projects#unseen_infrastructure', as: :unseen_infrastructure
 
   get '/about', to: 'pages#about', as: :about
+  get '/privacy', to: 'pages#privacy', as: :privacy
+
 
   if Rails.env.development?
     get '/rails/mailers'         => "rails/mailers#index"
