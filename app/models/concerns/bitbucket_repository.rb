@@ -40,7 +40,8 @@ module BitbucketRepository
       })
     end
 
-    def self.recursive_bitbucket_repos(url)
+    def self.recursive_bitbucket_repos(url, limit = 10)
+      return if limit.zero?
       r = Typhoeus::Request.new(url,
         method: :get,
         headers: { 'Accept' => 'application/json' }).run
@@ -52,8 +53,9 @@ module BitbucketRepository
       end
       puts json['next']
       if json['values'].any? && json['next']
+        limit = limit - 1
         REDIS.set 'bitbucket-after', Addressable::URI.parse(json['next']).query_values['after']
-        recursive_bitbucket_repos(json['next'])
+        recursive_bitbucket_repos(json['next'], limit)
       end
     end
   end
