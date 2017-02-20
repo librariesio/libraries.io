@@ -2,12 +2,14 @@ module GithubRepository
   extend ActiveSupport::Concern
 
   included do
+    IGNORABLE_GITHUB_EXCEPTIONS = [Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError]
+
     def self.create_from_github(full_name, token = nil)
       github_client = AuthToken.new_client(token)
       repo_hash = github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
       return false if repo_hash.nil? || repo_hash.empty?
       create_from_hash(repo_hash)
-    rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
+    rescue *IGNORABLE_GITHUB_EXCEPTIONS
       nil
     end
   end
@@ -24,7 +26,7 @@ module GithubRepository
     else
       GithubUser.create_from_github(o)
     end
-  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -40,7 +42,17 @@ module GithubRepository
     else
       readme.update_attributes(contents)
     end
-  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *IGNORABLE_GITHUB_EXCEPTIONS
+    nil
+  end
+
+  def download_github_issues(token = nil)
+    github_client = AuthToken.new_client(token)
+    issues = github_client.issues(full_name, state: 'all')
+    issues.each do |issue|
+      Issue.create_from_hash(self, issue)
+    end
+  rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -50,6 +62,23 @@ module GithubRepository
 
   def github_client(token = nil)
     AuthToken.fallback_client(token)
+  end
+
+  def github_create_webhook(token = nil)
+    github_client(token).create_hook(
+      full_name,
+      'web',
+      {
+        :url => 'https://libraries.io/hooks/github',
+        :content_type => 'json'
+      },
+      {
+        :events => ['push', 'pull_request'],
+        :active => true
+      }
+    )
+  rescue Octokit::UnprocessableEntity
+    nil
   end
 
   def update_from_github(token = nil)
@@ -71,7 +100,7 @@ module GithubRepository
       save! if self.changed?
     rescue Octokit::NotFound
       update_attribute(:status, 'Removed') if !self.private?
-    rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
+    rescue *IGNORABLE_GITHUB_EXCEPTIONS
       nil
     end
   end
@@ -83,7 +112,7 @@ module GithubRepository
       next unless tag && tag.is_a?(Sawyer::Resource) && tag['ref']
       download_github_tag(token, tag, existing_tag_names)
     end
-  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
@@ -143,7 +172,7 @@ module GithubRepository
       cont.save! if cont.changed?
     end
     true
-  rescue *Repository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *IGNORABLE_GITHUB_EXCEPTIONS
     nil
   end
 
