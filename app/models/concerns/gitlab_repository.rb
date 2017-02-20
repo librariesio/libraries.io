@@ -39,22 +39,21 @@ module GitlabRepository
       })
     end
 
-    def self.recursive_gitlab_repos(page_number = 1)
+    def self.recursive_gitlab_repos(page_number = 1, limit = 10)
       r = Typhoeus.get("https://gitlab.com/explore/projects?&page=#{page_number}&sort=created_asc")
       if r.code == 500
-        recursive_gitlab_repos(page_number.to_i + 1)
+        recursive_gitlab_repos(page_number.to_i + 1, limit)
       else
         page = Nokogiri::HTML(r.body)
         names = page.css('a.project').map{|project| project.attributes["href"].value[1..-1] }
         names.each do |name|
-          p name
           CreateRepositoryWorker.perform_async('GitLab', name)
         end
       end
       if names.any?
-        p page_number
+        limit = limit - 1
         REDIS.set 'gitlab-page', page_number
-        recursive_gitlab_repos(page_number.to_i + 1)
+        recursive_gitlab_repos(page_number.to_i + 1, limit)
       end
     end
   end
