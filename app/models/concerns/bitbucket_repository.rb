@@ -110,6 +110,16 @@ module BitbucketRepository
     "https://bitbucket.org/#{full_name}/avatar/#{size}"
   end
 
+  def get_bitbucket_file_list(token = nil)
+    user_name, repo_name = full_name.split('/')
+    bitbucket_client(token)
+  end
+
+  def get_bitbucket_file_contents(path, token = nil)
+    user_name, repo_name = full_name.split('/')
+    bitbucket_client(token).repos.sources.list(user_name, repo_name, 'master', path).data
+  end
+
   def update_from_bitbucket(token = nil)
     begin
       r = Repository.map_from_bitbucket(self.full_name)

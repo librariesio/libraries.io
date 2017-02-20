@@ -110,6 +110,15 @@ module GitlabRepository
     nil
   end
 
+  def get_gitlab_file_list(token = nil)
+    tree = gitlab_client(token).tree(escaped_full_name, recursive: true)
+    tree.select{|item| item.type == 'blob' }
+  end
+
+  def get_gitlab_file_contents(path, token = nil)
+    gitlab_client(token).file_contents(escaped_full_name, path)
+  end
+
   def update_from_gitlab(token = nil)
     begin
       r = Repository.map_from_gitlab(self.full_name)

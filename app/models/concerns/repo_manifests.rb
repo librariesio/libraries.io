@@ -1,7 +1,5 @@
 module RepoManifests
   def download_manifests(token = nil)
-    return unless host_type == 'GitHub'
-
     file_list = get_file_list(token)
     return if file_list.empty?
     new_manifests = parse_manifests(file_list, token)
@@ -16,17 +14,33 @@ module RepoManifests
     repository_subscriptions.each(&:update_subscriptions)
   end
 
-  def get_file_list(token)
-    tree = AuthToken.fallback_client(token).tree(full_name, default_branch, :recursive => true).tree
-    tree.select{|item| item.type == 'blob' }
+  def get_file_list(token = nil)
+    case host_type
+    when 'GitHub'
+      get_github_file_list(token)
+    when 'GitLab'
+      get_gitlab_file_list(token)
+    when 'Bitbucket'
+      # not implemented yet
+    end
   end
 
-  def parse_manifests(file_list, token)
+  def get_file_contents(path, token = nil)
+    case host_type
+    when 'GitHub'
+      get_github_file_contents(path, token)
+    when 'GitLab'
+      get_gitlab_file_contents(path, token)
+    when 'Bitbucket'
+      # not implemented yet
+    end
+  end
+
+  def parse_manifests(file_list, token = nil)
     manifest_paths = Bibliothecary.identify_manifests(file_list.map{|file| file.path })
 
     manifest_paths.map do |manifest_path|
-      contents = Base64.decode64 AuthToken.fallback_client(token).contents(full_name, path: manifest_path).content
-      Bibliothecary.analyse_file(manifest_path, contents).first
+      Bibliothecary.analyse_file(manifest_path, get_file_contents(manifest_path)).first
     end.reject(&:empty?)
   end
 
@@ -65,7 +79,7 @@ module RepoManifests
 
   def delete_old_manifests(new_manifests)
     existing_manifests = manifests.map{|m| [m.platform, m.filepath] }
-    to_be_removed = existing_manifests - new_manifests.map{|m| [m["platform"], m["filepath"]] }
+    to_be_removed = existing_manifests - new_manifests.map{|m| [m[:platform], m[:filepath]] }
     to_be_removed.each do |m|
       manifests.where(platform: m[0], filepath: m[1]).each(&:destroy)
     end
