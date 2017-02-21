@@ -140,16 +140,6 @@ module GithubRepository
     GithubDownloadForkWorker.perform_async(self.id, token)
   end
 
-  def download_forks(token = nil)
-    return unless host_type == 'GitHub'
-    return true if fork?
-    return true unless forks_count && forks_count > 0 && forks_count < 100
-    return true if forks_count == forked_repositories.count
-    AuthToken.new_client(token).forks(full_name).each do |fork|
-      Repository.create_from_hash(fork)
-    end
-  end
-
   def download_github_contributions(token = nil)
     gh_contributions = github_client(token).contributors(full_name)
     return if gh_contributions.empty?

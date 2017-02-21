@@ -284,6 +284,17 @@ class Repository < ApplicationRecord
     end
   end
 
+  def download_forks(token = nil)
+    case host_type
+    when 'GitHub'
+      repository_host.download_forks(token)
+    when 'GitLab'
+      # not implemented yet
+    when 'Bitbucket'
+      # not implemented yet
+    end
+  end
+
   def self.create_from_host(host_type, full_name, token = nil)
     send("create_from_#{host_type.downcase}", full_name, token)
   end
