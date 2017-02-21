@@ -18,7 +18,7 @@ module PackageManager
         rescue
           return nil
         end
-      elsif name_with_owner = GithubUrls.parse(name)
+      elsif name_with_owner = GitlabURLParser.parse(name)
         begin
           repo = AuthToken.client.repo(name_with_owner, accept: 'application/vnd.github.drax-preview+json')
           return repo.to_hash
