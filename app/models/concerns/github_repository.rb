@@ -56,10 +56,6 @@ module GithubRepository
     nil
   end
 
-  def github_avatar_url(size = 60)
-    "https://avatars.githubusercontent.com/u/#{owner_id}?size=#{size}"
-  end
-
   def github_client(token = nil)
     AuthToken.fallback_client(token)
   end

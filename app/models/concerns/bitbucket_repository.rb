@@ -106,10 +106,6 @@ module BitbucketRepository
     nil
   end
 
-  def bitbucket_avatar_url(size = 60)
-    "https://bitbucket.org/#{full_name}/avatar/#{size}"
-  end
-
   def update_from_bitbucket(token = nil)
     begin
       r = Repository.map_from_bitbucket(self.full_name)

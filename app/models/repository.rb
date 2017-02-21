@@ -199,7 +199,7 @@ class Repository < ApplicationRecord
   end
 
   def avatar_url(size = 60)
-    avatar = send("#{host_type.downcase}_avatar_url", size)
+    avatar = repository_host.avatar_url(size)
     return fallback_avatar_url(size) if avatar.blank?
     avatar
   end
@@ -366,5 +366,9 @@ class Repository < ApplicationRecord
     else
       Repository.create_from_github(repo_name, token)
     end
+  end
+
+  def repository_host
+    @repository_host ||= RepositoryHost.const_get(host_type.capitalize).new(self)
   end
 end
