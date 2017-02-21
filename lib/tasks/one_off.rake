@@ -21,11 +21,4 @@ namespace :one_off do
       end
     end
   end
-
-  desc 'fill in host_type on existing repositories'
-  task set_host_type: :environment do
-    Repository.select(:id).find_in_batches do |repos|
-      Repository.where(id: repos.map(&:id)).update_all host_type: 'GitHub'
-    end
-  end
 end
