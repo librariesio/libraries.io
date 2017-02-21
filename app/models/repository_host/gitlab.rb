@@ -6,6 +6,11 @@ module RepositoryHost
       repository.logo_url
     end
 
+    def download_fork_source(token = nil)
+      super
+      Repository.create_from_gitlab(repository.source_name, token)
+    end
+
     def download_readme(token = nil)
       files = api_client(token).tree(repository.full_name.gsub('/','%2F'))
       paths =  files.map(&:path)

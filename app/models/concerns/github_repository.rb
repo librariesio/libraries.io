@@ -14,11 +14,6 @@ module GithubRepository
     end
   end
 
-  def download_github_fork_source(token = nil)
-    return true unless self.fork? && self.source.nil?
-    Repository.create_from_github(source_name, token)
-  end
-
   def github_client(token = nil)
     AuthToken.fallback_client(token)
   end

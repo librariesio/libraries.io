@@ -58,11 +58,6 @@ module GitlabRepository
     end
   end
 
-  def download_gitlab_fork_source(token = nil)
-    return true unless self.fork? && self.source.nil?
-    Repository.create_from_gitlab(source_name, token)
-  end
-
   def gitlab_client(token = nil)
     Repository.gitlab_client(token)
   end

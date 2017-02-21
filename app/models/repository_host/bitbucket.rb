@@ -6,6 +6,11 @@ module RepositoryHost
       "https://bitbucket.org/#{repository.full_name}/avatar/#{size}"
     end
 
+    def download_fork_source(token = nil)
+      super
+      Repository.create_from_bitbucket(repository.source_name, token)
+    end
+
     def download_readme(token = nil)
       user_name, repo_name = repository.full_name.split('/')
       files = api_client(token).repos.sources.list(user_name, repo_name, 'master', '/')

@@ -64,11 +64,6 @@ module BitbucketRepository
     Repository.bitbucket_client(token)
   end
 
-  def download_bitbucket_fork_source(token = nil)
-    return true unless self.fork? && self.source.nil?
-    Repository.create_from_bitbucket(source_name, token)
-  end
-
   def update_from_bitbucket(token = nil)
     begin
       r = Repository.map_from_bitbucket(self.full_name)
