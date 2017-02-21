@@ -63,28 +63,4 @@ module BitbucketRepository
   def bitbucket_client(token = nil)
     Repository.bitbucket_client(token)
   end
-
-  def update_from_bitbucket(token = nil)
-    begin
-      r = Repository.map_from_bitbucket(self.full_name)
-      return unless r.present?
-      self.uuid = r[:id] unless self.uuid == r[:id]
-       if self.full_name.downcase != r[:full_name].downcase
-         clash = Repository.host(r[:host_type]).where('lower(full_name) = ?', r[:full_name].downcase).first
-         if clash && (!clash.update_from_bitbucket(token) || clash.status == "Removed")
-           clash.destroy
-         end
-         self.full_name = r[:full_name]
-       end
-      self.owner_id = r[:owner][:id]
-      self.license = Project.format_license(r[:license][:key]) if r[:license]
-      self.source_name = r[:parent][:full_name] if r[:fork]
-      assign_attributes r.slice(*Repository::API_FIELDS)
-      save! if self.changed?
-    rescue BitBucket::Error::NotFound
-      update_attribute(:status, 'Removed') if !self.private?
-    rescue *IGNORABLE_BITBUCKET_EXCEPTIONS
-      nil
-    end
-  end
 end

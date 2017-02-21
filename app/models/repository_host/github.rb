@@ -134,6 +134,30 @@ module RepositoryHost
       repository.tags.create!(tag_hash)
     end
 
+    def update(token = nil)
+      begin
+        r = AuthToken.new_client(token).repo(repository.id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
+        return unless r.present?
+        repository.uuid = r[:id] unless repository.uuid == r[:id]
+         if repository.full_name.downcase != r[:full_name].downcase
+           clash = Repository.host('GitHub').where('lower(full_name) = ?', r[:full_name].downcase).first
+           if clash && (!clash.update_from_repository(token) || clash.status == "Removed")
+             clash.destroy
+           end
+           repository.full_name = r[:full_name]
+         end
+        repository.owner_id = r[:owner][:id]
+        repository.license = Project.format_license(r[:license][:key]) if r[:license]
+        repository.source_name = r[:parent][:full_name] if r[:fork]
+        repository.assign_attributes r.slice(*API_FIELDS)
+        repository.save! if repository.changed?
+      rescue Octokit::NotFound
+        repository.update_attribute(:status, 'Removed') if !repository.private?
+      rescue *IGNORABLE_EXCEPTIONS
+        nil
+      end
+    end
+
     private
 
     def api_client(token = nil)

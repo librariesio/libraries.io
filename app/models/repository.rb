@@ -226,7 +226,7 @@ class Repository < ApplicationRecord
   end
 
   def update_from_repository(token = nil)
-    send("update_from_#{host_type.downcase}", token)
+    repository_host.update(token)
   end
 
   def update_all_info(token = nil)

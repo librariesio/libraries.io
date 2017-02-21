@@ -46,6 +46,30 @@ module RepositoryHost
       nil
     end
 
+    def update(token = nil)
+      begin
+        r = Repository.map_from_gitlab(repository.full_name)
+        return unless r.present?
+        repository.uuid = r[:id] unless repository.uuid == r[:id]
+         if repository.full_name.downcase != r[:full_name].downcase
+           clash = Repository.host('GitLab').where('lower(full_name) = ?', r[:full_name].downcase).first
+           if clash && (!clash.update_from_repository(token) || clash.status == "Removed")
+             clash.destroy
+           end
+           repository.full_name = r[:full_name]
+         end
+        repository.owner_id = r[:owner][:id]
+        repository.license = Project.format_license(r[:license][:key]) if r[:license]
+        repository.source_name = r[:parent][:full_name] if r[:fork]
+        repository.assign_attributes r.slice(*Repository::API_FIELDS)
+        repository.save! if self.changed?
+      rescue Gitlab::Error::NotFound
+        repository.update_attribute(:status, 'Removed') if !repository.private?
+      rescue *IGNORABLE_EXCEPTIONS
+        nil
+      end
+    end
+
     private
 
     def api_client(token = nil)
