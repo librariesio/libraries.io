@@ -99,7 +99,7 @@ GEM
     api-pagination (4.5.2)
     arel (7.1.4)
     asciidoctor (1.5.5)
-    autoprefixer-rails (6.7.3)
+    autoprefixer-rails (6.7.4)
       execjs
     bloomfilter-rb (2.1.1)
       redis
