@@ -80,6 +80,20 @@ module RepositoryHost
       nil
     end
 
+    def download_readme(token = nil)
+      contents = {
+        html_body: api_client(token).readme(repository.full_name, accept: 'application/vnd.github.V3.html')
+      }
+
+      if repository.readme.nil?
+        repository.create_readme(contents)
+      else
+        repository.readme.update_attributes(contents)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
+
     private
 
     def api_client(token = nil)

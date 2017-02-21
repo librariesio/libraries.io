@@ -67,25 +67,6 @@ module GitlabRepository
     Repository.gitlab_client(token)
   end
 
-  def download_gitlab_readme(token = nil)
-    files = gitlab_client(token).tree(full_name.gsub('/','%2F'))
-    paths =  files.map(&:path)
-    readme_path = paths.select{|path| path.match(/^readme/i) }.first
-    return if readme_path.nil?
-    raw_content =  gitlab_client(token).file_contents(full_name.gsub('/','%2F'), readme_path)
-    contents = {
-      html_body: GitHub::Markup.render(readme_path, raw_content)
-    }
-
-    if readme.nil?
-      create_readme(contents)
-    else
-      readme.update_attributes(contents)
-    end
-  rescue *IGNORABLE_GITLAB_EXCEPTIONS
-    nil
-  end
-
   def download_gitlab_tags(token = nil)
     remote_tags = gitlab_client(token).tags(full_name.gsub('/','%2F')).auto_paginate
     existing_tag_names = tags.pluck(:name)

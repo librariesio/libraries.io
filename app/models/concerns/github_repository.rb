@@ -19,17 +19,6 @@ module GithubRepository
     Repository.create_from_github(source_name, token)
   end
 
-  def download_github_readme(token = nil)
-    contents = {html_body: github_client(token).readme(full_name, accept: 'application/vnd.github.V3.html')}
-    if readme.nil?
-      create_readme(contents)
-    else
-      readme.update_attributes(contents)
-    end
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
-  end
-
   def github_client(token = nil)
     AuthToken.fallback_client(token)
   end

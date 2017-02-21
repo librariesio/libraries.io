@@ -218,7 +218,7 @@ class Repository < ApplicationRecord
   end
 
   def download_readme(token = nil)
-    send("download_#{host_type.downcase}_readme", token)
+    repository_host.download_readme(token)
   end
 
   def update_all_info_async(token = nil)
