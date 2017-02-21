@@ -248,7 +248,7 @@ class Repository < ApplicationRecord
   end
 
   def download_tags(token = nil)
-    send("download_#{host_type.downcase}_tags", token)
+    repository_host.download_tags(token)
   end
 
   def download_contributions(token = nil)

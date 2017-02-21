@@ -25,6 +25,22 @@ module RepositoryHost
       nil
     end
 
+    def download_tags(token = nil)
+      remote_tags = api_client(token).tags(repository.full_name.gsub('/','%2F')).auto_paginate
+      existing_tag_names = repository.tags.pluck(:name)
+      remote_tags.each do |tag|
+        next if existing_tag_names.include?(tag.name)
+        repository.tags.create({
+          name: tag.name,
+          kind: "tag",
+          sha: tag.commit.id,
+          published_at: tag.commit.committed_date
+        })
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
+
     private
 
     def api_client(token = nil)

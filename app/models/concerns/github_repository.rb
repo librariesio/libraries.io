@@ -47,41 +47,6 @@ module GithubRepository
     end
   end
 
-  def download_github_tags(token = nil)
-    existing_tag_names = tags.pluck(:name)
-    tags = github_client(token).refs(full_name, 'tags')
-    Array(tags).each do |tag|
-      next unless tag && tag.is_a?(Sawyer::Resource) && tag['ref']
-      download_github_tag(token, tag, existing_tag_names)
-    end
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
-  end
-
-  def download_github_tag(token, tag, existing_tag_names)
-    match = tag.ref.match(/refs\/tags\/(.*)/)
-    return unless match
-    name = match[1]
-    return if existing_tag_names.include?(name)
-
-    object = github_client(token).get(tag.object.url)
-
-    tag_hash = {
-      name: name,
-      kind: tag.object.type,
-      sha: tag.object.sha
-    }
-
-    case tag.object.type
-    when 'commit'
-      tag_hash[:published_at] = object.committer.date
-    when 'tag'
-      tag_hash[:published_at] = object.tagger.date
-    end
-
-    tags.create!(tag_hash)
-  end
-
   def download_forks_async(token = nil)
     GithubDownloadForkWorker.perform_async(self.id, token)
   end

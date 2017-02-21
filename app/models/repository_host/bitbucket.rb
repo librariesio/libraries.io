@@ -26,6 +26,23 @@ module RepositoryHost
       nil
     end
 
+    def download_tags(token = nil)
+      user_name, repo_name = repository.full_name.split('/')
+      remote_tags = api_client(token).repos.tags(user_name, repo_name)
+      existing_tag_names = repository.tags.pluck(:name)
+      remote_tags.each do |name, data|
+        next if existing_tag_names.include?(name)
+        repository.tags.create({
+          name: name,
+          kind: "tag",
+          sha: data.raw_node,
+          published_at: data.utctimestamp
+        })
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
+
     private
 
     def api_client(token = nil)
