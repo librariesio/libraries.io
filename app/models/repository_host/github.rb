@@ -23,6 +23,28 @@ module RepositoryHost
       nil
     end
 
+    def download_contributions(token = nil)
+      gh_contributions = api_client(token).contributors(repository.full_name)
+      return if gh_contributions.empty?
+      existing_contributions = repository.contributions.includes(:github_user).to_a
+      platform = repository.projects.first.try(:platform)
+      gh_contributions.each do |c|
+        next unless c['id']
+        cont = existing_contributions.find{|cnt| cnt.github_user.try(:github_id) == c.id }
+        unless cont
+          user = GithubUser.create_from_github(c)
+          cont = repository.contributions.find_or_create_by(github_user: user)
+        end
+
+        cont.count = c.contributions
+        cont.platform = platform
+        cont.save! if cont.changed?
+      end
+      true
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
+
     def download_forks(token = nil)
       return true if repository.fork?
       return true unless repository.forks_count && repository.forks_count > 0 && repository.forks_count < 100

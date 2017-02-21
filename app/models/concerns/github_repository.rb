@@ -97,28 +97,6 @@ module GithubRepository
     GithubDownloadForkWorker.perform_async(self.id, token)
   end
 
-  def download_github_contributions(token = nil)
-    gh_contributions = github_client(token).contributors(full_name)
-    return if gh_contributions.empty?
-    existing_contributions = contributions.includes(:github_user).to_a
-    platform = projects.first.try(:platform)
-    gh_contributions.each do |c|
-      next unless c['id']
-      cont = existing_contributions.find{|cnt| cnt.github_user.try(:github_id) == c.id }
-      unless cont
-        user = GithubUser.create_from_github(c)
-        cont = contributions.find_or_create_by(github_user: user)
-      end
-
-      cont.count = c.contributions
-      cont.platform = platform
-      cont.save! if cont.changed?
-    end
-    true
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
-  end
-
   def github_contributions_count
     contributions_count # legacy alias
   end

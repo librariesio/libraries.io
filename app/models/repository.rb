@@ -254,7 +254,7 @@ class Repository < ApplicationRecord
   def download_contributions(token = nil)
     case host_type
     when 'GitHub'
-      send("download_#{host_type.downcase}_contributions", token)
+      repository_host.download_contributions(token)
     when 'GitLab'
       # not implemented yet
     when 'Bitbucket'
