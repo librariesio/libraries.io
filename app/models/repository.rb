@@ -244,7 +244,7 @@ class Repository < ApplicationRecord
   end
 
   def download_fork_source(token = nil)
-    send("download_#{host_type.downcase}_fork_sources", token)
+    send("download_#{host_type.downcase}_fork_source", token)
   end
 
   def download_tags(token = nil)
