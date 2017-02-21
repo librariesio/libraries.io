@@ -265,7 +265,7 @@ class Repository < ApplicationRecord
   def create_webhook(token)
     case host_type
     when 'GitHub'
-      send("#{host_type.downcase}_create_webhook", token)
+      repository_host.create_webook(token)
     when 'GitLab'
       # not implemented yet
     when 'Bitbucket'

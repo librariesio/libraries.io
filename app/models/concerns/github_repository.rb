@@ -60,23 +60,6 @@ module GithubRepository
     AuthToken.fallback_client(token)
   end
 
-  def github_create_webhook(token = nil)
-    github_client(token).create_hook(
-      full_name,
-      'web',
-      {
-        :url => 'https://libraries.io/hooks/github',
-        :content_type => 'json'
-      },
-      {
-        :events => ['push', 'pull_request'],
-        :active => true
-      }
-    )
-  rescue Octokit::UnprocessableEntity
-    nil
-  end
-
   def update_from_github(token = nil)
     begin
       r = AuthToken.new_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
