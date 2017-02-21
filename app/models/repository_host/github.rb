@@ -1,5 +1,7 @@
 module RepositoryHost
   class Github < Base
+    IGNORABLE_EXCEPTIONS = [Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError]
+
     def avatar_url(size = 60)
       "https://avatars.githubusercontent.com/u/#{repository.owner_id}?size=#{size}"
     end
@@ -28,6 +30,16 @@ module RepositoryHost
       AuthToken.new_client(token).forks(repository.full_name).each do |fork|
         Repository.create_from_hash(fork)
       end
+    end
+
+    def download_issues(token = nil)
+      api_client = AuthToken.new_client(token)
+      issues = api_client.issues(full_name, state: 'all')
+      issues.each do |issue|
+        Issue.create_from_hash(repository, issue)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     private

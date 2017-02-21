@@ -276,7 +276,7 @@ class Repository < ApplicationRecord
   def download_issues(token = nil)
     case host_type
     when 'GitHub'
-      send("download_#{host_type.downcase}_issues", token)
+      repository_host.download_issues(token)
     when 'GitLab'
       # not implemented yet
     when 'Bitbucket'

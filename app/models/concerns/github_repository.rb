@@ -46,16 +46,6 @@ module GithubRepository
     nil
   end
 
-  def download_github_issues(token = nil)
-    github_client = AuthToken.new_client(token)
-    issues = github_client.issues(full_name, state: 'all')
-    issues.each do |issue|
-      Issue.create_from_hash(self, issue)
-    end
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
-  end
-
   def github_client(token = nil)
     AuthToken.fallback_client(token)
   end
