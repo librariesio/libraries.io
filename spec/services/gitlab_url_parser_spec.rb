@@ -87,29 +87,6 @@ describe GitlabURLParser do
     end
   end
 
-  it 'parses more gitlab urls' do
-    skip
-    [
-      ['git+ssh://gregoryfoster@gitlab.com/stori_es-sdk-node.git', 'gregoryfoster/stori_es-sdk-node'],
-      ['https://gitlab.com/zdne/spacegray-xcode/raw/master/Space%20Gray.dvtcolortheme', 'zdne/spacegray-xcode'],
-      ['scm:git:gitlab.com:eskatos/javafx-maven-plugin.git/javafx-maven-plugin', 'eskatos/javafx-maven-plugin'],
-      ['scm:git:https://${appverseweb.user.name}:${appverseweb.user.password}@gitlab.com/Appverse/appverse-web.git/appverse-web-tools-pom/appverse-web-tools-jpa-ddl-generator-pom/appverse-web-tools-jpa-ddl-generator-plugin', 'Appverse/appverse-web'],
-      ['scm:git:https//gitlab.com/DozerMapper/dozer/dozer-spring', 'DozerMapper/dozer'],
-      ['scm:git:https://michaelkrog@gitlab.com/michaelkrog/filter4j.git/filter4j-core', 'michaelkrog/filter4j'],
-      ['scm:git:https://matthieu-vergne@gitlab.com/matthieu-vergne/Translation.git/translation-editor', 'matthieu-vergne/Translation'],
-      ['scm:git:ssh@gitlab.com:claudius108/kuberam.git/junit-tests', 'claudius108/kuberam'],
-      ['scm:git:ssh//gitlab.com/switchyard/core.git/switchyard-release/switchyard-release-as7', 'switchyard/core'],
-      ['scm:git:ssh://git@ssh.gitlab.com/dcm4che/jdbc-jboss-modules.git', 'dcm4che/jdbc-jboss-modules'],
-      ['scm:git:ssh://git@ssh.gitlab.com/dcm4che/dcm4che.git/dcm4che-ws-rs', 'dcm4che/dcm4che'],
-      ['https://camlistore.org/third_party/gitlab.com/go-sql-driver/mysql', 'go-sql-driver/mysql'],
-      ['git://assemble.gitlab.com/assemble/dry.git', 'assemble/dry'],
-    ].each do |row|
-      url, full_name = row
-      result = GitlabURLParser.parse(url)
-      expect(result).to eq(full_name)
-    end
-  end
-
   it 'doesnt parses non-gitlab urls' do
     [
       'https://google.com',

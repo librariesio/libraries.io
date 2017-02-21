@@ -93,30 +93,6 @@ describe GithubURLParser do
     end
   end
 
-  it 'parses more github urls' do
-    skip
-    [
-      ['git+ssh://gregoryfoster@github.com/stori_es-sdk-node.git', 'gregoryfoster/stori_es-sdk-node'],
-      ['https://raw.github.com/zdne/spacegray-xcode/master/Space%20Gray.dvtcolortheme', 'zdne/spacegray-xcode'],
-      ['scm:git:github.com:eskatos/javafx-maven-plugin.git/javafx-maven-plugin', 'eskatos/javafx-maven-plugin'],
-      ['scm:git:https://${appverseweb.user.name}:${appverseweb.user.password}@github.com/Appverse/appverse-web.git/appverse-web-tools-pom/appverse-web-tools-jpa-ddl-generator-pom/appverse-web-tools-jpa-ddl-generator-plugin', 'Appverse/appverse-web'],
-      ['scm:git:https//github.com/DozerMapper/dozer/dozer-spring', 'DozerMapper/dozer'],
-      ['scm:git:https://michaelkrog@github.com/michaelkrog/filter4j.git/filter4j-core', 'michaelkrog/filter4j'],
-      ['scm:git:https://matthieu-vergne@github.com/matthieu-vergne/Translation.git/translation-editor', 'matthieu-vergne/Translation'],
-      ['scm:git:ssh@github.com:claudius108/kuberam.git/junit-tests', 'claudius108/kuberam'],
-      ['scm:git:ssh//github.com/switchyard/core.git/switchyard-release/switchyard-release-as7', 'switchyard/core'],
-      ['scm:git:ssh://git@ssh.github.com/dcm4che/jdbc-jboss-modules.git', 'dcm4che/jdbc-jboss-modules'],
-      ['scm:git:ssh://git@ssh.github.com/dcm4che/dcm4che.git/dcm4che-ws-rs', 'dcm4che/dcm4che'],
-      ['https://camlistore.org/third_party/github.com/go-sql-driver/mysql', 'go-sql-driver/mysql'],
-      ['git://assemble.github.com/assemble/dry.git', 'assemble/dry'],
-      ['git@Horsed-github.com:Horsed/chinaski.git', 'Horsed/chinaski']
-    ].each do |row|
-      url, full_name = row
-      result = GithubURLParser.parse(url)
-      expect(result).to eq(full_name)
-    end
-  end
-
   it 'doesnt parses non-github urls' do
     [
       'https://google.com',
