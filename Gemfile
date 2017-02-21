@@ -52,7 +52,6 @@ gem 'rack-timeout'
 gem 'semantic_range'
 gem 'license-compatibility'
 gem 'escape_utils'
-gem 'github_urls'
 gem 'mail', require: ['mail', 'mail/utilities', 'mail/parsers']
 gem 'pictogram'
 gem 'rails-timeago', git: 'https://github.com/librariesio/rails-timeago'
