@@ -58,6 +58,22 @@ module GitlabRepository
     end
   end
 
+  def download_gitlab_owner
+    # not implemented yet
+  end
+
+  def download_gitlab_contributions
+    # not implemented yet
+  end
+
+  def gitlab_create_webhook
+    # not implemented yet
+  end
+
+  def download_gitlab_issues
+    # not implemented yet
+  end
+
   def escaped_full_name
     full_name.gsub('/','%2F')
   end

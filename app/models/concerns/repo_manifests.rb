@@ -15,25 +15,11 @@ module RepoManifests
   end
 
   def get_file_list(token = nil)
-    case host_type
-    when 'GitHub'
-      get_github_file_list(token)
-    when 'GitLab'
-      get_gitlab_file_list(token)
-    when 'Bitbucket'
-      get_bitbucket_file_list(token)
-    end
+    send("get_#{host_type.downcase}_file_list", token)
   end
 
   def get_file_contents(path, token = nil)
-    case host_type
-    when 'GitHub'
-      get_github_file_contents(path, token)
-    when 'GitLab'
-      get_gitlab_file_contents(path, token)
-    when 'Bitbucket'
-      get_bitbucket_file_contents(path, token)
-    end
+    send("get_#{host_type.downcase}_file_contents", path, token)
   end
 
   def parse_manifests(file_list, token = nil)

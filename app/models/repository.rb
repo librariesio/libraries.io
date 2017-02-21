@@ -156,14 +156,7 @@ class Repository < ApplicationRecord
   end
 
   def download_owner
-    case host_type
-    when 'GitHub'
-      send("download_#{host_type.downcase}_owner")
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
+    send("download_#{host_type.downcase}_owner")
   end
 
   def to_s
@@ -252,36 +245,15 @@ class Repository < ApplicationRecord
   end
 
   def download_contributions(token = nil)
-    case host_type
-    when 'GitHub'
-      send("download_#{host_type.downcase}_contributions", token)
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
+    send("download_#{host_type.downcase}_contributions", token)
   end
 
   def create_webhook(token)
-    case host_type
-    when 'GitHub'
-      send("#{host_type.downcase}_create_webhook", token)
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
+    send("#{host_type.downcase}_create_webhook", token)
   end
 
   def download_issues(token = nil)
-    case host_type
-    when 'GitHub'
-      send("download_#{host_type.downcase}_issues", token)
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
+    send("download_#{host_type.downcase}_issues", token)
   end
 
   def self.create_from_host(host_type, full_name, token = nil)

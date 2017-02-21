@@ -60,6 +60,22 @@ module BitbucketRepository
     end
   end
 
+  def download_bitbucket_owner
+    # not implemented yet
+  end
+
+  def download_bitbucket_contributions
+    # not implemented yet
+  end
+
+  def bitbucket_create_webhook
+    # not implemented yet
+  end
+
+  def download_bitbucket_issues
+    # not implemented yet
+  end
+
   def bitbucket_client(token = nil)
     Repository.bitbucket_client(token)
   end
