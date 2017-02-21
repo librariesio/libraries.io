@@ -1,5 +1,5 @@
 module GitlabProject
   def gitlab_name_with_owner
-    GitlabUrls::Parser.parse(repository_url) || GitlabUrls::Parser.parse(homepage)
+    GitlabURLParser.parse(repository_url) || GitlabURLParser.parse(homepage)
   end
 end
