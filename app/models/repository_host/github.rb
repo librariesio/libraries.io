@@ -42,6 +42,22 @@ module RepositoryHost
       nil
     end
 
+    def download_owner
+      return if repository.owner && repository.owner.login == repository.owner_name
+      o = api_client.user(repository.owner_name)
+      if o.type == "Organization"
+        go = GithubOrganisation.create_from_github(repository.owner_id.to_i)
+        if go
+          repository.github_organisation_id = go.id
+          repository.save
+        end
+      else
+        GithubUser.create_from_github(o)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
+
     private
 
     def api_client(token = nil)

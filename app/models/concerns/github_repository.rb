@@ -14,22 +14,6 @@ module GithubRepository
     end
   end
 
-  def download_github_owner
-    return if owner && owner.login == owner_name
-    o = github_client.user(owner_name)
-    if o.type == "Organization"
-      go = GithubOrganisation.create_from_github(owner_id.to_i)
-      if go
-        self.github_organisation_id = go.id
-        save
-      end
-    else
-      GithubUser.create_from_github(o)
-    end
-  rescue *IGNORABLE_GITHUB_EXCEPTIONS
-    nil
-  end
-
   def download_github_fork_source(token = nil)
     return true unless self.fork? && self.source.nil?
     Repository.create_from_github(source_name, token)

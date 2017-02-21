@@ -158,7 +158,7 @@ class Repository < ApplicationRecord
   def download_owner
     case host_type
     when 'GitHub'
-      send("download_#{host_type.downcase}_owner")
+      repository_host.download_owner
     when 'GitLab'
       # not implemented yet
     when 'Bitbucket'
