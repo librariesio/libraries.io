@@ -296,7 +296,7 @@ class Repository < ApplicationRecord
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
-    send("create_from_#{host_type.downcase}", full_name, token)
+    RepositoryHost.const_get(host_type.capitalize).create(full_name, token)
   end
 
   def self.create_from_hash(repo_hash)
@@ -364,7 +364,7 @@ class Repository < ApplicationRecord
     if repository
       repository.increment!(:stargazers_count)
     else
-      Repository.create_from_github(repo_name, token)
+      RepositoryHost::Github.create(repo_name, token)
     end
   end
 
@@ -375,7 +375,7 @@ class Repository < ApplicationRecord
     if repository
       repository.download_tags(token)
     else
-      Repository.create_from_github(repo_name, token)
+      RepositoryHost::Github.create(repo_name, token)
     end
   end
 

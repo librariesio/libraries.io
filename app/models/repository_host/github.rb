@@ -6,6 +6,15 @@ module RepositoryHost
       "https://avatars.githubusercontent.com/u/#{repository.owner_id}?size=#{size}"
     end
 
+    def self.create(full_name, token = nil)
+      api_client = AuthToken.new_client(token)
+      repo_hash = api_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
+      return false if repo_hash.nil? || repo_hash.empty?
+      Repository.create_from_hash(repo_hash)
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
+
     def create_webhook(token = nil)
       api_client(token).create_hook(
         full_name,

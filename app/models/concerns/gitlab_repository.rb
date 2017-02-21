@@ -4,39 +4,8 @@ module GitlabRepository
   included do
     IGNORABLE_GITLAB_EXCEPTIONS = [Gitlab::Error::NotFound, Gitlab::Error::Forbidden]
 
-    def self.create_from_gitlab(full_name, token = nil)
-      repo_hash = map_from_gitlab(full_name, token)
-      create_from_hash(repo_hash)
-    rescue *IGNORABLE_GITLAB_EXCEPTIONS
-      nil
-    end
-
     def self.gitlab_client(token = nil)
       Gitlab.client(endpoint: 'https://gitlab.com/api/v3', private_token: token || ENV['GITLAB_KEY'])
-    end
-
-    def self.map_from_gitlab(full_name, token = nil)
-      client = gitlab_client(token)
-      project = client.project(full_name.gsub('/','%2F'))
-      repo_hash = project.to_hash.with_indifferent_access.slice(:id, :description, :created_at, :name, :open_issues_count, :forks_count, :default_branch)
-
-      repo_hash.merge!({
-        host_type: 'GitLab',
-        full_name: project.path_with_namespace,
-        owner: {},
-        fork: project.forked_from_project.present?,
-        updated_at: project.last_activity_at,
-        stargazers_count: project.star_count,
-        has_issues: project.issues_enabled,
-        has_wiki: project.wiki_enabled,
-        scm: 'git',
-        private: !project.public,
-        pull_requests_enabled: project.merge_requests_enabled,
-        logo_url: project.avatar_url,
-        parent: {
-          full_name: project.forked_from_project.try(:path_with_namespace)
-        }
-      })
     end
 
     def self.recursive_gitlab_repos(page_number = 1, limit = 10)

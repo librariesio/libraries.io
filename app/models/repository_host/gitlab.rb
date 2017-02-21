@@ -1,9 +1,15 @@
 module RepositoryHost
   class Gitlab < Base
-    IGNORABLE_EXCEPTIONS = [Gitlab::Error::NotFound, Gitlab::Error::Forbidden]
+    IGNORABLE_EXCEPTIONS = [::Gitlab::Error::NotFound, ::Gitlab::Error::Forbidden]
 
     def avatar_url(_size = 60)
       repository.logo_url
+    end
+
+    def self.create(full_name, token = nil)
+      Repository.create_from_hash(fetch_repo(full_name, token))
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def download_fork_source(token = nil)
@@ -48,7 +54,7 @@ module RepositoryHost
 
     def update(token = nil)
       begin
-        r = Repository.map_from_gitlab(repository.full_name)
+        r = self.class.fetch_repo(repository.full_name)
         return unless r.present?
         repository.uuid = r[:id] unless repository.uuid == r[:id]
          if repository.full_name.downcase != r[:full_name].downcase
@@ -63,7 +69,7 @@ module RepositoryHost
         repository.source_name = r[:parent][:full_name] if r[:fork]
         repository.assign_attributes r.slice(*Repository::API_FIELDS)
         repository.save! if self.changed?
-      rescue Gitlab::Error::NotFound
+      rescue ::Gitlab::Error::NotFound
         repository.update_attribute(:status, 'Removed') if !repository.private?
       rescue *IGNORABLE_EXCEPTIONS
         nil
@@ -72,8 +78,36 @@ module RepositoryHost
 
     private
 
+    def self.api_client(token = nil)
+      ::Gitlab.client(endpoint: 'https://gitlab.com/api/v3', private_token: token || ENV['GITLAB_KEY'])
+    end
+
     def api_client(token = nil)
-      Gitlab.client(endpoint: 'https://gitlab.com/api/v3', private_token: token || ENV['GITLAB_KEY'])
+      self.class.api_client
+    end
+
+    def self.fetch_repo(full_name, token = nil)
+      client = api_client(token)
+      project = client.project(full_name.gsub('/','%2F'))
+      repo_hash = project.to_hash.with_indifferent_access.slice(:id, :description, :created_at, :name, :open_issues_count, :forks_count, :default_branch)
+
+      repo_hash.merge!({
+        host_type: 'GitLab',
+        full_name: project.path_with_namespace,
+        owner: {},
+        fork: project.forked_from_project.present?,
+        updated_at: project.last_activity_at,
+        stargazers_count: project.star_count,
+        has_issues: project.issues_enabled,
+        has_wiki: project.wiki_enabled,
+        scm: 'git',
+        private: !project.public,
+        pull_requests_enabled: project.merge_requests_enabled,
+        logo_url: project.avatar_url,
+        parent: {
+          full_name: project.forked_from_project.try(:path_with_namespace)
+        }
+      })
     end
   end
 end
