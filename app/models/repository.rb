@@ -83,6 +83,10 @@ class Repository < ApplicationRecord
 
   scope :indexable, -> { open_source.not_removed.includes(:projects, :readme) }
 
+  delegate :download_owner, :download_readme, :update_from_repository,
+           :download_fork_source, :download_tags, :download_contributions,
+           :create_webhook, :download_issues, :download_forks, to: :repository_host
+
   def self.language(language)
     where('lower(repositories.language) = ?', language.try(:downcase))
   end
@@ -155,10 +159,6 @@ class Repository < ApplicationRecord
     github_organisation_id.present? ? github_organisation : github_user
   end
 
-  def download_owner
-    repository_host.download_owner
-  end
-
   def to_s
     full_name
   end
@@ -210,16 +210,8 @@ class Repository < ApplicationRecord
     uuid || full_name
   end
 
-  def download_readme(token = nil)
-    repository_host.download_readme(token)
-  end
-
   def update_all_info_async(token = nil)
     RepositoryDownloadWorker.perform_async(self.id, token)
-  end
-
-  def update_from_repository(token = nil)
-    repository_host.update(token)
   end
 
   def update_all_info(token = nil)
@@ -234,30 +226,6 @@ class Repository < ApplicationRecord
     # download_issues(token)
     save_projects
     update_attributes(last_synced_at: Time.now)
-  end
-
-  def download_fork_source(token = nil)
-    repository_host.download_fork_source(token)
-  end
-
-  def download_tags(token = nil)
-    repository_host.download_tags(token)
-  end
-
-  def download_contributions(token = nil)
-    repository_host.download_contributions(token)
-  end
-
-  def create_webhook(token)
-    repository_host.create_webook(token)
-  end
-
-  def download_issues(token = nil)
-    repository_host.download_issues(token)
-  end
-
-  def download_forks(token = nil)
-    repository_host.download_forks(token)
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
