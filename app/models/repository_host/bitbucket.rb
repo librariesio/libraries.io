@@ -33,12 +33,11 @@ module RepositoryHost
     end
 
     def download_readme(token = nil)
-      user_name, repo_name = repository.full_name.split('/')
-      files = api_client(token).repos.sources.list(user_name, repo_name, 'master', '/')
+      files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, 'master', '/')
       paths =  files.files.map(&:path)
       readme_path = paths.select{|path| path.match(/^readme/i) }.first
       return if readme_path.nil?
-      raw_content = api_client(token).repos.sources.list(user_name, repo_name, 'master', readme_path).data
+      raw_content = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, 'master', readme_path).data
       contents = {
         html_body: GitHub::Markup.render(readme_path, raw_content)
       }
@@ -53,8 +52,7 @@ module RepositoryHost
     end
 
     def download_tags(token = nil)
-      user_name, repo_name = repository.full_name.split('/')
-      remote_tags = api_client(token).repos.tags(user_name, repo_name)
+      remote_tags = api_client(token).repos.tags(repository.owner_name, repository.project_name)
       existing_tag_names = repository.tags.pluck(:name)
       remote_tags.each do |name, data|
         next if existing_tag_names.include?(name)
@@ -105,9 +103,8 @@ module RepositoryHost
 
     def self.fetch_repo(full_name, token = nil)
       client = api_client(token)
-      user_name, repo_name = full_name.split('/')
-      project = client.repos.get(user_name, repo_name)
-      v1_project = client.repos.get(user_name, repo_name, api_version: '1.0')
+      project = client.repos.get(repository.owner_name, repository.project_name)
+      v1_project = client.repos.get(repository.owner_name, repository.project_name, api_version: '1.0')
       repo_hash = project.to_hash.with_indifferent_access.slice(:description, :language, :full_name, :name, :has_wiki, :has_issues, :scm)
 
       repo_hash.merge!({
