@@ -9,10 +9,6 @@ module GithubRepository
     AuthToken.fallback_client(token)
   end
 
-  def download_forks_async(token = nil)
-    GithubDownloadForkWorker.perform_async(self.id, token)
-  end
-
   def github_contributions_count
     contributions_count # legacy alias
   end
