@@ -158,7 +158,7 @@ class Repository < ApplicationRecord
   def download_owner
     case host_type
     when 'GitHub'
-      send("download_#{host_type.downcase}_owner")
+      repository_host.download_owner
     when 'GitLab'
       # not implemented yet
     when 'Bitbucket'
@@ -199,7 +199,7 @@ class Repository < ApplicationRecord
   end
 
   def avatar_url(size = 60)
-    avatar = send("#{host_type.downcase}_avatar_url", size)
+    avatar = repository_host.avatar_url(size)
     return fallback_avatar_url(size) if avatar.blank?
     avatar
   end
@@ -218,7 +218,7 @@ class Repository < ApplicationRecord
   end
 
   def download_readme(token = nil)
-    send("download_#{host_type.downcase}_readme", token)
+    repository_host.download_readme(token)
   end
 
   def update_all_info_async(token = nil)
@@ -226,7 +226,7 @@ class Repository < ApplicationRecord
   end
 
   def update_from_repository(token = nil)
-    send("update_from_#{host_type.downcase}", token)
+    repository_host.update(token)
   end
 
   def update_all_info(token = nil)
@@ -244,17 +244,17 @@ class Repository < ApplicationRecord
   end
 
   def download_fork_source(token = nil)
-    send("download_#{host_type.downcase}_fork_source", token)
+    repository_host.download_fork_source(token)
   end
 
   def download_tags(token = nil)
-    send("download_#{host_type.downcase}_tags", token)
+    repository_host.download_tags(token)
   end
 
   def download_contributions(token = nil)
     case host_type
     when 'GitHub'
-      send("download_#{host_type.downcase}_contributions", token)
+      repository_host.download_contributions(token)
     when 'GitLab'
       # not implemented yet
     when 'Bitbucket'
@@ -265,7 +265,7 @@ class Repository < ApplicationRecord
   def create_webhook(token)
     case host_type
     when 'GitHub'
-      send("#{host_type.downcase}_create_webhook", token)
+      repository_host.create_webook(token)
     when 'GitLab'
       # not implemented yet
     when 'Bitbucket'
@@ -276,7 +276,18 @@ class Repository < ApplicationRecord
   def download_issues(token = nil)
     case host_type
     when 'GitHub'
-      send("download_#{host_type.downcase}_issues", token)
+      repository_host.download_issues(token)
+    when 'GitLab'
+      # not implemented yet
+    when 'Bitbucket'
+      # not implemented yet
+    end
+  end
+
+  def download_forks(token = nil)
+    case host_type
+    when 'GitHub'
+      repository_host.download_forks(token)
     when 'GitLab'
       # not implemented yet
     when 'Bitbucket'
@@ -285,7 +296,7 @@ class Repository < ApplicationRecord
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
-    send("create_from_#{host_type.downcase}", full_name, token)
+    RepositoryHost.const_get(host_type.capitalize).create(full_name, token)
   end
 
   def self.create_from_hash(repo_hash)
@@ -353,7 +364,7 @@ class Repository < ApplicationRecord
     if repository
       repository.increment!(:stargazers_count)
     else
-      Repository.create_from_github(repo_name, token)
+      RepositoryHost::Github.create(repo_name, token)
     end
   end
 
@@ -364,7 +375,11 @@ class Repository < ApplicationRecord
     if repository
       repository.download_tags(token)
     else
-      Repository.create_from_github(repo_name, token)
+      RepositoryHost::Github.create(repo_name, token)
     end
+  end
+
+  def repository_host
+    @repository_host ||= RepositoryHost.const_get(host_type.capitalize).new(self)
   end
 end
