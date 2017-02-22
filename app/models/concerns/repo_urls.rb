@@ -1,22 +1,25 @@
 module RepoUrls
-  def pages_url
-    case host_type
-    when 'GitHub'
-      "http://#{owner_name}.github.io/#{project_name}"
-    when 'GitLab'
-      "http://#{owner_name}.gitlab.io/#{project_name}"
+  extend ActiveSupport::Concern
+
+  included do
+    def self.host_domain(host_type)
+      case host_type
+      when 'GitHub'
+        'https://github.com'
+      when 'GitLab'
+        'https://gitlab.com'
+      when 'Bitbucket'
+        'https://bitbucket.org'
+      end
     end
   end
 
-  def wiki_url
-    case host_type
-    when 'GitHub'
-      "#{url}/wiki"
-    when 'GitLab'
-      "#{url}/wikis"
-    when 'Bitbucket'
-      "#{url}/wiki"
-    end
+  def host_url
+    Repository.host_domain(host_type)
+  end
+
+  def url
+    "#{host_url}/#{full_name}"
   end
 
   def watchers_url
@@ -55,21 +58,6 @@ module RepoUrls
     end
   end
 
-  def host_url
-    case host_type
-    when 'GitHub'
-      'https://github.com'
-    when 'GitLab'
-      'https://gitlab.com'
-    when 'Bitbucket'
-      'https://bitbucket.org'
-    end
-  end
-
-  def url
-    "#{host_url}/#{full_name}"
-  end
-
   def source_url
     "#{host_url}/#{source_name}"
   end
@@ -92,13 +80,5 @@ module RepoUrls
     when 'Bitbucket'
       "#{url}/commits"
     end
-  end
-
-  def readme_url
-    "#{url}#readme"
-  end
-
-  def tags_url
-    "#{url}/tags"
   end
 end

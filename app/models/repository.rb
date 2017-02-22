@@ -324,16 +324,7 @@ class Repository < ApplicationRecord
   end
 
   def self.check_status(host_type, repo_full_name, removed = false)
-    case host_type
-    when 'GitHub'
-      domain = 'https://github.com'
-    when 'GitLab'
-      domain = 'https://gitlab.com'
-    when 'Bitbucket'
-      domain = 'https://bitbucket.org'
-    end
-
-    response = Typhoeus.head("#{domain}/#{repo_full_name}")
+    response = Typhoeus.head("#{host_domain(host_type)}/#{repo_full_name}")
 
     if response.response_code == 404
       repo = Repository.includes(:projects).find_by_full_name(repo_full_name)
