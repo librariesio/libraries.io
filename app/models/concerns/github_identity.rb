@@ -67,7 +67,7 @@ module GithubIdentity
     remove_ids = existing_repo_ids - current_repo_ids
     repository_permissions.where(repository_id: remove_ids).delete_all if remove_ids.any?
 
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
     nil
   ensure
     self.update_columns(last_synced_at: Time.now, currently_syncing: false)
@@ -84,7 +84,7 @@ module GithubIdentity
     github_client.orgs.each do |org|
       GithubCreateOrgWorker.perform_async(org.login)
     end
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
     nil
   end
 

@@ -2,8 +2,6 @@ module BitbucketRepository
   extend ActiveSupport::Concern
 
   included do
-    IGNORABLE_BITBUCKET_EXCEPTIONS = [BitBucket::Error::NotFound, BitBucket::Error::Forbidden]
-
     def self.bitbucket_client(token = nil)
       BitBucket.new oauth_token: token || ENV['BITBUCKET_KEY']
     end

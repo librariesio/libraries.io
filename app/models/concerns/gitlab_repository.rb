@@ -2,8 +2,6 @@ module GitlabRepository
   extend ActiveSupport::Concern
 
   included do
-    IGNORABLE_GITLAB_EXCEPTIONS = [Gitlab::Error::NotFound, Gitlab::Error::Forbidden]
-
     def self.gitlab_client(token = nil)
       Gitlab.client(endpoint: 'https://gitlab.com/api/v3', private_token: token || ENV['GITLAB_KEY'])
     end

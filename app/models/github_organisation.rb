@@ -84,7 +84,7 @@ class GithubOrganisation < ApplicationRecord
       org.assign_attributes r.slice(*GithubOrganisation::API_FIELDS)
       org.save
       org
-    rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+    rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
       false
     end
   end
@@ -109,7 +109,7 @@ class GithubOrganisation < ApplicationRecord
 
   def download_from_github_by(id_or_login)
     GithubOrganisation.create_from_github(github_client.org(id_or_login))
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
     nil
   end
 
@@ -117,7 +117,7 @@ class GithubOrganisation < ApplicationRecord
     github_client.org_repos(login).each do |repo|
       CreateRepositoryWorker.perform_async('GitHub', repo.full_name)
     end
-  rescue *GithubRepository::IGNORABLE_GITHUB_EXCEPTIONS
+  rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
     nil
   end
 end
