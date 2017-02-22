@@ -8,9 +8,6 @@ module PackageManager
 
     def self.platforms
       @platforms ||= begin
-        Dir[Rails.root.join('app', 'models', 'package_manager', '*.rb')].each do|file|
-          require file unless file.match(/base.rb$/)
-        end
         PackageManager.constants
           .reject { |platform| platform == :Base }
           .map{|sym| "PackageManager::#{sym}".constantize }
