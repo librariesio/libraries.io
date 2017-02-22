@@ -43,12 +43,47 @@ class URLParser
     url.join('/')
   end
 
+  def parseable?
+    !url.nil? && url.include?(domain)
+  end
+
+  def tlds
+    raise NotImplementedError
+  end
+
+  def domain
+    raise NotImplementedError
+  end
+
   def includes_domain?
     raise NotImplementedError
   end
 
   def extractable_early?
     raise NotImplementedError
+  end
+
+  def domain_regex
+    "#{domain}\.(#{tlds.join('|')})"
+  end
+
+  def website_url?
+    url.match(/www\.#{domain_regex}/i)
+  end
+
+  def includes_domain?
+    url.match(/#{domain_regex}/i)
+  end
+
+  def extractable_early?
+    return false if website_url?
+
+    match = url.match(/([\w\.@\:\-_~]+)\.#{domain_regex}\/([\w\.@\:\-\_\~]+)/i)
+    if match && match.length == 4
+      return "#{match[1]}/#{match[3]}"
+    end
+
+    nil
   end
 
   def remove_anchors
