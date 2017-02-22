@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   def formatted_host
-    Repository.formatted_host(current_host)
+    RepositoryHost::Base.format(current_host)
   end
 
   def max_page

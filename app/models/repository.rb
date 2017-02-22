@@ -85,25 +85,11 @@ class Repository < ApplicationRecord
 
   delegate :download_owner, :download_readme, :update_from_repository,
            :download_fork_source, :download_tags, :download_contributions,
-           :create_webhook, :download_issues, :download_forks, to: :repository_host
+           :create_webhook, :download_issues, :download_forks,
+           :formatted_host, to: :repository_host
 
   def self.language(language)
     where('lower(repositories.language) = ?', language.try(:downcase))
-  end
-
-  def self.formatted_host(host_type)
-    case host_type.try(:downcase)
-    when 'github'
-      'GitHub'
-    when 'gitlab'
-      'GitLab'
-    when 'bitbucket'
-      'Bitbucket'
-    end
-  end
-
-  def formatted_host
-    Repository.formatted_host(host_type)
   end
 
   def meta_tags
