@@ -43,6 +43,6 @@ class Api::SubscriptionsController < Api::ApplicationController
   end
 
   def as_json(subscriptions)
-    subscriptions.as_json(only: [:include_prerelease, :created_at, :updated_at], include: {project: {only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} }}})
+    subscriptions.as_json(only: [:include_prerelease, :created_at, :updated_at], include: {project:  project_json_response_args})
   end
 end

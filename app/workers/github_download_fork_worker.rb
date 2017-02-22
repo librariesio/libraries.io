@@ -1,8 +1,0 @@
-class GithubDownloadForkWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: :low, unique: :until_executed
-
-  def perform(repo_id, token = nil)
-    Repository.find_by_id(repo_id).try(:download_forks, token)
-  end
-end

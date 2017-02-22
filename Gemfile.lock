@@ -99,7 +99,7 @@ GEM
     api-pagination (4.5.2)
     arel (7.1.4)
     asciidoctor (1.5.5)
-    autoprefixer-rails (6.7.4)
+    autoprefixer-rails (6.7.5)
       execjs
     bibliothecary (5.0.2)
       deb_control
@@ -237,7 +237,7 @@ GEM
     groupdate (3.2.0)
       activesupport (>= 3)
     hashdiff (0.3.2)
-    hashie (3.5.3)
+    hashie (3.5.4)
     highscore (1.2.1)
       whatlanguage (>= 1.0.0)
     hiredis (0.6.1)
@@ -335,8 +335,8 @@ GEM
       capybara (~> 2.1)
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
-    premailer (1.9.2)
-      css_parser (>= 1.4.8)
+    premailer (1.9.3)
+      css_parser (>= 1.4.9)
       htmlentities (>= 4.0.0)
     premailer-rails (1.9.5)
       actionmailer (>= 3, < 6)

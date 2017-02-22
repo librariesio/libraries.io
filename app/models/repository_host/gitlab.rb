@@ -12,9 +12,33 @@ module RepositoryHost
       nil
     end
 
-    def download_fork_source(token = nil)
-      super
-      Repository.create_from_gitlab(repository.source_name, token)
+    def download_contributions(token = nil)
+      # not implemented yet
+    end
+
+    def download_issues(token = nil)
+      # not implemented yet
+    end
+
+    def download_forks(token = nil)
+      # not implemented yet
+    end
+
+    def download_owner
+      # not implemented yet
+    end
+
+    def create_webook(token = nil)
+      # not implemented yet
+    end
+
+    def get_file_list(token = nil)
+      tree = api_client(token).tree(escaped_full_name, recursive: true)
+      tree.select{|item| item.type == 'blob' }.map{|file| file.path }
+    end
+
+    def get_file_contents(path, token = nil)
+      api_client(token).file_contents(escaped_full_name, path)
     end
 
     def download_readme(token = nil)
@@ -68,11 +92,29 @@ module RepositoryHost
         repository.license = Project.format_license(r[:license][:key]) if r[:license]
         repository.source_name = r[:parent][:full_name] if r[:fork]
         repository.assign_attributes r.slice(*Repository::API_FIELDS)
-        repository.save! if self.changed?
+        repository.save! if repository.changed?
       rescue ::Gitlab::Error::NotFound
         repository.update_attribute(:status, 'Removed') if !repository.private?
       rescue *IGNORABLE_EXCEPTIONS
         nil
+      end
+    end
+
+    def self.recursive_gitlab_repos(page_number = 1, limit = 10)
+      r = Typhoeus.get("https://gitlab.com/explore/projects?&page=#{page_number}&sort=created_asc")
+      if r.code == 500
+        recursive_gitlab_repos(page_number.to_i + 1, limit)
+      else
+        page = Nokogiri::HTML(r.body)
+        names = page.css('a.project').map{|project| project.attributes["href"].value[1..-1] }
+        names.each do |name|
+          CreateRepositoryWorker.perform_async('GitLab', name)
+        end
+      end
+      if names.any?
+        limit = limit - 1
+        REDIS.set 'gitlab-page', page_number
+        recursive_gitlab_repos(page_number.to_i + 1, limit)
       end
     end
 

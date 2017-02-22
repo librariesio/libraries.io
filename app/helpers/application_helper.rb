@@ -8,7 +8,7 @@ module ApplicationHelper
   end
 
   def format_host(host_type)
-    Repository.formatted_host(host_type)
+    RepositoryHost::Base.format(host_type)
   end
 
   def format_facet_name(facet_name)

@@ -12,6 +12,14 @@ module RepositoryHost
       nil
     end
 
+    def get_file_list(token = nil)
+      api_client(token).get_request("1.0/repositories/#{full_name}/directory/")[:values]
+    end
+
+    def get_file_contents(path, token = nil)
+      api_client(token).repos.sources.list(repository.owner_name, repository.project_name, 'master', path).data
+    end
+
     def download_fork_source(token = nil)
       super
       Repository.create_from_bitbucket(repository.source_name, token)

@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   def formatted_host
-    Repository.formatted_host(current_host)
+    RepositoryHost::Base.format(current_host)
   end
 
   def max_page
@@ -207,7 +207,11 @@ class ApplicationController < ActionController::Base
 
   helper_method :project_json_response
   def project_json_response(projects)
-    projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} })
+    projects.as_json(project_json_response_args)
+  end
+
+  def project_json_response_args
+    {only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} }}
   end
 
   def map_dependencies(dependencies)
@@ -225,5 +229,19 @@ class ApplicationController < ActionController::Base
         kind: dependency.try(:manifest).try(:kind)
       }
     end
+  end
+
+  def load_tree_resolver
+    @date = Date.parse(params[:date]) rescue Date.today
+
+    if params[:number].present?
+      @version = @project.versions.find_by_number(params[:number])
+    else
+      @version = @project.versions.where('versions.published_at <= ?', @date).select(&:stable?).sort.first
+    end
+    raise ActiveRecord::RecordNotFound if @version.nil?
+
+    @kind = params[:kind] || 'runtime'
+    @tree_resolver = TreeResolver.new(@version, @kind, @date)
   end
 end

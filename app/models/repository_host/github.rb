@@ -15,6 +15,15 @@ module RepositoryHost
       nil
     end
 
+    def get_file_list(token = nil)
+      tree = api_client(token).tree(full_name, default_branch, :recursive => true).tree
+      tree.select{|item| item.type == 'blob' }.map{|file| file.path }
+    end
+
+    def get_file_contents(path, token = nil)
+      Base64.decode64 api_client(token).contents(full_name, path: path).content
+    end
+
     def create_webhook(token = nil)
       api_client(token).create_hook(
         full_name,
@@ -61,11 +70,6 @@ module RepositoryHost
       AuthToken.new_client(token).forks(repository.full_name).each do |fork|
         Repository.create_from_hash(fork)
       end
-    end
-
-    def download_fork_source(token = nil)
-      super
-      Repository.create_from_github(repository.source_name, token)
     end
 
     def download_issues(token = nil)

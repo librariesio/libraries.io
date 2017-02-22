@@ -9,7 +9,26 @@ module RepositoryHost
     end
 
     def download_fork_source(token = nil)
-      return true unless repository.fork? && repository.source.nil?
+      self.class.fetch_repo(repository.source_name, token) if download_fork_source?
+    end
+
+    def download_fork_source?
+      repository.fork? && repository.source_name.present? && repository.source.nil?
+    end
+
+    def self.format(host_type)
+      case host_type.try(:downcase)
+      when 'github'
+        'GitHub'
+      when 'gitlab'
+        'GitLab'
+      when 'bitbucket'
+        'Bitbucket'
+      end
+    end
+
+    def formatted_host
+      self.class.format(repository.host_type)
     end
 
     private

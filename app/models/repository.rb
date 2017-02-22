@@ -5,10 +5,6 @@ class Repository < ApplicationRecord
   include RepoManifests
   include RepositorySourceRank
 
-  include GithubRepository
-  include GitlabRepository
-  include BitbucketRepository
-
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
 
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
@@ -83,23 +79,13 @@ class Repository < ApplicationRecord
 
   scope :indexable, -> { open_source.not_removed.includes(:projects, :readme) }
 
+  delegate :download_owner, :download_readme, :update_from_repository,
+           :download_fork_source, :download_tags, :download_contributions,
+           :create_webhook, :download_issues, :download_forks,
+           :formatted_host, :get_file_list, :get_file_contents, to: :repository_host
+
   def self.language(language)
     where('lower(repositories.language) = ?', language.try(:downcase))
-  end
-
-  def self.formatted_host(host_type)
-    case host_type.try(:downcase)
-    when 'github'
-      'GitHub'
-    when 'gitlab'
-      'GitLab'
-    when 'bitbucket'
-      'Bitbucket'
-    end
-  end
-
-  def formatted_host
-    Repository.formatted_host(host_type)
   end
 
   def meta_tags
@@ -155,17 +141,6 @@ class Repository < ApplicationRecord
     github_organisation_id.present? ? github_organisation : github_user
   end
 
-  def download_owner
-    case host_type
-    when 'GitHub'
-      repository_host.download_owner
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
-  end
-
   def to_s
     full_name
   end
@@ -217,16 +192,8 @@ class Repository < ApplicationRecord
     uuid || full_name
   end
 
-  def download_readme(token = nil)
-    repository_host.download_readme(token)
-  end
-
   def update_all_info_async(token = nil)
     RepositoryDownloadWorker.perform_async(self.id, token)
-  end
-
-  def update_from_repository(token = nil)
-    repository_host.update(token)
   end
 
   def update_all_info(token = nil)
@@ -241,58 +208,6 @@ class Repository < ApplicationRecord
     # download_issues(token)
     save_projects
     update_attributes(last_synced_at: Time.now)
-  end
-
-  def download_fork_source(token = nil)
-    repository_host.download_fork_source(token)
-  end
-
-  def download_tags(token = nil)
-    repository_host.download_tags(token)
-  end
-
-  def download_contributions(token = nil)
-    case host_type
-    when 'GitHub'
-      repository_host.download_contributions(token)
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
-  end
-
-  def create_webhook(token)
-    case host_type
-    when 'GitHub'
-      repository_host.create_webook(token)
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
-  end
-
-  def download_issues(token = nil)
-    case host_type
-    when 'GitHub'
-      repository_host.download_issues(token)
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
-  end
-
-  def download_forks(token = nil)
-    case host_type
-    when 'GitHub'
-      repository_host.download_forks(token)
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
@@ -324,16 +239,7 @@ class Repository < ApplicationRecord
   end
 
   def self.check_status(host_type, repo_full_name, removed = false)
-    case host_type
-    when 'GitHub'
-      domain = 'https://github.com'
-    when 'GitLab'
-      domain = 'https://gitlab.com'
-    when 'Bitbucket'
-      domain = 'https://bitbucket.org'
-    end
-
-    response = Typhoeus.head("#{domain}/#{repo_full_name}")
+    response = Typhoeus.head("#{host_domain(host_type)}/#{repo_full_name}")
 
     if response.response_code == 404
       repo = Repository.includes(:projects).find_by_full_name(repo_full_name)
@@ -377,6 +283,14 @@ class Repository < ApplicationRecord
     else
       RepositoryHost::Github.create(repo_name, token)
     end
+  end
+
+  def github_contributions_count
+    contributions_count # legacy alias
+  end
+
+  def github_id
+    uuid # legacy alias
   end
 
   def repository_host

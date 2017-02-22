@@ -14,14 +14,6 @@ module RepoManifests
     repository_subscriptions.each(&:update_subscriptions)
   end
 
-  def get_file_list(token = nil)
-    send("get_#{host_type.downcase}_file_list", token)
-  end
-
-  def get_file_contents(path, token = nil)
-    send("get_#{host_type.downcase}_file_contents", path, token)
-  end
-
   def parse_manifests(file_list, token = nil)
     manifest_paths = Bibliothecary.identify_manifests(file_list)
 
