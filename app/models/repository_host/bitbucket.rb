@@ -91,6 +91,25 @@ module RepositoryHost
       end
     end
 
+    def self.recursive_bitbucket_repos(url, limit = 10)
+      return if limit.zero?
+      r = Typhoeus::Request.new(url,
+        method: :get,
+        headers: { 'Accept' => 'application/json' }).run
+
+      json = Oj.load(r.body)
+
+      json['values'].each do |repo|
+        CreateRepositoryWorker.perform_async('Bitbucket', repo['full_name'])
+      end
+      puts json['next']
+      if json['values'].any? && json['next']
+        limit = limit - 1
+        REDIS.set 'bitbucket-after', Addressable::URI.parse(json['next']).query_values['after']
+        recursive_bitbucket_repos(json['next'], limit)
+      end
+    end
+
     private
 
     def self.api_client(token = nil)

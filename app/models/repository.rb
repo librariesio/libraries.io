@@ -5,10 +5,6 @@ class Repository < ApplicationRecord
   include RepoManifests
   include RepositorySourceRank
 
-  include GithubRepository
-  include GitlabRepository
-  include BitbucketRepository
-
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
 
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
@@ -287,6 +283,14 @@ class Repository < ApplicationRecord
     else
       RepositoryHost::Github.create(repo_name, token)
     end
+  end
+
+  def github_contributions_count
+    contributions_count # legacy alias
+  end
+
+  def github_id
+    uuid # legacy alias
   end
 
   def repository_host
