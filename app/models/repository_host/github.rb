@@ -63,11 +63,6 @@ module RepositoryHost
       end
     end
 
-    def download_fork_source(token = nil)
-      super
-      Repository.create_from_github(repository.source_name, token)
-    end
-
     def download_issues(token = nil)
       api_client = AuthToken.new_client(token)
       issues = api_client.issues(full_name, state: 'all')

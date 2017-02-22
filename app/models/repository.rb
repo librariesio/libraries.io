@@ -156,14 +156,7 @@ class Repository < ApplicationRecord
   end
 
   def download_owner
-    case host_type
-    when 'GitHub'
-      repository_host.download_owner
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
+    repository_host.download_owner
   end
 
   def to_s
@@ -252,47 +245,19 @@ class Repository < ApplicationRecord
   end
 
   def download_contributions(token = nil)
-    case host_type
-    when 'GitHub'
-      repository_host.download_contributions(token)
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
+    repository_host.download_contributions(token)
   end
 
   def create_webhook(token)
-    case host_type
-    when 'GitHub'
-      repository_host.create_webook(token)
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
+    repository_host.create_webook(token)
   end
 
   def download_issues(token = nil)
-    case host_type
-    when 'GitHub'
-      repository_host.download_issues(token)
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
+    repository_host.download_issues(token)
   end
 
   def download_forks(token = nil)
-    case host_type
-    when 'GitHub'
-      repository_host.download_forks(token)
-    when 'GitLab'
-      # not implemented yet
-    when 'Bitbucket'
-      # not implemented yet
-    end
+    repository_host.download_forks(token)
   end
 
   def self.create_from_host(host_type, full_name, token = nil)

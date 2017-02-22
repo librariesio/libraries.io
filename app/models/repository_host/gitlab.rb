@@ -12,9 +12,24 @@ module RepositoryHost
       nil
     end
 
-    def download_fork_source(token = nil)
-      super
-      Repository.create_from_gitlab(repository.source_name, token)
+    def download_contributions(token = nil)
+      # not implemented yet
+    end
+
+    def download_issues(token = nil)
+      # not implemented yet
+    end
+
+    def download_forks(token = nil)
+      # not implemented yet
+    end
+
+    def download_owner
+      # not implemented yet
+    end
+
+    def create_webook(token = nil)
+      # not implemented yet
     end
 
     def download_readme(token = nil)
@@ -68,7 +83,7 @@ module RepositoryHost
         repository.license = Project.format_license(r[:license][:key]) if r[:license]
         repository.source_name = r[:parent][:full_name] if r[:fork]
         repository.assign_attributes r.slice(*Repository::API_FIELDS)
-        repository.save! if self.changed?
+        repository.save! if repository.changed?
       rescue ::Gitlab::Error::NotFound
         repository.update_attribute(:status, 'Removed') if !repository.private?
       rescue *IGNORABLE_EXCEPTIONS
