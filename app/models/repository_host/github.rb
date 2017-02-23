@@ -69,7 +69,7 @@ module RepositoryHost
     def download_forks(token = nil)
       return true if repository.fork?
       return true unless repository.forks_count && repository.forks_count > 0 && repository.forks_count < 100
-      return true if repository.forks_count == repository.forked_repositories.count
+      return true if repository.forks_count == repository.forked_repositories.host(repository.host_type).count
       AuthToken.new_client(token).forks(repository.full_name).each do |fork|
         Repository.create_from_hash(fork)
       end

@@ -61,7 +61,7 @@ class RepositoriesController < ApplicationController
     @contributors = @repository.contributors.order('count DESC').visible.limit(20)
     @projects = @repository.projects.limit(20).includes(:versions)
     @color = @repository.color
-    @forks = @repository.forked_repositories.interesting.limit(5)
+    @forks = @repository.forked_repositories.host(@repository.host_type).interesting.limit(5)
     @manifests = @repository.manifests.latest.limit(10).includes(repository_dependencies: {project: :versions})
   end
 
@@ -86,7 +86,7 @@ class RepositoriesController < ApplicationController
 
   def forks
     load_repo
-    @forks = @repository.forked_repositories.maintained.order('stargazers_count DESC').paginate(page: page_number)
+    @forks = @repository.forked_repositories.host(@repository.host_type).maintained.order('stargazers_count DESC').paginate(page: page_number)
   end
 
   def dependency_issues
