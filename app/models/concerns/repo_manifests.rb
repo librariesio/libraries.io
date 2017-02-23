@@ -18,7 +18,10 @@ module RepoManifests
     manifest_paths = Bibliothecary.identify_manifests(file_list)
 
     manifest_paths.map do |manifest_path|
-      Bibliothecary.analyse_file(manifest_path, get_file_contents(manifest_path)).first
+      file = get_file_contents(manifest_path)
+      manifest = Bibliothecary.analyse_file(manifest_path, file[:content]).first
+      manifest.merge!(sha: file[:sha]) if manifest
+      manifest
     end.reject(&:blank?)
   end
 
@@ -34,7 +37,7 @@ module RepoManifests
   end
 
   def sync_manifest(m)
-    args = {platform: m[:platform], kind: m[:type], filepath: m[:path]}
+    args = {platform: m[:platform], kind: m[:kind], filepath: m[:path], sha: m[:sha]}
 
     unless manifests.find_by(args)
       manifest = manifests.create(args)

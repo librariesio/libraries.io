@@ -21,7 +21,11 @@ module RepositoryHost
     end
 
     def get_file_contents(path, token = nil)
-      Base64.decode64 api_client(token).contents(full_name, path: path).content
+      file = api_client(token).contents(full_name, path: path)
+      {
+        sha: file.sha,
+        content: Base64.decode64(file.content)
+      }
     end
 
     def create_webhook(token = nil)

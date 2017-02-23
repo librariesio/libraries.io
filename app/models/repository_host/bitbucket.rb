@@ -19,11 +19,15 @@ module RepositoryHost
     end
 
     def get_file_list(token = nil)
-      api_client(token).get_request("1.0/repositories/#{full_name}/directory/")[:values]
+      api_client(token).get_request("1.0/repositories/#{repository.full_name}/directory/")[:values]
     end
 
     def get_file_contents(path, token = nil)
-      api_client(token).repos.sources.list(repository.owner_name, repository.project_name, 'master', path).data
+      file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, 'master', path)
+      {
+        sha: file.node,
+        content: file.data
+      }
     end
 
     def download_contributions(token = nil)

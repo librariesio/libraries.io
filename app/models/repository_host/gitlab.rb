@@ -32,21 +32,29 @@ module RepositoryHost
       # not implemented yet
     end
 
+    def escaped_full_name
+      repository.full_name.gsub('/','%2F')
+    end
+
     def get_file_list(token = nil)
       tree = api_client(token).tree(escaped_full_name, recursive: true)
       tree.select{|item| item.type == 'blob' }.map{|file| file.path }
     end
 
     def get_file_contents(path, token = nil)
-      api_client(token).file_contents(escaped_full_name, path)
+      file = api_client(token).get_file(escaped_full_name, path, repository.default_branch)
+      {
+        sha: file.commit_id,
+        content: Base64.decode64(file.content)
+      }
     end
 
     def download_readme(token = nil)
-      files = api_client(token).tree(repository.full_name.gsub('/','%2F'))
+      files = api_client(token).tree(escaped_full_name)
       paths =  files.map(&:path)
       readme_path = paths.select{|path| path.match(/^readme/i) }.first
       return if readme_path.nil?
-      raw_content =  api_client(token).file_contents(repository.full_name.gsub('/','%2F'), readme_path)
+      raw_content =  api_client(token).file_contents(escaped_full_name, readme_path)
       contents = {
         html_body: GitHub::Markup.render(readme_path, raw_content)
       }
@@ -61,7 +69,7 @@ module RepositoryHost
     end
 
     def download_tags(token = nil)
-      remote_tags = api_client(token).tags(repository.full_name.gsub('/','%2F')).auto_paginate
+      remote_tags = api_client(token).tags(escaped_full_name).auto_paginate
       existing_tag_names = repository.tags.pluck(:name)
       remote_tags.each do |tag|
         next if existing_tag_names.include?(tag.name)
