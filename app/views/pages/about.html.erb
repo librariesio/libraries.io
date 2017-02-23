@@ -1,56 +1,72 @@
 <% title 'About - Libraries' %>
 <div class="row">
   <div class="col-sm-8">
-    <h1>What is Libraries.io?</h1>
-
+   <h1>About</h1>
+    <h3>
+      Helping you make more informed decisions about the software you use.
+    </h3>
     <p>
-      <strong>Libraries.io</strong> helps developers find new open source libraries, modules and frameworks and keep track of ones they depend upon.
+      Libraries.io indexes data from <strong><%= number_with_delimiter(Project.total) %></strong> projects from <strong><%= PackageManager::Base.platforms.length %></strong> package managers. We monitor project releases, analyse each project's code, community, distribution and documentation, and we map the relationships between projects when they're declared as a dependency. The 'dependency tree' that emerges is the core of the services that we provide.
+    </p>
+    <h2>Use Libraries.io to</h2>
+    <hr>
+    <h3>
+      <strong>Search</strong>
+    </h3>
+    <p><strong>Spend your time including, not searching.</strong></p>
+    <p>
+      <%= link_to search_path, class: "btn btn-info" do %>
+        <%= fa_icon 'search' %>
+        Search <%= number_with_delimiter(Project.total) %> libraries
+      <% end %>
+    </p>
+    <p>
+      The majority of publication and distribution channels do not provide sufficient tools for developers to discover libraries that could be valuable to them. Simialrly they do not provide adequate information for individuals to judge the merit of one library over another when they tackle similar issues or solve similar problems.
+    </p>
+    <p>
+     
     </p>
 
     <h3>
-      <strong>Repository Monitoring</strong>
+      <strong>Monitor Your Projects</strong>
     </h3>
-    <%= render 'dashboard/monitoring_promo' %>
-
-    <h3>
-      <strong>Advanced search</strong>
-    </h3>
-
     <p>
-      The world of open source software depends on a lot of open source libraries. We are standing on the shoulders of giants, which helps us to reach further than we could otherwise.
+      <strong>Keeping a watch while you work.</strong>
     </p>
-
+    <!-- <%= render 'dashboard/monitoring_promo' %>-->
     <p>
-      The problem with platforms like Rubygems and NPM is there are so many libraries, with hundreds of new ones added every day. Trying to find the right library can be overwhelming.
-    </p>
-
-    <p>
-      Within Libraries.io we’ve aggregated <strong><%= number_with_delimiter(Project.total) %></strong> projects, written in <strong>160</strong> languages from across <strong><%= PackageManager::Base.platforms.length %></strong> package managers, including dependencies, releases, license information and source code repository infomation. This results in a rich index of almost every open source library available for use today.
-    </p>
-
-    <p>
-      The index is kept up to date with information about new libraries and new releases of existing libraries every day. This ensures upcoming projects get exposure, as well as existing well known libraries.
-    </p>
-
-    <%= link_to search_path, class: "btn btn-info" do %>
-      <%= fa_icon 'search' %>
-      Search for open source libraries
+    <% if current_user && current_user.github_enabled? %>
+      <% if current_user.needs_to_enable_github_access? %>
+        <%= link_to enable_public_path, class: 'btn btn-primary' do %>
+          <i class="fa fa-github"></i> Enable open source access (for free)
+        <% end %>
+      <% else %>
+        <%= link_to repositories_path, class: 'btn btn-primary' do %>
+          <%= fa_icon 'github' %>
+          Manage your projects
+        <% end %>
+      <% end %>
+    <% elsif !current_user || current_user.github_enabled? %>
+      <%= link_to repositories_path, class: 'btn btn-primary' do %>
+        <%= fa_icon 'github' %>
+        Start monitoring your projects
+      <% end %>
     <% end %>
+    </p>
+    <p>
+      The software we depend upon is constantly shifting and in need of continuous monitoring and management. By analysing libraries and understanding the relationships between them, we can automate much of this.
+    </p>
+    <p>
+      Similarly we can help you maintain your open source library by reflecting the state of the ecosystem back at you. Exposing the network of consumers who depend upon your software and the characteristics of the projects your software is deployed within. 
+    </p>
 
     <h3>
-      <strong>New version notifications</strong>
+      <strong>Get Release Notifications</strong>
     </h3>
-
     <p>
-      Libraries.io lets you watch libraries that you depend on and notifies you when there's a new release.
-      When you follow a library, new releases will show up here in your newsfeed.
+      <strong>Smooth out version bumps.</strong>
     </p>
-
-    <p>
-      This means you can subscribe to a project to receive notifications when new releases are published, including new tags on repositories for platforms like Bower and Go that don’t store release information in a central repository.
-    </p>
-
-    <%- if logged_in? %>
+        <%- if logged_in? %>
     <p>
       <a href="<%= platforms_path %>" class="btn btn-success">
         <%= fa_icon 'star' %>
@@ -65,8 +81,16 @@
       </a>
     </p>
     <%- end %>
-
+    <p>
+      Libraries.io tracks releases from <strong><%= number_with_delimiter(Project.total) %></strong> projects on <strong><%= PackageManager::Base.platforms.length %></strong> package managers in one place. Subscribe to a project and recieve notifications of new versions or tags for platform like Bower and Go that don't store release information centrally. 
+    </p>
+    <h2>Supported Package Managers</h2>
     <hr>
+    <div class="">
+      <% PackageManager::Base.platforms.select{|p| p::LIBRARIAN_SUPPORT }.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
+        <a class="pictogram tip pictogram-<%= platform.formatted_name.downcase %>" href="/<%= platform.formatted_name %>" title='<%= platform.formatted_name %>'></a>
+      <% end %>
+    </div>
   </div>
   <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
@@ -114,7 +138,7 @@
     <% end %>
   </div>
 </div>
-<div class="row">
+<!-- <div class="row">
   <div class="col-md-12">
     <%= render 'adsense/banner' %>
     <% cache("matrix:v1.4", :expires_in => 1.day) do  %>
@@ -123,3 +147,4 @@
     <% end %>
   </div>
 </div>
+ -->
