@@ -12,6 +12,12 @@ module RepositoryHost
       nil
     end
 
+    def self.get_default_branch(full_name)
+      # n.b only works for public repos
+      r = Typhoeus.get("https://bitbucket.org/#{full_name}/branches/")
+      Nokogiri::HTML(r.body).css('.main-branch .branch-header a').try(:text) || 'master'
+    end
+
     def download_contributions(token = nil)
       # not implemented yet
     end
@@ -125,6 +131,7 @@ module RepositoryHost
       project = client.repos.get(repository.owner_name, repository.project_name)
       v1_project = client.repos.get(repository.owner_name, repository.project_name, api_version: '1.0')
       repo_hash = project.to_hash.with_indifferent_access.slice(:description, :language, :full_name, :name, :has_wiki, :has_issues, :scm)
+      default_branch = get_default_branch(full_name)
 
       repo_hash.merge!({
         id: project.uuid,
@@ -136,6 +143,7 @@ module RepositoryHost
         updated_at: project.updated_on,
         subscribers_count: v1_project.followers_count,
         forks_count: v1_project.forks_count,
+        default_branch: default_branch,
         private: project.is_private,
         size: project[:size].to_f/1000,
         parent: {
