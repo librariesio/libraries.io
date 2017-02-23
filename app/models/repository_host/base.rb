@@ -6,7 +6,7 @@ module RepositoryHost
 
     def self.create(full_name, token = nil)
       Repository.create_from_hash(fetch_repo(full_name, token))
-    rescue *IGNORABLE_EXCEPTIONS
+    rescue *self::IGNORABLE_EXCEPTIONS
       nil
     end
 
