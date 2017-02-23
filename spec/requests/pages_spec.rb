@@ -9,7 +9,7 @@ describe "PagesController", :vcr do
   end
   describe "GET /packagemanagercompatibility", type: :request do
     it "renders successfully when logged out" do
-      visit pmmatrix_path
+      visit compatibility_path
       expect(page).to have_content 'Package Manager Compatibility Matrix'
     end
   end
