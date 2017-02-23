@@ -6,13 +6,8 @@ module RepositoryHost
       "https://avatars.githubusercontent.com/u/#{repository.owner_id}?size=#{size}"
     end
 
-    def self.create(full_name, token = nil)
-      api_client = AuthToken.new_client(token)
-      repo_hash = api_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
-      return false if repo_hash.nil? || repo_hash.empty?
-      Repository.create_from_hash(repo_hash)
-    rescue *IGNORABLE_EXCEPTIONS
-      nil
+    def self.fetch_repo(full_name, token = nil)
+      AuthToken.fallback_client(token).repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
     end
 
     def get_file_list(token = nil)
@@ -157,7 +152,7 @@ module RepositoryHost
 
     def update(token = nil)
       begin
-        r = AuthToken.new_client(token).repo(repository.id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
+        r = self.class.fetch_repo(repository.id_or_name)
         return unless r.present?
         repository.uuid = r[:id] unless repository.uuid == r[:id]
          if repository.full_name.downcase != r[:full_name].downcase

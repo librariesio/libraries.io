@@ -6,12 +6,6 @@ module RepositoryHost
       repository.logo_url
     end
 
-    def self.create(full_name, token = nil)
-      Repository.create_from_hash(fetch_repo(full_name, token))
-    rescue *IGNORABLE_EXCEPTIONS
-      nil
-    end
-
     def download_contributions(token = nil)
       # not implemented yet
     end
