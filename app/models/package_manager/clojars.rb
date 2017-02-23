@@ -11,7 +11,7 @@ module PackageManager
     end
 
     def self.project_names
-      @names ||= get("http://clojars-json.herokuapp.com/packages.json").keys
+      @names ||= get("https://clojars.libraries.io/packages.json").keys
     end
 
     def self.recent_names
@@ -21,7 +21,7 @@ module PackageManager
     def self.projects
       @projects ||= begin
         projs = {}
-        get("http://clojars-json.herokuapp.com/feed.json").each do |k,v|
+        get("https://clojars.libraries.io/feed.json").each do |k,v|
           v.each do |proj|
             group = proj['group-id']
             key = (group == k ? k : "#{group}/#{k}")
