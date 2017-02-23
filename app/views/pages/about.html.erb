@@ -1,56 +1,68 @@
 <% title 'About - Libraries' %>
 <div class="row">
   <div class="col-sm-8">
-    <h1>What is Libraries.io?</h1>
-
+   <h1>About</h1>
+    <h3>
+      Helping you make more informed decisions about the software you use.
+    </h3>
     <p>
-      <strong>Libraries.io</strong> helps developers find new open source libraries, modules and frameworks and keep track of ones they depend upon.
+      Libraries.io indexes data from <strong><%= number_with_delimiter(Project.total) %></strong> projects from <strong><%= PackageManager::Base.platforms.length %></strong> package managers. We monitor project releases, analyse each project's code, community, distribution and documentation, and we map the relationships between projects when they're declared as a dependency. The 'dependency tree' that emerges is the core of the services that we provide.
+    </p>
+    <h2>Use Libraries.io to</h2>
+    <hr>
+    <h3>
+      <strong>Search</strong>
+    </h3>
+    <p><strong>Spend your time including, not searching.</strong></p>
+    <p>
+      <%= link_to search_path, class: "btn btn-info" do %>
+        <%= fa_icon 'search' %>
+        Search <%= number_with_delimiter(Project.total) %> libraries
+      <% end %>
+    </p>
+    <p>
+      The majority of publication and distribution channels do not provide sufficient tools for developers to discover libraries that could be valuable to them. Similarly they do not provide adequate information for individuals to judge the merit of one library over another when they tackle similar issues or solve similar problems.
     </p>
 
     <h3>
-      <strong>Repository Monitoring</strong>
+      <strong>Monitor Your Projects</strong>
     </h3>
-    <%= render 'dashboard/monitoring_promo' %>
-
-    <h3>
-      <strong>Advanced search</strong>
-    </h3>
-
     <p>
-      The world of open source software depends on a lot of open source libraries. We are standing on the shoulders of giants, which helps us to reach further than we could otherwise.
+      <strong>Keeping a watch while you work.</strong>
     </p>
-
     <p>
-      The problem with platforms like Rubygems and NPM is there are so many libraries, with hundreds of new ones added every day. Trying to find the right library can be overwhelming.
-    </p>
-
-    <p>
-      Within Libraries.io we’ve aggregated <strong><%= number_with_delimiter(Project.total) %></strong> projects, written in <strong>160</strong> languages from across <strong><%= PackageManager::Base.platforms.length %></strong> package managers, including dependencies, releases, license information and source code repository infomation. This results in a rich index of almost every open source library available for use today.
-    </p>
-
-    <p>
-      The index is kept up to date with information about new libraries and new releases of existing libraries every day. This ensures upcoming projects get exposure, as well as existing well known libraries.
-    </p>
-
-    <%= link_to search_path, class: "btn btn-info" do %>
-      <%= fa_icon 'search' %>
-      Search for open source libraries
+    <% if current_user && current_user.github_enabled? %>
+      <% if current_user.needs_to_enable_github_access? %>
+        <%= link_to enable_public_path, class: 'btn btn-primary' do %>
+          <i class="fa fa-github"></i> Enable open source access (for free)
+        <% end %>
+      <% else %>
+        <%= link_to repositories_path, class: 'btn btn-primary' do %>
+          <%= fa_icon 'github' %>
+          Manage your projects
+        <% end %>
+      <% end %>
+    <% elsif !current_user || current_user.github_enabled? %>
+      <%= link_to repositories_path, class: 'btn btn-primary' do %>
+        <%= fa_icon 'github' %>
+        Start monitoring your projects
+      <% end %>
     <% end %>
+    </p>
+    <p>
+      The software we depend upon is constantly shifting and in need of continuous monitoring and management. By analysing libraries and understanding the relationships between them, we can automate much of this.
+    </p>
+    <p>
+      Similarly we can help you maintain your open source library by reflecting the state of the ecosystem back at you. Exposing the network of consumers who depend upon your software and the characteristics of the projects your software is deployed within. 
+    </p>
 
     <h3>
-      <strong>New version notifications</strong>
+      <strong>Get Release Notifications</strong>
     </h3>
-
     <p>
-      Libraries.io lets you watch libraries that you depend on and notifies you when there's a new release.
-      When you follow a library, new releases will show up here in your newsfeed.
+      <strong>Smooth out version bumps.</strong>
     </p>
-
-    <p>
-      This means you can subscribe to a project to receive notifications when new releases are published, including new tags on repositories for platforms like Bower and Go that don’t store release information in a central repository.
-    </p>
-
-    <%- if logged_in? %>
+        <%- if logged_in? %>
     <p>
       <a href="<%= platforms_path %>" class="btn btn-success">
         <%= fa_icon 'star' %>
@@ -65,61 +77,47 @@
       </a>
     </p>
     <%- end %>
-
+    <p>
+      Libraries.io tracks releases from <strong><%= number_with_delimiter(Project.total) %></strong> projects on <strong><%= PackageManager::Base.platforms.length %></strong> package managers in one place. Subscribe to a project and receive notifications of new versions or tags for platform like Bower and Go that don't store release information centrally. 
+    </p>
+    <h2>Supported Package Managers</h2>
     <hr>
+    <p>
+      Libraries.io supports the following package managers. For more detail check out <%= link_to 'our compatibility matrix', compatibility_path %>.
+    </p> 
+    <div class="">
+      <% PackageManager::Base.platforms.select{|p| p::LIBRARIAN_SUPPORT }.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
+        <a class="pictogram tip pictogram-<%= platform.formatted_name.downcase %>" href="/<%= platform.formatted_name %>" title='<%= platform.formatted_name %>'></a>
+      <% end %>
+    </div>
+    <h3><strong>What About Package Manager X?</strong></h3>
+    <p>
+      Some package managers require compilation before parsing their dependencies, some we simply haven't got around to yet. Luckily Libraries.io is an open source project so if you need to add a new package manager then you can. You can find everything you need to get started in <a href='https://docs.libraries.io' target='_blank'>our documentation</a>.
+    </p>
+    <h2>Why are you doing this?</h2>
+    <hr>
+    <p>
+      <h3>Improving the quality of all software.</h3>
+    </p>
+    <p>
+      Our goal is to raise the quality of all software, by raising the quality and frequency of contributions to free and open source software; the services, frameworks, plugins and tools we collectively refer to as libraries. We do this by tackling three problems:
+    </p>
+    <ul>
+      <li><strong>Discovery:</strong> Helping developers make faster, more informed decisions about the software that they use.</li>
+      <li><strong>Maintainability:</strong> Helping maintainers understand more about the software they depend upon and the consumers of their software.</li>
+      <li><strong>Sustainability:</strong> Supporting undervalued software by highlighting shortfalls in contribution and funneling support to them.</li>
+    </ul>
+    <p>
+      If you’d like to know why we think this is the right approach then check out our <a href='https://docs.libraries.io/strategy' target='_blank'>strategy</a>.
+    </p>
+    <h3><strong>Can I help?</strong></h3>
+    <p>
+      <strong>YES!</strong> Libraries.io is an inclusive community of people working together. Check out our <a href='https://docs.libraries.io' target='_blank'>contributor documentation</a> for more. 
+    </p>
   </div>
   <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
-    <h3>
-      <strong>Contact us</strong>
-    </h3>
-    <p>
-      Got a question or request for Libraries? Open an <%= link_to 'issue on GitHub', 'https://github.com/librariesio/libraries.io/issues' %>, <%= link_to 'tweet us', 'https://twitter.com/librariesio' %> or email <%= mail_to 'support@libraries.io', 'support@libraries.io' %>
-    </p>
-    <h3>
-      <strong>Who built this?</strong>
-    </h3>
-    <%= link_to user_path('andrew') do %>
-      <img src="https://avatars.githubusercontent.com/u/1060?size=80" width="80" alt="" class='pull-left avatar' />
-    <% end %>
-    <strong>Andrew Nesbitt</strong><br>
-    <%= link_to 'https://github.com/andrew' do %>
-      <%= fa_icon 'github' %> GitHub
-    <% end %><br>
-    <%= link_to 'https://twitter.com/teabass' do %>
-      <%= fa_icon 'twitter' %> Twitter
-    <% end %><br>
-    <%= link_to 'http://nesbitt.io' do %>
-      <%= fa_icon 'globe' %> Website
-    <% end %><br><hr>
-    <%= link_to user_path('malditogeek') do %>
-      <img src="https://avatars.githubusercontent.com/u/14751?size=160" width="80" alt="" class='pull-left avatar' />
-    <% end %>
-    <strong>Mauro Pompilio</strong><br>
-    <%= link_to 'https://github.com/malditogeek' do %>
-      <%= fa_icon 'github' %> GitHub
-    <% end %><br>
-    <%= link_to 'https://twitter.com/malditogeek' do %>
-      <%= fa_icon 'twitter' %> Twitter
-    <% end %><br><hr>
-    <%= link_to user_path('benjam') do %>
-      <img src="https://avatars2.githubusercontent.com/u/158833?s=160" width="80" alt="" class='pull-left avatar' />
-    <% end %>
-    <strong>Benjamin Nickolls</strong><br>
-    <%= link_to 'https://github.com/benjam' do %>
-      <%= fa_icon 'github' %> GitHub
-    <% end %><br>
-    <%= link_to 'https://twitter.com/benjam' do %>
-      <%= fa_icon 'twitter' %> Twitter
-    <% end %>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <%= render 'adsense/banner' %>
-    <% cache("matrix:v1.4", :expires_in => 1.day) do  %>
-      <h2>Package Manager Compatibility Matrix</h2>
-      <%= render 'matrix' %>
-    <% end %>
+    <%= render 'contact' %>
+    <%= render 'who' %>
   </div>
 </div>

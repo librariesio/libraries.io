@@ -178,6 +178,7 @@ Rails.application.routes.draw do
 
   get '/about', to: 'pages#about', as: :about
   get '/privacy', to: 'pages#privacy', as: :privacy
+  get '/compatibility', to: 'pages#compatibility', as: :compatibility
 
 
   if Rails.env.development?
