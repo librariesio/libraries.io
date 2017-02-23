@@ -79,7 +79,7 @@ class Repository < ApplicationRecord
 
   scope :indexable, -> { open_source.not_removed.includes(:projects, :readme) }
 
-  delegate :download_owner, :download_readme, :update_from_repository,
+  delegate :download_owner, :download_readme,
            :download_fork_source, :download_tags, :download_contributions,
            :create_webhook, :download_issues, :download_forks,
            :formatted_host, :get_file_list, :get_file_contents, to: :repository_host
@@ -208,6 +208,10 @@ class Repository < ApplicationRecord
     # download_issues(token)
     save_projects
     update_attributes(last_synced_at: Time.now)
+  end
+
+  def update_from_repository(token)
+    repository_host.update(token)
   end
 
   def self.create_from_host(host_type, full_name, token = nil)

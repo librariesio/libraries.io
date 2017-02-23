@@ -16,12 +16,12 @@ module RepositoryHost
     end
 
     def get_file_list(token = nil)
-      tree = api_client(token).tree(full_name, default_branch, :recursive => true).tree
+      tree = api_client(token).tree(repository.full_name, default_branch, :recursive => true).tree
       tree.select{|item| item.type == 'blob' }.map{|file| file.path }
     end
 
     def get_file_contents(path, token = nil)
-      file = api_client(token).contents(full_name, path: path)
+      file = api_client(token).contents(repository.full_name, path: path)
       {
         sha: file.sha,
         content: Base64.decode64(file.content)
@@ -30,7 +30,7 @@ module RepositoryHost
 
     def create_webhook(token = nil)
       api_client(token).create_hook(
-        full_name,
+        repository.full_name,
         'web',
         {
           :url => 'https://libraries.io/hooks/github',
@@ -78,7 +78,7 @@ module RepositoryHost
 
     def download_issues(token = nil)
       api_client = AuthToken.new_client(token)
-      issues = api_client.issues(full_name, state: 'all')
+      issues = api_client.issues(repository.full_name, state: 'all')
       issues.each do |issue|
         Issue.create_from_hash(repository, issue)
       end
@@ -158,7 +158,7 @@ module RepositoryHost
         repository.uuid = r[:id] unless repository.uuid == r[:id]
          if repository.full_name.downcase != r[:full_name].downcase
            clash = Repository.host('GitHub').where('lower(full_name) = ?', r[:full_name].downcase).first
-           if clash && (!clash.update_from_repository(token) || clash.status == "Removed")
+           if clash && (!clash.update(token) || clash.status == "Removed")
              clash.destroy
            end
            repository.full_name = r[:full_name]

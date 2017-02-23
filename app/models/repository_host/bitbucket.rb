@@ -92,7 +92,7 @@ module RepositoryHost
         repository.uuid = r[:id] unless repository.uuid == r[:id]
          if repository.full_name.downcase != r[:full_name].downcase
            clash = Repository.host(r[:host_type]).where('lower(full_name) = ?', r[:full_name].downcase).first
-           if clash && (!clash.update_from_repository(token) || clash.status == "Removed")
+           if clash && (!clash.update(token) || clash.status == "Removed")
              clash.destroy
            end
            repository.full_name = r[:full_name]
