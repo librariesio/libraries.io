@@ -39,6 +39,8 @@ module RepositoryHost
     def get_file_list(token = nil)
       tree = api_client(token).tree(escaped_full_name, recursive: true)
       tree.select{|item| item.type == 'blob' }.map{|file| file.path }
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def get_file_contents(path, token = nil)
@@ -47,6 +49,8 @@ module RepositoryHost
         sha: file.commit_id,
         content: Base64.decode64(file.content)
       }
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def download_readme(token = nil)

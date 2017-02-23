@@ -18,6 +18,8 @@ module RepositoryHost
     def get_file_list(token = nil)
       tree = api_client(token).tree(repository.full_name, repository.default_branch, :recursive => true).tree
       tree.select{|item| item.type == 'blob' }.map{|file| file.path }
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def get_file_contents(path, token = nil)
@@ -26,6 +28,8 @@ module RepositoryHost
         sha: file.sha,
         content: Base64.decode64(file.content)
       }
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def create_webhook(token = nil)

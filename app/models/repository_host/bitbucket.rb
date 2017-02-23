@@ -20,6 +20,8 @@ module RepositoryHost
 
     def get_file_list(token = nil)
       api_client(token).get_request("1.0/repositories/#{repository.full_name}/directory/")[:values]
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def get_file_contents(path, token = nil)
@@ -28,6 +30,8 @@ module RepositoryHost
         sha: file.node,
         content: file.data
       }
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def download_contributions(token = nil)
