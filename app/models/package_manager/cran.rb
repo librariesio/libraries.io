@@ -107,16 +107,7 @@ module PackageManager
 
         `rm -rf /tmp/#{folder_name} /tmp/#{tarball_name}`
 
-        r = Typhoeus::Request.new("https://librarian.libraries.io/v2/parse_file?filepath=DESCRIPTION",
-          method: :post,
-          body: {contents: contents},
-          headers: { 'Accept' => 'application/json' }).run
-        begin
-          return Oj.load(r.body)
-        rescue Oj::ParseError
-          []
-        end
-
+        Bibliothecary.analyse_file('DESCRIPTION', contents).first.fetch(:dependencies)
       ensure
         `rm -rf /tmp/#{folder_name} /tmp/#{tarball_name}`
         []

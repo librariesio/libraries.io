@@ -15,6 +15,19 @@ module RepositoryHost
       nil
     end
 
+    def get_file_list(token = nil)
+      tree = api_client(token).tree(full_name, default_branch, :recursive => true).tree
+      tree.select{|item| item.type == 'blob' }.map{|file| file.path }
+    end
+
+    def get_file_contents(path, token = nil)
+      file = api_client(token).contents(full_name, path: path)
+      {
+        sha: file.sha,
+        content: Base64.decode64(file.content)
+      }
+    end
+
     def create_webhook(token = nil)
       api_client(token).create_hook(
         full_name,

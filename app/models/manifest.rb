@@ -6,7 +6,7 @@ class Manifest < ApplicationRecord
   scope :platform, ->(platform) { where('lower(manifests.platform) = ?', platform.try(:downcase)) }
   scope :kind, ->(kind) { where(kind: kind) }
 
-  def github_link
-    repository.blob_url + filepath
+  def repository_link
+    repository.blob_url(sha || branch) + filepath
   end
 end

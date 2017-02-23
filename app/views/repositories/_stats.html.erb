@@ -57,7 +57,6 @@
     </td>
   </tr>
   <% end %>
-  <% if repo.host_type == 'GitHub' %>
   <tr>
     <td>
       Dependencies
@@ -66,7 +65,6 @@
       <strong><%= number_with_delimiter repo.repository_dependencies.count %></strong>
     </td>
   </tr>
-  <% end %>
   <% if repo.contributors.count > 0 %>
   <tr>
     <td>

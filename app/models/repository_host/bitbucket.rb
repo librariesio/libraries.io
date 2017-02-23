@@ -18,6 +18,18 @@ module RepositoryHost
       Nokogiri::HTML(r.body).css('.main-branch .branch-header a').try(:text) || 'master'
     end
 
+    def get_file_list(token = nil)
+      api_client(token).get_request("1.0/repositories/#{repository.full_name}/directory/")[:values]
+    end
+
+    def get_file_contents(path, token = nil)
+      file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, 'master', path)
+      {
+        sha: file.node,
+        content: file.data
+      }
+    end
+
     def download_contributions(token = nil)
       # not implemented yet
     end
@@ -128,8 +140,9 @@ module RepositoryHost
 
     def self.fetch_repo(full_name, token = nil)
       client = api_client(token)
-      project = client.repos.get(repository.owner_name, repository.project_name)
-      v1_project = client.repos.get(repository.owner_name, repository.project_name, api_version: '1.0')
+      user_name, repo_name = full_name.split('/')
+      project = client.repos.get(user_name, repo_name)
+      v1_project = client.repos.get(user_name, repo_name, api_version: '1.0')
       repo_hash = project.to_hash.with_indifferent_access.slice(:description, :language, :full_name, :name, :has_wiki, :has_issues, :scm)
       default_branch = get_default_branch(full_name)
 

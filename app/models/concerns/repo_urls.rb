@@ -62,12 +62,20 @@ module RepoUrls
     "#{host_url}/#{source_name}"
   end
 
-  def blob_url
-    "#{url}/blob/#{default_branch}/"
+  def blob_url(sha = default_branch)
+    sha ||= default_branch
+    case host_type
+    when 'GitHub'
+      "#{url}/blob/#{sha}/"
+    when 'GitLab'
+      "#{url}/blob/#{sha}/"
+    when 'Bitbucket'
+      "#{url}/src/#{sha}/"
+    end
   end
 
-  def raw_url
-    "#{url}/raw/#{default_branch}/"
+  def raw_url(sha = default_branch)
+    "#{url}/raw/#{sha}/"
   end
 
   def commits_url(author = nil)

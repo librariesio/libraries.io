@@ -82,7 +82,7 @@ class Repository < ApplicationRecord
   delegate :download_owner, :download_readme, :update_from_repository,
            :download_fork_source, :download_tags, :download_contributions,
            :create_webhook, :download_issues, :download_forks,
-           :formatted_host, to: :repository_host
+           :formatted_host, :get_file_list, :get_file_contents, to: :repository_host
 
   def self.language(language)
     where('lower(repositories.language) = ?', language.try(:downcase))
@@ -294,6 +294,7 @@ class Repository < ApplicationRecord
   end
 
   def repository_host
+    RepositoryHost::Gitlab
     @repository_host ||= RepositoryHost.const_get(host_type.capitalize).new(self)
   end
 end
