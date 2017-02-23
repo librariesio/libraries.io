@@ -23,7 +23,7 @@ module RepositoryHost
     end
 
     def get_file_contents(path, token = nil)
-      file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, 'master', path)
+      file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, repository.default_branch, path)
       {
         sha: file.node,
         content: file.data
@@ -51,11 +51,11 @@ module RepositoryHost
     end
 
     def download_readme(token = nil)
-      files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, 'master', '/')
+      files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, repository.default_branch, '/')
       paths =  files.files.map(&:path)
       readme_path = paths.select{|path| path.match(/^readme/i) }.first
       return if readme_path.nil?
-      raw_content = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, 'master', readme_path).data
+      raw_content = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, repository.default_branch, readme_path).data
       contents = {
         html_body: GitHub::Markup.render(readme_path, raw_content)
       }

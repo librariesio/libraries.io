@@ -16,7 +16,7 @@ module RepositoryHost
     end
 
     def get_file_list(token = nil)
-      tree = api_client(token).tree(repository.full_name, default_branch, :recursive => true).tree
+      tree = api_client(token).tree(repository.full_name, repository.default_branch, :recursive => true).tree
       tree.select{|item| item.type == 'blob' }.map{|file| file.path }
     end
 
