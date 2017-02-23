@@ -86,11 +86,18 @@
     </p>
     <h2>Supported Package Managers</h2>
     <hr>
+    <p>
+      Libraries.io supports the following package managers. For more detail check out <a href='<%= url_for(controller: 'pages', action: 'pmmatrix',) %>'>our compatibility matrix</a>.
+    </p> 
     <div class="">
       <% PackageManager::Base.platforms.select{|p| p::LIBRARIAN_SUPPORT }.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
         <a class="pictogram tip pictogram-<%= platform.formatted_name.downcase %>" href="/<%= platform.formatted_name %>" title='<%= platform.formatted_name %>'></a>
       <% end %>
     </div>
+    <h3><strong>What About Package Manager X?</strong></h3>
+    <p>
+      Some package managers require compilation before parsing their dependencies, some we simply haven't got around to yet. Luckily Libraries.io is an open source project so if you need to add a new package manager then you can. You can find everything you need to get started in <a href='https://docs.libraries.io' target='_blank'>our documentation</a>.
+    </p>
   </div>
   <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
