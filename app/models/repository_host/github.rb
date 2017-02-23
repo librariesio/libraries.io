@@ -127,7 +127,7 @@ module RepositoryHost
       nil
     end
 
-    def download_github_tag(token, tag, existing_tag_names)
+    def download_tag(token, tag, existing_tag_names)
       match = tag.ref.match(/refs\/tags\/(.*)/)
       return unless match
       name = match[1]
