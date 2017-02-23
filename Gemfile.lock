@@ -101,7 +101,7 @@ GEM
     asciidoctor (1.5.5)
     autoprefixer-rails (6.7.5)
       execjs
-    bibliothecary (5.0.2)
+    bibliothecary (5.1.0)
       deb_control
       librariesio-gem-parser
       ox
@@ -649,4 +649,4 @@ RUBY VERSION
    ruby 2.3.3p222
 
 BUNDLED WITH
-   1.14.4
+   1.14.5
