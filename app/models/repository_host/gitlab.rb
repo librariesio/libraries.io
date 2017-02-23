@@ -54,7 +54,11 @@ module RepositoryHost
       paths =  files.map(&:path)
       readme_path = paths.select{|path| path.match(/^readme/i) }.first
       return if readme_path.nil?
-      raw_content =  api_client(token).file_contents(escaped_full_name, readme_path)
+      begin
+        raw_content =  api_client(token).file_contents(escaped_full_name, readme_path)
+      rescue
+        return
+      end
       contents = {
         html_body: GitHub::Markup.render(readme_path, raw_content)
       }
