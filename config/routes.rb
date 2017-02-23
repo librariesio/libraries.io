@@ -178,6 +178,7 @@ Rails.application.routes.draw do
 
   get '/about', to: 'pages#about', as: :about
   get '/privacy', to: 'pages#privacy', as: :privacy
+  get '/packagemanagercompatibility', to: 'pages#pmmatrix', as: :pmmatrix
 
 
   if Rails.env.development?

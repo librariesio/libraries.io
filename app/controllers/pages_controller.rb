@@ -5,4 +5,7 @@ class PagesController < ApplicationController
   def privacy
     
   end
+  def pmmatrix
+    
+  end
 end
