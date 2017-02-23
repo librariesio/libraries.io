@@ -294,6 +294,7 @@ class Repository < ApplicationRecord
   end
 
   def repository_host
+    RepositoryHost::Gitlab
     @repository_host ||= RepositoryHost.const_get(host_type.capitalize).new(self)
   end
 end
