@@ -83,7 +83,7 @@
     <h2>Supported Package Managers</h2>
     <hr>
     <p>
-      Libraries.io supports the following package managers. For more detail check out <a href='<%= compatibility_path %>'>our compatibility matrix</a>.
+      Libraries.io supports the following package managers. For more detail check out <%= link_to 'our compatibility matrix', compatibility_path %>.
     </p> 
     <div class="">
       <% PackageManager::Base.platforms.select{|p| p::LIBRARIAN_SUPPORT }.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
