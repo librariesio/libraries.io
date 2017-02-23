@@ -108,7 +108,7 @@ module RepositoryHost
       end
     end
 
-    def self.recursive_gitlab_repos(page_number = 1, limit = 10)
+    def self.recursive_gitlab_repos(page_number = 1, limit = 5)
       r = Typhoeus.get("https://gitlab.com/explore/projects?&page=#{page_number}&sort=created_asc")
       if r.code == 500
         recursive_gitlab_repos(page_number.to_i + 1, limit)
