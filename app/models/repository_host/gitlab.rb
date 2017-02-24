@@ -160,6 +160,8 @@ module RepositoryHost
           full_name: project.forked_from_project.try(:path_with_namespace)
         }
       })
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
   end
 end

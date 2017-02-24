@@ -8,6 +8,8 @@ module RepositoryHost
 
     def self.fetch_repo(full_name, token = nil)
       AuthToken.fallback_client(token).repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def get_file_list(token = nil)
