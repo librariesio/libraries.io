@@ -118,4 +118,4 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
   end
 end
 
-SitemapGenerator::Sitemap.ping_search_engines('https://libraries.io/sitemap.xml.gz')
+SitemapGenerator::Sitemap.ping_search_engines('https://libraries.io/sitemap.xml.gz', yandex: 'https://blogs.yandex.ru/pings/?status=success&url=%s')
