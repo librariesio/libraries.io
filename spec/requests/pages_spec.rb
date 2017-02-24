@@ -15,7 +15,7 @@ describe "PagesController", :vcr do
   end
   describe "GET /team", type: :request do
     it "renders successfully when logged out" do
-      visit compatibility_path
+      visit team_path
       expect(page).to have_content 'Team - Libraries'
     end
   end
