@@ -1,7 +1,6 @@
 class Repository < ApplicationRecord
   include RepoSearch
   include Status
-  include RepoUrls
   include RepoManifests
   include RepositorySourceRank
 
@@ -79,10 +78,11 @@ class Repository < ApplicationRecord
 
   scope :indexable, -> { open_source.not_removed.includes(:projects, :readme) }
 
-  delegate :download_owner, :download_readme,
-           :download_fork_source, :download_tags, :download_contributions,
-           :create_webhook, :download_issues, :download_forks,
-           :formatted_host, :get_file_list, :get_file_contents, to: :repository_host
+  delegate :download_owner, :download_readme, :domain, :watchers_url, :forks_url,
+           :download_fork_source, :download_tags, :download_contributions, :url,
+           :create_webhook, :download_issues, :download_forks, :stargazers_url,
+           :formatted_host, :get_file_list, :get_file_contents, :issues_url,
+           :source_url, :contributors_url, :blob_url, :raw_url, :commits_url, to: :repository_host
 
   def self.language(language)
     where('lower(repositories.language) = ?', language.try(:downcase))
@@ -243,7 +243,8 @@ class Repository < ApplicationRecord
   end
 
   def self.check_status(host_type, repo_full_name, removed = false)
-    response = Typhoeus.head("#{host_domain(host_type)}/#{repo_full_name}")
+    domain = RepositoryHost::Base.domain(host_type)
+    response = Typhoeus.head("#{domain}/#{repo_full_name}")
 
     if response.response_code == 404
       repo = Repository.includes(:projects).find_by_full_name(repo_full_name)

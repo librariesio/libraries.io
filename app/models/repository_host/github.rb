@@ -6,6 +6,36 @@ module RepositoryHost
       "https://avatars.githubusercontent.com/u/#{repository.owner_id}?size=#{size}"
     end
 
+    def domain
+      'https://github.com'
+    end
+
+    def watchers_url
+      "#{url}/watchers"
+    end
+
+    def forks_url
+      "#{url}/network"
+    end
+
+    def stargazers_url
+      "#{url}/stargazers"
+    end
+
+    def contributors_url
+      "#{url}/graphs/contributors"
+    end
+
+    def blob_url(sha = nil)
+      sha ||= repository.default_branch
+      "#{url}/blob/#{sha}/"
+    end
+
+    def commits_url(author = nil)
+      author_param = author.present? ? "?author=#{author}" : ''
+      "#{url}/commits#{author_param}"
+    end
+
     def self.fetch_repo(full_name, token = nil)
       AuthToken.fallback_client(token).repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
     rescue *IGNORABLE_EXCEPTIONS

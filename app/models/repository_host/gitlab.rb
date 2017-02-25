@@ -6,6 +6,27 @@ module RepositoryHost
       repository.logo_url
     end
 
+    def domain
+      'https://gitlab.com'
+    end
+
+    def forks_url
+      "#{url}/forks"
+    end
+
+    def contributors_url
+      "#{url}/graphs/#{repository.default_branch}"
+    end
+
+    def blob_url(sha = nil)
+      sha ||= repository.default_branch
+      "#{url}/blob/#{sha}/"
+    end
+
+    def commits_url(author = nil)
+      "#{url}/commits/#{repository.default_branch}"
+    end
+
     def download_contributions(token = nil)
       # not implemented yet
     end

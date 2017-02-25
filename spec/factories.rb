@@ -102,6 +102,7 @@ FactoryGirl.define do
     private false
     stargazers_count 10_000
     size 1000
+    default_branch 'master'
   end
 
   factory :user do

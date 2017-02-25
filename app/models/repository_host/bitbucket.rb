@@ -6,6 +6,19 @@ module RepositoryHost
       "https://bitbucket.org/#{repository.full_name}/avatar/#{size}"
     end
 
+    def domain
+      'https://bitbucket.org'
+    end
+
+    def blob_url(sha = nil)
+      sha ||= repository.default_branch
+      "#{url}/src/#{sha}/"
+    end
+
+    def commits_url(author = nil)
+      "#{url}/commits"
+    end
+
     def self.get_default_branch(full_name)
       # n.b only works for public repos
       r = Typhoeus.get("https://bitbucket.org/#{full_name}/branches/")

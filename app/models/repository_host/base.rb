@@ -10,6 +10,43 @@ module RepositoryHost
       nil
     end
 
+    def self.domain(host_type)
+      const_get(host_type.capitalize).new.domain
+    end
+
+    def url
+      "#{domain}/#{repository.full_name}"
+    end
+
+    def issues_url
+      "#{url}/issues"
+    end
+
+    def source_url
+      "#{domain}/#{repository.source_name}"
+    end
+
+    def raw_url(sha = nil)
+      sha ||= repository.default_branch
+      "#{url}/raw/#{sha}/"
+    end
+
+    def watchers_url
+      nil
+    end
+
+    def forks_url
+      nil
+    end
+
+    def stargazers_url
+      nil
+    end
+
+    def contributors_url
+      nil
+    end
+
     def avatar_url(size = 60)
       raise NotImplementedError
     end
