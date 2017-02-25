@@ -219,6 +219,7 @@ class Repository < ApplicationRecord
   end
 
   def self.create_from_hash(repo_hash)
+    return unless repo_hash
     repo_hash = repo_hash.to_hash.with_indifferent_access
     ActiveRecord::Base.transaction do
       g = Repository.find_by(uuid: repo_hash[:id])
