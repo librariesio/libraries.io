@@ -179,4 +179,20 @@ describe Repository, :vcr, type: :model do
       end
     end
   end
+
+  describe '#avatar_url' do
+    context 'with no args' do
+      it 'should return an avatar url for GitHub repos' do
+        expect(build(:repository, host_type: 'GitHub').avatar_url).to eq('https://avatars.githubusercontent.com/u/?size=60')
+      end
+
+      it 'should return an avatar url for GitLab repos' do
+        expect(build(:repository, host_type: 'GitLab').avatar_url).to eq('https://www.gravatar.com/avatar/7ae482ea784951c2d4bb56fc642619b7?s=60&f=y&d=retro')
+      end
+
+      it 'should return an avatar url for Bitbucket repos' do
+        expect(build(:repository, host_type: 'Bitbucket').avatar_url).to eq('https://bitbucket.org/rails/rails/avatar/60')
+      end
+    end
+  end
 end
