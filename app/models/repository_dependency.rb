@@ -26,7 +26,7 @@ class RepositoryDependency < ApplicationRecord
     return nil if manifest.repository.license.blank?
     project.normalized_licenses.any? do |license|
       begin
-        License::Compatibility.forward_compatiblity(license, manifest.repository.license)
+        License::Compatibility.forward_compatibility(license, manifest.repository.license)
       rescue
         true
       end

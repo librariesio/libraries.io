@@ -27,7 +27,7 @@ class Dependency < ApplicationRecord
     project.normalized_licenses.any? do |license|
       version.project.normalized_licenses.any? do |other_license|
         begin
-          License::Compatibility.forward_compatiblity(license, other_license)
+          License::Compatibility.forward_compatibility(license, other_license)
         rescue
           true
         end
