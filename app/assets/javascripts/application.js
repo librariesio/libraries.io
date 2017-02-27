@@ -28,6 +28,18 @@
 document.addEventListener('turbolinks:load', function(){
   $('.tip').tooltip({placement: 'bottom'})
   stickFooter()
+  
+  gascrolldepth.init({         
+    elements: $('body').data('ga_scroll_ids').split(','),
+    userTiming: false,
+    percentage: false,
+    pixelDepth: false,
+    nonInteraction: false, 
+    eventHandler: function(data) {
+      console.log(data);
+    }
+  });
+
 })
 
 $('.rss').on('click', function(){
