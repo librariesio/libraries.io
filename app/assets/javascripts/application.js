@@ -21,6 +21,7 @@
 //= require bootstrap/tooltip
 //= require js.cookie
 //= require rails-timeago
+//= require gascrolldepth
 //= require subtome
 //= require turbolinks
 
