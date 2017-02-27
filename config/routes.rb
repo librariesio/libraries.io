@@ -17,6 +17,12 @@ Rails.application.routes.draw do
     get '/searchcode', to: 'projects#searchcode'
 
     get '/subscriptions', to: 'subscriptions#index'
+    get '/subscriptions/:platform/:name', to: 'subscriptions#show'
+    post '/subscriptions/:platform/:name', to: 'subscriptions#create'
+    put '/subscriptions/:platform/:name', to: 'subscriptions#update'
+    delete '/subscriptions/:platform/:name', to: 'subscriptions#destroy'
+
+    # legacy due to typo
     get '/subscription/:platform/:name', to: 'subscriptions#show'
     post '/subscription/:platform/:name', to: 'subscriptions#create'
     put '/subscription/:platform/:name', to: 'subscriptions#update'
