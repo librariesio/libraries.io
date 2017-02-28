@@ -66,7 +66,7 @@ module ApplicationHelper
   end
 
   def ga_scroll_ids(ids)
-    content_for(:ga_scroll_ids) { ids.join(',') }
+    content_for(:ga_scroll_ids) { ids.join(',')+',' }
   end
 
   def description(page_description)
