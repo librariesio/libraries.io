@@ -78,6 +78,7 @@ module RepositoryHost
       rescue
         return
       end
+      return unless raw_content.present?
       contents = {
         html_body: GitHub::Markup.render(readme_path, raw_content)
       }

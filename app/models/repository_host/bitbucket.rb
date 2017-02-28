@@ -67,6 +67,7 @@ module RepositoryHost
       readme_path = paths.select{|path| path.match(/^readme/i) }.first
       return if readme_path.nil?
       raw_content = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, repository.default_branch, readme_path).data
+      return unless raw_content.present?
       contents = {
         html_body: GitHub::Markup.render(readme_path, raw_content)
       }
