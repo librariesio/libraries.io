@@ -32,7 +32,7 @@ module RepositoryHost
     end
 
     def get_file_contents(path, token = nil)
-      file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, repository.default_branch, path)
+      file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, repository.default_branch, URI.escape(path))
       {
         sha: file.node,
         content: file.data
