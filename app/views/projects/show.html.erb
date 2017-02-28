@@ -1,7 +1,7 @@
 <% title "#{@project} #{@version} on #{@project.platform_name} - Libraries.io" %>
 <% description project_description(@project, @version) %>
 <% content_for :atom, auto_discovery_link_tag(:atom, rss_url(@project)) %>
-<% ga_scroll_ids ['#dependent-projects','#dependent-repositories','#releases', '#tagged-releases', 'top-contributors', 'your-dependent-repositories'] %>
+<% ga_scroll_ids ['#dependencies','#dependent-projects','#dependent-repositories','#releases', '#tagged-releases', 'top-contributors', 'your-dependent-repositories'] %>
 
 <%= content_for :meta, render_meta(@project) %>
 
@@ -175,7 +175,7 @@
             <div class="col-md-12 table-responsive">
             <% @dependencies.group_by(&:kind).each do |kind, deps| %>
               <% if deps.length > 0 %>
-                <table class='table table-hover table-condensed'>
+                <table id='dependencies' class='table table-hover table-condensed'>
                   <thead>
                     <th>
                       <%= kind.humanize unless kind == 'runtime' %> Dependencies
