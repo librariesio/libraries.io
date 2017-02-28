@@ -34,10 +34,7 @@ document.addEventListener('turbolinks:load', function(){
     userTiming: false,
     percentage: false,
     pixelDepth: false,
-    nonInteraction: false, 
-    eventHandler: function(data) {
-      console.log(data);
-    }
+    nonInteraction: false
   });
 
 })
