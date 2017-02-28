@@ -53,7 +53,7 @@ module RepositoryHost
       file = api_client(token).contents(repository.full_name, path: path)
       {
         sha: file.sha,
-        content: Base64.decode64(file.content)
+        content: file.content.present? ? Base64.decode64(file.content) : file.content
       }
     rescue *IGNORABLE_EXCEPTIONS
       nil
