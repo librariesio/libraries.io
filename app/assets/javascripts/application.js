@@ -28,8 +28,8 @@
 document.addEventListener('turbolinks:load', function(){
   $('.tip').tooltip({placement: 'bottom'})
   stickFooter()
-  
-  gascrolldepth.init({         
+
+  gascrolldepth.init({
     elements: $('body').data('ga_scroll_ids').split(','),
     userTiming: false,
     percentage: false,
