@@ -1,6 +1,6 @@
 module RepositoryHost
   class Gitlab < Base
-    IGNORABLE_EXCEPTIONS = [::Gitlab::Error::NotFound, ::Gitlab::Error::Forbidden]
+    IGNORABLE_EXCEPTIONS = [::Gitlab::Error::NotFound, ::Gitlab::Error::Forbidden, ::Gitlab::Error::InternalServerError, ::Gitlab::Error::Parsing]
 
     def avatar_url(_size = 60)
       repository.logo_url
