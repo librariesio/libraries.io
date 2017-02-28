@@ -71,22 +71,16 @@ module RepositoryHost
     def download_readme(token = nil)
       files = api_client(token).tree(escaped_full_name)
       paths =  files.map(&:path)
-      readme_path = paths.select{|path| path.match(/^readme/i) }.first
+      readme_path = paths.select{|path| path.match(/^readme/i) }.sort{|path| Readme.supported_format?(path) ? 0 : 1 }.first
       return if readme_path.nil?
-      begin
-        raw_content =  api_client(token).file_contents(escaped_full_name, readme_path).force_encoding("UTF-8")
-      rescue
-        return
-      end
-      return unless raw_content.present?
-      contents = {
-        html_body: GitHub::Markup.render(readme_path, raw_content)
-      }
+      raw_content = get_file_contents(readme_path, token)[:content]
+      content = Readme.format_markup(readme_path, raw_content)
+      return unless content.present?
 
       if repository.readme.nil?
-        repository.create_readme(contents)
+        repository.create_readme(html_body: content)
       else
-        repository.readme.update_attributes(contents)
+        repository.readme.update_attributes(html_body: content)
       end
     rescue *IGNORABLE_EXCEPTIONS
       nil

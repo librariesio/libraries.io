@@ -1,10 +1,32 @@
 class Readme < ApplicationRecord
+  VALID_EXTENSION_REGEXES = [
+    /textile/,
+    /org/,
+    /creole/,
+    /adoc|asc(iidoc)?/,
+    /re?st(\.txt)?/,
+    /pod/,
+    /rdoc/
+  ]
+
   belongs_to :repository
   validates_presence_of :html_body, :repository
-
   after_validation :reformat
-
   after_commit :check_unmaintained
+
+  def self.format_markup(path, content)
+    return unless content.present?
+    return unless supported_format?(path)
+    GitHub::Markup.render(path, content.force_encoding("UTF-8"))
+  rescue GitHub::Markup::CommandError
+    nil
+  end
+
+  def self.supported_format?(path)
+    VALID_EXTENSION_REGEXES.any? do |regexp|
+      path =~ /\.(#{regexp})\z/
+    end
+  end
 
   def to_s
     @body ||= Nokogiri::HTML(html_body).css('body').try(:inner_html)
