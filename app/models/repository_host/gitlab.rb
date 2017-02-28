@@ -74,7 +74,7 @@ module RepositoryHost
       readme_path = paths.select{|path| path.match(/^readme/i) }.first
       return if readme_path.nil?
       begin
-        raw_content =  api_client(token).file_contents(escaped_full_name, readme_path)
+        raw_content =  api_client(token).file_contents(escaped_full_name, readme_path).force_encoding("UTF-8")
       rescue
         return
       end
