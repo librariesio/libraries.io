@@ -42,6 +42,7 @@ class UsersController < ApplicationController
   private
 
   def find_user
+    raise ActiveRecord::RecordNotFound unless current_host == 'github'
     @user = GithubUser.visible.where("lower(login) = ?", params[:login].downcase).first
     @user = GithubOrganisation.visible.where("lower(login) = ?", params[:login].downcase).first if @user.nil?
     raise ActiveRecord::RecordNotFound if @user.nil?
