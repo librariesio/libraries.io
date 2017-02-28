@@ -119,7 +119,7 @@ module RepositoryHost
       end
     end
 
-    def self.recursive_bitbucket_repos(url, limit = 5)
+    def self.recursive_bitbucket_repos(url, limit = 10)
       return if limit.zero?
       r = Typhoeus::Request.new(url,
         method: :get,
