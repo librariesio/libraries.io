@@ -1,5 +1,7 @@
 <% cache(['v1', @project, 'stats'], :expires_in => 1.day) do %>
-  <h4>Project Statistics</h4>
+<% ga_scroll_ids ['#project-statistics'] %>
+
+  <h4 id='project-statistics'>Project Statistics</h4>
   <table class='table table-striped'>
     <tr>
       <td>
