@@ -19,9 +19,11 @@ module RepoManifests
 
     manifest_paths.map do |manifest_path|
       file = get_file_contents(manifest_path)
-      manifest = Bibliothecary.analyse_file(manifest_path, file[:content]).first
-      manifest.merge!(sha: file[:sha]) if manifest
-      manifest
+      if file.present?
+        manifest = Bibliothecary.analyse_file(manifest_path, file[:content]).first
+        manifest.merge!(sha: file[:sha]) if manifest
+        manifest
+      end
     end.reject(&:blank?)
   end
 
