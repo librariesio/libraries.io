@@ -97,6 +97,7 @@ module RepositoryHost
       existing_tag_names = repository.tags.pluck(:name)
       remote_tags.each do |tag|
         next if existing_tag_names.include?(tag.name)
+        next if tag.commit.nil?
         repository.tags.create({
           name: tag.name,
           kind: "tag",
