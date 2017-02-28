@@ -12,7 +12,7 @@ module RepositoryHost
 
     def blob_url(sha = nil)
       sha ||= repository.default_branch
-      "#{url}/src/#{sha}/"
+      "#{url}/src/#{URI.escape(sha)}/"
     end
 
     def commits_url(author = nil)
@@ -32,7 +32,7 @@ module RepositoryHost
     end
 
     def get_file_contents(path, token = nil)
-      file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, repository.default_branch, URI.escape(path))
+      file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, URI.escape(repository.default_branch), URI.escape(path))
       {
         sha: file.node,
         content: file.data
@@ -62,11 +62,11 @@ module RepositoryHost
     end
 
     def download_readme(token = nil)
-      files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, repository.default_branch, '/')
+      files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, URI.escape(repository.default_branch), '/')
       paths =  files.files.map(&:path)
       readme_path = paths.select{|path| path.match(/^readme/i) }.first
       return if readme_path.nil?
-      raw_content = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, repository.default_branch, readme_path).data
+      raw_content = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, URI.escape(repository.default_branch), URI.escape(readme_path)).data
       return unless raw_content.present?
       contents = {
         html_body: GitHub::Markup.render(readme_path, raw_content)
