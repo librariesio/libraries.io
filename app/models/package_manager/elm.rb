@@ -65,7 +65,7 @@ module PackageManager
         response = request(url)
         if response.status == 200
           contents = response.body
-          dependencies = Bibliothecary.analyse_file('elm-package.json', contents).first.fetch(:dependencies)
+          dependencies = Bibliothecary.analyse_file('elm-package.json', contents).first.try(:fetch, :dependencies)
           return dependencies
         else
           return []
