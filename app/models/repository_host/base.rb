@@ -11,7 +11,7 @@ module RepositoryHost
     end
 
     def self.domain(host_type)
-      RepositoryHost.const_get(host_type.capitalize).new.domain
+      RepositoryHost.const_get(host_type.capitalize).new(nil).domain
     end
 
     def url
