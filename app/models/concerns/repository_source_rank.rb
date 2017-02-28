@@ -8,7 +8,7 @@ module RepositorySourceRank
   end
 
   def update_source_rank_async
-    UpdateRepositorySourceRankWorker.perform_async(self.id) if updated_at.present? && updated_at < 1.day.ago
+    UpdateRepositorySourceRankWorker.perform_async(self.id)
   end
 
   def set_source_rank
