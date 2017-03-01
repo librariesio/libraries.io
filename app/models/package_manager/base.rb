@@ -187,7 +187,7 @@ module PackageManager
 
     def self.find_and_map_dependencies(name, version, _project)
       dependencies = find_dependencies(name, version)
-      return [] unless dependencies.any?
+      return [] unless dependencies && dependencies.any?
       dependencies.map do |dependency|
         dependency = dependency.deep_stringify_keys
         {
