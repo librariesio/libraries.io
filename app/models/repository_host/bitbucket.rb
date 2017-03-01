@@ -1,6 +1,11 @@
 module RepositoryHost
   class Bitbucket < Base
-    IGNORABLE_EXCEPTIONS = [BitBucket::Error::NotFound, BitBucket::Error::Forbidden, BitBucket::Error::ServiceError, BitBucket::Error::InternalServerError]
+    IGNORABLE_EXCEPTIONS = [
+      BitBucket::Error::NotFound,
+      BitBucket::Error::Forbidden,
+      BitBucket::Error::ServiceError,
+      BitBucket::Error::InternalServerError,
+      BitBucket::Error::ServiceUnavailable]
 
     def avatar_url(size = 60)
       "https://bitbucket.org/#{repository.full_name}/avatar/#{size}"
