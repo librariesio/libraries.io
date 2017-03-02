@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe PlatformsController, :vcr do
   before :each do
-    PackageManager::Rubygems::URL
     @project = create(:project)
     Project.__elasticsearch__.import force: true
     Project.__elasticsearch__.refresh_index!

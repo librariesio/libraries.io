@@ -3,7 +3,7 @@ require "rails_helper"
 describe "Admin::ProjectSuggestionsController" do
   let(:user) { create :user }
 
-  describe "GET /admin/project_suggestions", :vcr, type: :request do
+  describe "GET /admin/project_suggestions", type: :request do
     it "denies access when logged out" do
       get admin_project_suggestions_path
       expect(response).to redirect_to(login_path)

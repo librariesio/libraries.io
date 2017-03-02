@@ -92,6 +92,12 @@ class Project < ApplicationRecord
   before_save  :update_details
   before_destroy :destroy_versions
 
+  def self.total
+    Rails.cache.fetch 'projects:total', :expires_in => 1.day, race_condition_ttl: 2.minutes do
+      self.all.count
+    end
+  end
+
   def to_param
     { name: name, platform: platform.downcase }
   end

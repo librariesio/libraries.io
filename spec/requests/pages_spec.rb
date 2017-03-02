@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "PagesController", :vcr do
+describe "PagesController" do
   describe "GET /about", type: :request do
     it "renders successfully when logged out" do
       visit about_path

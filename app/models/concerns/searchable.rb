@@ -56,12 +56,6 @@ module Searchable
       repository.try(:pushed_at)
     end
 
-    def self.total
-      Rails.cache.fetch 'projects:total', :expires_in => 1.hour, race_condition_ttl: 2.minutes do
-        __elasticsearch__.client.count(index: 'projects')["count"]
-      end
-    end
-
     def self.cta_search(filters, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
       options[:filters] ||= []

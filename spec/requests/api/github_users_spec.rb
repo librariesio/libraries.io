@@ -5,7 +5,7 @@ describe "Api::GithubUsersController" do
     @user = create(:github_user)
   end
 
-  describe "GET /api/github/:login", :vcr, type: :request do
+  describe "GET /api/github/:login", type: :request do
     it "renders successfully" do
       get "/api/github/#{@user.login}"
       expect(response).to have_http_status(:success)
@@ -24,7 +24,7 @@ describe "Api::GithubUsersController" do
     end
   end
 
-  describe "GET /api/github/:login/projects", :vcr, type: :request do
+  describe "GET /api/github/:login/projects", type: :request do
     it "renders successfully" do
       get "/api/github/#{@user.login}/projects"
       expect(response).to have_http_status(:success)
