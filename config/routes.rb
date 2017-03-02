@@ -183,6 +183,7 @@ Rails.application.routes.draw do
   get '/unseen-infrastructure', to: 'projects#unseen_infrastructure', as: :unseen_infrastructure
 
   get '/about', to: 'pages#about', as: :about
+  get '/team', to: 'pages#team', as: :team
   get '/privacy', to: 'pages#privacy', as: :privacy
   get '/compatibility', to: 'pages#compatibility', as: :compatibility
 
