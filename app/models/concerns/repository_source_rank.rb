@@ -1,10 +1,15 @@
 module RepositorySourceRank
   extend ActiveSupport::Concern
 
-  def update_source_rank
+  def update_source_rank(force = false)
+    return if !force && rank_recently_updated?
     update_column :rank, source_rank
     touch
     __elasticsearch__.index_document
+  end
+
+  def rank_recently_updated?
+    rank && updated_at && updated_at > 1.day.ago
   end
 
   def update_source_rank_async

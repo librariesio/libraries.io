@@ -207,6 +207,7 @@ class Repository < ApplicationRecord
     download_manifests(token)
     # download_issues(token)
     save_projects
+    update_source_rank(true)
     update_attributes(last_synced_at: Time.now)
   end
 
