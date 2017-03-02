@@ -127,15 +127,19 @@ module RepositoryHost
       end
     end
 
-    def self.recursive_gitlab_repos(page_number = 1, limit = 10)
-      r = Typhoeus.get("https://gitlab.com/explore/projects?&page=#{page_number}&sort=created_asc")
+    def self.recursive_gitlab_repos(page_number = 1, limit = 10, order = "created_asc")
+      r = Typhoeus.get("https://gitlab.com/explore/projects?&page=#{page_number}&sort=#{order}")
       if r.code == 500
         recursive_gitlab_repos(page_number.to_i + 1, limit)
       else
         page = Nokogiri::HTML(r.body)
         names = page.css('a.project').map{|project| project.attributes["href"].value[1..-1] }
         names.each do |name|
-          CreateRepositoryWorker.perform_async('GitLab', name)
+          if r = Repository.host('GitLab').find_by_full_name(name)
+            RepositoryDownloadWorker.perform_async(r.id)
+          else
+            CreateRepositoryWorker.perform_async('GitLab', name)
+          end
         end
       end
       if names.any?
