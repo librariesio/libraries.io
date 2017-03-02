@@ -34,7 +34,10 @@ document.addEventListener('turbolinks:load', function(){
   ga('require', 'eventTracker');
   ga('require', 'outboundLinkTracker');
   ga('require', 'impressionTracker', {
-    elements: $('body').data('ga_tracked_els').split(',')
+    elements: $('[data-ga-tracked-el]').map(function() {
+      return $(this).data('ga-tracked-el');
+    })
+    .get();
   });
   ga('require', 'maxScrollTracker', {
     maxScrollMetricIndex: 1,

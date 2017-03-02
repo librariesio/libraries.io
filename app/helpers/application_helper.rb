@@ -60,10 +60,6 @@ module ApplicationHelper
     end
   end
 
-  def ga_tracked_els(ids)
-    content_for(:ga_tracked_els) { ids.join(',')+',' }
-  end
-
   def title(page_title)
     content_for(:title) { page_title }
     page_title

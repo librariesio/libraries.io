@@ -1,8 +1,6 @@
 <% title "#{@project} #{@version} on #{@project.platform_name} - Libraries.io" %>
 <% description project_description(@project, @version) %>
 <% content_for :atom, auto_discovery_link_tag(:atom, rss_url(@project)) %>
-<% ga_tracked_els ['#dependencies','#dependent-projects','#dependent-repositories','#releases', '#tagged-releases', '#top-contributors', '#your-dependent-repositories'] %>
-
 
 <%= content_for :meta, render_meta(@project) %>
 
@@ -176,7 +174,7 @@
             <div class="col-md-12 table-responsive">
             <% @dependencies.group_by(&:kind).each do |kind, deps| %>
               <% if deps.length > 0 %>
-                <table id='dependencies' class='table table-hover table-condensed'>
+                <table data-ga-tracked-el='dependencies' class='table table-hover table-condensed'>
                   <thead>
                     <th>
                       <%= kind.humanize unless kind == 'runtime' %> Dependencies
@@ -240,7 +238,7 @@
           <% if dependent_repos.length > 0 || dependents.length > 0 %>
             <% if dependents.length > 0 %>
               <div class="col-sm-6">
-                <h4 id='dependent-projects'>Dependent Projects</h4>
+                <h4 data-ga-tracked-el='dependent-projects'>Dependent Projects</h4>
                 <ul>
                   <% dependents.each do |project| %>
                   <li>
@@ -253,7 +251,7 @@
             <% end %>
             <% if dependent_repos.length > 0 %>
               <div class="col-sm-6">
-                <h4 id='dependent-repositories'>Dependent Repositories</h4>
+                <h4 data-ga-tracked-el='dependent-repositories'>Dependent Repositories</h4>
                 <ul>
                   <% dependent_repos.each do |repo| %>
                   <li>
@@ -277,7 +275,7 @@
     <%= render 'adsense/sidebar' %>
     <% cache([@project, @version, 'projects:sidebar', 'v1'], :expires_in => 1.day) do %>
       <% if @version_count > 0 %>
-        <h4 id='releases'>
+        <h4 data-ga-tracked-el='releases'>
           <%= link_to project_versions_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
           <% end %>
@@ -297,7 +295,7 @@
           <%= link_to "See all #{pluralize(@project.versions.size, 'releases')}", project_versions_path(@project.to_param) %>
         <% end %>
       <% elsif @repository && @tags.length > 0 %>
-        <h4 id='tagged-releases'>
+        <h4 data-ga-tracked-el='tagged-releases'>
           <%= link_to project_tags_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
           <% end %>
@@ -323,7 +321,7 @@
       <% if @contributors.length > 0 %>
         <div class="row">
           <div class="col-md-12">
-            <h4 id='top-contributors'>Top Contributors <small><%= link_to 'See all', repository_contributors_path(@repository.to_param) %></small></h4>
+            <h4 data-ga-tracked-el='top-contributors'>Top Contributors <small><%= link_to 'See all', repository_contributors_path(@repository.to_param) %></small></h4>
             <%= render @contributors %>
           </div>
         </div>
@@ -335,7 +333,7 @@
       <% if your_dependent_repos.length > 0 %>
         <div class="row">
           <div class="col-md-12">
-            <h4 id='your-dependent-repositories'>Your Dependent Repositories</h4>
+            <h4 data-ga-tracked-el='your-dependent-repositories'>Your Dependent Repositories</h4>
             <ul>
               <% your_dependent_repos.limit(10).each do |repo| %>
                 <li>
