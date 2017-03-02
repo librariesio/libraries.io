@@ -79,7 +79,9 @@
           ]
         });
         ga('require', 'outboundLinkTracker');
-        ga('require', 'pageVisibilityTracker');
+        ga('require', 'pageVisibilityTracker', {
+          visibleMetricIndex: 2,
+        });
     </script>
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
   <% end %>
