@@ -43,7 +43,9 @@
         ga('require', 'linkid');
         ga('require', 'eventTracker');
         ga('require', 'impressionTracker');
-        ga('require', 'maxScrollTracker');
+        ga('require', 'maxScrollTracker', {
+          maxScrollMetricIndex: 1,
+        });
         ga('require', 'mediaQueryTracker', {
           definitions: [
             {
