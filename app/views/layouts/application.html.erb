@@ -40,7 +40,13 @@
       <% else %>
         ga('create', '<%= ENV["ANALYTICS"] %>', 'auto');
       <% end %>
-      ga('require', 'linkid');
+        ga('require', 'linkid');
+        ga('require', 'eventTracker');
+        ga('require', 'impressionTracker');
+        ga('require', 'maxScrollTracker');
+        ga('require', 'mediaQueryTracker');
+        ga('require', 'outboundLinkTracker');
+        ga('require', 'pageVisibilityTracker');
     </script>
   <% end %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true, integrity: true %>
