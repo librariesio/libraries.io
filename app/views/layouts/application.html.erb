@@ -42,7 +42,9 @@
       <% end %>
         ga('require', 'linkid');
         ga('require', 'eventTracker');
-        ga('require', 'impressionTracker');
+        ga('require', 'impressionTracker', {
+          elements: ['<%= content_for(:ga_tracked_els) %>']
+        });
         ga('require', 'maxScrollTracker', {
           maxScrollMetricIndex: 1,
         });
@@ -79,6 +81,7 @@
         ga('require', 'outboundLinkTracker');
         ga('require', 'pageVisibilityTracker');
     </script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
   <% end %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true, integrity: true %>
   <script type="application/ld+json">
