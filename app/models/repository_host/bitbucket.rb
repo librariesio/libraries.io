@@ -71,8 +71,9 @@ module RepositoryHost
       paths =  files.files.map(&:path)
       readme_path = paths.select{|path| path.match(/^readme/i) }.sort{|path| Readme.supported_format?(path) ? 0 : 1 }.first
       return if readme_path.nil?
-      raw_content = get_file_contents(readme_path, token)[:content]
-      content = Readme.format_markup(readme_path, raw_content)
+      file = get_file_contents(readme_path, token)
+      return unless file.present?
+      content = Readme.format_markup(readme_path, file[:content])
       return unless content.present?
 
       if repository.readme.nil?
