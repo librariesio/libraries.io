@@ -23,6 +23,7 @@
 //= require rails-timeago
 //= require subtome
 //= require turbolinks
+//= require autotrack
 
 document.addEventListener('turbolinks:load', function(){
   $('.tip').tooltip({placement: 'bottom'})
