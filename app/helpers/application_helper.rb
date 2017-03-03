@@ -65,6 +65,10 @@ module ApplicationHelper
     page_title
   end
 
+  def ga_scroll_ids(ids)
+    content_for(:ga_scroll_ids) { ids.join(',')+',' }
+  end
+
   def description(page_description)
     content_for(:description) { truncate(page_description, length: 160) }
   end

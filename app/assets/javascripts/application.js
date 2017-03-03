@@ -21,12 +21,22 @@
 //= require bootstrap/tooltip
 //= require js.cookie
 //= require rails-timeago
+//= require gascrolldepth
 //= require subtome
 //= require turbolinks
 
 document.addEventListener('turbolinks:load', function(){
   $('.tip').tooltip({placement: 'bottom'})
   stickFooter()
+
+  gascrolldepth.init({
+    elements: $('body').data('ga_scroll_ids').split(','),
+    userTiming: false,
+    percentage: false,
+    pixelDepth: false,
+    nonInteraction: false
+  });
+
 })
 
 $('.rss').on('click', function(){
