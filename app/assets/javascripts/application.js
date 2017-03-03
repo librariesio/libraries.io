@@ -36,8 +36,7 @@ document.addEventListener('turbolinks:load', function(){
   ga('require', 'impressionTracker', {
     elements: $('[data-ga-tracked-el]').map(function() {
       return $(this).data('ga-tracked-el');
-    })
-    .get();
+    }).get()
   });
   ga('require', 'maxScrollTracker', {
     maxScrollMetricIndex: 1,
