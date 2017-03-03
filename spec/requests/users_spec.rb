@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "UsersController", :vcr do
+describe "UsersController" do
   let(:github_user) { create(:github_user) }
   let(:github_organisation) { create(:github_organisation) }
 

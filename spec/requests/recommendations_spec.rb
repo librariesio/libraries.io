@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "RecommendationsController", :vcr do
+describe "RecommendationsController" do
   let(:user) { create(:user) }
 
   describe "GET /recommendations renders successfully when logged in", type: :request do

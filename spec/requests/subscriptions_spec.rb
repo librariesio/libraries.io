@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "SubscriptionsController", :vcr do
+describe "SubscriptionsController" do
   let(:user) { create :user }
 
   describe "GET /subscriptions", type: :request do

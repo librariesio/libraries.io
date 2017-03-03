@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "SessionsController", :vcr do
+describe "SessionsController" do
   describe "GET /login", type: :request do
     it "redirects to github" do
       visit login_path

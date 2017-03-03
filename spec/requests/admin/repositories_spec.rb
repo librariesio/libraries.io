@@ -3,7 +3,7 @@ require "rails_helper"
 describe "Admin::RepositoriesController" do
   let(:user) { create :user }
 
-  describe "GET /admin/repositories", :vcr, type: :request do
+  describe "GET /admin/repositories", type: :request do
     it "denies access when logged out" do
       get admin_repositories_path
       expect(response).to redirect_to(login_path)

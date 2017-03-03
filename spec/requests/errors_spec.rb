@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "ErrorsController", :vcr do
+describe "ErrorsController" do
   describe "GET /404", type: :request do
     it "renders successfully when logged out" do
       visit '/404'

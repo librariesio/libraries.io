@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "AccountsController", :vcr do
+describe "AccountsController" do
   let(:user) { create :user }
 
   describe "GET /account", type: :request do

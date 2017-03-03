@@ -3,7 +3,7 @@ require "rails_helper"
 describe "Admin::StatsController" do
   let(:user) { create :user }
 
-  describe "GET /admin/stats", :vcr, type: :request do
+  describe "GET /admin/stats", type: :request do
     it "denies access when logged out" do
       get admin_stats_path
       expect(response).to redirect_to(login_path)
@@ -22,7 +22,7 @@ describe "Admin::StatsController" do
     end
   end
 
-  describe "GET /admin/stats/repositories", :vcr, type: :request do
+  describe "GET /admin/stats/repositories", type: :request do
     it "denies access when logged out" do
       get admin_repositories_stats_path
       expect(response).to redirect_to(login_path)
