@@ -18,7 +18,7 @@ module RepoManifests
     manifest_paths = Bibliothecary.identify_manifests(file_list)
 
     manifest_paths.map do |manifest_path|
-      file = get_file_contents(manifest_path)
+      file = get_file_contents(manifest_path, token)
       if file.present? && file[:content].present?
         manifest = Bibliothecary.analyse_file(manifest_path, file[:content]).first
         manifest.merge!(sha: file[:sha]) if manifest
