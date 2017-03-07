@@ -116,11 +116,11 @@ Not all package managers have these concepts but lots do, more features in Libra
 
 ### `#versions`
 
-
+TODO
 
 ### `#dependencies`
 
-
+TODO
 
 ### `#recent_names`
 
@@ -165,48 +165,64 @@ end
 
 ## Implement url methods where possible
 
+If the package manager registry has a predictable url structure, we can generate useful urls for each project that are used where available:
+
 ### `#package_link`
 
-
+TODO
 
 ### `#download_url`
 
+TODO
 
 ### `#documentation_url`
 
+TODO
 
 ### `#check_status_url`
 
-
+TODO
 
 ## Set constants
 
+Constants are added to each `PackageManager` to provide more meta data about the level of support that Libraries.io has for that package manager:
+
 ### `HAS_VERSIONS`
 
+TODO
 
 ### `HAS_DEPENDENCIES`
 
+TODO
 
 ### `LIBRARIAN_SUPPORT`
 
+TODO
 
 ### `URL`
 
+TODO
 
 ### `COLOR`
 
+TODO
 
+### `HIDDEN`
+
+TODO
 
 ## Add tasks to `download.rake`
 
-
+TODO
 
 ## Add support to watcher
 
-
+TODO
 
 ## Add Biblothecary support
 
-
+TODO
 
 ## Add icon to pictogram
+
+TODO
