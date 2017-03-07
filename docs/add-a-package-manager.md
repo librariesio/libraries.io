@@ -324,16 +324,74 @@ HIDDEN = true
 
 ## Add tasks to `download.rake`
 
-TODO
+Once your `PackageManager` class is ready you can add the required rake tasks to [`download.rake`](../lib/tasks/download.rake)
 
-## Add support to watcher
+Depending on the size, popularity and frequency of updates there are different tasks to add:
 
-TODO
+### recent async
 
-## Add Biblothecary support
+If there's a `#recent_names` method defined on the `PackageManager` class then Libraries.io can check for new updates frequently by calling `#import_recent_async` on the class, add a rake task that looks like this:
 
-TODO
+```ruby
+desc 'Download recent Wordpress packages asynchronously'
+task wordpress: :environment do
+  PackageManager::Wordpress.import_recent_async
+end
+```
 
-## Add icon to pictogram
+### new async
 
-TODO
+For package managers that don't have a proper concept of versions (Go and Bower are good examples that fall back to git tags), we don't need to check packages we already know about, the `#import_new_async` task will only download packages we don't already have in the database:
+
+```ruby
+desc 'Download new Bower packages asynchronously'
+task bower: :environment do
+  PackageManager::Bower.import_new_async
+end
+```
+
+### all async
+
+For the initial import of all packages, add an `foobar_all` task which calls `#import_async`, this will be ran on a daily basis if there's no `#recent_names` method defined:
+
+```ruby
+desc 'Download all Wordpress packages asynchronously'
+task wordpress_all: :environment do
+  PackageManager::Wordpress.import_async
+end
+```
+
+### recent sync
+
+For some package managers that the download process can't easily be parallelized (if it requires cloning a git repo for example), the import can be done synchronously instead with the following task that calls `#import` on the class:
+
+```ruby
+desc 'Download all Inqlude packages'
+task inqlude: :environment do
+  PackageManager::Inqlude.import
+end
+```
+
+## Other repositories to be updated
+
+Once the `PackageManager` class is ready, there's some optional updates that can be added to some other repositories to enable more functionality.
+
+### Add support to Watcher
+
+[Watcher](https://github.com/librariesio/watcher) polls RSS feeds and JSON API endpoints every 30 seconds to check for new and updated packages and then enqueues jobs to download those pacakges. It helps reduce the load on the package manager registries and push new data into the system faster.
+
+If your package manager has RSS feeds of new packages or recently updated packages then add each url to the [`feeds`](https://github.com/librariesio/watcher/blob/master/watcher.rb#L49) array, along with the class name of the package.
+
+If your package manager has JSON API of new packages or recently updated packages then add each url to the [`urls`](https://github.com/librariesio/watcher/blob/master/watcher.rb#L106) array, along with the class name of the package.
+
+### Add Biblothecary support
+
+If your package manager has the concept of a manifest, a file that lists dependencies for a repository, then you can add support to [Biblothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
+
+Check out the documentation on adding support for a new package manager in the Biblothecary repo: https://github.com/librariesio/bibliothecary
+
+### Add icon to Pictogram
+
+If your package manager has an icon, adding it to the [Pictogram](https://github.com/librariesio/pictogram) repository will enable it to show up on the site.
+
+Check out the documentation on adding a logo for a new package manager in the Pictogram repo: https://github.com/librariesio/pictogram
