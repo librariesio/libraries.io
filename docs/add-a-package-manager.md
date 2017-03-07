@@ -112,31 +112,101 @@ end
 
 ## Implement extra methods where possible
 
-  - #versions
-  - #dependencies
-  - #recent_names
-  - #install_instructions
-  - #formatted_name
+Not all package managers have these concepts but lots do, more features in Libraries.io can be enabled if these methods are implemented in a PackageManager class:
+
+### `#versions`
+
+
+
+### `#dependencies`
+
+
+
+### `#recent_names`
+
+For package managers with a lot of packages, downloading the full list of names can take a long time. If you can provide a list of names of recently added/updated packages then Libraries.io can check that on a more regular basis. It should return a list of names in the same way that `#project_names` does, for example:
+
+- [Pub](../app/models/package_manager/pub.rb)'s project list page is ordered by most recently updated so we can just grab the first page of packages and map the names out:
+```ruby
+def self.recent_names
+  get("https://pub.dartlang.org/api/packages?page=1")['packages'].map{|project| project['name'] }
+end
+```
+
+### `#install_instructions`
+
+Many package managers have a command line interface for installing individual packages, if you add this method, Libraries.io will show the instructions on the project page so anyone can easily install it.
+
+This method is passed a `project` object and optionally a version number, here's some examples:
+
+- [Rubygems](../app/models/package_manager/rubygems.rb) adds a `-v` flag if a version is passed
+```ruby
+def self.install_instructions(project, version = nil)
+  "gem install #{project.name}" + (version ? " -v #{version}" : "")
+end
+```
+
+- [Go](../app/models/package_manager/go.rb) cli doesn't have support for specifying a version so it's ignored
+```ruby
+def self.install_instructions(project, version = nil)
+  "go get #{project.name}"
+end
+```
+
+### `#formatted_name`
+
+If the package manager's official name doesn't fit with Ruby's class name rules you can add it's official name in this method, for example [`npm`](../app/models/package_manager/npm.rb) is always lower case, the class name is `NPM` so we have added the following:
+
+```ruby
+def self.formatted_name
+  'npm'
+end
+```
 
 ## Implement url methods where possible
 
-  - #package_link
-  - #download_url
-  - #documentation_url
-  - #check_status_url
+### `#package_link`
+
+
+
+### `#download_url`
+
+
+### `#documentation_url`
+
+
+### `#check_status_url`
+
+
 
 ## Set constants
 
-  - HAS_VERSIONS
-  - HAS_DEPENDENCIES
-  - LIBRARIAN_SUPPORT
-  - URL
-  - COLOR
+### `HAS_VERSIONS`
+
+
+### `HAS_DEPENDENCIES`
+
+
+### `LIBRARIAN_SUPPORT`
+
+
+### `URL`
+
+
+### `COLOR`
+
+
 
 ## Add tasks to `download.rake`
 
+
+
 ## Add support to watcher
 
+
+
 ## Add Biblothecary support
+
+
 
 ## Add icon to pictogram
