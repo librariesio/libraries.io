@@ -2,7 +2,7 @@ module PackageManager
   class PlatformIO < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    LIBRARIAN_PLANNED = true
+    BIBLIOTHECARY_PLANNED = true
     URL = 'http://platformio.org'
     COLOR = '#f34b7d'
 

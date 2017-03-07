@@ -2,7 +2,7 @@ module PackageManager
   class CRAN < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    LIBRARIAN_SUPPORT = true
+    BIBLIOTHECARY_SUPPORT = true
     URL = 'https://cran.r-project.org/'
     COLOR = '#198ce7'
 

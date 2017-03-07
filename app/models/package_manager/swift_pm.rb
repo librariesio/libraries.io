@@ -2,7 +2,7 @@ module PackageManager
   class SwiftPM < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    LIBRARIAN_SUPPORT = false
+    BIBLIOTHECARY_SUPPORT = false
     URL = 'https://developer.apple.com/swift/'
     COLOR = '#ffac45'
 

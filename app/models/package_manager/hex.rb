@@ -2,7 +2,7 @@ module PackageManager
   class Hex < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    LIBRARIAN_SUPPORT = true
+    BIBLIOTHECARY_SUPPORT = true
     URL = 'https://hex.pm'
     COLOR = '#6e4a7e'
 

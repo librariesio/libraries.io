@@ -2,7 +2,7 @@ module PackageManager
   class Julia < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    LIBRARIAN_SUPPORT = true
+    BIBLIOTHECARY_SUPPORT = true
     URL = 'http://pkg.julialang.org/'
     COLOR = '#a270ba'
 

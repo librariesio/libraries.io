@@ -2,7 +2,7 @@ module PackageManager
   class Shards < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    LIBRARIAN_SUPPORT = true
+    BIBLIOTHECARY_SUPPORT = true
     URL = 'https://crystal-shards-registry.herokuapp.com/'
     COLOR = '#776791'
 

@@ -2,7 +2,7 @@ module PackageManager
   class NuGet < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    LIBRARIAN_SUPPORT = true
+    BIBLIOTHECARY_SUPPORT = true
     URL = 'https://www.nuget.org'
     COLOR = '#178600'
 

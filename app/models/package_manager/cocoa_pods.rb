@@ -2,7 +2,7 @@ module PackageManager
   class CocoaPods < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    LIBRARIAN_SUPPORT = true
+    BIBLIOTHECARY_SUPPORT = true
     URL = 'http://cocoapods.org/'
     COLOR = '#438eff'
 

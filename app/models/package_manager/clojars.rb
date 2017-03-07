@@ -2,7 +2,7 @@ module PackageManager
   class Clojars < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    LIBRARIAN_SUPPORT = true
+    BIBLIOTHECARY_SUPPORT = true
     URL = 'https://clojars.org'
     COLOR = '#db5855'
 

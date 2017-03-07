@@ -2,7 +2,7 @@ module PackageManager
   class Homebrew < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    LIBRARIAN_PLANNED = true
+    BIBLIOTHECARY_PLANNED = true
     SECURITY_PLANNED = false
     URL = 'http://brew.sh/'
     COLOR = '#a1804c'

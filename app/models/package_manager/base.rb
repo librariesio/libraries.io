@@ -1,8 +1,8 @@
 module PackageManager
   class Base
     COLOR = '#fff'
-    LIBRARIAN_SUPPORT = false
-    LIBRARIAN_PLANNED = false
+    BIBLIOTHECARY_SUPPORT = false
+    BIBLIOTHECARY_PLANNED = false
     SECURITY_PLANNED = false
     HIDDEN = false
 
