@@ -250,9 +250,21 @@ If the `PackageManager` class has a `#dependencies` method then set this to `tru
 HAS_DEPENDENCIES = true
 ```
 
-### `LIBRARIAN_SUPPORT`
+### `BIBLIOTHECARY_SUPPORT`
 
-TODO
+If [Biblothecary](https://github.com/librariesio/bibliothecary) already has support for parsing manifest files for this package manager set it to `true`:
+
+```ruby
+BIBLIOTHECARY_SUPPORT = true
+```
+
+### `BIBLIOTHECARY_PLANNED`
+
+If it's possible that [Biblothecary](https://github.com/librariesio/bibliothecary) support for parsing manifest files can be added for this package manager, but has not yet, set it to `true`:
+
+```ruby
+BIBLIOTHECARY_PLANNED = true
+```
 
 ### `URL`
 
