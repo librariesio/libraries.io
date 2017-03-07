@@ -236,11 +236,19 @@ Constants are added to each `PackageManager` to provide more meta data about the
 
 ### `HAS_VERSIONS`
 
-TODO
+If the `PackageManager` class has a `#versions` method then set this to `true`:
+
+```ruby
+HAS_VERSIONS = true
+```
 
 ### `HAS_DEPENDENCIES`
 
-TODO
+If the `PackageManager` class has a `#dependencies` method then set this to `true`:
+
+```ruby
+HAS_DEPENDENCIES = true
+```
 
 ### `LIBRARIAN_SUPPORT`
 
@@ -248,15 +256,27 @@ TODO
 
 ### `URL`
 
-TODO
+If the package manager has a website then set this to the full url with protocol:
+
+```ruby
+URL = 'https://rubygems.org'
+```
 
 ### `COLOR`
 
-TODO
+Most application level package managers have a main programming language that they focus on, this should be set to the hex value for that language from the `github-linguist` gem, you can see the full list of colours in [`languages.yml`](https://github.com/github/linguist/blob/master/lib/linguist/languages.yml)
+
+```ruby
+COLOR = '#701516'
+```
 
 ### `HIDDEN`
 
-TODO
+This doesn't need to be set for any active package managers, but if one is shut down and should no longer be shown on the site set it to `true`:
+
+```ruby
+HIDDEN = true
+```
 
 ## Add tasks to `download.rake`
 
