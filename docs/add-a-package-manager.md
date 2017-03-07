@@ -116,11 +116,58 @@ Not all package managers have these concepts but lots do, more features in Libra
 
 ### `#versions`
 
-TODO
+For package managers that have a concept of discrete versions being published.
+
+This method takes the returned data from the `#project` method and should return an array of hashes, one for each version, with a `number` and the date that the version was originally `published_at`.
+
+Here's an example from [NuGet](../app/models/package_manager/nu_get.rb):
+
+```ruby
+def self.versions(project)
+  project[:releases].map do |item|
+    {
+      number: item['catalogEntry']['version'],
+      published_at: item['catalogEntry']['published']
+    }
+  end
+end
+```
 
 ### `#dependencies`
 
-TODO
+For package managers that have a concept of versions and versions having dependencies.
+
+This method returns the dependencies for a particular version of a package, so it receives a `name`, `version` and optionally the returned data from the `#project` method and should return an array of hashes, one for each dependency.
+
+Each dependency hash should include the following attributes:
+
+- `project_name` - the name of the package of the dependency
+- `requirements` - the version requirements of this dependency, for example `~> 2.0`
+- `kind` - regular dependencies are `runtime` but this could also be `development`, `test`, `build` or something else
+
+The can also potentially have extra attributes:
+
+- `optional` - some package managers have the concept of optional dependencies, if yours does, set this as a boolean
+- `platform` - this will almost always be `self.name.demodulize`, the same platform as the package manager, but if dependencies come from a different package manager you can override it
+
+Example from [Haxelib](../app/models/package_manager/haxelib.rb):
+
+```ruby
+def self.dependencies(name, version, _project)
+  json = get_json("https://lib.haxe.org/p/#{name}/#{version}/raw-files/haxelib.json")
+  return [] unless json['dependencies']
+  json['dependencies'].map do |dep_name, dep_version|
+    {
+      project_name: dep_name,
+      requirements: dep_version.empty? ? '*' : dep_version,
+      kind: 'runtime',
+      platform: self.name.demodulize
+    }
+  end
+rescue
+  []
+end
+```
 
 ### `#recent_names`
 
