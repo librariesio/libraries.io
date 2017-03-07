@@ -216,19 +216,51 @@ If the package manager registry has a predictable url structure, we can generate
 
 ### `#package_link`
 
-TODO
+If the package manager registry website has individual pages for each package, add this method to return a url for it.
+
+It takes a `project` object and an optional `version` number, for example:
+
+```ruby
+def self.package_link(project, version = nil)
+  "https://rubygems.org/gems/#{project.name}" + (version ? "/versions/#{version}" : "")
+end
+```
 
 ### `#download_url`
 
-TODO
+If the package manager provides predictable urls to the tar ball or zip archive of the package, add this method to return a url for it.
+
+It takes a package `name` and an optional `version` number, for example:
+
+```ruby
+def self.download_url(name, version = nil)
+  "https://rubygems.org/downloads/#{name}-#{version}.gem"
+end
+```
 
 ### `#documentation_url`
 
-TODO
+If the package manager provides hosted documentation for each package, add this method to return a url for it.
+
+It takes a package `name` and an optional `version` number, for example:
+
+```ruby
+def self.documentation_url(name, version = nil)
+  "http://www.rubydoc.info/gems/#{name}/#{version}"
+end
+```
 
 ### `#check_status_url`
 
-TODO
+Libraries will try and ping the `#package_link` url on a regular basis to check for a 200 status code, if the package manager registry always returns a 200 or doesn't have a `#package_link` method, you can add this method to provide a different url that will return a 200 if the package still exists or a 404 if it's been removed.
+
+It takes a `project` object, for example:
+
+```ruby
+def self.check_status_url(project)
+  "https://rubygems.org/api/v1/versions/#{project.name}"
+end
+```
 
 ## Set constants
 
