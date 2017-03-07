@@ -36,10 +36,6 @@ module PackageManager
       get("http://registry.npmjs.org/#{name.gsub('/', '%2F')}")
     end
 
-    def self.keys
-      ["_id", "_rev", "name", "description", "dist-tags", "versions", "readme", "maintainers", "time", "author", "repository", "users", "homepage", "keywords", "bugs", "readmeFilename", "_attachments"]
-    end
-
     def self.mapping(project)
       return false unless project["versions"].present?
       latest_version = project["versions"].to_a.last[1]
