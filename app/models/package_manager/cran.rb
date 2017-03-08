@@ -4,7 +4,7 @@ module PackageManager
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
     URL = 'https://cran.r-project.org/'
-    COLOR = '#198ce7'
+    COLOR = '#198CE7'
 
     def self.package_link(project, _version = nil)
       "https://cran.r-project.org/package=#{project.name}"
