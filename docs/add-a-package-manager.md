@@ -284,6 +284,8 @@ HAS_DEPENDENCIES = true
 
 ### `BIBLIOTHECARY_SUPPORT`
 
+If your package manager has the concept of a manifest, a file that lists dependencies for a repository, for example `Gemfile`, `package.json` and `setup.py`, then you can add support to [Biblothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
+
 If [Biblothecary](https://github.com/librariesio/bibliothecary) already has support for parsing manifest files for this package manager set it to `true`:
 
 ```ruby
