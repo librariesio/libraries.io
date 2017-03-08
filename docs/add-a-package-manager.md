@@ -31,7 +31,7 @@ Libraries needs to know all of the names of the projects available in a package 
 
 Different package managers provide ways of getting this data, here are some examples:
 
-- [npm](../app/models/package_manager/npm.rb) provides one huge json endpoint containing all the pacakges, we pluck just the keys from the top level object in the response:
+- [npm](../app/models/package_manager/npm.rb) provides one huge json endpoint containing all the packages, we pluck just the keys from the top level object in the response:
 ```ruby
 def self.project_names
   get("https://registry.npmjs.org/-/all").keys[1..-1]
@@ -380,7 +380,7 @@ Once the `PackageManager` class is ready, there's some optional updates that can
 
 ### Add support to Watcher
 
-[Watcher](https://github.com/librariesio/watcher) polls RSS feeds and JSON API endpoints every 30 seconds to check for new and updated packages and then enqueues jobs to download those pacakges. It helps reduce the load on the package manager registries and push new data into the system faster.
+[Watcher](https://github.com/librariesio/watcher) polls RSS feeds and JSON API endpoints every 30 seconds to check for new and updated packages and then enqueues jobs to download those packages. It helps reduce the load on the package manager registries and push new data into the system faster.
 
 If your package manager has RSS feeds of new packages or recently updated packages then add each url to the [`feeds`](https://github.com/librariesio/watcher/blob/master/watcher.rb#L49) array, along with the class name of the package.
 
