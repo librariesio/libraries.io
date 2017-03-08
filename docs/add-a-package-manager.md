@@ -3,7 +3,7 @@
 Libraries.io already has support for most of the largest package managers but there are many more
 that we've not added yet. This guide will take you through the steps for adding support for another.
 
-Adding support for a new package manager is fairly easy assuming that the package manager repository has an API for extracting data about it's packages over http.
+Adding support for a new package manager is fairly easy assuming that the package manager repository has an API for extracting data about it's packages over the internet. Follow these steps:
 
 ## Add the `PackageManager` class file
 
