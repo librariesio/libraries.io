@@ -4,7 +4,7 @@ module PackageManager
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
     URL = 'https://pub.dartlang.org'
-    COLOR = '#98BAD6'
+    COLOR = '#00B4AB'
 
     def self.package_link(project, _version = nil)
       "https://pub.dartlang.org/packages/#{project.name}"
