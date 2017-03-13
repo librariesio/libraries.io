@@ -56,6 +56,12 @@ module ProjectSearch
       repository.try(:pushed_at)
     end
 
+    def self.facets(options = {})
+      Rails.cache.fetch "facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
+        search('', options).response.facets
+      end
+    end
+
     def self.cta_search(filters, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
       options[:filters] ||= []
