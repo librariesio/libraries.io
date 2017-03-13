@@ -1,16 +1,4 @@
 namespace :projects do
-  desc 'Recreate the search index'
-  task recreate_index: :environment do
-    # If the index doesn't exists can't be deleted, returns 404, carry on
-    Project.__elasticsearch__.client.indices.delete index: 'projects' rescue nil
-    Project.__elasticsearch__.create_index! force: true
-  end
-
-  desc 'Reindex the search'
-  task reindex: [:environment, :recreate_index] do
-    Project.import query: -> { indexable }
-  end
-
   desc 'Sync projects'
   task sync: :environment do
     ids = Project.where(last_synced_at: nil).order('projects.updated_at DESC').limit(100_000).pluck(:id)
