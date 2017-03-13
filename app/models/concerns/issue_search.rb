@@ -4,8 +4,8 @@ module IssueSearch
   included do
     include Elasticsearch::Model
 
-    index_name    "github_issues"
-    document_type "github_issue"
+    index_name    "issues-#{Rails.env}"
+    document_type "issue"
 
     FIELDS = ['title^2', 'body']
 

@@ -4,12 +4,14 @@ module ProjectSearch
   included do
     include Elasticsearch::Model
 
+    index_name "projects-#{Rails.env}"
+
     FIELDS = ['name^2', 'exact_name^2', 'repo_name', 'description', 'homepage', 'language', 'keywords_array', 'normalized_licenses', 'platform']
 
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
       mapping do
         indexes :name, :analyzer => 'snowball', :boost => 6
-        indexes :exact_name, :index => :not_analyzed, :boost => 2
+        indexes :exact_name, :index => :keyword, :boost => 2
 
         indexes :description, :analyzer => 'snowball'
         indexes :homepage
