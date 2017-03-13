@@ -65,7 +65,7 @@ module IssueSearch
             field_value_factor: { field: "rank", "modifier": "square" }
           }
         },
-        facets: issues_facet_filters(options, options[:labels_to_keep]),
+        # facets: issues_facet_filters(options, options[:labels_to_keep]),
         filter: { bool: { must: [], must_not: options[:must_not] } }
       }
       search_definition[:track_scores] = true
@@ -112,7 +112,7 @@ module IssueSearch
             field_value_factor: { field: "rank", "modifier": "square" }
           }
         },
-        facets: issues_facet_filters(options, Issue::FIRST_PR_LABELS),
+        # facets: issues_facet_filters(options, Issue::FIRST_PR_LABELS),
         filter: { bool: { must: [], must_not: options[:must_not] } }
       }
       search_definition[:track_scores] = true

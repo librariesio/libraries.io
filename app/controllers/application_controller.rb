@@ -111,6 +111,7 @@ class ApplicationController < ActionController::Base
     ids = @search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
     @issues = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @facets = {} # @search.response.facets
   end
 
   def first_pull_request_issues(labels)
@@ -122,6 +123,7 @@ class ApplicationController < ActionController::Base
     ids = @search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
     @issues = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @facets = {} # @search.response.facets
   end
 
   def search_repos(query)

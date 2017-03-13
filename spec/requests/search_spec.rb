@@ -10,7 +10,7 @@ describe "SearchController", :vcr do
   describe "GET /search", type: :request do
     it "renders successfully when logged out" do
       visit search_path
-      expect(page).to have_content 'Keywords'
+      expect(page).to have_content @project.name
     end
   end
 end

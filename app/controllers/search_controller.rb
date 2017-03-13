@@ -6,6 +6,7 @@ class SearchController < ApplicationController
     ids = @search.map{|r| r.id.to_i }
     indexes = Hash[ids.each_with_index.to_a]
     @projects = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @facets = {} # @search.response.facets
     @title = page_title
     respond_to do |format|
       format.html

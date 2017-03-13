@@ -58,7 +58,7 @@ module ProjectSearch
 
     def self.facets(options = {})
       Rails.cache.fetch "facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
-        search('', options).response.facets
+        {} #search('', options).response.facets
       end
     end
 
@@ -80,7 +80,7 @@ module ProjectSearch
             }
           }
         },
-        facets: facets_options(facet_limit, options),
+        # facets: facets_options(facet_limit, options),
         filter: { bool: { must: [] } }
       }
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
@@ -187,12 +187,12 @@ module ProjectSearch
             }
           }
         },
-        facets: {
-          platforms: facet_filter(:platform, facet_limit, options),
-          languages: facet_filter(:language, facet_limit, options),
-          keywords: facet_filter(:keywords_array, facet_limit, options),
-          licenses: facet_filter(:normalized_licenses, facet_limit, options)
-        },
+        # facets: {
+        #   platforms: facet_filter(:platform, facet_limit, options),
+        #   languages: facet_filter(:language, facet_limit, options),
+        #   keywords: facet_filter(:keywords_array, facet_limit, options),
+        #   licenses: facet_filter(:normalized_licenses, facet_limit, options)
+        # },
         filter: { bool: { must: [] } },
         suggest: {
           did_you_mean: {

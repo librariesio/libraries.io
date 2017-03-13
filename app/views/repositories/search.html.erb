@@ -58,7 +58,7 @@
 
   <div class='col-sm-4 facets'>
     <%= render 'adsense/sidebar' %>
-    <% @search.response.facets.each do |name, facet| %>
+    <% @facets.each do |name, facet| %>
       <% next if facet['terms'].empty? %>
       <%= render 'search/facet', name: name, facet: facet %>
     <% end %>
