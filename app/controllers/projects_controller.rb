@@ -153,8 +153,7 @@ class ProjectsController < ApplicationController
       normalized_licenses: current_license,
       language: current_language
     }).paginate(page: page_number)
-    indexes = Hash[@search.map{|r| r.id.to_i }.each_with_index.to_a]
-    @projects = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @projects = @search.records.includes(:repository)
     @facets = {} # @search.response.facets
   end
 

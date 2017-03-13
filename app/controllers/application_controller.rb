@@ -108,9 +108,7 @@ class ApplicationController < ActionController::Base
       language: current_language,
       labels: options[:labels]
     }, repo_ids: options[:repo_ids]), page: page_number, per_page: per_page_number
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @issues = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @issues = @search.records.includes(:repository)
     @facets = {} # @search.response.facets
   end
 
@@ -120,9 +118,7 @@ class ApplicationController < ActionController::Base
       language: current_language,
       labels: labels
     }), page: page_number, per_page: per_page_number
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @issues = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @issues = @search.records.includes(:repository)
     @facets = {} # @search.response.facets
   end
 

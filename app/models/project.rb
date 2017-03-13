@@ -297,9 +297,7 @@ class Project < ApplicationRecord
 
   def self.popular(options = {})
     results = search('*', options.merge(sort: 'rank', order: 'desc'))
-    ids = results.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    results.records.includes(:repository).reject{|p| p.repository.nil? }.sort_by { |u| indexes[u.id] }
+    results.records.includes(:repository).reject{|p| p.repository.nil? }
   end
 
   def normalized_licenses

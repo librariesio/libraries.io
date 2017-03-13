@@ -20,9 +20,7 @@ class RepositoriesController < ApplicationController
     @query = params[:q]
     @search = search_repos(@query)
     @suggestion = @search.response.suggest.did_you_mean.first
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @repositories = @search.records.sort_by { |u| indexes[u.id] }
+    @repositories = @search.records
     @title = page_title
     @facets = {} # @search.response.facets
     respond_to do |format|
@@ -139,8 +137,6 @@ class RepositoriesController < ApplicationController
       platforms: current_platforms,
       host_type: formatted_host
     }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
-    ids = search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    search.records.sort_by { |u| indexes[u.id] }
+    search.records
   end
 end

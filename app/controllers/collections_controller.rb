@@ -11,9 +11,7 @@ class CollectionsController < ApplicationController
         platform: current_platforms,
         normalized_licenses: current_licenses
       }}).paginate(page: page_number, per_page: per_page_number)
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @projects = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @projects = @search.records.includes(:repository)
     @facets = {} # @search.response.facets
     raise ActiveRecord::RecordNotFound if @projects.empty?
   end
