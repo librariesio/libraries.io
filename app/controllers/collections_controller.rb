@@ -1,6 +1,6 @@
 class CollectionsController < ApplicationController
   def index
-    @languages = Project.popular_languages.first(40).map(&:term)
+    @languages = Project.popular_languages.first(40).map{|t| t['key'] }.select(&:present?)
   end
 
   def show
