@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:9200/projects/project/_search?from=0&size=30
     body:
       encoding: UTF-8
-      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[],"must_not":[{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"facets":{"platforms":{"terms":{"field":"platform","size":35},"facet_filter":{"bool":{"must":[]}}},"languages":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[[{"terms":{"platform":["Bower"]}}]]}}},"keywords":{"terms":{"field":"keywords_array","size":35},"facet_filter":{"bool":{"must":[[{"terms":{"platform":["Bower"]}}]]}}},"licenses":{"terms":{"field":"normalized_licenses","size":35},"facet_filter":{"bool":{"must":[[{"terms":{"platform":["Bower"]}}]]}}}},"filter":{"bool":{"must":[[{"terms":{"platform":["Bower"]}}]]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"name"}}},"sort":[{"rank":"desc"},{"stars":"desc"}],"track_scores":true}'
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[],"must_not":[{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"filter":{"bool":{"must":[[{"terms":{"platform":["Bower"]}}]]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"name"}}},"sort":[{"rank":"desc"},{"stars":"desc"}],"track_scores":true}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -21,10 +21,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '1778'
+      - '152'
     body:
       encoding: UTF-8
-      string: '{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"facets":{"platforms":{"_type":"terms","missing":0,"total":101,"other":0,"terms":[{"term":"Rubygems","count":11},{"term":"PlatformIO","count":4},{"term":"PackageManager::Rubygems","count":4},{"term":"PackageManager::Pypi","count":4},{"term":"PackageManager::NuGet","count":4},{"term":"PackageManager::NPM","count":4},{"term":"PackageManager::Meteor","count":4},{"term":"PackageManager::Inqlude","count":4},{"term":"PackageManager::Homebrew","count":4},{"term":"PackageManager::Haxelib","count":4},{"term":"PackageManager::Hackage","count":4},{"term":"PackageManager::Go","count":4},{"term":"PackageManager::Elm","count":4},{"term":"PackageManager::Dub","count":4},{"term":"PackageManager::CocoaPods","count":4},{"term":"PackageManager::Atom","count":4},{"term":"PackageManager::Wordpress","count":2},{"term":"PackageManager::Sublime","count":2},{"term":"PackageManager::Shards","count":2},{"term":"PackageManager::Pub","count":2},{"term":"PackageManager::Packagist","count":2},{"term":"PackageManager::Nimble","count":2},{"term":"PackageManager::Maven","count":2},{"term":"PackageManager::Julia","count":2},{"term":"PackageManager::Hex","count":2},{"term":"PackageManager::Emacs","count":2},{"term":"PackageManager::Clojars","count":2},{"term":"PackageManager::Cargo","count":2},{"term":"PackageManager::CRAN","count":2},{"term":"PackageManager::CPAN","count":2},{"term":"PackageManager::Bower","count":2}]},"languages":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"keywords":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]},"licenses":{"_type":"terms","missing":0,"total":0,"other":0,"terms":[]}},"suggest":{"did_you_mean":[]}}'
+      string: '{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"suggest":{"did_you_mean":[]}}'
     http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:06 GMT
+  recorded_at: Mon, 13 Mar 2017 11:54:36 GMT
 recorded_with: VCR 3.0.3

@@ -26,5 +26,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
     http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:09 GMT
+  recorded_at: Mon, 13 Mar 2017 11:54:37 GMT
 recorded_with: VCR 3.0.3

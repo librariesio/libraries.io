@@ -2,40 +2,10 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:9200/projects/project/_search
-    body:
-      encoding: UTF-8
-      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[],"must_not":[{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"facets":{"platforms":{"terms":{"field":"platform","size":40},"facet_filter":{"bool":{"must":[]}}},"languages":{"terms":{"field":"language","size":40},"facet_filter":{"bool":{"must":[]}}},"keywords":{"terms":{"field":"keywords_array","size":40},"facet_filter":{"bool":{"must":[]}}},"licenses":{"terms":{"field":"normalized_licenses","size":40},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"name"}}},"sort":[{"rank":"desc"},{"stars":"desc"}],"track_scores":true}'
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '1486'
-    body:
-      encoding: UTF-8
-      string: '{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":0.0,"hits":[{"_index":"projects","_type":"project","_id":"107","_score":0.0,"_source":{"id":107,"name":"rails16","platform":"Rubygems","created_at":"2017-01-26T13:28:10.205Z","updated_at":"2017-01-26T13:28:10.205Z","description":"Ruby
-        on Rails is a full-stack web framework optimized for programmer happiness
-        and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-26T13:28:10.205Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails16","contributions_count":0,"pushed_at":null},"sort":[0,0]}]},"facets":{"platforms":{"_type":"terms","missing":0,"total":1,"other":0,"terms":[{"term":"Rubygems","count":1}]},"languages":{"_type":"terms","missing":0,"total":1,"other":0,"terms":[{"term":"Ruby","count":1}]},"keywords":{"_type":"terms","missing":0,"total":1,"other":0,"terms":[{"term":"web","count":1}]},"licenses":{"_type":"terms","missing":0,"total":1,"other":0,"terms":[{"term":"MIT","count":1}]}},"suggest":{"did_you_mean":[]}}'
-    http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:11 GMT
-- request:
-    method: get
     uri: http://localhost:9200/projects/project/_search?from=0&size=6
     body:
       encoding: UTF-8
-      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[],"must_not":[{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"facets":{"platforms":{"terms":{"field":"platform","size":35},"facet_filter":{"bool":{"must":[]}}},"languages":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"keywords":{"terms":{"field":"keywords_array","size":35},"facet_filter":{"bool":{"must":[]}}},"licenses":{"terms":{"field":"normalized_licenses","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"name"}}},"sort":{"dependents_count":"desc"},"track_scores":true}'
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[],"must_not":[{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"filter":{"bool":{"must":[]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"name"}}},"sort":{"dependents_count":"desc"},"track_scores":true}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -51,21 +21,21 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '1484'
+      - '1081'
     body:
       encoding: UTF-8
-      string: '{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":0.0,"hits":[{"_index":"projects","_type":"project","_id":"107","_score":0.0,"_source":{"id":107,"name":"rails16","platform":"Rubygems","created_at":"2017-01-26T13:28:10.205Z","updated_at":"2017-01-26T13:28:10.205Z","description":"Ruby
+      string: '{"took":2,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":0.0,"hits":[{"_index":"projects","_type":"project","_id":"107","_score":0.0,"_source":{"id":107,"name":"rails16","platform":"Rubygems","created_at":"2017-03-13T11:54:38.672Z","updated_at":"2017-03-13T11:54:38.672Z","description":"Ruby
         on Rails is a full-stack web framework optimized for programmer happiness
         and sustainable productivity. It encourages beautiful code by favoring convention
-        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-01-26T13:28:10.205Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails16","contributions_count":0,"pushed_at":null},"sort":[0]}]},"facets":{"platforms":{"_type":"terms","missing":0,"total":1,"other":0,"terms":[{"term":"Rubygems","count":1}]},"languages":{"_type":"terms","missing":0,"total":1,"other":0,"terms":[{"term":"Ruby","count":1}]},"keywords":{"_type":"terms","missing":0,"total":1,"other":0,"terms":[{"term":"web","count":1}]},"licenses":{"_type":"terms","missing":0,"total":1,"other":0,"terms":[{"term":"MIT","count":1}]}},"suggest":{"did_you_mean":[]}}'
+        over configuration.","keywords":["web"],"homepage":"http://rubyonrails.org/","licenses":"MIT","repository_url":"https://github.com/rails/rails","repository_id":null,"normalized_licenses":["MIT"],"versions_count":0,"rank":0,"latest_release_published_at":"2017-03-13T11:54:38.672Z","latest_release_number":null,"pm_id":null,"keywords_array":["web"],"dependents_count":0,"language":"Ruby","status":null,"last_synced_at":null,"dependent_repos_count":0,"stars":0,"repo_name":null,"exact_name":"rails16","contributions_count":0,"pushed_at":null},"sort":[0]}]},"suggest":{"did_you_mean":[]}}'
     http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:11 GMT
+  recorded_at: Mon, 13 Mar 2017 11:54:39 GMT
 - request:
     method: get
     uri: http://localhost:9200/github_repositories/github_repository/_search?from=0&size=6
     body:
       encoding: UTF-8
-      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"exists":{"field":"pushed_at"}}],"must_not":[{"term":{"fork":true}},{"term":{"private":true}},{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"stargazers_count","modifier":"square"}}},"facets":{"language":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"license":{"terms":{"field":"license","size":35},"facet_filter":{"bool":{"must":[]}}},"keywords":{"terms":{"field":"keywords","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[],"must_not":[]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"full_name"}}},"sort":{"stargazers_count":"desc"},"track_scores":true}'
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[],"must_not":[{"term":{"fork":true}},{"term":{"private":true}},{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"filter":{"bool":{"must":[],"must_not":[]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"full_name"}}},"sort":{"stargazers_count":"desc"},"track_scores":true}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -81,274 +51,16 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '8658'
+      - '6664'
     body:
       encoding: UTF-8
-      string: '{"took":2,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":2016,"max_score":6.5901924E7,"hits":[{"_index":"github_repositories","_type":"github_repository","_id":"1031","_score":6.5901924E7,"_source":{"pushed_at":"2017-01-25T12:15:52.000Z","github_id":1644196,"full_name":"JuliaLang/julia","owner_id":743164,"license":"Other","description":"The
-        Julia Language: A fresh approach to technical computing.","fork":false,"created_at":"2011-04-21T07:01:50.000Z","updated_at":"2017-01-25T12:18:00.465Z","homepage":"http://julialang.org/","size":128863,"stargazers_count":8118,"language":"Julia","has_issues":true,"has_wiki":false,"has_pages":true,"forks_count":1890,"mirror_url":null,"open_issues_count":2199,"default_branch":"master","subscribers_count":589,"private":false,"id":1031,"source_name":null,"github_organisation_id":48,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"JuliaLang/julia","keywords":["languages"],"platforms":["Emacs"]},"sort":[8118]},{"_index":"github_repositories","_type":"github_repository","_id":"658","_score":5870929.0,"_source":{"pushed_at":"2017-01-20T02:01:52.000Z","github_id":655492,"full_name":"magit/magit","owner_id":750076,"license":"GPL-3.0","description":"It''s
-        Magit! A Git Porcelain inside Emacs.","fork":false,"created_at":"2010-05-07T19:07:04.000Z","updated_at":"2017-01-25T12:15:53.377Z","homepage":"https://magit.vc","size":15953,"stargazers_count":2423,"language":"Emacs
-        Lisp","has_issues":true,"has_wiki":true,"has_pages":false,"forks_count":444,"mirror_url":null,"open_issues_count":79,"default_branch":"master","subscribers_count":133,"private":false,"id":658,"source_name":null,"github_organisation_id":31,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:15:53.374Z","rank":null,"exact_name":"magit/magit","keywords":["bindings","git","tools","vc"],"platforms":["Emacs"]},"sort":[2423]},{"_index":"github_repositories","_type":"github_repository","_id":"1533","_score":3031081.0,"_source":{"id":1533,"full_name":"bbatsov/projectile","owner_id":103882,"description":"Project
-        Interaction Library for Emacs","fork":false,"created_at":"2011-07-31T19:12:31.000Z","updated_at":"2017-01-24T16:48:50.000Z","pushed_at":"2017-01-06T14:06:49.000Z","homepage":"http://projectile.readthedocs.io","size":3522,"stargazers_count":1741,"language":"Emacs
-        Lisp","has_issues":true,"has_wiki":true,"has_pages":true,"forks_count":306,"mirror_url":null,"open_issues_count":126,"default_branch":"master","subscribers_count":84,"github_id":2133437,"source_name":null,"license":null,"github_organisation_id":null,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"bbatsov/projectile","keywords":[],"platforms":[]},"sort":[1741]},{"_index":"github_repositories","_type":"github_repository","_id":"748","_score":2961841.0,"_source":{"pushed_at":"2017-01-25T12:14:31.000Z","github_id":3727706,"full_name":"emacs-helm/helm","owner_id":1541688,"license":"GPL-3.0","description":"Emacs
-        incremental completion and selection narrowing framework","fork":false,"created_at":"2012-03-15T11:50:18.000Z","updated_at":"2017-01-25T12:16:20.635Z","homepage":"https://emacs-helm.github.io/helm/","size":22283,"stargazers_count":1721,"language":"Emacs
-        Lisp","has_issues":true,"has_wiki":true,"has_pages":true,"forks_count":219,"mirror_url":null,"open_issues_count":4,"default_branch":"master","subscribers_count":96,"private":false,"id":748,"source_name":null,"github_organisation_id":37,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"emacs-helm/helm","keywords":[],"platforms":["Emacs"]},"sort":[1721]},{"_index":"github_repositories","_type":"github_repository","_id":"701","_score":2795584.0,"_source":{"pushed_at":"2017-01-24T14:52:10.000Z","github_id":10443324,"full_name":"golang/lint","owner_id":4314092,"license":"BSD-3-Clause","description":"This
-        is a linter for Go source code.","fork":false,"created_at":"2013-06-02T22:45:37.000Z","updated_at":"2017-01-25T12:16:06.693Z","homepage":"","size":403,"stargazers_count":1672,"language":"Go","has_issues":true,"has_wiki":false,"has_pages":false,"forks_count":183,"mirror_url":null,"open_issues_count":38,"default_branch":"master","subscribers_count":73,"private":false,"id":701,"source_name":null,"github_organisation_id":32,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:16:06.689Z","rank":null,"exact_name":"golang/lint","keywords":[],"platforms":["Emacs"]},"sort":[1672]},{"_index":"github_repositories","_type":"github_repository","_id":"2003","_score":1943236.0,"_source":{"id":2003,"full_name":"joaotavora/yasnippet","owner_id":387011,"description":"A
-        template system for Emacs","fork":false,"created_at":"2011-10-08T12:05:37.000Z","updated_at":"2017-01-24T14:46:08.000Z","pushed_at":"2017-01-23T03:48:49.000Z","homepage":"http://joaotavora.github.com/yasnippet/","size":4682,"stargazers_count":1394,"language":"Emacs
-        Lisp","has_issues":true,"has_wiki":false,"has_pages":true,"forks_count":249,"mirror_url":null,"open_issues_count":41,"default_branch":"master","subscribers_count":97,"github_id":2537904,"source_name":null,"license":null,"github_organisation_id":null,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":null,"exact_name":"joaotavora/yasnippet","keywords":[],"platforms":[]},"sort":[1394]}]},"facets":{"language":{"_type":"terms","missing":7,"total":2009,"other":0,"terms":[{"term":"Emacs
-        Lisp","count":1844},{"term":"C++","count":51},{"term":"Haskell","count":34},{"term":"Crystal","count":23},{"term":"JavaScript","count":10},{"term":"Python","count":9},{"term":"Common
-        Lisp","count":5},{"term":"C","count":5},{"term":"TeX","count":3},{"term":"Ruby","count":3},{"term":"HTML","count":3},{"term":"Go","count":3},{"term":"CSS","count":3},{"term":"Perl","count":2},{"term":"OCaml","count":2},{"term":"Shell","count":1},{"term":"R","count":1},{"term":"QML","count":1},{"term":"PHP","count":1},{"term":"Objective-C","count":1},{"term":"Julia","count":1},{"term":"Cucumber","count":1},{"term":"CMake","count":1},{"term":"C#","count":1}]},"license":{"_type":"terms","missing":1295,"total":721,"other":0,"terms":[{"term":"GPL-3.0","count":396},{"term":"MIT","count":123},{"term":"GPL-2.0","count":56},{"term":"BSD-3-Clause","count":30},{"term":"Other","count":27},{"term":"Apache-2.0","count":24},{"term":"Unlicense","count":19},{"term":"BSD-2-Clause","count":17},{"term":"LGPL-2.1","count":11},{"term":"LGPL-3.0","count":9},{"term":"WTFPL","count":2},{"term":"ISC","count":2},{"term":"EPL-1.0","count":2},{"term":"MPL-2.0","count":1},{"term":"Artistic-2.0","count":1},{"term":"AGPL-3.0","count":1}]},"keywords":{"_type":"terms","missing":1086,"total":2167,"other":1199,"terms":[{"term":"convenience","count":250},{"term":"tools","count":120},{"term":"languages","count":84},{"term":"evil","count":41},{"term":"helm","count":39},{"term":"lisp","count":35},{"term":"org","count":29},{"term":"extensions","count":29},{"term":"completion","count":23},{"term":"faces","count":19},{"term":"git","count":18},{"term":"files","count":16},{"term":"vc","count":15},{"term":"javascript","count":15},{"term":"vim","count":14},{"term":"themes","count":14},{"term":"theme","count":14},{"term":"editing","count":14},{"term":"clojure","count":14},{"term":"babel","count":13},{"term":"c","count":12},{"term":"search","count":11},{"term":"company","count":11},{"term":"color","count":11},{"term":"project","count":10},{"term":"multimedia","count":10},{"term":"markdown","count":10},{"term":"help","count":10},{"term":"haskell","count":10},{"term":"emacs","count":10},{"term":"docs","count":10},{"term":"comm","count":10},{"term":"wp","count":9},{"term":"processes","count":9},{"term":"matching","count":9}]}},"suggest":{"did_you_mean":[]}}'
+      string: '{"took":2,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":2140,"max_score":49.0,"hits":[{"_index":"github_repositories","_type":"github_repository","_id":"18","_score":0.0,"_source":{"id":18,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2017-03-13T11:47:42.039Z","updated_at":"2017-03-13T11:47:42.039Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":"master","subscribers_count":null,"uuid":null,"source_name":null,"license":null,"github_organisation_id":34,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":0,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"rails/rails","keywords":[],"platforms":[],"github_id":null,"github_contributions_count":0},"sort":[10000]},{"_index":"github_repositories","_type":"github_repository","_id":"19","_score":0.0,"_source":{"id":19,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2017-03-13T11:47:42.185Z","updated_at":"2017-03-13T11:47:42.185Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":"master","subscribers_count":null,"uuid":null,"source_name":null,"license":null,"github_organisation_id":35,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":0,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"rails/rails","keywords":[],"platforms":[],"github_id":null,"github_contributions_count":0},"sort":[10000]},{"_index":"github_repositories","_type":"github_repository","_id":"20","_score":0.0,"_source":{"id":20,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2017-03-13T11:47:42.311Z","updated_at":"2017-03-13T11:47:42.311Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":"master","subscribers_count":null,"uuid":null,"source_name":null,"license":null,"github_organisation_id":36,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":0,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"rails/rails","keywords":[],"platforms":[],"github_id":null,"github_contributions_count":0},"sort":[10000]},{"_index":"github_repositories","_type":"github_repository","_id":"21","_score":0.0,"_source":{"id":21,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2017-03-13T11:47:42.458Z","updated_at":"2017-03-13T11:47:42.458Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":"master","subscribers_count":null,"uuid":null,"source_name":null,"license":null,"github_organisation_id":37,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":0,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"rails/rails","keywords":[],"platforms":[],"github_id":null,"github_contributions_count":0},"sort":[10000]},{"_index":"github_repositories","_type":"github_repository","_id":"22","_score":0.0,"_source":{"id":22,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2017-03-13T11:47:42.627Z","updated_at":"2017-03-13T11:47:42.627Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":"master","subscribers_count":null,"uuid":null,"source_name":null,"license":null,"github_organisation_id":38,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":0,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"rails/rails","keywords":[],"platforms":[],"github_id":null,"github_contributions_count":0},"sort":[10000]},{"_index":"github_repositories","_type":"github_repository","_id":"23","_score":0.0,"_source":{"id":23,"full_name":"rails/rails","owner_id":null,"description":"Ruby
+        on Rails","fork":false,"created_at":"2017-03-13T11:47:42.912Z","updated_at":"2017-03-13T11:47:42.912Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":"master","subscribers_count":null,"uuid":null,"source_name":null,"license":null,"github_organisation_id":39,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":0,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"rails/rails","keywords":[],"platforms":[],"github_id":null,"github_contributions_count":0},"sort":[10000]}]},"suggest":{"did_you_mean":[]}}'
     http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:11 GMT
-- request:
-    method: get
-    uri: http://localhost:9200/github_repositories/github_repository/_search?from=0&size=6
-    body:
-      encoding: UTF-8
-      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"exists":{"field":"pushed_at"}}],"must_not":[{"term":{"fork":true}},{"term":{"private":true}},{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"stargazers_count","modifier":"square"}}},"facets":{"language":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"license":{"terms":{"field":"license","size":35},"facet_filter":{"bool":{"must":[]}}},"keywords":{"terms":{"field":"keywords","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[],"must_not":[]}},"suggest":{"did_you_mean":{"text":"","term":{"size":1,"field":"full_name"}}},"sort":{"forks_count":"desc"},"track_scores":true}'
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '8871'
-    body:
-      encoding: ASCII-8BIT
-      string: !binary |-
-        eyJ0b29rIjoxLCJ0aW1lZF9vdXQiOmZhbHNlLCJfc2hhcmRzIjp7InRvdGFs
-        IjoxLCJzdWNjZXNzZnVsIjoxLCJmYWlsZWQiOjB9LCJoaXRzIjp7InRvdGFs
-        IjoyMDE2LCJtYXhfc2NvcmUiOjYuNTkwMTkyNEU3LCJoaXRzIjpbeyJfaW5k
-        ZXgiOiJnaXRodWJfcmVwb3NpdG9yaWVzIiwiX3R5cGUiOiJnaXRodWJfcmVw
-        b3NpdG9yeSIsIl9pZCI6IjEwMzEiLCJfc2NvcmUiOjYuNTkwMTkyNEU3LCJf
-        c291cmNlIjp7InB1c2hlZF9hdCI6IjIwMTctMDEtMjVUMTI6MTU6NTIuMDAw
-        WiIsImdpdGh1Yl9pZCI6MTY0NDE5NiwiZnVsbF9uYW1lIjoiSnVsaWFMYW5n
-        L2p1bGlhIiwib3duZXJfaWQiOjc0MzE2NCwibGljZW5zZSI6Ik90aGVyIiwi
-        ZGVzY3JpcHRpb24iOiJUaGUgSnVsaWEgTGFuZ3VhZ2U6IEEgZnJlc2ggYXBw
-        cm9hY2ggdG8gdGVjaG5pY2FsIGNvbXB1dGluZy4iLCJmb3JrIjpmYWxzZSwi
-        Y3JlYXRlZF9hdCI6IjIwMTEtMDQtMjFUMDc6MDE6NTAuMDAwWiIsInVwZGF0
-        ZWRfYXQiOiIyMDE3LTAxLTI1VDEyOjE4OjAwLjQ2NVoiLCJob21lcGFnZSI6
-        Imh0dHA6Ly9qdWxpYWxhbmcub3JnLyIsInNpemUiOjEyODg2Mywic3Rhcmdh
-        emVyc19jb3VudCI6ODExOCwibGFuZ3VhZ2UiOiJKdWxpYSIsImhhc19pc3N1
-        ZXMiOnRydWUsImhhc193aWtpIjpmYWxzZSwiaGFzX3BhZ2VzIjp0cnVlLCJm
-        b3Jrc19jb3VudCI6MTg5MCwibWlycm9yX3VybCI6bnVsbCwib3Blbl9pc3N1
-        ZXNfY291bnQiOjIxOTksImRlZmF1bHRfYnJhbmNoIjoibWFzdGVyIiwic3Vi
-        c2NyaWJlcnNfY291bnQiOjU4OSwicHJpdmF0ZSI6ZmFsc2UsImlkIjoxMDMx
-        LCJzb3VyY2VfbmFtZSI6bnVsbCwiZ2l0aHViX29yZ2FuaXNhdGlvbl9pZCI6
-        NDgsImNvbnRyaWJ1dGlvbnNfY291bnQiOjAsImhhc19yZWFkbWUiOm51bGws
-        Imhhc19jaGFuZ2Vsb2ciOm51bGwsImhhc19jb250cmlidXRpbmciOm51bGws
-        Imhhc19saWNlbnNlIjpudWxsLCJoYXNfY29jIjpudWxsLCJoYXNfdGhyZWF0
-        X21vZGVsIjpudWxsLCJoYXNfYXVkaXQiOm51bGwsInN0YXR1cyI6bnVsbCwi
-        bGFzdF9zeW5jZWRfYXQiOm51bGwsInJhbmsiOm51bGwsImV4YWN0X25hbWUi
-        OiJKdWxpYUxhbmcvanVsaWEiLCJrZXl3b3JkcyI6WyJsYW5ndWFnZXMiXSwi
-        cGxhdGZvcm1zIjpbIkVtYWNzIl19LCJzb3J0IjpbMTg5MF19LHsiX2luZGV4
-        IjoiZ2l0aHViX3JlcG9zaXRvcmllcyIsIl90eXBlIjoiZ2l0aHViX3JlcG9z
-        aXRvcnkiLCJfaWQiOiIyMTciLCJfc2NvcmUiOjEwNjA5MDAuMCwiX3NvdXJj
-        ZSI6eyJpZCI6MjE3LCJmdWxsX25hbWUiOiJ3YW5nLWJpbi9RdEFWIiwib3du
-        ZXJfaWQiOjc4NTIwNiwiZGVzY3JpcHRpb24iOiJBIGNyb3NzLXBsYXRmb3Jt
-        IG11bHRpbWVkaWEgZnJhbWV3b3JrIGJhc2VkIG9uIFF0IGFuZCBGRm1wZWcu
-        IEhpZ2ggcGVyZm9ybWFuY2UuIFVzZXIgJiBkZXZlbG9wZXIgZnJpZW5kbHku
-        IFN1cHBvcnRzIEFuZHJvaWQsIGlPUywgV2luZG93cyBzdG9yZSBhbmQgZGVz
-        a3RvcHMuIOWfuuS6jlF05ZKMRkZtcGVn55qE6Leo5bmz5Y+w6auY5oCn6IO9
-        6Z+z6KeG6aKR5pKt5pS+5qGG5p62IiwiZm9yayI6ZmFsc2UsImNyZWF0ZWRf
-        YXQiOiIyMDEyLTEwLTI5VDAzOjA2OjQwLjAwMFoiLCJ1cGRhdGVkX2F0Ijoi
-        MjAxNy0wMS0yNVQxMjoxMzozNi45NzRaIiwicHVzaGVkX2F0IjoiMjAxNy0w
-        MS0yNVQwNDo1MzowNS4wMDBaIiwiaG9tZXBhZ2UiOiJodHRwOi8vcXRhdi5v
-        cmciLCJzaXplIjoxMjc3Niwic3RhcmdhemVyc19jb3VudCI6MTAzMCwibGFu
-        Z3VhZ2UiOiJDKysiLCJoYXNfaXNzdWVzIjp0cnVlLCJoYXNfd2lraSI6dHJ1
-        ZSwiaGFzX3BhZ2VzIjp0cnVlLCJmb3Jrc19jb3VudCI6NTU3LCJtaXJyb3Jf
-        dXJsIjpudWxsLCJvcGVuX2lzc3Vlc19jb3VudCI6MTk3LCJkZWZhdWx0X2Jy
-        YW5jaCI6Im1hc3RlciIsInN1YnNjcmliZXJzX2NvdW50IjoxNzQsImdpdGh1
-        Yl9pZCI6NjQzNTA0Miwic291cmNlX25hbWUiOm51bGwsImxpY2Vuc2UiOm51
-        bGwsImdpdGh1Yl9vcmdhbmlzYXRpb25faWQiOm51bGwsInByaXZhdGUiOmZh
-        bHNlLCJjb250cmlidXRpb25zX2NvdW50IjowLCJoYXNfcmVhZG1lIjpudWxs
-        LCJoYXNfY2hhbmdlbG9nIjpudWxsLCJoYXNfY29udHJpYnV0aW5nIjpudWxs
-        LCJoYXNfbGljZW5zZSI6bnVsbCwiaGFzX2NvYyI6bnVsbCwiaGFzX3RocmVh
-        dF9tb2RlbCI6bnVsbCwiaGFzX2F1ZGl0IjpudWxsLCJzdGF0dXMiOm51bGws
-        Imxhc3Rfc3luY2VkX2F0IjoiMjAxNy0wMS0yNVQxMjoxMzozNi45NjhaIiwi
-        cmFuayI6bnVsbCwiZXhhY3RfbmFtZSI6IndhbmctYmluL1F0QVYiLCJrZXl3
-        b3JkcyI6W10sInBsYXRmb3JtcyI6WyJJbnFsdWRlIl19LCJzb3J0IjpbNTU3
-        XX0seyJfaW5kZXgiOiJnaXRodWJfcmVwb3NpdG9yaWVzIiwiX3R5cGUiOiJn
-        aXRodWJfcmVwb3NpdG9yeSIsIl9pZCI6IjY1OCIsIl9zY29yZSI6NTg3MDky
-        OS4wLCJfc291cmNlIjp7InB1c2hlZF9hdCI6IjIwMTctMDEtMjBUMDI6MDE6
-        NTIuMDAwWiIsImdpdGh1Yl9pZCI6NjU1NDkyLCJmdWxsX25hbWUiOiJtYWdp
-        dC9tYWdpdCIsIm93bmVyX2lkIjo3NTAwNzYsImxpY2Vuc2UiOiJHUEwtMy4w
-        IiwiZGVzY3JpcHRpb24iOiJJdCdzIE1hZ2l0ISBBIEdpdCBQb3JjZWxhaW4g
-        aW5zaWRlIEVtYWNzLiIsImZvcmsiOmZhbHNlLCJjcmVhdGVkX2F0IjoiMjAx
-        MC0wNS0wN1QxOTowNzowNC4wMDBaIiwidXBkYXRlZF9hdCI6IjIwMTctMDEt
-        MjVUMTI6MTU6NTMuMzc3WiIsImhvbWVwYWdlIjoiaHR0cHM6Ly9tYWdpdC52
-        YyIsInNpemUiOjE1OTUzLCJzdGFyZ2F6ZXJzX2NvdW50IjoyNDIzLCJsYW5n
-        dWFnZSI6IkVtYWNzIExpc3AiLCJoYXNfaXNzdWVzIjp0cnVlLCJoYXNfd2lr
-        aSI6dHJ1ZSwiaGFzX3BhZ2VzIjpmYWxzZSwiZm9ya3NfY291bnQiOjQ0NCwi
-        bWlycm9yX3VybCI6bnVsbCwib3Blbl9pc3N1ZXNfY291bnQiOjc5LCJkZWZh
-        dWx0X2JyYW5jaCI6Im1hc3RlciIsInN1YnNjcmliZXJzX2NvdW50IjoxMzMs
-        InByaXZhdGUiOmZhbHNlLCJpZCI6NjU4LCJzb3VyY2VfbmFtZSI6bnVsbCwi
-        Z2l0aHViX29yZ2FuaXNhdGlvbl9pZCI6MzEsImNvbnRyaWJ1dGlvbnNfY291
-        bnQiOjAsImhhc19yZWFkbWUiOm51bGwsImhhc19jaGFuZ2Vsb2ciOm51bGws
-        Imhhc19jb250cmlidXRpbmciOm51bGwsImhhc19saWNlbnNlIjpudWxsLCJo
-        YXNfY29jIjpudWxsLCJoYXNfdGhyZWF0X21vZGVsIjpudWxsLCJoYXNfYXVk
-        aXQiOm51bGwsInN0YXR1cyI6bnVsbCwibGFzdF9zeW5jZWRfYXQiOiIyMDE3
-        LTAxLTI1VDEyOjE1OjUzLjM3NFoiLCJyYW5rIjpudWxsLCJleGFjdF9uYW1l
-        IjoibWFnaXQvbWFnaXQiLCJrZXl3b3JkcyI6WyJiaW5kaW5ncyIsImdpdCIs
-        InRvb2xzIiwidmMiXSwicGxhdGZvcm1zIjpbIkVtYWNzIl19LCJzb3J0Ijpb
-        NDQ0XX0seyJfaW5kZXgiOiJnaXRodWJfcmVwb3NpdG9yaWVzIiwiX3R5cGUi
-        OiJnaXRodWJfcmVwb3NpdG9yeSIsIl9pZCI6IjE1MzMiLCJfc2NvcmUiOjMw
-        MzEwODEuMCwiX3NvdXJjZSI6eyJpZCI6MTUzMywiZnVsbF9uYW1lIjoiYmJh
-        dHNvdi9wcm9qZWN0aWxlIiwib3duZXJfaWQiOjEwMzg4MiwiZGVzY3JpcHRp
-        b24iOiJQcm9qZWN0IEludGVyYWN0aW9uIExpYnJhcnkgZm9yIEVtYWNzIiwi
-        Zm9yayI6ZmFsc2UsImNyZWF0ZWRfYXQiOiIyMDExLTA3LTMxVDE5OjEyOjMx
-        LjAwMFoiLCJ1cGRhdGVkX2F0IjoiMjAxNy0wMS0yNFQxNjo0ODo1MC4wMDBa
-        IiwicHVzaGVkX2F0IjoiMjAxNy0wMS0wNlQxNDowNjo0OS4wMDBaIiwiaG9t
-        ZXBhZ2UiOiJodHRwOi8vcHJvamVjdGlsZS5yZWFkdGhlZG9jcy5pbyIsInNp
-        emUiOjM1MjIsInN0YXJnYXplcnNfY291bnQiOjE3NDEsImxhbmd1YWdlIjoi
-        RW1hY3MgTGlzcCIsImhhc19pc3N1ZXMiOnRydWUsImhhc193aWtpIjp0cnVl
-        LCJoYXNfcGFnZXMiOnRydWUsImZvcmtzX2NvdW50IjozMDYsIm1pcnJvcl91
-        cmwiOm51bGwsIm9wZW5faXNzdWVzX2NvdW50IjoxMjYsImRlZmF1bHRfYnJh
-        bmNoIjoibWFzdGVyIiwic3Vic2NyaWJlcnNfY291bnQiOjg0LCJnaXRodWJf
-        aWQiOjIxMzM0MzcsInNvdXJjZV9uYW1lIjpudWxsLCJsaWNlbnNlIjpudWxs
-        LCJnaXRodWJfb3JnYW5pc2F0aW9uX2lkIjpudWxsLCJwcml2YXRlIjpmYWxz
-        ZSwiY29udHJpYnV0aW9uc19jb3VudCI6MCwiaGFzX3JlYWRtZSI6bnVsbCwi
-        aGFzX2NoYW5nZWxvZyI6bnVsbCwiaGFzX2NvbnRyaWJ1dGluZyI6bnVsbCwi
-        aGFzX2xpY2Vuc2UiOm51bGwsImhhc19jb2MiOm51bGwsImhhc190aHJlYXRf
-        bW9kZWwiOm51bGwsImhhc19hdWRpdCI6bnVsbCwic3RhdHVzIjpudWxsLCJs
-        YXN0X3N5bmNlZF9hdCI6bnVsbCwicmFuayI6bnVsbCwiZXhhY3RfbmFtZSI6
-        ImJiYXRzb3YvcHJvamVjdGlsZSIsImtleXdvcmRzIjpbXSwicGxhdGZvcm1z
-        IjpbXX0sInNvcnQiOlszMDZdfSx7Il9pbmRleCI6ImdpdGh1Yl9yZXBvc2l0
-        b3JpZXMiLCJfdHlwZSI6ImdpdGh1Yl9yZXBvc2l0b3J5IiwiX2lkIjoiMjAw
-        MyIsIl9zY29yZSI6MTk0MzIzNi4wLCJfc291cmNlIjp7ImlkIjoyMDAzLCJm
-        dWxsX25hbWUiOiJqb2FvdGF2b3JhL3lhc25pcHBldCIsIm93bmVyX2lkIjoz
-        ODcwMTEsImRlc2NyaXB0aW9uIjoiQSB0ZW1wbGF0ZSBzeXN0ZW0gZm9yIEVt
-        YWNzIiwiZm9yayI6ZmFsc2UsImNyZWF0ZWRfYXQiOiIyMDExLTEwLTA4VDEy
-        OjA1OjM3LjAwMFoiLCJ1cGRhdGVkX2F0IjoiMjAxNy0wMS0yNFQxNDo0Njow
-        OC4wMDBaIiwicHVzaGVkX2F0IjoiMjAxNy0wMS0yM1QwMzo0ODo0OS4wMDBa
-        IiwiaG9tZXBhZ2UiOiJodHRwOi8vam9hb3Rhdm9yYS5naXRodWIuY29tL3lh
-        c25pcHBldC8iLCJzaXplIjo0NjgyLCJzdGFyZ2F6ZXJzX2NvdW50IjoxMzk0
-        LCJsYW5ndWFnZSI6IkVtYWNzIExpc3AiLCJoYXNfaXNzdWVzIjp0cnVlLCJo
-        YXNfd2lraSI6ZmFsc2UsImhhc19wYWdlcyI6dHJ1ZSwiZm9ya3NfY291bnQi
-        OjI0OSwibWlycm9yX3VybCI6bnVsbCwib3Blbl9pc3N1ZXNfY291bnQiOjQx
-        LCJkZWZhdWx0X2JyYW5jaCI6Im1hc3RlciIsInN1YnNjcmliZXJzX2NvdW50
-        Ijo5NywiZ2l0aHViX2lkIjoyNTM3OTA0LCJzb3VyY2VfbmFtZSI6bnVsbCwi
-        bGljZW5zZSI6bnVsbCwiZ2l0aHViX29yZ2FuaXNhdGlvbl9pZCI6bnVsbCwi
-        cHJpdmF0ZSI6ZmFsc2UsImNvbnRyaWJ1dGlvbnNfY291bnQiOjAsImhhc19y
-        ZWFkbWUiOm51bGwsImhhc19jaGFuZ2Vsb2ciOm51bGwsImhhc19jb250cmli
-        dXRpbmciOm51bGwsImhhc19saWNlbnNlIjpudWxsLCJoYXNfY29jIjpudWxs
-        LCJoYXNfdGhyZWF0X21vZGVsIjpudWxsLCJoYXNfYXVkaXQiOm51bGwsInN0
-        YXR1cyI6bnVsbCwibGFzdF9zeW5jZWRfYXQiOm51bGwsInJhbmsiOm51bGws
-        ImV4YWN0X25hbWUiOiJqb2FvdGF2b3JhL3lhc25pcHBldCIsImtleXdvcmRz
-        IjpbXSwicGxhdGZvcm1zIjpbXX0sInNvcnQiOlsyNDldfSx7Il9pbmRleCI6
-        ImdpdGh1Yl9yZXBvc2l0b3JpZXMiLCJfdHlwZSI6ImdpdGh1Yl9yZXBvc2l0
-        b3J5IiwiX2lkIjoiNzM4IiwiX3Njb3JlIjo2MjI1MjEuMCwiX3NvdXJjZSI6
-        eyJwdXNoZWRfYXQiOiIyMDE3LTAxLTE2VDEyOjA3OjA5LjAwMFoiLCJnaXRo
-        dWJfaWQiOjM3MjM5OTksImZ1bGxfbmFtZSI6Imhhc2tlbGwvaGFza2VsbC1t
-        b2RlIiwib3duZXJfaWQiOjQ1MDU3NCwibGljZW5zZSI6IkdQTC0zLjAiLCJk
-        ZXNjcmlwdGlvbiI6IkVtYWNzIG1vZGUgZm9yIEhhc2tlbGwiLCJmb3JrIjpm
-        YWxzZSwiY3JlYXRlZF9hdCI6IjIwMTItMDMtMTVUMDE6MDI6MTMuMDAwWiIs
-        InVwZGF0ZWRfYXQiOiIyMDE3LTAxLTI1VDEyOjE2OjE3LjIwNloiLCJob21l
-        cGFnZSI6Imh0dHA6Ly9oYXNrZWxsLmdpdGh1Yi5pby9oYXNrZWxsLW1vZGUv
-        Iiwic2l6ZSI6Njk2Nywic3RhcmdhemVyc19jb3VudCI6Nzg5LCJsYW5ndWFn
-        ZSI6IkVtYWNzIExpc3AiLCJoYXNfaXNzdWVzIjp0cnVlLCJoYXNfd2lraSI6
-        dHJ1ZSwiaGFzX3BhZ2VzIjp0cnVlLCJmb3Jrc19jb3VudCI6MjQyLCJtaXJy
-        b3JfdXJsIjpudWxsLCJvcGVuX2lzc3Vlc19jb3VudCI6OTcsImRlZmF1bHRf
-        YnJhbmNoIjoibWFzdGVyIiwic3Vic2NyaWJlcnNfY291bnQiOjU3LCJwcml2
-        YXRlIjpmYWxzZSwiaWQiOjczOCwic291cmNlX25hbWUiOm51bGwsImdpdGh1
-        Yl9vcmdhbmlzYXRpb25faWQiOjM1LCJjb250cmlidXRpb25zX2NvdW50Ijow
-        LCJoYXNfcmVhZG1lIjpudWxsLCJoYXNfY2hhbmdlbG9nIjpudWxsLCJoYXNf
-        Y29udHJpYnV0aW5nIjpudWxsLCJoYXNfbGljZW5zZSI6bnVsbCwiaGFzX2Nv
-        YyI6bnVsbCwiaGFzX3RocmVhdF9tb2RlbCI6bnVsbCwiaGFzX2F1ZGl0Ijpu
-        dWxsLCJzdGF0dXMiOm51bGwsImxhc3Rfc3luY2VkX2F0IjoiMjAxNy0wMS0y
-        NVQxMjoxNjoxNy4yMDRaIiwicmFuayI6bnVsbCwiZXhhY3RfbmFtZSI6Imhh
-        c2tlbGwvaGFza2VsbC1tb2RlIiwia2V5d29yZHMiOlsiaGFza2VsbCIsImNh
-        YmFsIiwiZ2hjIiwicmVwbCJdLCJwbGF0Zm9ybXMiOlsiRW1hY3MiXX0sInNv
-        cnQiOlsyNDJdfV19LCJmYWNldHMiOnsibGFuZ3VhZ2UiOnsiX3R5cGUiOiJ0
-        ZXJtcyIsIm1pc3NpbmciOjcsInRvdGFsIjoyMDA5LCJvdGhlciI6MCwidGVy
-        bXMiOlt7InRlcm0iOiJFbWFjcyBMaXNwIiwiY291bnQiOjE4NDR9LHsidGVy
-        bSI6IkMrKyIsImNvdW50Ijo1MX0seyJ0ZXJtIjoiSGFza2VsbCIsImNvdW50
-        IjozNH0seyJ0ZXJtIjoiQ3J5c3RhbCIsImNvdW50IjoyM30seyJ0ZXJtIjoi
-        SmF2YVNjcmlwdCIsImNvdW50IjoxMH0seyJ0ZXJtIjoiUHl0aG9uIiwiY291
-        bnQiOjl9LHsidGVybSI6IkNvbW1vbiBMaXNwIiwiY291bnQiOjV9LHsidGVy
-        bSI6IkMiLCJjb3VudCI6NX0seyJ0ZXJtIjoiVGVYIiwiY291bnQiOjN9LHsi
-        dGVybSI6IlJ1YnkiLCJjb3VudCI6M30seyJ0ZXJtIjoiSFRNTCIsImNvdW50
-        IjozfSx7InRlcm0iOiJHbyIsImNvdW50IjozfSx7InRlcm0iOiJDU1MiLCJj
-        b3VudCI6M30seyJ0ZXJtIjoiUGVybCIsImNvdW50IjoyfSx7InRlcm0iOiJP
-        Q2FtbCIsImNvdW50IjoyfSx7InRlcm0iOiJTaGVsbCIsImNvdW50IjoxfSx7
-        InRlcm0iOiJSIiwiY291bnQiOjF9LHsidGVybSI6IlFNTCIsImNvdW50Ijox
-        fSx7InRlcm0iOiJQSFAiLCJjb3VudCI6MX0seyJ0ZXJtIjoiT2JqZWN0aXZl
-        LUMiLCJjb3VudCI6MX0seyJ0ZXJtIjoiSnVsaWEiLCJjb3VudCI6MX0seyJ0
-        ZXJtIjoiQ3VjdW1iZXIiLCJjb3VudCI6MX0seyJ0ZXJtIjoiQ01ha2UiLCJj
-        b3VudCI6MX0seyJ0ZXJtIjoiQyMiLCJjb3VudCI6MX1dfSwibGljZW5zZSI6
-        eyJfdHlwZSI6InRlcm1zIiwibWlzc2luZyI6MTI5NSwidG90YWwiOjcyMSwi
-        b3RoZXIiOjAsInRlcm1zIjpbeyJ0ZXJtIjoiR1BMLTMuMCIsImNvdW50Ijoz
-        OTZ9LHsidGVybSI6Ik1JVCIsImNvdW50IjoxMjN9LHsidGVybSI6IkdQTC0y
-        LjAiLCJjb3VudCI6NTZ9LHsidGVybSI6IkJTRC0zLUNsYXVzZSIsImNvdW50
-        IjozMH0seyJ0ZXJtIjoiT3RoZXIiLCJjb3VudCI6Mjd9LHsidGVybSI6IkFw
-        YWNoZS0yLjAiLCJjb3VudCI6MjR9LHsidGVybSI6IlVubGljZW5zZSIsImNv
-        dW50IjoxOX0seyJ0ZXJtIjoiQlNELTItQ2xhdXNlIiwiY291bnQiOjE3fSx7
-        InRlcm0iOiJMR1BMLTIuMSIsImNvdW50IjoxMX0seyJ0ZXJtIjoiTEdQTC0z
-        LjAiLCJjb3VudCI6OX0seyJ0ZXJtIjoiV1RGUEwiLCJjb3VudCI6Mn0seyJ0
-        ZXJtIjoiSVNDIiwiY291bnQiOjJ9LHsidGVybSI6IkVQTC0xLjAiLCJjb3Vu
-        dCI6Mn0seyJ0ZXJtIjoiTVBMLTIuMCIsImNvdW50IjoxfSx7InRlcm0iOiJB
-        cnRpc3RpYy0yLjAiLCJjb3VudCI6MX0seyJ0ZXJtIjoiQUdQTC0zLjAiLCJj
-        b3VudCI6MX1dfSwia2V5d29yZHMiOnsiX3R5cGUiOiJ0ZXJtcyIsIm1pc3Np
-        bmciOjEwODYsInRvdGFsIjoyMTY3LCJvdGhlciI6MTE5OSwidGVybXMiOlt7
-        InRlcm0iOiJjb252ZW5pZW5jZSIsImNvdW50IjoyNTB9LHsidGVybSI6InRv
-        b2xzIiwiY291bnQiOjEyMH0seyJ0ZXJtIjoibGFuZ3VhZ2VzIiwiY291bnQi
-        Ojg0fSx7InRlcm0iOiJldmlsIiwiY291bnQiOjQxfSx7InRlcm0iOiJoZWxt
-        IiwiY291bnQiOjM5fSx7InRlcm0iOiJsaXNwIiwiY291bnQiOjM1fSx7InRl
-        cm0iOiJvcmciLCJjb3VudCI6Mjl9LHsidGVybSI6ImV4dGVuc2lvbnMiLCJj
-        b3VudCI6Mjl9LHsidGVybSI6ImNvbXBsZXRpb24iLCJjb3VudCI6MjN9LHsi
-        dGVybSI6ImZhY2VzIiwiY291bnQiOjE5fSx7InRlcm0iOiJnaXQiLCJjb3Vu
-        dCI6MTh9LHsidGVybSI6ImZpbGVzIiwiY291bnQiOjE2fSx7InRlcm0iOiJ2
-        YyIsImNvdW50IjoxNX0seyJ0ZXJtIjoiamF2YXNjcmlwdCIsImNvdW50Ijox
-        NX0seyJ0ZXJtIjoidmltIiwiY291bnQiOjE0fSx7InRlcm0iOiJ0aGVtZXMi
-        LCJjb3VudCI6MTR9LHsidGVybSI6InRoZW1lIiwiY291bnQiOjE0fSx7InRl
-        cm0iOiJlZGl0aW5nIiwiY291bnQiOjE0fSx7InRlcm0iOiJjbG9qdXJlIiwi
-        Y291bnQiOjE0fSx7InRlcm0iOiJiYWJlbCIsImNvdW50IjoxM30seyJ0ZXJt
-        IjoiYyIsImNvdW50IjoxMn0seyJ0ZXJtIjoic2VhcmNoIiwiY291bnQiOjEx
-        fSx7InRlcm0iOiJjb21wYW55IiwiY291bnQiOjExfSx7InRlcm0iOiJjb2xv
-        ciIsImNvdW50IjoxMX0seyJ0ZXJtIjoicHJvamVjdCIsImNvdW50IjoxMH0s
-        eyJ0ZXJtIjoibXVsdGltZWRpYSIsImNvdW50IjoxMH0seyJ0ZXJtIjoibWFy
-        a2Rvd24iLCJjb3VudCI6MTB9LHsidGVybSI6ImhlbHAiLCJjb3VudCI6MTB9
-        LHsidGVybSI6Imhhc2tlbGwiLCJjb3VudCI6MTB9LHsidGVybSI6ImVtYWNz
-        IiwiY291bnQiOjEwfSx7InRlcm0iOiJkb2NzIiwiY291bnQiOjEwfSx7InRl
-        cm0iOiJjb21tIiwiY291bnQiOjEwfSx7InRlcm0iOiJ3cCIsImNvdW50Ijo5
-        fSx7InRlcm0iOiJwcm9jZXNzZXMiLCJjb3VudCI6OX0seyJ0ZXJtIjoibWF0
-        Y2hpbmciLCJjb3VudCI6OX1dfX0sInN1Z2dlc3QiOnsiZGlkX3lvdV9tZWFu
-        IjpbXX19
-    http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:11 GMT
-- request:
-    method: get
-    uri: http://localhost:9200/projects/_count
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '59'
-    body:
-      encoding: UTF-8
-      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
-    http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:11 GMT
+  recorded_at: Mon, 13 Mar 2017 11:54:39 GMT
 recorded_with: VCR 3.0.3

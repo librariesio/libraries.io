@@ -2,37 +2,10 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:9200/projects/_count
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '61'
-    body:
-      encoding: UTF-8
-      string: '{"count":101,"_shards":{"total":1,"successful":1,"failed":0}}'
-    http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:02 GMT
-- request:
-    method: get
     uri: http://localhost:9200/github_repositories/github_repository/_search?from=0&size=30
     body:
       encoding: UTF-8
-      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"bool":{"should":[{"multi_match":{"query":"deprecated","fields":["full_name^2","exact_name^2","description","homepage","language","license"],"fuzziness":1.2,"slop":2,"type":"cross_fields","operator":"and"}}]}},"filter":{"bool":{"must":[{"exists":{"field":"pushed_at"}}],"must_not":[{"term":{"fork":true}},{"term":{"private":true}},{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"stargazers_count","modifier":"square"}}},"facets":{"language":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"license":{"terms":{"field":"license","size":35},"facet_filter":{"bool":{"must":[]}}},"keywords":{"terms":{"field":"keywords","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[],"must_not":[{"terms":{"status":["Unmaintained","Active","Deprecated"]}}]}},"suggest":{"did_you_mean":{"text":"deprecated","term":{"size":1,"field":"full_name"}}},"sort":{"stargazers_count":"desc"},"track_scores":true}'
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"bool":{"should":[{"multi_match":{"query":"deprecated","fields":["full_name^2","exact_name^2","description","homepage","language","license"],"fuzziness":1.2,"slop":2,"type":"cross_fields","operator":"and"}}]}},"filter":{"bool":{"must":[],"must_not":[{"term":{"fork":true}},{"term":{"private":true}},{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"filter":{"bool":{"must":[],"must_not":[{"terms":{"status":["Unmaintained","Active","Deprecated"]}}]}},"suggest":{"did_you_mean":{"text":"deprecated","term":{"size":1,"field":"full_name"}}},"sort":{"stargazers_count":"desc"},"track_scores":true}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -48,41 +21,13 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '2680'
+      - '2623'
     body:
       encoding: UTF-8
-      string: '{"took":6,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":2,"max_score":23.585827,"hits":[{"_index":"github_repositories","_type":"github_repository","_id":"794","_score":23.585827,"_source":{"pushed_at":"2013-02-06T12:31:58.000Z","github_id":4224331,"full_name":"maio/helm-git","owner_id":18138,"description":"Helm
-        extension for Git (deprecated). Please switch to:","fork":false,"created_at":"2012-05-04T11:59:45.000Z","updated_at":"2017-01-25T12:16:37.669Z","homepage":"https://github.com/emacs-helm/helm-ls-git","size":118,"stargazers_count":9,"language":"Emacs
-        Lisp","has_issues":true,"has_wiki":true,"has_pages":false,"forks_count":3,"mirror_url":null,"open_issues_count":2,"default_branch":"master","subscribers_count":1,"private":false,"id":794,"source_name":null,"license":null,"github_organisation_id":null,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:16:37.662Z","rank":3,"exact_name":"maio/helm-git","keywords":["helm","git"],"platforms":["Emacs"]},"sort":[9]},{"_index":"github_repositories","_type":"github_repository","_id":"1167","_score":1.1647322,"_source":{"pushed_at":"2016-10-19T13:28:32.000Z","github_id":48653425,"full_name":"lvillani/metafmt","owner_id":241660,"license":"MIT","description":":warning:
-        DEPRECATED: use github.com/omnitools/omnifmt","fork":false,"created_at":"2015-12-27T17:14:25.000Z","updated_at":"2017-01-25T12:18:47.388Z","homepage":"","size":18,"stargazers_count":2,"language":"Go","has_issues":true,"has_wiki":true,"has_pages":false,"forks_count":3,"mirror_url":null,"open_issues_count":0,"default_branch":"master","subscribers_count":0,"private":false,"id":1167,"source_name":null,"github_organisation_id":null,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:18:47.378Z","rank":3,"exact_name":"lvillani/metafmt","keywords":["languages","tools"],"platforms":["Emacs"]},"sort":[2]}]},"facets":{"language":{"_type":"terms","missing":0,"total":2,"other":0,"terms":[{"term":"Go","count":1},{"term":"Emacs
-        Lisp","count":1}]},"license":{"_type":"terms","missing":1,"total":1,"other":0,"terms":[{"term":"MIT","count":1}]},"keywords":{"_type":"terms","missing":0,"total":4,"other":0,"terms":[{"term":"tools","count":1},{"term":"languages","count":1},{"term":"helm","count":1},{"term":"git","count":1}]}},"suggest":{"did_you_mean":[{"text":"deprec","offset":0,"length":10,"options":[]}]}}'
+      string: '{"took":33,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":2,"max_score":2.6369448,"hits":[{"_index":"github_repositories","_type":"github_repository","_id":"794","_score":2.6369448,"_source":{"id":794,"full_name":"maio/helm-git","owner_id":18138,"description":"Helm
+        extension for Git (deprecated). Please switch to:","fork":false,"created_at":"2012-05-04T11:59:45.000Z","updated_at":"2017-01-25T12:16:37.669Z","pushed_at":"2013-02-06T12:31:58.000Z","homepage":"https://github.com/emacs-helm/helm-ls-git","size":118,"stargazers_count":9,"language":"Emacs
+        Lisp","has_issues":true,"has_wiki":true,"has_pages":false,"forks_count":3,"mirror_url":null,"open_issues_count":2,"default_branch":"master","subscribers_count":1,"uuid":"4224331","source_name":null,"license":null,"github_organisation_id":null,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:16:37.662Z","rank":3,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"maio/helm-git","keywords":["helm","git"],"platforms":["Emacs"],"github_id":"4224331","github_contributions_count":0},"sort":[9]},{"_index":"github_repositories","_type":"github_repository","_id":"1167","_score":2.6369448,"_source":{"id":1167,"full_name":"lvillani/metafmt","owner_id":241660,"description":":warning:
+        DEPRECATED: use github.com/omnitools/omnifmt","fork":false,"created_at":"2015-12-27T17:14:25.000Z","updated_at":"2017-01-25T12:18:47.388Z","pushed_at":"2016-10-19T13:28:32.000Z","homepage":"","size":18,"stargazers_count":2,"language":"Go","has_issues":true,"has_wiki":true,"has_pages":false,"forks_count":3,"mirror_url":null,"open_issues_count":0,"default_branch":"master","subscribers_count":0,"uuid":"48653425","source_name":null,"license":"MIT","github_organisation_id":null,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:18:47.378Z","rank":3,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"lvillani/metafmt","keywords":["languages","tools"],"platforms":["Emacs"],"github_id":"48653425","github_contributions_count":0},"sort":[2]}]},"suggest":{"did_you_mean":[{"text":"deprec","offset":0,"length":10,"options":[]}]}}'
     http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:02 GMT
-- request:
-    method: get
-    uri: http://localhost:9200/projects/_count
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '61'
-    body:
-      encoding: UTF-8
-      string: '{"count":101,"_shards":{"total":1,"successful":1,"failed":0}}'
-    http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:02 GMT
+  recorded_at: Mon, 13 Mar 2017 11:54:34 GMT
 recorded_with: VCR 3.0.3

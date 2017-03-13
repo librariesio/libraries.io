@@ -6,7 +6,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"id":25,"full_name":"rails/rails","owner_id":null,"description":"Ruby
-        on Rails","fork":false,"created_at":"2017-03-02T20:27:05.602Z","updated_at":"2017-03-02T20:27:05.602Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":"master","subscribers_count":null,"uuid":null,"source_name":null,"license":null,"github_organisation_id":42,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":0,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"rails/rails","keywords":[],"platforms":[],"github_id":null,"github_contributions_count":0}'
+        on Rails","fork":false,"created_at":"2017-03-13T11:54:48.531Z","updated_at":"2017-03-13T11:54:48.531Z","pushed_at":null,"homepage":"http://rubyonrails.org","size":1000,"stargazers_count":10000,"language":"Ruby","has_issues":null,"has_wiki":null,"has_pages":null,"forks_count":null,"mirror_url":null,"open_issues_count":null,"default_branch":"master","subscribers_count":null,"uuid":null,"source_name":null,"license":null,"github_organisation_id":42,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":null,"rank":0,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"rails/rails","keywords":[],"platforms":[],"github_id":null,"github_contributions_count":0}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -22,10 +22,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '148'
+      - '149'
     body:
       encoding: UTF-8
-      string: '{"_index":"github_repositories","_type":"github_repository","_id":"25","_version":3,"_shards":{"total":1,"successful":1,"failed":0},"created":false}'
+      string: '{"_index":"github_repositories","_type":"github_repository","_id":"25","_version":11,"_shards":{"total":1,"successful":1,"failed":0},"created":false}'
     http_version: 
-  recorded_at: Thu, 02 Mar 2017 20:27:05 GMT
+  recorded_at: Mon, 13 Mar 2017 11:54:48 GMT
 recorded_with: VCR 3.0.3

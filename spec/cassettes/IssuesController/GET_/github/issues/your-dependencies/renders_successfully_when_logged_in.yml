@@ -2,37 +2,10 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:9200/projects/_count
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '59'
-    body:
-      encoding: UTF-8
-      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
-    http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:12 GMT
-- request:
-    method: get
     uri: http://localhost:9200/github_issues/github_issue/_search?from=0&size=30
     body:
       encoding: UTF-8
-      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"term":{"state":"open"}},{"term":{"locked":false}}],"must_not":[{"term":{"labels":"wontfix"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"facets":{"language":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"labels":{"terms":{"field":"labels","size":35},"facet_filter":{"bool":{"must":[]}}},"license":{"terms":{"field":"license","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[],"must_not":[]}},"track_scores":true,"sort":[{"comments_count":"asc"},{"rank":"desc"},{"created_at":"asc"},{"contributions_count":"asc"}]}'
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"match_all":{}},"filter":{"bool":{"must":[{"term":{"state":"open"}},{"term":{"locked":false}}],"must_not":[{"term":{"labels":"wontfix"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"filter":{"bool":{"must":[],"must_not":[]}},"track_scores":true,"sort":[{"comments_count":"asc"},{"rank":"desc"},{"created_at":"asc"},{"contributions_count":"asc"}]}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -48,13 +21,13 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '54707'
+      - '54207'
     body:
       encoding: ASCII-8BIT
       string: !binary |-
-        eyJ0b29rIjoyLCJ0aW1lZF9vdXQiOmZhbHNlLCJfc2hhcmRzIjp7InRvdGFs
+        eyJ0b29rIjo0LCJ0aW1lZF9vdXQiOmZhbHNlLCJfc2hhcmRzIjp7InRvdGFs
         IjoxLCJzdWNjZXNzZnVsIjoxLCJmYWlsZWQiOjB9LCJoaXRzIjp7InRvdGFs
-        Ijo2NiwibWF4X3Njb3JlIjowLjAsImhpdHMiOlt7Il9pbmRleCI6ImdpdGh1
+        Ijo2OCwibWF4X3Njb3JlIjowLjAsImhpdHMiOlt7Il9pbmRleCI6ImdpdGh1
         Yl9pc3N1ZXMiLCJfdHlwZSI6ImdpdGh1Yl9pc3N1ZSIsIl9pZCI6IjIyOSIs
         Il9zY29yZSI6MC4wLCJfc291cmNlIjp7ImlkIjoyMjksInJlcG9zaXRvcnlf
         aWQiOjY1OCwiZ2l0aHViX2lkIjoxNzIyNzM0OTUsIm51bWJlciI6Mjc0NCwi
@@ -1256,45 +1229,7 @@ http_interactions:
         MjVUMTI6MDk6MzcuNDUyWiIsInB1bGxfcmVxdWVzdCI6ZmFsc2UsImNvbnRy
         aWJ1dGlvbnNfY291bnQiOjAsInN0YXJzIjoyNDIzLCJsYW5ndWFnZSI6IkVt
         YWNzIExpc3AiLCJsaWNlbnNlIjoiR1BMLTMuMCIsInJhbmsiOjB9LCJzb3J0
-        IjpbMCwwLDE0ODQyMjk4MjQwMDAsMF19XX0sImZhY2V0cyI6eyJsYW5ndWFn
-        ZSI6eyJfdHlwZSI6InRlcm1zIiwibWlzc2luZyI6MCwidG90YWwiOjY2LCJv
-        dGhlciI6MCwidGVybXMiOlt7InRlcm0iOiJFbWFjcyBMaXNwIiwiY291bnQi
-        OjY2fV19LCJsYWJlbHMiOnsiX3R5cGUiOiJ0ZXJtcyIsIm1pc3NpbmciOjIs
-        InRvdGFsIjo2OSwib3RoZXIiOjAsInRlcm1zIjpbeyJ0ZXJtIjoiZmVhdHVy
-        ZSByZXF1ZXN0IiwiY291bnQiOjU1fSx7InRlcm0iOiJ3aXAiLCJjb3VudCI6
-        N30seyJ0ZXJtIjoidHJhbnNpZW50LmVsIiwiY291bnQiOjN9LHsidGVybSI6
-        Im5lZWRpbmZvIiwiY291bnQiOjF9LHsidGVybSI6Im5hdmlnYXRlIiwiY291
-        bnQiOjF9LHsidGVybSI6ImZseSIsImNvdW50IjoxfSx7InRlcm0iOiJkdXBs
-        aWNhdGUiLCJjb3VudCI6MX1dfSwibGljZW5zZSI6eyJfdHlwZSI6InRlcm1z
-        IiwibWlzc2luZyI6MCwidG90YWwiOjY2LCJvdGhlciI6MCwidGVybXMiOlt7
-        InRlcm0iOiJHUEwtMy4wIiwiY291bnQiOjY2fV19fX0=
+        IjpbMCwwLDE0ODQyMjk4MjQwMDAsMF19XX19
     http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:12 GMT
-- request:
-    method: get
-    uri: http://localhost:9200/projects/_count
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '59'
-    body:
-      encoding: UTF-8
-      string: '{"count":1,"_shards":{"total":1,"successful":1,"failed":0}}'
-    http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:12 GMT
+  recorded_at: Mon, 13 Mar 2017 11:54:39 GMT
 recorded_with: VCR 3.0.3

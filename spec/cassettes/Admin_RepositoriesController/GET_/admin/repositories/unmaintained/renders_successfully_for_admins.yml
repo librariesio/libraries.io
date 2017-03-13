@@ -2,37 +2,10 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:9200/projects/_count
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '61'
-    body:
-      encoding: UTF-8
-      string: '{"count":101,"_shards":{"total":1,"successful":1,"failed":0}}'
-    http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:03 GMT
-- request:
-    method: get
     uri: http://localhost:9200/github_repositories/github_repository/_search?from=0&size=30
     body:
       encoding: UTF-8
-      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"bool":{"should":[{"multi_match":{"query":"unmaintained","fields":["full_name^2","exact_name^2","description","homepage","language","license"],"fuzziness":1.2,"slop":2,"type":"cross_fields","operator":"and"}}]}},"filter":{"bool":{"must":[{"exists":{"field":"pushed_at"}}],"must_not":[{"term":{"fork":true}},{"term":{"private":true}},{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"stargazers_count","modifier":"square"}}},"facets":{"language":{"terms":{"field":"language","size":35},"facet_filter":{"bool":{"must":[]}}},"license":{"terms":{"field":"license","size":35},"facet_filter":{"bool":{"must":[]}}},"keywords":{"terms":{"field":"keywords","size":35},"facet_filter":{"bool":{"must":[]}}}},"filter":{"bool":{"must":[],"must_not":[{"terms":{"status":["Unmaintained","Active","Deprecated"]}}]}},"suggest":{"did_you_mean":{"text":"unmaintained","term":{"size":1,"field":"full_name"}}},"sort":{"stargazers_count":"desc"},"track_scores":true}'
+      string: '{"query":{"function_score":{"query":{"filtered":{"query":{"bool":{"should":[{"multi_match":{"query":"unmaintained","fields":["full_name^2","exact_name^2","description","homepage","language","license"],"fuzziness":1.2,"slop":2,"type":"cross_fields","operator":"and"}}]}},"filter":{"bool":{"must":[],"must_not":[{"term":{"fork":true}},{"term":{"private":true}},{"term":{"status":"Removed"}}]}}}},"field_value_factor":{"field":"rank","modifier":"square"}}},"filter":{"bool":{"must":[],"must_not":[{"terms":{"status":["Unmaintained","Active","Deprecated"]}}]}},"suggest":{"did_you_mean":{"text":"unmaintained","term":{"size":1,"field":"full_name"}}},"sort":{"stargazers_count":"desc"},"track_scores":true}'
     headers:
       User-Agent:
       - Faraday v0.10.1
@@ -48,41 +21,13 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '2624'
+      - '2606'
     body:
       encoding: UTF-8
-      string: '{"took":6,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":2,"max_score":653.0265,"hits":[{"_index":"github_repositories","_type":"github_repository","_id":"1237","_score":653.0265,"_source":{"pushed_at":"2013-03-26T22:50:40.000Z","github_id":6434471,"full_name":"chrisbarrett/elisp-namespaces","owner_id":836504,"description":"UNMAINTAINED","fork":false,"created_at":"2012-10-29T02:01:56.000Z","updated_at":"2017-01-25T12:19:08.802Z","homepage":"","size":460,"stargazers_count":29,"language":"Emacs
-        Lisp","has_issues":true,"has_wiki":true,"has_pages":false,"forks_count":1,"mirror_url":null,"open_issues_count":0,"default_branch":"master","subscribers_count":6,"private":false,"id":1237,"source_name":null,"license":null,"github_organisation_id":null,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:19:08.797Z","rank":2,"exact_name":"chrisbarrett/elisp-namespaces","keywords":[],"platforms":["Emacs"]},"sort":[29]},{"_index":"github_repositories","_type":"github_repository","_id":"506","_score":94.34331,"_source":{"pushed_at":"2016-10-31T09:10:21.000Z","github_id":22385068,"full_name":"lunaryorn/fancy-battery.el","owner_id":224922,"license":"GPL-3.0","description":"UNMAINTAINED!
-        Display battery in Emacs Mode line","fork":false,"created_at":"2014-07-29T15:35:18.000Z","updated_at":"2017-01-25T12:15:06.996Z","homepage":"","size":107,"stargazers_count":18,"language":"Emacs
-        Lisp","has_issues":true,"has_wiki":true,"has_pages":false,"forks_count":3,"mirror_url":null,"open_issues_count":1,"default_branch":"master","subscribers_count":2,"private":false,"id":506,"source_name":null,"github_organisation_id":null,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:15:06.990Z","rank":4,"exact_name":"lunaryorn/fancy-battery.el","keywords":["convenience","tools","hardware"],"platforms":["Emacs"]},"sort":[18]}]},"facets":{"language":{"_type":"terms","missing":0,"total":2,"other":0,"terms":[{"term":"Emacs
-        Lisp","count":2}]},"license":{"_type":"terms","missing":1,"total":1,"other":0,"terms":[{"term":"GPL-3.0","count":1}]},"keywords":{"_type":"terms","missing":1,"total":3,"other":0,"terms":[{"term":"tools","count":1},{"term":"hardware","count":1},{"term":"convenience","count":1}]}},"suggest":{"did_you_mean":[{"text":"unmaintain","offset":0,"length":12,"options":[]}]}}'
+      string: '{"took":11,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":2,"max_score":4.687902,"hits":[{"_index":"github_repositories","_type":"github_repository","_id":"1237","_score":3.125268,"_source":{"id":1237,"full_name":"chrisbarrett/elisp-namespaces","owner_id":836504,"description":"UNMAINTAINED","fork":false,"created_at":"2012-10-29T02:01:56.000Z","updated_at":"2017-01-25T12:19:08.802Z","pushed_at":"2013-03-26T22:50:40.000Z","homepage":"","size":460,"stargazers_count":29,"language":"Emacs
+        Lisp","has_issues":true,"has_wiki":true,"has_pages":false,"forks_count":1,"mirror_url":null,"open_issues_count":0,"default_branch":"master","subscribers_count":6,"uuid":"6434471","source_name":null,"license":null,"github_organisation_id":null,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:19:08.797Z","rank":2,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"chrisbarrett/elisp-namespaces","keywords":[],"platforms":["Emacs"],"github_id":"6434471","github_contributions_count":0},"sort":[29]},{"_index":"github_repositories","_type":"github_repository","_id":"506","_score":4.687902,"_source":{"id":506,"full_name":"lunaryorn/fancy-battery.el","owner_id":224922,"description":"UNMAINTAINED!
+        Display battery in Emacs Mode line","fork":false,"created_at":"2014-07-29T15:35:18.000Z","updated_at":"2017-01-25T12:15:06.996Z","pushed_at":"2016-10-31T09:10:21.000Z","homepage":"","size":107,"stargazers_count":18,"language":"Emacs
+        Lisp","has_issues":true,"has_wiki":true,"has_pages":false,"forks_count":3,"mirror_url":null,"open_issues_count":1,"default_branch":"master","subscribers_count":2,"uuid":"22385068","source_name":null,"license":"GPL-3.0","github_organisation_id":null,"private":false,"contributions_count":0,"has_readme":null,"has_changelog":null,"has_contributing":null,"has_license":null,"has_coc":null,"has_threat_model":null,"has_audit":null,"status":null,"last_synced_at":"2017-01-25T12:15:06.990Z","rank":4,"host_type":"GitHub","host_domain":null,"name":null,"scm":null,"fork_policy":null,"pull_requests_enabled":null,"logo_url":null,"exact_name":"lunaryorn/fancy-battery.el","keywords":["convenience","tools","hardware"],"platforms":["Emacs"],"github_id":"22385068","github_contributions_count":0},"sort":[18]}]},"suggest":{"did_you_mean":[{"text":"unmaintain","offset":0,"length":12,"options":[]}]}}'
     http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:03 GMT
-- request:
-    method: get
-    uri: http://localhost:9200/projects/_count
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.10.1
-      Accept-Encoding:
-      - gzip,deflate
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '61'
-    body:
-      encoding: UTF-8
-      string: '{"count":101,"_shards":{"total":1,"successful":1,"failed":0}}'
-    http_version: 
-  recorded_at: Thu, 26 Jan 2017 13:28:03 GMT
+  recorded_at: Mon, 13 Mar 2017 11:54:35 GMT
 recorded_with: VCR 3.0.3
