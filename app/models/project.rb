@@ -1,5 +1,5 @@
 class Project < ApplicationRecord
-  include Searchable
+  include ProjectSearch
   include SourceRank
   include Status
   include Releases

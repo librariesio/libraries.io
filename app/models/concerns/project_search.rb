@@ -1,4 +1,4 @@
-module Searchable
+module ProjectSearch
   extend ActiveSupport::Concern
 
   included do
