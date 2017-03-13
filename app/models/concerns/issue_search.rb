@@ -11,7 +11,7 @@ module IssueSearch
 
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
       mapping do
-        indexes :title, :analyzer => 'snowball', :boost => 6
+        indexes :title, type: 'string', :analyzer => 'snowball', :boost => 6
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
@@ -23,13 +23,13 @@ module IssueSearch
         indexes :rank, type: 'integer'
         indexes :comments_count, type: 'integer'
 
-        indexes :language, :analyzer => 'keyword'
-        indexes :license, :analyzer => 'keyword'
+        indexes :language, type: 'string', :analyzer => 'keyword'
+        indexes :license, type: 'string', :analyzer => 'keyword'
 
-        indexes :number
-        indexes :locked
-        indexes :labels, :analyzer => 'keyword'
-        indexes :state, :analyzer => 'keyword'
+        indexes :number, type: 'integer'
+        indexes :locked, type: 'boolean'
+        indexes :labels, type: 'string', :analyzer => 'keyword'
+        indexes :state, type: 'string', :analyzer => 'keyword'
       end
     end
 

@@ -10,19 +10,19 @@ module ProjectSearch
 
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
       mapping do
-        indexes :name, :analyzer => 'snowball', :boost => 6
-        indexes :exact_name, :index => :keyword, :boost => 2
+        indexes :name, type: 'string', :analyzer => 'snowball', :boost => 6
+        indexes :exact_name, type: 'string', :index => :not_analyzed, :boost => 2
 
-        indexes :description, :analyzer => 'snowball'
-        indexes :homepage
-        indexes :repository_url
-        indexes :repo_name
-        indexes :latest_release_number, :analyzer => 'keyword'
-        indexes :keywords_array, :analyzer => 'keyword'
-        indexes :language, :analyzer => 'keyword'
-        indexes :normalized_licenses, :analyzer => 'keyword'
-        indexes :platform, :analyzer => 'keyword'
-        indexes :status, :index => :not_analyzed
+        indexes :description, type: 'string', :analyzer => 'snowball'
+        indexes :homepage, type: 'string'
+        indexes :repository_url, type: 'string'
+        indexes :repo_name, type: 'string'
+        indexes :latest_release_number, type: 'string', :analyzer => 'keyword'
+        indexes :keywords_array, type: 'string', :analyzer => 'keyword'
+        indexes :language, type: 'string', :analyzer => 'keyword'
+        indexes :normalized_licenses, type: 'string', :analyzer => 'keyword'
+        indexes :platform, type: 'string', :analyzer => 'keyword'
+        indexes :status, type: 'string', :index => :not_analyzed
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
