@@ -72,7 +72,7 @@ Go create a [Personal access token on GitHub](https://help.github.com/articles/c
 You can then index that data into elasticsearch with the following rake task:
 
 ```bash
-rake projects:reindex github:reindex_repos github:reindex_issues
+rake search:reindex_everything
 ```
 
 It is normal to see:

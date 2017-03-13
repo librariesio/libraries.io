@@ -1,4 +1,7 @@
 namespace :search do
+  desc 'Reindex everything'
+  task reindex_everything: [:reindex_repos, :reindex_issues, :reindex_projects]
+
   desc 'Recreate repo search index'
   task recreate_repos_index: :environment do
     # If the index doesn't exists can't be deleted, returns 404, carry on
@@ -6,7 +9,7 @@ namespace :search do
     Repository.__elasticsearch__.create_index! force: true
   end
 
-  desc 'Reindex the repo search'
+  desc 'Reindex repositories'
   task reindex_repos: [:environment, :recreate_repos_index] do
     Repository.indexable.import
   end
@@ -18,7 +21,7 @@ namespace :search do
     Issue.__elasticsearch__.create_index! force: true
   end
 
-  desc 'Reindex the issues search'
+  desc 'Reindex issues'
   task reindex_issues: [:environment, :recreate_issues_index] do
     Issue.indexable.import
   end
@@ -30,7 +33,7 @@ namespace :search do
     Project.__elasticsearch__.create_index! force: true
   end
 
-  desc 'Reindex the search'
+  desc 'Reindex projects'
   task reindex_projects: [:environment, :recreate_projects_index] do
     Project.import query: -> { indexable }
   end
