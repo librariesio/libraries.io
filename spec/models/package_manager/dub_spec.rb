@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Dub, :vcr do
+describe PackageManager::Dub do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
   it 'has formatted name of "Dub"' do

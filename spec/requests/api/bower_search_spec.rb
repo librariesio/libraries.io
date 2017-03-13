@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "Api::BowerSearchController" do
-  describe "GET /api/bower-search", :vcr, type: :request do
+  describe "GET /api/bower-search", type: :request do
     it "renders successfully" do
       get '/api/bower-search'
       expect(response).to have_http_status(:success)

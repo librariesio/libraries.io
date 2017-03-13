@@ -1,11 +1,7 @@
 require "rails_helper"
 
-RSpec.describe LanguagesController, :vcr do
-  before :each do
-    @project = create(:project)
-    Project.__elasticsearch__.import force: true
-    Project.__elasticsearch__.refresh_index!
-  end
+RSpec.describe LanguagesController do
+  let!(:project) { create(:project) }
 
   describe "GET #index" do
     it "responds successfully", type: :request do
@@ -16,8 +12,8 @@ RSpec.describe LanguagesController, :vcr do
 
   describe "GET #show" do
     it "responds successfully", type: :request do
-      visit language_path(@project.language)
-      expect(page).to have_content @project.language
+      visit language_path(project.language)
+      expect(page).to have_content project.language
     end
   end
 end

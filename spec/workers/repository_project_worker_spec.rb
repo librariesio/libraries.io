@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe RepositoryProjectWorker, :vcr do
+describe RepositoryProjectWorker do
   it "should use the low priority queue" do
     is_expected.to be_processed_in :low
   end

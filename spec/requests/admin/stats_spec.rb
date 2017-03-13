@@ -41,7 +41,7 @@ describe "Admin::StatsController" do
     end
   end
 
-  describe "GET /admin/graphs", :vcr, type: :request do
+  describe "GET /admin/graphs", type: :request do
     it "denies access when logged out" do
       get admin_graphs_path
       expect(response).to redirect_to(login_path)

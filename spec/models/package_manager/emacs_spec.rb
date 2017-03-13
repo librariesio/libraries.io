@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Emacs, :vcr do
+describe PackageManager::Emacs do
   it 'has formatted name of "Emacs"' do
     expect(described_class.formatted_name).to eq('Emacs')
   end

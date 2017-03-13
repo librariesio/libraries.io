@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "WebHooksController", :vcr do
+describe "WebHooksController" do
   let(:user) { create :user }
   let(:random_user) { create :user }
   let(:repository) { create(:repository) }

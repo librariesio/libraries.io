@@ -5,7 +5,6 @@ module IssueSearch
     include Elasticsearch::Model
 
     index_name    "issues-#{Rails.env}"
-    document_type "issue"
 
     FIELDS = ['title^2', 'body']
 

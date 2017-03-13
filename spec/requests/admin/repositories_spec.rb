@@ -22,7 +22,7 @@ describe "Admin::RepositoriesController" do
     end
   end
 
-  describe "GET /admin/repositories/deprecated", :vcr, type: :request do
+  describe "GET /admin/repositories/deprecated", type: :request do
     it "denies access when logged out" do
       get deprecated_admin_repositories_path
       expect(response).to redirect_to(login_path)
@@ -41,7 +41,7 @@ describe "Admin::RepositoriesController" do
     end
   end
 
-  describe "GET /admin/repositories/unmaintained", :vcr, type: :request do
+  describe "GET /admin/repositories/unmaintained", type: :request do
     it "denies access when logged out" do
       get unmaintained_admin_repositories_path
       expect(response).to redirect_to(login_path)
@@ -60,7 +60,7 @@ describe "Admin::RepositoriesController" do
     end
   end
 
-  describe "GET /admin/repositories/:id", :vcr, type: :request do
+  describe "GET /admin/repositories/:id", type: :request do
     let(:repository) { create(:repository) }
 
     it "denies access when logged out" do

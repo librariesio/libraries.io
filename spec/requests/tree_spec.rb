@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "TreeController", :vcr do
+describe "TreeController" do
   let(:project) { create(:project) }
   let!(:version) { create(:version, project: project)}
 

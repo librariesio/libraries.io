@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Nimble, :vcr do
+describe PackageManager::Nimble do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
   it 'has formatted name of "Nimble"' do

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Cargo, :vcr do
+describe PackageManager::Cargo do
   it 'has formatted name of "Cargo"' do
     expect(described_class.formatted_name).to eq('Cargo')
   end

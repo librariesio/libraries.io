@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Wordpress, :vcr do
+describe PackageManager::Wordpress do
   it 'has formatted name of "WordPress"' do
     expect(described_class.formatted_name).to eq('WordPress')
   end

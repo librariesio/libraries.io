@@ -5,7 +5,7 @@ describe "RepositorySubscriptionsController" do
   let(:repository) { create(:repository) }
   let(:repository_subscription) { create(:repository_subscription, user: user, repository: repository) }
 
-  describe "GET /repository_subscriptions/:id/edit", type: :request, vcr: true do
+  describe "GET /repository_subscriptions/:id/edit", type: :request do
     it "redirects to /login if not logged in" do
       get edit_repository_subscription_path(repository_subscription)
       expect(response).to redirect_to(login_path)

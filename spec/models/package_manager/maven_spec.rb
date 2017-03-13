@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Maven, :vcr do
+describe PackageManager::Maven do
   it 'has formatted name of "Maven"' do
     expect(described_class.formatted_name).to eq('Maven')
   end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Shards, :vcr do
+describe PackageManager::Shards do
   it 'has formatted name of "Shards"' do
     expect(described_class.formatted_name).to eq('Shards')
   end

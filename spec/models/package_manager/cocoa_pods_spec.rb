@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::CocoaPods, :vcr do
+describe PackageManager::CocoaPods do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
   it 'has formatted name of "CocoaPods"' do

@@ -1,11 +1,7 @@
 require "rails_helper"
 
-RSpec.describe PlatformsController, :vcr do
-  before :each do
-    @project = create(:project)
-    Project.__elasticsearch__.import force: true
-    Project.__elasticsearch__.refresh_index!
-  end
+RSpec.describe PlatformsController do
+  let!(:project) { create(:project) }
 
   describe "GET #index" do
     it "responds successfully", type: :request do
@@ -16,8 +12,8 @@ RSpec.describe PlatformsController, :vcr do
 
   describe "GET #show" do
     it "responds successfully", type: :request do
-      visit platform_path(@project.platform)
-      expect(page).to have_content  @project.platform
+      visit platform_path(project.platform)
+      expect(page).to have_content project.platform
     end
   end
 end

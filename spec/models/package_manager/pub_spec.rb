@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Pub, :vcr do
+describe PackageManager::Pub do
   it 'has formatted name of "Pub"' do
     expect(described_class.formatted_name).to eq('Pub')
   end

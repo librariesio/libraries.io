@@ -33,7 +33,7 @@ describe "DashboardController" do
     end
   end
 
-  describe "POST /unwatch/:repository_id", :vcr, type: :request do
+  describe "POST /unwatch/:repository_id", type: :request do
     it "redirects to /repositories" do
       repository = create(:repository)
       create(:repository_subscription, repository: repository, user: user)

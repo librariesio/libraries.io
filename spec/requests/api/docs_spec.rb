@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "API::DocController" do
-  describe "GET /api/", :vcr, type: :request do
+  describe "GET /api/", type: :request do
     it "renders successfully" do
       project = create(:project, name: 'base62', platform: 'NPM')
       create(:version, project: project)

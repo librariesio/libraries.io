@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Sublime, :vcr do
+describe PackageManager::Sublime do
   it 'has formatted name of "Sublime"' do
     expect(described_class.formatted_name).to eq('Sublime')
   end
