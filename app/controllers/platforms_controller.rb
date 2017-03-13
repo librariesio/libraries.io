@@ -18,8 +18,8 @@ class PlatformsController < ApplicationController
 
     facets = Project.facets(filters: {platform: @platform_name}, :facet_limit => 10)
 
-    @languages = {} # facets[:languages][:terms]
-    @licenses = {} # facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
-    @keywords = {} # facets[:keywords][:terms]
+    @languages = facets[:languages].buckets
+    @licenses = facets[:licenses].buckets.reject{ |t| t['key'].downcase == 'other' }
+    @keywords = facets[:keywords].buckets
   end
 end

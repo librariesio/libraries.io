@@ -60,7 +60,7 @@ module ProjectSearch
 
     def self.facets(options = {})
       Rails.cache.fetch "facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
-        {} #search('', options).response.facets
+        search('', options).response.aggregations
       end
     end
 
@@ -82,7 +82,7 @@ module ProjectSearch
             }
           }
         },
-        # facets: facets_options(facet_limit, options),
+        aggs: facets_options(facet_limit, options),
         filter: { bool: { must: [] } }
       }
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
@@ -118,22 +118,22 @@ module ProjectSearch
             field: "language",
             size: facet_limit
           },
-          facet_filter: {
-            bool: {
-              must: filter_format(options[:filters], :language)
-            }
-          }
+          # facet_filter: {
+          #   bool: {
+          #     must: filter_format(options[:filters], :language)
+          #   }
+          # }
         },
         licenses: {
           terms: {
             field: "normalized_licenses",
             size: facet_limit
           },
-          facet_filter: {
-            bool: {
-              must: filter_format(options[:filters], :normalized_licenses)
-            }
-          }
+          # facet_filter: {
+          #   bool: {
+          #     must: filter_format(options[:filters], :normalized_licenses)
+          #   }
+          # }
         }
       }
     end
@@ -189,12 +189,12 @@ module ProjectSearch
             }
           }
         },
-        # facets: {
-        #   platforms: facet_filter(:platform, facet_limit, options),
-        #   languages: facet_filter(:language, facet_limit, options),
-        #   keywords: facet_filter(:keywords_array, facet_limit, options),
-        #   licenses: facet_filter(:normalized_licenses, facet_limit, options)
-        # },
+        aggs: {
+          platforms: facet_filter(:platform, facet_limit, options),
+          languages: facet_filter(:language, facet_limit, options),
+          keywords: facet_filter(:keywords_array, facet_limit, options),
+          licenses: facet_filter(:normalized_licenses, facet_limit, options)
+        },
         filter: { bool: { must: [] } },
         suggest: {
           did_you_mean: {
@@ -278,11 +278,11 @@ module ProjectSearch
           field: name.to_s,
           size: limit
         },
-        facet_filter: {
-          bool: {
-            must: filter_format(options[:filters], name.to_sym)
-          }
-        }
+        # facet_filter: {
+        #   bool: {
+        #     must: filter_format(options[:filters], name.to_sym)
+        #   }
+        # }
       }
     end
   end

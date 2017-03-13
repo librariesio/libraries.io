@@ -16,9 +16,9 @@ class KeywordsController < ApplicationController
 
     facets = Project.facets(filters: {keywords_array: @keyword}, :facet_limit => 10)
 
-    @languages = {} # facets[:languages][:terms]
-    @platforms = {} # facets[:platforms][:terms]
-    @licenses = {} # facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
+    @languages = facets[:languages].buckets
+    @platforms = facets[:platforms].buckets
+    @licenses = facets[:licenses].buckets.reject{ |t| t['key'].downcase == 'other' }
   end
 
   private

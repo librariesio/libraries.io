@@ -66,7 +66,7 @@
       <em>This is an experiment based on contributions and available dependency data from package manager repositories that make it easily available.</em>
     </p>
     <% @facets.each do |name, facet| %>
-      <% next if facet['terms'].empty? %>
+      <% next if facet.buckets.empty? %>
       <%= render 'search/facet', name: name, facet: facet %>
     <% end %>
   </div>

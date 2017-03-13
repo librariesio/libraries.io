@@ -109,7 +109,7 @@ class ApplicationController < ActionController::Base
       labels: options[:labels]
     }, repo_ids: options[:repo_ids]), page: page_number, per_page: per_page_number
     @issues = @search.records.includes(:repository)
-    @facets = {} # @search.response.facets
+    @facets = @search.response.aggregations
   end
 
   def first_pull_request_issues(labels)
@@ -119,7 +119,7 @@ class ApplicationController < ActionController::Base
       labels: labels
     }), page: page_number, per_page: per_page_number
     @issues = @search.records.includes(:repository)
-    @facets = {} # @search.response.facets
+    @facets = @search.response.aggregations
   end
 
   def search_repos(query)

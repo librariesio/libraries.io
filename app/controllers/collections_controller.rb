@@ -12,7 +12,7 @@ class CollectionsController < ApplicationController
         normalized_licenses: current_licenses
       }}).paginate(page: page_number, per_page: per_page_number)
     @projects = @search.records.includes(:repository)
-    @facets = {} # @search.response.facets
+    @facets = @search.response.aggregations
     raise ActiveRecord::RecordNotFound if @projects.empty?
   end
 

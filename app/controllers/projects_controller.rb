@@ -14,10 +14,10 @@ class ProjectsController < ApplicationController
     else
       facets = Project.facets(:facet_limit => 30)
 
-      @languages = {} # facets[:languages][:terms]
-      @platforms = {} # facets[:platforms][:terms]
-      @licenses = {} # facets[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
-      @keywords = {} # facets[:keywords][:terms]
+      @languages = facets[:languages].buckets
+      @platforms = facets[:platforms].buckets
+      @licenses = facets[:licenses].buckets.reject{ |t| t['key'].downcase == 'other' }
+      @keywords = facets[:keywords].buckets
     end
   end
 
@@ -154,7 +154,7 @@ class ProjectsController < ApplicationController
       language: current_language
     }).paginate(page: page_number)
     @projects = @search.records.includes(:repository)
-    @facets = {} # @search.response.facets
+    @facets = @search.response.aggregations
   end
 
   def incorrect_case?

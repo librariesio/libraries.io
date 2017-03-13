@@ -1,9 +1,9 @@
 <div class='language col-xs-6 col-sm-4 col-md-4'>
   <h4>
-    <div class="pictogram pictogram-<%= language.term.downcase %>"></div>
+    <div class="pictogram pictogram-<%= language['key'].downcase %>"></div>
     <div class="blurb">
-      <%= link_to language.term, language_path(language.term) %>
-      <small><%= number_to_human language['count'] %> Projects</small>
+      <%= link_to language['key'], language_path(language['key']) %>
+      <small><%= number_to_human language['doc_count'] %> Projects</small>
     </div>
   </h4>
 </div>

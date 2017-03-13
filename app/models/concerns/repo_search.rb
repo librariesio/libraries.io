@@ -62,7 +62,7 @@ module RepoSearch
 
     def self.facets(options = {})
       Rails.cache.fetch "repo_facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
-        {}#search('', options).response.facets
+        search('', options).response.aggregations
       end
     end
 
@@ -136,12 +136,12 @@ module RepoSearch
             }
           }
         },
-        # facets: {
-        #   language: Project.facet_filter(:language, facet_limit, options),
-        #   license: Project.facet_filter(:license, facet_limit, options),
-        #   keywords: Project.facet_filter(:keywords, facet_limit, options),
-        #   host_type: Project.facet_filter(:host_type, facet_limit, options)
-        # },
+        aggs: {
+          language: Project.facet_filter(:language, facet_limit, options),
+          license: Project.facet_filter(:license, facet_limit, options),
+          keywords: Project.facet_filter(:keywords, facet_limit, options),
+          host_type: Project.facet_filter(:host_type, facet_limit, options)
+        },
         filter: {
           bool: {
             must: [],

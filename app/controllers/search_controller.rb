@@ -4,7 +4,7 @@ class SearchController < ApplicationController
     @search = search_projects(@query)
     @suggestion = @search.response.suggest.did_you_mean.first
     @projects = @search.records.includes(:repository)
-    @facets = {} # @search.response.facets
+    @facets = @search.response.aggregations
     @title = page_title
     respond_to do |format|
       format.html

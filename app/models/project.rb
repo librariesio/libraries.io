@@ -276,11 +276,11 @@ class Project < ApplicationRecord
   end
 
   def self.popular_languages(options = {})
-    [] # facets(options)[:languages][:terms]
+    [] # facets(options)[:languages].buckets
   end
 
   def self.popular_platforms(options = {})
-    [] # facets(options)[:platforms][:terms].reject{ |t| ['biicode', 'jam'].include?(t.term.downcase) }
+    [] # facets(options)[:platforms].buckets.reject{ |t| ['biicode', 'jam'].include?(t['key'].downcase) }
   end
 
   def self.keywords_badlist
@@ -288,11 +288,11 @@ class Project < ApplicationRecord
   end
 
   def self.popular_keywords(options = {})
-    [] # facets(options)[:keywords][:terms].reject{ |t| all_languages.include?(t.term.downcase) }.reject{|t| keywords_badlist.include?(t.term.downcase) }
+    [] # facets(options)[:keywords].buckets.reject{ |t| all_languages.include?(t['key'].downcase) }.reject{|t| keywords_badlist.include?(t['key'].downcase) }
   end
 
   def self.popular_licenses(options = {})
-    [] # facets(options)[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
+    [] # facets(options)[:licenses].buckets.reject{ |t| t['key'].downcase == 'other' }
   end
 
   def self.popular(options = {})

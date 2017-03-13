@@ -1,10 +1,10 @@
-<% term['term'] = term['term'].downcase if name == 'host_type' %>
-<% active = term['term'] == params[name.to_sym] %>
+<% term['key'] = term['key'].downcase if name == 'host_type' %>
+<% active = term['key'] == params[name.to_sym] %>
 <li class='<%= 'active' if active %>'>
   <% if active %>
-    <%= link_to format_term(term['term']), url_for(params.except(:host).merge(name.to_sym => nil, page: nil).permit!) %>
+    <%= link_to format_term(term['key']), url_for(params.except(:host).merge(name.to_sym => nil, page: nil).permit!) %>
   <% else %>
-    <%= link_to format_term(term['term']), url_for(params.except(:host).merge(name.to_sym => term['term'], page: nil).permit!) %>
-    <small><%= number_to_human term['count'] %></small>
+    <%= link_to format_term(term['key']), url_for(params.except(:host).merge(name.to_sym => term['key'], page: nil).permit!) %>
+    <small><%= number_to_human term['doc_count'] %></small>
   <% end %>
 </li>

@@ -10,10 +10,10 @@ class RepositoriesController < ApplicationController
 
     facets = Repository.facets(filters: {language: current_language, license: current_license, keywords: current_keywords, host_type: formatted_host}, :facet_limit => 20)
 
-    @host_types = {} # facets[:host_type][:terms]
-    @languages = {} # facets[:language][:terms]
-    @licenses = {} # facets[:license][:terms].reject{ |t| t.term.downcase == 'other' }
-    @keywords = {} # facets[:keywords][:terms]
+    @host_types = facets[:host_type].buckets
+    @languages = facets[:language].buckets
+    @licenses = facets[:license].buckets.reject{ |t| t['key'].downcase == 'other' }
+    @keywords = facets[:keywords].buckets
   end
 
   def search
@@ -22,7 +22,7 @@ class RepositoriesController < ApplicationController
     @suggestion = @search.response.suggest.did_you_mean.first
     @repositories = @search.records
     @title = page_title
-    @facets = {} # @search.response.facets
+    @facets = @search.response.aggregations
     respond_to do |format|
       format.html
       format.atom
@@ -30,7 +30,7 @@ class RepositoriesController < ApplicationController
   end
 
   def languages
-    @languages = {} # Repository.search('', :facet_limit => 150).response.facets[:language][:terms]
+    @languages = Repository.search('', :facet_limit => 150).response.aggregations[:language].buckets
   end
 
   def hacker_news
