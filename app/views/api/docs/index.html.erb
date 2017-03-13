@@ -190,10 +190,10 @@
 <%= JSON.pretty_generate @github_user.as_json %></pre>
     <% end %>
 
-    <h3 id="github-user-repositories">GitHub User Repositories</h3>
+    <h3 id="user-repositories">User Repositories</h3>
 
     <p>
-      Get repositories owned by a Github User
+      Get repositories owned by a User
     </p>
 
     <p>
@@ -208,10 +208,10 @@
 <%= JSON.pretty_generate @github_user.open_source_repositories.paginate(page: 1).as_json(except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]) %></pre>
     <% end %>
 
-    <h3 id="github-user-projects">GitHub User Projects</h3>
+    <h3 id="user-projects">User Projects</h3>
 
     <p>
-      Get a list of projects referencing the given GitHub users repositories.
+      Get a list of projects referencing the given users repositories.
     </p>
 
     <p>
@@ -330,9 +330,9 @@
       <li><a href="#repository-projects">Repository Projects</a></li>
     </ul>
     <ul>
-      <li><a href="#github-user">GitHub User</a></li>
-      <li><a href="#github-user-repositories">GitHub User Repositories</a></li>
-      <li><a href="#github-user-projects">GitHub User Projects</a></li>
+      <li><a href="#user">User</a></li>
+      <li><a href="#user-repositories">User Repositories</a></li>
+      <li><a href="#user-projects">User Projects</a></li>
     </ul>
     <ul>
       <li><a href="#subscriptions-index">User Subscriptions</a></li>
