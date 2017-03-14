@@ -20,12 +20,29 @@ describe GithubHookHandler do
       end
     end
 
-    describe "push, pull_request event" do
+    describe "pull_request event" do
+      let(:params) do
+        {
+          "action" => "opened",
+          "repository" => {},
+          "pull_request" => {},
+          "sender" => {}
+        }
+      end
+
+      it "runs issues and push events" do
+        expect(subject).to receive(:run).with("pull_request", params).and_call_original
+        expect(subject).to receive(:run).with("issues", params)#.and_call_original
+        expect(subject).to receive(:run).with("push", params)#.and_call_original
+
+        subject.run("pull_request", params)
+      end
+    end
+
+    describe "push event" do
       it "enqueues GithubHookWorker" do
-        ["push", "pull_request"]. each do |event|
-          expect(GithubHookWorker).to receive(:perform_async)
-          subject.run(event, { "repository" => {}, "sender" => {} })
-        end
+        expect(GithubHookWorker).to receive(:perform_async)
+        subject.run("push", { "repository" => {}, "sender" => {} })
       end
     end
 
