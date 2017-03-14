@@ -10,5 +10,12 @@ describe GithubHookHandler do
         end
       end
     end
+
+    describe "repository event" do
+      it "enqueues CreateRepositoryWorker" do
+        expect(CreateRepositoryWorker).to receive(:perform_async)
+        subject.run("repository", { "repository" => {} })
+      end
+    end
   end
 end

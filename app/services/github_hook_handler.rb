@@ -3,6 +3,8 @@ class GithubHookHandler
     case event
     when "push", "pull_request"
       GithubHookWorker.perform_async(payload["repository"]["id"], payload["sender"]["id"])
+    when "repository"
+      CreateRepositoryWorker.perform_async("GitHub", payload["repository"]["full_name"], nil)
     else
       puts "GithubHookHandler: received unknown '#{event}' event"
     end
