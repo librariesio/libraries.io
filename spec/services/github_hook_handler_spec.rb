@@ -2,7 +2,25 @@ require 'rails_helper'
 
 describe GithubHookHandler do
   describe "#run" do
-    describe "push, pull_request events" do
+    describe "issues event" do
+      context "valid action" do
+        it "enqueues IssueWorker" do
+          ["opened", "closed", "reopened", "labeled" "unlabeled", "edited"].each do |action|
+            expect(IssueWorker).to receive(:perform_async)
+            subject.run("issues", { "action" => action, "issue" => {},"repository" => {} })
+          end
+        end
+      end
+
+      context "invalid action" do
+        it "does not enqueue IssueWorker" do
+          expect(IssueWorker).to_not receive(:perform_async)
+          subject.run("issues", { "action" => "lala", "issue" => {},"repository" => {} })
+        end
+      end
+    end
+
+    describe "push, pull_request event" do
       it "enqueues GithubHookWorker" do
         ["push", "pull_request"]. each do |event|
           expect(GithubHookWorker).to receive(:perform_async)
