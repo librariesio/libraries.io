@@ -1,11 +1,12 @@
 class GithubHookHandler
+  VALID_ISSUE_ACTIONS = ["opened", "closed", "reopened", "labeled" "unlabeled", "edited"]
+
   def run(event, payload)
     case event
-    when "issues"
-      case payload["action"]
-      when "opened", "closed", "reopened", "labeled" "unlabeled", "edited"
-        IssueWorker.perform_async(payload["repository"]["full_name"], payload["issue"]["number"], nil)
-      end
+    when "issue_comment", "issues"
+      return nil if event == "issues" && !VALID_ISSUE_ACTIONS.include?(payload["action"])
+
+      IssueWorker.perform_async(payload["repository"]["full_name"], payload["issue"]["number"], nil)
     when "pull_request"
       payload["issue"] ||= {}
       payload["issue"]["number"] = payload["pull_request"]["number"]
