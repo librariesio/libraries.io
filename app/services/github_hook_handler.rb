@@ -3,7 +3,7 @@ class GithubHookHandler
     case event
     when "push", "pull_request"
       GithubHookWorker.perform_async(payload["repository"]["id"], payload["sender"]["id"])
-    when "repository"
+    when "public", "repository"
       CreateRepositoryWorker.perform_async("GitHub", payload["repository"]["full_name"], nil)
     when "watch"
       GithubStarWorker.perform_async(payload['repository']['full_name'], nil)
