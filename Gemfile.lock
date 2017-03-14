@@ -335,7 +335,7 @@ GEM
       actionmailer (>= 3, < 6)
       premailer (~> 1.7, >= 1.7.9)
     public_suffix (2.0.5)
-    puma (3.8.1)
+    puma (3.8.2)
     rack (2.0.1)
     rack-attack (5.0.1)
       rack
