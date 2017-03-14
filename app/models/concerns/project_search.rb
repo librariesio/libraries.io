@@ -114,26 +114,35 @@ module ProjectSearch
 
     def self.facets_options(facet_limit, options)
       {
-        language: { terms: {
-            field: "language",
-            size: facet_limit
+        language: {
+          aggs: {
+            language: {
+              terms: {
+                field: "language",
+                size: facet_limit
+              },
+            }
           },
-          # facet_filter: {
-          #   bool: {
-          #     must: filter_format(options[:filters], :language)
-          #   }
-          # }
+          filter: {
+            bool: {
+              must: filter_format(options[:filters], :language)
+            }
+          }
         },
         licenses: {
-          terms: {
-            field: "normalized_licenses",
-            size: facet_limit
+          aggs:{
+            licenses:{
+              terms: {
+                field: "normalized_licenses",
+                size: facet_limit
+              }
+            }
           },
-          # facet_filter: {
-          #   bool: {
-          #     must: filter_format(options[:filters], :normalized_licenses)
-          #   }
-          # }
+          filter: {
+            bool: {
+              must: filter_format(options[:filters], :normalized_licenses)
+            }
+          }
         }
       }
     end
@@ -274,15 +283,19 @@ module ProjectSearch
 
     def self.facet_filter(name, limit, options)
       {
-        terms: {
-          field: name.to_s,
-          size: limit
+        aggs: {
+          name.to_s => {
+            terms: {
+              field: name.to_s,
+              size: limit
+            }
+          }
         },
-        # facet_filter: {
-        #   bool: {
-        #     must: filter_format(options[:filters], name.to_sym)
-        #   }
-        # }
+        filter: {
+          bool: {
+            must: filter_format(options[:filters], name.to_sym)
+          }
+        }
       }
     end
   end

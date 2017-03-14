@@ -15,9 +15,9 @@ class LicensesController < ApplicationController
 
     facets = Project.facets(filters: {normalized_licenses: @license.id}, :facet_limit => 10)
 
-    @languages = facets[:languages].buckets
-    @platforms = facets[:platforms].buckets
-    @keywords = facets[:keywords].buckets
+    @languages = facets[:languages].language.buckets
+    @platforms = facets[:platforms].platform.buckets
+    @keywords = facets[:keywords].keywords_array.buckets
   end
 
   private

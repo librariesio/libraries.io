@@ -58,6 +58,7 @@
       </strong>
     </h3>
     <% @facets.each do |name, facet| %>
+      <% facet = facet[facet.keys.last] %>
       <% next if facet.buckets.empty? %>
       <%= render 'search/facet', name: name, facet: facet %>
     <% end %>

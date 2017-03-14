@@ -128,22 +128,34 @@ module IssueSearch
       facet_limit = options.fetch(:facet_limit, 35)
       {
         language: {
-          terms: { field: "language", size: facet_limit },
-          # facet_filter: {
-          #   bool: { must: filter_format(options[:filters], :language) }
-          # }
+          aggs: {
+            language: {
+              terms: { field: "language", size: facet_limit }
+            }
+          },
+          filter: {
+            bool: { must: filter_format(options[:filters], :language) }
+          }
         },
         labels: {
-          terms: { field: "labels", size: facet_limit },
-          # facet_filter: {
-          #   bool: { must: label_filter_format(options[:filters], labels) }
-          # }
+          aggs: {
+            labels: {
+              terms: { field: "labels", size: facet_limit }
+            }
+          },
+          filter: {
+            bool: { must: label_filter_format(options[:filters], labels) }
+          }
         },
         license: {
-          terms: { field: "license", size: facet_limit },
-          # facet_filter: {
-          #   bool: { must: filter_format(options[:filters], :license) }
-          # }
+          aggs: {
+            license: {
+              terms: { field: "license", size: facet_limit }
+            }
+          },
+          filter: {
+            bool: { must: filter_format(options[:filters], :license) }
+          }
         }
       }
     end
