@@ -1,5 +1,5 @@
 class Admin::StatsController < Admin::ApplicationController
-  newrelic_ignore
+  # newrelic_ignore
 
   def index
     @recent_users = User.order('created_at DESC').limit(19)

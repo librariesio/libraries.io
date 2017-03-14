@@ -283,7 +283,6 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.1.0)
-    newrelic_rpm (3.18.1.330)
     nio4r (2.0.0)
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
@@ -579,7 +578,6 @@ DEPENDENCIES
   lograge
   mail
   mime-types
-  newrelic_rpm
   nokogiri
   octokit
   oj
