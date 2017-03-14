@@ -8,6 +8,7 @@ server ENV['SIDEKIQ_SERVER_3'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
 server ENV['SIDEKIQ_SERVER_4'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
 server ENV['SIDEKIQ_SERVER_5'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
 server ENV['SIDEKIQ_SERVER_6'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
+server '51.15.130.54', user: 'root', roles: %w{cron}
 
 namespace :deploy do
   task :restart do
