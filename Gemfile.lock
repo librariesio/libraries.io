@@ -227,7 +227,7 @@ GEM
     gemoji (3.0.0)
     gems (1.0.0)
       json
-    github-markup (1.4.2)
+    github-markup (1.4.3)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     groupdate (3.2.0)
