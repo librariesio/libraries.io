@@ -11,9 +11,9 @@ describe GithubHookHandler do
       end
     end
 
-    describe "public, repository event" do
+    describe "public, release, repository event" do
       it "enqueues CreateRepositoryWorker" do
-        ["public", "repository"].each do |event|
+        ["public", "release", "repository"].each do |event|
           expect(CreateRepositoryWorker).to receive(:perform_async)
           subject.run(event, { "repository" => {} })
         end
