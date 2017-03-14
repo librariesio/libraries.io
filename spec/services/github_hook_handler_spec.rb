@@ -2,6 +2,29 @@ require 'rails_helper'
 
 describe GithubHookHandler do
   describe "#run" do
+    describe "create event" do
+      context "repository" do
+        it "runs a repository event" do
+          params = {
+            "ref_type" => "repository",
+            "repository" => {}
+          }
+
+          expect(subject).to receive(:run).with("create", params).and_call_original
+          expect(subject).to receive(:run).with("repository", params)
+
+          subject.run("create", params)
+        end
+      end
+
+      context "tag" do
+        it "enqueues TagWorker" do
+          expect(TagWorker).to receive(:perform_async)
+          subject.run("create", { "ref_type" => "tag", "repository" => {} })
+        end
+      end
+    end
+
     describe "issue_comment event" do
       it "enqueues IssueWorker" do
         expect(IssueWorker).to receive(:perform_async)

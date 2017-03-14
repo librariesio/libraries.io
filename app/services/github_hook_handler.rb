@@ -3,6 +3,13 @@ class GithubHookHandler
 
   def run(event, payload)
     case event
+    when "create"
+      case payload['ref_type']
+      when "repository"
+        run("repository", payload)
+      when "tag"
+        TagWorker.perform_async(payload["repository"]["full_name"], nil)
+      end
     when "issue_comment", "issues"
       return nil if event == "issues" && !VALID_ISSUE_ACTIONS.include?(payload["action"])
 
