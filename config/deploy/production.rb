@@ -1,14 +1,16 @@
-server ENV['WEB_SERVER_1'],     user: ENV['WEB_USER'],     roles: %w{app web}
-server ENV['WEB_SERVER_2'],     user: ENV['WEB_USER'],     roles: %w{app web}
-server ENV['WEB_SERVER_3'],     user: ENV['WEB_USER'],     roles: %w{app web}
-server ENV['WEB_SERVER_4'],     user: ENV['WEB_USER'],     roles: %w{app web}
-server ENV['SIDEKIQ_SERVER_1'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
-server ENV['SIDEKIQ_SERVER_2'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
-server ENV['SIDEKIQ_SERVER_3'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
-server ENV['SIDEKIQ_SERVER_4'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
-server ENV['SIDEKIQ_SERVER_5'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
-server ENV['SIDEKIQ_SERVER_6'], user: ENV['SIDEKIQ_USER'], roles: %w{app worker}
-server '51.15.130.54', user: 'root', roles: %w{cron}
+server '163.172.185.77',  user: 'root', roles: %w{app web}
+server '163.172.149.206', user: 'root', roles: %w{app web}
+server '163.172.161.163', user: 'root', roles: %w{app web}
+server '163.172.139.6',   user: 'root', roles: %w{app web}
+
+server '163.172.139.253', user: 'root', roles: %w{app worker}
+server '163.172.138.184', user: 'root', roles: %w{app worker}
+server '163.172.155.116', user: 'root', roles: %w{app worker}
+server '163.172.165.101', user: 'root', roles: %w{app worker}
+server '51.15.56.211',    user: 'root', roles: %w{app worker}
+server '51.15.42.228',    user: 'root', roles: %w{app worker}
+
+server '51.15.130.54',    user: 'root', roles: %w{cron}
 
 namespace :deploy do
   task :restart do
