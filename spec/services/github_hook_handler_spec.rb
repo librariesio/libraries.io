@@ -17,5 +17,12 @@ describe GithubHookHandler do
         subject.run("repository", { "repository" => {} })
       end
     end
+
+    describe "watch event" do
+      it "enqueues a GithubStarWorker" do
+        expect(GithubStarWorker).to receive(:perform_async)
+        subject.run("watch", { "repository" => {} })
+      end
+    end
   end
 end
