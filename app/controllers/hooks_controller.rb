@@ -4,11 +4,18 @@ class HooksController < ApplicationController
   def github
     if params[:payload]
       payload = JSON.parse(params[:payload])
-      GithubHookWorker.perform_async(payload["repository"]["id"], payload["sender"]["id"])
     else
-      GithubHookWorker.perform_async(params["repository"]["id"], params["sender"]["id"])
+      payload = params
     end
 
+    handler.run(request.env['HTTP_X_GITHUB_EVENT'], payload)
+
     render json: nil, status: :ok
+  end
+
+  private
+
+  def handler
+    @handler ||= GithubHookHandler.new
   end
 end
