@@ -1,26 +1,28 @@
-module Searchable
+module ProjectSearch
   extend ActiveSupport::Concern
 
   included do
     include Elasticsearch::Model
 
+    index_name "projects-#{Rails.env}"
+
     FIELDS = ['name^2', 'exact_name^2', 'repo_name', 'description', 'homepage', 'language', 'keywords_array', 'normalized_licenses', 'platform']
 
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
       mapping do
-        indexes :name, :analyzer => 'snowball', :boost => 6
-        indexes :exact_name, :index => :not_analyzed, :boost => 2
+        indexes :name, type: 'string', :analyzer => 'snowball', :boost => 6
+        indexes :exact_name, type: 'string', :index => :not_analyzed, :boost => 2
 
-        indexes :description, :analyzer => 'snowball'
-        indexes :homepage
-        indexes :repository_url
-        indexes :repo_name
-        indexes :latest_release_number, :analyzer => 'keyword'
-        indexes :keywords_array, :analyzer => 'keyword'
-        indexes :language, :analyzer => 'keyword'
-        indexes :normalized_licenses, :analyzer => 'keyword'
-        indexes :platform, :analyzer => 'keyword'
-        indexes :status, :index => :not_analyzed
+        indexes :description, type: 'string', :analyzer => 'snowball'
+        indexes :homepage, type: 'string'
+        indexes :repository_url, type: 'string'
+        indexes :repo_name, type: 'string'
+        indexes :latest_release_number, type: 'string', :analyzer => 'keyword'
+        indexes :keywords_array, type: 'string', :analyzer => 'keyword'
+        indexes :language, type: 'string', :analyzer => 'keyword'
+        indexes :normalized_licenses, type: 'string', :analyzer => 'keyword'
+        indexes :platform, type: 'string', :analyzer => 'keyword'
+        indexes :status, type: 'string', :index => :not_analyzed
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
@@ -56,6 +58,12 @@ module Searchable
       repository.try(:pushed_at)
     end
 
+    def self.facets(options = {})
+      Rails.cache.fetch "facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
+        search('', options).response.aggregations
+      end
+    end
+
     def self.cta_search(filters, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
       options[:filters] ||= []
@@ -74,7 +82,7 @@ module Searchable
             }
           }
         },
-        facets: facets_options(facet_limit, options),
+        aggs: facets_options(facet_limit, options),
         filter: { bool: { must: [] } }
       }
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
@@ -106,22 +114,31 @@ module Searchable
 
     def self.facets_options(facet_limit, options)
       {
-        language: { terms: {
-            field: "language",
-            size: facet_limit
+        language: {
+          aggs: {
+            language: {
+              terms: {
+                field: "language",
+                size: facet_limit
+              },
+            }
           },
-          facet_filter: {
+          filter: {
             bool: {
               must: filter_format(options[:filters], :language)
             }
           }
         },
         licenses: {
-          terms: {
-            field: "normalized_licenses",
-            size: facet_limit
+          aggs:{
+            licenses:{
+              terms: {
+                field: "normalized_licenses",
+                size: facet_limit
+              }
+            }
           },
-          facet_filter: {
+          filter: {
             bool: {
               must: filter_format(options[:filters], :normalized_licenses)
             }
@@ -181,7 +198,7 @@ module Searchable
             }
           }
         },
-        facets: {
+        aggs: {
           platforms: facet_filter(:platform, facet_limit, options),
           languages: facet_filter(:language, facet_limit, options),
           keywords: facet_filter(:keywords_array, facet_limit, options),
@@ -266,11 +283,15 @@ module Searchable
 
     def self.facet_filter(name, limit, options)
       {
-        terms: {
-          field: name.to_s,
-          size: limit
+        aggs: {
+          name.to_s => {
+            terms: {
+              field: name.to_s,
+              size: limit
+            }
+          }
         },
-        facet_filter: {
+        filter: {
           bool: {
             must: filter_format(options[:filters], name.to_sym)
           }

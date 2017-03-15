@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Elm, :vcr do
+describe PackageManager::Elm do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
   it 'has formatted name of "Elm"' do

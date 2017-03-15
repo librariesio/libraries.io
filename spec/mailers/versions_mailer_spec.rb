@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe VersionsMailer, :vcr, type: :mailer do
+describe VersionsMailer, type: :mailer do
   describe 'new_version' do
     let(:user) { create(:user) }
     let(:version) { create(:version) }

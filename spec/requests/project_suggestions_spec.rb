@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "ProjectSuggestionsController", :vcr do
+describe "ProjectSuggestionsController" do
   let(:user) { create(:user) }
   let(:project) { create(:project) }
 

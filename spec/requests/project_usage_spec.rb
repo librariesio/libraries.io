@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "ProjectUsageController", :vcr do
+describe "ProjectUsageController" do
   let(:project) { create(:project) }
 
   describe "GET renders successfully when logged in", type: :request do

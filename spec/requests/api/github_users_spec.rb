@@ -14,7 +14,7 @@ describe "Api::GithubUsersController" do
     end
   end
 
-  describe "GET /api/github/:login/repositories", :vcr, type: :request do
+  describe "GET /api/github/:login/repositories", type: :request do
     it "renders successfully" do
       repo = create(:repository, github_user: @user)
       get "/api/github/#{@user.login}/repositories"

@@ -5,7 +5,7 @@ describe "Api::SubscriptionsController" do
   let(:project) { create(:project) }
   let!(:subscription) { create(:subscription, user: user, project: project) }
 
-  describe "GET /api/subscriptions", type: :request, vcr: true do
+  describe "GET /api/subscriptions", type: :request do
     it "renders successfully" do
       get "/api/subscriptions?api_key=#{user.api_key}"
       expect(response).to have_http_status(:success)
@@ -14,7 +14,7 @@ describe "Api::SubscriptionsController" do
     end
   end
 
-  describe "GET /api/subscriptions/:platform/:name", type: :request, vcr: true do
+  describe "GET /api/subscriptions/:platform/:name", type: :request do
     it "renders successfully" do
       get "/api/subscriptions/#{subscription.project.platform}/#{subscription.project.name}?api_key=#{user.api_key}"
       expect(response).to have_http_status(:success)
@@ -23,7 +23,7 @@ describe "Api::SubscriptionsController" do
     end
   end
 
-  describe "POST /api/subscriptions/:platform/:name", type: :request, vcr: true do
+  describe "POST /api/subscriptions/:platform/:name", type: :request do
     it "renders successfully" do
       post "/api/subscriptions/#{subscription.project.platform}/#{subscription.project.name}?api_key=#{user.api_key}", params: { subscription: { include_prerelease: true } }
       expect(response).to have_http_status(:success)
@@ -31,7 +31,7 @@ describe "Api::SubscriptionsController" do
     end
   end
 
-  describe "PUT /api/subscriptions/:platform/:name", type: :request, vcr: true do
+  describe "PUT /api/subscriptions/:platform/:name", type: :request do
     it "renders successfully" do
       put "/api/subscriptions/#{subscription.project.platform}/#{subscription.project.name}?api_key=#{user.api_key}", params: { subscription: { include_prerelease: true } }
       expect(response).to have_http_status(:success)
@@ -40,7 +40,7 @@ describe "Api::SubscriptionsController" do
     end
   end
 
-  describe "DELETE /api/subscriptions/:platform/:name", type: :request, vcr: true do
+  describe "DELETE /api/subscriptions/:platform/:name", type: :request do
     it "renders successfully" do
       delete "/api/subscriptions/#{subscription.project.platform}/#{subscription.project.name}?api_key=#{user.api_key}"
       expect(response).to have_http_status(204)

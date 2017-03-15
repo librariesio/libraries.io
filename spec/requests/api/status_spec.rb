@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "API::StatusController", :vcr do
+describe "API::StatusController" do
   let(:user) { create(:user) }
   describe "GET /api/check", type: :request do
     it "renders successfully" do

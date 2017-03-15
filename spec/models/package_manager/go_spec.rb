@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Go, :vcr do
+describe PackageManager::Go do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
   it 'has formatted name of "Go"' do

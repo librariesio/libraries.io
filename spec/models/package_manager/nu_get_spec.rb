@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::NuGet, :vcr do
+describe PackageManager::NuGet do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
   it 'has formatted name of "NuGet"' do

@@ -22,7 +22,7 @@ describe "Admin::ProjectController" do
     end
   end
 
-  describe "GET /admin/projects/deprecated", :vcr, type: :request do
+  describe "GET /admin/projects/deprecated", type: :request do
     it "denies access when logged out" do
       get deprecated_admin_projects_path
       expect(response).to redirect_to(login_path)
@@ -41,7 +41,7 @@ describe "Admin::ProjectController" do
     end
   end
 
-  describe "GET /admin/projects/unmaintained", :vcr, type: :request do
+  describe "GET /admin/projects/unmaintained", type: :request do
     it "denies access when logged out" do
       get unmaintained_admin_projects_path
       expect(response).to redirect_to(login_path)

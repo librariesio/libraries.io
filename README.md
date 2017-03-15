@@ -33,7 +33,7 @@ rbenv install 2.3.3
 Next, you'll need to make sure that you have PostgreSQL and Redis installed. This can be done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or postgres can be installed by using [http://postgresapp.com](http://postgresapp.com). Please also see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
 
 ```bash
-brew install postgres phantomjs elasticsearch@1.7 redis
+brew install postgres phantomjs elasticsearch@2.4 redis
 ```
 
 Remember to start the services!
@@ -72,7 +72,7 @@ Go create a [Personal access token on GitHub](https://help.github.com/articles/c
 You can then index that data into elasticsearch with the following rake task:
 
 ```bash
-rake projects:reindex github:reindex_repos github:reindex_issues
+rake search:reindex_everything
 ```
 
 It is normal to see:

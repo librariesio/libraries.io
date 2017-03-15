@@ -57,8 +57,9 @@
         Filter by package manager
       </strong>
     </h3>
-    <% @search.response.facets.each do |name, facet| %>
-      <% next if facet['terms'].empty? %>
+    <% @facets.each do |name, facet| %>
+      <% facet = facet[facet.keys.last] %>
+      <% next if facet.buckets.empty? %>
       <%= render 'search/facet', name: name, facet: facet %>
     <% end %>
 

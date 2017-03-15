@@ -4,34 +4,33 @@ module RepoSearch
   included do
     include Elasticsearch::Model
 
-    index_name    "github_repositories"
-    document_type "github_repository"
+    index_name    "repositories-#{Rails.env}"
 
     FIELDS = ['full_name^2', 'exact_name^2', 'description', 'homepage', 'language', 'license']
 
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
       mapping do
-        indexes :full_name, :analyzer => 'snowball', :boost => 6
-        indexes :exact_name, :index => :not_analyzed, :boost => 2
+        indexes :full_name, type: 'string', :analyzer => 'snowball', :boost => 6
+        indexes :exact_name, type: 'string', :index => :not_analyzed, :boost => 2
 
-        indexes :description, :analyzer => 'snowball'
-        indexes :homepage
-        indexes :language, :index => :not_analyzed
-        indexes :license, :index => :not_analyzed
-        indexes :keywords, :index => :not_analyzed
-        indexes :platforms, :index => :not_analyzed
-        indexes :host_type, :index => :not_analyzed
+        indexes :description, type: 'string', :analyzer => 'snowball'
+        indexes :homepage, type: 'string'
+        indexes :language, type: 'string', :index => :not_analyzed
+        indexes :license, type: 'string', :index => :not_analyzed
+        indexes :keywords, type: 'string', :index => :not_analyzed
+        indexes :platforms, type: 'string', :index => :not_analyzed
+        indexes :host_type, type: 'string', :index => :not_analyzed
 
-        indexes :status, :index => :not_analyzed
-        indexes :default_branch, :index => :not_analyzed
-        indexes :source_name, :index => :not_analyzed
-        indexes :has_readme, :index => :not_analyzed
-        indexes :has_changelog, :index => :not_analyzed
-        indexes :has_contributing, :index => :not_analyzed
-        indexes :has_license, :index => :not_analyzed
-        indexes :has_coc, :index => :not_analyzed
-        indexes :has_threat_model, :index => :not_analyzed
-        indexes :has_audit, :index => :not_analyzed
+        indexes :status, type: 'string', :index => :not_analyzed
+        indexes :default_branch, type: 'string', :index => :not_analyzed
+        indexes :source_name, type: 'string', :index => :not_analyzed
+        indexes :has_readme, type: 'boolean'
+        indexes :has_changelog, type: 'boolean'
+        indexes :has_contributing, type: 'boolean'
+        indexes :has_license, type: 'boolean'
+        indexes :has_coc, type: 'boolean'
+        indexes :has_threat_model, type: 'boolean'
+        indexes :has_audit, type: 'boolean'
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
@@ -50,11 +49,11 @@ module RepoSearch
         indexes :contributions_count, type: 'integer'
         indexes :rank, type: 'integer'
 
-        indexes :fork
-        indexes :has_issues
-        indexes :has_wiki
-        indexes :has_pages
-        indexes :private
+        indexes :fork, type: 'boolean'
+        indexes :has_issues, type: 'boolean'
+        indexes :has_wiki, type: 'boolean'
+        indexes :has_pages, type: 'boolean'
+        indexes :private, type: 'boolean'
       end
     end
 
@@ -63,7 +62,7 @@ module RepoSearch
 
     def self.facets(options = {})
       Rails.cache.fetch "repo_facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
-        search('', options).response.facets
+        search('', options).response.aggregations
       end
     end
 
@@ -137,7 +136,7 @@ module RepoSearch
             }
           }
         },
-        facets: {
+        aggs: {
           language: Project.facet_filter(:language, facet_limit, options),
           license: Project.facet_filter(:license, facet_limit, options),
           keywords: Project.facet_filter(:keywords, facet_limit, options),

@@ -13,8 +13,9 @@
 </div>
 <div class='col-sm-4 facets'>
   <%= render 'adsense/sidebar' %>
-  <% @search.response.facets.each do |name, facet| %>
-    <% next if facet['terms'].empty? %>
+  <% @facets.each do |name, facet| %>
+    <% facet = facet[facet.keys.last] %>
+    <% next if facet.buckets.empty? %>
     <% next if name == 'languages' %>
     <%= render 'search/facet', name: name, facet: facet %>
   <% end %>

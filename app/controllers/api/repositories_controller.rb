@@ -22,9 +22,7 @@ class Api::RepositoriesController < Api::ApplicationController
 
   def search
     @search = paginate(search_repos(params[:q]))
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @repositories = @search.records.sort_by { |u| indexes[u.id] }
+    @repositories = @search.records
     render json: @repositories.as_json({ except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id] })
   end
 

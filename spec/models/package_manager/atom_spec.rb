@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Atom, :vcr do
+describe PackageManager::Atom do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
   it 'has formatted name of "Atom"' do

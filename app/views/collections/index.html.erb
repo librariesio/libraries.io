@@ -10,7 +10,7 @@
 <% cache 'collections:index', expires_in: 1.day do  %>
   <div class="row">
     <% @languages.each_with_index do |language, index| %>
-      <% keywords = Project.popular_keywords({filters: {language: [language]}}).map{|k| k[:term].downcase }.uniq.first(15) %>
+      <% keywords = Project.popular_keywords({filters: {language: [language]}}).map{|k| k['key'].downcase }.uniq.first(15) %>
       <% next if keywords.length < 5 %>
       <div class="col-sm-4 collection">
         <h3>

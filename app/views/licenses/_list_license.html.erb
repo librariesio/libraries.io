@@ -1,4 +1,4 @@
 <p class='list'>
-  <strong><%= link_to format_license(license.term), search_path(licenses: license.term, platforms: @platform_name, languages: @language, keywords: @keyword) %></strong>
-  <small><%= pluralize number_to_human(license['count']), 'project' %></small>
+  <strong><%= link_to format_license(license['key']), search_path(licenses: license['key'], platforms: @platform_name, languages: @language, keywords: @keyword) %></strong>
+  <small><%= pluralize number_to_human(license['doc_count']), 'project' %></small>
 </p>

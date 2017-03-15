@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Repository, :vcr, type: :model do
+describe Repository, type: :model do
   it { should have_many(:projects) }
   it { should have_many(:contributions) }
   it { should have_many(:contributors) }

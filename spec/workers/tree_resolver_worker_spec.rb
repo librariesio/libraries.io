@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe TreeResolverWorker, :vcr do
+describe TreeResolverWorker do
   it "should use the default priority queue" do
     is_expected.to be_processed_in :default
   end

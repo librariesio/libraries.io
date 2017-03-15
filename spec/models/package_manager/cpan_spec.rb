@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::CPAN, :vcr do
+describe PackageManager::CPAN do
   it 'has formatted name of "CPAN"' do
     expect(described_class.formatted_name).to eq('CPAN')
   end

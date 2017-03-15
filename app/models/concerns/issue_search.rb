@@ -4,14 +4,13 @@ module IssueSearch
   included do
     include Elasticsearch::Model
 
-    index_name    "github_issues"
-    document_type "github_issue"
+    index_name    "issues-#{Rails.env}"
 
     FIELDS = ['title^2', 'body']
 
     settings index: { number_of_shards: 1, number_of_replicas: 0 } do
       mapping do
-        indexes :title, :analyzer => 'snowball', :boost => 6
+        indexes :title, type: 'string', :analyzer => 'snowball', :boost => 6
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
@@ -23,13 +22,13 @@ module IssueSearch
         indexes :rank, type: 'integer'
         indexes :comments_count, type: 'integer'
 
-        indexes :language, :analyzer => 'keyword'
-        indexes :license, :analyzer => 'keyword'
+        indexes :language, type: 'string', :analyzer => 'keyword'
+        indexes :license, type: 'string', :analyzer => 'keyword'
 
-        indexes :number
-        indexes :locked
-        indexes :labels, :analyzer => 'keyword'
-        indexes :state, :analyzer => 'keyword'
+        indexes :number, type: 'integer'
+        indexes :locked, type: 'boolean'
+        indexes :labels, type: 'string', :analyzer => 'keyword'
+        indexes :state, type: 'string', :analyzer => 'keyword'
       end
     end
 
@@ -65,7 +64,7 @@ module IssueSearch
             field_value_factor: { field: "rank", "modifier": "square" }
           }
         },
-        facets: issues_facet_filters(options, options[:labels_to_keep]),
+        aggs: issues_facet_filters(options, options[:labels_to_keep]),
         filter: { bool: { must: [], must_not: options[:must_not] } }
       }
       search_definition[:track_scores] = true
@@ -112,7 +111,7 @@ module IssueSearch
             field_value_factor: { field: "rank", "modifier": "square" }
           }
         },
-        facets: issues_facet_filters(options, Issue::FIRST_PR_LABELS),
+        aggs: issues_facet_filters(options, Issue::FIRST_PR_LABELS),
         filter: { bool: { must: [], must_not: options[:must_not] } }
       }
       search_definition[:track_scores] = true
@@ -129,20 +128,32 @@ module IssueSearch
       facet_limit = options.fetch(:facet_limit, 35)
       {
         language: {
-          terms: { field: "language", size: facet_limit },
-          facet_filter: {
+          aggs: {
+            language: {
+              terms: { field: "language", size: facet_limit }
+            }
+          },
+          filter: {
             bool: { must: filter_format(options[:filters], :language) }
           }
         },
         labels: {
-          terms: { field: "labels", size: facet_limit },
-          facet_filter: {
+          aggs: {
+            labels: {
+              terms: { field: "labels", size: facet_limit }
+            }
+          },
+          filter: {
             bool: { must: label_filter_format(options[:filters], labels) }
           }
         },
         license: {
-          terms: { field: "license", size: facet_limit },
-          facet_filter: {
+          aggs: {
+            license: {
+              terms: { field: "license", size: facet_limit }
+            }
+          },
+          filter: {
             bool: { must: filter_format(options[:filters], :license) }
           }
         }

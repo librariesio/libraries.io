@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "ExploreController", :vcr do
+describe "ExploreController" do
   describe "GET /explore", type: :request do
     it "renders successfully when logged out" do
       visit explore_path

@@ -1,28 +1,4 @@
 namespace :github do
-  desc 'Recreate repo search index'
-  task recreate_repos_index: :environment do
-    # If the index doesn't exists can't be deleted, returns 404, carry on
-    Repository.__elasticsearch__.client.indices.delete index: 'github_repositories' rescue nil
-    Repository.__elasticsearch__.create_index! force: true
-  end
-
-  desc 'Reindex the repo search'
-  task reindex_repos: [:environment, :recreate_repos_index] do
-    Repository.indexable.import
-  end
-
-  desc 'Recreate issue search index'
-  task recreate_issues_index: :environment do
-    # If the index doesn't exists can't be deleted, returns 404, carry on
-    Issue.__elasticsearch__.client.indices.delete index: 'issues' rescue nil
-    Issue.__elasticsearch__.create_index! force: true
-  end
-
-  desc 'Reindex the issues search'
-  task reindex_issues: [:environment, :recreate_issues_index] do
-    Issue.indexable.import
-  end
-
   desc 'Sync github users'
   task sync_users: :environment do
     GithubUser.visible.where(last_synced_at: nil).limit(100).each(&:async_sync)

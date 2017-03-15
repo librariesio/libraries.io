@@ -53,6 +53,7 @@ FactoryGirl.define do
     title "I found a bug"
     body "Please fix it"
     github_user
+    comments_count 1
   end
 
   factory :contribution do
@@ -103,6 +104,7 @@ FactoryGirl.define do
     stargazers_count 10_000
     size 1000
     default_branch 'master'
+    forks_count 1
   end
 
   factory :user do

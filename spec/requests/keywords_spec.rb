@@ -1,11 +1,7 @@
 require "rails_helper"
 
-RSpec.describe KeywordsController, :vcr do
-  before :each do
-    @project = create(:project)
-    Project.__elasticsearch__.import force: true
-    Project.__elasticsearch__.refresh_index!
-  end
+RSpec.describe KeywordsController do
+  let!(:project) { create(:project) }
 
   describe "GET #index" do
     it "responds successfully", type: :request do
@@ -16,8 +12,8 @@ RSpec.describe KeywordsController, :vcr do
 
   describe "GET #show" do
     it "responds successfully", type: :request do
-      visit keyword_path(@project.keywords.first)
-      expect(page).to have_content @project.keywords.first
+      visit keyword_path(project.keywords.first)
+      expect(page).to have_content project.keywords.first
     end
   end
 end

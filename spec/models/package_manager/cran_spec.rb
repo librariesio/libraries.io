@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::CRAN, :vcr do
+describe PackageManager::CRAN do
   it 'has formatted name of "CRAN"' do
     expect(described_class.formatted_name).to eq('CRAN')
   end
