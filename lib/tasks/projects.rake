@@ -78,11 +78,9 @@ namespace :projects do
 
   desc 'Check to see if nuget projects have been removed'
   task check_nuget_yanks: :environment do
-    if Date.today.wday.zero?
-      Project.platform('nuget').not_removed.includes(:versions).find_each do |project|
-        if project.versions.all? { |version| version.published_at < 100.years.ago  }
-          project.update_attribute(:status, 'Removed')
-        end
+    Project.platform('nuget').not_removed.includes(:versions).find_each do |project|
+      if project.versions.all? { |version| version.published_at < 100.years.ago  }
+        project.update_attribute(:status, 'Removed')
       end
     end
   end

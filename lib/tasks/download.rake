@@ -29,9 +29,7 @@ namespace :download do
 
   desc 'Download all Bower packages'
   task bower_all: :environment do
-    if Date.today.wday.zero?
-      PackageManager::Bower.import
-    end
+    PackageManager::Bower.import
   end
 
   desc 'Download recent Cargo packages asynchronously'
