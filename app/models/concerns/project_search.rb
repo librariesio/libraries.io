@@ -27,14 +27,11 @@ module ProjectSearch
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
         indexes :latest_release_published_at, type: 'date'
-        indexes :pushed_at, type: 'date'
 
         indexes :rank, type: 'integer'
         indexes :stars, type: 'integer'
-        indexes :versions_count, type: 'integer'
         indexes :dependents_count, type: 'integer'
         indexes :dependent_repos_count, type: 'integer'
-        indexes :repository_id, type: 'integer'
         indexes :contributions_count, type: 'integer'
       end
     end
@@ -43,7 +40,7 @@ module ProjectSearch
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def as_indexed_json(_options)
-      as_json methods: [:stars, :repo_name, :exact_name, :contributions_count, :pushed_at, :dependent_repos_count]
+      as_json methods: [:stars, :repo_name, :exact_name, :contributions_count, :dependent_repos_count]
     end
 
     def dependent_repos_count
@@ -52,10 +49,6 @@ module ProjectSearch
 
     def exact_name
       name
-    end
-
-    def pushed_at
-      repository.try(:pushed_at)
     end
 
     def self.facets(options = {})
