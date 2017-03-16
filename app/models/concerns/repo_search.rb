@@ -18,41 +18,22 @@ module RepoSearch
         indexes :language, type: 'string', :index => :not_analyzed
         indexes :license, type: 'string', :index => :not_analyzed
         indexes :keywords, type: 'string', :index => :not_analyzed
-        indexes :platforms, type: 'string', :index => :not_analyzed
         indexes :host_type, type: 'string', :index => :not_analyzed
 
         indexes :status, type: 'string', :index => :not_analyzed
-        indexes :default_branch, type: 'string', :index => :not_analyzed
-        indexes :source_name, type: 'string', :index => :not_analyzed
-        indexes :has_readme, type: 'boolean'
-        indexes :has_changelog, type: 'boolean'
-        indexes :has_contributing, type: 'boolean'
-        indexes :has_license, type: 'boolean'
-        indexes :has_coc, type: 'boolean'
-        indexes :has_threat_model, type: 'boolean'
-        indexes :has_audit, type: 'boolean'
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
         indexes :pushed_at, type: 'date'
-        indexes :last_synced_at, type: 'date'
 
-        indexes :owner_id, type: 'integer'
-        indexes :size, type: 'integer'
         indexes :stargazers_count, type: 'integer'
         indexes :forks_count, type: 'integer'
         indexes :open_issues_count, type: 'integer'
         indexes :subscribers_count, type: 'integer'
-        indexes :github_id, type: 'string'
-        indexes :uuid, type: 'string'
-        indexes :github_contributions_count, type: 'integer'
         indexes :contributions_count, type: 'integer'
         indexes :rank, type: 'integer'
 
         indexes :fork, type: 'boolean'
-        indexes :has_issues, type: 'boolean'
-        indexes :has_wiki, type: 'boolean'
-        indexes :has_pages, type: 'boolean'
         indexes :private, type: 'boolean'
       end
     end
@@ -67,7 +48,7 @@ module RepoSearch
     end
 
     def as_indexed_json(_options)
-      as_json methods: [:exact_name, :keywords, :platforms, :github_id, :github_contributions_count, :rank]
+      as_json methods: [:exact_name, :keywords, :rank]
     end
 
     def rank
