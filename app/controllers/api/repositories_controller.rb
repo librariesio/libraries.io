@@ -36,6 +36,6 @@ class Api::RepositoriesController < Api::ApplicationController
   end
 
   def allowed_sorts
-    ['rank', 'stargazers_count', 'github_contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
+    ['rank', 'stargazers_count', 'contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
   end
 end
