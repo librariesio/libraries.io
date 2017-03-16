@@ -49,29 +49,23 @@ module IssueSearch
 
       search_definition = {
         query: {
-          function_score: {
-            query: {
-              filtered: {
-                 query: {match_all: {}},
-                 filter: {
-                   bool: {
-                     must: [ { "term": { "state": "open"}}, { "term": { "locked": false}} ],
-                     must_not: [ { term: { "labels": "wontfix" } } ],
-                   }
-                 }
-              }
-            },
-            field_value_factor: { field: "rank", "modifier": "square" }
+          filtered: {
+             query: {match_all: {}},
+             filter: {
+               bool: {
+                 must: [ { "term": { "state": "open"}}, { "term": { "locked": false}} ],
+                 must_not: [ { term: { "labels": "wontfix" } } ],
+               }
+             }
           }
         },
         aggs: issues_facet_filters(options, options[:labels_to_keep]),
-        filter: { bool: { must: [], must_not: options[:must_not] } }
+        filter: { bool: { must: [], must_not: options[:must_not] } },
+        sort: default_sort
       }
-      search_definition[:track_scores] = true
-      search_definition[:sort] = default_sort if options[:sort].blank?
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       if options[:repo_ids].present?
-        search_definition[:query][:function_score][:query][:filtered][:filter][:bool][:must] << {
+        search_definition[:query][:filtered][:filter][:bool][:must] << {
           terms: { "repository_id": options[:repo_ids] } }
       end
       __elasticsearch__.search(search_definition)
@@ -93,29 +87,23 @@ module IssueSearch
 
       search_definition = {
         query: {
-          function_score: {
-            query: {
-              filtered: {
-                 query: {match_all: {}},
-                 filter: {
-                   bool: {
-                     must: [ { "term": { "state": "open"}}, { "term": { "locked": false}} ],
-                     must_not: [ { term: { "labels": "wontfix" } } ],
-                     should: Issue::FIRST_PR_LABELS.map do |label|
-                       { term: { "labels": label } }
-                     end
-                   }
-                 }
-              }
-            },
-            field_value_factor: { field: "rank", "modifier": "square" }
+          filtered: {
+             query: {match_all: {}},
+             filter: {
+               bool: {
+                 must: [ { "term": { "state": "open"}}, { "term": { "locked": false}} ],
+                 must_not: [ { term: { "labels": "wontfix" } } ],
+                 should: Issue::FIRST_PR_LABELS.map do |label|
+                   { term: { "labels": label } }
+                 end
+               }
+             }
           }
         },
         aggs: issues_facet_filters(options, Issue::FIRST_PR_LABELS),
-        filter: { bool: { must: [], must_not: options[:must_not] } }
+        filter: { bool: { must: [], must_not: options[:must_not] } },
+        sort: default_sort
       }
-      search_definition[:track_scores] = true
-      search_definition[:sort] = default_sort if options[:sort].blank?
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       __elasticsearch__.search(search_definition)
     end
