@@ -13,11 +13,6 @@ module IssueSearch
         indexes :title, type: 'string', :analyzer => 'snowball', :boost => 6
 
         indexes :created_at, type: 'date'
-        indexes :updated_at, type: 'date'
-        indexes :closed_at, type: 'date'
-
-        indexes :stars, type: 'integer'
-        indexes :github_id, type: 'integer'
         indexes :contributions_count, type: 'integer'
         indexes :rank, type: 'integer'
         indexes :comments_count, type: 'integer'
@@ -25,7 +20,6 @@ module IssueSearch
         indexes :language, type: 'string', :analyzer => 'keyword'
         indexes :license, type: 'string', :analyzer => 'keyword'
 
-        indexes :number, type: 'integer'
         indexes :locked, type: 'boolean'
         indexes :labels, type: 'string', :analyzer => 'keyword'
         indexes :state, type: 'string', :analyzer => 'keyword'
@@ -36,11 +30,7 @@ module IssueSearch
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def as_indexed_json(_options)
-      as_json methods: [:title, :contributions_count, :stars, :language, :license, :rank]
-    end
-
-    def exact_title
-      full_title
+      as_json methods: [:contributions_count, :language, :license, :rank]
     end
 
     def self.search(options = {})
