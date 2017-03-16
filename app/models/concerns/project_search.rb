@@ -69,24 +69,16 @@ module ProjectSearch
       options[:filters] ||= []
       search_definition = {
         query: {
-          function_score: {
-            query: {
-              filtered: {
-                query: { match_all: {} },
-                filter:{ bool: filters }
-              }
-            },
-            field_value_factor: {
-              field: "rank",
-              "modifier": "square"
-            }
+          filtered: {
+            query: { match_all: {} },
+            filter:{ bool: filters }
           }
         },
         aggs: facets_options(facet_limit, options),
-        filter: { bool: { must: [] } }
+        filter: { bool: { must: [] } },
+        sort: [{'contributions_count' => 'asc'}, {'rank' => 'desc'}]
       }
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
-      search_definition[:sort]  = [{'contributions_count' => 'asc'}, {'rank' => 'desc'}]
       __elasticsearch__.search(search_definition)
     end
 
