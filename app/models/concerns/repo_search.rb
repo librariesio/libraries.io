@@ -8,7 +8,7 @@ module RepoSearch
 
     FIELDS = ['full_name^2', 'exact_name^2', 'description', 'homepage', 'language', 'license']
 
-    settings index: { number_of_shards: 1, number_of_replicas: 0 } do
+    settings index: { number_of_shards: 3, number_of_replicas: 1 } do
       mapping do
         indexes :full_name, type: 'string', :analyzer => 'snowball', :boost => 6
         indexes :exact_name, type: 'string', :index => :not_analyzed, :boost => 2

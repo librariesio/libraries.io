@@ -8,7 +8,7 @@ module IssueSearch
 
     FIELDS = ['title^2', 'body']
 
-    settings index: { number_of_shards: 1, number_of_replicas: 0 } do
+    settings index: { number_of_shards: 3, number_of_replicas: 1 } do
       mapping do
         indexes :title, type: 'string', :analyzer => 'snowball', :boost => 6
 
