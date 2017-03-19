@@ -80,6 +80,7 @@ gem 'org-ruby'
 gem 'creole'
 gem 'bundler'
 gem 'bibliothecary'
+gem 'stripe'
 
 group :development do
   gem 'spring'
