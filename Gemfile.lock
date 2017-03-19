@@ -615,7 +615,7 @@ DEPENDENCIES
   sidekiq-unique-jobs
   simple-rss
   simple_form
-  simplecov (= 0.14.1)
+  simplecov
   sitemap_generator
   spdx
   spring
