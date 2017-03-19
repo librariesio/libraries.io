@@ -103,7 +103,7 @@ group :test do
   gem 'database_cleaner'
   gem 'rspec_junit_formatter'
   gem 'shoulda'
-  gem 'simplecov', '0.14.1', require: false
+  gem 'simplecov', require: false
   gem 'codeclimate-test-reporter', require: false
   gem 'faker'
   gem 'poltergeist'
