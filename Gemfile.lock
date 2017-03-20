@@ -20,10 +20,10 @@ GIT
 
 GIT
   remote: https://github.com/librariesio/bitbucket
-  revision: 7fe71f433735ece6f98157814beddc96c0f54c13
+  revision: 43f8f97be403091debab480235413b20059337bd
   specs:
     bitbucket_rest_api (0.1.7)
-      faraday (~> 0.10.1)
+      faraday (~> 0.10)
       faraday_middleware (~> 0.11)
       hashie
       multi_json (>= 1.7.5, < 2.0)
@@ -199,7 +199,7 @@ GEM
       railties (>= 3.0.0)
     faker (1.7.3)
       i18n (~> 0.5)
-    faraday (0.10.1)
+    faraday (0.11.0)
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (2.0.0)
       faraday (~> 0.8)
