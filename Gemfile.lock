@@ -621,7 +621,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen
   sql_queries_count
-  stripe (= 2.1.0)
+  stripe
   turbolinks
   typhoeus
   uglifier
