@@ -80,6 +80,7 @@ gem 'creole'
 gem 'bundler'
 gem 'bibliothecary'
 gem 'stripe'
+gem 'github-linguist'
 
 group :development do
   gem 'spring'
