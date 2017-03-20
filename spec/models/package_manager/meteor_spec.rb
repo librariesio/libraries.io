@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Meteor, :vcr do
+describe PackageManager::Meteor do
   let(:project) { create(:project, name: 'foo:bar', platform: described_class.name) }
 
   it 'has formatted name of "Meteor"' do

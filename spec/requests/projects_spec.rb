@@ -1,13 +1,9 @@
 require "rails_helper"
 
-RSpec.describe ProjectsController, :vcr do
-  before :each do
-    @project = create(:project)
-    version = create(:version, project: @project)
-    create(:dependency, version: version)
-    Project.__elasticsearch__.import force: true
-    Project.__elasticsearch__.refresh_index!
-  end
+RSpec.describe ProjectsController do
+  let!(:project) { create(:project) }
+  let!(:version) { create(:version, project: project) }
+  let!(:dependency) { create(:dependency, version: version) }
 
   describe "GET #index" do
     it "responds successfully", type: :request do

@@ -3,6 +3,7 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
     URL = 'https://packagecontrol.io'
+    COLOR = '#3572A5'
 
     def self.package_link(project, version = nil)
       "https://packagecontrol.io/packages/#{project.name}"

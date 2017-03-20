@@ -85,17 +85,17 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
       end
 
       Project.popular_licenses(:facet_limit => 200).each do |license|
-        name = license.term
+        name = license['key']
         add license_path(name), :lastmod => Project.license(name).order('updated_at DESC').first.try(:updated_at)
       end
 
       Project.popular_languages(:facet_limit => 200).each do |language|
-        name = language.term
+        name = language['key']
         add language_path(name), :lastmod => Project.language(name).order('updated_at DESC').first.try(:updated_at)
       end
 
       Project.popular_keywords(:facet_limit => 1000).each do |keyword|
-        name = keyword.term
+        name = keyword['key']
         add keyword_path(name), :lastmod => Project.keyword(name).order('updated_at DESC').first.try(:updated_at)
       end
     end

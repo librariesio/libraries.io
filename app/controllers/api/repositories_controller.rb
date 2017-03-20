@@ -22,9 +22,7 @@ class Api::RepositoriesController < Api::ApplicationController
 
   def search
     @search = paginate(search_repos(params[:q]))
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @repositories = @search.records.sort_by { |u| indexes[u.id] }
+    @repositories = @search.records
     render json: @repositories.as_json({ except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id] })
   end
 
@@ -38,6 +36,6 @@ class Api::RepositoriesController < Api::ApplicationController
   end
 
   def allowed_sorts
-    ['rank', 'stargazers_count', 'github_contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
+    ['rank', 'stargazers_count', 'contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
   end
 end

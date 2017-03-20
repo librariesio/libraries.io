@@ -1,5 +1,5 @@
 class Project < ApplicationRecord
-  include Searchable
+  include ProjectSearch
   include SourceRank
   include Status
   include Releases
@@ -271,22 +271,16 @@ class Project < ApplicationRecord
     where('lower(projects.language) = ?', language.try(:downcase))
   end
 
-  def self.facets(options = {})
-    Rails.cache.fetch "facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
-      search('', options).response.facets
-    end
-  end
-
   def self.all_languages
     @all_languages ||= Languages::Language.all.map{|l| l.name.downcase}
   end
 
   def self.popular_languages(options = {})
-    facets(options)[:languages][:terms]
+    facets(options)[:languages].language.buckets
   end
 
   def self.popular_platforms(options = {})
-    facets(options)[:platforms][:terms].reject{ |t| ['biicode', 'jam'].include?(t.term.downcase) }
+    facets(options)[:platforms].platform.buckets.reject{ |t| ['biicode', 'jam'].include?(t['key'].downcase) }
   end
 
   def self.keywords_badlist
@@ -294,18 +288,16 @@ class Project < ApplicationRecord
   end
 
   def self.popular_keywords(options = {})
-    facets(options)[:keywords][:terms].reject{ |t| all_languages.include?(t.term.downcase) }.reject{|t| keywords_badlist.include?(t.term.downcase) }
+    facets(options)[:keywords].keywords_array.buckets.reject{ |t| all_languages.include?(t['key'].downcase) }.reject{|t| keywords_badlist.include?(t['key'].downcase) }
   end
 
   def self.popular_licenses(options = {})
-    facets(options)[:licenses][:terms].reject{ |t| t.term.downcase == 'other' }
+    facets(options)[:licenses].normalized_licenses.buckets.reject{ |t| t['key'].downcase == 'other' }
   end
 
   def self.popular(options = {})
     results = search('*', options.merge(sort: 'rank', order: 'desc'))
-    ids = results.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    results.records.includes(:repository).reject{|p| p.repository.nil? }.sort_by { |u| indexes[u.id] }
+    results.records.includes(:repository).reject{|p| p.repository.nil? }
   end
 
   def normalized_licenses

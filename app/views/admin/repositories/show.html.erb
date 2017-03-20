@@ -21,7 +21,7 @@
 </div>
 <div class='row'>
   <%= simple_form_for(@repository, url: admin_repository_path(@repository.id), html: { class: 'form-vertical col-md-6' }) do |form| %>
-    <%= form.input :license, include_blank: true, selected: @repository.license, label: 'License', collection: Project.popular_licenses(:facet_limit => 100).map{|l| format_license(l.term) } %>
+    <%= form.input :license, include_blank: true, selected: @repository.license, label: 'License', collection: Project.popular_licenses(:facet_limit => 100).map{|l| format_license(l['key']) } %>
     <%= form.input :status, include_blank: true, collection: Repository::STATUSES %>
 
     <%= form.submit class: 'btn btn-primary' %>

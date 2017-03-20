@@ -5,7 +5,7 @@ module PackageManager
     BIBLIOTHECARY_PLANNED = true
     SECURITY_PLANNED = false
     URL = 'http://brew.sh/'
-    COLOR = '#a1804c'
+    COLOR = '#555555'
 
     def self.package_link(project, version = nil)
       "http://brewformulas.org/#{project.name}"

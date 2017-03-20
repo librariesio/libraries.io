@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Haxelib, :vcr do
+describe PackageManager::Haxelib do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
   it 'has formatted name of "Haxelib"' do

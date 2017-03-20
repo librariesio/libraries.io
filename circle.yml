@@ -4,12 +4,14 @@ machine:
     - postgresql
 
 dependencies:
-  cache_directories:
-    - elasticsearch-1.7.5
+  pre:
+    - sudo apt-get update; sudo apt-get install cmake
   post:
-    - wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.5.tar.gz
-    - tar -xvf elasticsearch-1.7.5.tar.gz
-    - elasticsearch-1.7.5/bin/elasticsearch: {background: true}
+    - wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.4.4/elasticsearch-2.4.4.tar.gz
+    - tar -xvf elasticsearch-2.4.4.tar.gz
+    - elasticsearch-2.4.4/bin/elasticsearch: {background: true}
+    # Make sure that Elasticsearch is up before running tests:
+    - sleep 10 && wget --waitretry=5 --retry-connrefused -v http://127.0.0.1:9200/
 
 test:
   override:

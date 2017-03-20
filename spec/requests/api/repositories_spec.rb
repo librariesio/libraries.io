@@ -5,7 +5,7 @@ describe "Api::RepositoriesController" do
     @repo = create(:repository)
   end
 
-  describe "GET /api/github/search", :vcr, type: :request do
+  describe "GET /api/github/search", type: :request do
     it "renders successfully" do
       get '/api/github/search'
       expect(response).to have_http_status(:success)
@@ -14,7 +14,7 @@ describe "Api::RepositoriesController" do
     end
   end
 
-  describe "GET /api/github/:owner/:name/dependencies", :vcr, type: :request do
+  describe "GET /api/github/:owner/:name/dependencies", type: :request do
     it "renders successfully" do
       get "/api/github/#{@repo.full_name}/dependencies"
       expect(response).to have_http_status(:success)
@@ -23,7 +23,7 @@ describe "Api::RepositoriesController" do
     end
   end
 
-  describe "GET /api/github/:owner/:name/projects", :vcr, type: :request do
+  describe "GET /api/github/:owner/:name/projects", type: :request do
     it "renders successfully" do
       get "/api/github/#{@repo.full_name}/projects"
       expect(response).to have_http_status(:success)
@@ -32,7 +32,7 @@ describe "Api::RepositoriesController" do
     end
   end
 
-  describe "GET /api/github/:owner/:name", :vcr, type: :request do
+  describe "GET /api/github/:owner/:name", type: :request do
     it "renders successfully" do
       get "/api/github/#{@repo.full_name}"
       expect(response).to have_http_status(:success)

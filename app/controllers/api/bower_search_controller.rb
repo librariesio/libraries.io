@@ -5,9 +5,7 @@ class Api::BowerSearchController < Api::ApplicationController
     @search = paginate Project.search(params[:q] || '', filters: {
       platform: 'Bower',
     }, sort: format_sort, order: format_order), page: page_number, per_page: per_page_number
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @projects = @search.records.includes(:repository, :versions).sort_by { |u| indexes[u.id] }
+    @projects = @search.records.includes(:repository, :versions)
 
     render json: project_json_response(@projects)
   end
@@ -15,6 +13,6 @@ class Api::BowerSearchController < Api::ApplicationController
   private
 
   def allowed_sorts
-    ['rank', 'stars', 'dependents_count', 'dependent_repos_count', 'latest_release_published_at', 'created_at']
+    ['rank', 'stars', 'dependents_count', 'dependent_repos_count', 'latest_release_published_at', 'created_at', 'contributions_count']
   end
 end

@@ -16,6 +16,10 @@ module PackageManager
       end
     end
 
+    def self.language
+      Languages::Language.all.find{|l| l.color == color }.try(:name)
+    end
+
     def self.format_name(platform)
       return nil if platform.nil?
       platforms.find{|p| p.to_s.demodulize.downcase == platform.downcase }.to_s.demodulize

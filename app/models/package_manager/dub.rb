@@ -4,7 +4,7 @@ module PackageManager
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
     URL = 'http://code.dlang.org'
-    COLOR = '#fcd46d'
+    COLOR = '#ba595e'
 
     def self.package_link(project, version = nil)
       "http://code.dlang.org/packages/#{project.name}" + (version ? "/#{version}" : "")

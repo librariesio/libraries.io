@@ -1,6 +1,4 @@
 class Admin::StatsController < Admin::ApplicationController
-  newrelic_ignore
-
   def index
     @recent_users = User.order('created_at DESC').limit(19)
     @recent_subscriptions = Subscription.where(repository_subscription_id: nil).order('created_at DESC').limit(7)

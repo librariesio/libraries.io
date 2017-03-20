@@ -55,12 +55,12 @@
           <h4>Popular Languages</h4>
           <ul class='filter'>
             <% @languages.each do |language| %>
-              <li class='<%= 'active' if language.term.downcase == params[:language].try(:downcase) %>'>
-                <% if language.term.downcase == params[:language].try(:downcase) %>
-                  <%= link_to format_language(language.term), url_for(params.except(:host).merge(language: nil).permit!) %>
+              <li class='<%= 'active' if language['key'].downcase == params[:language].try(:downcase) %>'>
+                <% if language['key'].downcase == params[:language].try(:downcase) %>
+                  <%= link_to format_language(language['key']), url_for(params.except(:host).merge(language: nil).permit!) %>
                 <% else %>
-                  <%= link_to format_language(language.term), url_for(params.except(:host).merge(language: format_language(language.term)).permit!) %>
-                  <small><%= pluralize number_to_human(language['count']), 'repos' %></small>
+                  <%= link_to format_language(language['key']), url_for(params.except(:host).merge(language: format_language(language['key'])).permit!) %>
+                  <small><%= pluralize number_to_human(language['doc_count']), 'repos' %></small>
                 <% end %>
               </li>
             <% end %>
@@ -77,12 +77,12 @@
           <h4>Popular Hosts</h4>
           <ul class='filter'>
             <% @host_types.each do |host_type| %>
-              <li class='<%= 'active' if host_type.term.downcase == params[:host_type].try(:downcase) %>'>
-                <% if host_type.term.downcase == params[:host_type].try(:downcase) %>
-                  <%= link_to host_type.term, url_for(params.except(:host).merge(host_type: nil).permit!) %>
+              <li class='<%= 'active' if host_type['key'].downcase == params[:host_type].try(:downcase) %>'>
+                <% if host_type['key'].downcase == params[:host_type].try(:downcase) %>
+                  <%= link_to host_type['key'], url_for(params.except(:host).merge(host_type: nil).permit!) %>
                 <% else %>
-                  <%= link_to host_type.term, url_for(params.except(:host).merge(host_type: host_type.term.downcase).permit!) %>
-                  <small><%= pluralize number_to_human(host_type['count']), 'repos' %></small>
+                  <%= link_to host_type['key'], url_for(params.except(:host).merge(host_type: host_type['key'].downcase).permit!) %>
+                  <small><%= pluralize number_to_human(host_type['doc_count']), 'repos' %></small>
                 <% end %>
               </li>
             <% end %>
@@ -99,16 +99,16 @@
           <h4>Popular Licenses</h4>
           <ul class='filter'>
             <% @licenses.each do |license| %>
-              <li class='<%= 'active' if license.term.downcase == params[:license].try(:downcase) %>'>
-                <% if license.term.downcase == params[:license].try(:downcase) %>
-                  <%= link_to format_license(license.term), url_for(params.except(:host).merge(license: nil).permit!) %>
+              <li class='<%= 'active' if license['key'].downcase == params[:license].try(:downcase) %>'>
+                <% if license['key'].downcase == params[:license].try(:downcase) %>
+                  <%= link_to format_license(license['key']), url_for(params.except(:host).merge(license: nil).permit!) %>
                 <% else %>
-                <%= link_to format_license(license.term), url_for(params.except(:host).merge(license: format_license(license.term)).permit!) %>
-                <small><%= pluralize number_to_human(license['count']), 'repos' %></small>
+                <%= link_to format_license(license['key']), url_for(params.except(:host).merge(license: format_license(license['key'])).permit!) %>
+                <small><%= pluralize number_to_human(license['doc_count']), 'repos' %></small>
                 <% end %>
               </li>
             <% end %>
-            <% if @license && !@licenses.map{|l| l.term.downcase }.include?(@license.id.downcase) %>
+            <% if @license && !@licenses.map{|l| l['key'].downcase }.include?(@license.id.downcase) %>
               <li class='active'>
                 <%= link_to format_license(@license.id), url_for(params.except(:host).merge(license: nil).permit!) %>
               </li>
@@ -121,16 +121,16 @@
           <h4>Popular Keywords</h4>
           <ul class='filter'>
             <% @keywords.each do |keyword| %>
-              <li class='<%= 'active' if keyword.term.downcase == params[:keywords].try(:downcase) %>'>
-                <% if keyword.term.downcase == params[:keywords].try(:downcase) %>
-                  <%= link_to keyword.term, url_for(params.except(:host).merge(keywords: nil).permit!) %>
+              <li class='<%= 'active' if keyword['key'].downcase == params[:keywords].try(:downcase) %>'>
+                <% if keyword['key'].downcase == params[:keywords].try(:downcase) %>
+                  <%= link_to keyword['key'], url_for(params.except(:host).merge(keywords: nil).permit!) %>
                 <% else %>
-                  <%= link_to keyword.term, url_for(params.except(:host).merge(keywords: keyword.term).permit!) %>
-                  <small><%= pluralize number_to_human(keyword['count']), 'repos' %></small>
+                  <%= link_to keyword['key'], url_for(params.except(:host).merge(keywords: keyword['key']).permit!) %>
+                  <small><%= pluralize number_to_human(keyword['doc_count']), 'repos' %></small>
                 <% end %>
               </li>
             <% end %>
-            <% if @keyword && !@keyword.map{|l| l.term.downcase }.include?(@keyword.downcase) %>
+            <% if @keyword && !@keyword.map{|l| l['key'].downcase }.include?(@keyword.downcase) %>
               <li class='active'>
                 <%= link_to @keyword, url_for(params.except(:host).merge(keywords: nil).permit!) %>
               </li>

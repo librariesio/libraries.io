@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "IssuesController", :vcr do
+describe "IssuesController" do
   describe "GET /help-wanted", type: :request do
     it "renders successfully when logged out" do
       visit help_wanted_path

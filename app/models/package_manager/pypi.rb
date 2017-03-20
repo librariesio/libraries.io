@@ -5,7 +5,7 @@ module PackageManager
     BIBLIOTHECARY_SUPPORT = true
     SECURITY_PLANNED = true
     URL = 'https://pypi.python.org'
-    COLOR = '#3581ba'
+    COLOR = '#3572A5'
 
     def self.package_link(project, version = nil)
       "https://pypi.python.org/pypi/#{project.name}/#{version}"

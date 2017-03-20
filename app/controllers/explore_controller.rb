@@ -27,8 +27,6 @@ class ExploreController < ApplicationController
   end
 
   def search(klass, sort)
-    search = klass.search('', sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
-    indexes = Hash[search.map{|r| r.id.to_i }.each_with_index.to_a]
-    search.records.sort_by { |u| indexes[u.id] }
+    klass.search('', sort: sort, order: 'desc').paginate(per_page: 6, page: 1).records
   end
 end

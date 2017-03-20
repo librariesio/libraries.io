@@ -11,9 +11,7 @@ class IssuesController < ApplicationController
 
   def first_pull_request
     first_pull_request_issues(params[:labels])
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @issues = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @issues = @search.records.includes(:repository)
   end
 
   def your_dependencies

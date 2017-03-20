@@ -9,4 +9,15 @@ RSpec.configure do |config|
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
   end
+
+  config.around :each, elasticsearch: true do |example|
+    [Project, Repository, Issue].each do |model|
+      model.__elasticsearch__.create_index!(force: true)
+      model.__elasticsearch__.refresh_index!
+    end
+    example.run
+    [Project, Repository, Issue].each do |model|
+      model.__elasticsearch__.client.indices.delete index: model.index_name
+    end
+  end
 end

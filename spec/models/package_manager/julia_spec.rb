@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Julia, :vcr do
+describe PackageManager::Julia do
   it 'has formatted name of "Julia"' do
     expect(described_class.formatted_name).to eq('Julia')
   end

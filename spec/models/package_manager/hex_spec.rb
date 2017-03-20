@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Hex, :vcr do
+describe PackageManager::Hex do
   it 'has formatted name of "Hex"' do
     expect(described_class.formatted_name).to eq('Hex')
   end

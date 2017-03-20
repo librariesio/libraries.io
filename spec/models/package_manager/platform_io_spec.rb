@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::PlatformIO, :vcr do
+describe PackageManager::PlatformIO do
   let(:project) { create(:project, name: 'foo', platform: 'PlatformIO', pm_id: 1) }
 
   it 'has formatted name of "PlatformIO"' do

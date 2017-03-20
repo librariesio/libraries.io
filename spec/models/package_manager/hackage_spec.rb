@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Hackage, :vcr do
+describe PackageManager::Hackage do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
   it 'has formatted name of "Hackage"' do

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::Inqlude, :vcr do
+describe PackageManager::Inqlude do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
   it 'has formatted name of "Inqlude"' do

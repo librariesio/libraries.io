@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PackageManager::NPM, :vcr do
+describe PackageManager::NPM do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
   it 'has formatted name of "npm"' do

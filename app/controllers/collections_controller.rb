@@ -1,6 +1,6 @@
 class CollectionsController < ApplicationController
   def index
-    @languages = Project.popular_languages.first(40).map(&:term)
+    @languages = Project.popular_languages.first(40).map{|t| t['key'] }.select(&:present?)
   end
 
   def show
@@ -11,9 +11,8 @@ class CollectionsController < ApplicationController
         platform: current_platforms,
         normalized_licenses: current_licenses
       }}).paginate(page: page_number, per_page: per_page_number)
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @projects = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @projects = @search.records.includes(:repository)
+    @facets = @search.response.aggregations
     raise ActiveRecord::RecordNotFound if @projects.empty?
   end
 

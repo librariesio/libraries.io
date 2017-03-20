@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "RepositoryTreeController", :vcr do
+describe "RepositoryTreeController" do
   let(:repository) { create(:repository) }
 
   describe "GET /:platform/:project/tree", type: :request do

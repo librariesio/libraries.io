@@ -4,8 +4,8 @@
 </h4>
 <div class='pictogram-list'>
   <% @platforms.each do |platform| %>
-    <% next if platform.term.downcase == 'go' %>
-    <a class="pictogram tip pictogram-<%= platform.term.downcase %>" href='<%= platform.term %>' title='<%= platform.term %>'></a>
+    <% next if platform['key'].downcase == 'go' %>
+    <a class="pictogram tip pictogram-<%= platform['key'].downcase %>" href='<%= platform['key'] %>' title='<%= platform['key'] %>'></a>
   <% end %>
 </div>
 <hr>
@@ -15,7 +15,7 @@
 </h4>
 <div class='pictogram-list'>
   <% @languages.each do |language| %>
-    <a class="pictogram tip pictogram-<%= language.term.downcase %>" title='<%= language.term %>' href='<%= language_path(language.term) %>'></a>
+    <a class="pictogram tip pictogram-<%= language['key'].downcase %>" title='<%= language['key'] %>' href='<%= language_path(language['key']) %>'></a>
   <% end %>
 </div>
 <hr>
@@ -25,8 +25,8 @@
 </h4>
 <% @licenses.each do |license| %>
   <p class='list'>
-    <strong><%= link_to format_license(license.term), license_path(license.term) %></strong>
-    <small><%= pluralize number_to_human(license['count']), 'project' %></small>
+    <strong><%= link_to format_license(license['key']), license_path(license['key']) %></strong>
+    <small><%= pluralize number_to_human(license['doc_count']), 'project' %></small>
   </p>
 <% end %>
 <hr>
@@ -35,10 +35,10 @@
   <%= link_to 'Popular Keywords', keywords_path %>
 </h4>
 <% @keywords.each do |keyword| %>
-  <% if keyword.term.present? %>
+  <% if keyword['key'].present? %>
     <p class='list'>
-      <strong><%= link_to keyword.term, keyword_path(keyword.term) %></strong>
-      <small><%= pluralize number_to_human(keyword['count']), 'project' %></small>
+      <strong><%= link_to keyword['key'], keyword_path(keyword['key']) %></strong>
+      <small><%= pluralize number_to_human(keyword['doc_count']), 'project' %></small>
     </p>
   <% end %>
 <% end %>

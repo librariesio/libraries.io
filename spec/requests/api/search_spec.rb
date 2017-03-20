@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "API::SearchController", :vcr do
+describe "API::SearchController" do
   describe "GET /api/search", type: :request do
     it "renders successfully" do
       get "/api/search"

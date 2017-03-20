@@ -4,32 +4,25 @@ module IssueSearch
   included do
     include Elasticsearch::Model
 
-    index_name    "github_issues"
-    document_type "github_issue"
+    index_name    "issues-#{Rails.env}"
 
     FIELDS = ['title^2', 'body']
 
-    settings index: { number_of_shards: 1, number_of_replicas: 0 } do
+    settings index: { number_of_shards: 3, number_of_replicas: 1 } do
       mapping do
-        indexes :title, :analyzer => 'snowball', :boost => 6
+        indexes :title, type: 'string', :analyzer => 'snowball', :boost => 6
 
         indexes :created_at, type: 'date'
-        indexes :updated_at, type: 'date'
-        indexes :closed_at, type: 'date'
-
-        indexes :stars, type: 'integer'
-        indexes :github_id, type: 'integer'
         indexes :contributions_count, type: 'integer'
         indexes :rank, type: 'integer'
         indexes :comments_count, type: 'integer'
 
-        indexes :language, :analyzer => 'keyword'
-        indexes :license, :analyzer => 'keyword'
+        indexes :language, type: 'string', :analyzer => 'keyword'
+        indexes :license, type: 'string', :analyzer => 'keyword'
 
-        indexes :number
-        indexes :locked
-        indexes :labels, :analyzer => 'keyword'
-        indexes :state, :analyzer => 'keyword'
+        indexes :locked, type: 'boolean'
+        indexes :labels, type: 'string', :analyzer => 'keyword'
+        indexes :state, type: 'string', :analyzer => 'keyword'
       end
     end
 
@@ -37,11 +30,7 @@ module IssueSearch
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def as_indexed_json(_options)
-      as_json methods: [:title, :contributions_count, :stars, :language, :license, :rank]
-    end
-
-    def exact_title
-      full_title
+      as_json methods: [:contributions_count, :language, :license, :rank]
     end
 
     def self.search(options = {})
@@ -50,29 +39,23 @@ module IssueSearch
 
       search_definition = {
         query: {
-          function_score: {
-            query: {
-              filtered: {
-                 query: {match_all: {}},
-                 filter: {
-                   bool: {
-                     must: [ { "term": { "state": "open"}}, { "term": { "locked": false}} ],
-                     must_not: [ { term: { "labels": "wontfix" } } ],
-                   }
-                 }
-              }
-            },
-            field_value_factor: { field: "rank", "modifier": "square" }
+          filtered: {
+             query: {match_all: {}},
+             filter: {
+               bool: {
+                 must: [ { "term": { "state": "open"}}, { "term": { "locked": false}} ],
+                 must_not: [ { term: { "labels": "wontfix" } } ],
+               }
+             }
           }
         },
-        facets: issues_facet_filters(options, options[:labels_to_keep]),
-        filter: { bool: { must: [], must_not: options[:must_not] } }
+        aggs: issues_facet_filters(options, options[:labels_to_keep]),
+        filter: { bool: { must: [], must_not: options[:must_not] } },
+        sort: default_sort
       }
-      search_definition[:track_scores] = true
-      search_definition[:sort] = default_sort if options[:sort].blank?
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       if options[:repo_ids].present?
-        search_definition[:query][:function_score][:query][:filtered][:filter][:bool][:must] << {
+        search_definition[:query][:filtered][:filter][:bool][:must] << {
           terms: { "repository_id": options[:repo_ids] } }
       end
       __elasticsearch__.search(search_definition)
@@ -94,29 +77,23 @@ module IssueSearch
 
       search_definition = {
         query: {
-          function_score: {
-            query: {
-              filtered: {
-                 query: {match_all: {}},
-                 filter: {
-                   bool: {
-                     must: [ { "term": { "state": "open"}}, { "term": { "locked": false}} ],
-                     must_not: [ { term: { "labels": "wontfix" } } ],
-                     should: Issue::FIRST_PR_LABELS.map do |label|
-                       { term: { "labels": label } }
-                     end
-                   }
-                 }
-              }
-            },
-            field_value_factor: { field: "rank", "modifier": "square" }
+          filtered: {
+             query: {match_all: {}},
+             filter: {
+               bool: {
+                 must: [ { "term": { "state": "open"}}, { "term": { "locked": false}} ],
+                 must_not: [ { term: { "labels": "wontfix" } } ],
+                 should: Issue::FIRST_PR_LABELS.map do |label|
+                   { term: { "labels": label } }
+                 end
+               }
+             }
           }
         },
-        facets: issues_facet_filters(options, Issue::FIRST_PR_LABELS),
-        filter: { bool: { must: [], must_not: options[:must_not] } }
+        aggs: issues_facet_filters(options, Issue::FIRST_PR_LABELS),
+        filter: { bool: { must: [], must_not: options[:must_not] } },
+        sort: default_sort
       }
-      search_definition[:track_scores] = true
-      search_definition[:sort] = default_sort if options[:sort].blank?
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       __elasticsearch__.search(search_definition)
     end
@@ -129,20 +106,32 @@ module IssueSearch
       facet_limit = options.fetch(:facet_limit, 35)
       {
         language: {
-          terms: { field: "language", size: facet_limit },
-          facet_filter: {
+          aggs: {
+            language: {
+              terms: { field: "language", size: facet_limit }
+            }
+          },
+          filter: {
             bool: { must: filter_format(options[:filters], :language) }
           }
         },
         labels: {
-          terms: { field: "labels", size: facet_limit },
-          facet_filter: {
+          aggs: {
+            labels: {
+              terms: { field: "labels", size: facet_limit }
+            }
+          },
+          filter: {
             bool: { must: label_filter_format(options[:filters], labels) }
           }
         },
         license: {
-          terms: { field: "license", size: facet_limit },
-          facet_filter: {
+          aggs: {
+            license: {
+              terms: { field: "license", size: facet_limit }
+            }
+          },
+          filter: {
             bool: { must: filter_format(options[:filters], :license) }
           }
         }

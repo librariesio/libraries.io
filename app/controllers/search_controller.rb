@@ -3,9 +3,8 @@ class SearchController < ApplicationController
     @query = params[:q]
     @search = search_projects(@query)
     @suggestion = @search.response.suggest.did_you_mean.first
-    ids = @search.map{|r| r.id.to_i }
-    indexes = Hash[ids.each_with_index.to_a]
-    @projects = @search.records.includes(:repository).sort_by { |u| indexes[u.id] }
+    @projects = @search.records.includes(:repository)
+    @facets = @search.response.aggregations
     @title = page_title
     respond_to do |format|
       format.html

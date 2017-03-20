@@ -1,11 +1,7 @@
 require "rails_helper"
 
-RSpec.describe LicensesController, :vcr do
-  before :each do
-    @project = create(:project)
-    Project.__elasticsearch__.import force: true
-    Project.__elasticsearch__.refresh_index!
-  end
+RSpec.describe LicensesController do
+  let!(:project) { create(:project) }
 
   describe "GET #index" do
     it "responds successfully", type: :request do
@@ -16,8 +12,8 @@ RSpec.describe LicensesController, :vcr do
 
   describe "GET #show" do
     it "responds successfully", type: :request do
-      visit license_path(@project.normalize_licenses.first)
-      expect(page).to have_content @project.normalize_licenses.first
+      visit license_path(project.normalize_licenses.first)
+      expect(page).to have_content project.normalize_licenses.first
     end
   end
 end
