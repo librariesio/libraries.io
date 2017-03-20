@@ -190,7 +190,7 @@ class Project < ApplicationRecord
   end
 
   def color
-    Languages::Language[language].try(:color) || platform_class.try(:color)
+    Linguist::Language[language].try(:color) || platform_class.try(:color)
   end
 
   def mlt
@@ -272,7 +272,7 @@ class Project < ApplicationRecord
   end
 
   def self.all_languages
-    @all_languages ||= Languages::Language.all.map{|l| l.name.downcase}
+    @all_languages ||= Linguist::Language.all.map{|l| l.name.downcase}
   end
 
   def self.popular_languages(options = {})

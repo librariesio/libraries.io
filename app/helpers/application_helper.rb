@@ -21,7 +21,7 @@ module ApplicationHelper
   end
 
   def colours
-    Languages::Language.all.map(&:color).compact.uniq.shuffle(random: Random.new(12))
+    Linguist::Language.all.map(&:color).compact.uniq.shuffle(random: Random.new(12))
   end
 
   def sort_options
@@ -93,7 +93,7 @@ module ApplicationHelper
 
   def format_language(language)
     return nil if language.blank?
-    Languages::Language[language].try(:to_s)
+    Linguist::Language[language].try(:to_s)
   end
 
   def stats_for(title, records)

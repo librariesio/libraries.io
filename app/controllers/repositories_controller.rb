@@ -34,7 +34,7 @@ class RepositoriesController < ApplicationController
   end
 
   def hacker_news
-    @language = Languages::Language[params[:language]] if params[:language].present?
+    @language = Linguist::Language[params[:language]] if params[:language].present?
 
     original_scope = Repository.trending.open_source
     original_scope = original_scope.host(current_host) if current_host
@@ -45,7 +45,7 @@ class RepositoriesController < ApplicationController
   end
 
   def new
-    @language = Languages::Language[params[:language]] if params[:language].present?
+    @language = Linguist::Language[params[:language]] if params[:language].present?
 
     original_scope = Repository.with_stars.open_source.source
     original_scope = original_scope.host(current_host) if current_host

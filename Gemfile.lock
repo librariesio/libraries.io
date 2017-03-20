@@ -268,8 +268,6 @@ GEM
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
     jwt (1.5.6)
-    languages (1.4.9)
-      escape_utils (~> 1.1)
     librariesio-gem-parser (1.0.0)
     license-compatibility (2.0.0)
     listen (3.1.5)
@@ -586,7 +584,6 @@ DEPENDENCIES
   jquery-rails
   js_cookie_rails
   json_spec
-  languages (= 1.4.9)
   license-compatibility
   listen
   lograge

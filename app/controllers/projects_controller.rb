@@ -166,7 +166,7 @@ class ProjectsController < ApplicationController
   end
 
   def current_language
-    Languages::Language[params[:language]].to_s if params[:language].present?
+    Linguist::Language[params[:language]].to_s if params[:language].present?
   end
 
   def current_license

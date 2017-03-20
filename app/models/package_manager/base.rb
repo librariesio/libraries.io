@@ -17,7 +17,7 @@ module PackageManager
     end
 
     def self.language
-      Languages::Language.all.find{|l| l.color == color }.try(:name)
+      Linguist::Language.all.find{|l| l.color == color }.try(:name)
     end
 
     def self.format_name(platform)

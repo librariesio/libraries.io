@@ -89,7 +89,7 @@ class Readme < ApplicationRecord
       same foo from char function var method string nim agpl case def let func
       return key try txt chr set nil int} +
     Highscore::Blacklist.load_default_file.words +
-    Languages::Language.all.map{|l| l.name.downcase } +
+    Linguist::Language.all.map{|l| l.name.downcase } +
     PackageManager::Base.platforms.map{|p| p.to_s.demodulize.downcase }
     Highscore::Blacklist.load badlist_words
   end

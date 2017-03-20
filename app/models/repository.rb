@@ -102,7 +102,7 @@ class Repository < ApplicationRecord
   end
 
   def normalize_license_and_language
-    self.language = Languages::Language[self.language].to_s
+    self.language = Linguist::Language[self.language].to_s
     self.language = nil if self.language.blank?
     return if license.blank?
     if license.downcase == 'other'
@@ -162,7 +162,7 @@ class Repository < ApplicationRecord
   end
 
   def color
-    Languages::Language[language].try(:color)
+    Linguist::Language[language].try(:color)
   end
 
   def stars
