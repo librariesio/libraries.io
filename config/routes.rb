@@ -187,6 +187,7 @@ Rails.application.routes.draw do
   get '/privacy', to: 'pages#privacy', as: :privacy
   get '/compatibility', to: 'pages#compatibility', as: :compatibility
 
+  post '/hooks/package', to: 'hooks#package'
 
   if Rails.env.development?
     get '/rails/mailers'         => "rails/mailers#index"
