@@ -17,7 +17,7 @@ rbenv install 2.3.3
 Next, you'll need to make sure that you have PostgreSQL and Redis installed. This can be done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or postgres can be installed by using [http://postgresapp.com](http://postgresapp.com). Please also see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
 
 ```bash
-brew install postgres phantomjs elasticsearch@2.4 redis
+brew install postgres phantomjs elasticsearch@2.4 redis icu4c
 ```
 
 Remember to start the services!
@@ -25,7 +25,7 @@ Remember to start the services!
 On Debian-based Linux distributions you can use apt-get to install Postgres:
 
 ```bash
-sudo apt-get install postgresql postgresql-contrib libpq-dev
+sudo apt-get install postgresql postgresql-contrib libpq-dev libicu-dev
 ```
 
 Now, let's install the gems from the `Gemfile` ("Gems" are synonymous with libraries in other
