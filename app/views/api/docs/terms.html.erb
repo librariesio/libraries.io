@@ -1,0 +1,124 @@
+<% title 'End User Licence Agreement - Libraries.io' %>
+
+<div class="row">
+  <div class="col-md-12">
+    <h1>API Docs</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-8">
+    <h3 id='accptance'>Acceptance (how to accept these things)</h3>
+    <p>
+      Thank you for using Libraries.io. By accessing the API your are agreeing to the terms presented below. 
+    </p>
+    <p>
+      You may not enter into this agreement if you are not of legal age to do so or you are legally prohibited from doing so. 
+    </p>
+    <p>
+      If you are using the API on behalf of a legal entity you are representing that you have authority to bind that entity to to the terms below. By accepting these terms you are doing so on behalf of that entity and all references to 'you' and 'your' refer to that entity from here on.
+    </p>
+    <h3 id='usage'>Usage (how to use the service)</h3>
+    <h4>Your API Key</h4>
+    <p>
+      All API requests must include <code>api_key</code> parameter. Your API key is generated when you create an account. Your API key can be accessed from your <%= link_to 'account page', account_path %>. 
+    </p>
+    <h4>Rate Limits<h4>
+    <p>
+      Requests are subject to a 60 request per minute rate limit based on your api key, any further requests within that timeframe will result in a <code>403</code> response.
+    </p>
+    <h4>Increasing Rate Limits<h4>
+    <p>
+      If you require a higher rate limit please <%= mail_to 'support@libraries.io', 'contact us', subject: 'Inreased rate limit' %>. We may need to charge a fee to do so. 
+    </p>
+    <h3 id='data'>Data (how to use data from Libraries.io)</h3>
+    <p>
+      Data provided by Libraries.io is licensed under the <a href='https://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution, Share-alike 4.0 licence</a> which we shall from this point refer to as 'the data licence'. 
+    </p>
+    <p>
+      This licence is designed to encourage open and free exchange of data. It grants permissive rights for users to use the data commercially, to create and distribute derivative works, and to redistribute data under the same terms. Many of these rights are transferred to you so you should check the full wording at: <a href='https://creativecommons.org/licenses/by-sa/4.0/legalcode'>https://creativecommons.org/licenses/by-sa/4.0/legalcode</a>
+    </p>
+    <h3 id='agreements'>Agreements (things you agree to)</h3>
+    <p>
+      Comply with the data licence
+      One key
+      Storing your data
+      Monitoring usage
+      Sharing your information if legally obliged to do so
+    </p>
+    <h3 id='provisionsn'>Provisions (things you must do)</h3>
+    <p>
+        Comply with the terms of the data licence
+    </p>
+    <h3 id='restrictions'>Restrictions (things you must not do)</h3>
+    <p>
+      Contradict the terms of the data licence
+      Malicious use
+      Do not share keys
+      Do not make representations (ownership, partnership, sponsorship or endorsement)
+      Compliance with local laws
+    </p>
+    <h3 id='warranties'>Warranties (things we promise)</h3>
+    <p>
+      Providing the service to the best of our ability
+      Providing data under the terms of our own sources
+      Revoke these terms unless you are
+    </p>
+    <h3 id='limitations'>Limitations (things we cannot promise)</h3>
+    <p>
+      Availability
+      Liability
+      Indemnification
+      Third party content
+    </p>
+    <h3 id='modifications'>Modifications (things we may change)</h3>
+    <p>
+      We may change these terms, by updating this page
+      We may change the API by changing the API page
+    </p>
+    <h3 id='termination'>Termination (how to cancel this agreement)</h3>
+    <p>
+      May terminate usage without notice
+    </p>
+    <h3 id='continuing-provisions'>Continuing Provisions (things you must do if you cancel this agreement)</h3>
+    <p>
+      You must continue to abide by the terms of the data licence
+      You must destroy access keys generated during registration
+    </p>
+    <h3 id='communication'>Communication (things we may email you about)</h3>
+    <p>
+      May contact you regarding
+      changes to these terms
+      changes to the api
+      feedback to help us improve the service
+    </p>
+    <h3 id='feedback'>Feedback</h3>
+    <p>
+      Bugs and errors
+      Support
+    </p>
+  </div>
+  <div class="col-sm-4">
+    <%= render 'adsense/sidebar' %>
+    <h3>Contents</h3>
+    <ul>
+      <li><a href="#accetance">Acceptance</a></li>
+      <li><a href="#usage">Usage</a></li>
+      <li><a href="#data">Data</a></li>
+      <li><a href="#agreements">Agreements</a></li>
+      <li><a href="#provisions">Provisions</a></li>
+      <li><a href="#resrictions">Restrictions</a></li>
+      <li><a href="#warranties">Warranties</a></li>
+      <li><a href="#limitations">Limitations</a></li>
+      <li><a href="#modifications">Modifications</a></li>
+      <li><a href="#termination">Termination</a></li>
+      <li><a href="#continuing-provisions">Continuing Provisions</a></li>
+      <li><a href="#commnication">Communication</a></li>
+      <li><a href="#feedback">Feedback</a></li>
+    </ul>
+    <p>
+      For any questions, feature requests or bug reports<br/>
+      email <%= mail_to 'support@libraries.io', 'support@libraries.io', subject: 'Libraries.io API' %> or
+      <%= link_to 'open an issue', 'https://github.com/librariesio/libraries.io/issues/new' %>.
+    </p>
+  </div>
+</div>
