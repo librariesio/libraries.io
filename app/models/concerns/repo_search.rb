@@ -60,7 +60,11 @@ module RepoSearch
     end
 
     def keywords
-      (project_keywords + readme_keywords).uniq.first(10)
+      []
+    end
+
+    def all_keywords
+      @all_keywords ||= (project_keywords + readme_keywords).uniq.first(10)
     end
 
     def project_keywords
