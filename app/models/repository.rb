@@ -76,7 +76,7 @@ class Repository < ApplicationRecord
   scope :removed, -> { where('repositories."status" = ?', "Removed")}
   scope :unmaintained, -> { where('repositories."status" = ?', "Unmaintained")}
 
-  scope :indexable, -> { open_source.not_removed.includes(:projects, :readme) }
+  scope :indexable, -> { open_source.not_removed }
 
   delegate :download_owner, :download_readme, :domain, :watchers_url, :forks_url,
            :download_fork_source, :download_tags, :download_contributions, :url,

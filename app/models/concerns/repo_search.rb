@@ -76,10 +76,6 @@ module RepoSearch
       readme.keywords
     end
 
-    def platforms
-      projects.map(&:platform).compact.uniq(&:downcase)
-    end
-
     def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
       query = Project.sanitize_query(query)
