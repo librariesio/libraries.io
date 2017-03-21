@@ -14,7 +14,6 @@ Rails.application.routes.draw do
     post '/check', to: 'status#check'
 
     get '/', to: 'docs#index'
-    get '/terms', to: 'docs#terms'
     get '/search', to: 'search#index'
     get '/bower-search', to: 'bower_search#index'
     get '/searchcode', to: 'projects#searchcode'
@@ -194,6 +193,7 @@ Rails.application.routes.draw do
   get '/about', to: 'pages#about', as: :about
   get '/team', to: 'pages#team', as: :team
   get '/privacy', to: 'pages#privacy', as: :privacy
+  get '/terms', to: 'pages#terms', as: :terms
   get '/compatibility', to: 'pages#compatibility', as: :compatibility
   get '/data', to: 'pages#data', as: :data
   get '/open-data', to: redirect("/data")
