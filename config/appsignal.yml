@@ -11,6 +11,7 @@ default: &defaults
   ignore_errors:
     - ActiveRecord::RecordNotFound
     - ActionController::RoutingError
+    - ActiveRecord::RecordInvalid
 
   # Enable Garbage Collection instrumentation
   enable_gc_instrumentation: true
