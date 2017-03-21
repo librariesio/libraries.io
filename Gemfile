@@ -80,6 +80,7 @@ gem 'bundler'
 gem 'bibliothecary'
 gem 'stripe'
 gem 'github-linguist'
+gem 'appsignal'
 
 group :development do
   gem 'spring'

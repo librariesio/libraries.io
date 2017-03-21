@@ -108,6 +108,9 @@ GEM
     airbrussh (1.1.2)
       sshkit (>= 1.6.1, != 1.7.0)
     api-pagination (4.5.2)
+    appsignal (2.1.2)
+      rack
+      thread_safe
     arel (7.1.4)
     asciidoctor (1.5.5)
     autoprefixer-rails (6.7.7.1)
@@ -540,6 +543,7 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   api-pagination
+  appsignal
   asciidoctor
   bibliothecary
   bitbucket_rest_api!
