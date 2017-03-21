@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     post '/check', to: 'status#check'
 
     get '/', to: 'docs#index'
+    get '/terms', to: 'docs#terms'
     get '/search', to: 'search#index'
     get '/bower-search', to: 'bower_search#index'
     get '/searchcode', to: 'projects#searchcode'

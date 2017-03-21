@@ -23,4 +23,7 @@ class Api::DocsController < ApplicationController
 
     @repository_user = RepositoryUser.host('GitHub').login('andrew').first || RepositoryUser.first
   end
+
+  def terms
+  end 
 end
