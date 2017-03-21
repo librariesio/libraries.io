@@ -14,3 +14,7 @@ default: &defaults
 
   # Enable Garbage Collection instrumentation
   enable_gc_instrumentation: true
+
+production:
+  <<: *defaults
+  active: true
