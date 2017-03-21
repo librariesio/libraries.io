@@ -11,4 +11,7 @@ class PagesController < ApplicationController
   def compatibility
     
   end
+  def terms
+    
+  end
 end

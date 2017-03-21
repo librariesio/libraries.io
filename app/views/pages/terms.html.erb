@@ -1,8 +1,8 @@
-<% title 'End User Licence Agreement - Libraries.io' %>
+<% title 'Terms and Conditions - Libraries.io' %>
 
 <div class="row">
   <div class="col-md-12">
-    <h1>API Docs</h1>
+    <h1>Terms and Conditions</h1>
   </div>
 </div>
 <div class="row">
@@ -13,7 +13,7 @@
     <p>
       Libraries.io is a small team of people offering a utility service at scale on a small budget so please be respectful of these terms.
     </p>
-    <h3 id='acceptance'>Acceptance (how to accept these things)</h3>
+    <h3 id='acceptance'>Acceptance (How To Accept These Things)</h3>
     <p>
       By accessing the API you are agreeing to the terms presented below between yourself and Brave New Software, on behalf of and referred to as 'Libraries.io'. You may not enter into this agreement if you are not of legal age to do so or you are legally prohibited from doing so. 
     </p>
@@ -21,79 +21,78 @@
       If you are using the API on behalf of a legal entity you are representing that you have authority to bind that entity to these terms. By accepting these terms you are doing so on behalf of that entity and all references to 'you' and 'your' refer to that entity from here on.
     </p>
     
-    <h3 id='usage'>Usage (how to use the service)</h3>
-    <h4>Your API Key</h4>
+    <h3 id='usage'>Usage (How To Use The Service)</h3>
     <p>
       All API requests must include <code>api_key</code> parameter. Your API key is generated when you create an account. Your API key can be accessed from your <%= link_to 'account page', account_path %>.
     </p>
-    <h4>Rate Limits<h4>
+    <h4>Rate Limits</h4>
     <p>
       Requests to the API are subject to a 60 request per minute rate limit based on your api key. Any further requests within that time-frame will result in a <code>403</code> response.
     </p>
-    <h4>Increasing Rate Limits<h4>
+    <h4>Increasing Rate Limits</h4>
     <p>
       If you require a higher rate limit please <%= mail_to 'support@libraries.io', 'contact us', subject: 'Inreased rate limit' %>. We may need to charge a fee to do so. 
     </p>
     
-    <h3 id='data'>Data (how to use data from Libraries.io)</h3>
+    <h3 id='data'>Data (How To Use Data From Libraries.io)</h3>
     <p>
       Data provided by Libraries.io is licensed under the <a href='https://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution, Share-alike 4.0 licence</a> which we shall refer to as 'the data licence'. 
     </p>
     <p>
       This licence is designed to encourage open and free exchange of data. It grants permissive rights for users to use the data commercially, to create and distribute derivative works, and to redistribute data under the same terms. Many of these rights are transferred to you so you should check the full wording at: <a href='https://creativecommons.org/licenses/by-sa/4.0/legalcode'>https://creativecommons.org/licenses/by-sa/4.0/legalcode</a>
     </p>
-    <h4 id='attribution'>Attribution (how to attribute Libraries.io)</h3>
+    <h4 id='attribution'>Attribution (How To Attribute Libraries.io)</h3>
     <p>
       You may attribute us with the text 'includes data gathered by Libraries.io' in your publication or 'powered by Libraries.io' if providing a service.
     </p>
 
-    <h3 id='agreements'>Agreements (things you agree to)</h3>
+    <h3 id='agreements'>Agreements (Things You Agree To)</h3>
     <ul>
       <li>You agree to comply with the terms of the data licence.</li>
       <li>You agree to use a single API key.</li>
       <li>You agree to Libraries.io storing your account information.</li>
       <li>You agree to Libraries.io monitoring your usage in order to enforce rate limits and improve the service.</li>
       <li>You agree to Libraries.io sharing your information — including personal information — if it is required to do so by law.</li>
-    <ul>
-    <h3 id='provisions'>Provisions (things you must do)</h3>
+    </ul>
+    <h3 id='provisions'>Provisions (Things You Must Do)</h3>
     <ul>
       <li>You must Comply with the terms of the data licence.</li>
     </ul>
-    <h3 id='restrictions'>Restrictions (things you must not do)</h3>
+    <h3 id='restrictions'>Restrictions (Things You Must Not Do)</h3>
     <ul>
       <li>You must not perform any action with the intent to introduce errors within or otherwise disrupt or interfer with the provision of the API.</li>
       <li>You must not share your API key with any party that is not entitled to act on your behalf.</li>
       <li>You must not make representations regarding ownership, partnership, sponsorship or any other type of endorsement between you and Libraries.io.</li>
       <li>You must comply with local laws regarding the safe keeping and use of data obtained from Libraries.io.</li>
     </ul>
-    <h3 id='warranties'>Warranties (things we promise)</h3>
+    <h3 id='warranties'>Warranties (Things We Promise)</h3>
     <ul>
       <li>We will provide the API to to the best of our ability.</li>
       <li>We will uphold the terms of licenses from our sources.</li>
-    </p>
-    <h3 id='limitations'>Limitations (things we cannot promise)</h3>
+    </ul>
+    <h3 id='limitations'>Limitations (Things We Cannot Promise)</h3>
     <p>
       To the maximum extent permitted by law Libraries.io accepts no liability or responsibility for any loss or damage arising, directly or indirectly, from your use of or inability to use the API.
     </p>
     <p>
       Data provided by Libraries.io is gathered from third party sources. Therefore we cannot and do not warrant that it is accurate or up to date and we accept no liability for any errors. 
     </p>
-    <h3 id='modifications'>Modifications (things we may change)</h3>
+    <h3 id='modifications'>Modifications (Things We May Change)</h3>
     <p>
       From time to time we may need to update these terms. We will do so by updating this page. You should check this page regularly. Changes will not apply retroactively and will become effective immediately.  If you do not agree to the modified terms, you should discontinue your use of the API. Your continued use of the API constitutes your acceptance of the modified terms.
     </p>
     <p>
       As the service grows we may add to or otherwise modify the API. If we do so we will update the API documentation. Occasionally we may need to make changes that require you to modify your usage. We will not be held liable for the cost of making those modifications or any costs arising from those modifications. 
     </p>
-    <h3 id='termination'>Termination (how to cancel this agreement)</h3>
+    <h3 id='termination'>Termination (How To Cancel This Agreement)</h3>
     <p>
       You may stop using the API without notice. If you do not use the API for thirty (30) calendar days we will consider your agreement under these terms terminated. You may also give prior notice of termination by emailing <%= mail_to 'support@libraries.io', 'support@libraries.io', subject: 'Termination of agreement' %>. Once terminated you must destroy any copies of API keys that you have made.
     </p>
-    <h3 id='continuing-provisions'>Surviving Provisions (things you must continue to do even if you cancel this agreement)</h3>
+    <h3 id='continuing-provisions'>Surviving Provisions (Things You Must Continue To Do Even If You Cancel This Agreement)</h3>
     <p>
       Once this agreement is terminated you must continue to abide by the terms of the data licence and any applicable laws regarding the safe usage, provision of access and storage of data. 
     </p>
-    <h3 id='communication'>Communication (things we may email you about)</h3>
+    <h3 id='communication'>Communication (Things We May Email You About)</h3>
     <p>
       From time to time we may you use your registered email address to contact you about:
     </p>
@@ -102,12 +101,11 @@
       <li>Changes to the API.</li>
       <li>Feedback to help us improve the service.</li>
     </ul>
-    <h3 id='feedback'>Feedback</h3>
-    <h4>Bugs, Errors and Issues</h4>
+    <h3 id='bugs'>Bugs, Errors and Issues</h4>
     <p>
       If you find a bug or error in the operation or content of the API please file an issue in our <a href='https://github.com/librariesio/libraries.io/issues/new'>bug tracker</a> following the template provided. 
     </p>
-    <h4>Support</h4>
+    <h3 id='support'>Support</h4>
     <p>
       Libraries.io is a small community of people building a free, utility service. We do not offer formal support processes. If you require support you should try (in order):
     </p>
@@ -133,7 +131,8 @@
       <li><a href="#termination">Termination</a></li>
       <li><a href="#continuing-provisions">Continuing Provisions</a></li>
       <li><a href="#commnication">Communication</a></li>
-      <li><a href="#feedback">Feedback</a></li>
+      <li><a href="#bugs">Bugs, Errors and Issues</a></li>
+      <li><a href="#support">Support</a></li>
     </ul>
     <p>
       For any questions, feature requests or bug reports<br/>
