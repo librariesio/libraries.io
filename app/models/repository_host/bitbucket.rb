@@ -165,7 +165,7 @@ module RepositoryHost
         updated_at: project.updated_on,
         subscribers_count: v1_project.followers_count,
         forks_count: v1_project.forks_count,
-        default_branch: project.fetch('mainbranch', {}).fetch('name', nil),
+        default_branch: project.fetch('mainbranch', {}).try(:fetch, 'name', nil),
         private: project.is_private,
         size: project[:size].to_f/1000,
         parent: {
