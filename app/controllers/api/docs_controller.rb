@@ -22,4 +22,7 @@ class Api::DocsController < ApplicationController
 
     @github_user = GithubUser.find_by_login('andrew') || GithubUser.first
   end
+
+  def terms
+  end 
 end
