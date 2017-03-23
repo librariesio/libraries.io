@@ -1,11 +1,14 @@
 class SearchController < ApplicationController
   def index
+    facets = Project.facets(:facet_limit => 30)
+
     @query = params[:q]
     @search = search_projects(@query)
     @suggestion = @search.response.suggest.did_you_mean.first
     @projects = @search.records.includes(:repository)
     @facets = @search.response.aggregations
     @title = page_title
+    @platforms = facets[:platforms].platform.buckets
     respond_to do |format|
       format.html
       format.atom
