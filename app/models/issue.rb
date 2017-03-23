@@ -47,8 +47,10 @@ class Issue < ApplicationRecord
     i.pull_request = issue_hash[:pull_request].present?
     i.comments_count = issue_hash[:comments]
     i.assign_attributes issue_hash.slice(*Issue::API_FIELDS)
-    i.last_synced_at = Time.now
-    i.save! if i.changed?
+    if i.changed?
+      i.last_synced_at = Time.now
+      i.save!
+    end
     i
   end
 
@@ -74,7 +76,7 @@ class Issue < ApplicationRecord
 
   def self.update_from_github(name_with_owner, issue_number, token = nil)
     token ||= AuthToken.token
-    repo = RepositoryHost::Github.create(name_with_owner, token)
+    repo = Repository.host('GitHub').find_by_full_name(name_with_owner) || RepositoryHost::Github.create(name_with_owner, token)
     return unless repo
     issue_hash = AuthToken.fallback_client(token).issue(repo.full_name, issue_number)
     Issue.create_from_hash(repo, issue_hash)
