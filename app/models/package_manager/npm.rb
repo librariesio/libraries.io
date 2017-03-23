@@ -24,7 +24,7 @@ module PackageManager
     end
 
     def self.project_names
-      get("https://registry.npmjs.org/-/all").keys[1..-1]
+      get("https://raw.githubusercontent.com/nice-registry/all-the-package-names/master/names.json")
     end
 
     def self.recent_names
