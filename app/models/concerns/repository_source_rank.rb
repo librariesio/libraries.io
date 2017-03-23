@@ -3,9 +3,8 @@ module RepositorySourceRank
 
   def update_source_rank(force = false)
     return if !force && rank_recently_updated?
-    update_column :rank, source_rank
-    touch
-    __elasticsearch__.index_document
+    self.rank = source_rank
+    self.save if self.changed?
   end
 
   def rank_recently_updated?

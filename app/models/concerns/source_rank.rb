@@ -2,9 +2,8 @@ module SourceRank
   extend ActiveSupport::Concern
 
   def update_source_rank
-    update_column :rank, source_rank
-    touch
-    __elasticsearch__.index_document
+    self.rank = source_rank
+    self.save if self.changed?
   end
 
   def update_source_rank_async
