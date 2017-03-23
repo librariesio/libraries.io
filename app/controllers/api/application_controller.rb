@@ -1,6 +1,6 @@
 class Api::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :check_api_key, :set_headers
+  before_action :check_api_key
 
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
@@ -12,14 +12,6 @@ class Api::ApplicationController < ApplicationController
 
   def record_not_found(error)
     render json: { error: "404 Not Found" }, status: :not_found
-  end
-
-  def set_headers
-    headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Expose-Headers'] = 'ETag'
-    headers['Access-Control-Allow-Methods'] = 'GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD'
-    headers['Access-Control-Allow-Headers'] = '*,x-requested-with,Content-Type,If-Modified-Since,If-None-Match'
-    headers['Access-Control-Max-Age'] = '86400'
   end
 
   def check_api_key

@@ -81,6 +81,7 @@ gem 'bibliothecary'
 gem 'stripe'
 gem 'github-linguist'
 gem 'appsignal'
+gem 'rack-cors', :require => 'rack/cors'
 
 group :development do
   gem 'spring'

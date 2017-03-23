@@ -369,6 +369,7 @@ GEM
     rack-canonical-host (0.2.2)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
+    rack-cors (0.4.1)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
@@ -620,6 +621,7 @@ DEPENDENCIES
   rack-attack
   rack-attack-rate-limit
   rack-canonical-host
+  rack-cors
   rack-timeout
   rails (= 5.0.2)
   rails-timeago!

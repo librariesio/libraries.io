@@ -44,5 +44,15 @@ module Libraries
 
     config.middleware.use Rack::Attack
     config.middleware.use Rack::Attack::RateLimit, throttle: ['api']
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource /^\/api\/.+/,
+          :headers => :any,
+          :methods => [:get, :post, :patch, :put, :delete, :options, :head],
+          :max_age => 86400
+      end
+    end
   end
 end
