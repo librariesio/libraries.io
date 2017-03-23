@@ -42,7 +42,7 @@ module PackageManager
 
       repo = latest_version.fetch('repository', {})
       repo = repo[0] if repo.is_a?(Array)
-      repo_url = repo.fetch('url', nil)
+      repo_url = repo.try(:fetch, 'url', nil)
 
       {
         :name => project["name"],
