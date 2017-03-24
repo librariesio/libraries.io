@@ -45,16 +45,24 @@
       </p>
     <% else %>
       <p>
-        No projects found.
+        <b>No projects found. </b>
       </p>
-      <p>
-        <% if params[:platforms].present? || params[:licenses].present? ||  params[:languages].present? ||  params[:keywords].present? %>
+      <% if params[:platforms].present? || params[:licenses].present? ||  params[:languages].present? ||  params[:keywords].present? %>
+        <p>
           <%= link_to 'Try removing some filters.', search_path(q: params[:q]) %>
-        <% else %>
-          Can't find what you're looking for?
-          <%= link_to 'Report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>
-        <% end %>
-      </p>
+        </p>
+      <% else %>
+        <h3>Something Missing?</h3>
+        <p>
+          If a project from one of these package managers is is missing please <%= link_to 'report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>. 
+        </p>
+        <div class='row'>
+          <%= render partial: 'platforms/platform', collection: @platforms %>
+        </div>
+        <p>
+          Package manager not listed above? <%= link_to 'Consider adding support for it', "https://github.com/librariesio/libraries.io/blob/master/docs/add-a-package-manager.md" %>.
+        </p> 
+      <% end %>
     <% end %>
   </div>
 
