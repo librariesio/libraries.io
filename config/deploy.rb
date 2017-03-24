@@ -13,9 +13,6 @@ set :bundle_jobs, 6
 
 set :app_server_port, 5000
 
-set :puma_conf, "#{current_path}/config/puma.rb"
-set :puma_state, "#{shared_path}/tmp/pids/puma.state"
-
 set :maintenance_template_path, File.join(File.expand_path('../../public/system', __FILE__), 'maintenance.html')
 
 set :bugsnag_api_key, ENV['BUGSNAG_API_KEY']
