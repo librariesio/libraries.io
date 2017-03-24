@@ -21,7 +21,9 @@
 <div class='row'>
   <%= render partial: 'platforms/platform', collection: @platforms %>
 </div>
-
+<p>
+  Package manager not listed above? <%= link_to 'Consider adding support for it', "https://github.com/librariesio/libraries.io/blob/master/docs/add-a-package-manager.md" %>.
+</p> 
 <hr>
 <%= render 'adsense/banner' %>
 <h3 data-ga-tracked-el='search-by-language'>
