@@ -54,17 +54,13 @@
       <% else %>
         <h3>Something Missing?</h3>
         <p>
-          Libraries.io indexes projects from:
+          If a project from one of these package managers is is missing please <%= link_to 'report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>. 
         </p>
         <div class='row'>
           <%= render partial: 'platforms/platform', collection: @platforms %>
         </div>
         <p>
-          If a project from one of these package managers is is missing please <%= link_to 'report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>. 
-        </p>
-        <h3>Adding Support For More Package Managers</h3>
-        <p>
-          If you would like Libraries.io to find projects from a package manager not listed above please <%= link_to 'consider contributing support for it', "https://github.com/librariesio/libraries.io/blob/master/docs/development-setup.md" %>.
+          Package manager not listed above? <%= link_to 'Consider adding support for it', "https://github.com/librariesio/libraries.io/blob/master/docs/add-a-package-manager.md" %>.
         </p> 
       <% end %>
     <% end %>
