@@ -11,8 +11,6 @@ set :keep_assets, 2
 set :keep_releases, 4
 set :bundle_jobs, 6
 
-set :nginx_domains, "libraries.io staging.libraries.io"
-set :nginx_read_timeout, 60
 set :app_server_port, 5000
 
 set :puma_conf, "#{current_path}/config/puma.rb"

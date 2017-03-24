@@ -89,7 +89,6 @@ group :development do
   gem 'brakeman', :require => false
   gem 'capistrano'
   gem 'capistrano-rails'
-  gem 'capistrano3-nginx'
   gem 'capistrano-maintenance', require: nil
   gem 'capistrano-rails-console', require: nil
   gem 'listen'

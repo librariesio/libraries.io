@@ -154,8 +154,6 @@ GEM
     capistrano-rails-console (2.2.0)
       capistrano (>= 3.5.0, < 4.0.0)
       sshkit-interactive (~> 0.2.0)
-    capistrano3-nginx (2.1.5)
-      capistrano (>= 3.0.0)
     capybara (2.13.0)
       addressable
       mime-types (>= 1.16)
@@ -562,7 +560,6 @@ DEPENDENCIES
   capistrano-maintenance
   capistrano-rails
   capistrano-rails-console
-  capistrano3-nginx
   chartkick
   codeclimate-test-reporter
   commonmarker
