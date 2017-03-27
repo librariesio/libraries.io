@@ -232,6 +232,7 @@ module PackageManager
         builder.use :http_cache, store: Rails.cache, logger: Rails.logger, shared_cache: false, serializer: Marshal
         builder.use FaradayMiddleware::Gzip
         builder.use FaradayMiddleware::FollowRedirects, limit: 3
+        builder.use :instrumentation
         builder.adapter :typhoeus
       end
       connection.get
