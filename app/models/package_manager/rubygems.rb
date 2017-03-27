@@ -39,7 +39,7 @@ module PackageManager
     end
 
     def self.project(name)
-      Gems.info name
+      get_json("https://rubygems.org/api/v1/gems/#{name}.json")
     rescue
       {}
     end
@@ -55,24 +55,15 @@ module PackageManager
     end
 
     def self.versions(project)
-      versions_response = Gems.versions(project['name'])
-      return [] if versions_response.is_a?(String)
-      versions_response.map do |v|
+      json = get_json("https://rubygems.org/api/v1/versions/#{project['name']}.json")
+      json.map do |v|
         {
           :number => v['number'],
           :published_at => v['created_at']
         }
       end
-    end
-
-    def self.update_versions(name)
-      p = project(name)
-      dbproject = Project.find_by({:name => name, :platform => self.name.demodulize})
-      versions(p).each do |version|
-        v = dbproject.versions.find_by_number(version[:number])
-        v.update_attribute(:published_at, version[:published_at]) if v
-      end
-      dbproject.save
+    rescue
+      []
     end
 
     def self.dependencies(name, version, _project)

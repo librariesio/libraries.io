@@ -59,10 +59,10 @@ GIT
 
 GIT
   remote: https://github.com/mhenrixon/sidekiq-unique-jobs
-  revision: 62b768051003cab0d052049c22e5c06eeeb298b9
+  revision: abb71d5808592376f60654409dde240febecb73a
   specs:
-    sidekiq-unique-jobs (4.0.18)
-      sidekiq (>= 2.6)
+    sidekiq-unique-jobs (5.0.0.beta)
+      sidekiq (>= 4.0)
       thor
 
 GEM
@@ -244,8 +244,6 @@ GEM
     formatador (0.2.5)
     fuzzy_match (2.1.0)
     gemoji (3.0.0)
-    gems (1.0.0)
-      json
     github-linguist (5.0.8)
       charlock_holmes (~> 0.7.3)
       escape_utils (~> 1.1.0)
@@ -583,7 +581,6 @@ DEPENDENCIES
   font-awesome-rails
   foreman
   gemoji
-  gems
   github-linguist
   github-markup
   gitlab!
