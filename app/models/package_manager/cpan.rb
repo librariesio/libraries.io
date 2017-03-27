@@ -37,7 +37,8 @@ module PackageManager
         :homepage => project.fetch('resources',{})['homepage'],
         :description => project['abstract'],
         :licenses => project['license'].join(','),
-        :repository_url => repo_fallback(project.fetch('resources',{}).fetch('repository',{})['web'], project.fetch('resources',{})['homepage'])
+        :repository_url => repo_fallback(project.fetch('resources',{}).fetch('repository',{})['web'], project.fetch('resources',{})['homepage']),
+        :versions => get("http://api.metacpan.org/v0/release/_search?q=distribution:#{project['distribution']}&size=5000&fields=version,dependency")['hits']['hits']
       }
     end
 
@@ -51,8 +52,8 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, _project)
-      versions = get("http://api.metacpan.org/v0/release/_search?q=distribution:#{name}&size=5000&fields=version,dependency")['hits']['hits']
+    def self.dependencies(name, version, project)
+      versions = project[:versions]
       version_data = versions.find{|v| v['fields']['version'] == version }
       version_data['fields']['dependency'].select{|dep| dep['relationship'] == 'requires' }.map do |dep|
         {
