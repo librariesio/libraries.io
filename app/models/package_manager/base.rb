@@ -99,7 +99,9 @@ module PackageManager
 
       if self::HAS_VERSIONS
         versions(project).each do |version|
-          dbproject.versions.find_or_create_by(version)
+          unless dbproject.versions.find {|v| v.number == version[:number] }
+            dbproject.versions.create(version)
+          end
         end
       end
 
@@ -161,7 +163,7 @@ module PackageManager
     def self.save_dependencies(mapped_project)
       name = mapped_project[:name]
       proj = Project.find_by(name: name, platform: self.name.demodulize)
-      proj.versions.each do |version|
+      proj.versions.includes(:dependencies).each do |version|
         deps = dependencies(name, version.number, mapped_project)
         next unless deps && deps.any? && version.dependencies.empty?
         deps.each do |dep|
