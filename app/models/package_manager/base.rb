@@ -179,14 +179,14 @@ module PackageManager
       []
     end
 
-    def self.map_dependencies(deps, kind, optional = false)
+    def self.map_dependencies(deps, kind, optional = false, platform = self.name.demodulize)
       deps.map do |k,v|
         {
           project_name: k,
           requirements: v,
           kind: kind,
           optional: optional,
-          platform: self.name.demodulize
+          platform: platform
         }
       end
     end

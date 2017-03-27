@@ -48,7 +48,8 @@ module PackageManager
       {
         :name => project['name'],
         :description => metadata['description'],
-        :repository_url => repo_fallback(repo, '')
+        :repository_url => repo_fallback(repo, ''),
+        :versions => project['versions']
       }
     end
 
@@ -61,17 +62,12 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, _project)
-      deps = get("https://atom.io/api/packages/#{URI.encode(name.strip)}/versions/#{version}")["dependencies"] || []
-      deps.map do |dep_name,req|
-        {
-          project_name: dep_name,
-          requirements: req,
-          kind: 'runtime',
-          optional: false,
-          platform: 'Npm' # woah!
-        }
-      end
+    def self.dependencies(name, version, project)
+      vers = project[:versions][version]
+      return [] if vers.nil?
+      map_dependencies(vers.fetch('dependencies', {}), 'runtime', false, 'Npm') +
+      map_dependencies(vers.fetch('devDependencies', {}), 'Development', false, 'Npm') +
+      map_dependencies(vers.fetch('optionalDependencies', {}), 'Optional', true, 'Npm')
     end
   end
 end
