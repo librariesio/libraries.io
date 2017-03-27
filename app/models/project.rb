@@ -141,14 +141,6 @@ class Project < ApplicationRecord
     }
   end
 
-  def follows_semver?
-    if versions.all.length > 0
-      versions.all?(&:follows_semver?)
-    elsif tags.published.length > 0
-      tags.published.all?(&:follows_semver?)
-    end
-  end
-
   def update_details
     normalize_licenses
     set_latest_release_published_at
