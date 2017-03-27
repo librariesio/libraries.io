@@ -30,7 +30,8 @@ module PackageManager
         :homepage => latest_version['homepage'],
         :keywords_array => format_keywords(project["categories"]),
         :licenses => latest_version['license'],
-        :repository_url => repo_fallback(repository(project["repository"]),latest_version['homepage'])
+        :repository_url => repo_fallback(repository(project["repository"]),latest_version['homepage']),
+        :versions => project["versions"]
       }
     end
 
@@ -63,8 +64,8 @@ module PackageManager
       Array.wrap(categories).join('.').split('.').map(&:downcase).uniq
     end
 
-    def self.dependencies(name, version, _project)
-      vers = project(name)['versions'].find{|v| v['version'] == version}
+    def self.dependencies(name, version, project)
+      vers = project[:versions].find{|v| v['version'] == version}
       return [] if vers.nil?
       deps = vers['dependencies']
       return [] if deps.nil?
