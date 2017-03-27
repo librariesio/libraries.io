@@ -10,7 +10,7 @@ class Version < ApplicationRecord
 
   after_commit :send_notifications_async, on: :create
   after_commit :update_repository_async, on: :create
-  after_commit :save_project
+  after_commit :save_project, on: :create
 
   scope :newest_first, -> { order('versions.published_at DESC') }
 
