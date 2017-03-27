@@ -91,10 +91,10 @@ module PackageManager
       puts "Saving #{mapped_project[:name]}"
       dbproject = Project.find_or_initialize_by({:name => mapped_project[:name], :platform => self.name.demodulize})
       if dbproject.new_record?
-        dbproject.assign_attributes(mapped_project.except(:name, :releases))
+        dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions))
         dbproject.save
       else
-        dbproject.update_attributes(mapped_project.except(:name, :releases))
+        dbproject.update_attributes(mapped_project.except(:name, :releases, :versions))
       end
 
       if self::HAS_VERSIONS
