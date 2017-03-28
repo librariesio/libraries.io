@@ -224,7 +224,7 @@ class ApplicationController < ActionController::Base
         deprecated: dependency.try(:project).try(:is_deprecated?),
         outdated: dependency.outdated?,
         filepath: dependency.try(:manifest).try(:filepath),
-        kind: dependency.try(:manifest).try(:kind)
+        kind: dependency.kind
       }
     end
   end
