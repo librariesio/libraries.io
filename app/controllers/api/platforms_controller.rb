@@ -1,7 +1,5 @@
 class Api::PlatformsController < Api::ApplicationController
   def index
-    @platforms = Platform.popular
-
-    render json: @platforms
+    render json: Platform.all
   end
 end
