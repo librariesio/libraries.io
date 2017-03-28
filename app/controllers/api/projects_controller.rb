@@ -2,12 +2,12 @@ class Api::ProjectsController < Api::ApplicationController
   before_action :find_project, except: :searchcode
 
   def show
-    render json: project_json_response(@project)
+    render json: @project
   end
 
   def dependents
     dependents = paginate(@project.dependent_projects).includes(:versions, :repository)
-    render json: project_json_response(dependents)
+    render json: dependents
   end
 
   def dependent_repositories
@@ -27,7 +27,9 @@ class Api::ProjectsController < Api::ApplicationController
 
     raise ActiveRecord::RecordNotFound if version.nil?
 
-    project_json = project_json_response(@project)
+
+
+    project_json = @project
     project_json[:dependencies] = map_dependencies(version.dependencies || [])
 
     render json: project_json

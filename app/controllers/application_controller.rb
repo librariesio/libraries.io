@@ -203,15 +203,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  helper_method :project_json_response
-  def project_json_response(projects)
-    projects.as_json(project_json_response_args)
-  end
-
-  def project_json_response_args
-    {only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} }}
-  end
-
   def map_dependencies(dependencies)
     dependencies.map do |dependency|
       {
@@ -219,12 +210,12 @@ class ApplicationController < ActionController::Base
         name: dependency.project_name,
         platform: dependency.platform,
         requirements: dependency.requirements,
-        latest_stable: dependency.try(:project).try(:latest_stable_release_number),
-        latest: dependency.try(:project).try(:latest_release_number),
-        deprecated: dependency.try(:project).try(:is_deprecated?),
+        latest_stable: dependency.latest_stable_release_number,
+        latest: dependency.latest_release_number,
+        deprecated: dependency.is_deprecated?,
         outdated: dependency.outdated?,
-        filepath: dependency.try(:manifest).try(:filepath),
-        kind: dependency.try(:manifest).try(:kind)
+        filepath: dependency.filepath,
+        kind: dependency.kind
       }
     end
   end

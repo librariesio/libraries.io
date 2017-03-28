@@ -15,7 +15,7 @@ class Api::GithubUsersController < Api::ApplicationController
     @projects = @github_user.projects.joins(:repository).includes(:versions).order('projects.rank DESC, projects.created_at DESC')
     @projects = @projects.keywords(params[:keywords].split(',')) if params[:keywords].present?
 
-    paginate json: project_json_response(@projects)
+    paginate json: @projects
   end
 
   private

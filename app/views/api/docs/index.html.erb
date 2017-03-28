@@ -69,7 +69,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate project_json_response(@project) %></pre>
+<%= JSON.pretty_generate ProjectSerializer.new(@project).as_json %></pre>
     <% end %>
     <h3 id='project-dependencies'>Project Dependencies</h3>
 
@@ -105,15 +105,13 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependents", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate project_json_response(@project.dependent_projects.paginate(page: 1)) %></pre>
+<%= JSON.pretty_generate @dependent_projects.map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
     <h3 id="project-dependent-repositories">Project Dependent Repositories</h3>
 
     <p>
       Get repositories that depend on a given project.
     </p>
-
-
 
     <p>
       <code>GET https://libraries.io/api/:platform/:name/dependent_repositories?api_key=<%= @api_key %></code>
@@ -142,7 +140,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-search", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate project_json_response(@search) %></pre>
+<%= JSON.pretty_generate @search.map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
     <h3 id='repository'>Repository</h3>
 
@@ -190,7 +188,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-repository-projects", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate project_json_response(@repository.projects.includes(:versions, :repository).paginate(page: 1)) %></pre>
+<%= JSON.pretty_generate @repository.projects.includes(:versions, :repository).paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
 
     <h3 id='user'>User</h3>
@@ -242,7 +240,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-projects", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate project_json_response(@github_user.projects.includes(:versions, :repository).paginate(page: 1)) %></pre>
+<%= JSON.pretty_generate @github_user.projects.includes(:versions, :repository).paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
 
     <h3 id='subscriptions-index'>User Subscriptions</h3>

@@ -14,6 +14,9 @@ class Dependency < ApplicationRecord
 
   after_create :update_project_id
 
+  delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :project
+  delegate :filepath, to: :manifest
+
   def find_project_id
     project_id = Project.platform(platform).where(name: project_name.strip).limit(1).pluck(:id).first
     return project_id if project_id
