@@ -167,7 +167,7 @@ GEM
     cliver (0.3.2)
     codeclimate-test-reporter (1.0.8)
       simplecov (<= 0.13)
-    commonmarker (0.14.13)
+    commonmarker (0.14.14)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
