@@ -94,6 +94,11 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_model_serializers (0.10.5)
+      actionpack (>= 4.1, < 6)
+      activemodel (>= 4.1, < 6)
+      case_transform (>= 0.2)
+      jsonapi-renderer (>= 0.1.1.beta1, < 0.2)
     activejob (5.0.2)
       activesupport (= 5.0.2)
       globalid (>= 0.3.6)
@@ -161,6 +166,8 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    case_transform (0.2)
+      activesupport
     charlock_holmes (0.7.3)
     chartkick (2.2.3)
     citrus (3.0.2)
@@ -276,6 +283,7 @@ GEM
     json_spec (1.1.4)
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
+    jsonapi-renderer (0.1.2)
     jwt (1.5.6)
     librariesio-gem-parser (1.0.0)
     license-compatibility (2.0.0)
@@ -543,6 +551,7 @@ PLATFORMS
 
 DEPENDENCIES
   RedCloth
+  active_model_serializers
   api-pagination
   appsignal
   asciidoctor

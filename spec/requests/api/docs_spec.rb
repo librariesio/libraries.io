@@ -7,6 +7,8 @@ describe "API::DocController" do
       create(:version, project: project)
       create(:repository, full_name: 'gruntjs/grunt')
       create(:github_user, login: 'andrew')
+      Project.__elasticsearch__.import force: true
+      Project.__elasticsearch__.refresh_index!
 
       visit '/api'
       expect(page).to have_content 'API Docs'

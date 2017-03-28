@@ -16,7 +16,7 @@ module PackageManager
       end
     end
 
-    def self.language
+    def self.default_language
       Linguist::Language.all.find{|l| l.color == color }.try(:name)
     end
 
@@ -27,6 +27,10 @@ module PackageManager
 
     def self.color
       self::COLOR
+    end
+
+    def self.homepage
+      self::URL
     end
 
     def self.formatted_name

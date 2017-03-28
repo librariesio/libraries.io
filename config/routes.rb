@@ -16,6 +16,8 @@ Rails.application.routes.draw do
     get '/bower-search', to: 'bower_search#index'
     get '/searchcode', to: 'projects#searchcode'
 
+    get '/platforms', to: 'platforms#index'
+
     get '/subscriptions', to: 'subscriptions#index'
     get '/subscriptions/:platform/:name', to: 'subscriptions#show'
     post '/subscriptions/:platform/:name', to: 'subscriptions#create'

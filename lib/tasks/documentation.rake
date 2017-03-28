@@ -7,7 +7,7 @@ namespace :documentation do
       require file unless file.match(/base.rb$/)
     end
     PackageManager::Base.platforms.each do |platform|
-      puts "| #{platform.formatted_name} | #{platform::URL} | #{platform.language} | #{platform::HAS_VERSIONS} | #{platform::HAS_DEPENDENCIES} | #{platform::BIBLIOTHECARY_SUPPORT} |"
+      puts "| #{platform.formatted_name} | #{platform.homepage} | #{platform.default_language} | #{platform::HAS_VERSIONS} | #{platform::HAS_DEPENDENCIES} | #{platform::BIBLIOTHECARY_SUPPORT} |"
     end
   end
 end

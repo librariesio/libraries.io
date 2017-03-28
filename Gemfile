@@ -81,6 +81,7 @@ gem 'stripe'
 gem 'github-linguist'
 gem 'appsignal'
 gem 'rack-cors', :require => 'rack/cors'
+gem 'active_model_serializers'
 
 group :development do
   gem 'spring'

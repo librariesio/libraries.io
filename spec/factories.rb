@@ -24,6 +24,11 @@ FactoryGirl.define do
     repository_url  'https://github.com/rails/rails'
   end
 
+  factory :platform do
+    name 'Rubygems'
+    project_count 100_000
+  end
+
   factory :version do
     project
     number '1.0.0'
