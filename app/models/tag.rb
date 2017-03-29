@@ -89,4 +89,31 @@ class Tag < ApplicationRecord
       "#{repository.url}/commits/tag/#{name}"
     end
   end
+
+  def related_tags
+    repository.tags.sort
+  end
+
+  def tag_index
+    related_tags.index(self)
+  end
+
+  def next_tag
+    related_tags[tag_index - 1]
+  end
+
+  def previous_tag
+    related_tags[tag_index + 1]
+  end
+
+  alias_method :previous_version, :previous_tag
+
+  def related_tag
+    true
+  end
+
+  def diff_url
+    return nil unless repository && previous_tag && previous_tag
+    repository.compare_url(previous_tag.number, number)
+  end
 end

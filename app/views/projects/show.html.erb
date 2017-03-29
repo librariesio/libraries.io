@@ -281,16 +281,40 @@
           <% end %>
           Releases
         </h4>
-        <ul>
+        <table class='table'>
           <% @versions.each do |version| %>
-          <li>
-            <%= link_to version, version_path(version.to_param) %>
+          <tr>
+            <td>
+              <%= link_to version, version_path(version.to_param) %>
+            </td>
             <% if version.published_at.present? %>
-            - <%= version.published_at.to_s(:long) %>
+              <td>
+                <small class='text-muted'>
+                  <%= version.published_at.to_date.to_s(:long) %>
+                </small>
+              </td>
             <% end %>
-          </li>
+            <% if version.related_tag %>
+            <td>
+              <small class='text-muted'>
+                <%= link_to version.related_tag.repository_url, class: 'tip', title: "Browse source on #{version.project.repository.host_type}" do %>
+                  <%= fa_icon('tag') %>
+                <% end %>
+              </small>
+            </td>
+            <td>
+                <% if version.previous_version %>
+                  <small class='text-muted'>
+                    <%= link_to version.diff_url, class: 'tip', title: "View diff between #{version} and #{version.previous_version}" do %>
+                      <%= fa_icon('random') %>
+                    <% end %>
+                  </small>
+                <% end %>
+              </td>
+            <% end %>
+          </tr>
           <% end %>
-        </ul>
+        </table>
         <% if @project.versions.size > 10 %>
           <%= link_to "See all #{pluralize(@project.versions.size, 'releases')}", project_versions_path(@project.to_param) %>
         <% end %>
@@ -301,16 +325,38 @@
           <% end %>
           Tagged Releases
         </h4>
-        <ul>
+        <table class='table'>
           <% @tags.each do |tag| %>
-          <li>
-            <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
+          <tr>
+            <td>
+              <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
+            </td>
             <% if tag.published_at.present? %>
-            - <%= tag.published_at.to_s(:long) %>
+              <td>
+                <small class='text-muted'>
+                  <%= tag.published_at.to_date.to_s(:long) %>
+                </small>
+              </td>
             <% end %>
-          </li>
+            <td>
+              <small class='text-muted'>
+                <%= link_to tag.repository_url, class: 'tip', title: "Browse source on #{tag.repository.host_type}" do %>
+                  <%= fa_icon('tag') %>
+                <% end %>
+              </small>
+            </td>
+            <td>
+              <% if tag.previous_tag %>
+                <small class='text-muted'>
+                  <%= link_to tag.diff_url, class: 'tip', title: "View diff between #{tag} and #{tag.previous_tag}" do %>
+                    <%= fa_icon('random') %>
+                  <% end %>
+                </small>
+              <% end %>
+            </td>
+          </tr>
           <% end %>
-        </ul>
+        </table>
         <% if @repository.tags.published.count > 10 %>
           <%= link_to "See all #{pluralize(@repository.tags.published.count, 'tags')}", project_tags_path(@project.to_param) %>
         <% end %>
