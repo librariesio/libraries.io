@@ -64,6 +64,7 @@ class Version < ApplicationRecord
   end
 
   def send_notifications
+    project.try(:repository).try(:download_tags) rescue nil
     notify_subscribers
     notify_firehose
     notify_web_hooks
