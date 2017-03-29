@@ -36,10 +36,6 @@ module RepositoryHost
       "#{url}/commits#{author_param}"
     end
 
-    def compare_url(branch_one, branch_two)
-      "#{url}/compare/#{branch_one}...#{branch_two}#files_bucket"
-    end
-
     def self.fetch_repo(full_name, token = nil)
       AuthToken.fallback_client(token).repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
     rescue *IGNORABLE_EXCEPTIONS
