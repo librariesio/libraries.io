@@ -1,8 +1,8 @@
 namespace :projects do
   desc 'Sync projects'
   task sync: :environment do
-    ids = Project.where(last_synced_at: nil).order('projects.updated_at DESC').limit(100_000).pluck(:id)
-    Project.where(id: ids).find_each(&:async_sync)
+    Project.not_removed.order('last_synced_at ASC').limit(500).each(&:async_sync)
+    Project.not_removed.where(last_synced_at: nil).order('updated_at ASC').limit(500).each(&:async_sync)
   end
 
   desc 'Update sourcerank of projects'
