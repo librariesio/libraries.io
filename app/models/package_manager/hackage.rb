@@ -64,6 +64,7 @@ module PackageManager
     def self.description(page)
       contents = page.css('#content p, #content hr' ).map(&:text)
       index = contents.index ''
+      return '' unless index
       contents[0..(index - 1)].join("\n\n")
     end
 
