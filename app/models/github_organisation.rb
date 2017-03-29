@@ -47,6 +47,18 @@ class GithubOrganisation < ApplicationRecord
     AuthToken.client
   end
 
+  def user_type
+    'Organisation'
+  end
+
+  def followers
+    0
+  end
+
+  def following
+    0
+  end
+
   def self.create_from_github(login_or_id)
     begin
       r = AuthToken.client.org(login_or_id).to_hash

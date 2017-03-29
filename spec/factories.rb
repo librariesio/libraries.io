@@ -43,6 +43,20 @@ FactoryGirl.define do
     requirements '~> 4.2'
   end
 
+  factory :repository_dependency do
+    manifest
+    project
+    platform 'Rubygems'
+    project_name 'rails'
+    requirements '~> 4.2'
+  end
+
+  factory :manifest do
+    repository
+    filepath 'Gemfile'
+    platform 'Rubygems'
+  end
+
   factory :tag do
     repository
     name '1.0.0'

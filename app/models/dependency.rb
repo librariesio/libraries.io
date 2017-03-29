@@ -14,8 +14,17 @@ class Dependency < ApplicationRecord
 
   after_create :update_project_id
 
+  alias_attribute :name, :project_name
+  alias_attribute :latest_stable, :latest_stable_release_number
+  alias_attribute :latest, :latest_release_number
+  alias_attribute :deprecated, :is_deprecated?
+  alias_method :outdated, :outdated?
+
   delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :project
-  delegate :filepath, to: :manifest
+
+  def filepath
+    nil
+  end
 
   def find_project_id
     project_id = Project.platform(platform).where(name: project_name.strip).limit(1).pluck(:id).first
