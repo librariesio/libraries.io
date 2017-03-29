@@ -191,11 +191,6 @@ Rails.application.routes.draw do
 
   post '/hooks/package', to: 'hooks#package'
 
-  if Rails.env.development?
-    get '/rails/mailers'         => "rails/mailers#index"
-    get '/rails/mailers/*path'   => "rails/mailers#preview"
-  end
-
   get '/:platform/:name/suggestions', to: 'project_suggestions#new', as: :project_suggestions, constraints: { :name => /.*/ }
   post '/:platform/:name/suggestions', to: 'project_suggestions#create', constraints: { :name => /.*/ }
 
