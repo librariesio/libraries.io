@@ -120,6 +120,9 @@ class Project < ApplicationRecord
 
   def sync
     platform_class.update(name)
+  rescue
+    self.last_synced_at = Time.zone.now
+    save
   end
 
   def async_sync
