@@ -203,6 +203,47 @@
         <%= render @projects, cache: true %>
       <% end %>
 
+      <% if repo.tags.published.length > 0 %>
+        <div class="row"></div>
+        <hr>
+        <h4>
+          Tags
+          <small><%= link_to 'See all', repository_tags_path(@repository.to_param) %></small>
+        </h4>
+        <table class='table'>
+          <% repo.tags.published.order('published_at DESC, name DESC').limit(30).to_a.each do |tag| %>
+          <tr>
+            <td>
+              <%= link_to tag, tag.repository_url %>
+            </td>
+            <% if tag.published_at.present? %>
+              <td>
+                <small class='text-muted'>
+                  <%= tag.published_at.to_date.to_s(:long) %>
+                </small>
+              </td>
+            <% end %>
+            <td>
+              <small class='text-muted'>
+                <%= link_to tag.repository_url, class: 'tip', title: "Browse source on #{tag.repository.host_type}" do %>
+                  <%= fa_icon('tag') %>
+                <% end %>
+              </small>
+            </td>
+            <td>
+              <% if tag.previous_tag %>
+                <small class='text-muted'>
+                  <%= link_to tag.diff_url, class: 'tip', title: "View diff between #{tag} and #{tag.previous_tag}" do %>
+                    <%= fa_icon('random') %>
+                  <% end %>
+                </small>
+              <% end %>
+            </td>
+          </tr>
+          <% end %>
+        </table>
+      <% end %>
+
       <% if @forks.length > 0 %>
         <div class="row"></div>
         <hr>
@@ -213,24 +254,6 @@
         <%= render @forks, cache: true %>
       <% end %>
 
-      <% if repo.tags.published.length > 0 %>
-        <div class="row"></div>
-        <hr>
-        <h4>
-          Tags
-          <small><%= link_to 'See all', repository_tags_path(@repository.to_param) %></small>
-        </h4>
-        <ul>
-          <% repo.tags.published.order('published_at DESC, name DESC').limit(30).to_a.each do |tag| %>
-            <li>
-              <%= link_to tag, tag.repository_url %>
-              <% if tag.published_at.present? %>
-              - <%= tag.published_at.to_s(:long) %>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      <% end %>
       <div class="row"></div>
       <br>
       <p>

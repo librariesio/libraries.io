@@ -2,21 +2,45 @@
 <% content_for :atom, auto_discovery_link_tag(:atom, project_tags_url({format: "atom"}.merge(@project.to_param))) %>
 
 <h1><%= link_to @project, project_path(@project.to_param) %> tagged releases</h1>
-<hr>
 <div class="row">
   <div class="col-sm-8">
     <%= render 'adsense/banner' %>
     <% if @tags.any? %>
-      <ul>
+      <table class='table'>
         <% @tags.each do |tag| %>
-        <li>
-          <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
+        <tr>
+          <td>
+            <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
+          </td>
           <% if tag.published_at.present? %>
-          - <%= tag.published_at.to_s(:long) %>
+            <td>
+              <small class='text-muted'>
+                <%= tag.published_at.to_s(:long_ordinal) %>
+              </small>
+            </td>
           <% end %>
-        </li>
+          <td>
+            <small class='text-muted'>
+              <%= link_to tag.repository_url do %>
+                <%= fa_icon('tag') %>
+                Browse source on <%= tag.repository.host_type %>
+              <% end %>
+            </small>
+          </td>
+          <td>
+            <% if tag.previous_tag %>
+              <small class='text-muted'>
+                <%= link_to tag.diff_url do %>
+                  <%= fa_icon('random') %>
+                  View diff between <%= tag %> and <%= tag.previous_tag %>
+                <% end %>
+              </small>
+            <% end %>
+          </td>
+        </tr>
         <% end %>
-      </ul>
+      </table>
+
       <%= will_paginate @tags, page_links: false %>
       <%= link_to project_tags_path(@project.to_param.merge(format: :atom)) do %>
         <%= fa_icon "rss-square" %>

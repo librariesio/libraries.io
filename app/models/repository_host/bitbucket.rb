@@ -24,6 +24,10 @@ module RepositoryHost
       "#{url}/commits"
     end
 
+    def compare_url(branch_one, branch_two)
+      "#{url}/compare/#{branch_two}..#{branch_one}#diff"
+    end
+
     def get_file_list(token = nil)
       api_client(token).get_request("1.0/repositories/#{repository.full_name}/directory/")[:values]
     rescue *IGNORABLE_EXCEPTIONS
