@@ -1,3 +1,6 @@
 class IssueSerializer < ActiveModel::Serializer
-  attributes :name, :project_count, :homepage, :color, :default_language
+  attributes :number, :state, :title, :body, :locked, :closed_at, :created_at,
+             :updated_at
+
+  belongs_to :repository
 end
