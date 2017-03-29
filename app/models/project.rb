@@ -119,10 +119,14 @@ class Project < ApplicationRecord
   end
 
   def sync
-    platform_class.update(name)
+    result = platform_class.update(name)
+    set_last_synced_at unless result
   rescue
-    self.last_synced_at = Time.zone.now
-    save
+    set_last_synced_at
+  end
+
+  def set_last_synced_at
+    update_attribute(:last_synced_at, Time.zone.now)
   end
 
   def async_sync
