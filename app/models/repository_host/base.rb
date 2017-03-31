@@ -31,6 +31,10 @@ module RepositoryHost
       "#{url}/raw/#{sha}/"
     end
 
+    def compare_url(branch_one, branch_two)
+      "#{url}/compare/#{branch_one}...#{branch_two}"
+    end
+
     def watchers_url
       nil
     end

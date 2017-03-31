@@ -82,7 +82,8 @@ class Repository < ApplicationRecord
            :download_fork_source, :download_tags, :download_contributions, :url,
            :create_webhook, :download_issues, :download_forks, :stargazers_url,
            :formatted_host, :get_file_list, :get_file_contents, :issues_url,
-           :source_url, :contributors_url, :blob_url, :raw_url, :commits_url, to: :repository_host
+           :source_url, :contributors_url, :blob_url, :raw_url, :commits_url,
+           :compare_url, to: :repository_host
 
   def self.language(language)
     where('lower(repositories.language) = ?', language.try(:downcase))

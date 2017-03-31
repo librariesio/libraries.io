@@ -64,6 +64,7 @@ class Version < ApplicationRecord
   end
 
   def send_notifications
+    project.try(:repository).try(:download_tags) rescue nil
     notify_subscribers
     notify_firehose
     notify_web_hooks
@@ -101,5 +102,39 @@ class Version < ApplicationRecord
 
   def load_dependencies_tree(kind, date = nil)
     TreeResolver.new(self, kind, date).load_dependencies_tree
+  end
+
+  def related_tag
+    return nil unless project && project.repository
+    @related_tag ||= project.repository.tags.find{|t| t.clean_number == clean_number }
+  end
+
+  def repository_url
+    related_tag.try(:repository_url)
+  end
+
+  def related_versions
+    @related_versions ||= project.try(:versions).try(:sort)
+  end
+
+  def related_versions_with_tags
+    @related_versions_with_tags ||= related_versions.select(&:related_tag)
+  end
+
+  def version_index
+    related_versions_with_tags.index(self)
+  end
+
+  def next_version
+    related_versions_with_tags[version_index - 1]
+  end
+
+  def previous_version
+    related_versions_with_tags[version_index + 1]
+  end
+
+  def diff_url
+    return nil unless project && project.repository && related_tag && previous_version && previous_version.related_tag
+    project.repository.compare_url(previous_version.related_tag.number, related_tag.number)
   end
 end

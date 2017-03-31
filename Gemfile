@@ -93,7 +93,6 @@ group :development do
   gem 'capistrano-rails-console', require: nil
   gem 'listen'
   gem 'spring-watcher-listen'
-  gem 'web-console'
 end
 
 group :development, :test do

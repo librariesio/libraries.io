@@ -129,9 +129,10 @@ module RepositoryHost
     end
 
     def self.recursive_gitlab_repos(page_number = 1, limit = 5, order = "created_asc")
+      return if limit.zero?
       r = Typhoeus.get("https://gitlab.com/explore/projects?&page=#{page_number}&sort=#{order}")
       if r.code == 500
-        recursive_gitlab_repos(page_number.to_i + 1, limit)
+        recursive_gitlab_repos(page_number.to_i + 1, limit, order)
       else
         page = Nokogiri::HTML(r.body)
         names = page.css('a.project').map{|project| project.attributes["href"].value[1..-1] }
@@ -146,7 +147,7 @@ module RepositoryHost
       if names.any?
         limit = limit - 1
         REDIS.set 'gitlab-page', page_number
-        recursive_gitlab_repos(page_number.to_i + 1, limit)
+        recursive_gitlab_repos(page_number.to_i + 1, limit, order)
       end
     end
 
