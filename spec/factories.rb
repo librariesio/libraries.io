@@ -80,12 +80,28 @@ FactoryGirl.define do
 
   factory :repository_user do
     login
+    name 'Andrew Nesbitt'
+    user_type 'User'
+    company 'Libraries.io'
+    blog 'http://nesbitt.io'
+    location 'Somerset, UK'
+    email 'andrew@libraries.io'
+    bio 'Developer of things'
+    followers 1
+    following 2
     sequence(:uuid)
+    host_type 'GitHub'
   end
 
   factory :repository_organisation do
     login
     sequence(:uuid)
+    host_type 'GitHub'
+    name 'Libraries.io'
+    blog 'https://libraries.io'
+    email 'support@libraries.io'
+    location 'Bath, UK'
+    bio 'Open source things'
   end
 
   factory :subscription do
