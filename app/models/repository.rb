@@ -26,7 +26,7 @@ class Repository < ApplicationRecord
   has_many :issues, dependent: :delete_all
   has_one :readme, dependent: :delete
   belongs_to :repository_organisation
-  belongs_to :repository_user, primary_key: :github_id, foreign_key: :owner_id
+  belongs_to :repository_user, primary_key: :uuid, foreign_key: :owner_id
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
   has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
 

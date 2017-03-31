@@ -13,7 +13,7 @@ class RepositoryOrganisation < ApplicationRecord
   has_many :projects, through: :open_source_repositories
 
   validates :login, uniqueness: true, if: lambda { self.login_changed? }
-  validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
+  validates :uuid, uniqueness: true, if: lambda { self.uuid_changed? }
 
   after_commit :async_sync, on: :create
 
@@ -53,7 +53,7 @@ class RepositoryOrganisation < ApplicationRecord
       return false if r.blank?
 
       org = nil
-      org_by_id = RepositoryOrganisation.find_by_github_id(r[:id])
+      org_by_id = RepositoryOrganisation.find_by_uuid(r[:id])
       if r[:login].present?
         org_by_login = RepositoryOrganisation.where("lower(login) = ?", r[:login].downcase).first
       else
@@ -78,7 +78,7 @@ class RepositoryOrganisation < ApplicationRecord
         org_by_login.destroy if org.nil?
       end
       if org.nil?
-        org = RepositoryOrganisation.create!(github_id: r[:id], login: r[:login])
+        org = RepositoryOrganisation.create!(uuid: r[:id], login: r[:login])
       end
 
       org.assign_attributes r.slice(*RepositoryOrganisation::API_FIELDS)

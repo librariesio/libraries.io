@@ -14,5 +14,5 @@ describe RepositoryUser, type: :model do
   it { should have_many(:contributions) }
 
   it { should validate_uniqueness_of(:login) }
-  it { should validate_uniqueness_of(:github_id) }
+  it { should validate_uniqueness_of(:uuid) }
 end

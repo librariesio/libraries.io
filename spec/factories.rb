@@ -80,11 +80,12 @@ FactoryGirl.define do
 
   factory :repository_user do
     login
-    sequence(:github_id)
+    sequence(:uuid)
   end
 
   factory :repository_organisation do
     login
+    sequence(:uuid)
   end
 
   factory :subscription do

@@ -2,9 +2,9 @@ class RepositoryUser < ApplicationRecord
   include Profile
 
   has_many :contributions, dependent: :delete_all
-  has_many :repositories, primary_key: :github_id, foreign_key: :owner_id
-  has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
-  has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
+  has_many :repositories, primary_key: :uuid, foreign_key: :owner_id
+  has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, primary_key: :uuid, foreign_key: :owner_id
+  has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository, primary_key: :uuid, foreign_key: :owner_id
   has_many :dependencies, through: :open_source_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
@@ -13,11 +13,11 @@ class RepositoryUser < ApplicationRecord
   has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('repository_users.id').order("COUNT(repository_users.id) DESC") }, through: :contributed_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
-  has_many :issues, primary_key: :github_id
+  has_many :issues, primary_key: :uuid
 
   validates :login, uniqueness: true, if: lambda { self.login_changed? }
-  validates :github_id, uniqueness: true, if: lambda { self.github_id_changed? }
-  validates :github_id, presence: true
+  validates :uuid, uniqueness: true, if: lambda { self.uuid_changed? }
+  validates :uuid, presence: true
 
   after_commit :async_sync, on: :create
 
@@ -56,7 +56,7 @@ class RepositoryUser < ApplicationRecord
   end
 
   def download_from_github
-    download_from_github_by(github_id)
+    download_from_github_by(uuid)
   end
 
   def download_from_github_by_login
@@ -90,7 +90,7 @@ class RepositoryUser < ApplicationRecord
 
   def self.create_from_github(repository_user)
     user = nil
-    user_by_id = RepositoryUser.find_by_github_id(repository_user.id)
+    user_by_id = RepositoryUser.find_by_uuid(repository_user.id)
     user_by_login = RepositoryUser.where("lower(login) = ?", repository_user.login.try(:downcase)).first
     if user_by_id # its fine
       if user_by_id.login.try(:downcase) == repository_user.login.downcase && user_by_id.user_type == repository_user.type
@@ -106,12 +106,12 @@ class RepositoryUser < ApplicationRecord
       end
     elsif user_by_login # conflict
       if user_by_login.download_from_github_by_login
-        user = user_by_login if user_by_login.github_id == repository_user.id
+        user = user_by_login if user_by_login.uuid == repository_user.id
       end
       user_by_login.destroy if user.nil?
     end
     if user.nil?
-      user = RepositoryUser.create!(github_id: repository_user.id, login: repository_user.login, user_type: repository_user.type)
+      user = RepositoryUser.create!(uuid: repository_user.id, login: repository_user.login, user_type: repository_user.type)
     end
     user.update(repository_user.to_hash.slice(:name, :company, :blog, :location, :email))
     user

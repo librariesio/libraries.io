@@ -20,7 +20,7 @@ module Profile
   end
 
   def avatar_url(size = 60)
-    "https://avatars.githubusercontent.com/u/#{github_id}?size=#{size}"
+    "https://avatars.githubusercontent.com/u/#{uuid}?size=#{size}"
   end
 
   def github_url

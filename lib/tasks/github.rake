@@ -41,7 +41,7 @@ namespace :github do
       users.each do |o|
         begin
           if o.type == "Organization"
-            RepositoryOrganisation.find_or_create_by(github_id: o.id) do |u|
+            RepositoryOrganisation.find_or_create_by(uuid: o.id) do |u|
               u.login = o.login
             end
           else
