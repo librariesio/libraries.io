@@ -7,12 +7,12 @@ describe "UsersController" do
   describe "GET /github/:login", type: :request do
     it "renders successfully when logged out" do
       visit user_path(repository_user)
-      expect(page).to have_content repository_user.login
+      expect(page).to have_content repository_user.name
     end
 
     it "renders orgs successfully when logged out" do
       visit user_path(repository_organisation)
-      expect(page).to have_content repository_organisation.login
+      expect(page).to have_content repository_organisation.name
     end
   end
 end
