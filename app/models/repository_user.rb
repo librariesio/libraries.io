@@ -24,6 +24,10 @@ class RepositoryUser < ApplicationRecord
   scope :visible, -> { where(hidden: false) }
   scope :with_login, -> { where("repository_users.login <> ''") }
 
+  def github_id
+    uuid
+  end
+
   def meta_tags
     {
       title: "#{self} on GitHub",

@@ -2,7 +2,7 @@ class Api::RepositoryUsersController < Api::ApplicationController
   before_action :find_user
 
   def show
-    render json: @repository_user.as_json
+    render json: @repository_user.as_json({methods: [:github_id, :user_type]})
   end
 
   def repositories
