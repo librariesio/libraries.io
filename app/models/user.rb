@@ -12,7 +12,7 @@ class User < ApplicationRecord
   has_many :all_repositories, through: :repository_permissions, source: :repository
   has_many :adminable_repository_permissions, -> { where admin: true }, anonymous_class: RepositoryPermission
   has_many :adminable_repositories, through: :adminable_repository_permissions, source: :repository
-  has_many :adminable_github_orgs, -> { group('repository_organisations.id') }, through: :adminable_repositories, source: :repository_organisation
+  has_many :adminable_repository_organisations, -> { group('repository_organisations.id') }, through: :adminable_repositories, source: :repository_organisation
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
   has_many :public_repositories, -> { where private: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
 
