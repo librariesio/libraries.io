@@ -10,7 +10,7 @@ module Profile
   end
 
   def top_contributors
-    GithubUser.where(id: top_contributor_ids).order("position(','||github_users.id::text||',' in '#{top_contributor_ids.join(',')}')")
+    RepositoryUser.where(id: top_contributor_ids).order("position(','||repository_users.id::text||',' in '#{top_contributor_ids.join(',')}')")
   end
 
   def top_contributor_ids

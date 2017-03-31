@@ -1,4 +1,4 @@
-class GithubOrganisation < ApplicationRecord
+class RepositoryOrganisation < ApplicationRecord
   include Profile
 
   API_FIELDS = [:name, :login, :blog, :email, :location, :bio]
@@ -9,7 +9,7 @@ class GithubOrganisation < ApplicationRecord
   has_many :dependencies, through: :open_source_repositories
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
-  has_many :contributors, -> { group('github_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
+  has_many :contributors, -> { group('repository_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
   validates :login, uniqueness: true, if: lambda { self.login_changed? }
@@ -17,11 +17,11 @@ class GithubOrganisation < ApplicationRecord
 
   after_commit :async_sync, on: :create
 
-  scope :most_repos, -> { joins(:open_source_repositories).select('github_organisations.*, count(repositories.id) AS repo_count').group('github_organisations.id').order('repo_count DESC') }
-  scope :most_stars, -> { joins(:open_source_repositories).select('github_organisations.*, sum(repositories.stargazers_count) AS star_count, count(repositories.id) AS repo_count').group('github_organisations.id').order('star_count DESC') }
-  scope :newest, -> { joins(:open_source_repositories).select('github_organisations.*, count(repositories.id) AS repo_count').group('github_organisations.id').order('created_at DESC').having('count(repositories.id) > 0') }
+  scope :most_repos, -> { joins(:open_source_repositories).select('repository_organisations.*, count(repositories.id) AS repo_count').group('repository_organisations.id').order('repo_count DESC') }
+  scope :most_stars, -> { joins(:open_source_repositories).select('repository_organisations.*, sum(repositories.stargazers_count) AS star_count, count(repositories.id) AS repo_count').group('repository_organisations.id').order('star_count DESC') }
+  scope :newest, -> { joins(:open_source_repositories).select('repository_organisations.*, count(repositories.id) AS repo_count').group('repository_organisations.id').order('created_at DESC').having('count(repositories.id) > 0') }
   scope :visible, -> { where(hidden: false) }
-  scope :with_login, -> { where("github_organisations.login <> ''") }
+  scope :with_login, -> { where("repository_organisations.login <> ''") }
 
   def meta_tags
     {
@@ -53,9 +53,9 @@ class GithubOrganisation < ApplicationRecord
       return false if r.blank?
 
       org = nil
-      org_by_id = GithubOrganisation.find_by_github_id(r[:id])
+      org_by_id = RepositoryOrganisation.find_by_github_id(r[:id])
       if r[:login].present?
-        org_by_login = GithubOrganisation.where("lower(login) = ?", r[:login].downcase).first
+        org_by_login = RepositoryOrganisation.where("lower(login) = ?", r[:login].downcase).first
       else
         org_by_login = nil
       end
@@ -78,10 +78,10 @@ class GithubOrganisation < ApplicationRecord
         org_by_login.destroy if org.nil?
       end
       if org.nil?
-        org = GithubOrganisation.create!(github_id: r[:id], login: r[:login])
+        org = RepositoryOrganisation.create!(github_id: r[:id], login: r[:login])
       end
 
-      org.assign_attributes r.slice(*GithubOrganisation::API_FIELDS)
+      org.assign_attributes r.slice(*RepositoryOrganisation::API_FIELDS)
       org.save
       org
     rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
@@ -90,7 +90,7 @@ class GithubOrganisation < ApplicationRecord
   end
 
   def async_sync
-    GithubUpdateOrgWorker.perform_async(self.login)
+    RepositoryUpdateOrgWorker.perform_async(self.login)
   end
 
   def sync
@@ -108,7 +108,7 @@ class GithubOrganisation < ApplicationRecord
   end
 
   def download_from_github_by(id_or_login)
-    GithubOrganisation.create_from_github(github_client.org(id_or_login))
+    RepositoryOrganisation.create_from_github(github_client.org(id_or_login))
   rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
     nil
   end

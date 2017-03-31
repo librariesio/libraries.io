@@ -1,4 +1,4 @@
-class GithubUser < ApplicationRecord
+class RepositoryUser < ApplicationRecord
   include Profile
 
   has_many :contributions, dependent: :delete_all
@@ -9,8 +9,8 @@ class GithubUser < ApplicationRecord
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
   has_many :contributed_repositories, -> { Repository.source.open_source }, through: :contributions, source: :repository
-  has_many :contributors, -> { group('github_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
-  has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('github_users.id').order("COUNT(github_users.id) DESC") }, through: :contributed_repositories, source: :contributors
+  has_many :contributors, -> { group('repository_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
+  has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('repository_users.id').order("COUNT(repository_users.id) DESC") }, through: :contributed_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
   has_many :issues, primary_key: :github_id
@@ -22,7 +22,7 @@ class GithubUser < ApplicationRecord
   after_commit :async_sync, on: :create
 
   scope :visible, -> { where(hidden: false) }
-  scope :with_login, -> { where("github_users.login <> ''") }
+  scope :with_login, -> { where("repository_users.login <> ''") }
 
   def meta_tags
     {
@@ -45,7 +45,7 @@ class GithubUser < ApplicationRecord
   end
 
   def async_sync
-    GithubUpdateUserWorker.perform_async(self.login)
+    RepositoryUpdateUserWorker.perform_async(self.login)
   end
 
   def sync
@@ -64,7 +64,7 @@ class GithubUser < ApplicationRecord
   end
 
   def download_from_github_by(id_or_login)
-    GithubUser.create_from_github(github_client.user(id_or_login))
+    RepositoryUser.create_from_github(github_client.user(id_or_login))
   rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
     nil
   end
@@ -88,32 +88,32 @@ class GithubUser < ApplicationRecord
     nil
   end
 
-  def self.create_from_github(github_user)
+  def self.create_from_github(repository_user)
     user = nil
-    user_by_id = GithubUser.find_by_github_id(github_user.id)
-    user_by_login = GithubUser.where("lower(login) = ?", github_user.login.try(:downcase)).first
+    user_by_id = RepositoryUser.find_by_github_id(repository_user.id)
+    user_by_login = RepositoryUser.where("lower(login) = ?", repository_user.login.try(:downcase)).first
     if user_by_id # its fine
-      if user_by_id.login.try(:downcase) == github_user.login.downcase && user_by_id.user_type == github_user.type
+      if user_by_id.login.try(:downcase) == repository_user.login.downcase && user_by_id.user_type == repository_user.type
         user = user_by_id
       else
         if user_by_login && !user_by_login.download_from_github
           user_by_login.destroy
         end
-        user_by_id.login = github_user.login
-        user_by_id.user_type = github_user.type
+        user_by_id.login = repository_user.login
+        user_by_id.user_type = repository_user.type
         user_by_id.save!
         user = user_by_id
       end
     elsif user_by_login # conflict
       if user_by_login.download_from_github_by_login
-        user = user_by_login if user_by_login.github_id == github_user.id
+        user = user_by_login if user_by_login.github_id == repository_user.id
       end
       user_by_login.destroy if user.nil?
     end
     if user.nil?
-      user = GithubUser.create!(github_id: github_user.id, login: github_user.login, user_type: github_user.type)
+      user = RepositoryUser.create!(github_id: repository_user.id, login: repository_user.login, user_type: repository_user.type)
     end
-    user.update(github_user.to_hash.slice(:name, :company, :blog, :location, :email))
+    user.update(repository_user.to_hash.slice(:name, :company, :blog, :location, :email))
     user
   end
 end

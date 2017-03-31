@@ -198,7 +198,7 @@ module ApplicationHelper
       hash = record.meta_tags.merge({
         url: repository_url(record.to_param)
       })
-    when 'GithubUser', 'GithubOrganisation'
+    when 'RepositoryUser', 'RepositoryOrganisation'
       hash = record.meta_tags.merge({
         url: user_url(record.login)
       })

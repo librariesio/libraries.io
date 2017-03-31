@@ -75,8 +75,8 @@ class RepositoriesController < ApplicationController
 
   def contributors
     load_repo
-    scope = @repository.contributions.where('count > 0').joins(:github_user)
-    visible_scope = scope.where('github_users.hidden = ?', false).order('count DESC')
+    scope = @repository.contributions.where('count > 0').joins(:repository_user)
+    visible_scope = scope.where('repository_users.hidden = ?', false).order('count DESC')
     @total = scope.sum(:count)
     @top_count = visible_scope.first.try(:count)
     @contributions = visible_scope.paginate(page: page_number)
