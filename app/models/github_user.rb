@@ -113,7 +113,7 @@ class GithubUser < ApplicationRecord
     if user.nil?
       user = GithubUser.create!(github_id: github_user.id, login: github_user.login, user_type: github_user.type)
     end
-    user.update(github_user.to_hash.slice(:name, :company, :blog, :location, :email))
+    user.update(github_user.to_hash.slice(:name, :company, :blog, :location, :email, :bio))
     user
   end
 end
