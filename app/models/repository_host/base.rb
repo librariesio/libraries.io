@@ -97,7 +97,7 @@ module RepositoryHost
         repository.save! if repository.changed?
       rescue self.class.api_missing_error_class
         repository.update_attribute(:status, 'Removed') if !repository.private?
-      rescue *IGNORABLE_EXCEPTIONS
+      rescue *self.class::IGNORABLE_EXCEPTIONS
         nil
       end
     end
