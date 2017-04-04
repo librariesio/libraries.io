@@ -187,7 +187,7 @@ module RepositoryHost
       begin
         r = self.class.fetch_repo(repository.id_or_name)
         return unless r.present?
-        repository.uuid = r[:id] unless repository.uuid == r[:id]
+        repository.uuid = r[:id] unless repository.uuid.to_s == r[:id].to_s
          if repository.full_name.downcase != r[:full_name].downcase
            clash = Repository.host('GitHub').where('lower(full_name) = ?', r[:full_name].downcase).first
            if clash && (!clash.update(token) || clash.status == "Removed")

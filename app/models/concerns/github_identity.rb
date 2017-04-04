@@ -47,7 +47,7 @@ module GithubIdentity
     existing_repos = Repository.where(uuid: new_repo_ids).select(:id, :uuid)
 
     r.each do |repo|
-      unless github_repo = existing_repos.find{|re| re.uuid == repo.id}
+      unless github_repo = existing_repos.find{|re| re.uuid.to_s == repo.id.to_s}
         github_repo = Repository.host('GitHub').find_by('lower(full_name) = ?', repo.full_name.downcase) || Repository.create_from_hash(repo)
       end
       next if github_repo.nil?
