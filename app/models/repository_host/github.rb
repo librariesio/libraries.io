@@ -2,6 +2,10 @@ module RepositoryHost
   class Github < Base
     IGNORABLE_EXCEPTIONS = [Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError]
 
+    def self.api_missing_error_class
+      Octokit::NotFound
+    end
+
     def avatar_url(size = 60)
       "https://avatars.githubusercontent.com/u/#{repository.owner_id}?size=#{size}"
     end
@@ -181,30 +185,6 @@ module RepositoryHost
       end
 
       repository.tags.create!(tag_hash)
-    end
-
-    def update(token = nil)
-      begin
-        r = self.class.fetch_repo(repository.id_or_name)
-        return unless r.present?
-        repository.uuid = r[:id] unless repository.uuid.to_s == r[:id].to_s
-         if repository.full_name.downcase != r[:full_name].downcase
-           clash = Repository.host('GitHub').where('lower(full_name) = ?', r[:full_name].downcase).first
-           if clash && (!clash.update(token) || clash.status == "Removed")
-             clash.destroy
-           end
-           repository.full_name = r[:full_name]
-         end
-        repository.owner_id = r[:owner][:id]
-        repository.license = Project.format_license(r[:license][:key]) if r[:license]
-        repository.source_name = r[:parent][:full_name] if r[:fork]
-        repository.assign_attributes r.slice(*Repository::API_FIELDS)
-        repository.save! if repository.changed?
-      rescue Octokit::NotFound
-        repository.update_attribute(:status, 'Removed') if !repository.private?
-      rescue *IGNORABLE_EXCEPTIONS
-        nil
-      end
     end
 
     private

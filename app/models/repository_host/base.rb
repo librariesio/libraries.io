@@ -78,6 +78,30 @@ module RepositoryHost
       self.class.format(repository.host_type)
     end
 
+    def update_from_host(token = nil)
+      begin
+        r = self.class.fetch_repo(repository.id_or_name)
+        return unless r.present?
+        repository.uuid = r[:id] unless repository.uuid.to_s == r[:id].to_s
+         if repository.full_name.downcase != r[:full_name].downcase
+           clash = Repository.host(r[:host_type]).where('lower(full_name) = ?', r[:full_name].downcase).first
+           if clash && (!clash.repository_host.update_from_host(token) || clash.status == "Removed")
+             clash.destroy
+           end
+           repository.full_name = r[:full_name]
+         end
+        repository.owner_id = r[:owner][:id]
+        repository.license = Project.format_license(r[:license][:key]) if r[:license]
+        repository.source_name = r[:parent][:full_name] if r[:fork]
+        repository.assign_attributes r.slice(*Repository::API_FIELDS)
+        repository.save! if repository.changed?
+      rescue self.class.api_missing_error_class
+        repository.update_attribute(:status, 'Removed') if !repository.private?
+      rescue *IGNORABLE_EXCEPTIONS
+        nil
+      end
+    end
+
     private
 
     attr_reader :repository

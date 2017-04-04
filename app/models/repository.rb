@@ -213,7 +213,7 @@ class Repository < ApplicationRecord
   end
 
   def update_from_repository(token)
-    repository_host.update(token)
+    repository_host.update_from_host(token)
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
