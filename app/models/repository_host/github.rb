@@ -82,6 +82,7 @@ module RepositoryHost
     end
 
     def download_contributions(token = nil)
+      return if repository.fork?
       gh_contributions = api_client(token).contributors(repository.full_name)
       return if gh_contributions.empty?
       existing_contributions = repository.contributions.includes(:github_user).to_a
