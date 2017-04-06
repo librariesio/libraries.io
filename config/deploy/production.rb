@@ -8,7 +8,6 @@ server '163.172.138.184', user: 'root', roles: %w{app worker}
 server '163.172.155.116', user: 'root', roles: %w{app worker}
 server '163.172.165.101', user: 'root', roles: %w{app worker}
 server '51.15.141.224', user: 'root', roles: %w{app worker}
-server '163.172.128.75', user: 'root', roles: %w{app worker}
 
 server '51.15.130.54',    user: 'root', roles: %w{cron}
 
