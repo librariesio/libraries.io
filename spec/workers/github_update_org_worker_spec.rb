@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe GithubUpdateOrgWorker do
   it "should use the low priority queue" do
-    is_expected.to be_processed_in :low
+    is_expected.to be_processed_in :owners
   end
 
   it "should sync an org" do
