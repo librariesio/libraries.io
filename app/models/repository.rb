@@ -281,7 +281,7 @@ class Repository < ApplicationRecord
   def self.update_from_tag(repo_name)
     repository = Repository.host('GitHub').find_by_full_name(repo_name)
     if repository
-      repository.download_tags(token)
+      repository.download_tags
     else
       CreateRepositoryWorker.perform_async('GitHub', repo_name)
     end
