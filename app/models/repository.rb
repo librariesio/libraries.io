@@ -269,25 +269,21 @@ class Repository < ApplicationRecord
     end
   end
 
-  def self.update_from_star(repo_name, token = nil)
-    token ||= AuthToken.token
-
+  def self.update_from_star(repo_name)
     repository = Repository.host('GitHub').find_by_full_name(repo_name)
     if repository
       repository.increment!(:stargazers_count)
     else
-      RepositoryHost::Github.create(repo_name, token)
+      CreateRepositoryWorker.perform_async('GitHub', repo_name)
     end
   end
 
-  def self.update_from_tag(repo_name, token = nil)
-    token ||= AuthToken.token
-
+  def self.update_from_tag(repo_name)
     repository = Repository.host('GitHub').find_by_full_name(repo_name)
     if repository
       repository.download_tags(token)
     else
-      RepositoryHost::Github.create(repo_name, token)
+      CreateRepositoryWorker.perform_async('GitHub', repo_name)
     end
   end
 
