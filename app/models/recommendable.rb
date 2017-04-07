@@ -26,8 +26,8 @@ module Recommendable
   end
 
   def favourite_recommendation_ids
-    return [] if github_user.nil?
-    recommendation_filter github_user.favourite_projects.limit(100)
+    return [] if repository_user.nil?
+    recommendation_filter repository_user.favourite_projects.limit(100)
   end
 
   def most_depended_on_recommendation_ids
@@ -53,7 +53,7 @@ module Recommendable
       languages = all_repositories.pluck(:language).compact
 
       # repositories you've contributed to
-      languages += github_user.contributed_repositories.pluck(:language).compact if github_user.present?
+      languages += repository_user.contributed_repositories.pluck(:language).compact if repository_user.present?
 
       # Repositories your subscribed to (twice to bump those languages)
       languages += subscribed_projects.pluck(:language).compact + subscribed_projects.pluck(:language).compact

@@ -1,13 +1,13 @@
 namespace :github do
   desc 'Sync github users'
   task sync_users: :environment do
-    GithubUser.visible.where(last_synced_at: nil).limit(100).each(&:async_sync)
-    GithubUser.visible.order('last_synced_at ASC').limit(100).each(&:async_sync)
+    RepositoryUser.visible.where(last_synced_at: nil).limit(100).each(&:async_sync)
+    RepositoryUser.visible.order('last_synced_at ASC').limit(100).each(&:async_sync)
   end
 
   desc 'Sync github orgs'
   task sync_orgs: :environment do
-    GithubOrganisation.visible.order('last_synced_at ASC').limit(200).each(&:async_sync)
+    RepositoryOrganisation.visible.order('last_synced_at ASC').limit(200).each(&:async_sync)
   end
 
   desc 'Sync github repos'
@@ -41,11 +41,11 @@ namespace :github do
       users.each do |o|
         begin
           if o.type == "Organization"
-            GithubOrganisation.find_or_create_by(github_id: o.id) do |u|
+            RepositoryOrganisation.find_or_create_by(uuid: o.id) do |u|
               u.login = o.login
             end
           else
-            GithubUser.create_from_github(o)
+            RepositoryUser.create_from_github(o)
           end
         rescue
           nil

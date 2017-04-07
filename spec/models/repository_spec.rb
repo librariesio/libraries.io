@@ -13,8 +13,8 @@ describe Repository, type: :model do
   it { should have_many(:web_hooks) }
   it { should have_many(:issues) }
   it { should have_one(:readme) }
-  it { should belong_to(:github_organisation) }
-  it { should belong_to(:github_user) }
+  it { should belong_to(:repository_organisation) }
+  it { should belong_to(:repository_user) }
   it { should belong_to(:source) }
 
   it { should validate_uniqueness_of(:full_name) }

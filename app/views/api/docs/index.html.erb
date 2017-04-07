@@ -122,7 +122,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependent-repositories", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @project.dependent_repositories.paginate(page: 1).as_json(except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]) %></pre>
+<%= JSON.pretty_generate @project.dependent_repositories.paginate(page: 1).as_json(except: [:id, :repository_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]) %></pre>
     <% end %>
 
     <h3 id="project-search">Project Search</h3>
@@ -156,7 +156,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-repository", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @repository.as_json({except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]}) %></pre>
+<%= JSON.pretty_generate @repository.as_json({except: [:id, :repository_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]}) %></pre>
     <% end %>
     <h3 id='repository-dependencies'>Repository Dependencies</h3>
 
@@ -200,11 +200,11 @@
     </p>
     <hr>
     <p>
-      Example: <strong><%= link_to "https://libraries.io/api/github/#{@github_user.login}?api_key=#{@api_key}", "https://libraries.io/api/github/#{@github_user.login}?api_key=#{@api_key}" %></strong>
+      Example: <strong><%= link_to "https://libraries.io/api/github/#{@repository_user.login}?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}?api_key=#{@api_key}" %></strong>
     </p>
     <% cache "api-docs-#{@cache_version}-user", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @github_user.as_json %></pre>
+<%= JSON.pretty_generate @repository_user.as_json %></pre>
     <% end %>
 
     <h3 id="user-repositories">User Repositories</h3>
@@ -222,7 +222,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-repositories", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @github_user.open_source_repositories.paginate(page: 1).as_json(except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]) %></pre>
+<%= JSON.pretty_generate @repository_user.open_source_repositories.paginate(page: 1).as_json(except: [:id, :repository_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]) %></pre>
     <% end %>
 
     <h3 id="user-projects">User Projects</h3>
@@ -236,11 +236,11 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@github_user.login}/projects?api_key=#{@api_key}", "https://libraries.io/api/github/#{@github_user.login}/projects?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-projects", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @github_user.projects.includes(:versions, :repository).paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
+<%= JSON.pretty_generate @repository_user.projects.includes(:versions, :repository).paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
 
     <h3 id='subscriptions-index'>User Subscriptions</h3>

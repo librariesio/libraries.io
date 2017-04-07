@@ -36,14 +36,14 @@ Rails.application.routes.draw do
 
       get '/:host_type/search', to: 'repositories#search'
 
-      get '/:host_type/:login/repositories', to: 'github_users#repositories'
-      get '/:host_type/:login/projects', to: 'github_users#projects'
+      get '/:host_type/:login/repositories', to: 'repository_users#repositories'
+      get '/:host_type/:login/projects', to: 'repository_users#projects'
 
       get '/:host_type/:owner/:name/dependencies', to: 'repositories#dependencies', constraints: { :name => /[^\/]+/ }
       get '/:host_type/:owner/:name/projects', to: 'repositories#projects', constraints: { :name => /[^\/]+/ }
       get '/:host_type/:owner/:name', to: 'repositories#show', constraints: { :name => /[^\/]+/ }
 
-      get '/:host_type/:login', to: 'github_users#show'
+      get '/:host_type/:login', to: 'repository_users#show'
     end
 
     get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }, as: :version_tree
@@ -138,15 +138,15 @@ Rails.application.routes.draw do
     get '/:host_type/search', to: 'repositories#search', as: :github_search
     get '/:host_type/trending', to: 'repositories#hacker_news', as: :trending
     get '/:host_type/new', to: 'repositories#new', as: :new_repos
-    get '/:host_type/organisations', to: 'github_organisations#index', as: :github_organisations
+    get '/:host_type/organisations', to: 'repository_organisations#index', as: :repository_organisations
     get '/:host_type/timeline', to: 'repositories#timeline', as: :github_timeline
-    get '/:host_type/:login/issues', to: 'users#issues'
-    get '/:host_type/:login/dependency-issues', to: 'users#dependency_issues'
-    get '/:host_type/:login/repositories', to: 'users#repositories', as: :user_repositories
-    get '/:host_type/:login/contributions', to: 'users#contributions', as: :user_contributions
-    get '/:host_type/:login/projects', to: 'users#projects', as: :user_projects
-    get '/:host_type/:login/contributors', to: 'users#contributors', as: :user_contributors
-    get '/:host_type/:login', to: 'users#show', as: :user
+    get '/:host_type/:login/issues', to: 'repository_users#issues'
+    get '/:host_type/:login/dependency-issues', to: 'repository_users#dependency_issues'
+    get '/:host_type/:login/repositories', to: 'repository_users#repositories', as: :user_repositories
+    get '/:host_type/:login/contributions', to: 'repository_users#contributions', as: :user_contributions
+    get '/:host_type/:login/projects', to: 'repository_users#projects', as: :user_projects
+    get '/:host_type/:login/contributors', to: 'repository_users#contributors', as: :user_contributors
+    get '/:host_type/:login', to: 'repository_users#show', as: :user
 
     get '/:host_type/:owner/:name', to: 'repositories#show', as: :repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
     get '/:host_type/:owner/:name/contributors', to: 'repositories#contributors', as: :repository_contributors, format: false, constraints: { :name => /[^\/]+/ }

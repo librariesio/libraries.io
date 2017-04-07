@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class RepositoryUsersController < ApplicationController
   before_action :find_user
 
   def show
@@ -43,8 +43,8 @@ class UsersController < ApplicationController
 
   def find_user
     raise ActiveRecord::RecordNotFound unless current_host == 'github'
-    @user = GithubUser.visible.where("lower(login) = ?", params[:login].downcase).first
-    @user = GithubOrganisation.visible.where("lower(login) = ?", params[:login].downcase).first if @user.nil?
+    @user = RepositoryUser.visible.where("lower(login) = ?", params[:login].downcase).first
+    @user = RepositoryOrganisation.visible.where("lower(login) = ?", params[:login].downcase).first if @user.nil?
     raise ActiveRecord::RecordNotFound if @user.nil?
     redirect_to url_for(login: @user.login), :status => :moved_permanently if params[:login] != @user.login
   end
@@ -52,7 +52,7 @@ class UsersController < ApplicationController
   def find_contributions
     @user.contributions.with_repo
                        .joins(:repository)
-                       .where('repositories.owner_id != ?', @user.github_id.to_s)
+                       .where('repositories.owner_id != ?', @user.uuid.to_s)
                        .where('repositories.fork = ?', false)
                        .where('repositories.private = ?', false)
                        .includes(:repository)

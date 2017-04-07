@@ -20,7 +20,7 @@ class Project < ApplicationRecord
   has_many :versions
   has_many :dependencies, -> { group 'project_name' }, through: :versions
   has_many :contributions, through: :repository
-  has_many :contributors, through: :contributions, source: :github_user
+  has_many :contributors, through: :contributions, source: :repository_user
   has_many :tags, through: :repository
   has_many :dependents, class_name: 'Dependency'
   has_many :dependent_versions, through: :dependents, source: :version, class_name: 'Version'
@@ -177,7 +177,7 @@ class Project < ApplicationRecord
 
   def owner
     return nil unless repository && repository.host_type == 'GitHub'
-    GithubUser.visible.find_by_login repository.owner_name
+    RepositoryUser.visible.find_by_login repository.owner_name
   end
 
   def platform_class

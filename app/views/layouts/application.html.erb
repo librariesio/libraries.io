@@ -115,8 +115,8 @@
                 <li><%= link_to 'Subscriptions', subscriptions_path %></li>
                 <% if current_user.github_enabled? %>
                   <li><%= link_to 'Repository Monitoring', repositories_path %></li>
-                  <% if current_user.github_user.present? %>
-                    <li><%= link_to 'Profile', user_path(current_user.github_user) %></li>
+                  <% if current_user.repository_user.present? %>
+                    <li><%= link_to 'Profile', user_path(current_user.repository_user) %></li>
                   <% end %>
                 <% end %>
                 <li><%= link_to 'Settings', account_path %></li>
