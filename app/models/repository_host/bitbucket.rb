@@ -7,6 +7,10 @@ module RepositoryHost
       BitBucket::Error::InternalServerError,
       BitBucket::Error::ServiceUnavailable]
 
+    def self.api_missing_error_class
+      BitBucket::Error::NotFound
+    end
+
     def avatar_url(size = 60)
       "https://bitbucket.org/#{repository.full_name}/avatar/#{size}"
     end
@@ -97,30 +101,6 @@ module RepositoryHost
       end
     rescue *IGNORABLE_EXCEPTIONS
       nil
-    end
-
-    def update(token = nil)
-      begin
-        r = self.class.fetch_repo(repository.full_name)
-        return unless r.present?
-        repository.uuid = r[:id] unless repository.uuid == r[:id]
-         if repository.full_name.downcase != r[:full_name].downcase
-           clash = Repository.host(r[:host_type]).where('lower(full_name) = ?', r[:full_name].downcase).first
-           if clash && (!clash.update(token) || clash.status == "Removed")
-             clash.destroy
-           end
-           repository.full_name = r[:full_name]
-         end
-        repository.owner_id = r[:owner][:id]
-        repository.license = Project.format_license(r[:license][:key]) if r[:license]
-        repository.source_name = r[:parent][:full_name] if r[:fork]
-        repository.assign_attributes r.slice(*Repository::API_FIELDS)
-        repository.save! if repository.changed?
-      rescue BitBucket::Error::NotFound
-        repository.update_attribute(:status, 'Removed') if !repository.private?
-      rescue *IGNORABLE_EXCEPTIONS
-        nil
-      end
     end
 
     def self.recursive_bitbucket_repos(url, limit = 5)

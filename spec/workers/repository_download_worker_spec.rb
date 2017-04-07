@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe RepositoryDownloadWorker do
   it "should use the low priority queue" do
-    is_expected.to be_processed_in :low
+    is_expected.to be_processed_in :repo
   end
 
   it "should update all info for a repo" do

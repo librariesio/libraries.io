@@ -117,7 +117,7 @@ class RepositoryUser < ApplicationRecord
     if user.nil?
       user = RepositoryUser.create!(uuid: repository_user.id, login: repository_user.login, user_type: repository_user.type)
     end
-    user.update(repository_user.to_hash.slice(:name, :company, :blog, :location, :email))
+    user.update(repository_user.to_hash.slice(:name, :company, :blog, :location, :email, :bio))
     user
   end
 end

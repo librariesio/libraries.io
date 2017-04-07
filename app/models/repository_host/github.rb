@@ -2,6 +2,10 @@ module RepositoryHost
   class Github < Base
     IGNORABLE_EXCEPTIONS = [Octokit::Unauthorized, Octokit::InvalidRepository, Octokit::RepositoryUnavailable, Octokit::NotFound, Octokit::Conflict, Octokit::Forbidden, Octokit::InternalServerError, Octokit::BadGateway, Octokit::ClientError]
 
+    def self.api_missing_error_class
+      Octokit::NotFound
+    end
+
     def avatar_url(size = 60)
       "https://avatars.githubusercontent.com/u/#{repository.owner_id}?size=#{size}"
     end
@@ -36,8 +40,9 @@ module RepositoryHost
       "#{url}/commits#{author_param}"
     end
 
-    def self.fetch_repo(full_name, token = nil)
-      AuthToken.fallback_client(token).repo(full_name, accept: 'application/vnd.github.drax-preview+json').to_hash
+    def self.fetch_repo(id_or_name, token = nil)
+      id_or_name = id_or_name.to_i if id_or_name.match(/\A\d+\Z/)
+      AuthToken.fallback_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
@@ -77,6 +82,7 @@ module RepositoryHost
     end
 
     def download_contributions(token = nil)
+      return if repository.fork?
       gh_contributions = api_client(token).contributors(repository.full_name)
       return if gh_contributions.empty?
       existing_contributions = repository.contributions.includes(:repository_user).to_a
@@ -180,30 +186,6 @@ module RepositoryHost
       end
 
       repository.tags.create!(tag_hash)
-    end
-
-    def update(token = nil)
-      begin
-        r = self.class.fetch_repo(repository.id_or_name)
-        return unless r.present?
-        repository.uuid = r[:id] unless repository.uuid == r[:id]
-         if repository.full_name.downcase != r[:full_name].downcase
-           clash = Repository.host('GitHub').where('lower(full_name) = ?', r[:full_name].downcase).first
-           if clash && (!clash.update(token) || clash.status == "Removed")
-             clash.destroy
-           end
-           repository.full_name = r[:full_name]
-         end
-        repository.owner_id = r[:owner][:id]
-        repository.license = Project.format_license(r[:license][:key]) if r[:license]
-        repository.source_name = r[:parent][:full_name] if r[:fork]
-        repository.assign_attributes r.slice(*API_FIELDS)
-        repository.save! if repository.changed?
-      rescue Octokit::NotFound
-        repository.update_attribute(:status, 'Removed') if !repository.private?
-      rescue *IGNORABLE_EXCEPTIONS
-        nil
-      end
     end
 
     private

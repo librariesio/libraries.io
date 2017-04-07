@@ -206,14 +206,12 @@ class Repository < ApplicationRecord
     download_tags(token)
     download_contributions(token)
     download_manifests(token)
-    # download_issues(token)
-    save_projects
     update_source_rank(true)
     update_attributes(last_synced_at: Time.now)
   end
 
   def update_from_repository(token)
-    repository_host.update(token)
+    repository_host.update_from_host(token)
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
@@ -271,25 +269,21 @@ class Repository < ApplicationRecord
     end
   end
 
-  def self.update_from_star(repo_name, token = nil)
-    token ||= AuthToken.token
-
+  def self.update_from_star(repo_name)
     repository = Repository.host('GitHub').find_by_full_name(repo_name)
     if repository
       repository.increment!(:stargazers_count)
     else
-      RepositoryHost::Github.create(repo_name, token)
+      CreateRepositoryWorker.perform_async('GitHub', repo_name)
     end
   end
 
-  def self.update_from_tag(repo_name, token = nil)
-    token ||= AuthToken.token
-
+  def self.update_from_tag(repo_name)
     repository = Repository.host('GitHub').find_by_full_name(repo_name)
     if repository
-      repository.download_tags(token)
+      repository.download_tags
     else
-      RepositoryHost::Github.create(repo_name, token)
+      CreateRepositoryWorker.perform_async('GitHub', repo_name)
     end
   end
 

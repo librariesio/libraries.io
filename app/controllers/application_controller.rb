@@ -102,6 +102,11 @@ class ApplicationController < ActionController::Base
     ['desc', 'asc'].include?(params[:order]) ? params[:order] : nil
   end
 
+  def custom_order
+    return unless format_sort.present?
+    "#{format_sort} #{format_order}"
+  end
+
   def search_issues(options = {})
     @search = paginate Issue.search(filters: {
       license: current_license,
