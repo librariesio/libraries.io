@@ -75,7 +75,7 @@ class RepositoryUser < ApplicationRecord
 
   def download_orgs
     github_client.orgs(login).each do |org|
-      GithubCreateOrgWorker.perform_async(org.login)
+      RepositoryCreateOrgWorker.perform_async(org.login)
     end
     true
   rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
