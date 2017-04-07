@@ -5,15 +5,14 @@ production:
 :timeout: 8
 :verbose: true
 :queues:
-
-  - [sourcerank, 1]
-  - [repo, 2]
-  - [owners, 2]
-  - [issues, 2]
-  - [status, 2]
-  - [small, 4]
-  - [default, 4]
-  - [tree, 6]
-  - [mailers, 8]
-  - [critical, 30]
   - [user, 40]
+  - [critical, 30]
+  - [mailers, 8]
+  - [tree, 6]
+  - [default, 4]
+  - [small, 4]
+  - [status, 2]
+  - [issues, 2]
+  - [owners, 2]
+  - [repo, 2]
+  - [sourcerank, 1]
