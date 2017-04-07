@@ -13,7 +13,7 @@ class Repository < ApplicationRecord
 
   has_many :projects
   has_many :contributions, dependent: :delete_all
-  has_many :contributors, through: :contributions, source: :github_user
+  has_many :contributors, through: :contributions, source: :repository_user
   has_many :tags, dependent: :delete_all
   has_many :published_tags, -> { published }, anonymous_class: Tag
   has_many :manifests, dependent: :destroy
@@ -25,8 +25,8 @@ class Repository < ApplicationRecord
   has_many :web_hooks, dependent: :delete_all
   has_many :issues, dependent: :delete_all
   has_one :readme, dependent: :delete
-  belongs_to :github_organisation
-  belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
+  belongs_to :repository_organisation
+  belongs_to :repository_user, primary_key: :uuid, foreign_key: :owner_id
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
   has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
 
@@ -51,7 +51,7 @@ class Repository < ApplicationRecord
   scope :source, -> { where(fork: false) }
 
   scope :open_source, -> { where(private: false) }
-  scope :from_org, lambda{ |org_id|  where(github_organisation_id: org_id) }
+  scope :from_org, lambda{ |org_id|  where(repository_organisation_id: org_id) }
 
   scope :with_manifests, -> { joins(:manifests) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {repository_id: nil}) }
@@ -139,7 +139,7 @@ class Repository < ApplicationRecord
 
   def owner
     return nil unless host_type == 'GitHub'
-    github_organisation_id.present? ? github_organisation : github_user
+    repository_organisation_id.present? ? repository_organisation : repository_user
   end
 
   def to_s

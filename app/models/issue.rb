@@ -2,7 +2,7 @@ class Issue < ApplicationRecord
   include IssueSearch
 
   belongs_to :repository
-  belongs_to :github_user, primary_key: :github_id
+  belongs_to :repository_user, primary_key: :uuid
 
   API_FIELDS = [:number, :state, :title, :body, :locked, :closed_at, :created_at, :updated_at]
   FIRST_PR_LABELS = ['good first bug', 'good first contribution', 'good-first-bug',
@@ -40,8 +40,8 @@ class Issue < ApplicationRecord
 
   def self.create_from_hash(repo, issue_hash)
     issue_hash = issue_hash.to_hash
-    i = repo.issues.find_or_create_by(github_id: issue_hash[:id])
-    i.github_user_id = issue_hash[:user][:id]
+    i = repo.issues.find_or_create_by(uuid: issue_hash[:id])
+    i.repository_user_id = issue_hash[:user][:id]
     i.repository_id = repo.id
     i.labels = issue_hash[:labels].map{|l| l[:name] }
     i.pull_request = issue_hash[:pull_request].present?

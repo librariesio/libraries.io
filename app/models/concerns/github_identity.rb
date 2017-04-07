@@ -3,18 +3,18 @@ module GithubIdentity
     token
   end
 
-  def github_user
+  def repository_user
     return unless github_enabled?
-    GithubUser.find_by_github_id(github_identity.uid)
+    RepositoryUser.find_by_uuid(github_identity.uid)
   end
 
   def hidden
-    github_user.try(:hidden)
+    repository_user.try(:hidden)
   end
 
   def hidden=(val)
-    return unless github_user
-    github_user.update_attributes(hidden: val)
+    return unless repository_user
+    repository_user.update_attributes(hidden: val)
   end
 
   def github_settings_url
@@ -75,8 +75,8 @@ module GithubIdentity
 
   def download_self
     return unless github_identity
-    GithubUser.create_from_github(OpenStruct.new({id: github_identity.uid, login: github_identity.nickname, type: 'User'}))
-    GithubUpdateUserWorker.perform_async(nickname)
+    RepositoryUser.create_from_github(OpenStruct.new({id: github_identity.uid, login: github_identity.nickname, type: 'User'}))
+    RepositoryUpdateUserWorker.perform_async(nickname)
   end
 
   def download_orgs

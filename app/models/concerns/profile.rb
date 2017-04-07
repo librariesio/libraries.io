@@ -10,7 +10,7 @@ module Profile
   end
 
   def top_contributors
-    GithubUser.where(id: top_contributor_ids).order("position(','||github_users.id::text||',' in '#{top_contributor_ids.join(',')}')")
+    RepositoryUser.where(id: top_contributor_ids).order("position(','||repository_users.id::text||',' in '#{top_contributor_ids.join(',')}')")
   end
 
   def top_contributor_ids
@@ -20,7 +20,7 @@ module Profile
   end
 
   def avatar_url(size = 60)
-    "https://avatars.githubusercontent.com/u/#{github_id}?size=#{size}"
+    "https://avatars.githubusercontent.com/u/#{uuid}?size=#{size}"
   end
 
   def github_url

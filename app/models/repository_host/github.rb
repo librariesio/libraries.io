@@ -85,14 +85,14 @@ module RepositoryHost
       return if repository.fork?
       gh_contributions = api_client(token).contributors(repository.full_name)
       return if gh_contributions.empty?
-      existing_contributions = repository.contributions.includes(:github_user).to_a
+      existing_contributions = repository.contributions.includes(:repository_user).to_a
       platform = repository.projects.first.try(:platform)
       gh_contributions.each do |c|
         next unless c['id']
-        cont = existing_contributions.find{|cnt| cnt.github_user.try(:github_id) == c.id }
+        cont = existing_contributions.find{|cnt| cnt.repository_user.try(:uuid) == c.id }
         unless cont
-          user = GithubUser.create_from_github(c)
-          cont = repository.contributions.find_or_create_by(github_user: user)
+          user = RepositoryUser.create_from_github(c)
+          cont = repository.contributions.find_or_create_by(repository_user: user)
         end
 
         cont.count = c.contributions
@@ -127,13 +127,13 @@ module RepositoryHost
       return if repository.owner && repository.owner.login == repository.owner_name
       o = api_client.user(repository.owner_name)
       if o.type == "Organization"
-        go = GithubOrganisation.create_from_github(repository.owner_id.to_i)
+        go = RepositoryOrganisation.create_from_github(repository.owner_id.to_i)
         if go
-          repository.github_organisation_id = go.id
+          repository.repository_organisation_id = go.id
           repository.save
         end
       else
-        GithubUser.create_from_github(o)
+        RepositoryUser.create_from_github(o)
       end
     rescue *IGNORABLE_EXCEPTIONS
       nil

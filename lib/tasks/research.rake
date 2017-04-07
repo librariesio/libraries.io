@@ -18,7 +18,7 @@ namespace :research do
     'WorldBank-Transport',
     'open-contracting']
 
-    orgs = GithubOrganisation.where(login: org_names)
+    orgs = RepositoryOrganisation.where(login: org_names)
 
     repositories = orgs.map{|org| org.repositories.source.open_source }.flatten
 

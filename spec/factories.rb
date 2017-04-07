@@ -57,13 +57,13 @@ FactoryGirl.define do
     state "open"
     title "I found a bug"
     body "Please fix it"
-    github_user
+    repository_user
     comments_count 1
   end
 
   factory :contribution do
     repository
-    github_user
+    repository_user
     count 1
   end
 
@@ -78,13 +78,30 @@ FactoryGirl.define do
     user_id 1
   end
 
-  factory :github_user do
+  factory :repository_user do
     login
-    sequence(:github_id)
+    name 'Andrew Nesbitt'
+    user_type 'User'
+    company 'Libraries.io'
+    blog 'http://nesbitt.io'
+    location 'Somerset, UK'
+    email 'andrew@libraries.io'
+    bio 'Developer of things'
+    followers 1
+    following 2
+    sequence(:uuid)
+    host_type 'GitHub'
   end
 
-  factory :github_organisation do
+  factory :repository_organisation do
     login
+    sequence(:uuid)
+    host_type 'GitHub'
+    name 'Libraries.io'
+    blog 'https://libraries.io'
+    email 'support@libraries.io'
+    location 'Bath, UK'
+    bio 'Open source things'
   end
 
   factory :subscription do
@@ -104,7 +121,7 @@ FactoryGirl.define do
     language    'Ruby'
     fork        false
     homepage    'http://rubyonrails.org'
-    github_organisation
+    repository_organisation
     private false
     stargazers_count 10_000
     size 1000
