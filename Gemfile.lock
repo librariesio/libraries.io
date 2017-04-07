@@ -194,12 +194,12 @@ GEM
     dotenv-rails (2.2.0)
       dotenv (= 2.2.0)
       railties (>= 3.2, < 5.1)
-    elasticsearch (2.0.1)
-      elasticsearch-api (= 2.0.1)
-      elasticsearch-transport (= 2.0.1)
-    elasticsearch-api (2.0.1)
+    elasticsearch (2.0.2)
+      elasticsearch-api (= 2.0.2)
+      elasticsearch-transport (= 2.0.2)
+    elasticsearch-api (2.0.2)
       multi_json
-    elasticsearch-transport (2.0.1)
+    elasticsearch-transport (2.0.2)
       faraday
       multi_json
     erubis (2.7.0)
