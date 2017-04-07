@@ -40,7 +40,7 @@ class Issue < ApplicationRecord
 
   def self.create_from_hash(repo, issue_hash)
     issue_hash = issue_hash.to_hash
-    i = repo.issues.find_or_create_by(uuid: issue_hash[:id])
+    i = repo.issues.find_or_create_by(github_id: issue_hash[:id])
     i.repository_user_id = issue_hash[:user][:id]
     i.repository_id = repo.id
     i.labels = issue_hash[:labels].map{|l| l[:name] }
