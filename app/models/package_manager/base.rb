@@ -168,7 +168,7 @@ module PackageManager
       name = mapped_project[:name]
       proj = Project.find_by(name: name, platform: self.name.demodulize)
       proj.versions.includes(:dependencies).each do |version|
-        deps = dependencies(name, version.number, mapped_project)
+        deps = dependencies(name, version.number, mapped_project) rescue []
         next unless deps && deps.any? && version.dependencies.empty?
         deps.each do |dep|
           unless version.dependencies.find_by_project_name dep[:project_name]
