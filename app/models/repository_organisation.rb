@@ -1,6 +1,4 @@
 class RepositoryOrganisation < ApplicationRecord
-  include Profile
-
   API_FIELDS = [:name, :login, :blog, :email, :location, :bio]
 
   has_many :repositories
@@ -24,22 +22,18 @@ class RepositoryOrganisation < ApplicationRecord
   scope :with_login, -> { where("repository_organisations.login <> ''") }
   scope :host, lambda{ |host_type| where('lower(repository_organisations.host_type) = ?', host_type.try(:downcase)) }
 
-  delegate :avatar_url, :repository_url, to: :repository_owner
+  delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
+           :to_s, :to_param, :github_id, to: :repository_owner
 
   def repository_owner
     RepositoryOwner::Gitlab
     @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
   end
 
-
-  def github_id
-    uuid
-  end
-
   def meta_tags
     {
-      title: "#{self} on GitHub",
-      description: "GitHub repositories created by #{self}",
+      title: "#{self} on #{host_type}",
+      description: "#{host_type} repositories created by #{self}",
       image: avatar_url(200)
     }
   end

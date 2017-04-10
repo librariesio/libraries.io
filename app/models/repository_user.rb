@@ -1,6 +1,4 @@
 class RepositoryUser < ApplicationRecord
-  include Profile
-
   has_many :contributions, dependent: :delete_all
   has_many :repositories, primary_key: :uuid, foreign_key: :owner_id
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, primary_key: :uuid, foreign_key: :owner_id
@@ -25,7 +23,8 @@ class RepositoryUser < ApplicationRecord
   scope :with_login, -> { where("repository_users.login <> ''") }
   scope :host, lambda{ |host_type| where('lower(repository_users.host_type) = ?', host_type.try(:downcase)) }
 
-  delegate :avatar_url, :repository_url, to: :repository_owner
+  delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
+           :to_s, :to_param, :github_id, to: :repository_owner
 
   def repository_owner
     RepositoryOwner::Gitlab
@@ -38,8 +37,8 @@ class RepositoryUser < ApplicationRecord
 
   def meta_tags
     {
-      title: "#{self} on GitHub",
-      description: "GitHub repositories created and contributed to by #{self}",
+      title: "#{self} on #{host_type}",
+      description: "#{host_type} repositories created and contributed to by #{self}",
       image: avatar_url(200)
     }
   end
