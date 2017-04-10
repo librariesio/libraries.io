@@ -91,7 +91,7 @@ module RepositoryHost
         next unless c['id']
         cont = existing_contributions.find{|cnt| cnt.repository_user.try(:uuid) == c.id }
         unless cont
-          user = RepositoryUser.create_from_github(c)
+          user = RepositoryUser.create_from_host('GitHub', c)
           cont = repository.contributions.find_or_create_by(repository_user: user)
         end
 
@@ -118,22 +118,6 @@ module RepositoryHost
       issues = api_client.issues(repository.full_name, state: 'all')
       issues.each do |issue|
         Issue.create_from_hash(repository, issue)
-      end
-    rescue *IGNORABLE_EXCEPTIONS
-      nil
-    end
-
-    def download_owner
-      return if repository.owner && repository.owner.login == repository.owner_name
-      o = api_client.user(repository.owner_name)
-      if o.type == "Organization"
-        go = RepositoryOrganisation.create_from_github(repository.owner_id.to_i)
-        if go
-          repository.repository_organisation_id = go.id
-          repository.save
-        end
-      else
-        RepositoryUser.create_from_github(o)
       end
     rescue *IGNORABLE_EXCEPTIONS
       nil

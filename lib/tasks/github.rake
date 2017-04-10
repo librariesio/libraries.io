@@ -45,7 +45,7 @@ namespace :github do
               u.login = o.login
             end
           else
-            RepositoryUser.create_from_github(o)
+            RepositoryUser.create_from_host('GitHub', o)
           end
         rescue
           nil

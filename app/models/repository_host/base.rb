@@ -78,6 +78,15 @@ module RepositoryHost
       self.class.format(repository.host_type)
     end
 
+    def download_owner
+      # return if repository.owner && repository.owner.login == repository.owner_name
+      repository_owner_class.download_user_from_host(repository.host_type, repository.owner_name)
+    end
+
+    def repository_owner_class
+      RepositoryOwner.const_get(repository.host_type.capitalize)
+    end
+
     def update_from_host(token = nil)
       begin
         r = self.class.fetch_repo(repository.id_or_name)

@@ -37,6 +37,41 @@ module RepositoryOwner
       owner.uuid
     end
 
+    def self.format(host_type)
+      case host_type.try(:downcase)
+      when 'github'
+        'GitHub'
+      when 'gitlab'
+        'GitLab'
+      when 'bitbucket'
+        'Bitbucket'
+      end
+    end
+
+    def formatted_host
+      self.class.format(repository.host_type)
+    end
+
+    def download_user_from_host
+      download_user_from_host_by(owner.uuid)
+    end
+
+    def download_user_from_host_by_login
+      download_user_from_host_by(owner.login)
+    end
+
+    def download_user_from_host_by(id_or_login)
+      self.class.download_user_from_host(owner.host_type, id_or_login)
+    end
+
+    def self.download_user_from_host(host_type, id_or_login)
+      RepositoryUser.create_from_host(host_type, self.fetch_user(id_or_login))
+    end
+
+    def self.fetch_user(id_or_login)
+      raise NotImplementedError
+    end
+
     private
 
     def top_favourite_project_ids
