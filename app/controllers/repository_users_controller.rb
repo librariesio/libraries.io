@@ -43,8 +43,8 @@ class RepositoryUsersController < ApplicationController
 
   def find_user
     raise ActiveRecord::RecordNotFound unless current_host == 'github'
-    @user = RepositoryUser.visible.where("lower(login) = ?", params[:login].downcase).first
-    @user = RepositoryOrganisation.visible.where("lower(login) = ?", params[:login].downcase).first if @user.nil?
+    @user = RepositoryUser.host(current_host).visible.where("lower(login) = ?", params[:login].downcase).first
+    @user = RepositoryOrganisation.host(current_host).visible.where("lower(login) = ?", params[:login].downcase).first if @user.nil?
     raise ActiveRecord::RecordNotFound if @user.nil?
     redirect_to url_for(login: @user.login), :status => :moved_permanently if params[:login] != @user.login
   end
