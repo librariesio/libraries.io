@@ -75,7 +75,7 @@ module GithubIdentity
 
   def download_self
     return unless github_identity
-    RepositoryUser.create_from_github(OpenStruct.new({id: github_identity.uid, login: github_identity.nickname, type: 'User'}))
+    RepositoryUser.create_from_github(OpenStruct.new({id: github_identity.uid, login: github_identity.nickname, type: 'User', host_type: 'GitHub'}))
     RepositoryUpdateUserWorker.perform_async(nickname)
   end
 

@@ -15,14 +15,15 @@ class RepositoryUser < ApplicationRecord
 
   has_many :issues, primary_key: :uuid
 
-  validates :login, uniqueness: true, if: lambda { self.login_changed? }
-  validates :uuid, uniqueness: true, if: lambda { self.uuid_changed? }
+  validates :login, uniqueness: {scope: :host_type}, if: lambda { self.login_changed? }
+  validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
   validates :uuid, presence: true
 
   after_commit :async_sync, on: :create
 
   scope :visible, -> { where(hidden: false) }
   scope :with_login, -> { where("repository_users.login <> ''") }
+  scope :host, lambda{ |host_type| where('lower(repository_users.host_type) = ?', host_type.try(:downcase)) }
 
   def github_id
     uuid
@@ -94,8 +95,8 @@ class RepositoryUser < ApplicationRecord
 
   def self.create_from_github(repository_user)
     user = nil
-    user_by_id = RepositoryUser.find_by_uuid(repository_user.id)
-    user_by_login = RepositoryUser.where("lower(login) = ?", repository_user.login.try(:downcase)).first
+    user_by_id = RepositoryUser.host('GitHub').find_by_uuid(repository_user.id)
+    user_by_login = RepositoryUser.host('GitHub').where("lower(login) = ?", repository_user.login.try(:downcase)).first
     if user_by_id # its fine
       if user_by_id.login.try(:downcase) == repository_user.login.downcase && user_by_id.user_type == repository_user.type
         user = user_by_id
@@ -115,7 +116,7 @@ class RepositoryUser < ApplicationRecord
       user_by_login.destroy if user.nil?
     end
     if user.nil?
-      user = RepositoryUser.create!(uuid: repository_user.id, login: repository_user.login, user_type: repository_user.type)
+      user = RepositoryUser.create!(uuid: repository_user.id, login: repository_user.login, user_type: repository_user.type, host_type: 'GitHub')
     end
     user.update(repository_user.to_hash.slice(:name, :company, :blog, :location, :email, :bio))
     user

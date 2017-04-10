@@ -22,6 +22,7 @@ class RepositoryOrganisation < ApplicationRecord
   scope :newest, -> { joins(:open_source_repositories).select('repository_organisations.*, count(repositories.id) AS repo_count').group('repository_organisations.id').order('created_at DESC').having('count(repositories.id) > 0') }
   scope :visible, -> { where(hidden: false) }
   scope :with_login, -> { where("repository_organisations.login <> ''") }
+  scope :host, lambda{ |host_type| where('lower(repository_organisations.host_type) = ?', host_type.try(:downcase)) }
 
   def github_id
     uuid
@@ -57,9 +58,9 @@ class RepositoryOrganisation < ApplicationRecord
       return false if r.blank?
 
       org = nil
-      org_by_id = RepositoryOrganisation.find_by_uuid(r[:id])
+      org_by_id = RepositoryOrganisation.host('GitHub').find_by_uuid(r[:id])
       if r[:login].present?
-        org_by_login = RepositoryOrganisation.where("lower(login) = ?", r[:login].downcase).first
+        org_by_login = RepositoryOrganisation.host('GitHub').where("lower(login) = ?", r[:login].downcase).first
       else
         org_by_login = nil
       end
@@ -82,7 +83,7 @@ class RepositoryOrganisation < ApplicationRecord
         org_by_login.destroy if org.nil?
       end
       if org.nil?
-        org = RepositoryOrganisation.create!(uuid: r[:id], login: r[:login])
+        org = RepositoryOrganisation.create!(uuid: r[:id], login: r[:login], host_type: 'GitHub')
       end
 
       org.assign_attributes r.slice(*RepositoryOrganisation::API_FIELDS)
