@@ -216,7 +216,7 @@
    </p>
    <div class='row'>
       <div class='col-sm-4 team-user'>
-        <%= link_to user_path('andrew') do %>
+        <%= link_to user_path(host_type: 'github', login: 'andrew') do %>
           <img src="https://avatars.githubusercontent.com/u/1060?size=80" width="80" alt="" class='pull-left avatar' />
         <% end %>
         <strong>Andrew Nesbitt</strong><br>
@@ -231,7 +231,7 @@
         <% end %>
      </div>
      <div class='col-sm-4 team-user'>
-        <%= link_to user_path('benjam') do %>
+        <%= link_to user_path(host_type: 'github', login: 'benjam') do %>
           <img src="https://avatars2.githubusercontent.com/u/158833?s=160" width="80" alt="" class='pull-left avatar' />
         <% end %>
         <strong>Benjamin Nickolls</strong><br>

@@ -4,6 +4,13 @@ class Identity < ApplicationRecord
 
   scope :viewable, -> { where(provider: ['github', 'gitlab', 'bitbucket']) }
 
+  def to_param
+    {
+        host_type: provider.downcase,
+        login: nickname
+      }
+  end
+
   def self.find_with_omniauth(auth)
     find_by(uid: auth['uid'], provider: auth['provider'])
   end

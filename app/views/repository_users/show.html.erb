@@ -54,14 +54,14 @@
         <div class="col-sm-6 user-column">
           <h4>Repositories</h4>
           <%= render @repositories, cache: true %>
-          <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user) %>
+          <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user.to_param) %>
         </div>
       <% end %>
       <% if @contributions.length > 0 %>
         <div class="col-sm-6 user-column">
           <h4>Repositories Contributed To</h4>
           <%= render @contributions.map(&:repository), cache: true  %>
-          <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user) %>
+          <%= link_to "See all #{@user}'s contributions", user_contributions_path(@user.to_param) %>
         </div>
       <% end %>
     </div>
@@ -70,7 +70,7 @@
         <div class="col-sm-6 user-column">
           <h4>Published Projects</h4>
           <%= render @projects, cache: true %>
-          <%= link_to "See all #{@user}'s projects", user_projects_path(@user) %>
+          <%= link_to "See all #{@user}'s projects", user_projects_path(@user.to_param) %>
         </div>
       <% end %>
       <% if @favourite_projects.length > 0 %>
@@ -88,7 +88,7 @@
         <h4>
           Top Contributors
           <small>
-            <%= link_to "See all", user_contributors_path(@user) %>
+            <%= link_to "See all", user_contributors_path(@user.to_param) %>
           </small>
         </h4>
         <%= render @user.top_contributors %>

@@ -2,7 +2,7 @@
 
 <h1>
   <%= image_tag @user.avatar_url(120), width: 60, height: 60, alt: @user %>
-  Projects referencing <%= link_to @user, user_path(@user) %>'s Repositories
+  Projects referencing <%= link_to @user, user_path(@user.to_param) %>'s Repositories
 </h1>
 <hr>
 <div class="row">
@@ -13,7 +13,7 @@
       <%= will_paginate @projects, page_links: false %>
     <% else %>
       <p>
-        No projects found, go back to <%= link_to @user, user_path(@user) %>.
+        No projects found, go back to <%= link_to @user, user_path(@user.to_param) %>.
       </p>
     <% end %>
   </div>
@@ -25,7 +25,7 @@
       </strong>
     </h3>
     <p>
-      This is a list of every project published to a package manager that references one of <%= link_to @user, user_path(@user) %>'s repositories as it's source.
+      This is a list of every project published to a package manager that references one of <%= link_to @user, user_path(@user.to_param) %>'s repositories as it's source.
     </p>
   </div>
 </div>

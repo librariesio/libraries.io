@@ -200,7 +200,7 @@ module ApplicationHelper
       })
     when 'RepositoryUser', 'RepositoryOrganisation'
       hash = record.meta_tags.merge({
-        url: user_url(record.login)
+        url: user_url(record.to_param)
       })
     else
       hash = {}

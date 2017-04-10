@@ -27,7 +27,10 @@ module RepositoryOwner
     end
 
     def to_param
-      owner.login
+      {
+        host_type: owner.host_type.downcase,
+        login: owner.login
+      }
     end
 
     def github_id
