@@ -138,7 +138,6 @@ class Repository < ApplicationRecord
   end
 
   def owner
-    return nil unless host_type == 'GitHub'
     repository_organisation_id.present? ? repository_organisation : repository_user
   end
 
