@@ -190,7 +190,11 @@ class Repository < ApplicationRecord
   end
 
   def id_or_name
-    uuid || full_name
+    if host_type == 'GitHub'
+      uuid || full_name
+    else
+      full_name
+    end
   end
 
   def update_all_info_async(token = nil)
