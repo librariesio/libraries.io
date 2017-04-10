@@ -30,8 +30,8 @@ class Repository < ApplicationRecord
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
   has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
 
-  validates :full_name, uniqueness: true, if: lambda { self.full_name_changed? }
-  validates :uuid, uniqueness: true, if: lambda { self.uuid_changed? }
+  validates :full_name, uniqueness: {scope: :host_type}, if: lambda { self.full_name_changed? }
+  validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
 
   before_save  :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
