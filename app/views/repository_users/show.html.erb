@@ -7,7 +7,7 @@
     <h1>
       <%= image_tag @user.avatar_url(100), width: 50, height: 50, alt: @user %>
       <%= @user %>
-      <%= link_to fa_icon('github'), @user.github_url, class: 'tip', title: "View #{@user.login} on GitHub" %>
+      <%= link_to fa_icon(@user.host_type.downcase), @user.repository_url, class: 'tip', title: "View #{@user.login} on #{@user.host_type}" %>
     </h1>
     <% unless @user.org? %>
       <% count = @user.open_source_contributions.count %>

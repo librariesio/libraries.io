@@ -24,6 +24,14 @@ class RepositoryOrganisation < ApplicationRecord
   scope :with_login, -> { where("repository_organisations.login <> ''") }
   scope :host, lambda{ |host_type| where('lower(repository_organisations.host_type) = ?', host_type.try(:downcase)) }
 
+  delegate :avatar_url, :repository_url, to: :repository_owner
+
+  def repository_owner
+    RepositoryOwner::Gitlab
+    @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
+  end
+
+
   def github_id
     uuid
   end

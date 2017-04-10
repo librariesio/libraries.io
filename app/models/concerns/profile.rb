@@ -19,14 +19,6 @@ module Profile
     end
   end
 
-  def avatar_url(size = 60)
-    "https://avatars.githubusercontent.com/u/#{uuid}?size=#{size}"
-  end
-
-  def github_url
-    "https://github.com/#{login}"
-  end
-
   def to_s
     name.presence || login
   end
