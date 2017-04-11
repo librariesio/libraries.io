@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170331174614) do
+ActiveRecord::Schema.define(version: 20170411134044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -256,8 +256,7 @@ ActiveRecord::Schema.define(version: 20170331174614) do
     t.text     "html_body"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.index ["created_at"], name: "index_readmes_on_created_at", using: :btree
-    t.index ["repository_id"], name: "index_readmes_on_repository_id", using: :btree
+    t.index ["repository_id"], name: "index_readmes_on_repository_id", unique: true, using: :btree
   end
 
   create_table "repositories", force: :cascade do |t|
