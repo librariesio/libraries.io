@@ -5,7 +5,8 @@ module RepositoryHost
       BitBucket::Error::Forbidden,
       BitBucket::Error::ServiceError,
       BitBucket::Error::InternalServerError,
-      BitBucket::Error::ServiceUnavailable]
+      BitBucket::Error::ServiceUnavailable,
+      BitBucket::Error::Unauthorized]
 
     def self.api_missing_error_class
       BitBucket::Error::NotFound
