@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170411143624) do
+ActiveRecord::Schema.define(version: 20170411164230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -307,6 +307,7 @@ ActiveRecord::Schema.define(version: 20170411143624) do
     t.index "lower((full_name)::text)", name: "index_github_repositories_on_lowercase_full_name", unique: true, using: :btree
     t.index "lower((language)::text)", name: "github_repositories_lower_language", using: :btree
     t.index ["owner_id"], name: "index_repositories_on_owner_id", using: :btree
+    t.index ["repository_organisation_id"], name: "index_repositories_on_repository_organisation_id", using: :btree
     t.index ["source_name"], name: "index_repositories_on_source_name", using: :btree
     t.index ["status"], name: "index_repositories_on_status", using: :btree
     t.index ["uuid"], name: "index_repositories_on_uuid", unique: true, using: :btree
