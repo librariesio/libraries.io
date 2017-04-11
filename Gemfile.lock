@@ -416,7 +416,7 @@ GEM
       rspec-expectations (~> 3.5.0)
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
-    rspec-sidekiq (3.0.0)
+    rspec-sidekiq (3.0.1)
       rspec-core (~> 3.0, >= 3.0.0)
       sidekiq (>= 2.4.0)
     rspec-support (3.5.0)
