@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170411134044) do
+ActiveRecord::Schema.define(version: 20170411141219) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20170411134044) do
     t.string   "token"
     t.string   "nickname"
     t.string   "avatar_url"
+    t.index ["user_id"], name: "index_identities_on_user_id", using: :btree
   end
 
   create_table "issues", force: :cascade do |t|
