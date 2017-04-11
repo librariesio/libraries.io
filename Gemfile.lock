@@ -263,7 +263,7 @@ GEM
       thor (>= 0.14, < 2.0)
     js_cookie_rails (2.1.4)
       railties (>= 3.1)
-    json (2.0.3)
+    json (2.0.4)
     json_spec (1.1.4)
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
