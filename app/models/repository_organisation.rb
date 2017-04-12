@@ -10,8 +10,8 @@ class RepositoryOrganisation < ApplicationRecord
   has_many :contributors, -> { group('repository_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
-  validates :login, uniqueness: true, if: lambda { self.login_changed? }
-  validates :uuid, uniqueness: true, if: lambda { self.uuid_changed? }
+  validates :login, uniqueness: {scope: :host_type}, if: lambda { self.login_changed? }
+  validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
 
   after_commit :async_sync, on: :create
 

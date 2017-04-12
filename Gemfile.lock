@@ -333,10 +333,14 @@ GEM
       omniauth (~> 1.2)
     org-ruby (0.9.12)
       rubypants (~> 0.2)
-    ox (2.4.11)
+    ox (2.4.12)
     parallel (1.11.1)
     pg (0.20.0)
     pg_array_parser (0.0.9)
+    pg_query (0.11.4)
+      json (>= 1.8, < 3)
+    pghero (1.6.4)
+      activerecord
     pictogram (2.0.8)
       railties
     poltergeist (1.14.0)
@@ -613,6 +617,8 @@ DEPENDENCIES
   parallel
   payola-payments!
   pg
+  pg_query
+  pghero
   pictogram
   poltergeist
   postgres_ext!

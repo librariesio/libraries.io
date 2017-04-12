@@ -4,8 +4,8 @@ class Api::StatusController < Api::ApplicationController
   def check
     if params[:projects].any?
       @projects = params[:projects].group_by{|project| project[:platform] }.map do |platform, projects|
-        projects.each_slice(200).map do |slice|
-          Project.lookup_multiple(find_platform_by_name(platform), projects.map{|project| project[:name] }).paginate(page: 1, per_page: 200).records.includes(:repository, :versions)
+        projects.each_slice(500).map do |slice|
+          Project.lookup_multiple(find_platform_by_name(platform), projects.map{|project| project[:name] }).paginate(page: 1, per_page: 500).records.includes(:repository, :versions)
         end.flatten.compact
       end.flatten.compact
     else
