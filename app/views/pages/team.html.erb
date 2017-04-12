@@ -119,6 +119,13 @@
         <% end %>
       </div>
       <div class='col-sm-4 team-user'>
+        <%= link_to image_tag('ben-laurie.jpg', width: 80, height: 80), root_path, class: 'pull-left avatar' %>
+        <strong>Ben Laurie</strong><br>
+        <%= link_to 'https://twitter.com/benlaurie' do %>
+          <%= fa_icon 'twitter' %> Twitter
+        <% end %>
+      </div>
+      <div class='col-sm-4 team-user'>
         <img src="https://avatars2.githubusercontent.com/u/125011?v=3&s=160" width="80" height="80" alt="" class='pull-left avatar'/>
         <strong>Mike McQuaid</strong><br>
         <%= link_to 'https://github.com/MikeMcQuaid' do %>
