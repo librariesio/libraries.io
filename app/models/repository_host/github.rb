@@ -124,7 +124,7 @@ module RepositoryHost
     end
 
     def download_owner
-      return if repository.owner && repository.owner.login == repository.owner_name
+      return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
       o = api_client.user(repository.owner_name)
       if o.type == "Organization"
         go = RepositoryOrganisation.create_from_github(repository.owner_id.to_i)
@@ -133,7 +133,11 @@ module RepositoryHost
           repository.save
         end
       else
-        RepositoryUser.create_from_github(o)
+        u = RepositoryUser.create_from_github(o)
+        if u
+          repository.repository_user_id = u.id
+          repository.save
+        end
       end
     rescue *IGNORABLE_EXCEPTIONS
       nil
