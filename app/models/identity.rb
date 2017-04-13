@@ -3,7 +3,9 @@ class Identity < ApplicationRecord
   belongs_to :repository_user
   validates_presence_of :uid, :provider
 
-  scope :viewable, -> { where(provider: ['github', 'gitlab', 'bitbucket']) }
+  VIEWABLE_PROVIDERS = ['github', 'gitlab', 'bitbucket']
+
+  scope :viewable, -> { where(provider: VIEWABLE_PROVIDERS) }
 
   def to_param
     {
