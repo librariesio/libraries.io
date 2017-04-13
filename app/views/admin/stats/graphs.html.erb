@@ -9,7 +9,7 @@
   <div class="col-md-10">
     <%= form_tag admin_graphs_path, method: :get, enforce_utf8: false do |f| %>
     <h4>
-      <%= select_tag 'platform', options_for_select(Project.popular_platforms{|t| t['key'] }, @platform), onchange: "this.form.submit()" %>
+      <%= select_tag 'platform', options_for_select(Project.popular_platforms.map{|t| t['key'] }, @platform), onchange: "this.form.submit()" %>
     </h4>
     <% end %>
   </div>

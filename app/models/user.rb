@@ -46,12 +46,20 @@ class User < ApplicationRecord
     update_attributes({email: hash.fetch('info', {}).fetch('email', nil)})
   end
 
+  def main_identity
+    @main_identity ||= identities.first
+  end
+
+  def to_param
+    main_identity.try(:to_param)
+  end
+
   def avatar_url(size = 60)
-    identities.first.try(:avatar_url, size)
+    main_identity.try(:avatar_url, size)
   end
 
   def nickname
-    identities.first.try(:nickname).presence
+    main_identity.try(:nickname).presence
   end
 
   def all_subscribed_projects

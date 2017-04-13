@@ -5,7 +5,7 @@ module GithubIdentity
 
   def repository_user
     return unless github_enabled?
-    RepositoryUser.find_by_uuid(github_identity.uid)
+    RepositoryUser.host('GitHub').find_by_uuid(github_identity.uid)
   end
 
   def hidden
@@ -75,7 +75,7 @@ module GithubIdentity
 
   def download_self
     return unless github_identity
-    RepositoryUser.create_from_github(OpenStruct.new({id: github_identity.uid, login: github_identity.nickname, type: 'User'}))
+    RepositoryUser.create_from_github(OpenStruct.new({id: github_identity.uid, login: github_identity.nickname, type: 'User', host_type: 'GitHub'}))
     RepositoryUpdateUserWorker.perform_async(nickname)
   end
 

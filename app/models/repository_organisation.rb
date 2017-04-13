@@ -1,6 +1,4 @@
 class RepositoryOrganisation < ApplicationRecord
-  include Profile
-
   API_FIELDS = [:name, :login, :blog, :email, :location, :bio]
 
   has_many :repositories
@@ -12,8 +10,8 @@ class RepositoryOrganisation < ApplicationRecord
   has_many :contributors, -> { group('repository_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
-  validates :login, uniqueness: true, if: lambda { self.login_changed? }
-  validates :uuid, uniqueness: true, if: lambda { self.uuid_changed? }
+  validates :login, uniqueness: {scope: :host_type}, if: lambda { self.login_changed? }
+  validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
 
   after_commit :async_sync, on: :create
 
@@ -22,15 +20,20 @@ class RepositoryOrganisation < ApplicationRecord
   scope :newest, -> { joins(:open_source_repositories).select('repository_organisations.*, count(repositories.id) AS repo_count').group('repository_organisations.id').order('created_at DESC').having('count(repositories.id) > 0') }
   scope :visible, -> { where(hidden: false) }
   scope :with_login, -> { where("repository_organisations.login <> ''") }
+  scope :host, lambda{ |host_type| where('lower(repository_organisations.host_type) = ?', host_type.try(:downcase)) }
 
-  def github_id
-    uuid
+  delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
+           :to_s, :to_param, :github_id, to: :repository_owner
+
+  def repository_owner
+    RepositoryOwner::Gitlab
+    @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
   end
 
   def meta_tags
     {
-      title: "#{self} on GitHub",
-      description: "GitHub repositories created by #{self}",
+      title: "#{self} on #{host_type}",
+      description: "#{host_type} repositories created by #{self}",
       image: avatar_url(200)
     }
   end
@@ -69,9 +72,9 @@ class RepositoryOrganisation < ApplicationRecord
       return false if r.blank?
 
       org = nil
-      org_by_id = RepositoryOrganisation.find_by_uuid(r[:id])
+      org_by_id = RepositoryOrganisation.host('GitHub').find_by_uuid(r[:id])
       if r[:login].present?
-        org_by_login = RepositoryOrganisation.where("lower(login) = ?", r[:login].downcase).first
+        org_by_login = RepositoryOrganisation.host('GitHub').where("lower(login) = ?", r[:login].downcase).first
       else
         org_by_login = nil
       end
@@ -94,7 +97,7 @@ class RepositoryOrganisation < ApplicationRecord
         org_by_login.destroy if org.nil?
       end
       if org.nil?
-        org = RepositoryOrganisation.create!(uuid: r[:id], login: r[:login])
+        org = RepositoryOrganisation.create!(uuid: r[:id], login: r[:login], host_type: 'GitHub')
       end
 
       org.assign_attributes r.slice(*RepositoryOrganisation::API_FIELDS)

@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   end if Rails.env.production?
   mount Sidekiq::Web => '/sidekiq'
 
+  mount PgHero::Engine, at: "pghero"
+
   get '/home', to: 'dashboard#home'
 
   namespace :api do

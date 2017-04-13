@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170331174614) do
+ActiveRecord::Schema.define(version: 20170413115806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
 
   create_table "api_keys", force: :cascade do |t|
     t.string   "access_token"
@@ -62,11 +63,15 @@ ActiveRecord::Schema.define(version: 20170331174614) do
     t.string   "uid"
     t.string   "provider"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.string   "token"
     t.string   "nickname"
     t.string   "avatar_url"
+    t.integer  "repository_user_id"
+    t.index ["repository_user_id"], name: "index_identities_on_repository_user_id", using: :btree
+    t.index ["uid"], name: "index_identities_on_uid", using: :btree
+    t.index ["user_id"], name: "index_identities_on_user_id", using: :btree
   end
 
   create_table "issues", force: :cascade do |t|
@@ -256,8 +261,7 @@ ActiveRecord::Schema.define(version: 20170331174614) do
     t.text     "html_body"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.index ["created_at"], name: "index_readmes_on_created_at", using: :btree
-    t.index ["repository_id"], name: "index_readmes_on_repository_id", using: :btree
+    t.index ["repository_id"], name: "index_readmes_on_repository_id", unique: true, using: :btree
   end
 
   create_table "repositories", force: :cascade do |t|
@@ -303,9 +307,12 @@ ActiveRecord::Schema.define(version: 20170331174614) do
     t.string   "fork_policy"
     t.string   "pull_requests_enabled"
     t.string   "logo_url"
+    t.integer  "repository_user_id"
     t.index "lower((full_name)::text)", name: "index_github_repositories_on_lowercase_full_name", unique: true, using: :btree
     t.index "lower((language)::text)", name: "github_repositories_lower_language", using: :btree
     t.index ["owner_id"], name: "index_repositories_on_owner_id", using: :btree
+    t.index ["repository_organisation_id"], name: "index_repositories_on_repository_organisation_id", using: :btree
+    t.index ["repository_user_id"], name: "index_repositories_on_repository_user_id", using: :btree
     t.index ["source_name"], name: "index_repositories_on_source_name", using: :btree
     t.index ["status"], name: "index_repositories_on_status", using: :btree
     t.index ["uuid"], name: "index_repositories_on_uuid", unique: true, using: :btree

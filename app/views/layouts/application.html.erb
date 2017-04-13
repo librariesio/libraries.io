@@ -116,7 +116,7 @@
                 <% if current_user.github_enabled? %>
                   <li><%= link_to 'Repository Monitoring', repositories_path %></li>
                   <% if current_user.repository_user.present? %>
-                    <li><%= link_to 'Profile', user_path(current_user.repository_user) %></li>
+                    <li><%= link_to 'Profile', user_path(current_user.repository_user.to_param) %></li>
                   <% end %>
                 <% end %>
                 <li><%= link_to 'Settings', account_path %></li>

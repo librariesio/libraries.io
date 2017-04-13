@@ -21,7 +21,7 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
   orgs = lambda {
     group = sitemap.group(:filename => :orgs, :sitemaps_path => 'sitemaps/orgs') do
       RepositoryOrganisation.visible.with_login.find_each do |user|
-        add user_path(user), :lastmod => user.updated_at
+        add user_path(user.to_param), :lastmod => user.updated_at
       end
     end
     group.sitemap.write unless group.sitemap.written?
@@ -30,7 +30,7 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
   users = lambda {
     group = sitemap.group(:filename => :users, :sitemaps_path => 'sitemaps/users') do
       RepositoryUser.visible.with_login.find_each do |user|
-        add user_path(user), :lastmod => user.updated_at
+        add user_path(user.to_param), :lastmod => user.updated_at
       end
     end
     group.sitemap.write unless group.sitemap.written?

@@ -3,6 +3,6 @@ class RepositoryUpdateUserWorker
   sidekiq_options queue: :owners, unique: :until_executed
 
   def perform(login)
-    RepositoryUser.find_by_login(login).try(:sync)
+    RepositoryUser.host('GitHub').find_by_login(login).try(:sync)
   end
 end

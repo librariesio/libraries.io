@@ -1,6 +1,4 @@
 class RepositoryUser < ApplicationRecord
-  include Profile
-
   has_many :contributions, dependent: :delete_all
   has_many :repositories, primary_key: :uuid, foreign_key: :owner_id
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, primary_key: :uuid, foreign_key: :owner_id
@@ -12,17 +10,27 @@ class RepositoryUser < ApplicationRecord
   has_many :contributors, -> { group('repository_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('repository_users.id').order("COUNT(repository_users.id) DESC") }, through: :contributed_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
+  has_many :identities
 
   has_many :issues, primary_key: :uuid
 
-  validates :login, uniqueness: true, if: lambda { self.login_changed? }
-  validates :uuid, uniqueness: true, if: lambda { self.uuid_changed? }
+  validates :login, uniqueness: {scope: :host_type}, if: lambda { self.login_changed? }
+  validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
   validates :uuid, presence: true
 
   after_commit :async_sync, on: :create
 
   scope :visible, -> { where(hidden: false) }
   scope :with_login, -> { where("repository_users.login <> ''") }
+  scope :host, lambda{ |host_type| where('lower(repository_users.host_type) = ?', host_type.try(:downcase)) }
+
+  delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
+           :to_s, :to_param, :github_id, to: :repository_owner
+
+  def repository_owner
+    RepositoryOwner::Gitlab
+    @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
+  end
 
   def github_id
     uuid
@@ -30,8 +38,8 @@ class RepositoryUser < ApplicationRecord
 
   def meta_tags
     {
-      title: "#{self} on GitHub",
-      description: "GitHub repositories created and contributed to by #{self}",
+      title: "#{self} on #{host_type}",
+      description: "#{host_type} repositories created and contributed to by #{self}",
       image: avatar_url(200)
     }
   end
@@ -94,8 +102,8 @@ class RepositoryUser < ApplicationRecord
 
   def self.create_from_github(repository_user)
     user = nil
-    user_by_id = RepositoryUser.find_by_uuid(repository_user.id)
-    user_by_login = RepositoryUser.where("lower(login) = ?", repository_user.login.try(:downcase)).first
+    user_by_id = RepositoryUser.host('GitHub').find_by_uuid(repository_user.id)
+    user_by_login = RepositoryUser.host('GitHub').where("lower(login) = ?", repository_user.login.try(:downcase)).first
     if user_by_id # its fine
       if user_by_id.login.try(:downcase) == repository_user.login.downcase && user_by_id.user_type == repository_user.type
         user = user_by_id
@@ -115,7 +123,7 @@ class RepositoryUser < ApplicationRecord
       user_by_login.destroy if user.nil?
     end
     if user.nil?
-      user = RepositoryUser.create!(uuid: repository_user.id, login: repository_user.login, user_type: repository_user.type)
+      user = RepositoryUser.create!(uuid: repository_user.id, login: repository_user.login, user_type: repository_user.type, host_type: 'GitHub')
     end
     user.update(repository_user.to_hash.slice(:name, :company, :blog, :location, :email, :bio))
     user
