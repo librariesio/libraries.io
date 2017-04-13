@@ -10,6 +10,7 @@ class RepositoryUser < ApplicationRecord
   has_many :contributors, -> { group('repository_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('repository_users.id').order("COUNT(repository_users.id) DESC") }, through: :contributed_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
+  has_many :identities
 
   has_many :issues, primary_key: :uuid
 

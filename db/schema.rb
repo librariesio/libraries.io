@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170412143657) do
+ActiveRecord::Schema.define(version: 20170413115806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,14 +54,15 @@ ActiveRecord::Schema.define(version: 20170412143657) do
   end
 
   create_table "identities", force: :cascade do |t|
-    t.string   "uid",        :index=>{:name=>"index_identities_on_uid"}
+    t.string   "uid",                :index=>{:name=>"index_identities_on_uid"}
     t.string   "provider"
-    t.integer  "user_id",    :index=>{:name=>"index_identities_on_user_id"}
-    t.datetime "created_at", :null=>false
-    t.datetime "updated_at", :null=>false
+    t.integer  "user_id",            :index=>{:name=>"index_identities_on_user_id"}
+    t.datetime "created_at",         :null=>false
+    t.datetime "updated_at",         :null=>false
     t.string   "token"
     t.string   "nickname"
     t.string   "avatar_url"
+    t.integer  "repository_user_id", :index=>{:name=>"index_identities_on_repository_user_id"}
   end
 
   create_table "issues", force: :cascade do |t|
@@ -278,6 +279,7 @@ ActiveRecord::Schema.define(version: 20170412143657) do
     t.string   "fork_policy"
     t.string   "pull_requests_enabled"
     t.string   "logo_url"
+    t.integer  "repository_user_id",         :index=>{:name=>"index_repositories_on_repository_user_id"}
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
