@@ -90,7 +90,6 @@ module RepositoryHost
            end
            repository.full_name = r[:full_name]
          end
-        repository.owner_id = r[:owner][:id]
         repository.license = Project.format_license(r[:license][:key]) if r[:license]
         repository.source_name = r[:parent][:full_name] if r[:fork]
         repository.assign_attributes r.slice(*Repository::API_FIELDS)
