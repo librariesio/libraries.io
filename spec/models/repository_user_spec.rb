@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe RepositoryUser, type: :model do
+  it { should have_many(:identities) }
   it { should have_many(:repositories) }
   it { should have_many(:source_repositories) }
   it { should have_many(:open_source_repositories) }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170413102126) do
+ActiveRecord::Schema.define(version: 20170413115806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,11 +63,13 @@ ActiveRecord::Schema.define(version: 20170413102126) do
     t.string   "uid"
     t.string   "provider"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.string   "token"
     t.string   "nickname"
     t.string   "avatar_url"
+    t.integer  "repository_user_id"
+    t.index ["repository_user_id"], name: "index_identities_on_repository_user_id", using: :btree
     t.index ["uid"], name: "index_identities_on_uid", using: :btree
     t.index ["user_id"], name: "index_identities_on_user_id", using: :btree
   end
