@@ -1,5 +1,6 @@
 class Identity < ApplicationRecord
   belongs_to :user
+  belongs_to :repository_user
   validates_presence_of :uid, :provider
 
   scope :viewable, -> { where(provider: ['github', 'gitlab', 'bitbucket']) }

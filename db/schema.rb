@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170413091907) do
+ActiveRecord::Schema.define(version: 20170413115806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,11 +63,13 @@ ActiveRecord::Schema.define(version: 20170413091907) do
     t.string   "uid"
     t.string   "provider"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.string   "token"
     t.string   "nickname"
     t.string   "avatar_url"
+    t.integer  "repository_user_id"
+    t.index ["repository_user_id"], name: "index_identities_on_repository_user_id", using: :btree
     t.index ["uid"], name: "index_identities_on_uid", using: :btree
     t.index ["user_id"], name: "index_identities_on_user_id", using: :btree
   end
@@ -332,7 +334,7 @@ ActiveRecord::Schema.define(version: 20170413091907) do
 
   create_table "repository_organisations", force: :cascade do |t|
     t.string   "login"
-    t.string   "uuid"
+    t.integer  "uuid"
     t.string   "name"
     t.string   "blog"
     t.string   "email"
@@ -343,10 +345,10 @@ ActiveRecord::Schema.define(version: 20170413091907) do
     t.boolean  "hidden",         default: false
     t.datetime "last_synced_at"
     t.string   "host_type"
-    t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_organisations_on_host_type_and_login", unique: true, using: :btree
+    t.index "lower((login)::text)", name: "index_github_organisations_on_lowercase_login", unique: true, using: :btree
     t.index ["created_at"], name: "index_repository_organisations_on_created_at", using: :btree
     t.index ["hidden"], name: "index_repository_organisations_on_hidden", using: :btree
-    t.index ["host_type", "uuid"], name: "index_repository_organisations_on_host_type_and_uuid", unique: true, using: :btree
+    t.index ["uuid"], name: "index_repository_organisations_on_uuid", unique: true, using: :btree
   end
 
   create_table "repository_permissions", force: :cascade do |t|
@@ -371,7 +373,7 @@ ActiveRecord::Schema.define(version: 20170413091907) do
   end
 
   create_table "repository_users", force: :cascade do |t|
-    t.string   "uuid"
+    t.integer  "uuid"
     t.string   "login"
     t.string   "user_type"
     t.datetime "created_at",                     null: false
@@ -387,10 +389,12 @@ ActiveRecord::Schema.define(version: 20170413091907) do
     t.integer  "followers"
     t.integer  "following"
     t.string   "host_type"
-    t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_users_on_host_type_and_login", unique: true, using: :btree
+    t.index "lower((login)::text)", name: "github_users_lower_login", using: :btree
+    t.index "lower((login)::text)", name: "index_github_users_on_lowercase_login", unique: true, using: :btree
     t.index ["created_at"], name: "index_repository_users_on_created_at", using: :btree
     t.index ["hidden"], name: "index_repository_users_on_hidden", using: :btree
-    t.index ["host_type", "uuid"], name: "index_repository_users_on_host_type_and_uuid", unique: true, using: :btree
+    t.index ["login"], name: "index_repository_users_on_login", using: :btree
+    t.index ["uuid"], name: "index_repository_users_on_uuid", unique: true, using: :btree
   end
 
   create_table "subscription_plans", force: :cascade do |t|
