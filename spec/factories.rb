@@ -138,6 +138,7 @@ FactoryGirl.define do
 
   factory :identity do
     user
+    repository_user
     sequence(:uid)
     provider 'github'
     nickname { Faker::Name.name.parameterize }
