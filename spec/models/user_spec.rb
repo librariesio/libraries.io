@@ -15,7 +15,6 @@ describe User, type: :model do
   it { should have_many(:watched_dependencies) }
   it { should have_many(:watched_dependent_projects) }
   it { should have_many(:dependencies) }
-  it { should have_many(:all_dependencies) }
   it { should have_many(:really_all_dependencies) }
   it { should have_many(:all_dependent_projects) }
   it { should have_many(:favourite_projects) }
