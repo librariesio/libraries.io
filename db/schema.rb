@@ -264,6 +264,7 @@ ActiveRecord::Schema.define(version: 20170414144733) do
 
   create_table "repositories", force: :cascade do |t|
     t.string   "full_name"
+    t.integer  "owner_id"
     t.string   "description"
     t.boolean  "fork"
     t.datetime "created_at",                             null: false
@@ -307,6 +308,7 @@ ActiveRecord::Schema.define(version: 20170414144733) do
     t.integer  "repository_user_id"
     t.index "lower((full_name)::text)", name: "index_github_repositories_on_lowercase_full_name", unique: true, using: :btree
     t.index "lower((language)::text)", name: "github_repositories_lower_language", using: :btree
+    t.index ["owner_id"], name: "index_repositories_on_owner_id", using: :btree
     t.index ["repository_organisation_id"], name: "index_repositories_on_repository_organisation_id", using: :btree
     t.index ["repository_user_id"], name: "index_repositories_on_repository_user_id", using: :btree
     t.index ["source_name"], name: "index_repositories_on_source_name", using: :btree
