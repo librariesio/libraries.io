@@ -242,8 +242,12 @@ class Project < ApplicationRecord
 
   def set_dependents_count
     return if destroyed?
-    self.update_columns(dependents_count: dependents.joins(:version).pluck('DISTINCT versions.project_id').count,
-                        dependent_repos_count: dependent_repositories.open_source.count.length)
+    new_dependents_count = dependents.joins(:version).pluck('DISTINCT versions.project_id').count
+    new_dependent_repos_count = dependent_repositories.open_source.count.length
+    updates = {}
+    updates[:dependents_count] = new_dependents_count if dependents_count != new_dependents_count
+    updates[:dependent_repos_count] = new_dependent_repos_count if dependent_repos_count != new_dependent_repos_count
+    self.update_columns(updates) if updates.present?
   end
 
   def needs_suggestions?
