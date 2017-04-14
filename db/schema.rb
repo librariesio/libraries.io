@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170414144733) do
+ActiveRecord::Schema.define(version: 20170414151549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -235,7 +235,7 @@ ActiveRecord::Schema.define(version: 20170414144733) do
   end
 
   create_table "repositories", force: :cascade do |t|
-    t.string   "full_name",                  :index=>{:name=>"index_github_repositories_on_lowercase_full_name", :unique=>true, :case_sensitive=>false}
+    t.string   "full_name"
     t.integer  "owner_id",                   :index=>{:name=>"index_repositories_on_owner_id"}
     t.string   "description"
     t.boolean  "fork"
@@ -270,7 +270,7 @@ ActiveRecord::Schema.define(version: 20170414144733) do
     t.string   "status",                     :index=>{:name=>"index_repositories_on_status"}
     t.datetime "last_synced_at"
     t.integer  "rank"
-    t.string   "host_type"
+    t.string   "host_type",                  :index=>{:name=>"index_repositories_on_host_type_and_full_name", :with=>["full_name"], :unique=>true, :case_sensitive=>false}
     t.string   "host_domain"
     t.string   "name"
     t.string   "scm"
