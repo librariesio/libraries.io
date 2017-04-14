@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170413115806) do
+ActiveRecord::Schema.define(version: 20170414144733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -245,12 +245,10 @@ ActiveRecord::Schema.define(version: 20170413115806) do
     t.string   "status"
     t.datetime "last_synced_at"
     t.integer  "dependent_repos_count"
-    t.index "lower((name)::text)", name: "projects_lower_name", using: :btree
-    t.index "lower((platform)::text)", name: "projects_lower_platform", using: :btree
     t.index ["created_at"], name: "index_projects_on_created_at", using: :btree
     t.index ["dependents_count"], name: "index_projects_on_dependents_count", using: :btree
     t.index ["keywords_array"], name: "index_projects_on_keywords_array", using: :gin
-    t.index ["name", "platform"], name: "index_projects_on_name_and_platform", using: :btree
+    t.index ["platform", "name"], name: "index_projects_on_platform_and_name", unique: true, using: :btree
     t.index ["repository_id"], name: "index_projects_on_repository_id", using: :btree
     t.index ["updated_at"], name: "index_projects_on_updated_at", using: :btree
     t.index ["versions_count"], name: "index_projects_on_versions_count", using: :btree
@@ -266,7 +264,6 @@ ActiveRecord::Schema.define(version: 20170413115806) do
 
   create_table "repositories", force: :cascade do |t|
     t.string   "full_name"
-    t.integer  "owner_id"
     t.string   "description"
     t.boolean  "fork"
     t.datetime "created_at",                             null: false
@@ -310,7 +307,6 @@ ActiveRecord::Schema.define(version: 20170413115806) do
     t.integer  "repository_user_id"
     t.index "lower((full_name)::text)", name: "index_github_repositories_on_lowercase_full_name", unique: true, using: :btree
     t.index "lower((language)::text)", name: "github_repositories_lower_language", using: :btree
-    t.index ["owner_id"], name: "index_repositories_on_owner_id", using: :btree
     t.index ["repository_organisation_id"], name: "index_repositories_on_repository_organisation_id", using: :btree
     t.index ["repository_user_id"], name: "index_repositories_on_repository_user_id", using: :btree
     t.index ["source_name"], name: "index_repositories_on_source_name", using: :btree
