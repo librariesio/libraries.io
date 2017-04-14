@@ -33,7 +33,7 @@ class Project < ApplicationRecord
   belongs_to :repository
   has_one :readme, through: :repository
 
-  scope :platform, ->(platform) { where('lower(platform) = ?', platform.try(:downcase)) }
+  scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
