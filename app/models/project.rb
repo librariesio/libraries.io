@@ -373,7 +373,7 @@ class Project < ApplicationRecord
     response = Typhoeus.head(platform_class.check_status_url(self))
     if platform == 'packagist' && response.response_code == 302
       update_attribute(:status, 'Removed')
-    elsif platform != 'packagist' && response.response_code == 404
+    elsif platform != 'packagist' && [400, 404].include?(response.response_code)
       update_attribute(:status, 'Removed')
     elsif removed
       update_attribute(:status, nil)
