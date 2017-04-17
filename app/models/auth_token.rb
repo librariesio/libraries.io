@@ -1,6 +1,6 @@
 class AuthToken < ApplicationRecord
   validates_presence_of :token
-  scope :authorized, -> { where('authorized != ? OR authorized IS NULL', true) }
+  scope :authorized, -> { where(authorized: true) }
 
   def self.client(options = {})
     if @auth_token && @auth_token.high_rate_limit?
