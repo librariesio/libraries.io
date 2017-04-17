@@ -189,7 +189,7 @@ module RepositoryHost
         tag_hash[:published_at] = object.tagger.date
       end
 
-      repository.tags.create!(tag_hash)
+      repository.tags.create(tag_hash)
     end
 
     private
