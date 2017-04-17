@@ -251,6 +251,10 @@ module PackageManager
       Nokogiri::HTML(get_raw(url, options))
     end
 
+    def self.get_xml(url, options = {})
+      Ox.parse(get_raw(url, options))
+    end
+
     def self.get_json(url)
       get(url, headers: { 'Accept' => "application/json"})
     end
