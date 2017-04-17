@@ -72,10 +72,10 @@ module PackageManager
       end
       {
         name: project[:name],
-        description: xml.description.nodes.first,
-        homepage: xml.url.nodes.first,
-        repository_url: repo_fallback(xml.scm.url.nodes.first, xml.url.nodes.first),
-        licenses: xml.licenses.locate('license').map{|l| l.locate('name').map(&:nodes)}.flatten
+        description: xml.locate('description').try(:nodes).try(:first),
+        homepage: xml.locate('url').try(:nodes).try(:first),
+        repository_url: repo_fallback(xml.locate('scm').try(:locate, 'url').try(:nodes).try(:first), xml.locate('url').try(:nodes).try(:first)),
+        licenses: (xml.locate('licenses').try(:locate, 'license') || []).map{|l| l.locate('name').map(&:nodes)}.flatten
       }
     end
 
