@@ -175,6 +175,6 @@ class ProjectsController < ApplicationController
 
   def project_scope(scope_name)
     @platforms = Project.send(scope_name).group('platform').count.sort_by(&:last).reverse
-    @projects = platform_scope.send(scope_name).includes(:repository).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = platform_scope.send(scope_name).includes(:repository).order('dependents_count DESC, projects.rank DESC NULLS LAST, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 end
