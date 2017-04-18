@@ -394,8 +394,13 @@ class Project < ApplicationRecord
 
   def potentially_outdated?
     current_version = SemanticRange.clean(latest_release_number)
-    unique_requirement_ranges.any? do |range|
-      SemanticRange.ltr(current_version, range, false, platform) rescue false
+    unique_requirement_ranges.sort.any? do |range|
+      begin
+        !(SemanticRange.gtr(current_version, range, false, platform) ||
+        SemanticRange.satisfies(current_version, range, false, platform))
+      rescue
+        false
+      end
     end
   end
 end
