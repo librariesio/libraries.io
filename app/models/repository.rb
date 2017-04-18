@@ -63,7 +63,7 @@ class Repository < ApplicationRecord
   scope :pushed, -> { where.not(pushed_at: nil) }
   scope :good_quality, -> { maintained.open_source.pushed }
   scope :with_stars, -> { where('repositories.stargazers_count > 0') }
-  scope :interesting, -> { with_stars.order('repositories.stargazers_count DESC, repositories.pushed_at DESC') }
+  scope :interesting, -> { with_stars.order('repositories.stargazers_count DESC, repositories.rank DESC NULLS LAST, repositories.pushed_at DESC') }
   scope :uninteresting, -> { without_readme.without_manifests.without_license.where('repositories.stargazers_count = 0').where('repositories.forks_count = 0') }
 
   scope :recently_created, -> { where('created_at > ?', 7.days.ago)}

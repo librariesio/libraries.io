@@ -27,7 +27,7 @@ class Project < ApplicationRecord
   has_many :dependent_projects, -> { group('projects.id') }, through: :dependent_versions, source: :project, class_name: 'Project'
   has_many :repository_dependencies
   has_many :dependent_manifests, through: :repository_dependencies, source: :manifest
-  has_many :dependent_repositories, -> { group('repositories.id').order('repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
+  has_many :dependent_repositories, -> { group('repositories.id').order('repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
   has_many :subscriptions
   has_many :project_suggestions, dependent: :delete_all
   belongs_to :repository
