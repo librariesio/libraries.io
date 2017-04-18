@@ -379,4 +379,23 @@ class Project < ApplicationRecord
       update_attribute(:status, nil)
     end
   end
+
+  def unique_repo_requirement_ranges
+    repository_dependencies.group('repository_dependencies.requirements').count.keys
+  end
+
+  def unique_project_requirement_ranges
+    dependents.group('dependencies.requirements').count.keys
+  end
+
+  def unique_requirement_ranges
+    (unique_repo_requirement_ranges + unique_project_requirement_ranges).uniq
+  end
+
+  def potentially_outdated?
+    current_version = SemanticRange.clean(latest_release_number)
+    unique_requirement_ranges.any? do |range|
+      SemanticRange.gtr(current_version, range, false, platform)
+    end
+  end
 end
