@@ -239,7 +239,6 @@ ActiveRecord::Schema.define(version: 20170417160002) do
 
   create_table "repositories", force: :cascade do |t|
     t.string   "full_name"
-    t.integer  "owner_id",                   :index=>{:name=>"index_repositories_on_owner_id"}
     t.string   "description"
     t.boolean  "fork"
     t.datetime "created_at",                 :null=>false

@@ -3,7 +3,7 @@ class Api::RepositoriesController < Api::ApplicationController
 
   def show
     render json: @repository.as_json({
-      except: [:id, :repository_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]
+      except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id]
     })
   end
 
@@ -13,7 +13,7 @@ class Api::RepositoriesController < Api::ApplicationController
 
   def dependencies
     repo_json = @repository.as_json({
-      except: [:id, :repository_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]
+      except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id]
     })
     repo_json[:dependencies] = map_dependencies(@repository.repository_dependencies || [])
 
@@ -23,7 +23,7 @@ class Api::RepositoriesController < Api::ApplicationController
   def search
     @search = paginate(search_repos(params[:q]))
     @repositories = @search.records
-    render json: @repositories.as_json({ except: [:id, :repository_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id] })
+    render json: @repositories.as_json({ except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id] })
   end
 
   private

@@ -51,7 +51,7 @@ class RepositoryUsersController < ApplicationController
   def find_contributions
     @user.contributions.with_repo
                        .joins(:repository)
-                       .where('repositories.owner_id != ?', @user.uuid.to_s)
+                       .where('repositories.repository_user_id != ?', @user.id)
                        .where('repositories.fork = ?', false)
                        .where('repositories.private = ?', false)
                        .includes(:repository)
