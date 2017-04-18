@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170413115806) do
+ActiveRecord::Schema.define(version: 20170417160002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20170413115806) do
     t.string   "token"
     t.datetime "created_at", :null=>false
     t.datetime "updated_at", :null=>false
+    t.boolean  "authorized"
   end
 
   create_table "contributions", force: :cascade do |t|
@@ -203,8 +204,8 @@ ActiveRecord::Schema.define(version: 20170413115806) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "name",                        :index=>{:name=>"projects_lower_name", :case_sensitive=>false}
-    t.string   "platform",                    :index=>{:name=>"projects_lower_platform", :case_sensitive=>false}
+    t.string   "name"
+    t.string   "platform",                    :index=>{:name=>"index_projects_on_platform_and_name", :with=>["name"], :unique=>true}
     t.datetime "created_at",                  :index=>{:name=>"index_projects_on_created_at"}
     t.datetime "updated_at",                  :index=>{:name=>"index_projects_on_updated_at"}
     t.text     "description"
@@ -226,7 +227,7 @@ ActiveRecord::Schema.define(version: 20170413115806) do
     t.datetime "last_synced_at"
     t.integer  "dependent_repos_count"
 
-    t.index ["name", "platform"], :name=>"index_projects_on_name_and_platform"
+    t.index ["platform", "name"], :name=>"index_projects_on_platform_and_name_lower", :case_sensitive=>false
   end
 
   create_table "readmes", force: :cascade do |t|
@@ -237,8 +238,7 @@ ActiveRecord::Schema.define(version: 20170413115806) do
   end
 
   create_table "repositories", force: :cascade do |t|
-    t.string   "full_name",                  :index=>{:name=>"index_github_repositories_on_lowercase_full_name", :unique=>true, :case_sensitive=>false}
-    t.integer  "owner_id",                   :index=>{:name=>"index_repositories_on_owner_id"}
+    t.string   "full_name"
     t.string   "description"
     t.boolean  "fork"
     t.datetime "created_at",                 :null=>false
@@ -272,7 +272,7 @@ ActiveRecord::Schema.define(version: 20170413115806) do
     t.string   "status",                     :index=>{:name=>"index_repositories_on_status"}
     t.datetime "last_synced_at"
     t.integer  "rank"
-    t.string   "host_type"
+    t.string   "host_type",                  :index=>{:name=>"index_repositories_on_host_type_and_full_name", :with=>["full_name"], :unique=>true, :case_sensitive=>false}
     t.string   "host_domain"
     t.string   "name"
     t.string   "scm"

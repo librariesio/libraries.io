@@ -85,6 +85,7 @@ gem 'active_model_serializers'
 gem 'schema_plus_pg_indexes'
 gem 'pghero'
 gem 'pg_query'
+gem 'schema_plus_pg_indexes'
 
 group :development do
   gem 'spring'

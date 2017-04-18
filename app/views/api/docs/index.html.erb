@@ -124,7 +124,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependent-repositories", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @project.dependent_repositories.paginate(page: 1).as_json(except: [:id, :repository_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]) %></pre>
+<%= JSON.pretty_generate @project.dependent_repositories.paginate(page: 1).as_json(except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id]) %></pre>
     <% end %>
 
     <h3 id="project-search">Project Search</h3>
@@ -158,7 +158,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-repository", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @repository.as_json({except: [:id, :repository_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]}) %></pre>
+<%= JSON.pretty_generate @repository.as_json({except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id]}) %></pre>
     <% end %>
     <h3 id='repository-dependencies'>Repository Dependencies</h3>
 
@@ -224,7 +224,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-repositories", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @repository_user.open_source_repositories.paginate(page: 1).as_json(except: [:id, :repository_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]) %></pre>
+<%= JSON.pretty_generate @repository_user.open_source_repositories.paginate(page: 1).as_json(except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id]) %></pre>
     <% end %>
 
     <h3 id="user-projects">User Projects</h3>

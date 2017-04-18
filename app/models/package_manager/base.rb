@@ -8,6 +8,9 @@ module PackageManager
 
     def self.platforms
       @platforms ||= begin
+        Dir[Rails.root.join('app', 'models', 'package_manager', '*.rb')].each do |file|
+          require file unless file.match(/base\.rb$/)
+        end
         PackageManager.constants
           .reject { |platform| platform == :Base }
           .map{|sym| "PackageManager::#{sym}".constantize }
@@ -246,6 +249,10 @@ module PackageManager
 
     def self.get_html(url, options = {})
       Nokogiri::HTML(get_raw(url, options))
+    end
+
+    def self.get_xml(url, options = {})
+      Ox.parse(get_raw(url, options))
     end
 
     def self.get_json(url)
