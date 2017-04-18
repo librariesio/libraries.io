@@ -11,7 +11,7 @@ class LanguagesController < ApplicationController
     @color = Linguist::Language[@language].try(:color)
     @watched = scope.most_watched.limit(5).includes(:repository)
     @dependend = scope.most_dependents.limit(5).includes(:repository)
-    @popular = scope.order('projects.rank DESC').limit(5).includes(:repository)
+    @popular = scope.order('projects.rank DESC NULLS LAST').limit(5).includes(:repository)
     @dependent_repos = scope.most_dependent_repos.limit(5).includes(:repository)
 
     facets = Project.facets(filters: { language: @language }, :facet_limit => 10)
