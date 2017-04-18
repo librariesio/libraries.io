@@ -17,6 +17,11 @@ namespace :github do
     scope.order('last_synced_at ASC').limit(100).each(&:update_all_info_async)
   end
 
+  desc 'Update source rank'
+  task update_source_rank: :environment do
+    Repository.source.open_source.where(rank: nil).order('repositories.stargazers_count DESC').limit(1000).select('id').each(&:update_source_rank_async)
+  end
+
   desc 'Sync github issues'
   task sync_issues: :environment do
     scope = Issue.includes(:repository)
