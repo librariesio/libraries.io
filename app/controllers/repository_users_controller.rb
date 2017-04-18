@@ -23,7 +23,7 @@ class RepositoryUsersController < ApplicationController
   end
 
   def repositories
-    @repositories = @user.repositories.open_source.source.order('stargazers_count DESC').paginate(page: page_number)
+    @repositories = @user.repositories.open_source.source.order('status ASC NULLS FIRST, rank DESC NULLS LAST').paginate(page: page_number)
   end
 
   def contributions
