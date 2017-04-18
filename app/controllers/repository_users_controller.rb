@@ -2,7 +2,7 @@ class RepositoryUsersController < ApplicationController
   before_action :find_user
 
   def show
-    @repositories = @user.repositories.open_source.source.order('stargazers_count DESC').limit(6)
+    @repositories = @user.repositories.open_source.source.order('status NULLS FIRST, rank DESC').limit(6)
     @favourite_projects = @user.top_favourite_projects.limit(6)
     @projects = @user.projects.joins(:repository).includes(:versions).order('projects.rank DESC, projects.created_at DESC').limit(6)
     if @user.org?
@@ -55,7 +55,7 @@ class RepositoryUsersController < ApplicationController
                        .where('repositories.fork = ?', false)
                        .where('repositories.private = ?', false)
                        .includes(:repository)
-                       .order('count DESC')
+                       .order('count DESC, rank DESC')
   end
 
   def current_language
