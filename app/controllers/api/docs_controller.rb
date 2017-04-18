@@ -15,7 +15,6 @@ class Api::DocsController < ApplicationController
 
     @repository = Repository.host('GitHub').find_by_full_name('gruntjs/grunt') || Repository.host('GitHub').first
 
-
     @repo_dependencies = @repository.as_json
 
     @repo_dependencies[:dependencies] = map_dependencies(@repository.repository_dependencies || [])

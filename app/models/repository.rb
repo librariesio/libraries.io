@@ -26,7 +26,7 @@ class Repository < ApplicationRecord
   has_many :issues, dependent: :delete_all
   has_one :readme, dependent: :delete
   belongs_to :repository_organisation
-  belongs_to :repository_user, primary_key: :uuid, foreign_key: :owner_id
+  belongs_to :repository_user
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
   has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
 
@@ -63,7 +63,7 @@ class Repository < ApplicationRecord
   scope :pushed, -> { where.not(pushed_at: nil) }
   scope :good_quality, -> { maintained.open_source.pushed }
   scope :with_stars, -> { where('repositories.stargazers_count > 0') }
-  scope :interesting, -> { with_stars.order('repositories.stargazers_count DESC, repositories.pushed_at DESC') }
+  scope :interesting, -> { with_stars.order('repositories.stargazers_count DESC, repositories.rank DESC NULLS LAST, repositories.pushed_at DESC') }
   scope :uninteresting, -> { without_readme.without_manifests.without_license.where('repositories.stargazers_count = 0').where('repositories.forks_count = 0') }
 
   scope :recently_created, -> { where('created_at > ?', 7.days.ago)}
@@ -228,7 +228,6 @@ class Repository < ApplicationRecord
       g = Repository.find_by(uuid: repo_hash[:id])
       g = Repository.host(repo_hash[:host_type] || 'GitHub').find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
       g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
-      g.owner_id = repo_hash[:owner][:id]
       g.host_type = repo_hash[:host_type] || 'GitHub'
       g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
       g.uuid = repo_hash[:id] if g.uuid.nil?

@@ -6,11 +6,11 @@ class Api::RepositoryUsersController < Api::ApplicationController
   end
 
   def repositories
-    paginate json: @repository_user.repositories.open_source.source.order('stargazers_count DESC')
+    paginate json: @repository_user.repositories.open_source.source.order('stargazers_count DESC, rank DESC NULLS LAST')
   end
 
   def projects
-    @projects = @repository_user.projects.joins(:repository).includes(:versions).order('projects.rank DESC, projects.created_at DESC')
+    @projects = @repository_user.projects.joins(:repository).includes(:versions).order('projects.rank DESC NULLS LAST, projects.created_at DESC')
     @projects = @projects.keywords(params[:keywords].split(',')) if params[:keywords].present?
 
     paginate json: @projects

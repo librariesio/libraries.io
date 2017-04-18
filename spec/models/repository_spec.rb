@@ -183,7 +183,7 @@ describe Repository, type: :model do
   describe '#avatar_url' do
     context 'with no args' do
       it 'should return an avatar url for GitHub repos' do
-        expect(build(:repository, host_type: 'GitHub').avatar_url).to eq('https://avatars.githubusercontent.com/u/?size=60')
+        expect(build(:repository, host_type: 'GitHub').avatar_url).to eq('https://github.com/rails?size=60')
       end
 
       it 'should return an avatar url for GitLab repos' do

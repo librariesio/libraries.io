@@ -7,7 +7,7 @@ module RepositoryHost
     end
 
     def avatar_url(size = 60)
-      "https://avatars.githubusercontent.com/u/#{repository.owner_id}?size=#{size}"
+      "https://github.com/#{repository.owner_name}?size=#{size}"
     end
 
     def domain
@@ -127,15 +127,17 @@ module RepositoryHost
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
       o = api_client.user(repository.owner_name)
       if o.type == "Organization"
-        go = RepositoryOrganisation.create_from_github(repository.owner_id.to_i)
+        go = RepositoryOrganisation.create_from_github(o)
         if go
           repository.repository_organisation_id = go.id
+          repository.repository_user_id = nil
           repository.save
         end
       else
         u = RepositoryUser.create_from_github(o)
         if u
           repository.repository_user_id = u.id
+          repository.repository_organisation_id = nil
           repository.save
         end
       end
@@ -189,7 +191,7 @@ module RepositoryHost
         tag_hash[:published_at] = object.tagger.date
       end
 
-      repository.tags.create!(tag_hash)
+      repository.tags.create(tag_hash)
     end
 
     private

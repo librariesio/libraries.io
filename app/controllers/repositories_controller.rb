@@ -85,7 +85,7 @@ class RepositoriesController < ApplicationController
 
   def forks
     load_repo
-    @forks = @repository.forked_repositories.host(@repository.host_type).maintained.order('stargazers_count DESC').paginate(page: page_number)
+    @forks = @repository.forked_repositories.host(@repository.host_type).maintained.order('stargazers_count DESC, rank DESC NULLS LAST').paginate(page: page_number)
   end
 
   def dependency_issues

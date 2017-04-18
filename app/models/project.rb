@@ -27,13 +27,13 @@ class Project < ApplicationRecord
   has_many :dependent_projects, -> { group('projects.id') }, through: :dependent_versions, source: :project, class_name: 'Project'
   has_many :repository_dependencies
   has_many :dependent_manifests, through: :repository_dependencies, source: :manifest
-  has_many :dependent_repositories, -> { group('repositories.id').order('repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
+  has_many :dependent_repositories, -> { group('repositories.id').order('repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
   has_many :subscriptions
   has_many :project_suggestions, dependent: :delete_all
   belongs_to :repository
   has_one :readme, through: :repository
 
-  scope :platform, ->(platform) { where('lower(platform) = ?', platform.try(:downcase)) }
+  scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
@@ -242,8 +242,12 @@ class Project < ApplicationRecord
 
   def set_dependents_count
     return if destroyed?
-    self.update_columns(dependents_count: dependents.joins(:version).pluck('DISTINCT versions.project_id').count,
-                        dependent_repos_count: dependent_repositories.open_source.count.length)
+    new_dependents_count = dependents.joins(:version).pluck('DISTINCT versions.project_id').count
+    new_dependent_repos_count = dependent_repositories.open_source.count.length
+    updates = {}
+    updates[:dependents_count] = new_dependents_count if dependents_count != new_dependents_count
+    updates[:dependent_repos_count] = new_dependent_repos_count if dependent_repos_count != new_dependent_repos_count
+    self.update_columns(updates) if updates.present?
   end
 
   def needs_suggestions?
@@ -369,7 +373,7 @@ class Project < ApplicationRecord
     response = Typhoeus.head(platform_class.check_status_url(self))
     if platform == 'packagist' && response.response_code == 302
       update_attribute(:status, 'Removed')
-    elsif platform != 'packagist' && response.response_code == 404
+    elsif platform != 'packagist' && [400, 404].include?(response.response_code)
       update_attribute(:status, 'Removed')
     elsif removed
       update_attribute(:status, nil)
