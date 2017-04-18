@@ -55,7 +55,7 @@ class RepositoryUsersController < ApplicationController
                        .where('repositories.fork = ?', false)
                        .where('repositories.private = ?', false)
                        .includes(:repository)
-                       .order('count DESC, rank DESC NULLS LAST')
+                       .order('count DESC')
   end
 
   def current_language
