@@ -122,9 +122,9 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
     brakeman (3.6.1)
-    bugsnag (5.3.0)
+    bugsnag (5.3.1)
     builder (3.2.3)
-    capistrano (3.8.0)
+    capistrano (3.8.1)
       airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)
@@ -164,7 +164,7 @@ GEM
       activesupport (>= 3.0.0)
       after_commit_action (~> 1.0)
     creole (0.5.0)
-    css_parser (1.4.10)
+    css_parser (1.5.0)
       addressable
     dalli (2.7.6)
     database_cleaner (1.5.3)
@@ -339,7 +339,7 @@ GEM
     pg_array_parser (0.0.9)
     pg_query (0.11.4)
       json (>= 1.8, < 3)
-    pghero (1.6.4)
+    pghero (1.6.5)
       activerecord
     pictogram (2.0.8)
       railties
@@ -347,7 +347,7 @@ GEM
       capybara (~> 2.1)
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
-    premailer (1.10.2)
+    premailer (1.10.3)
       addressable
       css_parser (>= 1.4.10)
       htmlentities (>= 4.0.0)
@@ -361,7 +361,7 @@ GEM
       rack
     rack-attack-rate-limit (1.1.0)
       rack
-    rack-canonical-host (0.2.2)
+    rack-canonical-host (0.2.3)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
     rack-cors (0.4.1)
@@ -519,7 +519,7 @@ GEM
       net-ssh (>= 2.8.0)
     sshkit-interactive (0.2.0)
       sshkit (~> 1.9)
-    stripe (2.3.0)
+    stripe (2.4.0)
       faraday (~> 0.9)
     stripe_event (1.6.0)
       activesupport (>= 3.1)
