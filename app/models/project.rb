@@ -245,8 +245,8 @@ class Project < ApplicationRecord
     new_dependents_count = dependents.joins(:version).pluck('DISTINCT versions.project_id').count
     new_dependent_repos_count = dependent_repositories.open_source.count.length
     updates = {}
-    updates[:dependents_count] = new_dependents_count if dependents_count != new_dependents_count
-    updates[:dependent_repos_count] = new_dependent_repos_count if dependent_repos_count != new_dependent_repos_count
+    updates[:dependents_count] = new_dependents_count if read_attribute(:dependents_count) != new_dependents_count
+    updates[:dependent_repos_count] = new_dependent_repos_count if read_attribute(:dependent_repos_count) != new_dependent_repos_count
     self.update_columns(updates) if updates.present?
   end
 
