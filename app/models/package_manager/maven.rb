@@ -55,7 +55,7 @@ module PackageManager
         name: name,
         path: name.split(':').join('/'),
         groupId: sections[0].gsub('.', '/'),
-        artifactId: sections[1].gsub('.', '/')
+        artifactId: sections[1]
       }
       h[:versions] = versions(h)
       h
@@ -82,7 +82,7 @@ module PackageManager
     def self.dependencies(name, version, project)
       sections = project[:name].split(':')
       groupId = sections[0].gsub('.', '/')
-      artifactId = sections[1].gsub('.', '/')
+      artifactId = sections[1]
       base_url = "http://repo1.maven.org/maven2/#{groupId}/#{artifactId}"
       pom_file = get_raw(base_url + "/#{version}/#{artifactId}-#{version}.pom")
       Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file).map do |dep|
