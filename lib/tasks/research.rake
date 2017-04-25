@@ -73,10 +73,10 @@ namespace :research do
       }
     end
 
-    total_commits = Contribution.where(repository_id: dependency_repos.map(&:id)).sum(:count) # 2,424,027
-    total_committers = Contribution.where(repository_id: dependency_repos.map(&:id)).group(:repository_user_id).count.keys.length # 71,754
-    civic_commits = Contribution.where(repository_id: dependency_repos.map(&:id), repository_user_id: civic_tech_contributor_ids).sum(:count) # 276,298
-    civic_committers = Contribution.where(repository_id: dependency_repos.map(&:id), repository_user_id: civic_tech_contributor_ids).group(:repository_user_id).count.keys.length # 2065
+    total_commits = Contribution.where(repository_id: dependency_repos.map(&:id)).sum(:count) # 2,682,407
+    total_committers = Contribution.where(repository_id: dependency_repos.map(&:id)).group(:repository_user_id).count.keys.length # 81187
+    civic_commits = Contribution.where(repository_id: dependency_repos.map(&:id), repository_user_id: civic_tech_contributor_ids).sum(:count) # 410,625
+    civic_committers = Contribution.where(repository_id: dependency_repos.map(&:id), repository_user_id: civic_tech_contributor_ids).group(:repository_user_id).count.keys.length # 2977
     civic_commits.to_f/total_commits*100
 
     # top 1000 cii projects
@@ -93,11 +93,11 @@ namespace :research do
     # cii_projects_used_by_civic_tech
 
     cii_projects_used_by_civic_tech = dependencies.uniq & cii_projects
-    cii_projects_used_by_civic_tech.sort_by(&:dependent_repos_count).each {|project| puts "#{project.platform}/#{project.name}" };nil
+    cii_projects_used_by_civic_tech.sort_by(&:dependent_repos_count).reverse.each {|project| puts "#{project.platform}/#{project.name}" };nil
 
     # cii_projects_used_by_civic_tech with usage counts
 
-    dependencies = repositories.map(&:dependency_projects).flatten
+    dependencies = repositories.map(&:dependency_projects).flatten.uniq
 
     cii_projects = Project.not_removed.order('dependent_repos_count DESC NULLS LAST').limit(1000)
 
@@ -115,10 +115,10 @@ namespace :research do
 
     cii_repository_ids = Repository.where(id: cii_projects.map(&:repository_id).uniq).pluck(:id).uniq
 
-    total_commits = Contribution.where(repository_id: cii_repository_ids).sum(:count) # 1,046,045
-    cii_committers = Contribution.where(repository_id: cii_repository_ids).group(:repository_user_id).count.keys.length # 37,981
-    civic_commits = Contribution.where(repository_id: cii_repository_ids, repository_user_id: civic_tech_contributor_ids).sum(:count) # 77,740
-    civic_committers = Contribution.where(repository_id: cii_repository_ids, repository_user_id: civic_tech_contributor_ids).group(:repository_user_id).count.keys.length # 891
+    total_commits = Contribution.where(repository_id: cii_repository_ids).sum(:count) # 1,061,393
+    cii_committers = Contribution.where(repository_id: cii_repository_ids).group(:repository_user_id).count.keys.length # 38,262
+    civic_commits = Contribution.where(repository_id: cii_repository_ids, repository_user_id: civic_tech_contributor_ids).sum(:count) # 151415
+    civic_committers = Contribution.where(repository_id: cii_repository_ids, repository_user_id: civic_tech_contributor_ids).group(:repository_user_id).count.keys.length # 1177
     civic_commits.to_f/total_commits*100 # 7.4%
 
     # cii commiters
@@ -133,20 +133,54 @@ namespace :research do
 
     # cii deps with less than 100 stars (unseen infrastucture)
     unique_cii_deps = cii_deps.uniq
-    unseen = unique_cii_deps.select{|project| project.stars < 100 rescue true } # 206
+    unseen = unique_cii_deps.select{|project| project.stars < 100 rescue true } # 212
     unseen.sort_by(&:stars).reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.stars})" };nil
 
+    json = unseen.sort_by(&:stars).reverse.map do |project|
+      {
+        project: "#{project.platform}/#{project.name}",
+        project_id: project.id,
+        stars: project.stars
+      }
+    end.to_json
+
     # cii deps with less than 6 contributors (bus factor)
-    bus_factor = unique_cii_deps.select{|project| project.contributors.length < 6 } # 149
+    bus_factor = unique_cii_deps.select{|project| project.contributors.length < 6 } # 152
     bus_factor.sort_by{|project| project.contributors.length}.reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.contributors.length})" };nil
 
+    json= open_issues.sort_by{|project| project.repository.try(:open_issues_count) || 0}.map do |project|
+      {
+        project: "#{project.platform}/#{project.name}",
+        project_id: project.id,
+        contributors: project.contributors.length
+      }
+    end.to_json
+
     # bus_factor unseen intersection
-    unseen_bus_factor_ids = unseen.map(&:id) & bus_factor.map(&:id) # 132
+    unseen_bus_factor_ids = unseen.map(&:id) & bus_factor.map(&:id) # 134
     Project.where(id:unseen_bus_factor_ids).sort_by(&:dependent_repos_count).reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.dependent_repos_count})" };nil
 
+    json= Project.where(id:unseen_bus_factor_ids).sort_by(&:dependent_repos_count).reverse.map do |project|
+      {
+        project: "#{project.platform}/#{project.name}",
+        project_id: project.id,
+        dependent_repos_count: project.dependent_repos_count,
+        contributors: project.contributors.length,
+        stars: project.stars
+      }
+    end.to_json
+
     # high open issues
-    open_issues = unique_cii_deps.select{|project| (project.repository.try(:open_issues_count) || 0) > 100  } # 153
+    open_issues = unique_cii_deps.select{|project| (project.repository.try(:open_issues_count) || 0) > 100  } # 169
     open_issues.sort_by{|project| project.repository.try(:open_issues_count) || 0}.reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.repository.try(:open_issues_count)})" };nil
+
+    json= open_issues.sort_by{|project| project.repository.try(:open_issues_count) || 0}.map do |project|
+      {
+        project: "#{project.platform}/#{project.name}",
+        project_id: project.id,
+        open_issues_count: project.repository.try(:open_issues_count) || 0
+      }
+    end.to_json
 
     # breakdown of percentage commits to cii deps by civit tech peeps
 
@@ -156,6 +190,7 @@ namespace :research do
       {
         dependency: "#{dep.platform}/#{dep.name}",
         dependent_repos_count: dep.dependent_repos_count,
+        project_id: dep.id,
         total_commits: total_commits,
         civic_commits: civic_commits,
         percentage: civic_commits.to_f/total_commits*100
