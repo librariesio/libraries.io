@@ -149,7 +149,7 @@ class ProjectsController < ApplicationController
     orginal_scope = Project.unsung_heroes
     scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
     @projects = scope.order('projects.dependent_repos_count DESC').paginate(page: page_number)
-    @platforms = orginal_scope.group('projects.platform').count.reject{|k,_v|÷ k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
+    @platforms = orginal_scope.group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
   end
 
   private
