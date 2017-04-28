@@ -77,6 +77,11 @@ class Project < ApplicationRecord
                              .where('repositories.stargazers_count < 100')
                              .where('projects.dependent_repos_count > 1000') }
 
+  scope :digital_infrastructure, -> { not_removed
+                             .with_dependent_repos
+                             .with_repo
+                             .where('projects.dependent_repos_count > ?', 10000)}
+
   scope :bus_factor, -> { maintained
                           .joins(:repository)
                           .where('repositories.contributions_count < 6')
