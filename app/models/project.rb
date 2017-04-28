@@ -80,7 +80,7 @@ class Project < ApplicationRecord
   scope :digital_infrastructure, -> { not_removed
                              .with_dependent_repos
                              .with_repo
-                             .where('projects.dependent_repos_count DESC NULLS LAST').limit(1000)}
+                             .where('projects.dependent_repos_count > ?', 10000)}
 
   scope :bus_factor, -> { maintained
                           .joins(:repository)
