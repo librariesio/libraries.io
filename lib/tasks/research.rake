@@ -105,11 +105,21 @@ namespace :research do
 
     cii_deps = dependencies.select{|p| cii_project_ids.include?(p.id)}
 
-    projects = cii_deps.map {|project| "#{project.platform}/#{project.name}" }
+    projects = cii_deps.map(&:id)
 
     project_counts = projects.reduce (Hash.new(0)) {|counts, el| counts[el]+=1; counts}
 
-    project_counts.select{|k,v| v > 0 }.sort_by{|k,v| -v}.each {|k,v| puts "#{k} (#{v})" };nil
+    # project_counts.select{|k,v| v > 0 }.sort_by{|k,v| -v}.each {|k,v| puts "#{k} (#{v})" };nil
+
+    json = project_counts.select{|k,v| v > 0 }.sort_by{|k,v| -v}.map do |k,v|
+      project = Project.find(k)
+      {
+        project_name: "#{project.platform}/#{project.name}",
+        project_id: project.id,
+        count: v
+      }
+    end.to_json
+
 
     # ct people who contributed to cii projects
 
