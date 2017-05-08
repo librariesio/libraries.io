@@ -245,6 +245,10 @@ class Repository < ApplicationRecord
     nil
   end
 
+  def check_status(removed = false)
+    Repository.check_status(host_type, full_name, removed)
+  end
+
   def self.check_status(host_type, repo_full_name, removed = false)
     domain = RepositoryHost::Base.domain(host_type)
     response = Typhoeus.head("#{domain}/#{repo_full_name}")
