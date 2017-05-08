@@ -90,8 +90,8 @@ class Project < ApplicationRecord
   scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 1.month.ago)}
 
   after_commit :update_repository_async, on: :create
-  after_commit :set_dependents_count
-  after_commit :update_source_rank_async
+  after_commit :set_dependents_count, on: [:create, :update]
+  after_commit :update_source_rank_async, on: [:create, :update]
   before_save  :update_details
   before_destroy :destroy_versions
 
