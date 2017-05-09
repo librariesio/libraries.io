@@ -239,4 +239,39 @@ namespace :research do
     end;nil
 
   end
+
+  desc 'output csv of cii maintainers'
+  task contributors: :environment do
+    projects = Project.digital_infrastructure.order('projects.dependent_repos_count DESC').includes(:repository)
+
+    projects.each do |project|
+      puts "- #{project.platform}/#{project.name} - https://librares.io/#{project.platform}/#{project.name}"
+      puts "  - #{project.repository.url}"
+      total_commits = project.contributions.sum(:count)
+      threshold = total_commits.to_f/20
+      project.contributions.order('count DESC').limit(5).each do |contribution|
+        next if contribution.count < threshold && contribution.count < 5
+        puts "    - #{contribution.count} commits (#{(contribution.count.to_f/total_commits*100).round}%) #{contribution.repository_user.repository_url} #{contribution.repository_user.email} #{contribution.repository_user.location}"
+      end
+      puts ""
+    end;nil
+
+    output = CSV.generate do |csv|
+    csv << ['Project',	'Repo',	'Commits', 'Percentage',	'Maintainer URI',	'Maintener email', 'Maintainer Location']
+
+      projects.each do |project|
+        total_commits = project.contributions.sum(:count)
+        threshold = total_commits.to_f/20
+        project.contributions.order('count DESC').limit(5).each do |contribution|
+          next if contribution.count < threshold && contribution.count < 10
+
+          csv << ["#{project.platform}/#{project.name}", project.repository.url, contribution.count, (contribution.count.to_f/total_commits*100).round, contribution.repository_user.repository_url, contribution.repository_user.email, contribution.repository_user.location]
+
+        end
+
+      end
+
+    end;nil
+    puts output
+  end
 end
