@@ -59,6 +59,17 @@
     </div>
 
     <div class="panel panel-default">
+      <div class="panel-heading">Slack</div>
+      <div class="panel-body">
+        <%= simple_form_for(current_user, url: account_path, html: { class: 'form-vertical' }) do |form| %>
+          <%= form.input :slack_api_token %>
+          <%= form.input :slack_channel %>
+          <%= form.submit 'Update Slack Preferences', class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
       <div class="panel-heading">API Key</div>
       <div class="panel-body">
         <p>

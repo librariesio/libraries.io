@@ -30,6 +30,6 @@ class AccountsController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email, :emails_enabled, :hidden)
+    params.require(:user).permit(:email, :emails_enabled, :hidden, :slack_api_token, :slack_channel)
   end
 end
