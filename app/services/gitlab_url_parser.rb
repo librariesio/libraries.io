@@ -1,6 +1,10 @@
 class GitlabURLParser < URLParser
   private
 
+  def full_domain
+    'https://gitlab.com'
+  end
+
   def tlds
     %w(com)
   end

@@ -38,7 +38,7 @@ module RepoSearch
       end
     end
 
-    after_save lambda { __elasticsearch__.index_document }
+    after_commit lambda { __elasticsearch__.index_document if previous_changes.any? }, on: [:create, :update], prepend: true
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def self.facets(options = {})

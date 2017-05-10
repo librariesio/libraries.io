@@ -46,7 +46,7 @@ module PackageManager
 
     def self.load_bower_json(mapped_project)
       return mapped_project unless mapped_project['url']
-      github_name_with_owner = GitlabURLParser.parse(mapped_project['url'])
+      github_name_with_owner = GithubURLParser.parse(mapped_project['url'])
       return mapped_project unless github_name_with_owner
       get_json("https://raw.githubusercontent.com/#{github_name_with_owner}/master/bower.json") rescue {}
     end

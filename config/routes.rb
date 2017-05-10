@@ -185,6 +185,7 @@ Rails.application.routes.draw do
   post '/auth/failure',             to: 'sessions#failure'
 
   get '/unseen-infrastructure', to: 'projects#unseen_infrastructure', as: :unseen_infrastructure
+  get '/digital-infrastructure', to: 'projects#digital_infrastructure', as: :digital_infrastructure
 
   get '/about', to: 'pages#about', as: :about
   get '/team', to: 'pages#team', as: :team

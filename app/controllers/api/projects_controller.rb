@@ -20,7 +20,7 @@ class Api::ProjectsController < Api::ApplicationController
 
   def dependencies
     version = if params[:version] == 'latest'
-                @project.versions.first
+                @project.versions.sort.first
               else
                 @project.versions.find_by_number(params[:version])
               end

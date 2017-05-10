@@ -85,4 +85,20 @@ namespace :projects do
   task sync_pypi_deps: :environment do
     Project.maintained.platform('pypi').where('last_synced_at < ?', '2016-11-29 15:30:45').order(:last_synced_at).limit(10).each(&:async_sync)
   end
+
+  desc 'Sync potentially outdated projects'
+  task potentially_outdated: :environment do
+    rd_names = RepositoryDependency.where('created_at > ?', 1.hour.ago).select('project_name,platform').distinct.pluck(:platform, :project_name).map{|r| [PackageManager::Base.format_name(r[0]), r[1]]}
+    d_names = Dependency.where('created_at > ?', 1.hour.ago).select('project_name,platform').distinct.pluck(:platform, :project_name).map{|r| [PackageManager::Base.format_name(r[0]), r[1]]}
+    all_names = (d_names + rd_names).uniq
+
+    all_names.each do |platform, name|
+      project = Project.platform(platform).find_by_name(name)
+      if project
+        project.async_sync if project.potentially_outdated? rescue nil
+      else
+        PackageManagerDownloadWorker.perform_async(platform, name)
+      end
+    end
+  end
 end
