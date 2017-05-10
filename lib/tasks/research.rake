@@ -103,7 +103,7 @@ namespace :research do
 
     # cii_projects_used_by_civic_tech with usage counts
 
-    dependencies = repositories.map(&:dependency_projects).flatten.uniq
+    dependencies = repositories.map(&:dependency_projects).flatten
 
     cii_projects = Project.not_removed.order('dependent_repos_count DESC NULLS LAST').limit(1000)
 
@@ -115,7 +115,7 @@ namespace :research do
 
     project_counts = projects.reduce (Hash.new(0)) {|counts, el| counts[el]+=1; counts}
 
-    # project_counts.select{|k,v| v > 0 }.sort_by{|k,v| -v}.each {|k,v| puts "#{k} (#{v})" };nil
+    project_counts.select{|k,v| v > 0 }.sort_by{|k,v| -v}.each {|k,v| project = Project.find(k); puts "#{project.platform}/#{project.name} (#{v})" };nil
 
     json = project_counts.select{|k,v| v > 0 }.sort_by{|k,v| -v}.map do |k,v|
       project = Project.find(k)
@@ -125,6 +125,11 @@ namespace :research do
         count: v
       }
     end.to_json
+
+    # commits to civic tech repos
+
+    total_commits = Contribution.where(repository_id: repositories.map(&:id)).sum(:count)
+
 
 
     # ct people who contributed to cii projects
@@ -149,7 +154,7 @@ namespace :research do
 
     # cii deps with less than 100 stars (unseen infrastucture)
     unique_cii_deps = cii_deps.uniq
-    unseen = unique_cii_deps.select{|project| project.stars < 100 rescue true } # 212
+    unseen = unique_cii_deps.select{|project| project.stars < 100 rescue true } # 207
     unseen.sort_by(&:stars).reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.stars})" };nil
 
     json = unseen.sort_by(&:stars).reverse.map do |project|
@@ -161,10 +166,10 @@ namespace :research do
     end.to_json
 
     # cii deps with less than 6 contributors (bus factor)
-    bus_factor = unique_cii_deps.select{|project| project.contributors.length < 6 } # 152
+    bus_factor = unique_cii_deps.select{|project| project.contributors.length < 6 } # 144
     bus_factor.sort_by{|project| project.contributors.length}.reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.contributors.length})" };nil
 
-    json= open_issues.sort_by{|project| project.repository.try(:open_issues_count) || 0}.map do |project|
+    json= bus_factor.sort_by{|project| project.repository.try(:open_issues_count) || 0}.map do |project|
       {
         project: "#{project.platform}/#{project.name}",
         project_id: project.id,
@@ -173,7 +178,7 @@ namespace :research do
     end.to_json
 
     # bus_factor unseen intersection
-    unseen_bus_factor_ids = unseen.map(&:id) & bus_factor.map(&:id) # 134
+    unseen_bus_factor_ids = unseen.map(&:id) & bus_factor.map(&:id) # 127
     Project.where(id:unseen_bus_factor_ids).sort_by(&:dependent_repos_count).reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.dependent_repos_count})" };nil
 
     json= Project.where(id:unseen_bus_factor_ids).sort_by(&:dependent_repos_count).reverse.map do |project|
@@ -187,7 +192,7 @@ namespace :research do
     end.to_json
 
     # high open issues
-    open_issues = unique_cii_deps.select{|project| (project.repository.try(:open_issues_count) || 0) > 100  } # 169
+    open_issues = unique_cii_deps.select{|project| (project.repository.try(:open_issues_count) || 0) > 100  } # 165
     open_issues.sort_by{|project| project.repository.try(:open_issues_count) || 0}.reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.repository.try(:open_issues_count)})" };nil
 
     json= open_issues.sort_by{|project| project.repository.try(:open_issues_count) || 0}.map do |project|
@@ -233,7 +238,7 @@ namespace :research do
       next if dependencies.empty?
       invalid = dependencies.select do |dep|
         dep.project && dep.project.normalize_licenses.present? && !dep.compatible_license?
-      end
+      end.uniq{|d| d.project.id }
       if invalid.any?
         puts "#{repo.url} - #{repo.license}"
         invalid.each do |dep|
