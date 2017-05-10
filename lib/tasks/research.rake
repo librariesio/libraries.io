@@ -49,7 +49,10 @@ namespace :research do
     'loomio',
     'wikimedia',
     'WorldBank-Transport',
-    'open-contracting']
+    'open-contracting',
+    'openaustralia',
+    'planningalerts-scrapers',
+    'delib']
 
     orgs = RepositoryOrganisation.where(login: org_names)
 
