@@ -17,7 +17,9 @@ namespace :research do
     'wikimedia',
     'WorldBank-Transport',
     'open-contracting',
-    'openaustralia']
+    'openaustralia',
+    'planningalerts-scrapers',
+    'delib']
 
     orgs = RepositoryOrganisation.where(login: org_names)
 
