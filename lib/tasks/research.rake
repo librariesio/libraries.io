@@ -274,4 +274,23 @@ namespace :research do
     end;nil
     puts output
   end
+
+  desc 'most active contributors to cii'
+  task top_cii_contributors: :environment do
+    projects = Project.digital_infrastructure.order('projects.dependent_repos_count DESC').includes(:repository)
+    contributor_ids = Contribution.where(repository_id: projects.map(&:repository_id)).group(:repository_user_id).sum(:count)
+    top_1percent = contributor_ids.select{|k,v| v > 499 }.map{|k,v| [RepositoryUser.find(k), v]}
+
+    output = CSV.generate do |csv|
+    csv << ['Name', 'CII commits', 'URI',	'email', 'company', 'Location']
+
+    top_1percent.sort_by(&:last).reverse.each do |user, commits|
+
+      csv << [user.login, commits, user.repository_url, user.email, user.company, user.location]
+
+    end
+
+    end;nil
+    puts output
+  end
 end
