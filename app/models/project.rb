@@ -72,10 +72,13 @@ class Project < ApplicationRecord
   scope :indexable, -> { not_removed.includes(:repository) }
 
   scope :unsung_heroes, -> { maintained
-                             .with_dependent_repos
                              .with_repo
                              .where('repositories.stargazers_count < 100')
                              .where('projects.dependent_repos_count > 1000') }
+
+  scope :digital_infrastructure, -> { not_removed
+                             .with_repo
+                             .where('projects.dependent_repos_count > ?', 10000)}
 
   scope :bus_factor, -> { maintained
                           .joins(:repository)
@@ -87,8 +90,8 @@ class Project < ApplicationRecord
   scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 1.month.ago)}
 
   after_commit :update_repository_async, on: :create
-  after_commit :set_dependents_count
-  after_commit :update_source_rank_async
+  after_commit :set_dependents_count, on: [:create, :update]
+  after_commit :update_source_rank_async, on: [:create, :update]
   before_save  :update_details
   before_destroy :destroy_versions
 
@@ -245,8 +248,8 @@ class Project < ApplicationRecord
     new_dependents_count = dependents.joins(:version).pluck('DISTINCT versions.project_id').count
     new_dependent_repos_count = dependent_repositories.open_source.count.length
     updates = {}
-    updates[:dependents_count] = new_dependents_count if dependents_count != new_dependents_count
-    updates[:dependent_repos_count] = new_dependent_repos_count if dependent_repos_count != new_dependent_repos_count
+    updates[:dependents_count] = new_dependents_count if read_attribute(:dependents_count) != new_dependents_count
+    updates[:dependent_repos_count] = new_dependent_repos_count if read_attribute(:dependent_repos_count) != new_dependent_repos_count
     self.update_columns(updates) if updates.present?
   end
 
@@ -377,6 +380,30 @@ class Project < ApplicationRecord
       update_attribute(:status, 'Removed')
     elsif removed
       update_attribute(:status, nil)
+    end
+  end
+
+  def unique_repo_requirement_ranges
+    repository_dependencies.group('repository_dependencies.requirements').count.keys
+  end
+
+  def unique_project_requirement_ranges
+    dependents.group('dependencies.requirements').count.keys
+  end
+
+  def unique_requirement_ranges
+    (unique_repo_requirement_ranges + unique_project_requirement_ranges).uniq
+  end
+
+  def potentially_outdated?
+    current_version = SemanticRange.clean(latest_release_number)
+    unique_requirement_ranges.compact.sort.any? do |range|
+      begin
+        !(SemanticRange.gtr(current_version, range, false, platform) ||
+        SemanticRange.satisfies(current_version, range, false, platform))
+      rescue
+        false
+      end
     end
   end
 end

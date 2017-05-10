@@ -1,6 +1,10 @@
 class GithubURLParser < URLParser
   private
 
+  def full_domain
+    'https://github.com'
+  end
+
   def tlds
     %w(io com org)
   end

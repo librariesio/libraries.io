@@ -215,12 +215,12 @@ module PackageManager
     def self.repo_fallback(repo, homepage)
       repo = '' if repo.nil?
       homepage = '' if homepage.nil?
-      repo_gh = GitlabURLParser.parse(repo)
-      homepage_gh = GitlabURLParser.parse(homepage)
-      if repo_gh.present?
-        return "https://github.com/#{repo_gh}"
-      elsif homepage_gh.present?
-        return "https://github.com/#{homepage_gh}"
+      repo_url = URLParser.try_all(repo)
+      homepage_url = URLParser.try_all(homepage)
+      if repo_url.present?
+        return repo_url
+      elsif homepage_url.present?
+        return homepage_url
       else
         repo
       end

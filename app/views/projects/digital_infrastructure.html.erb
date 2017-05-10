@@ -1,9 +1,9 @@
-<% title "Unseen Open Source Infrastructure - Libraries.io" %>
+<% title "Digital Infrastructure - Libraries.io" %>
 <div class="row">
   <div class="col-md-12">
     <h1>
       <i class="fa fa-map-signs"></i>
-      Unseen Open Source Infrastructure
+      Digital Infrastructure
       <% if params[:platforms].present? %>
         on <%= link_to platform_name(params[:platforms]), platforms_path(params[:platforms]) %>
       <% end %>
@@ -45,23 +45,23 @@
     <%= will_paginate @projects, page_links: false %>
   </div>
   <div class="col-sm-4 facets">
-    <%= render 'adsense/sustain' %>
+    <%= render 'adsense/sidebar' %>
     <h3>
       <strong>
-        What is Unseen Infrastructure?
+        What is Digital Infrastructure?
       </strong>
     </h3>
     <p>
-      Unseen infrastructure are open source libraries that are heavily depended upon by the community but don't receive much recognition or attention.
+      Digital Infrastructure is the free and open source software contributed as a public good that underpins much of today's technology. As Nadia Edghal posed in her excellent primer <a href='http://www.fordfoundation.org/library/reports-and-studies/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure/' target='_blank'>Roads and Bridges' for the Ford Foundation</a>
     </p>
     <p>
-      This page shows projects that are depended upon by at least 1,000 other open source repositories but have less than 100 stars.
+      "Shared, public code makes up the digital infrastructure of our society today. In the face of unprecedented demand, the costs of not supporting our digital infrastructure are numerous. No individual company or organisation is incentivised to address the public good problem alone. In order to support our digital infrastructure, we must find ways to work together."
     </p>
     <p>
-      You can help out by reviewing the code for these libraries, helping out with open issues and thanking the maintainers for their hard work.
+      You can support these projects by reviewing the code, helping out with open issues and thanking the maintainers for their hard work.
     </p>
     <p>
-      <em>This is an experiment based on contributions and available dependency data from package manager repositories that make it easily available.</em>
+      <em>This is an experiment based available dependency data from package manager repositories that make it easily available.</em>
     </p>
 
     <div class='row'>

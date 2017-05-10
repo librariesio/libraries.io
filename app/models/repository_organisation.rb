@@ -139,4 +139,8 @@ class RepositoryOrganisation < ApplicationRecord
   rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
     nil
   end
+
+  def find_repositories
+    Repository.host(host_type).where('full_name ILIKE ?', "#{login}/%").update_all(repository_user_id: nil, repository_organisation_id: self.id)
+  end
 end

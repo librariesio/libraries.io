@@ -1,13 +1,13 @@
 namespace :github do
   desc 'Sync github users'
   task sync_users: :environment do
-    RepositoryUser.visible.where(last_synced_at: nil).limit(100).each(&:async_sync)
-    RepositoryUser.visible.order('last_synced_at ASC').limit(100).each(&:async_sync)
+    RepositoryUser.visible.where(last_synced_at: nil).limit(100).select('login').each(&:async_sync)
+    RepositoryUser.visible.order('last_synced_at ASC').limit(100).select('login').each(&:async_sync)
   end
 
   desc 'Sync github orgs'
   task sync_orgs: :environment do
-    RepositoryOrganisation.visible.order('last_synced_at ASC').limit(200).each(&:async_sync)
+    RepositoryOrganisation.visible.order('last_synced_at ASC').limit(200).select('login').each(&:async_sync)
   end
 
   desc 'Sync github repos'
@@ -15,6 +15,11 @@ namespace :github do
     scope = Repository.source.open_source
     scope.where(last_synced_at: nil).limit(100).each(&:update_all_info_async)
     scope.order('last_synced_at ASC').limit(100).each(&:update_all_info_async)
+  end
+
+  desc 'Update source rank'
+  task update_source_rank: :environment do
+    Repository.source.open_source.where(rank: nil).order('repositories.stargazers_count DESC').limit(1000).select('id').each(&:update_source_rank_async)
   end
 
   desc 'Sync github issues'
