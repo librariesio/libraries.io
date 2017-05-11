@@ -13,8 +13,9 @@ describe "RepositoriesController" do
     end
   end
 
-  describe "GET /github/search", type: :request do
+  describe "GET /github/search", type: :request, elasticsearch: true do
     it "renders successfully when logged out" do
+      Repository.__elasticsearch__.refresh_index!
       visit github_search_path
       expect(page).to have_content 'Language'
     end

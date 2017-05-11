@@ -10,7 +10,7 @@ class Api::RepositoriesController < Api::ApplicationController
   end
 
   def dependencies
-    repo_json = @repository.as_json
+    repo_json = RepositorySerializer.new(@repository).as_json
     repo_json[:dependencies] = map_dependencies(@repository.repository_dependencies || [])
 
     render json: repo_json

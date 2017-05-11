@@ -1,10 +1,9 @@
 require "rails_helper"
 
-describe "Api::PlatformsController" do
+describe "Api::PlatformsController", elasticsearch: true do
   describe "GET /api/platforms", type: :request do
     it "renders successfully" do
       create(:project)
-      Project.__elasticsearch__.import force: true
       Project.__elasticsearch__.refresh_index!
       get '/api/platforms'
       expect(response).to have_http_status(:success)
