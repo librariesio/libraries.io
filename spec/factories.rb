@@ -72,6 +72,7 @@ FactoryGirl.define do
     title "I found a bug"
     body "Please fix it"
     labels ['help wanted', 'easy']
+    locked false
     repository_user
     comments_count 1
   end

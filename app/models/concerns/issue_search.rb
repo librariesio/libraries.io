@@ -53,7 +53,7 @@ module IssueSearch
         filter: { bool: { must: [], must_not: options[:must_not] } },
         sort: default_sort
       }
-      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
+      search_definition[:filter][:bool][:must] = filter_format(options[:filters]) if options[:filters].any?
       if options[:repo_ids].present?
         search_definition[:query][:filtered][:filter][:bool][:must] << {
           terms: { "repository_id": options[:repo_ids] } }
