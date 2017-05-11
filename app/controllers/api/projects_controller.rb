@@ -15,7 +15,7 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def searchcode
-    render json: Project.where('updated_at > ?', 1.day.ago).pluck(:repository_url).compact.reject(&:blank?)
+    render json: Project.where('updated_at > ?', 1.day.ago).order(:repository_url).pluck(:repository_url).compact.reject(&:blank?)
   end
 
   def dependencies
@@ -29,7 +29,7 @@ class Api::ProjectsController < Api::ApplicationController
 
 
 
-    project_json = @project
+    project_json = ProjectSerializer.new(@project).as_json
     project_json[:dependencies] = map_dependencies(version.dependencies || [])
 
     render json: project_json

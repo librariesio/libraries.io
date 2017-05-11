@@ -13,6 +13,10 @@ FactoryGirl.define do
     "andrew#{n}"
   end
 
+  sequence :repository_url do |n|
+    "https://github.com/rails/rails#{n}"
+  end
+
   factory :project do
     name
     platform        'Rubygems'
@@ -21,7 +25,7 @@ FactoryGirl.define do
     language        'Ruby'
     licenses        'MIT'
     keywords_array  ['web']
-    repository_url  'https://github.com/rails/rails'
+    repository_url
   end
 
   factory :platform do
@@ -38,6 +42,7 @@ FactoryGirl.define do
   factory :dependency do
     version
     project
+    kind 'runtime'
     platform 'Rubygems'
     project_name 'rails'
     requirements '~> 4.2'
