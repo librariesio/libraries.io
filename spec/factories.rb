@@ -13,6 +13,10 @@ FactoryGirl.define do
     "andrew#{n}"
   end
 
+  sequence :repository_url do |n|
+    "https://github.com/rails/rails#{n}"
+  end
+
   factory :project do
     name
     platform        'Rubygems'
@@ -21,7 +25,7 @@ FactoryGirl.define do
     language        'Ruby'
     licenses        'MIT'
     keywords_array  ['web']
-    repository_url  'https://github.com/rails/rails'
+    repository_url
   end
 
   factory :platform do
@@ -38,9 +42,24 @@ FactoryGirl.define do
   factory :dependency do
     version
     project
+    kind 'runtime'
     platform 'Rubygems'
     project_name 'rails'
     requirements '~> 4.2'
+  end
+
+  factory :repository_dependency do
+    manifest
+    project
+    platform 'Rubygems'
+    project_name 'rails'
+    requirements '~> 4.2'
+  end
+
+  factory :manifest do
+    repository
+    filepath 'Gemfile'
+    platform 'Rubygems'
   end
 
   factory :tag do
@@ -57,6 +76,8 @@ FactoryGirl.define do
     state "open"
     title "I found a bug"
     body "Please fix it"
+    labels ['help wanted', 'easy']
+    locked false
     repository_user
     comments_count 1
   end

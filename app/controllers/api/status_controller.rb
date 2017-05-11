@@ -11,7 +11,7 @@ class Api::StatusController < Api::ApplicationController
     else
       @projects = []
     end
-    render json: project_json_response(@projects)
+    render json: @projects
   end
 
   private

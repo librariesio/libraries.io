@@ -13,7 +13,7 @@ RSpec.configure do |config|
   config.around :each, elasticsearch: true do |example|
     [Project, Repository, Issue].each do |model|
       model.__elasticsearch__.create_index!(force: true)
-      model.__elasticsearch__.refresh_index!
+      model.__elasticsearch__.import force: true
     end
     example.run
     [Project, Repository, Issue].each do |model|
