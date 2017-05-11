@@ -7,7 +7,7 @@ class Api::BowerSearchController < Api::ApplicationController
     }, sort: format_sort, order: format_order), page: page_number, per_page: per_page_number
     @projects = @search.records.includes(:repository, :versions)
 
-    render json: project_json_response(@projects)
+    render json: @projects
   end
 
   private

@@ -3,7 +3,7 @@ class Api::SearchController < Api::ApplicationController
     @search = paginate search_projects(params[:q])
     @projects = @search.records.includes(:repository, :versions)
 
-    render json: project_json_response(@projects)
+    render json: @projects
   end
 
   private
