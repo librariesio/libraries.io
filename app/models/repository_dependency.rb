@@ -18,7 +18,7 @@ class RepositoryDependency < ApplicationRecord
   alias_attribute :deprecated, :is_deprecated?
   alias_method :outdated, :outdated?
 
-  delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :project
+  delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :project, allow_nil: true
   delegate :filepath, to: :manifest
 
   def repository
