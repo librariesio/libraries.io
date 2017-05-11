@@ -209,20 +209,7 @@ class ApplicationController < ActionController::Base
   end
 
   def map_dependencies(dependencies)
-    dependencies.map do |dependency|
-      {
-        project_name: dependency.project_name,
-        name: dependency.project_name,
-        platform: dependency.platform,
-        requirements: dependency.requirements,
-        latest_stable: dependency.latest_stable_release_number,
-        latest: dependency.latest_release_number,
-        deprecated: dependency.is_deprecated?,
-        outdated: dependency.outdated?,
-        filepath: dependency.filepath,
-        kind: dependency.kind
-      }
-    end
+    dependencies.map {|dependency| DependencySerializer.new(dependency) }
   end
 
   def load_tree_resolver
