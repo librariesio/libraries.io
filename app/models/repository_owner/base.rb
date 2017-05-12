@@ -37,6 +37,14 @@ module RepositoryOwner
       owner.uuid
     end
 
+    def download_orgs
+      raise NotImplementedError
+    end
+
+    def download_repos
+      raise NotImplementedError
+    end
+
     def self.format(host_type)
       case host_type.try(:downcase)
       when 'github'

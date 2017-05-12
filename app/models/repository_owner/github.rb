@@ -8,6 +8,24 @@ module RepositoryOwner
       "https://github.com/#{owner.login}"
     end
 
+    def download_orgs
+      api_client.orgs(owner.login).each do |org|
+        RepositoryCreateOrgWorker.perform_async(org.login)
+      end
+      true
+    rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
+      nil
+    end
+
+    def download_repos
+      api_client.search_repos("user:#{owner.login}").items.each do |repo|
+        CreateRepositoryWorker.perform_async('GitHub', repo.full_name)
+      end
+      true
+    rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
+      nil
+    end
+
     def self.fetch_user(id_or_login)
       api_client.user(id_or_login)
     rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS

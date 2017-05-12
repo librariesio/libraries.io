@@ -27,7 +27,8 @@ class RepositoryOrganisation < ApplicationRecord
   scope :host, lambda{ |host_type| where('lower(repository_organisations.host_type) = ?', host_type.try(:downcase)) }
 
   delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
-           :to_s, :to_param, :github_id, to: :repository_owner
+           :to_s, :to_param, :github_id, :download_org_from_host, :download_orgs,
+           :download_org_from_host_by_login, :download_repos, to: :repository_owner
 
   def repository_owner
     @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
@@ -53,10 +54,6 @@ class RepositoryOrganisation < ApplicationRecord
     nil
   end
 
-  def github_client
-    AuthToken.client
-  end
-
   def user_type
     'Organisation'
   end
@@ -73,48 +70,6 @@ class RepositoryOrganisation < ApplicationRecord
     RepositoryOwner.const_get(host_type.capitalize).create_org(org_hash)
   end
 
-  def self.create_from_github(login_or_id)
-    begin
-      r = AuthToken.client.org(login_or_id).to_hash
-      return false if r.blank?
-
-      org = nil
-      org_by_id = RepositoryOrganisation.host('GitHub').find_by_uuid(r[:id])
-      if r[:login].present?
-        org_by_login = RepositoryOrganisation.host('GitHub').where("lower(login) = ?", r[:login].downcase).first
-      else
-        org_by_login = nil
-      end
-
-      if org_by_id # its fine
-        if org_by_id.login.try(:downcase) == r[:login].try(:downcase)
-          org = org_by_id
-        else
-          if org_by_login && !org_by_login.download_from_github
-            org_by_login.destroy
-          end
-          org_by_id.login = r[:login]
-          org_by_id.save!
-          org = org_by_id
-        end
-      elsif org_by_login # conflict
-        if org_by_login.download_from_github_by_login
-          org = org_by_login if org_by_login.github_id == r[:id]
-        end
-        org_by_login.destroy if org.nil?
-      end
-      if org.nil?
-        org = RepositoryOrganisation.create!(uuid: r[:id], login: r[:login], host_type: 'GitHub')
-      end
-
-      org.assign_attributes r.slice(*RepositoryOrganisation::API_FIELDS)
-      org.save
-      org
-    rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
-      false
-    end
-  end
-
   def async_sync
     RepositoryUpdateOrgWorker.perform_async(self.login)
   end
@@ -123,28 +78,6 @@ class RepositoryOrganisation < ApplicationRecord
     download_from_github
     download_repos
     update_attributes(last_synced_at: Time.now)
-  end
-
-  def download_from_github
-    download_from_github_by(github_id)
-  end
-
-  def download_from_github_by_login
-    download_from_github_by(login)
-  end
-
-  def download_from_github_by(id_or_login)
-    RepositoryOrganisation.create_from_github(github_client.org(id_or_login))
-  rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
-    nil
-  end
-
-  def download_repos
-    github_client.org_repos(login).each do |repo|
-      CreateRepositoryWorker.perform_async('GitHub', repo.full_name)
-    end
-  rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
-    nil
   end
 
   def find_repositories

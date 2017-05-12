@@ -28,14 +28,11 @@ class RepositoryUser < ApplicationRecord
   scope :host, lambda{ |host_type| where('lower(repository_users.host_type) = ?', host_type.try(:downcase)) }
 
   delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
-           :to_s, :to_param, :github_id, :download_user_from_host, :download_user_from_host_by_login, to: :repository_owner
+           :to_s, :to_param, :github_id, :download_user_from_host, :download_orgs,
+           :download_user_from_host_by_login, :download_repos, to: :repository_owner
 
   def repository_owner
     @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
-  end
-
-  def github_id
-    uuid
   end
 
   def meta_tags
@@ -54,10 +51,6 @@ class RepositoryUser < ApplicationRecord
     false
   end
 
-  def github_client
-    AuthToken.client
-  end
-
   def async_sync
     RepositoryUpdateUserWorker.perform_async(self.login)
   end
@@ -67,25 +60,6 @@ class RepositoryUser < ApplicationRecord
     download_orgs
     download_repos
     update_attributes(last_synced_at: Time.now)
-  end
-
-  def download_orgs
-    github_client.orgs(login).each do |org|
-      RepositoryCreateOrgWorker.perform_async(org.login)
-    end
-    true
-  rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
-    nil
-  end
-
-  def download_repos
-    AuthToken.client.search_repos("user:#{login}").items.each do |repo|
-      Repository.create_from_hash repo.to_hash
-    end
-
-    true
-  rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
-    nil
   end
 
   def self.create_from_host(host_type, user_hash)
