@@ -134,7 +134,7 @@ module RepositoryHost
           repository.save
         end
       else
-        u = RepositoryUser.create_from_github(o)
+        u = RepositoryUser.create_from_host('GitHub', o)
         if u
           repository.repository_user_id = u.id
           repository.repository_organisation_id = nil
