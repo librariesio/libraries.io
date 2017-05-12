@@ -9,7 +9,11 @@ module RepositoryOwner
     end
 
     def self.fetch_user(id_or_login)
-      api_client.user(id_or_login)
+      if id_or_login.to_i.zero?
+        api_client.get(("/users?username=#{id_or_login}")).first
+      else
+        api_client.user(id_or_login)
+      end
     rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
       nil
     end

@@ -44,7 +44,25 @@ module RepositoryHost
     end
 
     def download_owner
-      # TODO
+      return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
+      o = RepositoryOwner::Gitlab.fetch_user(repository.owner_name)
+      if o.type == "Organization"
+        go = RepositoryOrganisation.create_from_gitlab(o.id)
+        if go
+          repository.repository_organisation_id = go.id
+          repository.repository_user_id = nil
+          repository.save
+        end
+      else
+        u = RepositoryUser.create_from_host('GitLab', o)
+        if u
+          repository.repository_user_id = u.id
+          repository.repository_organisation_id = nil
+          repository.save
+        end
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def create_webook(token = nil)
