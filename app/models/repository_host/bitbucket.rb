@@ -61,6 +61,10 @@ module RepositoryHost
       # not implemented yet
     end
 
+    def download_owner
+      # TODO
+    end
+
     def create_webook(token = nil)
       # not implemented yet
     end

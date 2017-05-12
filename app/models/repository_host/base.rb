@@ -78,13 +78,6 @@ module RepositoryHost
       self.class.format(repository.host_type)
     end
 
-    def download_owner
-      # need to check if owner is org or user
-      repository_owner_class.download_user_from_host(repository.host_type, repository.owner_name)
-      # need to save owner id to correct field after creation
-    end
-
-
     def repository_owner_class
       RepositoryOwner.const_get(repository.host_type.capitalize)
     end
