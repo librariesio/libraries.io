@@ -64,10 +64,10 @@ module RepositoryHost
     def download_owner
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
       o = RepositoryOwner::Bitbucket.fetch_user(repository.owner_name)
-      if o.type == "Organization"
-        go = RepositoryOrganisation.create_from_gitlab(o.id)
-        if go
-          repository.repository_organisation_id = go.id
+      if o.type == "team"
+        org = RepositoryOrganisation.create_from_host('Bitbucket', o)
+        if org
+          repository.repository_organisation_id = org.id
           repository.repository_user_id = nil
           repository.save
         end

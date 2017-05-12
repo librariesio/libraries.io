@@ -9,7 +9,13 @@ module RepositoryOwner
     end
 
     def self.fetch_user(id_or_login)
-      api_client.get_request "/2.0/users/#{URI.escape(id_or_login)}"
+      begin
+        api_client.get_request "/2.0/users/#{URI.escape(id_or_login)}"
+      rescue BitBucket::Error::NotFound => error
+        if error.message.index('is a team account')
+          api_client.get_request "/2.0/teams/#{URI.escape(id_or_login)}"
+        end
+      end
     rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
       nil
     end

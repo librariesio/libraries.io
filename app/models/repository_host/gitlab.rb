@@ -45,15 +45,18 @@ module RepositoryHost
 
     def download_owner
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
-      o = RepositoryOwner::Gitlab.fetch_user(repository.owner_name)
-      if o.type == "Organization"
-        go = RepositoryOrganisation.create_from_gitlab(o.id)
-        if go
-          repository.repository_organisation_id = go.id
+      namespace = api_client.namespaces(search: repository.owner_name).try(:first)
+      return unless namespace
+      if namespace.kind == 'group'
+        o = RepositoryOwner::Gitlab.api_client.group(namespace.path)
+        org = RepositoryOrganisation.create_from_host('GitLab', o)
+        if org
+          repository.repository_organisation_id = org.id
           repository.repository_user_id = nil
           repository.save
         end
-      else
+      elsif namespace.kind == 'user'
+        o = RepositoryOwner::Gitlab.fetch_user(namespace.path)
         u = RepositoryUser.create_from_host('GitLab', o)
         if u
           repository.repository_user_id = u.id
