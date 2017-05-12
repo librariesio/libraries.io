@@ -10,6 +10,9 @@ class RepositoryOrganisation < ApplicationRecord
   has_many :contributors, -> { group('repository_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
+  # eager load this module to avoid clashing with Gitlab gem in development
+  RepositoryOwner::Gitlab
+
   validates :uuid, presence: true
   validates :login, uniqueness: {scope: :host_type}, if: lambda { self.login_changed? }
   validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
@@ -27,7 +30,6 @@ class RepositoryOrganisation < ApplicationRecord
            :to_s, :to_param, :github_id, to: :repository_owner
 
   def repository_owner
-    RepositoryOwner::Gitlab
     @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
   end
 

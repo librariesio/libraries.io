@@ -12,6 +12,9 @@ class RepositoryUser < ApplicationRecord
   has_many :projects, through: :open_source_repositories
   has_many :identities
 
+  # eager load this module to avoid clashing with Gitlab gem in development
+  RepositoryOwner::Gitlab
+
   has_many :issues, primary_key: :uuid
 
   validates :login, uniqueness: {scope: :host_type}, if: lambda { self.login_changed? }
@@ -28,7 +31,6 @@ class RepositoryUser < ApplicationRecord
            :to_s, :to_param, :github_id, :download_user_from_host, :download_user_from_host_by_login, to: :repository_owner
 
   def repository_owner
-    RepositoryOwner::Gitlab
     @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
   end
 
