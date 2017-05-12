@@ -4,6 +4,9 @@ class Repository < ApplicationRecord
   include RepoManifests
   include RepositorySourceRank
 
+  # eager load this module to avoid clashing with Gitlab gem in development
+  RepositoryHost::Gitlab
+
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
 
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
@@ -302,7 +305,6 @@ class Repository < ApplicationRecord
   end
 
   def repository_host
-    RepositoryHost::Gitlab
     @repository_host ||= RepositoryHost.const_get(host_type.capitalize).new(self)
   end
 end
