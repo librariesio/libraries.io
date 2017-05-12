@@ -143,7 +143,7 @@ module RepositoryHost
 
     def self.fetch_repo(full_name, token = nil)
       client = api_client(token)
-      project = client.project(full_name.gsub('/','%2F'))
+      project = client.project(full_name)
       repo_hash = project.to_hash.with_indifferent_access.slice(:id, :description, :created_at, :name, :open_issues_count, :forks_count, :default_branch)
 
       repo_hash.merge!({
