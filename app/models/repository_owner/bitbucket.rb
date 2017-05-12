@@ -9,7 +9,7 @@ module RepositoryOwner
     end
 
     def self.fetch_user(id_or_login)
-      api_client.get_request "/2.0/users/#{id_or_login}"
+      api_client.get_request "/2.0/users/#{URI.escape(id_or_login)}"
     rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
       nil
     end
