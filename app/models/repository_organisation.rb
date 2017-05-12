@@ -69,6 +69,10 @@ class RepositoryOrganisation < ApplicationRecord
     0
   end
 
+  def self.create_from_host(host_type, org_hash)
+    RepositoryOwner.const_get(host_type.capitalize).create_org(org_hash)
+  end
+
   def self.create_from_github(login_or_id)
     begin
       r = AuthToken.client.org(login_or_id).to_hash

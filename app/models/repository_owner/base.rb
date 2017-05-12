@@ -68,7 +68,27 @@ module RepositoryOwner
       RepositoryUser.create_from_host(host_type, self.fetch_user(id_or_login))
     end
 
+    def download_org_from_host
+      download_org_from_host_by(owner.uuid)
+    end
+
+    def download_org_from_host_by_login
+      download_org_from_host_by(owner.login)
+    end
+
+    def download_org_from_host_by(id_or_login)
+      self.class.download_org_from_host(owner.host_type, id_or_login)
+    end
+
+    def self.download_org_from_host(host_type, id_or_login)
+      RepositoryOrganisation.create_from_host(host_type, self.fetch_org(id_or_login))
+    end
+
     def self.fetch_user(id_or_login)
+      raise NotImplementedError
+    end
+
+    def self.fetch_org(id_or_login)
       raise NotImplementedError
     end
 
@@ -79,7 +99,6 @@ module RepositoryOwner
         owner.favourite_projects.limit(10).pluck(:id)
       end
     end
-
 
     def top_contributor_ids
       Rails.cache.fetch [owner, "top_contributor_ids"], :expires_in => 1.week, race_condition_ttl: 2.minutes do

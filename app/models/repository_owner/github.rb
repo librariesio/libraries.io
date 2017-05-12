@@ -18,6 +18,36 @@ module RepositoryOwner
       AuthToken.fallback_client(token)
     end
 
+    def self.create_org(org_hash)
+      org_hash = org_hash.to_hash.with_indifferent_access
+      org = nil
+      org_by_id = RepositoryOrganisation.host('GitHub').find_by_uuid(org_hash[:id])
+      org_by_login = RepositoryOrganisation.host('GitHub').where("lower(login) = ?", org_hash[:login].try(:downcase)).first
+      if org_by_id # its fine
+        if org_by_id.login.try(:downcase) == org_hash[:login].downcase && org_by_id.user_type == org_hash[:type]
+          org = org_by_id
+        else
+          if org_by_login && !org_by_login.download_org_from_host
+            org_by_login.destroy
+          end
+          org_by_id.login = org_hash[:login]
+          org_by_id.user_type = org_hash[:type]
+          org_by_id.save!
+          org = org_by_id
+        end
+      elsif org_by_login # conflict
+        if org_by_login.download_org_from_host_by_login
+          org = org_by_login if org_by_login.uuid == org_hash[:id]
+        end
+        org_by_login.destroy if org.nil?
+      end
+      if org.nil?
+        org = RepositoryOrganisation.create!(uuid: org_hash[:id], login: org_hash[:login], user_type: org_hash[:type], host_type: 'GitHub')
+      end
+      org.update(org_hash.slice(:name, :company, :blog, :location, :email, :bio))
+      org
+    end
+
     def self.create_user(user_hash)
       user_hash = user_hash.to_hash.with_indifferent_access
       user = nil
