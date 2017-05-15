@@ -78,7 +78,7 @@ module GithubIdentity
     repository_user = RepositoryUser.create_from_host('GitHub', {id: github_identity.uid, login: github_identity.nickname, type: 'User', host_type: 'GitHub'})
     if repository_user
       github_identity.update_column(:repository_user_id, repository_user.id)
-      RepositoryUpdateUserWorker.perform_async(nickname)
+      RepositoryUpdateUserWorker.perform_async('GitHub', nickname)
     end
   end
 
