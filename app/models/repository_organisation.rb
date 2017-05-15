@@ -75,7 +75,7 @@ class RepositoryOrganisation < ApplicationRecord
   end
 
   def sync
-    download_from_github
+    download_org_from_host
     download_repos
     download_members
     update_attributes(last_synced_at: Time.now)
