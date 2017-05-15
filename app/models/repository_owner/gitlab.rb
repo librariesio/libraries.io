@@ -120,7 +120,7 @@ module RepositoryOwner
       org_hash = org_hash.to_hash.with_indifferent_access
       org_hash = {
         id: org_hash[:id],
-        login: org_hash[:orgname],
+        login: org_hash[:path],
         name: org_hash[:name],
         blog: org_hash[:website_url],
         location: org_hash[:location],
