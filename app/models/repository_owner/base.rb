@@ -45,6 +45,10 @@ module RepositoryOwner
       raise NotImplementedError
     end
 
+    def api_client(token = nil)
+      self.class.api_client
+    end
+
     def self.format(host_type)
       case host_type.try(:downcase)
       when 'github'

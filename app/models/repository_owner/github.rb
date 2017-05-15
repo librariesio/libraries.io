@@ -8,6 +8,14 @@ module RepositoryOwner
       "https://github.com/#{owner.login}"
     end
 
+    def download_user_from_host
+      download_user_from_host_by(owner.uuid.to_i)
+    end
+
+    def download_org_from_host
+      download_org_from_host_by(owner.uuid.to_i)
+    end
+
     def download_orgs
       return if owner.org?
       api_client.orgs(owner.login).each do |org|
