@@ -16,13 +16,13 @@ module RepositoryOwner
           api_client.get_request "/2.0/teams/#{URI.escape(id_or_login)}"
         end
       end
-    rescue *RepositoryHost::BitBucket::IGNORABLE_EXCEPTIONS
+    rescue *RepositoryHost::Bitbucket::IGNORABLE_EXCEPTIONS
       nil
     end
 
     def self.fetch_org(id_or_login)
       api_client.get_request "/2.0/teams/#{URI.escape(id_or_login)}"
-    rescue *RepositoryHost::BitBucket::IGNORABLE_EXCEPTIONS
+    rescue *RepositoryHost::Bitbucket::IGNORABLE_EXCEPTIONS
       nil
     end
 
