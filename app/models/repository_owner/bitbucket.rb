@@ -33,7 +33,17 @@ module RepositoryOwner
     end
 
     def download_orgs
-      # TODO
+      return if owner.org?
+      # Bitbucket doesn't have an API to get a users public group memberships so we scrape it instead
+      groups_html = PackageManager::Base.get_html("https://bitbucket.org/#{owner.login}/profile/teams")
+      links = groups_html.css('li.team a.name').map{|l| l['title']}
+
+      links.each do |org_name|
+        RepositoryCreateOrgWorker.perform_async('Bitbucket', org_name)
+      end
+      true
+    rescue *RepositoryHost::Bitbucket::IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def download_repos
