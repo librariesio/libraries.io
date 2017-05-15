@@ -73,7 +73,7 @@ module RepositoryOwner
       if org.nil?
         org = RepositoryOrganisation.create!(uuid: org_hash[:id], login: org_hash[:login], host_type: 'GitHub')
       end
-      org.update(org_hash.slice(:name, :company, :blog, :location, :email, :bio))
+      org.update(org_hash.slice(:name, :blog, :location, :email, :bio))
       org
     end
 
