@@ -31,11 +31,35 @@ module RepositoryOwner
     end
 
     def download_orgs
-      # TODO
+      return if owner.org?
+
+      # GitLab doesn't have an API to get a users public group memberships so we scrape it instead
+      groups_html = Nokogiri::HTML(PackageManager::Base.get_json("https://gitlab.com/users/#{owner.login}/groups")['html'])
+      links = groups_html.css('a.group-name').map{|l| l['href'][1..-1]}
+
+      links.each do |org_login|
+        RepositoryCreateOrgWorker.perform_async('GitLab', org_login)
+      end
+      true
+    rescue *RepositoryHost::Gitlab::IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def download_repos
-      # TODO
+      if owner.org?
+        repos = api_client.group_projects(owner.login).map(&:full_name)
+      else
+        # GitLab doesn't have an API to get a users public projects so we scrape it instead
+        projects_html = Nokogiri::HTML(PackageManager::Base.get_json("https://gitlab.com/users/#{owner.login}/projects")['html'])
+        links = projects_html.css('a.project').map{|l| l['href'][1..-1] }.uniq
+      end
+
+      links.each do |repo_name|
+        CreateRepositoryWorker.perform_async('GitLab', repo_name)
+      end
+      true
+    rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def download_members
