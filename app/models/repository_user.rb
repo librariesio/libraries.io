@@ -52,7 +52,7 @@ class RepositoryUser < ApplicationRecord
   end
 
   def async_sync
-    RepositoryUpdateUserWorker.perform_async(host_type, self.login)
+    RepositoryUpdateUserWorker.perform_async(self.host_type, self.login)
   end
 
   def sync

@@ -71,7 +71,7 @@ class RepositoryOrganisation < ApplicationRecord
   end
 
   def async_sync
-    RepositoryUpdateOrgWorker.perform_async(host_type, self.login)
+    RepositoryUpdateOrgWorker.perform_async(self.host_type, self.login)
   end
 
   def sync
