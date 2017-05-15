@@ -8,7 +8,7 @@ describe RepositoryUpdateOrgWorker do
   it "should sync an org" do
     org = create(:repository_organisation)
     host_type = 'GitHub'
-    expect(RepositoryOrganisation).to receive(:find_by_login).with(host_type, org.login).and_return(org)
+    expect(RepositoryOrganisation).to receive(:find_by_login).with(org.login).and_return(org)
     expect(org).to receive(:sync)
     subject.perform(host_type, org.login)
   end
