@@ -85,7 +85,7 @@ module GithubIdentity
   def download_orgs
     return unless token
     github_client.orgs.each do |org|
-      RepositoryCreateOrgWorker.perform_async(org.login)
+      RepositoryCreateOrgWorker.perform_async('GitHub', org.login)
     end
   rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
     nil
