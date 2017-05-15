@@ -14,7 +14,7 @@ module RepositoryOwner
       else
         api_client.user(id_or_login)
       end
-    rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
+    rescue *RepositoryHost::Gitlab::IGNORABLE_EXCEPTIONS
       nil
     end
 
@@ -58,7 +58,7 @@ module RepositoryOwner
         CreateRepositoryWorker.perform_async('GitLab', repo_name)
       end
       true
-    rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
+    rescue *RepositoryHost::Gitlab::IGNORABLE_EXCEPTIONS
       nil
     end
 
