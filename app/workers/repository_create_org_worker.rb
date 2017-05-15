@@ -3,6 +3,6 @@ class RepositoryCreateOrgWorker
   sidekiq_options queue: :owners, unique: :until_executed
 
   def perform(org_login)
-    RepositoryOrganisation.create_from_github(org_login)
+    RepositoryOwner::Base.download_org_from_host('GitHub', org_login)
   end
 end

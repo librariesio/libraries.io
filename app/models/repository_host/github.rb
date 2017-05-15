@@ -127,7 +127,7 @@ module RepositoryHost
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
       o = api_client.user(repository.owner_name)
       if o.type == "Organization"
-        go = RepositoryOrganisation.create_from_github(o.id)
+        go = RepositoryOrganisation.create_from_host('GitHub', o)
         if go
           repository.repository_organisation_id = go.id
           repository.repository_user_id = nil
