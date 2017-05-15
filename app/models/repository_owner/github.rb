@@ -52,6 +52,12 @@ module RepositoryOwner
       nil
     end
 
+    def self.fetch_org(id_or_login)
+      api_client.org(id_or_login)
+    rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
+      nil
+    end
+
     def self.api_client(token = nil)
       AuthToken.fallback_client(token)
     end
