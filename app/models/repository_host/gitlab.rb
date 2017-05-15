@@ -44,7 +44,28 @@ module RepositoryHost
     end
 
     def download_owner
-      # not implemented yet
+      return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
+      namespace = api_client.namespaces(search: repository.owner_name).try(:first)
+      return unless namespace
+      if namespace.kind == 'group'
+        o = RepositoryOwner::Gitlab.api_client.group(namespace.path)
+        org = RepositoryOrganisation.create_from_host('GitLab', o)
+        if org
+          repository.repository_organisation_id = org.id
+          repository.repository_user_id = nil
+          repository.save
+        end
+      elsif namespace.kind == 'user'
+        o = RepositoryOwner::Gitlab.fetch_user(namespace.path)
+        u = RepositoryUser.create_from_host('GitLab', o)
+        if u
+          repository.repository_user_id = u.id
+          repository.repository_organisation_id = nil
+          repository.save
+        end
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def create_webook(token = nil)

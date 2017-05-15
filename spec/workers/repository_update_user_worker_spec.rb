@@ -9,6 +9,6 @@ describe RepositoryUpdateUserWorker do
     user = create(:repository_user)
     expect(RepositoryUser).to receive(:find_by_login).with(user.login).and_return(user)
     expect(user).to receive(:sync)
-    subject.perform(user.login)
+    subject.perform(user.host_type, user.login)
   end
 end

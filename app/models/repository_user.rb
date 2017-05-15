@@ -12,6 +12,9 @@ class RepositoryUser < ApplicationRecord
   has_many :projects, through: :open_source_repositories
   has_many :identities
 
+  # eager load this module to avoid clashing with Gitlab gem in development
+  RepositoryOwner::Gitlab
+
   has_many :issues, primary_key: :uuid
 
   validates :login, uniqueness: {scope: :host_type}, if: lambda { self.login_changed? }
@@ -25,15 +28,11 @@ class RepositoryUser < ApplicationRecord
   scope :host, lambda{ |host_type| where('lower(repository_users.host_type) = ?', host_type.try(:downcase)) }
 
   delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
-           :to_s, :to_param, :github_id, to: :repository_owner
+           :to_s, :to_param, :github_id, :download_user_from_host, :download_orgs,
+           :download_user_from_host_by_login, :download_repos, to: :repository_owner
 
   def repository_owner
-    RepositoryOwner::Gitlab
     @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
-  end
-
-  def github_id
-    uuid
   end
 
   def meta_tags
@@ -52,80 +51,18 @@ class RepositoryUser < ApplicationRecord
     false
   end
 
-  def github_client
-    AuthToken.client
-  end
-
   def async_sync
-    RepositoryUpdateUserWorker.perform_async(self.login)
+    RepositoryUpdateUserWorker.perform_async(host_type, self.login)
   end
 
   def sync
-    download_from_github
+    download_user_from_host
     download_orgs
     download_repos
     update_attributes(last_synced_at: Time.now)
   end
 
-  def download_from_github
-    download_from_github_by(uuid)
-  end
-
-  def download_from_github_by_login
-    download_from_github_by(login)
-  end
-
-  def download_from_github_by(id_or_login)
-    RepositoryUser.create_from_github(github_client.user(id_or_login))
-  rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
-    nil
-  end
-
-  def download_orgs
-    github_client.orgs(login).each do |org|
-      RepositoryCreateOrgWorker.perform_async(org.login)
-    end
-    true
-  rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
-    nil
-  end
-
-  def download_repos
-    AuthToken.client.search_repos("user:#{login}").items.each do |repo|
-      Repository.create_from_hash repo.to_hash
-    end
-
-    true
-  rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
-    nil
-  end
-
-  def self.create_from_github(repository_user)
-    user = nil
-    user_by_id = RepositoryUser.host('GitHub').find_by_uuid(repository_user.id)
-    user_by_login = RepositoryUser.host('GitHub').where("lower(login) = ?", repository_user.login.try(:downcase)).first
-    if user_by_id # its fine
-      if user_by_id.login.try(:downcase) == repository_user.login.downcase && user_by_id.user_type == repository_user.type
-        user = user_by_id
-      else
-        if user_by_login && !user_by_login.download_from_github
-          user_by_login.destroy
-        end
-        user_by_id.login = repository_user.login
-        user_by_id.user_type = repository_user.type
-        user_by_id.save!
-        user = user_by_id
-      end
-    elsif user_by_login # conflict
-      if user_by_login.download_from_github_by_login
-        user = user_by_login if user_by_login.uuid == repository_user.id
-      end
-      user_by_login.destroy if user.nil?
-    end
-    if user.nil?
-      user = RepositoryUser.create!(uuid: repository_user.id, login: repository_user.login, user_type: repository_user.type, host_type: 'GitHub')
-    end
-    user.update(repository_user.to_hash.slice(:name, :company, :blog, :location, :email, :bio))
-    user
+  def self.create_from_host(host_type, user_hash)
+    RepositoryOwner.const_get(host_type.capitalize).create_user(user_hash)
   end
 end

@@ -62,7 +62,25 @@ module RepositoryHost
     end
 
     def download_owner
-      # not implemented yet
+      return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
+      o = RepositoryOwner::Bitbucket.fetch_user(repository.owner_name)
+      if o.type == "team"
+        org = RepositoryOrganisation.create_from_host('Bitbucket', o)
+        if org
+          repository.repository_organisation_id = org.id
+          repository.repository_user_id = nil
+          repository.save
+        end
+      else
+        u = RepositoryUser.create_from_host('Bitbucket', o)
+        if u
+          repository.repository_user_id = u.id
+          repository.repository_organisation_id = nil
+          repository.save
+        end
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def create_webook(token = nil)

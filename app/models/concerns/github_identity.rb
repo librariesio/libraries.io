@@ -75,14 +75,17 @@ module GithubIdentity
 
   def download_self
     return unless github_identity
-    RepositoryUser.create_from_github(OpenStruct.new({id: github_identity.uid, login: github_identity.nickname, type: 'User', host_type: 'GitHub'}))
-    RepositoryUpdateUserWorker.perform_async(nickname)
+    repository_user = RepositoryUser.create_from_host('GitHub', {id: github_identity.uid, login: github_identity.nickname, type: 'User', host_type: 'GitHub'})
+    if repository_user
+      github_identity.update_column(:repository_user_id, repository_user.id)
+      RepositoryUpdateUserWorker.perform_async('GitHub', nickname)
+    end
   end
 
   def download_orgs
     return unless token
     github_client.orgs.each do |org|
-      RepositoryCreateOrgWorker.perform_async(org.login)
+      RepositoryCreateOrgWorker.perform_async('GitHub', org.login)
     end
   rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
     nil

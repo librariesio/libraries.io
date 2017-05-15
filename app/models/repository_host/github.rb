@@ -91,7 +91,7 @@ module RepositoryHost
         next unless c['id']
         cont = existing_contributions.find{|cnt| cnt.repository_user.try(:uuid) == c.id }
         unless cont
-          user = RepositoryUser.create_from_github(c)
+          user = RepositoryUser.create_from_host('GitHub', c)
           cont = repository.contributions.find_or_create_by(repository_user: user)
         end
 
@@ -127,14 +127,14 @@ module RepositoryHost
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
       o = api_client.user(repository.owner_name)
       if o.type == "Organization"
-        go = RepositoryOrganisation.create_from_github(o.id)
+        go = RepositoryOrganisation.create_from_host('GitHub', o)
         if go
           repository.repository_organisation_id = go.id
           repository.repository_user_id = nil
           repository.save
         end
       else
-        u = RepositoryUser.create_from_github(o)
+        u = RepositoryUser.create_from_host('GitHub', o)
         if u
           repository.repository_user_id = u.id
           repository.repository_organisation_id = nil
