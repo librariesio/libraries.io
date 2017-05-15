@@ -9,8 +9,9 @@ module RepositoryOwner
     end
 
     def download_orgs
+      return if owner.org?
       api_client.orgs(owner.login).each do |org|
-        RepositoryCreateOrgWorker.perform_async(org.login)
+        RepositoryCreateOrgWorker.perform_async('GitHub', org.login)
       end
       true
     rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
