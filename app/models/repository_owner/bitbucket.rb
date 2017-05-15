@@ -123,14 +123,13 @@ module RepositoryOwner
       org_by_id = RepositoryOrganisation.host('Bitbucket').find_by_uuid(org_hash[:id])
       org_by_login = RepositoryOrganisation.host('Bitbucket').where("lower(login) = ?", org_hash[:login].try(:downcase)).first
       if org_by_id # its fine
-        if org_by_id.login.try(:downcase) == org_hash[:login].downcase && org_by_id.user_type == org_hash[:type]
+        if org_by_id.login.try(:downcase) == org_hash[:login].downcase
           org = org_by_id
         else
           if org_by_login && !org_by_login.download_org_from_host
             org_by_login.destroy
           end
           org_by_id.login = org_hash[:login]
-          org_by_id.org_type = org_hash[:type]
           org_by_id.save!
           org = org_by_id
         end
@@ -141,7 +140,7 @@ module RepositoryOwner
         org_by_login.destroy if org.nil?
       end
       if org.nil?
-        org = RepositoryOrganisation.create!(uuid: org_hash[:id], login: org_hash[:login], user_type: org_hash[:type], host_type: 'Bitbucket')
+        org = RepositoryOrganisation.create!(uuid: org_hash[:id], login: org_hash[:login], host_type: 'Bitbucket')
       end
 
       org.update(org_hash.slice(:name, :blog, :location))
