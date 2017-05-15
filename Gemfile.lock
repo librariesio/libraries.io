@@ -107,7 +107,7 @@ GEM
       thread_safe
     arel (7.1.4)
     asciidoctor (1.5.5)
-    autoprefixer-rails (7.0.1)
+    autoprefixer-rails (7.1.0)
       execjs
     bibliothecary (5.3.2)
       deb_control
@@ -150,7 +150,7 @@ GEM
     case_transform (0.2)
       activesupport
     charlock_holmes (0.7.3)
-    chartkick (2.2.3)
+    chartkick (2.2.4)
     citrus (3.0.2)
     cliver (0.3.2)
     codeclimate-test-reporter (1.0.8)
@@ -277,10 +277,10 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    lograge (0.5.0)
-      actionpack (>= 4, <= 5.1.0)
-      activesupport (>= 4, <= 5.1.0)
-      railties (>= 4, <= 5.1.0)
+    lograge (0.5.1)
+      actionpack (>= 4, < 5.2)
+      activesupport (>= 4, < 5.2)
+      railties (>= 4, < 5.2)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.5)
