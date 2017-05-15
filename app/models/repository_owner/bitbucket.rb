@@ -20,12 +20,24 @@ module RepositoryOwner
       nil
     end
 
+    def self.fetch_org(id_or_login)
+      # TODO
+    end
+
     def self.api_client(token = nil)
       BitBucket.new oauth_token: token || ENV['BITBUCKET_KEY']
     end
 
     def api_client(token = nil)
       self.class.api_client(token)
+    end
+
+    def download_orgs
+      # TODO
+    end
+
+    def download_repos
+      # TODO
     end
 
     def self.create_user(user_hash)

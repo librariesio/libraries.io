@@ -18,12 +18,24 @@ module RepositoryOwner
       nil
     end
 
+    def self.fetch_org(id_or_login)
+      # TODO
+    end
+
     def self.api_client(token = nil)
       ::Gitlab.client(endpoint: 'https://gitlab.com/api/v3', private_token: token || ENV['GITLAB_KEY'])
     end
 
     def api_client(token = nil)
       self.class.api_client(token)
+    end
+
+    def download_orgs
+      # TODO
+    end
+
+    def download_repos
+      # TODO
     end
 
     def self.create_user(user_hash)
