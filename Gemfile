@@ -85,6 +85,8 @@ gem 'active_model_serializers'
 gem 'pghero'
 gem 'pg_query'
 gem 'schema_plus_pg_indexes'
+gem 'slack-ruby-client'
+gem 'semantic_range'
 
 group :development do
   gem 'spring'

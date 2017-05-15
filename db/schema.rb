@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170417160002) do
+ActiveRecord::Schema.define(version: 20170509155011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -387,6 +387,8 @@ ActiveRecord::Schema.define(version: 20170417160002) do
     t.boolean  "currently_syncing", :default=>false, :null=>false
     t.datetime "last_synced_at"
     t.boolean  "emails_enabled",    :default=>true
+    t.string   "slack_api_token"
+    t.string   "slack_channel"
   end
 
   create_table "versions", force: :cascade do |t|

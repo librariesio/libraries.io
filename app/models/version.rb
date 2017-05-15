@@ -36,6 +36,12 @@ class Version < ApplicationRecord
       next if user.muted?(project)
       next if !user.emails_enabled?
       VersionsMailer.new_version(user, project, self).deliver_later
+
+      next if user.slack_api_token?
+      next if user.slack_channel?
+      requirements = repo.repository_dependencies.select{|rd| rd.project == project }.map(&:requirements)
+        post_to_slack(project, project.platform, self, requirements, user.slack_api_token, user.slack_channel)
+
     end
   end
 
@@ -50,6 +56,37 @@ class Version < ApplicationRecord
       repo.web_hooks.each do |web_hook|
         web_hook.send_new_version(project, project.platform, self, requirements)
       end
+    end
+  end
+
+
+  def post_to_slack(repository, platform, name, version, requiremnts, token, channel)
+    return if ENV['SKIP_PRERELEASE'] && prerelease?(platform, version)
+    return if satisfied_by_requirements?(requiremnts, version, platform)
+
+    text = "There's a newer version of #{name} that #{repository} depends on.
+More info: https://libraries.io/#{platform.downcase}/#{name}/#{version}"
+
+    client = Slack::Web::Client.new(token)
+    client.chat_postMessage(channel: channel, text: text, as_user: true)
+  end
+
+  def satisfied_by_requirements?(requiremnts, version, platform = nil)
+    return false if requiremnts.nil? || requiremnts.empty?
+    requiremnts.none? do |requirement|
+      SemanticRange.gtr(version, requirement, false, platform)
+    end
+  rescue
+    false
+  end
+
+  def prerelease?(platform, version)
+    parsed_version = SemanticRange.parse(version) rescue nil
+    return true if parsed_version && parsed_version.prerelease.length > 0
+    if platform.downcase == 'rubygems'
+      !!(version =~ /[a-zA-Z]/)
+    else
+      false
     end
   end
 
