@@ -28,7 +28,7 @@ class RepositoryOrganisation < ApplicationRecord
 
   delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
            :to_s, :to_param, :github_id, :download_org_from_host, :download_orgs,
-           :download_org_from_host_by_login, :download_repos, to: :repository_owner
+           :download_org_from_host_by_login, :download_repos, :download_members, to: :repository_owner
 
   def repository_owner
     @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
