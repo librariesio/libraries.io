@@ -21,7 +21,9 @@ module RepositoryOwner
     end
 
     def self.fetch_org(id_or_login)
-      # TODO
+      api_client.get_request "/2.0/teams/#{URI.escape(id_or_login)}"
+    rescue *RepositoryHost::BitBucket::IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def self.api_client(token = nil)

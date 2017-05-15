@@ -19,7 +19,9 @@ module RepositoryOwner
     end
 
     def self.fetch_org(id_or_login)
-      # TODO
+      api_client.group(id_or_login)
+    rescue *RepositoryHost::Gitlab::IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def self.api_client(token = nil)
