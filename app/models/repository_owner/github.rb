@@ -26,6 +26,17 @@ module RepositoryOwner
       nil
     end
 
+    def download_members
+      return unless owner.org?
+
+      api_client.organization_members(owner.login).each do |org|
+        RepositoryCreateUserWorker.perform_async('GitHub', org.login)
+      end
+      true
+    rescue *RepositoryHost::Gitlab::IGNORABLE_EXCEPTIONS
+      nil
+    end
+
     def self.fetch_user(id_or_login)
       api_client.user(id_or_login)
     rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS

@@ -40,6 +40,17 @@ module RepositoryOwner
       # TODO
     end
 
+    def download_members
+      return unless owner.org?
+
+      api_client.teams.members(owner.login).each do |org|
+        RepositoryCreateUserWorker.perform_async('Bitbucket', org.login)
+      end
+      true
+    rescue *RepositoryHost::Bitbucket::IGNORABLE_EXCEPTIONS
+      nil
+    end
+
     def self.create_user(user_hash)
       user_hash = user_hash.to_hash.with_indifferent_access
       user_hash = {

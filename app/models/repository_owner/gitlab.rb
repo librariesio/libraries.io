@@ -38,6 +38,17 @@ module RepositoryOwner
       # TODO
     end
 
+    def download_members
+      return unless owner.org?
+
+      api_client.group_members(owner.login).each do |org|
+        RepositoryCreateUserWorker.perform_async('GitLab', org.login)
+      end
+      true
+    rescue *RepositoryHost::Gitlab::IGNORABLE_EXCEPTIONS
+      nil
+    end
+
     def self.create_user(user_hash)
       user_hash = user_hash.to_hash.with_indifferent_access
       user_hash = {
