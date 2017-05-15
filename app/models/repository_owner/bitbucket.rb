@@ -37,7 +37,12 @@ module RepositoryOwner
     end
 
     def download_repos
-      # TODO
+      api_client.get_request("/2.0/repositories/#{owner.login}")['values'].each do |repo|
+        CreateRepositoryWorker.perform_async('Bitbucket', repo.full_name)
+      end
+      true
+    rescue *RepositoryHost::Bitbucket::IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def download_members
