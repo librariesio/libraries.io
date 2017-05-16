@@ -15,6 +15,7 @@
 
   <p>
     <small>
+      <%= fa_icon issue.host_type.try(:downcase) %>
       Created <%= timeago_tag issue.created_at %>
       - <%= pluralize(issue.comments_count, 'comment') %>
       <% if issue.labels.any? %>

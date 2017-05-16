@@ -30,6 +30,10 @@ class Issue < ApplicationRecord
     "#{repository.url}/#{path}/#{number}"
   end
 
+  def github_id
+    uuid
+  end
+
   def github_client(token = nil)
     AuthToken.fallback_client(token)
   end
@@ -40,12 +44,13 @@ class Issue < ApplicationRecord
 
   def self.create_from_hash(repo, issue_hash)
     issue_hash = issue_hash.to_hash
-    i = repo.issues.find_or_create_by(github_id: issue_hash[:id])
+    i = repo.issues.find_or_create_by(uuid: issue_hash[:id])
     i.repository_user_id = issue_hash[:user][:id]
     i.repository_id = repo.id
     i.labels = issue_hash[:labels].map{|l| l[:name] }
     i.pull_request = issue_hash[:pull_request].present?
     i.comments_count = issue_hash[:comments]
+    i.host_type = 'GitHub'
     i.assign_attributes issue_hash.slice(*Issue::API_FIELDS)
     if i.changed?
       i.last_synced_at = Time.now

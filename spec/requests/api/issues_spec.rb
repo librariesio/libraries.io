@@ -18,6 +18,8 @@ describe "Api::IssuesController", elasticsearch: true do
         "closed_at": issue.closed_at,
         "created_at": issue.created_at,
         "updated_at": issue.updated_at,
+        "uuid": issue.uuid,
+        "host_type": issue.host_type,
         "repository": RepositorySerializer.new(issue.repository).to_hash
       }].as_json)
     end
@@ -38,6 +40,8 @@ describe "Api::IssuesController", elasticsearch: true do
         "closed_at": issue.closed_at,
         "created_at": issue.created_at,
         "updated_at": issue.updated_at,
+        "uuid": issue.uuid,
+        "host_type": issue.host_type,
         "repository": RepositorySerializer.new(issue.repository).to_hash
       }].as_json)
     end
