@@ -23,6 +23,8 @@ module IssueSearch
         indexes :locked, type: 'boolean'
         indexes :labels, type: 'string', :analyzer => 'keyword'
         indexes :state, type: 'string', :analyzer => 'keyword'
+
+        indexes :host_type, type: 'string', :index => :not_analyzed
       end
     end
 
