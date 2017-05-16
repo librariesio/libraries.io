@@ -34,6 +34,9 @@ class Project < ApplicationRecord
   has_one :readme, through: :repository
 
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
+  scope :lower_platform, ->(platform) { where('lower(projects.platform) = ?', platform.try(:downcase)) }
+  scope :lower_name, ->(name) { where('lower(projects.name) = ?', name.try(:downcase)) }
+
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }

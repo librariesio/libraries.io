@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
 
   def find_project
     @project = Project.platform(params[:platform]).where(name: params[:name]).includes(:repository, :versions).first
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes(:repository, :versions).first if @project.nil?
+    @project = Project.lower_platform(params[:platform]).lower_name(params[:name]).includes(:repository, :versions).first if @project.nil?
     raise ActiveRecord::RecordNotFound if @project.nil?
     @color = @project.color
   end

@@ -29,7 +29,7 @@ class Dependency < ApplicationRecord
   def find_project_id
     project_id = Project.platform(platform).where(name: project_name.strip).limit(1).pluck(:id).first
     return project_id if project_id
-    Project.platform(platform).where('lower(name) = ?', project_name.downcase.strip).limit(1).pluck(:id).first
+    Project.lower_platform(platform).lower_name(project_name.strip).limit(1).pluck(:id).first
   end
 
   def compatible_license?
