@@ -2,7 +2,7 @@ class IssuesController < ApplicationController
   before_action :ensure_logged_in, only: [:your_dependencies]
 
   def index
-    @issues = Issue.actionable.includes(:repository).order('created_at DESC').paginate(page: params[:page])
+    @issues = Issue.host(current_host).actionable.includes(:repository).order('created_at DESC').paginate(page: params[:page])
   end
 
   def help_wanted

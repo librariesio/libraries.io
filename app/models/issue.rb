@@ -25,6 +25,8 @@ class Issue < ApplicationRecord
   scope :first_pull_request, -> { where.overlap(labels: FIRST_PR_LABELS) }
   scope :indexable, -> { actionable.includes(:repository) }
 
+  scope :host, lambda{ |host_type| where('lower(issues.host_type) = ?', host_type.try(:downcase)) }
+
   def url
     path = pull_request ? 'pull' : 'issues'
     "#{repository.url}/#{path}/#{number}"
