@@ -18,14 +18,4 @@ class IssuesController < ApplicationController
     @repo_ids = current_user.all_dependent_repos.pluck(:id)
     search_issues(repo_ids: @repo_ids)
   end
-
-  private
-
-  def current_language
-    params[:language] if params[:language].present?
-  end
-
-  def current_license
-    params[:license] if params[:license].present?
-  end
 end

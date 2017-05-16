@@ -82,9 +82,17 @@ class ApplicationController < ActionController::Base
     params[:languages].split(',').map{|l| Linguist::Language[l].to_s }.compact
   end
 
+  def current_language
+    Linguist::Language[params[:language]].to_s if params[:language].present?
+  end
+
   def current_licenses
     return [] if params[:licenses].blank?
     params[:licenses].split(',').map{|l| Spdx.find(l).try(:id) }.compact
+  end
+
+  def current_license
+    Spdx.find(params[:license]).try(:id) if params[:license].present?
   end
 
   def current_keywords
