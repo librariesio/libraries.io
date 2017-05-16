@@ -50,6 +50,7 @@ class Issue < ApplicationRecord
     i.labels = issue_hash[:labels].map{|l| l[:name] }
     i.pull_request = issue_hash[:pull_request].present?
     i.comments_count = issue_hash[:comments]
+    i.host_type = 'GitHub'
     i.assign_attributes issue_hash.slice(*Issue::API_FIELDS)
     if i.changed?
       i.last_synced_at = Time.now
