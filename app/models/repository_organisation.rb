@@ -15,7 +15,7 @@ class RepositoryOrganisation < ApplicationRecord
 
   validates :uuid, presence: true
   validates :login, uniqueness: {scope: :host_type, case_sensitive: false}, if: lambda { self.login_changed? }
-  validates :uuid, uniqueness: {scope: :host_type, case_sensitive: false}, if: lambda { self.uuid_changed? }
+  validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
 
   after_commit :async_sync, on: :create
 

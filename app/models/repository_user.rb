@@ -18,7 +18,7 @@ class RepositoryUser < ApplicationRecord
   has_many :issues, primary_key: :uuid
 
   validates :login, uniqueness: {scope: :host_type, case_sensitive: false}, if: lambda { self.login_changed? }
-  validates :uuid, uniqueness: {scope: :host_type, case_sensitive: false}, if: lambda { self.uuid_changed? }
+  validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
   validates :uuid, presence: true
 
   after_commit :async_sync, on: :create

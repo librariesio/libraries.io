@@ -65,7 +65,7 @@ module RepositoryOwner
     def self.create_org(org_hash)
       org_hash = org_hash.to_hash.with_indifferent_access
       org = nil
-      org_by_id = RepositoryOrganisation.host('GitHub').find_by_uuid(org_hash[:id])
+      org_by_id = RepositoryOrganisation.where(host_type: 'GitHub').find_by_uuid(org_hash[:id])
       org_by_login = RepositoryOrganisation.host('GitHub').login(org_hash[:login]).first
       if org_by_id # its fine
         if org_by_id.login.try(:downcase) == org_hash[:login].downcase
@@ -94,7 +94,7 @@ module RepositoryOwner
     def self.create_user(user_hash)
       user_hash = user_hash.to_hash.with_indifferent_access
       user = nil
-      user_by_id = RepositoryUser.host('GitHub').find_by_uuid(user_hash[:id])
+      user_by_id = RepositoryUser.where(host_type: 'GitHub').find_by_uuid(user_hash[:id])
       user_by_login = RepositoryUser.host('GitHub').login(user_hash[:login]).first
       if user_by_id # its fine
         if user_by_id.login.try(:downcase) == user_hash[:login].downcase && user_by_id.user_type == user_hash[:type]

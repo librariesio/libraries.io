@@ -5,7 +5,7 @@ module GithubIdentity
 
   def repository_user
     return unless github_enabled?
-    RepositoryUser.host('GitHub').find_by_uuid(github_identity.uid)
+    RepositoryUser.where(host_type: 'GitHub').find_by_uuid(github_identity.uid)
   end
 
   def hidden
