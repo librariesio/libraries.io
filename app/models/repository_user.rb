@@ -17,8 +17,8 @@ class RepositoryUser < ApplicationRecord
 
   has_many :issues, primary_key: :uuid
 
-  validates :login, uniqueness: {scope: :host_type}, if: lambda { self.login_changed? }
-  validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
+  validates :login, uniqueness: {scope: :host_type, case_sensitive: false}, if: lambda { self.login_changed? }
+  validates :uuid, uniqueness: {scope: :host_type, case_sensitive: false}, if: lambda { self.uuid_changed? }
   validates :uuid, presence: true
 
   after_commit :async_sync, on: :create
@@ -26,6 +26,7 @@ class RepositoryUser < ApplicationRecord
   scope :visible, -> { where(hidden: false) }
   scope :with_login, -> { where("repository_users.login <> ''") }
   scope :host, lambda{ |host_type| where('lower(repository_users.host_type) = ?', host_type.try(:downcase)) }
+  scope :login, lambda{ |login| where('lower(login) = ?', login.try(:downcase)) }
 
   delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
            :to_s, :to_param, :github_id, :download_user_from_host, :download_orgs,

@@ -81,7 +81,7 @@ module RepositoryOwner
       }
       user = nil
       user_by_id = RepositoryUser.host('Bitbucket').find_by_uuid(user_hash[:id])
-      user_by_login = RepositoryUser.host('Bitbucket').where("lower(login) = ?", user_hash[:login].try(:downcase)).first
+      user_by_login = RepositoryUser.host('Bitbucket').login(user_hash[:login]).first
       if user_by_id # its fine
         if user_by_id.login.try(:downcase) == user_hash[:login].downcase && user_by_id.user_type == user_hash[:type]
           user = user_by_id
@@ -121,7 +121,7 @@ module RepositoryOwner
       }
       org = nil
       org_by_id = RepositoryOrganisation.host('Bitbucket').find_by_uuid(org_hash[:id])
-      org_by_login = RepositoryOrganisation.host('Bitbucket').where("lower(login) = ?", org_hash[:login].try(:downcase)).first
+      org_by_login = RepositoryOrganisation.host('Bitbucket').login(org_hash[:login]).first
       if org_by_id # its fine
         if org_by_id.login.try(:downcase) == org_hash[:login].downcase
           org = org_by_id

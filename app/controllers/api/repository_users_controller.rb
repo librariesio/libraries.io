@@ -19,8 +19,8 @@ class Api::RepositoryUsersController < Api::ApplicationController
   private
 
   def find_user
-    @repository_user = RepositoryUser.host(current_host).visible.where("lower(login) = ?", params[:login].downcase).first
-    @repository_user = RepositoryOrganisation.host(current_host).visible.where("lower(login) = ?", params[:login].downcase).first if @repository_user.nil?
+    @repository_user = RepositoryUser.host(current_host).visible.login(params[:login]).first
+    @repository_user = RepositoryOrganisation.host(current_host).visible.login(params[:login]).first if @repository_user.nil?
     raise ActiveRecord::RecordNotFound if @repository_user.nil?
   end
 end

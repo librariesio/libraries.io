@@ -180,7 +180,7 @@ class Project < ApplicationRecord
 
   def owner
     return nil unless repository && repository.host_type == 'GitHub'
-    RepositoryUser.host('GitHub').visible.find_by_login repository.owner_name
+    RepositoryUser.host('GitHub').visible.login(repository.owner_name).first
   end
 
   def platform_class

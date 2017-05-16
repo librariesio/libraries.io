@@ -4,6 +4,6 @@ class RepositoryUpdateOrgWorker
 
   def perform(host_type, login)
     return if login.nil?
-    RepositoryOrganisation.host(host_type).find_by_login(login).try(:sync)
+    RepositoryOrganisation.host(host_type).login(login).first.try(:sync)
   end
 end
