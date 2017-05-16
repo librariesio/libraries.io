@@ -80,6 +80,7 @@ FactoryGirl.define do
     locked false
     repository_user
     comments_count 1
+    host_type 'GitHub'
   end
 
   factory :contribution do
