@@ -88,7 +88,7 @@ module RepositoryOwner
         host_type: 'GitLab'
       }
       user = nil
-      user_by_id = RepositoryUser.host('GitLab').find_by_uuid(user_hash[:id])
+      user_by_id = RepositoryUser.host('GitLab').uuid(user_hash[:id]).first
       user_by_login = RepositoryUser.host('GitLab').login(user_hash[:login]).first
       if user_by_id # its fine
         if user_by_id.login.try(:downcase) == user_hash[:login].downcase && user_by_id.user_type == user_hash[:type]
@@ -129,7 +129,7 @@ module RepositoryOwner
         host_type: 'GitLab'
       }
       org = nil
-      org_by_id = RepositoryOrganisation.host('GitLab').find_by_uuid(org_hash[:id])
+      org_by_id = RepositoryOrganisation.host('GitLab').uuid(org_hash[:id]).first
       org_by_login = RepositoryOrganisation.host('GitLab').login(org_hash[:login]).first
       if org_by_id # its fine
         if org_by_id.login.try(:downcase) == org_hash[:login].downcase

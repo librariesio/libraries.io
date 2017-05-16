@@ -25,7 +25,8 @@ class RepositoryOrganisation < ApplicationRecord
   scope :visible, -> { where(hidden: false) }
   scope :with_login, -> { where("repository_organisations.login <> ''") }
   scope :host, lambda{ |host_type| where('lower(repository_organisations.host_type) = ?', host_type.try(:downcase)) }
-  scope :login, lambda{ |login| where('lower(login) = ?', login.try(:downcase)) }
+  scope :login, lambda{ |login| where('lower(repository_organisations.login) = ?', login.try(:downcase)) }
+  scope :uuid, lambda{ |uuid| where('lower(repository_organisations.uuid) = ?', uuid.to_s.try(:downcase)) }
 
   delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
            :to_s, :to_param, :github_id, :download_org_from_host, :download_orgs,
