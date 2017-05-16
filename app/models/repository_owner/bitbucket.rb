@@ -61,7 +61,7 @@ module RepositoryOwner
       return unless owner.org?
 
       api_client.teams.members(owner.login).each do |org|
-        RepositoryCreateUserWorker.perform_async('Bitbucket', org.login)
+        RepositoryCreateUserWorker.perform_async('Bitbucket', org.username)
       end
       true
     rescue *RepositoryHost::Bitbucket::IGNORABLE_EXCEPTIONS
