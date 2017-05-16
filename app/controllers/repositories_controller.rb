@@ -96,14 +96,6 @@ class RepositoriesController < ApplicationController
 
   private
 
-  def current_language
-    params[:language] if params[:language].present?
-  end
-
-  def current_license
-    params[:license] if params[:license].present?
-  end
-
   def allowed_sorts
     ['rank', 'stargazers_count', 'contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
   end

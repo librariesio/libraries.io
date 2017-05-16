@@ -57,12 +57,4 @@ class RepositoryUsersController < ApplicationController
                        .includes(:repository)
                        .order('count DESC')
   end
-
-  def current_language
-    params[:language] if params[:language].present?
-  end
-
-  def current_license
-    params[:license] if params[:license].present?
-  end
 end
