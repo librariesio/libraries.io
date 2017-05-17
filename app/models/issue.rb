@@ -13,6 +13,9 @@ class Issue < ApplicationRecord
                      'first contribution', 'first timers only', 'your-first-pr',
                      'starter', 'beginner', 'easy', 'E-easy']
 
+  # eager load this module to avoid clashing with Gitlab gem in development
+  RepositoryIssue::Gitlab
+
   scope :open, -> { where(state: 'open') }
   scope :closed, -> { where(state: 'closed') }
   scope :issue, -> { where(pull_request: false) }
