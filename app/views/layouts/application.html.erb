@@ -92,14 +92,11 @@
         <%= link_to image_tag('logo.svg', width: 116, height: 22), root_path, class: 'navbar-brand' %>
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-            <%= link_to 'Explore', explore_path %>
-          </li>
+        <ul class="nav navbar-nav navbar-left">
           <li>
             <%= form_tag search_path, method: :get, class: 'navbar-form', enforce_utf8: false do |f| %>
               <div class="input-group input-group">
-                <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 40 %>
+                <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search..', class: 'form-control', size: 40 %>
                 <span class="input-group-btn">
                   <button class="btn btn-primary" type="submit">
                     <%= fa_icon 'search' %>
@@ -108,6 +105,8 @@
               </div>
             <% end %>
           </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
           <% if logged_in? %>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= image_tag current_user.avatar_url(40), width: 20, height: 20 %> <span class="caret"></span></a>

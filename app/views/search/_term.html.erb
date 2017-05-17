@@ -5,6 +5,6 @@
     <%= link_to format_term(term['key']), url_for(params.except(:host).merge(name.to_sym => nil, page: nil).permit!) %>
   <% else %>
     <%= link_to format_term(term['key']), url_for(params.except(:host).merge(name.to_sym => term['key'], page: nil).permit!) %>
-    <small><%= number_to_human term['doc_count'] %></small>
+    <small><%= number_to_human term['doc_count'] %> projects</small>
   <% end %>
 </li>
