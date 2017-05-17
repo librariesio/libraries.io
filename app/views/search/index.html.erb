@@ -6,7 +6,7 @@
       <h3> 
         Showing projects by <%= select_tag 'sort', options_for_select(sort_options, params[:sort]), onchange: "this.form.submit()" %> 
       </h3>
-      <% [:query, :platforms, :licenses, :languages, :keywords, :sort].each do |field| %>
+      <% [:q, :platforms, :licenses, :languages, :keywords].each do |field| %>
         <%= hidden_field_tag field, params[field] if params[field].present? %>
       <% end %>
       <% if @suggestion && @suggestion.options.any? %>
