@@ -27,50 +27,15 @@ class Issue < ApplicationRecord
 
   scope :host, lambda{ |host_type| where('lower(issues.host_type) = ?', host_type.try(:downcase)) }
 
-  def url
-    path = pull_request ? 'pull' : 'issues'
-    "#{repository.url}/#{path}/#{number}"
-  end
-
-  def github_id
-    uuid
-  end
-
-  def github_client(token = nil)
-    AuthToken.fallback_client(token)
-  end
+  delegate :language, :license, to: :repository
+  delegate :url, to: :repository_issue
 
   def sync(token = nil)
     IssueWorker.perform_async(repository.full_name, number, token)
   end
 
-  def self.create_from_hash(repo, issue_hash)
-    issue_hash = issue_hash.to_hash
-    i = repo.issues.find_or_create_by(uuid: issue_hash[:id])
-    i.repository_user_id = issue_hash[:user][:id]
-    i.repository_id = repo.id
-    i.labels = issue_hash[:labels].map{|l| l[:name] }
-    i.pull_request = issue_hash[:pull_request].present?
-    i.comments_count = issue_hash[:comments]
-    i.host_type = 'GitHub'
-    i.assign_attributes issue_hash.slice(*Issue::API_FIELDS)
-    if i.changed?
-      i.last_synced_at = Time.now
-      i.save!
-    end
-    i
-  end
-
   def contributions_count
     repository.try(:contributions_count) || 0
-  end
-
-  def language
-    repository.try(:language)
-  end
-
-  def license
-    repository.try(:license)
   end
 
   def stars
@@ -81,13 +46,11 @@ class Issue < ApplicationRecord
     repository.try(:rank) || 0
   end
 
-  def self.update_from_github(name_with_owner, issue_number, token = nil)
-    token ||= AuthToken.token
-    repo = Repository.host('GitHub').find_by_full_name(name_with_owner) || RepositoryHost::Github.create(name_with_owner, token)
-    return unless repo
-    issue_hash = AuthToken.fallback_client(token).issue(repo.full_name, issue_number)
-    Issue.create_from_hash(repo, issue_hash)
-  rescue Octokit::NotFound, Octokit::ClientError
-    nil
+  def github_id
+    uuid # legacy alias
+  end
+
+  def repository_issue
+    @repository_issue ||= RepositoryIssue.const_get(host_type.capitalize).new(self)
   end
 end

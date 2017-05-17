@@ -8,7 +8,7 @@ describe IssueWorker do
   it "should update from github" do
     repo_full_name = 'rails/rails'
     issue_number = 1
-    expect(Issue).to receive(:update_from_github).with(repo_full_name, issue_number, nil)
+    expect(RepositoryIssue::Github).to receive(:update_from_host).with(repo_full_name, issue_number, nil)
     subject.perform(repo_full_name, issue_number)
   end
 end
