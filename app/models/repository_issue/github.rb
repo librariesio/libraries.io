@@ -16,7 +16,7 @@ module RepositoryIssue
       issue_hash = issue_hash.to_hash
       repository = Repository.host('GitHub').find_by_full_name(name_with_owner) || RepositoryHost::Github.create(name_with_owner)
       i = repository.issues.find_or_create_by(uuid: issue_hash[:id])
-      i.repository_user_id = issue_hash[:user][:id]
+      i.repository_user_id = issue_hash[:user][:id] # problematic
       i.repository_id = repository.id
       i.labels = issue_hash[:labels].map{|l| l[:name] }
       i.pull_request = issue_hash[:pull_request].present?
