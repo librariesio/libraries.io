@@ -10,7 +10,7 @@ GIT
 
 GIT
   remote: https://github.com/librariesio/bitbucket
-  revision: 7f9b42548115e34216fbbff914c8de7a3cec01d0
+  revision: 43f8f97be403091debab480235413b20059337bd
   specs:
     bitbucket_rest_api (0.1.7)
       faraday (~> 0.10)
