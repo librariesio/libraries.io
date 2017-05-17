@@ -115,7 +115,7 @@ module RepositoryHost
 
     def download_issues(token = nil)
       api_client = AuthToken.new_client(token)
-      issues = api_client.issues(repository.full_name, state: 'all')
+      issues = api_client(token).issues(repository.full_name, state: 'all')
       issues.each do |issue|
         Issue.create_from_hash(repository, issue)
       end
