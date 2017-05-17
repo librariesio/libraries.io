@@ -31,7 +31,7 @@ class Issue < ApplicationRecord
   delegate :url, to: :repository_issue
 
   def sync(token = nil)
-    IssueWorker.perform_async(repository.full_name, number, token)
+    IssueWorker.perform_async(host_type, repository.full_name, number, token)
   end
 
   def contributions_count

@@ -13,7 +13,7 @@ class GithubHookHandler
     when "issue_comment", "issues"
       return nil if event == "issues" && !VALID_ISSUE_ACTIONS.include?(payload["action"])
 
-      IssueWorker.perform_async(payload["repository"]["full_name"], payload["issue"]["number"], nil)
+      IssueWorker.perform_async('GitHub', payload["repository"]["full_name"], payload["issue"]["number"], nil)
     when "pull_request"
       payload["issue"] ||= {}
       payload["issue"]["number"] = payload["pull_request"]["number"]
