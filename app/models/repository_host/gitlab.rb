@@ -45,7 +45,7 @@ module RepositoryHost
 
     def download_owner
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
-      namespace = api_client.namespaces(search: repository.owner_name).try(:first)
+      namespace = api_client.project(repository.full_name).try(:namespace)
       return unless namespace
       if namespace.kind == 'group'
         o = RepositoryOwner::Gitlab.api_client.group(namespace.path)
