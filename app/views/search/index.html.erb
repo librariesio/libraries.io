@@ -6,17 +6,17 @@
       <h3> 
         Showing projects by <%= select_tag 'sort', options_for_select(sort_options, params[:sort]), onchange: "this.form.submit()" %> 
       </h3>
+      <% [:query, :platforms, :licenses, :languages, :keywords, :sort].each do |field| %>
+        <%= hidden_field_tag field, params[field] if params[field].present? %>
+      <% end %>
+      <% if @suggestion && @suggestion.options.any? %>
+        <p>
+          Did you mean
+          <strong><%= link_to "#{@suggestion.options.first.text}?", search_path(q: @suggestion.options.first.text) %></strong>
+        </p>
+      <% end %>
     <% end %>
-    <% [:platforms, :licenses, :languages, :keywords, :sort].each do |field| %>
-      <%= hidden_field_tag field, params[field] if params[field].present? %>
-    <% end %>
-    <% if @suggestion && @suggestion.options.any? %>
-      <p>
-        Did you mean
-        <strong><%= link_to "#{@suggestion.options.first.text}?", search_path(q: @suggestion.options.first.text) %></strong>
-      </p>
-    <% end %>
-  
+    
     <%= render 'adsense/banner' %>
     
     <% if @projects.length > 0 %>
