@@ -6,6 +6,10 @@ module RepositoryIssue
       "#{issue.repository.url}/#{path}/#{issue.number}"
     end
 
+    def label_url(label)
+      "#{issue.repository.url}/issues?kind=#{ERB::Util.url_encode(label)}"
+    end
+
     def self.fetch_issue(repo_full_name, issue_number, token = nil)
       owner, repo_name = repo_full_name.split('/')
       api_client.issues.get(owner, repo_name, issue_number).to_hash.with_indifferent_access.merge(type: 'issue')

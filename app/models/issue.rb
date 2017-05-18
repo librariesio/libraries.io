@@ -31,7 +31,7 @@ class Issue < ApplicationRecord
   scope :host, lambda{ |host_type| where('lower(issues.host_type) = ?', host_type.try(:downcase)) }
 
   delegate :language, :license, to: :repository
-  delegate :url, to: :repository_issue
+  delegate :url, :label_url, to: :repository_issue
 
   def sync(token = nil)
     IssueWorker.perform_async(host_type, repository.full_name, number, token)
