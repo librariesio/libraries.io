@@ -103,7 +103,7 @@ module RepositoryOwner
           user = user_by_id
         end
       elsif user_by_login # conflict
-        if user_by_login.download_user_from_host_by_login
+        if fetch_user(user_by_login.login)
           user = user_by_login if user_by_login.uuid == user_hash[:id]
         end
         user_by_login.destroy if user.nil?
@@ -143,7 +143,7 @@ module RepositoryOwner
           org = org_by_id
         end
       elsif org_by_login # conflict
-        if org_by_login.download_org_from_host_by_login
+        if fetch_org(org_by_login.login)
           org = org_by_login if org_by_login.uuid == org_hash[:id]
         end
         org_by_login.destroy if org.nil?
