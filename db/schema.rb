@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170516141712) do
+ActiveRecord::Schema.define(version: 20170518105429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 20170516141712) do
     t.string   "state"
     t.string   "title"
     t.text     "body"
-    t.integer  "repository_user_id"
+    t.integer  "user_uuid"
     t.boolean  "locked"
     t.integer  "comments_count"
     t.datetime "closed_at"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 20170516141712) do
     t.datetime "last_synced_at"
     t.boolean  "pull_request"
     t.string   "host_type"
+    t.integer  "repository_user_id"
   end
 
   create_table "manifests", force: :cascade do |t|
