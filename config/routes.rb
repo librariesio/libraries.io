@@ -127,6 +127,7 @@ Rails.application.routes.draw do
 
   get '/help-wanted', to: 'issues#help_wanted', as: :help_wanted
   get '/first-pull-request', to: 'issues#first_pull_request', as: :first_pull_request
+  get '/issues', to: 'issues#index', as: :all_issues
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
