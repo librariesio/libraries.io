@@ -2,7 +2,8 @@ class Issue < ApplicationRecord
   include IssueSearch
 
   belongs_to :repository
-  belongs_to :repository_user, primary_key: :uuid
+  belongs_to :repository_user
+  belongs_to :repository_user_by_uuid, -> { where(host_type: 'GitHub') }, primary_key: :uuid, foreign_key: :user_uuid, anonymous_class: RepositoryUser
 
   API_FIELDS = [:number, :state, :title, :body, :locked, :closed_at, :created_at, :updated_at]
   FIRST_PR_LABELS = ['good first bug', 'good first contribution', 'good-first-bug',
@@ -45,7 +46,8 @@ class Issue < ApplicationRecord
   def self.create_from_hash(repo, issue_hash)
     issue_hash = issue_hash.to_hash
     i = repo.issues.find_or_create_by(uuid: issue_hash[:id])
-    i.repository_user_id = issue_hash[:user][:id]
+    user = RepositoryUser.where(host_type: 'GitHub').find_by_uuid(issue_hash[:user][:id]) || RepositoryOwner::Github.download_user_from_host('GitHub', issue_hash[:user][:login])
+    i.repository_user_id = user.id
     i.repository_id = repo.id
     i.labels = issue_hash[:labels].map{|l| l[:name] }
     i.pull_request = issue_hash[:pull_request].present?
