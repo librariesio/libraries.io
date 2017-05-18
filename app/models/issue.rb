@@ -2,7 +2,8 @@ class Issue < ApplicationRecord
   include IssueSearch
 
   belongs_to :repository
-  belongs_to :repository_user, primary_key: :uuid
+  belongs_to :repository_user
+  belongs_to :repository_user_by_uuid, -> { where(host_type: 'GitHub') }, primary_key: :uuid, foreign_key: :user_uuid, anonymous_class: RepositoryUser
 
   API_FIELDS = [:number, :state, :title, :body, :locked, :closed_at, :created_at, :updated_at]
   FIRST_PR_LABELS = ['good first bug', 'good first contribution', 'good-first-bug',

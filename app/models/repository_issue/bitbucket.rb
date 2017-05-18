@@ -22,7 +22,10 @@ module RepositoryIssue
       repository = Repository.host('Bitbucket').find_by_full_name(name_with_owner) || RepositoryHost::Bitbucket.create(name_with_owner)
       uuid = make_uuid(repository.uuid, issue_hash[:type], issue_hash[:local_id])
       i = repository.issues.find_or_create_by(uuid: uuid)
-      # i.repository_user_id = issue_hash[:reported_by][:username] # problematic
+
+      user = RepositoryUser.where(host_type: 'Bitbucket').find_by_login(issue_hash[:reported_by][:username]) || RepositoryOwner::Bitbucket.download_user_from_host('Bitbucket', issue_hash[:reported_by][:username]) rescue nil
+      i.repository_user_id = user.id if user.present?
+
       i.repository_id = repository.id
       i.labels = [issue_hash[:metadata][:kind]]
       i.pull_request = issue_hash[:type] == 'pull_request'

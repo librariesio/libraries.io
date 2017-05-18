@@ -24,7 +24,8 @@ module RepositoryIssue
       issue_hash = issue_hash.to_hash.with_indifferent_access
       repository = Repository.host('GitLab').find_by_full_name(name_with_owner) || RepositoryHost::Gitlab.create(name_with_owner)
       i = repository.issues.find_or_create_by(uuid: issue_hash[:id])
-      i.repository_user_id = issue_hash[:author][:id] # problematic
+      user = RepositoryUser.where(host_type: 'GitLab').find_by_uuid(issue_hash[:author][:id]) || RepositoryOwner::GitLab.download_user_from_host('GitLab', issue_hash[:author][:username]) rescue nil
+      i.repository_user_id = user.id if user.present?
       i.repository_id = repository.id
       i.labels = issue_hash[:labels]
       i.pull_request = issue_hash.keys.include?("merge_status")
