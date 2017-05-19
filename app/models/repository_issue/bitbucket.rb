@@ -32,7 +32,7 @@ module RepositoryIssue
       i.comments_count = issue_hash[:comment_count]
       i.host_type = 'Bitbucket'
       i.number = issue_hash[:local_id]
-      i.state = ['open', 'new'].include?(issue_hash[:status]) ? 'open' : 'closed'
+      i.state = ['open', 'new', 'on hold'].include?(issue_hash[:status]) ? 'open' : 'closed'
       i.body = issue_hash[:content]
       i.locked = false
       i.created_at = issue_hash[:utc_created_on]
