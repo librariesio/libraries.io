@@ -20,6 +20,13 @@ module RepositoryIssue
     def self.create_from_hash(name_with_owner, issue_hash, token = nil)
       issue_hash = issue_hash.to_hash.with_indifferent_access
       repository = Repository.host('Bitbucket').find_by_full_name(name_with_owner) || RepositoryHost::Bitbucket.create(name_with_owner)
+      if issue_hash[:type] == 'pullrequest'
+        issue_hash[:local_id] = issue_hash[:id]
+        issue_hash[:content] = issue_hash[:description]
+        issue_hash[:status] = issue_hash[:state]
+        issue_hash[:utc_created_on] = issue_hash[:created_on]
+        issue_hash[:utc_last_updated] = issue_hash[:updated_on]
+      end
       uuid = make_uuid(repository.uuid, issue_hash[:type], issue_hash[:local_id])
       i = repository.issues.find_or_create_by(uuid: uuid)
 
@@ -27,12 +34,12 @@ module RepositoryIssue
       i.repository_user_id = user.id if user.present?
 
       i.repository_id = repository.id
-      i.labels = [issue_hash[:metadata][:kind]]
+      i.labels = [issue_hash.fetch(:metadata, {})[:kind]]
       i.pull_request = issue_hash[:type] == 'pull_request'
       i.comments_count = issue_hash[:comment_count]
       i.host_type = 'Bitbucket'
       i.number = issue_hash[:local_id]
-      i.state = ['open', 'new', 'on hold'].include?(issue_hash[:status]) ? 'open' : 'closed'
+      i.state = ['open', 'new', 'on hold'].include?(issue_hash[:status].downcase) ? 'open' : 'closed'
       i.body = issue_hash[:content]
       i.locked = false
       i.created_at = issue_hash[:utc_created_on]
