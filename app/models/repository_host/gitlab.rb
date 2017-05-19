@@ -127,9 +127,8 @@ module RepositoryHost
     end
 
     def download_tags(token = nil)
-      remote_tags = api_client(token).tags(escaped_full_name).auto_paginate
       existing_tag_names = repository.tags.pluck(:name)
-      remote_tags.each do |tag|
+      remote_tags = api_client(token).tags(escaped_full_name).auto_paginate do |tag|
         next if existing_tag_names.include?(tag.name)
         next if tag.commit.nil?
         repository.tags.create({
