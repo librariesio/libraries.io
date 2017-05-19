@@ -39,6 +39,10 @@ module RepositoryHost
       # not implemented yet
     end
 
+    def download_pull_requests(token = nil)
+      # not implemented yet
+    end
+
     def download_forks(token = nil)
       # not implemented yet
     end
