@@ -24,6 +24,19 @@
 <hr>
 <div class="row">
   <div class="col-md-8">
+    <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
+      <div class="input-group input-group-lg">
+        <%= hidden_field_tag 'platforms', @platform_name %>
+        <%= text_field_tag 'q', '', placeholder: "Search #{@platform_name}...", class: 'form-control', size: 40 %>
+        <span class="input-group-btn">
+          <button class="btn btn-primary btn-large" type="submit"><%= fa_icon 'search' %></button>
+        </span>
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
     <div class="row">
       <% if @trending.any? %>
         <div class='col-sm-6 platform-column'>
