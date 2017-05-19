@@ -36,8 +36,7 @@ module RepositoryHost
     end
 
     def download_issues(token = nil)
-      api_client = AuthToken.new_client(token)
-      issues = api_client(token).issues(repository.full_name).auto_paginate do |issue|
+      api_client(token).issues(repository.full_name).auto_paginate do |issue|
         RepositoryIssue::Gitlab.create_from_hash(repository.full_name, issue, token)
       end
     rescue *IGNORABLE_EXCEPTIONS
@@ -45,8 +44,7 @@ module RepositoryHost
     end
 
     def download_pull_requests(token = nil)
-      api_client = AuthToken.new_client(token)
-      pull_requests = api_client(token).merge_requests(repository.full_name).auto_paginate do |pull_request|
+      api_client(token).merge_requests(repository.full_name).auto_paginate do |pull_request|
         RepositoryIssue::Gitlab.create_from_hash(repository.full_name, pull_request, token)
       end
     rescue *IGNORABLE_EXCEPTIONS
