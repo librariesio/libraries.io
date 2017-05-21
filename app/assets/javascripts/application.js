@@ -82,7 +82,7 @@ document.addEventListener('turbolinks:load', function(){
 function load_async(id) {
   if($(id).length){
     $.get($(id).data('url'), function(data) {
-      $(id).html(data).show();
+      $(id).html(data).toggle(data.length > 0);
     });
   }
 }
