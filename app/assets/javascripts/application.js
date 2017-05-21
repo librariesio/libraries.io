@@ -75,6 +75,7 @@ document.addEventListener('turbolinks:load', function(){
     visibleMetricIndex: 2,
   });
 
+  load_async('#version_dependencies');
   load_async('#top_dependent_projects');
   load_async('#top_dependent_repos');
 })

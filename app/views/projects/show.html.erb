@@ -163,75 +163,9 @@
       <%= render 'adsense/banner' %>
       <%== @repository.readme %>
       <% end %>
-      <div class="row">
-        <% cache([@project, @version, 'dependents:v4'], :expires_in => 1.day) do  %>
-          <% if @dependencies.length > 0 %>
-            <hr>
-            <div class="col-md-12 table-responsive">
-            <% @dependencies.group_by(&:kind).each do |kind, deps| %>
-              <% if deps.length > 0 %>
-                <table data-ga-tracked-el='dependencies' class='table table-hover table-condensed'>
-                  <thead>
-                    <th>
-                      <%= kind.humanize unless kind == 'runtime' %> Dependencies
-                    </th>
-                    <th>
-                      Requirements
-                    </th>
-                    <th>
-                      Latest Stable
-                    </th>
-                    <th>
-                      Latest Release
-                    </th>
-                    <th>
-                      Licenses
-                    </th>
-                    <th>
 
-                    </th>
-                  </thead>
-                  <% deps.each do |dependency| %>
-                    <tr>
-                      <td>
-                        <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: PackageManager::Base.dependency_platform(dependency.platform)) %>
-                      </td>
-                      <td>
-                        <%= dependency.requirements %>
-                      </td>
-                      <td>
-                        <%= dependency.try(:project).try(:latest_stable_release_number) %>
-                      </td>
-                      <td>
-                        <%= dependency.try(:project).try(:latest_release_number) %>
-                      </td>
-                      <td>
-                        <% if dependency.project %>
-                          <%= linked_licenses dependency.project.normalized_licenses %>
-                        <% end %>
-                      </td>
-                      <td>
-                        <% if dependency.project %>
-                          <%= render 'dependencies/flags', dependency: dependency %>
-                        <% end %>
-                      </td>
-                    </tr>
-                  <% end %>
-                </table>
-                <% kind_param = kind == 'runtime' ? nil : kind %>
-                <% link = @version ? version_tree_path(@version.to_param.merge(kind: kind_param)) : tree_path(@project.to_param.merge(kind: kind_param)) %>
-                <%= link_to link, class: 'btn btn-success' do %>
-                  <%= fa_icon 'code-fork' %>
-                  Explore the resolved <%= kind.downcase unless kind == 'runtime' %> dependency tree for <%= @project %> <%= @version_number %>
-                <% end %>
-                <hr>
-              <% end %>
-            <% end %>
-          </div>
-          <hr>
-          <% end %>
-        <% end %>
-
+      <div id='version_dependencies' style='display:none;' data-url="<%= version_dependencies_path(@version.to_param) %>"></div>
+      <div class='row'>
         <div id='top_dependent_projects' style='display:none;' data-url="<%= top_dependent_projects_path(@project.to_param) %>" class="col-sm-6"></div>
         <div id='top_dependent_repos' style='display:none;' data-url="<%= top_dependent_repos_path(@project.to_param) %>" class="col-sm-6"></div>
       </div>
