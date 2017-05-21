@@ -80,10 +80,9 @@ document.addEventListener('turbolinks:load', function(){
 })
 
 function load_async(id) {
-  console.log("Async loading: " + id);
   if($(id).length){
     $.get($(id).data('url'), function(data) {
-      $(id).html(data);
+      $(id).html(data).show();
     });
   }
 }

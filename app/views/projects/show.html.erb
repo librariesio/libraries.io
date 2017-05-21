@@ -232,8 +232,8 @@
           <% end %>
         <% end %>
 
-        <div id='top_dependent_projects' data-url="<%= top_dependent_projects_path(@project.to_param) %>" class="col-sm-6"></div>
-        <div id='top_dependent_repos' data-url="<%= top_dependent_repos_path(@project.to_param) %>" class="col-sm-6"></div>
+        <div id='top_dependent_projects' style='display:none;' data-url="<%= top_dependent_projects_path(@project.to_param) %>" class="col-sm-6"></div>
+        <div id='top_dependent_repos' style='display:none;' data-url="<%= top_dependent_repos_path(@project.to_param) %>" class="col-sm-6"></div>
       </div>
     </div>
   <% end %>
