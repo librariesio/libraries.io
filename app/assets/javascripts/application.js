@@ -74,7 +74,18 @@ document.addEventListener('turbolinks:load', function(){
   ga('require', 'pageVisibilityTracker', {
     visibleMetricIndex: 2,
   });
+
+  load_async('#top_dependent_projects')
+  load_async('#top_dependent_repos')
 })
+
+function load_async(id) {
+  if($(id).length){
+    $.get($(id).data('url'), function(data) {
+      $(id).html(data)
+    })
+  }
+}
 
 $('.rss').on('click', function(){
   subtome($(this).attr('href'))

@@ -164,13 +164,9 @@
       <%== @repository.readme %>
       <% end %>
       <div class="row">
-        <% cache([@project, @version, 'dependents:v3'], :expires_in => 1.day) do  %>
-          <% dependents = @project.dependent_projects.limit(10) %>
-          <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
-          <% if dependent_repos.length > 0 || dependents.length > 0 || @dependencies.length > 0 %>
-            <hr>
-          <% end %>
+        <% cache([@project, @version, 'dependents:v4'], :expires_in => 1.day) do  %>
           <% if @dependencies.length > 0 %>
+            <hr>
             <div class="col-md-12 table-responsive">
             <% @dependencies.group_by(&:kind).each do |kind, deps| %>
               <% if deps.length > 0 %>
@@ -234,40 +230,10 @@
           </div>
           <hr>
           <% end %>
-
-          <% if dependent_repos.length > 0 || dependents.length > 0 %>
-            <% if dependents.length > 0 %>
-              <div class="col-sm-6">
-                <h4 data-ga-tracked-el='dependent-projects'>Dependent Projects</h4>
-                <ul>
-                  <% dependents.each do |project| %>
-                  <li>
-                    <%= link_to project.name, project_path(project.to_param) %>
-                  </li>
-                  <% end %>
-                </ul>
-                <%= link_to "See all dependent projects", project_dependents_path(@project.to_param) %>
-              </div>
-            <% end %>
-            <% if dependent_repos.length > 0 %>
-              <div class="col-sm-6">
-                <h4 data-ga-tracked-el='dependent-repositories'>Dependent Repositories</h4>
-                <ul>
-                  <% dependent_repos.each do |repo| %>
-                  <li>
-                    <%= link_to repo.full_name, repository_path(repo.to_param) %>
-                    <small>
-                      <%= fa_icon("lock") if repo.private? %>
-                      <%= fa_icon("code-fork") if repo.fork? %>
-                    </small>
-                  </li>
-                  <% end %>
-                </ul>
-                <%= link_to "See all dependent repositories", project_usage_path(@project.to_param) %>
-              </div>
-            <% end %>
-          <% end %>
         <% end %>
+
+        <div id='top_dependent_projects' data-url="<%= top_dependent_projects_path(@project.to_param) %>" class="col-sm-6"></div>
+        <div id='top_dependent_repos' data-url="<%= top_dependent_repos_path(@project.to_param) %>" class="col-sm-6"></div>
       </div>
     </div>
   <% end %>
