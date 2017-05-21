@@ -201,14 +201,14 @@ Rails.application.routes.draw do
   # project routes
   get '/:platform/:name/top_dependent_repos', to: 'projects#top_dependent_repos', as: :top_dependent_repos, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
   get '/:platform/:name/top_dependent_projects', to: 'projects#top_dependent_projects', as: :top_dependent_projects, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
-  get '/:platform/:name/:number/dependencies', to: 'projects#dependencies', constraints: { :number => /[\w\.\-\%]+/, :name => /[\w\.\-\%]+/ }, as: :version_dependencies
+  get '/:platform/:name/:number/dependencies', to: 'projects#dependencies', constraints: { :number => /[\w\.\-\%]+/, :name => /.*/ }, as: :version_dependencies
 
   post '/:platform/:name/sync', to: 'projects#sync', constraints: { :name => /.*/ }, as: :sync_project
   get '/:platform/:name/unsubscribe', to: 'projects#unsubscribe', constraints: { :name => /.*/ }, as: :unsubscribe_project
   get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
   post '/:platform/:name/mute', to: 'projects#mute', as: :mute_project, constraints: { :name => /.*/ }
   delete '/:platform/:name/unmute', to: 'projects#unmute', as: :unmute_project, constraints: { :name => /.*/ }
-  get '/:platform/:name/tree', to: 'tree#show', constraints: { :name => /[\w\.\-\%]+/ }, as: :tree
+  get '/:platform/:name/tree', to: 'tree#show', constraints: { :name => /.*/ }, as: :tree
   get '/:platform/:name/sourcerank', to: 'projects#sourcerank', as: :project_sourcerank, constraints: { :name => /.*/ }
   get '/:platform/:name/versions', to: 'projects#versions', as: :project_versions, constraints: { :name => /.*/ }
   get '/:platform/:name/tags', to: 'projects#tags', as: :project_tags, constraints: { :name => /.*/ }
@@ -218,7 +218,7 @@ Rails.application.routes.draw do
   get '/:platform/:name/dependent-repositories/yours', to: 'projects#your_dependent_repos', as: :your_project_dependent_repos, constraints: { :name => /.*/ }
   get '/:platform/:name/:number.about', to: 'projects#about', as: :about_version, constraints: { :number => /.*/, :name => /.*/ }
   get '/:platform/:name/:number.ABOUT', to: 'projects#about', constraints: { :number => /.*/, :name => /.*/ }
-  get '/:platform/:name/:number/tree', to: 'tree#show', constraints: { :number => /[\w\.\-\%]+/, :name => /[\w\.\-\%]+/ }, as: :version_tree
+  get '/:platform/:name/:number/tree', to: 'tree#show', constraints: { :number => /[\w\.\-\%]+/, :name => /.*/ }, as: :version_tree
   get '/:platform/:name/:number', to: 'projects#show', as: :version, constraints: { :number => /.*/, :name => /.*/ }
   get '/:platform/:name.about', to: 'projects#about', as: :about_project, constraints: { :name => /.*/ }
   get '/:platform/:name.ABOUT', to: 'projects#about', constraints: { :name => /.*/ }
