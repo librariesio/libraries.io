@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170518105429) do
+ActiveRecord::Schema.define(version: 20170522101817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,7 +73,6 @@ ActiveRecord::Schema.define(version: 20170518105429) do
     t.string   "state"
     t.string   "title"
     t.text     "body"
-    t.integer  "user_uuid"
     t.boolean  "locked"
     t.integer  "comments_count"
     t.datetime "closed_at"

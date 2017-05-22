@@ -16,7 +16,6 @@ class RepositoryUser < ApplicationRecord
   RepositoryOwner::Gitlab
 
   has_many :issues
-  has_many :issues_by_uuid, -> { where(host_type: 'GitHub') }, primary_key: :uuid, foreign_key: :user_uuid, anonymous_class: Issue
 
   validate :login_uniqueness_with_case_insenitive_host, if: lambda { self.login_changed? }
   validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
