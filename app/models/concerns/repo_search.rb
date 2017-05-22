@@ -59,23 +59,6 @@ module RepoSearch
       full_name
     end
 
-    def keywords
-      []
-    end
-
-    def all_keywords
-      @all_keywords ||= (project_keywords + readme_keywords).uniq.first(10)
-    end
-
-    def project_keywords
-      projects.map(&:keywords_array).flatten.compact.uniq(&:downcase)
-    end
-
-    def readme_keywords
-      return [] unless readme.present?
-      readme.keywords
-    end
-
     def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
       query = Project.sanitize_query(query)

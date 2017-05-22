@@ -109,8 +109,6 @@ GEM
       sdl4r
       toml-rb (~> 0.3.9)
       typhoeus
-    bloomfilter-rb (2.1.1)
-      redis
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -200,7 +198,6 @@ GEM
       faraday (~> 0.8)
     faraday_middleware (0.11.0.1)
       faraday (>= 0.7.4, < 1.0)
-    fast-stemmer (1.0.2)
     fast_blank (1.0.0)
     fast_xor (1.1.3)
       rake
@@ -243,8 +240,6 @@ GEM
     groupdate (3.2.0)
       activesupport (>= 3)
     hashie (3.5.5)
-    highscore (1.2.1)
-      whatlanguage (>= 1.0.0)
     hiredis (0.6.1)
     htmlentities (4.3.4)
     httparty (0.15.5)
@@ -540,7 +535,6 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
-    whatlanguage (1.0.6)
     will_paginate (3.1.5)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
@@ -558,7 +552,6 @@ DEPENDENCIES
   asciidoctor
   bibliothecary
   bitbucket_rest_api!
-  bloomfilter-rb
   bootstrap-sass
   brakeman
   bugsnag
@@ -583,7 +576,6 @@ DEPENDENCIES
   faker
   faraday-http-cache
   faraday_middleware
-  fast-stemmer
   fast_blank
   fast_xor
   fast_xs
@@ -595,7 +587,6 @@ DEPENDENCIES
   github-markup
   gitlab
   groupdate
-  highscore
   hiredis
   indefinite_article
   jquery-rails

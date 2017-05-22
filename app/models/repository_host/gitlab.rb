@@ -174,8 +174,7 @@ module RepositoryHost
     end
 
     def self.fetch_repo(full_name, token = nil)
-      client = api_client(token)
-      project = client.project(full_name)
+      project = api_client(token).project(full_name)
       repo_hash = project.to_hash.with_indifferent_access.slice(:id, :description, :created_at, :name, :open_issues_count, :forks_count, :default_branch)
 
       repo_hash.merge!({
@@ -191,6 +190,7 @@ module RepositoryHost
         private: !project.public,
         pull_requests_enabled: project.merge_requests_enabled,
         logo_url: project.avatar_url,
+        keywords: project.tag_list,
         parent: {
           full_name: project.forked_from_project.try(:path_with_namespace)
         }

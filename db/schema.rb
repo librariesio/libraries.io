@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170522101817) do
+ActiveRecord::Schema.define(version: 20170522132051) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -281,6 +281,7 @@ ActiveRecord::Schema.define(version: 20170522101817) do
     t.string   "pull_requests_enabled"
     t.string   "logo_url"
     t.integer  "repository_user_id",         :index=>{:name=>"index_repositories_on_repository_user_id"}
+    t.string   "keywords",                   :default=>[], :array=>true
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
