@@ -126,14 +126,21 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  helper_method :repos_cache_key
+  def repos_cache_key(sort)
+    [sort, current_license, current_language, current_keywords, current_platforms, current_host].reject(&:blank?).map(&:downcase)
+  end
+
   def repo_search(sort)
-    search = Repository.search('', filters: {
-      license: current_license,
-      language: current_language,
-      keywords: current_keywords,
-      platforms: current_platforms,
-      host_type: formatted_host
-    }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
-    search.records
+    Rails.cache.fetch(repos_cache_key(sort), expires_in: 1.hour) do
+      search = Repository.search('', filters: {
+        license: current_license,
+        language: current_language,
+        keywords: current_keywords,
+        platforms: current_platforms,
+        host_type: formatted_host
+      }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
+      search.records.to_a
+    end
   end
 end
