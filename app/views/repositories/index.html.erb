@@ -9,6 +9,19 @@
 <hr>
 <div class="row">
   <div class="col-md-8">
+    <%= form_tag repo_search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
+      <div class="input-group input-group-lg">
+        <%= hidden_field_tag 'host_type', current_host %>
+        <%= text_field_tag 'q', '', placeholder: "Search #{formatted_host} Repositories...", class: 'form-control', size: 40 %>
+        <span class="input-group-btn">
+          <button class="btn btn-primary btn-large" type="submit"><%= fa_icon 'search' %></button>
+        </span>
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
     <div class='row'>
       <% if @popular.any? %>
         <div class='col-sm-6'>

@@ -65,7 +65,7 @@ module RepositoryOwner
     end
 
     def download_user_from_host
-      download_user_from_host_by(owner.uuid)
+      download_user_from_host_by(owner.uuid) rescue download_user_from_host_by_login
     end
 
     def download_user_from_host_by_login
@@ -81,7 +81,7 @@ module RepositoryOwner
     end
 
     def download_org_from_host
-      download_org_from_host_by(owner.uuid)
+      download_org_from_host_by(owner.uuid) rescue download_org_from_host_by_login
     end
 
     def download_org_from_host_by_login

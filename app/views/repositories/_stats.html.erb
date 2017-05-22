@@ -65,13 +65,13 @@
       <strong><%= number_with_delimiter repo.repository_dependencies.count %></strong>
     </td>
   </tr>
-  <% if repo.contributors.count > 0 %>
+  <% if repo.contributions_count > 0 %>
   <tr>
     <td>
       Contributors
     </td>
     <td>
-      <strong><%= link_to number_with_delimiter(repo.contributors.count), repository_contributors_path(@repository.to_param)  %></strong>
+      <strong><%= link_to number_with_delimiter(repo.contributions_count), repository_contributors_path(@repository.to_param)  %></strong>
     </td>
   </tr>
   <% end %>

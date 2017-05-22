@@ -163,111 +163,13 @@
       <%= render 'adsense/banner' %>
       <%== @repository.readme %>
       <% end %>
-      <div class="row">
-        <% cache([@project, @version, 'dependents:v3'], :expires_in => 1.day) do  %>
-          <% dependents = @project.dependent_projects.limit(10) %>
-          <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
-          <% if dependent_repos.length > 0 || dependents.length > 0 || @dependencies.length > 0 %>
-            <hr>
-          <% end %>
-          <% if @dependencies.length > 0 %>
-            <div class="col-md-12 table-responsive">
-            <% @dependencies.group_by(&:kind).each do |kind, deps| %>
-              <% if deps.length > 0 %>
-                <table data-ga-tracked-el='dependencies' class='table table-hover table-condensed'>
-                  <thead>
-                    <th>
-                      <%= kind.humanize unless kind == 'runtime' %> Dependencies
-                    </th>
-                    <th>
-                      Requirements
-                    </th>
-                    <th>
-                      Latest Stable
-                    </th>
-                    <th>
-                      Latest Release
-                    </th>
-                    <th>
-                      Licenses
-                    </th>
-                    <th>
 
-                    </th>
-                  </thead>
-                  <% deps.each do |dependency| %>
-                    <tr>
-                      <td>
-                        <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: PackageManager::Base.dependency_platform(dependency.platform)) %>
-                      </td>
-                      <td>
-                        <%= dependency.requirements %>
-                      </td>
-                      <td>
-                        <%= dependency.try(:project).try(:latest_stable_release_number) %>
-                      </td>
-                      <td>
-                        <%= dependency.try(:project).try(:latest_release_number) %>
-                      </td>
-                      <td>
-                        <% if dependency.project %>
-                          <%= linked_licenses dependency.project.normalized_licenses %>
-                        <% end %>
-                      </td>
-                      <td>
-                        <% if dependency.project %>
-                          <%= render 'dependencies/flags', dependency: dependency %>
-                        <% end %>
-                      </td>
-                    </tr>
-                  <% end %>
-                </table>
-                <% kind_param = kind == 'runtime' ? nil : kind %>
-                <% link = @version ? version_tree_path(@version.to_param.merge(kind: kind_param)) : tree_path(@project.to_param.merge(kind: kind_param)) %>
-                <%= link_to link, class: 'btn btn-success' do %>
-                  <%= fa_icon 'code-fork' %>
-                  Explore the resolved <%= kind.downcase unless kind == 'runtime' %> dependency tree for <%= @project %> <%= @version_number %>
-                <% end %>
-                <hr>
-              <% end %>
-            <% end %>
-          </div>
-          <hr>
-          <% end %>
-
-          <% if dependent_repos.length > 0 || dependents.length > 0 %>
-            <% if dependents.length > 0 %>
-              <div class="col-sm-6">
-                <h4 data-ga-tracked-el='dependent-projects'>Dependent Projects</h4>
-                <ul>
-                  <% dependents.each do |project| %>
-                  <li>
-                    <%= link_to project.name, project_path(project.to_param) %>
-                  </li>
-                  <% end %>
-                </ul>
-                <%= link_to "See all dependent projects", project_dependents_path(@project.to_param) %>
-              </div>
-            <% end %>
-            <% if dependent_repos.length > 0 %>
-              <div class="col-sm-6">
-                <h4 data-ga-tracked-el='dependent-repositories'>Dependent Repositories</h4>
-                <ul>
-                  <% dependent_repos.each do |repo| %>
-                  <li>
-                    <%= link_to repo.full_name, repository_path(repo.to_param) %>
-                    <small>
-                      <%= fa_icon("lock") if repo.private? %>
-                      <%= fa_icon("code-fork") if repo.fork? %>
-                    </small>
-                  </li>
-                  <% end %>
-                </ul>
-                <%= link_to "See all dependent repositories", project_usage_path(@project.to_param) %>
-              </div>
-            <% end %>
-          <% end %>
-        <% end %>
+      <% if @version %>
+        <div id='version_dependencies' style='display:none;' data-url="<%= version_dependencies_path(@version.to_param) %>"></div>
+      <% end %>
+      <div class='row'>
+        <div id='top_dependent_projects' style='display:none;' data-url="<%= top_dependent_projects_path(@project.to_param) %>" class="col-sm-6"></div>
+        <div id='top_dependent_repos' style='display:none;' data-url="<%= top_dependent_repos_path(@project.to_param) %>" class="col-sm-6"></div>
       </div>
     </div>
   <% end %>

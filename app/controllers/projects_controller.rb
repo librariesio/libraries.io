@@ -3,7 +3,9 @@ class ProjectsController < ApplicationController
                                           :unsubscribe, :sync]
   before_action :find_project, only: [:show, :sourcerank, :about, :dependents,
                                       :dependent_repos, :your_dependent_repos,
-                                      :versions, :tags, :mute, :unmute, :unsubscribe, :sync]
+                                      :versions, :tags, :mute, :unmute, :unsubscribe,
+                                      :sync]
+  before_action :find_project_lite, only: [:top_dependent_repos, :top_dependent_projects]
 
   def index
     if current_user
@@ -51,7 +53,6 @@ class ProjectsController < ApplicationController
     end
     find_version
     fresh_when([@project, @version])
-    @dependencies = (@versions.size > 0 ? (@version || @versions.first).dependencies.includes(project: :versions).order('project_name ASC').limit(100) : [])
     @contributors = @project.contributors.order('count DESC').visible.limit(20)
   end
 
@@ -150,6 +151,20 @@ class ProjectsController < ApplicationController
     scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
     @projects = scope.order('projects.dependent_repos_count DESC').paginate(page: page_number)
     @platforms = orginal_scope.group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
+  end
+
+  def dependencies
+    find_project_lite
+    find_version
+    render layout: false
+  end
+
+  def top_dependent_repos
+    render layout: false
+  end
+
+  def top_dependent_projects
+    render layout: false
   end
 
   private

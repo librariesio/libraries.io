@@ -61,7 +61,6 @@ class RepositoriesController < ApplicationController
     @projects = @repository.projects.limit(20).includes(:versions)
     @color = @repository.color
     @forks = @repository.forked_repositories.host(@repository.host_type).interesting.limit(5)
-    @manifests = @repository.manifests.latest.limit(10).includes(repository_dependencies: {project: :versions})
   end
 
   def sourcerank
@@ -92,6 +91,12 @@ class RepositoriesController < ApplicationController
     load_repo
     @repo_ids = @repository.dependency_repos.open_source.pluck(:id) - [@repository.id]
     search_issues(repo_ids: @repo_ids)
+  end
+
+  def dependencies
+    load_repo
+    @manifests = @repository.manifests.latest.limit(10).includes(repository_dependencies: {project: :versions})
+    render layout: false
   end
 
   private

@@ -72,6 +72,11 @@ class ApplicationController < ActionController::Base
     @color = @project.color
   end
 
+  def find_project_lite
+    @project = Project.platform(params[:platform]).where(name: params[:name]).first
+    raise ActiveRecord::RecordNotFound if @project.nil?
+  end
+
   def current_platforms
     return [] if params[:platforms].blank?
     params[:platforms].split(',').map{|p| PackageManager::Base.format_name(p) }.compact
