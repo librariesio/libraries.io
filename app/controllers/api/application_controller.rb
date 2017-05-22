@@ -28,7 +28,8 @@ class Api::ApplicationController < ApplicationController
   end
 
   def current_api_key
-    ApiKey.active.find_by_access_token(params[:api_key])
+    return nil if params[:api_key].blank?
+    @current_api_key ||= ApiKey.active.find_by_access_token(params[:api_key])
   end
 
   def current_user
