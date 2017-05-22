@@ -553,7 +553,7 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   active_model_serializers
-  api-pagination
+  api-pagination (= 4.5.2)
   appsignal
   asciidoctor
   bibliothecary
