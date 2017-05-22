@@ -141,7 +141,7 @@ class RepositoriesController < ApplicationController
 
   helper_method :repos_cache_key
   def repos_cache_key(sort)
-    [sort, current_license, current_language, current_keywords, current_platforms, current_host].reject(&:blank?).map(&:downcase)
+    [sort, current_license, current_language, current_keywords, current_platforms, current_host].flatten.reject(&:blank?).map(&:downcase)
   end
 
   def repo_search(sort)
