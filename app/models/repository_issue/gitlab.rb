@@ -11,11 +11,11 @@ module RepositoryIssue
     end
 
     def self.fetch_issue(repo_full_name, issue_number, type, token = nil)
-      # GitLab have seperate APIs for issues/merge requests but they share the same issue number space
-      # so we first check to see if the number corresponds to an issue, otherwise check the merge api
-      issue = api_client(token).issues(repo_full_name, iids: issue_number).first
-      issue = api_client(token).merge_requests(repo_full_name, iid: issue_number).first if issue.nil?
-      issue
+      if type == 'issue'
+        api_client(token).issues(repo_full_name, iids: issue_number).first
+      else
+        api_client(token).merge_requests(repo_full_name, iid: issue_number).first
+      end
     rescue *RepositoryHost::Gitlab::IGNORABLE_EXCEPTIONS
       nil
     end

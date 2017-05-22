@@ -12,7 +12,11 @@ module RepositoryIssue
 
     def self.fetch_issue(repo_full_name, issue_number, type, token = nil)
       owner, repo_name = repo_full_name.split('/')
-      api_client.issues.get(owner, repo_name, issue_number).to_hash.with_indifferent_access.merge(type: 'issue')
+      if type == 'issue'
+        api_client.issues.get(owner, repo_name, issue_number).to_hash.with_indifferent_access.merge(type: 'issue')
+      else
+        api_client.pull_requests.get(owner, repo_name, issue_number).to_hash.with_indifferent_access.merge(type: 'pull_request')
+      end
     rescue *RepositoryHost::Bitbucket::IGNORABLE_EXCEPTIONS
       nil
     end

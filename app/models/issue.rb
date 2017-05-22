@@ -34,8 +34,16 @@ class Issue < ApplicationRecord
   delegate :language, :license, to: :repository
   delegate :url, :label_url, to: :repository_issue
 
+  def issue_type
+    pull_request ? 'pull_request' : 'issue'
+  end
+
   def sync(token = nil)
-    IssueWorker.perform_async(host_type, repository.full_name, number, token)
+    RepositoryIssue::Base.update(host_type, repository.full_name, number, issue_type, token)
+  end
+
+  def async_sync(token = nil)
+    IssueWorker.perform_async(host_type, repository.full_name, number, issue_type, token)
   end
 
   def contributions_count
