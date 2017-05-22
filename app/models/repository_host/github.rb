@@ -7,7 +7,7 @@ module RepositoryHost
     end
 
     def avatar_url(size = 60)
-      "https://github.com/#{repository.owner_name}?size=#{size}"
+      "https://github.com/#{repository.owner_name}.png?size=#{size}"
     end
 
     def domain
