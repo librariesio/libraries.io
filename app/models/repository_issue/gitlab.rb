@@ -10,7 +10,7 @@ module RepositoryIssue
       "#{issue.repository.url}/issues?label_name=#{ERB::Util.url_encode(label)}"
     end
 
-    def self.fetch_issue(repo_full_name, issue_number, token = nil)
+    def self.fetch_issue(repo_full_name, issue_number, type, token = nil)
       # GitLab have seperate APIs for issues/merge requests but they share the same issue number space
       # so we first check to see if the number corresponds to an issue, otherwise check the merge api
       issue = api_client(token).issues(repo_full_name, iids: issue_number).first

@@ -10,7 +10,7 @@ module RepositoryIssue
       "#{issue.repository.url}/labels/#{ERB::Util.url_encode(label)}"
     end
 
-    def self.fetch_issue(repo_full_name, issue_number, token = nil)
+    def self.fetch_issue(repo_full_name, issue_number, type, token = nil)
       api_client(token).issue(repo_full_name, issue_number)
     rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
       nil

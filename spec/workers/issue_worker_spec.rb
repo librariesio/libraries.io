@@ -9,7 +9,9 @@ describe IssueWorker do
     repo_full_name = 'rails/rails'
     issue_number = 1
     host_type = 'GitHub'
-    expect(RepositoryIssue::Base).to receive(:update).with(host_type, repo_full_name, issue_number, nil)
-    subject.perform(host_type, repo_full_name, issue_number)
+    type = 'issue'
+    token = nil
+    expect(RepositoryIssue::Base).to receive(:update).with(host_type, repo_full_name, issue_number, type, token)
+    subject.perform(host_type, repo_full_name, issue_number, type, token)
   end
 end
