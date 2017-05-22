@@ -1,4 +1,6 @@
 class RepositoriesController < ApplicationController
+  before_action :ensure_logged_in, only: [:sync]
+
   def index
     postfix = [current_language, current_license, current_keywords].any?(&:present?) ? 'Repos' : 'Repositories'
     @title = [current_language, current_license, current_keywords, formatted_host, postfix].compact.join(' ')
@@ -97,6 +99,17 @@ class RepositoriesController < ApplicationController
     load_repo
     @manifests = @repository.manifests.latest.limit(10).includes(repository_dependencies: {project: :versions})
     render layout: false
+  end
+
+  def sync
+    load_repo
+    if @repository.recently_synced?
+      flash[:error] = "Repository has already been synced recently"
+    else
+      @repository.manual_sync
+      flash[:notice] = "Repository has been queued to be resynced"
+    end
+    redirect_back fallback_location: repository_path(@repository.to_param)
   end
 
   private

@@ -164,6 +164,22 @@
           <small class='text-muted'>Last synced: <%= repo.last_synced_at %></small>
         </p>
       <% end %>
+      <% unless repo.recently_synced? %>
+        <% if logged_in? %>
+          <p>
+            <%= link_to sync_repository_path(repo.to_param), class: 'btn btn-primary btn-xs', method: :post do %>
+              <%= fa_icon 'refresh' %>
+              Resync Repository
+            <% end %>
+          </p>
+        <% else %>
+          <p>
+            <small class='text-muted'>
+              <%= link_to 'Login', login_path %> to resync this repository
+            </small>
+          </p>
+        <% end %>
+      <% end %>
     </div>
   </div>
 <% end %>

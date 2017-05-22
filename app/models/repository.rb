@@ -199,6 +199,16 @@ class Repository < ApplicationRecord
     end
   end
 
+  def recently_synced?
+    last_synced_at && last_synced_at > 1.day.ago
+  end
+
+  def manual_sync(token = nil)
+    update_all_info_async
+    self.last_synced_at = Time.zone.now
+    save
+  end
+
   def update_all_info_async(token = nil)
     RepositoryDownloadWorker.perform_async(self.id, token)
   end
