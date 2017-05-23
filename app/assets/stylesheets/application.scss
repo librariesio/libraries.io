@@ -82,7 +82,15 @@ dt {
   margin-top: 0.5em;
 }
 
-dt:first-child{
+dt:first-of-type{
+  margin-top: 0;
+}
+
+.statistics dd{
+  margin-top: 0.5em;
+}
+
+.statistics dd:first-of-type{
   margin-top: 0;
 }
 
