@@ -63,6 +63,29 @@ footer{
   }
 }
 
+h1, .h1 {
+  word-wrap: break-word;
+}
+
+h3,h4{
+  color:#555;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 46px;
+  .more {
+    margin-left: 5px;
+    font-size: 12px;
+  }
+}
+
+dt {
+  margin-top: 0.5em;
+}
+
+dt:first-child{
+  margin-top: 0;
+}
+
 .facets{
   ul{
     padding-left: 0px;
@@ -118,16 +141,7 @@ footer {
   padding: 15px 10px;
 }
 
-h3,h4{
-  color:#555;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 46px;
-  .more {
-    margin-left: 5px;
-    font-size: 12px;
-  }
-}
+
 
 .project{
   border-left: 2px solid;
@@ -384,9 +398,7 @@ tr.top td{
   margin-bottom: 25px;
 }
 
-h1, .h1 {
-  word-wrap: break-word;
-}
+
 
 .team-user{
   min-height: 100px;

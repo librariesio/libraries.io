@@ -1,70 +1,100 @@
-<% if @project.description.present? %>
-<p>
-  <%= @project.description %>
-</p>
-<% end %>
-
-<% if @project.homepage.present? && @project.homepage != @project.package_manager_url %>
-<p>
-  Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage), :rel => 'nofollow') %>
-</p>
-<% end %>
-
-<p>
-  Platform: <%= link_to @project.platform_name, platform_path(@project.platform.downcase) %>
-</p>
-
-<% if @project.language.present? %>
-<p>
-  Language: <%= link_to @project.language, language_path(@project.language) %>
-</p>
-<% end %>
-
-<% if @project.normalized_licenses.present? %>
-<p>
-  <%= 'License'.pluralize(@project.normalized_licenses.length) %>: <%= linked_licenses @project.normalized_licenses %>
-</p>
-<% end %>
-
-<% if @project.keywords_array.present? %>
-<p>
-  Keywords: <%= linked_keywords @project.keywords_array %>
-</p>
-<% end %>
-
-<% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
-<p>
-  Repository: <%= link_to @project.repository_url, @project.repository_url, :rel => 'nofollow' %>
-</p>
-<% end %>
-
-<% if link = @project.package_manager_url(@version.try(:number)) %>
-<p>
-  View on registry: <%= link_to truncate(link, length: 70), link %>
-</p>
-<% end %>
-
-<% if link = @project.documentation_url(@version.try(:number) || @project.latest_release_number) %>
-  <p>
-    Documentation: <%= link_to truncate(link, length: 70), link %>
-  </p>
-<% elsif @project.platform.downcase == 'bower' && @project.language.try(:downcase) == 'purescript' %>
-  <% link = "https://pursuit.purescript.org/packages/#{@project.name}" %>
-  <p>
-    Documentation: <%= link_to truncate(link, length: 70), link %>
-  </p>
-<% end %>
-
-<% if link = @project.download_url(@version.try(:number)) %>
-  <p>
-    Direct download link: <%= link_to truncate(link, length: 70), link %>
-  </p>
+<dl>
+  <% if @project.description.present? %>
+    <dd>
+      <%= @project.description %>
+    </dd>
   <% end %>
-<% if @project.install_instructions(@version.try(:number)).present? %>
-  <p>
-    Install:
-    <code>
-      <%= @project.install_instructions(@version.try(:number)) %>
-    </code>
-  </p>
-<% end %>
+  <% if @project.keywords_array.present? %>
+    <dt>
+        Keywords
+    </dt>
+    <dd>
+      <%= linked_keywords @project.keywords_array %>
+    </dd>
+  <% end %>
+  <hr>
+  <% if @project.homepage.present? && @project.homepage != @project.package_manager_url %>
+    <dt>
+      Homepage
+    </dt>
+    <dd>
+      <%= link_to(@project.homepage, sanitize_url(@project.homepage), :rel => 'nofollow') %>
+    </dd>
+  <% end %>
+  <% if @project.normalized_licenses.present? %>
+    <dt>
+      <%= 'License'.pluralize(@project.normalized_licenses.length) %>
+    </dt>
+    <dd>
+      <%= linked_licenses @project.normalized_licenses %>
+    </dd>
+  <% end %>
+  <dt>
+    Platform   
+  </dt>
+  <dd>
+    <%= link_to @project.platform_name, platform_path(@project.platform.downcase) %>
+  </dd>
+ <% if @project.language.present? %>
+   <dt>
+      Langauge
+   </dt>
+   <dd>
+    <%= link_to @project.language, language_path(@project.language) %>
+   </dd>
+  <% end %>
+
+  <% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
+    <dt>
+      Repository
+    </dt>
+    <dd>
+      <%= link_to @project.repository_url, @project.repository_url, :rel => 'nofollow' %>
+    </dd>
+  <% end %>
+
+  <% if link = @project.package_manager_url(@version.try(:number)) %>
+    <dt>
+      View on <%= @project.platform.downcase %>
+    </dt>
+    <dd>
+      <%= link_to truncate(link, length: 70), link %>
+    </dd>
+  <% end %>
+
+  <% if link = @project.documentation_url(@version.try(:number) || @project.latest_release_number) %>
+  <dt>
+    Documentation
+  </dt>
+  <dd>
+    <%= link_to truncate(link, length: 70), link %>
+  </dd>
+  <% elsif @project.platform.downcase == 'bower' && @project.language.try(:downcase) == 'purescript' %>
+    <% link = "https://pursuit.purescript.org/packages/#{@project.name}" %>
+    <dt>
+      Documentation
+    </dt>
+    <dd>
+      <%= link_to truncate(link, length: 70), link %>
+    </dd>
+  <% end %>
+
+  <% if link = @project.download_url(@version.try(:number)) %>
+    <dt>
+      Direct download
+    </dt>
+    <dd>
+      <%= link_to truncate(link, length: 70), link %>
+    </dd>  
+  <% end %>
+  <% if @project.install_instructions(@version.try(:number)).present? %>
+    <dt>
+      Install
+    </dt>
+    <dd>
+      <code>
+        <%= @project.install_instructions(@version.try(:number)) %>
+      </code>
+    </dd>
+  <% end %>
+</dl>
