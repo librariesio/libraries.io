@@ -9,7 +9,6 @@
 <div class="row">
   <div class='col-md-8'>
     <h1>
-      <div class="pictogram pictogram-<%= @project.platform.downcase %>"></div>
       <%= @project %>
       <small>
         <% if @version %>
@@ -24,39 +23,54 @@
       <%= render 'actions' %>
   </div>
 </div>
+
+
 <div class='row'>
   <% cache([@project, @version, 'projects:show', 'v1'], :expires_in => 1.day) do %>
     <div class='col-md-8'>
-    <%= render 'details' %>
-    <% if @repository.present? && @repository.readme.present? %>
-      <hr>
-      <%= render 'adsense/banner' %>
-      <%== @repository.readme %>
-    <% end %>
-      <div class="row">
-        <% cache([@project, @version, 'dependents:v3'], :expires_in => 1.day) do  %>
-          <% dependents = @project.dependent_projects.limit(10) %>
-          <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
-          <% if dependent_repos.length > 0 || dependents.length > 0 || @dependencies.length > 0 %>
-            <hr>
-          <% end %>
-          <% if @dependencies.length > 0 %>
-            <%= render 'dependencies' %>
-          <% end %>
-          <% if dependent_repos.length > 0 || dependents.length > 0 %>
-            <%= render 'dependents' %>
-          <% end %>
-        <% end %>
-      </div>
+    
+      <%= render 'details' %>
+
+      <%= render 'contributors' %>
+
+      <% if @repository.present? && @repository.readme.present? %>
+        <hr>
+        <%= render 'adsense/banner' %>
+        <%== @repository.readme %>
+      <% end %>
+
     </div>
   <% end %>
+  <% cache([@project, @version, 'projects:sidebar', 'v1'], :expires_in => 1.day) do %>
+    <div class='col-md-4'>
+
+      <%= render 'adsense/sustain' %>
+
+      <%= render 'statistics' %>
+
+      <%= render 'releases' %>
+ 
+      <% cache([@project, @version, 'dependents:v3'], :expires_in => 1.day) do  %>
+      <% dependents = @project.dependent_projects.limit(10) %>
+      <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
+      <% if dependent_repos.length > 0 || dependents.length > 0 || @dependencies.length > 0 %>
+        <hr>
+      <% end %>
+      <% if @dependencies.length > 0 %>
+        <%= render 'dependencies' %>
+      <% end %>
+      <% if dependent_repos.length > 0 || dependents.length > 0 %>
+        <%= render 'dependents' %>
+      <% end %>
+    <% end %>
+
+    </div>
+  <% end %>
+</div>
+
   <div class='col-md-4'>
     <%= render 'adsense/sustain' %>
     <% cache([@project, @version, 'projects:sidebar', 'v1'], :expires_in => 1.day) do %>
-      
-      <%= render 'releases' %>
-
-      <%= render 'statistics' %>
 
       <% if @contributors.length > 0 %>
         <div class="row">
