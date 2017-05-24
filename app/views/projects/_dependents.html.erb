@@ -1,30 +1,31 @@
-<% if dependents.length > 0 %>
-              <div class="col-sm-6">
-                <h4 data-ga-tracked-el='dependent-projects'>Dependent Projects</h4>
-                <ul>
-                  <% dependents.each do |project| %>
-                  <li>
-                    <%= link_to project.name, project_path(project.to_param) %>
-                  </li>
-                  <% end %>
-                </ul>
-                <%= link_to "See all dependent projects", project_dependents_path(@project.to_param) %>
-              </div>
-            <% end %>
-            <% if dependent_repos.length > 0 %>
-              <div class="col-sm-6">
-                <h4 data-ga-tracked-el='dependent-repositories'>Dependent Repositories</h4>
-                <ul>
-                  <% dependent_repos.each do |repo| %>
-                  <li>
-                    <%= link_to repo.full_name, repository_path(repo.to_param) %>
-                    <small>
-                      <%= fa_icon("lock") if repo.private? %>
-                      <%= fa_icon("code-fork") if repo.fork? %>
-                    </small>
-                  </li>
-                  <% end %>
-                </ul>
-                <%= link_to "See all dependent repositories", project_usage_path(@project.to_param) %>
-              </div>
-            <% end %>
+<% dependents = @project.dependent_projects.limit(10) %>
+<% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
+    <% if dependents.length > 0 || dependent_repos.length > 0 %>
+      <h4 data-ga-tracked-el='dependent-projects'>Used By</h4>
+      <dl class='row'>
+        <% if dependents.length > 0 %>
+          <% dependents.each do |project| %>
+            <dt class='col-sm-8'>
+              <%= link_to project.name, project_path(project.to_param) %>
+            </dt>
+            <dd>
+              <%= project.latest_release %>
+            </dd>
+        <% end %>
+        <% if dependent_repos.length > 0 %>
+          <% dependent_repos.each do |repo| %>
+          <dt class='col-sm-8'>
+            <%= link_to repo.full_name, repository_path(repo.to_param) %>
+            <small>
+              <%= fa_icon("lock") if repo.private? %>
+              <%= fa_icon("code-fork") if repo.fork? %>
+            </small>
+          </dt>
+          <dd>
+              <%= repo.latest_release %>
+            </dd>
+        <% end %>
+      </dl>
+    <% end %>
+  <% end %>
+<% end %>
