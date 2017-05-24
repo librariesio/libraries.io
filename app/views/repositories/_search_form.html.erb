@@ -1,0 +1,32 @@
+<%= form_tag repo_search_path(host_type: current_host), method: :get, class: 'navbar-form search_form', enforce_utf8: false do |f| %>
+  <div class="input-group input-group">
+
+    <div class="input-group-btn">
+     <a type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search <span class="caret"></span></a>
+     <ul class="dropdown-menu">
+       <li>
+         <%= link_to search_path(q: params[:q], sort: params[:sort]) do %>
+           <span class='fa-blank'></span>
+           Libraries
+         <% end %>
+       </li>
+       <li>
+         <%= link_to repo_search_path(q: params[:q], sort: params[:sort]) do %>
+           <%= fa_icon 'check' %>
+           Repositories
+         <% end %>
+       </li>
+     </ul>
+   </div>
+
+    <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search Repositories', class: 'form-control', size: 40 %>
+    <% [:license, :language, :keywords, :sort].each do |field| %>
+      <%= hidden_field_tag field, params[field] if params[field].present? %>
+    <% end %>
+    <span class="input-group-btn">
+      <button class="btn btn-primary" type="submit">
+        <%= fa_icon 'search' %>
+      </button>
+    </span>
+  </div>
+<% end %>
