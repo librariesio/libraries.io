@@ -37,10 +37,9 @@ module ApplicationHelper
       else; "#{collection.total_entries} #{entry_name.pluralize}"
       end
     else
-      %{%d - %d of %d #{entry_name.pluralize}} % [
+      %{%d - %d of #{number_to_human(collection.total_entries)} #{entry_name.pluralize}} % [
         collection.offset + 1,
-        collection.offset + collection.length,
-        collection.total_entries
+        collection.offset + collection.length
       ]
     end
   end
