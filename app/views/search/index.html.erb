@@ -1,16 +1,12 @@
 <% title @title %>
 <% content_for :atom, auto_discovery_link_tag(:atom, url_for(search_params.merge({format: "atom"}))) %>
-<%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
   <div class="row">
-    <div class='col-sm-8'>
-      <div class="input-group input-group-lg">
-        <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search...', class: 'form-control', size: 40 %>
-        <span class="input-group-btn">
-          <button class="btn btn-primary btn-large" type="submit"><%= fa_icon 'search' %></button>
-        </span>
-      </div>
-
-      <% [:platforms, :licenses, :languages, :keywords, :sort].each do |field| %>
+  <div class='col-sm-8'>
+    <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
+      <h3> 
+        Showing projects by <%= select_tag 'sort', options_for_select(sort_options, params[:sort]), onchange: "this.form.submit()" %> 
+      </h3>
+      <% [:q, :platforms, :licenses, :languages, :keywords].each do |field| %>
         <%= hidden_field_tag field, params[field] if params[field].present? %>
       <% end %>
       <% if @suggestion && @suggestion.options.any? %>
@@ -19,17 +15,10 @@
           <strong><%= link_to "#{@suggestion.options.first.text}?", search_path(q: @suggestion.options.first.text) %></strong>
         </p>
       <% end %>
-    </div>
-    <div class='col-sm-4 hidden-xs'>
-      <h3>
-        <small>Sort by: <%= select_tag 'sort', options_for_select(sort_options, params[:sort]), onchange: "this.form.submit()" %></small>
-      </h3>
-    </div>
-  </div>
-<% end %>
-<div class='row'>
-  <div class='col-sm-8'>
+    <% end %>
+    
     <%= render 'adsense/banner' %>
+    
     <% if @projects.length > 0 %>
       <%= render @projects, cache: true %>
       <%= will_paginate @search, page_links: false %>
@@ -68,6 +57,9 @@
 
   <div class='col-sm-4 facets'>
     <%= render 'adsense/sidebar' %>
+    <h3>
+      Filter projects by
+    </h3>
     <% @facets.each do |name, facet| %>
       <% facet = facet[facet.keys.last] %>
       <% next if facet.buckets.nil? || facet.buckets.empty? %>

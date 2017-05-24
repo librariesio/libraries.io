@@ -13,7 +13,7 @@ module ApplicationHelper
 
   def format_facet_name(facet_name)
     return 'Host' if facet_name == 'host_type'
-    facet_name.humanize
+    facet_name.humanize.singularize
   end
 
   def platform_name(platform)
