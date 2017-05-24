@@ -150,7 +150,6 @@ class RepositoriesController < ApplicationController
         license: current_license,
         language: current_language,
         keywords: current_keywords,
-        platforms: current_platforms,
         host_type: formatted_host
       }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
       search.records.to_a
