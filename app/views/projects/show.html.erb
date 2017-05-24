@@ -51,6 +51,8 @@
 
       <%= render 'statistics' %>
 
+      <hr>
+
       <%= render 'releases' %>
  
       <% cache([@project, @version, 'dependents:v3'], :expires_in => 1.day) do  %>
