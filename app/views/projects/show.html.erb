@@ -10,7 +10,9 @@
   <div class='col-md-8'>
     <h1>
       <%= @project %>
+      <br>
       <small>
+        <%= @project.release_or_tag.singularize.titlecase %>
         <% if @version %>
           <%= @version %>
         <% else %>
