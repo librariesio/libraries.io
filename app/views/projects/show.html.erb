@@ -21,7 +21,7 @@
       </small>
     </h1>
   </div>
-  <div class='col-md-4'>
+  <div class='col-md-4 sidebar'>
       <%= render 'actions' %>
   </div>
 </div>
@@ -43,8 +43,9 @@
 
     </div>
   <% end %>
+
   <% cache([@project, @version, 'projects:sidebar', 'v1'], :expires_in => 1.day) do %>
-    <div class='col-md-4'>
+    <div class='col-md-4 sidebar'>
 
       <%= render 'adsense/sustain' %>
 
@@ -70,7 +71,7 @@
   <% end %>
 </div>
 
-  <div class='col-md-4'>
+  <div class='col-md-4 sidebar'>
     <%= render 'adsense/sustain' %>
     <% cache([@project, @version, 'projects:sidebar', 'v1'], :expires_in => 1.day) do %>
 
