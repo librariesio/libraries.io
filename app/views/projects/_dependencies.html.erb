@@ -7,7 +7,7 @@
           <dt class='col-sm-8'>
             <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: PackageManager::Base.dependency_platform(dependency.platform)) %>
           </dt>
-          <dd class='col-sm-4'>
+          <dd class='col-sm-4 hidden-xs'>
             <%= dependency.requirements %>
             <% if dependency.project %>
               <small>

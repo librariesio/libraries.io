@@ -8,20 +8,20 @@
             <dt class='col-sm-8'>
               <%= link_to project.name, project_path(project.to_param) %>
             </dt>
-            <dd>
+            <dd class='col-sm-4 hidden-xs'>
               <%= project.latest_release %>
             </dd>
         <% end %>
         <% if dependent_repos.length > 0 %>
           <% dependent_repos.each do |repo| %>
-          <dt class='col-sm-8'>
+          <dt class='col-sm-4 hidden-xs'>
             <%= link_to repo.full_name, repository_path(repo.to_param) %>
             <small>
               <%= fa_icon("lock") if repo.private? %>
               <%= fa_icon("code-fork") if repo.fork? %>
             </small>
           </dt>
-          <dd>
+          <dd class='col-sm-4 hideen-sm-down'>
               <%= repo.latest_release %>
             </dd>
         <% end %>
