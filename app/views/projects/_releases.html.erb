@@ -5,17 +5,10 @@
         <%= fa_icon "rss-square" %>
       <% end %>
   </h4>
-    <dl class='row'>
+    <dl class='releases row'>
       <% @versions.each do |version| %>
-        <dt class='col-xs-12 col-sm-4'>
+        <dt class='col-xs-12 col-sm-8'>
           <%= link_to version, version_path(version.to_param) %>
-        </dt>
-        <dd class='col-sm-8 hidden-xs'>
-          <% if version.published_at.present? %>
-              <small class='text-muted'>
-                <%= version.published_at.to_date.to_s(:long) %>
-              </small>
-          <% end %>
           <% if version.related_tag %>
             <small class='text-muted'>
               <%= link_to version.related_tag.repository_url, class: 'tip', title: "Browse source on #{version.project.repository.host_type}" do %>
@@ -25,10 +18,17 @@
             <% if version.previous_version %>
               <small class='text-muted'>
                 <%= link_to version.diff_url, class: 'tip', title: "View diff between #{version} and #{version.previous_version}" do %>
-                  <%= fa_icon('random') %>
+                  <span><%= fa_icon('random') %></span>
                 <% end %>
               </small>
             <% end %>
+          <% end %>
+        </dt>
+        <dd class='col-sm-4 hidden-xs'>
+          <% if version.published_at.present? %>
+              <small class='text-muted'>
+                <%= version.published_at.to_date.to_s(:long) %>
+              </small>
           <% end %>
         </dd>
       <% end %>
@@ -43,7 +43,7 @@
         <%= fa_icon "rss-square" %>
       <% end %>
     </h4>
-    <dl class='row'>
+    <dl class='row releases'>
       <% @tags.each do |tag| %>
         <dl class='col-sm-4'>
           <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
