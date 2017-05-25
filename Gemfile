@@ -41,7 +41,6 @@ gem 'fast_xor'
 gem 'premailer-rails'
 gem 'gemoji'
 gem 'js_cookie_rails'
-gem 'postgres_ext', git: 'https://github.com/gocardless/postgres_ext', branch: 'rails-5'
 gem 'foreman', require: false
 gem 'puma'
 gem 'payola-payments', git: 'https://github.com/librariesio/payola'

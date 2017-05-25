@@ -265,15 +265,15 @@ class Project < ApplicationRecord
   end
 
   def self.license(license)
-    where.contains(normalized_licenses: [license])
+    where("projects.normalized_licenses @> ?", Array(license).to_postgres_array(true))
   end
 
   def self.keyword(keyword)
-    where.contains(keywords_array: [keyword])
+    where("projects.keywords_array @> ?", Array(keyword).to_postgres_array(true))
   end
 
   def self.keywords(keywords)
-    where.overlap(keywords_array: keywords)
+    where("projects.keywords_array && ?", Array(keywords).to_postgres_array(true))
   end
 
   def self.language(language)

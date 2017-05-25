@@ -1,14 +1,4 @@
 GIT
-  remote: https://github.com/gocardless/postgres_ext
-  revision: 17e4358fe013c05fed530af58cb4bd96225d79fb
-  branch: rails-5
-  specs:
-    postgres_ext (3.0.0)
-      activerecord (>= 4.0.0)
-      arel (>= 4.0.1)
-      pg_array_parser (~> 0.0.9)
-
-GIT
   remote: https://github.com/librariesio/bitbucket
   revision: 43f8f97be403091debab480235413b20059337bd
   specs:
@@ -327,7 +317,6 @@ GEM
     ox (2.5.0)
     parallel (1.11.2)
     pg (0.20.0)
-    pg_array_parser (0.0.9)
     pg_query (0.11.4)
       json (>= 1.8, < 3)
     pghero (1.7.0)
@@ -611,7 +600,6 @@ DEPENDENCIES
   pghero
   pictogram
   poltergeist
-  postgres_ext!
   premailer-rails
   puma
   rack-attack

@@ -23,9 +23,9 @@ class Issue < ApplicationRecord
   scope :locked, -> { where(locked: true) }
   scope :unlocked, -> { where(locked: false) }
   scope :actionable, -> { open.issue.unlocked }
-  scope :labeled, -> (label) { where.contains(labels: [label]) }
+  scope :labeled, -> (label) { where("issues.labels @> ?", Array(label).to_postgres_array(true)) }
   scope :help_wanted, -> { labeled('help wanted') }
-  scope :first_pull_request, -> { where.overlap(labels: FIRST_PR_LABELS) }
+  scope :first_pull_request, -> { where("issues.labels && ?", Array(FIRST_PR_LABELS).to_postgres_array(true)) }
   scope :indexable, -> { actionable.includes(:repository) }
 
   scope :host, lambda{ |host_type| where('lower(issues.host_type) = ?', host_type.try(:downcase)) }
