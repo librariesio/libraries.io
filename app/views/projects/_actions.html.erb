@@ -1,4 +1,33 @@
-<h1> 
+<h1>
+  <div class="btn-group visible-xs">
+    <span class='btn btn-default'>
+      <%= @project.release_or_tag.singularize.titlecase %> 
+      <% if @version %>
+        <%= @version %>
+      <% else %>
+        <%= @project.latest_release_number %>
+      <% end %>
+    </span>
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="caret"></span>
+      <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu">
+      <% @versions.each do |version| %>
+        <li>
+          <%= link_to version_path(version.to_param) do %>
+            <% if @version == version %>
+              <%= fa_icon 'check' %>
+            <% else %>
+              <span class='fa-blank'></span>
+            <% end %>
+            <%= version %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+    <br>
+  </div> 
   <% if logged_in? %>
     <% if current_user.muted?(@project) %>
       <%= link_to unmute_project_path(@project.to_param), method: :delete, class: 'btn btn-danger tip', title: "Unmute #{@project.name}" do %>

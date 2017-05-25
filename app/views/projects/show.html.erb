@@ -11,7 +11,7 @@
     <h1>
       <%= @project %>
       <br>
-      <small>
+      <small class='hidden-xs'>
         <%= @project.release_or_tag.singularize.titlecase %>
         <% if @version %>
           <%= @version %>
