@@ -5,7 +5,7 @@ module GithubIdentity
 
   def repository_user
     return unless github_enabled?
-    RepositoryUser.where(host_type: 'GitHub').find_by_uuid(github_identity.uid)
+    @repository_user ||= RepositoryUser.where(host_type: 'GitHub').find_by_uuid(github_identity.uid)
   end
 
   def hidden
@@ -104,11 +104,11 @@ module GithubIdentity
   end
 
   def github_identity
-    identities.find_by_provider('github')
+    identities.first{|i| i.provider == 'github' }
   end
 
   def github_public_identity
-    identities.find_by_provider('githubpublic')
+    identities.first{|i| i.provider == 'githubpublic' }
   end
 
   def private_repo_token
@@ -116,11 +116,11 @@ module GithubIdentity
   end
 
   def github_private_identity
-    identities.find_by_provider('githubprivate')
+    identities.first{|i| i.provider == 'githubprivate' }
   end
 
   def github_client
-    AuthToken.new_client(token)
+    @github_client ||= AuthToken.new_client(token)
   end
 
   def github_url

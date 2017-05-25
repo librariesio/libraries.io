@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
 
   def current_user
     return nil if session[:user_id].blank?
-    @current_user ||= User.find_by_id(session[:user_id])
+    @current_user ||= User.includes(:identities).find_by_id(session[:user_id])
   end
 
   def logged_in?
