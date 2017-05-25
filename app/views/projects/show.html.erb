@@ -50,10 +50,16 @@
 
       <%= render 'contributors' %>
 
+      <%= render 'adsense/banner' %>
+
       <% if @repository.present? && @repository.readme.present? %>
-        <hr>
-        <%= render 'adsense/banner' %>
-        <%== @repository.readme %>
+        <div class='hidden-xs'>
+          <hr>
+          <h3 data-ga-tracked-el='readme'>Documentation</h3>
+          <div class='well'>
+            <%== @repository.readme %>
+          </div>
+        </div>
       <% end %>
 
     </div>
@@ -66,83 +72,50 @@
 
       <%= render 'statistics' %>
 
-      <hr>
-
       <%= render 'releases' %>
  
       <% cache([@project, @version, 'dependents:v3'], :expires_in => 1.day) do  %>
       <% dependents = @project.dependent_projects.limit(10) %>
       <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
       <% if @dependencies.length > 0 %>
-        <hr>
         <%= render 'dependencies' %>
       <% end %>
       <% if current_user %>
         <% render 'your_dependents' %>
       <% end %>
       <% if dependent_repos.length > 0 || dependents.length > 0 %>
-        <hr>
         <%= render 'dependents' %>
       <% end %>
     <% end %>
-
+      <hr>
+      <p>
+        <%= fa_icon 'question-circle' %>
+        Something wrong with this page?
+        <%= link_to 'Make a suggestion', project_suggestions_path(@project.to_param) %>
+      </p>
+      <p>
+        <%= fa_icon 'download' %>
+        <%= link_to 'Export .ABOUT file for this library', @version.present? ? about_version_path(@project.to_param.merge(number: @version.number)) : about_project_path(@project.to_param) %>
+      </p>
+      <p>
+        <small class='text-muted'>Last synced: <%= @project.last_synced_at || @project.created_at %></small>
+      </p>
+      <% unless @project.recently_synced? %>
+        <% if logged_in? %>
+          <p>
+            <%= link_to sync_project_path(@project.to_param), class: 'btn btn-primary btn-xs', method: :post do %>
+              <%= fa_icon 'refresh' %>
+              Resync Project
+            <% end %>
+          </p>
+        <% else %>
+          <p>
+            <small class='text-muted'>
+              <%= link_to 'Login', login_path(return_to: request.original_url) %> to resync this project
+            </small>
+          </p>
+        <% end %>
+      <% end %>
     </div>
   <% end %>
-</div>
-
-  <div class='col-md-4 sidebar'>
-    <%= render 'adsense/sustain' %>
-    <% cache([@project, @version, 'projects:sidebar', 'v1'], :expires_in => 1.day) do %>
-
-      <% if @contributors.length > 0 %>
-        <div class="row">
-          <div class="col-md-12">
-            <h4 data-ga-tracked-el='top-contributors'>Top Contributors <small><%= link_to 'See all', repository_contributors_path(@repository.to_param) %></small></h4>
-            <%= render @contributors %>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
-
-    <% if current_user %>
-      <% your_dependent_repos = current_user.your_dependent_repos(@project) %>
-      <% if your_dependent_repos.length > 0 %>
-        <% render 'repos' %>
-      <% end %>
-    <% end %>
-
-    <div class="row">
-      <div class="col-md-12">
-        <br>
-        <p>
-          <%= fa_icon 'question-circle' %>
-          Something wrong with this page?
-          <%= link_to 'Make a suggestion', project_suggestions_path(@project.to_param) %>
-        </p>
-        <p>
-          <%= fa_icon 'download' %>
-          <%= link_to 'Export .ABOUT file for this library', @version.present? ? about_version_path(@project.to_param.merge(number: @version.number)) : about_project_path(@project.to_param) %>
-        </p>
-        <p>
-          <small class='text-muted'>Last synced: <%= @project.last_synced_at || @project.created_at %></small>
-        </p>
-        <% unless @project.recently_synced? %>
-          <% if logged_in? %>
-            <p>
-              <%= link_to sync_project_path(@project.to_param), class: 'btn btn-primary btn-xs', method: :post do %>
-                <%= fa_icon 'refresh' %>
-                Resync Project
-              <% end %>
-            </p>
-          <% else %>
-            <p>
-              <small class='text-muted'>
-                <%= link_to 'Login', login_path(return_to: request.original_url) %> to resync this project
-              </small>
-            </p>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-  </div>
 </div>
