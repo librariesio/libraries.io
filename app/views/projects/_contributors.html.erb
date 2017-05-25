@@ -1,8 +1,10 @@
 <% if @contributors.length > 0 %>
 	<div class="row">
 	  <div class="col-md-12">
-	    <h4 data-ga-tracked-el='top-contributors'>Top Contributors <small><%= link_to 'See all', repository_contributors_path(@repository.to_param) %></small></h4>
+	  	<hr>
+	    <h3 data-ga-tracked-el='top-contributors'>Contributors</h4>
 	    <%= render @contributors %>
+	    <%= link_to 'See all contributors', repository_contributors_path(@repository.to_param) %>
 	  </div>
 	</div>
 <% end %>
