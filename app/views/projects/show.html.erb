@@ -73,13 +73,15 @@
       <% cache([@project, @version, 'dependents:v3'], :expires_in => 1.day) do  %>
       <% dependents = @project.dependent_projects.limit(10) %>
       <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
-      <% if dependent_repos.length > 0 || dependents.length > 0 || @dependencies.length > 0 %>
-        <hr>
-      <% end %>
       <% if @dependencies.length > 0 %>
+        <hr>
         <%= render 'dependencies' %>
       <% end %>
+      <% if current_user %>
+        <% render 'your_dependents' %>
+      <% end %>
       <% if dependent_repos.length > 0 || dependents.length > 0 %>
+        <hr>
         <%= render 'dependents' %>
       <% end %>
     <% end %>
