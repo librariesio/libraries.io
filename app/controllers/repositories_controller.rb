@@ -141,7 +141,7 @@ class RepositoriesController < ApplicationController
 
   helper_method :repos_cache_key
   def repos_cache_key(sort)
-    [sort, current_license, current_language, current_keywords, current_platforms, current_host].flatten.reject(&:blank?).map(&:downcase)
+    ['v2', sort, current_license, current_language, current_keywords, current_platforms, current_host].flatten.reject(&:blank?).map(&:downcase)
   end
 
   def repo_search(sort)
@@ -152,7 +152,7 @@ class RepositoriesController < ApplicationController
         keywords: current_keywords,
         host_type: formatted_host
       }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
-      search.records.to_a
+      search.results.map{|result| RepositorySearchResult.new(result) }
     end
   end
 end
