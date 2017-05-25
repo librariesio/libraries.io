@@ -30,7 +30,22 @@
 <div class='row'>
   <% cache([@project, @version, 'projects:show', 'v1'], :expires_in => 1.day) do %>
     <div class='col-md-8'>
-    
+      <dl>
+        <% if @project.description.present? %>
+          <dd>
+            <%= @project.description %>
+          </dd>
+        <% end %>
+        <% if @project.keywords_array.present? %>
+          <dt>
+              Keywords
+          </dt>
+          <dd>
+            <%= linked_keywords @project.keywords_array %>
+          </dd>
+        <% end %>
+      </dl>
+      <hr>
       <%= render 'details' %>
 
       <%= render 'contributors' %>

@@ -1,18 +1,4 @@
 <dl>
-  <% if @project.description.present? %>
-    <dd>
-      <%= @project.description %>
-    </dd>
-  <% end %>
-  <% if @project.keywords_array.present? %>
-    <dt>
-        Keywords
-    </dt>
-    <dd>
-      <%= linked_keywords @project.keywords_array %>
-    </dd>
-  <% end %>
-  <hr>
   <% if @project.homepage.present? && @project.homepage != @project.package_manager_url %>
     <dt>
       Homepage
