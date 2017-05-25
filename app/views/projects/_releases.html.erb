@@ -10,14 +10,12 @@
         <dt class='col-xs-12 col-sm-4'>
           <%= link_to version, version_path(version.to_param) %>
         </dt>
-        <dd class='col-sm-4 hidden-xs'>
+        <dd class='col-sm-8 hidden-xs'>
           <% if version.published_at.present? %>
               <small class='text-muted'>
                 <%= version.published_at.to_date.to_s(:long) %>
               </small>
           <% end %>
-        </dd>
-        <dd col='col-sm-4 hidden-xs'>
           <% if version.related_tag %>
             <small class='text-muted'>
               <%= link_to version.related_tag.repository_url, class: 'tip', title: "Browse source on #{version.project.repository.host_type}" do %>
@@ -31,8 +29,6 @@
                 <% end %>
               </small>
             <% end %>
-          <% else %>
-            &nbsp
           <% end %>
         </dd>
       <% end %>
@@ -57,8 +53,6 @@
               <small class='text-muted'>
                 <%= tag.published_at.to_date.to_s(:long) %>
               </small>
-          <% else %>
-            &nbsp
           <% end %>
         </dd>
         <dd class='col-sm-4 hidden-xs'>
