@@ -19,8 +19,13 @@ class ProjectSearchResult
     @status = search_result.status
     @latest_release_number = search_result.latest_release_number
     @versions_count = search_result.versions_count
-    @latest_release_published_at = DateTime.parse(search_result.latest_release_published_at)
+    @latest_release_published_at = parse_timestamp(search_result.latest_release_published_at)
     @stars = search_result.stars
+  end
+
+  def parse_timestamp(timestamp)
+    return nil unless timestamp.present?
+    DateTime.parse(timestamp) rescue nil
   end
 
   def color
