@@ -67,4 +67,8 @@ class RepositorySearchResult
   def fork?
     !!@fork
   end
+
+  def to_partial_path
+    'repositories/repository'
+  end
 end

@@ -39,4 +39,8 @@ class ProjectSearchResult
   def to_param
     { name: name, platform: platform.downcase }
   end
+
+  def to_partial_path
+    'projects/project'
+  end
 end

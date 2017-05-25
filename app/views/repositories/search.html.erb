@@ -45,7 +45,7 @@
 
     <%= render 'adsense/banner' %>
     <% if @repositories.length > 0 %>
-      <%= render partial: 'repositories/repository', collection: @repositories, cache: true %>
+      <%= render @repositories, cache: true %>
       <%= will_paginate @search, page_links: false %>
     <% else %>
 
