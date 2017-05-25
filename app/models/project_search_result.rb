@@ -1,0 +1,37 @@
+class ProjectSearchResult
+  include Status
+
+  attr_reader :language
+  attr_reader :platform
+  attr_reader :name
+  attr_reader :description
+  attr_reader :status
+  attr_reader :latest_release_number
+  attr_reader :versions_count
+  attr_reader :latest_release_published_at
+  attr_reader :stars
+
+  def initialize(search_result)
+    @language = search_result.language
+    @platform = search_result.platform
+    @name = search_result.name
+    @description = search_result.description
+    @status = search_result.status
+    @latest_release_number = search_result.latest_release_number
+    @versions_count = search_result.versions_count
+    @latest_release_published_at = DateTime.parse(search_result.latest_release_published_at)
+    @stars = search_result.stars
+  end
+
+  def color
+    Linguist::Language[language].try(:color) || platform_class.try(:color)
+  end
+
+  def platform_class
+    "PackageManager::#{platform}".constantize
+  end
+
+  def to_param
+    { name: name, platform: platform.downcase }
+  end
+end
