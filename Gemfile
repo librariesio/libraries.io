@@ -54,7 +54,7 @@ gem 'pictogram'
 gem 'rails-timeago', git: 'https://github.com/librariesio/rails-timeago'
 gem 'rack-attack'
 gem 'rack-attack-rate-limit', require: 'rack/attack/rate-limit'
-gem 'api-pagination', '4.5.2'
+gem 'api-pagination'
 gem 'indefinite_article'
 gem 'faraday_middleware'
 gem 'parallel', require: nil
