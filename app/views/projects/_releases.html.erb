@@ -1,4 +1,5 @@
 <% if @version_count > 0 %>
+  <hr>
   <h4 data-ga-tracked-el='releases'>
       Releases
       <%= link_to project_versions_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>

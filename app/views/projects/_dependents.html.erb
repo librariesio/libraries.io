@@ -1,6 +1,7 @@
 <% dependents = @project.dependent_projects.limit(10) %>
 <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
     <% if dependents.length > 0 || dependent_repos.length > 0 %>
+      <hr>
       <h4 data-ga-tracked-el='dependent-projects'>Used By</h4>
       <dl class='row'>
         <% if dependents.length > 0 %>
