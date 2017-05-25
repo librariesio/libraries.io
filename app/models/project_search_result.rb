@@ -11,6 +11,7 @@ class ProjectSearchResult
   attr_reader :latest_release_published_at
   attr_reader :stars
   attr_reader :created_at
+  attr_reader :id
 
   def initialize(search_result)
     @language = search_result.language
@@ -23,6 +24,7 @@ class ProjectSearchResult
     @latest_release_published_at = parse_timestamp(search_result.latest_release_published_at)
     @stars = search_result.stars
     @created_at = parse_timestamp(search_result.created_at)
+    @id = search_result.id
   end
 
   def parse_timestamp(timestamp)

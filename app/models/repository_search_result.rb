@@ -14,6 +14,7 @@ class RepositorySearchResult
   attr_reader :license
   attr_reader :stargazers_count
   attr_reader :forks
+  attr_reader :id
 
   def initialize(search_result)
     @language = search_result.language
@@ -29,6 +30,7 @@ class RepositorySearchResult
     @license = search_result.license
     @stargazers_count = search_result.stargazers_count
     @forks = search_result.forks_count
+    @id = search_result.id
   end
 
   def parse_timestamp(timestamp)
