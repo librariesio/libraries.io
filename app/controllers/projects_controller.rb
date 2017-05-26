@@ -52,7 +52,6 @@ class ProjectsController < ApplicationController
       end
     end
     find_version
-    fresh_when([@project, @version])
     @contributors = @project.contributors.order('count DESC').visible.limit(20)
   end
 
