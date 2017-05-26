@@ -5,28 +5,29 @@
 
 <%= render 'projects/alerts' %>
 
-<div class="row">
-  <div class='col-md-8'>
-    <h1>
-      <%= @project %>
-      <br>
-      <small class='hidden-xs'>
-        <%= @project.release_or_tag.singularize.titlecase %>
-        <% if @version %>
-          <%= @version %>
-        <% else %>
-          <%= @project.latest_release_number %>
-        <% end %>
-      </small>
-    </h1>
-  </div>
-  <div class='col-md-4 sidebar'>
-    <%= render 'projects/actions' %>
-  </div>
-</div>
-
 <div class='row'>
   <div class='col-md-8'>
+    <div class="row">
+      <div class='col-md-8'>
+        <h1>
+          <%= @project %>
+          <br>
+          <small class='hidden-xs'>
+            <%= @project.release_or_tag.singularize.titlecase %>
+            <% if @version %>
+              <%= @version %>
+            <% else %>
+              <%= @project.latest_release_number %>
+            <% end %>
+          </small>
+        </h1>
+      </div>
+      <div class='col-md-4 sidebar'>
+        <%= render 'projects/actions' %>
+      </div>
+    </div>
+
+
     <dl>
       <% if @project.description.present? %>
         <dd>
