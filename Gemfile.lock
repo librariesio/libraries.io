@@ -92,7 +92,7 @@ GEM
     asciidoctor (1.5.5)
     autoprefixer-rails (7.1.1)
       execjs
-    bibliothecary (5.3.3)
+    bibliothecary (5.3.4)
       deb_control
       librariesio-gem-parser
       ox
