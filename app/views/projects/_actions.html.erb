@@ -1,7 +1,7 @@
 <h1>
   <div class="btn-group visible-xs">
     <span class='btn btn-default'>
-      <%= @project.release_or_tag.singularize.titlecase %> 
+      <%= @project.release_or_tag.singularize.titlecase %>
       <% if @version %>
         <%= @version %>
       <% else %>
@@ -27,7 +27,7 @@
       <% end %>
     </ul>
     <br>
-  </div> 
+  </div>
   <% if logged_in? %>
     <% if current_user.muted?(@project) %>
       <%= link_to unmute_project_path(@project.to_param), method: :delete, class: 'btn btn-danger tip', title: "Unmute #{@project.name}" do %>

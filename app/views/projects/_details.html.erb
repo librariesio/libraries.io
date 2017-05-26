@@ -7,6 +7,7 @@
       <%= link_to(@project.homepage, sanitize_url(@project.homepage), :rel => 'nofollow') %>
     </dd>
   <% end %>
+
   <% if @project.normalized_licenses.present? %>
     <dt>
       <%= 'License'.pluralize(@project.normalized_licenses.length) %>
@@ -15,19 +16,21 @@
       <%= linked_licenses @project.normalized_licenses %>
     </dd>
   <% end %>
+
   <dt>
-    Platform   
+    Platform
   </dt>
   <dd>
     <%= link_to @project.platform_name, platform_path(@project.platform.downcase) %>
   </dd>
- <% if @project.language.present? %>
-   <dt>
+
+  <% if @project.language.present? %>
+    <dt>
       Langauge
-   </dt>
-   <dd>
-    <%= link_to @project.language, language_path(@project.language) %>
-   </dd>
+    </dt>
+    <dd>
+      <%= link_to @project.language, language_path(@project.language) %>
+    </dd>
   <% end %>
 
   <% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
@@ -49,12 +52,12 @@
   <% end %>
 
   <% if link = @project.documentation_url(@version.try(:number) || @project.latest_release_number) %>
-  <dt>
-    Documentation
-  </dt>
-  <dd>
-    <%= link_to truncate(link, length: 70), link %>
-  </dd>
+    <dt>
+      Documentation
+    </dt>
+    <dd>
+      <%= link_to truncate(link, length: 70), link %>
+    </dd>
   <% elsif @project.platform.downcase == 'bower' && @project.language.try(:downcase) == 'purescript' %>
     <% link = "https://pursuit.purescript.org/packages/#{@project.name}" %>
     <dt>
@@ -71,8 +74,9 @@
     </dt>
     <dd>
       <%= link_to truncate(link, length: 70), link %>
-    </dd>  
+    </dd>
   <% end %>
+
   <% if @project.install_instructions(@version.try(:number)).present? %>
     <dt>
       Install

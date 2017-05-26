@@ -1,8 +1,8 @@
 <% if @dependencies.length > 0 %>
   <% @dependencies.group_by(&:kind).each do |kind, deps| %>
     <% if deps.length > 0 %>
-    <hr>
-    <h3><%= kind.humanize unless kind == 'runtime' %> Dependencies </h3>
+      <hr>
+      <h3><%= kind.humanize unless kind == 'runtime' %> Dependencies </h3>
       <dl data-ga-tracked-el='dependencies' class='row'>
         <% deps.each do |dependency| %>
           <dt class='col-sm-8'>
