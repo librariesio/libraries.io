@@ -44,7 +44,7 @@ module RepoManifests
 
     unless manifests.find_by(args)
       manifest = manifests.create(args)
-      dependencies = m[:dependencies].uniq{|dep| [dep[:name].try(:strip), dep[:requirement], dep[:type]]}
+      dependencies = m[:dependencies].map(&:with_indifferent_access).uniq{|dep| [dep[:name].try(:strip), dep[:requirement], dep[:type]]}
       dependencies.each do |dep|
         platform = manifest.platform
         next unless dep.is_a?(Hash)
