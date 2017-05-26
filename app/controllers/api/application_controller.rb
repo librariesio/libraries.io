@@ -28,7 +28,8 @@ class Api::ApplicationController < ApplicationController
   end
 
   def current_api_key
-    ApiKey.active.find_by_access_token(params[:api_key])
+    return nil if params[:api_key].blank?
+    @current_api_key ||= ApiKey.active.find_by_access_token(params[:api_key])
   end
 
   def current_user
@@ -37,15 +38,5 @@ class Api::ApplicationController < ApplicationController
 
   def error_message
     { error: "Error 403, you don't have permissions for this operation." }
-  end
-
-  private
-
-  def current_language
-    params[:language] if params[:language].present?
-  end
-
-  def current_license
-    params[:license] if params[:license].present?
   end
 end

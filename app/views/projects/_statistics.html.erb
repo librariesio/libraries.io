@@ -78,7 +78,7 @@
         Contributors
       </dt>
       <dd class='col-sm-4'>
-        <%= link_to number_to_human(@project.contributions.count), @project.repository.contributors_url %>
+        <%= link_to number_to_human(@project.repository.contributions_count), @project.repository.contributors_url %>
       </dd>
       <% if @project.repository.size.present? %>
         <dt class='col-sm-8'>

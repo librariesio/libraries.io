@@ -15,12 +15,13 @@
 
   <p>
     <small>
+      <%= fa_icon issue.host_type.try(:downcase) %>
       Created <%= timeago_tag issue.created_at %>
       - <%= pluralize(issue.comments_count, 'comment') %>
       <% if issue.labels.any? %>
         -
         <% issue.labels.each do |label| %>
-          <%= link_to label, "#{repository.url}/labels/#{ERB::Util.url_encode(label)}", class: 'label label-info label-pill'%>
+          <%= link_to label, issue.label_url(label), class: 'label label-info label-pill'%>
         <% end %>
       <% end %>
     </small>

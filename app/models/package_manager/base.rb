@@ -174,9 +174,10 @@ module PackageManager
         deps = dependencies(name, version.number, mapped_project) rescue []
         next unless deps && deps.any? && version.dependencies.empty?
         deps.each do |dep|
-          unless version.dependencies.find_by_project_name dep[:project_name]
-            named_project = Project.platform(self.name.demodulize).where('lower(name) = ?', dep[:project_name].downcase).first.try(:id)
-            version.dependencies.create(dep.merge(project_id: named_project.try(:strip)))
+          unless dep[:project_name].blank? || version.dependencies.find_by_project_name(dep[:project_name])
+            named_project_id = Project.platform(self.name.demodulize).where(name: dep[:project_name].strip).first.try(:id)
+            named_project_id = Project.lower_platform(self.name.demodulize).lower_name(dep[:project_name].strip).first.try(:id) if named_project_id.nil?
+            version.dependencies.create(dep.merge(project_id: named_project_id.try(:strip)))
           end
         end
       end

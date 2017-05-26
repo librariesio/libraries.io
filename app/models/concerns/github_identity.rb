@@ -5,7 +5,7 @@ module GithubIdentity
 
   def repository_user
     return unless github_enabled?
-    RepositoryUser.host('GitHub').find_by_uuid(github_identity.uid)
+    @repository_user ||= RepositoryUser.where(host_type: 'GitHub').find_by_uuid(github_identity.uid)
   end
 
   def hidden
@@ -75,14 +75,17 @@ module GithubIdentity
 
   def download_self
     return unless github_identity
-    RepositoryUser.create_from_github(OpenStruct.new({id: github_identity.uid, login: github_identity.nickname, type: 'User', host_type: 'GitHub'}))
-    RepositoryUpdateUserWorker.perform_async(nickname)
+    repository_user = RepositoryUser.create_from_host('GitHub', {id: github_identity.uid, login: github_identity.nickname, type: 'User', host_type: 'GitHub'})
+    if repository_user
+      github_identity.update_column(:repository_user_id, repository_user.id)
+      RepositoryUpdateUserWorker.perform_async('GitHub', nickname)
+    end
   end
 
   def download_orgs
     return unless token
     github_client.orgs.each do |org|
-      RepositoryCreateOrgWorker.perform_async(org.login)
+      RepositoryCreateOrgWorker.perform_async('GitHub', org.login)
     end
   rescue *RepositoryHost::Github::IGNORABLE_EXCEPTIONS
     nil
@@ -101,11 +104,11 @@ module GithubIdentity
   end
 
   def github_identity
-    identities.find_by_provider('github')
+    identities.first{|i| i.provider == 'github' }
   end
 
   def github_public_identity
-    identities.find_by_provider('githubpublic')
+    identities.first{|i| i.provider == 'githubpublic' }
   end
 
   def private_repo_token
@@ -113,11 +116,11 @@ module GithubIdentity
   end
 
   def github_private_identity
-    identities.find_by_provider('githubprivate')
+    identities.first{|i| i.provider == 'githubprivate' }
   end
 
   def github_client
-    AuthToken.new_client(token)
+    @github_client ||= AuthToken.new_client(token)
   end
 
   def github_url

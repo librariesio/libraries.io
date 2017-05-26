@@ -5,7 +5,7 @@ class SearchController < ApplicationController
     @query = params[:q]
     @search = search_projects(@query)
     @suggestion = @search.response.suggest.did_you_mean.first
-    @projects = @search.records.includes(:repository)
+    @projects = @search.results.map{|result| ProjectSearchResult.new(result) }
     @facets = @search.response.aggregations
     @title = page_title
     @platforms = facets[:platforms].platform.buckets

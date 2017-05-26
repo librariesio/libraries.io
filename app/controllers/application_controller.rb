@@ -48,7 +48,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= User.find_by_id(session[:user_id])
+    return nil if session[:user_id].blank?
+    @current_user ||= User.includes(:identities).find_by_id(session[:user_id])
   end
 
   def logged_in?
@@ -67,9 +68,14 @@ class ApplicationController < ActionController::Base
 
   def find_project
     @project = Project.platform(params[:platform]).where(name: params[:name]).includes(:repository, :versions).first
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes(:repository, :versions).first if @project.nil?
+    @project = Project.lower_platform(params[:platform]).lower_name(params[:name]).includes(:repository, :versions).first if @project.nil?
     raise ActiveRecord::RecordNotFound if @project.nil?
     @color = @project.color
+  end
+
+  def find_project_lite
+    @project = Project.platform(params[:platform]).where(name: params[:name]).first
+    raise ActiveRecord::RecordNotFound if @project.nil?
   end
 
   def current_platforms
@@ -82,9 +88,17 @@ class ApplicationController < ActionController::Base
     params[:languages].split(',').map{|l| Linguist::Language[l].to_s }.compact
   end
 
+  def current_language
+    Linguist::Language[params[:language]].to_s if params[:language].present?
+  end
+
   def current_licenses
     return [] if params[:licenses].blank?
     params[:licenses].split(',').map{|l| Spdx.find(l).try(:id) }.compact
+  end
+
+  def current_license
+    Spdx.find(params[:license]).try(:id) if params[:license].present?
   end
 
   def current_keywords

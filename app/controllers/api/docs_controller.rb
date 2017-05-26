@@ -21,6 +21,6 @@ class Api::DocsController < ApplicationController
 
     @search = Project.search('grunt').records
 
-    @repository_user = RepositoryUser.host('GitHub').find_by_login('andrew') || RepositoryUser.first
+    @repository_user = RepositoryUser.host('GitHub').login('andrew').first || RepositoryUser.first
   end
 end

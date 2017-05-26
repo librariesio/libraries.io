@@ -1,0 +1,14 @@
+<% cache([@project.id, 'top_dependent_projects'], :expires_in => 2.weeks) do %>
+  <% @top_dependent_projects = @project.dependent_projects.limit(10) %>
+  <% if @top_dependent_projects.length > 0 %>
+    <h4 data-ga-tracked-el='dependent-projects'>Dependent Projects</h4>
+    <ul>
+      <% @top_dependent_projects.each do |project| %>
+      <li>
+        <%= link_to project.name, project_path(project.to_param) %>
+      </li>
+      <% end %>
+    </ul>
+    <%= link_to "See all dependent projects", project_dependents_path(@project.to_param) %>
+  <% end %>
+<% end %>

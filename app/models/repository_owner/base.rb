@@ -37,6 +37,73 @@ module RepositoryOwner
       owner.uuid
     end
 
+    def download_orgs
+      raise NotImplementedError
+    end
+
+    def download_repos
+      raise NotImplementedError
+    end
+
+    def api_client(token = nil)
+      self.class.api_client
+    end
+
+    def self.format(host_type)
+      case host_type.try(:downcase)
+      when 'github'
+        'GitHub'
+      when 'gitlab'
+        'GitLab'
+      when 'bitbucket'
+        'Bitbucket'
+      end
+    end
+
+    def formatted_host
+      self.class.format(repository.host_type)
+    end
+
+    def download_user_from_host
+      download_user_from_host_by(owner.uuid) rescue download_user_from_host_by_login
+    end
+
+    def download_user_from_host_by_login
+      download_user_from_host_by(owner.login)
+    end
+
+    def download_user_from_host_by(id_or_login)
+      self.class.download_user_from_host(owner.host_type, id_or_login)
+    end
+
+    def self.download_user_from_host(host_type, id_or_login)
+      RepositoryUser.create_from_host(host_type, self.fetch_user(id_or_login))
+    end
+
+    def download_org_from_host
+      download_org_from_host_by(owner.uuid) rescue download_org_from_host_by_login
+    end
+
+    def download_org_from_host_by_login
+      download_org_from_host_by(owner.login)
+    end
+
+    def download_org_from_host_by(id_or_login)
+      self.class.download_org_from_host(owner.host_type, id_or_login)
+    end
+
+    def self.download_org_from_host(host_type, id_or_login)
+      RepositoryOrganisation.create_from_host(host_type, self.fetch_org(id_or_login))
+    end
+
+    def self.fetch_user(id_or_login)
+      raise NotImplementedError
+    end
+
+    def self.fetch_org(id_or_login)
+      raise NotImplementedError
+    end
+
     private
 
     def top_favourite_project_ids
@@ -44,7 +111,6 @@ module RepositoryOwner
         owner.favourite_projects.limit(10).pluck(:id)
       end
     end
-
 
     def top_contributor_ids
       Rails.cache.fetch [owner, "top_contributor_ids"], :expires_in => 1.week, race_condition_ttl: 2.minutes do

@@ -24,6 +24,26 @@ module ApplicationHelper
     Linguist::Language.all.map(&:color).compact.uniq.shuffle(random: Random.new(12))
   end
 
+  def on_search_page
+    (action_name == 'search' && controller_name == 'repositories') || (action_name == 'index' && controller_name == 'search')
+  end
+
+  def search_page_entries_info(collection, options = {})
+    entry_name = options[:model] || (collection.empty?? 'item' :
+        collection.first.class.name.split('::').last.titleize)
+    if collection.total_pages < 2
+      case collection.size
+      when 0; "No #{entry_name.pluralize} found"
+      else; "#{collection.total_entries} #{entry_name.pluralize}"
+      end
+    else
+      %{%d - %d of #{number_to_human(collection.total_entries)} #{entry_name.pluralize}} % [
+        collection.offset + 1,
+        collection.offset + collection.length
+      ]
+    end
+  end
+
   def sort_options
     [
       ['Relevance', nil],
@@ -35,6 +55,14 @@ module ApplicationHelper
       ['Contributors', 'contributions_count'],
       ['Newest', 'created_at']
     ]
+  end
+
+  def current_sort
+    sort_options.find{|name, param| param == params[:sort] } || sort_options.first
+  end
+
+  def current_repo_sort
+    repo_sort_options.find{|name, param| param == params[:sort] } || repo_sort_options.first
   end
 
   def repo_sort_options

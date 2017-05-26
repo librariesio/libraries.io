@@ -34,11 +34,4 @@ class Api::ProjectsController < Api::ApplicationController
 
     render json: project_json
   end
-
-  private
-
-  def find_project
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes(:versions, :repository).first
-    raise ActiveRecord::RecordNotFound if @project.nil?
-  end
 end

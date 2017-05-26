@@ -6,7 +6,7 @@ describe IssueSerializer do
   it 'should have expected attribute names' do
     expect(subject.attributes.keys).to eql([
       :number, :state, :title, :body, :locked, :closed_at, :created_at,
-      :updated_at
+      :updated_at, :uuid, :host_type
     ])
   end
 end

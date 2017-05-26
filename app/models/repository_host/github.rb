@@ -7,7 +7,7 @@ module RepositoryHost
     end
 
     def avatar_url(size = 60)
-      "https://github.com/#{repository.owner_name}?size=#{size}"
+      "https://github.com/#{repository.owner_name}.png?size=#{size}"
     end
 
     def domain
@@ -42,7 +42,9 @@ module RepositoryHost
 
     def self.fetch_repo(id_or_name, token = nil)
       id_or_name = id_or_name.to_i if id_or_name.match(/\A\d+\Z/)
-      AuthToken.fallback_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json').to_hash
+      hash = AuthToken.fallback_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json').to_hash
+      hash[:keywords] = hash[:topics]
+      hash
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
@@ -91,7 +93,7 @@ module RepositoryHost
         next unless c['id']
         cont = existing_contributions.find{|cnt| cnt.repository_user.try(:uuid) == c.id }
         unless cont
-          user = RepositoryUser.create_from_github(c)
+          user = RepositoryUser.create_from_host('GitHub', c)
           cont = repository.contributions.find_or_create_by(repository_user: user)
         end
 
@@ -114,10 +116,18 @@ module RepositoryHost
     end
 
     def download_issues(token = nil)
-      api_client = AuthToken.new_client(token)
-      issues = api_client.issues(repository.full_name, state: 'all')
+      issues = api_client(token).search_issues("repo:#{repository.full_name} type:issue").items
       issues.each do |issue|
-        Issue.create_from_hash(repository, issue)
+        RepositoryIssue::Github.create_from_hash(repository.full_name, issue, token)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
+
+    def download_pull_requests(token = nil)
+      pull_requests = api_client(token).search_issues("repo:#{repository.full_name} type:pr").items
+      pull_requests.each do |pull_request|
+        RepositoryIssue::Github.create_from_hash(repository.full_name, pull_request, token)
       end
     rescue *IGNORABLE_EXCEPTIONS
       nil
@@ -127,14 +137,14 @@ module RepositoryHost
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
       o = api_client.user(repository.owner_name)
       if o.type == "Organization"
-        go = RepositoryOrganisation.create_from_github(o.id)
+        go = RepositoryOrganisation.create_from_host('GitHub', o)
         if go
           repository.repository_organisation_id = go.id
           repository.repository_user_id = nil
           repository.save
         end
       else
-        u = RepositoryUser.create_from_github(o)
+        u = RepositoryUser.create_from_host('GitHub', o)
         if u
           repository.repository_user_id = u.id
           repository.repository_organisation_id = nil

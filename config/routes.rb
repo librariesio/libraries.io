@@ -127,6 +127,7 @@ Rails.application.routes.draw do
 
   get '/help-wanted', to: 'issues#help_wanted', as: :help_wanted
   get '/first-pull-request', to: 'issues#first_pull_request', as: :first_pull_request
+  get '/issues', to: 'issues#index', as: :all_issues
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
@@ -152,10 +153,12 @@ Rails.application.routes.draw do
 
     get '/:host_type/:owner/:name', to: 'repositories#show', as: :repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
     get '/:host_type/:owner/:name/contributors', to: 'repositories#contributors', as: :repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
+    post '/:host_type/:owner/:name/sync', to: 'repositories#sync', as: :sync_repository, format: false, constraints: { :name => /[^\/]+/ }
     get '/:host_type/:owner/:name/sourcerank', to: 'repositories#sourcerank', as: :repository_sourcerank, format: false, constraints: { :name => /[^\/]+/ }
     get '/:host_type/:owner/:name/forks', to: 'repositories#forks', as: :repository_forks, format: false, constraints: { :name => /[^\/]+/ }
     get '/:host_type/:owner/:name/tags', to: 'repositories#tags', as: :repository_tags, format: false, constraints: { :name => /[^\/]+/ }
     get '/:host_type/:owner/:name/dependency-issues', to: 'repositories#dependency_issues', format: false, constraints: { :name => /[^\/]+/ }
+    get '/:host_type/:owner/:name/dependencies', to: 'repositories#dependencies', format: false, constraints: { :name => /[^\/]+/ }, as: :repository_dependencies
     get '/:host_type/:owner/:name/tree', to: 'repository_tree#show', as: :repository_tree, format: false, constraints: { :name => /[^\/]+/ }
 
     get '/:host_type/:owner/:name/web_hooks', to: 'web_hooks#index', as: :repository_web_hooks, format: false, constraints: { :name => /[^\/]+/ }
@@ -198,6 +201,10 @@ Rails.application.routes.draw do
   post '/:platform/:name/suggestions', to: 'project_suggestions#create', constraints: { :name => /.*/ }
 
   # project routes
+  get '/:platform/:name/top_dependent_repos', to: 'projects#top_dependent_repos', as: :top_dependent_repos, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
+  get '/:platform/:name/top_dependent_projects', to: 'projects#top_dependent_projects', as: :top_dependent_projects, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
+  get '/:platform/:name/:number/dependencies', to: 'projects#dependencies', constraints: { :number => /.*/, :name => /.*/ }, as: :version_dependencies
+
   post '/:platform/:name/sync', to: 'projects#sync', constraints: { :name => /.*/ }, as: :sync_project
   get '/:platform/:name/unsubscribe', to: 'projects#unsubscribe', constraints: { :name => /.*/ }, as: :unsubscribe_project
   get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }

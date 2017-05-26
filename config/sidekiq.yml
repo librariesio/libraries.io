@@ -1,5 +1,5 @@
 ---
-:concurrency: 5
+:concurrency: 2
 production:
   :concurrency: 100
 :timeout: 8

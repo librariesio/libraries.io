@@ -24,7 +24,7 @@ class Project < ApplicationRecord
   has_many :tags, through: :repository
   has_many :dependents, class_name: 'Dependency'
   has_many :dependent_versions, through: :dependents, source: :version, class_name: 'Version'
-  has_many :dependent_projects, -> { group('projects.id') }, through: :dependent_versions, source: :project, class_name: 'Project'
+  has_many :dependent_projects, -> { group('projects.id').order('projects.rank DESC NULLS LAST') }, through: :dependent_versions, source: :project, class_name: 'Project'
   has_many :repository_dependencies
   has_many :dependent_manifests, through: :repository_dependencies, source: :manifest
   has_many :dependent_repositories, -> { group('repositories.id').order('repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
@@ -34,6 +34,9 @@ class Project < ApplicationRecord
   has_one :readme, through: :repository
 
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
+  scope :lower_platform, ->(platform) { where('lower(projects.platform) = ?', platform.try(:downcase)) }
+  scope :lower_name, ->(name) { where('lower(projects.name) = ?', name.try(:downcase)) }
+
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
@@ -180,7 +183,7 @@ class Project < ApplicationRecord
 
   def owner
     return nil unless repository && repository.host_type == 'GitHub'
-    RepositoryUser.host('GitHub').visible.find_by_login repository.owner_name
+    RepositoryUser.host('GitHub').visible.login(repository.owner_name).first
   end
 
   def platform_class
@@ -262,15 +265,15 @@ class Project < ApplicationRecord
   end
 
   def self.license(license)
-    where.contains(normalized_licenses: [license])
+    where("projects.normalized_licenses @> ?", Array(license).to_postgres_array(true))
   end
 
   def self.keyword(keyword)
-    where.contains(keywords_array: [keyword])
+    where("projects.keywords_array @> ?", Array(keyword).to_postgres_array(true))
   end
 
   def self.keywords(keywords)
-    where.overlap(keywords_array: keywords)
+    where("projects.keywords_array && ?", Array(keywords).to_postgres_array(true))
   end
 
   def self.language(language)

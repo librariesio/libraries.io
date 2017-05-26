@@ -36,9 +36,4 @@ class Api::SubscriptionsController < Api::ApplicationController
   def find_subscription
     @subscription = current_user.subscriptions.includes(:project).find_by_project_id(@project.id)
   end
-
-  def find_project
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).first
-    raise ActiveRecord::RecordNotFound if @project.nil?
-  end
 end

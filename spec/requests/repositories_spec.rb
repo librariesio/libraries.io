@@ -17,7 +17,15 @@ describe "RepositoriesController" do
     it "renders successfully when logged out" do
       Repository.__elasticsearch__.refresh_index!
       visit github_search_path
-      expect(page).to have_content 'Language'
+      expect(page).to have_content repository.full_name
+    end
+  end
+
+  describe "GET /github/search.atom", type: :request, elasticsearch: true do
+    it "renders successfully when logged out" do
+      Repository.__elasticsearch__.refresh_index!
+      visit github_search_path(format: :atom)
+      expect(page).to have_content repository.full_name
     end
   end
 

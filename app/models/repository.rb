@@ -4,12 +4,15 @@ class Repository < ApplicationRecord
   include RepoManifests
   include RepositorySourceRank
 
+  # eager load this module to avoid clashing with Gitlab gem in development
+  RepositoryHost::Gitlab
+
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
 
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
    :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
    :forks_count, :mirror_url, :open_issues_count, :default_branch,
-   :subscribers_count, :private, :logo_url, :pull_requests_enabled, :scm]
+   :subscribers_count, :private, :logo_url, :pull_requests_enabled, :scm, :keywords]
 
   has_many :projects
   has_many :contributions, dependent: :delete_all
@@ -83,7 +86,7 @@ class Repository < ApplicationRecord
            :create_webhook, :download_issues, :download_forks, :stargazers_url,
            :formatted_host, :get_file_list, :get_file_contents, :issues_url,
            :source_url, :contributors_url, :blob_url, :raw_url, :commits_url,
-           :compare_url, to: :repository_host
+           :compare_url, :download_pull_requests, to: :repository_host
 
   def self.language(language)
     where('lower(repositories.language) = ?', language.try(:downcase))
@@ -196,6 +199,16 @@ class Repository < ApplicationRecord
     end
   end
 
+  def recently_synced?
+    last_synced_at && last_synced_at > 1.day.ago
+  end
+
+  def manual_sync(token = nil)
+    update_all_info_async
+    self.last_synced_at = Time.zone.now
+    save
+  end
+
   def update_all_info_async(token = nil)
     RepositoryDownloadWorker.perform_async(self.id, token)
   end
@@ -302,7 +315,6 @@ class Repository < ApplicationRecord
   end
 
   def repository_host
-    RepositoryHost::Gitlab
     @repository_host ||= RepositoryHost.const_get(host_type.capitalize).new(self)
   end
 end

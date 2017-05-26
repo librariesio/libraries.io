@@ -24,7 +24,7 @@
   <div class='col-md-8'>
     <h1>
       <% if repo.owner.present? %>
-        <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo), user_path(repo.owner.to_param) %>
+        <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo), user_path(host_type: repo.host_type, login: repo.owner_name) %>
       <% else %>
         <%= image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo) %>
       <% end %>
@@ -105,9 +105,9 @@
         Language: <%= link_to repo.language, language_path(repo.language) %>
       </p>
       <% end %>
-      <% if repo.all_keywords.any? %>
+      <% if repo.keywords.any? %>
       <p>
-        Keywords: <%= linked_repo_keywords repo.all_keywords %>
+        Keywords: <%= linked_repo_keywords repo.keywords %>
       </p>
       <% end %>
       <% if repo.mirror_url.present? %>
@@ -121,74 +121,7 @@
         <%== repo.readme %>
       <% end %>
 
-      <% if @manifests.length > 0 %>
-        <hr>
-        <div id="dependencies" class="table-responsive">
-          <h4>Dependencies</h4>
-          <% @manifests.each do |manifest| %>
-            <% deps = manifest.repository_dependencies %>
-            <% if deps.length > 0 %>
-              <table class='table table-hover table-condensed'>
-                <thead>
-                  <th>
-                    <div class="pictogram tip pictogram-<%= manifest.platform.try(:downcase) %>" title='<%= manifest.platform %>'></div>
-                    <%= link_to manifest.filepath, manifest.repository_link %>
-                  </th>
-                  <th>Kind</th>
-                  <th>
-                    Requirements
-                  </th>
-                  <th>
-                    Latest Stable
-                  </th>
-                  <th>
-                    Latest Release
-                  </th>
-                  <th>
-                    Licenses
-                  </th>
-                  <th>
-
-                  </th>
-                </thead>
-                <% deps.first(200).reject{|dep| dep.project_name.blank? }.sort_by(&:project_name).each do |dependency| %>
-                  <tr>
-                    <td>
-                      <% if dependency.platform.present? %>
-                        <%= link_to  truncate_with_tip(dependency.project_name, 30), project_path(name: dependency.project_name, platform: PackageManager::Base.dependency_platform(dependency.platform)) %>
-                      <% else %>
-                        <%= truncate_with_tip(dependency.project_name, 30) %>
-                      <% end %>
-                    </td>
-                    <td>
-                      <%= truncate_with_tip(dependency.kind, 15) %>
-                    </td>
-                    <td>
-                      <%= truncate_with_tip(dependency.requirements, 15) %>
-                    </td>
-                    <td>
-                      <%= dependency.try(:project).try(:latest_stable_release_number) %>
-                    </td>
-                    <td>
-                      <%= dependency.try(:project).try(:latest_release_number) %>
-                    </td>
-                    <td>
-                      <% if dependency.project %>
-                        <%= linked_licenses dependency.project.normalized_licenses %>
-                      <% end %>
-                    </td>
-                    <td>
-                      <% if dependency.project %>
-                        <%= render 'dependencies/flags', dependency: dependency %>
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </table>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
+      <div id='repository_dependencies' style='display:none;' data-url="<%= repository_dependencies_path(repo.to_param) %>"></div>
     </div>
     <div class='col-md-4'>
       <%= render 'adsense/sidebar' %>
@@ -207,46 +140,7 @@
         <%= render @projects, cache: true %>
       <% end %>
 
-      <% if repo.tags.published.length > 0 %>
-        <div class="row"></div>
-        <hr>
-        <h4>
-          Tags
-          <small><%= link_to 'See all', repository_tags_path(@repository.to_param) %></small>
-        </h4>
-        <table class='table'>
-          <% repo.tags.published.order('published_at DESC, name DESC').limit(30).to_a.each do |tag| %>
-          <tr>
-            <td>
-              <%= link_to tag, tag.repository_url %>
-            </td>
-            <% if tag.published_at.present? %>
-              <td>
-                <small class='text-muted'>
-                  <%= tag.published_at.to_date.to_s(:long) %>
-                </small>
-              </td>
-            <% end %>
-            <td>
-              <small class='text-muted'>
-                <%= link_to tag.repository_url, class: 'tip', title: "Browse source on #{tag.repository.host_type}" do %>
-                  <%= fa_icon('tag') %>
-                <% end %>
-              </small>
-            </td>
-            <td>
-              <% if tag.previous_tag %>
-                <small class='text-muted'>
-                  <%= link_to tag.diff_url, class: 'tip', title: "View diff between #{tag} and #{tag.previous_tag}" do %>
-                    <%= fa_icon('random') %>
-                  <% end %>
-                </small>
-              <% end %>
-            </td>
-          </tr>
-          <% end %>
-        </table>
-      <% end %>
+      <%= render 'tags', repo: repo %>
 
       <% if @forks.length > 0 %>
         <div class="row"></div>
@@ -269,6 +163,22 @@
         <p>
           <small class='text-muted'>Last synced: <%= repo.last_synced_at %></small>
         </p>
+      <% end %>
+      <% unless repo.recently_synced? %>
+        <% if logged_in? %>
+          <p>
+            <%= link_to sync_repository_path(repo.to_param), class: 'btn btn-primary btn-xs', method: :post do %>
+              <%= fa_icon 'refresh' %>
+              Resync Repository
+            <% end %>
+          </p>
+        <% else %>
+          <p>
+            <small class='text-muted'>
+              <%= link_to 'Login', login_path %> to resync this repository
+            </small>
+          </p>
+        <% end %>
       <% end %>
     </div>
   </div>

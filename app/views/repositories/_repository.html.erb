@@ -40,12 +40,7 @@
       <% if repository.stargazers_count %>
       - <%= number_to_human repository.stars %> stars
       <% end %>
-      <% if repository.fork? %>
-      - Fork
-        <% if repository.source.present? || repository.source_name.present? %>
-        of <%= link_to repository.source_name, source_path(repository) %>
-        <% end %>
-      <% elsif repository.forks > 0 %>
+      <% if repository.forks > 0 %>
         - <%= number_to_human repository.forks %> forks
       <% end %>
     <% end %>

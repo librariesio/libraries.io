@@ -93,19 +93,11 @@
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
         <ul class="nav navbar-nav navbar-left">
-          <li>
-            <%= form_tag search_path, method: :get, class: 'navbar-form', enforce_utf8: false do |f| %>
-              <div class="input-group input-group">
-                <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search..', class: 'form-control', size: 40 %>
-                <% [:q, :platforms, :licenses, :languages, :keywords, :sort].each do |field| %>
-                  <%= hidden_field_tag field, params[field] if params[field].present? %>
-                <% end %>
-                <span class="input-group-btn">
-                  <button class="btn btn-primary" type="submit">
-                    <%= fa_icon 'search' %>
-                  </button>
-                </span>
-              </div>
+          <li class=' <%= 'hidden-xs' if on_search_page %>'>
+            <% if current_host.present? || request.original_fullpath =~ /^\/repos/i %>
+              <%= render 'repositories/search_form' %>
+            <% else %>
+              <%= render 'projects/search_form' %>
             <% end %>
           </li>
         </ul>

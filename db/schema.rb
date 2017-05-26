@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170417160002) do
+ActiveRecord::Schema.define(version: 20170522132051) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,12 +68,11 @@ ActiveRecord::Schema.define(version: 20170417160002) do
 
   create_table "issues", force: :cascade do |t|
     t.integer  "repository_id",      :index=>{:name=>"index_issues_on_repository_id"}
-    t.integer  "github_id"
+    t.string   "uuid"
     t.integer  "number"
     t.string   "state"
     t.string   "title"
     t.text     "body"
-    t.integer  "repository_user_id"
     t.boolean  "locked"
     t.integer  "comments_count"
     t.datetime "closed_at"
@@ -82,6 +81,8 @@ ActiveRecord::Schema.define(version: 20170417160002) do
     t.datetime "updated_at",         :null=>false
     t.datetime "last_synced_at"
     t.boolean  "pull_request"
+    t.string   "host_type"
+    t.integer  "repository_user_id"
   end
 
   create_table "manifests", force: :cascade do |t|
@@ -280,6 +281,7 @@ ActiveRecord::Schema.define(version: 20170417160002) do
     t.string   "pull_requests_enabled"
     t.string   "logo_url"
     t.integer  "repository_user_id",         :index=>{:name=>"index_repositories_on_repository_user_id"}
+    t.string   "keywords",                   :default=>[], :array=>true
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
@@ -295,8 +297,8 @@ ActiveRecord::Schema.define(version: 20170417160002) do
   end
 
   create_table "repository_organisations", force: :cascade do |t|
-    t.string   "login",          :index=>{:name=>"index_github_organisations_on_lowercase_login", :unique=>true, :case_sensitive=>false}
-    t.integer  "uuid",           :index=>{:name=>"index_repository_organisations_on_uuid", :unique=>true}
+    t.string   "login"
+    t.string   "uuid"
     t.string   "name"
     t.string   "blog"
     t.string   "email"
@@ -306,7 +308,9 @@ ActiveRecord::Schema.define(version: 20170417160002) do
     t.datetime "updated_at",     :null=>false
     t.boolean  "hidden",         :default=>false, :index=>{:name=>"index_repository_organisations_on_hidden"}
     t.datetime "last_synced_at"
-    t.string   "host_type"
+    t.string   "host_type",      :index=>{:name=>"index_repository_organisations_on_host_type_and_login", :with=>["login"], :unique=>true, :case_sensitive=>false}
+
+    t.index ["host_type", "uuid"], :name=>"index_repository_organisations_on_host_type_and_uuid", :unique=>true
   end
 
   create_table "repository_permissions", force: :cascade do |t|
@@ -329,8 +333,8 @@ ActiveRecord::Schema.define(version: 20170417160002) do
   end
 
   create_table "repository_users", force: :cascade do |t|
-    t.integer  "uuid",           :index=>{:name=>"index_repository_users_on_uuid", :unique=>true}
-    t.string   "login",          :index=>{:name=>"github_users_lower_login", :case_sensitive=>false}
+    t.string   "uuid"
+    t.string   "login"
     t.string   "user_type"
     t.datetime "created_at",     :null=>false, :index=>{:name=>"index_repository_users_on_created_at"}
     t.datetime "updated_at",     :null=>false
@@ -344,10 +348,9 @@ ActiveRecord::Schema.define(version: 20170417160002) do
     t.string   "bio"
     t.integer  "followers"
     t.integer  "following"
-    t.string   "host_type"
+    t.string   "host_type",      :index=>{:name=>"index_repository_users_on_host_type_and_login", :with=>["login"], :unique=>true, :case_sensitive=>false}
 
-    t.index ["login"], :name=>"index_github_users_on_lowercase_login", :unique=>true, :case_sensitive=>false
-    t.index ["login"], :name=>"index_repository_users_on_login"
+    t.index ["host_type", "uuid"], :name=>"index_repository_users_on_host_type_and_uuid", :unique=>true
   end
 
   create_table "subscription_plans", force: :cascade do |t|

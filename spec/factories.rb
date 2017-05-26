@@ -71,7 +71,7 @@ FactoryGirl.define do
 
   factory :issue do
     repository
-    sequence(:github_id)
+    sequence(:uuid)
     sequence(:number)
     state "open"
     title "I found a bug"
@@ -80,6 +80,7 @@ FactoryGirl.define do
     locked false
     repository_user
     comments_count 1
+    host_type 'GitHub'
   end
 
   factory :contribution do

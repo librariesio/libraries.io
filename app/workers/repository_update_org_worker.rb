@@ -2,8 +2,8 @@ class RepositoryUpdateOrgWorker
   include Sidekiq::Worker
   sidekiq_options queue: :owners, unique: :until_executed
 
-  def perform(login)
+  def perform(host_type, login)
     return if login.nil?
-    RepositoryOrganisation.host('GitHub').find_by_login(login).try(:sync)
+    RepositoryOrganisation.host(host_type).login(login).first.try(:sync)
   end
 end

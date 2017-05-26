@@ -49,7 +49,7 @@ module PackageManager
     def self.versions(project)
       versions = find_attribute(project[:page], 'Versions')
       versions = find_attribute(project[:page], 'Version') if versions.nil?
-      versions.split(',').map(&:strip).map do |v|
+      versions.delete('(info)').split(',').map(&:strip).map do |v|
         {
           :number => v
         }

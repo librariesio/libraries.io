@@ -36,7 +36,19 @@ module RepositoryHost
     end
 
     def download_issues(token = nil)
-      # not implemented yet
+      api_client(token).issues(repository.full_name).auto_paginate do |issue|
+        RepositoryIssue::Gitlab.create_from_hash(repository.full_name, issue, token)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
+
+    def download_pull_requests(token = nil)
+      api_client(token).merge_requests(repository.full_name).auto_paginate do |pull_request|
+        RepositoryIssue::Gitlab.create_from_hash(repository.full_name, pull_request, token)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def download_forks(token = nil)
@@ -44,7 +56,28 @@ module RepositoryHost
     end
 
     def download_owner
-      # not implemented yet
+      return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
+      namespace = api_client.project(repository.full_name).try(:namespace)
+      return unless namespace
+      if namespace.kind == 'group'
+        o = RepositoryOwner::Gitlab.api_client.group(namespace.path)
+        org = RepositoryOrganisation.create_from_host('GitLab', o)
+        if org
+          repository.repository_organisation_id = org.id
+          repository.repository_user_id = nil
+          repository.save
+        end
+      elsif namespace.kind == 'user'
+        o = RepositoryOwner::Gitlab.fetch_user(namespace.path)
+        u = RepositoryUser.create_from_host('GitLab', o)
+        if u
+          repository.repository_user_id = u.id
+          repository.repository_organisation_id = nil
+          repository.save
+        end
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def create_webook(token = nil)
@@ -92,9 +125,8 @@ module RepositoryHost
     end
 
     def download_tags(token = nil)
-      remote_tags = api_client(token).tags(escaped_full_name).auto_paginate
       existing_tag_names = repository.tags.pluck(:name)
-      remote_tags.each do |tag|
+      remote_tags = api_client(token).tags(escaped_full_name).auto_paginate do |tag|
         next if existing_tag_names.include?(tag.name)
         next if tag.commit.nil?
         repository.tags.create({
@@ -142,8 +174,7 @@ module RepositoryHost
     end
 
     def self.fetch_repo(full_name, token = nil)
-      client = api_client(token)
-      project = client.project(full_name.gsub('/','%2F'))
+      project = api_client(token).project(full_name)
       repo_hash = project.to_hash.with_indifferent_access.slice(:id, :description, :created_at, :name, :open_issues_count, :forks_count, :default_branch)
 
       repo_hash.merge!({
@@ -159,6 +190,7 @@ module RepositoryHost
         private: !project.public,
         pull_requests_enabled: project.merge_requests_enabled,
         logo_url: project.avatar_url,
+        keywords: project.tag_list,
         parent: {
           full_name: project.forked_from_project.try(:path_with_namespace)
         }

@@ -78,6 +78,10 @@ module RepositoryHost
       self.class.format(repository.host_type)
     end
 
+    def repository_owner_class
+      RepositoryOwner.const_get(repository.host_type.capitalize)
+    end
+
     def update_from_host(token = nil)
       begin
         r = self.class.fetch_repo(repository.id_or_name)

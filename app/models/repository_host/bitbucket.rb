@@ -54,7 +54,20 @@ module RepositoryHost
     end
 
     def download_issues(token = nil)
-      # not implemented yet
+      api_client(token).issues.list_repo(repository.owner_name, repository.project_name) do |issue|
+        RepositoryIssue::Bitbucket.create_from_hash(repository.full_name, issue, token)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
+
+    def download_pull_requests(token = nil)
+      pull_requests = api_client(token).repos.pull_request.list(repository.owner_name, repository.project_name)['values']
+      pull_requests.each do |pull_request|
+        RepositoryIssue::Bitbucket.create_from_hash(repository.full_name, pull_request, token)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def download_forks(token = nil)
@@ -62,7 +75,25 @@ module RepositoryHost
     end
 
     def download_owner
-      # not implemented yet
+      return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
+      o = RepositoryOwner::Bitbucket.fetch_user(repository.owner_name)
+      if o.type == "team"
+        org = RepositoryOrganisation.create_from_host('Bitbucket', o)
+        if org
+          repository.repository_organisation_id = org.id
+          repository.repository_user_id = nil
+          repository.save
+        end
+      else
+        u = RepositoryUser.create_from_host('Bitbucket', o)
+        if u
+          repository.repository_user_id = u.id
+          repository.repository_organisation_id = nil
+          repository.save
+        end
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def create_webook(token = nil)

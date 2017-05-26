@@ -42,8 +42,8 @@ class RepositoryUsersController < ApplicationController
   private
 
   def find_user
-    @user = RepositoryUser.host(current_host).visible.where("lower(login) = ?", params[:login].downcase).first
-    @user = RepositoryOrganisation.host(current_host).visible.where("lower(login) = ?", params[:login].downcase).first if @user.nil?
+    @user = RepositoryUser.host(current_host).visible.login(params[:login]).first
+    @user = RepositoryOrganisation.host(current_host).visible.login(params[:login]).first if @user.nil?
     raise ActiveRecord::RecordNotFound if @user.nil?
     redirect_to url_for(login: @user.login), :status => :moved_permanently if params[:login] != @user.login
   end
@@ -56,13 +56,5 @@ class RepositoryUsersController < ApplicationController
                        .where('repositories.private = ?', false)
                        .includes(:repository)
                        .order('count DESC')
-  end
-
-  def current_language
-    params[:language] if params[:language].present?
-  end
-
-  def current_license
-    params[:license] if params[:license].present?
   end
 end
