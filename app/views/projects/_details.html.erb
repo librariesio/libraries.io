@@ -1,79 +1,18 @@
 <dl>
-  <% if @project.homepage.present? && @project.homepage != @project.package_manager_url %>
+  <% if @project.keywords_array.present? %>
     <dt>
-      Homepage
+        Keywords
     </dt>
     <dd>
-      <%= link_to(@project.homepage, sanitize_url(@project.homepage), :rel => 'nofollow') %>
+      <%= linked_keywords @project.keywords_array %>
     </dd>
   <% end %>
-
   <% if @project.normalized_licenses.present? %>
     <dt>
       <%= 'License'.pluralize(@project.normalized_licenses.length) %>
     </dt>
     <dd>
       <%= linked_licenses @project.normalized_licenses %>
-    </dd>
-  <% end %>
-
-  <dt>
-    Platform
-  </dt>
-  <dd>
-    <%= link_to @project.platform_name, platform_path(@project.platform.downcase) %>
-  </dd>
-
-  <% if @project.language.present? %>
-    <dt>
-      Langauge
-    </dt>
-    <dd>
-      <%= link_to @project.language, language_path(@project.language) %>
-    </dd>
-  <% end %>
-
-  <% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
-    <dt>
-      Repository
-    </dt>
-    <dd>
-      <%= link_to @project.repository_url, @project.repository_url, :rel => 'nofollow' %>
-    </dd>
-  <% end %>
-
-  <% if link = @project.package_manager_url(@version.try(:number)) %>
-    <dt>
-      View on <%= @project.platform.downcase %>
-    </dt>
-    <dd>
-      <%= link_to truncate(link, length: 70), link %>
-    </dd>
-  <% end %>
-
-  <% if link = @project.documentation_url(@version.try(:number) || @project.latest_release_number) %>
-    <dt>
-      Documentation
-    </dt>
-    <dd>
-      <%= link_to truncate(link, length: 70), link %>
-    </dd>
-  <% elsif @project.platform.downcase == 'bower' && @project.language.try(:downcase) == 'purescript' %>
-    <% link = "https://pursuit.purescript.org/packages/#{@project.name}" %>
-    <dt>
-      Documentation
-    </dt>
-    <dd>
-      <%= link_to truncate(link, length: 70), link %>
-    </dd>
-  <% end %>
-
-  <% if link = @project.download_url(@version.try(:number)) %>
-    <dt>
-      Direct download
-    </dt>
-    <dd>
-      <%= link_to truncate(link, length: 70), link %>
     </dd>
   <% end %>
 

@@ -27,22 +27,12 @@
       </div>
     </div>
 
-
-    <dl>
-      <% if @project.description.present? %>
-        <dd>
-          <%= @project.description %>
-        </dd>
-      <% end %>
-      <% if @project.keywords_array.present? %>
-        <dt>
-            Keywords
-        </dt>
-        <dd>
-          <%= linked_keywords @project.keywords_array %>
-        </dd>
-      <% end %>
-    </dl>
+    <% if @project.description.present? %>
+      <p>
+        <%= @project.description %>
+      </p>
+    <% end %>
+    <%= render 'projects/links' %>
     <hr>
     <%= render 'projects/details' %>
     <%= render 'projects/contributors' %>

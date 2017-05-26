@@ -444,3 +444,14 @@ tr.top td{
     float: right;
   }
 }
+
+.project-links span {
+  &:after {
+    margin: 5px;
+    content: ' - ';
+  }
+  &:last-child:after {
+    margin: 0;
+    content: "";
+  }
+}
