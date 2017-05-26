@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 ruby '2.4.0'
 
-gem 'bootsnap'
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
 gem 'rb-readline'
 gem 'oj'

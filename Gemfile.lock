@@ -99,8 +99,6 @@ GEM
       sdl4r
       toml-rb (~> 0.3.9)
       typhoeus
-    bootsnap (0.2.15)
-      msgpack (~> 1.0)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -276,7 +274,6 @@ GEM
     minitest (5.10.2)
     modware (0.1.3)
       key_struct (~> 0.4)
-    msgpack (1.1.0)
     multi_json (1.12.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
@@ -544,7 +541,6 @@ DEPENDENCIES
   asciidoctor
   bibliothecary
   bitbucket_rest_api!
-  bootsnap
   bootstrap-sass
   brakeman
   bugsnag
