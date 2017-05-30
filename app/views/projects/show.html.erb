@@ -174,7 +174,7 @@
     </div>
   <% end %>
   <div class='col-md-4'>
-    <%= render 'adsense/sustain' %>
+    <%= render 'adsense/sidebar' %>
     <% cache([@project, @version, 'projects:sidebar', 'v1'], :expires_in => 1.day) do %>
       <% if @version_count > 0 %>
         <h4 data-ga-tracked-el='releases'>
