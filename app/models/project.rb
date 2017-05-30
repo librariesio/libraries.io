@@ -30,6 +30,8 @@ class Project < ApplicationRecord
   has_many :dependent_repositories, -> { group('repositories.id').order('repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
   has_many :subscriptions
   has_many :project_suggestions, dependent: :delete_all
+  has_many :registry_permissions, dependent: :delete_all
+  has_many :registry_users, through: :registry_permissions
   belongs_to :repository
   has_one :readme, through: :repository
 
@@ -408,5 +410,28 @@ class Project < ApplicationRecord
         false
       end
     end
+  end
+
+  def download_registry_users
+    return unless platform.downcase == 'rubygems'
+    # download owner data
+    owner_json = PackageManager::Base.get_json("https://rubygems.org/api/v1/gems/#{name}/owners.json")
+    owners = []
+
+    # find or create registry users
+    owner_json.each do |json|
+      r = RegistryUser.find_or_create_by(platform: platform, uuid: json['id'])
+      r.email = json['email']
+      r.login = json['handle']
+      r.save if r.changed?
+      owners << r
+    end
+
+    # update registry permissions
+    existing_permissions = registry_permissions.includes(:registry_user).all
+    # add new users
+
+    # remove missing users
+
   end
 end
