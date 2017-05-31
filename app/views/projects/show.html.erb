@@ -42,9 +42,8 @@
 </div>
 <div class='row'>
   <div class='col-md-8'>
-
-    <%= render 'projects/contributors' %>
     <%= render 'adsense/banner' %>
+    <%= render 'projects/contributors' %>
 
     <% if @repository.present? && @repository.readme.present? %>
       <hr>
