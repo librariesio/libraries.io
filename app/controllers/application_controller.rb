@@ -89,7 +89,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_language
-    Linguist::Language[params[:language]].to_s if params[:language].present?
+    return [] if params[:language].blank?
+    params[:language].split(',').map{|l| Linguist::Language[l].to_s }.compact
   end
 
   def current_licenses
