@@ -2,7 +2,7 @@
   <% @top_dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
   <% if @top_dependent_repos.length > 0 %>
     <h4 data-ga-tracked-el='dependent-repositories'>
-      <%= link_to "Dependent Repositories", project_usage_path(@project.to_param) %>
+      Used by
     </h4>
     <dl class='row'>
       <% @top_dependent_repos.each do |repo| %>
@@ -14,10 +14,11 @@
           </small>
         </dt>
         <dd class='col-sm-4 hidden-xs'>
-          <%= repo.formatted_host %>
+          <%= fa_icon 'star' %> <%= repo.stars %>
         </dd>
       <% end %>
     </dl>
+    <%= link_to "See usage by version", project_usage_path(@project.to_param) %>
     <hr>
   <% end %>
 <% end %>

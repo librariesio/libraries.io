@@ -29,7 +29,7 @@
       Dependent repositories
     </dt>
     <dd class='col-sm-4'>
-      <%= link_to number_to_human(@project.dependent_repos_count), project_dependent_repos_path(@project.to_param) %>
+      <%= link_to number_to_human(@project.dependent_repos_count), project_usage_path(@project.to_param) %>
     </dd>
     <dt class='col-sm-8'>
       Total <%= @project.release_or_tag %>
