@@ -3,23 +3,23 @@
     <h5><%= format_facet_name(name) %></h5>
   </div>
   <div class="panel-body">
-	<ul class='filter'>
-	  <% facet.buckets.each do |term| %>
-	    <% next if term['key'].blank? %>
-	    <%= render 'search/term', term: term, name: name %>
-	  <% end %>
-	  <% if params[name.to_sym].present? %>
-		  <% params[name.to_sym].split(',').each do |term| %>
-		  	<% if !facet.buckets.map{|t| t['key']}.include?(term) %>
-			    <li class='active'>
-			      <%= link_to url_for(params.except(:host).merge(name.to_sym => params[name.to_sym].split(',').reject{ |x| x == term }.join(','), page: nil).permit!) do %>
-			    	<input type='checkbox' checked>
-			    	<%= format_term(term) %>
-			      <% end %>
-			    </li>
-		  <% end %>
-		<% end %>
-	  <% end %>
-	</ul>
+  <ul class='filter'>
+    <% facet.buckets.each do |term| %>
+        <% next if term['key'].blank? %>
+        <%= render 'search/term', term: term, name: name %>
+      <% end %>
+      <% if params[name.to_sym].present? %>
+        <% params[name.to_sym].split(',').each do |term| %>
+          <% if !facet.buckets.map{|t| t['key']}.include?(term) %>
+            <li class='active'>
+              <%= link_to url_for(params.except(:host).merge(name.to_sym => params[name.to_sym].split(',').reject{ |x| x == term }.join(','), page: nil).permit!) do %>
+              <input type='checkbox' checked>
+              <%= format_term(term) %>
+              <% end %>
+            </li>
+        <% end %>
+      <% end %>
+    <% end %>
+  </ul>
   </div>
 </div>
