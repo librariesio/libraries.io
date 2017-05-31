@@ -39,12 +39,10 @@
     <%= render 'adsense/banner' %>
 
     <% if @repository.present? && @repository.readme.present? %>
-      <div class='hidden-xs'>
-        <hr>
-        <h3 data-ga-tracked-el='readme'>Documentation</h3>
-        <div class='well'>
-          <%== @repository.readme %>
-        </div>
+      <hr>
+      <h3 data-ga-tracked-el='readme'>Documentation</h3>
+      <div class='well' id='readme-well'>
+        <%== @repository.readme %>
       </div>
     <% end %>
   </div>
