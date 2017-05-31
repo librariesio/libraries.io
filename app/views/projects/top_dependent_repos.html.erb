@@ -6,14 +6,14 @@
     </h4>
     <dl class='row'>
       <% @top_dependent_repos.each do |repo| %>
-        <dt class='col-sm-8'>
+        <dt class='col-xs-8'>
           <%= link_to repo.full_name, repository_path(repo.to_param) %>
           <small>
             <%= fa_icon("lock") if repo.private? %>
             <%= fa_icon("code-fork") if repo.fork? %>
           </small>
         </dt>
-        <dd class='col-sm-4 hidden-xs'>
+        <dd class='col-xs-4'>
           <%= fa_icon 'star' %> <%= repo.stars %>
         </dd>
       <% end %>

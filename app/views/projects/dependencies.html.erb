@@ -7,10 +7,10 @@
         <h3><%= kind.humanize unless kind == 'runtime' %> Dependencies </h3>
         <dl data-ga-tracked-el='dependencies' class='row'>
           <% deps.each do |dependency| %>
-            <dt class='col-sm-8'>
+            <dt class='col-xs-8'>
               <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: PackageManager::Base.dependency_platform(dependency.platform)) %>
             </dt>
-            <dd class='col-sm-4 hidden-xs'>
+            <dd class='col-xs-4'>
               <%= dependency.requirements %>
               <% if dependency.project %>
                 <small>

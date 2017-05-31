@@ -1,10 +1,10 @@
 <% cache(['v1', @project, 'stats'], :expires_in => 1.day) do %>
 <dl class='row'>
     <h2>
-    <dt class='col-sm-8'>
+    <dt class='col-xs-8'>
       SourceRank
     </dt>
-    <dd class='col-sm-4'>
+    <dd class='col-xs-4'>
       <%= link_to @project.rank, project_sourcerank_path(@project.to_param) %>
     </dd>
   </h2>
@@ -12,79 +12,79 @@
 <hr>
 <dl class='row'>
   <% if @project.can_have_dependencies? && @project.latest_version %>
-    <dt class='col-sm-8'>
+    <dt class='col-xs-8'>
       Dependencies
     </dt>
-    <dd class='col-sm-4'>
+    <dd class='col-xs-4'>
       <%= number_to_human(@project.latest_version.dependencies.kind('runtime').count) %>
     </dd>
-    <dt class='col-sm-8'>
+    <dt class='col-xs-8'>
       Dependent projects
     </dt>
-    <dd class='col-sm-4'>
+    <dd class='col-xs-4'>
       <%= link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %>
     </dd>
   <% end %>
-    <dt class='col-sm-8'>
+    <dt class='col-xs-8'>
       Dependent repositories
     </dt>
-    <dd class='col-sm-4'>
+    <dd class='col-xs-4'>
       <%= link_to number_to_human(@project.dependent_repos_count), project_usage_path(@project.to_param) %>
     </dd>
-    <dt class='col-sm-8'>
+    <dt class='col-xs-8'>
       Total <%= @project.release_or_tag %>
     </dt>
-    <dd class='col-sm-4'>
+    <dd class='col-xs-4'>
       <% if @project.can_have_versions? %>
             <%= link_to number_to_human(@project.versions.size), project_versions_path(@project.to_param) %>
           <% else %>
             <%= link_to number_to_human(@project.tags.count), project_tags_path(@project.to_param) %>
           <% end %>
     </dd>
-    <dt class='col-sm-8'>
+    <dt class='col-xs-8'>
       Latest <%= @project.release_or_tag.singularize %>
     </dt>
-    <dd class='col-sm-4'>
+    <dd class='col-xs-4'>
       <%= timeago_tag(@project.latest_release.try(:published_at).presence || @project.updated_at) %>
     </dd>
-    <dt class='col-sm-8'>
+    <dt class='col-xs-8'>
       First <%= @project.release_or_tag.singularize %>
     </dt>
-    <dd class='col-sm-4'>
+    <dd class='col-xs-4'>
       <%= timeago_tag(@project.first_release.try(:published_at).presence || @project.repository.try(:created_at).presence || @project.created_at) %>
     </dd>
     <% if @project.repository.present? %>
-      <dt class='col-sm-8'>
+      <dt class='col-xs-8'>
         Stars
       </dt>
-      <dd class='col-sm-4'>
+      <dd class='col-xs-4'>
         <%= link_to number_to_human(@project.repository.stargazers_count), @project.repository.stargazers_url %>
       </dd>
-      <dt class='col-sm-8'>
+      <dt class='col-xs-8'>
         Forks
       </dt>
-      <dd class='col-sm-4'>
+      <dd class='col-xs-4'>
         <%= link_to number_to_human(@project.repository.forks_count), @project.repository.forks_url %>
       </dd>
       <% if @project.repository.subscribers_count.present? %>
-        <dt class='col-sm-8'>
+        <dt class='col-xs-8'>
           Watchers
         </dt>
-        <dd class='col-sm-4'>
+        <dd class='col-xs-4'>
           <%= link_to number_with_delimiter(@project.repository.subscribers_count), @project.repository.watchers_url %>
         </dd>
       <% end %>
-      <dt class='col-sm-8'>
+      <dt class='col-xs-8'>
         Contributors
       </dt>
-      <dd class='col-sm-4'>
+      <dd class='col-xs-4'>
         <%= link_to number_to_human(@project.repository.contributions_count), @project.repository.contributors_url %>
       </dd>
       <% if @project.repository.size.present? %>
-        <dt class='col-sm-8'>
+        <dt class='col-xs-8'>
           Size
         </dt>
-        <dd class='col-sm-4'>
+        <dd class='col-xs-4'>
           <%= number_to_human_size @project.repository.size*1000 %>
         </dd>
       <% end %>
