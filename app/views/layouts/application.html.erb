@@ -92,15 +92,17 @@
         <%= link_to image_tag('logo.svg', width: 116, height: 22), root_path, class: 'navbar-brand' %>
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
-        <ul class="nav navbar-nav navbar-left">
-          <li class=' <%= 'hidden-xs' if on_search_page %>'>
-            <% if current_host.present? || request.original_fullpath =~ /^\/repos/i %>
-              <%= render 'repositories/search_form' %>
-            <% else %>
-              <%= render 'projects/search_form' %>
-            <% end %>
-          </li>
-        </ul>
+        <% unless on_homepage? %>
+          <ul class="nav navbar-nav navbar-left">
+            <li class=' <%= 'hidden-xs' if on_search_page %>'>
+              <% if current_host.present? || request.original_fullpath =~ /^\/repos/i %>
+                <%= render 'repositories/search_form' %>
+              <% else %>
+                <%= render 'projects/search_form' %>
+              <% end %>
+            </li>
+          </ul>
+        <% end %>
         <ul class="nav navbar-nav navbar-right">
           <% if logged_in? %>
             <li class="dropdown">
