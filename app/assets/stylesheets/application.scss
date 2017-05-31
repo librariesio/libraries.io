@@ -63,6 +63,42 @@ footer{
   }
 }
 
+h1, .h1 {
+  word-wrap: break-word;
+}
+
+h3,h4{
+  color:#555;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 46px;
+  .more {
+    margin-left: 5px;
+    font-size: 12px;
+  }
+}
+
+dt {
+  margin-top: 0.5em;
+}
+
+dt:first-of-type{
+  margin-top: 0;
+}
+
+.sidebar dd{
+  margin-top: 0.5em;
+}
+
+.sidebar dd:first-of-type{
+  margin-top: 0;
+}
+
+.releases .tip{
+  margin-left:1em;
+  margin-right: 1am;
+}
+
 .facets{
   ul{
     padding-left: 0px;
@@ -118,16 +154,7 @@ footer {
   padding: 15px 10px;
 }
 
-h3,h4{
-  color:#555;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 46px;
-  .more {
-    margin-left: 5px;
-    font-size: 12px;
-  }
-}
+
 
 .project{
   border-left: 2px solid;
@@ -384,9 +411,7 @@ tr.top td{
   margin-bottom: 25px;
 }
 
-h1, .h1 {
-  word-wrap: break-word;
-}
+
 
 .team-user{
   min-height: 100px;
@@ -412,4 +437,26 @@ h1, .h1 {
 .hidden-md .search_form{
   margin-top: 0px;
   padding-top: 0px;
+}
+
+@media (min-width: 1200px) {
+  .pull-right-lg {
+    float: right;
+  }
+}
+
+.project-links span {
+  &:after {
+    margin: 5px;
+    content: ' - ';
+  }
+  &:last-child:after {
+    margin: 0;
+    content: "";
+  }
+}
+
+#readme-well{
+  max-height: 800px;
+  overflow: scroll;
 }

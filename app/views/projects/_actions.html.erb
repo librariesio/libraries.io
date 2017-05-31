@@ -1,0 +1,66 @@
+<h1>
+  <div class="btn-group visible-xs">
+    <span class='btn btn-default'>
+      <%= @project.release_or_tag.singularize.titlecase %>
+      <% if @version %>
+        <%= @version %>
+      <% else %>
+        <%= @project.latest_release_number %>
+      <% end %>
+    </span>
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="caret"></span>
+      <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu">
+      <% @versions.each do |version| %>
+        <li>
+          <%= link_to version_path(version.to_param) do %>
+            <% if @version == version %>
+              <%= fa_icon 'check' %>
+            <% else %>
+              <span class='fa-blank'></span>
+            <% end %>
+            <%= version %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+    <br>
+  </div>
+  <% if logged_in? %>
+    <% if current_user.muted?(@project) %>
+      <%= link_to unmute_project_path(@project.to_param), method: :delete, class: 'btn btn-danger tip', title: "Unmute #{@project.name}" do %>
+        <i class='fa fa-microphone-slash'></i>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if logged_in? && subscription = current_user.subscribed_to?(@project) %>
+    <div class="btn-group pull-right-lg">
+      <span class='btn btn-success'>Subscribed to <%= 'stable' unless subscription.include_prerelease? %> releases</span>
+      <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <%= form_for subscription do |form| %>
+            <label class='include_prerelease'><%= form.check_box :include_prerelease %> &nbsp;Include prereleases</label>
+          <% end %>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li>
+          <%= link_to 'Unsubscribe from updates', subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'text-danger', title: 'Stop being notified of new releases of this library' %>
+        </li>
+      </ul>
+    </div>
+  <% elsif logged_in? %>
+    <%= link_to 'Subscribe to releases', subscribe_path(project_id: @project.id), class: 'tip btn btn-success pull-right-lg', rel: 'nofollow', title: 'Get notified by email of new releases of this library' %>
+  <% else %>
+    <%= link_to 'Subscribe to releases', subscribe_path(project_id: @project.id), class: 'tip btn btn-success pull-right-lg', rel: 'nofollow', title: 'Login to get notified by email of new releases' %>
+  <% end %>
+  <% if logged_in? && current_user.admin? %>
+    <%= link_to 'Edit in Admin', admin_project_path(@project.id), class: 'btn btn-primary pull-right-lg', rel: 'nofollow' %>
+  <% end %>
+</h1>
