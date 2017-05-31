@@ -84,7 +84,7 @@ GEM
       activesupport (>= 3.0.0)
     airbrussh (1.2.0)
       sshkit (>= 1.6.1, != 1.7.0)
-    api-pagination (4.6.1)
+    api-pagination (4.6.2)
     appsignal (2.2.1)
       rack
       thread_safe
@@ -92,7 +92,7 @@ GEM
     asciidoctor (1.5.5)
     autoprefixer-rails (7.1.1)
       execjs
-    bibliothecary (5.3.3)
+    bibliothecary (5.3.4)
       deb_control
       librariesio-gem-parser
       ox
@@ -199,7 +199,7 @@ GEM
       fog-json (~> 1.0)
       fog-xml (~> 0.1)
       ipaddress (~> 0.8)
-    fog-core (1.44.2)
+    fog-core (1.44.3)
       builder
       excon (~> 0.49)
       formatador (~> 0.2)
@@ -216,15 +216,15 @@ GEM
     formatador (0.2.5)
     fuzzy_match (2.1.0)
     gemoji (3.0.0)
-    github-linguist (5.0.10)
+    github-linguist (5.0.11)
       charlock_holmes (~> 0.7.3)
       escape_utils (~> 1.1.0)
       mime-types (>= 1.19)
       rugged (>= 0.25.1)
     github-markup (1.6.0)
-    gitlab (4.0.0)
+    gitlab (4.1.0)
       httparty
-      terminal-table (= 1.7.1)
+      terminal-table
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     groupdate (3.2.0)
@@ -499,13 +499,13 @@ GEM
       net-ssh (>= 2.8.0)
     sshkit-interactive (0.2.1)
       sshkit (~> 1.12)
-    stripe (2.9.0)
+    stripe (2.10.0)
       faraday (~> 0.9)
     stripe_event (1.6.0)
       activesupport (>= 3.1)
       stripe (>= 1.6, < 3.0)
-    terminal-table (1.7.1)
-      unicode-display_width (~> 1.1.1)
+    terminal-table (1.8.0)
+      unicode-display_width (~> 1.1, >= 1.1.1)
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.7)
@@ -520,14 +520,14 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
-    unicode-display_width (1.1.3)
+    unicode-display_width (1.2.1)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
     will_paginate (3.1.5)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
-    xpath (2.0.0)
+    xpath (2.1.0)
       nokogiri (~> 1.3)
 
 PLATFORMS
