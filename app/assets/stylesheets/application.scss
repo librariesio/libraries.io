@@ -111,10 +111,6 @@ dt:first-of-type{
 .filter .active {
   font-weight: bold;
 }
-.filter .active:after {
-   content: '✔';
-   margin-left: 0.5em; margin-right: .100em;
-}
 
 .navbar{
   background: #222;
