@@ -19,7 +19,7 @@ class Api::DocsController < ApplicationController
 
     @repo_dependencies[:dependencies] = map_dependencies(@repository.repository_dependencies || [])
 
-    @search = Project.search('grunt').records
+    @search = Project.search('grunt', api: true).records
 
     @repository_user = RepositoryUser.host('GitHub').login('andrew').first || RepositoryUser.first
   end

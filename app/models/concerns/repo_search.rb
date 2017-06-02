@@ -100,19 +100,22 @@ module RepoSearch
             }
           }
         },
-        aggs: {
-          language: Project.facet_filter(:language, facet_limit, options),
-          license: Project.facet_filter(:license, facet_limit, options),
-          keywords: Project.facet_filter(:keywords, facet_limit, options),
-          host_type: Project.facet_filter(:host_type, facet_limit, options)
-        },
         filter: {
           bool: {
             must: [],
             must_not: options[:must_not]
           }
-        },
-        suggest: {
+        }
+      }
+
+      unless options[:api]
+        search_definition[:aggs] = {
+          language: Project.facet_filter(:language, facet_limit, options),
+          license: Project.facet_filter(:license, facet_limit, options),
+          keywords: Project.facet_filter(:keywords, facet_limit, options),
+          host_type: Project.facet_filter(:host_type, facet_limit, options)
+        }
+        search_definition[:suggest] = {
           did_you_mean: {
             text: query,
             term: {
@@ -121,7 +124,8 @@ module RepoSearch
             }
           }
         }
-      }
+      end
+
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
       search_definition[:track_scores] = true
       search_definition[:filter][:bool][:must] = Project.filter_format(options[:filters])
