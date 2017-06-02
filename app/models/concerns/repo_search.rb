@@ -127,7 +127,6 @@ module RepoSearch
       end
 
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
-      search_definition[:track_scores] = true
       search_definition[:filter][:bool][:must] = Project.filter_format(options[:filters])
 
       if query.present?

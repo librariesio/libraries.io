@@ -205,7 +205,6 @@ module ProjectSearch
       end
 
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
-      search_definition[:track_scores] = true
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
 
       if query.present?
