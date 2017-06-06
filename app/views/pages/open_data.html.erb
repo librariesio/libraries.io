@@ -47,6 +47,8 @@
     <hr>
     <h2>Download</h2>
 
+    <p>Latest release: <strong><%= latest_open_data_release_number %> - <%= latest_open_data_release_date %></strong></p>
+
     <p>Download individual csv files or an archive of all of them, all downloads are gzipped:</p>
 
     <table class='table table-bordered table-hover'>
@@ -64,111 +66,23 @@
           <th>Download link</th>
         </tr>
       </thead>
-      <tr>
-        <td>
-          <strong>
-            projects-1.0.0-2017-06-06.csv
-          </strong>
-          <br><small class='text-muted'>SHA256: 589b1c2ab88346074e98966ab34caccc111e43c1ed8d23a6a5e2599b318493fc</small>
-        </td>
-        <td>
-          512MB
-        </td>
-        <td>2,000,000 rows</td>
-        <td>
-          <a href="#" class='btn btn-primary'>Download</a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <strong>
-            versions-1.0.0-2017-06-06.csv
-          </strong>
-          <br><small class='text-muted'>SHA256: 589b1c2ab88346074e98966ab34caccc111e43c1ed8d23a6a5e2599b318493fc</small>
-        </td>
-        <td>
-          1GB
-        </td>
-        <td>10,000,000 rows</td>
-        <td>
-          <a href="#" class='btn btn-primary'>Download</a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <strong>
-            dependencies-1.0.0-2017-06-06.csv
-          </strong>
-          <br><small class='text-muted'>SHA256: 589b1c2ab88346074e98966ab34caccc111e43c1ed8d23a6a5e2599b318493fc</small>
-        </td>
-        <td>
-          2GB
-        </td>
-        <td>50,000,000 rows</td>
-        <td>
-          <a href="#" class='btn btn-primary'>Download</a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <strong>
-            repositories-1.0.0-2017-06-06.csv
-          </strong>
-          <br><small class='text-muted'>SHA256: 589b1c2ab88346074e98966ab34caccc111e43c1ed8d23a6a5e2599b318493fc</small>
-        </td>
-        <td>
-          1.5GB
-        </td>
-        <td>25,000,000 rows</td>
-        <td>
-          <a href="#" class='btn btn-primary'>Download</a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <strong>
-            tags-1.0.0-2017-06-06.csv
-          </strong>
-          <br><small class='text-muted'>SHA256: 589b1c2ab88346074e98966ab34caccc111e43c1ed8d23a6a5e2599b318493fc</small>
-        </td>
-        <td>
-          900MB
-        </td>
-        <td>40,000,000 rows</td>
-        <td>
-          <a href="#" class='btn btn-primary'>Download</a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <strong>
-            repository_dependencies-1.0.0-2017-06-06.csv
-          </strong>
-          <br><small class='text-muted'>SHA256: 589b1c2ab88346074e98966ab34caccc111e43c1ed8d23a6a5e2599b318493fc</small>
-        </td>
-        <td>
-          4GB
-        </td>
-        <td>86,000,000 rows</td>
-        <td>
-          <a href="#" class='btn btn-primary'>Download</a>
-        </td>
-      </tr>
-      <tr class='active'>
-        <td>
-          <strong>
-            combined-1.0.0-2017-06-06.csv
-          </strong>
-          <br><small class='text-muted'>SHA256: 589b1c2ab88346074e98966ab34caccc111e43c1ed8d23a6a5e2599b318493fc</small>
-        </td>
-        <td>
-          10GB
-        </td>
-        <td>213,000,000 rows</td>
-        <td>
-          <a href="#" class='btn btn-success'>Download</a>
-        </td>
-      </tr>
+      <% open_data_release(latest_open_data_release_number)[:files].each do |file| %>
+        <tr>
+          <td>
+            <strong>
+              <%= file[:filename] %>
+            </strong>
+            <br><small class='text-muted'><%= file[:sha256] %></small>
+          </td>
+          <td>
+            <%= file[:size] %>
+          </td>
+          <td><%= file[:rows] %></td>
+          <td>
+            <a href="<%= file[:href] %>" class='btn btn-primary'>Download</a>
+          </td>
+        </tr>
+      <% end %>
     </table>
 
     <h3>Mirrors</h3>
@@ -177,5 +91,7 @@
 
     <hr>
     <h2>Documentation</h2>
+
+    <%= render 'open_data_documentation' %>
   </div>
 </div>
