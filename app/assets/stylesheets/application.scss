@@ -456,3 +456,12 @@ tr.top td{
   max-height: 800px;
   overflow: scroll;
 }
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+}
+
+.creative_commons{
+  max-height: 400px;
+  overflow: scroll;
+}
