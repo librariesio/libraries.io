@@ -51,4 +51,3 @@ F("socialWidgetTracker",La);function Na(a,b){I(a,G.$);history.pushState&&window.
 f.D=function(a){var b=this;return function(c){for(var d=[],e=0;e<arguments.length;++e)d[e-0]=arguments[e];a.apply(null,[].concat(n(d)));Z(b,!0)}};f.F=function(a){var b=this;return function(c){for(var d=[],e=0;e<arguments.length;++e)d[e-0]=arguments[e];a.apply(null,[].concat(n(d)));Z(b,!1)}};f.w=function(){Z(this,!0)};
 function Z(a,b){setTimeout(function(){var c=a.c,d=location.pathname+location.search;c!=d&&a.a.shouldTrackUrlChange.call(a,d,c)&&(a.c=d,a.b.set({page:d,title:document.title}),(b||a.a.trackReplaceState)&&a.b.send("pageview",z({transport:"beacon"},a.a.fieldsObj,a.b,a.a.hitFilter)))},0)}f.shouldTrackUrlChange=function(a,b){return!(!a||!b)};f.remove=function(){var a=this.D;x(y(history,"pushState"),a);a=this.F;x(y(history,"replaceState"),a);window.removeEventListener("popstate",this.w)};
 F("urlChangeTracker",Na);})();
-//# sourceMappingURL=autotrack.js.map
