@@ -1,12 +1,22 @@
 require 'csv'
 
-namespace :open_data do
-  task export: :environment do
-    version = '1.0.0'
-    date = Date.today.to_s(:db)
+EXPORT_VERSION = '1.0.0'
+EXPORT_DATE = Date.today.to_s(:db)
 
-    # Projects
-    csv_file = File.open("data/projects-#{version}-#{date}.csv",'w')
+namespace :open_data do
+  desc 'Export all open data csvs'
+  task export: [
+    :export_projects,
+    :export_versions,
+    :export_dependencies,
+    :export_repositories,
+    :export_tags,
+    :export_repository_dependencies
+  ]
+
+  desc 'Export projects open data csv'
+  task export_projects: :environment do
+    csv_file = File.open("data/projects-#{EXPORT_VERSION}-#{EXPORT_DATE}.csv",'w')
     csv_file = CSV.new(csv_file)
     csv_file << [
       'Platform',
@@ -57,9 +67,11 @@ namespace :open_data do
         project.dependent_repos_count,
       ]
     end
+  end
 
-    # Version
-    csv_file = File.open("data/versions-#{version}-#{date}.csv",'w')
+  desc 'Export versions open data csv'
+  task export_versions: :environment do
+    csv_file = File.open("data/versions-#{EXPORT_VERSION}-#{EXPORT_DATE}.csv",'w')
     csv_file = CSV.new(csv_file)
     csv_file << [
       'Platform',
@@ -82,9 +94,11 @@ namespace :open_data do
         ]
       end
     end
+  end
 
-    # Dependencies
-    csv_file = File.open("data/dependencies-#{version}-#{date}.csv",'w')
+  desc 'Export dependencies open data csv'
+  task export_dependencies: :environment do
+    csv_file = File.open("data/dependencies-#{EXPORT_VERSION}-#{EXPORT_DATE}.csv",'w')
     csv_file = CSV.new(csv_file)
     csv_file << [
       'Platform',
@@ -113,9 +127,11 @@ namespace :open_data do
         end
       end
     end
+  end
 
-    # Repository
-    csv_file = File.open("data/repositories-#{version}-#{date}.csv",'w')
+  desc 'Export repositories open data csv'
+  task export_repositories: :environment do
+    csv_file = File.open("data/repositories-#{EXPORT_VERSION}-#{EXPORT_DATE}.csv",'w')
     csv_file = CSV.new(csv_file)
     csv_file << [
       'Host Type',
@@ -208,9 +224,11 @@ namespace :open_data do
         repo.keywords,
       ]
     end
+  end
 
-    # Tags
-    csv_file = File.open("data/tags-#{version}-#{date}.csv",'w')
+  desc 'Export tags open data csv'
+  task export_tags: :environment do
+    csv_file = File.open("data/tags-#{EXPORT_VERSION}-#{EXPORT_DATE}.csv",'w')
     csv_file = CSV.new(csv_file)
     csv_file << [
       'Host Type',
@@ -237,9 +255,11 @@ namespace :open_data do
         ]
       end
     end
+  end
 
-    # Repository Dependencies
-    csv_file = File.open("data/repository_dependencies-#{version}-#{date}.csv",'w')
+  desc 'Export repository dependencies open data csv'
+  task export_repository_dependencies: :environment do
+    csv_file = File.open("data/repository_dependencies-#{EXPORT_VERSION}-#{EXPORT_DATE}.csv",'w')
     csv_file = CSV.new(csv_file)
     csv_file << [
       'Host Type',
