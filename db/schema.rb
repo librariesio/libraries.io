@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170522132051) do
+ActiveRecord::Schema.define(version: 20170607094720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -257,7 +257,7 @@ ActiveRecord::Schema.define(version: 20170522132051) do
     t.integer  "open_issues_count"
     t.string   "default_branch"
     t.integer  "subscribers_count"
-    t.string   "uuid",                       :index=>{:name=>"index_repositories_on_uuid", :unique=>true}
+    t.string   "uuid"
     t.string   "source_name",                :index=>{:name=>"index_repositories_on_source_name"}
     t.string   "license"
     t.integer  "repository_organisation_id", :index=>{:name=>"index_repositories_on_repository_organisation_id"}
@@ -282,6 +282,8 @@ ActiveRecord::Schema.define(version: 20170522132051) do
     t.string   "logo_url"
     t.integer  "repository_user_id",         :index=>{:name=>"index_repositories_on_repository_user_id"}
     t.string   "keywords",                   :default=>[], :array=>true
+
+    t.index ["host_type", "uuid"], :name=>"index_repositories_on_host_type_and_uuid", :unique=>true
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
