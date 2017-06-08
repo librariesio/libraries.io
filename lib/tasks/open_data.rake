@@ -46,7 +46,7 @@ namespace :open_data do
         project.name,
         project.created_at,
         project.updated_at,
-        project.description,
+        project.description.try(:tr, "\r\n",' '),
         project.keywords_array,
         project.homepage,
         project.normalized_licenses,
@@ -175,7 +175,7 @@ namespace :open_data do
       csv_file << [
         repo.host_type,
         repo.full_name,
-        repo.description,
+        repo.description.try(:tr, "\r\n",' '),
         repo.fork,
         repo.created_at,
         repo.updated_at,
