@@ -47,9 +47,9 @@ namespace :open_data do
         project.created_at,
         project.updated_at,
         project.description.try(:tr, "\r\n",' '),
-        project.keywords_array,
+        project.keywords_array.join(','),
         project.homepage,
-        project.normalized_licenses,
+        project.normalized_licenses.join(','),
         project.repository_url,
         project.versions_count,
         project.rank,
@@ -212,7 +212,7 @@ namespace :open_data do
         repo.fork_policy,
         repo.pull_requests_enabled,
         repo.logo_url,
-        repo.keywords,
+        repo.keywords.join(','),
       ]
     end
   end
