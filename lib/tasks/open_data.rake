@@ -40,7 +40,7 @@ namespace :open_data do
       'Dependent Repositories Count'
     ]
 
-    Project.not_removed.find_each do |project|
+    Project.not_removed.includes(:repository).find_each do |project|
       csv_file << [
         project.platform,
         project.name,
