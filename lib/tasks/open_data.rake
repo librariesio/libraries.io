@@ -46,10 +46,10 @@ namespace :open_data do
         project.name,
         project.created_at,
         project.updated_at,
-        project.description,
-        project.keywords_array,
+        project.description.try(:tr, "\r\n",' '),
+        project.keywords_array.join(','),
         project.homepage,
-        project.normalized_licenses,
+        project.normalized_licenses.join(','),
         project.repository_url,
         project.versions_count,
         project.rank,
@@ -175,7 +175,7 @@ namespace :open_data do
       csv_file << [
         repo.host_type,
         repo.full_name,
-        repo.description,
+        repo.description.try(:tr, "\r\n",' '),
         repo.fork,
         repo.created_at,
         repo.updated_at,
@@ -212,7 +212,7 @@ namespace :open_data do
         repo.fork_policy,
         repo.pull_requests_enabled,
         repo.logo_url,
-        repo.keywords,
+        repo.keywords.join(','),
       ]
     end
   end
