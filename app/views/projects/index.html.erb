@@ -20,11 +20,11 @@
   <div class='col-md-3'>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h2 class="panel-title">Discover new software</h2>
+        <h2 class="panel-title"><%= fa_icon 'binoculars' %>&nbsp;Discover new software</h2>
       </div>
       <div class="panel-body">
         <p>
-          Search <%= number_with_delimiter(Project.total) %> projects by <%= link_to 'licence'.html_safe, licenses_path %>, <%= link_to 'language'.html_safe, licenses_path %> or <%= link_to 'keyword'.html_safe, keywords_path %>, or explore new, trending or popular projects. 
+          Search <%= number_with_delimiter(Project.total) %> projects by <%= link_to 'licence'.html_safe, licenses_path %>, <%= link_to 'language'.html_safe, licenses_path %> or <%= link_to 'keyword'.html_safe, keywords_path %>, or explore new, trending or popular projects.
         </p>
         <%= link_to 'Explore', explore_path, class:'btn btn-primary center-block' %>
       </div>
@@ -33,11 +33,11 @@
   <div class='col-md-3'>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h2 class="panel-title">Monitor your dependencies</h2>
+        <h2 class="panel-title"><%= fa_icon 'thumb-tack' %>&nbsp;Monitor your dependencies</h2>
       </div>
       <div class="panel-body">
         <p>
-          Stay up to date with notifications of updates, licence incompatibilties or deleted dependencies. 
+          Stay up to date with notifications of updates, licence incompatibilties or deleted dependencies.
         </p>
         <% if logged_in? %>
           <%= link_to 'Subscriptions', subscriptions_path, class:'btn btn-success center-block'%>
@@ -50,11 +50,11 @@
   <div class='col-md-3'>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h2 class="panel-title">Maintain your OSS project</h2>
+        <h2 class="panel-title"><%= fa_icon 'wrench' %>&nbsp;Maintain your OSS project</h2>
       </div>
       <div class="panel-body">
         <p>
-          Understand your users and make informed decisions about features with usage and version data.  
+          Understand your users and make informed decisions about features with usage and version data.
         </p>
         <% if logged_in? %>
           <%= link_to 'Repository Monitoring', repositories_path, class:'btn btn-success center-block'%>
@@ -67,7 +67,7 @@
   <div class='col-md-3'>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h2 class="panel-title">Use Libraries.io data</h2>
+        <h2 class="panel-title"><%= fa_icon 'database' %>&nbsp;Use Libraries.io data</h2>
       </div>
       <div class="panel-body">
         <p>
