@@ -17,97 +17,97 @@
         <ul>
           <li>
             <p>
-              <strong>Platform</strong> -
+              <strong>Platform</strong> <em class='text-muted'>string</em> - The name of the Package manager the project is available on
             </p>
           </li>
           <li>
             <p>
-              <strong>Name</strong> -
+              <strong>Name</strong> <em class='text-muted'>string</em> - The name of the project, unique by Platform (case sensitive)
             </p>
           </li>
           <li>
             <p>
-              <strong>Created Timestamp</strong> -
+              <strong>Created Timestamp</strong> <em class='text-muted'>datetime</em> - The timestamp of when Libraries.io first discovered the project
             </p>
           </li>
           <li>
             <p>
-              <strong>Updated Timestamp</strong> -
+              <strong>Updated Timestamp</strong> <em class='text-muted'>datetime</em> - The timestamp of when Libraries.io last saved a change to the project
             </p>
           </li>
           <li>
             <p>
-              <strong>Description</strong> -
+              <strong>Description</strong> <em class='text-muted'>string</em> - Description provided by the package manager, falling back to description from repository if empty
             </p>
           </li>
           <li>
             <p>
-              <strong>Keywords</strong> -
+              <strong>Keywords</strong> <em class='text-muted'>string</em> - Comma separated array of keywords if supported by package manager
             </p>
           </li>
           <li>
             <p>
-              <strong>Homepage URL</strong> -
+              <strong>Homepage URL</strong> <em class='text-muted'>string</em> - URL of webpage or repository as provided by package managers that support it
             </p>
           </li>
           <li>
             <p>
-              <strong>Licenses</strong> -
+              <strong>Licenses</strong> <em class='text-muted'>string</em> - Comma separated array of SPDX identifiers for licenses declared in package manager meta data  or submitted manually by Libraries.io user via "project suggection" feature
             </p>
           </li>
           <li>
             <p>
-              <strong>Repository URL</strong> -
+              <strong>Repository URL</strong> <em class='text-muted'>string</em> - URL of source code repository declared in package manager metadata or submitted manually by Libraries.io user via "project suggection" feature
             </p>
           </li>
           <li>
             <p>
-              <strong>Versions Count</strong> -
+              <strong>Versions Count</strong> <em class='text-muted'>integer</em> - Number of published versions of the project found by Libraries.io
             </p>
           </li>
           <li>
             <p>
-              <strong>SourceRank</strong> -
+              <strong>SourceRank</strong> <em class='text-muted'>integer</em> - Libraries.io defined score based on quality, popularity and community metrics
             </p>
           </li>
           <li>
             <p>
-              <strong>Latest Release Publish Timestamp</strong> -
+              <strong>Latest Release Publish Timestamp</strong> <em class='text-muted'>datetime</em> - time of the latest release detected by Libraries.io (ordered by semver, falling back to publish date for invalid semver)
             </p>
           </li>
           <li>
             <p>
-              <strong>Latest Release Number</strong> -
+              <strong>Latest Release Number</strong> <em class='text-muted'>string</em> - version number of the latest release detected by Libraries.io (ordered by semver, falling back to publish date for invalid semver)
             </p>
           </li>
           <li>
             <p>
-              <strong>Package Manager ID</strong> -
+              <strong>Package Manager ID</strong> <em class='text-muted'>integer</em> - unique ID of project from package manager API, only currently used by PlatformIO
             </p>
           </li>
           <li>
             <p>
-              <strong>Dependent Projects Count</strong> -
+              <strong>Dependent Projects Count</strong> <em class='text-muted'>integer</em> - Number of other projects that declare the project as a dependency in one or more of their versions
             </p>
           </li>
           <li>
             <p>
-              <strong>Language</strong> -
+              <strong>Language</strong> <em class='text-muted'>string</em> - primary programming language the project is written in, pulled from the repository if source is hosted on GitHub
             </p>
           </li>
           <li>
             <p>
-              <strong>Status</strong> -
+              <strong>Status</strong> <em class='text-muted'>string</em> - Either Active, Deprecated, Unmaintained, Help Wanted, Removed, no value also means active. Updated when detected by Libraries.io or submitted manually by Libraries.io user via "project suggection" feature
             </p>
           </li>
           <li>
             <p>
-              <strong>Last synced Timestamp</strong> -
+              <strong>Last synced Timestamp</strong> <em class='text-muted'>datetime</em> - Timestamp of when Libraries.io last synced the project from it's package manager API
             </p>
           </li>
           <li>
             <p>
-              <strong>Dependent Repositories Count</strong> -
+              <strong>Dependent Repositories Count</strong> <em class='text-muted'>integer</em> - The total count of open source repositories that list the project as a dependency as detected by Libraries.io
             </p>
           </li>
         </ul>
@@ -133,32 +133,32 @@
         <ul>
           <li>
             <p>
-              <strong>Platform</strong> -
+              <strong>Platform</strong> <em class='text-muted'>string</em> - The name of the Package manager the version is available on
             </p>
           </li>
           <li>
             <p>
-              <strong>Project Name</strong> -
+              <strong>Project Name</strong> <em class='text-muted'>string</em> - The name of the project the version belongs to
             </p>
           </li>
           <li>
             <p>
-              <strong>Number</strong> -
+              <strong>Number</strong> <em class='text-muted'>string</em> - The number of the release, often confirms to semantic versioning
             </p>
           </li>
           <li>
             <p>
-              <strong>Published Timestamp</strong> -
+              <strong>Published Timestamp</strong> <em class='text-muted'>datetime</em> - The timestamp of when the version was published
             </p>
           </li>
           <li>
             <p>
-              <strong>Created Timestamp</strong> -
+              <strong>Created Timestamp</strong> <em class='text-muted'>datetime</em> - The timestamp of when the version was first detected by Libraries.io
             </p>
           </li>
           <li>
             <p>
-              <strong>Updated Timestamp</strong> -
+              <strong>Updated Timestamp</strong> <em class='text-muted'>datetime</em> - The timestamp of when the version was last saved by Libraries.io
             </p>
           </li>
         </ul>
@@ -188,42 +188,42 @@
         <ul>
           <li>
             <p>
-              <strong>Platform</strong> -
+              <strong>Platform</strong> <em class='text-muted'>string</em> - The name of the Package manager the dependency is available on
             </p>
           </li>
           <li>
             <p>
-              <strong>Project Name</strong> -
+              <strong>Project Name</strong> <em class='text-muted'>string</em> - The name of the project the dependency belongs to
             </p>
           </li>
           <li>
             <p>
-              <strong>Verion Number</strong> -
+              <strong>Verion Number</strong> <em class='text-muted'>string</em> - The number of the version that the dependency belongs to
             </p>
           </li>
           <li>
             <p>
-              <strong>Dependency Name</strong> -
+              <strong>Dependency Name</strong> <em class='text-muted'>string</em> - The name of the project that the dependency specifies
             </p>
           </li>
           <li>
             <p>
-              <strong>Dependency Platform</strong> -
+              <strong>Dependency Platform</strong> <em class='text-muted'>string</em> - The name of the package manager that the project that the dependency specifies is available from (only different for Atom)
             </p>
           </li>
           <li>
             <p>
-              <strong>Dependency Kind</strong> -
+              <strong>Dependency Kind</strong> <em class='text-muted'>string</em> - The type of dependency, often declared for the phase of usage, e.g. runtime, test, development, build
             </p>
           </li>
           <li>
             <p>
-              <strong>Optional Dependency</strong> -
+              <strong>Optional Dependency</strong> <em class='text-muted'>boolean</em> - Is the dependency optional?
             </p>
           </li>
           <li>
             <p>
-              <strong>Dependency Requirements</strong> -
+              <strong>Dependency Requirements</strong> <em class='text-muted'>string</em> - The version or range of versions that the dependency specifies, resolution of that to a particular version is package manager specific
             </p>
           </li>
         </ul>
@@ -248,197 +248,197 @@
         <ul>
           <li>
             <p>
-              <strong>Host Type</strong> -
+              <strong>Host Type</strong> <em class='text-muted'>string</em> - Which website the repository is hosted on, either GitHub, GitLab or Bitbucket
             </p>
           </li>
           <li>
             <p>
-              <strong>Name with Owner</strong> -
+              <strong>Name with Owner</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Description</strong> -
+              <strong>Description</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Fork?</strong> -
+              <strong>Fork?</strong> <em class='text-muted'>boolean</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Created Timestamp</strong> -
+              <strong>Created Timestamp</strong> <em class='text-muted'>datetime</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Updated Timestamp</strong> -
+              <strong>Updated Timestamp</strong> <em class='text-muted'>datetime</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Last pushed Timestamp</strong> -
+              <strong>Last pushed Timestamp</strong> <em class='text-muted'>datetime</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Homepage URL</strong> -
+              <strong>Homepage URL</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Size</strong> -
+              <strong>Size</strong> <em class='text-muted'>integer</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Stars Count</strong> -
+              <strong>Stars Count</strong> <em class='text-muted'>integer</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Language</strong> -
+              <strong>Language</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Issues enabled?</strong> -
+              <strong>Issues enabled?</strong> <em class='text-muted'>boolean</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Wiki enabled?</strong> -
+              <strong>Wiki enabled?</strong> <em class='text-muted'>boolean</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Pages enabled?</strong> -
+              <strong>Pages enabled?</strong> <em class='text-muted'>boolean</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Forks Count</strong> -
+              <strong>Forks Count</strong> <em class='text-muted'>integer</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Mirror URL</strong> -
+              <strong>Mirror URL</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Open Issues Count</strong> -
+              <strong>Open Issues Count</strong> <em class='text-muted'>integer</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Default branch</strong> -
+              <strong>Default branch</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Watchers Count</strong> -
+              <strong>Watchers Count</strong> <em class='text-muted'>integer</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>UUID</strong> -
+              <strong>UUID</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Fork Source Name with Owner</strong> -
+              <strong>Fork Source Name with Owner</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>License</strong> -
+              <strong>License</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Contributors Count</strong> -
+              <strong>Contributors Count</strong> <em class='text-muted'>integer</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Readme filename</strong> -
+              <strong>Readme filename</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Changelog filename</strong> -
+              <strong>Changelog filename</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Contributing guidelines filename</strong> -
+              <strong>Contributing guidelines filename</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>License filename</strong> -
+              <strong>License filename</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Code of Conduct filename</strong> -
+              <strong>Code of Conduct filename</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Security Threat Model filename</strong> -
+              <strong>Security Threat Model filename</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Security Audit filename</strong> -
+              <strong>Security Audit filename</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Status</strong> -
+              <strong>Status</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Last Synced Timestamp</strong> -
+              <strong>Last Synced Timestamp</strong> <em class='text-muted'>datetime</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>SourceRank</strong> -
+              <strong>SourceRank</strong> <em class='text-muted'>integer</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Display Name</strong> -
+              <strong>Display Name</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>SCM type</strong> -
+              <strong>SCM type</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Fork policy</strong> -
+              <strong>Fork policy</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Pull requests enabled?</strong> -
+              <strong>Pull requests enabled?</strong> <em class='text-muted'>boolean</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Logo URL</strong> -
+              <strong>Logo URL</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Keywords</strong> -
+              <strong>Keywords</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
         </ul>
@@ -462,42 +462,42 @@
         <ul>
           <li>
             <p>
-              <strong>Host Type</strong> -
+              <strong>Host Type</strong> <em class='text-muted'>string</em> - Which website the tags repository is hosted on, either GitHub, GitLab or Bitbucket
             </p>
           </li>
           <li>
             <p>
-              <strong>Repository Name with Owner</strong> -
+              <strong>Repository Name with Owner</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Tag Name</strong> -
+              <strong>Tag Name</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Tag git sha</strong> -
+              <strong>Tag git sha</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Tag kind</strong> -
+              <strong>Tag kind</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Tag Published Timestamp</strong> -
+              <strong>Tag Published Timestamp</strong> <em class='text-muted'>datetime</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Tag Created Timestamp</strong> -
+              <strong>Tag Created Timestamp</strong> <em class='text-muted'>datetime</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Tag Updated Timestamp</strong> -
+              <strong>Tag Updated Timestamp</strong> <em class='text-muted'>datetime</em> -
             </p>
           </li>
         </ul>
@@ -523,52 +523,52 @@
         <ul>
           <li>
             <p>
-              <strong>Host Type</strong> -
+              <strong>Host Type</strong> <em class='text-muted'>string</em> - Which website the dependencys repository is hosted on, either GitHub, GitLab or Bitbucket
             </p>
           </li>
           <li>
             <p>
-              <strong>Repository Name with Owner</strong> -
+              <strong>Repository Name with Owner</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Manifest Platform</strong> -
+              <strong>Manifest Platform</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Manifest Filepath</strong> -
+              <strong>Manifest Filepath</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Git branch</strong> -
+              <strong>Git branch</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Manifest kind</strong> -
+              <strong>Manifest kind</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Optional?</strong> -
+              <strong>Optional?</strong> <em class='text-muted'>boolean</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Dependency Project Name</strong> -
+              <strong>Dependency Project Name</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Dependency Requirements</strong> -
+              <strong>Dependency Requirements</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
           <li>
             <p>
-              <strong>Dependency Kind</strong> -
+              <strong>Dependency Kind</strong> <em class='text-muted'>string</em> -
             </p>
           </li>
         </ul>
