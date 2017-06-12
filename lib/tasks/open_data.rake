@@ -226,7 +226,6 @@ namespace :open_data do
       'Repository Name with Owner',
       'Tag Name',
       'Tag git sha',
-      'Tag kind',
       'Tag Published Timestamp',
       'Tag Created Timestamp',
       'Tag Updated Timestamp'
@@ -239,7 +238,6 @@ namespace :open_data do
           repo.full_name,
           tag.name,
           tag.sha,
-          tag.kind,
           tag.published_at,
           tag.created_at,
           tag.updated_at
