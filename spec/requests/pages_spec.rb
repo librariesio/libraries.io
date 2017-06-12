@@ -19,4 +19,10 @@ describe "PagesController" do
       expect(page).to have_content 'Team'
     end
   end
+  describe "GET /open-data", type: :request do
+    it "renders successfully when logged out" do
+      visit open_data_path
+      expect(page).to have_content 'Open Data'
+    end
+  end
 end
