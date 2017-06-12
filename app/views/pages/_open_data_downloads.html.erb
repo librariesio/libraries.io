@@ -1,0 +1,37 @@
+<p>Latest release: <strong><%= latest_open_data_release_number %> - <%= latest_open_data_release_date %></strong></p>
+
+<p>Download individual csv files or an archive of all of them, all downloads are gzipped:</p>
+
+<table class='table table-bordered table-hover'>
+  <thead>
+    <tr>
+      <th>
+        File name and digest
+      </th>
+      <th>
+        Archive Size
+      </th>
+      <th>
+        Number of rows
+      </th>
+      <th>Download link</th>
+    </tr>
+  </thead>
+  <% open_data_release(latest_open_data_release_number)[:files].each do |file| %>
+    <tr>
+      <td>
+        <strong>
+          <%= file[:filename] %>
+        </strong>
+        <br><small class='text-muted'><%= file[:sha256] %></small>
+      </td>
+      <td>
+        <%= file[:size] %>
+      </td>
+      <td><%= file[:rows] %></td>
+      <td>
+        <a href="<%= file[:href] %>" class='btn btn-primary'>Download</a>
+      </td>
+    </tr>
+  <% end %>
+</table>
