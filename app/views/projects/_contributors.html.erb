@@ -3,7 +3,7 @@
 	<div class="row">
 	  <div class="col-md-12">
 			<h3 data-ga-tracked-el='top-contributors'>Contributors</h4>
-	    <%= render @contributors %>
+	    <%= render partial: 'repository_users/repository_user', collection: @contributors %>
 	  </div>
 	</div>
 	<p>
