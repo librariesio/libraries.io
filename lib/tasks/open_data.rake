@@ -165,7 +165,6 @@ namespace :open_data do
       'SourceRank',
       'Display Name',
       'SCM type',
-      'Fork policy',
       'Pull requests enabled?',
       'Logo URL',
       'Keywords'
@@ -209,7 +208,6 @@ namespace :open_data do
         repo.host_type,
         repo.name,
         repo.scm,
-        repo.fork_policy,
         repo.pull_requests_enabled,
         repo.logo_url,
         repo.keywords.join(','),
