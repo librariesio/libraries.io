@@ -12,14 +12,14 @@ namespace :github do
 
   desc 'Sync github repos'
   task sync_repos: :environment do
-    scope = Repository.source.open_source
+    scope = Repository.source.open_source.not_removed
     scope.where(last_synced_at: nil).limit(100).each(&:update_all_info_async)
     scope.order('last_synced_at ASC').limit(100).each(&:update_all_info_async)
   end
 
   desc 'Update source rank'
   task update_source_rank: :environment do
-    Repository.source.open_source.where(rank: nil).order('repositories.stargazers_count DESC').limit(1000).select('id').each(&:update_source_rank_async)
+    Repository.source.not_removed.open_source.where(rank: nil).order('repositories.stargazers_count DESC').limit(1000).select('id').each(&:update_source_rank_async)
   end
 
   desc 'Sync github issues'
