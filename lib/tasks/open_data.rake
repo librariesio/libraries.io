@@ -1,7 +1,7 @@
 require 'csv'
 
 EXPORT_VERSION = '1.0.0'
-EXPORT_DATE = Date.today.to_s(:db)
+EXPORT_DATE = "2017-06-14"
 
 namespace :open_data do
   desc 'Export all open data csvs'
@@ -40,7 +40,7 @@ namespace :open_data do
       'Dependent Repositories Count'
     ]
 
-    Project.not_removed.find_each do |project|
+    Project.not_removed.includes(:repository).find_each do |project|
       csv_file << [
         project.platform,
         project.name,
@@ -48,9 +48,9 @@ namespace :open_data do
         project.updated_at,
         project.description.try(:tr, "\r\n",' '),
         project.keywords_array.join(','),
-        project.homepage,
+        project.homepage.try(:strip),
         project.normalized_licenses.join(','),
-        project.repository_url,
+        project.repository_url.try(:strip),
         project.versions_count,
         project.rank,
         project.latest_release_published_at,
@@ -165,7 +165,6 @@ namespace :open_data do
       'SourceRank',
       'Display Name',
       'SCM type',
-      'Fork policy',
       'Pull requests enabled?',
       'Logo URL',
       'Keywords'
@@ -209,7 +208,6 @@ namespace :open_data do
         repo.host_type,
         repo.name,
         repo.scm,
-        repo.fork_policy,
         repo.pull_requests_enabled,
         repo.logo_url,
         repo.keywords.join(','),
@@ -226,7 +224,6 @@ namespace :open_data do
       'Repository Name with Owner',
       'Tag Name',
       'Tag git sha',
-      'Tag kind',
       'Tag Published Timestamp',
       'Tag Created Timestamp',
       'Tag Updated Timestamp'
@@ -239,7 +236,6 @@ namespace :open_data do
           repo.full_name,
           tag.name,
           tag.sha,
-          tag.kind,
           tag.published_at,
           tag.created_at,
           tag.updated_at
