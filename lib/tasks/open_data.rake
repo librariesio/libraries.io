@@ -83,7 +83,7 @@ namespace :open_data do
         csv_file << [
           project.platform,
           project.name,
-          version.number,
+          version.number.try(:tr, "\r\n",' '),
           version.published_at,
           version.created_at,
           version.updated_at
@@ -114,11 +114,11 @@ namespace :open_data do
             project.platform,
             project.name,
             version.number,
-            dependency.project_name,
-            dependency.platform,
-            dependency.kind,
-            dependency.optional,
-            dependency.requirements
+            dependency.project_name.try(:tr, "\r\n",''),
+            dependency.platform.try(:tr, "\r\n",''),
+            dependency.kind.try(:tr, "\r\n",''),
+            dependency.optional.try(:tr, "\r\n",''),
+            dependency.requirements.try(:tr, "\r\n",'')
           ]
         end
       end
@@ -234,7 +234,7 @@ namespace :open_data do
         csv_file << [
           repo.host_type,
           repo.full_name,
-          tag.name,
+          tag.name.try(:tr, "\r\n",' '),
           tag.sha,
           tag.published_at,
           tag.created_at,
@@ -272,9 +272,9 @@ namespace :open_data do
             manifest.branch,
             manifest.kind,
             repository_dependency.optional,
-            repository_dependency.project_name,
-            repository_dependency.requirements,
-            repository_dependency.kind
+            repository_dependency.project_name.try(:tr, "\r\n",' '),
+            repository_dependency.requirements.try(:tr, "\r\n",' '),
+            repository_dependency.kind.try(:tr, "\r\n",' ')
           ]
         end
       end
