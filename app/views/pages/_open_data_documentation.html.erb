@@ -17,6 +17,11 @@
         <ul>
           <li>
             <p>
+              <strong>ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the project in the Libraries.io database
+            </p>
+          </li>
+          <li>
+            <p>
               <strong>Platform</strong> <em class='text-muted'>string</em> - The name of the Package manager the project is available on
             </p>
           </li>
@@ -110,6 +115,11 @@
               <strong>Dependent Repositories Count</strong> <em class='text-muted'>integer</em> - The total count of open source repositories that list the project as a dependency as detected by Libraries.io
             </p>
           </li>
+          <li>
+            <p>
+              <strong>Repository ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the repository for this project in the Libraries.io database
+            </p>
+          </li>
         </ul>
       </div>
     </div>
@@ -133,12 +143,22 @@
         <ul>
           <li>
             <p>
+              <strong>ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the version in the Libraries.io database
+            </p>
+          </li>
+          <li>
+            <p>
               <strong>Platform</strong> <em class='text-muted'>string</em> - The name of the Package manager the version is available on
             </p>
           </li>
           <li>
             <p>
               <strong>Project Name</strong> <em class='text-muted'>string</em> - The name of the project the version belongs to
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Project ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the project for this version in the Libraries.io database
             </p>
           </li>
           <li>
@@ -188,6 +208,11 @@
         <ul>
           <li>
             <p>
+              <strong>ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the dependency in the Libraries.io database
+            </p>
+          </li>
+          <li>
+            <p>
               <strong>Platform</strong> <em class='text-muted'>string</em> - The name of the Package manager the dependency is available on
             </p>
           </li>
@@ -198,7 +223,17 @@
           </li>
           <li>
             <p>
+              <strong>Project ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the project for this dependency in the Libraries.io database
+            </p>
+          </li>
+          <li>
+            <p>
               <strong>Version Number</strong> <em class='text-muted'>string</em> - The number of the version that the dependency belongs to
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Version ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the version for this dependency in the Libraries.io database
             </p>
           </li>
           <li>
@@ -246,6 +281,11 @@
         </p>
         <h4>Fields</h4>
         <ul>
+          <li>
+            <p>
+              <strong>ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the repository in the Libraries.io database
+            </p>
+          </li>
           <li>
             <p>
               <strong>Host Type</strong> <em class='text-muted'>string</em> - Which website the repository is hosted on, either GitHub, GitLab or Bitbucket
@@ -457,12 +497,22 @@
         <ul>
           <li>
             <p>
+              <strong>ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the tag in the Libraries.io database
+            </p>
+          </li>
+          <li>
+            <p>
               <strong>Host Type</strong> <em class='text-muted'>string</em> - Which website the tags repository is hosted on, either GitHub, GitLab or Bitbucket
             </p>
           </li>
           <li>
             <p>
               <strong>Repository Name with Owner</strong> <em class='text-muted'>string</em> - The repository name and owner seperated by a slash, also maps to the url slug on the given repository host e.g. librariesio/libraries.io
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the repository for this tag in the Libraries.io database
             </p>
           </li>
           <li>
@@ -513,12 +563,22 @@
         <ul>
           <li>
             <p>
+              <strong>ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the repository dependency in the Libraries.io database
+            </p>
+          </li>
+          <li>
+            <p>
               <strong>Host Type</strong> <em class='text-muted'>string</em> - Which website the dependencys repository is hosted on, either GitHub, GitLab or Bitbucket
             </p>
           </li>
           <li>
             <p>
               <strong>Repository Name with Owner</strong> <em class='text-muted'>string</em> - The repository name and owner seperated by a slash, also maps to the url slug on the given repository host e.g. librariesio/libraries.io
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the repository for this dependency in the Libraries.io database
             </p>
           </li>
           <li>
@@ -559,6 +619,11 @@
           <li>
             <p>
               <strong>Dependency Kind</strong> <em class='text-muted'>string</em> - The type of dependency, often declared for the phase of usage, e.g. runtime, test, development, build
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Dependency Project ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the project for this dependency in the Libraries.io database
             </p>
           </li>
         </ul>
