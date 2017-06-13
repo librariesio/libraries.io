@@ -125,6 +125,320 @@
     </div>
   </div>
   <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Projects with related Repository fields
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <p>
+          This is an alternative projects export that denormalizes a projects related source code repository inline to reduce the need to join between two data sets.
+        </p>
+        <h4>Fields</h4>
+        <ul>
+          <li>
+            <p>
+              <strong>ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the project in the Libraries.io database
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Platform</strong> <em class='text-muted'>string</em> - The name of the Package manager the project is available on
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Name</strong> <em class='text-muted'>string</em> - The name of the project, unique by Platform (case sensitive)
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Created Timestamp</strong> <em class='text-muted'>datetime</em> - The timestamp of when Libraries.io first discovered the project
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Updated Timestamp</strong> <em class='text-muted'>datetime</em> - The timestamp of when Libraries.io last saved a change to the project
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Description</strong> <em class='text-muted'>string</em> - Description provided by the package manager, falling back to description from repository if empty
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Keywords</strong> <em class='text-muted'>string</em> - Comma separated array of keywords if supported by package manager
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Homepage URL</strong> <em class='text-muted'>string</em> - URL of webpage or repository as provided by package managers that support it
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Licenses</strong> <em class='text-muted'>string</em> - Comma separated array of SPDX identifiers for licenses declared in package manager meta data  or submitted manually by Libraries.io user via "project suggection" feature
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository URL</strong> <em class='text-muted'>string</em> - URL of source code repository declared in package manager metadata or submitted manually by Libraries.io user via "project suggection" feature
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Versions Count</strong> <em class='text-muted'>integer</em> - Number of published versions of the project found by Libraries.io
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>SourceRank</strong> <em class='text-muted'>integer</em> - Libraries.io defined score based on quality, popularity and community metrics
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Latest Release Publish Timestamp</strong> <em class='text-muted'>datetime</em> - time of the latest release detected by Libraries.io (ordered by semver, falling back to publish date for invalid semver)
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Latest Release Number</strong> <em class='text-muted'>string</em> - version number of the latest release detected by Libraries.io (ordered by semver, falling back to publish date for invalid semver)
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Package Manager ID</strong> <em class='text-muted'>integer</em> - unique ID of project from package manager API, only currently used by PlatformIO
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Dependent Projects Count</strong> <em class='text-muted'>integer</em> - Number of other projects that declare the project as a dependency in one or more of their versions
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Language</strong> <em class='text-muted'>string</em> - primary programming language the project is written in, pulled from the repository if source is hosted on GitHub
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Status</strong> <em class='text-muted'>string</em> - Either Active, Deprecated, Unmaintained, Help Wanted, Removed, no value also means active. Updated when detected by Libraries.io or submitted manually by Libraries.io user via "project suggection" feature
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Last synced Timestamp</strong> <em class='text-muted'>datetime</em> - Timestamp of when Libraries.io last synced the project from it's package manager API
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Dependent Repositories Count</strong> <em class='text-muted'>integer</em> - The total count of open source repositories that list the project as a dependency as detected by Libraries.io
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository ID</strong> <em class='text-muted'>integer</em> - The unique primary key of the repository for this project in the Libraries.io database
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Host Type</strong> <em class='text-muted'>string</em> - Which website the repository is hosted on, either GitHub, GitLab or Bitbucket
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Name with Owner</strong> <em class='text-muted'>string</em> - The repository name and owner seperated by a slash, also maps to the url slug on the given repository host e.g. librariesio/libraries.io
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Description</strong> <em class='text-muted'>string</em> - Description of repository
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Fork?</strong> <em class='text-muted'>boolean</em> - Is the repository a fork of another
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Created Timestamp</strong> <em class='text-muted'>datetime</em> - Timestamp of when the repository was created on the host
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Updated Timestamp</strong> <em class='text-muted'>datetime</em> - Timestamp of when the repository was last saved by Libraries.io
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Last pushed Timestamp</strong> <em class='text-muted'>datetime</em>  - Timestamp of when the repository was last pushed to, only available for GitHub repositories
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Homepage URL</strong> <em class='text-muted'>string</em> - URL of a declared homepage or other website for the repository
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Size</strong> <em class='text-muted'>integer</em> - Size of the repository in kilobytes, only available for GitHub and Bitbucket
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Stars Count</strong> <em class='text-muted'>integer</em> - Number of stars on the repository, only available for GitHub and GitLab
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Language</strong> <em class='text-muted'>string</em> - Primary programming language the project is written in, only available for GitHub and Bitbucket
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Issues enabled?</strong> <em class='text-muted'>boolean</em> - Is the bug tracker enabled for this repository?
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Wiki enabled?</strong> <em class='text-muted'>boolean</em> - Is the wiki enabled for this repository?
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Pages enabled?</strong> <em class='text-muted'>boolean</em> - Is GitHub pages enabled for this repository? only possible for GitHub
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Forks Count</strong> <em class='text-muted'>integer</em> - Number of forks of this repository
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Mirror URL</strong> <em class='text-muted'>string</em> - URL of the repositroy of which this is a mirror of, only present if this repository is a mirror of another
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Open Issues Count</strong> <em class='text-muted'>integer</em> - Number of open issues on the repository bug tracker, only available for GitHub and GitLab
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Default branch</strong> <em class='text-muted'>string</em> - Primary branch of the repository
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Watchers Count</strong> <em class='text-muted'>integer</em> - Number of subscribers to all notifications for the repository, only available for GitHub and Bitbucket
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository UUID</strong> <em class='text-muted'>string</em> - ID of the repository on the remote host, not unique between GitLab and GitHub repositories
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Fork Source Name with Owner</strong> <em class='text-muted'>string</em> - If the repository is a fork, the repository name and owner seperated by a slash of the repository if was forked from
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository License</strong> <em class='text-muted'>string</em> - SPDX identifier of the license of the repository, only available for GitHub repositories
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Contributors Count</strong> <em class='text-muted'>integer</em> - Number of unique contributors that have committed to the default branch
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Readme filename</strong> <em class='text-muted'>string</em> - If a readme file has been detected, the full name of the readme file, e.g README.md
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Changelog filename</strong> <em class='text-muted'>string</em> - If a changelog file has been detected, the full name of the changelog file, e.g changelog.txt
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Contributing guidelines filename</strong> <em class='text-muted'>string</em> - If a contributing guidelines file has been detected, the full name of the contributing guidelines file, e.g contributing.md
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository License filename</strong> <em class='text-muted'>string</em> - If a license file has been detected, the full name of the license file, e.g LICENSE
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Code of Conduct filename</strong> <em class='text-muted'>string</em> - If a code of conduct file has been detected, the full name of the code of conduct file, e.g code_of_conduct.md
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Security Threat Model filename</strong> <em class='text-muted'>string</em> - If a Security Threat Model  file has been detected, the full name of the Security Threat Model  file, e.g threatmodel.md
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Security Audit filename</strong> <em class='text-muted'>string</em> - If a Security Audit file has been detected, the full name of the Security Audit file, e.g security.md
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Status</strong> <em class='text-muted'>string</em> -  - Either Active, Deprecated, Unmaintained, Help Wanted, Removed, no value also means active. Updated when detected by Libraries.io or submitted manually by Libraries.io user via "repo suggection" feature
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Last Synced Timestamp</strong> <em class='text-muted'>datetime</em> - Timestamp of when Libraries.io last synced the repository from the host API
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository SourceRank</strong> <em class='text-muted'>integer</em> - Libraries.io defined score based on quality, popularity and community metrics
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Display Name</strong> <em class='text-muted'>string</em> - Display name for the repository, only available for GitLab repositories
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository SCM type</strong> <em class='text-muted'>string</em> - Type of source control repository uses, always "git" for GitHub and GitLab
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Pull requests enabled?</strong> <em class='text-muted'>boolean</em> - Are pull requests enabled for this repository? Only available for GitLab repositories
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Logo URL</strong> <em class='text-muted'>string</em> - Custom logo url for repository, only available for GitLab repositories
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Repository Keywords</strong> <em class='text-muted'>string</em> - Comma separated array of keywords, called "topics" on GitHub, only available for GitHub and GitLab
+            </p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingTwo">
       <h4 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
