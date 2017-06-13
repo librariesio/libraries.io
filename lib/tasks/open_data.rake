@@ -1,6 +1,6 @@
 require 'csv'
 
-EXPORT_VERSION = '1.0.0'
+EXPORT_VERSION = '1.0.1'
 EXPORT_DATE = "2017-06-14"
 
 namespace :open_data do
