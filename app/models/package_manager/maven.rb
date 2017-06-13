@@ -96,7 +96,7 @@ module PackageManager
     end
 
     def self.versions(project)
-      # multiple verion pages
+      # multiple version pages
       initial_page = get_html("https://maven-repository.com/artifact/#{project[:path]}/")
       version_pages(initial_page).reduce(extract_versions(initial_page)) do |acc, page|
         acc.concat( extract_versions(get_html(page)) )

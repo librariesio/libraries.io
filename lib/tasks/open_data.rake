@@ -228,7 +228,7 @@ namespace :open_data do
     csv_file << [
       'Platform',
       'Project Name',
-      'Verion Number',
+      'Version Number',
       'Dependency Name',
       'Dependency Platform',
       'Dependency Kind',
