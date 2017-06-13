@@ -194,7 +194,8 @@ Rails.application.routes.draw do
   get '/team', to: 'pages#team', as: :team
   get '/privacy', to: 'pages#privacy', as: :privacy
   get '/compatibility', to: 'pages#compatibility', as: :compatibility
-  get '/open-data', to: 'pages#open_data', as: :open_data
+  get '/data', to: 'pages#data', as: :data
+  get '/data/documentation', to: 'pages#data_documentation', as: :data_documentation
 
   post '/hooks/package', to: 'hooks#package'
 
