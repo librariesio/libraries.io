@@ -248,7 +248,8 @@ namespace :open_data do
       'Dependency Platform',
       'Dependency Kind',
       'Optional Dependency',
-      'Dependency Requirements'
+      'Dependency Requirements',
+      'Dependency Project ID'
     ]
 
     Project.not_removed.includes(versions: :dependencies).find_each do |project|
@@ -265,7 +266,8 @@ namespace :open_data do
             dependency.platform.try(:tr, "\r\n",''),
             dependency.kind.try(:tr, "\r\n",''),
             dependency.optional.try(:tr, "\r\n",''),
-            dependency.requirements.try(:tr, "\r\n",'')
+            dependency.requirements.try(:tr, "\r\n",''),
+            dependency.project_id
           ]
         end
       end
