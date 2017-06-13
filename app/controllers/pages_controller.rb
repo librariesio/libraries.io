@@ -22,5 +22,5 @@ class PagesController < ApplicationController
 
   def data_documentation
 
-  end 
+  end
 end
