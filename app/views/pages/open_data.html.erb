@@ -6,12 +6,13 @@
       <%= fa_icon 'database' %>
       Libraries.io Open Data
     </h1>
+    <br>
     <p>
       This page contains information on how to download, use and redistribute data from Libraries.io. For enquiries please contact <%= mail_to 'data@libraries.io'%>.
     </p>
     <h2>What is in this release?</h2>
     <p>
-      Libraries.io gathers data from <strong>33</strong> package managers and <strong>3</strong> source repositories. We track over <strong>2.4m</strong> unique open source projects, <strong>25m</strong> repositories and <strong>85m</strong> interdependencies between them. This gives Libraries.io a unique understanding of open source software. An understanding that we want to share with <strong>you</strong>. 
+      Libraries.io gathers data from <strong>33</strong> package managers and <strong>3</strong> source code repositories. We track over <strong>2.4m</strong> unique open source projects, <strong>25m</strong> repositories and <strong>85m</strong> interdependencies between them. This gives Libraries.io a unique understanding of open source software. An understanding that we want to share with <strong>you</strong>. 
     </p>
     <p>
       In this release you will find data about software distributed and/or crafted publicly on the Internet. You will find information about it's development, its distribution and its dependencies. You will <strong>not</strong> find any information about the individuals behind the creation of these projects.
@@ -129,5 +130,6 @@
       <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary">
     </form>
     <hr>
+    <%= render 'package_manager_list' %>
   </div>
 </div>

@@ -16,6 +16,7 @@ class PagesController < ApplicationController
   end
 
   def open_data
+    @platforms = Project.popular_platforms(:facet_limit => 40).first(28)
 
   end
 end
