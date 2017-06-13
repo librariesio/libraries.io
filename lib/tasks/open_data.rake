@@ -268,7 +268,7 @@ namespace :open_data do
             repo.host_type,
             repo.full_name,
             manifest.platform,
-            manifest.filepath,
+            manifest.filepath.try(:strip),
             manifest.branch,
             manifest.kind,
             repository_dependency.optional,
