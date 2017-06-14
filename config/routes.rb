@@ -195,8 +195,7 @@ Rails.application.routes.draw do
   get '/privacy', to: 'pages#privacy', as: :privacy
   get '/compatibility', to: 'pages#compatibility', as: :compatibility
   get '/data', to: 'pages#data', as: :data
-  get '/data/documentation', to: 'pages#data_documentation', as: :data_documentation
-
+  
   post '/hooks/package', to: 'hooks#package'
 
   get '/:platform/:name/suggestions', to: 'project_suggestions#new', as: :project_suggestions, constraints: { :name => /.*/ }
