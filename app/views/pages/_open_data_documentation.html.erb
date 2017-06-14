@@ -7,6 +7,10 @@
   </div>
   <ul class="list-group collapse" id="projectFields">
     <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the project in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
         <h5>Platform <em class='text-muted'>string</em></h5>
         <p>The name of the Package manager the project is available on.</p>
     </li>
@@ -84,6 +88,10 @@
         <p>The total count of open source repositories that list the project as a dependency as detected by Libraries.io.</p>
       </p>
     </li>
+    <li class='list-group-item'>
+        <h5>Repository ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the repository for this project in the Libraries.io database</p>
+    </li>
   </ul>
 </div>
 
@@ -96,12 +104,20 @@
   </div>
   <ul class='list-group collapse' class='list-group' id='versionFields'>
     <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the version in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
         <h5>Platform <em class='text-muted'>string</em></h5>
         <p>The name of the Package manager the version is available on.</p>
     </li>
     <li class='list-group-item'>
         <h5>Project Name <em class='text-muted'>string</em></h5>
         <p>The name of the project the version belongs to.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Project ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the project for this version in the Libraries.io database</p>
     </li>
     <li class='list-group-item'>
         <h5>Number <em class='text-muted'>string</em></h5>
@@ -131,12 +147,20 @@
   </div>
   <ul class='list-group collapse' class='list-group' id='tagFields'>
     <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the tag in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
         <h5>Host Type <em class='text-muted'>string</em></h5>
         <p>Which website the tags repository is hosted on, either GitHub, GitLab or Bitbucket.</p>
     </li>
     <li class='list-group-item'>
         <h5>Repository Name with Owner <em class='text-muted'>string</em></h5>
         <p>The repository name and owner seperated by a slash, also maps to the url slug on the given repository host e.g. librariesio/libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the repository for this tag in the Libraries.io database</p>
     </li>
     <li class='list-group-item'>
         <h5>Tag Name <em class='text-muted'>string</em></h5>
@@ -176,6 +200,10 @@
   </div>
   <ul class='list-group collapse' class='list-group' id='dependenciesFields'>
     <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the dependency in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
         <h5>Platform <em class='text-muted'>string</em></h5>
         <p>The name of the Package manager the dependency is available on.</p>
     </li>
@@ -184,8 +212,16 @@
         <p>The name of the project the dependency belongs to.</p>
     </li>
     <li class='list-group-item'>
+        <h5>Project ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the project for this dependency in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
         <h5>Verion Number <em class='text-muted'>string</em></h5>
         <p>The number of the version that the dependency belongs to.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Version ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the version for this dependency in the Libraries.io database</p>
     </li>
     <li class='list-group-item'>
         <h5>Dependency Name <em class='text-muted'>string</em></h5>
@@ -207,6 +243,10 @@
         <h5>Dependency Requirements <em class='text-muted'>string</em></h5>
         <p>The version or range of versions that the dependency specifies, resolution of that to a particular version is package manager specific.</p>
     </li>
+    <li class='list-group-item'>
+        <h5>Dependency Project ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the project for this dependency in the Libraries.io database</p>
+    </li>
   </ul>
 </div>
 
@@ -220,6 +260,10 @@
     </p>
   </div>
   <ul class='list-group collapse' class='list-group' id='repositoriesFields'>
+    <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the repository in the Libraries.io database</p>
+    </li>
     <li class='list-group-item'>
         <h5>Host Type <em class='text-muted'>string</em></h5>
         <p>Which website the repository is hosted on, either GitHub, GitLab or Bitbucket.</p>
@@ -385,12 +429,20 @@
   </div>
   <ul class='list-group collapse' class='list-group' id='repDepFields'>
     <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the repository dependency in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
         <h5>Host Type <em class='text-muted'>string</em></h5>
         <p>Which website the dependencys repository is hosted on, either GitHub, GitLab or Bitbucket.</p>
     </li>
     <li class='list-group-item'>
         <h5>Repository Name with Owner <em class='text-muted'>string</em></h5>
         <p>The repository name and owner seperated by a slash, also maps to the url slug on the given repository host e.g. librariesio/libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the repository for this dependency in the Libraries.io database</p>
     </li>
     <li class='list-group-item'>
         <h5>Manifest Platform <em class='text-muted'>string</em></h5>
@@ -423,6 +475,10 @@
     <li class='list-group-item'>
         <h5>Dependency Kind <em class='text-muted'>string</em></h5>
         <p>The type of dependency, often declared for the phase of usage, e.g. runtime, test, development, build.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependency Project ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the project for this dependency in the Libraries.io database</p>
     </li>
   </ul>
 </div>
