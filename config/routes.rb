@@ -194,8 +194,8 @@ Rails.application.routes.draw do
   get '/team', to: 'pages#team', as: :team
   get '/privacy', to: 'pages#privacy', as: :privacy
   get '/compatibility', to: 'pages#compatibility', as: :compatibility
-  get '/open-data', to: 'pages#open_data', as: :open_data
-
+  get '/data', to: 'pages#data', as: :data
+  
   post '/hooks/package', to: 'hooks#package'
 
   get '/:platform/:name/suggestions', to: 'project_suggestions#new', as: :project_suggestions, constraints: { :name => /.*/ }

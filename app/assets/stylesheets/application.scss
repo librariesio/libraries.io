@@ -407,8 +407,6 @@ tr.top td{
   margin-bottom: 25px;
 }
 
-
-
 .team-user{
   min-height: 100px;
   margin-bottom: 10px;
@@ -468,4 +466,13 @@ tr.top td{
 
 h4.panel-title{
   line-height: 14px;
+}
+
+.panel-heading .panel-toggle:after{
+    content: "\25B2";
+    float: right;
+    color: grey;
+}
+.panel-heading .panel-toggle.collapsed:after{
+    content: "\25BC";
 }

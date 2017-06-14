@@ -1,0 +1,13 @@
+<h3>
+  Supported Package Managers
+</h3>
+<div class='pictogram-list'>
+  <% @platforms.each do |platform| %>
+    <% next if platform['key'].downcase == 'go' %>
+    <a class="pictogram tip pictogram-<%= platform['key'].downcase %>" href='<%= platform['key'] %>' title='<%= platform['key'] %>'></a>
+  <% end %>
+</div>
+<br>
+<p>
+  Package manager not listed above? <%= link_to 'Consider adding support for it', "https://github.com/librariesio/libraries.io/blob/master/docs/add-a-package-manager.md" %>.
+</p> 
