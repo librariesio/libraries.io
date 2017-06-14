@@ -1,13 +1,13 @@
 <div class='panel panel-default'> 
   <div class="panel-heading">
-    <h5 class='panel-title' id='projects'>Projects</h5>
+    <h5 class='panel-title' id='projects'><a class='panel-toggle collapsed' data-toggle="collapse" href="#projectFields" aria-expanded="false" aria-controls="projectFields">Projects</a></h5>
   </div>
   <div class="panel-body">
-    A Libraries.io project is the definition of a package available from one of the 33 Package Managers that it supports. <a data-toggle="collapse" href="#projectFields" aria-expanded="false" aria-controls="projectFields">Show fields</a>.
+    A Libraries.io project is the definition of a package available from one of the 33 Package Managers that it supports.
   </div>
   <ul class="list-group collapse" id="projectFields">
     <li class='list-group-item'>
-        <h5>Platform <em class='text-muted'>string</em></h5> 
+        <h5>Platform <em class='text-muted'>string</em></h5>
         <p>The name of the Package manager the project is available on.</p>
     </li>
     <li class='list-group-item'>
@@ -89,10 +89,10 @@
 
 <div class='panel panel-default'> 
   <div class="panel-heading">
-    <h5 class='panel-title' id='versions'>Versions</h5>
+    <h5 class='panel-title' id='versions'><a class='panel-toggle collapsed' data-toggle="collapse" href="#versionFields" aria-expanded="false" aria-controls="versionFields">Versions</a></h5>
   </div>
   <div class="panel-body">
-    A Libraries.io version is a definition of an imutable published version of a Project from a package manager. Not all package managers have a concept of publishing versions, often relying directly on tags/branches from a source control. <a data-toggle="collapse" href="#versionFields" aria-expanded="false" aria-controls="versionFields">Show fields</a>.
+    A Libraries.io version is a definition of an imutable published version of a Project from a package manager. Not all package managers have a concept of publishing versions, often relying directly on tags/branches from a source control.
   </div>
   <ul class='list-group collapse' class='list-group' id='versionFields'>
     <li class='list-group-item'>
@@ -124,10 +124,10 @@
 
 <div class='panel panel-default'> 
   <div class="panel-heading">
-    <h5 class='panel-title' id='tags'>Tags</em></h5>
+    <h5 class='panel-title' id='tags'><a class='panel-toggle collapsed' data-toggle="collapse" href="#tagFields" aria-expanded="false" aria-controls="tagFields">Tags</a></em></h5>
   </div>
   <div class="panel-body">
-    A Libraries.io tag is equivelant to a tag in git or other source control systems. <a data-toggle="collapse" href="#tagFields" aria-expanded="false" aria-controls="tagFields">Show fields</a>.
+    A Libraries.io tag is equivelant to a tag in git or other source control systems.
   </div>
   <ul class='list-group collapse' class='list-group' id='tagFields'>
     <li class='list-group-item'>
@@ -163,7 +163,7 @@
 
 <div class='panel panel-default'> 
   <div class="panel-heading">
-    <h5 class='panel-title' id='versions'>Dependencies
+    <h5 class='panel-title' id='versions'><a class='panel-toggle collapsed' data-toggle="collapse" href="#dependenciesFields" aria-expanded="false" aria-controls="dependenciesFields">Dependencies</a></h5>
   </div>
   <div class="panel-body">
     <p>
@@ -172,9 +172,6 @@
     <p>
       Almost all package managers dependencies will be from the same package manager, the only exception is Atom, which pulls it's
       dependencies from the NPM package manager, hence the extra `Dependency Platform` field.
-    </p>
-    <p>
-      <a data-toggle="collapse" href="#dependenciesFields" aria-expanded="false" aria-controls="dependenciesFields">Show fields</a>.
     </p>
   </div>
   <ul class='list-group collapse' class='list-group' id='dependenciesFields'>
@@ -215,10 +212,12 @@
 
 <div class='panel panel-default'> 
   <div class="panel-heading">
-    <h5 class='panel-title' id='repositories'>Repositories
+    <h5 class='panel-title' id='repositories'><a class='panel-toggle collapsed' data-toggle="collapse" href="#repositoriesFields" aria-expanded="false" aria-controls="repositoriesFields">Repositories</a></h5>
   </div>
   <div class="panel-body">
-    A Libraries.io repository represents a publically accessible source code repository from either github.com, gitlab.com or bitbucket.org. <a data-toggle="collapse" href="#repositoriesFields" aria-expanded="false" aria-controls="repositoriesFields">Show fields</a>.
+    <p>
+      A Libraries.io repository represents a publically accessible source code repository from either github.com, gitlab.com or bitbucket.org.
+    </p>
   </div>
   <ul class='list-group collapse' class='list-group' id='repositoriesFields'>
     <li class='list-group-item'>
@@ -379,10 +378,10 @@
 
 <div class='panel panel-default'> 
   <div class="panel-heading">
-    <h5 class='panel-title' id='repository_dependencies'>Repository Dependencies
+    <h5 class='panel-title' id='repository_dependencies'><a class='panel-toggle collapsed' class='panel-toggle' data-toggle="collapse" href="#repDepFields" aria-expanded="false" aria-controls="repDepFields">Repository Dependencies</a></h5>
   </div>
   <div class="panel-body">
-    A Libraries.io repository dependency is where a dependency on a Project from a package manager has been specified in a manifest file, either as a manually added dependency commited by a user or listed as a generated dependency listed in a lockfile that has been automatically generated by a package manager and commited. <a data-toggle="collapse" href="#repDepFields" aria-expanded="false" aria-controls="repDepFields">Show fields</a>.
+    A Libraries.io repository dependency is where a dependency on a Project from a package manager has been specified in a manifest file, either as a manually added dependency commited by a user or listed as a generated dependency listed in a lockfile that has been automatically generated by a package manager and commited.
   </div>
   <ul class='list-group collapse' class='list-group' id='repDepFields'>
     <li class='list-group-item'>
