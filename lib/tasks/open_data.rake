@@ -11,7 +11,8 @@ namespace :open_data do
     :export_dependencies,
     :export_repositories,
     :export_tags,
-    :export_repository_dependencies
+    :export_repository_dependencies,
+    :export_projects_with_repository_fields
   ]
 
   desc 'Export projects open data csv'
