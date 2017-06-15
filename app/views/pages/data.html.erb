@@ -1,0 +1,143 @@
+<% title 'Open Data - Libraries.io' %>
+
+<div class="row">
+  <div class="col-md-8">
+    <h1>
+      <%= fa_icon 'database' %>
+      Libraries.io Open Data
+    </h1>
+    <br>
+    <p>
+       Libraries.io gathers data from <strong>33</strong> package managers and <strong>3</strong> source code repositories. We track over <strong>2.4m</strong> unique open source projects, <strong>25m</strong> repositories and <strong>85m</strong> interdependencies between them. This gives Libraries.io a unique understanding of open source software. An understanding that we want to share with <strong>you</strong>.
+    </p>
+    <p>
+      This page contains information on how to download, use and redistribute data from Libraries.io. For enquiries please contact <%= mail_to 'data@libraries.io'%>.
+    </p>
+    <h2>What is in this release?</h2>
+    <p>
+      In this release you will find data about software distributed and/or crafted publicly on the Internet. You will find information about its development, its distribution and its dependencies. You will <strong>not</strong> find any information about the individuals who create and maintain these projects.
+    </p>
+    <hr>
+    <h2>Licence</h2>
+    <p>
+      Data from Libraries.io is available under the <a href='https://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International Licence</a>. We have summarised the freedoms and restrictions of this license below:
+    </p>
+    <div class='row'>
+      <div class='col-md-4'>
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h4 class="panel-title">Use</h4>
+          </div>
+          <div class="panel-body">
+            You <b>can</b> make any use of this data in private or public. You may study this data and use that knowledge in any way.
+          </div>
+        </div>
+      </div>
+      <div class='col-md-4'>
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h4 class="panel-title">Adapt</h4>
+          </div>
+          <div class="panel-body">
+            You <b>can</b> remix, transform, and build upon the material for any purpose, even commercially.
+          </div>
+        </div>
+      </div>
+      <div class='col-md-4'>
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h4 class="panel-title">Share</h4>
+          </div>
+          <div class="panel-body">
+            You <b>can</b> redistribute this data set and any derivatives.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='row'>
+      <div class='col-md-4'>
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h4 class="panel-title">Restrict Access</h4>
+          </div>
+          <div class="panel-body">
+            You <b>must</b> not restrict access to the work using technical measures, or otherwise impose limitations on the freedoms above.
+          </div>
+        </div>
+      </div>
+      <div class='col-md-4'>
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h4 class="panel-title">Attribute</h4>
+          </div>
+          <div class="panel-body">
+            You <b>must</b> give proper attribution to the author 'Libraries.io'
+          </div>
+        </div>
+      </div>
+      <div class='col-md-4'>
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h4 class="panel-title">Sharealike</h4>
+          </div>
+          <div class="panel-body">
+            You <b>must</b> release derivative works under an identical or similar license.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p>The full legal text of the license is included below:</p>
+
+    <pre class='well creative_commons'><%= render 'creative_commons' %></pre>
+
+    <hr>
+
+    <h2>Download</h2>
+
+    <%= render 'open_data_downloads' %>
+
+    <h3>Mirrors</h3>
+    <p>If you're providing a mirror of this dataset and would like to feature it here, email support@libraries.io or send a pull request!</p>
+
+    <hr>
+
+    <h2>Documentation</h2>
+    <br>
+    <p>
+      Libraries.io's data is organised into six packages. Here we describe each of the packages and its contents:
+    </p>
+    <%= render 'open_data_documentation' %>
+    <hr>
+
+  </div>
+  <div class='col-md-4'>
+
+    <%= render 'adsense/sidebar' %>
+
+    <h2>Releases</h2>
+    <hr>
+    <dl class='row'>
+        <dt class='col-xs-8'>Next</dt>
+        <dd class='col-xs-4'>August 2017</dd>
+        <dt class='col-xs-8'>Latest</dt>
+        <dd class='col-xs-4'>
+          <a href="https://zenodo.org/record/808273">1.0.0</a> - 15 June, 2017
+        </dd>
+    </dl>
+
+    <h3>Subscribe to release notifications</h3>
+
+    <p>
+      We'll be releasing more open data over the next few months, join the mailing list to be notified via email whenever we publish a new data set.
+    </p>
+    <form action="//libraries.us10.list-manage.com/subscribe/post?u=15c11768c94674bc6f18d079f&amp;id=08d43abc2f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="form-inline" novalidate>
+      <input type="email" value="" name="EMAIL" size='20' placeholder='Your email...' class="form-control" id="mce-EMAIL">
+      <div style="position: absolute; left: -5000px;"><input type="text" name="b_15c11768c94674bc6f18d079f_08d43abc2f" tabindex="-1" value=""></div>
+      <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary">
+    </form>
+    <hr>
+    <%= render 'package_manager_list' %>
+  </div>
+</div>

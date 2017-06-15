@@ -194,6 +194,8 @@ Rails.application.routes.draw do
   get '/team', to: 'pages#team', as: :team
   get '/privacy', to: 'pages#privacy', as: :privacy
   get '/compatibility', to: 'pages#compatibility', as: :compatibility
+  get '/data', to: 'pages#data', as: :data
+  get '/open-data', to: redirect("/data")
 
   post '/hooks/package', to: 'hooks#package'
 

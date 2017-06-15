@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170529132028) do
+ActiveRecord::Schema.define(version: 20170607094720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -205,13 +205,13 @@ ActiveRecord::Schema.define(version: 20170529132028) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "name"
-    t.string   "platform",                    :index=>{:name=>"index_projects_on_platform_and_name", :with=>["name"], :unique=>true}
+    t.string   "name",                        :limit=>255
+    t.string   "platform",                    :limit=>255, :index=>{:name=>"index_projects_on_platform_and_name", :with=>["name"], :unique=>true}
     t.datetime "created_at",                  :index=>{:name=>"index_projects_on_created_at"}
-    t.datetime "updated_at",                  :index=>{:name=>"index_projects_on_updated_at"}
+    t.datetime "updated_at"
     t.text     "description"
     t.text     "keywords"
-    t.string   "homepage"
+    t.string   "homepage",                    :limit=>255
     t.string   "licenses"
     t.string   "repository_url"
     t.integer  "repository_id",               :index=>{:name=>"index_projects_on_repository_id"}
@@ -254,7 +254,7 @@ ActiveRecord::Schema.define(version: 20170529132028) do
   end
 
   create_table "repositories", force: :cascade do |t|
-    t.string   "full_name"
+    t.string   "full_name",                  :index=>{:name=>"index_repositories_on_full_name"}
     t.string   "description"
     t.boolean  "fork"
     t.datetime "created_at",                 :null=>false
@@ -272,7 +272,7 @@ ActiveRecord::Schema.define(version: 20170529132028) do
     t.integer  "open_issues_count"
     t.string   "default_branch"
     t.integer  "subscribers_count"
-    t.string   "uuid",                       :index=>{:name=>"index_repositories_on_uuid", :unique=>true}
+    t.string   "uuid"
     t.string   "source_name",                :index=>{:name=>"index_repositories_on_source_name"}
     t.string   "license"
     t.integer  "repository_organisation_id", :index=>{:name=>"index_repositories_on_repository_organisation_id"}
@@ -297,6 +297,8 @@ ActiveRecord::Schema.define(version: 20170529132028) do
     t.string   "logo_url"
     t.integer  "repository_user_id",         :index=>{:name=>"index_repositories_on_repository_user_id"}
     t.string   "keywords",                   :default=>[], :array=>true
+
+    t.index ["host_type", "uuid"], :name=>"index_repositories_on_host_type_and_uuid", :unique=>true
   end
 
   create_table "repository_dependencies", force: :cascade do |t|

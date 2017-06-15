@@ -4,7 +4,7 @@ class Api::BowerSearchController < Api::ApplicationController
   def index
     @search = paginate Project.search(params[:q] || '', filters: {
       platform: 'Bower',
-    }, sort: format_sort, order: format_order), page: page_number, per_page: per_page_number
+    }, sort: format_sort, order: format_order, api: true), page: page_number, per_page: per_page_number
     @projects = @search.records.includes(:repository, :versions)
 
     render json: @projects

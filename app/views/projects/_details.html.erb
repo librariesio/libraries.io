@@ -1,0 +1,29 @@
+<dl>
+  <% if @project.keywords_array.present? %>
+    <dt>
+        Keywords
+    </dt>
+    <dd>
+      <%= linked_keywords @project.keywords_array %>
+    </dd>
+  <% end %>
+  <% if @project.normalized_licenses.present? %>
+    <dt>
+      <%= 'License'.pluralize(@project.normalized_licenses.length) %>
+    </dt>
+    <dd>
+      <%= linked_licenses @project.normalized_licenses %>
+    </dd>
+  <% end %>
+
+  <% if @project.install_instructions(@version.try(:number)).present? %>
+    <dt>
+      Install
+    </dt>
+    <dd class='well'>
+      <code>
+        <%= @project.install_instructions(@version.try(:number)) %>
+      </code>
+    </dd>
+  <% end %>
+</dl>

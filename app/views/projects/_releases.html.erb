@@ -1,0 +1,78 @@
+<% if @version_count > 0 %>
+  <hr>
+  <h4 data-ga-tracked-el='releases'>
+    Releases
+    <%= link_to project_versions_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
+      <%= fa_icon "rss-square" %>
+    <% end %>
+  </h4>
+  <dl class='releases row'>
+    <% @versions.each do |version| %>
+      <dt class='col-xs-12 col-sm-8'>
+        <%= link_to version, version_path(version.to_param) %>
+        <% if version.related_tag %>
+          <small class='text-muted'>
+            <%= link_to version.related_tag.repository_url, class: 'tip', title: "Browse source on #{version.project.repository.host_type}" do %>
+              <%= fa_icon('tag') %>
+            <% end %>
+          </small>
+          <% if version.previous_version %>
+            <small class='text-muted'>
+              <%= link_to version.diff_url, class: 'tip', title: "View diff between #{version} and #{version.previous_version}" do %>
+                <span><%= fa_icon('random') %></span>
+              <% end %>
+            </small>
+          <% end %>
+        <% end %>
+      </dt>
+      <dd class='col-sm-4 hidden-xs'>
+        <% if version.published_at.present? %>
+          <small class='text-muted'>
+            <%= version.published_at.strftime('%b %e, %Y') %>
+          </small>
+        <% end %>
+      </dd>
+    <% end %>
+  </dl>
+  <% if @project.versions.size > 10 %>
+    <%= link_to "See all #{pluralize(@project.versions.size, 'releases')}", project_versions_path(@project.to_param) %>
+  <% end %>
+<% elsif @repository && @tags.length > 0 %>
+  <h4 data-ga-tracked-el='tagged-releases'>
+    Tagged Releases
+    <%= link_to project_tags_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
+      <%= fa_icon "rss-square" %>
+    <% end %>
+  </h4>
+  <dl class='row releases'>
+    <% @tags.each do |tag| %>
+      <dl class='col-sm-4'>
+        <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
+      </dl>
+      <dd class='col-sm-4 hidden-xs'>
+        <% if tag.published_at.present? %>
+          <small class='text-muted'>
+            <%= tag.published_at.strftime('%b %e, %Y') %>
+          </small>
+        <% end %>
+      </dd>
+      <dd class='col-sm-4 hidden-xs'>
+        <small class='text-muted'>
+          <%= link_to tag.repository_url, class: 'tip', title: "Browse source on #{tag.repository.host_type}" do %>
+            <%= fa_icon('tag') %>
+          <% end %>
+        </small>
+        <% if tag.previous_tag %>
+          <small class='text-muted'>
+            <%= link_to tag.diff_url, class: 'tip', title: "View diff between #{tag} and #{tag.previous_tag}" do %>
+              <%= fa_icon('random') %>
+            <% end %>
+          </small>
+        <% end %>
+      </dd>
+    <% end %>
+  </dl>
+  <% if @repository.tags.published.count > 10 %>
+    <%= link_to "See all #{pluralize(@repository.tags.published.count, 'tags')}", project_tags_path(@project.to_param) %>
+  <% end %>
+<% end %>

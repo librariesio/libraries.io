@@ -39,4 +39,10 @@ class Api::ApplicationController < ApplicationController
   def error_message
     { error: "Error 403, you don't have permissions for this operation." }
   end
+
+  def es_query(klass, query, filters)
+    klass.search(query, filters: filters,
+                        sort: format_sort,
+                        order: format_order, api: true).paginate(page: page_number, per_page: per_page_number)
+  end
 end

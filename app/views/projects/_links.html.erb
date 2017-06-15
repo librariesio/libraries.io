@@ -1,0 +1,28 @@
+<p class='project-links'>
+  <% if @project.homepage.present? && @project.homepage != @project.package_manager_url %>
+    <span><%= link_to('Homepage', sanitize_url(@project.homepage), :rel => 'nofollow') %></span> 
+  <% end %>
+
+  <% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
+    <span><%= link_to 'Repository', @project.repository_url, :rel => 'nofollow' %></span>
+  <% end %>
+
+  <% if link = @project.package_manager_url(@version.try(:number)) %>
+    <span><%= link_to @project.platform, link %></span>
+  <% end %>
+
+  <% if @project.language.present? %>
+    <span><%= link_to @project.language, language_path(@project.language) %></span>
+  <% end %>
+
+  <% if link = @project.documentation_url(@version.try(:number) || @project.latest_release_number) %>
+    <span><%= link_to 'Documentation', link %></span>
+  <% elsif @project.platform.downcase == 'bower' && @project.language.try(:downcase) == 'purescript' %>
+    <% link = "https://pursuit.purescript.org/packages/#{@project.name}" %>
+    <span><%= link_to 'Documentation', link %></span>
+  <% end %>
+
+  <% if link = @project.download_url(@version.try(:number)) %>
+    <span><%= link_to 'Download', link %></span>
+  <% end %>
+</p>

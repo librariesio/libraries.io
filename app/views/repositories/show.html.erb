@@ -24,7 +24,7 @@
   <div class='col-md-8'>
     <h1>
       <% if repo.owner.present? %>
-        <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo), user_path(host_type: repo.host_type, login: repo.owner_name) %>
+        <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo), user_path(host_type: repo.host_type.downcase, login: repo.owner_name) %>
       <% else %>
         <%= image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo) %>
       <% end %>
@@ -79,8 +79,8 @@
   </div>
 </div>
 <hr>
-<% cache([@repository, 'show', 'v1'], :expires_in => 1.day) do %>
-  <div class='row'>
+<div class='row'>
+  <% cache([@repository, 'show', 'v2'], :expires_in => 1.day) do %>
     <div class='col-md-8'>
       <p>
         <%= emojify repo.description %>
@@ -123,7 +123,10 @@
 
       <div id='repository_dependencies' style='display:none;' data-url="<%= repository_dependencies_path(repo.to_param) %>"></div>
     </div>
-    <div class='col-md-4'>
+  <% end %>
+
+  <div class='col-md-4'>
+    <% cache([@repository, 'sidebar', 'v1'], :expires_in => 1.day) do %>
       <%= render 'adsense/sidebar' %>
       <h4>Project Statistics</h4>
       <%= render 'repositories/stats', repo: repo %>
@@ -151,35 +154,35 @@
         </h4>
         <%= render @forks, cache: true %>
       <% end %>
+    <% end %>
 
-      <div class="row"></div>
-      <br>
+    <div class="row"></div>
+    <br>
+    <p>
+      <%= fa_icon 'question-circle' %>
+      Something wrong with this page?
+      <%= link_to 'Make a suggestion', 'https://github.com/librariesio/libraries.io/issues/new' %>
+    </p>
+    <% if repo.last_synced_at.present? %>
       <p>
-        <%= fa_icon 'question-circle' %>
-        Something wrong with this page?
-        <%= link_to 'Make a suggestion', 'https://github.com/librariesio/libraries.io/issues/new' %>
+        <small class='text-muted'>Last synced: <%= repo.last_synced_at %></small>
       </p>
-      <% if repo.last_synced_at.present? %>
+    <% end %>
+    <% unless repo.recently_synced? %>
+      <% if logged_in? %>
         <p>
-          <small class='text-muted'>Last synced: <%= repo.last_synced_at %></small>
+          <%= link_to sync_repository_path(repo.to_param), class: 'btn btn-primary btn-xs', method: :post do %>
+            <%= fa_icon 'refresh' %>
+            Resync Repository
+          <% end %>
+        </p>
+      <% else %>
+        <p>
+          <small class='text-muted'>
+            <%= link_to 'Login', login_path %> to resync this repository
+          </small>
         </p>
       <% end %>
-      <% unless repo.recently_synced? %>
-        <% if logged_in? %>
-          <p>
-            <%= link_to sync_repository_path(repo.to_param), class: 'btn btn-primary btn-xs', method: :post do %>
-              <%= fa_icon 'refresh' %>
-              Resync Repository
-            <% end %>
-          </p>
-        <% else %>
-          <p>
-            <small class='text-muted'>
-              <%= link_to 'Login', login_path %> to resync this repository
-            </small>
-          </p>
-        <% end %>
-      <% end %>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>

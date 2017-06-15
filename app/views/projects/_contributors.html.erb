@@ -1,0 +1,12 @@
+<% if @contributors.length > 0 %>
+	<hr>
+	<div class="row">
+	  <div class="col-md-12">
+			<h3 data-ga-tracked-el='top-contributors'>Contributors</h4>
+	    <%= render partial: 'repository_users/repository_user', collection: @contributors %>
+	  </div>
+	</div>
+	<p>
+		<br><%= link_to 'See all contributors', repository_contributors_path(@repository.to_param) %>
+	</p>
+<% end %>

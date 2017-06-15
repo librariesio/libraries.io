@@ -28,6 +28,10 @@ module ApplicationHelper
     (action_name == 'search' && controller_name == 'repositories') || (action_name == 'index' && controller_name == 'search')
   end
 
+  def on_homepage?
+    (action_name == 'index' && controller_name == 'projects')
+  end
+
   def search_page_entries_info(collection, options = {})
     entry_name = options[:model] || (collection.empty?? 'item' :
         collection.first.class.name.split('::').last.titleize)

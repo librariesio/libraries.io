@@ -89,7 +89,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_language
-    Linguist::Language[params[:language]].to_s if params[:language].present?
+    return [] if params[:language].blank?
+    params[:language].split(',').map{|l| Linguist::Language[l].to_s }.compact
   end
 
   def current_licenses
@@ -98,7 +99,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_license
-    Spdx.find(params[:license]).try(:id) if params[:license].present?
+    return [] if params[:license].blank?
+    params[:license].split(',').map{|l| Spdx.find(l).try(:id) }.compact
   end
 
   def current_keywords
@@ -143,7 +145,7 @@ class ApplicationController < ActionController::Base
 
   def search_repos(query)
     es_query(Repository, query, {
-      license: current_licenses,
+      license: current_license,
       language: current_language,
       keywords: current_keywords,
       platforms: current_platforms,

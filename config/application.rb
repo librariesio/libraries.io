@@ -38,7 +38,7 @@ module Libraries
     config.assets.paths << Emoji.images_path
     config.assets.precompile << "emoji/**/*.png"
 
-    Rails::Timeago.default_options :limit => proc { 60.days.ago }, :nojs => true
+    Rails::Timeago.default_options :limit => proc { 60.days.ago }, :nojs => true, :format => proc { |time, options| time.strftime('%b %e, %Y') }
 
     # GC::Profiler.enable
 

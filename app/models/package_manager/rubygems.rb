@@ -24,7 +24,7 @@ module PackageManager
     end
 
     def self.check_status_url(project)
-      "https://rubygems.org/api/v1/versions/#{project.name}"
+      "https://rubygems.org/api/v1/versions/#{project.name}.json"
     end
 
     def self.project_names

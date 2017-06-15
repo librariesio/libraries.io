@@ -8,7 +8,7 @@ module RepositorySourceRank
   end
 
   def rank_recently_updated?
-    rank && updated_at && updated_at > 1.day.ago
+    read_attribute(:rank) && updated_at && updated_at > 1.day.ago
   end
 
   def update_source_rank_async

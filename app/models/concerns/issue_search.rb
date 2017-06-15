@@ -144,9 +144,9 @@ module IssueSearch
       labels_to_keep ||= ['help wanted']
       filters.select { |_k, v| v.present? }.map do |k, v|
         if k == :labels
-          labels_to_keep.map { |value| { term: { k => value } } }
+          Array(labels_to_keep).map { |value| { terms: { k => value.split(',') } } }
         else
-          { term: { k => v } }
+          Array(v).map { { terms: { k => v.split(',') } } }
         end
       end
     end
