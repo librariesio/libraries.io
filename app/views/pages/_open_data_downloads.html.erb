@@ -1,6 +1,6 @@
-<p>Latest release: <strong><%= latest_open_data_release_number %> - <%= latest_open_data_release_date %></strong></p>
+<p>Latest release: <strong>1.0.0 - 15 June, 2017</strong></p>
 
-<p>Download individual csv files or an archive of all of them, all downloads are gzipped:</p>
+<p>Download an archive of seven csv files from zenodo:</p>
 
 <table class='table table-bordered table-hover'>
   <thead>
@@ -17,21 +17,19 @@
       <th>Download link</th>
     </tr>
   </thead>
-  <% open_data_release(latest_open_data_release_number)[:files].each do |file| %>
     <tr>
       <td>
         <strong>
-          <%= file[:filename] %>
+          Libraries.io-open-data-1.0.0.zip
         </strong>
-        <br><small class='text-muted'><%= file[:sha256] %></small>
+        <br><small class='text-muted'>MD5: be8015f7e70481da6b43af63372be626</small>
       </td>
       <td>
-        <%= file[:size] %>
+        5.9GB
       </td>
-      <td><%= file[:rows] %></td>
+      <td>200 million</td>
       <td>
-        <a href="<%= file[:href] %>" class='btn btn-primary'>Download</a>
+        <a href="https://zenodo.org/record/808273/files/Libraries.io-open-data-1.0.0.zip" class='btn btn-primary'>Download</a>
       </td>
     </tr>
-  <% end %>
 </table>
