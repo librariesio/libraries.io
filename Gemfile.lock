@@ -90,7 +90,7 @@ GEM
       thread_safe
     arel (7.1.4)
     asciidoctor (1.5.5)
-    autoprefixer-rails (7.1.1)
+    autoprefixer-rails (7.1.1.2)
       execjs
     bibliothecary (5.3.4)
       deb_control
