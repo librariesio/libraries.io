@@ -1,17 +1,54 @@
-db:
-  image: postgres
-elasticsearch:
-  image: elasticsearch:2.4
-redis:
-  image: redis
-web:
-  build: .
-  command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
-  volumes:
-    - .:/libraries.io
-  ports:
-    - "3000:3000"
-  links:
-    - db
-    - elasticsearch
-    - redis
+version: '3.0'
+
+volumes:
+  postgres-data:
+    driver: local
+
+  redis-data:
+    driver: local
+
+  elasticsearch-data:
+    driver: local
+
+services:
+  postgres:
+    image: postgres:9.6.3
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=not-a-secret
+      - POSTGRES_USER=librariesio
+
+  elasticsearch:
+    image: elasticsearch:2.4.5
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    command: -Daction.auto_create_index=true
+
+  redis:
+    image: redis:3.2.9
+    volumes:
+      - redis-data:/var/lib/redis
+    command: redis-server --appendonly yes
+
+  sidekiq: &app_base
+    build:
+      context: .
+    image: librariesio/libraries.io
+    environment:
+      - DATABASE_URL=postgresql://librariesio:not-a-secret@postgres/librariesio
+      - REDIS_URL=redis://redis:6379/1
+      - ELASTICSEARCH_CLUSTER_URL=elasticsearch:9200
+    volumes:
+      - .:/libraries.io
+    depends_on:
+      - postgres
+      - elasticsearch
+      - redis
+    command: bundle exec sidekiq -C config/sidekiq.yml
+
+  web:
+    <<: *app_base
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server --port 3000 --bind '0.0.0.0'"
+    ports:
+      - "3000:3000"
