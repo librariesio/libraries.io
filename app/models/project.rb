@@ -431,9 +431,19 @@ class Project < ApplicationRecord
 
     # update registry permissions
     existing_permissions = registry_permissions.includes(:registry_user).all
-    # add new users
+    existing_owners = existing_permissions.map(&:registry_user)
+
+
+    # add new owners
+    new_owners = owners - existing_owners
+    new_owners.each do |owner|
+      registry_permissions.create(registry_user: owner)
+    end
 
     # remove missing users
-
+    removed_owners = existing_owners - owners
+    removed_owners.each do |owner|
+      registry_permissions.find{|rp| rp.registry_user == owner}.destroy
+    end
   end
 end
