@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607094720) do
+ActiveRecord::Schema.define(version: 20170624194713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -287,15 +287,16 @@ ActiveRecord::Schema.define(version: 20170607094720) do
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
-    t.integer  "project_id",   :index=>{:name=>"index_repository_dependencies_on_project_id"}
-    t.integer  "manifest_id",  :index=>{:name=>"index_repository_dependencies_on_manifest_id"}
+    t.integer  "project_id",    :index=>{:name=>"index_repository_dependencies_on_project_id"}
+    t.integer  "manifest_id",   :index=>{:name=>"index_repository_dependencies_on_manifest_id"}
     t.boolean  "optional"
     t.string   "project_name"
     t.string   "platform"
     t.string   "requirements"
     t.string   "kind"
-    t.datetime "created_at",   :null=>false
-    t.datetime "updated_at",   :null=>false
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
+    t.integer  "repository_id"
   end
 
   create_table "repository_organisations", force: :cascade do |t|
