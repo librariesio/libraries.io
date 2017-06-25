@@ -20,7 +20,7 @@ class Repository < ApplicationRecord
   has_many :tags, dependent: :delete_all
   has_many :published_tags, -> { published }, anonymous_class: Tag
   has_many :manifests, dependent: :destroy
-  has_many :dependencies, through: :manifests, source: :repository_dependencies
+  has_many :dependencies, -> { uniq } ,foreign_key: "repository_id", class_name: "RepositoryDependency"
   has_many :dependency_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :dependency_repos, -> { group('repositories.id') }, through: :dependency_projects, source: :repository
 
@@ -137,7 +137,7 @@ class Repository < ApplicationRecord
   end
 
   def repository_dependencies
-    manifests.latest.includes({repository_dependencies: {project: :versions}}).map(&:repository_dependencies).flatten.uniq
+    RepositoryDependency.where(repository_id: id).uniq
   end
 
   def owner
