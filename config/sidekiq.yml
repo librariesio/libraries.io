@@ -3,7 +3,6 @@
 production:
   :concurrency: 100
 :timeout: 8
-:verbose: true
 :queues:
   - [user, 40]
   - [critical, 30]
