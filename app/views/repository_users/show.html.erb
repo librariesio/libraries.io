@@ -77,6 +77,7 @@
         <div class="col-sm-6 user-column">
           <h4>Most Used Projects</h4>
           <%= render @favourite_projects, cache: true %>
+          <%= link_to "See all #{@user}'s most used projects", user_dependencies_path(@user.to_param) %>
         </div>
       <% end %>
     </div>
