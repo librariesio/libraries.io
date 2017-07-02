@@ -20,7 +20,7 @@ class CollectionsController < ApplicationController
   private
 
   def find_language
-    @language = Project.language(params[:language]).first.try(:language)
+    @language = Linguist::Language[params[:language]].try(:to_s)
     raise ActiveRecord::RecordNotFound if @language.nil?
   end
 end
