@@ -40,7 +40,7 @@ class RepositoryUsersController < ApplicationController
   end
 
   def contributors
-    @contributors = @user.contributors.paginate(page: params[:page])
+    @contributors = @user.contributors.select(:host_type, :name, :login, :uuid).paginate(page: params[:page])
   end
 
   private
