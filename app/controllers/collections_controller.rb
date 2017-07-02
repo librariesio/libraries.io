@@ -11,7 +11,8 @@ class CollectionsController < ApplicationController
         platform: current_platforms,
         normalized_licenses: current_licenses
       }}).paginate(page: page_number, per_page: per_page_number)
-    @projects = @search.records.includes(:repository)
+
+    @projects = @search.results.map{|result| ProjectSearchResult.new(result) }
     @facets = @search.response.aggregations
     raise ActiveRecord::RecordNotFound if @projects.empty?
   end
