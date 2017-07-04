@@ -24,6 +24,7 @@ module RepositoryIssue
     def self.create_from_hash(name_with_owner, issue_hash, token = nil)
       issue_hash = issue_hash.to_hash.with_indifferent_access
       repository = Repository.host('Bitbucket').find_by_full_name(name_with_owner) || RepositoryHost::Bitbucket.create(name_with_owner)
+      return if repository.nil?
       if issue_hash[:type] == 'pullrequest'
         issue_hash[:local_id] = issue_hash[:id]
         issue_hash[:content] = issue_hash[:description]
