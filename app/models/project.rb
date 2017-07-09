@@ -162,7 +162,7 @@ class Project < ApplicationRecord
   end
 
   def keywords
-    keywords_array
+    (Array(keywords_array) + Array(repository.try(:keywords) || [])).compact.uniq(&:downcase)
   end
 
   def package_manager_url(version = nil)

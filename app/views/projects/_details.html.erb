@@ -1,10 +1,10 @@
 <dl>
-  <% if @project.keywords_array.present? %>
+  <% if @project.keywords.present? %>
     <dt>
         Keywords
     </dt>
     <dd>
-      <%= linked_keywords @project.keywords_array %>
+      <%= linked_keywords @project.keywords %>
     </dd>
   <% end %>
   <% if @project.normalized_licenses.present? %>

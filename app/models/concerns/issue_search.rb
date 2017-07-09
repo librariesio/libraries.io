@@ -31,7 +31,7 @@ module IssueSearch
     after_save lambda { __elasticsearch__.index_document  }
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
-    def as_indexed_json(_options)
+    def as_indexed_json(_options = {})
       as_json methods: [:contributions_count, :language, :license, :rank]
     end
 

@@ -23,7 +23,7 @@ class Admin::RepositoriesController < Admin::ApplicationController
 
   def index
     if params[:language].present?
-      @language = Repository.language(params[:language].downcase).first.try(:language)
+      @language = Linguist::Language[params[:language]].try(:to_s)
       raise ActiveRecord::RecordNotFound if @language.nil?
       scope = Repository.language(@language)
     else
