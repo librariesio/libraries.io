@@ -450,18 +450,23 @@ tr.top td{
   }
 }
 
-#readme-well{
-  max-height: 800px;
-  overflow: scroll;
-}
-
 .table > tbody > tr > td {
   vertical-align: middle;
 }
 
-.creative_commons{
+.well-small{
+  max-height: 200px;
+  overflow: scroll;
+}
+
+.well-medium{
   max-height: 400px;
   overflow: scroll;
+}
+
+.well-large{
+  max-height: 800px;
+  overflow: scroll; 
 }
 
 h4.panel-title{
