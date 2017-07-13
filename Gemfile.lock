@@ -414,11 +414,7 @@ GEM
     rubypants (0.6.0)
     rugged (0.26.0)
     sanitize-url (0.1.4)
-    sass (3.5.0)
-      sass-listen (~> 3.0.7)
-    sass-listen (3.0.7)
-      rb-fsevent (>= 0.9.3)
-      rb-inotify (>= 0.9.7)
+    sass (3.4.24)
     sassc (1.11.2)
       bundler
       ffi (~> 1.9.6)
@@ -620,6 +616,7 @@ DEPENDENCIES
   rspec-sidekiq
   rspec_junit_formatter
   sanitize-url
+  sass (= 3.4.24)
   sassc-rails
   schema_plus_pg_indexes
   semantic
