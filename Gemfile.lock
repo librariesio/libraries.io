@@ -135,7 +135,7 @@ GEM
     cliver (0.3.2)
     codeclimate-test-reporter (1.0.8)
       simplecov (<= 0.13)
-    commonmarker (0.16.7)
+    commonmarker (0.16.8)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
@@ -221,7 +221,7 @@ GEM
       mime-types (>= 1.19)
       rugged (>= 0.25.1)
     github-markup (1.6.0)
-    gitlab (4.1.0)
+    gitlab (4.2.0)
       httparty
       terminal-table
     globalid (0.4.0)
@@ -343,7 +343,7 @@ GEM
     rack-canonical-host (0.2.3)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
-    rack-cors (0.4.1)
+    rack-cors (1.0.0)
     rack-protection (2.0.0)
       rack
     rack-test (0.6.3)
@@ -414,8 +414,12 @@ GEM
     rubypants (0.6.0)
     rugged (0.26.0)
     sanitize-url (0.1.4)
-    sass (3.4.24)
-    sassc (1.11.2)
+    sass (3.5.1)
+      sass-listen (~> 4.0.0)
+    sass-listen (4.0.0)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+    sassc (1.11.4)
       bundler
       ffi (~> 1.9.6)
       sass (>= 3.3.0)
@@ -616,7 +620,6 @@ DEPENDENCIES
   rspec-sidekiq
   rspec_junit_formatter
   sanitize-url
-  sass (= 3.4.24)
   sassc-rails
   schema_plus_pg_indexes
   semantic
