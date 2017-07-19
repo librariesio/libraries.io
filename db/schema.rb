@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607094720) do
+ActiveRecord::Schema.define(version: 20170719162634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,25 @@ ActiveRecord::Schema.define(version: 20170607094720) do
     t.string   "requirements"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "dependency_activities", force: :cascade do |t|
+    t.integer  "repository_id_id",     :index=>{:name=>"index_dependency_activities_on_repository_id_id"}
+    t.integer  "project_id_id",        :index=>{:name=>"index_dependency_activities_on_project_id_id"}
+    t.string   "action"
+    t.string   "project_name"
+    t.string   "commit_message"
+    t.string   "requirement"
+    t.string   "kind"
+    t.string   "manifest_path"
+    t.string   "manifest_kind"
+    t.string   "commit_sha"
+    t.string   "platform"
+    t.string   "previous_requirement"
+    t.string   "previous_kind"
+    t.datetime "committed_at",         :index=>{:name=>"index_dependency_activities_on_committed_at"}
+    t.datetime "created_at",           :null=>false
+    t.datetime "updated_at",           :null=>false
   end
 
   create_table "identities", force: :cascade do |t|
@@ -205,13 +224,13 @@ ActiveRecord::Schema.define(version: 20170607094720) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "name"
-    t.string   "platform",                    :index=>{:name=>"index_projects_on_platform_and_name", :with=>["name"], :unique=>true}
+    t.string   "name",                        :limit=>255
+    t.string   "platform",                    :limit=>255, :index=>{:name=>"index_projects_on_platform_and_name", :with=>["name"], :unique=>true}
     t.datetime "created_at",                  :index=>{:name=>"index_projects_on_created_at"}
-    t.datetime "updated_at",                  :index=>{:name=>"index_projects_on_updated_at"}
+    t.datetime "updated_at"
     t.text     "description"
     t.text     "keywords"
-    t.string   "homepage"
+    t.string   "homepage",                    :limit=>255
     t.string   "licenses"
     t.string   "repository_url"
     t.integer  "repository_id",               :index=>{:name=>"index_projects_on_repository_id"}
@@ -238,8 +257,23 @@ ActiveRecord::Schema.define(version: 20170607094720) do
     t.datetime "updated_at",    :null=>false
   end
 
+  create_table "registry_permissions", force: :cascade do |t|
+    t.integer "registry_user_id"
+    t.integer "project_id"
+    t.string  "kind"
+  end
+
+  create_table "registry_users", force: :cascade do |t|
+    t.string  "platform"
+    t.integer "uuid"
+    t.string  "login"
+    t.string  "email"
+    t.string  "name"
+    t.string  "url"
+  end
+
   create_table "repositories", force: :cascade do |t|
-    t.string   "full_name"
+    t.string   "full_name",                  :index=>{:name=>"index_repositories_on_full_name"}
     t.string   "description"
     t.boolean  "fork"
     t.datetime "created_at",                 :null=>false

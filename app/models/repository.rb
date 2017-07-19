@@ -3,6 +3,7 @@ class Repository < ApplicationRecord
   include Status
   include RepoManifests
   include RepositorySourceRank
+  include DependencyMiner
 
   # eager load this module to avoid clashing with Gitlab gem in development
   RepositoryHost::Gitlab

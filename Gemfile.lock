@@ -382,6 +382,9 @@ GEM
     rb-readline (0.5.5)
     rdoc (5.1.0)
     redis (3.3.3)
+    repo_miner (0.2.2)
+      bibliothecary
+      rugged
     rspec (3.6.0)
       rspec-core (~> 3.6.0)
       rspec-expectations (~> 3.6.0)
@@ -616,6 +619,7 @@ DEPENDENCIES
   rb-readline
   rdoc
   redis
+  repo_miner
   rspec-rails
   rspec-sidekiq
   rspec_junit_formatter
