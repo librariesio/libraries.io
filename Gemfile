@@ -59,6 +59,7 @@ gem 'faraday_middleware'
 gem 'parallel', require: nil
 gem 'omniauth-gitlab'
 gem 'omniauth-bitbucket'
+gem 'omniauth-sourceforge', git: 'https://github.com/librariesio/omniauth-sourceforge'
 gem 'chartkick'
 gem 'groupdate'
 gem 'turbolinks'

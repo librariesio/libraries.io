@@ -18,6 +18,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :github_private, ENV['GITHUB_PRIVATE_KEY'], ENV['GITHUB_PRIVATE_SECRET'], scope: "user:email,repo,read:org", request_path: '/auth/github_private', callback_path: '/auth/github_private/callback'
   provider :gitlab, ENV['GITLAB_APPLICATION_ID'], ENV['GITLAB_SECRET'], scope: "read_user"
   provider :bitbucket, ENV['BITBUCKET_APPLICATION_ID'], ENV['BITBUCKET_SECRET']
+  provider :sourceforge, ENV['SOURCEFORGE_KEY'], ENV['SOURCEFORGE_SECRET']
 end
 
 Rails.application.config.default_provider = :github
