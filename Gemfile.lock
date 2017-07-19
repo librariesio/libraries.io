@@ -33,7 +33,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     RedCloth (4.3.2)
-    aasm (4.12.0)
+    aasm (4.12.1)
       concurrent-ruby (~> 1.0)
     actioncable (5.0.3)
       actionpack (= 5.0.3)
@@ -89,7 +89,7 @@ GEM
       rack
     arel (7.1.4)
     asciidoctor (1.5.6)
-    autoprefixer-rails (7.1.2.2)
+    autoprefixer-rails (7.1.2.3)
       execjs
     bibliothecary (5.4.0)
       deb_control
@@ -343,7 +343,7 @@ GEM
     rack-canonical-host (0.2.3)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
-    rack-cors (1.0.0)
+    rack-cors (1.0.1)
     rack-protection (2.0.0)
       rack
     rack-test (0.6.3)
@@ -645,4 +645,4 @@ RUBY VERSION
    ruby 2.4.0p0
 
 BUNDLED WITH
-   1.15.1
+   1.15.2
