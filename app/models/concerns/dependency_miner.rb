@@ -9,6 +9,8 @@ module DependencyMiner
     # download code
     `git clone #{url} #{tmp_path}`
 
+    return unless tmp_path.exist? # handle failed clones
+
     # mine dependency activity from git repository
     miner = RepoMiner::Repository.new(tmp_path.to_s)
 
@@ -57,6 +59,9 @@ module DependencyMiner
     # write activities to the database
     activities.each {|activity| dependency_activities.create(activity) }
 
+
+
+  ensure
     # delete code
     `rm -rf #{tmp_path}`
   end
