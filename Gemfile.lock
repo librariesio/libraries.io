@@ -382,7 +382,7 @@ GEM
     rb-readline (0.5.5)
     rdoc (5.1.0)
     redis (3.3.3)
-    repo_miner (0.2.2)
+    repo_miner (0.3.0)
       bibliothecary
       rugged
     rspec (3.6.0)
