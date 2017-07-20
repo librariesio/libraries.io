@@ -12,8 +12,11 @@ module DependencyMiner
     # mine dependency activity from git repository
     miner = RepoMiner::Repository.new(tmp_path.to_s)
 
+    # Find last commit analysed
+    last_commit_sha = dependency_activities.order('committed_at DESC').first.try(:commit_sha)
+
     # store activities as DependencyActivity records
-    commits = miner.analyse(default_branch)
+    commits = miner.analyse(default_branch, last_commit_sha)
 
     # only consider commits with dependency data
     dependency_commits = commits.select{|c| c.data[:dependencies].present? }
