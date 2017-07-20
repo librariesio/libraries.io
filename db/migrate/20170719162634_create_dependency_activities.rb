@@ -1,8 +1,8 @@
 class CreateDependencyActivities < ActiveRecord::Migration[5.0]
   def change
     create_table :dependency_activities do |t|
-      t.references :repository_id, index: true
-      t.references :project_id, index: true
+      t.references :repository, index: true
+      t.references :project, index: true
       t.string :action
       t.string :project_name
       t.string :commit_message

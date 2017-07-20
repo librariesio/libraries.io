@@ -55,8 +55,8 @@ ActiveRecord::Schema.define(version: 20170719162634) do
   end
 
   create_table "dependency_activities", force: :cascade do |t|
-    t.integer  "repository_id_id",     :index=>{:name=>"index_dependency_activities_on_repository_id_id"}
-    t.integer  "project_id_id",        :index=>{:name=>"index_dependency_activities_on_project_id_id"}
+    t.integer  "repository_id",        :index=>{:name=>"index_dependency_activities_on_repository_id"}
+    t.integer  "project_id",           :index=>{:name=>"index_dependency_activities_on_project_id"}
     t.string   "action"
     t.string   "project_name"
     t.string   "commit_message"

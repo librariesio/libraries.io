@@ -51,10 +51,11 @@ module DependencyMiner
       end
     end
 
+    # write activities to the database
+    activities.each {|activity| dependency_activities.create(activity) }
+
     # delete code
     `rm -rf #{tmp_path}`
-
-    activities
   end
 
   def find_project_id(project_name, platform)
