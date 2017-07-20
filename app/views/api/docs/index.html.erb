@@ -325,6 +325,20 @@
     <p>
       Example: <strong> <%= link_to "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}", "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
     </p>
+    <hr>
+    <h3 id='api-wrappers'>API Wrappers</h3>
+    <p>
+      JavaScript / Node
+    </p>
+    <ul>
+      <li><a href="https://libraries.io/npm/librarian-api">librarian-api</a></li>
+    </ul>
+    <p>
+      Go
+    </p>
+    <ul>
+      <li><a href="https://github.com/hackebrot/go-librariesio">go-librariesio</a></li>
+    </ul>
   </div>
   <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
@@ -360,6 +374,9 @@
       <li><a href="#subscriptions-show">Check if subscribed to a project</a></li>
       <li><a href="#subscriptions-update">Update a subscription</a></li>
       <li><a href="#subscriptions-destroy">Unsubscribe from a project</a></li>
+    </ul>
+    <ul>
+      <li><a href="#api-wrappers">Wrappers</a></li>
     </ul>
     <p>
       For any questions, feature requests or bug reports<br/>
