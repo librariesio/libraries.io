@@ -47,7 +47,7 @@ module DependencyMiner
         end
 
         dependency_data[:removed_manifests].each do |removed_manifest|
-          removed_manifests[:removed_dependencies].each do |removed_dependency|
+          removed_manifest[:removed_dependencies].each do |removed_dependency|
             activities << format_activity(commit, removed_manifest, removed_dependency, 'removed')
           end
         end
