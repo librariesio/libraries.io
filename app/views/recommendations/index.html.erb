@@ -36,7 +36,7 @@
         <% @platforms.each do |platform| %>
           <li class='<%= 'active' if platform.downcase == params[:platform].try(:downcase) %>'>
             <% if platform.downcase == params[:platform].try(:downcase) %>
-              <%= link_to platform, url_for(params.merge(platform: nil)) %>
+              <%= link_to platform, url_for(params.merge(platform: nil).permit!) %>
             <% else %>
               <%= link_to platform, url_for(params.merge(platform: platform).permit!) %>
             <% end %>
@@ -55,7 +55,7 @@
         <% @languages.each do |language| %>
           <li class='<%= 'active' if language.downcase == params[:language].try(:downcase) %>'>
             <% if language.downcase == params[:language].try(:downcase) %>
-              <%= link_to language, url_for(params.merge(language: nil)) %>
+              <%= link_to language, url_for(params.merge(language: nil).permit!) %>
             <% else %>
               <%= link_to language, url_for(params.merge(language: language).permit!) %>
             <% end %>
@@ -74,7 +74,7 @@
         <% @licenses.each do |license| %>
           <li class='<%= 'active' if license.downcase == params[:license].try(:downcase) %>'>
             <% if license.downcase == params[:license].try(:downcase) %>
-              <%= link_to license, url_for(params.merge(license: nil)) %>
+              <%= link_to license, url_for(params.merge(license: nil).permit!) %>
             <% else %>
               <%= link_to license, url_for(params.merge(license: license).permit!) %>
             <% end %>
