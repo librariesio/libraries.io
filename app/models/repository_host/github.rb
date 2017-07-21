@@ -45,6 +45,7 @@ module RepositoryHost
       hash = AuthToken.fallback_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json').to_hash
       hash[:keywords] = hash[:topics]
       hash[:host_type] = 'GitHub'
+      hash[:scm] = 'git'
       hash
     rescue *IGNORABLE_EXCEPTIONS
       nil
