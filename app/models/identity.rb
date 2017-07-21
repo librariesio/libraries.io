@@ -44,7 +44,7 @@ class Identity < ApplicationRecord
     avatar = read_attribute(:avatar_url)
     case provider
     when 'github', 'githubpublic', 'githubprivate'
-      avatar + "?size=#{size}"
+      "#{avatar}?size=#{size}"
     when 'gitlab'
       avatar
     when 'bitbucket'
