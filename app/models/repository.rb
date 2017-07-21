@@ -215,6 +215,8 @@ class Repository < ApplicationRecord
 
   def update_all_info(token = nil)
     token ||= AuthToken.token if host_type == 'GitHub'
+    check_status
+    return if status == 'Removed'
     update_from_repository(token)
     download_owner
     download_fork_source(token)

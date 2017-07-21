@@ -29,7 +29,8 @@ class RepositoryOrganisation < ApplicationRecord
 
   delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
            :to_s, :to_param, :github_id, :download_org_from_host, :download_orgs,
-           :download_org_from_host_by_login, :download_repos, :download_members, to: :repository_owner
+           :download_org_from_host_by_login, :download_repos, :download_members,
+           :check_status, to: :repository_owner
 
   def login_uniqueness_with_case_insenitive_host
     if RepositoryOrganisation.host(host_type).login(login).exists?
@@ -82,6 +83,8 @@ class RepositoryOrganisation < ApplicationRecord
   end
 
   def sync
+    check_status
+    return unless persisted?
     download_org_from_host
     download_repos
     download_members
