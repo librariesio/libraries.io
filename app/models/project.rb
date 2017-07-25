@@ -30,6 +30,7 @@ class Project < ApplicationRecord
   has_many :dependent_repositories, -> { group('repositories.id').order('repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
   has_many :subscriptions
   has_many :project_suggestions, dependent: :delete_all
+  has_many :dependency_activities
   belongs_to :repository
   has_one :readme, through: :repository
 
