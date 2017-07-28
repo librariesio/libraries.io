@@ -1,6 +1,7 @@
 module DependencyMiner
   def mine_dependencies
     return if scm == 'hg' # only works with git repositories at the moment
+    return if fork?
 
     tmp_dir_name = "#{host_type}-#{owner_name}-#{project_name}".downcase
 
