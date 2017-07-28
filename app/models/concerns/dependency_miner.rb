@@ -7,7 +7,7 @@ module DependencyMiner
     tmp_path = Rails.root.join("tmp/#{tmp_dir_name}")
 
     # download code
-    `git clone #{url} #{tmp_path}`
+    system "git clone -b #{default_branch} --single-branch #{url} #{tmp_path}"
 
     return unless tmp_path.exist? # handle failed clones
 
