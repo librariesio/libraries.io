@@ -57,7 +57,7 @@ module DependencyMiner
     end
 
     # write activities to the database
-    activities.each {|activity| dependency_activities.create(activity) }
+    DependencyActivity.import(activities.map{|a| DependencyActivity.new(a) })
 
 
 
