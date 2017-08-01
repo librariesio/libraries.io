@@ -2,6 +2,7 @@ class RepositoryDependency < ApplicationRecord
   include DependencyChecks
 
   belongs_to :manifest
+  belongs_to :repository
   belongs_to :project
 
   scope :with_project, -> { joins(:project).where('projects.id IS NOT NULL') }
@@ -20,10 +21,6 @@ class RepositoryDependency < ApplicationRecord
 
   delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :project, allow_nil: true
   delegate :filepath, to: :manifest
-
-  def repository
-    manifest.try(:repository)
-  end
 
   def find_project_id
     project_id = Project.platform(platform).where(name: project_name.try(:strip)).limit(1).pluck(:id).first
