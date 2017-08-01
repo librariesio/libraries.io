@@ -17,4 +17,16 @@ describe Project, type: :model do
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:platform) }
+
+  context 'rails 5.1 upgrade' do
+
+    let(:repository) { create(:repository) }
+    let!(:tag) { create(:tag, repository: repository)}
+    let(:project) { create(:project, repository: repository) }
+
+    it "shouldn't error finding tags for projects" do
+      expect(project.tags).to eq([tag])
+    end
+
+  end
 end
