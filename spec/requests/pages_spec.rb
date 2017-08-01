@@ -25,4 +25,10 @@ describe "PagesController" do
       expect(page).to have_content 'Open Data'
     end
   end
+  describe "GET /experiments", type: :request do
+    it "renders successfully when logged out" do
+      visit data_path
+      expect(page).to have_content 'Experiments'
+    end
+  end
 end

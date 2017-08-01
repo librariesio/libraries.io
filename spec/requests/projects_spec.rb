@@ -85,7 +85,7 @@ RSpec.describe ProjectsController do
   describe "GET #unseen_infrastructure" do
     it "responds successfully", type: :request do
       visit unseen_infrastructure_path
-      expect(page).to have_content 'Unseen Open Source Infrastructure'
+      expect(page).to have_content 'Unseen Infrastructure'
     end
   end
 end
