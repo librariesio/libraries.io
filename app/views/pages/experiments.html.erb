@@ -16,7 +16,12 @@
     <hr>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h2 class="panel-title"><%= fa_icon 'fa fa-bus' %><%= link_to ' Bus Factor', bus_factor_path %></h2>
+        <h2 class="panel-title">
+        	<%= link_to bus_factor_path  do%>
+        		<%= fa_icon 'bus' %>
+        		Bus Factor
+        	<% end %>
+        </h2>
       </div>
       <div class="panel-body">
         <p>
@@ -26,7 +31,12 @@
     </div>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h2 class="panel-title"><%= fa_icon 'fa fa-map-signs' %><%= link_to ' Digital Infrastructure', digital_infrastructure_path %></h2>
+        <h2 class="panel-title">
+        	<%= link_to digital_infrastructure_path do %>
+        		<%= fa_icon 'map-signs' %>
+        		Digital Infrastructure
+        	<% end %>
+        </h2>
       </div>
       <div class="panel-body">
         <p>
@@ -36,7 +46,12 @@
     </div>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h2 class="panel-title"><%= fa_icon 'fa fa-map-signs' %> <%= link_to ' Unseen Infrastructure', unseen_infrastructure_path %></h2>
+        <h2 class="panel-title">
+        	<%= link_to unseen_infrastructure_path do %>
+        		<%= fa_icon 'binoculars' %>
+        		Unseen Infrastructure
+        	<% end %>
+       	</h2>
       </div>
       <div class="panel-body">
         <p>
@@ -49,7 +64,7 @@
   	<h2>Use Libraries.io Data</h2>
   	<hr>
   	<p>
-  		Libraries.io data is released periodically under a CC-BY-SA 4.0 License. For more information see our <%= link_to 'documentation', data_path %>.
+  		Libraries.io data is released periodically under a CC-BY-SA 4.0 license. For more information see our <%= link_to 'documentation', data_path %>.
   	</p>
   	<%= render 'releases'%>
   
