@@ -199,6 +199,7 @@ Rails.application.routes.draw do
 
   #experiments
   get '/experiments', to: 'pages#experiments', as: :experiments
+  get '/experiments/similar-names', to: 'experiments/similar_names#index', as: :similar_names
   get '/experiments/bus-factor', to: 'projects#bus_factor', as: :bus_factor
   get '/experiments/unseen-infrastructure', to: 'projects#unseen_infrastructure', as: :unseen_infrastructure
   get '/experiments/digital-infrastructure', to: 'projects#digital_infrastructure', as: :digital_infrastructure

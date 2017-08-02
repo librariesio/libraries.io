@@ -31,6 +31,7 @@ class Project < ApplicationRecord
   has_many :dependent_repositories, -> { group('repositories.id').order('repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
   has_many :subscriptions
   has_many :project_suggestions, dependent: :delete_all
+  has_many :similar_names
   has_one :readme, through: :repository
 
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
@@ -93,6 +94,7 @@ class Project < ApplicationRecord
   scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 1.month.ago)}
 
   after_commit :update_repository_async, on: :create
+  after_commit :check_for_similar_names, on: :create
   after_commit :set_dependents_count, on: [:create, :update]
   after_commit :update_source_rank_async, on: [:create, :update]
   before_save  :update_details
@@ -410,5 +412,14 @@ class Project < ApplicationRecord
         false
       end
     end
+  end
+
+  def check_for_similar_names
+    return if similar_names.any?
+    return unless name.length > 3
+    all_names_for_platform = Project.platform(platform).not_removed.pluck(:name)
+    matches = all_names_for_platform.reject{|n| n == name || name.include?('/') }.select{|n| name.levenshtein_similar(n) > 0.8}
+    return if matches.length.zero?
+    similar_names.create(matches: matches.sort)
   end
 end
