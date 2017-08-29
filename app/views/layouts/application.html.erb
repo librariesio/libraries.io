@@ -80,7 +80,7 @@
   </script>
 </head>
 <body>
-  <div class="navbar navbar-inverse navbar-static-top">
+  <div class="navbar navbar-static-top">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
@@ -89,7 +89,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <%= link_to image_tag('logo.svg', width: 116, height: 22), root_path, class: 'navbar-brand' %>
+        <%= link_to image_tag('logo-black.svg', width: 116, height: 22), root_path, class: 'navbar-brand' %>
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
         <% unless on_homepage? && !logged_in? %>
