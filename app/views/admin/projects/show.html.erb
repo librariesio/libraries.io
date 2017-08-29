@@ -25,7 +25,7 @@
     </p>
 
     <%= form.input :repository_url %>
-    <%= form.input :licenses, include_blank: true, selected: @project.licenses, label: 'License', collection: Project.popular_licenses(:facet_limit => 100).map{|l| format_license(l['key']) } %>
+    <%= form.input :licenses, include_blank: true, selected: @project.licenses, label: 'License', collection: Project.popular_licenses(:facet_limit => 300).map{|l| format_license(l['key']) } %>
     <%= form.input :status, include_blank: true, collection: Project::STATUSES %>
 
     <%= form.submit class: 'btn btn-primary' %>

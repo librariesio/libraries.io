@@ -84,7 +84,7 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
         add platform_path(name.downcase), :lastmod => Project.platform(name).order('updated_at DESC').first.try(:updated_at)
       end
 
-      Project.popular_licenses(:facet_limit => 200).each do |license|
+      Project.popular_licenses(:facet_limit => 300).each do |license|
         name = license['key']
         add license_path(name), :lastmod => Project.license(name).order('updated_at DESC').first.try(:updated_at)
       end
