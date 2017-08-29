@@ -44,6 +44,8 @@ module RepositoryOwner
       true
     rescue *RepositoryHost::Gitlab::IGNORABLE_EXCEPTIONS
       nil
+    rescue Octokit::NotFound
+      nil
     end
 
     def self.fetch_user(id_or_login)
