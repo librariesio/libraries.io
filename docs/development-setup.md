@@ -104,9 +104,11 @@ GITHUB_PRIVATE_KEY=yourprivateclientidhere
 GITHUB_PRIVATE_SECRET=yourprivateclientsecrethere
 ```
 
-## Repository sync
+## Background workers
 
-To enable repository sync you will need to run a sidekiq worker:
+Many syncing tasks are added to a sidekiq queue to be ran asynchronously later, including tasks such as syncing repository data, contributors, tags and permissions.
+
+To run these tasks you will need to start a sidekiq worker with the following command:
 
 ```bash
 bundle exec sidekiq -C config/sidekiq.yml
