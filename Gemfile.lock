@@ -516,7 +516,7 @@ GEM
       sshkit (~> 1.12)
     stripe (3.3.1)
       faraday (~> 0.9)
-    stripe_event (1.7.0)
+    stripe_event (1.8.0)
       activesupport (>= 3.1)
       stripe (>= 1.6, < 4.0)
     terminal-table (1.8.0)
