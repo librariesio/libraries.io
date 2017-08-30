@@ -142,7 +142,7 @@ GEM
       ruby-enum (~> 0.5)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
-    counter_culture (1.7.0)
+    counter_culture (1.8.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
       after_commit_action (~> 1.0)
@@ -570,7 +570,7 @@ DEPENDENCIES
   chartkick
   codeclimate-test-reporter
   commonmarker
-  counter_culture (~> 1.7.0)
+  counter_culture
   creole
   dalli
   database_cleaner
