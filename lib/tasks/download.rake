@@ -47,6 +47,11 @@ namespace :download do
     PackageManager::Clojars.import_recent
   end
 
+  desc 'Download all Puppet packages asynchronously'
+  task puppet_all: :environment do
+    PackageManager::Puppet.import_async
+  end
+
   desc 'Download recent CPAN packages asynchronously'
   task cpan: :environment do
     PackageManager::CPAN.import_recent_async
