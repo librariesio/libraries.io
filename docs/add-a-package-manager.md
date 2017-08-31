@@ -378,13 +378,13 @@ end
 
 Once the `PackageManager` class is ready, there's some optional updates that can be added to some other repositories to enable more functionality.
 
-### Add support to Watcher
+### Add support to Dispatch
 
-[Watcher](https://github.com/librariesio/watcher) polls RSS feeds and JSON API endpoints every 30 seconds to check for new and updated packages and then enqueues jobs to download those packages. It helps reduce the load on the package manager registries and push new data into the system faster.
+[Dispatch](https://github.com/librariesio/dispatch) polls RSS feeds and JSON API endpoints every 30 seconds to check for new and updated packages and then enqueues jobs to download those packages. It helps reduce the load on the package manager registries and push new data into the system faster.
 
-If your package manager has RSS feeds of new packages or recently updated packages then add each url to the [`feeds`](https://github.com/librariesio/watcher/blob/master/watcher.rb#L49) array, along with the class name of the package.
+If your package manager has RSS feeds of new packages or recently updated packages then add each url to the [`RSS_SERVICES`](https://github.com/librariesio/dispatch/blob/master/dispatch.rb#L125) array, along with the class name of the package.
 
-If your package manager has JSON API of new packages or recently updated packages then add each url to the [`urls`](https://github.com/librariesio/watcher/blob/master/watcher.rb#L106) array, along with the class name of the package.
+If your package manager has JSON API of new packages or recently updated packages then add each url to the [`JSON_SERVICES`](https://github.com/librariesio/dispatch/blob/master/dispatch.rb#L103) array, along with the class name of the package.
 
 ### Add Bibliothecary support
 
