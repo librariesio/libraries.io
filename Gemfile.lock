@@ -327,7 +327,7 @@ GEM
       json (>= 1.8, < 3)
     pghero (2.0.4)
       activerecord
-    pictogram (2.0.8)
+    pictogram (2.0.9)
       railties
     poltergeist (1.16.0)
       capybara (~> 2.1)
