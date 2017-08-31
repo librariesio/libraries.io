@@ -284,9 +284,9 @@ HAS_DEPENDENCIES = true
 
 ### `BIBLIOTHECARY_SUPPORT`
 
-If your package manager has the concept of a manifest, a file that lists dependencies for a repository, for example `Gemfile`, `package.json` and `setup.py`, then you can add support to [Biblothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
+If your package manager has the concept of a manifest, a file that lists dependencies for a repository, for example `Gemfile`, `package.json` and `setup.py`, then you can add support to [Bibliothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
 
-If [Biblothecary](https://github.com/librariesio/bibliothecary) already has support for parsing manifest files for this package manager set it to `true`:
+If [Bibliothecary](https://github.com/librariesio/bibliothecary) already has support for parsing manifest files for this package manager set it to `true`:
 
 ```ruby
 BIBLIOTHECARY_SUPPORT = true
@@ -294,7 +294,7 @@ BIBLIOTHECARY_SUPPORT = true
 
 ### `BIBLIOTHECARY_PLANNED`
 
-If it's possible that [Biblothecary](https://github.com/librariesio/bibliothecary) support for parsing manifest files can be added for this package manager, but has not yet, set it to `true`:
+If it's possible that [Bibliothecary](https://github.com/librariesio/bibliothecary) support for parsing manifest files can be added for this package manager, but has not yet, set it to `true`:
 
 ```ruby
 BIBLIOTHECARY_PLANNED = true
@@ -386,11 +386,11 @@ If your package manager has RSS feeds of new packages or recently updated packag
 
 If your package manager has JSON API of new packages or recently updated packages then add each url to the [`urls`](https://github.com/librariesio/watcher/blob/master/watcher.rb#L106) array, along with the class name of the package.
 
-### Add Biblothecary support
+### Add Bibliothecary support
 
-If your package manager has the concept of a manifest, a file that lists dependencies for a repository, then you can add support to [Biblothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
+If your package manager has the concept of a manifest, a file that lists dependencies for a repository, then you can add support to [Bibliothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
 
-Check out the documentation on adding support for a new package manager in the Biblothecary repo: https://github.com/librariesio/bibliothecary
+Check out the documentation on adding support for a new package manager in the Bibliothecary repo: https://github.com/librariesio/bibliothecary
 
 ### Add icon to Pictogram
 
