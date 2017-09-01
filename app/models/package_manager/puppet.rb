@@ -1,7 +1,7 @@
 module PackageManager
   class Puppet < Base
-    HAS_VERSIONS = false
-    HAS_DEPENDENCIES = false
+    HAS_VERSIONS = true
+    HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = false
     BIBLIOTHECARY_PLANNED = true
     URL = 'https://forge.puppet.com'
@@ -24,18 +24,52 @@ module PackageManager
     end
 
     def self.mapping(project)
+      current_release = project['current_release']
+      metadata = current_release['metadata']
       {
         name: project['slug'],
-        homepage: "https://forge.puppet.com/#{project['slug']}",
-        repository_url: project['current_release']['metadata']['source'],
-        description: project['current_release']['metadata']['description'],
-        keywords_array: project['current_release']['tags'],
-        licenses: project['current_release']['metadata']['license']
+        repository_url: metadata['source'],
+        description: metadata['description'],
+        keywords_array: current_release['tags'],
+        licenses: metadata['license']
       }
     end
 
+    def self.versions(project)
+      project['releases'].map do |release|
+        {
+          number: release['version'],
+          published_at: release['created_at']
+        }
+      end
+    end
+
+    def self.dependencies(name, version, project)
+      metadata = project['current_release']['metadata']
+      metadata['dependencies'].map do |dependency|
+        {
+          project_name: dependency['name'].sub('/', '-'),
+          requirements: dependency['version_requirement'],
+          kind: 'runtime',
+          platform: self.name.demodulize
+        }
+      end
+    end
+
+    def self.recent_names
+      get_json("https://forgeapi.puppetlabs.com/v3/modules?limit=100&sort_by=latest_release")['results'].map { |result| result['slug'] }
+    end 
+
     def self.install_instructions(project, version = nil)
       "puppet module install #{project.name}" + (version ? " --version #{version}" : "")
+    end
+
+    def self.package_link(project, version = nil)
+      "https://forge.puppet.com/#{project.name.sub('-', '/')}" + (version ? "/#{version}" : "")
+    end
+
+    def self.download_url(name, version = nil)
+      "https://forge.puppet.com/v3/files/#{name}-#{version}.tar.gz"
     end
   end
 end
