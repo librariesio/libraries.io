@@ -1,0 +1,51 @@
+<% title "Possible Typosquatted Libraries" %>
+<% description "Recently created libraries with similar names to existing libraries" %>
+<div class="row">
+  <h1><i class="fa fa-user-secret"></i> Possible Typosquatted Libraries</h1>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-sm-8">
+
+    <% @projects.each do |project| %>
+      <div class='project' style="border-color: <%= project.color %>;">
+        <h5>
+          <%= link_to project.name, project_path(project.to_param) %>
+          <small><%= project.latest_release_number %></small>
+        </h5>
+
+        <div class="">
+          <%= truncate project.description, :length => 100 %>
+        </div>
+
+        <small>
+          <%= link_to project.platform_name, platform_path(project.platform.downcase) %> -
+          Similar to:
+          <% project.similar_names.first.matches.first(10).each do |name| %>
+            <%= link_to name, project_path(platform: project.platform.downcase, name: name) %>,
+          <% end %>
+        </small>
+      </div>
+    <% end %>
+
+    <%= will_paginate @projects, page_links: false %>
+    <p>
+      <small><%= page_entries_info @projects, model: 'libraries' %></small>
+    </p>
+  </div>
+  <div class="col-sm-4">
+    <%= render 'adsense/sidebar' %>
+    <h3>
+      <strong>
+        What's typosquatting?
+      </strong>
+    </h3>
+    <p>Malicous users will sometimes publish libraries with very similar names to existing, popular libraries.
+      They hope that some users will type the wrong name of the package and install their version instead.</p>
+
+    <p>This page highlights newly published packages that have names that are similar to existing packages, calculated using Levenshtein distance.</p>
+
+    <p>You can read more about typosquatted packages in this excellent blog post on the subject: <%= link_to 'http://incolumitas.com/2016/06/08/typosquatting-package-managers/' %> </p>
+  </div>
+</div>

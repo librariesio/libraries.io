@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607094720) do
+ActiveRecord::Schema.define(version: 20170802120718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -355,6 +355,13 @@ ActiveRecord::Schema.define(version: 20170607094720) do
     t.index ["host_type", "uuid"], :name=>"index_repository_users_on_host_type_and_uuid", :unique=>true
   end
 
+  create_table "similar_names", force: :cascade do |t|
+    t.integer  "project_id", :index=>{:name=>"index_similar_names_on_project_id"}
+    t.string   "matches",    :default=>[], :array=>true
+    t.datetime "created_at", :null=>false
+    t.datetime "updated_at", :null=>false
+  end
+
   create_table "subscription_plans", force: :cascade do |t|
     t.integer  "amount"
     t.string   "interval"
@@ -412,4 +419,5 @@ ActiveRecord::Schema.define(version: 20170607094720) do
     t.datetime "updated_at",    :null=>false
   end
 
+  add_foreign_key "similar_names", "projects"
 end
