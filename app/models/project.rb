@@ -32,6 +32,7 @@ class Project < ApplicationRecord
   has_many :subscriptions
   has_many :project_suggestions, dependent: :delete_all
   has_many :dependency_activities
+  belongs_to :repository
   has_one :readme, through: :repository
 
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
