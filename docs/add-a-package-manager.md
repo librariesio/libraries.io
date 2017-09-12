@@ -284,9 +284,9 @@ HAS_DEPENDENCIES = true
 
 ### `BIBLIOTHECARY_SUPPORT`
 
-If your package manager has the concept of a manifest, a file that lists dependencies for a repository, for example `Gemfile`, `package.json` and `setup.py`, then you can add support to [Biblothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
+If your package manager has the concept of a manifest, a file that lists dependencies for a repository, for example `Gemfile`, `package.json` and `setup.py`, then you can add support to [Bibliothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
 
-If [Biblothecary](https://github.com/librariesio/bibliothecary) already has support for parsing manifest files for this package manager set it to `true`:
+If [Bibliothecary](https://github.com/librariesio/bibliothecary) already has support for parsing manifest files for this package manager set it to `true`:
 
 ```ruby
 BIBLIOTHECARY_SUPPORT = true
@@ -294,7 +294,7 @@ BIBLIOTHECARY_SUPPORT = true
 
 ### `BIBLIOTHECARY_PLANNED`
 
-If it's possible that [Biblothecary](https://github.com/librariesio/bibliothecary) support for parsing manifest files can be added for this package manager, but has not yet, set it to `true`:
+If it's possible that [Bibliothecary](https://github.com/librariesio/bibliothecary) support for parsing manifest files can be added for this package manager, but has not yet, set it to `true`:
 
 ```ruby
 BIBLIOTHECARY_PLANNED = true
@@ -378,19 +378,19 @@ end
 
 Once the `PackageManager` class is ready, there's some optional updates that can be added to some other repositories to enable more functionality.
 
-### Add support to Watcher
+### Add support to Dispatch
 
-[Watcher](https://github.com/librariesio/watcher) polls RSS feeds and JSON API endpoints every 30 seconds to check for new and updated packages and then enqueues jobs to download those packages. It helps reduce the load on the package manager registries and push new data into the system faster.
+[Dispatch](https://github.com/librariesio/dispatch) polls RSS feeds and JSON API endpoints every 30 seconds to check for new and updated packages and then enqueues jobs to download those packages. It helps reduce the load on the package manager registries and push new data into the system faster.
 
-If your package manager has RSS feeds of new packages or recently updated packages then add each url to the [`feeds`](https://github.com/librariesio/watcher/blob/master/watcher.rb#L49) array, along with the class name of the package.
+If your package manager has RSS feeds of new packages or recently updated packages then add each url to the [`RSS_SERVICES`](https://github.com/librariesio/dispatch/blob/master/dispatch.rb#L125) array, along with the class name of the package.
 
-If your package manager has JSON API of new packages or recently updated packages then add each url to the [`urls`](https://github.com/librariesio/watcher/blob/master/watcher.rb#L106) array, along with the class name of the package.
+If your package manager has JSON API of new packages or recently updated packages then add each url to the [`JSON_SERVICES`](https://github.com/librariesio/dispatch/blob/master/dispatch.rb#L103) array, along with the class name of the package.
 
-### Add Biblothecary support
+### Add Bibliothecary support
 
-If your package manager has the concept of a manifest, a file that lists dependencies for a repository, then you can add support to [Biblothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
+If your package manager has the concept of a manifest, a file that lists dependencies for a repository, then you can add support to [Bibliothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
 
-Check out the documentation on adding support for a new package manager in the Biblothecary repo: https://github.com/librariesio/bibliothecary
+Check out the documentation on adding support for a new package manager in the Bibliothecary repo: https://github.com/librariesio/bibliothecary
 
 ### Add icon to Pictogram
 

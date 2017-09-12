@@ -84,19 +84,15 @@ module RepositoryHost
       # not implemented yet
     end
 
-    def escaped_full_name
-      repository.full_name.gsub('/','%2F')
-    end
-
     def get_file_list(token = nil)
-      tree = api_client(token).tree(escaped_full_name, recursive: true)
+      tree = api_client(token).tree(repository.full_name, recursive: true)
       tree.select{|item| item.type == 'blob' }.map{|file| file.path }
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
 
     def get_file_contents(path, token = nil)
-      file = api_client(token).get_file(escaped_full_name, path, repository.default_branch)
+      file = api_client(token).get_file(repository.full_name, path, repository.default_branch)
       {
         sha: file.commit_id,
         content: Base64.decode64(file.content)
@@ -106,7 +102,7 @@ module RepositoryHost
     end
 
     def download_readme(token = nil)
-      files = api_client(token).tree(escaped_full_name)
+      files = api_client(token).tree(repository.full_name)
       paths =  files.map(&:path)
       readme_path = paths.select{|path| path.match(/^readme/i) }.sort{|path| Readme.supported_format?(path) ? 0 : 1 }.first
       return if readme_path.nil?
@@ -126,7 +122,7 @@ module RepositoryHost
 
     def download_tags(token = nil)
       existing_tag_names = repository.tags.pluck(:name)
-      remote_tags = api_client(token).tags(escaped_full_name).auto_paginate do |tag|
+      remote_tags = api_client(token).tags(repository.full_name).auto_paginate do |tag|
         next if existing_tag_names.include?(tag.name)
         next if tag.commit.nil?
         repository.tags.create({
@@ -166,7 +162,7 @@ module RepositoryHost
     private
 
     def self.api_client(token = nil)
-      ::Gitlab.client(endpoint: 'https://gitlab.com/api/v3', private_token: token || ENV['GITLAB_KEY'])
+      ::Gitlab.client(endpoint: 'https://gitlab.com/api/v4', private_token: token || ENV['GITLAB_KEY'])
     end
 
     def api_client(token = nil)

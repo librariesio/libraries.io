@@ -1,5 +1,11 @@
 class Readme < ApplicationRecord
   VALID_EXTENSION_REGEXES = [
+    /md/,
+    /mdown/,
+    /mkdn/,
+    /mdn/,
+    /mdtext/,
+    /markdown/,
     /textile/,
     /org/,
     /creole/,
