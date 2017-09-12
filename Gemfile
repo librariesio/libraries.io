@@ -83,6 +83,7 @@ gem 'pg_query'
 gem 'schema_plus_pg_indexes'
 gem 'autoprefixer-rails', '~> 7.1.2.1'
 gem 'amatch'
+gem 'concurrent-ruby-ext'
 
 group :development do
   gem 'spring'

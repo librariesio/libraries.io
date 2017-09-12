@@ -141,6 +141,8 @@ GEM
     commonmarker (0.17.2)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.0.5)
+    concurrent-ruby-ext (1.0.5)
+      concurrent-ruby (= 1.0.5)
     connection_pool (2.2.1)
     counter_culture (1.8.1)
       activerecord (>= 3.0.0)
@@ -570,6 +572,7 @@ DEPENDENCIES
   chartkick
   codeclimate-test-reporter
   commonmarker
+  concurrent-ruby-ext
   counter_culture
   creole
   dalli
