@@ -88,7 +88,7 @@ GEM
       mize
       tins (~> 1.0)
     api-pagination (4.6.3)
-    appsignal (2.3.3)
+    appsignal (2.3.4)
       rack
     arel (7.1.4)
     asciidoctor (1.5.6.1)
