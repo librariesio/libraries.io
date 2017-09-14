@@ -18,7 +18,7 @@ module PackageManager
     def self.projects
       @projects ||= begin
         projects = {}
-        data = get("https://bower.herokuapp.com/packages")
+        data = get("https://registry.bower.io/packages")
 
         data.each do |hash|
           projects[hash['name'].downcase] = hash.slice('name', 'url')
