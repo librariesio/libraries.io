@@ -516,7 +516,7 @@ GEM
       net-ssh (>= 2.8.0)
     sshkit-interactive (0.2.3)
       sshkit (~> 1.12)
-    stripe (3.3.1)
+    stripe (3.3.2)
       faraday (~> 0.9)
     stripe_event (1.8.0)
       activesupport (>= 3.1)
