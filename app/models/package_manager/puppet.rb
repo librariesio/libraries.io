@@ -59,7 +59,7 @@ module PackageManager
 
     def self.recent_names
       get_json("https://forgeapi.puppetlabs.com/v3/modules?limit=100&sort_by=latest_release")['results'].map { |result| result['slug'] }
-    end 
+    end
 
     def self.install_instructions(project, version = nil)
       "puppet module install #{project.name}" + (version ? " --version #{version}" : "")
