@@ -38,7 +38,7 @@ module RepoSearch
       end
     end
 
-    after_save lambda { __elasticsearch__.index_document }
+    after_commit lambda { __elasticsearch__.index_document if previous_changes.any? }, on: [:create, :update], prepend: true
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def self.facets(options = {})
@@ -57,23 +57,6 @@ module RepoSearch
 
     def exact_name
       full_name
-    end
-
-    def keywords
-      (project_keywords + readme_keywords).uniq.first(10)
-    end
-
-    def project_keywords
-      projects.map(&:keywords_array).flatten.compact.uniq(&:downcase)
-    end
-
-    def readme_keywords
-      return [] unless readme.present?
-      readme.keywords
-    end
-
-    def platforms
-      projects.map(&:platform).compact.uniq(&:downcase)
     end
 
     def self.search(query, options = {})
@@ -117,19 +100,22 @@ module RepoSearch
             }
           }
         },
-        aggs: {
-          language: Project.facet_filter(:language, facet_limit, options),
-          license: Project.facet_filter(:license, facet_limit, options),
-          keywords: Project.facet_filter(:keywords, facet_limit, options),
-          host_type: Project.facet_filter(:host_type, facet_limit, options)
-        },
         filter: {
           bool: {
             must: [],
             must_not: options[:must_not]
           }
-        },
-        suggest: {
+        }
+      }
+
+      unless options[:api]
+        search_definition[:aggs] = {
+          language: Project.facet_filter(:language, facet_limit, options),
+          license: Project.facet_filter(:license, facet_limit, options),
+          keywords: Project.facet_filter(:keywords, facet_limit, options),
+          host_type: Project.facet_filter(:host_type, facet_limit, options)
+        }
+        search_definition[:suggest] = {
           did_you_mean: {
             text: query,
             term: {
@@ -138,9 +124,9 @@ module RepoSearch
             }
           }
         }
-      }
+      end
+
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
-      search_definition[:track_scores] = true
       search_definition[:filter][:bool][:must] = Project.filter_format(options[:filters])
 
       if query.present?

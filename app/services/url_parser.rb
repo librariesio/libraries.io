@@ -4,7 +4,7 @@ class URLParser
   end
 
   def initialize(url)
-    @url = url
+    @url = url.to_s
   end
 
   def parse
@@ -15,6 +15,22 @@ class URLParser
     else
       clean_url
     end
+  end
+
+  def self.parse_to_full_url(url)
+    new(url).parse_to_full_url
+  end
+
+  def self.try_all(url)
+    GithubURLParser.parse_to_full_url(url) ||
+    GitlabURLParser.parse_to_full_url(url) ||
+    BitbucketURLParser.parse_to_full_url(url)
+  end
+
+  def parse_to_full_url
+    path = parse
+    return nil unless path.present?
+    [full_domain, path].join('/')
   end
 
   private

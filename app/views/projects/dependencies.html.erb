@@ -1,0 +1,32 @@
+<% cache(['v2', @version.id, 'dependencies'], expires_in: 1.week) do %>
+  <% @dependencies = (@versions.size > 0 ? (@version || @versions.first).dependencies.includes(project: :versions).order('project_name ASC').limit(100) : []) %>
+  <% if @dependencies.length > 0 %>
+    <% @dependencies.group_by(&:kind).sort_by{|k,v| k == 'runtime' ? 0 : 1}.each do |kind, deps| %>
+      <% if deps.length > 0 %>
+        <hr>
+        <h3><%= kind.humanize unless kind == 'runtime' %> Dependencies </h3>
+        <dl data-ga-tracked-el='dependencies' class='row'>
+          <% deps.each do |dependency| %>
+            <dt class='col-xs-8'>
+              <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: PackageManager::Base.dependency_platform(dependency.platform)) %>
+            </dt>
+            <dd class='col-xs-4'>
+              <%= dependency.requirements %>
+              <% if dependency.project %>
+                <small>
+                  <%= render 'dependencies/flags', dependency: dependency %>
+                </small>
+              <% end %>
+            </dd>
+          <% end %>
+        </dl>
+        <% kind_param = kind == 'runtime' ? nil : kind %>
+        <% link = @version ? version_tree_path(@version.to_param.merge(kind: kind_param)) : tree_path(@project.to_param.merge(kind: kind_param)) %>
+        <%= link_to link do %>
+          Explore <%= kind.downcase unless kind == 'runtime' %> dependencies
+        <% end %>
+      <% end %>
+    <% end %>
+    <hr>
+  <% end %>
+<% end %>

@@ -15,7 +15,7 @@
       Recommendations are based on
       <% if current_user.github_enabled? %>
         data from your
-        <%= link_to 'Profile', user_path(current_user.nickname) %> and
+        <%= link_to 'Profile', user_path(current_user.to_param) %> and
       <% end %>
       Libraries data.
     </p>

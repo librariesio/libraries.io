@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   end if Rails.env.production?
   mount Sidekiq::Web => '/sidekiq'
 
+  mount PgHero::Engine, at: "pghero"
+
   get '/home', to: 'dashboard#home'
 
   namespace :api do
@@ -15,6 +17,8 @@ Rails.application.routes.draw do
     get '/search', to: 'search#index'
     get '/bower-search', to: 'bower_search#index'
     get '/searchcode', to: 'projects#searchcode'
+
+    get '/platforms', to: 'platforms#index'
 
     get '/subscriptions', to: 'subscriptions#index'
     get '/subscriptions/:platform/:name', to: 'subscriptions#show'
@@ -34,14 +38,14 @@ Rails.application.routes.draw do
 
       get '/:host_type/search', to: 'repositories#search'
 
-      get '/:host_type/:login/repositories', to: 'github_users#repositories'
-      get '/:host_type/:login/projects', to: 'github_users#projects'
+      get '/:host_type/:login/repositories', to: 'repository_users#repositories'
+      get '/:host_type/:login/projects', to: 'repository_users#projects'
 
       get '/:host_type/:owner/:name/dependencies', to: 'repositories#dependencies', constraints: { :name => /[^\/]+/ }
       get '/:host_type/:owner/:name/projects', to: 'repositories#projects', constraints: { :name => /[^\/]+/ }
       get '/:host_type/:owner/:name', to: 'repositories#show', constraints: { :name => /[^\/]+/ }
 
-      get '/:host_type/:login', to: 'github_users#show'
+      get '/:host_type/:login', to: 'repository_users#show'
     end
 
     get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }, as: :version_tree
@@ -123,6 +127,7 @@ Rails.application.routes.draw do
 
   get '/help-wanted', to: 'issues#help_wanted', as: :help_wanted
   get '/first-pull-request', to: 'issues#first_pull_request', as: :first_pull_request
+  get '/issues', to: 'issues#index', as: :all_issues
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
@@ -136,22 +141,24 @@ Rails.application.routes.draw do
     get '/:host_type/search', to: 'repositories#search', as: :github_search
     get '/:host_type/trending', to: 'repositories#hacker_news', as: :trending
     get '/:host_type/new', to: 'repositories#new', as: :new_repos
-    get '/:host_type/organisations', to: 'github_organisations#index', as: :github_organisations
+    get '/:host_type/organisations', to: 'repository_organisations#index', as: :repository_organisations
     get '/:host_type/timeline', to: 'repositories#timeline', as: :github_timeline
-    get '/:host_type/:login/issues', to: 'users#issues'
-    get '/:host_type/:login/dependency-issues', to: 'users#dependency_issues'
-    get '/:host_type/:login/repositories', to: 'users#repositories', as: :user_repositories
-    get '/:host_type/:login/contributions', to: 'users#contributions', as: :user_contributions
-    get '/:host_type/:login/projects', to: 'users#projects', as: :user_projects
-    get '/:host_type/:login/contributors', to: 'users#contributors', as: :user_contributors
-    get '/:host_type/:login', to: 'users#show', as: :user
+    get '/:host_type/:login/issues', to: 'repository_users#issues'
+    get '/:host_type/:login/dependency-issues', to: 'repository_users#dependency_issues'
+    get '/:host_type/:login/repositories', to: 'repository_users#repositories', as: :user_repositories
+    get '/:host_type/:login/contributions', to: 'repository_users#contributions', as: :user_contributions
+    get '/:host_type/:login/projects', to: 'repository_users#projects', as: :user_projects
+    get '/:host_type/:login/contributors', to: 'repository_users#contributors', as: :user_contributors
+    get '/:host_type/:login', to: 'repository_users#show', as: :user
 
     get '/:host_type/:owner/:name', to: 'repositories#show', as: :repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
     get '/:host_type/:owner/:name/contributors', to: 'repositories#contributors', as: :repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
+    post '/:host_type/:owner/:name/sync', to: 'repositories#sync', as: :sync_repository, format: false, constraints: { :name => /[^\/]+/ }
     get '/:host_type/:owner/:name/sourcerank', to: 'repositories#sourcerank', as: :repository_sourcerank, format: false, constraints: { :name => /[^\/]+/ }
     get '/:host_type/:owner/:name/forks', to: 'repositories#forks', as: :repository_forks, format: false, constraints: { :name => /[^\/]+/ }
     get '/:host_type/:owner/:name/tags', to: 'repositories#tags', as: :repository_tags, format: false, constraints: { :name => /[^\/]+/ }
     get '/:host_type/:owner/:name/dependency-issues', to: 'repositories#dependency_issues', format: false, constraints: { :name => /[^\/]+/ }
+    get '/:host_type/:owner/:name/dependencies', to: 'repositories#dependencies', format: false, constraints: { :name => /[^\/]+/ }, as: :repository_dependencies
     get '/:host_type/:owner/:name/tree', to: 'repository_tree#show', as: :repository_tree, format: false, constraints: { :name => /[^\/]+/ }
 
     get '/:host_type/:owner/:name/web_hooks', to: 'web_hooks#index', as: :repository_web_hooks, format: false, constraints: { :name => /[^\/]+/ }
@@ -181,23 +188,26 @@ Rails.application.routes.draw do
   post '/auth/failure',             to: 'sessions#failure'
 
   get '/unseen-infrastructure', to: 'projects#unseen_infrastructure', as: :unseen_infrastructure
+  get '/digital-infrastructure', to: 'projects#digital_infrastructure', as: :digital_infrastructure
 
   get '/about', to: 'pages#about', as: :about
   get '/team', to: 'pages#team', as: :team
   get '/privacy', to: 'pages#privacy', as: :privacy
   get '/terms', to: 'pages#terms', as: :terms
   get '/compatibility', to: 'pages#compatibility', as: :compatibility
+  get '/data', to: 'pages#data', as: :data
+  get '/open-data', to: redirect("/data")
 
-
-  if Rails.env.development?
-    get '/rails/mailers'         => "rails/mailers#index"
-    get '/rails/mailers/*path'   => "rails/mailers#preview"
-  end
+  post '/hooks/package', to: 'hooks#package'
 
   get '/:platform/:name/suggestions', to: 'project_suggestions#new', as: :project_suggestions, constraints: { :name => /.*/ }
   post '/:platform/:name/suggestions', to: 'project_suggestions#create', constraints: { :name => /.*/ }
 
   # project routes
+  get '/:platform/:name/top_dependent_repos', to: 'projects#top_dependent_repos', as: :top_dependent_repos, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
+  get '/:platform/:name/top_dependent_projects', to: 'projects#top_dependent_projects', as: :top_dependent_projects, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
+  get '/:platform/:name/:number/dependencies', to: 'projects#dependencies', constraints: { :number => /.*/, :name => /.*/ }, as: :version_dependencies
+
   post '/:platform/:name/sync', to: 'projects#sync', constraints: { :name => /.*/ }, as: :sync_project
   get '/:platform/:name/unsubscribe', to: 'projects#unsubscribe', constraints: { :name => /.*/ }, as: :unsubscribe_project
   get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }

@@ -44,7 +44,8 @@ module PackageManager
         :name => project["name"],
         :homepage => latest_version['pubspec']['homepage'],
         :description => latest_version['pubspec']['description'],
-        :repository_url => repo_fallback('', latest_version['pubspec']['homepage'])
+        :repository_url => repo_fallback('', latest_version['pubspec']['homepage']),
+        :versions => project['versions']
       }
     end
 
@@ -56,10 +57,8 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, _project)
-      proj = project(name)
-      vers = proj['versions'].find{|v| v['version'] == version }
-
+    def self.dependencies(name, version, project)
+      vers = project[:versions].find{|v| v['version'] == version }
       return [] if vers.nil?
       map_dependencies(vers['pubspec'].fetch('dependencies', {}), 'runtime') +
       map_dependencies(vers['pubspec'].fetch('dev_dependencies', {}), 'Development')

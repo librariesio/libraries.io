@@ -1,4 +1,6 @@
 class RepositoriesController < ApplicationController
+  before_action :ensure_logged_in, only: [:sync]
+
   def index
     postfix = [current_language, current_license, current_keywords].any?(&:present?) ? 'Repos' : 'Repositories'
     @title = [current_language, current_license, current_keywords, formatted_host, postfix].compact.join(' ')
@@ -20,7 +22,7 @@ class RepositoriesController < ApplicationController
     @query = params[:q]
     @search = search_repos(@query)
     @suggestion = @search.response.suggest.did_you_mean.first
-    @repositories = @search.records
+    @repositories = @search.results.map{|result| RepositorySearchResult.new(result) }
     @title = page_title
     @facets = @search.response.aggregations
     respond_to do |format|
@@ -61,7 +63,6 @@ class RepositoriesController < ApplicationController
     @projects = @repository.projects.limit(20).includes(:versions)
     @color = @repository.color
     @forks = @repository.forked_repositories.host(@repository.host_type).interesting.limit(5)
-    @manifests = @repository.manifests.latest.limit(10).includes(repository_dependencies: {project: :versions})
   end
 
   def sourcerank
@@ -75,8 +76,8 @@ class RepositoriesController < ApplicationController
 
   def contributors
     load_repo
-    scope = @repository.contributions.where('count > 0').joins(:github_user)
-    visible_scope = scope.where('github_users.hidden = ?', false).order('count DESC')
+    scope = @repository.contributions.where('count > 0').joins(:repository_user)
+    visible_scope = scope.where('repository_users.hidden = ?', false).order('count DESC')
     @total = scope.sum(:count)
     @top_count = visible_scope.first.try(:count)
     @contributions = visible_scope.paginate(page: page_number)
@@ -85,7 +86,7 @@ class RepositoriesController < ApplicationController
 
   def forks
     load_repo
-    @forks = @repository.forked_repositories.host(@repository.host_type).maintained.order('stargazers_count DESC').paginate(page: page_number)
+    @forks = @repository.forked_repositories.host(@repository.host_type).maintained.order('stargazers_count DESC, rank DESC NULLS LAST').paginate(page: page_number)
   end
 
   def dependency_issues
@@ -94,15 +95,24 @@ class RepositoriesController < ApplicationController
     search_issues(repo_ids: @repo_ids)
   end
 
+  def dependencies
+    load_repo
+    @manifests = @repository.manifests.latest.limit(10).includes(repository_dependencies: {project: :versions})
+    render layout: false
+  end
+
+  def sync
+    load_repo
+    if @repository.recently_synced?
+      flash[:error] = "Repository has already been synced recently"
+    else
+      @repository.manual_sync
+      flash[:notice] = "Repository has been queued to be resynced"
+    end
+    redirect_back fallback_location: repository_path(@repository.to_param)
+  end
+
   private
-
-  def current_language
-    params[:language] if params[:language].present?
-  end
-
-  def current_license
-    params[:license] if params[:license].present?
-  end
 
   def allowed_sorts
     ['rank', 'stargazers_count', 'contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
@@ -129,14 +139,20 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  helper_method :repos_cache_key
+  def repos_cache_key(sort)
+    ['v2', sort, current_license, current_language, current_keywords, current_platforms, current_host].flatten.reject(&:blank?).map(&:downcase)
+  end
+
   def repo_search(sort)
-    search = Repository.search('', filters: {
-      license: current_license,
-      language: current_language,
-      keywords: current_keywords,
-      platforms: current_platforms,
-      host_type: formatted_host
-    }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
-    search.records
+    Rails.cache.fetch(repos_cache_key(sort), expires_in: 1.hour) do
+      search = Repository.search('', filters: {
+        license: current_license,
+        language: current_language,
+        keywords: current_keywords,
+        host_type: formatted_host
+      }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
+      search.results.map{|result| RepositorySearchResult.new(result) }
+    end
   end
 end

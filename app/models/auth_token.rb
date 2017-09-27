@@ -1,11 +1,12 @@
 class AuthToken < ApplicationRecord
   validates_presence_of :token
+  scope :authorized, -> { where(authorized: [true, nil]) }
 
   def self.client(options = {})
     if @auth_token && @auth_token.high_rate_limit?
       return @auth_token.github_client(options)
     end
-    auth_token = order("RANDOM()").limit(100).sample
+    auth_token = authorized.order("RANDOM()").limit(100).sample
     if auth_token.high_rate_limit?
       @auth_token = auth_token
       return auth_token.github_client(options)
@@ -25,7 +26,13 @@ class AuthToken < ApplicationRecord
 
   def high_rate_limit?
     github_client.rate_limit.remaining > 500
-  rescue Octokit::Unauthorized
+  rescue Octokit::Unauthorized, Octokit::AccountSuspended
+    false
+  end
+
+  def still_authorized?
+    !!github_client.rate_limit
+  rescue Octokit::Unauthorized, Octokit::AccountSuspended
     false
   end
 

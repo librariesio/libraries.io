@@ -1,0 +1,734 @@
+<div class='panel panel-default'>
+  <div class="panel-heading">
+    <h5 class='panel-title' id='projects'><a class='panel-toggle collapsed' data-toggle="collapse" href="#projectFields" aria-expanded="false" aria-controls="projectFields">Projects</a></h5>
+  </div>
+  <div class="panel-body">
+    A Libraries.io project is the definition of a package available from one of the 33 Package Managers that it supports.
+  </div>
+  <ul class="list-group collapse" id="projectFields">
+    <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the project in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Platform <em class='text-muted'>string</em></h5>
+        <p>The name of the Package manager the project is available on.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Name <em class='text-muted'>string</em></h5>
+        <p>The name of the project, unique by Platform (case sensitive).</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Created Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>The timestamp of when Libraries.io first discovered the project.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Updated Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>The timestamp of when Libraries.io last saved a change to the project.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Description <em class='text-muted'>string</em></h5>
+        <p>Description provided by the package manager, falling back to description from repository if empty.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Keywords <em class='text-muted'>string</em></h5>
+        <p>Comma separated array of keywords if supported by package manager.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Homepage URL <em class='text-muted'>string</em></h5>
+        <p>URL of webpage or repository as provided by package managers that support it.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Licenses <em class='text-muted'>string</em></h5>
+        <p>Comma separated array of SPDX identifiers for licenses declared in package manager meta data  or submitted manually by Libraries.io user via "project suggection" feature.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository URL <em class='text-muted'>string</em></h5>
+        <p>URL of source code repository declared in package manager metadata or submitted manually by Libraries.io user via "project suggection" feature.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Versions Count <em class='text-muted'>integer</em></h5>
+        <p>Number of published versions of the project found by Libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>SourceRank <em class='text-muted'>integer</em></h5>
+        <p>Libraries.io defined score based on quality, popularity and community metrics.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Latest Release Publish Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>Time of the latest release detected by Libraries.io (ordered by semver, falling back to publish date for invalid semver).</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Latest Release Number <em class='text-muted'>string</em></h5>
+        <p>Version number of the latest release detected by Libraries.io (ordered by semver, falling back to publish date for invalid semver).</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Package Manager ID <em class='text-muted'>integer</em></h5>
+        <p>Unique ID of project from package manager API, only currently used by PlatformIO.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependent Projects Count <em class='text-muted'>integer</em></h5>
+        <p>Number of other projects that declare the project as a dependency in one or more of their versions</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Language <em class='text-muted'>string</em></h5>
+        <p> primary programming language the project is written in, pulled from the repository if source is hosted on GitHub</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Status <em class='text-muted'>string</em></h5>
+        <p>Either Active, Deprecated, Unmaintained, Help Wanted, Removed, no value also means active. Updated when detected by Libraries.io or submitted manually by Libraries.io user via "project suggection" feature</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Last synced Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>Timestamp of when Libraries.io last synced the project from it's package manager API</p>
+      </p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependent Repositories Count <em class='text-muted'>integer</em></h5>
+        <p>The total count of open source repositories that list the project as a dependency as detected by Libraries.io.</p>
+      </p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the repository for this project in the Libraries.io database</p>
+    </li>
+  </ul>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading">
+    <h5 class='panel-title' id='versions'><a class='panel-toggle collapsed' data-toggle="collapse" href="#versionFields" aria-expanded="false" aria-controls="versionFields">Versions</a></h5>
+  </div>
+  <div class="panel-body">
+    A Libraries.io version is a definition of an imutable published version of a Project from a package manager. Not all package managers have a concept of publishing versions, often relying directly on tags/branches from a source control.
+  </div>
+  <ul class='list-group collapse' class='list-group' id='versionFields'>
+    <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the version in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Platform <em class='text-muted'>string</em></h5>
+        <p>The name of the Package manager the version is available on.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Project Name <em class='text-muted'>string</em></h5>
+        <p>The name of the project the version belongs to.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Project ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the project for this version in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Number <em class='text-muted'>string</em></h5>
+        <p>The number of the release, often confirms to semantic versioning.</p>
+    </li>
+    <li class='list-group-item'>
+      <h5>Published Timestamp <em class='text-muted'>datetime</em></h5>
+      <p>The timestamp of when the version was published</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Created Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>The timestamp of when the version was first detected by Libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Updated Timestamp< <em class='text-muted'>datetime</em></h5>
+        <p>The timestamp of when the version was last saved by Libraries.io</p>
+    </li>
+  </ul>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading">
+    <h5 class='panel-title' id='tags'><a class='panel-toggle collapsed' data-toggle="collapse" href="#tagFields" aria-expanded="false" aria-controls="tagFields">Tags</a></em></h5>
+  </div>
+  <div class="panel-body">
+    A Libraries.io tag is equivelant to a tag in git or other source control systems.
+  </div>
+  <ul class='list-group collapse' class='list-group' id='tagFields'>
+    <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the tag in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Host Type <em class='text-muted'>string</em></h5>
+        <p>Which website the tags repository is hosted on, either GitHub, GitLab or Bitbucket.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Name with Owner <em class='text-muted'>string</em></h5>
+        <p>The repository name and owner seperated by a slash, also maps to the url slug on the given repository host e.g. librariesio/libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the repository for this tag in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Tag Name <em class='text-muted'>string</em></h5>
+        <p>The name of the tag, often is a version number but could be any freeform string.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Tag git sha <em class='text-muted'>string</em></h5>
+        <p>Sha of the object that the tag is pointing at in the repository.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Tag Published Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>The timestamp of when the tag was published.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Tag Created Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>The timestamp of when the tag was first saved by Libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Tag Updated Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>The timestamp of when the tag was last saved by Libraries.io.</p>
+    </li>
+  </ul>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading">
+    <h5 class='panel-title' id='versions'><a class='panel-toggle collapsed' data-toggle="collapse" href="#dependenciesFields" aria-expanded="false" aria-controls="dependenciesFields">Dependencies</a></h5>
+  </div>
+  <div class="panel-body">
+    <p>
+      Libraries.io dependencies belong to versions of a project, each version can have different sets of dependencies with different versions. Dependencies point at a specific version or range of versions of other projects, the resolution of that project version change over time as new versions are published and dependent on the specifics of the platform.
+    </p>
+    <p>
+      Almost all package managers dependencies will be from the same package manager, the only exception is Atom, which pulls it's
+      dependencies from the NPM package manager, hence the extra `Dependency Platform` field.
+    </p>
+  </div>
+  <ul class='list-group collapse' class='list-group' id='dependenciesFields'>
+    <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the dependency in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Platform <em class='text-muted'>string</em></h5>
+        <p>The name of the Package manager the dependency is available on.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Project Name <em class='text-muted'>string</em></h5>
+        <p>The name of the project the dependency belongs to.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Project ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the project for this dependency in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Verion Number <em class='text-muted'>string</em></h5>
+        <p>The number of the version that the dependency belongs to.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Version ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the version for this dependency in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependency Name <em class='text-muted'>string</em></h5>
+        <p>The name of the project that the dependency specifies.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependency Platform <em class='text-muted'>string</em></h5>
+        <p>The name of the package manager that the project that the dependency specifies is available from (only different for Atom).</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependency Kind <em class='text-muted'>string</em></h5>
+        <p>The type of dependency, often declared for the phase of usage, e.g. runtime, test, development, build.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Optional Dependency <em class='text-muted'>boolean</em></h5>
+        <p>Is the dependency optional?.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependency Requirements <em class='text-muted'>string</em></h5>
+        <p>The version or range of versions that the dependency specifies, resolution of that to a particular version is package manager specific.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependency Project ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the project for this dependency in the Libraries.io database</p>
+    </li>
+  </ul>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading">
+    <h5 class='panel-title' id='repositories'><a class='panel-toggle collapsed' data-toggle="collapse" href="#repositoriesFields" aria-expanded="false" aria-controls="repositoriesFields">Repositories</a></h5>
+  </div>
+  <div class="panel-body">
+    <p>
+      A Libraries.io repository represents a publically accessible source code repository from either github.com, gitlab.com or bitbucket.org.
+    </p>
+  </div>
+  <ul class='list-group collapse' class='list-group' id='repositoriesFields'>
+    <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the repository in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Host Type <em class='text-muted'>string</em></h5>
+        <p>Which website the repository is hosted on, either GitHub, GitLab or Bitbucket.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Name with Owner <em class='text-muted'>string</em></h5>
+        <p>The repository name and owner seperated by a slash, also maps to the url slug on the given repository host e.g. librariesio/libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Description <em class='text-muted'>string</em></h5>
+        <p>Description of repository.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Fork<em class='text-muted'>boolean</em></h5>
+        <p>Is the repository a fork of another.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Created Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>Timestamp of when the repository was created on the host.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Updated Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>Timestamp of when the repository was last saved by Libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Last pushed Timestamp <em class='text-muted'>datetime</em></h5>
+        <p> Timestamp of when the repository was last pushed to, only available for GitHub repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Homepage URL <em class='text-muted'>string</em></h5>
+        <p>URL of a declared homepage or other website for the repository.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Size <em class='text-muted'>integer</em></h5>
+        <p>Size of the repository in kilobytes, only available for GitHub and Bitbucket.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Stars Count <em class='text-muted'>integer</em></h5>
+        <p>Number of stars on the repository, only available for GitHub and GitLab.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Language <em class='text-muted'>string</em></h5>
+        <p>Primary programming language the project is written in, only available for GitHub and Bitbucket.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Issues enabled<em class='text-muted'>boolean</em></h5>
+        <p>Is the bug tracker enabled for this repository?.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Wiki enabled<em class='text-muted'>boolean</em></h5>
+        <p>Is the wiki enabled for this repository?.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Pages enabled<em class='text-muted'>boolean</em></h5>
+        <p>Is GitHub pages enabled for this repository? only possible for GitHub.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Forks Count <em class='text-muted'>integer</em></h5>
+        <p>Number of forks of this repository.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Mirror URL <em class='text-muted'>string</em></h5>
+        <p>URL of the repositroy of which this is a mirror of, only present if this repository is a mirror of another.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Open Issues Count <em class='text-muted'>integer</em></h5>
+        <p>Number of open issues on the repository bug tracker, only available for GitHub and GitLab.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Default branch <em class='text-muted'>string</em></h5>
+        <p>Primary branch of the repository.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Watchers Count <em class='text-muted'>integer</em></h5>
+        <p>Number of subscribers to all notifications for the repository, only available for GitHub and Bitbucket.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>UUID <em class='text-muted'>string</em></h5>
+        <p>ID of the repository on the remote host, not unique between GitLab and GitHub repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Fork Source Name with Owner <em class='text-muted'>string</em></h5>
+        <p>If the repository is a fork, the repository name and owner seperated by a slash of the repository if was forked from.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>License <em class='text-muted'>string</em></h5>
+        <p>SPDX identifier of the license of the repository, only available for GitHub repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Contributors Count <em class='text-muted'>integer</em></h5>
+        <p>Number of unique contributors that have committed to the default branch.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Readme filename <em class='text-muted'>string</em></h5>
+        <p>If a readme file has been detected, the full name of the readme file, e.g README.md.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Changelog filename <em class='text-muted'>string</em></h5>
+        <p>If a changelog file has been detected, the full name of the changelog file, e.g changelog.txt.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Contributing guidelines filename <em class='text-muted'>string</em></h5>
+        <p>If a contributing guidelines file has been detected, the full name of the contributing guidelines file, e.g contributing.md.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>License filename <em class='text-muted'>string</em></h5>
+        <p>If a license file has been detected, the full name of the license file, e.g LICENSE.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Code of Conduct filename <em class='text-muted'>string</em></h5>
+        <p>If a code of conduct file has been detected, the full name of the code of conduct file, e.g code_of_conduct.md.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Security Threat Model filename <em class='text-muted'>string</em></h5>
+        <p>If a Security Threat Model  file has been detected, the full name of the Security Threat Model  file, e.g threatmodel.md.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Security Audit filename <em class='text-muted'>string</em></h5>
+        <p>If a Security Audit file has been detected, the full name of the Security Audit file, e.g security.md.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Status <em class='text-muted'>string</em></h5>
+        <p> - Either Active, Deprecated, Unmaintained, Help Wanted, Removed, no value also means active. Updated when detected by Libraries.io or su. manually by Libraries.io user via "repo suggection" feature
+      </p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Last Synced Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>Timestamp of when Libraries.io last synced the repository from the host API.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>SourceRank <em class='text-muted'>integer</em></h5>
+        <p>Libraries.io defined score based on quality, popularity and community metrics.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Display Name <em class='text-muted'>string</em></h5>
+        <p>Display name for the repository, only available for GitLab repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>SCM type <em class='text-muted'>string</em></h5>
+        <p>Type of source control repository uses, always "git" for GitHub and GitLab.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Pull requests enabled<em class='text-muted'>boolean</em></h5>
+        <p>Are pull requests enabled for this repository? Only available for GitLab repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Logo URL <em class='text-muted'>string</em></h5>
+        <p>Custom logo url for repository, only available for GitLab repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Keywords <em class='text-muted'>string</em></h5>
+        <p>Comma separated array of keywords, called "topics" on GitHub, only available for GitHub and GitLab.</p>
+    </li>
+  </ul>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading">
+    <h5 class='panel-title' id='repository_dependencies'><a class='panel-toggle collapsed' class='panel-toggle' data-toggle="collapse" href="#repDepFields" aria-expanded="false" aria-controls="repDepFields">Repository Dependencies</a></h5>
+  </div>
+  <div class="panel-body">
+    A Libraries.io repository dependency is where a dependency on a Project from a package manager has been specified in a manifest file, either as a manually added dependency commited by a user or listed as a generated dependency listed in a lockfile that has been automatically generated by a package manager and commited.
+  </div>
+  <ul class='list-group collapse' class='list-group' id='repDepFields'>
+    <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the repository dependency in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Host Type <em class='text-muted'>string</em></h5>
+        <p>Which website the dependencys repository is hosted on, either GitHub, GitLab or Bitbucket.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Name with Owner <em class='text-muted'>string</em></h5>
+        <p>The repository name and owner seperated by a slash, also maps to the url slug on the given repository host e.g. librariesio/libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the repository for this dependency in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Manifest Platform <em class='text-muted'>string</em></h5>
+        <p>Which package manager the dependency listed in the manifest should use.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Manifest Filepath <em class='text-muted'>string</em></h5>
+        <p>Path to the file where the dependency is declared within the repository.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Git branch <em class='text-muted'>string</em></h5>
+        <p>Which branch was the manifest loaded from the repository.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Manifest kind <em class='text-muted'>string</em></h5>
+        <p>Either manifest or lockfile, manifests are written by humans, lockfiles contain full resolved dependency tree.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Optional<em class='text-muted'>boolean</em></h5>
+        <p>Is the dependency optional?.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependency Project Name <em class='text-muted'>string</em></h5>
+        <p>The name of the project that the dependency specifies.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependency Requirements <em class='text-muted'>string</em></h5>
+        <p>The version or range of versions that the dependency specifies, resolution of that to a particular version is package manager specific.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependency Kind <em class='text-muted'>string</em></h5>
+        <p>The type of dependency, often declared for the phase of usage, e.g. runtime, test, development, build.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependency Project ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the project for this dependency in the Libraries.io database</p>
+    </li>
+  </ul>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading">
+    <h5 class='panel-title' id='projects_with_repository_fields'><a class='panel-toggle collapsed' data-toggle="collapse" href="#projects_with_repository_fieldsFields" aria-expanded="false" aria-controls="projects_with_repository_fieldsFields">Projects with related Repository fields</a></h5>
+  </div>
+  <div class="panel-body">
+    This is an alternative projects export that denormalizes a projects related source code repository inline to reduce the need to join between two data sets.
+  </div>
+  <ul class="list-group collapse" id="projects_with_repository_fieldsFields">
+    <li class='list-group-item'>
+        <h5>ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the project in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Platform <em class='text-muted'>string</em></h5>
+        <p>The name of the Package manager the project is available on.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Name <em class='text-muted'>string</em></h5>
+        <p>The name of the project, unique by Platform (case sensitive).</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Created Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>The timestamp of when Libraries.io first discovered the project.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Updated Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>The timestamp of when Libraries.io last saved a change to the project.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Description <em class='text-muted'>string</em></h5>
+        <p>Description provided by the package manager, falling back to description from repository if empty.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Keywords <em class='text-muted'>string</em></h5>
+        <p>Comma separated array of keywords if supported by package manager.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Homepage URL <em class='text-muted'>string</em></h5>
+        <p>URL of webpage or repository as provided by package managers that support it.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Licenses <em class='text-muted'>string</em></h5>
+        <p>Comma separated array of SPDX identifiers for licenses declared in package manager meta data  or submitted manually by Libraries.io user via "project suggection" feature.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository URL <em class='text-muted'>string</em></h5>
+        <p>URL of source code repository declared in package manager metadata or submitted manually by Libraries.io user via "project suggection" feature.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Versions Count <em class='text-muted'>integer</em></h5>
+        <p>Number of published versions of the project found by Libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>SourceRank <em class='text-muted'>integer</em></h5>
+        <p>Libraries.io defined score based on quality, popularity and community metrics.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Latest Release Publish Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>Time of the latest release detected by Libraries.io (ordered by semver, falling back to publish date for invalid semver).</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Latest Release Number <em class='text-muted'>string</em></h5>
+        <p>Version number of the latest release detected by Libraries.io (ordered by semver, falling back to publish date for invalid semver).</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Package Manager ID <em class='text-muted'>integer</em></h5>
+        <p>Unique ID of project from package manager API, only currently used by PlatformIO.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependent Projects Count <em class='text-muted'>integer</em></h5>
+        <p>Number of other projects that declare the project as a dependency in one or more of their versions</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Language <em class='text-muted'>string</em></h5>
+        <p> primary programming language the project is written in, pulled from the repository if source is hosted on GitHub</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Status <em class='text-muted'>string</em></h5>
+        <p>Either Active, Deprecated, Unmaintained, Help Wanted, Removed, no value also means active. Updated when detected by Libraries.io or submitted manually by Libraries.io user via "project suggection" feature</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Last synced Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>Timestamp of when Libraries.io last synced the project from it's package manager API</p>
+      </p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Dependent Repositories Count <em class='text-muted'>integer</em></h5>
+        <p>The total count of open source repositories that list the project as a dependency as detected by Libraries.io.</p>
+      </p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository ID <em class='text-muted'>integer</em></h5>
+        <p>The unique primary key of the repository for this project in the Libraries.io database</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Host Type <em class='text-muted'>string</em></h5>
+        <p>Which website the repository is hosted on, either GitHub, GitLab or Bitbucket.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Name with Owner <em class='text-muted'>string</em></h5>
+        <p>The repository name and owner seperated by a slash, also maps to the url slug on the given repository host e.g. librariesio/libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Description <em class='text-muted'>string</em></h5>
+        <p>Description of repository.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Fork<em class='text-muted'>boolean</em></h5>
+        <p>Is the repository a fork of another.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Created Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>Timestamp of when the repository was created on the host.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Updated Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>Timestamp of when the repository was last saved by Libraries.io.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Last pushed Timestamp <em class='text-muted'>datetime</em></h5>
+        <p> Timestamp of when the repository was last pushed to, only available for GitHub repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Homepage URL <em class='text-muted'>string</em></h5>
+        <p>URL of a declared homepage or other website for the repository.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Size <em class='text-muted'>integer</em></h5>
+        <p>Size of the repository in kilobytes, only available for GitHub and Bitbucket.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Stars Count <em class='text-muted'>integer</em></h5>
+        <p>Number of stars on the repository, only available for GitHub and GitLab.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Language <em class='text-muted'>string</em></h5>
+        <p>Primary programming language the project is written in, only available for GitHub and Bitbucket.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Issues enabled<em class='text-muted'>boolean</em></h5>
+        <p>Is the bug tracker enabled for this repository?.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Wiki enabled<em class='text-muted'>boolean</em></h5>
+        <p>Is the wiki enabled for this repository?.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Pages enabled<em class='text-muted'>boolean</em></h5>
+        <p>Is GitHub pages enabled for this repository? only possible for GitHub.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Forks Count <em class='text-muted'>integer</em></h5>
+        <p>Number of forks of this repository.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Mirror URL <em class='text-muted'>string</em></h5>
+        <p>URL of the repositroy of which this is a mirror of, only present if this repository is a mirror of another.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Open Issues Count <em class='text-muted'>integer</em></h5>
+        <p>Number of open issues on the repository bug tracker, only available for GitHub and GitLab.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Default branch <em class='text-muted'>string</em></h5>
+        <p>Primary branch of the repository.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Watchers Count <em class='text-muted'>integer</em></h5>
+        <p>Number of subscribers to all notifications for the repository, only available for GitHub and Bitbucket.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository UUID <em class='text-muted'>string</em></h5>
+        <p>ID of the repository on the remote host, not unique between GitLab and GitHub repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Fork Source Name with Owner <em class='text-muted'>string</em></h5>
+        <p>If the repository is a fork, the repository name and owner seperated by a slash of the repository if was forked from.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository License <em class='text-muted'>string</em></h5>
+        <p>SPDX identifier of the license of the repository, only available for GitHub repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Contributors Count <em class='text-muted'>integer</em></h5>
+        <p>Number of unique contributors that have committed to the default branch.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Readme filename <em class='text-muted'>string</em></h5>
+        <p>If a readme file has been detected, the full name of the readme file, e.g README.md.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Changelog filename <em class='text-muted'>string</em></h5>
+        <p>If a changelog file has been detected, the full name of the changelog file, e.g changelog.txt.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Contributing guidelines filename <em class='text-muted'>string</em></h5>
+        <p>If a contributing guidelines file has been detected, the full name of the contributing guidelines file, e.g contributing.md.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository License filename <em class='text-muted'>string</em></h5>
+        <p>If a license file has been detected, the full name of the license file, e.g LICENSE.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Code of Conduct filename <em class='text-muted'>string</em></h5>
+        <p>If a code of conduct file has been detected, the full name of the code of conduct file, e.g code_of_conduct.md.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Security Threat Model filename <em class='text-muted'>string</em></h5>
+        <p>If a Security Threat Model  file has been detected, the full name of the Security Threat Model  file, e.g threatmodel.md.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Security Audit filename <em class='text-muted'>string</em></h5>
+        <p>If a Security Audit file has been detected, the full name of the Security Audit file, e.g security.md.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Status <em class='text-muted'>string</em></h5>
+        <p> - Either Active, Deprecated, Unmaintained, Help Wanted, Removed, no value also means active. Updated when detected by Libraries.io or su. manually by Libraries.io user via "repo suggection" feature
+      </p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Last Synced Timestamp <em class='text-muted'>datetime</em></h5>
+        <p>Timestamp of when Libraries.io last synced the repository from the host API.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository SourceRank <em class='text-muted'>integer</em></h5>
+        <p>Libraries.io defined score based on quality, popularity and community metrics.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Display Name <em class='text-muted'>string</em></h5>
+        <p>Display name for the repository, only available for GitLab repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository SCM type <em class='text-muted'>string</em></h5>
+        <p>Type of source control repository uses, always "git" for GitHub and GitLab.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Pull requests enabled<em class='text-muted'>boolean</em></h5>
+        <p>Are pull requests enabled for this repository? Only available for GitLab repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Logo URL <em class='text-muted'>string</em></h5>
+        <p>Custom logo url for repository, only available for GitLab repositories.</p>
+    </li>
+    <li class='list-group-item'>
+        <h5>Repository Keywords <em class='text-muted'>string</em></h5>
+        <p>Comma separated array of keywords, called "topics" on GitHub, only available for GitHub and GitLab.</p>
+    </li>
+  </ul>
+</div>

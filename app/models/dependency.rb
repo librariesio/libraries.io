@@ -14,10 +14,22 @@ class Dependency < ApplicationRecord
 
   after_create :update_project_id
 
+  alias_attribute :name, :project_name
+  alias_attribute :latest_stable, :latest_stable_release_number
+  alias_attribute :latest, :latest_release_number
+  alias_attribute :deprecated, :is_deprecated?
+  alias_method :outdated, :outdated?
+
+  delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :project, allow_nil: true
+
+  def filepath
+    nil
+  end
+
   def find_project_id
     project_id = Project.platform(platform).where(name: project_name.strip).limit(1).pluck(:id).first
     return project_id if project_id
-    Project.platform(platform).where('lower(name) = ?', project_name.downcase.strip).limit(1).pluck(:id).first
+    Project.lower_platform(platform).lower_name(project_name.strip).limit(1).pluck(:id).first
   end
 
   def compatible_license?

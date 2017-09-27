@@ -24,7 +24,7 @@ module PackageManager
     end
 
     def self.project_names
-      get("https://registry.npmjs.org/-/all").keys[1..-1]
+      get("https://raw.githubusercontent.com/nice-registry/all-the-package-names/master/names.json")
     end
 
     def self.recent_names
@@ -42,7 +42,7 @@ module PackageManager
 
       repo = latest_version.fetch('repository', {})
       repo = repo[0] if repo.is_a?(Array)
-      repo_url = repo.fetch('url', nil)
+      repo_url = repo.try(:fetch, 'url', nil)
 
       {
         :name => project["name"],
@@ -50,7 +50,8 @@ module PackageManager
         :homepage => project["homepage"],
         :keywords_array => Array.wrap(latest_version.fetch("keywords", [])),
         :licenses => licenses(latest_version),
-        :repository_url => repo_fallback(repo_url, project["homepage"])
+        :repository_url => repo_fallback(repo_url, project["homepage"]),
+        :versions => project["versions"]
       }
     end
 
@@ -75,28 +76,16 @@ module PackageManager
     end
 
     def self.versions(project)
-      versions = if project['time']
-                   project['time'].except("modified", "created").map do |k,v|
-                     {
-                       :number => k,
-                       :published_at => v
-                     }
-                   end
-                 else
-                   project['versions'].map do |_k, v|
-                     { :number => v['version'] }
-                   end
-                 end
-      versions.reject {|version,_date| version_invalid?(project['name'], version[:number]) }
+      project['versions'].map do |k, v|
+        {
+          :number => k,
+          :published_at => project['time'][k]
+        }
+      end
     end
 
-    def self.version_invalid?(name, version)
-      get("http://registry.npmjs.org/#{name.gsub('/', '%2F')}/#{version}").try(:has_key?, 'error')
-    end
-
-    def self.dependencies(name, version, _project)
-      proj = project(name)
-      vers = proj['versions'][version]
+    def self.dependencies(name, version, project)
+      vers = project[:versions][version]
       return [] if vers.nil?
       map_dependencies(vers.fetch('dependencies', {}), 'runtime') +
       map_dependencies(vers.fetch('devDependencies', {}), 'Development') +

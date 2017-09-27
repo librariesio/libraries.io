@@ -23,6 +23,8 @@ module IssueSearch
         indexes :locked, type: 'boolean'
         indexes :labels, type: 'string', :analyzer => 'keyword'
         indexes :state, type: 'string', :analyzer => 'keyword'
+
+        indexes :host_type, type: 'string', :index => :not_analyzed
       end
     end
 
@@ -53,7 +55,7 @@ module IssueSearch
         filter: { bool: { must: [], must_not: options[:must_not] } },
         sort: default_sort
       }
-      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
+      search_definition[:filter][:bool][:must] = filter_format(options[:filters]) if options[:filters].any?
       if options[:repo_ids].present?
         search_definition[:query][:filtered][:filter][:bool][:must] << {
           terms: { "repository_id": options[:repo_ids] } }
@@ -142,9 +144,9 @@ module IssueSearch
       labels_to_keep ||= ['help wanted']
       filters.select { |_k, v| v.present? }.map do |k, v|
         if k == :labels
-          labels_to_keep.map { |value| { term: { k => value } } }
+          Array(labels_to_keep).map { |value| { terms: { k => value.split(',') } } }
         else
-          { term: { k => v } }
+          Array(v).map { { terms: { k => v.split(',') } } }
         end
       end
     end

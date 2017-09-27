@@ -41,11 +41,11 @@
     </h2>
 
     <h2>
-      <%= number_to_human GithubUser.fast_total %> Github Users
+      <%= number_to_human RepositoryUser.fast_total %> Repository Users
     </h2>
 
     <h2>
-      <%= number_to_human GithubOrganisation.fast_total %> Github Orgs
+      <%= number_to_human RepositoryOrganisation.fast_total %> Repository Orgs
     </h2>
 
     <h2>
@@ -58,6 +58,12 @@
 
     <h2>
       <%= number_to_human RepositoryPermission.fast_total %> Repository Permissions
+    </h2>
+    <h2>
+      <%= number_to_human Readme.fast_total %> Readmes
+    </h2>
+    <h2>
+      <%= number_to_human Issue.fast_total %> Issues
     </h2>
   </div>
 </div>

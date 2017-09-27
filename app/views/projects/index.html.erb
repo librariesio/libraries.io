@@ -1,6 +1,7 @@
 <div class='row'>
-  <div class="col-md-12 leaderboard">
-    <h1>Libraries.io <small>The Open Source Discovery Service. <%= link_to 'Find out more &raquo;'.html_safe, about_path, class: 'visible-xs' %></small></h1>
+  <div class="col-md-12 headline">
+    <h1>Libraries.io</h1>
+    <%= link_to 'Find out more &raquo;'.html_safe, about_path, class: 'visible-xs' %>
 
     <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
       <div class="input-group input-group-lg">
@@ -9,51 +10,87 @@
           <button class="btn btn-primary" type="submit">Search</button>
         </span>
       </div>
-      <p class='hidden-xs'>Libraries.io monitors <strong><%= number_with_delimiter(Project.total) %></strong> open source libraries across <strong><%= PackageManager::Base.platforms.length %></strong> different package managers.
-          You can discover new libraries to use in your software projects as well as be notified of new releases to keep your applications secure and up to date.
-      <%= link_to 'Find out more', about_path %>
+      <p class='hidden-xs'>Libraries.io monitors <strong><%= number_with_delimiter(Project.total) %></strong> open source libraries across <strong><%= PackageManager::Base.platforms.length %></strong> different package managers, so you don't have to. <%= link_to 'Find out more', about_path %>
       </p>
       <hr>
     <% end %>
   </div>
 </div>
+<div class='row'>
+  <div class='col-md-3'>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title"><%= fa_icon 'binoculars' %>&nbsp;Discover new software</h2>
+      </div>
+      <div class="panel-body">
+        <p>
+          Search <%= number_with_delimiter(Project.total) %> projects by <%= link_to 'licence'.html_safe, licenses_path %>, <%= link_to 'language'.html_safe, licenses_path %> or <%= link_to 'keyword'.html_safe, keywords_path %>, or explore new, trending or popular projects.
+        </p>
+        <%= link_to 'Explore', explore_path, class:'btn btn-primary center-block' %>
+      </div>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title"><%= fa_icon 'thumb-tack' %>&nbsp;Monitor your dependencies</h2>
+      </div>
+      <div class="panel-body">
+        <p>
+          Stay up to date with notifications of updates, licence incompatibilties or deleted dependencies.
+        </p>
+        <% if logged_in? %>
+          <%= link_to 'Subscriptions', subscriptions_path, class:'btn btn-success center-block'%>
+        <% else %>
+          <%= link_to 'Login', login_path, class:'btn btn-success center-block' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title"><%= fa_icon 'wrench' %>&nbsp;Maintain your OSS project</h2>
+      </div>
+      <div class="panel-body">
+        <p>
+          Understand your users and make informed decisions about features with usage and version data.
+        </p>
+        <% if logged_in? %>
+          <%= link_to 'Repository Monitoring', repositories_path, class:'btn btn-success center-block'%>
+        <% else %>
+          <%= link_to 'Login', login_path, class:'btn btn-success center-block' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title"><%= fa_icon 'database' %>&nbsp;Use Libraries.io data</h2>
+      </div>
+      <div class="panel-body">
+        <p>
+          Build Libraries.io data into your own applications and services. <em>Open data release coming soon.</em>
+        </p>
+        <%= link_to 'Documentation', '/api', class:'btn btn-primary center-block'%>
+      </div>
+    </div>
+  </div>
 
+</div>
+
+<hr>
+
+
+<%= render 'adsense/banner' %>
+<h3 data-ga-tracked-el='search-by-language'>
+  Supported Package Managers
+</h3>
 <div class='row'>
   <%= render partial: 'platforms/platform', collection: @platforms %>
 </div>
-
-<hr>
-<%= render 'adsense/banner' %>
-<h3 data-ga-tracked-el='search-by-language'>
-  Search Projects by Language
-  <small class='more'>
-    <%= link_to 'See more &raquo;'.html_safe, languages_path %>
-  </small>
-</h3>
-<div class='row'>
-  <%= render partial: 'languages/language', collection: @languages %>
-</div>
-
-<hr>
-<%= render 'adsense/banner' %>
-<h3 data-ga-tracked-el='search-by-license'>
-  Search Projects by License
-  <small class='more'>
-    <%= link_to 'See more &raquo;'.html_safe, licenses_path %>
-  </small>
-</h3>
-<div class='row'>
-  <%= render partial: 'licenses/license', collection: @licenses %>
-</div>
-
-<hr>
-<%= render 'adsense/banner' %>
-<h3 data-ga-tracked-el='search-by-keyword'>
-  Search Projects by Keyword
-  <small class='more'>
-    <%= link_to 'See more &raquo;'.html_safe, keywords_path %>
-  </small>
-</h3>
-<div class='row'>
-  <%= render partial: 'keywords/keyword', collection: @keywords %>
-</div>
+<br>
+<p>
+  Package manager not listed above? <%= link_to 'Consider adding support for it', "https://github.com/librariesio/libraries.io/blob/master/docs/add-a-package-manager.md" %>.
+</p>

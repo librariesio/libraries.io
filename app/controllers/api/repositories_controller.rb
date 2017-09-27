@@ -2,19 +2,15 @@ class Api::RepositoriesController < Api::ApplicationController
   before_action :find_repo, except: :search
 
   def show
-    render json: @repository.as_json({
-      except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]
-    })
+    render json: @repository
   end
 
   def projects
-    paginate json: project_json_response(@repository.projects.includes(:versions, :repository))
+    paginate json: @repository.projects.order(custom_order).includes(:versions, :repository)
   end
 
   def dependencies
-    repo_json = @repository.as_json({
-      except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]
-    })
+    repo_json = RepositorySerializer.new(@repository).as_json
     repo_json[:dependencies] = map_dependencies(@repository.repository_dependencies || [])
 
     render json: repo_json
@@ -23,7 +19,8 @@ class Api::RepositoriesController < Api::ApplicationController
   def search
     @search = paginate(search_repos(params[:q]))
     @repositories = @search.records
-    render json: @repositories.as_json({ except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id] })
+
+    render json: @repositories
   end
 
   private

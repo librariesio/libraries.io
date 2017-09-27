@@ -36,7 +36,8 @@ module PackageManager
         :homepage => latest_version['home_page'],
         :keywords_array => Array.wrap(latest_version['keywords']),
         :licenses => latest_version['license'].join(','),
-        :repository_url => repo_fallback(project['repository'],latest_version['home_page'])
+        :repository_url => repo_fallback(project['repository'],latest_version['home_page']),
+        :versions => project["versions"]
       }
     end
 
@@ -55,8 +56,8 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, _project)
-      vers = project(name)['versions'][version]
+    def self.dependencies(name, version, project)
+      vers = project[:versions][version]
       return [] if vers.nil?
       map_dependencies(vers.fetch('require', {}).reject{|k,_v| k == 'php' }, 'runtime') +
       map_dependencies(vers.fetch('require-dev', {}).reject{|k,_v| k == 'php' }, 'Development')

@@ -23,7 +23,11 @@
 <div class="row">
   <div class='col-md-8'>
     <h1>
-      <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo), user_path(repo.owner_name) %>
+      <% if repo.owner.present? %>
+        <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo), user_path(host_type: repo.host_type.downcase, login: repo.owner_name) %>
+      <% else %>
+        <%= image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo) %>
+      <% end %>
       <%= repo %>
       <%= link_to fa_icon(repo.host_type.downcase), repo.url, class: 'tip', title: "View #{repo} on #{repo.formatted_host}" %>
       <%= fa_icon("lock", title: 'This repo is private', class: 'tip') if repo.private? %>
@@ -75,8 +79,8 @@
   </div>
 </div>
 <hr>
-<% cache([@repository, 'show', 'v1'], :expires_in => 1.day) do %>
-  <div class='row'>
+<div class='row'>
+  <% cache([@repository, 'show', 'v2'], :expires_in => 1.day) do %>
     <div class='col-md-8'>
       <p>
         <%= emojify repo.description %>
@@ -117,76 +121,12 @@
         <%== repo.readme %>
       <% end %>
 
-      <% if @manifests.length > 0 %>
-        <hr>
-        <div id="dependencies" class="table-responsive">
-          <h4>Dependencies</h4>
-          <% @manifests.each do |manifest| %>
-            <% deps = manifest.repository_dependencies %>
-            <% if deps.length > 0 %>
-              <table class='table table-hover table-condensed'>
-                <thead>
-                  <th>
-                    <div class="pictogram tip pictogram-<%= manifest.platform.try(:downcase) %>" title='<%= manifest.platform %>'></div>
-                    <%= link_to manifest.filepath, manifest.repository_link %>
-                  </th>
-                  <th>Kind</th>
-                  <th>
-                    Requirements
-                  </th>
-                  <th>
-                    Latest Stable
-                  </th>
-                  <th>
-                    Latest Release
-                  </th>
-                  <th>
-                    Licenses
-                  </th>
-                  <th>
-
-                  </th>
-                </thead>
-                <% deps.first(200).reject{|dep| dep.project_name.blank? }.sort_by(&:project_name).each do |dependency| %>
-                  <tr>
-                    <td>
-                      <% if dependency.platform.present? %>
-                        <%= link_to  truncate_with_tip(dependency.project_name, 30), project_path(name: dependency.project_name, platform: PackageManager::Base.dependency_platform(dependency.platform)) %>
-                      <% else %>
-                        <%= truncate_with_tip(dependency.project_name, 30) %>
-                      <% end %>
-                    </td>
-                    <td>
-                      <%= truncate_with_tip(dependency.kind, 15) %>
-                    </td>
-                    <td>
-                      <%= truncate_with_tip(dependency.requirements, 15) %>
-                    </td>
-                    <td>
-                      <%= dependency.try(:project).try(:latest_stable_release_number) %>
-                    </td>
-                    <td>
-                      <%= dependency.try(:project).try(:latest_release_number) %>
-                    </td>
-                    <td>
-                      <% if dependency.project %>
-                        <%= linked_licenses dependency.project.normalized_licenses %>
-                      <% end %>
-                    </td>
-                    <td>
-                      <% if dependency.project %>
-                        <%= render 'dependencies/flags', dependency: dependency %>
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </table>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
+      <div id='repository_dependencies' style='display:none;' data-url="<%= repository_dependencies_path(repo.to_param) %>"></div>
     </div>
-    <div class='col-md-4'>
+  <% end %>
+
+  <div class='col-md-4'>
+    <% cache([@repository, 'sidebar', 'v1'], :expires_in => 1.day) do %>
       <%= render 'adsense/sidebar' %>
       <h4>Project Statistics</h4>
       <%= render 'repositories/stats', repo: repo %>
@@ -203,6 +143,8 @@
         <%= render @projects, cache: true %>
       <% end %>
 
+      <%= render 'tags', repo: repo %>
+
       <% if @forks.length > 0 %>
         <div class="row"></div>
         <hr>
@@ -212,37 +154,35 @@
         </h4>
         <%= render @forks, cache: true %>
       <% end %>
+    <% end %>
 
-      <% if repo.tags.published.length > 0 %>
-        <div class="row"></div>
-        <hr>
-        <h4>
-          Tags
-          <small><%= link_to 'See all', repository_tags_path(@repository.to_param) %></small>
-        </h4>
-        <ul>
-          <% repo.tags.published.order('published_at DESC, name DESC').limit(30).to_a.each do |tag| %>
-            <li>
-              <%= link_to tag, tag.repository_url %>
-              <% if tag.published_at.present? %>
-              - <%= tag.published_at.to_s(:long) %>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      <% end %>
-      <div class="row"></div>
-      <br>
+    <div class="row"></div>
+    <br>
+    <p>
+      <%= fa_icon 'question-circle' %>
+      Something wrong with this page?
+      <%= link_to 'Make a suggestion', 'https://github.com/librariesio/libraries.io/issues/new' %>
+    </p>
+    <% if repo.last_synced_at.present? %>
       <p>
-        <%= fa_icon 'question-circle' %>
-        Something wrong with this page?
-        <%= link_to 'Make a suggestion', 'https://github.com/librariesio/libraries.io/issues/new' %>
+        <small class='text-muted'>Last synced: <%= repo.last_synced_at %></small>
       </p>
-      <% if repo.last_synced_at.present? %>
+    <% end %>
+    <% unless repo.recently_synced? %>
+      <% if logged_in? %>
         <p>
-          <small class='text-muted'>Last synced: <%= repo.last_synced_at %></small>
+          <%= link_to sync_repository_path(repo.to_param), class: 'btn btn-primary btn-xs', method: :post do %>
+            <%= fa_icon 'refresh' %>
+            Resync Repository
+          <% end %>
+        </p>
+      <% else %>
+        <p>
+          <small class='text-muted'>
+            <%= link_to 'Login', login_path %> to resync this repository
+          </small>
         </p>
       <% end %>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>

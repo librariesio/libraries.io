@@ -1,12 +1,18 @@
 ---
-:concurrency: 5
+:concurrency: 2
 production:
-  :concurrency: 70
+  :concurrency: 100
 :timeout: 8
 :verbose: true
 :queues:
-  - [low, 1]
-  - [default, 2]
-  - [mailers, 4]
-  - [critical, 16]
-  - [user, 20]
+  - [user, 40]
+  - [critical, 30]
+  - [mailers, 8]
+  - [tree, 6]
+  - [default, 4]
+  - [small, 4]
+  - [status, 2]
+  - [issues, 2]
+  - [owners, 2]
+  - [repo, 2]
+  - [sourcerank, 1]

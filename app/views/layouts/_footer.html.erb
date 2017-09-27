@@ -6,10 +6,6 @@
             <%= link_to 'Libraries', root_path %> helps you find new open source libraries, modules and frameworks and keep track of ones you depend upon.
           </p>
           <p>
-            Currently tracking <%= link_to number_with_delimiter(Project.total), search_path %> open source projects
-            from across <%= link_to PackageManager::Base.platforms.length, platforms_path %> platforms.
-          </p>
-          <p>
             <a href="https://twitter.com/librariesio" title='Twitter'><%= fa_icon('twitter') %></a>&nbsp;
             <a href="https://github.com/librariesio" title='GitHub'><%= fa_icon('github') %></a>&nbsp;
             <a href="https://www.facebook.com/libraries.io" title='Facebook'><%= fa_icon('facebook') %></a>&nbsp;

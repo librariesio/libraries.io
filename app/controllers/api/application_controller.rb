@@ -1,6 +1,6 @@
 class Api::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :check_api_key, :set_headers
+  before_action :check_api_key
 
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
@@ -12,14 +12,6 @@ class Api::ApplicationController < ApplicationController
 
   def record_not_found(error)
     render json: { error: "404 Not Found" }, status: :not_found
-  end
-
-  def set_headers
-    headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Expose-Headers'] = 'ETag'
-    headers['Access-Control-Allow-Methods'] = 'GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD'
-    headers['Access-Control-Allow-Headers'] = '*,x-requested-with,Content-Type,If-Modified-Since,If-None-Match'
-    headers['Access-Control-Max-Age'] = '86400'
   end
 
   def check_api_key
@@ -36,7 +28,8 @@ class Api::ApplicationController < ApplicationController
   end
 
   def current_api_key
-    ApiKey.active.find_by_access_token(params[:api_key])
+    return nil if params[:api_key].blank?
+    @current_api_key ||= ApiKey.active.find_by_access_token(params[:api_key])
   end
 
   def current_user
@@ -47,13 +40,9 @@ class Api::ApplicationController < ApplicationController
     { error: "Error 403, you don't have permissions for this operation." }
   end
 
-  private
-
-  def current_language
-    params[:language] if params[:language].present?
-  end
-
-  def current_license
-    params[:license] if params[:license].present?
+  def es_query(klass, query, filters)
+    klass.search(query, filters: filters,
+                        sort: format_sort,
+                        order: format_order, api: true).paginate(page: page_number, per_page: per_page_number)
   end
 end

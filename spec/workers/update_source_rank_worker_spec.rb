@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe UpdateSourceRankWorker do
   it "should use the low priority queue" do
-    is_expected.to be_processed_in :low
+    is_expected.to be_processed_in :sourcerank
   end
 
   it "should update sourcerank for a project" do

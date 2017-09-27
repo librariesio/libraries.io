@@ -74,7 +74,20 @@ document.addEventListener('turbolinks:load', function(){
   ga('require', 'pageVisibilityTracker', {
     visibleMetricIndex: 2,
   });
+
+  load_async('#version_dependencies');
+  load_async('#top_dependent_projects');
+  load_async('#top_dependent_repos');
+  load_async('#repository_dependencies');
 })
+
+function load_async(id) {
+  if($(id).length && $(id).data('url').length){
+    $.get($(id).data('url'), function(data) {
+      $(id).html(data).toggle(data.length > 0);
+    });
+  }
+}
 
 $('.rss').on('click', function(){
   subtome($(this).attr('href'))

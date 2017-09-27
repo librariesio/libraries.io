@@ -2,6 +2,10 @@ module RepositoryHost
   class Gitlab < Base
     IGNORABLE_EXCEPTIONS = [::Gitlab::Error::NotFound, ::Gitlab::Error::Forbidden, ::Gitlab::Error::InternalServerError, ::Gitlab::Error::Parsing]
 
+    def self.api_missing_error_class
+      ::Gitlab::Error::NotFound
+    end
+
     def avatar_url(_size = 60)
       repository.logo_url
     end
@@ -32,7 +36,19 @@ module RepositoryHost
     end
 
     def download_issues(token = nil)
-      # not implemented yet
+      api_client(token).issues(repository.full_name).auto_paginate do |issue|
+        RepositoryIssue::Gitlab.create_from_hash(repository.full_name, issue, token)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
+
+    def download_pull_requests(token = nil)
+      api_client(token).merge_requests(repository.full_name).auto_paginate do |pull_request|
+        RepositoryIssue::Gitlab.create_from_hash(repository.full_name, pull_request, token)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def download_forks(token = nil)
@@ -40,7 +56,28 @@ module RepositoryHost
     end
 
     def download_owner
-      # not implemented yet
+      return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
+      namespace = api_client.project(repository.full_name).try(:namespace)
+      return unless namespace
+      if namespace.kind == 'group'
+        o = RepositoryOwner::Gitlab.api_client.group(namespace.path)
+        org = RepositoryOrganisation.create_from_host('GitLab', o)
+        if org
+          repository.repository_organisation_id = org.id
+          repository.repository_user_id = nil
+          repository.save
+        end
+      elsif namespace.kind == 'user'
+        o = RepositoryOwner::Gitlab.fetch_user(namespace.path)
+        u = RepositoryUser.create_from_host('GitLab', o)
+        if u
+          repository.repository_user_id = u.id
+          repository.repository_organisation_id = nil
+          repository.save
+        end
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def create_webook(token = nil)
@@ -88,9 +125,8 @@ module RepositoryHost
     end
 
     def download_tags(token = nil)
-      remote_tags = api_client(token).tags(escaped_full_name).auto_paginate
       existing_tag_names = repository.tags.pluck(:name)
-      remote_tags.each do |tag|
+      remote_tags = api_client(token).tags(escaped_full_name).auto_paginate do |tag|
         next if existing_tag_names.include?(tag.name)
         next if tag.commit.nil?
         repository.tags.create({
@@ -104,34 +140,11 @@ module RepositoryHost
       nil
     end
 
-    def update(token = nil)
-      begin
-        r = self.class.fetch_repo(repository.full_name)
-        return unless r.present?
-        repository.uuid = r[:id] unless repository.uuid == r[:id]
-         if repository.full_name.downcase != r[:full_name].downcase
-           clash = Repository.host('GitLab').where('lower(full_name) = ?', r[:full_name].downcase).first
-           if clash && (!clash.update(token) || clash.status == "Removed")
-             clash.destroy
-           end
-           repository.full_name = r[:full_name]
-         end
-        repository.owner_id = r[:owner][:id]
-        repository.license = Project.format_license(r[:license][:key]) if r[:license]
-        repository.source_name = r[:parent][:full_name] if r[:fork]
-        repository.assign_attributes r.slice(*Repository::API_FIELDS)
-        repository.save! if repository.changed?
-      rescue ::Gitlab::Error::NotFound
-        repository.update_attribute(:status, 'Removed') if !repository.private?
-      rescue *IGNORABLE_EXCEPTIONS
-        nil
-      end
-    end
-
     def self.recursive_gitlab_repos(page_number = 1, limit = 5, order = "created_asc")
+      return if limit.zero?
       r = Typhoeus.get("https://gitlab.com/explore/projects?&page=#{page_number}&sort=#{order}")
       if r.code == 500
-        recursive_gitlab_repos(page_number.to_i + 1, limit)
+        recursive_gitlab_repos(page_number.to_i + 1, limit, order)
       else
         page = Nokogiri::HTML(r.body)
         names = page.css('a.project').map{|project| project.attributes["href"].value[1..-1] }
@@ -146,7 +159,7 @@ module RepositoryHost
       if names.any?
         limit = limit - 1
         REDIS.set 'gitlab-page', page_number
-        recursive_gitlab_repos(page_number.to_i + 1, limit)
+        recursive_gitlab_repos(page_number.to_i + 1, limit, order)
       end
     end
 
@@ -161,8 +174,7 @@ module RepositoryHost
     end
 
     def self.fetch_repo(full_name, token = nil)
-      client = api_client(token)
-      project = client.project(full_name.gsub('/','%2F'))
+      project = api_client(token).project(full_name)
       repo_hash = project.to_hash.with_indifferent_access.slice(:id, :description, :created_at, :name, :open_issues_count, :forks_count, :default_branch)
 
       repo_hash.merge!({
@@ -178,6 +190,7 @@ module RepositoryHost
         private: !project.public,
         pull_requests_enabled: project.merge_requests_enabled,
         logo_url: project.avatar_url,
+        keywords: project.tag_list,
         parent: {
           full_name: project.forked_from_project.try(:path_with_namespace)
         }

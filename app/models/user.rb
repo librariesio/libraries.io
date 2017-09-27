@@ -4,6 +4,8 @@ class User < ApplicationRecord
   include Monitoring
 
   has_many :identities, dependent: :destroy
+  has_many :repository_users, through: :identities
+
   has_many :subscriptions, dependent: :destroy
   has_many :subscribed_projects, through: :subscriptions, source: :project
   has_many :repository_subscriptions, dependent: :destroy
@@ -12,18 +14,17 @@ class User < ApplicationRecord
   has_many :all_repositories, through: :repository_permissions, source: :repository
   has_many :adminable_repository_permissions, -> { where admin: true }, anonymous_class: RepositoryPermission
   has_many :adminable_repositories, through: :adminable_repository_permissions, source: :repository
-  has_many :adminable_github_orgs, -> { group('github_organisations.id') }, through: :adminable_repositories, source: :github_organisation
-  has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
-  has_many :public_repositories, -> { where private: false }, anonymous_class: Repository, primary_key: :github_id, foreign_key: :owner_id
+  has_many :adminable_repository_organisations, -> { group('repository_organisations.id') }, through: :adminable_repositories, source: :repository_organisation
+  has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, through: :repository_users
+  has_many :public_repositories, -> { where private: false }, anonymous_class: Repository, through: :repository_users
 
   has_many :watched_repositories, source: :repository, through: :repository_subscriptions
   has_many :watched_dependencies, through: :watched_repositories, source: :dependencies
   has_many :watched_dependent_projects, -> { group('projects.id') }, through: :watched_dependencies, source: :project
 
   has_many :dependencies, through: :source_repositories
-  has_many :all_dependencies, through: :public_repositories, source: :dependencies
   has_many :really_all_dependencies, through: :all_repositories, source: :dependencies
-  has_many :all_dependent_projects, -> { group('projects.id') }, through: :all_dependencies, source: :project
+  has_many :all_dependent_projects, -> { group('projects.id') }, through: :really_all_dependencies, source: :project
   has_many :all_dependent_repos, -> { group('repositories.id') }, through: :all_dependent_projects, source: :repository
 
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
@@ -46,12 +47,20 @@ class User < ApplicationRecord
     update_attributes({email: hash.fetch('info', {}).fetch('email', nil)})
   end
 
+  def main_identity
+    @main_identity ||= identities.first
+  end
+
+  def to_param
+    main_identity.try(:to_param)
+  end
+
   def avatar_url(size = 60)
-    identities.first.try(:avatar_url, size)
+    main_identity.try(:avatar_url, size)
   end
 
   def nickname
-    identities.first.try(:nickname).presence
+    main_identity.try(:nickname).presence
   end
 
   def all_subscribed_projects

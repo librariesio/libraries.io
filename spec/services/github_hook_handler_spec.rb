@@ -60,10 +60,8 @@ describe GithubHookHandler do
         }
       end
 
-      it "runs issues and push events" do
-        expect(subject).to receive(:run).with("pull_request", params).and_call_original
-        expect(subject).to receive(:run).with("issues", params)
-        expect(subject).to receive(:run).with("push", params)
+      it "runs pull request events" do
+        expect(subject).to receive(:run).with("pull_request", params)
 
         subject.run("pull_request", params)
       end

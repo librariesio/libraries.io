@@ -35,6 +35,25 @@
       <li><code>per_page</code> (default is `30`, max is `100`)</li>
     </ul>
 
+    <h3 id='platforms'>Platforms</h3>
+
+    <p>
+      Get list of supported package managers
+    </p>
+
+    <p>
+      <code>GET https://libraries.io/api/platforms?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/platforms?api_key=#{@api_key}", "https://libraries.io/api/platforms?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}-platforms", :expires_in => 1.day do %>
+      <pre>
+<%= JSON.pretty_generate Platform.all.map{|p| PlatformSerializer.new(p) }.as_json %></pre>
+    <% end %>
+
+
     <h3 id='project'>Project</h3>
 
     <p>
@@ -50,7 +69,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate project_json_response(@project) %></pre>
+<%= JSON.pretty_generate ProjectSerializer.new(@project).as_json %></pre>
     <% end %>
     <h3 id='project-dependencies'>Project Dependencies</h3>
 
@@ -86,15 +105,13 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependents", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate project_json_response(@project.dependent_projects.paginate(page: 1)) %></pre>
+<%= JSON.pretty_generate @dependent_projects.map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
     <h3 id="project-dependent-repositories">Project Dependent Repositories</h3>
 
     <p>
       Get repositories that depend on a given project.
     </p>
-
-
 
     <p>
       <code>GET https://libraries.io/api/:platform/:name/dependent_repositories?api_key=<%= @api_key %></code>
@@ -105,7 +122,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependent-repositories", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @project.dependent_repositories.paginate(page: 1).as_json(except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]) %></pre>
+<%= JSON.pretty_generate @project.dependent_repositories.paginate(page: 1).as_json(except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id]) %></pre>
     <% end %>
 
     <h3 id="project-search">Project Search</h3>
@@ -123,7 +140,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-project-search", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate project_json_response(@search) %></pre>
+<%= JSON.pretty_generate @search.map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
     <h3 id='repository'>Repository</h3>
 
@@ -139,7 +156,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-repository", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @repository.as_json({except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]}) %></pre>
+<%= JSON.pretty_generate @repository.as_json({except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id]}) %></pre>
     <% end %>
     <h3 id='repository-dependencies'>Repository Dependencies</h3>
 
@@ -171,7 +188,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-repository-projects", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate project_json_response(@repository.projects.includes(:versions, :repository).paginate(page: 1)) %></pre>
+<%= JSON.pretty_generate @repository.projects.includes(:versions, :repository).paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
 
     <h3 id='user'>User</h3>
@@ -183,11 +200,11 @@
     </p>
     <hr>
     <p>
-      Example: <strong><%= link_to "https://libraries.io/api/github/#{@github_user.login}?api_key=#{@api_key}", "https://libraries.io/api/github/#{@github_user.login}?api_key=#{@api_key}" %></strong>
+      Example: <strong><%= link_to "https://libraries.io/api/github/#{@repository_user.login}?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}?api_key=#{@api_key}" %></strong>
     </p>
     <% cache "api-docs-#{@cache_version}-user", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @github_user.as_json %></pre>
+<%= JSON.pretty_generate @repository_user.as_json %></pre>
     <% end %>
 
     <h3 id="user-repositories">User Repositories</h3>
@@ -205,7 +222,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-repositories", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate @github_user.open_source_repositories.paginate(page: 1).as_json(except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]) %></pre>
+<%= JSON.pretty_generate @repository_user.open_source_repositories.paginate(page: 1).as_json(except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id]) %></pre>
     <% end %>
 
     <h3 id="user-projects">User Projects</h3>
@@ -219,11 +236,11 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@github_user.login}/projects?api_key=#{@api_key}", "https://libraries.io/api/github/#{@github_user.login}/projects?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-projects", :expires_in => 1.day do %>
       <pre>
-<%= JSON.pretty_generate project_json_response(@github_user.projects.includes(:versions, :repository).paginate(page: 1)) %></pre>
+<%= JSON.pretty_generate @repository_user.projects.includes(:versions, :repository).paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
 
     <h3 id='subscriptions-index'>User Subscriptions</h3>
@@ -316,6 +333,9 @@
       <li><a href="#authentication">Authentication</a></li>
       <li><a href="#rate-limit">Rate limit</a></li>
       <li><a href="#pagination">Pagination</a></li>
+    </ul>
+    <ul>
+      <li><a href="#platforms">Platforms</a></li>
     </ul>
     <ul>
       <li><a href="#project">Project</a></li>

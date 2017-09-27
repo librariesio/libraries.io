@@ -48,7 +48,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= User.find_by_id(session[:user_id])
+    return nil if session[:user_id].blank?
+    @current_user ||= User.includes(:identities).find_by_id(session[:user_id])
   end
 
   def logged_in?
@@ -67,9 +68,14 @@ class ApplicationController < ActionController::Base
 
   def find_project
     @project = Project.platform(params[:platform]).where(name: params[:name]).includes(:repository, :versions).first
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).includes(:repository, :versions).first if @project.nil?
+    @project = Project.lower_platform(params[:platform]).lower_name(params[:name]).includes(:repository, :versions).first if @project.nil?
     raise ActiveRecord::RecordNotFound if @project.nil?
     @color = @project.color
+  end
+
+  def find_project_lite
+    @project = Project.platform(params[:platform]).where(name: params[:name]).first
+    raise ActiveRecord::RecordNotFound if @project.nil?
   end
 
   def current_platforms
@@ -82,9 +88,19 @@ class ApplicationController < ActionController::Base
     params[:languages].split(',').map{|l| Linguist::Language[l].to_s }.compact
   end
 
+  def current_language
+    return [] if params[:language].blank?
+    params[:language].split(',').map{|l| Linguist::Language[l].to_s }.compact
+  end
+
   def current_licenses
     return [] if params[:licenses].blank?
     params[:licenses].split(',').map{|l| Spdx.find(l).try(:id) }.compact
+  end
+
+  def current_license
+    return [] if params[:license].blank?
+    params[:license].split(',').map{|l| Spdx.find(l).try(:id) }.compact
   end
 
   def current_keywords
@@ -100,6 +116,11 @@ class ApplicationController < ActionController::Base
   def format_order
     return nil unless params[:order].present?
     ['desc', 'asc'].include?(params[:order]) ? params[:order] : nil
+  end
+
+  def custom_order
+    return unless format_sort.present?
+    "#{format_sort} #{format_order}"
   end
 
   def search_issues(options = {})
@@ -124,7 +145,7 @@ class ApplicationController < ActionController::Base
 
   def search_repos(query)
     es_query(Repository, query, {
-      license: current_licenses,
+      license: current_license,
       language: current_language,
       keywords: current_keywords,
       platforms: current_platforms,
@@ -203,30 +224,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  helper_method :project_json_response
-  def project_json_response(projects)
-    projects.as_json(project_json_response_args)
-  end
-
-  def project_json_response_args
-    {only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} }}
-  end
-
   def map_dependencies(dependencies)
-    dependencies.map do |dependency|
-      {
-        project_name: dependency.project_name,
-        name: dependency.project_name,
-        platform: dependency.platform,
-        requirements: dependency.requirements,
-        latest_stable: dependency.try(:project).try(:latest_stable_release_number),
-        latest: dependency.try(:project).try(:latest_release_number),
-        deprecated: dependency.try(:project).try(:is_deprecated?),
-        outdated: dependency.outdated?,
-        filepath: dependency.try(:manifest).try(:filepath),
-        kind: dependency.try(:manifest).try(:kind)
-      }
-    end
+    dependencies.map {|dependency| DependencySerializer.new(dependency) }
   end
 
   def load_tree_resolver

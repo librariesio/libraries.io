@@ -1,0 +1,19 @@
+<% your_dependent_repos = current_user.your_dependent_repos(@project) %>
+<% if your_dependent_repos.length > 0 %>
+  <hr>
+  <h4 data-ga-tracked-el='your-dependent-repositories'>Your Dependent Projects</h4>
+  <dl class='row'>
+    <% your_dependent_repos.limit(10).each do |repo| %>
+      <dt class='col-sm-12'>
+        <%= link_to repo.full_name, repository_path(repo.to_param) %>
+        <small>
+          <%= fa_icon("lock") if repo.private? %>
+          <%= fa_icon("code-fork") if repo.fork? %>
+        </small>
+      </dt>
+    <% end %>
+  </dl>
+  <% if your_dependent_repos.count > 10 %>
+    <%= link_to "See all", your_project_dependent_repos_path(@project.to_param) %>
+  <% end %>
+<% end %>

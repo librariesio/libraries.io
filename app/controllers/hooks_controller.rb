@@ -13,6 +13,12 @@ class HooksController < ApplicationController
     render json: nil, status: :ok
   end
 
+  def package
+    PackageManagerDownloadWorker.perform_async(params['platform'], params['name'])
+
+    render json: nil, status: :ok
+  end
+
   private
 
   def handler

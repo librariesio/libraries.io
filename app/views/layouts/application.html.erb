@@ -92,22 +92,18 @@
         <%= link_to image_tag('logo.svg', width: 116, height: 22), root_path, class: 'navbar-brand' %>
       </div>
       <div class="navbar-collapse collapse" id="navbar-main">
+        <% unless on_homepage? && !logged_in? %>
+          <ul class="nav navbar-nav navbar-left">
+            <li class=' <%= 'hidden-xs' if on_search_page %>'>
+              <% if current_host.present? || request.original_fullpath =~ /^\/repos/i %>
+                <%= render 'repositories/search_form' %>
+              <% else %>
+                <%= render 'projects/search_form' %>
+              <% end %>
+            </li>
+          </ul>
+        <% end %>
         <ul class="nav navbar-nav navbar-right">
-          <li>
-            <%= link_to 'Explore', explore_path %>
-          </li>
-          <li>
-            <%= form_tag search_path, method: :get, class: 'navbar-form', enforce_utf8: false do |f| %>
-              <div class="input-group input-group">
-                <%= text_field_tag 'q', '', placeholder: 'Search..', class: 'form-control', size: 40 %>
-                <span class="input-group-btn">
-                  <button class="btn btn-primary" type="submit">
-                    <%= fa_icon 'search' %>
-                  </button>
-                </span>
-              </div>
-            <% end %>
-          </li>
           <% if logged_in? %>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= image_tag current_user.avatar_url(40), width: 20, height: 20 %> <span class="caret"></span></a>
@@ -115,8 +111,8 @@
                 <li><%= link_to 'Subscriptions', subscriptions_path %></li>
                 <% if current_user.github_enabled? %>
                   <li><%= link_to 'Repository Monitoring', repositories_path %></li>
-                  <% if current_user.github_user.present? %>
-                    <li><%= link_to 'Profile', user_path(current_user.github_user) %></li>
+                  <% if current_user.repository_user.present? %>
+                    <li><%= link_to 'Profile', user_path(current_user.repository_user.to_param) %></li>
                   <% end %>
                 <% end %>
                 <li><%= link_to 'Settings', account_path %></li>

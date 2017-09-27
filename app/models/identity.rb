@@ -1,8 +1,18 @@
 class Identity < ApplicationRecord
   belongs_to :user
+  belongs_to :repository_user
   validates_presence_of :uid, :provider
 
-  scope :viewable, -> { where(provider: ['github', 'gitlab', 'bitbucket']) }
+  VIEWABLE_PROVIDERS = ['github', 'gitlab', 'bitbucket']
+
+  scope :viewable, -> { where(provider: VIEWABLE_PROVIDERS) }
+
+  def to_param
+    {
+        host_type: provider.downcase,
+        login: nickname
+      }
+  end
 
   def self.find_with_omniauth(auth)
     find_by(uid: auth['uid'], provider: auth['provider'])

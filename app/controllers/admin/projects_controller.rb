@@ -43,6 +43,6 @@ class Admin::ProjectsController < Admin::ApplicationController
       platform: params[:platform]
     }, sort: params[:sort], order: params[:order])
 
-    @projects = @search.records.where("status IS ? OR status = ''", nil).order('projects.rank DESC, name DESC').paginate(page: params[:page])
+    @projects = @search.records.where("status IS ? OR status = ''", nil).order('projects.rank DESC NULLS LAST, name DESC').paginate(page: params[:page])
   end
 end

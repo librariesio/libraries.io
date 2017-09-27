@@ -1,7 +1,6 @@
 <div class='project' style="border-color: <%= project.color %>;">
   <h5>
     <%= link_to project.name, project_path(project.to_param) %>
-    <small><%= project.latest_release_number %></small>
   </h5>
 
   <div class="">
@@ -20,13 +19,7 @@
       <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
       <%= timeago_tag project.latest_release_published_at %>
     <% else %>
-      <%= link_to project.platform_name, platform_path(project.platform.downcase) %> -
-      <% if project.language.present? && project.language != project.platform %>
-        <%= link_to project.language, language_path(project.language) %> -
-      <% end %>
-      <% if project.normalized_licenses.present? %>
-        <%= linked_licenses project.normalized_licenses %> -
-      <% end %>
+      Latest release <%= project.latest_release_number %> -
       <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
       <%= timeago_tag project.latest_release_published_at %>
       <% if project.stars > 0 %>

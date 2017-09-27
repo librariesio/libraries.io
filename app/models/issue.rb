@@ -2,7 +2,7 @@ class Issue < ApplicationRecord
   include IssueSearch
 
   belongs_to :repository
-  belongs_to :github_user, primary_key: :github_id
+  belongs_to :repository_user
 
   API_FIELDS = [:number, :state, :title, :body, :locked, :closed_at, :created_at, :updated_at]
   FIRST_PR_LABELS = ['good first bug', 'good first contribution', 'good-first-bug',
@@ -13,6 +13,9 @@ class Issue < ApplicationRecord
                      'first contribution', 'first timers only', 'your-first-pr',
                      'starter', 'beginner', 'easy', 'E-easy']
 
+  # eager load this module to avoid clashing with Gitlab gem in development
+  RepositoryIssue::Gitlab
+
   scope :open, -> { where(state: 'open') }
   scope :closed, -> { where(state: 'closed') }
   scope :issue, -> { where(pull_request: false) }
@@ -20,48 +23,30 @@ class Issue < ApplicationRecord
   scope :locked, -> { where(locked: true) }
   scope :unlocked, -> { where(locked: false) }
   scope :actionable, -> { open.issue.unlocked }
-  scope :labeled, -> (label) { where.contains(labels: [label]) }
+  scope :labeled, -> (label) { where("issues.labels @> ?", Array(label).to_postgres_array(true)) }
   scope :help_wanted, -> { labeled('help wanted') }
-  scope :first_pull_request, -> { where.overlap(labels: FIRST_PR_LABELS) }
+  scope :first_pull_request, -> { where("issues.labels && ?", Array(FIRST_PR_LABELS).to_postgres_array(true)) }
   scope :indexable, -> { actionable.includes(:repository) }
 
-  def url
-    path = pull_request ? 'pull' : 'issues'
-    "#{repository.url}/#{path}/#{number}"
-  end
+  scope :host, lambda{ |host_type| where('lower(issues.host_type) = ?', host_type.try(:downcase)) }
 
-  def github_client(token = nil)
-    AuthToken.fallback_client(token)
+  delegate :language, :license, to: :repository
+  delegate :url, :label_url, to: :repository_issue
+
+  def issue_type
+    pull_request ? 'pull_request' : 'issue'
   end
 
   def sync(token = nil)
-    IssueWorker.perform_async(repository.full_name, number, token)
+    RepositoryIssue::Base.update(host_type, repository.full_name, number, issue_type, token)
   end
 
-  def self.create_from_hash(repo, issue_hash)
-    issue_hash = issue_hash.to_hash
-    i = repo.issues.find_or_create_by(github_id: issue_hash[:id])
-    i.github_user_id = issue_hash[:user][:id]
-    i.repository_id = repo.id
-    i.labels = issue_hash[:labels].map{|l| l[:name] }
-    i.pull_request = issue_hash[:pull_request].present?
-    i.comments_count = issue_hash[:comments]
-    i.assign_attributes issue_hash.slice(*Issue::API_FIELDS)
-    i.last_synced_at = Time.now
-    i.save! if i.changed?
-    i
+  def async_sync(token = nil)
+    IssueWorker.perform_async(host_type, repository.full_name, number, issue_type, token)
   end
 
   def contributions_count
     repository.try(:contributions_count) || 0
-  end
-
-  def language
-    repository.try(:language)
-  end
-
-  def license
-    repository.try(:license)
   end
 
   def stars
@@ -72,13 +57,11 @@ class Issue < ApplicationRecord
     repository.try(:rank) || 0
   end
 
-  def self.update_from_github(name_with_owner, issue_number, token = nil)
-    token ||= AuthToken.token
-    repo = RepositoryHost::Github.create(name_with_owner, token)
-    return unless repo
-    issue_hash = AuthToken.fallback_client(token).issue(repo.full_name, issue_number)
-    Issue.create_from_hash(repo, issue_hash)
-  rescue Octokit::NotFound, Octokit::ClientError
-    nil
+  def github_id
+    uuid # legacy alias
+  end
+
+  def repository_issue
+    @repository_issue ||= RepositoryIssue.const_get(host_type.capitalize).new(self)
   end
 end

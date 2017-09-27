@@ -14,7 +14,7 @@ module PackageManager
       page = 1
       projects = []
       while true
-        r = get("http://api.metacpan.org/v0/release/_search?q=status:latest&fields=distribution&sort=date:desc&size=5000&from=#{page*5000}")['hits']['hits']
+        r = get("https://fastapi.metacpan.org/v1/release/_search?q=status:latest&fields=distribution&sort=date:desc&size=5000&from=#{page*5000}")['hits']['hits']
         break if r == []
         projects += r
         page +=1
@@ -23,12 +23,12 @@ module PackageManager
     end
 
     def self.recent_names
-      names = get('http://api.metacpan.org/v0/release/_search?q=status:latest&fields=distribution&sort=date:desc&size=100')['hits']['hits']
+      names = get('https://fastapi.metacpan.org/v1/release/_search?q=status:latest&fields=distribution&sort=date:desc&size=100')['hits']['hits']
       names.map{|project| project['fields']['distribution'] }.uniq
     end
 
     def self.project(name)
-      get("http://api.metacpan.org/v0/release/#{name}")
+      get("https://fastapi.metacpan.org/v1/release/#{name}")
     end
 
     def self.mapping(project)
@@ -37,12 +37,13 @@ module PackageManager
         :homepage => project.fetch('resources',{})['homepage'],
         :description => project['abstract'],
         :licenses => project['license'].join(','),
-        :repository_url => repo_fallback(project.fetch('resources',{}).fetch('repository',{})['web'], project.fetch('resources',{})['homepage'])
+        :repository_url => repo_fallback(project.fetch('resources',{}).fetch('repository',{})['web'], project.fetch('resources',{})['homepage']),
+        :versions => get("https://fastapi.metacpan.org/v1/release/_search?q=distribution:#{project['distribution']}&size=5000&fields=version,dependency")['hits']['hits']
       }
     end
 
     def self.versions(project)
-      versions = get("http://api.metacpan.org/v0/release/_search?q=distribution:#{project['distribution']}&size=5000&fields=version,date")['hits']['hits']
+      versions = get("https://fastapi.metacpan.org/v1/release/_search?q=distribution:#{project['distribution']}&size=5000&fields=version,date")['hits']['hits']
       versions.map do |version|
         {
           :number => version['fields']['version'],
@@ -51,8 +52,8 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, _project)
-      versions = get("http://api.metacpan.org/v0/release/_search?q=distribution:#{name}&size=5000&fields=version,dependency")['hits']['hits']
+    def self.dependencies(name, version, project)
+      versions = project[:versions]
       version_data = versions.find{|v| v['fields']['version'] == version }
       version_data['fields']['dependency'].select{|dep| dep['relationship'] == 'requires' }.map do |dep|
         {

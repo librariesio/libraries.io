@@ -20,20 +20,23 @@ class Project < ApplicationRecord
   has_many :versions
   has_many :dependencies, -> { group 'project_name' }, through: :versions
   has_many :contributions, through: :repository
-  has_many :contributors, through: :contributions, source: :github_user
+  has_many :contributors, through: :contributions, source: :repository_user
   has_many :tags, through: :repository
   has_many :dependents, class_name: 'Dependency'
   has_many :dependent_versions, through: :dependents, source: :version, class_name: 'Version'
-  has_many :dependent_projects, -> { group('projects.id') }, through: :dependent_versions, source: :project, class_name: 'Project'
+  has_many :dependent_projects, -> { group('projects.id').order('projects.rank DESC NULLS LAST') }, through: :dependent_versions, source: :project, class_name: 'Project'
   has_many :repository_dependencies
   has_many :dependent_manifests, through: :repository_dependencies, source: :manifest
-  has_many :dependent_repositories, -> { group('repositories.id').order('repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
+  has_many :dependent_repositories, -> { group('repositories.id').order('repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
   has_many :subscriptions
   has_many :project_suggestions, dependent: :delete_all
   belongs_to :repository
   has_one :readme, through: :repository
 
-  scope :platform, ->(platform) { where('lower(platform) = ?', platform.try(:downcase)) }
+  scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
+  scope :lower_platform, ->(platform) { where('lower(projects.platform) = ?', platform.try(:downcase)) }
+  scope :lower_name, ->(name) { where('lower(projects.name) = ?', name.try(:downcase)) }
+
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }
@@ -72,10 +75,13 @@ class Project < ApplicationRecord
   scope :indexable, -> { not_removed.includes(:repository) }
 
   scope :unsung_heroes, -> { maintained
-                             .with_dependent_repos
                              .with_repo
                              .where('repositories.stargazers_count < 100')
                              .where('projects.dependent_repos_count > 1000') }
+
+  scope :digital_infrastructure, -> { not_removed
+                             .with_repo
+                             .where('projects.dependent_repos_count > ?', 10000)}
 
   scope :bus_factor, -> { maintained
                           .joins(:repository)
@@ -87,8 +93,8 @@ class Project < ApplicationRecord
   scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 1.month.ago)}
 
   after_commit :update_repository_async, on: :create
-  after_commit :set_dependents_count
-  after_commit :update_source_rank_async
+  after_commit :set_dependents_count, on: [:create, :update]
+  after_commit :update_source_rank_async, on: [:create, :update]
   before_save  :update_details
   before_destroy :destroy_versions
 
@@ -119,7 +125,14 @@ class Project < ApplicationRecord
   end
 
   def sync
-    platform_class.update(name)
+    result = platform_class.update(name)
+    set_last_synced_at unless result
+  rescue
+    set_last_synced_at
+  end
+
+  def set_last_synced_at
+    update_attribute(:last_synced_at, Time.zone.now)
   end
 
   def async_sync
@@ -139,14 +152,6 @@ class Project < ApplicationRecord
       title: "#{name} on #{platform}",
       description: description,
     }
-  end
-
-  def follows_semver?
-    if versions.all.length > 0
-      versions.all?(&:follows_semver?)
-    elsif tags.published.length > 0
-      tags.published.all?(&:follows_semver?)
-    end
   end
 
   def update_details
@@ -178,7 +183,7 @@ class Project < ApplicationRecord
 
   def owner
     return nil unless repository && repository.host_type == 'GitHub'
-    GithubUser.visible.find_by_login repository.owner_name
+    RepositoryUser.host('GitHub').visible.login(repository.owner_name).first
   end
 
   def platform_class
@@ -243,8 +248,12 @@ class Project < ApplicationRecord
 
   def set_dependents_count
     return if destroyed?
-    self.update_columns(dependents_count: dependents.joins(:version).pluck('DISTINCT versions.project_id').count,
-                        dependent_repos_count: dependent_repositories.open_source.count.length)
+    new_dependents_count = dependents.joins(:version).pluck('DISTINCT versions.project_id').count
+    new_dependent_repos_count = dependent_repositories.open_source.count.length
+    updates = {}
+    updates[:dependents_count] = new_dependents_count if read_attribute(:dependents_count) != new_dependents_count
+    updates[:dependent_repos_count] = new_dependent_repos_count if read_attribute(:dependent_repos_count) != new_dependent_repos_count
+    self.update_columns(updates) if updates.present?
   end
 
   def needs_suggestions?
@@ -256,15 +265,15 @@ class Project < ApplicationRecord
   end
 
   def self.license(license)
-    where.contains(normalized_licenses: [license])
+    where("projects.normalized_licenses @> ?", Array(license).to_postgres_array(true))
   end
 
   def self.keyword(keyword)
-    where.contains(keywords_array: [keyword])
+    where("projects.keywords_array @> ?", Array(keyword).to_postgres_array(true))
   end
 
   def self.keywords(keywords)
-    where.overlap(keywords_array: keywords)
+    where("projects.keywords_array && ?", Array(keywords).to_postgres_array(true))
   end
 
   def self.language(language)
@@ -367,13 +376,39 @@ class Project < ApplicationRecord
   end
 
   def check_status(removed = false)
-    response = Typhoeus.head(platform_class.check_status_url(self))
-    if platform == 'packagist' && response.response_code == 302
+    url = platform_class.check_status_url(self)
+    return if url.blank?
+    response = Typhoeus.head(url)
+    if platform.downcase == 'packagist' && response.response_code == 302
       update_attribute(:status, 'Removed')
-    elsif platform != 'packagist' && response.response_code == 404
+    elsif platform.downcase != 'packagist' && [400, 404].include?(response.response_code)
       update_attribute(:status, 'Removed')
     elsif removed
       update_attribute(:status, nil)
+    end
+  end
+
+  def unique_repo_requirement_ranges
+    repository_dependencies.group('repository_dependencies.requirements').count.keys
+  end
+
+  def unique_project_requirement_ranges
+    dependents.group('dependencies.requirements').count.keys
+  end
+
+  def unique_requirement_ranges
+    (unique_repo_requirement_ranges + unique_project_requirement_ranges).uniq
+  end
+
+  def potentially_outdated?
+    current_version = SemanticRange.clean(latest_release_number)
+    unique_requirement_ranges.compact.sort.any? do |range|
+      begin
+        !(SemanticRange.gtr(current_version, range, false, platform) ||
+        SemanticRange.satisfies(current_version, range, false, platform))
+      rescue
+        false
+      end
     end
   end
 end

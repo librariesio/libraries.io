@@ -1,115 +1,93 @@
 <% cache(['v1', @project, 'stats'], :expires_in => 1.day) do %>
-  <h4 data-ga-tracked-el='statistics'>Project Statistics</h4>
-  <table class='table table-striped'>
-    <tr>
-      <td>
-        SourceRank
-      </td>
-      <td>
-        <strong><%= link_to @project.rank, project_sourcerank_path(@project.to_param) %></strong>
-      </td>
-    </tr>
-    <% if @project.can_have_dependencies? && @project.latest_version %>
-      <tr>
-        <td>
-          Dependencies
-        </td>
-        <td>
-          <strong><%= number_to_human(@project.latest_version.dependencies.kind('runtime').count) %></strong>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Dependent projects
-        </td>
-        <td>
-          <strong><%= link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %></strong>
-        </td>
-      </tr>
-    <% end %>
-    <tr>
-      <td>
-        Dependent repositories
-      </td>
-      <td>
-        <strong><%= link_to number_to_human(@project.dependent_repos_count), project_dependent_repos_path(@project.to_param) %></strong>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Total <%= @project.release_or_tag %>
-      </td>
-      <td>
-        <strong>
-          <% if @project.can_have_versions? %>
+<dl class='row'>
+    <h2>
+    <dt class='col-xs-8'>
+      SourceRank
+    </dt>
+    <dd class='col-xs-4'>
+      <%= link_to @project.rank, project_sourcerank_path(@project.to_param) %>
+    </dd>
+  </h2>
+</dl>
+<hr>
+<dl class='row'>
+  <% if @project.can_have_dependencies? && @project.latest_version %>
+    <dt class='col-xs-8'>
+      Dependencies
+    </dt>
+    <dd class='col-xs-4'>
+      <%= number_to_human(@project.latest_version.dependencies.kind('runtime').count) %>
+    </dd>
+    <dt class='col-xs-8'>
+      Dependent projects
+    </dt>
+    <dd class='col-xs-4'>
+      <%= link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %>
+    </dd>
+  <% end %>
+    <dt class='col-xs-8'>
+      Dependent repositories
+    </dt>
+    <dd class='col-xs-4'>
+      <%= link_to number_to_human(@project.dependent_repos_count), project_usage_path(@project.to_param) %>
+    </dd>
+    <dt class='col-xs-8'>
+      Total <%= @project.release_or_tag %>
+    </dt>
+    <dd class='col-xs-4'>
+      <% if @project.can_have_versions? %>
             <%= link_to number_to_human(@project.versions.size), project_versions_path(@project.to_param) %>
           <% else %>
             <%= link_to number_to_human(@project.tags.count), project_tags_path(@project.to_param) %>
           <% end %>
-        </strong>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Latest <%= @project.release_or_tag.singularize %>
-      </td>
-      <td>
-        <strong><%= timeago_tag(@project.latest_release.try(:published_at).presence || @project.updated_at) %></strong>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        First <%= @project.release_or_tag.singularize %>
-      </td>
-      <td>
-        <strong><%= timeago_tag(@project.first_release.try(:published_at).presence || @project.repository.try(:created_at).presence || @project.created_at) %></strong>
-      </td>
-    </tr>
+    </dd>
+    <dt class='col-xs-8'>
+      Latest <%= @project.release_or_tag.singularize %>
+    </dt>
+    <dd class='col-xs-4'>
+      <%= timeago_tag(@project.latest_release.try(:published_at).presence || @project.updated_at) %>
+    </dd>
+    <dt class='col-xs-8'>
+      First <%= @project.release_or_tag.singularize %>
+    </dt>
+    <dd class='col-xs-4'>
+      <%= timeago_tag(@project.first_release.try(:published_at).presence || @project.repository.try(:created_at).presence || @project.created_at) %>
+    </dd>
     <% if @project.repository.present? %>
-    <tr>
-      <td>
+      <dt class='col-xs-8'>
         Stars
-      </td>
-      <td>
-        <strong><%= link_to number_to_human(@project.repository.stargazers_count), @project.repository.stargazers_url %></strong>
-      </td>
-    </tr>
-    <tr>
-      <td>
+      </dt>
+      <dd class='col-xs-4'>
+        <%= link_to number_to_human(@project.repository.stargazers_count), @project.repository.stargazers_url %>
+      </dd>
+      <dt class='col-xs-8'>
         Forks
-      </td>
-      <td>
-        <strong><%= link_to number_to_human(@project.repository.forks_count), @project.repository.forks_url %></strong>
-      </td>
-    </tr>
-    <% if @project.repository.subscribers_count.present? %>
-      <tr>
-        <td>
+      </dt>
+      <dd class='col-xs-4'>
+        <%= link_to number_to_human(@project.repository.forks_count), @project.repository.forks_url %>
+      </dd>
+      <% if @project.repository.subscribers_count.present? %>
+        <dt class='col-xs-8'>
           Watchers
-        </td>
-        <td>
-          <strong><%= link_to number_with_delimiter(@project.repository.subscribers_count), @project.repository.watchers_url %></strong>
-        </td>
-      </tr>
-    <% end %>
-    <tr>
-      <td>
+        </dt>
+        <dd class='col-xs-4'>
+          <%= link_to number_with_delimiter(@project.repository.subscribers_count), @project.repository.watchers_url %>
+        </dd>
+      <% end %>
+      <dt class='col-xs-8'>
         Contributors
-      </td>
-      <td>
-        <strong><%= link_to number_to_human(@project.contributions.count), @project.repository.contributors_url %></strong>
-      </td>
-    </tr>
-    <% if @project.repository.size.present? %>
-      <tr>
-        <td>
-          Repo Size:
-        </td>
-        <td>
-          <strong><%= number_to_human_size @project.repository.size*1000 %></strong>
-        </td>
-      </tr>
+      </dt>
+      <dd class='col-xs-4'>
+        <%= link_to number_to_human(@project.repository.contributions_count), @project.repository.contributors_url %>
+      </dd>
+      <% if @project.repository.size.present? %>
+        <dt class='col-xs-8'>
+          Size
+        </dt>
+        <dd class='col-xs-4'>
+          <%= number_to_human_size @project.repository.size*1000 %>
+        </dd>
+      <% end %>
     <% end %>
-    <% end %>
-  </table>
+  </dl>
 <% end %>

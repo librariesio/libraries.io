@@ -13,6 +13,10 @@ FactoryGirl.define do
     "andrew#{n}"
   end
 
+  sequence :repository_url do |n|
+    "https://github.com/rails/rails#{n}"
+  end
+
   factory :project do
     name
     platform        'Rubygems'
@@ -21,7 +25,12 @@ FactoryGirl.define do
     language        'Ruby'
     licenses        'MIT'
     keywords_array  ['web']
-    repository_url  'https://github.com/rails/rails'
+    repository_url
+  end
+
+  factory :platform do
+    name 'Rubygems'
+    project_count 100_000
   end
 
   factory :version do
@@ -33,9 +42,24 @@ FactoryGirl.define do
   factory :dependency do
     version
     project
+    kind 'runtime'
     platform 'Rubygems'
     project_name 'rails'
     requirements '~> 4.2'
+  end
+
+  factory :repository_dependency do
+    manifest
+    project
+    platform 'Rubygems'
+    project_name 'rails'
+    requirements '~> 4.2'
+  end
+
+  factory :manifest do
+    repository
+    filepath 'Gemfile'
+    platform 'Rubygems'
   end
 
   factory :tag do
@@ -47,18 +71,21 @@ FactoryGirl.define do
 
   factory :issue do
     repository
-    sequence(:github_id)
+    sequence(:uuid)
     sequence(:number)
     state "open"
     title "I found a bug"
     body "Please fix it"
-    github_user
+    labels ['help wanted', 'easy']
+    locked false
+    repository_user
     comments_count 1
+    host_type 'GitHub'
   end
 
   factory :contribution do
     repository
-    github_user
+    repository_user
     count 1
   end
 
@@ -73,13 +100,30 @@ FactoryGirl.define do
     user_id 1
   end
 
-  factory :github_user do
+  factory :repository_user do
     login
-    sequence(:github_id)
+    name 'Andrew Nesbitt'
+    user_type 'User'
+    company 'Libraries.io'
+    blog 'http://nesbitt.io'
+    location 'Somerset, UK'
+    email 'andrew@libraries.io'
+    bio 'Developer of things'
+    followers 1
+    following 2
+    sequence(:uuid)
+    host_type 'GitHub'
   end
 
-  factory :github_organisation do
+  factory :repository_organisation do
     login
+    sequence(:uuid)
+    host_type 'GitHub'
+    name 'Libraries.io'
+    blog 'https://libraries.io'
+    email 'support@libraries.io'
+    location 'Bath, UK'
+    bio 'Open source things'
   end
 
   factory :subscription do
@@ -99,7 +143,7 @@ FactoryGirl.define do
     language    'Ruby'
     fork        false
     homepage    'http://rubyonrails.org'
-    github_organisation
+    repository_organisation
     private false
     stargazers_count 10_000
     size 1000
@@ -116,6 +160,7 @@ FactoryGirl.define do
 
   factory :identity do
     user
+    repository_user
     sequence(:uid)
     provider 'github'
     nickname { Faker::Name.name.parameterize }

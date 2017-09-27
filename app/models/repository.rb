@@ -4,16 +4,19 @@ class Repository < ApplicationRecord
   include RepoManifests
   include RepositorySourceRank
 
+  # eager load this module to avoid clashing with Gitlab gem in development
+  RepositoryHost::Gitlab
+
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
 
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
    :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
    :forks_count, :mirror_url, :open_issues_count, :default_branch,
-   :subscribers_count, :private, :logo_url, :pull_requests_enabled, :scm]
+   :subscribers_count, :private, :logo_url, :pull_requests_enabled, :scm, :keywords]
 
   has_many :projects
   has_many :contributions, dependent: :delete_all
-  has_many :contributors, through: :contributions, source: :github_user
+  has_many :contributors, through: :contributions, source: :repository_user
   has_many :tags, dependent: :delete_all
   has_many :published_tags, -> { published }, anonymous_class: Tag
   has_many :manifests, dependent: :destroy
@@ -25,18 +28,18 @@ class Repository < ApplicationRecord
   has_many :web_hooks, dependent: :delete_all
   has_many :issues, dependent: :delete_all
   has_one :readme, dependent: :delete
-  belongs_to :github_organisation
-  belongs_to :github_user, primary_key: :github_id, foreign_key: :owner_id
+  belongs_to :repository_organisation
+  belongs_to :repository_user
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
   has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
 
-  validates :full_name, uniqueness: true, if: lambda { self.full_name_changed? }
-  validates :uuid, uniqueness: true, if: lambda { self.uuid_changed? }
+  validates :full_name, uniqueness: {scope: :host_type}, if: lambda { self.full_name_changed? }
+  validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
 
   before_save  :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
   after_commit :save_projects, on: :update
-  after_commit :update_source_rank_async
+  after_commit :update_source_rank_async, on: [:create, :update]
 
   scope :without_readme, -> { where("repositories.id NOT IN (SELECT repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
@@ -51,7 +54,7 @@ class Repository < ApplicationRecord
   scope :source, -> { where(fork: false) }
 
   scope :open_source, -> { where(private: false) }
-  scope :from_org, lambda{ |org_id|  where(github_organisation_id: org_id) }
+  scope :from_org, lambda{ |org_id|  where(repository_organisation_id: org_id) }
 
   scope :with_manifests, -> { joins(:manifests) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {repository_id: nil}) }
@@ -63,7 +66,7 @@ class Repository < ApplicationRecord
   scope :pushed, -> { where.not(pushed_at: nil) }
   scope :good_quality, -> { maintained.open_source.pushed }
   scope :with_stars, -> { where('repositories.stargazers_count > 0') }
-  scope :interesting, -> { with_stars.order('repositories.stargazers_count DESC, repositories.pushed_at DESC') }
+  scope :interesting, -> { with_stars.order('repositories.stargazers_count DESC, repositories.rank DESC NULLS LAST, repositories.pushed_at DESC') }
   scope :uninteresting, -> { without_readme.without_manifests.without_license.where('repositories.stargazers_count = 0').where('repositories.forks_count = 0') }
 
   scope :recently_created, -> { where('created_at > ?', 7.days.ago)}
@@ -76,13 +79,14 @@ class Repository < ApplicationRecord
   scope :removed, -> { where('repositories."status" = ?', "Removed")}
   scope :unmaintained, -> { where('repositories."status" = ?', "Unmaintained")}
 
-  scope :indexable, -> { open_source.not_removed.includes(:projects, :readme) }
+  scope :indexable, -> { open_source.source.not_removed }
 
   delegate :download_owner, :download_readme, :domain, :watchers_url, :forks_url,
            :download_fork_source, :download_tags, :download_contributions, :url,
            :create_webhook, :download_issues, :download_forks, :stargazers_url,
            :formatted_host, :get_file_list, :get_file_contents, :issues_url,
-           :source_url, :contributors_url, :blob_url, :raw_url, :commits_url, to: :repository_host
+           :source_url, :contributors_url, :blob_url, :raw_url, :commits_url,
+           :compare_url, :download_pull_requests, to: :repository_host
 
   def self.language(language)
     where('lower(repositories.language) = ?', language.try(:downcase))
@@ -129,7 +133,7 @@ class Repository < ApplicationRecord
   end
 
   def save_projects
-    projects.find_each(&:forced_save)
+    projects.find_each(&:forced_save) if previous_changes.any?
   end
 
   def repository_dependencies
@@ -137,8 +141,7 @@ class Repository < ApplicationRecord
   end
 
   def owner
-    return nil unless host_type == 'GitHub'
-    github_organisation_id.present? ? github_organisation : github_user
+    repository_organisation_id.present? ? repository_organisation : repository_user
   end
 
   def to_s
@@ -189,7 +192,21 @@ class Repository < ApplicationRecord
   end
 
   def id_or_name
-    uuid || full_name
+    if host_type == 'GitHub'
+      uuid || full_name
+    else
+      full_name
+    end
+  end
+
+  def recently_synced?
+    last_synced_at && last_synced_at > 1.day.ago
+  end
+
+  def manual_sync(token = nil)
+    update_all_info_async
+    self.last_synced_at = Time.zone.now
+    save
   end
 
   def update_all_info_async(token = nil)
@@ -205,14 +222,12 @@ class Repository < ApplicationRecord
     download_tags(token)
     download_contributions(token)
     download_manifests(token)
-    # download_issues(token)
-    save_projects
     update_source_rank(true)
     update_attributes(last_synced_at: Time.now)
   end
 
   def update_from_repository(token)
-    repository_host.update(token)
+    repository_host.update_from_host(token)
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
@@ -226,7 +241,6 @@ class Repository < ApplicationRecord
       g = Repository.find_by(uuid: repo_hash[:id])
       g = Repository.host(repo_hash[:host_type] || 'GitHub').find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
       g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
-      g.owner_id = repo_hash[:owner][:id]
       g.host_type = repo_hash[:host_type] || 'GitHub'
       g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
       g.uuid = repo_hash[:id] if g.uuid.nil?
@@ -242,6 +256,10 @@ class Repository < ApplicationRecord
     end
   rescue ActiveRecord::RecordNotUnique
     nil
+  end
+
+  def check_status(removed = false)
+    Repository.check_status(host_type, full_name, removed)
   end
 
   def self.check_status(host_type, repo_full_name, removed = false)
@@ -270,25 +288,21 @@ class Repository < ApplicationRecord
     end
   end
 
-  def self.update_from_star(repo_name, token = nil)
-    token ||= AuthToken.token
-
+  def self.update_from_star(repo_name)
     repository = Repository.host('GitHub').find_by_full_name(repo_name)
     if repository
       repository.increment!(:stargazers_count)
     else
-      RepositoryHost::Github.create(repo_name, token)
+      CreateRepositoryWorker.perform_async('GitHub', repo_name)
     end
   end
 
-  def self.update_from_tag(repo_name, token = nil)
-    token ||= AuthToken.token
-
+  def self.update_from_tag(repo_name)
     repository = Repository.host('GitHub').find_by_full_name(repo_name)
     if repository
-      repository.download_tags(token)
+      repository.download_tags
     else
-      RepositoryHost::Github.create(repo_name, token)
+      CreateRepositoryWorker.perform_async('GitHub', repo_name)
     end
   end
 
@@ -301,7 +315,6 @@ class Repository < ApplicationRecord
   end
 
   def repository_host
-    RepositoryHost::Gitlab
     @repository_host ||= RepositoryHost.const_get(host_type.capitalize).new(self)
   end
 end

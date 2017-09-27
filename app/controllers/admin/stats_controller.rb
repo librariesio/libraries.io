@@ -13,10 +13,9 @@ class Admin::StatsController < Admin::ApplicationController
   end
 
   def repositories
-    @new_users          = stats_for(GithubUser)
+    @new_users          = stats_for(RepositoryUser)
     @new_manifests      = stats_for(Manifest)
-    @new_readmes        = stats_for(Readme)
-    @new_orgs           = stats_for(GithubOrganisation)
+    @new_orgs           = stats_for(RepositoryOrganisation)
   end
 
   def overview

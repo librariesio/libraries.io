@@ -1,390 +1,100 @@
 <% title "#{@project} #{@version} on #{@project.platform_name} - Libraries.io" %>
 <% description project_description(@project, @version) %>
 <% content_for :atom, auto_discovery_link_tag(:atom, rss_url(@project)) %>
-
 <%= content_for :meta, render_meta(@project) %>
 
-<% if logged_in? && @project.maintained? && @project.needs_suggestions? && @project.project_suggestions.where(user: current_user).count.zero? %>
-<div class="alert alert-info" role="alert">
-  <%= fa_icon 'question-circle' %>
-  We're missing some data for this project, can you help out by adding it?
-  <a href="<%= project_suggestions_path(@project.to_param) %>" class="btn btn-primary btn-xs learn-more">Suggest an improvement</a>
-</div>
-<% end %>
-<% if @project.is_removed? %>
-<div class="alert alert-danger" role="alert">
-  <%= fa_icon 'exclamation-triangle' %>
-  This project has been removed from <%= @project.platform %> and cannot be used anymore.
-</div>
-<% elsif @project.is_deprecated? %>
-<div class="alert alert-danger" role="alert">
-  <%= fa_icon 'exclamation-triangle' %>
-  This project has been marked as deprecated and is not recommended for use anymore.
-</div>
-<% elsif @project.is_unmaintained? %>
-<div class="alert alert-danger" role="alert">
-  <%= fa_icon 'exclamation-triangle' %>
-  This project has been marked as unmaintained and is no longer being updated.
-</div>
-<% end %>
+<%= render 'projects/alerts' %>
 
-<div class="row">
-  <div class='col-md-8'>
-    <h1>
-      <div class="pictogram pictogram-<%= @project.platform.downcase %>"></div>
-      <%= @project %>
-      <small>
-        <% if @version %>
-          <%= @version %>
-        <% else %>
-          <%= @project.latest_release_number %>
-        <% end %>
-      </small>
-    </h1>
-  </div>
-  <div class='col-md-4'>
-    <h1>
-      <% if logged_in? %>
-        <% if current_user.muted?(@project) %>
-          <%= link_to unmute_project_path(@project.to_param), method: :delete, class: 'btn btn-danger tip', title: "Unmute #{@project.name}" do %>
-            <i class='fa fa-microphone-slash'></i>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <% if logged_in? && subscription = current_user.subscribed_to?(@project) %>
-
-        <div class="btn-group">
-          <span class='btn btn-success'>Subscribed to <%= 'stable' unless subscription.include_prerelease? %> releases</span>
-          <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="caret"></span>
-            <span class="sr-only">Toggle Dropdown</span>
-          </button>
-          <ul class="dropdown-menu">
-            <li>
-              <%= form_for subscription do |form| %>
-                <label class='include_prerelease'><%= form.check_box :include_prerelease %> &nbsp;Include prereleases</label>
-              <% end %>
-            </li>
-            <li role="separator" class="divider"></li>
-            <li>
-              <%= link_to 'Unsubscribe from updates', subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'text-danger', title: 'Stop being notified of new releases of this library' %>
-            </li>
-          </ul>
-        </div>
-      <% elsif logged_in? %>
-        <%= link_to 'Subscribe to releases', subscribe_path(project_id: @project.id), class: 'tip btn btn-success', rel: 'nofollow', title: 'Get notified by email of new releases of this library' %>
-      <% else %>
-        <%= link_to 'Subscribe to releases', subscribe_path(project_id: @project.id), class: 'tip btn btn-success', rel: 'nofollow', title: 'Login to get notified by email of new releases' %>
-      <% end %>
-      <% if logged_in? && current_user.admin? %>
-        <%= link_to 'Edit in Admin', admin_project_path(@project.id), class: 'btn btn-primary', rel: 'nofollow' %>
-      <% end %>
-    </h1>
-  </div>
-</div>
 <div class='row'>
-  <% cache([@project, @version, 'projects:show', 'v1'], :expires_in => 1.day) do %>
-    <div class='col-md-8'>
-      <% if @project.description.present? %>
+  <div class='col-md-8'>
+    <div class="row">
+      <div class='col-md-8'>
+        <h1>
+          <%= @project %>
+          <br>
+          <small class='hidden-xs'>
+            <%= @project.release_or_tag.singularize.titlecase %>
+            <% if @version %>
+              <%= @version %>
+            <% else %>
+              <%= @project.latest_release_number %>
+            <% end %>
+          </small>
+        </h1>
+      </div>
+      <div class='col-md-4 sidebar'>
+        <%= render 'projects/actions' %>
+      </div>
+    </div>
+
+    <% if @project.description.present? %>
       <p>
         <%= @project.description %>
       </p>
-      <% end %>
-
-      <% if @project.homepage.present? && @project.homepage != @project.package_manager_url %>
-      <p>
-        Homepage: <%= link_to(@project.homepage, sanitize_url(@project.homepage), :rel => 'nofollow') %>
-      </p>
-      <% end %>
-
-      <p>
-        Platform: <%= link_to @project.platform_name, platform_path(@project.platform.downcase) %>
-      </p>
-
-      <% if @project.language.present? %>
-      <p>
-        Language: <%= link_to @project.language, language_path(@project.language) %>
-      </p>
-      <% end %>
-
-      <% if @project.normalized_licenses.present? %>
-      <p>
-        <%= 'License'.pluralize(@project.normalized_licenses.length) %>: <%= linked_licenses @project.normalized_licenses %>
-      </p>
-      <% end %>
-
-      <% if @project.keywords_array.present? %>
-      <p>
-        Keywords: <%= linked_keywords @project.keywords_array %>
-      </p>
-      <% end %>
-
-      <% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
-      <p>
-        Repository: <%= link_to @project.repository_url, @project.repository_url, :rel => 'nofollow' %>
-      </p>
-      <% end %>
-
-      <% if link = @project.package_manager_url(@version.try(:number)) %>
-      <p>
-        View on registry: <%= link_to truncate(link, length: 70), link %>
-      </p>
-      <% end %>
-
-      <% if link = @project.documentation_url(@version.try(:number) || @project.latest_release_number) %>
-        <p>
-          Documentation: <%= link_to truncate(link, length: 70), link %>
-        </p>
-      <% elsif @project.platform.downcase == 'bower' && @project.language.try(:downcase) == 'purescript' %>
-        <% link = "https://pursuit.purescript.org/packages/#{@project.name}" %>
-        <p>
-          Documentation: <%= link_to truncate(link, length: 70), link %>
-        </p>
-      <% end %>
-
-      <% if link = @project.download_url(@version.try(:number)) %>
-      <p>
-        Direct download link: <%= link_to truncate(link, length: 70), link %>
-      </p>
-      <% end %>
-
-      <% if @project.install_instructions(@version.try(:number)).present? %>
-        <p>
-          Install:
-          <code>
-            <%= @project.install_instructions(@version.try(:number)) %>
-          </code>
-        </p>
-      <% end %>
-
-      <% if @repository.present? && @repository.readme.present? %>
-      <hr>
-      <%= render 'adsense/banner' %>
-      <%== @repository.readme %>
-      <% end %>
-      <div class="row">
-        <% cache([@project, @version, 'dependents:v3'], :expires_in => 1.day) do  %>
-          <% dependents = @project.dependent_projects.limit(10) %>
-          <% dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
-          <% if dependent_repos.length > 0 || dependents.length > 0 || @dependencies.length > 0 %>
-            <hr>
-          <% end %>
-          <% if @dependencies.length > 0 %>
-            <div class="col-md-12 table-responsive">
-            <% @dependencies.group_by(&:kind).each do |kind, deps| %>
-              <% if deps.length > 0 %>
-                <table data-ga-tracked-el='dependencies' class='table table-hover table-condensed'>
-                  <thead>
-                    <th>
-                      <%= kind.humanize unless kind == 'runtime' %> Dependencies
-                    </th>
-                    <th>
-                      Requirements
-                    </th>
-                    <th>
-                      Latest Stable
-                    </th>
-                    <th>
-                      Latest Release
-                    </th>
-                    <th>
-                      Licenses
-                    </th>
-                    <th>
-
-                    </th>
-                  </thead>
-                  <% deps.each do |dependency| %>
-                    <tr>
-                      <td>
-                        <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: PackageManager::Base.dependency_platform(dependency.platform)) %>
-                      </td>
-                      <td>
-                        <%= dependency.requirements %>
-                      </td>
-                      <td>
-                        <%= dependency.try(:project).try(:latest_stable_release_number) %>
-                      </td>
-                      <td>
-                        <%= dependency.try(:project).try(:latest_release_number) %>
-                      </td>
-                      <td>
-                        <% if dependency.project %>
-                          <%= linked_licenses dependency.project.normalized_licenses %>
-                        <% end %>
-                      </td>
-                      <td>
-                        <% if dependency.project %>
-                          <%= render 'dependencies/flags', dependency: dependency %>
-                        <% end %>
-                      </td>
-                    </tr>
-                  <% end %>
-                </table>
-                <% kind_param = kind == 'runtime' ? nil : kind %>
-                <% link = @version ? version_tree_path(@version.to_param.merge(kind: kind_param)) : tree_path(@project.to_param.merge(kind: kind_param)) %>
-                <%= link_to link, class: 'btn btn-success' do %>
-                  <%= fa_icon 'code-fork' %>
-                  Explore the resolved <%= kind.downcase unless kind == 'runtime' %> dependency tree for <%= @project %> <%= @version_number %>
-                <% end %>
-                <hr>
-              <% end %>
-            <% end %>
-          </div>
-          <hr>
-          <% end %>
-
-          <% if dependent_repos.length > 0 || dependents.length > 0 %>
-            <% if dependents.length > 0 %>
-              <div class="col-sm-6">
-                <h4 data-ga-tracked-el='dependent-projects'>Dependent Projects</h4>
-                <ul>
-                  <% dependents.each do |project| %>
-                  <li>
-                    <%= link_to project.name, project_path(project.to_param) %>
-                  </li>
-                  <% end %>
-                </ul>
-                <%= link_to "See all dependent projects", project_dependents_path(@project.to_param) %>
-              </div>
-            <% end %>
-            <% if dependent_repos.length > 0 %>
-              <div class="col-sm-6">
-                <h4 data-ga-tracked-el='dependent-repositories'>Dependent Repositories</h4>
-                <ul>
-                  <% dependent_repos.each do |repo| %>
-                  <li>
-                    <%= link_to repo.full_name, repository_path(repo.to_param) %>
-                    <small>
-                      <%= fa_icon("lock") if repo.private? %>
-                      <%= fa_icon("code-fork") if repo.fork? %>
-                    </small>
-                  </li>
-                  <% end %>
-                </ul>
-                <%= link_to "See all dependent repositories", project_usage_path(@project.to_param) %>
-              </div>
-            <% end %>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
-  <div class='col-md-4'>
-    <%= render 'adsense/sidebar' %>
-    <% cache([@project, @version, 'projects:sidebar', 'v1'], :expires_in => 1.day) do %>
-      <% if @version_count > 0 %>
-        <h4 data-ga-tracked-el='releases'>
-          <%= link_to project_versions_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
-            <%= fa_icon "rss-square" %>
-          <% end %>
-          Releases
-        </h4>
-        <ul>
-          <% @versions.each do |version| %>
-          <li>
-            <%= link_to version, version_path(version.to_param) %>
-            <% if version.published_at.present? %>
-            - <%= version.published_at.to_s(:long) %>
-            <% end %>
-          </li>
-          <% end %>
-        </ul>
-        <% if @project.versions.size > 10 %>
-          <%= link_to "See all #{pluralize(@project.versions.size, 'releases')}", project_versions_path(@project.to_param) %>
-        <% end %>
-      <% elsif @repository && @tags.length > 0 %>
-        <h4 data-ga-tracked-el='tagged-releases'>
-          <%= link_to project_tags_url(@project.to_param.merge(format: :atom)), class: 'rss' do %>
-            <%= fa_icon "rss-square" %>
-          <% end %>
-          Tagged Releases
-        </h4>
-        <ul>
-          <% @tags.each do |tag| %>
-          <li>
-            <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
-            <% if tag.published_at.present? %>
-            - <%= tag.published_at.to_s(:long) %>
-            <% end %>
-          </li>
-          <% end %>
-        </ul>
-        <% if @repository.tags.published.count > 10 %>
-          <%= link_to "See all #{pluralize(@repository.tags.published.count, 'tags')}", project_tags_path(@project.to_param) %>
-        <% end %>
-      <% end %>
-
-      <%= render 'statistics' %>
-
-      <% if @contributors.length > 0 %>
-        <div class="row">
-          <div class="col-md-12">
-            <h4 data-ga-tracked-el='top-contributors'>Top Contributors <small><%= link_to 'See all', repository_contributors_path(@repository.to_param) %></small></h4>
-            <%= render @contributors %>
-          </div>
-        </div>
-      <% end %>
     <% end %>
+    <%= render 'projects/links' %>
+    <hr>
+    <%= render 'projects/details' %>
+  </div>
+  <div class='col-md-4 sidebar'>
+    <%= render 'projects/statistics' %>
+  </div>
+</div>
+<div class='row'>
+  <div class='col-md-8'>
+    <%= render 'adsense/banner' %>
+    <%= render 'projects/contributors' %>
+
+    <% if @repository.present? && @repository.readme.present? %>
+      <hr>
+      <h3 data-ga-tracked-el='readme'>Documentation</h3>
+      <div class='well' id='readme-well'>
+        <%== @repository.readme %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class='col-md-4 sidebar'>
+    <%= render 'adsense/sidebar' %>
+    <%= render 'projects/releases' %>
 
     <% if current_user %>
-      <% your_dependent_repos = current_user.your_dependent_repos(@project) %>
-      <% if your_dependent_repos.length > 0 %>
-        <div class="row">
-          <div class="col-md-12">
-            <h4 data-ga-tracked-el='your-dependent-repositories'>Your Dependent Repositories</h4>
-            <ul>
-              <% your_dependent_repos.limit(10).each do |repo| %>
-                <li>
-                  <%= link_to repo.full_name, repository_path(repo.to_param) %>
-                  <small>
-                    <%= fa_icon("lock") if repo.private? %>
-                    <%= fa_icon("code-fork") if repo.fork? %>
-                  </small>
-                </li>
-              <% end %>
-            </ul>
-            <% if your_dependent_repos.count > 10 %>
-              <%= link_to "See all your dependent repositories", your_project_dependent_repos_path(@project.to_param) %>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
+      <% render 'your_dependents' %>
     <% end %>
 
-    <div class="row">
-      <div class="col-md-12">
-        <br>
+    <% if @version %>
+      <div id='version_dependencies' style='display:none;' data-url="<%= version_dependencies_path(@version.to_param) %>"></div>
+    <% end %>
+
+    <div id='top_dependent_repos' style='display:none;' data-url="<%= top_dependent_repos_path(@project.to_param) %>"></div>
+
+    <p>
+      <%= fa_icon 'question-circle' %>
+      Something wrong with this page?
+      <%= link_to 'Make a suggestion', project_suggestions_path(@project.to_param) %>
+    </p>
+    <p>
+      <%= fa_icon 'download' %>
+      <%= link_to 'Export .ABOUT file for this library', @version.present? ? about_version_path(@project.to_param.merge(number: @version.number)) : about_project_path(@project.to_param) %>
+    </p>
+    <p>
+      <small class='text-muted'>Last synced: <%= @project.last_synced_at || @project.created_at %></small>
+    </p>
+    <% unless @project.recently_synced? %>
+      <% if logged_in? %>
         <p>
-          <%= fa_icon 'question-circle' %>
-          Something wrong with this page?
-          <%= link_to 'Make a suggestion', project_suggestions_path(@project.to_param) %>
-        </p>
-        <p>
-          <%= fa_icon 'download' %>
-          <%= link_to 'Export .ABOUT file for this library', @version.present? ? about_version_path(@project.to_param.merge(number: @version.number)) : about_project_path(@project.to_param) %>
-        </p>
-        <p>
-          <small class='text-muted'>Last synced: <%= @project.last_synced_at || @project.created_at %></small>
-        </p>
-        <% unless @project.recently_synced? %>
-          <% if logged_in? %>
-            <p>
-              <%= link_to sync_project_path(@project.to_param), class: 'btn btn-primary btn-xs', method: :post do %>
-                <%= fa_icon 'refresh' %>
-                Resync Project
-              <% end %>
-            </p>
-          <% else %>
-            <p>
-              <small class='text-muted'>
-                <%= link_to 'Login', login_path(return_to: request.original_url) %> to resync this project
-              </small>
-            </p>
+          <%= link_to sync_project_path(@project.to_param), class: 'btn btn-primary btn-xs', method: :post do %>
+            <%= fa_icon 'refresh' %>
+            Resync Project
           <% end %>
-        <% end %>
-      </div>
-    </div>
+        </p>
+      <% else %>
+        <p>
+          <small class='text-muted'>
+            <%= link_to 'Login', login_path(return_to: request.original_url) %> to resync this project
+          </small>
+        </p>
+      <% end %>
+    <% end %>
   </div>
 </div>

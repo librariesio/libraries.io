@@ -1,10 +1,17 @@
 <% term['key'] = term['key'].downcase if name == 'host_type' %>
-<% active = term['key'] == params[name.to_sym] %>
+<% current_param = params[name.to_sym].try(:split,',') || [] %>
+<% active = current_param.include?(term['key']) %>
 <li class='<%= 'active' if active %>'>
   <% if active %>
-    <%= link_to format_term(term['key']), url_for(params.except(:host).merge(name.to_sym => nil, page: nil).permit!) %>
+    <%= link_to url_for(params.except(:host).merge(name.to_sym => current_param.reject{ |x| x == term['key'] }.join(','), page: nil).permit!) do %>
+    	<input type='checkbox' checked>
+    	<%= format_term(term['key']) %>
+    <% end %>
   <% else %>
-    <%= link_to format_term(term['key']), url_for(params.except(:host).merge(name.to_sym => term['key'], page: nil).permit!) %>
-    <small><%= number_to_human term['doc_count'] %></small>
+    <%= link_to url_for(params.except(:host).merge(name.to_sym => current_param.push(term['key']).join(','), page: nil).permit!) do %>
+    	<input type='checkbox'>
+    	<%= format_term(term['key']) %>
+    <% end %>
+    <small><%= number_to_human term['doc_count'] %> projects</small>
   <% end %>
 </li>

@@ -8,24 +8,20 @@ class GithubHookHandler
       when "repository"
         run("repository", payload)
       when "tag"
-        TagWorker.perform_async(payload["repository"]["full_name"], nil)
+        TagWorker.perform_async(payload["repository"]["full_name"])
       end
     when "issue_comment", "issues"
       return nil if event == "issues" && !VALID_ISSUE_ACTIONS.include?(payload["action"])
 
-      IssueWorker.perform_async(payload["repository"]["full_name"], payload["issue"]["number"], nil)
+      IssueWorker.perform_async('GitHub', payload["repository"]["full_name"], payload["issue"]["number"], 'issue', nil)
     when "pull_request"
-      payload["issue"] ||= {}
-      payload["issue"]["number"] = payload["pull_request"]["number"]
-
-      run("issues", payload)
-      run("push", payload)
+      IssueWorker.perform_async('GitHub', payload["repository"]["full_name"], payload["pull_request"]["number"], 'pull_request', nil)
     when "push"
       GithubHookWorker.perform_async(payload["repository"]["id"], payload["sender"]["id"])
     when "public", "release", "repository"
       CreateRepositoryWorker.perform_async("GitHub", payload["repository"]["full_name"], nil)
     when "watch"
-      GithubStarWorker.perform_async(payload['repository']['full_name'], nil)
+      GithubStarWorker.perform_async(payload['repository']['full_name'])
     else
       puts "GithubHookHandler: received unknown '#{event}' event"
     end

@@ -1,0 +1,62 @@
+<% title "Organisations - Libraries.io" %>
+<% description "Explore popular Organisations on Libraries.io" %>
+
+<div class='row'>
+  <div class='col-md-12'>
+    <h1>Organisations</h1>
+  </div>
+</div>
+<hr>
+<div class='row'>
+  <% if @most_repos.length > 0 %>
+    <div class='col-sm-4'>
+      <h4>
+        Most Repositories
+      </h4>
+      <% @most_repos.each do |org| %>
+        <div class="org">
+          <%= link_to image_tag(org.avatar_url(120), width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org.to_param) %>
+          <strong><%= link_to org, user_path(org.to_param) %></strong>
+          <p>
+            <small><%= pluralize number_to_human(org.repo_count), 'repository' %></small>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <% if @most_stars.length > 0 %>
+    <div class='col-sm-4'>
+      <h4>
+        Most Stars
+      </h4>
+      <% @most_stars.each do |org| %>
+        <div class="org">
+          <%= link_to image_tag(org.avatar_url(120), width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org.to_param) %>
+          <strong><%= link_to org, user_path(org.to_param) %></strong>
+          <p>
+            <small><%= number_to_human org.star_count %> stars on <%= pluralize number_to_human(org.repo_count), 'repository' %></small>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <% if @newest.length > 0 %>
+    <div class='col-sm-4'>
+      <h4>
+        Recently Indexed
+      </h4>
+      <% @newest.each do |org| %>
+        <div class="org">
+          <%= link_to image_tag(org.avatar_url(120), width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org.to_param) %>
+          <strong><%= link_to org, user_path(org.to_param) %></strong>
+          <p>
+            <small><%= pluralize number_to_human(org.repo_count), 'repository' %></small>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="col-sm-4">
+    <%= render 'adsense/sidebar' %>
+  </div>
+</div>

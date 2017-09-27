@@ -6,16 +6,40 @@
   <div class="col-sm-8">
     <%= render 'adsense/banner' %>
     <% if @tags.any? %>
-      <ul>
-        <% @tags.each do |tag| %>
-        <li>
+    <table class='table'>
+      <% @tags.each do |tag| %>
+      <tr>
+        <td>
           <%= link_to tag, tag.repository_url %>
-          <% if tag.published_at.present? %>
-          - <%= tag.published_at.to_s(:long) %>
-          <% end %>
-        </li>
+        </td>
+        <% if tag.published_at.present? %>
+          <td>
+            <small class='text-muted'>
+              <%= tag.published_at.to_s(:long_ordinal) %>
+            </small>
+          </td>
         <% end %>
-      </ul>
+        <td>
+          <small class='text-muted'>
+            <%= link_to tag.repository_url do %>
+              <%= fa_icon('tag') %>
+              Browse source on <%= tag.repository.host_type %>
+            <% end %>
+          </small>
+        </td>
+        <td>
+          <% if tag.previous_tag %>
+            <small class='text-muted'>
+              <%= link_to tag.diff_url do %>
+                <%= fa_icon('random') %>
+                View diff between <%= tag %> and <%= tag.previous_tag %>
+              <% end %>
+            </small>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </table>
       <%= will_paginate @tags, page_links: false %>
     <% else %>
       <p>

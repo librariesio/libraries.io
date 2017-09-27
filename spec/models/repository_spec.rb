@@ -13,8 +13,8 @@ describe Repository, type: :model do
   it { should have_many(:web_hooks) }
   it { should have_many(:issues) }
   it { should have_one(:readme) }
-  it { should belong_to(:github_organisation) }
-  it { should belong_to(:github_user) }
+  it { should belong_to(:repository_organisation) }
+  it { should belong_to(:repository_user) }
   it { should belong_to(:source) }
 
   it { should validate_uniqueness_of(:full_name) }
@@ -183,7 +183,7 @@ describe Repository, type: :model do
   describe '#avatar_url' do
     context 'with no args' do
       it 'should return an avatar url for GitHub repos' do
-        expect(build(:repository, host_type: 'GitHub').avatar_url).to eq('https://avatars.githubusercontent.com/u/?size=60')
+        expect(build(:repository, host_type: 'GitHub').avatar_url).to eq('https://github.com/rails.png?size=60')
       end
 
       it 'should return an avatar url for GitLab repos' do

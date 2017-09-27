@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.8.0'
+lock '3.8.1'
 
 set :application, 'librariesio'
 set :repo_url, 'git@github.com:librariesio/libraries.io.git'
@@ -11,13 +11,11 @@ set :keep_assets, 2
 set :keep_releases, 4
 set :bundle_jobs, 6
 
-set :nginx_domains, "libraries.io staging.libraries.io"
-set :nginx_read_timeout, 60
 set :app_server_port, 5000
 
-set :puma_conf, "#{current_path}/config/puma.rb"
-set :puma_state, "#{shared_path}/tmp/pids/puma.state"
-
 set :maintenance_template_path, File.join(File.expand_path('../../public/system', __FILE__), 'maintenance.html')
+
+set :migration_role, :app
+set :conditionally_migrate, true
 
 set :bugsnag_api_key, ENV['BUGSNAG_API_KEY']

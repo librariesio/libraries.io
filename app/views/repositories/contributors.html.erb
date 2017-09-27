@@ -13,14 +13,14 @@
   <div class="col-sm-8">
     <% if @contributions.any? %>
       <% @contributions.each do |contribution| %>
-        <% user = contribution.github_user %>
+        <% user = contribution.repository_user %>
         <% next if user.nil? %>
         <% width = contribution.count/@top_count.to_f*100 %>
-        <div class="contributor">
-          <%= link_to image_tag(user.avatar_url(100), width: 50, height: 50, alt: user), user_path(user) %>
+        <div class="contributor-bar">
+          <%= link_to image_tag(user.avatar_url(100), width: 50, height: 50, alt: user), user_path(user.to_param) %>
           <div class="contribution-bar" style='background: linear-gradient(90deg, #f5f5f5 <%= width.round(2) %>%, #FFFFFF <%= width.round(2) %>%);'>
             <h4>
-              <%= link_to user, user_path(user) %>
+              <%= link_to user, user_path(user.to_param) %>
               <% if user.name.present? && user.name.downcase != user.login.downcase %>
                 <small>
                   <%= user.login %>

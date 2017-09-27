@@ -1,0 +1,19 @@
+<% if logged_in? && @project.maintained? && @project.needs_suggestions? && @project.project_suggestions.where(user: current_user).count.zero? %>
+  <div class="alert alert-info" role="alert">
+    <strong>We're missing some data for this project</strong>, can you help out by adding it? <a href="<%= project_suggestions_path(@project.to_param) %>" class="alert-link">Suggest an improvement</a>
+  </div>
+<% end %>
+
+<% if @project.is_removed? %>
+  <div class="alert alert-danger" role="alert">
+    <strong>This project has been removed from <%= @project.platform %></strong> and cannot be used anymore.
+  </div>
+<% elsif @project.is_deprecated? %>
+  <div class="alert alert-danger" role="alert">
+    <strong>This project has been marked as deprecated</strong> you can use it but you might want to use an alternative.
+  </div>
+<% elsif @project.is_unmaintained? %>
+  <div class="alert alert-danger" role="alert">
+    <strong>This project has been marked as unmaintained</strong> you can use it but it is no longer being updated.
+  </div>
+<% end %>

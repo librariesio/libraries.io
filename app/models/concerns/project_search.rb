@@ -36,7 +36,7 @@ module ProjectSearch
       end
     end
 
-    after_save lambda { __elasticsearch__.index_document  }
+    after_commit lambda { __elasticsearch__.index_document if previous_changes.any? }, on: [:create, :update], prepend: true
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def as_indexed_json(_options)
@@ -183,14 +183,17 @@ module ProjectSearch
             }
           }
         },
-        aggs: {
+        filter: { bool: { must: [] } },
+      }
+
+      unless options[:api]
+        search_definition[:aggs] = {
           platforms: facet_filter(:platform, facet_limit, options),
           languages: facet_filter(:language, facet_limit, options),
           keywords: facet_filter(:keywords_array, facet_limit, options),
           licenses: facet_filter(:normalized_licenses, facet_limit, options)
-        },
-        filter: { bool: { must: [] } },
-        suggest: {
+        }
+        search_definition[:suggest] = {
           did_you_mean: {
             text: query,
             term: {
@@ -199,9 +202,9 @@ module ProjectSearch
             }
           }
         }
-      }
+      end
+
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
-      search_definition[:track_scores] = true
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
 
       if query.present?

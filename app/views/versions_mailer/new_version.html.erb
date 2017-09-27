@@ -23,9 +23,20 @@
 </p>
 
 <% if @project.repository.present? %>
-<p>
-  You can also browse the latest commits on <%= @project.repository.formatted_host %>: <%= link_to @project.repository.commits_url, @project.repository.commits_url %>
-</p>
+  <% if @version.related_tag %>
+    <p>
+      Browse the code for <%= @version %> on <%= @project.repository.formatted_host %>: <%= link_to @version.repository_url, @version.repository_url %>
+    </p>
+    <% if @version.previous_version %>
+      <p>
+        View diff between <%= @version %> and <%= @version.previous_version %>: <%= link_to @version.diff_url, @version.diff_url %>
+      </p>
+    <% end %>
+  <% else %>
+    <p>
+      You can also browse the latest commits on <%= @project.repository.formatted_host %>: <%= link_to @project.repository.commits_url, @project.repository.commits_url %>
+    </p>
+  <% end %>
 <% end %>
 
 <p>

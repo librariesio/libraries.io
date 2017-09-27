@@ -1,0 +1,24 @@
+<% cache(['v2', @project.id, 'top_dependent_repos'], :expires_in => 2.weeks) do %>
+  <% @top_dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
+  <% if @top_dependent_repos.length > 0 %>
+    <h4 data-ga-tracked-el='dependent-repositories'>
+      Used by
+    </h4>
+    <dl class='row'>
+      <% @top_dependent_repos.each do |repo| %>
+        <dt class='col-xs-8'>
+          <%= link_to repo.full_name, repository_path(repo.to_param) %>
+          <small>
+            <%= fa_icon("lock") if repo.private? %>
+            <%= fa_icon("code-fork") if repo.fork? %>
+          </small>
+        </dt>
+        <dd class='col-xs-4'>
+          <%= fa_icon 'star' %> <%= repo.stars %>
+        </dd>
+      <% end %>
+    </dl>
+    <%= link_to "See usage by version", project_usage_path(@project.to_param) %>
+    <hr>
+  <% end %>
+<% end %>

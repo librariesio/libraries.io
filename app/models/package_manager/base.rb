@@ -8,6 +8,9 @@ module PackageManager
 
     def self.platforms
       @platforms ||= begin
+        Dir[Rails.root.join('app', 'models', 'package_manager', '*.rb')].each do |file|
+          require file unless file.match(/base\.rb$/)
+        end
         PackageManager.constants
           .reject { |platform| platform == :Base }
           .map{|sym| "PackageManager::#{sym}".constantize }
@@ -16,7 +19,7 @@ module PackageManager
       end
     end
 
-    def self.language
+    def self.default_language
       Linguist::Language.all.find{|l| l.color == color }.try(:name)
     end
 
@@ -27,6 +30,10 @@ module PackageManager
 
     def self.color
       self::COLOR
+    end
+
+    def self.homepage
+      self::URL
     end
 
     def self.formatted_name
@@ -91,15 +98,17 @@ module PackageManager
       puts "Saving #{mapped_project[:name]}"
       dbproject = Project.find_or_initialize_by({:name => mapped_project[:name], :platform => self.name.demodulize})
       if dbproject.new_record?
-        dbproject.assign_attributes(mapped_project.except(:name, :releases))
+        dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions))
         dbproject.save
       else
-        dbproject.update_attributes(mapped_project.except(:name, :releases))
+        dbproject.update_attributes(mapped_project.except(:name, :releases, :versions))
       end
 
       if self::HAS_VERSIONS
         versions(project).each do |version|
-          dbproject.versions.find_or_create_by(version)
+          unless dbproject.versions.find {|v| v.number == version[:number] }
+            dbproject.versions.create(version)
+          end
         end
       end
 
@@ -161,13 +170,14 @@ module PackageManager
     def self.save_dependencies(mapped_project)
       name = mapped_project[:name]
       proj = Project.find_by(name: name, platform: self.name.demodulize)
-      proj.versions.each do |version|
-        deps = dependencies(name, version.number, mapped_project)
+      proj.versions.includes(:dependencies).each do |version|
+        deps = dependencies(name, version.number, mapped_project) rescue []
         next unless deps && deps.any? && version.dependencies.empty?
         deps.each do |dep|
-          unless version.dependencies.find_by_project_name dep[:project_name]
-            named_project = Project.platform(self.name.demodulize).where('lower(name) = ?', dep[:project_name].downcase).first.try(:id)
-            version.dependencies.create(dep.merge(project_id: named_project.try(:strip)))
+          unless dep[:project_name].blank? || version.dependencies.find_by_project_name(dep[:project_name])
+            named_project_id = Project.platform(self.name.demodulize).where(name: dep[:project_name].strip).first.try(:id)
+            named_project_id = Project.lower_platform(self.name.demodulize).lower_name(dep[:project_name].strip).first.try(:id) if named_project_id.nil?
+            version.dependencies.create(dep.merge(project_id: named_project_id.try(:strip)))
           end
         end
       end
@@ -177,14 +187,14 @@ module PackageManager
       []
     end
 
-    def self.map_dependencies(deps, kind, optional = false)
+    def self.map_dependencies(deps, kind, optional = false, platform = self.name.demodulize)
       deps.map do |k,v|
         {
           project_name: k,
           requirements: v,
           kind: kind,
           optional: optional,
-          platform: self.name.demodulize
+          platform: platform
         }
       end
     end
@@ -206,12 +216,12 @@ module PackageManager
     def self.repo_fallback(repo, homepage)
       repo = '' if repo.nil?
       homepage = '' if homepage.nil?
-      repo_gh = GitlabURLParser.parse(repo)
-      homepage_gh = GitlabURLParser.parse(homepage)
-      if repo_gh.present?
-        return "https://github.com/#{repo_gh}"
-      elsif homepage_gh.present?
-        return "https://github.com/#{homepage_gh}"
+      repo_url = URLParser.try_all(repo)
+      homepage_url = URLParser.try_all(homepage)
+      if repo_url.present?
+        return repo_url
+      elsif homepage_url.present?
+        return homepage_url
       else
         repo
       end
@@ -232,6 +242,7 @@ module PackageManager
         builder.use :http_cache, store: Rails.cache, logger: Rails.logger, shared_cache: false, serializer: Marshal
         builder.use FaradayMiddleware::Gzip
         builder.use FaradayMiddleware::FollowRedirects, limit: 3
+        builder.use :instrumentation
         builder.adapter :typhoeus
       end
       connection.get
@@ -239,6 +250,10 @@ module PackageManager
 
     def self.get_html(url, options = {})
       Nokogiri::HTML(get_raw(url, options))
+    end
+
+    def self.get_xml(url, options = {})
+      Ox.parse(get_raw(url, options))
     end
 
     def self.get_json(url)

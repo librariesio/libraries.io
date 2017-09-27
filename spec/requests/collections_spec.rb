@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "CollectionController" do
+describe "CollectionController", elasticsearch: true do
   let!(:project) { create(:project) }
 
   describe "GET /collections", type: :request do
@@ -12,7 +12,6 @@ describe "CollectionController" do
 
   describe "GET /explore/:language-:keyword-libraries", type: :request do
     it "renders successfully when logged out" do
-      Project.__elasticsearch__.import force: true
       Project.__elasticsearch__.refresh_index!
       visit collection_path(project.language, project.keywords.first)
       expect(page).to have_content 'libraries written in'

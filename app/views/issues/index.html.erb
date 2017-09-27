@@ -8,7 +8,7 @@
 <div class="row">
   <div class="col-sm-8">
     <%= render @issues, cache: true %>
-    <%= will_paginate @issues %>
+    <%= will_paginate @issues, page_links: false %>
   </div>
   <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>

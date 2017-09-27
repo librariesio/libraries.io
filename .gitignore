@@ -33,3 +33,5 @@ node_modules
 coverage
 
 *.dump
+*.csv
+data

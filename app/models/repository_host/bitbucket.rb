@@ -5,7 +5,12 @@ module RepositoryHost
       BitBucket::Error::Forbidden,
       BitBucket::Error::ServiceError,
       BitBucket::Error::InternalServerError,
-      BitBucket::Error::ServiceUnavailable]
+      BitBucket::Error::ServiceUnavailable,
+      BitBucket::Error::Unauthorized]
+
+    def self.api_missing_error_class
+      BitBucket::Error::NotFound
+    end
 
     def avatar_url(size = 60)
       "https://bitbucket.org/#{repository.full_name}/avatar/#{size}"
@@ -24,10 +29,8 @@ module RepositoryHost
       "#{url}/commits"
     end
 
-    def self.get_default_branch(full_name)
-      # n.b only works for public repos
-      r = Typhoeus.get("https://bitbucket.org/#{full_name}/branches/")
-      Nokogiri::HTML(r.body).css('.main-branch .branch-header a').try(:text) || 'master'
+    def compare_url(branch_one, branch_two)
+      "#{url}/compare/#{branch_two}..#{branch_one}#diff"
     end
 
     def get_file_list(token = nil)
@@ -51,7 +54,20 @@ module RepositoryHost
     end
 
     def download_issues(token = nil)
-      # not implemented yet
+      api_client(token).issues.list_repo(repository.owner_name, repository.project_name) do |issue|
+        RepositoryIssue::Bitbucket.create_from_hash(repository.full_name, issue, token)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
+
+    def download_pull_requests(token = nil)
+      pull_requests = api_client(token).repos.pull_request.list(repository.owner_name, repository.project_name)['values']
+      pull_requests.each do |pull_request|
+        RepositoryIssue::Bitbucket.create_from_hash(repository.full_name, pull_request, token)
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def download_forks(token = nil)
@@ -59,7 +75,25 @@ module RepositoryHost
     end
 
     def download_owner
-      # not implemented yet
+      return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
+      o = RepositoryOwner::Bitbucket.fetch_user(repository.owner_name)
+      if o.type == "team"
+        org = RepositoryOrganisation.create_from_host('Bitbucket', o)
+        if org
+          repository.repository_organisation_id = org.id
+          repository.repository_user_id = nil
+          repository.save
+        end
+      else
+        u = RepositoryUser.create_from_host('Bitbucket', o)
+        if u
+          repository.repository_user_id = u.id
+          repository.repository_organisation_id = nil
+          repository.save
+        end
+      end
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def create_webook(token = nil)
@@ -101,30 +135,6 @@ module RepositoryHost
       nil
     end
 
-    def update(token = nil)
-      begin
-        r = self.class.fetch_repo(repository.full_name)
-        return unless r.present?
-        repository.uuid = r[:id] unless repository.uuid == r[:id]
-         if repository.full_name.downcase != r[:full_name].downcase
-           clash = Repository.host(r[:host_type]).where('lower(full_name) = ?', r[:full_name].downcase).first
-           if clash && (!clash.update(token) || clash.status == "Removed")
-             clash.destroy
-           end
-           repository.full_name = r[:full_name]
-         end
-        repository.owner_id = r[:owner][:id]
-        repository.license = Project.format_license(r[:license][:key]) if r[:license]
-        repository.source_name = r[:parent][:full_name] if r[:fork]
-        repository.assign_attributes r.slice(*Repository::API_FIELDS)
-        repository.save! if repository.changed?
-      rescue BitBucket::Error::NotFound
-        repository.update_attribute(:status, 'Removed') if !repository.private?
-      rescue *IGNORABLE_EXCEPTIONS
-        nil
-      end
-    end
-
     def self.recursive_bitbucket_repos(url, limit = 5)
       return if limit.zero?
       r = Typhoeus::Request.new(url,
@@ -160,7 +170,6 @@ module RepositoryHost
       project = client.repos.get(user_name, repo_name)
       v1_project = client.repos.get(user_name, repo_name, api_version: '1.0')
       repo_hash = project.to_hash.with_indifferent_access.slice(:description, :language, :full_name, :name, :has_wiki, :has_issues, :scm)
-      default_branch = get_default_branch(full_name)
 
       repo_hash.merge!({
         id: project.uuid,
@@ -172,7 +181,7 @@ module RepositoryHost
         updated_at: project.updated_on,
         subscribers_count: v1_project.followers_count,
         forks_count: v1_project.forks_count,
-        default_branch: default_branch,
+        default_branch: project.fetch('mainbranch', {}).try(:fetch, 'name', nil),
         private: project.is_private,
         size: project[:size].to_f/1000,
         parent: {

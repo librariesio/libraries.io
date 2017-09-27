@@ -1,0 +1,92 @@
+<% title "Digital Infrastructure - Libraries.io" %>
+<div class="row">
+  <div class="col-md-12">
+    <h1>
+      <i class="fa fa-map-signs"></i>
+      Digital Infrastructure
+      <% if params[:platforms].present? %>
+        on <%= link_to platform_name(params[:platforms]), platforms_path(params[:platforms]) %>
+      <% end %>
+    </h1>
+  </div>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-sm-8">
+    <% @projects.each do |project| %>
+      <div class='project' style="border-color: <%= project.color %>;">
+        <h5>
+          <%= link_to project.name, project_path(project.to_param) %>
+          <small><%= project.latest_release_number %></small>
+        </h5>
+
+        <div class="">
+          <%= truncate project.description, :length => 100 %>
+        </div>
+
+        <small>
+          <%= link_to project.platform_name, platform_path(project.platform.downcase) %>
+          <% if project.language.present? && project.language != project.platform %>
+            - <%= link_to project.language, language_path(project.language) %>
+          <% end %>
+          - <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+          <%= timeago_tag project.latest_release_published_at %>
+          - <%= link_to project.repository.try(:stargazers_url) do %>
+            <%= number_to_human project.stars %> stars
+          <% end %>
+          -  <%= link_to project_dependent_repos_path(project.to_param) do %>
+            <%= number_to_human(project.dependent_repos_count) %> Dependent Repositories
+          <% end %>
+          - <%= link_to pluralize(project.repository.try(:contributions_count), 'contributor'), project.repository.try(:contributors_url) %>
+        </small>
+      </div>
+    <% end %>
+    <%= will_paginate @projects, page_links: false %>
+  </div>
+  <div class="col-sm-4 facets">
+    <%= render 'adsense/sidebar' %>
+    <h3>
+      <strong>
+        What is Digital Infrastructure?
+      </strong>
+    </h3>
+    <p>
+      Digital Infrastructure is the free and open source software contributed as a public good that underpins much of today's technology. As Nadia Edghal posed in her excellent primer <a href='http://www.fordfoundation.org/library/reports-and-studies/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure/' target='_blank'>Roads and Bridges' for the Ford Foundation</a>
+    </p>
+    <p>
+      "Shared, public code makes up the digital infrastructure of our society today. In the face of unprecedented demand, the costs of not supporting our digital infrastructure are numerous. No individual company or organisation is incentivised to address the public good problem alone. In order to support our digital infrastructure, we must find ways to work together."
+    </p>
+    <p>
+      You can support these projects by reviewing the code, helping out with open issues and thanking the maintainers for their hard work.
+    </p>
+    <p>
+      <em>This is an experiment based available dependency data from package manager repositories that make it easily available.</em>
+    </p>
+
+    <div class='row'>
+      <% if @platforms.any? %>
+        <div class='col-md-12 facets'>
+          <h4>Filter by Package Manager</h4>
+          <ul class='filter'>
+            <% @platforms.each do |platform| %>
+              <li class='<%= 'active' if platform[0].downcase == params[:platform].try(:downcase) %>'>
+                <% if platform[0].downcase == params[:platform].try(:downcase) %>
+                  <%= link_to platform_name(platform[0]), digital_infrastructure_path(platforms: nil, license: params[:license]) %>
+                <% else %>
+                  <%= link_to platform_name(platform[0]), digital_infrastructure_path(platforms: platform_name(platform[0]), license: params[:license]) %>
+                  <small><%= pluralize number_to_human(platform[1]), 'projects' %></small>
+                <% end %>
+              </li>
+            <% end %>
+            <% if @platform && !@platforms.map{|l| l[0].downcase }.include?(@platform.name.downcase) %>
+              <li class='active'>
+                <%= link_to platform_name(@platform.name), digital_infrastructure_path(platforms: nil, license: params[:license]) %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

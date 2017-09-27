@@ -21,6 +21,7 @@ class Tag < ApplicationRecord
 
   def send_notifications
     if has_projects?
+      repository.download_tags rescue nil
       notify_subscribers
       notify_firehose
       notify_web_hooks
@@ -79,15 +80,6 @@ class Tag < ApplicationRecord
     name
   end
 
-  def greater_than_1?
-    return nil unless follows_semver?
-    begin
-      SemanticRange.gte(clean_number, '1.0.0')
-    rescue
-      false
-    end
-  end
-
   def repository_url
     case repository.host_type
     when 'GitHub'
@@ -97,5 +89,32 @@ class Tag < ApplicationRecord
     when 'Bitbucket'
       "#{repository.url}/commits/tag/#{name}"
     end
+  end
+
+  def related_tags
+    repository.tags.sort
+  end
+
+  def tag_index
+    related_tags.index(self)
+  end
+
+  def next_tag
+    related_tags[tag_index - 1]
+  end
+
+  def previous_tag
+    related_tags[tag_index + 1]
+  end
+
+  alias_method :previous_version, :previous_tag
+
+  def related_tag
+    true
+  end
+
+  def diff_url
+    return nil unless repository && previous_tag && previous_tag
+    repository.compare_url(previous_tag.number, number)
   end
 end

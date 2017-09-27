@@ -56,9 +56,13 @@ module PackageManager
 
     def self.get_releases(name)
       latest_version = get_json("https://api.nuget.org/v3/registration1/#{name.downcase}/index.json")
-      releases = latest_version['items'][0]['items']
-
-      if releases.nil?
+      if latest_version['items'][0]['items']
+        releases = []
+        latest_version['items'].each do |items|
+          releases << items['items']
+        end
+        releases.flatten!
+      elsif releases.nil?
         releases = []
         latest_version['items'].each do |page|
           json = get_json(page['@id'])

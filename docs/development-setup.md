@@ -47,7 +47,7 @@ Go create a [Personal access token on GitHub](https://help.github.com/articles/c
 
 ```sh
  bundle exec rails c
- irb> AuthToken.new(token: "<secure github token here>").save
+ irb> AuthToken.create(token: "<secure github token here>")
  irb> PackageManager::NPM.update "pictogram"
  irb> PackageManager::Rubygems.update "split"
  irb> PackageManager::Bower.update "sbteclipse"

@@ -28,13 +28,14 @@ module RepoManifests
   end
 
   def sync_metadata(file_list)
-    self.has_readme       = file_list.any?{|file| file.match(/^README/i) }
-    self.has_changelog    = file_list.any?{|file| file.match(/^CHANGELOG/i) }
-    self.has_contributing = file_list.any?{|file| file.match(/^CONTRIBUTING/i) }
-    self.has_license      = file_list.any?{|file| file.match(/^LICENSE/i) }
-    self.has_coc          = file_list.any?{|file| file.match(/^CODE[-_]OF[-_]CONDUCT/i) }
-    self.has_threat_model = file_list.any?{|file| file.match(/^THREAT[-_]MODEL/i) }
-    self.has_audit        = file_list.any?{|file| file.match(/^AUDIT/i) }
+    return if file_list.nil?
+    self.has_readme       = file_list.find{|file| file.match(/^README/i) }
+    self.has_changelog    = file_list.find{|file| file.match(/^CHANGE|^HISTORY/i) }
+    self.has_contributing = file_list.find{|file| file.match(/^CONTRIBUTING/i) }
+    self.has_license      = file_list.find{|file| file.match(/^LICENSE|^COPYING|^MIT-LICENSE/i) }
+    self.has_coc          = file_list.find{|file| file.match(/^CODE[-_]OF[-_]CONDUCT/i) }
+    self.has_threat_model = file_list.find{|file| file.match(/^THREAT[-_]MODEL/i) }
+    self.has_audit        = file_list.find{|file| file.match(/^AUDIT/i) }
     save if self.changed?
   end
 
@@ -43,7 +44,7 @@ module RepoManifests
 
     unless manifests.find_by(args)
       manifest = manifests.create(args)
-      dependencies = m[:dependencies].uniq{|dep| [dep[:name].try(:strip), dep[:requirement], dep[:type]]}
+      dependencies = m[:dependencies].map(&:with_indifferent_access).uniq{|dep| [dep[:name].try(:strip), dep[:requirement], dep[:type]]}
       dependencies.each do |dep|
         platform = manifest.platform
         next unless dep.is_a?(Hash)

@@ -9,7 +9,14 @@ You depend on <%= @project %> in the following repos: <%= @repos.map{|repo| repo
 Check out all the details here: <%= version_url(@project.to_param.merge(number: @version.number)) %>
 
 <% if @project.repository.present? %>
+<% if @version.related_tag %>
+Browse the code for <%= @version %> on <%= @project.repository.formatted_host %>: <%= @version.repository_url %>
+<% if @version.previous_version %>
+View diff between <%= @version %> and <%= @version.previous_version %>: <%= @version.diff_url %>
+<% end %>
+<% else %>
 You can also browse the latest commits on <%= @project.repository.formatted_host %>: <%= @project.repository.commits_url %>
+<% end %>
 <% end %>
 
 From your friendly neighborhood robot, Libby.

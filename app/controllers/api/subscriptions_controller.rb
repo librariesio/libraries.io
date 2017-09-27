@@ -5,21 +5,21 @@ class Api::SubscriptionsController < Api::ApplicationController
 
   def index
     @subscriptions = current_user.subscriptions.includes(:project)
-    paginate json: as_json(@subscriptions)
+    paginate json: @subscriptions, include: 'project,project.versions'
   end
 
   def show
-    render json: as_json(@subscription)
+    render json: @subscription, include: 'project,project.versions'
   end
 
   def create
     @subscription = current_user.subscriptions.create(subscription_params.merge(project_id: @project))
-    render json: as_json(@subscription)
+    render json: @subscription, include: 'project,project.versions'
   end
 
   def update
     @subscription.update_attributes(subscription_params)
-    render json: as_json(@subscription)
+    render json: @subscription, include: 'project,project.versions'
   end
 
   def destroy
@@ -35,14 +35,5 @@ class Api::SubscriptionsController < Api::ApplicationController
 
   def find_subscription
     @subscription = current_user.subscriptions.includes(:project).find_by_project_id(@project.id)
-  end
-
-  def find_project
-    @project = Project.platform(params[:platform]).where('lower(name) = ?', params[:name].downcase).first
-    raise ActiveRecord::RecordNotFound if @project.nil?
-  end
-
-  def as_json(subscriptions)
-    subscriptions.as_json(only: [:include_prerelease, :created_at, :updated_at], include: {project:  project_json_response_args})
   end
 end

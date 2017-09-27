@@ -18,8 +18,8 @@
     <% @recent_subscriptions.each do |sub| %>
       <div style='min-height:30px;'>
         <% if sub.user %>
-        <%= link_to image_tag(sub.user.avatar_url(40), width: 20, height: 20, alt: sub.user, class: 'pull-left'), user_path(sub.user.nickname), class: 'tip', style: 'display:block; float:left; margin-right:5px;', title: "#{sub.user.nickname}: #{pluralize(sub.user.subscriptions.count, 'subs')}, #{pluralize(sub.user.all_repositories.count, 'repo')}, #{pluralize(sub.user.repository_subscriptions.count, 'track')}" %>
-         <%= link_to sub.user, user_path(sub.user.nickname) %>
+        <%= link_to image_tag(sub.user.avatar_url(40), width: 20, height: 20, alt: sub.user, class: 'pull-left'), user_path(sub.user.to_param), class: 'tip', style: 'display:block; float:left; margin-right:5px;', title: "#{sub.user.nickname}: #{pluralize(sub.user.subscriptions.count, 'subs')}, #{pluralize(sub.user.all_repositories.count, 'repo')}, #{pluralize(sub.user.repository_subscriptions.count, 'track')}" %>
+         <%= link_to sub.user, user_path(sub.user.to_param) %>
         <% else %>Deleted<% end %>
         subscribed to <%= link_to sub.project, project_path(sub.project.to_param) %>
         <br>
@@ -34,8 +34,8 @@
     <% @recent_watches.each do |sub| %>
       <div style='min-height:30px;'>
         <% if sub.user %>
-        <%= link_to image_tag(sub.user.avatar_url(40), width: 20, height: 20, alt: sub.user, class: 'pull-left'), user_path(sub.user.nickname), class: 'tip', style: 'display:block; float:left; margin-right:5px;', title: "#{sub.user.nickname}: #{pluralize(sub.user.subscriptions.count, 'subs')}, #{pluralize(sub.user.all_repositories.count, 'repo')}, #{pluralize(sub.user.repository_subscriptions.count, 'track')}" %>
-         <%= link_to sub.user, user_path(sub.user.nickname) %>
+        <%= link_to image_tag(sub.user.avatar_url(40), width: 20, height: 20, alt: sub.user, class: 'pull-left'), user_path(sub.user.to_param), class: 'tip', style: 'display:block; float:left; margin-right:5px;', title: "#{sub.user.nickname}: #{pluralize(sub.user.subscriptions.count, 'subs')}, #{pluralize(sub.user.all_repositories.count, 'repo')}, #{pluralize(sub.user.repository_subscriptions.count, 'track')}" %>
+         <%= link_to sub.user, user_path(sub.user.to_param) %>
         <% else %>Deleted<% end %>
         watched
         <% if sub.repository %>

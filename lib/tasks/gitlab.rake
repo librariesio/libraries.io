@@ -5,7 +5,7 @@ namespace :gitlab do
   end
 
   task find_updated_repos: :environment do
-    RepositoryHost::Gitlab.recursive_gitlab_repos(page_number, 10, 'last_activity_desc')
+    RepositoryHost::Gitlab.recursive_gitlab_repos(1, 10, 'last_activity_desc')
   end
 
   task find_existing_repos: :environment do

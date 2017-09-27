@@ -20,8 +20,8 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
 
   orgs = lambda {
     group = sitemap.group(:filename => :orgs, :sitemaps_path => 'sitemaps/orgs') do
-      GithubOrganisation.visible.with_login.find_each do |user|
-        add user_path(user), :lastmod => user.updated_at
+      RepositoryOrganisation.visible.with_login.find_each do |user|
+        add user_path(user.to_param), :lastmod => user.updated_at
       end
     end
     group.sitemap.write unless group.sitemap.written?
@@ -29,8 +29,8 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
 
   users = lambda {
     group = sitemap.group(:filename => :users, :sitemaps_path => 'sitemaps/users') do
-      GithubUser.visible.with_login.find_each do |user|
-        add user_path(user), :lastmod => user.updated_at
+      RepositoryUser.visible.with_login.find_each do |user|
+        add user_path(user.to_param), :lastmod => user.updated_at
       end
     end
     group.sitemap.write unless group.sitemap.written?
@@ -64,7 +64,7 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
 
       add hosts_path
       add issues_path
-      add github_organisations_path
+      add repository_organisations_path
       add github_search_path
       add trending_path
       add trending_projects_path

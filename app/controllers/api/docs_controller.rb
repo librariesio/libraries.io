@@ -6,20 +6,21 @@ class Api::DocsController < ApplicationController
     @api_key = logged_in? ? current_user.api_key : 'YOUR_API_KEY'
     @project = Project.platform('npm').includes(:versions, :repository).find_by_name('base62') || Project.platform('rubygems').first
 
-    @version = @project.versions.first
+    @version = @project.versions.sort.first
 
-    @dependencies = project_json_response(@project)
+    @dependencies = @project.as_json
     @dependencies[:dependencies] = map_dependencies(@version.dependencies || [])
+
+    @dependent_projects = @project.dependent_projects.paginate(page: 1)
 
     @repository = Repository.host('GitHub').find_by_full_name('gruntjs/grunt') || Repository.host('GitHub').first
 
-    @repo_dependencies = @repository.as_json({
-      except: [:id, :github_organisation_id, :owner_id], methods: [:github_contributions_count, :github_id]
-    })
+    @repo_dependencies = @repository.as_json
+
     @repo_dependencies[:dependencies] = map_dependencies(@repository.repository_dependencies || [])
 
-    @search = Project.search('grunt').records
+    @search = Project.search('grunt', api: true).records
 
-    @github_user = GithubUser.find_by_login('andrew') || GithubUser.first
+    @repository_user = RepositoryUser.host('GitHub').login('andrew').first || RepositoryUser.first
   end
 end

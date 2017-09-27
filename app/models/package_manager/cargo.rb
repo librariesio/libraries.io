@@ -18,6 +18,10 @@ module PackageManager
       "https://docs.rs/#{name}/#{version}"
     end
 
+    def self.check_status_url(project)
+      "https://crates.io/api/v1/crates/#{project.name}"
+    end
+
     def self.project_names
       page = 1
       projects = []

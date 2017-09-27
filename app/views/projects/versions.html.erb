@@ -4,21 +4,47 @@
 <h1>
   <%= link_to @project, project_path(@project.to_param) %> Releases
 </h1>
-<hr>
+
 <div class="row">
   <div class="col-sm-8">
     <%= render 'adsense/banner' %>
     <% if @versions.any? %>
-      <ul>
+      <table class='table'>
         <% @versions.each do |version| %>
-        <li>
-          <%= link_to version, version_path(version.to_param) %>
+        <tr>
+          <td>
+            <%= link_to version, version_path(version.to_param) %>
+          </td>
           <% if version.published_at.present? %>
-          - <%= version.published_at.to_s(:long) %>
+            <td>
+              <small class='text-muted'>
+                <%= version.published_at.to_s(:long_ordinal) %>
+              </small>
+            </td>
           <% end %>
-        </li>
+          <% if version.related_tag %>
+          <td>
+            <small class='text-muted'>
+              <%= link_to version.related_tag.repository_url do %>
+                <%= fa_icon('tag') %>
+                Browse source on <%= version.project.repository.host_type %>
+              <% end %>
+            </small>
+          </td>
+          <td>
+            <% if version.previous_version %>              
+              <small class='text-muted'>
+                <%= link_to version.diff_url do %>
+                  <%= fa_icon('random') %>
+                  View diff between <%= version %> and <%= version.previous_version %>
+                <% end %>
+              </small>
+            <% end %>
+          </td>
+          <% end %>
+        </tr>
         <% end %>
-      </ul>
+      </table>
       <%= will_paginate @versions, page_links: false %>
       <p>
         <%= link_to project_versions_path(@project.to_param.merge(format: :atom)) do %>

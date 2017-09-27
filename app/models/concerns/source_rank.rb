@@ -2,9 +2,8 @@ module SourceRank
   extend ActiveSupport::Concern
 
   def update_source_rank
-    update_column :rank, source_rank
-    touch
-    __elasticsearch__.index_document
+    self.rank = source_rank
+    self.save if self.changed?
   end
 
   def update_source_rank_async
@@ -25,7 +24,7 @@ module SourceRank
       repository_present:         repository_present? ? 1 : 0,
       readme_present:             readme_present? ? 1 : 0,
       license_present:            license_present? ? 1 : 0,
-      versions_present:           versions_present? ? 1 : 0,
+      versions_present:           multiple_versions_present? ? 1 : 0,
       follows_semver:             follows_semver? ? 1 : 0,
       recent_release:             recent_release? ? 1 : 0,
       not_brand_new:              not_brand_new? ? 1 : 0,
@@ -59,30 +58,53 @@ module SourceRank
     normalized_licenses.present?
   end
 
-  def versions_present?
-    versions_count > 1 || (tags.published.length > 0)
+  def follows_semver?
+    published_releases.all?(&:follows_semver?)
+  end
+
+  def uses_versions?
+    versions_count > 0
+  end
+
+  def has_versions?
+    versions_count > 1
+  end
+
+  def published_releases
+    @published_releases ||= uses_versions? ? versions : tags.published
+  end
+
+  def multiple_versions_present?
+    published_releases.length > 1
+  end
+
+  def any_versions?
+    published_releases.length > 0
   end
 
   def recent_release?
-    versions.any? {|v| v.published_at && v.published_at > 6.months.ago } ||
-      (tags.published.any? {|v| v.published_at && v.published_at > 6.months.ago })
+    return false unless any_versions?
+    published_releases.any? {|v| v.published_at && v.published_at > 6.months.ago }
   end
 
   def not_brand_new?
-    versions.any? {|v| v.published_at && v.published_at < 6.months.ago } ||
-      (tags.published.any? {|v| v.published_at && v.published_at < 6.months.ago })
+    return false unless any_versions?
+    published_releases.any? {|v| v.published_at && v.published_at < 6.months.ago }
   end
 
   def any_outdated_dependencies?
+    return false unless has_versions?
     latest_version.try(:any_outdated_dependencies?)
   end
 
   def all_prereleases?
-    prereleases.size == versions.size
+    return false unless any_versions?
+    published_releases.all?(&:prerelease?)
   end
 
   def one_point_oh?
-    versions.any?(&:greater_than_1?)
+    return false unless any_versions?
+    published_releases.any?(&:greater_than_1?)
   end
 
   def log_scale(number)

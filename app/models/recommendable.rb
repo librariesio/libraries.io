@@ -2,7 +2,7 @@ module Recommendable
   extend ActiveSupport::Concern
 
   def recommended_projects
-    projects = Project.where(id: recommended_project_ids).order("position(','||projects.id::text||',' in '#{recommended_project_ids.join(',')}'), projects.rank DESC")
+    projects = Project.where(id: recommended_project_ids).order("position(','||projects.id::text||',' in '#{recommended_project_ids.join(',')}'), projects.rank DESC NULLS LAST")
     projects = unfiltered_recommendations if projects.empty?
     projects.where.not(id: already_watching_ids).maintained.includes(:repository, :versions)
   end
@@ -26,8 +26,8 @@ module Recommendable
   end
 
   def favourite_recommendation_ids
-    return [] if github_user.nil?
-    recommendation_filter github_user.favourite_projects.limit(100)
+    return [] if repository_user.nil?
+    recommendation_filter repository_user.favourite_projects.limit(100)
   end
 
   def most_depended_on_recommendation_ids
@@ -40,7 +40,7 @@ module Recommendable
 
   def unfiltered_recommendations
     ids = Project.maintained.most_dependents.limit(50).pluck(:id) + Project.maintained.most_watched.limit(50).pluck(:id)
-    Project.where(id: sort_array_by_frequency(ids)).order('projects.rank DESC').maintained
+    Project.where(id: sort_array_by_frequency(ids)).order('projects.rank DESC NULLS LAST').maintained
   end
 
   def favourite_platforms
@@ -53,7 +53,7 @@ module Recommendable
       languages = all_repositories.pluck(:language).compact
 
       # repositories you've contributed to
-      languages += github_user.contributed_repositories.pluck(:language).compact if github_user.present?
+      languages += repository_user.contributed_repositories.pluck(:language).compact if repository_user.present?
 
       # Repositories your subscribed to (twice to bump those languages)
       languages += subscribed_projects.pluck(:language).compact + subscribed_projects.pluck(:language).compact

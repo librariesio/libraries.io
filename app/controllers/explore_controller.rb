@@ -18,15 +18,11 @@ class ExploreController < ApplicationController
 
   helper_method :repo_search
   def repo_search(sort)
-    search(Repository, sort)
+    Repository.search('', sort: sort, order: 'desc').paginate(per_page: 6, page: 1).results.map{|result| RepositorySearchResult.new(result) }
   end
 
   helper_method :project_search
   def project_search(sort)
-    search(Project, sort)
-  end
-
-  def search(klass, sort)
-    klass.search('', sort: sort, order: 'desc').paginate(per_page: 6, page: 1).records
+    Project.search('', sort: sort, order: 'desc').paginate(per_page: 6, page: 1).results.map{|result| ProjectSearchResult.new(result) }
   end
 end

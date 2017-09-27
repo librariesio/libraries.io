@@ -1,0 +1,21 @@
+<% cache(['v2', @project.id, 'top_dependent_projects'], :expires_in => 2.weeks) do %>
+  <% @top_dependent_projects = @project.dependent_projects.limit(10) %>
+  <% if @top_dependent_projects.length > 0 %>
+    <h4 data-ga-tracked-el='dependent-projects'>
+      <%= link_to "Dependent Libraries", project_dependents_path(@project.to_param) %>
+    </h4>
+    <dl class='row'>
+      <% if @top_dependent_projects.length > 0 %>
+        <% @top_dependent_projects.each do |project| %>
+          <dt class='col-sm-8'>
+            <%= link_to project.name, project_path(project.to_param) %>
+          </dt>
+          <dd class='col-sm-4 hidden-xs'>
+            <%= project.latest_release %>
+          </dd>
+        <% end %>
+      <% end %>
+    </dl>
+    <hr>
+  <% end %>
+<% end %>

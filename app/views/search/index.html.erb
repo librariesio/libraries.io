@@ -1,60 +1,72 @@
 <% title @title %>
 <% content_for :atom, auto_discovery_link_tag(:atom, url_for(search_params.merge({format: "atom"}))) %>
-<%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
   <div class="row">
-    <div class='col-sm-8'>
-      <div class="input-group input-group-lg">
-        <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search...', class: 'form-control', size: 40 %>
-        <span class="input-group-btn">
-          <button class="btn btn-primary btn-large" type="submit"><%= fa_icon 'search' %></button>
-        </span>
+  <div class='col-sm-8'>
+    <div class="row hidden-sm  hidden-md hidden-lg">
+      <div class="col-md-12">
+        <%= render 'projects/search_form' %>
       </div>
+    </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <h5><%= search_page_entries_info @search, model: 'library' %></h5>
+        </div>
+        <div class="col-xs-6">
+          <div class="btn-group pull-right">
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Sort: <strong><%= current_sort.first %></strong> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <% sort_options.each do |sort_option| %>
+                <li>
+                  <%= link_to url_for(params.except(:host).merge(sort: sort_option[1]).permit!) do %>
+                    <% if params[:sort] == sort_option[1] %>
+                      <%= fa_icon 'check' %>
+                    <% else %>
+                      <span class='fa-blank'></span>
+                    <% end %>
+                    <%= sort_option[0] %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
 
-      <% [:platforms, :licenses, :languages, :keywords, :sort].each do |field| %>
-        <%= hidden_field_tag field, params[field] if params[field].present? %>
-      <% end %>
+        </div>
+      </div>
+      <hr>
       <% if @suggestion && @suggestion.options.any? %>
         <p>
           Did you mean
           <strong><%= link_to "#{@suggestion.options.first.text}?", search_path(q: @suggestion.options.first.text) %></strong>
         </p>
       <% end %>
-    </div>
-    <div class='col-sm-4 hidden-xs'>
-      <h3>
-        <small>Sort by: <%= select_tag 'sort', options_for_select(sort_options, params[:sort]), onchange: "this.form.submit()" %></small>
-      </h3>
-    </div>
-  </div>
-<% end %>
-<div class='row'>
-  <div class='col-sm-8'>
+
     <%= render 'adsense/banner' %>
+
     <% if @projects.length > 0 %>
       <%= render @projects, cache: true %>
       <%= will_paginate @search, page_links: false %>
-      <p>
-        <small>
-          <%= page_entries_info @search, model: 'project' %>
-          -
-          <%= link_to url_for(params.except(:host).merge(format: :atom, sort: 'created_at', order: 'desc').permit!), class: 'rss' do %>
-            <%= fa_icon "rss-square" %>
-            Subscribe to an RSS feed of this search
-          <% end %>
-        </small>
-      </p>
     <% else %>
       <p>
-        No projects found.
+        <b>No projects found. </b>
       </p>
-      <p>
-        <% if params[:platforms].present? || params[:licenses].present? ||  params[:languages].present? ||  params[:keywords].present? %>
+      <% if params[:platforms].present? || params[:licenses].present? ||  params[:languages].present? ||  params[:keywords].present? %>
+        <p>
           <%= link_to 'Try removing some filters.', search_path(q: params[:q]) %>
-        <% else %>
-          Can't find what you're looking for?
-          <%= link_to 'Report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>
-        <% end %>
-      </p>
+        </p>
+      <% else %>
+        <h3>Something Missing?</h3>
+        <p>
+          If a project from one of these package managers is is missing please <%= link_to 'report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>.
+        </p>
+        <div class='row'>
+          <%= render partial: 'platforms/platform', collection: @platforms %>
+        </div>
+        <p>
+          Package manager not listed above? <%= link_to 'Consider adding support for it', "https://github.com/librariesio/libraries.io/blob/master/docs/add-a-package-manager.md" %>.
+        </p>
+      <% end %>
     <% end %>
   </div>
 
@@ -65,5 +77,13 @@
       <% next if facet.buckets.nil? || facet.buckets.empty? %>
       <%= render 'search/facet', name: name, facet: facet %>
     <% end %>
+    <p>
+      <small>
+        <%= link_to url_for(params.except(:host).merge(format: :atom, sort: 'created_at', order: 'desc').permit!), class: 'rss' do %>
+          <%= fa_icon "rss-square" %>
+          Subscribe to an RSS feed of this search
+        <% end %>
+      </small>
+    </p>
   </div>
 </div>

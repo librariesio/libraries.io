@@ -13,14 +13,14 @@ module PackageManager
     def self.project(name)
       if name.match(/^([-\w]+)\/([-.\w]+)$/)
         begin
-          repo = AuthToken.client.repo(name, accept: 'application/vnd.github.drax-preview+json')
+          repo = AuthToken.client.repo(name, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json')
           return repo.to_hash
         rescue
           return nil
         end
       elsif name_with_owner = GitlabURLParser.parse(name)
         begin
-          repo = AuthToken.client.repo(name_with_owner, accept: 'application/vnd.github.drax-preview+json')
+          repo = AuthToken.client.repo(name_with_owner, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json')
           return repo.to_hash
         rescue
           return nil
@@ -45,6 +45,7 @@ module PackageManager
         :name => project[:full_name],
         :description => project[:description],
         :homepage => project[:homepage],
+        :keywords_array => project[:topics],
         :licenses => (project.fetch(:license, {}) || {})[:key],
         :repository_url => project[:html_url]
       }

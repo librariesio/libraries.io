@@ -1,8 +1,8 @@
 class IssueWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :low, unique: :until_executed
+  sidekiq_options queue: :issues, unique: :until_executed
 
-  def perform(name_with_owner, issue_number, token = nil)
-    Issue.update_from_github(name_with_owner, issue_number, token)
+  def perform(host_type, name_with_owner, issue_number, type, token = nil)
+    RepositoryIssue::Base.update(host_type, name_with_owner, issue_number, type, token)
   end
 end

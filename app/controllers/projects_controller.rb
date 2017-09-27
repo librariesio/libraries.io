@@ -3,7 +3,9 @@ class ProjectsController < ApplicationController
                                           :unsubscribe, :sync]
   before_action :find_project, only: [:show, :sourcerank, :about, :dependents,
                                       :dependent_repos, :your_dependent_repos,
-                                      :versions, :tags, :mute, :unmute, :unsubscribe, :sync]
+                                      :versions, :tags, :mute, :unmute, :unsubscribe,
+                                      :sync]
+  before_action :find_project_lite, only: [:top_dependent_repos, :top_dependent_projects]
 
   def index
     if current_user
@@ -50,9 +52,7 @@ class ProjectsController < ApplicationController
       end
     end
     find_version
-    fresh_when([@project, @version])
-    @dependencies = (@versions.size > 0 ? (@version || @versions.first).dependencies.includes(project: :versions).order('project_name ASC').limit(100) : [])
-    @contributors = @project.contributors.order('count DESC').visible.limit(20)
+    @contributors = @project.contributors.order('count DESC').visible.limit(24)
   end
 
   def sourcerank
@@ -138,11 +138,32 @@ class ProjectsController < ApplicationController
     redirect_back fallback_location: project_path(@project.to_param)
   end
 
+  def digital_infrastructure
+    orginal_scope = Project.digital_infrastructure
+    scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
+    @projects = scope.order('projects.dependent_repos_count DESC').paginate(page: page_number)
+    @platforms = orginal_scope.group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
+  end
+
   def unseen_infrastructure
     orginal_scope = Project.unsung_heroes
     scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
     @projects = scope.order('projects.dependent_repos_count DESC').paginate(page: page_number)
     @platforms = orginal_scope.group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
+  end
+
+  def dependencies
+    find_project_lite
+    find_version
+    render layout: false
+  end
+
+  def top_dependent_repos
+    render layout: false
+  end
+
+  def top_dependent_projects
+    render layout: false
   end
 
   private
@@ -165,16 +186,8 @@ class ProjectsController < ApplicationController
     PackageManager::Base.format_name(params[:platforms])
   end
 
-  def current_language
-    Linguist::Language[params[:language]].to_s if params[:language].present?
-  end
-
-  def current_license
-    Spdx.find(params[:license]).try(:id) if params[:license].present?
-  end
-
   def project_scope(scope_name)
     @platforms = Project.send(scope_name).group('platform').count.sort_by(&:last).reverse
-    @projects = platform_scope.send(scope_name).includes(:repository).order('dependents_count DESC, projects.rank DESC, projects.created_at DESC').paginate(page: page_number, per_page: 20)
+    @projects = platform_scope.send(scope_name).includes(:repository).order('dependents_count DESC, projects.rank DESC NULLS LAST, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 end

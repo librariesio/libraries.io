@@ -1,7 +1,7 @@
 module PackageManager
   class Maven < Base
     HAS_VERSIONS = true
-    HAS_DEPENDENCIES = false
+    HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
     SECURITY_PLANNED = true
     URL = "http://maven.org"
@@ -50,32 +50,53 @@ module PackageManager
     end
 
     def self.project(name)
+      sections = name.split(':')
       h = {
         name: name,
-        path: name.split(':').join('/')
+        path: name.split(':').join('/'),
+        groupId: sections[0].gsub('.', '/'),
+        artifactId: sections[1]
       }
       h[:versions] = versions(h)
       h
     end
 
     def self.mapping(project)
-      latest_version = get_html("https://maven-repository.com/artifact/#{project[:path]}/#{project[:versions][0][:number]}")
-      hash = {}
-      latest_version.css('tr').each do |tr|
-        tds = tr.css('td')
-        hash[tds[0].text.gsub(/[^a-zA-Z0-9\s]/,'')] = tds[1] if tds.length == 2
+      base_url = "http://repo1.maven.org/maven2/#{project[:groupId]}/#{project[:artifactId]}"
+      latest_version = project[:versions].last[:number]
+      version_xml = get_xml(base_url + "/#{latest_version}/#{project[:artifactId]}-#{latest_version}.pom")
+      if version_xml.respond_to?('project')
+        xml = version_xml.project
+      else
+        xml = version_xml
       end
       {
         name: project[:name],
-        description: hash['Description'].try(:text),
-        homepage: hash['URL'].try(:css,'a').try(:text),
-        repository_url: repo_fallback(hash['Connection'].try(:text), hash['URL'].try(:css,'a').try(:text)),
-        licenses: hash['Name'].try(:text)
+        description: xml.locate('description').try(:nodes).try(:first),
+        homepage: xml.locate('url').try(:nodes).try(:first),
+        repository_url: repo_fallback(xml.locate('scm').try(:locate, 'url').try(:nodes).try(:first), xml.locate('url').try(:nodes).try(:first)),
+        licenses: (xml.locate('licenses').try(:locate, 'license') || []).map{|l| l.locate('name').map(&:nodes)}.flatten
       }
     end
 
+    def self.dependencies(name, version, project)
+      sections = project[:name].split(':')
+      groupId = sections[0].gsub('.', '/')
+      artifactId = sections[1]
+      base_url = "http://repo1.maven.org/maven2/#{groupId}/#{artifactId}"
+      pom_file = get_raw(base_url + "/#{version}/#{artifactId}-#{version}.pom")
+      Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file).map do |dep|
+        {
+          project_name: dep[:name],
+          requirements: dep[:requirement],
+          kind: dep[:type],
+          platform: 'Maven'
+        }
+      end
+    end
+
     def self.versions(project)
-      # multiple verion pages
+      # multiple version pages
       initial_page = get_html("https://maven-repository.com/artifact/#{project[:path]}/")
       version_pages(initial_page).reduce(extract_versions(initial_page)) do |acc, page|
         acc.concat( extract_versions(get_html(page)) )

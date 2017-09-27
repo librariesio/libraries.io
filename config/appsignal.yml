@@ -1,0 +1,29 @@
+default: &defaults
+  push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
+
+  # Your app's name
+  name: "Libraries.io"
+
+  # Skip session data, it contains private information.
+  skip_session_data: true
+
+  # Ignore these errors.
+  ignore_errors:
+    - ActiveRecord::RecordNotFound
+    - ActionController::RoutingError
+    - ActiveRecord::RecordInvalid
+
+  # Enable Garbage Collection instrumentation
+  enable_gc_instrumentation: true
+
+development:
+  <<: *defaults
+  active: false
+
+test:
+  <<: *defaults
+  active: false
+
+production:
+  <<: *defaults
+  active: true

@@ -9,13 +9,12 @@ describe User, type: :model do
   it { should have_many(:all_repositories) }
   it { should have_many(:adminable_repository_permissions) }
   it { should have_many(:adminable_repositories) }
-  it { should have_many(:adminable_github_orgs) }
+  it { should have_many(:adminable_repository_organisations) }
   it { should have_many(:source_repositories) }
   it { should have_many(:watched_repositories) }
   it { should have_many(:watched_dependencies) }
   it { should have_many(:watched_dependent_projects) }
   it { should have_many(:dependencies) }
-  it { should have_many(:all_dependencies) }
   it { should have_many(:really_all_dependencies) }
   it { should have_many(:all_dependent_projects) }
   it { should have_many(:favourite_projects) }
