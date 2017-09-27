@@ -38,7 +38,7 @@ class SessionsController < ApplicationController
       end
     else
       if identity.user.nil?
-        user = User.new
+        user = User.new(optin: true)
         user.assign_from_auth_hash(auth)
         identity.user = user
         identity.save
