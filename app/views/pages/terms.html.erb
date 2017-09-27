@@ -11,21 +11,62 @@
       Thank you for using Libraries.io! 
     </p>
     <p>
-      Libraries.io is a small team of people offering a utility service at scale on a small budget so please be respectful of these terms.
+      Libraries.io is owned and operated operated by Andrew Nesbitt and Benjamin Nickolls ("Libraries.io").
     </p>
     <h3 id='acceptance'>Acceptance (How To Accept These Things)</h3>
     <p>
-      By accessing the API you are agreeing to the terms presented below between yourself and Brave New Software, on behalf of and referred to as 'Libraries.io'. You may not enter into this agreement if you are not of legal age to do so or you are legally prohibited from doing so. 
-    </p>
-    <p>
-      If you are using the API on behalf of a legal entity you are representing that you have authority to bind that entity to these terms. By accepting these terms you are doing so on behalf of that entity and all references to 'you' and 'your' refer to that entity from here on.
+      By using the Libraries.io web site ("Service") you are agreeing to the terms and conditions ("Terms fo Service") presented below. 
     </p>
     
+    <h3 id='account'>Account Terms</h3>
+      You may not enter into this agreement if you are not of legal age to do so, you are legally prohibited from doing so or you are not a human.
+    </p>
+    <p>
+      If you are using the Service on behalf of a legal entity you are representing that you have authority to bind that entity to these terms. By accepting these terms you are doing so on behalf of that entity and all references to 'you' and 'your' refer to that entity from here on.
+    </p>
+
+    <h3 id='payments'>Payments and Refunds</h3>
+    <p>
+      You are required to provide valid billing information at the time of sign up for all paid plans.
+    </p>
+    <p>
+      The Service is billed in advance on a monthly basis and is non-refundable. There will be no refunds or credits for partial months of service, upgrade/downgrade, cancellation, or for unused months with an open account.
+    </p>
+
+    <h3 id='termination'>Cancellation and Termination (How To Cancel This Agreement)</h3>
+    <p>
+      You may stop using the Service without notice. If you do not use the Service for thirty (30) calendar days we will consider your agreement under these terms terminated. You may also give prior notice of termination by emailing <%= mail_to 'support@libraries.io', 'support@libraries.io', subject: 'Termination of agreement' %>. Once terminated you must destroy any copies of API keys that you have made.
+    </p>
+
+    <h3 id='modifications'>Modifications (Things We May Change)</h3>
+    <p>
+      Libraries.io reserves the right at any time and from time to time to modify or discontinue, temporarily or permanently, the Service (or any part thereof) with or without notice.
+    </p>
+    <p>
+      Libraries.io reserves the right to update and change the Terms of Service from time to time without notice. Any new features that augment or enhance the current Service, including the release of new tools and resources, shall be subject to the Terms of Service. Continued use of the Service after any such changes shall constitute your consent to such changes.
+    </p>
+    <p>
+      Prices of all Services, including but not limited to monthly subscription plan fees to the Service, are subject to change upon 30 days notice from us. Such notice may be provided at any time by sending a notice to the primary email address specified in your Libraries.io account or by placing a prominent notice on our site.
+    </p>
+    <p>
+      As the Service grows we may add to or otherwise modify the Service. If we do so we will update the documentation. Occasionally we may need to make changes that require you to modify your usage.
+    </p>
+    <p>
+      Libraries.io shall not be liable to you or to any third party for any modification, price change, suspension or discontinuance of the Service.
+    </p>
+
+    <h3 id='copyrights'>Copyrights and Content Ownership</h3>
+    <p>
+      We claim no intellectual property rights over the material you provide to the Service.
+    </p>
+    <p>
+      The name and logos for Libraries.io are property of Libraries.io. All rights reserved. You may not use the Libraries.io name without written permission from Libraries.io.
+    </p>
+
     <h3 id='usage'>Usage (How To Use The Service)</h3>
     <p>
       All API requests must include <code>api_key</code> parameter. Your API key is generated when you create an account. Your API key can be accessed from your <%= link_to 'account page', account_path %>.
     </p>
-    <h4>Rate Limits</h4>
     <p>
       Requests to the API are subject to a 60 request per minute rate limit based on your api key. Any further requests within that time-frame will result in a <code>403</code> response.
     </p>
@@ -36,7 +77,7 @@
     
     <h3 id='data'>Data (How To Use Data From Libraries.io)</h3>
     <p>
-      Data provided by Libraries.io is licensed under the <a href='https://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution, Share-alike 4.0 licence</a> which we shall refer to as 'the data licence'. 
+      Data provided by the Service is licensed under the <a href='https://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution, Share-alike 4.0 licence</a> the ("Data Licence"). 
     </p>
     <p>
       This licence is designed to encourage open and free exchange of data. It grants permissive rights for users to use the data commercially, to create and distribute derivative works, and to redistribute data under the same terms. Many of these rights are transferred to you so you should check the full wording at: <a href='https://creativecommons.org/licenses/by-sa/4.0/legalcode'>https://creativecommons.org/licenses/by-sa/4.0/legalcode</a>.
@@ -46,52 +87,48 @@
       You may attribute us with the text 'includes data gathered by Libraries.io' in your publication or 'powered by Libraries.io' if providing a service.
     </p>
 
-    <h3 id='agreements'>Agreements (Things You Agree To)</h3>
+    <h3 id='agreements'>Agreements (Things You Agree To</h3>
     <ul>
-      <li>You agree to comply with the terms of the data licence.</li>
+      <li>Your use of the Service is at your sole risk. The Service is provided on an “as is” and “as available” basis.</li>
+      <li>You understand that Libraries.io uses third party vendors and hosting partners to provide the necessary hardware, software, networking, storage, and related technology required to run the Service.</li>
+      <li>You agree to comply with the terms of the Data Licence.</li>
       <li>You agree to use a single API key.</li>
-      <li>You agree to Libraries.io storing your account information.</li>
-      <li>You agree to Libraries.io monitoring your usage in order to enforce rate limits and improve the service.</li>
-      <li>You agree to Libraries.io sharing your information — including personal information — if it is required to do so by law.</li>
+      <li>You agree to the terms of our <a href='/privacy'>Privacy Policy</a></li>
     </ul>
+    
     <h3 id='provisions'>Provisions (Things You Must Do)</h3>
     <ul>
-      <li>You must Comply with the terms of the data licence.</li>
+      <li>You must Comply with the terms of service and the data licence.</li>
     </ul>
+    
     <h3 id='restrictions'>Restrictions (Things You Must Not Do)</h3>
     <ul>
       <li>You must not perform any action with the intent to introduce errors within or otherwise disrupt or interfer with the provision of the API.</li>
       <li>You must not share your API key with any party that is not entitled to act on your behalf.</li>
       <li>You must not make representations regarding ownership, partnership, sponsorship or any other type of endorsement between you and Libraries.io.</li>
-      <li>You must comply with local laws regarding the safe keeping and use of data obtained from Libraries.io.</li>
+      <li>You may not use the Service for any illegal or unauthorized purpose. </li>
+      <li>You must not, in the use of the Service, violate any laws in your jurisdiction (including but not limited to copyright laws).</li>
     </ul>
-    <h3 id='warranties'>Warranties (Things We Promise)</h3>
-    <ul>
-      <li>We will provide the API to to the best of our ability.</li>
-      <li>We will uphold the terms of licenses from our sources.</li>
-    </ul>
+    
     <h3 id='limitations'>Limitations (Things We Cannot Promise)</h3>
     <p>
-      To the maximum extent permitted by law Libraries.io accepts no liability or responsibility for any loss or damage arising, directly or indirectly, from your use of or inability to use the API.
+      Libraries.io does not warrant that (i) the Service will meet your specific requirements, (ii) the Service will be uninterrupted, timely, secure, or error-free, (iii) the results that may be obtained from the use of the Service will be accurate or reliable, (iv) the quality of any products, services, information, or other material purchased or obtained by you through the Service will meet your expectations, and (v) any errors in the Service will be corrected.
+    </p>
+    <p>
+      You expressly understand and agree that  Libraries.io shall not be liable for any direct, indirect, incidental, special, consequential or exemplary damages, including but not limited to, damages for loss of profits, goodwill, use, data or other intangible losses (even if Libraries.io has been advised of the possibility of such damages), resulting from: (i) the use or the inability to use the Service; (ii) the cost of procurement of substitute goods and services resulting from any goods, data, information or services purchased or obtained or messages received or transactions entered into through or from the Service; (iii) unauthorized access to or alteration of your transmissions or data; (iv) statements or conduct of any third party on the Service; (v) or any other matter relating to the Service.
     </p>
     <p>
       Data provided by Libraries.io is gathered from third party sources. Therefore we cannot and do not warrant that it is accurate or up to date and we accept no liability for any errors. 
     </p>
-    <h3 id='modifications'>Modifications (Things We May Change)</h3>
     <p>
-      From time to time we may need to update these terms. We will do so by updating this page. You should check this page regularly. Changes will not apply retroactively and will become effective immediately.  If you do not agree to the modified terms, you should discontinue your use of the API. Your continued use of the API constitutes your acceptance of the modified terms.
+      The failure of Libraries.io to exercise or enforce any right or provision of the Terms of Service shall not constitute a waiver of such right or provision. The Terms of Service constitutes the entire agreement between you and Libraries.io and govern your use of the Service, superceding any prior agreements between you and Libraries.io (including, but not limited to, any prior versions of the Terms of Service).
     </p>
-    <p>
-      As the service grows we may add to or otherwise modify the API. If we do so we will update the API documentation. Occasionally we may need to make changes that require you to modify your usage. We will not be held liable for the cost of making those modifications or any costs arising from those modifications. 
-    </p>
-    <h3 id='termination'>Termination (How To Cancel This Agreement)</h3>
-    <p>
-      You may stop using the API without notice. If you do not use the API for thirty (30) calendar days we will consider your agreement under these terms terminated. You may also give prior notice of termination by emailing <%= mail_to 'support@libraries.io', 'support@libraries.io', subject: 'Termination of agreement' %>. Once terminated you must destroy any copies of API keys that you have made.
-    </p>
+
     <h3 id='surviving-provisions'>Surviving Provisions (Things You Must Continue To Do Even If You Cancel This Agreement)</h3>
     <p>
-      Once this agreement is terminated you must continue to abide by the terms of the data licence and any applicable laws regarding the safe usage, provision of access and storage of data. 
+      Once this agreement is terminated you must continue to abide by the terms of the Data Licence and any applicable laws regarding the safe usage, provision of access and storage of data. 
     </p>
+    
     <h3 id='communication'>Communication (Things We May Email You About)</h3>
     <p>
       From time to time we may you use your registered email address to contact you about:
@@ -101,10 +138,12 @@
       <li>Changes to the API.</li>
       <li>Feedback to help us improve the service.</li>
     </ul>
+    
     <h3 id='bugs'>Bugs, Errors and Issues</h4>
     <p>
       If you find a bug or error in the operation or content of the API please file an issue in our <a href='https://github.com/librariesio/libraries.io/issues/new'>bug tracker</a> following the template provided. 
     </p>
+    
     <h3 id='support'>Support</h4>
     <p>
       Libraries.io is a small community of people building a free, utility service. We do not offer formal support processes. If you require support you can try:
@@ -115,11 +154,13 @@
       <li>Emailing us at <%= mail_to 'support@libraries.io', 'support@libraries.io', subject: 'Libraries.io Support Request' %>.</li>
     </ul>
   </div>
+ 
   <div class="col-sm-4">
     <%= render 'adsense/sidebar' %>
     <h3>Contents</h3>
     <ul>
       <li><a href="#acceptance">Acceptance</a></li>
+      <li><a href="#account">Account Terms</a></li>
       <li><a href="#usage">Usage</a></li>
       <li><a href="#data">Data</a></li>
       <li><a href="#agreements">Agreements</a></li>
