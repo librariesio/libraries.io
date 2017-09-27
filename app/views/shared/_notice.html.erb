@@ -1,5 +1,5 @@
 <% if current_user && current_user.optin == false %>
     <div class='alert alert-danger'>
-      We have updated our <a href='/terms'>terms of service</a> and <a href='/privacy'>privacy policy</a>. If you do not accept these changes <b>your account will be removed</b> on 31st December 2016. <%= link_to 'Accept', optin_account_path, method: 'put', class: 'btn btn-success btn-sm', rel: 'nofollow', title: 'Accept the new terms of service and privacy policy' %>
+      We have updated our <a href='/terms'>terms of service</a> and <a href='/privacy'>privacy policy</a>. If you do not accept these changes <b>your account will be removed</b> on 31st December 2017. <%= link_to 'Accept', optin_account_path, method: 'put', class: 'btn btn-success btn-sm', rel: 'nofollow', title: 'Accept the new terms of service and privacy policy' %>
     </div>
 <% end %>

@@ -24,10 +24,9 @@ class PagesController < ApplicationController
     @platforms = Project.popular_platforms(:facet_limit => 40).first(28)
 
   end
+
   def terms
     
   end
-  def terms
-    
-  end
+
 end
