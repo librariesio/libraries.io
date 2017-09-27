@@ -215,6 +215,8 @@ class Repository < ApplicationRecord
 
   def update_all_info(token = nil)
     token ||= AuthToken.token if host_type == 'GitHub'
+    check_status
+    return if status == 'Removed'
     update_from_repository(token)
     download_owner
     download_fork_source(token)
@@ -238,7 +240,7 @@ class Repository < ApplicationRecord
     return unless repo_hash
     repo_hash = repo_hash.to_hash.with_indifferent_access
     ActiveRecord::Base.transaction do
-      g = Repository.find_by(uuid: repo_hash[:id])
+      g = Repository.host(repo_hash[:host_type] || 'GitHub').find_by(uuid: repo_hash[:id])
       g = Repository.host(repo_hash[:host_type] || 'GitHub').find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
       g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
       g.host_type = repo_hash[:host_type] || 'GitHub'
@@ -280,7 +282,7 @@ class Repository < ApplicationRecord
   end
 
   def self.update_from_hook(uuid, sender_id)
-    repository = Repository.host('GitHub').find_by_uuid(uuid)
+    repository = Repository.where(host_type:'Github').find_by_uuid(uuid)
     user = Identity.where('provider ILIKE ?', 'github%').where(uid: sender_id).first.try(:user)
     if user.present? && repository.present?
       repository.download_manifests(user.token)

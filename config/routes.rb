@@ -119,15 +119,21 @@ Rails.application.routes.draw do
 
   get '/stats', to: redirect('/admin/stats')
 
-  get 'bus-factor', to: 'projects#bus_factor', as: :bus_factor
-  get '/unlicensed-libraries', to: 'projects#unlicensed', as: :unlicensed
-  get 'unmaintained-libraries', to: 'projects#unmaintained', as: :unmaintained
-  get 'deprecated-libraries', to: 'projects#deprecated', as: :deprecated
-  get 'removed-libraries', to: 'projects#removed', as: :removed
-
-  get '/help-wanted', to: 'issues#help_wanted', as: :help_wanted
-  get '/first-pull-request', to: 'issues#first_pull_request', as: :first_pull_request
-  get '/issues', to: 'issues#index', as: :all_issues
+  #explore
+  get '/explore/unlicensed-libraries', to: 'projects#unlicensed', as: :unlicensed
+  get '/explore/unmaintained-libraries', to: 'projects#unmaintained', as: :unmaintained
+  get '/explore/deprecated-libraries', to: 'projects#deprecated', as: :deprecated
+  get '/explore/removed-libraries', to: 'projects#removed', as: :removed
+  get '/explore/help-wanted', to: 'issues#help_wanted', as: :help_wanted
+  get '/explore/first-pull-request', to: 'issues#first_pull_request', as: :first_pull_request
+  get '/explore/issues', to: 'issues#index', as: :all_issues
+  get '/unlicensed-libraries', to: redirect("/explore/unlicensed-libraries")
+  get 'unmaintained-libraries', to: redirect("/explore/unmaintained-libraries")
+  get 'deprecated-libraries', to: redirect("/explore/deprecated-libraries")
+  get 'removed-libraries', to: redirect("/explore/removed-libraries")
+  get '/help-wanted', to: redirect("/explore/help-wanted")
+  get '/first-pull-request', to: redirect("/explore/first-pull-request")
+  
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
@@ -144,6 +150,7 @@ Rails.application.routes.draw do
     get '/:host_type/organisations', to: 'repository_organisations#index', as: :repository_organisations
     get '/:host_type/timeline', to: 'repositories#timeline', as: :github_timeline
     get '/:host_type/:login/issues', to: 'repository_users#issues'
+    get '/:host_type/:login/dependencies', to: 'repository_users#dependencies', as: :user_dependencies
     get '/:host_type/:login/dependency-issues', to: 'repository_users#dependency_issues'
     get '/:host_type/:login/repositories', to: 'repository_users#repositories', as: :user_repositories
     get '/:host_type/:login/contributions', to: 'repository_users#contributions', as: :user_contributions
@@ -172,6 +179,9 @@ Rails.application.routes.draw do
     get '/:host_type', to: 'repositories#index', as: :hosts
   end
 
+  #redirect after other issues routes created
+  get '/issues', to: redirect('explore/issues')
+
   get '/repos/search', to: 'repositories#search', as: :repo_search
   get '/repos', to: 'repositories#index', as: :repos
 
@@ -187,9 +197,16 @@ Rails.application.routes.draw do
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   post '/auth/failure',             to: 'sessions#failure'
 
-  get '/unseen-infrastructure', to: 'projects#unseen_infrastructure', as: :unseen_infrastructure
-  get '/digital-infrastructure', to: 'projects#digital_infrastructure', as: :digital_infrastructure
+  #experiments
+  get '/experiments', to: 'pages#experiments', as: :experiments
+  get '/experiments/bus-factor', to: 'projects#bus_factor', as: :bus_factor
+  get '/experiments/unseen-infrastructure', to: 'projects#unseen_infrastructure', as: :unseen_infrastructure
+  get '/experiments/digital-infrastructure', to: 'projects#digital_infrastructure', as: :digital_infrastructure
+  get 'bus-factor', to: redirect("/experiments/bus-factor")
+  get '/unseen-infrastructure', to: redirect("/experiments/unseen-infrastructure")
+  get '/digital-infrastructure', to: redirect("/experiments/digital-infrastructure")
 
+  #content
   get '/about', to: 'pages#about', as: :about
   get '/team', to: 'pages#team', as: :team
   get '/privacy', to: 'pages#privacy', as: :privacy

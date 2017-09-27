@@ -5,7 +5,7 @@ class RepositoryOrganisation < ApplicationRecord
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository
   has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository
   has_many :dependencies, through: :open_source_repositories
-  has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC, projects.rank DESC NULLS LAST") }, through: :dependencies, source: :project
+  has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
   has_many :contributors, -> { group('repository_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
@@ -29,7 +29,8 @@ class RepositoryOrganisation < ApplicationRecord
 
   delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
            :to_s, :to_param, :github_id, :download_org_from_host, :download_orgs,
-           :download_org_from_host_by_login, :download_repos, :download_members, to: :repository_owner
+           :download_org_from_host_by_login, :download_repos, :download_members,
+           :check_status, to: :repository_owner
 
   def login_uniqueness_with_case_insenitive_host
     if RepositoryOrganisation.host(host_type).login(login).exists?
@@ -82,6 +83,8 @@ class RepositoryOrganisation < ApplicationRecord
   end
 
   def sync
+    check_status
+    return unless persisted?
     download_org_from_host
     download_repos
     download_members

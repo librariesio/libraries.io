@@ -69,6 +69,7 @@ module RepositoryOwner
     end
 
     def self.create_user(user_hash)
+      return if user_hash.nil?
       user_hash = user_hash.to_hash.with_indifferent_access
       user_hash = {
         id: user_hash[:uuid],
@@ -109,6 +110,7 @@ module RepositoryOwner
     end
 
     def self.create_org(org_hash)
+      return if org_hash.nil?
       org_hash = org_hash.to_hash.with_indifferent_access
       org_hash = {
         id: org_hash[:uuid],

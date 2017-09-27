@@ -78,7 +78,7 @@ h3,h4{
   }
 }
 
-dt {
+dt, dd {
   margin-top: 0.5em;
 }
 
@@ -450,17 +450,22 @@ tr.top td{
   }
 }
 
-#readme-well{
-  max-height: 800px;
-  overflow: scroll;
-}
-
 .table > tbody > tr > td {
   vertical-align: middle;
 }
 
-.creative_commons{
+.well-small{
+  max-height: 200px;
+  overflow: scroll;
+}
+
+.well-medium{
   max-height: 400px;
+  overflow: scroll;
+}
+
+.well-large{
+  max-height: 800px;
   overflow: scroll;
 }
 

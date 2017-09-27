@@ -44,6 +44,8 @@ module RepositoryOwner
       true
     rescue *RepositoryHost::Gitlab::IGNORABLE_EXCEPTIONS
       nil
+    rescue Octokit::NotFound
+      nil
     end
 
     def self.fetch_user(id_or_login)
@@ -63,6 +65,7 @@ module RepositoryOwner
     end
 
     def self.create_org(org_hash)
+      return if org_hash.nil?
       org_hash = org_hash.to_hash.with_indifferent_access
       org = nil
       org_by_id = RepositoryOrganisation.where(host_type: 'GitHub').find_by_uuid(org_hash[:id])
@@ -92,6 +95,7 @@ module RepositoryOwner
     end
 
     def self.create_user(user_hash)
+      return if user_hash.nil?
       user_hash = user_hash.to_hash.with_indifferent_access
       user = nil
       user_by_id = RepositoryUser.where(host_type: 'GitHub').find_by_uuid(user_hash[:id])

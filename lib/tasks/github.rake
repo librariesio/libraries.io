@@ -1,13 +1,13 @@
 namespace :github do
   desc 'Sync github users'
   task sync_users: :environment do
-    RepositoryUser.visible.where(last_synced_at: nil).limit(100).select('login').each(&:async_sync)
-    RepositoryUser.visible.order('last_synced_at ASC').limit(100).select('login').each(&:async_sync)
+    RepositoryUser.visible.where(last_synced_at: nil).limit(100).select('login,host_type').each(&:async_sync)
+    RepositoryUser.visible.order('last_synced_at ASC').limit(100).select('login,host_type').each(&:async_sync)
   end
 
   desc 'Sync github orgs'
   task sync_orgs: :environment do
-    RepositoryOrganisation.visible.order('last_synced_at ASC').limit(200).select('login').each(&:async_sync)
+    RepositoryOrganisation.visible.order('last_synced_at ASC').limit(200).select('login,host_type').each(&:async_sync)
   end
 
   desc 'Sync github repos'
@@ -46,7 +46,7 @@ namespace :github do
       users.each do |o|
         begin
           if o.type == "Organization"
-            RepositoryOrganisation.find_or_create_by(uuid: o.id) do |u|
+            RepositoryOrganisation.where(host_type:'Github').find_or_create_by(uuid: o.id) do |u|
               u.login = o.login
             end
           else

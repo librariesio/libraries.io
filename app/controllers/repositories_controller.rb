@@ -59,7 +59,7 @@ class RepositoriesController < ApplicationController
 
   def show
     load_repo
-    @contributors = @repository.contributors.order('count DESC').visible.limit(20)
+    @contributors = @repository.contributors.order('count DESC').visible.limit(20).select(:host_type, :name, :login, :uuid)
     @projects = @repository.projects.limit(20).includes(:versions)
     @color = @repository.color
     @forks = @repository.forked_repositories.host(@repository.host_type).interesting.limit(5)

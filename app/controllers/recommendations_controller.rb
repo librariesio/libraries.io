@@ -3,7 +3,7 @@ class RecommendationsController < ApplicationController
 
   def index
     if params[:language].present?
-      @language = Project.language(params[:language].downcase).first.try(:language)
+      @language = Linguist::Language[params[:language]].try(:to_s)
       raise ActiveRecord::RecordNotFound if @language.nil?
       scope = current_user.recommended_projects.language(@language)
     else

@@ -22,6 +22,10 @@ class RepositoryUsersController < ApplicationController
     search_issues(repo_ids: @repo_ids)
   end
 
+  def dependencies
+    @projects = @user.all_dependent_repos.open_source.order('rank DESC NULLS LAST').paginate(page: page_number)
+  end
+
   def repositories
     @repositories = @user.repositories.open_source.source.order('status ASC NULLS FIRST, rank DESC NULLS LAST').paginate(page: page_number)
   end
@@ -36,7 +40,7 @@ class RepositoryUsersController < ApplicationController
   end
 
   def contributors
-    @contributors = @user.contributors.paginate(page: params[:page])
+    @contributors = @user.contributors.select(:host_type, :name, :login, :uuid).paginate(page: params[:page])
   end
 
   private

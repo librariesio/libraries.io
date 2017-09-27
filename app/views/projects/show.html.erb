@@ -48,7 +48,7 @@
     <% if @repository.present? && @repository.readme.present? %>
       <hr>
       <h3 data-ga-tracked-el='readme'>Documentation</h3>
-      <div class='well' id='readme-well'>
+      <div class='well well-large' id='readme'>
         <%== @repository.readme %>
       </div>
     <% end %>

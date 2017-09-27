@@ -6,12 +6,12 @@ New to Ruby? No worries! You can follow these instructions to install a local se
 
 ### Installing a Local Server
 
-First things first, you'll need to install Ruby 2.4.0. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+First things first, you'll need to install Ruby 2.4.1. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build)
 
 ```bash
 brew install rbenv ruby-build
-rbenv install 2.4.0
+rbenv install 2.4.1
 ```
 
 Next, you'll need to make sure that you have PostgreSQL and Redis installed. This can be done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or postgres can be installed by using [http://postgresapp.com](http://postgresapp.com). Please also see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
@@ -104,9 +104,11 @@ GITHUB_PRIVATE_KEY=yourprivateclientidhere
 GITHUB_PRIVATE_SECRET=yourprivateclientsecrethere
 ```
 
-## Repository sync
+## Background workers
 
-To enable repository sync you will need to run a sidekiq worker:
+Many syncing tasks are added to a sidekiq queue to be ran asynchronously later, including tasks such as syncing repository data, contributors, tags and permissions.
+
+To run these tasks you will need to start a sidekiq worker with the following command:
 
 ```bash
 bundle exec sidekiq -C config/sidekiq.yml

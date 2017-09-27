@@ -266,7 +266,7 @@ namespace :open_data do
             dependency.project_name.try(:tr, "\r\n",''),
             dependency.platform.try(:tr, "\r\n",''),
             dependency.kind.try(:tr, "\r\n",''),
-            dependency.optional.try(:tr, "\r\n",''),
+            dependency.optional,
             dependency.requirements.try(:tr, "\r\n",''),
             dependency.project_id
           ]

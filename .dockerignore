@@ -1,0 +1,9 @@
+.env
+.git
+*.csv
+*.dump
+coverage
+data
+log
+node_modules
+tmp

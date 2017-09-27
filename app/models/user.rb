@@ -48,7 +48,7 @@ class User < ApplicationRecord
   end
 
   def main_identity
-    @main_identity ||= identities.first
+    @main_identity ||= identities.viewable.first
   end
 
   def to_param

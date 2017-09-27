@@ -39,8 +39,8 @@ module ProjectSearch
     after_commit lambda { __elasticsearch__.index_document if previous_changes.any? }, on: [:create, :update], prepend: true
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
-    def as_indexed_json(_options)
-      as_json methods: [:stars, :repo_name, :exact_name, :contributions_count, :dependent_repos_count]
+    def as_indexed_json(_options = {})
+      as_json(methods: [:stars, :repo_name, :exact_name, :contributions_count, :dependent_repos_count]).merge(keywords_array: keywords)
     end
 
     def dependent_repos_count

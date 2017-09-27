@@ -58,7 +58,7 @@
       <% else %>
         <h3>Something Missing?</h3>
         <p>
-          If a project from one of these package managers is is missing please <%= link_to 'report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>.
+          If a project from one of these package managers is missing please <%= link_to 'report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>.
         </p>
         <div class='row'>
           <%= render partial: 'platforms/platform', collection: @platforms %>

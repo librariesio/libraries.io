@@ -26,7 +26,7 @@ class Identity < ApplicationRecord
     self.token = auth_hash.fetch('credentials', {}).fetch('token')
 
     case auth_hash['provider']
-    when 'github'
+    when 'github', 'githubpublic', 'githubprivate'
       self.nickname   = auth_hash.fetch('info', {}).fetch('nickname')
       self.avatar_url = "https://avatars1.githubusercontent.com/u/#{self.uid}"
     when 'gitlab'
@@ -44,7 +44,7 @@ class Identity < ApplicationRecord
     avatar = read_attribute(:avatar_url)
     case provider
     when 'github', 'githubpublic', 'githubprivate'
-      avatar + "?size=#{size}"
+      "#{avatar}?size=#{size}"
     when 'gitlab'
       avatar
     when 'bitbucket'

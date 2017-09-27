@@ -87,13 +87,13 @@ module RepositoryHost
         r = self.class.fetch_repo(repository.id_or_name)
         return unless r.present?
         repository.uuid = r[:id] unless repository.uuid.to_s == r[:id].to_s
-         if repository.full_name.downcase != r[:full_name].downcase
-           clash = Repository.host(r[:host_type]).where('lower(full_name) = ?', r[:full_name].downcase).first
-           if clash && (!clash.repository_host.update_from_host(token) || clash.status == "Removed")
-             clash.destroy
-           end
-           repository.full_name = r[:full_name]
-         end
+        if repository.full_name.downcase != r[:full_name].downcase
+          clash = Repository.host(r[:host_type]).where('lower(full_name) = ?', r[:full_name].downcase).first
+          if clash && (!clash.repository_host.update_from_host(token) || clash.status == "Removed")
+            clash.destroy
+          end
+          repository.full_name = r[:full_name]
+        end
         repository.license = Project.format_license(r[:license][:key]) if r[:license]
         repository.source_name = r[:parent][:full_name] if r[:fork]
         repository.assign_attributes r.slice(*Repository::API_FIELDS)
