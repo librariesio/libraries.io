@@ -481,3 +481,9 @@ h4.panel-title{
 .panel-heading .panel-toggle.collapsed:after{
     content: "\25BC";
 }
+
+.dropdown-header.terms a{
+  display: inline;
+  padding: 0;
+  text-decoration: underline;
+}
