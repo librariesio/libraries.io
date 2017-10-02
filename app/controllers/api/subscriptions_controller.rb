@@ -30,7 +30,7 @@ class Api::SubscriptionsController < Api::ApplicationController
   private
 
   def subscription_params
-    params.require(:subscription).permit(:include_prerelease)
+    params.permit(:subscription).permit(:include_prerelease)
   end
 
   def find_subscription
