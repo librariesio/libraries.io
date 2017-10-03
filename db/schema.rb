@@ -414,7 +414,6 @@ ActiveRecord::Schema.define(version: 20171003110956) do
     t.boolean  "currently_syncing", :default=>false, :null=>false
     t.datetime "last_synced_at"
     t.boolean  "emails_enabled",    :default=>true
-    t.boolean  "optin",             :default=>false
   end
 
   create_table "versions", force: :cascade do |t|
