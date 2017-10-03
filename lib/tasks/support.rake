@@ -1,25 +1,9 @@
-namespace :support do 
-	
-	desc 'Add evidence of financial support to a user, org or repo'
-	task add_evidence: :environment do
-		r = Repository.first
-		s = r.support || r.create_support
-		s.support_evidences.create({
-
-			currency: 'USD',
-      amount: 5,
-      description: 'Donation from Ashley Mannix on Open Collective',
-      source_url: 'https://opencollective.com/octobox/transactions/23121228-cfde-41ac-bc40-c19ef89b1c8e/invoice.pdf',
-      published_at: Date.parse('2 October 2017')
-
-			})
-	end
-
+namespace :support do
 	desc 'Grab evidence of financial support from open collective'
 	task open_collective: :environment do
-		offset = 0		
+		offset = 0
 		while true
-			result = PackageManager::Base.get("https://opencollective.com/api/discover?sort=newest&offset=#{offset}") 
+			result = PackageManager::Base.get("https://opencollective.com/api/discover?sort=newest&offset=#{offset}")
 			break if result['collectives'] == []
 			page_groups(result)
 			offset += 12
@@ -41,14 +25,14 @@ def page_groups(result)
         supportable = RepositoryUser.create_from_host('GitHub', o)
       end
 			page_tx(supportable, collective['slug'])
-		end 
+		end
 	end
 end
 
 def page_tx(supportable, slug)
-	page = 1 
+	page = 1
 	while true
-		tx_list = PackageManager::Base.get( "https://opencollective.com/api/groups/#{slug}/transactions?page=#{page}")
+		tx_list = PackageManager::Base.get("https://opencollective.com/api/groups/#{slug}/transactions?page=#{page}")
 		break if tx_list == []
 		s = supportable.support || supportable.create_support
 		tx_list.each do |tx|
@@ -56,15 +40,16 @@ def page_tx(supportable, slug)
 		end
 		page += 1
 	end
-end 
+end
 
 def import_tx(support, tx)
 	return unless tx['type'] == 'DONATION'
 	puts tx['description']
+	user = PackageManager::Base.get("https://opencollective.com/api/users/#{tx['UserId']}")
 	support.support_evidences.find_or_create_by({
 		currency: tx['txnCurrency'],
     amount: tx['amountInTxnCurrency'],
-    description: "Donation from #{tx['UserId']} on Open Collective",
+    description: "Donation from #{user['name']} on Open Collective",
     source_url: "https://opencollective.com/octobox/transactions/#{tx['uuid']}/invoice.pdf",
     published_at: tx['createdAt']
 	})
