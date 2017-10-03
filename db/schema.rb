@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607094720) do
+ActiveRecord::Schema.define(version: 20171003110956) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -375,6 +375,28 @@ ActiveRecord::Schema.define(version: 20170607094720) do
     t.boolean  "include_prerelease",         :default=>true
   end
 
+  create_table "support_evidences", force: :cascade do |t|
+    t.string   "currency"
+    t.integer  "amount"
+    t.string   "description"
+    t.string   "source_url"
+    t.datetime "published_at"
+    t.integer  "user_id",      :index=>{:name=>"index_support_evidences_on_user_id"}
+    t.integer  "support_id",   :index=>{:name=>"index_support_evidences_on_support_id"}
+    t.string   "kind"
+    t.datetime "created_at",   :null=>false
+    t.datetime "updated_at",   :null=>false
+  end
+
+  create_table "supports", force: :cascade do |t|
+    t.string   "primary_currency"
+    t.integer  "balance"
+    t.string   "supportable_type", :index=>{:name=>"index_supports_on_supportable_type_and_supportable_id", :with=>["supportable_id"]}
+    t.integer  "supportable_id"
+    t.datetime "created_at",       :null=>false
+    t.datetime "updated_at",       :null=>false
+  end
+
   create_table "tags", force: :cascade do |t|
     t.integer  "repository_id", :index=>{:name=>"index_tags_on_repository_id_and_name", :with=>["name"]}
     t.string   "name"
@@ -392,6 +414,7 @@ ActiveRecord::Schema.define(version: 20170607094720) do
     t.boolean  "currently_syncing", :default=>false, :null=>false
     t.datetime "last_synced_at"
     t.boolean  "emails_enabled",    :default=>true
+    t.boolean  "optin",             :default=>false
   end
 
   create_table "versions", force: :cascade do |t|

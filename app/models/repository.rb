@@ -23,20 +23,23 @@ class Repository < ApplicationRecord
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :dependency_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :dependency_repos, -> { group('repositories.id') }, through: :dependency_projects, source: :repository
-
   has_many :repository_subscriptions, dependent: :delete_all
   has_many :web_hooks, dependent: :delete_all
   has_many :issues, dependent: :delete_all
+  has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
+
   has_one :readme, dependent: :delete
+  has_one :support, as: :supportable
+
   belongs_to :repository_organisation
   belongs_to :repository_user
   belongs_to :source, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
-  has_many :forked_repositories, primary_key: :full_name, foreign_key: :source_name, anonymous_class: Repository
 
   validates :full_name, uniqueness: {scope: :host_type}, if: lambda { self.full_name_changed? }
   validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
 
   before_save  :normalize_license_and_language
+  
   after_commit :update_all_info_async, on: :create
   after_commit :save_projects, on: :update
   after_commit :update_source_rank_async, on: [:create, :update]

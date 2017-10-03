@@ -10,6 +10,8 @@ class RepositoryOrganisation < ApplicationRecord
   has_many :contributors, -> { group('repository_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
+  has_one :support, as: :supportable
+
   # eager load this module to avoid clashing with Gitlab gem in development
   RepositoryOwner::Gitlab
 

@@ -12,6 +12,8 @@ class RepositoryUser < ApplicationRecord
   has_many :projects, through: :open_source_repositories
   has_many :identities
 
+  has_one :support, as: :supportable
+
   # eager load this module to avoid clashing with Gitlab gem in development
   RepositoryOwner::Gitlab
 
