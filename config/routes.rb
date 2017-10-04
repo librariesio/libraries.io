@@ -101,7 +101,7 @@ Rails.application.routes.draw do
     member do
       get 'delete'
       put 'disable_emails'
-      put 'optin'
+      # put 'optin'
     end
   end
 
