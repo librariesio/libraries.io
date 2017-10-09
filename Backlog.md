@@ -6,7 +6,6 @@ Issues that we'd like to implement but aren't likely to happen in the near futur
 - [Link projects to related Stackoverflow Q&A](https://github.com/librariesio/libraries.io/issues/17)
 - [Compare source of release with repository tagged release](https://github.com/librariesio/libraries.io/issues/18)
 - [Curate/group related repo's into 'ecosystems'](https://github.com/librariesio/libraries.io/issues/20)
-- [Track project security advisories](https://github.com/librariesio/libraries.io/issues/21)
 - [Overview of licence warnings](https://github.com/librariesio/libraries.io/issues/23)
 - [Add calls to action for projects](https://github.com/librariesio/libraries.io/issues/24)
 - [Add links to external project resources](https://github.com/librariesio/libraries.io/issues/25)
