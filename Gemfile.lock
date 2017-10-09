@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: https://github.com/librariesio/payola
-  revision: 7d4026856edf0cbafc8a188748ba96ced7bad99b
+  revision: 5e73e918873a27a4cff0c59d2944e1186d183b4b
   specs:
     payola-payments (1.5.0)
       aasm (>= 4.0.7)
