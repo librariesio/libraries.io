@@ -31,7 +31,7 @@
       </div>
       <% @orgs.each do |org| %>
         <div class='org-filter <%= 'active' if @org && org.login == @org.login %>'>
-          <%= link_to url_for(org: org) do %>
+          <%= link_to url_for(org: org.login) do %>
             <%= image_tag org.avatar_url(60), width: 30, height: 30 %>
             <%= org.login %>
           <% end %>
