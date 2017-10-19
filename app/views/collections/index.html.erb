@@ -6,7 +6,7 @@
   Explore
 </h1>
 <hr>
-<%= render 'adsense/banner' %>
+
 <% cache 'collections:index', expires_in: 1.day do  %>
   <div class="row">
     <% @languages.each_with_index do |language, index| %>

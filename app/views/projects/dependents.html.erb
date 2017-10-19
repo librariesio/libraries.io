@@ -11,7 +11,6 @@
 
 <div class="row">
   <div class="col-sm-8">
-    <%= render 'adsense/banner' %>
     <% if @dependents.any? %>
       <%= render @dependents, cache: true %>
       <%= will_paginate @dependents, page_links: false %>
@@ -22,6 +21,6 @@
     <% end %>
   </div>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
+
   </div>
 </div>
