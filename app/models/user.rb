@@ -31,8 +31,6 @@ class User < ApplicationRecord
 
   has_many :project_mutes, dependent: :delete_all
   has_many :muted_projects, through: :project_mutes, source: :project
-
-  has_many :payola_subscriptions, anonymous_class: Payola::Subscription, as: :owner
   has_many :project_suggestions
 
   after_commit :update_repo_permissions_async, :download_self, :create_api_key, on: :create

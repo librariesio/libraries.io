@@ -50,7 +50,6 @@ Issues that we'd like to implement but aren't likely to happen in the near futur
 - [Search filters from within query](https://github.com/librariesio/libraries.io/issues/191)
 - [Support Kanso package manager](https://github.com/librariesio/libraries.io/issues/193)
 - [Add support for Helm package manager](https://github.com/librariesio/libraries.io/issues/203)
-- [Paid plan improvements](https://github.com/librariesio/libraries.io/issues/207)
 - [Support chicken scheme eggs](https://github.com/librariesio/libraries.io/issues/219)
 - [Add testimonials to the site](https://github.com/librariesio/libraries.io/issues/224)
 - [Get added to github integrations directory](https://github.com/librariesio/libraries.io/issues/237)
