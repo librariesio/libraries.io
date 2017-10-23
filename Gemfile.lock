@@ -11,6 +11,14 @@ GIT
       simple_oauth
 
 GIT
+  remote: https://github.com/librariesio/omniauth-sourceforge
+  revision: 1108e2021e8ffa3cda96b778806bf2a69ffde10e
+  specs:
+    omniauth-sourceforge (1.0.0)
+      omniauth (~> 1.0)
+      omniauth-oauth (~> 1.0)
+
+GIT
   remote: https://github.com/librariesio/payola
   revision: 5e73e918873a27a4cff0c59d2944e1186d183b4b
   specs:
@@ -616,6 +624,7 @@ DEPENDENCIES
   omniauth-bitbucket
   omniauth-github
   omniauth-gitlab
+  omniauth-sourceforge!
   org-ruby
   parallel
   payola-payments!
