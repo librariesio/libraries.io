@@ -1,6 +1,6 @@
 require 'securerandom'
 
-FactoryGirl.define do
+FactoryBot.define do
   sequence :email do |n|
     "email#{n}@gmail.com"
   end

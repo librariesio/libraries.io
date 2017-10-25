@@ -102,7 +102,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'database_cleaner'
   gem 'rspec_junit_formatter'
   gem 'shoulda'

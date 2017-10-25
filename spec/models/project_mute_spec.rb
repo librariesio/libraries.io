@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe ProjectMute, type: :model do
-  subject { FactoryGirl.build(:project_mute) }
+  subject { FactoryBot.build(:project_mute) }
 
   it { should belong_to(:user) }
   it { should belong_to(:project) }
