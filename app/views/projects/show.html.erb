@@ -42,7 +42,6 @@
 </div>
 <div class='row'>
   <div class='col-md-8'>
-    <%= render 'adsense/banner' %>
     <%= render 'projects/contributors' %>
 
     <% if @repository.present? && @repository.readme.present? %>
@@ -55,7 +54,6 @@
   </div>
 
   <div class='col-md-4 sidebar'>
-    <%= render 'adsense/sidebar' %>
     <%= render 'projects/releases' %>
 
     <% if current_user %>

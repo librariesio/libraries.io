@@ -1,7 +1,6 @@
 <% if @tree %>
   <% cache ['tree', @project, @version, @kind, @date].compact, expires_in: 1.day do  %>
     <div class="col-sm-8">
-      <%= render 'adsense/banner' %>
       <div class="tree">
         <ul class="top-level">
           <%= render 'dep', dep: @tree %>
@@ -9,7 +8,6 @@
       </div>
     </div>
     <div class="col-sm-4">
-      <%= render 'adsense/sidebar' %>
       <div>
         <p class="h4">Unique dependencies:</p>
         <p class="h1"><%= @project_names.uniq.length %></p>
