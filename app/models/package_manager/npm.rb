@@ -79,7 +79,7 @@ module PackageManager
       project['versions'].map do |k, v|
         {
           :number => k,
-          :published_at => project['time'][k]
+          :published_at => project.fetch('time', {}).fetch(k, nil)
         }
       end
     end
