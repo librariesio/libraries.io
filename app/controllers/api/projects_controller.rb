@@ -34,4 +34,8 @@ class Api::ProjectsController < Api::ApplicationController
 
     render json: project_json
   end
+
+  def contributors
+    paginate json: @project.contributors
+  end
 end

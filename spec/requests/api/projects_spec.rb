@@ -88,4 +88,13 @@ describe "Api::ProjectsController" do
         }.to_json)
     end
   end
+
+  describe "GET /api/:platform/:name/contributors", type: :request do
+    it "renders successfully" do
+      get "/api/#{project.platform}/#{project.name}/contributors"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq('application/json')
+      expect(response.body).to be_json_eql([].to_json)
+    end
+  end
 end
