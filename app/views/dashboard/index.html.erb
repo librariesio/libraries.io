@@ -4,7 +4,7 @@
     <br>
   </div>
 </div>
-<% if current_user.has_active_subscription? && current_user.private_repo_token.blank? %>
+<% if current_user.private_repo_token.blank? %>
 <div class="row">
   <div class="col-md-12">
     <div class="alert alert-success" role="alert">
