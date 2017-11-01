@@ -165,9 +165,14 @@
     </p>
     <hr>
     <p>
-      The search endpoint accepts a <code>languages</code> parameter, which may be any of
-      platforms supported by libraries.io.
+      The search endpoint accepts number of other parameters to filter results:
     </p>
+    <ul>
+      <li><code>languages</code></li>
+      <li><code>licenses</code></li>
+      <li><code>keywords</code></li>
+      <li><code>platforms</code></li>
+    </ul>
     <hr>
     <p>
       Example: <strong> <%= link_to "https://libraries.io/api/search?q=grunt&api_key=#{@api_key}", "https://libraries.io/api/search?q=grunt&api_key=#{@api_key}" %> </strong>
