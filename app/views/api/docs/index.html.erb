@@ -154,6 +154,27 @@
     </p>
     <hr>
     <p>
+      The search endpoint accepts a <code>sort</code> parameter, one of
+        <code>rank</code>,
+        <code>stars</code>,
+        <code>dependents_count</code>,
+        <code>dependent_repos_count</code>,
+        <code>latest_release_published_at</code>,
+        <code>contributions_count</code>,
+        <code>created_at</code>.
+    </p>
+    <hr>
+    <p>
+      The search endpoint accepts number of other parameters to filter results:
+    </p>
+    <ul>
+      <li><code>languages</code></li>
+      <li><code>licenses</code></li>
+      <li><code>keywords</code></li>
+      <li><code>platforms</code></li>
+    </ul>
+    <hr>
+    <p>
       Example: <strong> <%= link_to "https://libraries.io/api/search?q=grunt&api_key=#{@api_key}", "https://libraries.io/api/search?q=grunt&api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-project-search", :expires_in => 1.day do %>
