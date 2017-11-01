@@ -81,7 +81,7 @@ GEM
     asciidoctor (1.5.6.1)
     autoprefixer-rails (7.1.2.6)
       execjs
-    bibliothecary (5.5.3)
+    bibliothecary (5.5.4)
       deb_control
       librariesio-gem-parser
       ox
@@ -208,7 +208,7 @@ GEM
     formatador (0.2.5)
     fuzzy_match (2.1.0)
     gemoji (3.0.0)
-    github-linguist (5.3.1)
+    github-linguist (5.3.2)
       charlock_holmes (~> 0.7.5)
       escape_utils (~> 1.1.0)
       mime-types (>= 1.19)
@@ -259,8 +259,8 @@ GEM
     loofah (2.1.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
-    mail (2.6.6)
-      mime-types (>= 1.16, < 4)
+    mail (2.7.0)
+      mini_mime (>= 0.1.1)
     method_source (0.9.0)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
@@ -268,7 +268,7 @@ GEM
     mini_mime (0.1.4)
     mini_portile2 (2.3.0)
     minitest (5.10.3)
-    mize (0.3.3)
+    mize (0.3.4)
       protocol
     modware (0.1.3)
       key_struct (~> 0.4)
@@ -315,7 +315,7 @@ GEM
     ox (2.8.1)
     parallel (1.12.0)
     pg (0.21.0)
-    pg_query (0.13.5)
+    pg_query (1.0.0)
       json (>= 1.8, < 3)
     pghero (2.0.7)
       activerecord
