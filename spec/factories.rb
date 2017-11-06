@@ -153,7 +153,7 @@ FactoryBot.define do
 
   factory :user do
     email
-    after(:create) do |user, evaluator|
+    after(:create) do |user, _evaluator|
       create(:identity, user: user)
     end
   end
