@@ -282,6 +282,42 @@
 <%= JSON.pretty_generate @repository_user.projects.includes(:versions, :repository).paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
 
+    <h3 id="user-project-contributions">User Project Contributions</h3>
+
+    <p>
+      Get a list of projects that the given users has contributed to.
+    </p>
+
+    <p>
+      <code>GET https://libraries.io/api/github/:login/project-contributions?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository_user.login}/project-contributions?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}-github-user-project-contributions", :expires_in => 1.day do %>
+      <pre class='well well-small'>
+<%= JSON.pretty_generate @repository_user.contributed_projects.includes(:versions, :repository).order('rank DESC NULLS LAST').paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
+    <% end %>
+
+    <h3 id="user-projects">User Repository Contributions</h3>
+
+    <p>
+      Get a list of repositories that the given users has contributed to.
+    </p>
+
+    <p>
+      <code>GET https://libraries.io/api/github/:login/repository-contributions?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository_user.login}/repository-contributions?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}-github-user-repository-contributions", :expires_in => 1.day do %>
+      <pre class='well well-small'>
+<%= JSON.pretty_generate @repository_user.contributed_repositories.order('stargazers_count DESC, rank DESC NULLS LAST').paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
+    <% end %>
+
     <h3 id='subscriptions-index'>User Subscriptions</h3>
     <p>
       List projects that a user is subscribed to recieved notifications about new releases
@@ -406,6 +442,8 @@
       <li><a href="#user">User</a></li>
       <li><a href="#user-repositories">User Repositories</a></li>
       <li><a href="#user-projects">User Projects</a></li>
+      <li><a href="#user-project-contributions">User Project Contributions</a></li>
+      <li><a href="#user-repository-contributions">User Repository Contributions</a></li>
     </ul>
     <ul>
       <li><a href="#subscriptions-index">User Subscriptions</a></li>

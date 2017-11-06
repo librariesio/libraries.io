@@ -16,6 +16,14 @@ class Api::RepositoryUsersController < Api::ApplicationController
     paginate json: @projects
   end
 
+  def repository_contributions
+    paginate json: @repository_user.contributed_repositories.order('stargazers_count DESC, rank DESC NULLS LAST')
+  end
+
+  def project_contributions
+    paginate json: @repository_user.contributed_projects.includes(:versions, :repository).order('rank DESC NULLS LAST')
+  end
+
   private
 
   def find_user
