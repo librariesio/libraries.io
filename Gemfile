@@ -106,7 +106,7 @@ group :test do
   gem 'rspec_junit_formatter'
   gem 'shoulda'
   gem 'simplecov', require: false
-  gem 'codeclimate-test-reporter', require: false
+  gem 'codeclimate-test-reporter', '>= 1.0.8', require: false
   gem 'faker'
   gem 'poltergeist'
   gem 'json_spec'

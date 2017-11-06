@@ -556,7 +556,7 @@ DEPENDENCIES
   capistrano-rails-console
   charlock_holmes (>= 0.7.5)
   chartkick
-  codeclimate-test-reporter
+  codeclimate-test-reporter (>= 1.0.8)
   commonmarker
   concurrent-ruby-ext
   counter_culture
