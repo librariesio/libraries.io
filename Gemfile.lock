@@ -554,6 +554,7 @@ DEPENDENCIES
   capistrano-maintenance
   capistrano-rails
   capistrano-rails-console
+  charlock_holmes (>= 0.7.5)
   chartkick
   codeclimate-test-reporter
   commonmarker
@@ -646,4 +647,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   1.15.4
+   1.16.0
