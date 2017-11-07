@@ -25,30 +25,30 @@ describe GithubHookHandler do
       end
     end
 
-    describe "issue_comment event" do
-      it "enqueues IssueWorker" do
-        expect(IssueWorker).to receive(:perform_async)
-        subject.run("issue_comment", { "issue" => {}, "repository" => {} })
-      end
-    end
-
-    describe "issues event" do
-      context "valid action" do
-        it "enqueues IssueWorker" do
-          GithubHookHandler::VALID_ISSUE_ACTIONS.each do |action|
-            expect(IssueWorker).to receive(:perform_async)
-            subject.run("issues", { "action" => action, "issue" => {}, "repository" => {} })
-          end
-        end
-      end
-
-      context "invalid action" do
-        it "does not enqueue IssueWorker" do
-          expect(IssueWorker).to_not receive(:perform_async)
-          subject.run("issues", { "action" => "lala", "issue" => {}, "repository" => {} })
-        end
-      end
-    end
+    # describe "issue_comment event" do
+    #   it "enqueues IssueWorker" do
+    #     expect(IssueWorker).to receive(:perform_async)
+    #     subject.run("issue_comment", { "issue" => {}, "repository" => {} })
+    #   end
+    # end
+    #
+    # describe "issues event" do
+    #   context "valid action" do
+    #     it "enqueues IssueWorker" do
+    #       GithubHookHandler::VALID_ISSUE_ACTIONS.each do |action|
+    #         expect(IssueWorker).to receive(:perform_async)
+    #         subject.run("issues", { "action" => action, "issue" => {}, "repository" => {} })
+    #       end
+    #     end
+    #   end
+    #
+    #   context "invalid action" do
+    #     it "does not enqueue IssueWorker" do
+    #       expect(IssueWorker).to_not receive(:perform_async)
+    #       subject.run("issues", { "action" => "lala", "issue" => {}, "repository" => {} })
+    #     end
+    #   end
+    # end
 
     describe "pull_request event" do
       let(:params) do
