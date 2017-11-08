@@ -18,11 +18,11 @@ class Api::ApplicationController < ApplicationController
 
   def check_api_key
     return true if params[:api_key].nil?
-    render :json => error_message, :status => :bad_request unless valid_api_key_present?
+    require_api_key
   end
 
   def require_api_key
-    render :json => error_message, :status => :bad_request unless valid_api_key_present?
+    render json: { error: "Error 403, you don't have permissions for this operation." }, status: :bad_request unless valid_api_key_present?
   end
 
   def valid_api_key_present?
@@ -36,10 +36,6 @@ class Api::ApplicationController < ApplicationController
 
   def current_user
     current_api_key.try(:user)
-  end
-
-  def error_message
-    { error: "Error 403, you don't have permissions for this operation." }
   end
 
   def es_query(klass, query, filters)
