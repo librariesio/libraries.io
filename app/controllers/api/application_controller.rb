@@ -2,8 +2,6 @@ class Api::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :check_api_key
 
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-
   rescue_from ActiveRecord::RecordNotFound do |e|
     render json: { message: e.message }, status: :not_found
   end
@@ -16,10 +14,6 @@ class Api::ApplicationController < ApplicationController
 
   def max_page
     1000
-  end
-
-  def record_not_found(error)
-    render json: { error: "404 Not Found" }, status: :not_found
   end
 
   def check_api_key
