@@ -12,6 +12,12 @@ class Api::ApplicationController < ApplicationController
 
   private
 
+  def disabled_in_read_only
+    if in_read_only_mode?
+      render json: { error: "Error 503, Can't perform this action, the site is in read-only mode temporarily." }, status: :service_unavailable
+    end
+  end
+
   def max_page
     1000
   end

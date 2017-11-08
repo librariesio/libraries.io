@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create, :failure]
+  before_action :read_only, only: [:new, :create]
 
   def new
     if params[:host_type].present?
