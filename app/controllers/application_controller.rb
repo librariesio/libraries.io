@@ -34,12 +34,6 @@ class ApplicationController < ActionController::Base
     @per_page_number
   end
 
-  def welcome_new_users
-    if not logged_in? and not cookies[:hide_welcome_alert]
-      flash.now[:show_welcome] = true # Actual content is at views/shared/_flash
-    end
-  end
-
   def ensure_logged_in
     unless logged_in?
       session[:pre_login_destination] = request.original_url
