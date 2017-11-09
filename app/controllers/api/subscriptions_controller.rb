@@ -2,6 +2,7 @@ class Api::SubscriptionsController < Api::ApplicationController
   before_action :require_api_key
   before_action :find_project, except: :index
   before_action :find_subscription, except: [:index, :create]
+  before_action :disabled_in_read_only, only: [:create, :update, :destroy]
 
   def index
     @subscriptions = current_user.subscriptions.includes(:project)
