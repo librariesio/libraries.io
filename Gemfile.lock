@@ -92,7 +92,7 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
     brakeman (4.0.1)
-    bugsnag (6.0.0)
+    bugsnag (6.0.1)
     builder (3.2.3)
     capistrano (3.10.0)
       airbrussh (>= 1.0.0)
@@ -317,7 +317,7 @@ GEM
     pg (0.21.0)
     pg_query (1.0.0)
       json (>= 1.8, < 3)
-    pghero (2.0.7)
+    pghero (2.0.8)
       activerecord
     pictogram (2.0.9)
       railties
@@ -526,7 +526,7 @@ GEM
     unicode-display_width (1.3.0)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.2)
+    websocket-extensions (0.1.3)
     will_paginate (3.1.6)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
