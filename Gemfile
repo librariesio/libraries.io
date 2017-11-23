@@ -38,7 +38,7 @@ gem 'mime-types', require: 'mime/types/columnar'
 gem 'fast_blank'
 gem 'fast_xs'
 gem 'fast_xor'
-gem 'premailer-rails'
+gem 'premailer-rails', '1.9.7'
 gem 'gemoji'
 gem 'js_cookie_rails'
 gem 'foreman', require: false

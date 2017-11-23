@@ -329,7 +329,7 @@ GEM
       addressable
       css_parser (>= 1.6.0)
       htmlentities (>= 4.0.0)
-    premailer-rails (1.10.0)
+    premailer-rails (1.9.7)
       actionmailer (>= 3, < 6)
       premailer (~> 1.7, >= 1.7.9)
     protocol (1.0.1)
@@ -606,7 +606,7 @@ DEPENDENCIES
   pghero
   pictogram
   poltergeist
-  premailer-rails
+  premailer-rails (= 1.9.7)
   puma
   rack-attack
   rack-attack-rate-limit
