@@ -92,7 +92,7 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
     brakeman (4.0.1)
-    bugsnag (6.1.0)
+    bugsnag (6.1.1)
     builder (3.2.3)
     capistrano (3.10.0)
       airbrussh (>= 1.0.0)
