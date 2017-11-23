@@ -148,14 +148,17 @@ module PackageManager
     end
 
     def self.import
+      return if ENV['READ_ONLY'].present?
       project_names.each { |name| update(name) }
     end
 
     def self.import_recent
+      return if ENV['READ_ONLY'].present?
       recent_names.each { |name| update(name) }
     end
 
     def self.import_new
+      return if ENV['READ_ONLY'].present?
       new_names.each { |name| update(name) }
     end
 

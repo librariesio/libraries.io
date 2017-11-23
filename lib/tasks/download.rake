@@ -1,6 +1,7 @@
 namespace :download do
   desc 'Download undownloaded github repositories'
   task new_github_repos: :environment do
+    exit if ENV['READ_ONLY'].present?
     Project.undownloaded_repos.order('created_at DESC').find_each(&:update_repository_async)
   end
 
