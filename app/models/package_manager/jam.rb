@@ -6,5 +6,9 @@ module PackageManager
     HIDDEN = true
     URL = 'http://jamjs.org/'
     COLOR = '#f1e05a'
+
+    def project(_name)
+      nil
+    end
   end
 end
