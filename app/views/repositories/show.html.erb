@@ -23,10 +23,12 @@
 <div class="row">
   <div class='col-md-8'>
     <h1>
-      <% if repo.owner.present? %>
-        <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo.owner), user_path(host_type: repo.host_type.downcase, login: repo.owner_name) %>
-      <% else %>
-        <%= image_tag(repo.avatar_url(100), width: 50, height: 50) %>
+      <% if repo.avatar_url(100).present? %>
+        <% if repo.owner.present? %>
+          <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: repo.owner), user_path(host_type: repo.host_type.downcase, login: repo.owner_name) %>
+        <% else %>
+          <%= image_tag(repo.avatar_url(100), width: 50, height: 50) %>
+        <% end %>
       <% end %>
       <%= repo %>
       <%= link_to fa_icon(repo.host_type.downcase), repo.url, class: 'tip', title: "View #{repo} on #{repo.formatted_host}" %>
