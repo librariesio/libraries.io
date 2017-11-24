@@ -39,7 +39,7 @@ class Repository < ApplicationRecord
   before_save  :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
   after_commit :save_projects, on: :update
-  after_commit :update_source_rank_async, on: [:create, :update]
+  after_commit :update_source_rank_async, on: [:update]
 
   scope :without_readme, -> { where("repositories.id NOT IN (SELECT repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
