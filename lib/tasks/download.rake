@@ -1,6 +1,7 @@
 namespace :download do
   desc 'Download undownloaded github repositories'
   task new_github_repos: :environment do
+    exit if ENV['READ_ONLY'].present?
     Project.undownloaded_repos.order('created_at DESC').find_each(&:update_repository_async)
   end
 
@@ -45,6 +46,11 @@ namespace :download do
   desc 'Download recent Clojars packages'
   task clojars: :environment do
     PackageManager::Clojars.import_recent
+  end
+
+  desc 'Download all Puppet packages asynchronously'
+  task puppet_all: :environment do
+    PackageManager::Puppet.import_async
   end
 
   desc 'Download recent CPAN packages asynchronously'

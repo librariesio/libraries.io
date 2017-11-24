@@ -25,7 +25,15 @@ describe "Api::SubscriptionsController" do
 
   describe "POST /api/subscriptions/:platform/:name", type: :request do
     it "renders successfully" do
-      post "/api/subscriptions/#{subscription.project.platform}/#{subscription.project.name}?api_key=#{user.api_key}", params: { subscription: { include_prerelease: true } }
+      post "/api/subscriptions/#{project.platform}/#{project.name}?api_key=#{user.api_key}", params: { subscription: { include_prerelease: true } }
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq('application/json')
+    end
+  end
+
+  describe "POST /api/subscriptions/:platform/:name with no body", type: :request do
+    it "renders successfully" do
+      post "/api/subscriptions/#{project.platform}/#{project.name}?api_key=#{user.api_key}"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq('application/json')
     end

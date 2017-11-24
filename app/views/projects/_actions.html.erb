@@ -38,7 +38,7 @@
 
   <% if logged_in? && subscription = current_user.subscribed_to?(@project) %>
     <div class="btn-group pull-right-lg">
-      <span class='btn btn-success'>Subscribed to <%= 'stable' unless subscription.include_prerelease? %> releases</span>
+      <span class='btn btn-success'><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Already subscribed</span>
       <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="caret"></span>
         <span class="sr-only">Toggle Dropdown</span>

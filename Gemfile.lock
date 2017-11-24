@@ -11,17 +11,6 @@ GIT
       simple_oauth
 
 GIT
-  remote: https://github.com/librariesio/payola
-  revision: 7d4026856edf0cbafc8a188748ba96ced7bad99b
-  specs:
-    payola-payments (1.5.0)
-      aasm (>= 4.0.7)
-      jquery-rails
-      rails (>= 4.1)
-      stripe (>= 1.20.1)
-      stripe_event (>= 1.3.0)
-
-GIT
   remote: https://github.com/librariesio/rails-timeago
   revision: 4225f85ee1992270b5944903a417542a7cd3303a
   specs:
@@ -33,8 +22,6 @@ GEM
   remote: https://rubygems.org/
   specs:
     RedCloth (4.3.2)
-    aasm (4.12.2)
-      concurrent-ruby (~> 1.0)
     actioncable (5.0.6)
       actionpack (= 5.0.6)
       nio4r (>= 1.2, < 3.0)
@@ -58,11 +45,11 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active_model_serializers (0.10.6)
+    active_model_serializers (0.10.7)
       actionpack (>= 4.1, < 6)
       activemodel (>= 4.1, < 6)
       case_transform (>= 0.2)
-      jsonapi-renderer (>= 0.1.1.beta1, < 0.2)
+      jsonapi-renderer (>= 0.1.1.beta1, < 0.3)
     activejob (5.0.6)
       activesupport (= 5.0.6)
       globalid (>= 0.3.6)
@@ -72,7 +59,7 @@ GEM
       activemodel (= 5.0.6)
       activesupport (= 5.0.6)
       arel (~> 7.0)
-    activerecord-import (0.20.0)
+    activerecord-import (0.21.0)
       activerecord (>= 3.2)
     activesupport (5.0.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
@@ -90,13 +77,13 @@ GEM
       mize
       tins (~> 1.0)
     api-pagination (4.6.3)
-    appsignal (2.3.4)
+    appsignal (2.3.7)
       rack
     arel (7.1.4)
     asciidoctor (1.5.6.1)
     autoprefixer-rails (7.1.2.6)
       execjs
-    bibliothecary (5.5.2)
+    bibliothecary (5.5.4)
       deb_control
       librariesio-gem-parser
       ox
@@ -106,26 +93,26 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
-    brakeman (3.7.2)
-    bugsnag (5.3.3)
+    brakeman (4.0.1)
+    bugsnag (6.1.1)
     builder (3.2.3)
-    capistrano (3.9.1)
+    capistrano (3.10.0)
       airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)
       sshkit (>= 1.9.0)
-    capistrano-bundler (1.2.0)
+    capistrano-bundler (1.3.0)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
     capistrano-maintenance (1.2.0)
       capistrano (>= 3.0)
-    capistrano-rails (1.3.0)
+    capistrano-rails (1.3.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
     capistrano-rails-console (2.2.1)
       capistrano (>= 3.5.0, < 4.0.0)
       sshkit-interactive (~> 0.2.0)
-    capybara (2.15.1)
+    capybara (2.16.1)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (>= 1.3.3)
@@ -135,26 +122,27 @@ GEM
     case_transform (0.2)
       activesupport
     charlock_holmes (0.7.5)
-    chartkick (2.2.4)
+    chartkick (2.2.5)
     citrus (3.0.2)
     cliver (0.3.2)
     codeclimate-test-reporter (1.0.8)
       simplecov (<= 0.13)
-    commonmarker (0.17.2)
+    commonmarker (0.17.6)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.0.5)
     concurrent-ruby-ext (1.0.5)
       concurrent-ruby (= 1.0.5)
     connection_pool (2.2.1)
-    counter_culture (1.8.1)
+    counter_culture (1.8.2)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
       after_commit_action (~> 1.0)
+    crass (1.0.3)
     creole (0.5.0)
     css_parser (1.6.0)
       addressable
     dalli (2.7.6)
-    database_cleaner (1.6.1)
+    database_cleaner (1.6.2)
     deb_control (0.0.1)
     diff-lcs (1.3)
     docile (1.1.5)
@@ -177,14 +165,14 @@ GEM
       multi_json
     erubis (2.7.0)
     escape_utils (1.1.1)
-    ethon (0.10.1)
+    ethon (0.11.0)
       ffi (>= 1.3.0)
     excon (0.59.0)
     execjs (2.7.0)
-    factory_girl (4.8.0)
+    factory_bot (4.8.2)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.8.0)
-      factory_girl (~> 4.8.0)
+    factory_bot_rails (4.8.2)
+      factory_bot (~> 4.8.2)
       railties (>= 3.0.0)
     faker (1.8.4)
       i18n (~> 0.5)
@@ -222,8 +210,8 @@ GEM
     formatador (0.2.5)
     fuzzy_match (2.1.0)
     gemoji (3.0.0)
-    github-linguist (5.2.0)
-      charlock_holmes (~> 0.7.3)
+    github-linguist (5.3.2)
+      charlock_holmes (~> 0.7.5)
       escape_utils (~> 1.1.0)
       mime-types (>= 1.19)
       rugged (>= 0.25.1)
@@ -231,7 +219,7 @@ GEM
     gitlab (4.2.0)
       httparty
       terminal-table
-    globalid (0.4.0)
+    globalid (0.4.1)
       activesupport (>= 4.2.0)
     groupdate (3.2.0)
       activesupport (>= 3)
@@ -240,7 +228,8 @@ GEM
     htmlentities (4.3.4)
     httparty (0.15.6)
       multi_xml (>= 0.5.2)
-    i18n (0.8.6)
+    i18n (0.9.1)
+      concurrent-ruby (~> 1.0)
     indefinite_article (0.2.4)
       activesupport
     ipaddress (0.8.3)
@@ -255,7 +244,7 @@ GEM
     json_spec (1.1.5)
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
-    jsonapi-renderer (0.1.3)
+    jsonapi-renderer (0.2.0)
     jwt (1.5.6)
     key_struct (0.4.2)
     librariesio-gem-parser (1.0.0)
@@ -264,23 +253,24 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    lograge (0.6.0)
+    lograge (0.7.1)
       actionpack (>= 4, < 5.2)
       activesupport (>= 4, < 5.2)
       railties (>= 4, < 5.2)
       request_store (~> 1.0)
-    loofah (2.0.3)
+    loofah (2.1.1)
+      crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
-    mail (2.6.6)
-      mime-types (>= 1.16, < 4)
-    method_source (0.8.2)
+    mail (2.7.0)
+      mini_mime (>= 0.1.1)
+    method_source (0.9.0)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
-    mini_mime (0.1.4)
-    mini_portile2 (2.2.0)
+    mini_mime (1.0.0)
+    mini_portile2 (2.3.0)
     minitest (5.10.3)
-    mize (0.3.3)
+    mize (0.3.4)
       protocol
     modware (0.1.3)
       key_struct (~> 0.4)
@@ -291,8 +281,8 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
     nio4r (2.1.0)
-    nokogiri (1.8.0)
-      mini_portile2 (~> 2.2.0)
+    nokogiri (1.8.1)
+      mini_portile2 (~> 2.3.0)
     oauth (0.5.3)
     oauth2 (1.4.0)
       faraday (>= 0.8, < 0.13)
@@ -302,8 +292,8 @@ GEM
       rack (>= 1.2, < 3)
     octokit (4.7.0)
       sawyer (~> 0.8.0, >= 0.5.3)
-    oj (3.3.5)
-    omniauth (1.6.1)
+    oj (3.3.9)
+    omniauth (1.7.1)
       hashie (>= 3.4.6, < 3.6.0)
       rack (>= 1.6.2, < 3)
     omniauth-bitbucket (0.0.2)
@@ -324,12 +314,12 @@ GEM
       omniauth (~> 1.2)
     org-ruby (0.9.12)
       rubypants (~> 0.2)
-    ox (2.6.0)
+    ox (2.8.2)
     parallel (1.12.0)
     pg (0.21.0)
-    pg_query (0.13.3)
+    pg_query (1.0.0)
       json (>= 1.8, < 3)
-    pghero (2.0.4)
+    pghero (2.0.8)
       activerecord
     pictogram (2.0.9)
       railties
@@ -337,17 +327,17 @@ GEM
       capybara (~> 2.1)
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
-    premailer (1.10.4)
+    premailer (1.11.1)
       addressable
-      css_parser (>= 1.4.10)
+      css_parser (>= 1.6.0)
       htmlentities (>= 4.0.0)
     premailer-rails (1.9.7)
       actionmailer (>= 3, < 6)
       premailer (~> 1.7, >= 1.7.9)
     protocol (1.0.1)
       ruby_parser (~> 3.0)
-    public_suffix (3.0.0)
-    puma (3.10.0)
+    public_suffix (3.0.1)
+    puma (3.11.0)
     rack (2.0.3)
     rack-attack (5.0.1)
       rack
@@ -356,7 +346,7 @@ GEM
     rack-canonical-host (0.2.3)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
-    rack-cors (1.0.1)
+    rack-cors (1.0.2)
     rack-protection (2.0.0)
       rack
     rack-test (0.6.3)
@@ -386,7 +376,7 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (12.1.0)
+    rake (12.3.0)
     rake-compiler (1.0.4)
       rake
     rb-fsevent (0.10.2)
@@ -394,35 +384,35 @@ GEM
       ffi (>= 0.5.0, < 2)
     rb-readline (0.5.5)
     rdoc (5.1.0)
-    redis (3.3.3)
+    redis (4.0.1)
     repo_miner (0.3.1)
       bibliothecary
       rugged
     request_store (1.3.2)
-    rspec (3.6.0)
-      rspec-core (~> 3.6.0)
-      rspec-expectations (~> 3.6.0)
-      rspec-mocks (~> 3.6.0)
-    rspec-core (3.6.0)
-      rspec-support (~> 3.6.0)
-    rspec-expectations (3.6.0)
+    rspec (3.7.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
+    rspec-core (3.7.0)
+      rspec-support (~> 3.7.0)
+    rspec-expectations (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.6.0)
-    rspec-mocks (3.6.0)
+      rspec-support (~> 3.7.0)
+    rspec-mocks (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.6.0)
-    rspec-rails (3.6.1)
+      rspec-support (~> 3.7.0)
+    rspec-rails (3.7.2)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
-      rspec-core (~> 3.6.0)
-      rspec-expectations (~> 3.6.0)
-      rspec-mocks (~> 3.6.0)
-      rspec-support (~> 3.6.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
+      rspec-support (~> 3.7.0)
     rspec-sidekiq (3.0.3)
       rspec-core (~> 3.0, >= 3.0.0)
       sidekiq (>= 2.4.0)
-    rspec-support (3.6.0)
+    rspec-support (3.7.0)
     rspec_junit_formatter (0.3.0)
       rspec-core (>= 2, < 4, != 2.12.0)
     ruby-enum (0.7.1)
@@ -433,7 +423,7 @@ GEM
     rubypants (0.6.0)
     rugged (0.26.0)
     sanitize-url (0.1.4)
-    sass (3.5.1)
+    sass (3.5.3)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -478,11 +468,11 @@ GEM
     shoulda-context (1.2.2)
     shoulda-matchers (2.8.0)
       activesupport (>= 3.0.0)
-    sidekiq (5.0.4)
+    sidekiq (5.0.5)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
-      redis (~> 3.3, >= 3.3.3)
+      redis (>= 3.3.4, < 5)
     sidekiq-unique-jobs (5.0.10)
       sidekiq (>= 4.0, <= 6.0)
       thor (~> 0)
@@ -496,7 +486,7 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    sitemap_generator (5.3.1)
+    sitemap_generator (6.0.0)
       builder (~> 3.0)
     spdx (1.3.2)
       fuzzy_match (~> 2.1)
@@ -516,37 +506,32 @@ GEM
       sprockets (>= 3.0.0)
     sql_queries_count (0.0.1)
       rails (> 3.0.0)
-    sshkit (1.14.0)
+    sshkit (1.15.1)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     sshkit-interactive (0.2.3)
       sshkit (~> 1.12)
-    stripe (3.3.1)
-      faraday (~> 0.9)
-    stripe_event (1.8.0)
-      activesupport (>= 3.1)
-      stripe (>= 1.6, < 4.0)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    tins (1.15.0)
-    toml-rb (1.0.0)
+    tins (1.15.1)
+    toml-rb (1.1.0)
       citrus (~> 3.0, > 3.0)
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.3)
     typhoeus (1.3.0)
       ethon (>= 0.9.0)
-    tzinfo (1.2.3)
+    tzinfo (1.2.4)
       thread_safe (~> 0.1)
     uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.3.0)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.2)
+    websocket-extensions (0.1.3)
     will_paginate (3.1.6)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
@@ -575,8 +560,9 @@ DEPENDENCIES
   capistrano-maintenance
   capistrano-rails
   capistrano-rails-console
+  charlock_holmes (>= 0.7.5)
   chartkick
-  codeclimate-test-reporter
+  codeclimate-test-reporter (>= 1.0.8)
   commonmarker
   concurrent-ruby-ext
   counter_culture
@@ -588,7 +574,7 @@ DEPENDENCIES
   elasticsearch-model
   elasticsearch-rails
   escape_utils
-  factory_girl_rails
+  factory_bot_rails
   faker
   faraday-http-cache
   faraday_middleware
@@ -621,13 +607,12 @@ DEPENDENCIES
   omniauth-gitlab
   org-ruby
   parallel
-  payola-payments!
   pg
   pg_query
   pghero
   pictogram
   poltergeist
-  premailer-rails
+  premailer-rails (= 1.9.7)
   puma
   rack-attack
   rack-attack-rate-limit
@@ -660,14 +645,13 @@ DEPENDENCIES
   spring
   spring-watcher-listen
   sql_queries_count
-  stripe
   turbolinks
   typhoeus
   uglifier
   will_paginate-bootstrap
 
 RUBY VERSION
-   ruby 2.4.1p111
+   ruby 2.4.2p198
 
 BUNDLED WITH
-   1.15.4
+   1.16.0

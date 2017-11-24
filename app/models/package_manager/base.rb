@@ -95,7 +95,6 @@ module PackageManager
       mapped_project = mapping(project)
       mapped_project = mapped_project.delete_if { |_key, value| value.blank? } if mapped_project.present?
       return false unless mapped_project.present?
-      puts "Saving #{mapped_project[:name]}"
       dbproject = Project.find_or_initialize_by({:name => mapped_project[:name], :platform => self.name.demodulize})
       if dbproject.new_record?
         dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions))
@@ -149,14 +148,17 @@ module PackageManager
     end
 
     def self.import
+      return if ENV['READ_ONLY'].present?
       project_names.each { |name| update(name) }
     end
 
     def self.import_recent
+      return if ENV['READ_ONLY'].present?
       recent_names.each { |name| update(name) }
     end
 
     def self.import_new
+      return if ENV['READ_ONLY'].present?
       new_names.each { |name| update(name) }
     end
 

@@ -8,7 +8,6 @@
 
 <div class="row">
   <div class="col-sm-8">
-    <%= render 'adsense/banner' %>
     <% if @contributions.any? %>
       <%= render @contributions.map(&:repository), cache: true  %>
       <%= will_paginate @contributions, page_links: false %>
@@ -19,6 +18,6 @@
     <% end %>
   </div>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
+
   </div>
 </div>

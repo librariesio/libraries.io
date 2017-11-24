@@ -146,7 +146,7 @@ module RepositoryHost
       json['values'].each do |repo|
         CreateRepositoryWorker.perform_async('Bitbucket', repo['full_name'])
       end
-      puts json['next']
+
       if json['values'].any? && json['next']
         limit = limit - 1
         REDIS.set 'bitbucket-after', Addressable::URI.parse(json['next']).query_values['after']

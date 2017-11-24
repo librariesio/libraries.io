@@ -3,30 +3,6 @@
 <div class="row">
   <div class="col-sm-8">
     <div class="panel panel-default">
-      <div class="panel-heading">Repository Monitoring Subscription</div>
-      <div class="panel-body">
-        <div class="well">
-          <% if current_user.current_plan.present? %>
-            Current Plan: <strong><%= current_user.current_plan %></strong><br>
-            Private Repositories: <strong>
-              <%= current_user.current_private_repo_count %>/<%= current_user.max_private_repo_count %>
-            </strong><br>
-            Cost: <strong>
-              <%= number_to_currency current_user.current_plan.amount/100.0, unit: '£' %> per <%= current_user.current_plan.interval %>
-            </strong>
-          <% else %>
-            Current Plan: <strong>Open Source</strong><br>
-            Private Repositories: <strong>0</strong><br>
-            Cost: <strong>
-              Free
-            </strong>
-          <% end %>
-        </div>
-        <%= link_to 'Manage Subscription', pricing_path, class: 'btn btn-success' %>
-      </div>
-    </div>
-
-    <div class="panel panel-default">
       <div class="panel-heading">Emails</div>
       <div class="panel-body">
         <%= simple_form_for(current_user, url: account_path, html: { class: 'form-vertical' }) do |form| %>
@@ -102,6 +78,6 @@
     </div>
   </div>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
+
   </div>
 </div>

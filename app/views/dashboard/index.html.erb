@@ -4,7 +4,7 @@
     <br>
   </div>
 </div>
-<% if current_user.has_active_subscription? && current_user.private_repo_token.blank? %>
+<% if current_user.private_repo_token.blank? %>
 <div class="row">
   <div class="col-md-12">
     <div class="alert alert-success" role="alert">
@@ -31,7 +31,7 @@
       </div>
       <% @orgs.each do |org| %>
         <div class='org-filter <%= 'active' if @org && org.login == @org.login %>'>
-          <%= link_to url_for(org: org) do %>
+          <%= link_to url_for(org: org.login) do %>
             <%= image_tag org.avatar_url(60), width: 30, height: 30 %>
             <%= org.login %>
           <% end %>
@@ -101,7 +101,6 @@
       <%= will_paginate @repos, page_links: false %>
     </div>
     <div class="col-md-3">
-      <%= render 'adsense/sidebar' %>
       <h5>How does this work?</h5>
       <p>
         With the help of a webhook, Libraries.io can automatically keep track of all

@@ -127,6 +127,12 @@ class Project < ApplicationRecord
   end
 
   def sync
+    check_status
+    if status == 'Removed'
+      set_last_synced_at
+      return
+    end
+
     result = platform_class.update(name)
     set_last_synced_at unless result
   rescue
