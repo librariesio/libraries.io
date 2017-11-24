@@ -204,7 +204,7 @@ class Repository < ApplicationRecord
   end
 
   def manual_sync(token = nil)
-    update_all_info_async
+    update_all_info_async(token)
     self.last_synced_at = Time.zone.now
     save
   end
@@ -218,12 +218,14 @@ class Repository < ApplicationRecord
     check_status
     return if status == 'Removed'
     update_from_repository(token)
-    download_owner
-    download_fork_source(token)
-    download_readme(token)
-    download_tags(token)
-    download_contributions(token)
-    download_manifests(token)
+    if last_synced_at < 2.minutes.ago
+      download_owner
+      download_fork_source(token)
+      download_readme(token)
+      download_tags(token)
+      download_contributions(token)
+      download_manifests(token)
+    end
     update_source_rank(true)
     update_attributes(last_synced_at: Time.now)
   end
