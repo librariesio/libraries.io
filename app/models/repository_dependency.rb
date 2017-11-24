@@ -10,7 +10,7 @@ class RepositoryDependency < ApplicationRecord
   scope :platform, ->(platform) { where('lower(repository_dependencies.platform) = ?', platform.try(:downcase)) }
   scope :kind, ->(kind) { where(kind: kind) }
 
-  before_create :update_project_id
+  before_create :set_project_id
 
   alias_attribute :name, :project_name
   alias_attribute :latest_stable, :latest_stable_release_number
@@ -42,6 +42,10 @@ class RepositoryDependency < ApplicationRecord
         true
       end
     end
+  end
+
+  def set_project_id
+    self.project_id = find_project_id
   end
 
   def update_project_id
