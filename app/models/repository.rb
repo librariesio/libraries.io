@@ -218,7 +218,7 @@ class Repository < ApplicationRecord
     check_status
     return if status == 'Removed'
     update_from_repository(token)
-    if last_synced_at < 2.minutes.ago
+    if last_synced_at && last_synced_at < 2.minutes.ago
       download_owner
       download_fork_source(token)
       download_readme(token)
