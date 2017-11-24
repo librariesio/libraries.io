@@ -48,7 +48,7 @@ class Dependency < ApplicationRecord
   end
 
   def set_project_id
-    self.project_id = find_project_id
+    self.project_id = find_project_id unless project_id.present?
   end
 
   def update_project_id
