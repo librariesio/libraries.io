@@ -58,7 +58,7 @@ module DependencyMiner
     end
 
     # write activities to the database
-    DependencyActivity.import(activities.map{|a| DependencyActivity.new(a) })
+    DependencyActivity.ar_import(activities.map{|a| DependencyActivity.new(a) })
 
 
 
