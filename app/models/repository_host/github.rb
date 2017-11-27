@@ -35,6 +35,11 @@ module RepositoryHost
       "#{url}/blob/#{sha}/"
     end
 
+    def commit_url(sha = nil)
+      sha ||= repository.default_branch
+      "#{url}/commit/#{sha}"
+    end
+
     def commits_url(author = nil)
       author_param = author.present? ? "?author=#{author}" : ''
       "#{url}/commits#{author_param}"

@@ -29,6 +29,11 @@ module RepositoryHost
       "#{url}/commits"
     end
 
+    def commit_url(sha = nil)
+      sha ||= repository.default_branch
+      "#{url}/commits/{#{sha}"
+    end
+
     def compare_url(branch_one, branch_two)
       "#{url}/compare/#{branch_two}..#{branch_one}#diff"
     end
