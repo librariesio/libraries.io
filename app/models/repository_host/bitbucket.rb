@@ -131,6 +131,7 @@ module RepositoryHost
           published_at: data.utctimestamp
         })
       end
+      repository.projects.find_each(&:forced_save) if remote_tags.any?
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
