@@ -318,6 +318,10 @@ class Repository < ApplicationRecord
     uuid # legacy alias
   end
 
+  def sorted_tags
+    @sorted_tags ||= tags.sort
+  end
+
   def repository_host
     @repository_host ||= RepositoryHost.const_get(host_type.capitalize).new(self)
   end
