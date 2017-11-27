@@ -213,7 +213,7 @@ GEM
       escape_utils (~> 1.1.0)
       mime-types (>= 1.19)
       rugged (>= 0.25.1)
-    github-markup (1.6.1)
+    github-markup (1.6.2)
     gitlab (4.2.0)
       httparty
       terminal-table
@@ -512,7 +512,7 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.8)
     tins (1.15.1)
-    toml-rb (1.1.0)
+    toml-rb (1.1.1)
       citrus (~> 3.0, > 3.0)
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
