@@ -23,6 +23,8 @@
 //= require subtome
 //= require turbolinks
 //= require autotrack
+//= require jsapi
+//= require chartkick
 
 document.addEventListener('turbolinks:load', function(){
   $('.tip').tooltip({placement: 'bottom'})
