@@ -2,14 +2,14 @@ namespace :projects do
   desc 'Sync projects'
   task sync: :environment do
     exit if ENV['READ_ONLY'].present?
-    Project.not_removed.order('last_synced_at ASC').where.not(last_synced_at: nil).limit(1000).each(&:async_sync)
-    Project.not_removed.where(last_synced_at: nil).order('updated_at ASC').limit(1000).each(&:async_sync)
+    Project.not_removed.order('last_synced_at ASC').where.not(last_synced_at: nil).limit(500).each(&:async_sync)
+    Project.not_removed.where(last_synced_at: nil).order('updated_at ASC').limit(500).each(&:async_sync)
   end
 
   desc 'Update sourcerank of projects'
   task update_source_ranks: :environment do
     exit if ENV['READ_ONLY'].present?
-    Project.where('projects.updated_at < ?', 1.week.ago).order('projects.updated_at ASC').limit(1000).each(&:update_source_rank_async)
+    Project.where('projects.updated_at < ?', 1.week.ago).order('projects.updated_at ASC').limit(500).each(&:update_source_rank_async)
   end
 
   desc 'Link dependencies to projects'
