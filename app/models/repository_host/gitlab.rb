@@ -132,7 +132,7 @@ module RepositoryHost
           published_at: tag.commit.committed_date
         })
       end
-      repository.projects.find_each(&:forced_save) if remote_tags.any?
+      repository.projects.find_each(&:forced_save) if remote_tags.present?
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
