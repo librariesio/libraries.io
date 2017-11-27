@@ -1,0 +1,35 @@
+<div class='project' style="border-color: <%= activity.repository.color %>;">
+  <h5>
+    <%= link_to activity.repository.full_name, repository_path(activity.repository.to_param) %>
+    <small>
+      <%= fa_icon("lock") if activity.repository.private? %>
+      <%= fa_icon("code-fork") if activity.repository.fork? %>
+    </small>
+  </h5>
+
+  <div>
+    <% if activity.action == 'added' %>
+      Added version <%= activity.requirement %> to <%= activity.kind %>.
+    <% elsif activity.action == 'modified'%>
+      Updated from version <%= activity.previous_requirement %> to <%= activity.requirement %>.
+    <% elsif activity.action == 'removed' %>
+      Removed version <%= activity.requirement %>
+    <% end %> 
+  </div>
+
+  <small>
+    <%= fa_icon activity.repository.host_type.downcase %>
+    <% if activity.repository.is_removed? %>
+      <%= fa_icon('exclamation-triangle') %> This repository is no longer available
+    <% elsif activity.repository.is_deprecated? %>
+      <%= fa_icon('exclamation-triangle') %> This repository is deprecated -
+    <% elsif activity.repository.is_unmaintained? %>
+      <%= fa_icon('exclamation-triangle') %> This repository is no longer maintained -
+    <% end %>
+    <% unless activity.repository.is_removed? %>
+      <% if activity.committed_at && activity.commit_sha %>
+        Committed <%= timeago_tag activity.committed_at %> <%= link_to activity.commit_sha.last(7), activity.repository.commit_url(activity.commit_sha) %>
+      <% end %>
+    <% end %>
+  </small>
+</div>
