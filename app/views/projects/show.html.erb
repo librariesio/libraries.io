@@ -61,7 +61,7 @@
     <% end %>
 
     <% if @version %>
-      <div id='version_dependencies' style='display:none;' data-url="<%= version_dependencies_path(@version.to_param) %>"></div>
+      <div id='version_dependencies' style='display:none;' data-url="<%= version_dependencies_path(@project.to_param.merge(number: @version.number)) %>"></div>
     <% end %>
 
     <div id='top_dependent_repos' style='display:none;' data-url="<%= top_dependent_repos_path(@project.to_param) %>"></div>
