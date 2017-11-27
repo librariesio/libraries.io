@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171109154509) do
+ActiveRecord::Schema.define(version: 20171127120330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20171109154509) do
     t.datetime "committed_at",         :index=>{:name=>"index_dependency_activities_on_committed_at"}
     t.datetime "created_at",           :null=>false
     t.datetime "updated_at",           :null=>false
+    t.string   "branch"
   end
 
   create_table "identities", force: :cascade do |t|

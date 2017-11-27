@@ -88,7 +88,8 @@ module DependencyMiner
       platform: manifest[:platform],
       previous_requirement: dependency[:previous_requirement],
       previous_kind: dependency[:previous_type],
-      committed_at: commit.timestamp
+      committed_at: commit.timestamp,
+      branch: default_branch
     }
   end
 end
