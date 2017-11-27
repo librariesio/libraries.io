@@ -11,7 +11,7 @@
 <p>
   Dependency activity across <strong><%= number_to_human(@total) %></strong> open source repositories
 </p>
-<% if true %>
+<% if @all_counts.any? %>
     
   <%= line_chart @activities.group(:action).group_by_month(:committed_at).count %>
 
