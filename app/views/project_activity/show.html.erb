@@ -1,0 +1,34 @@
+<% title "Activity for #{@project} on #{@project.platform_name} - Libraries.io" %>
+<% description "Dependency activity accross #{number_to_human(@total)} open source repositories that depend on #{@project} on #{@project.platform_name}" %>
+<% content_for :meta, render_meta(@project) %>
+
+<h1>
+  <%= fa_icon 'line-chart' %>
+  Activity for <%= link_to @project, project_path(@project.to_param) %>
+  on <%= link_to platform_name(@project.platform), platform_path(@project.platform) %>
+</h1>
+
+<p>
+  Dependency activity across <strong><%= number_to_human(@total) %></strong> open source repositories
+</p>
+<% if true %>
+    
+  <%= line_chart @activities.group(:action).group_by_month(:committed_at).count %>
+
+  <hr>
+  <div class="row">
+    <div class="col-sm-8">
+      <h4>
+        Recent depenednecy activity for <%= link_to @project, project_path(@project.to_param) %>
+        <% if params[:requirements].present? %>
+          <code><%= params[:requirements] %></code>
+        <% end %>
+      </h4>
+
+      <%= render @activities, cache: true %>
+      <%= will_paginate @activities, page_links: false %>
+    </div>
+  </div>
+<% else %>
+  No dependent repositories found.
+<% end %>
