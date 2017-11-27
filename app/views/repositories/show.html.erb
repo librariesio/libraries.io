@@ -25,7 +25,7 @@
     <h1>
       <% if repo.avatar_url(100).present? %>
         <% if repo.owner.to_s.present? %>
-          <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: nil), user_path(host_type: repo.host_type.downcase, login: repo.owner) %>
+          <%= link_to image_tag(repo.avatar_url(100), width: 50, height: 50, alt: nil), user_path({host_type: repo.host_type.downcase, login: repo.owner_name}) %>
         <% else %>
           <%= image_tag(repo.avatar_url(100), width: 50, height: 50) %>
         <% end %>
