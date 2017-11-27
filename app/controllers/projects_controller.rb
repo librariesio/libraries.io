@@ -95,7 +95,7 @@ class ProjectsController < ApplicationController
       if @project.repository.nil?
         @tags = []
       else
-        @tags = @project.tags.published.order('published_at DESC').paginate(page: page_number)
+        @tags = @project.repository.tags.published.order('published_at DESC').paginate(page: page_number)
       end
       respond_to do |format|
         format.html
