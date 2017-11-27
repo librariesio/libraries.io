@@ -33,7 +33,7 @@ module RepositoryHost
 
     def commit_url(sha = nil)
       sha ||= repository.default_branch
-      "#{url}/commits/#{sha}"
+      "#{url}/commit/#{sha}"
     end
 
     def download_contributions(token = nil)
