@@ -69,14 +69,14 @@ class ApplicationController < ActionController::Base
   end
 
   def find_project
-    @project = Project.platform(params[:platform]).where(name: params[:name]).includes(:repository, :versions).first
-    @project = Project.lower_platform(params[:platform]).lower_name(params[:name]).includes(:repository, :versions).first if @project.nil?
+    @project = Project.visible.platform(params[:platform]).where(name: params[:name]).includes(:repository, :versions).first
+    @project = Project.visible.lower_platform(params[:platform]).lower_name(params[:name]).includes(:repository, :versions).first if @project.nil?
     raise ActiveRecord::RecordNotFound if @project.nil?
     @color = @project.color
   end
 
   def find_project_lite
-    @project = Project.platform(params[:platform]).where(name: params[:name]).first
+    @project = Project.visible.platform(params[:platform]).where(name: params[:name]).first
     raise ActiveRecord::RecordNotFound if @project.nil?
   end
 
@@ -220,7 +220,7 @@ class ApplicationController < ActionController::Base
     if params[:platform].present?
       find_platform(:platform)
       raise ActiveRecord::RecordNotFound if @platform_name.nil?
-      scope.platform(@platform_name)
+      scope.platform(@platform_name).visible
     else
       scope
     end

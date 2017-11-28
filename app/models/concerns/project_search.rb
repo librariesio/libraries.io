@@ -81,6 +81,7 @@ module ProjectSearch
           { range: { contributions_count: { lte: 5, gte: 1 } } }
         ],
         must_not: [
+          { term: { "status" => "Hidden" } },
           { term: { "status" => "Removed" } },
           { term: { "status" => "Unmaintained" } }
         ]
@@ -91,6 +92,7 @@ module ProjectSearch
       cta_search({
         must_not: [
           { exists: { field: "normalized_licenses" } },
+          { term: { "status" => "Hidden" } },
           { term: { "status" => "Removed" } },
           { term: { "status" => "Unmaintained" } }
         ]
@@ -169,9 +171,8 @@ module ProjectSearch
                    bool: {
                      must: [],
                      must_not: [
-                       {
-                         term: { "status" => "Removed" }
-                       }
+                       { term: { "status" => "Hidden" } },
+                       { term: { "status" => "Removed" } }
                      ]
                   }
                 }

@@ -29,7 +29,7 @@ class DashboardController < ApplicationController
   end
 
   def muted
-    @projects = current_user.muted_projects.paginate(page: page_number)
+    @projects = current_user.muted_projects.visible.paginate(page: page_number)
   end
 
   def sync

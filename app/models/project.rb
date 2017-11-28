@@ -66,11 +66,13 @@ class Project < ApplicationRecord
   scope :most_dependents, -> { with_dependents.order('dependents_count DESC') }
   scope :most_dependent_repos, -> { with_dependent_repos.order('dependent_repos_count DESC') }
 
-  scope :maintained, -> { where('projects."status" not in (?) OR projects."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
+  scope :visible, -> { where('projects."status" != ? OR projects."status" IS NULL', "Hidden")}
+  scope :maintained, -> { where('projects."status" not in (?) OR projects."status" IS NULL', ["Deprecated", "Removed", "Unmaintained", "Hidden"])}
   scope :deprecated, -> { where('projects."status" = ?', "Deprecated")}
-  scope :not_removed, -> { where('projects."status" != ? OR projects."status" IS NULL', "Removed")}
+  scope :not_removed, -> { where('projects."status" not in (?) OR projects."status" IS NULL', ["Removed", "Hidden"])}
   scope :removed, -> { where('projects."status" = ?', "Removed")}
   scope :unmaintained, -> { where('projects."status" = ?', "Unmaintained")}
+  scope :hidden, -> { where('projects."status" = ?', "Hidden")}
 
   scope :indexable, -> { not_removed.includes(:repository) }
 
