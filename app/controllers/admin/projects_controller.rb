@@ -35,7 +35,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:repository_url, :licenses, :status)
+    params.require(:project).permit(:repository_url, :licenses, :status, :hidden)
   end
 
   def search(query)
