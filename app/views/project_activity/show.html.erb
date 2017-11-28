@@ -39,9 +39,9 @@
           <% active = type == params[:type] %>
           <li class='<%= 'active' if active %>'>
             <% if active %>
-              <%= link_to type, project_activity_path(params.permit(:requirements).merge(type: nil, page: nil)) %>
+              <%= link_to type, project_activity_path %>
             <% else %>
-              <%= link_to type, project_activity_path(params.permit(:requirements).merge(type: type, page: nil)) %>
+              <%= link_to type, project_activity_path(type: type) %>
               <small><%= number_to_human(count) %></small>
             <% end %>
           </li>
@@ -57,9 +57,9 @@
           <% active = requirements == params[:requirements] %>
           <li class='<%= 'active' if active %>'>
             <% if active %>
-              <%= link_to requirements, project_activity_path(params.permit(:type).merge(requirements: nil, page: nil)) %>
+              <%= link_to requirements, project_activity_path() %>
             <% else %>
-              <%= link_to requirements, project_activity_path(params.permit(:type).merge(requirements: requirements)) %>
+              <%= link_to requirements, project_activity_path(requirements: requirements) %>
               <small><%= number_to_human(count) %></small>
             <% end %>
           </li>
