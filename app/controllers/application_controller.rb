@@ -247,4 +247,15 @@ class ApplicationController < ActionController::Base
   def in_read_only_mode?
     ENV['READ_ONLY'].present?
   end
+
+  helper_method :sort_by_semver_range
+  def sort_by_semver_range(counts, limit)
+    counts.sort_by{|_k,v| -v}
+               .first(limit)
+               .sort_by{|k,_v|
+                 k.gsub(/\~|\>|\<|\^|\=|\*|\s/,'')
+                 .gsub('-','.')
+                 .split('.').map{|i| i.to_i}
+               }
+  end
 end

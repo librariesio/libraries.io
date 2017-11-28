@@ -51,7 +51,7 @@
         Filter by required version range
       </h4>
       <ul class='filter'>
-        <% sort_by_semver_range(60).each do |requirements,count| %>
+        <% sort_by_semver_range(@all_counts, 60).each do |requirements,count| %>
           <% next unless requirements.present? %>
           <% active = requirements == params[:requirements] %>
           <li class='<%= 'active' if active %>'>
