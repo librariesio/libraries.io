@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171127155819) do
+ActiveRecord::Schema.define(version: 20171127120330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -157,7 +157,6 @@ ActiveRecord::Schema.define(version: 20171127155819) do
     t.string   "status"
     t.datetime "last_synced_at"
     t.integer  "dependent_repos_count"
-    t.boolean  "hidden",                      :default=>false
 
     t.index ["platform", "name"], :name=>"index_projects_on_platform_and_name_lower", :case_sensitive=>false
   end
