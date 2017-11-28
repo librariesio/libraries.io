@@ -34,12 +34,8 @@
 
     <% end %>
     <% if activity.committed_at && activity.commit_sha %>
-      Committed <%= timeago_tag activity.committed_at %> in 
-      <% if activity.project %>
-        <%= link_to activity.commit_sha.first(7), activity.project.commit_url(activity.commit_sha) %>
-      <% else %>
-        <%= activity.commit_sha.first(7) %>
-      <% end %>
+      Committed <%= timeago_tag activity.committed_at %> in
+      <%= link_to activity.commit_sha.first(7), activity.repository.commit_url(activity.commit_sha) %>
     <% end %>
   </small>
 </div>
