@@ -4,8 +4,8 @@ class ProjectActivityController < ApplicationController
   def show
     original_scope = @project.dependency_activities
     scope = original_scope
-    scope = original_scope.where(action: params[:type]) if params[:type].present?
     scope = original_scope.where(requirement: params[:requirements]) if params[:requirements].present?
+    scope = scope.where(action: params[:type]) if params[:type].present?
     @all_counts = original_scope.group(:requirement).count.select{|k,v| k.present? }
     @types = original_scope.group(:action).count
     @total = DependencyActivity.where(project_id: @project.id).distinct.count(:repository_id)
