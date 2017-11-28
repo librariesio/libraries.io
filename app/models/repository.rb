@@ -24,7 +24,7 @@ class Repository < ApplicationRecord
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :dependency_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :dependency_repos, -> { group('repositories.id') }, through: :dependency_projects, source: :repository
-  has_many :dependency_activities
+  has_many :dependency_activities, dependent: :delete_all
   has_many :repository_subscriptions, dependent: :delete_all
   has_many :web_hooks, dependent: :delete_all
   has_many :issues, dependent: :delete_all
