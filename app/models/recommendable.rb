@@ -2,7 +2,7 @@ module Recommendable
   extend ActiveSupport::Concern
 
   def recommended_projects
-    projects = Project.visible.where(id: recommended_project_ids).order("position(','||projects.id::text||',' in '#{recommended_project_ids.join(',')}'), projects.rank DESC NULLS LAST")
+    projects = Project.where(id: recommended_project_ids).order("position(','||projects.id::text||',' in '#{recommended_project_ids.join(',')}'), projects.rank DESC NULLS LAST")
     projects = unfiltered_recommendations if projects.empty?
     projects.where.not(id: already_watching_ids).maintained.includes(:repository, :versions)
   end
@@ -39,7 +39,7 @@ module Recommendable
   end
 
   def unfiltered_recommendations
-    ids = Project.visible.maintained.most_dependents.limit(50).pluck(:id) + Project.maintained.most_watched.limit(50).pluck(:id)
+    ids = Project.maintained.most_dependents.limit(50).pluck(:id) + Project.maintained.most_watched.limit(50).pluck(:id)
     Project.where(id: sort_array_by_frequency(ids)).order('projects.rank DESC NULLS LAST').maintained
   end
 

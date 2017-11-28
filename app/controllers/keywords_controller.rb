@@ -6,7 +6,7 @@ class KeywordsController < ApplicationController
   def show
     find_keyword
 
-    scope = Project.keyword(@keyword).maintained.visible
+    scope = Project.keyword(@keyword).maintained
     @created = scope.few_versions.order('projects.created_at DESC').limit(5).includes(:repository)
     @updated = scope.many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:repository)
     @watched = scope.most_watched.limit(5).includes(:repository)

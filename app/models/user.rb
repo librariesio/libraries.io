@@ -62,7 +62,7 @@ class User < ApplicationRecord
   end
 
   def all_subscribed_projects
-    Project.where(id: all_subscribed_project_ids).visible
+    Project.where(id: all_subscribed_project_ids)
   end
 
   def to_s
