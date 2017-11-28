@@ -65,7 +65,7 @@ class ProjectsController < ApplicationController
   end
 
   def dependents
-    @dependents = @project.dependent_projects.paginate(page: page_number)
+    @dependents = @project.dependent_projects.visible.paginate(page: page_number)
   end
 
   def dependent_repos
@@ -117,7 +117,7 @@ class ProjectsController < ApplicationController
   end
 
   def trending
-    orginal_scope = Project.includes(:repository).recently_created.maintained
+    orginal_scope = Project.includes(:repository).recently_created.maintained.visible
     scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
     scope = current_language.present? ? scope.language(current_language) : scope
     @projects = scope.hacker_news.paginate(page: page_number)
@@ -139,14 +139,14 @@ class ProjectsController < ApplicationController
   end
 
   def digital_infrastructure
-    orginal_scope = Project.digital_infrastructure
+    orginal_scope = Project.digital_infrastructure.visible
     scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
     @projects = scope.order('projects.dependent_repos_count DESC').paginate(page: page_number)
     @platforms = orginal_scope.group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
   end
 
   def unseen_infrastructure
-    orginal_scope = Project.unsung_heroes
+    orginal_scope = Project.unsung_heroes.visible
     scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
     @projects = scope.order('projects.dependent_repos_count DESC').paginate(page: page_number)
     @platforms = orginal_scope.group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
@@ -187,7 +187,7 @@ class ProjectsController < ApplicationController
   end
 
   def project_scope(scope_name)
-    @platforms = Project.send(scope_name).group('platform').count.sort_by(&:last).reverse
+    @platforms = Project.visible.send(scope_name).group('platform').count.sort_by(&:last).reverse
     @projects = platform_scope.send(scope_name).includes(:repository).order('dependents_count DESC, projects.rank DESC NULLS LAST, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 end

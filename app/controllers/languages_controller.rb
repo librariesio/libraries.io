@@ -5,7 +5,7 @@ class LanguagesController < ApplicationController
 
   def show
     find_language
-    scope = Project.language(@language).maintained
+    scope = Project.language(@language).maintained.visible
     @created = scope.few_versions.order('projects.created_at DESC').limit(5).includes(:repository)
     @updated = scope.many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:repository)
     @color = Linguist::Language[@language].try(:color)

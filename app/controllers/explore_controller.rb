@@ -5,7 +5,7 @@ class ExploreController < ApplicationController
     @languages = Project.popular_languages(:facet_limit => 40).first(21)
     @licenses = Project.popular_licenses(:facet_limit => 40).first(10)
 
-    project_scope = Project.includes(:repository).maintained.with_description
+    project_scope = Project.visible.includes(:repository).maintained.with_description
     repo_scope = Repository.source.with_description.open_source.limit(6)
 
     @trending_projects = project_scope.recently_created.hacker_news.limit(10).to_a.uniq(&:name).first(6)

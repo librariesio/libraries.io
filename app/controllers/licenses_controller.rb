@@ -5,7 +5,7 @@ class LicensesController < ApplicationController
 
   def show
     find_license
-    scope = Project.license(@license.id).maintained
+    scope = Project.license(@license.id).maintained.visible
     @created = scope.few_versions.order('projects.created_at DESC').limit(5).includes(:repository)
     @updated = scope.many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:repository)
     @popular = scope.order('projects.rank DESC NULLS LAST').limit(5).includes(:repository)

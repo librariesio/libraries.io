@@ -5,7 +5,7 @@ class PlatformsController < ApplicationController
 
   def show
     find_platform
-    scope = Project.platform(@platform_name).maintained
+    scope = Project.platform(@platform_name).maintained.visible
     @created = scope.few_versions.order('projects.created_at DESC').limit(5).includes(:repository)
     @updated = scope.many_versions.order('projects.latest_release_published_at DESC').limit(5).includes(:repository)
     @watched = scope.most_watched.limit(5).includes(:repository)

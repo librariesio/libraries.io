@@ -62,7 +62,7 @@ class User < ApplicationRecord
   end
 
   def all_subscribed_projects
-    Project.where(id: all_subscribed_project_ids)
+    Project.where(id: all_subscribed_project_ids).visible
   end
 
   def to_s
@@ -70,7 +70,7 @@ class User < ApplicationRecord
   end
 
   def all_subscribed_project_ids
-    (subscribed_projects.pluck(:id) + watched_dependent_projects.pluck(:id)).uniq
+    (subscribed_projects.visible.pluck(:id) + watched_dependent_projects.visible.pluck(:id)).uniq
   end
 
   def all_subscribed_versions

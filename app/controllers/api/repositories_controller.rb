@@ -6,7 +6,7 @@ class Api::RepositoriesController < Api::ApplicationController
   end
 
   def projects
-    paginate json: @repository.projects.order(custom_order).includes(:versions, :repository)
+    paginate json: @repository.projects.visible.order(custom_order).includes(:versions, :repository)
   end
 
   def dependencies
