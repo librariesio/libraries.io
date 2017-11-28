@@ -14,7 +14,7 @@
       Updated from version <%= activity.previous_requirement %> to <%= activity.requirement %>.
     <% elsif activity.action == 'removed' %>
       Removed version <%= activity.requirement %>
-    <% end %> 
+    <% end %>
   </div>
 
   <small>
@@ -28,7 +28,7 @@
     <% end %>
     <% unless activity.repository.is_removed? %>
       <% if activity.committed_at && activity.commit_sha %>
-        Committed <%= timeago_tag activity.committed_at %> <%= link_to activity.commit_sha.last(7), activity.repository.commit_url(activity.commit_sha) %>
+        Committed <%= timeago_tag activity.committed_at %> in <%= link_to activity.commit_sha.first(7), activity.repository.commit_url(activity.commit_sha) %>
       <% end %>
     <% end %>
   </small>

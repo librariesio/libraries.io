@@ -1,0 +1,45 @@
+<div class='project' style="border-color: <%= activity.project.try(:color) %>;">
+  <h5>
+    <% if activity.project %>
+      <%= link_to activity.project.full_name, project_path(activity.project.to_param) %>
+      <small>
+        <%= fa_icon("lock") if activity.project.private? %>
+        <%= fa_icon("code-fork") if activity.project.fork? %>
+      </small>
+    <% else %>
+      <%= activity.project_name %>
+    <% end %>
+  </h5>
+
+  <div>
+    <% if activity.action == 'added' %>
+      Added version <%= activity.requirement %> to <%= activity.kind %>.
+    <% elsif activity.action == 'modified'%>
+      Updated from version <%= activity.previous_requirement %> to <%= activity.requirement %>.
+    <% elsif activity.action == 'removed' %>
+      Removed version <%= activity.requirement %>
+    <% end %>
+  </div>
+
+  <small>
+    <% if activity.project %>
+      <%= fa_icon activity.project.host_type.downcase %>
+      <% if activity.project.is_removed? %>
+        <%= fa_icon('exclamation-triangle') %> This project is no longer available
+      <% elsif activity.project.is_deprecated? %>
+        <%= fa_icon('exclamation-triangle') %> This project is deprecated -
+      <% elsif activity.project.is_unmaintained? %>
+        <%= fa_icon('exclamation-triangle') %> This project is no longer maintained -
+      <% end %>
+
+    <% end %>
+    <% if activity.committed_at && activity.commit_sha %>
+      Committed <%= timeago_tag activity.committed_at %> in 
+      <% if activity.project %>
+        <%= link_to activity.commit_sha.first(7), activity.project.commit_url(activity.commit_sha) %>
+      <% else %>
+        <%= activity.commit_sha.first(7) %>
+      <% end %>
+    <% end %>
+  </small>
+</div>
