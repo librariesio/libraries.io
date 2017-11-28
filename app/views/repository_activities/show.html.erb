@@ -46,7 +46,24 @@
           </li>
         <% end %>
       </ul>
-
+      <h4>
+        <%= fa_icon 'arrows-h' %>
+        Filter by required version range
+      </h4>
+      <ul class='filter'>
+        <% sort_by_semver_range(60).each do |requirements,count| %>
+          <% next unless requirements.present? %>
+          <% active = requirements == params[:requirements] %>
+          <li class='<%= 'active' if active %>'>
+            <% if active %>
+              <%= link_to requirements, project_activity_path(params.permit(:type).merge(requirements: nil, page: nil)) %>
+            <% else %>
+              <%= link_to requirements, project_activity_path(params.permit(:type).merge(requirements: requirements)) %>
+              <small><%= number_to_human(count) %></small>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
     </div>
   </div>
 <% else %>
