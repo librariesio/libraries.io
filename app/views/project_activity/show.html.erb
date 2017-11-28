@@ -11,9 +11,9 @@
 <p>
   Dependency activity across <strong><%= number_to_human(@total) %></strong> open source repositories
 </p>
-<% if @all_counts.any? %>
-    
-  <%= line_chart @activities.group(:action).group_by_month(:committed_at).count %>
+<% if @chart_data.any? %>
+
+  <%= line_chart @chart_data %>
 
   <hr>
   <div class="row">
@@ -27,6 +27,27 @@
 
       <%= render @activities, cache: true %>
       <%= will_paginate @activities, page_links: false %>
+    </div>
+    <div class="col-sm-4">
+      <h4>
+        <%= fa_icon 'link' %>
+        Filter by Action
+      </h4>
+      <ul class='filter'>
+        <% @types.sort_by{|k,v| -v}.each do |type, count| %>
+          <% next unless type.present? %>
+          <% active = type == params[:type] %>
+          <li class='<%= 'active' if active %>'>
+            <% if active %>
+              <%= link_to type, project_activity_path(params.permit(:requirements).merge(type: nil, page: nil)) %>
+            <% else %>
+              <%= link_to type, project_activity_path(params.permit(:requirements).merge(type: type, page: nil)) %>
+              <small><%= number_to_human(count) %></small>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+
     </div>
   </div>
 <% else %>
