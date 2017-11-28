@@ -37,6 +37,7 @@ class Project < ApplicationRecord
   scope :lower_platform, ->(platform) { where('lower(projects.platform) = ?', platform.try(:downcase)) }
   scope :lower_name, ->(name) { where('lower(projects.name) = ?', name.try(:downcase)) }
 
+  scope :visible, -> { where(hidden: false) }
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
   scope :without_repository_url, -> { where("repository_url IS ? OR repository_url = ''", nil) }

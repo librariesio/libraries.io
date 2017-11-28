@@ -54,6 +54,26 @@ ActiveRecord::Schema.define(version: 20171127155819) do
     t.datetime "updated_at"
   end
 
+  create_table "dependency_activities", force: :cascade do |t|
+    t.integer  "repository_id",        :index=>{:name=>"index_dependency_activities_on_repository_id"}
+    t.integer  "project_id",           :index=>{:name=>"index_dependency_activities_on_project_id"}
+    t.string   "action"
+    t.string   "project_name"
+    t.string   "commit_message"
+    t.string   "requirement"
+    t.string   "kind"
+    t.string   "manifest_path"
+    t.string   "manifest_kind"
+    t.string   "commit_sha"
+    t.string   "platform"
+    t.string   "previous_requirement"
+    t.string   "previous_kind"
+    t.datetime "committed_at",         :index=>{:name=>"index_dependency_activities_on_committed_at"}
+    t.datetime "created_at",           :null=>false
+    t.datetime "updated_at",           :null=>false
+    t.string   "branch"
+  end
+
   create_table "identities", force: :cascade do |t|
     t.string   "uid",                :index=>{:name=>"index_identities_on_uid"}
     t.string   "provider"
