@@ -49,13 +49,13 @@ Rails.application.routes.draw do
       get '/:host_type/:login', to: 'repository_users#show'
     end
 
-    get '/:platform/:name/contributors', to: 'projects#contributors', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
-    get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }, as: :version_tree
-    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }
-    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
-    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
-    get '/:platform/:name/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }, as: :tree
-    get '/:platform/:name', to: 'projects#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
+    get '/:platform/:name/contributors', to: 'projects#contributors', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%@]+/ }
+    get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%@]+/, :version => /[\w\.\-]+/ }, as: :version_tree
+    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%@]+/, :version => /[\w\.\-]+/ }
+    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%@]+/ }
+    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%@]+/ }
+    get '/:platform/:name/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%@]+/ }, as: :tree
+    get '/:platform/:name', to: 'projects#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%@]+/ }
   end
 
   namespace :admin do
