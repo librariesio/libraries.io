@@ -118,3 +118,6 @@ group :production do
   gem 'lograge'
   gem 'rails_safe_tasks'
 end
+
+# Added at 2017-12-02 09:52:32 +0900 by ngalim:
+gem "stripe_event", "= 1.9.0"
