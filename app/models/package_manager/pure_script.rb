@@ -1,5 +1,5 @@
 module PackageManager
-  class PscPackage < Base
+  class PureScript < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
     BIBLIOTHECARY_PLANNED = true
@@ -29,7 +29,7 @@ module PackageManager
     end
 
     def self.formatted_name
-      'psc-package'
+      'PureScript'
     end
   end
 end

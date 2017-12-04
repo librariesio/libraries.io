@@ -212,9 +212,9 @@ namespace :download do
     PackageManager::PlatformIO.import_async
   end
 
-  desc 'Download all psc-package packages asynchronously'
-  task psc_package_all: :environment do
-    PackageManager::PscPackage.import_async
+  desc 'Download all PureScript packages asynchronously'
+  task purescript_all: :environment do
+    PackageManager::PureScript.import_async
   end
 
   desc 'Download recent Pub packages asynchronously'

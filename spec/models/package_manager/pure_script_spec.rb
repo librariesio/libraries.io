@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-describe PackageManager::PscPackage do
+describe PackageManager::PureScript do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
 
-  it 'has formatted name of "psc-package"' do
-    expect(described_class.formatted_name).to eq('psc-package')
+  it 'has formatted name of "PureScript"' do
+    expect(described_class.formatted_name).to eq('PureScript')
   end
 
   describe '#install_instructions' do
