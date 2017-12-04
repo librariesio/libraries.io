@@ -227,6 +227,11 @@ namespace :download do
     PackageManager::Pypi.import_async
   end
 
+  desc 'Download recent Racket packages asynchronously'
+  task racket: :environment do
+    PackageManager::Racket.import_async
+  end
+
   desc 'Download recent Rubygems packages asynchronously'
   task rubygems: :environment do
     PackageManager::Rubygems.import_recent_async
