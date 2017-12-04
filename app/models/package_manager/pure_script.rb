@@ -27,9 +27,5 @@ module PackageManager
     def self.install_instructions(project, version = nil)
       "psc-package install #{project.name}"
     end
-
-    def self.formatted_name
-      'PureScript'
-    end
   end
 end
