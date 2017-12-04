@@ -25,7 +25,11 @@ module PackageManager
 
     def self.format_name(platform)
       return nil if platform.nil?
-      platforms.find{|p| p.to_s.demodulize.downcase == platform.downcase }.to_s.demodulize
+      find(platform).to_s.demodulize
+    end
+
+    def self.find(platform)
+      platforms.find{|p| p.to_s.demodulize.downcase == platform.downcase }
     end
 
     def self.color
@@ -61,13 +65,7 @@ module PackageManager
     end
 
     def self.platform_name(platform)
-      if platform.downcase == 'npm'
-        return 'npm'
-      elsif platform.downcase == 'wordpress'
-        return 'WordPress'
-      else
-        return platform
-      end
+      find(platform).try(:formatted_name) || platform
     end
 
     def self.dependency_platform(platform_string)
