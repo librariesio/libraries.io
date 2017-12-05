@@ -81,7 +81,7 @@ GEM
     asciidoctor (1.5.6.1)
     autoprefixer-rails (7.1.2.6)
       execjs
-    bibliothecary (5.5.4)
+    bibliothecary (5.5.5)
       deb_control
       librariesio-gem-parser
       ox
@@ -157,7 +157,7 @@ GEM
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
-    elasticsearch-rails (5.0.1)
+    elasticsearch-rails (5.0.2)
     elasticsearch-transport (2.0.2)
       faraday
       multi_json
