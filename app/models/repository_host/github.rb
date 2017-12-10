@@ -64,6 +64,8 @@ module RepositoryHost
         sha: file.sha,
         content: file.content.present? ? Base64.decode64(file.content) : file.content
       }
+    rescue URI::InvalidURIError
+      nil
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
