@@ -321,7 +321,7 @@ GEM
       activerecord
     pictogram (2.0.9)
       railties
-    poltergeist (1.16.0)
+    poltergeist (1.17.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
