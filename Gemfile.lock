@@ -123,8 +123,6 @@ GEM
     chartkick (2.2.5)
     citrus (3.0.2)
     cliver (0.3.2)
-    codeclimate-test-reporter (1.0.8)
-      simplecov (<= 0.13)
     commonmarker (0.17.7.1)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.0.5)
@@ -556,7 +554,6 @@ DEPENDENCIES
   capistrano-rails-console
   charlock_holmes (>= 0.7.5)
   chartkick
-  codeclimate-test-reporter (>= 1.0.8)
   commonmarker
   concurrent-ruby-ext
   counter_culture
