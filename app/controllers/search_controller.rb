@@ -1,6 +1,6 @@
 class SearchController < ApplicationController
   def index
-    facets = Project.facets(:facet_limit => 30)
+    facets = Project.facets(:facet_limit => 40)
 
     @query = params[:q]
     @search = search_projects(@query)

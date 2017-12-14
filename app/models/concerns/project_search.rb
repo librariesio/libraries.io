@@ -58,7 +58,7 @@ module ProjectSearch
     end
 
     def self.cta_search(filters, options = {})
-      facet_limit = options.fetch(:facet_limit, 35)
+      facet_limit = options.fetch(:facet_limit, 36)
       options[:filters] ||= []
       search_definition = {
         query: {
@@ -158,7 +158,7 @@ module ProjectSearch
     end
 
     def self.search(original_query, options = {})
-      facet_limit = options.fetch(:facet_limit, 35)
+      facet_limit = options.fetch(:facet_limit, 36)
       query = sanitize_query(original_query)
       options[:filters] ||= []
       search_definition = {

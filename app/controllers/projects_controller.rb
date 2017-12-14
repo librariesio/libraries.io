@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
       @projects = current_user.recommended_projects.limit(7)
       render 'dashboard/home'
     else
-      facets = Project.facets(:facet_limit => 30)
+      facets = Project.facets(:facet_limit => 40)
 
       @languages = facets[:languages].language.buckets
       @platforms = facets[:platforms].platform.buckets
