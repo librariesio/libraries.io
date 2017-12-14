@@ -16,10 +16,7 @@ class ProjectsController < ApplicationController
     else
       facets = Project.facets(:facet_limit => 40)
 
-      @languages = facets[:languages].language.buckets
       @platforms = facets[:platforms].platform.buckets
-      @licenses = facets[:licenses].normalized_licenses.buckets.reject{ |t| t['key'].downcase == 'other' }
-      @keywords = facets[:keywords].keywords_array.buckets
     end
   end
 
