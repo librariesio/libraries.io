@@ -24,7 +24,7 @@
       </div>
       <div class="panel-body">
         <p>
-          Search <%= number_to_human(Project.total) %> projects by <%= link_to 'licence'.html_safe, licenses_path %>, <%= link_to 'language'.html_safe, licenses_path %> or <%= link_to 'keyword'.html_safe, keywords_path %>, or explore new, trending or popular projects.
+          Search <%= number_to_human(Project.total) %> projects by <%= link_to 'licence'.html_safe, licenses_path %>, <%= link_to 'language'.html_safe, languages_path %> or <%= link_to 'keyword'.html_safe, keywords_path %>, or explore new, trending or popular projects.
         </p>
       </div>
       <div class="panel-footer"><%= link_to 'Explore', explore_path, class:'btn btn-primary center-block' %></div>
