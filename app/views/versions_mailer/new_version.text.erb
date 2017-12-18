@@ -1,5 +1,13 @@
 Hi <%= @user.nickname %>
 
+<% unless @user.optin? %>
+We have updated our terms of service and privacy policy. If you do not accept these changes your account will be removed on 31st December 2017.
+
+Click here to read and accept the new terms of service and privacy policy: <%= account_url %>
+
+-----
+<% end %>
+
 I detected a new release (<%= @version.number %>) of <%= @project %> (<%= project_url(@project.to_param) %>) <%= "at #{@version.published_at.to_s(:long)}" if @version.published_at.present? %>
 
 <% if @repos.any? %>
