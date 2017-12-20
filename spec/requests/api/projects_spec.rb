@@ -97,4 +97,32 @@ describe "Api::ProjectsController" do
       expect(response.body).to be_json_eql([].to_json)
     end
   end
+
+  describe "GET /api/:platform/:name/sourcerank", type: :request do
+    it "renders successfully" do
+      get "/api/#{project.platform}/#{project.name}/sourcerank"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq('application/json')
+      expect(response.body).to be_json_eql({
+       "all_prereleases": 0,
+       "any_outdated_dependencies": 0,
+       "basic_info_present": 1,
+       "contributors": 0,
+       "dependent_projects": 0,
+       "dependent_repositories": 0,
+       "follows_semver": 1,
+       "is_deprecated": 0,
+       "is_removed": 0,
+       "is_unmaintained": 0,
+       "license_present": 1,
+       "not_brand_new": 0,
+       "one_point_oh": 1,
+       "readme_present": 0,
+       "recent_release": 1,
+       "repository_present": 0,
+       "stars": 0,
+       "subscribers": 0,
+       "versions_present": 0}.to_json)
+    end
+  end
 end
