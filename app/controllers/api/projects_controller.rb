@@ -5,6 +5,10 @@ class Api::ProjectsController < Api::ApplicationController
     render json: @project
   end
 
+  def sourcerank
+    render json: @project.source_rank_breakdown
+  end
+
   def dependents
     dependents = paginate(@project.dependent_projects).includes(:versions, :repository)
     render json: dependents
