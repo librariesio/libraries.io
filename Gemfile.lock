@@ -59,6 +59,8 @@ GEM
       activemodel (= 5.0.6)
       activesupport (= 5.0.6)
       arel (~> 7.0)
+    activerecord-import (0.21.0)
+      activerecord (>= 3.2)
     activesupport (5.0.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (~> 0.7)
@@ -385,6 +387,9 @@ GEM
     rb-readline (0.5.5)
     rdoc (6.0.0)
     redis (4.0.1)
+    repo_miner (0.3.1)
+      bibliothecary
+      rugged
     request_store (1.3.2)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
@@ -541,6 +546,7 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   active_model_serializers
+  activerecord-import
   amatch
   api-pagination
   appsignal (~> 2.3.0)
@@ -620,6 +626,7 @@ DEPENDENCIES
   rb-readline
   rdoc
   redis
+  repo_miner
   rspec-rails
   rspec-sidekiq
   rspec_junit_formatter
