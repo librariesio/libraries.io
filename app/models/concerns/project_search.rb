@@ -171,15 +171,17 @@ module ProjectSearch
           keywords: facet_filter(:keywords_array, facet_limit, options),
           licenses: facet_filter(:normalized_licenses, facet_limit, options)
         }
-        search_definition[:suggest] = {
-          did_you_mean: {
-            text: query,
-            term: {
-              size: 1,
-              field: "name"
+        if query.present?
+          search_definition[:suggest] = {
+            did_you_mean: {
+              text: query,
+              term: {
+                size: 1,
+                field: "name"
+              }
             }
           }
-        }
+        end
       end
 
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }

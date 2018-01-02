@@ -115,15 +115,17 @@ module RepoSearch
           keywords: Project.facet_filter(:keywords, facet_limit, options),
           host_type: Project.facet_filter(:host_type, facet_limit, options)
         }
-        search_definition[:suggest] = {
-          did_you_mean: {
-            text: query,
-            term: {
-              size: 1,
-              field: "full_name"
+        if query.present?
+          search_definition[:suggest] = {
+            did_you_mean: {
+              text: query,
+              term: {
+                size: 1,
+                field: "full_name"
+              }
             }
           }
-        }
+        end
       end
 
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }

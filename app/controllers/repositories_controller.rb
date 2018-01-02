@@ -21,7 +21,7 @@ class RepositoriesController < ApplicationController
   def search
     @query = params[:q]
     @search = search_repos(@query)
-    @suggestion = @search.response.suggest.did_you_mean.first
+    @suggestion = @search.response.suggest.did_you_mean.first if @query.present?
     @repositories = @search.results.map{|result| RepositorySearchResult.new(result) }
     @title = page_title
     @facets = @search.response.aggregations
