@@ -4,7 +4,7 @@ class Api::DocsController < ApplicationController
   def index
     @cache_version = 'v1.1'
     @api_key = logged_in? ? current_user.api_key : 'YOUR_API_KEY'
-    @project = Project.platform('npm').includes(:versions, :repository).find_by_name('base62') || Project.platform('rubygems').first
+    @project = Project.platform('npm').visible.includes(:versions, :repository).find_by_name('base62') || Project.platform('rubygems').visible.first
 
     @version = @project.versions.sort.first
 

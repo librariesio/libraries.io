@@ -131,6 +131,7 @@ module RepositoryHost
           published_at: data.utctimestamp
         })
       end
+      repository.projects.find_each(&:forced_save) if remote_tags.present?
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
@@ -146,7 +147,7 @@ module RepositoryHost
       json['values'].each do |repo|
         CreateRepositoryWorker.perform_async('Bitbucket', repo['full_name'])
       end
-      puts json['next']
+
       if json['values'].any? && json['next']
         limit = limit - 1
         REDIS.set 'bitbucket-after', Addressable::URI.parse(json['next']).query_values['after']

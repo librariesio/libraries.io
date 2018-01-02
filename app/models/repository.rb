@@ -39,7 +39,7 @@ class Repository < ApplicationRecord
   before_save  :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
   after_commit :save_projects, on: :update
-  after_commit :update_source_rank_async, on: [:create, :update]
+  after_commit :update_source_rank_async, on: [:update]
 
   scope :without_readme, -> { where("repositories.id NOT IN (SELECT repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
@@ -204,7 +204,7 @@ class Repository < ApplicationRecord
   end
 
   def manual_sync(token = nil)
-    update_all_info_async
+    update_all_info_async(token)
     self.last_synced_at = Time.zone.now
     save
   end
@@ -218,12 +218,14 @@ class Repository < ApplicationRecord
     check_status
     return if status == 'Removed'
     update_from_repository(token)
-    download_owner
-    download_fork_source(token)
-    download_readme(token)
-    download_tags(token)
-    download_contributions(token)
-    download_manifests(token)
+    unless last_synced_at && last_synced_at > 2.minutes.ago
+      download_owner
+      download_fork_source(token)
+      download_readme(token)
+      download_tags(token)
+      download_contributions(token)
+      download_manifests(token)
+    end
     update_source_rank(true)
     update_attributes(last_synced_at: Time.now)
   end
@@ -240,7 +242,7 @@ class Repository < ApplicationRecord
     return unless repo_hash
     repo_hash = repo_hash.to_hash.with_indifferent_access
     ActiveRecord::Base.transaction do
-      g = Repository.host(repo_hash[:host_type] || 'GitHub').find_by(uuid: repo_hash[:id])
+      g = Repository.where(host_type: (repo_hash[:host_type] || 'GitHub')).find_by(uuid: repo_hash[:id])
       g = Repository.host(repo_hash[:host_type] || 'GitHub').find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
       g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
       g.host_type = repo_hash[:host_type] || 'GitHub'
@@ -314,6 +316,10 @@ class Repository < ApplicationRecord
 
   def github_id
     uuid # legacy alias
+  end
+
+  def sorted_tags
+    @sorted_tags ||= tags.sort
   end
 
   def repository_host

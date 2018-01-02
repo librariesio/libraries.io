@@ -24,10 +24,10 @@
       </div>
       <div class="panel-body">
         <p>
-          Search <%= number_to_human(Project.total) %> projects by <%= link_to 'licence'.html_safe, licenses_path %>, <%= link_to 'language'.html_safe, licenses_path %> or <%= link_to 'keyword'.html_safe, keywords_path %>, or explore new, trending or popular projects.
+          Search <%= number_to_human(Project.total) %> projects by <%= link_to 'licence'.html_safe, licenses_path %>, <%= link_to 'language'.html_safe, languages_path %> or <%= link_to 'keyword'.html_safe, keywords_path %>, or explore new, trending or popular projects.
         </p>
       </div>
-      <div class="panel-footer"><%= link_to 'Explore', explore_path, class:'btn btn-primary center-block' %></div> 
+      <div class="panel-footer"><%= link_to 'Explore', explore_path, class:'btn btn-primary center-block' %></div>
     </div>
   </div>
   <div class='col-md-3'>
@@ -37,7 +37,7 @@
       </div>
       <div class="panel-body">
         <p>
-          Stay up to date with notifications of updates, licence incompatibilties or deleted dependencies.
+          Stay up to date with notifications of updates, licence incompatibilities or deleted dependencies.
         </p>
       </div>
       <div class="panel-footer">
@@ -46,7 +46,7 @@
         <% else %>
           <%= link_to 'Login', login_path, class:'btn btn-success center-block' %>
         <% end %>
-      </div> 
+      </div>
     </div>
   </div>
   <div class='col-md-3'>
@@ -65,7 +65,7 @@
         <% else %>
           <%= link_to 'Login', login_path, class:'btn btn-success center-block' %>
         <% end %>
-      </div> 
+      </div>
     </div>
   </div>
   <div class='col-md-3'>
@@ -78,7 +78,7 @@
           Use Libraries.io data in your applications, services or research. Use our <%= link_to 'API', '/api'%> to stay up to date.
         </p>
       </div>
-      <div class="panel-footer"><%= link_to 'Documentation', '/data', class:'btn btn-primary center-block'%></div> 
+      <div class="panel-footer"><%= link_to 'Documentation', '/data', class:'btn btn-primary center-block'%></div>
     </div>
   </div>
 
@@ -86,8 +86,6 @@
 
 <hr>
 
-
-<%= render 'adsense/banner' %>
 <h3 data-ga-tracked-el='search-by-language'>
   Supported Package Managers
 </h3>

@@ -80,5 +80,5 @@ test:
 #
 production:
   <<: *default
-  pool: 100
+  pool: 120
   prepared_statements: false

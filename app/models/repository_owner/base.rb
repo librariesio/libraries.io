@@ -15,7 +15,7 @@ module RepositoryOwner
     end
 
     def top_favourite_projects
-      Project.where(id: top_favourite_project_ids).maintained.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
+      Project.visible.where(id: top_favourite_project_ids).maintained.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
     end
 
     def top_contributors

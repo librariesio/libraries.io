@@ -5,6 +5,12 @@ class AccountsController < ApplicationController
 
   end
 
+  def optin
+    current_user.update_attributes(optin: true)
+    flash[:notice] = "You have accepted the terms of service and privacy policy. Thanks!"
+    redirect_back(fallback_location: root_path)
+  end
+
   def update
     if current_user.update_attributes(user_params)
       redirect_to account_path, notice: 'Preferences updated'

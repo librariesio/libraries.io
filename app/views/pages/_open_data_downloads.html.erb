@@ -1,6 +1,6 @@
-<p>Latest release: <strong>1.0.1 - 21 July, 2017</strong></p>
+<p>Latest release: <strong> <%= latest_open_data_release_number %> - <%= latest_open_data_release_date %></strong></p>
 
-<p>Download an archive of seven csv files from zenodo:</p>
+<p>Download an archive of CSV files from zenodo:</p>
 
 <table class='table table-bordered table-hover'>
   <thead>
@@ -8,6 +8,7 @@
       <th>
         File name and digest
       </th>
+      <th>Release Date</th>
       <th>
         Archive Size
       </th>
@@ -17,19 +18,24 @@
       <th>Download link</th>
     </tr>
   </thead>
+  <% open_data_releases.to_a.reverse.each do |version, release| %>
     <tr>
       <td>
         <strong>
-          Libraries.io-open-data-1.0.1.zip
+          <%= release[:filename] %>
         </strong>
-        <br><small class='text-muted'>MD5: e73506370d920431cea1ed95c19338b5</small>
+        <br><small class='text-muted'>MD5: <%= release[:md5] %></small>
       </td>
       <td>
-        5.9GB
+        <%= release[:date] %>
       </td>
-      <td>200 million</td>
       <td>
-        <a href="https://zenodo.org/record/833207/files/Libraries.io-open-data-1.0.1.zip" class='btn btn-primary'>Download</a>
+        <%= release[:size] %>
+      </td>
+      <td><%= release[:rows] %></td>
+      <td>
+        <a href="<%= release[:download] %>" class='btn btn-<%= version == latest_open_data_release_number ? 'success' : 'primary' %>'>Download</a>
       </td>
     </tr>
+  <% end %>
 </table>

@@ -125,6 +125,42 @@
 <%= JSON.pretty_generate @project.dependent_repositories.paginate(page: 1).as_json(except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id]) %></pre>
     <% end %>
 
+    <h3 id="project-contributors">Project Contributors</h3>
+
+    <p>
+      Get users that have contributed to a given project.
+    </p>
+
+    <p>
+      <code>GET https://libraries.io/api/:platform/:name/contributors?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/contributors?api_key=#{@api_key}", "https://libraries.io/api/npm/grunt/contributors?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}-project-contributors", :expires_in => 1.day do %>
+      <pre class='well well-small'>
+<%= JSON.pretty_generate @project.contributors.paginate(page: 1).map{|p| RepositoryUserSerializer.new(p) }.as_json %></pre>
+    <% end %>
+
+    <h3 id="project-sourcerank">Project SourceRank</h3>
+
+    <p>
+      Get breakdown of SourceRank score for a given project.
+    </p>
+
+    <p>
+      <code>GET https://libraries.io/api/:platform/:name/sourcerank?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/sourcerank?api_key=#{@api_key}", "https://libraries.io/api/npm/grunt/sourcerank?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}sourcerank", :expires_in => 1.day do %>
+      <pre class='well well-small'>
+<%= JSON.pretty_generate @project.source_rank.as_json %></pre>
+    <% end %>
+
     <h3 id="project-search">Project Search</h3>
 
     <p>
@@ -134,6 +170,27 @@
     <p>
       <code>GET https://libraries.io/api/search?q=grunt&api_key=<%= @api_key %></code>
     </p>
+    <hr>
+    <p>
+      The search endpoint accepts a <code>sort</code> parameter, one of
+        <code>rank</code>,
+        <code>stars</code>,
+        <code>dependents_count</code>,
+        <code>dependent_repos_count</code>,
+        <code>latest_release_published_at</code>,
+        <code>contributions_count</code>,
+        <code>created_at</code>.
+    </p>
+    <hr>
+    <p>
+      The search endpoint accepts number of other parameters to filter results:
+    </p>
+    <ul>
+      <li><code>languages</code></li>
+      <li><code>licenses</code></li>
+      <li><code>keywords</code></li>
+      <li><code>platforms</code></li>
+    </ul>
     <hr>
     <p>
       Example: <strong> <%= link_to "https://libraries.io/api/search?q=grunt&api_key=#{@api_key}", "https://libraries.io/api/search?q=grunt&api_key=#{@api_key}" %> </strong>
@@ -243,6 +300,42 @@
 <%= JSON.pretty_generate @repository_user.projects.includes(:versions, :repository).paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
 
+    <h3 id="user-project-contributions">User Project Contributions</h3>
+
+    <p>
+      Get a list of projects that the given users has contributed to.
+    </p>
+
+    <p>
+      <code>GET https://libraries.io/api/github/:login/project-contributions?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository_user.login}/project-contributions?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}-github-user-project-contributions", :expires_in => 1.day do %>
+      <pre class='well well-small'>
+<%= JSON.pretty_generate @repository_user.contributed_projects.includes(:versions, :repository).order('rank DESC NULLS LAST').paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
+    <% end %>
+
+    <h3 id="user-projects">User Repository Contributions</h3>
+
+    <p>
+      Get a list of repositories that the given users has contributed to.
+    </p>
+
+    <p>
+      <code>GET https://libraries.io/api/github/:login/repository-contributions?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository_user.login}/repository-contributions?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}-github-user-repository-contributions", :expires_in => 1.day do %>
+      <pre class='well well-small'>
+<%= JSON.pretty_generate @repository_user.contributed_repositories.order('stargazers_count DESC, rank DESC NULLS LAST').paginate(page: 1).map{|p| RepositorySerializer.new(p) }.as_json %></pre>
+    <% end %>
+
     <h3 id='subscriptions-index'>User Subscriptions</h3>
     <p>
       List projects that a user is subscribed to recieved notifications about new releases
@@ -341,7 +434,6 @@
     </ul>
   </div>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
     <h3>API Methods</h3>
     <ul>
       <li><a href="#authentication">Authentication</a></li>
@@ -356,6 +448,8 @@
       <li><a href="#project-dependencies">Project Dependencies</a></li>
       <li><a href="#project-dependents">Project Dependents</a></li>
       <li><a href="#project-dependent-repositories">Project Dependent Repositories</a></li>
+      <li><a href="#project-contributors">Project Contributors</a></li>
+      <li><a href="#project-sourcerank">Project SourceRank</a></li>
       <li><a href="#project-search">Project Search</a></li>
     </ul>
     <ul>
@@ -367,6 +461,8 @@
       <li><a href="#user">User</a></li>
       <li><a href="#user-repositories">User Repositories</a></li>
       <li><a href="#user-projects">User Projects</a></li>
+      <li><a href="#user-project-contributions">User Project Contributions</a></li>
+      <li><a href="#user-repository-contributions">User Repository Contributions</a></li>
     </ul>
     <ul>
       <li><a href="#subscriptions-index">User Subscriptions</a></li>

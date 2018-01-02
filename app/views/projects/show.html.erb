@@ -8,7 +8,7 @@
 <div class='row'>
   <div class='col-md-8'>
     <div class="row">
-      <div class='col-md-8'>
+      <div class='col-md-7'>
         <h1>
           <%= @project %>
           <br>
@@ -22,7 +22,7 @@
           </small>
         </h1>
       </div>
-      <div class='col-md-4 sidebar'>
+      <div class='col-md-5 sidebar'>
         <%= render 'projects/actions' %>
       </div>
     </div>
@@ -42,7 +42,6 @@
 </div>
 <div class='row'>
   <div class='col-md-8'>
-    <%= render 'adsense/banner' %>
     <%= render 'projects/contributors' %>
 
     <% if @repository.present? && @repository.readme.present? %>
@@ -55,7 +54,6 @@
   </div>
 
   <div class='col-md-4 sidebar'>
-    <%= render 'adsense/sidebar' %>
     <%= render 'projects/releases' %>
 
     <% if current_user %>
@@ -63,7 +61,7 @@
     <% end %>
 
     <% if @version %>
-      <div id='version_dependencies' style='display:none;' data-url="<%= version_dependencies_path(@version.to_param) %>"></div>
+      <div id='version_dependencies' style='display:none;' data-url="<%= version_dependencies_path(@project.to_param.merge(number: @version.number)) %>"></div>
     <% end %>
 
     <div id='top_dependent_repos' style='display:none;' data-url="<%= top_dependent_repos_path(@project.to_param) %>"></div>

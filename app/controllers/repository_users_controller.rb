@@ -4,7 +4,7 @@ class RepositoryUsersController < ApplicationController
   def show
     @repositories = @user.repositories.open_source.source.order('status ASC NULLS FIRST, rank DESC NULLS LAST').limit(6)
     @favourite_projects = @user.top_favourite_projects.limit(6)
-    @projects = @user.projects.joins(:repository).includes(:versions).order('projects.rank DESC NULLS LAST, projects.created_at DESC').limit(6)
+    @projects = @user.projects.visible.joins(:repository).includes(:versions).order('projects.rank DESC NULLS LAST, projects.created_at DESC').limit(6)
     if @user.org?
       @contributions = []
     else
@@ -36,7 +36,7 @@ class RepositoryUsersController < ApplicationController
 
   def projects
     order = params[:sort] == "contributions" ? "repositories.contributions_count ASC, projects.rank DESC NULLS LAST, projects.created_at DESC" : 'projects.rank DESC NULLS LAST, projects.created_at DESC'
-    @projects = @user.projects.joins(:repository).includes(:repository).order(order).paginate(page: page_number)
+    @projects = @user.projects.visible.joins(:repository).includes(:repository).order(order).paginate(page: page_number)
   end
 
   def contributors

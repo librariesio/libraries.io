@@ -32,4 +32,22 @@ describe "Api::RepositoryUsersController" do
       expect(json).to eq []
     end
   end
+
+  describe "GET /api/github/:login/project-contributions", type: :request do
+    it "renders successfully" do
+      get "/api/github/#{@user.login}/project-contributions"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq('application/json')
+      expect(json).to eq []
+    end
+  end
+
+  describe "GET /api/github/:login/repository-contributions", type: :request do
+    it "renders successfully" do
+      get "/api/github/#{@user.login}/repository-contributions"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq('application/json')
+      expect(json).to eq []
+    end
+  end
 end

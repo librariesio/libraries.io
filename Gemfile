@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
-ruby '2.4.1'
+ruby '2.4.2'
 
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
 gem 'rb-readline'
 gem 'oj'
-gem 'rails', '5.1.4'
+gem 'rails', '5.1.5'
 gem 'pg'
 gem 'sassc-rails'
 gem 'uglifier'
@@ -38,12 +38,11 @@ gem 'mime-types', require: 'mime/types/columnar'
 gem 'fast_blank'
 gem 'fast_xs'
 gem 'fast_xor'
-gem 'premailer-rails'
+gem 'premailer-rails', '1.9.7'
 gem 'gemoji'
 gem 'js_cookie_rails'
 gem 'foreman', require: false
 gem 'puma'
-gem 'payola-payments', git: 'https://github.com/librariesio/payola'
 gem 'rack-timeout'
 gem 'semantic_range'
 gem 'license-compatibility'
@@ -73,7 +72,6 @@ gem 'org-ruby'
 gem 'creole'
 gem 'bundler'
 gem 'bibliothecary'
-gem 'stripe'
 gem 'github-linguist'
 gem 'appsignal', '~> 2.3.0'
 gem 'rack-cors', :require => 'rack/cors'
@@ -84,6 +82,7 @@ gem 'schema_plus_pg_indexes'
 gem 'autoprefixer-rails', '~> 7.1.2.1'
 gem 'amatch'
 gem 'concurrent-ruby-ext'
+gem 'charlock_holmes', '>= 0.7.5'
 
 group :development do
   gem 'spring'
@@ -102,12 +101,11 @@ group :development, :test do
 end
 
 group :test do
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'database_cleaner'
   gem 'rspec_junit_formatter'
   gem 'shoulda'
   gem 'simplecov', require: false
-  gem 'codeclimate-test-reporter', require: false
   gem 'faker'
   gem 'poltergeist'
   gem 'json_spec'

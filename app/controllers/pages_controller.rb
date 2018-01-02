@@ -17,11 +17,18 @@ class PagesController < ApplicationController
 
   def experiments
     @platforms = Project.popular_platforms(:facet_limit => 40).first(28)
-
   end
 
   def data
     @platforms = Project.popular_platforms(:facet_limit => 40).first(28)
+  end
+
+  def terms
 
   end
+
+  def terms
+    
+  end
+
 end

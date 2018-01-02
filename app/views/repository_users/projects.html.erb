@@ -7,7 +7,6 @@
 <hr>
 <div class="row">
   <div class="col-sm-8">
-    <%= render 'adsense/banner' %>
     <% if @projects.any? %>
       <%= render @projects, cache: true  %>
       <%= will_paginate @projects, page_links: false %>
@@ -18,7 +17,6 @@
     <% end %>
   </div>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
     <h3>
       <strong>
         Where do these come from?
