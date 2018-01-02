@@ -215,7 +215,7 @@ GEM
       mime-types (>= 1.19)
       rugged (>= 0.25.1)
     github-markup (1.6.2)
-    gitlab (4.2.0)
+    gitlab (4.3.0)
       httparty
       terminal-table
     globalid (0.4.1)
@@ -269,7 +269,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
-    minitest (5.10.3)
+    minitest (5.11.0)
     mize (0.3.4)
       protocol
     modware (0.1.3)
@@ -280,7 +280,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
-    nio4r (2.1.0)
+    nio4r (2.2.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     oauth (0.5.4)
@@ -292,8 +292,8 @@ GEM
       rack (>= 1.2, < 3)
     octokit (4.8.0)
       sawyer (~> 0.8.0, >= 0.5.3)
-    oj (3.3.9)
-    omniauth (1.7.1)
+    oj (3.3.10)
+    omniauth (1.8.1)
       hashie (>= 3.4.6, < 3.6.0)
       rack (>= 1.6.2, < 3)
     omniauth-bitbucket (0.0.2)
@@ -383,9 +383,10 @@ GEM
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     rb-readline (0.5.5)
-    rdoc (6.0.0)
+    rdoc (6.0.1)
     redis (4.0.1)
-    request_store (1.3.2)
+    request_store (1.4.0)
+      rack (>= 1.4)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
@@ -523,7 +524,7 @@ GEM
       ethon (>= 0.9.0)
     tzinfo (1.2.4)
       thread_safe (~> 0.1)
-    uglifier (4.0.2)
+    uglifier (4.1.2)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.3.0)
     websocket-driver (0.6.5)
@@ -648,4 +649,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
