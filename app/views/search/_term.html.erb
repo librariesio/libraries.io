@@ -3,15 +3,15 @@
 <% active = current_param.include?(term['key']) %>
 <li class='<%= 'active' if active %>'>
   <% if active %>
-    <%= link_to url_for(params.except(:host).merge(name.to_sym => current_param.reject{ |x| x == term['key'] }.join(','), page: nil).permit!) do %>
+    <a href="<%= url_for(params.except(:host).merge(name.to_sym => current_param.reject{ |x| x == term['key'] }.join(','), page: nil).permit!) %>">
     	<input type='checkbox' checked>
     	<%= format_term(term['key']) %>
-    <% end %>
+    </a>
   <% else %>
-    <%= link_to url_for(params.except(:host).merge(name.to_sym => current_param.push(term['key']).join(','), page: nil).permit!) do %>
+    <a href="<%= url_for(params.except(:host).merge(name.to_sym => current_param.push(term['key']).join(','), page: nil).permit!) %>"></a>
     	<input type='checkbox'>
     	<%= format_term(term['key']) %>
-    <% end %>
+    </a>
     <small><%= number_to_human term['doc_count'] %> projects</small>
   <% end %>
 </li>
