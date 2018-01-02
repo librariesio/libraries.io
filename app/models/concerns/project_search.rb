@@ -203,19 +203,13 @@ module ProjectSearch
 
     def self.query_options(query, fields)
       {
-        bool: {
-          should: [
-            {
-              multi_match: {
-                query: query,
-                fields: fields,
-                fuzziness: 1.2,
-                slop: 2,
-                type: 'cross_fields',
-                operator: 'and'
-              }
-            }
-          ]
+        multi_match: {
+          query: query,
+          fields: fields,
+          fuzziness: 1.2,
+          slop: 2,
+          type: 'cross_fields',
+          operator: 'and'
         }
       }
     end
