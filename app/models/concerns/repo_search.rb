@@ -102,7 +102,6 @@ module RepoSearch
         },
         filter: {
           bool: {
-            must: [],
             must_not: options[:must_not]
           }
         }
@@ -129,7 +128,7 @@ module RepoSearch
       end
 
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
-      search_definition[:filter][:bool][:must] = Project.filter_format(options[:filters])
+      search_definition[:query][:function_score][:query][:filtered][:filter][:bool][:must] = Project.filter_format(options[:filters])
 
       if query.present?
         search_definition[:query][:function_score][:query][:filtered][:query] = Project.query_options(query, FIELDS)
