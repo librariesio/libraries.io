@@ -4,6 +4,7 @@ module LoginHelpers
   end
 
   def mock_github_auth(user)
+    user.identities << create(:identity) if user.identities.empty?
     OmniAuth.config.mock_auth[:github] = OmniAuth::AuthHash.new(
       provider:    'github',
       uid:         user.github_identity.uid,

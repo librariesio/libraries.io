@@ -104,11 +104,11 @@ module GithubIdentity
   end
 
   def github_identity
-    identities.first{|i| i.provider == 'github' }
+    identities.find{|i| i.provider == 'github' }
   end
 
   def github_public_identity
-    identities.first{|i| i.provider == 'githubpublic' }
+    identities.find{|i| i.provider == 'githubpublic' }
   end
 
   def private_repo_token
@@ -116,7 +116,7 @@ module GithubIdentity
   end
 
   def github_private_identity
-    identities.first{|i| i.provider == 'githubprivate' }
+    identities.find{|i| i.provider == 'githubprivate' }
   end
 
   def github_client

@@ -15,15 +15,10 @@
           </p>
           <hr>
           <p>
-            Sponsored by:
-          </p>
-          <p>
-            <%= link_to image_tag('bns_logo.png', width: 60), 'http://www.bravenewsoftware.org/' %>
-            &nbsp;
-            <%= link_to image_tag('safestack.png', width: 190), 'https://safestack.io' %>
+            <%= link_to image_tag('Tidelift_logo_white.svg', width: 160), 'https://tidelift.com' %>
           </p>
           <p class='text-muted'>
-            Copyright © <%= Date.today.year %> Andrew Nesbitt<br>
+            Copyright © <%= Date.today.year %> Tidelift, Inc<br>
             Open Source under <%= link_to 'AGPLv3', 'https://github.com/librariesio/libraries.io/blob/master/LICENSE.txt' %> license
           </p>
       </div>
@@ -38,17 +33,19 @@
           <li><%= link_to 'Unlicensed Libraries', unlicensed_path %></li>
           <li><%= link_to 'Trending Repositories', trending_path %></li>
         </ul>
-      </div>
-      <div class="col-xs-12 col-md-2">
         <strong><%= link_to 'Experiments', '/experiments' %></strong>
         <ul>
           <li><%= link_to 'Bus Factor', bus_factor_path %></li>
           <li><%= link_to 'Digital Infrastructure', digital_infrastructure_path %></li>
           <li><%= link_to 'Unseen Infrastructure', unseen_infrastructure_path %></li>
         </ul>
+      </div>
+      <div class="col-xs-12 col-md-2">
         <ul class='list-unstyled'>
           <li><strong><%= link_to 'About', '/about' %></strong></li>
           <li><strong><%= link_to 'Team', '/team' %></strong></li>
+          <li><strong><%= link_to 'Terms and Conditions', '/terms' %></strong></li>
+          <li><strong><%= link_to 'Privacy Policy', '/privacy' %></strong></li>
           <li><strong><%= link_to 'API', '/api' %></strong></li>
         </ul>
       </div>

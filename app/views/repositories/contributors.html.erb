@@ -37,7 +37,6 @@
         </div>
       <% end %>
       <%= will_paginate @contributions, page_links: false %>
-      <%= render 'adsense/banner' %>
     <% else %>
       <p>
         No contributors found, go back to <%= link_to @repository.full_name, repository_path(@repository.to_param) %>.
@@ -45,8 +44,6 @@
     <% end %>
   </div>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
-
     <% if @contributions.any? %>
       <p class="h4">Total commits:</p>
       <p class="h1"><%= number_to_human @total %></p>

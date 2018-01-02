@@ -12,12 +12,6 @@ namespace :app do
           nil
         end
       end
-      Payola::Affiliate.delete_all
-      Payola::Coupon.delete_all
-      Payola::Sale.delete_all
-      Payola::StripeWebhook.delete_all
-      Payola::Subscription.delete_all
-      SubscriptionPlan.delete_all
       Subscription.delete_all
       WebHook.delete_all
     end

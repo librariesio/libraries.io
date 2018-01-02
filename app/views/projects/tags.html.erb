@@ -4,7 +4,6 @@
 <h1><%= link_to @project, project_path(@project.to_param) %> tagged releases</h1>
 <div class="row">
   <div class="col-sm-8">
-    <%= render 'adsense/banner' %>
     <% if @tags.any? %>
       <table class='table'>
         <% @tags.each do |tag| %>
@@ -53,6 +52,6 @@
     <% end %>
   </div>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
+
   </div>
 </div>

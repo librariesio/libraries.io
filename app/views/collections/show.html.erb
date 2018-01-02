@@ -7,12 +7,10 @@
 </h1>
 
 <div class="col-sm-8">
-  <%= render 'adsense/banner' %>
   <%= render @projects, cache: true %>
   <%= will_paginate @search, page_links: false %>
 </div>
 <div class='col-sm-4 facets'>
-  <%= render 'adsense/sidebar' %>
   <% @facets.each do |name, facet| %>
     <% facet = facet[facet.keys.last] %>
     <% next if facet.buckets.empty? %>

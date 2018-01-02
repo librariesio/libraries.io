@@ -34,20 +34,22 @@ class ApplicationController < ActionController::Base
     @per_page_number
   end
 
-  def welcome_new_users
-    if not logged_in? and not cookies[:hide_welcome_alert]
-      flash.now[:show_welcome] = true # Actual content is at views/shared/_flash
-    end
-  end
-
   def ensure_logged_in
+    return if read_only
     unless logged_in?
       session[:pre_login_destination] = request.original_url
       redirect_to login_path, notice: 'You must be logged in to view this content.'
     end
   end
 
+  def read_only
+    if in_read_only_mode?
+      redirect_to root_path, notice: "Can't perform this action, the site is in read-only mode temporarily."
+    end
+  end
+
   def current_user
+    return nil if in_read_only_mode?
     return nil if session[:user_id].blank?
     @current_user ||= User.includes(:identities).find_by_id(session[:user_id])
   end
@@ -67,14 +69,14 @@ class ApplicationController < ActionController::Base
   end
 
   def find_project
-    @project = Project.platform(params[:platform]).where(name: params[:name]).includes(:repository, :versions).first
-    @project = Project.lower_platform(params[:platform]).lower_name(params[:name]).includes(:repository, :versions).first if @project.nil?
+    @project = Project.visible.platform(params[:platform]).where(name: params[:name]).includes(:repository, :versions).first
+    @project = Project.visible.lower_platform(params[:platform]).lower_name(params[:name]).includes(:repository, :versions).first if @project.nil?
     raise ActiveRecord::RecordNotFound if @project.nil?
     @color = @project.color
   end
 
   def find_project_lite
-    @project = Project.platform(params[:platform]).where(name: params[:name]).first
+    @project = Project.visible.platform(params[:platform]).where(name: params[:name]).first
     raise ActiveRecord::RecordNotFound if @project.nil?
   end
 
@@ -218,7 +220,7 @@ class ApplicationController < ActionController::Base
     if params[:platform].present?
       find_platform(:platform)
       raise ActiveRecord::RecordNotFound if @platform_name.nil?
-      scope.platform(@platform_name)
+      scope.platform(@platform_name).visible
     else
       scope
     end
@@ -240,5 +242,9 @@ class ApplicationController < ActionController::Base
 
     @kind = params[:kind] || 'runtime'
     @tree_resolver = TreeResolver.new(@version, @kind, @date)
+  end
+
+  def in_read_only_mode?
+    ENV['READ_ONLY'].present?
   end
 end

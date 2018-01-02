@@ -11,7 +11,6 @@
 // about supported directives.
 //
 //= require jquery
-//= require payola
 //= require jquery_ujs
 //= require bootstrap/alert
 //= require bootstrap/collapse
@@ -94,14 +93,6 @@ $('.rss').on('click', function(){
   subtome($(this).attr('href'))
   return false;
 })
-
-$('.learn-more').on('click', function(){
-  $('#welcome-alert').alert('close')
-})
-
-$('#welcome-alert').on('closed.bs.alert', function() {
-  Cookies.set('hide_welcome_alert', 'true');
-});
 
 $('input[name="subscription[include_prerelease]"]').on('change',function(){
   $(this).parents('form').submit();

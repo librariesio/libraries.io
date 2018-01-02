@@ -10,10 +10,18 @@ class Api::RepositoryUsersController < Api::ApplicationController
   end
 
   def projects
-    @projects = @repository_user.projects.joins(:repository).includes(:versions).order('projects.rank DESC NULLS LAST, projects.created_at DESC')
+    @projects = @repository_user.projects.visible.joins(:repository).includes(:versions).order('projects.rank DESC NULLS LAST, projects.created_at DESC')
     @projects = @projects.keywords(params[:keywords].split(',')) if params[:keywords].present?
 
     paginate json: @projects
+  end
+
+  def repository_contributions
+    paginate json: @repository_user.contributed_repositories.order('stargazers_count DESC, rank DESC NULLS LAST')
+  end
+
+  def project_contributions
+    paginate json: @repository_user.contributed_projects.visible.includes(:versions, :repository).order('rank DESC NULLS LAST')
   end
 
   private

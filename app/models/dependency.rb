@@ -12,7 +12,7 @@ class Dependency < ApplicationRecord
   scope :kind, ->(kind) { where(kind: kind) }
   scope :platform, ->(platform) { where('lower(dependencies.platform) = ?', platform.try(:downcase)) }
 
-  after_create :update_project_id
+  before_create :set_project_id
 
   alias_attribute :name, :project_name
   alias_attribute :latest_stable, :latest_stable_release_number
@@ -45,6 +45,10 @@ class Dependency < ApplicationRecord
         end
       end
     end
+  end
+
+  def set_project_id
+    self.project_id = find_project_id unless project_id.present?
   end
 
   def update_project_id

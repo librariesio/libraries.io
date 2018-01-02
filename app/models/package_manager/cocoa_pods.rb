@@ -39,7 +39,7 @@ module PackageManager
         :name => project['name'],
         :description => project["summary"],
         :homepage => project["homepage"],
-        :licenses => project['license']['type'],
+        :licenses => project["license"],
         :repository_url => repo_fallback(project['source']['git'], '')
       }
     end

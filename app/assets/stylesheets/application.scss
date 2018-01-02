@@ -361,13 +361,6 @@ tr.top td{
   margin-right: 10px;
 }
 
-.plans{
-  margin-top:20px;
-  .col-sm-2{
-    width: 20% !important;
-  }
-}
-
 .include_prerelease {
   display: block;
   padding: 3px 20px;
@@ -480,4 +473,10 @@ h4.panel-title{
 }
 .panel-heading .panel-toggle.collapsed:after{
     content: "\25BC";
+}
+
+.dropdown-header.terms a{
+  display: inline;
+  padding: 0;
+  text-decoration: underline;
 }

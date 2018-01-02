@@ -21,7 +21,7 @@ class RepositoriesController < ApplicationController
   def search
     @query = params[:q]
     @search = search_repos(@query)
-    @suggestion = @search.response.suggest.did_you_mean.first
+    @suggestion = @search.response.suggest.did_you_mean.first if @query.present?
     @repositories = @search.results.map{|result| RepositorySearchResult.new(result) }
     @title = page_title
     @facets = @search.response.aggregations
@@ -60,7 +60,7 @@ class RepositoriesController < ApplicationController
   def show
     load_repo
     @contributors = @repository.contributors.order('count DESC').visible.limit(20).select(:host_type, :name, :login, :uuid)
-    @projects = @repository.projects.limit(20).includes(:versions)
+    @projects = @repository.projects.visible.limit(20).includes(:versions)
     @color = @repository.color
     @forks = @repository.forked_repositories.host(@repository.host_type).interesting.limit(5)
   end

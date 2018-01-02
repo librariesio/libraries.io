@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create, :failure]
+  before_action :read_only, only: [:new, :create]
 
   def new
     if params[:host_type].present?
@@ -38,7 +39,7 @@ class SessionsController < ApplicationController
       end
     else
       if identity.user.nil?
-        user = User.new
+        user = User.new(optin: true)
         user.assign_from_auth_hash(auth)
         identity.user = user
         identity.save

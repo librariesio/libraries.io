@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  mount Payola::Engine => '/payola', as: :payola
   require 'sidekiq/web'
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
@@ -38,6 +37,8 @@ Rails.application.routes.draw do
 
       get '/:host_type/search', to: 'repositories#search'
 
+      get '/:host_type/:login/project-contributions', to: 'repository_users#project_contributions'
+      get '/:host_type/:login/repository-contributions', to: 'repository_users#repository_contributions'
       get '/:host_type/:login/repositories', to: 'repository_users#repositories'
       get '/:host_type/:login/projects', to: 'repository_users#projects'
 
@@ -48,12 +49,18 @@ Rails.application.routes.draw do
       get '/:host_type/:login', to: 'repository_users#show'
     end
 
-    get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }, as: :version_tree
-    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }
-    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
-    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
-    get '/:platform/:name/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }, as: :tree
-    get '/:platform/:name', to: 'projects#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
+    PLATFORM_CONSTRAINT = /[\w\-]+/
+    PROJECT_CONSTRAINT = /[^\/]+/
+    VERSION_CONSTRAINT = /[\w\.\-]+/
+
+    get '/:platform/:name/sourcerank', to: 'projects#sourcerank', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    get '/:platform/:name/contributors', to: 'projects#contributors', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => PROJECT_CONSTRAINT, :version => VERSION_CONSTRAINT }, as: :version_tree
+    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT, :version => VERSION_CONSTRAINT }
+    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    get '/:platform/:name/tree', to: 'tree#show', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }, as: :tree
+    get '/:platform/:name', to: 'projects#show', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
   end
 
   namespace :admin do
@@ -85,9 +92,6 @@ Rails.application.routes.draw do
   get '/collections', to: 'collections#index', as: :collections
   get '/explore/:language-:keyword-libraries', to: 'collections#show', as: :collection
 
-  get '/pricing', to: 'account_subscriptions#plans', as: :pricing
-  resources :account_subscriptions
-
   get '/recommendations', to: 'recommendations#index', as: :recommendations
 
   get '/repositories', to: 'dashboard#index', as: :repositories
@@ -101,6 +105,7 @@ Rails.application.routes.draw do
     member do
       get 'delete'
       put 'disable_emails'
+      put 'optin'
     end
   end
 
@@ -133,7 +138,6 @@ Rails.application.routes.draw do
   get 'removed-libraries', to: redirect("/explore/removed-libraries")
   get '/help-wanted', to: redirect("/explore/help-wanted")
   get '/first-pull-request', to: redirect("/explore/first-pull-request")
-  
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
@@ -210,6 +214,7 @@ Rails.application.routes.draw do
   get '/about', to: 'pages#about', as: :about
   get '/team', to: 'pages#team', as: :team
   get '/privacy', to: 'pages#privacy', as: :privacy
+  get '/terms', to: 'pages#terms', as: :terms
   get '/compatibility', to: 'pages#compatibility', as: :compatibility
   get '/data', to: 'pages#data', as: :data
   get '/open-data', to: redirect("/data")

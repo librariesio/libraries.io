@@ -20,7 +20,6 @@ describe User, type: :model do
   it { should have_many(:favourite_projects) }
   it { should have_many(:project_mutes) }
   it { should have_many(:muted_projects) }
-  it { should have_many(:payola_subscriptions) }
   it { should have_many(:project_suggestions) }
 
   it { should validate_presence_of(:email).on(:update) }
