@@ -8,7 +8,7 @@
     	<%= format_term(term['key']) %>
     </a>
   <% else %>
-    <a href="<%= url_for(params.except(:host).merge(name.to_sym => current_param.push(term['key']).join(','), page: nil).permit!) %>"></a>
+    <a href="<%= url_for(params.except(:host).merge(name.to_sym => current_param.push(term['key']).join(','), page: nil).permit!) %>">
     	<input type='checkbox'>
     	<%= format_term(term['key']) %>
     </a>
