@@ -12,3 +12,9 @@ Rack::Attack.throttle('api', :limit => limit_proc, :period => 1.minute) do |req|
     req.params['api_key'] || req.ip
   end
 end
+
+Rack::Attack.throttle('req/ip', :limit => 5, :period => 1.second) do |req|
+  if !req.path.match(/^\/api\/.+/)
+    req.ip
+  end
+end
