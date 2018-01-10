@@ -73,12 +73,8 @@ module PackageManager
       case platform_string.downcase
       when 'rubygemslockfile'
         'rubygems'
-      when 'cocoapodslockfile'
-        'cocoapods'
-      when 'nugetlockfile', 'nuspec'
+      when 'nuspec'
         'nuget'
-      when 'packagistlockfile'
-        'packagist'
       when 'gemspec'
         'rubygems'
       when 'npmshrinkwrap'

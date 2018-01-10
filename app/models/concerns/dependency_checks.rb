@@ -13,12 +13,8 @@ module DependencyChecks
     case platform
     when 'rubygemslockfile', 'gemspec'
       'Rubygems'
-    when 'cocoapodslockfile'
-      'CocoaPods'
-    when 'nugetlockfile', 'nuspec'
+    when 'nuspec'
       'NuGet'
-    when 'packagistlockfile'
-      'Packagist'
     when 'npmshrinkwrap'
       'NPM'
     else
