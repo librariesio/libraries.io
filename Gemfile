@@ -40,7 +40,6 @@ gem 'fast_xs'
 gem 'fast_xor'
 gem 'premailer-rails', '1.9.7'
 gem 'gemoji'
-gem 'js_cookie_rails'
 gem 'foreman', require: false
 gem 'puma'
 gem 'rack-timeout'
