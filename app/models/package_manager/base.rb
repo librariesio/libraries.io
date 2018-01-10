@@ -71,11 +71,7 @@ module PackageManager
     def self.dependency_platform(platform_string)
       return platform_string if platform_string.nil?
       case platform_string.downcase
-      when 'rubygemslockfile'
-        'rubygems'
-      when 'nuspec'
-        'nuget'
-      when 'gemspec'
+      when 'rubygemslockfile', 'gemspec'
         'rubygems'
       when 'npmshrinkwrap'
         'npm'

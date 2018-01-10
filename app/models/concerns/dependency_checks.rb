@@ -13,8 +13,6 @@ module DependencyChecks
     case platform
     when 'rubygemslockfile', 'gemspec'
       'Rubygems'
-    when 'nuspec'
-      'NuGet'
     when 'npmshrinkwrap'
       'NPM'
     else
