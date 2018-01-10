@@ -5,21 +5,6 @@ module DependencyChecks
     compatible_license? == false
   end
 
-  def platform
-    platform_name(read_attribute(:platform))
-  end
-
-  def platform_name(platform)
-    case platform
-    when 'rubygemslockfile', 'gemspec'
-      'Rubygems'
-    when 'npmshrinkwrap'
-      'NPM'
-    else
-      platform
-    end
-  end
-
   def outdated?
     return nil unless valid_requirements? && project && project.latest_stable_release_number
     !(SemanticRange.satisfies(SemanticRange.clean(project.latest_stable_release_number), semantic_requirements, false, platform) ||

@@ -68,18 +68,6 @@ module PackageManager
       find(platform).try(:formatted_name) || platform
     end
 
-    def self.dependency_platform(platform_string)
-      return platform_string if platform_string.nil?
-      case platform_string.downcase
-      when 'rubygemslockfile', 'gemspec'
-        'rubygems'
-      when 'npmshrinkwrap'
-        'npm'
-      else
-        platform_string.downcase
-      end
-    end
-
     def self.save(project)
       return unless project.present?
       mapped_project = mapping(project)
