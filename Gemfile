@@ -82,6 +82,7 @@ gem 'autoprefixer-rails', '~> 7.1.2.1'
 gem 'amatch'
 gem 'concurrent-ruby-ext'
 gem 'charlock_holmes', '>= 0.7.5'
+gem 'octicons_helper'
 
 group :development do
   gem 'spring'
