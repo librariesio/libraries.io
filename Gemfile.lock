@@ -607,7 +607,7 @@ DEPENDENCIES
   omniauth-gitlab
   org-ruby
   parallel
-  pg
+  pg (~> 0.18)
   pg_query
   pghero
   pictogram
