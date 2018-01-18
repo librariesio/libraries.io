@@ -88,7 +88,12 @@ module RepoSearch
                          term: {
                            "status" => "Removed"
                          }
-                       }
+                       },
+                       {
+                         term: {
+                           "status" => "Hidden"
+                          }
+                       },
                      ]
                   }
                 }

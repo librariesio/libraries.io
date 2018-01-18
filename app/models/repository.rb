@@ -73,11 +73,12 @@ class Repository < ApplicationRecord
   scope :hacker_news, -> { order("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC") }
   scope :trending, -> { good_quality.recently_created.with_stars }
 
-  scope :maintained, -> { where('repositories."status" not in (?) OR repositories."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
+  scope :maintained, -> { where('repositories."status" not in (?) OR repositories."status" IS NULL', ["Deprecated", "Removed", "Unmaintained", "Hidden"])}
   scope :deprecated, -> { where('repositories."status" = ?', "Deprecated")}
-  scope :not_removed, -> { where('repositories."status" != ? OR repositories."status" IS NULL', "Removed")}
+  scope :not_removed, -> { where('repositories."status" not in (?) OR projects."status" IS NULL', ["Removed", "Hidden"])}
   scope :removed, -> { where('repositories."status" = ?', "Removed")}
   scope :unmaintained, -> { where('repositories."status" = ?', "Unmaintained")}
+  scope :hidden, -> { where('repositories."status" = ?', "Hidden")}
 
   scope :indexable, -> { open_source.source.not_removed }
 
