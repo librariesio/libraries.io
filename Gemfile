@@ -44,7 +44,7 @@ gem 'foreman', require: false
 gem 'puma'
 gem 'rack-timeout'
 gem 'semantic_range'
-gem 'license-compatibility'
+gem 'license-compatibility', '3.0.0'
 gem 'escape_utils'
 gem 'mail', require: ['mail', 'mail/utilities', 'mail/parsers']
 gem 'pictogram'
