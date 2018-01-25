@@ -28,7 +28,7 @@ class Api::ApplicationController < ApplicationController
   end
 
   def require_api_key
-    render json: { error: "Error 403, you don't have permissions for this operation." }, status: :bad_request unless valid_api_key_present?
+    render json: { error: "Error 403, you don't have permissions for this operation." }, status: :forbidden unless valid_api_key_present?
   end
 
   def valid_api_key_present?
