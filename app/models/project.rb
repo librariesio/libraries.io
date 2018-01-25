@@ -12,7 +12,8 @@ class Project < ApplicationRecord
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
   API_FIELDS = [:name, :platform, :description, :language, :homepage,
                 :repository_url, :normalized_licenses, :rank, :status,
-                :latest_release_number, :latest_release_published_at]
+                :latest_release_number, :latest_release_published_at,
+                :dependents_count, :dependent_repos_count]
 
   validates_presence_of :name, :platform
   validates_uniqueness_of :name, scope: :platform, case_sensitive: true

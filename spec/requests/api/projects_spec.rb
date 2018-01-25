@@ -70,6 +70,8 @@ describe "Api::ProjectsController" do
         "forks": project.forks,
         "keywords": project.keywords,
         "latest_stable_release": project.latest_stable_release,
+        "dependents_count": project.dependents_count,
+        "dependent_repos_count": project.dependent_repos_count,
         "versions": project.versions.as_json(only: [:number, :published_at]),
         "dependencies": version.dependencies.map do |dependency|
           {
