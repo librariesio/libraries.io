@@ -1,47 +1,57 @@
 module PackageManager
   class Homebrew < Base
-    HAS_VERSIONS = false
-    HAS_DEPENDENCIES = false
+    HAS_VERSIONS = true
+    HAS_DEPENDENCIES = true
     BIBLIOTHECARY_PLANNED = true
     SECURITY_PLANNED = false
     URL = 'http://brew.sh/'
     COLOR = '#555555'
 
     def self.package_link(project, version = nil)
-      "http://brewformulas.org/#{project.name}"
+      "http://formulae.brew.sh/formula/#{project.name}"
     end
 
     def self.install_instructions(project, version = nil)
-      "brew install #{project.name}"
+      "brew install #{project.name}"  + (version ? "@#{version}" : '')
     end
 
     def self.project_names
-      page = 1
-      projects = []
-      while true
-        r = get("http://brewformulas.org/?format=json&page=#{page}")['formulas']
-        break if  r == []
-        projects += r
-        page +=1
-      end
-      projects.map{|project| project['formula'] }.uniq
+      JSON.parse(`brew info --json=v1 --all`).map{ |package| package["name"] }
     end
 
     def self.recent_names
-      get("http://brewformulas.org/?format=json&page=1")['new_formulas'].map{|project| project['formula'] }.uniq
+      rss = SimpleRSS.parse open('http://formulae.brew.sh/feed.atom')
+      rss.entries.map{ |entry| entry.link.split('/')[-1] }
     end
 
     def self.project(name)
-      get("http://brewformulas.org/#{name}.json")
+      JSON.parse(`brew info #{name} --json=v1`).first
     end
 
     def self.mapping(project)
       {
-        :name => project['formula'],
-        :description => project['description'],
+        :name => project['full_name'],
+        :description => project['desc'],
         :homepage => project['homepage'],
-        :repository_url => repo_fallback('', project['homepage'])
       }
+    end
+
+    def self.versions(project)
+      project['installed'].map do |item|
+        {
+          number: item['version']
+        }
+      end
+    end
+
+    def self.dependencies(name, version, project)
+      project['installed'].select{ |version_info| version_info['version'] == version }.first['runtime_dependencies'].map do |dependency|
+        {
+          project_name: dependency['full_name'],
+          requirements: dependency['version'],
+          kind: 'runtime',
+        }
+      end
     end
   end
 end
