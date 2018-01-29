@@ -81,7 +81,7 @@ GEM
     asciidoctor (1.5.6.1)
     autoprefixer-rails (7.1.2.6)
       execjs
-    bibliothecary (6.0.0)
+    bibliothecary (6.1.0)
       commander
       deb_control
       librariesio-gem-parser
@@ -268,7 +268,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
-    minitest (5.11.2)
+    minitest (5.11.3)
     mize (0.3.4)
       protocol
     modware (0.1.3)
@@ -280,7 +280,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
     nio4r (2.2.0)
-    nokogiri (1.8.1)
+    nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
     oauth (0.5.4)
     oauth2 (1.4.0)
@@ -528,7 +528,7 @@ GEM
       ethon (>= 0.9.0)
     tzinfo (1.2.4)
       thread_safe (~> 0.1)
-    uglifier (4.1.4)
+    uglifier (4.1.5)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.3.0)
     websocket-driver (0.6.5)
