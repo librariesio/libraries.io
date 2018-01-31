@@ -210,12 +210,12 @@ GEM
     formatador (0.2.5)
     fuzzy_match (2.1.0)
     gemoji (3.0.0)
-    github-linguist (6.0.0)
+    github-linguist (6.0.1)
       charlock_holmes (~> 0.7.5)
       escape_utils (~> 1.2.0)
       mime-types (>= 1.19)
       rugged (>= 0.25.1)
-    github-markup (1.6.2)
+    github-markup (2.0.0)
     gitlab (4.3.0)
       httparty
       terminal-table
@@ -414,7 +414,7 @@ GEM
     rspec-sidekiq (3.0.3)
       rspec-core (~> 3.0, >= 3.0.0)
       sidekiq (>= 2.4.0)
-    rspec-support (3.7.0)
+    rspec-support (3.7.1)
     rspec_junit_formatter (0.3.0)
       rspec-core (>= 2, < 4, != 2.12.0)
     ruby-enum (0.7.1)
