@@ -81,7 +81,7 @@ GEM
     asciidoctor (1.5.6.1)
     autoprefixer-rails (7.1.2.6)
       execjs
-    bibliothecary (6.1.0)
+    bibliothecary (6.2.0)
       commander
       deb_control
       librariesio-gem-parser
