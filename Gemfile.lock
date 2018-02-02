@@ -342,7 +342,7 @@ GEM
       ruby_parser (~> 3.0)
     public_suffix (3.0.1)
     puma (3.11.2)
-    rack (2.0.3)
+    rack (2.0.4)
     rack-attack (5.0.1)
       rack
     rack-attack-rate-limit (1.1.0)
@@ -490,7 +490,7 @@ GEM
     simplecov-html (0.10.2)
     sitemap_generator (6.0.1)
       builder (~> 3.0)
-    spdx (1.3.3)
+    spdx (1.3.4)
       fuzzy_match (~> 2.1)
       spdx-licenses (~> 1.0)
     spdx-licenses (1.1.0)
