@@ -16,19 +16,12 @@ module PackageManager
     end
 
     def self.project_names
-      page = 1
-      projects = []
-      while true
-        r = get("http://brewformulas.org/?format=json&page=#{page}")['formulas']
-        break if  r == []
-        projects += r
-        page +=1
-      end
-      projects.map{|project| project['formula'] }.uniq
+      get("http://brewformulas.org/?format=json").map{|project| project['formula'] }.uniq
     end
 
     def self.recent_names
-      get("http://brewformulas.org/?format=json&page=1")['new_formulas'].map{|project| project['formula'] }.uniq
+      rss = SimpleRSS.parse(get_raw('http://formulae.brew.sh/feed.atom'))
+      rss.entries.map{ |entry| entry.link.split('/')[-1] }.map{|e| e.split('@').first }.uniq
     end
 
     def self.project(name)
