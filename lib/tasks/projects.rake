@@ -87,7 +87,7 @@ namespace :projects do
     ['Alcatraz', 'Atom', 'Bower', 'Cargo', 'Clojars', 'CocoaPods', 'CRAN',
       'Dub', 'Elm', 'Emacs', 'Hackage', 'Haxelib', 'Hex', 'Homebrew', 'Inqlude',
       'Julia', 'NPM', 'Packagist', 'Pypi', 'Rubygems'].each do |platform|
-      "PackageManager::#{platform}".constantize.import_new_async
+      "PackageManager::#{platform}".constantize.import_new_async rescue nil
     end
   end
 
