@@ -95,7 +95,11 @@ module RepositoryHost
           repository.full_name = r[:full_name]
         end
         repository.license = Project.format_license(r[:license][:key]) if r[:license]
-        repository.source_name = r[:parent][:full_name] if r[:fork]
+        if r[:fork]
+          repository.source_name = r[:parent][:full_name]
+        else
+          repository.source_name = nil
+        end
         repository.assign_attributes r.slice(*Repository::API_FIELDS)
         repository.save! if repository.changed?
       rescue self.class.api_missing_error_class

@@ -101,3 +101,4 @@ Issues that we'd like to implement but aren't likely to happen in the near futur
 - [Add support for npackd](https://github.com/librariesio/libraries.io/issues/1668)
 - [Add support for PowerShell Gallery](https://github.com/librariesio/libraries.io/issues/1669)
 - [Support domain-specific keywords](https://github.com/librariesio/libraries.io/issues/1675)
+- [Allow users to rate/review projects](https://github.com/librariesio/libraries.io/issues/37)

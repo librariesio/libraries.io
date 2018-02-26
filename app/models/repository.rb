@@ -250,7 +250,12 @@ class Repository < ApplicationRecord
       g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
       g.uuid = repo_hash[:id] if g.uuid.nil?
       g.license = repo_hash[:license][:key] if repo_hash[:license]
-      g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
+      if repo_hash[:fork] && repo_hash[:parent]
+        g.source_name = repo_hash[:parent][:full_name]
+      else
+        g.source_name = nil
+      end
+
       g.assign_attributes repo_hash.slice(*Repository::API_FIELDS)
 
       if g.changed?

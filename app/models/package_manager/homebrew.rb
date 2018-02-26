@@ -16,12 +16,12 @@ module PackageManager
     end
 
     def self.project_names
-      JSON.parse(`brew info --json=v1 --all`).map{ |package| package["name"] }
+      get("http://brewformulas.org/?format=json").map{|project| project['formula'] }.uniq
     end
 
     def self.recent_names
-      rss = SimpleRSS.parse open('http://formulae.brew.sh/feed.atom')
-      rss.entries.map{ |entry| entry.link.split('/')[-1] }
+      rss = SimpleRSS.parse(get_raw('http://formulae.brew.sh/feed.atom'))
+      rss.entries.map{ |entry| entry.link.split('/')[-1] }.map{|e| e.split('@').first }.uniq
     end
 
     def self.project(name)

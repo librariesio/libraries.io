@@ -48,7 +48,8 @@ class SessionsController < ApplicationController
       flash[:notice] = nil
       session[:user_id] = identity.user.id
     end
-
+    
+    identity.user.update_columns(last_login_at: Time.current)
     identity.user.update_repo_permissions_async
     login_destination = pre_login_destination
 
