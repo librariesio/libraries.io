@@ -12,7 +12,7 @@ module PackageManager
     end
 
     def self.install_instructions(project, version = nil)
-      "brew install #{project.name}"  + (version ? "@#{version}" : '')
+      "brew install #{project.name}"
     end
 
     def self.project_names
