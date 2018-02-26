@@ -33,7 +33,9 @@ module PackageManager
         :name => project['formula'],
         :description => project['description'],
         :homepage => project['homepage'],
-        :repository_url => repo_fallback('', project['homepage'])
+        :repository_url => repo_fallback('', project['homepage']),
+        :version => project['version'],
+        :dependencies => project['dependencies']
       }
     end
 
@@ -46,12 +48,13 @@ module PackageManager
     end
 
     def self.dependencies(name, version, project)
-      return nil unless version == project['version']
-      project['dependencies'].map do |dependency|
+      return nil unless version == project[:version]
+      project[:dependencies].map do |dependency|
         {
           project_name: dependency,
           requirements: '*',
           kind: 'runtime',
+          platform: self.name.demodulize
         }
       end
     end
