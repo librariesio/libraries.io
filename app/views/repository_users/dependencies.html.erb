@@ -1,8 +1,8 @@
-<% title "Libraries that #{@user} depends on the most - Libraries.io" %>
+<% title "Packages that #{@user} depends on the most - Libraries.io" %>
 
 <h1>
   <%= image_tag @user.avatar_url(120), width: 60, height: 60, alt: @user %>
-  Libraries that <%= link_to @user, user_path(@user.to_param) %> depends on the most
+  Packages that <%= link_to @user, user_path(@user.to_param) %> depends on the most
 </h1>
 <hr>
 <div class="row">
@@ -12,7 +12,7 @@
       <%= will_paginate @projects, page_links: false %>
     <% else %>
       <p>
-        No projects found, go back to <%= link_to @user, user_path(@user.to_param) %>.
+        No packages found, go back to <%= link_to @user, user_path(@user.to_param) %>.
       </p>
     <% end %>
   </div>
@@ -23,7 +23,7 @@
       </strong>
     </h3>
     <p>
-      This is a list of every library that <%= link_to @user, user_path(@user.to_param) %>'s
+      This is a list of every package that <%= link_to @user, user_path(@user.to_param) %>'s
       open source repositories list as a dependency, ordered by most used.
     </p>
   </div>

@@ -10,7 +10,7 @@
         You're currently subscribed to updates for any new versions of <%= @project %>:
       </p>
       <p>
-        <%= link_to subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'btn btn-success', title: 'Stop being notified of new releases of this library' do %>
+        <%= link_to subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'btn btn-success', title: 'Stop being notified of new releases of this package' do %>
           <%= fa_icon('times') %>
           Unsubscribe from updates to <strong><%= @project %></strong>
         <% end %>

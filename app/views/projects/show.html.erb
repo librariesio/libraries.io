@@ -73,7 +73,7 @@
     </p>
     <p>
       <%= fa_icon 'download' %>
-      <%= link_to 'Export .ABOUT file for this library', @version.present? ? about_version_path(@project.to_param.merge(number: @version.number)) : about_project_path(@project.to_param) %>
+      <%= link_to 'Export .ABOUT file for this package', @version.present? ? about_version_path(@project.to_param.merge(number: @version.number)) : about_project_path(@project.to_param) %>
     </p>
     <p>
       <small class='text-muted'>Last synced: <%= @project.last_synced_at || @project.created_at %></small>

@@ -2,7 +2,7 @@
   <% @top_dependent_projects = @project.dependent_projects.limit(10) %>
   <% if @top_dependent_projects.length > 0 %>
     <h4 data-ga-tracked-el='dependent-projects'>
-      <%= link_to "Dependent Libraries", project_dependents_path(@project.to_param) %>
+      <%= link_to "Dependent Packages", project_dependents_path(@project.to_param) %>
     </h4>
     <dl class='row'>
       <% if @top_dependent_projects.length > 0 %>

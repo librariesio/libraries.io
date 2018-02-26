@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-8">
-    <h2>Projects you're watching</h2>
+    <h2>Packages you're watching</h2>
     <% if @subscriptions.any? %>
       <table id='subscriptions' class='table table-striped table-hover'>
         <%= render @subscriptions %>
@@ -8,10 +8,10 @@
       <%= will_paginate @subscriptions, page_links: false %>
     <% else %>
       <p>
-        Libraries lets you watch libraries that you depend on and notifies you by email when there's a new release.
+        Libraries.io lets you watch packages that you depend on and notifies you by email when there's a new release.
       </p>
       <p>
-        Below are some recommended projects for you to watch:
+        Below are some recommended packages for you to watch:
       </p>
       <%= render collection: @projects, partial: 'subscriptions/project' %>
       <p>

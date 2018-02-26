@@ -7,7 +7,7 @@
        <li>
          <%= link_to search_path(q: params[:q], sort: params[:sort]) do %>
            <%= fa_icon 'check' %>
-           Libraries
+           Packages
          <% end %>
        </li>
        <li>
@@ -19,7 +19,7 @@
      </ul>
    </div>
 
-    <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search Libraries', class: 'form-control search-input', size: 40 %>
+    <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search Packages', class: 'form-control search-input', size: 40 %>
     <% [:platforms, :licenses, :languages, :keywords, :sort].each do |field| %>
       <%= hidden_field_tag field, params[field] if params[field].present? %>
     <% end %>

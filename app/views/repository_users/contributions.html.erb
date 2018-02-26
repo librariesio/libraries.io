@@ -13,7 +13,7 @@
       <%= will_paginate @contributions, page_links: false %>
     <% else %>
       <p>
-        No projects found, go back to <%= link_to @user, user_path(@user.to_param) %>.
+        No packages found, go back to <%= link_to @user, user_path(@user.to_param) %>.
       </p>
     <% end %>
   </div>

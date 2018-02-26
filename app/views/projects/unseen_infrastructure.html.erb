@@ -51,13 +51,13 @@
       </strong>
     </h3>
     <p>
-      Unseen infrastructure are open source libraries that are heavily depended upon by the community but don't receive much recognition or attention.
+      Unseen infrastructure are open source packages that are heavily depended upon by the community but don't receive much recognition or attention.
     </p>
     <p>
-      This page shows projects that are depended upon by at least 1,000 other open source repositories but have less than 100 stars.
+      This page shows packages that are depended upon by at least 1,000 other open source repositories but have less than 100 stars.
     </p>
     <p>
-      You can help out by reviewing the code for these libraries, helping out with open issues and thanking the maintainers for their hard work.
+      You can help out by reviewing the code for these packages, helping out with open issues and thanking the maintainers for their hard work.
     </p>
     <p>
       <em>This is an experiment based on contributions and available dependency data from package manager repositories that make it easily available.</em>
@@ -74,7 +74,7 @@
                   <%= link_to platform_name(platform[0]), unseen_infrastructure_path(platforms: nil, license: params[:license]) %>
                 <% else %>
                   <%= link_to platform_name(platform[0]), unseen_infrastructure_path(platforms: platform_name(platform[0]), license: params[:license]) %>
-                  <small><%= pluralize number_to_human(platform[1]), 'projects' %></small>
+                  <small><%= pluralize number_to_human(platform[1]), 'packages' %></small>
                 <% end %>
               </li>
             <% end %>

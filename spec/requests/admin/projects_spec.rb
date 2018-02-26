@@ -18,7 +18,7 @@ describe "Admin::ProjectController" do
       mock_is_admin
       login(user)
       visit admin_projects_path
-      expect(page).to have_content 'Popular projects without repo links'
+      expect(page).to have_content 'Popular packages without repo links'
     end
   end
 
@@ -37,7 +37,7 @@ describe "Admin::ProjectController" do
       mock_is_admin
       login(user)
       visit deprecated_admin_projects_path
-      expect(page).to have_content 'Deprecated projects'
+      expect(page).to have_content 'Deprecated packages'
     end
   end
 
@@ -56,7 +56,7 @@ describe "Admin::ProjectController" do
       mock_is_admin
       login(user)
       visit unmaintained_admin_projects_path
-      expect(page).to have_content 'Unmaintained projects'
+      expect(page).to have_content 'Unmaintained packages'
     end
   end
 end
