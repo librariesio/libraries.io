@@ -25,30 +25,32 @@ module PackageManager
     end
 
     def self.project(name)
-      JSON.parse(`brew info #{name} --json=v1`).first
+      get("http://brewformulas.org/#{name}.json")
     end
 
     def self.mapping(project)
       {
-        :name => project['full_name'],
-        :description => project['desc'],
+        :name => project['formula'],
+        :description => project['description'],
         :homepage => project['homepage'],
+        :repository_url => repo_fallback('', project['homepage'])
       }
     end
 
     def self.versions(project)
-      project['installed'].map do |item|
+      [
         {
-          number: item['version']
+          number: project['version']
         }
-      end
+      ]
     end
 
     def self.dependencies(name, version, project)
-      project['installed'].select{ |version_info| version_info['version'] == version }.first['runtime_dependencies'].map do |dependency|
+      return nil unless version == project['version']
+      project['dependencies'].map do |dependency|
         {
-          project_name: dependency['full_name'],
-          requirements: dependency['version'],
+          project_name: dependency,
+          requirements: '*',
           kind: 'runtime',
         }
       end
