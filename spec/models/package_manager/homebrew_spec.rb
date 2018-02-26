@@ -22,8 +22,8 @@ describe PackageManager::Homebrew do
       expect(described_class.install_instructions(project)).to eq("brew install foo")
     end
 
-    it 'handles version' do
-      expect(described_class.install_instructions(project, '2.0.0')).to eq("brew install foo@2.0.0")
+    it 'ignores versions' do
+      expect(described_class.install_instructions(project, '2.0.0')).to eq("brew install foo")
     end
   end
 end
