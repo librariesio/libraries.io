@@ -1,5 +1,5 @@
-<% title "Trending Libraries - Libraries.io" %>
-<h1><i class="fa fa-line-chart"></i> Trending Libraries</h1>
+<% title "Trending Packages - Libraries.io" %>
+<h1><i class="fa fa-line-chart"></i> Trending Packages</h1>
 
 <div class="row">
   <div class="col-sm-8">
@@ -18,7 +18,7 @@
                   <%= link_to platform_name(platform[0]), trending_projects_path(platforms: nil, license: params[:license]) %>
                 <% else %>
                   <%= link_to platform_name(platform[0]), trending_projects_path(platforms: platform_name(platform[0]), license: params[:license]) %>
-                  <small><%= pluralize number_to_human(platform[1]), 'projects' %></small>
+                  <small><%= pluralize number_to_human(platform[1]), 'packages' %></small>
                 <% end %>
               </li>
             <% end %>

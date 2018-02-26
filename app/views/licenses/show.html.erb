@@ -1,7 +1,7 @@
 <% title "#{@license.name} license - Libraries.io" %>
-<% description "A detailed listing of the most popular, recently updated and most watched #{@license.name} licensed projects online" %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_url(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@license.id} Projects") %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_url(licenses: @license.id, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@license.id} Projects") %>
+<% description "A detailed listing of the most popular, recently updated and most watched #{@license.name} licensed packages online" %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@license.id} Packages") %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(licenses: @license.id, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@license.id} Packages") %>
 
 <% cache([@license.id, 'licenses:show', 'v1'], :expires_in => 1.hour) do %>
 <div class="row">
@@ -33,7 +33,7 @@
       <% if @popular.any? %>
       <div class='col-sm-6 platform-column'>
         <h4>
-          Popular <%= @license.id %> Projects
+          Popular <%= @license.id %> Packages
           <small class='more'>
             <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'rank', order: 'desc') %>
           </small>
@@ -48,7 +48,7 @@
           <%= link_to search_url(licenses: @license.id, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
           <% end %>
-          New <%= @license.id %> Projects
+          New <%= @license.id %> Packages
           <small class='more'>
             <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'created_at', order: 'desc') %>
           </small>
@@ -63,7 +63,7 @@
           <%= link_to search_url(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
           <% end %>
-          Updated <%= @license.id %> Projects
+          Updated <%= @license.id %> Packages
           <small class='more'>
             <%= link_to 'See more &raquo;'.html_safe, search_path(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc') %>
           </small>
@@ -73,21 +73,21 @@
       <% end %>
       <% if @watched.any? %>
       <div class='col-sm-6 platform-column'>
-        <h4>Most Watched <%= @license.id %> Projects</h4>
+        <h4>Most Watched <%= @license.id %> Packages</h4>
         <%= render @watched, cache: true %>
       </div>
       <% end %>
 
       <% if @dependent_repos.any? %>
         <div class='col-sm-6 platform-column'>
-          <h4>Most Used <%= @license.id %> Projects</h4>
+          <h4>Most Used <%= @license.id %> Packages</h4>
           <%= render @dependent_repos, cache: true %>
         </div>
       <% end %>
 
       <% if @dependend.any? %>
         <div class='col-sm-6 platform-column'>
-          <h4>Most Depended upon <%= @license.id %> Projects</h4>
+          <h4>Most Depended upon <%= @license.id %> Packages</h4>
           <%= render @dependend, cache: true %>
         </div>
       <% end %>

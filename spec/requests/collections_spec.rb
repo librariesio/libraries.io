@@ -14,7 +14,7 @@ describe "CollectionController", elasticsearch: true do
     it "renders successfully when logged out" do
       Project.__elasticsearch__.refresh_index!
       visit collection_path(project.language, project.keywords.first)
-      expect(page).to have_content 'libraries written in'
+      expect(page).to have_content 'packages written in'
     end
   end
 end

@@ -19,7 +19,7 @@
       <%= number_to_human(@project.latest_version.dependencies.kind('runtime').count) %>
     </dd>
     <dt class='col-xs-8'>
-      Dependent projects
+      Dependent Packages
     </dt>
     <dd class='col-xs-4'>
       <%= link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %>

@@ -1,5 +1,5 @@
-<%= render 'admin/nav' %>
-<% title 'Admin Graphs - Libraries' %>
+ Packages <%= render 'admin/nav' %>
+<% title 'Admin Graphs - Libraries.io' %>
 <%= javascript_include_tag 'admin', 'data-turbolinks-track' => true, integrity: true %>
 
 <div class="row">
@@ -18,7 +18,7 @@
 <div class="row">
   <div class="col-md-12">
     <p>
-      <strong><%= @platform %> Projects by created_at</strong>
+      <strong><%= @platform %> Packages by created_at</strong>
     </p>
     <%= line_chart @projects %>
     <% if @versions.any? %>

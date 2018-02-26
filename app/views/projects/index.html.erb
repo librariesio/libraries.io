@@ -5,12 +5,12 @@
 
     <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
       <div class="input-group input-group-lg">
-        <%= text_field_tag 'q', params[:q], placeholder: 'Search open source libraries, frameworks and tools...', class: 'form-control', autofocus: true %>
+        <%= text_field_tag 'q', params[:q], placeholder: 'Search open source packages, frameworks and tools...', class: 'form-control', autofocus: true %>
         <span class="input-group-btn">
           <button class="btn btn-primary" type="submit">Search</button>
         </span>
       </div>
-      <p class='hidden-xs'>Libraries.io monitors <strong><%= number_with_delimiter(Project.total) %></strong> open source libraries across <strong><%= PackageManager::Base.platforms.length %></strong> different package managers, so you don't have to. <%= link_to 'Find out more', about_path %>
+      <p class='hidden-xs'>Libraries.io monitors <strong><%= number_with_delimiter(Project.total) %></strong> open source packages across <strong><%= PackageManager::Base.platforms.length %></strong> different package managers, so you don't have to. <%= link_to 'Find out more', about_path %>
       </p>
       <hr>
     <% end %>
@@ -24,7 +24,7 @@
       </div>
       <div class="panel-body">
         <p>
-          Search <%= number_to_human(Project.total) %> projects by <%= link_to 'licence'.html_safe, licenses_path %>, <%= link_to 'language'.html_safe, languages_path %> or <%= link_to 'keyword'.html_safe, keywords_path %>, or explore new, trending or popular projects.
+          Search <%= number_to_human(Project.total) %> packages by <%= link_to 'licence'.html_safe, licenses_path %>, <%= link_to 'language'.html_safe, languages_path %> or <%= link_to 'keyword'.html_safe, keywords_path %>, or explore new, trending or popular packages.
         </p>
       </div>
       <div class="panel-footer"><%= link_to 'Explore', explore_path, class:'btn btn-primary center-block' %></div>

@@ -9,7 +9,7 @@
     </div>
       <div class="row">
         <div class="col-xs-6">
-          <h5><%= search_page_entries_info @search, model: 'library' %></h5>
+          <h5><%= search_page_entries_info @search, model: 'package' %></h5>
         </div>
         <div class="col-xs-6">
           <div class="btn-group pull-right">
@@ -47,7 +47,7 @@
       <%= will_paginate @search, page_links: false %>
     <% else %>
       <p>
-        <b>No projects found. </b>
+        <b>No packages found. </b>
       </p>
       <% if params[:platforms].present? || params[:licenses].present? ||  params[:languages].present? ||  params[:keywords].present? %>
         <p>
@@ -56,7 +56,7 @@
       <% else %>
         <h3>Something Missing?</h3>
         <p>
-          If a project from one of these package managers is missing please <%= link_to 'report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>.
+          If a package from one of these package managers is missing please <%= link_to 'report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>.
         </p>
         <div class='row'>
           <%= render partial: 'platforms/platform', collection: @platforms %>

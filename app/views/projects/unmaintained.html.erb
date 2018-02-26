@@ -1,7 +1,7 @@
-<% title "#{@platform_name} Unmaintained Libraries - Libraries.io" %>
-<% description "Projects marked as unmaintained which are no longer updated" %>
+<% title "#{@platform_name} Unmaintained Packages - Libraries.io" %>
+<% description "Packages marked as unmaintained which are no longer updated" %>
 <div class="row">
-  <h1><i class="fa fa-archive"></i> <%= @platform_name %> Unmaintained Libraries</h1>
+  <h1><i class="fa fa-archive"></i> <%= @platform_name %> Unmaintained Packages</h1>
 </div>
 <hr>
 
@@ -10,7 +10,7 @@
     <%= render @projects, cache: true %>
     <%= will_paginate @projects, page_links: false %>
     <p>
-      <small><%= page_entries_info @projects, model: 'unmaintained libraries' %></small>
+      <small><%= page_entries_info @projects, model: 'unmaintained packages' %></small>
     </p>
   </div>
   <div class="col-sm-4">

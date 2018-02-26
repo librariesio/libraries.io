@@ -1,14 +1,14 @@
 <% if dependency.project.is_removed? %>
-  <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: "This project is no longer available on #{dependency.project.platform}" %>
+  <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: "This package is no longer available on #{dependency.project.platform}" %>
 <% elsif dependency.project.is_deprecated? %>
-  <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project has been marked as deprecated' %>
+  <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This package has been marked as deprecated' %>
 <% elsif dependency.project.is_unmaintained? %>
-  <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This project is no longer maintained' %>
+  <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This package is no longer maintained' %>
 <% elsif dependency.outdated? %>
   <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: 'Out of date version' %>
 <% end %>
 <% if !dependency.project.license_present? %>
-  <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: "This project doesn't appear to have a license" %>
+  <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: "This package doesn't appear to have a license" %>
 <% elsif dependency.incompatible_license? %>
-  <%= fa_icon 'exclamation-triangle', class: 'text-info tip', title: 'This project may have a conflicting license' %>
+  <%= fa_icon 'exclamation-triangle', class: 'text-info tip', title: 'This package may have a conflicting license' %>
 <% end %>

@@ -14,7 +14,7 @@ describe "DashboardController" do
     it "renders successfully when logged in" do
       login(user)
       visit muted_path
-      expect(page).to have_content 'Muted Projects'
+      expect(page).to have_content 'Muted Packages'
     end
   end
 

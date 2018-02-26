@@ -57,7 +57,7 @@
     <h3 id='project'>Project</h3>
 
     <p>
-      Get information about a project and it's versions.
+      Get information about a package and it's versions.
     </p>
 
     <p>
@@ -91,7 +91,7 @@
     <h3 id="project-dependents">Project Dependents</h3>
 
     <p>
-      Get projects that have at least one version that depends on a given project.
+      Get packages that have at least one version that depends on a given project.
     </p>
 
 
@@ -234,7 +234,7 @@
     <h3 id="repository-projects">Repository Projects</h3>
 
     <p>
-      Get a list of projects referencing the given repository.
+      Get a list of packages referencing the given repository.
     </p>
     <p>
       <code>GET https://libraries.io/api/github/:owner/:name/projects?api_key=<%= @api_key %></code>
@@ -282,10 +282,10 @@
 <%= JSON.pretty_generate @repository_user.open_source_repositories.paginate(page: 1).as_json(except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id]) %></pre>
     <% end %>
 
-    <h3 id="user-projects">User Projects</h3>
+    <h3 id="user-projects">User Packages</h3>
 
     <p>
-      Get a list of projects referencing the given users repositories.
+      Get a list of packages referencing the given users repositories.
     </p>
 
     <p>
@@ -300,10 +300,10 @@
 <%= JSON.pretty_generate @repository_user.projects.includes(:versions, :repository).paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
 
-    <h3 id="user-project-contributions">User Project Contributions</h3>
+    <h3 id="user-project-contributions">User Packages Contributions</h3>
 
     <p>
-      Get a list of projects that the given users has contributed to.
+      Get a list of packages that the given users has contributed to.
     </p>
 
     <p>
@@ -338,7 +338,7 @@
 
     <h3 id='subscriptions-index'>User Subscriptions</h3>
     <p>
-      List projects that a user is subscribed to recieved notifications about new releases
+      List packages that a user is subscribed to recieved notifications about new releases
     </p>
 
     <p>
@@ -461,7 +461,7 @@
       <li><a href="#user">User</a></li>
       <li><a href="#user-repositories">User Repositories</a></li>
       <li><a href="#user-projects">User Projects</a></li>
-      <li><a href="#user-project-contributions">User Project Contributions</a></li>
+      <li><a href="#user-project-contributions">User Package Contributions</a></li>
       <li><a href="#user-repository-contributions">User Repository Contributions</a></li>
     </ul>
     <ul>
