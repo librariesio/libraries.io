@@ -424,16 +424,19 @@ class Project < ApplicationRecord
   end
 
   def download_registry_users
-    return unless platform.downcase == 'rubygems'
     # download owner data
-    owner_json = PackageManager::Base.get_json("https://rubygems.org/api/v1/gems/#{name}/owners.json")
+    owner_json = platform_class.download_registry_users(name)
     owners = []
 
+    return unless owner_json.present? 
+
     # find or create registry users
-    owner_json.each do |json|
-      r = RegistryUser.find_or_create_by(platform: platform, uuid: json['id'])
-      r.email = json['email']
-      r.login = json['handle']
+    owner_json.each do |user|
+      r = RegistryUser.find_or_create_by(platform: platform, uuid: user[:uuid])
+      r.email = user[:email]
+      r.login = user[:login]
+      r.name = user[:name]
+      r.url = user[:url]
       r.save if r.changed?
       owners << r
     end
@@ -441,7 +444,6 @@ class Project < ApplicationRecord
     # update registry permissions
     existing_permissions = registry_permissions.includes(:registry_user).all
     existing_owners = existing_permissions.map(&:registry_user)
-
 
     # add new owners
     new_owners = owners - existing_owners

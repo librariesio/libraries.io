@@ -60,6 +60,10 @@ module PackageManager
       nil
     end
 
+    def self.download_registry_users(_name)
+      nil
+    end
+
     def self.check_status_url(project)
       package_link(project)
     end
