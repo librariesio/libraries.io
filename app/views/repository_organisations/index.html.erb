@@ -14,6 +14,7 @@
         Most Repositories
       </h4>
       <% @most_repos.each do |org| %>
+        <% next if org.nil? || org.login.nil? %>
         <div class="org">
           <%= link_to image_tag(org.avatar_url(120), width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org.to_param) %>
           <strong><%= link_to org, user_path(org.to_param) %></strong>
@@ -30,6 +31,7 @@
         Most Stars
       </h4>
       <% @most_stars.each do |org| %>
+        <% next if org.nil? || org.login.nil? %>
         <div class="org">
           <%= link_to image_tag(org.avatar_url(120), width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org.to_param) %>
           <strong><%= link_to org, user_path(org.to_param) %></strong>
@@ -46,6 +48,7 @@
         Recently Indexed
       </h4>
       <% @newest.each do |org| %>
+        <% next if org.nil? || org.login.nil? %>
         <div class="org">
           <%= link_to image_tag(org.avatar_url(120), width: 60, height: 60, alt: org, class: 'pull-left'), user_path(org.to_param) %>
           <strong><%= link_to org, user_path(org.to_param) %></strong>
@@ -57,6 +60,6 @@
     </div>
   <% end %>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
+
   </div>
 </div>

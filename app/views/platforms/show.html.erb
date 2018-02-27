@@ -1,7 +1,7 @@
 <% title "#{platform_name(@platform_name)} - Libraries.io" %>
-<% description "A detailed listing of the most popular, recently updated and most watched #{platform_name(@platform_name)} projects online" %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_url(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{platform_name(@platform_name)} Projects") %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), title: "New #{platform_name(@platform_name)} Projects") %>
+<% description "A detailed listing of the most popular, recently updated and most watched #{platform_name(@platform_name)} packages online" %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{platform_name(@platform_name)} Packages") %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), title: "New #{platform_name(@platform_name)} Packages") %>
 
 <% cache([@platform_name, 'platforms:show', 'v1'], :expires_in => 1.hour) do %>
 <div class='row'>
@@ -28,7 +28,7 @@
       <% if @trending.any? %>
         <div class='col-sm-6 platform-column'>
           <h4>
-            Trending <%= platform_name(@platform_name) %> Projects
+            Trending <%= platform_name(@platform_name) %> Packages
             <small class='more'>
               <%= link_to 'See more &raquo;'.html_safe, trending_projects_path(platforms: @platform_name) %>
             </small>
@@ -40,7 +40,7 @@
       <% if @popular.any? %>
         <div class='col-sm-6 platform-column'>
           <h4>
-            Popular <%= platform_name(@platform_name) %> Projects
+            Popular <%= platform_name(@platform_name) %> Packages
             <small class='more'>
               <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'rank', order: 'desc') %>
             </small>
@@ -51,14 +51,14 @@
 
       <% if @dependent_repos.any? %>
         <div class='col-sm-6 platform-column'>
-          <h4>Most Used <%= platform_name(@platform_name) %> Projects</h4>
+          <h4>Most Used <%= platform_name(@platform_name) %> Packages</h4>
           <%= render @dependent_repos, cache: true %>
         </div>
       <% end %>
 
       <% if @dependend.any? %>
         <div class='col-sm-6 platform-column'>
-          <h4>Most Depended upon <%= platform_name(@platform_name) %> Projects</h4>
+          <h4>Most Depended upon <%= platform_name(@platform_name) %> Packages</h4>
           <%= render @dependend, cache: true %>
         </div>
       <% end %>
@@ -69,7 +69,7 @@
           <%= link_to search_url(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
           <% end %>
-          Updated <%= platform_name(@platform_name) %> Projects
+          Updated <%= platform_name(@platform_name) %> Packages
           <small class='more'>
             <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc') %>
           </small>
@@ -83,7 +83,7 @@
             <%= link_to search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
               <%= fa_icon "rss-square" %>
             <% end %>
-            New <%= platform_name(@platform_name) %> Projects
+            New <%= platform_name(@platform_name) %> Packages
             <small class='more'>
               <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc') %>
             </small>
@@ -94,17 +94,16 @@
 
       <% if @watched.any? %>
           <div class='col-sm-6 platform-column'>
-            <h4>Most Watched <%= platform_name(@platform_name) %> Projects</h4>
+            <h4>Most Watched <%= platform_name(@platform_name) %> Packages</h4>
             <%= render @watched, cache: true %>
           </div>
           <div class="col-sm-6">
-            <%= render 'adsense/sidebar' %>
+
           </div>
       <% end %>
     </div>
   </div>
   <div class="col-md-4">
-    <%= render 'adsense/sidebar' %>
     <div class='row'>
       <% if @languages.many? %>
         <div class='col-md-12 col-sm-4'>

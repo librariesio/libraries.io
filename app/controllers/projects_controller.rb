@@ -14,12 +14,9 @@ class ProjectsController < ApplicationController
       @projects = current_user.recommended_projects.limit(7)
       render 'dashboard/home'
     else
-      facets = Project.facets(:facet_limit => 30)
+      facets = Project.facets(:facet_limit => 40)
 
-      @languages = facets[:languages].language.buckets
       @platforms = facets[:platforms].platform.buckets
-      @licenses = facets[:licenses].normalized_licenses.buckets.reject{ |t| t['key'].downcase == 'other' }
-      @keywords = facets[:keywords].keywords_array.buckets
     end
   end
 
@@ -52,7 +49,7 @@ class ProjectsController < ApplicationController
       end
     end
     find_version
-    @contributors = @project.contributors.order('count DESC').visible.limit(24)
+    @contributors = @project.contributors.order('count DESC').visible.limit(24).select(:host_type, :name, :login, :uuid)
   end
 
   def sourcerank
@@ -65,7 +62,7 @@ class ProjectsController < ApplicationController
   end
 
   def dependents
-    @dependents = @project.dependent_projects.paginate(page: page_number)
+    @dependents = @project.dependent_projects.visible.paginate(page: page_number)
   end
 
   def dependent_repos
@@ -95,7 +92,7 @@ class ProjectsController < ApplicationController
       if @project.repository.nil?
         @tags = []
       else
-        @tags = @project.tags.published.order('published_at DESC').paginate(page: page_number)
+        @tags = @project.repository.tags.published.order('published_at DESC').paginate(page: page_number)
       end
       respond_to do |format|
         format.html
@@ -187,7 +184,7 @@ class ProjectsController < ApplicationController
   end
 
   def project_scope(scope_name)
-    @platforms = Project.send(scope_name).group('platform').count.sort_by(&:last).reverse
+    @platforms = Project.visible.send(scope_name).group('platform').count.sort_by(&:last).reverse
     @projects = platform_scope.send(scope_name).includes(:repository).order('dependents_count DESC, projects.rank DESC NULLS LAST, projects.created_at DESC').paginate(page: page_number, per_page: 20)
   end
 end

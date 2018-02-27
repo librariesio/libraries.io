@@ -14,7 +14,7 @@
       <% if count > 0 %>
         <p>
           <%= fa_icon 'code' %>
-          Tracking <%= number_to_human @user.open_source_contributions.sum(:count) %> commits to <%= number_to_human count %> open source projects
+          Tracking <%= number_to_human @user.open_source_contributions.sum(:count) %> commits to <%= number_to_human count %> open source packages
         </p>
       <% end %>
     <% end %>
@@ -48,7 +48,6 @@
 
 <div class="row">
   <div class="col-md-8">
-    <%= render 'adsense/banner' %>
     <div class="row">
       <% if @repositories.length > 0 %>
         <div class="col-sm-6 user-column">
@@ -68,21 +67,21 @@
     <div class="row">
       <% if @projects.length > 0 %>
         <div class="col-sm-6 user-column">
-          <h4>Published Projects</h4>
+          <h4>Published Packages</h4>
           <%= render @projects, cache: true %>
           <%= link_to "See all #{@user}'s projects", user_projects_path(@user.to_param) %>
         </div>
       <% end %>
       <% if @favourite_projects.length > 0 %>
         <div class="col-sm-6 user-column">
-          <h4>Most Used Projects</h4>
+          <h4>Most Used Packages</h4>
           <%= render @favourite_projects, cache: true %>
+          <%= link_to "See all #{@user}'s most used projects", user_dependencies_path(@user.to_param) %>
         </div>
       <% end %>
     </div>
   </div>
   <div class="col-md-4">
-    <%= render 'adsense/sidebar' %>
     <% if @user.org? %>
       <% if @user.top_contributors.any?  %>
         <h4>

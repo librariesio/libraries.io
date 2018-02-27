@@ -1,7 +1,7 @@
 require 'csv'
 
-EXPORT_VERSION = '1.0.1'
-EXPORT_DATE = "2017-06-14"
+EXPORT_VERSION = '1.1.0'
+EXPORT_DATE = "2017-11-29"
 
 namespace :open_data do
   desc 'Export all open data csvs'
@@ -266,7 +266,7 @@ namespace :open_data do
             dependency.project_name.try(:tr, "\r\n",''),
             dependency.platform.try(:tr, "\r\n",''),
             dependency.kind.try(:tr, "\r\n",''),
-            dependency.optional.try(:tr, "\r\n",''),
+            dependency.optional,
             dependency.requirements.try(:tr, "\r\n",''),
             dependency.project_id
           ]

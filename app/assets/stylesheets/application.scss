@@ -78,7 +78,7 @@ h3,h4{
   }
 }
 
-dt {
+dt, dd {
   margin-top: 0.5em;
 }
 
@@ -361,13 +361,6 @@ tr.top td{
   margin-right: 10px;
 }
 
-.plans{
-  margin-top:20px;
-  .col-sm-2{
-    width: 20% !important;
-  }
-}
-
 .include_prerelease {
   display: block;
   padding: 3px 20px;
@@ -395,10 +388,6 @@ tr.top td{
   min-height: 300px;
 }
 
-.adsbygoogle {
-  display: block;
-  margin: 10px 0 20px;
-}
 .pictogram-list .pictogram{
   margin-bottom: 5px;
 }
@@ -450,17 +439,22 @@ tr.top td{
   }
 }
 
-#readme-well{
-  max-height: 800px;
-  overflow: scroll;
-}
-
 .table > tbody > tr > td {
   vertical-align: middle;
 }
 
-.creative_commons{
+.well-small{
+  max-height: 200px;
+  overflow: scroll;
+}
+
+.well-medium{
   max-height: 400px;
+  overflow: scroll;
+}
+
+.well-large{
+  max-height: 800px;
   overflow: scroll;
 }
 
@@ -475,4 +469,14 @@ h4.panel-title{
 }
 .panel-heading .panel-toggle.collapsed:after{
     content: "\25BC";
+}
+
+.dropdown-header.terms a{
+  display: inline;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.octicon {
+  fill: currentColor;
 }

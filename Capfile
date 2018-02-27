@@ -5,7 +5,6 @@ require "capistrano/deploy"
 require 'capistrano/rails'
 require 'capistrano/maintenance'
 require "capistrano/scm/git"
-require 'bugsnag/capistrano'
 require 'capistrano/rails/console'
 install_plugin Capistrano::SCM::Git
 

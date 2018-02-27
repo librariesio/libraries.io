@@ -1,4 +1,4 @@
-<% title 'About - Libraries' %>
+<% title 'About - Libraries.io' %>
 <div class="row">
   <div class="col-sm-8">
    <h1>About</h1>
@@ -6,7 +6,7 @@
       Helping you make more informed decisions about the software you use.
     </h3>
     <p>
-      Libraries.io indexes data from <strong><%= number_with_delimiter(Project.total) %></strong> projects from <strong><%= PackageManager::Base.platforms.length %></strong> package managers. We monitor project releases, analyse each project's code, community, distribution and documentation, and we map the relationships between projects when they're declared as a dependency. The 'dependency tree' that emerges is the core of the services that we provide.
+      Libraries.io indexes data from <strong><%= number_with_delimiter(Project.total) %></strong> packages from <strong><%= PackageManager::Base.platforms.length %></strong> package managers. We monitor package releases, analyse each project's code, community, distribution and documentation, and we map the relationships between packages when they're declared as a dependency. The 'dependency tree' that emerges is the core of the services that we provide.
     </p>
     <h2>Use Libraries.io to</h2>
     <hr>
@@ -17,15 +17,15 @@
     <p>
       <%= link_to search_path, class: "btn btn-info" do %>
         <%= fa_icon 'search' %>
-        Search <%= number_with_delimiter(Project.total) %> libraries
+        Search <%= number_with_delimiter(Project.total) %> packages
       <% end %>
     </p>
     <p>
-      The majority of publication and distribution channels do not provide sufficient tools for developers to discover libraries that could be valuable to them. Similarly they do not provide adequate information for individuals to judge the merit of one library over another when they tackle similar issues or solve similar problems.
+      The majority of publication and distribution channels do not provide sufficient tools for developers to discover packages that could be valuable to them. Similarly they do not provide adequate information for individuals to judge the merit of one package over another when they tackle similar issues or solve similar problems.
     </p>
 
     <h3>
-      <strong>Monitor Your Projects</strong>
+      <strong>Monitor Your Packages</strong>
     </h3>
     <p>
       <strong>Keeping a watch while you work.</strong>
@@ -39,21 +39,21 @@
       <% else %>
         <%= link_to repositories_path, class: 'btn btn-primary' do %>
           <%= fa_icon 'github' %>
-          Manage your projects
+          Manage your repos
         <% end %>
       <% end %>
     <% elsif !current_user || current_user.github_enabled? %>
       <%= link_to repositories_path, class: 'btn btn-primary' do %>
         <%= fa_icon 'github' %>
-        Start monitoring your projects
+        Start monitoring your repos
       <% end %>
     <% end %>
     </p>
     <p>
-      The software we depend upon is constantly shifting and in need of continuous monitoring and management. By analysing libraries and understanding the relationships between them, we can automate much of this.
+      The software we depend upon is constantly shifting and in need of continuous monitoring and management. By analysing packages and understanding the relationships between them, we can automate much of this.
     </p>
     <p>
-      Similarly we can help you maintain your open source library by reflecting the state of the ecosystem back at you. Exposing the network of consumers who depend upon your software and the characteristics of the projects your software is deployed within. 
+      Similarly we can help you maintain your open source package by reflecting the state of the ecosystem back at you. Exposing the network of consumers who depend upon your software and the characteristics of the packages your software is deployed within.
     </p>
 
     <h3>
@@ -78,7 +78,7 @@
     </p>
     <%- end %>
     <p>
-      Libraries.io tracks releases from <strong><%= number_with_delimiter(Project.total) %></strong> projects on <strong><%= PackageManager::Base.platforms.length %></strong> package managers in one place. Subscribe to a project and receive notifications of new versions or tags for platforms like Bower and Go that don't store release information centrally. 
+      Libraries.io tracks releases from <strong><%= number_with_delimiter(Project.total) %></strong> packages on <strong><%= PackageManager::Base.platforms.length %></strong> package managers in one place. Subscribe to a package and receive notifications of new versions or tags for platforms like Bower and Go that don't store release information centrally.
     </p>
     <h2>Supported Package Managers</h2>
     <hr>
@@ -92,7 +92,7 @@
     </div>
     <h3><strong>What About Package Manager X?</strong></h3>
     <p>
-      Some package managers require compilation before parsing their dependencies, some we simply haven't got around to yet. Luckily Libraries.io is an open source project so if you need to add a new package manager then you can. You can find everything you need to get started in <a href='https://docs.libraries.io' target='_blank'>our documentation</a>.
+      Some package managers require compilation before parsing their dependencies, some we simply haven't got around to yet. Luckily Libraries.io is an open source package so if you need to add a new package manager then you can. You can find everything you need to get started in <a href='https://docs.libraries.io' target='_blank'>our documentation</a>.
     </p>
     <h2>Why Are You Doing This?</h2>
     <hr>
@@ -120,7 +120,6 @@
     </p>
   </div>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
     <%= render 'contact' %>
     <%= render 'who' %>
   </div>

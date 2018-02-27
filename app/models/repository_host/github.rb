@@ -44,6 +44,8 @@ module RepositoryHost
       id_or_name = id_or_name.to_i if id_or_name.match(/\A\d+\Z/)
       hash = AuthToken.fallback_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json').to_hash
       hash[:keywords] = hash[:topics]
+      hash[:host_type] = 'GitHub'
+      hash[:scm] = 'git'
       hash
     rescue *IGNORABLE_EXCEPTIONS
       nil
@@ -62,6 +64,8 @@ module RepositoryHost
         sha: file.sha,
         content: file.content.present? ? Base64.decode64(file.content) : file.content
       }
+    rescue URI::InvalidURIError
+      nil
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
@@ -176,6 +180,7 @@ module RepositoryHost
         next unless tag && tag.is_a?(Sawyer::Resource) && tag['ref']
         download_tag(token, tag, existing_tag_names)
       end
+      repository.projects.find_each(&:forced_save) if tags.present?
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end

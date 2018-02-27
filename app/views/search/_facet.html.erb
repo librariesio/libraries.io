@@ -3,23 +3,42 @@
     <h5><%= format_facet_name(name) %></h5>
   </div>
   <div class="panel-body">
-  <ul class='filter'>
-    <% facet.buckets.each do |term| %>
+    <ul class='filter'>
+      <% facet.buckets.each do |term| %>
         <% next if term['key'].blank? %>
-        <%= render 'search/term', term: term, name: name %>
+
+        <% term['key'] = term['key'].downcase if name == 'host_type' %>
+        <% current_param = params[name.to_sym].try(:split,',') || [] %>
+        <% active = current_param.map(&:downcase).include?(term['key'].try(:downcase)) %>
+        <li class='<%= 'active' if active %>'>
+          <% if active %>
+            <a href="<%= url_for(params.except(:host).merge(name.to_sym => current_param.reject{ |x| x == term['key'] }.join(','), page: nil).permit!) %>">
+            	<input type='checkbox' checked>
+            	<%= format_term(term['key']) %>
+            </a>
+          <% else %>
+            <a href="<%= url_for(params.except(:host).merge(name.to_sym => current_param.push(term['key']).join(','), page: nil).permit!) %>">
+            	<input type='checkbox'>
+            	<%= format_term(term['key']) %>
+            </a>
+            <small><%= number_to_human term['doc_count'] %> projects</small>
+          <% end %>
+        </li>
+
       <% end %>
+
       <% if params[name.to_sym].present? %>
         <% params[name.to_sym].split(',').each do |term| %>
-          <% if !facet.buckets.map{|t| t['key']}.include?(term) %>
+          <% if !facet.buckets.map{|t| t['key'].try(:downcase) }.include?(term.try(:downcase)) %>
             <li class='active'>
-              <%= link_to url_for(params.except(:host).merge(name.to_sym => params[name.to_sym].split(',').reject{ |x| x == term }.join(','), page: nil).permit!) do %>
-              <input type='checkbox' checked>
-              <%= format_term(term) %>
-              <% end %>
+              <a href="<%= url_for(params.except(:host).merge(name.to_sym => params[name.to_sym].split(',').reject{ |x| x == term }.join(','), page: nil).permit!) %>">
+                <input type='checkbox' checked>
+                <%= format_term(term) %>
+              </a>
             </li>
+          <% end %>
         <% end %>
       <% end %>
-    <% end %>
-  </ul>
+    </ul>
   </div>
 </div>

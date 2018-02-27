@@ -11,7 +11,6 @@
 // about supported directives.
 //
 //= require jquery
-//= require payola
 //= require jquery_ujs
 //= require bootstrap/alert
 //= require bootstrap/collapse
@@ -19,7 +18,6 @@
 //= require bootstrap/transition
 //= require bootstrap/tab
 //= require bootstrap/tooltip
-//= require js.cookie
 //= require rails-timeago
 //= require subtome
 //= require turbolinks
@@ -85,6 +83,7 @@ function load_async(id) {
   if($(id).length && $(id).data('url').length){
     $.get($(id).data('url'), function(data) {
       $(id).html(data).toggle(data.length > 0);
+      stickFooter()
     });
   }
 }
@@ -93,14 +92,6 @@ $('.rss').on('click', function(){
   subtome($(this).attr('href'))
   return false;
 })
-
-$('.learn-more').on('click', function(){
-  $('#welcome-alert').alert('close')
-})
-
-$('#welcome-alert').on('closed.bs.alert', function() {
-  Cookies.set('hide_welcome_alert', 'true');
-});
 
 $('input[name="subscription[include_prerelease]"]').on('change',function(){
   $(this).parents('form').submit();

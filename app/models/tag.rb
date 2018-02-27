@@ -92,7 +92,7 @@ class Tag < ApplicationRecord
   end
 
   def related_tags
-    repository.tags.sort
+    repository.sorted_tags
   end
 
   def tag_index

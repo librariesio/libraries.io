@@ -1,0 +1,16 @@
+<h1>
+  Activity Timeline for <%= @project.name %>
+</h1>
+
+<% @events.group_by_month(reverse: true){|e| e[:time] }.each do |month, events| %>
+  <strong><%= month.strftime('%B %Y') %></strong>
+  <br/>
+  <% events.each do |event| %>
+    <br/>
+    <%= octicon(event[:icon], class: event[:color]) %>
+    <%= event[:name] %> - <small class='text-muted'><%= event[:time].strftime('%b %e, %l:%M %p') %></small>
+  <% end %>
+  <br/><br/>
+<% end %>
+
+<%= will_paginate @events %>

@@ -29,13 +29,13 @@ RSpec.describe ProjectsController do
   describe "GET #unlicensed" do
     it "responds successfully", type: :request do
       visit unlicensed_path
-      expect(page).to have_content 'Unlicensed Libraries'
+      expect(page).to have_content 'Unlicensed Packages'
     end
 
     context "filtered by platform" do
       it "responds successfully" do
         visit unlicensed_path(platform: 'Rubygems')
-        expect(page).to have_content 'Unlicensed Libraries'
+        expect(page).to have_content 'Unlicensed Packages'
       end
     end
   end
@@ -85,7 +85,7 @@ RSpec.describe ProjectsController do
   describe "GET #unseen_infrastructure" do
     it "responds successfully", type: :request do
       visit unseen_infrastructure_path
-      expect(page).to have_content 'Unseen Open Source Infrastructure'
+      expect(page).to have_content 'Unseen Infrastructure'
     end
   end
 end

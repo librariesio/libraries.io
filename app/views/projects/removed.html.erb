@@ -1,7 +1,7 @@
-<% title "#{@platform_name} Removed Libraries - Libraries.io" %>
-<% description "Projects marked as removed which are no longer available for download" %>
+<% title "#{@platform_name} Removed Packages - Libraries.io" %>
+<% description "Packages marked as removed which are no longer available for download" %>
 <div class="row">
-  <h1><i class="fa fa-ban"></i> <%= @platform_name %> Removed Libraries</h1>
+  <h1><i class="fa fa-ban"></i> <%= @platform_name %> Removed Packages</h1>
 </div>
 <hr>
 
@@ -10,11 +10,10 @@
     <%= render @projects, cache: true %>
     <%= will_paginate @projects, page_links: false %>
     <p>
-      <small><%= page_entries_info @projects, model: 'removed libraries' %></small>
+      <small><%= page_entries_info @projects, model: 'removed packages' %></small>
     </p>
   </div>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
     <h3>
       <strong>
         Filter by package manager

@@ -1,0 +1,84 @@
+<% title 'Experiments - Libraries.io' %>
+
+<div class="row">
+  <div class="col-md-8">
+  	<h1>
+      <%= fa_icon 'flask' %>
+      Experiments
+    </h1>
+    <br>
+    <p>
+       Libraries.io gathers data from <strong>33</strong> package managers and <strong>3</strong> source code repositories. We track over <strong>2.4m</strong> unique open source packages, <strong>25m</strong> repositories and <strong>121m</strong> interdependencies between them. We publish this data periodically under a creative-commons license to empower and accelerate the work of those seeking to understand and create a stronger open source ecosystem.
+    </p>
+    <p>
+    	This page contains a number of experiments that we have created ourselves. If you would like to feature research using Libraries.io data on this page please contact <%= mail_to 'data@libraries.io'%>.
+    </p>
+    <hr>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">
+        	<%= link_to bus_factor_path  do%>
+        		<%= fa_icon 'bus' %>
+        		Bus Factor
+        	<% end %>
+        </h2>
+      </div>
+      <div class="panel-body">
+        <p>
+           The <%= link_to 'Bus factor', 'https://en.wikipedia.org/wiki/Bus_factor' %> is the number of key developers who would need to be incapacitated to make a package unable to proceed. This page shows packages that are depended upon by many other packages but have only ever had a handful of contributors commit to the project.
+        </p>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">
+        	<%= link_to digital_infrastructure_path do %>
+        		<%= fa_icon 'map-signs' %>
+        		Digital Infrastructure
+        	<% end %>
+        </h2>
+      </div>
+      <div class="panel-body">
+        <p>
+          Digital infrastructure is the free and open source software contributed as a public good that underpins much of today's technology. As Nadia Edghal posed in her excellent primer <a href='http://www.fordfoundation.org/library/reports-and-studies/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure/' target='_blank'>Roads and Bridges' for the Ford Foundation:</a> 'In order to support our digital infrastructure, we must find ways to work together'. These packages are the most-commonly depended upon open source components of over 25m repositories tracked by Libraries.io.
+        </p>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">
+        	<%= link_to unseen_infrastructure_path do %>
+        		<%= fa_icon 'binoculars' %>
+        		Unseen Infrastructure
+        	<% end %>
+       	</h2>
+      </div>
+      <div class="panel-body">
+        <p>
+          Unseen infrastructure are packages that are among some of the most depended upon (at least 1,000 dependent repos) and yet receive very little attention and recognition. These packages may become digital infrastructure, but they are unlikely to succeed without more support.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class='col-md-4'>
+  	<h2>Use Libraries.io Data</h2>
+  	<hr>
+  	<p>
+  		Libraries.io data is released periodically under a CC-BY-SA 4.0 license. For more information see our <%= link_to 'documentation', data_path %>.
+  	</p>
+  	<%= render 'releases'%>
+
+  	<h3>Subscribe to release notifications</h3>
+    <p>
+      Join the mailing list to be notified via email whenever we publish a new data set.
+    </p>
+    <form action="//libraries.us10.list-manage.com/subscribe/post?u=15c11768c94674bc6f18d079f&amp;id=08d43abc2f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="form-inline" novalidate>
+      <input type="email" value="" name="EMAIL" size='20' placeholder='Your email...' class="form-control" id="mce-EMAIL">
+      <div style="position: absolute; left: -5000px;"><input type="text" name="b_15c11768c94674bc6f18d079f_08d43abc2f" tabindex="-1" value=""></div>
+      <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary">
+    </form>
+
+    <%= render 'package_manager_list' %>
+
+  </div>
+</div>

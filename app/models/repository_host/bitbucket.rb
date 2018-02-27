@@ -101,7 +101,7 @@ module RepositoryHost
     end
 
     def download_readme(token = nil)
-      files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, URI.escape(repository.default_branch), '/')
+      files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, URI.escape(repository.default_branch || 'master'), '/')
       paths =  files.files.map(&:path)
       readme_path = paths.select{|path| path.match(/^readme/i) }.sort{|path| Readme.supported_format?(path) ? 0 : 1 }.first
       return if readme_path.nil?
@@ -131,6 +131,7 @@ module RepositoryHost
           published_at: data.utctimestamp
         })
       end
+      repository.projects.find_each(&:forced_save) if remote_tags.present?
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
@@ -146,7 +147,7 @@ module RepositoryHost
       json['values'].each do |repo|
         CreateRepositoryWorker.perform_async('Bitbucket', repo['full_name'])
       end
-      puts json['next']
+
       if json['values'].any? && json['next']
         limit = limit - 1
         REDIS.set 'bitbucket-after', Addressable::URI.parse(json['next']).query_values['after']

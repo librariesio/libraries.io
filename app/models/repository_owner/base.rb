@@ -15,7 +15,7 @@ module RepositoryOwner
     end
 
     def top_favourite_projects
-      Project.where(id: top_favourite_project_ids).maintained.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
+      Project.visible.where(id: top_favourite_project_ids).maintained.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
     end
 
     def top_contributors
@@ -60,8 +60,19 @@ module RepositoryOwner
       end
     end
 
+    def check_status
+      response = Typhoeus.head(repository_url)
+
+      if response.response_code == 404
+        owner.repositories.each do |repo|
+          CheckRepoStatusWorker.perform_async(repo.host_type, repo.full_name)
+        end
+        owner.destroy
+      end
+    end
+
     def formatted_host
-      self.class.format(repository.host_type)
+      self.class.format(owner.host_type)
     end
 
     def download_user_from_host

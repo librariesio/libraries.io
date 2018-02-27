@@ -7,6 +7,7 @@ class RepositoryUser < ApplicationRecord
   has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
   has_many :contributed_repositories, -> { Repository.source.open_source }, through: :contributions, source: :repository
+  has_many :contributed_projects, through: :contributed_repositories, source: :projects
   has_many :contributors, -> { group('repository_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
   has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('repository_users.id').order("COUNT(repository_users.id) DESC") }, through: :contributed_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
@@ -30,7 +31,7 @@ class RepositoryUser < ApplicationRecord
 
   delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
            :to_s, :to_param, :github_id, :download_user_from_host, :download_orgs,
-           :download_user_from_host_by_login, :download_repos, to: :repository_owner
+           :download_user_from_host_by_login, :download_repos, :check_status, to: :repository_owner
 
  def login_uniqueness_with_case_insenitive_host
    if RepositoryUser.host(host_type).login(login).exists?
@@ -63,6 +64,8 @@ class RepositoryUser < ApplicationRecord
   end
 
   def sync
+    check_status
+    return unless persisted?
     download_user_from_host
     download_orgs
     download_repos

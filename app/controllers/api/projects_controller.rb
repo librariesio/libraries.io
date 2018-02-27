@@ -5,6 +5,10 @@ class Api::ProjectsController < Api::ApplicationController
     render json: @project
   end
 
+  def sourcerank
+    render json: @project.source_rank_breakdown
+  end
+
   def dependents
     dependents = paginate(@project.dependent_projects).includes(:versions, :repository)
     render json: dependents
@@ -15,7 +19,7 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def searchcode
-    render json: Project.where('updated_at > ?', 1.day.ago).order(:repository_url).pluck(:repository_url).compact.reject(&:blank?)
+    render json: Project.visible.where('updated_at > ?', 1.day.ago).order(:repository_url).pluck(:repository_url).compact.reject(&:blank?)
   end
 
   def dependencies
@@ -33,5 +37,9 @@ class Api::ProjectsController < Api::ApplicationController
     project_json[:dependencies] = map_dependencies(version.dependencies || [])
 
     render json: project_json
+  end
+
+  def contributors
+    paginate json: @project.contributors
   end
 end

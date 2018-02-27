@@ -1,13 +1,13 @@
-<% title "Projects tagged with '#{@keyword}' - Libraries.io" %>
-<% description "A detailed listing of the most popular, recently updated and most watched #{@keyword} projects online" %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_url(keywords: @keyword, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@keyword} Projects") %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_url(keywords: @keyword, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@keyword} Projects") %>
+<% title "Packages tagged with '#{@keyword}' - Libraries.io" %>
+<% description "A detailed listing of the most popular, recently updated and most watched #{@keyword} packages online" %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(keywords: @keyword, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@keyword} Packages") %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(keywords: @keyword, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@keyword} Packages") %>
 
 <% cache([@keyword, 'keywords:show', 'v1'], :expires_in => 1.hour) do %>
 <div class="row">
   <div class="col-sm-6">
     <h1>
-      Projects tagged with "<%= @keyword %>"
+      Packages tagged with "<%= @keyword %>"
     </h1>
   </div>
   <div class="col-sm-6">
@@ -25,7 +25,7 @@
       <% if @popular.any? %>
       <div class='col-sm-6 platform-column'>
         <h4>
-          Popular "<%= @keyword %>" Projects
+          Popular "<%= @keyword %>" Packages
           <small class='more'>
             <%= link_to 'See more &raquo;'.html_safe, search_path(keywords: @keyword, sort: 'rank', order: 'desc') %>
           </small>
@@ -40,7 +40,7 @@
           <%= link_to search_url(keywords: @keyword, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
           <% end %>
-          New "<%= @keyword %>" Projects
+          New "<%= @keyword %>" Packages
           <small class='more'>
             <%= link_to 'See more &raquo;'.html_safe, search_path(keywords: @keyword, sort: 'created_at', order: 'desc') %>
           </small>
@@ -55,7 +55,7 @@
           <%= link_to search_url(keywords: @keyword, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
           <% end %>
-          Updated "<%= @keyword %>" Projects
+          Updated "<%= @keyword %>" Packages
           <small class='more'>
             <%= link_to 'See more &raquo;'.html_safe, search_path(keywords: @keyword, sort: 'latest_release_published_at', order: 'desc') %>
           </small>
@@ -66,21 +66,21 @@
 
       <% if @watched.any? %>
       <div class='col-sm-6 platform-column'>
-        <h4>Most Watched "<%= @keyword %>" Projects</h4>
+        <h4>Most Watched "<%= @keyword %>" Packages</h4>
         <%= render @watched, cache: true %>
       </div>
       <% end %>
 
       <% if @dependent_repos.any? %>
         <div class='col-sm-6 platform-column'>
-          <h4>Most Used "<%= @keyword %>" Projects</h4>
+          <h4>Most Used "<%= @keyword %>" Packages</h4>
           <%= render @dependent_repos, cache: true %>
         </div>
       <% end %>
 
       <% if @dependend.any? %>
         <div class='col-md-6 platform-column'>
-          <h4>Most Depended upon "<%= @keyword %>" Projects</h4>
+          <h4>Most Depended upon "<%= @keyword %>" Packages</h4>
           <%= render @dependend, cache: true %>
         </div>
       <% end %>
@@ -88,7 +88,6 @@
   </div>
   <div class="col-md-4">
     <div class='row'>
-      <%= render 'adsense/sidebar' %>
       <% if @languages.many? %>
       <div class='col-md-12 col-sm-4'>
         <h4>

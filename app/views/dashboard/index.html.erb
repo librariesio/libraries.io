@@ -4,7 +4,7 @@
     <br>
   </div>
 </div>
-<% if current_user.has_active_subscription? && current_user.private_repo_token.blank? %>
+<% if current_user.private_repo_token.blank? %>
 <div class="row">
   <div class="col-md-12">
     <div class="alert alert-success" role="alert">
@@ -31,7 +31,7 @@
       </div>
       <% @orgs.each do |org| %>
         <div class='org-filter <%= 'active' if @org && org.login == @org.login %>'>
-          <%= link_to url_for(org: org) do %>
+          <%= link_to url_for(org: org.login) do %>
             <%= image_tag org.avatar_url(60), width: 30, height: 30 %>
             <%= org.login %>
           <% end %>
@@ -101,15 +101,14 @@
       <%= will_paginate @repos, page_links: false %>
     </div>
     <div class="col-md-3">
-      <%= render 'adsense/sidebar' %>
       <h5>How does this work?</h5>
       <p>
         With the help of a webhook, Libraries.io can automatically keep track of all
-        of the libraries that your repositories depends upon across many different package managers.
+        of the packages that your repositories depends upon across many different package managers.
       </p>
       <p>
         Once synced, Libraries.io will email you about new versions of your dependencies,
-        if you add or remove a new dependency it will change the notifications settings for that library
+        if you add or remove a new dependency it will change the notifications settings for that package
         as soon as you push to your repositories.
       </p>
       <p><strong>Supported Package Managers:</strong></p>

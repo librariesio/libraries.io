@@ -1,7 +1,7 @@
 <% title "#{@language} - Libraries.io" %>
-<% description "A detailed listing of the most popular, recently updated and most watched #{@language} projects online" %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_url(languages: @language, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@language} Projects") %>
-<% content_for :atom, auto_discovery_link_tag(:atom, search_url(languages: @language, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@language} Projects") %>
+<% description "A detailed listing of the most popular, recently updated and most watched #{@language} packages online" %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(languages: @language, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@language} Packages") %>
+<% content_for :atom, auto_discovery_link_tag(:atom, search_url(languages: @language, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@language} Packages") %>
 
 <% cache([@language, 'languages:show', 'v1'], :expires_in => 1.hour) do %>
 <div class="row">
@@ -27,7 +27,7 @@
       <% if @popular.any? %>
       <div class='col-sm-6 platform-column'>
         <h4>
-          Popular <%= @language %> Projects
+          Popular <%= @language %> Packages
           <small class='more'>
             <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'rank', order: 'desc') %>
           </small>
@@ -42,7 +42,7 @@
           <%= link_to search_url(languages: @language, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
           <% end %>
-          New <%= @language %> Projects
+          New <%= @language %> Packages
           <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'created_at', order: 'desc') %>
         </h4>
         <%= render @created, cache: true %>
@@ -54,7 +54,7 @@
           <%= link_to search_url(languages: @language, sort: 'latest_release_published_at', order: 'desc', format: :atom), class: 'rss' do %>
             <%= fa_icon "rss-square" %>
           <% end %>
-          Updated <%= @language %> Projects
+          Updated <%= @language %> Packages
           <small>
             <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'latest_release_published_at', order: 'desc') %>
           </small>
@@ -64,26 +64,25 @@
       <% end %>
       <% if @watched.any? %>
         <div class='col-sm-6 platform-column'>
-          <h4>Most Watched <%= @language %> Projects</h4>
+          <h4>Most Watched <%= @language %> Packages</h4>
           <%= render @watched, cache: true %>
         </div>
       <% end %>
       <% if @dependent_repos.any? %>
         <div class='col-sm-6 platform-column'>
-          <h4>Most Used <%= @language %> Projects</h4>
+          <h4>Most Used <%= @language %> Packages</h4>
           <%= render @dependent_repos, cache: true %>
         </div>
       <% end %>
       <% if @dependend.any? %>
         <div class='col-sm-6 platform-column'>
-          <h4>Most Depended upon <%= @language %> Projects</h4>
+          <h4>Most Depended upon <%= @language %> Packages</h4>
           <%= render @dependend, cache: true %>
         </div>
       <% end %>
     </div>
   </div>
   <div class="col-md-4">
-    <%= render 'adsense/sidebar' %>
     <div class="row">
       <% if @licenses.many? %>
         <div class='col-md-12 col-sm-4'>

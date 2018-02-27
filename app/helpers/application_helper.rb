@@ -87,7 +87,7 @@ module ApplicationHelper
   def rss_url(project)
     if project.versions.size > 0
       project_versions_url({format: "atom"}.merge(project.to_param))
-    elsif project.repository && project.tags.length > 0
+    elsif project.repository && project.repository.tags.length > 0
       project_tags_url({format: "atom"}.merge(project.to_param))
     end
   end
@@ -111,7 +111,7 @@ module ApplicationHelper
   end
 
   def linked_keywords(keywords)
-    keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/keywords/#{k}" }.join(', ').html_safe
+    keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/search?keywords=#{k}" }.join(', ').html_safe
   end
 
   def linked_repo_keywords(keywords)
@@ -172,7 +172,7 @@ module ApplicationHelper
   def project_description(project, version)
     text = project.description || project.name
     text += " - #{version}" if version
-    library_text = [project.language, "library"].compact.join(' ').with_indefinite_article
+    library_text = [project.language, "package"].compact.join(' ').with_indefinite_article
     text + " - #{library_text} on #{project.platform_name} - Libraries.io"
   end
 

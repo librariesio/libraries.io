@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <title><%= content_for?(:title) ? content_for(:title) : "Libraries.io - The Open Source Discovery Service" %></title>
-  <meta name="description" content="<%= content_for?(:description) ? content_for(:description) : "Discover open source libraries, modules and frameworks you can use in your code." %>">
+  <meta name="description" content="<%= content_for?(:description) ? content_for(:description) : "Discover open source packages, modules and frameworks you can use in your code." %>">
   <%= csrf_meta_tags %>
   <%= content_for :atom %>
   <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/apple-touch-icon-57x57.png" />
@@ -28,9 +28,6 @@
   <meta name="yandex-verification" content="2a6b144b8bd37026" />
   <%= content_for(:meta).presence || render_meta %>
   <link href="/opensearch.xml" title="Libraries.io" rel="search" type="application/opensearchdescription+xml">
-  <% if Rails.env.production? %>
-      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <% end %>
   <% if ENV["GA_ANALYTICS_ID"].present? %>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -52,7 +49,7 @@
       "@type": "WebSite",
       "name": "Libraries.io",
       "url": "https://libraries.io/",
-      "description": "Discover open source libraries, modules and frameworks you can use in your code",
+      "description": "Discover open source packages, modules and frameworks you can use in your code",
       "license": "https://github.com/librariesio/libraries.io/blob/master/LICENSE.txt",
       "potentialAction": {
         "@type": "SearchAction",
@@ -66,7 +63,7 @@
       "@context": "http://schema.org",
       "@type": "Organization",
       "name": "Libraries.io",
-      "description": "Discover open source libraries, modules and frameworks you can use in your code",
+      "description": "Discover open source packages, modules and frameworks you can use in your code",
       "url": "https://libraries.io/",
       "logo": "https://libraries.io/apple-touch-icon-152x152.png",
       "email": "support@libraries.io",
@@ -141,6 +138,10 @@
                       <%= fa_icon('bitbucket') %> Bitbucket
                     <% end %>
                   </li>
+                  <li class='divider'></li>
+                  <li class="dropdown-header terms">
+                    By logging in you accept <br>our <a href='/terms'>terms of service</a> <br>and <a href='/privacy'>privacy policy</a>
+                  </li>
                 </ul>
               </div>
             </li>
@@ -151,6 +152,7 @@
   </div>
 
   <div class="container">
+    <%= render 'shared/notice' %>
     <%= render 'shared/flash' %>
     <%= yield %>
   </div>

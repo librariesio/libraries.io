@@ -1,7 +1,7 @@
-<% title "#{@platform_name} Libraries without licenses - Libraries.io" %>
-<% description "Help the community by encouraging the authors to add a LICENSE file to their #{@platform_name} libraries." %>
+<% title "#{@platform_name} Packages without licenses - Libraries.io" %>
+<% description "Help the community by encouraging the authors to add a LICENSE file to their #{@platform_name} packages." %>
 <div class="row">
-  <h1><i class="fa fa-copyright"></i> <%= @platform_name %> Libraries without licenses</h1>
+  <h1><i class="fa fa-copyright"></i> <%= @platform_name %> Packages without licenses</h1>
 </div>
 <hr>
 
@@ -27,18 +27,17 @@
     <% end %>
     <%= will_paginate @search, page_links: false %>
     <p>
-      <small><%= page_entries_info @search, model: 'libraries without licenses' %></small>
+      <small><%= page_entries_info @search, model: 'packages without licenses' %></small>
     </p>
   </div>
   <div class="col-sm-4 facets">
-    <%= render 'adsense/sidebar' %>
     <h3>
       <strong>
         What's the deal with licenses?
       </strong>
     </h3>
     <p>
-      Over <strong>30%</strong> of all open source libraries published aren't licensed correctly, by using a library in your code that doesn't have a license you could be in breach of copyright.
+      Over <strong>30%</strong> of all open source packages published aren't licensed correctly, by using a package in your code that doesn't have a license you could be in breach of copyright.
     </p>
     <p>
       Theoretically the author could assert copyright at any time and demand that you stop using their code.
@@ -47,7 +46,7 @@
       Code without an explicit license is protected by copyright and is by default All Rights Reserved. The person or people who wrote the code are protected as such. Any time you're using software you didn't write, licensing should be considered and abided.
     </p>
     <p>
-      This is a list of the most popular/important libraries that we couldn't find a license for, you can help the community by encouraging the authors to add a <code>LICENSE</code> file to their repositories.
+      This is a list of the most popular/important packages that we couldn't find a license for, you can help the community by encouraging the authors to add a <code>LICENSE</code> file to their repositories.
     </p>
     <p>
       Find out more about open source licensing at <%= link_to 'ChooseALicense.com','http://choosealicense.com/' %>

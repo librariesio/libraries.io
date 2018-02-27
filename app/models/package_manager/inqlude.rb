@@ -2,7 +2,7 @@ module PackageManager
   class Inqlude < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    BIBLIOTHECARY_SUPPORT = false
+    BIBLIOTHECARY_PLANNED = true
     URL = 'https://inqlude.org/'
     COLOR = '#f34b7d'
 

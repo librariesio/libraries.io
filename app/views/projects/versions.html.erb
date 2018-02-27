@@ -7,7 +7,6 @@
 
 <div class="row">
   <div class="col-sm-8">
-    <%= render 'adsense/banner' %>
     <% if @versions.any? %>
       <table class='table'>
         <% @versions.each do |version| %>
@@ -32,7 +31,7 @@
             </small>
           </td>
           <td>
-            <% if version.previous_version %>              
+            <% if version.previous_version %>
               <small class='text-muted'>
                 <%= link_to version.diff_url do %>
                   <%= fa_icon('random') %>
@@ -59,6 +58,6 @@
     <% end %>
   </div>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
+
   </div>
 </div>

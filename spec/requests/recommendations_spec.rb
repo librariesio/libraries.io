@@ -12,7 +12,7 @@ describe "RecommendationsController" do
     it "renders successfully when logged in" do
       login(user)
       visit recommendations_path
-      expect(page).to have_content 'Recommended Libraries'
+      expect(page).to have_content 'Recommended Packages'
     end
   end
 end

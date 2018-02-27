@@ -11,7 +11,8 @@ class CollectionsController < ApplicationController
         platform: current_platforms,
         normalized_licenses: current_licenses
       }}).paginate(page: page_number, per_page: per_page_number)
-    @projects = @search.records.includes(:repository)
+
+    @projects = @search.results.map{|result| ProjectSearchResult.new(result) }
     @facets = @search.response.aggregations
     raise ActiveRecord::RecordNotFound if @projects.empty?
   end
@@ -19,7 +20,7 @@ class CollectionsController < ApplicationController
   private
 
   def find_language
-    @language = Project.language(params[:language]).first.try(:language)
+    @language = Linguist::Language[params[:language]].try(:to_s)
     raise ActiveRecord::RecordNotFound if @language.nil?
   end
 end

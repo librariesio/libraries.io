@@ -11,7 +11,6 @@
   <% cache(['SourceRank', @project]) do  %>
     <% @breakdown = @project.source_rank_breakdown %>
     <div class="col-sm-8">
-      <%= render 'adsense/banner' %>
       <ul class="list-group">
         <% @breakdown.each do |key, value| %>
           <% next if skip_showing_if_zero?(key, value) %>
@@ -35,17 +34,16 @@
     </div>
   <% end %>
   <div class="col-sm-4">
-    <%= render 'adsense/sidebar' %>
     <h3>
       <strong>
         What's SourceRank used for?
       </strong>
     </h3>
     <p>
-      SourceRank is the score for a project based on a number of metrics, it's used across the site to boost high quality projects.
+      SourceRank is the score for a package based on a number of metrics, it's used across the site to boost high quality packages.
     </p>
     <p>
-      The factors are based on attributes of a project that make it appear like a dependable library and can be handy to compare different projects.
+      The factors are based on attributes of a package that make it appear like a dependable package and can be handy to compare different packages.
     </p>
     <p>
       Got a question or suggestion to improve SourceRank? Open an <%= link_to 'issue', 'https://github.com/librariesio/libraries.io/issues' %>, <%= link_to 'tweet us', 'https://twitter.com/librariesio' %> or email <%= mail_to 'support@libraries.io', 'support@libraries.io' %>

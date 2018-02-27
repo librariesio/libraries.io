@@ -1,12 +1,12 @@
 <% title "Explore - Libraries.io" %>
-<% description "Find popular and trending libraries by language and keyword" %>
+<% description "Find popular and trending packages by language and keyword" %>
 
 <h1>
   <%= fa_icon 'binoculars' %>
   Explore
 </h1>
 <hr>
-<%= render 'adsense/banner' %>
+
 <% cache 'collections:index', expires_in: 1.day do  %>
   <div class="row">
     <% @languages.each_with_index do |language, index| %>
@@ -24,7 +24,7 @@
             <% next if keyword.blank? %>
             <li>
               <a href="/explore/<%= ERB::Util.url_encode(language.downcase) %>-<%= keyword %>-libraries">
-                <%= keyword %> libraries
+                <%= keyword %> packages
               </a>
             </li>
           <% end %>

@@ -17,6 +17,13 @@ namespace :deploy do
       execute "sleep #{rand(100)} && restart librariesio"
     end
   end
+
+  task :restart_web do
+    on roles(:web) do |host|
+      execute "sleep #{rand(100)} && restart librariesio"
+    end
+  end
+
   task :stop do
     on roles(:worker) do |host|
       execute "stop librariesio"

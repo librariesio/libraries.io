@@ -9,12 +9,12 @@
           <% if current_user.muted_projects.length > 0 %>
             <% if params[:include_muted].present? %>
               Showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
-              <%= link_to 'Hide muted projects', url_for(params.except(:include_muted).permit!) %> -
+              <%= link_to 'Hide muted packages', url_for(params.except(:include_muted).permit!) %> -
             <% else %>
               Not showing <%= pluralize current_user.muted_projects.length, 'muted project' %> -
-              <%= link_to 'Show muted projects', url_for(params.except(:host).merge(include_muted: true).permit!) %> -
+              <%= link_to 'Show muted packages', url_for(params.except(:host).merge(include_muted: true).permit!) %> -
             <% end %>
-            <%= link_to 'Manage muted projects', muted_path %> -
+            <%= link_to 'Manage muted packages', muted_path %> -
           <% end %>
           <%= link_to 'Manage your subscriptions', subscriptions_path %>
         </small>
@@ -30,8 +30,8 @@
     <% else %>
       <h2>Hi there <%= current_user %>!</h2>
       <p>
-        Libraries.io lets you watch libraries that you depend on and notifies you when there's a new release.
-        When you follow a library, new releases will show up here in your newsfeed.
+        Libraries.io lets you watch packages that you depend on and notifies you when there's a new release.
+        When you follow a package, new releases will show up here in your newsfeed.
       </p>
       <%= render 'dashboard/monitoring_promo' %>
     <% end %>
@@ -42,7 +42,7 @@
       <%= render 'dashboard/monitoring_promo' %>
     <% end %>
     <h3>
-      Recommended Libraries
+      Recommended Packages
       <small>
         <%= link_to 'See more &raquo;'.html_safe, recommendations_path %>
       </small>

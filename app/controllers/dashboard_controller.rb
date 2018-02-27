@@ -29,7 +29,7 @@ class DashboardController < ApplicationController
   end
 
   def muted
-    @projects = current_user.muted_projects.paginate(page: page_number)
+    @projects = current_user.muted_projects.visible.paginate(page: page_number)
   end
 
   def sync
@@ -40,12 +40,8 @@ class DashboardController < ApplicationController
 
   def watch
     repository = Repository.find(params[:repository_id])
-    if current_user.can_watch?(repository)
-      current_user.subscribe_to_repo(repository)
-      redirect_back fallback_location: repositories_path
-    else
-      redirect_to pricing_path, notice: 'You need to upgrade your plan to track more repositories'
-    end
+    current_user.subscribe_to_repo(repository)
+    redirect_back fallback_location: repositories_path
   end
 
   def unwatch

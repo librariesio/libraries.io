@@ -25,7 +25,11 @@ module PackageManager
 
     def self.format_name(platform)
       return nil if platform.nil?
-      platforms.find{|p| p.to_s.demodulize.downcase == platform.downcase }.to_s.demodulize
+      find(platform).to_s.demodulize
+    end
+
+    def self.find(platform)
+      platforms.find{|p| p.to_s.demodulize.downcase == platform.downcase }
     end
 
     def self.color
@@ -61,33 +65,7 @@ module PackageManager
     end
 
     def self.platform_name(platform)
-      if platform.downcase == 'npm'
-        return 'npm'
-      elsif platform.downcase == 'wordpress'
-        return 'WordPress'
-      else
-        return platform
-      end
-    end
-
-    def self.dependency_platform(platform_string)
-      return platform_string if platform_string.nil?
-      case platform_string.downcase
-      when 'rubygemslockfile'
-        'rubygems'
-      when 'cocoapodslockfile'
-        'cocoapods'
-      when 'nugetlockfile', 'nuspec'
-        'nuget'
-      when 'packagistlockfile'
-        'packagist'
-      when 'gemspec'
-        'rubygems'
-      when 'npmshrinkwrap'
-        'npm'
-      else
-        platform_string.downcase
-      end
+      find(platform).try(:formatted_name) || platform
     end
 
     def self.save(project)
@@ -95,13 +73,12 @@ module PackageManager
       mapped_project = mapping(project)
       mapped_project = mapped_project.delete_if { |_key, value| value.blank? } if mapped_project.present?
       return false unless mapped_project.present?
-      puts "Saving #{mapped_project[:name]}"
       dbproject = Project.find_or_initialize_by({:name => mapped_project[:name], :platform => self.name.demodulize})
       if dbproject.new_record?
-        dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions))
+        dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies))
         dbproject.save
       else
-        dbproject.update_attributes(mapped_project.except(:name, :releases, :versions))
+        dbproject.update_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies))
       end
 
       if self::HAS_VERSIONS
@@ -149,14 +126,17 @@ module PackageManager
     end
 
     def self.import
+      return if ENV['READ_ONLY'].present?
       project_names.each { |name| update(name) }
     end
 
     def self.import_recent
+      return if ENV['READ_ONLY'].present?
       recent_names.each { |name| update(name) }
     end
 
     def self.import_new
+      return if ENV['READ_ONLY'].present?
       new_names.each { |name| update(name) }
     end
 

@@ -39,8 +39,8 @@ module ProjectSearch
     after_commit lambda { __elasticsearch__.index_document if previous_changes.any? }, on: [:create, :update], prepend: true
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
-    def as_indexed_json(_options)
-      as_json methods: [:stars, :repo_name, :exact_name, :contributions_count, :dependent_repos_count]
+    def as_indexed_json(_options = {})
+      as_json(methods: [:stars, :repo_name, :exact_name, :contributions_count, :dependent_repos_count]).merge(keywords_array: keywords)
     end
 
     def dependent_repos_count
@@ -58,7 +58,7 @@ module ProjectSearch
     end
 
     def self.cta_search(filters, options = {})
-      facet_limit = options.fetch(:facet_limit, 35)
+      facet_limit = options.fetch(:facet_limit, 36)
       options[:filters] ||= []
       search_definition = {
         query: {
@@ -81,6 +81,7 @@ module ProjectSearch
           { range: { contributions_count: { lte: 5, gte: 1 } } }
         ],
         must_not: [
+          { term: { "status" => "Hidden" } },
           { term: { "status" => "Removed" } },
           { term: { "status" => "Unmaintained" } }
         ]
@@ -91,6 +92,7 @@ module ProjectSearch
       cta_search({
         must_not: [
           { exists: { field: "normalized_licenses" } },
+          { term: { "status" => "Hidden" } },
           { term: { "status" => "Removed" } },
           { term: { "status" => "Unmaintained" } }
         ]
@@ -132,31 +134,8 @@ module ProjectSearch
       }
     end
 
-    def self.lookup_multiple(platform, names)
-      search_definition = {
-        query: {
-          filtered: {
-             query: {match_all: {}},
-             filter:{
-               bool: {
-                 must: [
-                   {
-                     term: { "platform" => platform }
-                   }
-                 ],
-                 should: names.map do |name|
-                   { term: { "exact_name": name } }
-                 end
-              }
-            }
-          }
-        }
-      }
-      __elasticsearch__.search(search_definition)
-    end
-
     def self.search(original_query, options = {})
-      facet_limit = options.fetch(:facet_limit, 35)
+      facet_limit = options.fetch(:facet_limit, 36)
       query = sanitize_query(original_query)
       options[:filters] ||= []
       search_definition = {
@@ -169,9 +148,8 @@ module ProjectSearch
                    bool: {
                      must: [],
                      must_not: [
-                       {
-                         term: { "status" => "Removed" }
-                       }
+                       { term: { "status" => "Hidden" } },
+                       { term: { "status" => "Removed" } }
                      ]
                   }
                 }
@@ -193,19 +171,21 @@ module ProjectSearch
           keywords: facet_filter(:keywords_array, facet_limit, options),
           licenses: facet_filter(:normalized_licenses, facet_limit, options)
         }
-        search_definition[:suggest] = {
-          did_you_mean: {
-            text: query,
-            term: {
-              size: 1,
-              field: "name"
+        if query.present?
+          search_definition[:suggest] = {
+            did_you_mean: {
+              text: query,
+              term: {
+                size: 1,
+                field: "name"
+              }
             }
           }
-        }
+        end
       end
 
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
-      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
+      search_definition[:query][:function_score][:query][:filtered][:filter][:bool][:must] = filter_format(options[:filters])
 
       if query.present?
         search_definition[:query][:function_score][:query][:filtered][:query] = query_options(query, FIELDS)
@@ -225,19 +205,13 @@ module ProjectSearch
 
     def self.query_options(query, fields)
       {
-        bool: {
-          should: [
-            {
-              multi_match: {
-                query: query,
-                fields: fields,
-                fuzziness: 1.2,
-                slop: 2,
-                type: 'cross_fields',
-                operator: 'and'
-              }
-            }
-          ]
+        multi_match: {
+          query: query,
+          fields: fields,
+          fuzziness: 1.2,
+          slop: 2,
+          type: 'cross_fields',
+          operator: 'and'
         }
       }
     end

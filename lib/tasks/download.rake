@@ -1,6 +1,7 @@
 namespace :download do
   desc 'Download undownloaded github repositories'
   task new_github_repos: :environment do
+    exit if ENV['READ_ONLY'].present?
     Project.undownloaded_repos.order('created_at DESC').find_each(&:update_repository_async)
   end
 
@@ -45,6 +46,11 @@ namespace :download do
   desc 'Download recent Clojars packages'
   task clojars: :environment do
     PackageManager::Clojars.import_recent
+  end
+
+  desc 'Download all Puppet packages asynchronously'
+  task puppet_all: :environment do
+    PackageManager::Puppet.import_async
   end
 
   desc 'Download recent CPAN packages asynchronously'
@@ -206,6 +212,16 @@ namespace :download do
     PackageManager::PlatformIO.import_async
   end
 
+  desc 'Download new PureScript packages asynchronously'
+  task purescript: :environment do
+    PackageManager::PureScript.import_new_async
+  end
+
+  desc 'Download all PureScript packages asynchronously'
+  task purescript_all: :environment do
+    PackageManager::PureScript.import_async
+  end
+
   desc 'Download recent Pub packages asynchronously'
   task pub: :environment do
     PackageManager::Pub.import_recent_async
@@ -219,6 +235,11 @@ namespace :download do
   desc 'Download all Pypi packages asynchronously'
   task pypi_all: :environment do
     PackageManager::Pypi.import_async
+  end
+
+  desc 'Download recent Racket packages asynchronously'
+  task racket: :environment do
+    PackageManager::Racket.import_async
   end
 
   desc 'Download recent Rubygems packages asynchronously'

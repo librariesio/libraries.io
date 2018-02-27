@@ -23,6 +23,7 @@ module RepositoryIssue
     def self.create_from_hash(name_with_owner, issue_hash, token = nil)
       issue_hash = issue_hash.to_hash.with_indifferent_access
       repository = Repository.host('GitLab').find_by_full_name(name_with_owner) || RepositoryHost::Gitlab.create(name_with_owner)
+      return if repository.nil?
       i = repository.issues.find_or_create_by(uuid: issue_hash[:id])
       user = RepositoryUser.where(host_type: 'GitLab').find_by_uuid(issue_hash[:author][:id]) || RepositoryOwner::GitLab.download_user_from_host('GitLab', issue_hash[:author][:username]) rescue nil
       i.repository_user_id = user.id if user.present?
@@ -46,7 +47,7 @@ module RepositoryIssue
     private
 
     def self.api_client(token = nil)
-      ::Gitlab.client(endpoint: 'https://gitlab.com/api/v3', private_token: token || ENV['GITLAB_KEY'])
+      ::Gitlab.client(endpoint: 'https://gitlab.com/api/v4', private_token: token || ENV['GITLAB_KEY'])
     end
   end
 end

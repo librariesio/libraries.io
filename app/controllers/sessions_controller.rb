@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create, :failure]
+  before_action :read_only, only: [:new, :create]
 
   def new
     if params[:host_type].present?
@@ -38,7 +39,7 @@ class SessionsController < ApplicationController
       end
     else
       if identity.user.nil?
-        user = User.new
+        user = User.new(optin: true)
         user.assign_from_auth_hash(auth)
         identity.user = user
         identity.save
@@ -47,7 +48,8 @@ class SessionsController < ApplicationController
       flash[:notice] = nil
       session[:user_id] = identity.user.id
     end
-
+    
+    identity.user.update_columns(last_login_at: Time.current)
     identity.user.update_repo_permissions_async
     login_destination = pre_login_destination
 

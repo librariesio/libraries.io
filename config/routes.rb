@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  mount Payola::Engine => '/payola', as: :payola
   require 'sidekiq/web'
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
@@ -38,6 +37,8 @@ Rails.application.routes.draw do
 
       get '/:host_type/search', to: 'repositories#search'
 
+      get '/:host_type/:login/project-contributions', to: 'repository_users#project_contributions'
+      get '/:host_type/:login/repository-contributions', to: 'repository_users#repository_contributions'
       get '/:host_type/:login/repositories', to: 'repository_users#repositories'
       get '/:host_type/:login/projects', to: 'repository_users#projects'
 
@@ -48,12 +49,18 @@ Rails.application.routes.draw do
       get '/:host_type/:login', to: 'repository_users#show'
     end
 
-    get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }, as: :version_tree
-    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => /[\w\-]+/, :name => /[\w\-\%]+/, :version => /[\w\.\-]+/ }
-    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
-    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
-    get '/:platform/:name/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }, as: :tree
-    get '/:platform/:name', to: 'projects#show', constraints: { :platform => /[\w\-]+/, :name => /[\w\.\-\%]+/ }
+    PLATFORM_CONSTRAINT = /[\w\-]+/
+    PROJECT_CONSTRAINT = /[^\/]+/
+    VERSION_CONSTRAINT = /[\w\.\-]+/
+
+    get '/:platform/:name/sourcerank', to: 'projects#sourcerank', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    get '/:platform/:name/contributors', to: 'projects#contributors', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => PROJECT_CONSTRAINT, :version => VERSION_CONSTRAINT }, as: :version_tree
+    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT, :version => VERSION_CONSTRAINT }
+    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    get '/:platform/:name/tree', to: 'tree#show', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }, as: :tree
+    get '/:platform/:name', to: 'projects#show', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
   end
 
   namespace :admin do
@@ -85,9 +92,6 @@ Rails.application.routes.draw do
   get '/collections', to: 'collections#index', as: :collections
   get '/explore/:language-:keyword-libraries', to: 'collections#show', as: :collection
 
-  get '/pricing', to: 'account_subscriptions#plans', as: :pricing
-  resources :account_subscriptions
-
   get '/recommendations', to: 'recommendations#index', as: :recommendations
 
   get '/repositories', to: 'dashboard#index', as: :repositories
@@ -101,6 +105,7 @@ Rails.application.routes.draw do
     member do
       get 'delete'
       put 'disable_emails'
+      put 'optin'
     end
   end
 
@@ -119,15 +124,20 @@ Rails.application.routes.draw do
 
   get '/stats', to: redirect('/admin/stats')
 
-  get 'bus-factor', to: 'projects#bus_factor', as: :bus_factor
-  get '/unlicensed-libraries', to: 'projects#unlicensed', as: :unlicensed
-  get 'unmaintained-libraries', to: 'projects#unmaintained', as: :unmaintained
-  get 'deprecated-libraries', to: 'projects#deprecated', as: :deprecated
-  get 'removed-libraries', to: 'projects#removed', as: :removed
-
-  get '/help-wanted', to: 'issues#help_wanted', as: :help_wanted
-  get '/first-pull-request', to: 'issues#first_pull_request', as: :first_pull_request
-  get '/issues', to: 'issues#index', as: :all_issues
+  #explore
+  get '/explore/unlicensed-libraries', to: 'projects#unlicensed', as: :unlicensed
+  get '/explore/unmaintained-libraries', to: 'projects#unmaintained', as: :unmaintained
+  get '/explore/deprecated-libraries', to: 'projects#deprecated', as: :deprecated
+  get '/explore/removed-libraries', to: 'projects#removed', as: :removed
+  get '/explore/help-wanted', to: 'issues#help_wanted', as: :help_wanted
+  get '/explore/first-pull-request', to: 'issues#first_pull_request', as: :first_pull_request
+  get '/explore/issues', to: 'issues#index', as: :all_issues
+  get '/unlicensed-libraries', to: redirect("/explore/unlicensed-libraries")
+  get 'unmaintained-libraries', to: redirect("/explore/unmaintained-libraries")
+  get 'deprecated-libraries', to: redirect("/explore/deprecated-libraries")
+  get 'removed-libraries', to: redirect("/explore/removed-libraries")
+  get '/help-wanted', to: redirect("/explore/help-wanted")
+  get '/first-pull-request', to: redirect("/explore/first-pull-request")
 
   get '/platforms', to: 'platforms#index', as: :platforms
 
@@ -144,6 +154,7 @@ Rails.application.routes.draw do
     get '/:host_type/organisations', to: 'repository_organisations#index', as: :repository_organisations
     get '/:host_type/timeline', to: 'repositories#timeline', as: :github_timeline
     get '/:host_type/:login/issues', to: 'repository_users#issues'
+    get '/:host_type/:login/dependencies', to: 'repository_users#dependencies', as: :user_dependencies
     get '/:host_type/:login/dependency-issues', to: 'repository_users#dependency_issues'
     get '/:host_type/:login/repositories', to: 'repository_users#repositories', as: :user_repositories
     get '/:host_type/:login/contributions', to: 'repository_users#contributions', as: :user_contributions
@@ -172,6 +183,9 @@ Rails.application.routes.draw do
     get '/:host_type', to: 'repositories#index', as: :hosts
   end
 
+  #redirect after other issues routes created
+  get '/issues', to: redirect('explore/issues')
+
   get '/repos/search', to: 'repositories#search', as: :repo_search
   get '/repos', to: 'repositories#index', as: :repos
 
@@ -187,12 +201,20 @@ Rails.application.routes.draw do
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   post '/auth/failure',             to: 'sessions#failure'
 
-  get '/unseen-infrastructure', to: 'projects#unseen_infrastructure', as: :unseen_infrastructure
-  get '/digital-infrastructure', to: 'projects#digital_infrastructure', as: :digital_infrastructure
+  #experiments
+  get '/experiments', to: 'pages#experiments', as: :experiments
+  get '/experiments/bus-factor', to: 'projects#bus_factor', as: :bus_factor
+  get '/experiments/unseen-infrastructure', to: 'projects#unseen_infrastructure', as: :unseen_infrastructure
+  get '/experiments/digital-infrastructure', to: 'projects#digital_infrastructure', as: :digital_infrastructure
+  get 'bus-factor', to: redirect("/experiments/bus-factor")
+  get '/unseen-infrastructure', to: redirect("/experiments/unseen-infrastructure")
+  get '/digital-infrastructure', to: redirect("/experiments/digital-infrastructure")
 
+  #content
   get '/about', to: 'pages#about', as: :about
   get '/team', to: 'pages#team', as: :team
   get '/privacy', to: 'pages#privacy', as: :privacy
+  get '/terms', to: 'pages#terms', as: :terms
   get '/compatibility', to: 'pages#compatibility', as: :compatibility
   get '/data', to: 'pages#data', as: :data
   get '/open-data', to: redirect("/data")
@@ -210,6 +232,7 @@ Rails.application.routes.draw do
   post '/:platform/:name/sync', to: 'projects#sync', constraints: { :name => /.*/ }, as: :sync_project
   get '/:platform/:name/unsubscribe', to: 'projects#unsubscribe', constraints: { :name => /.*/ }, as: :unsubscribe_project
   get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
+  get '/:platform/:name/timeline', to: 'timeline#show', as: :project_timeline, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
   post '/:platform/:name/mute', to: 'projects#mute', as: :mute_project, constraints: { :name => /.*/ }
   delete '/:platform/:name/unmute', to: 'projects#unmute', as: :unmute_project, constraints: { :name => /.*/ }
   get '/:platform/:name/tree', to: 'tree#show', constraints: { :name => /[\w\.\-\%]+/ }, as: :tree

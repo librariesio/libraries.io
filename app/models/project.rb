@@ -12,11 +12,13 @@ class Project < ApplicationRecord
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
   API_FIELDS = [:name, :platform, :description, :language, :homepage,
                 :repository_url, :normalized_licenses, :rank, :status,
-                :latest_release_number, :latest_release_published_at]
+                :latest_release_number, :latest_release_published_at,
+                :dependents_count, :dependent_repos_count]
 
   validates_presence_of :name, :platform
   validates_uniqueness_of :name, scope: :platform, case_sensitive: true
 
+  belongs_to :repository
   has_many :versions
   has_many :dependencies, -> { group 'project_name' }, through: :versions
   has_many :contributions, through: :repository
@@ -32,7 +34,6 @@ class Project < ApplicationRecord
   has_many :project_suggestions, dependent: :delete_all
   has_many :registry_permissions, dependent: :delete_all
   has_many :registry_users, through: :registry_permissions
-  belongs_to :repository
   has_one :readme, through: :repository
 
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
@@ -68,11 +69,13 @@ class Project < ApplicationRecord
   scope :most_dependents, -> { with_dependents.order('dependents_count DESC') }
   scope :most_dependent_repos, -> { with_dependent_repos.order('dependent_repos_count DESC') }
 
-  scope :maintained, -> { where('projects."status" not in (?) OR projects."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
+  scope :visible, -> { where('projects."status" != ? OR projects."status" IS NULL', "Hidden")}
+  scope :maintained, -> { where('projects."status" not in (?) OR projects."status" IS NULL', ["Deprecated", "Removed", "Unmaintained", "Hidden"])}
   scope :deprecated, -> { where('projects."status" = ?', "Deprecated")}
-  scope :not_removed, -> { where('projects."status" != ? OR projects."status" IS NULL', "Removed")}
+  scope :not_removed, -> { where('projects."status" not in (?) OR projects."status" IS NULL', ["Removed", "Hidden"])}
   scope :removed, -> { where('projects."status" = ?', "Removed")}
   scope :unmaintained, -> { where('projects."status" = ?', "Unmaintained")}
+  scope :hidden, -> { where('projects."status" = ?', "Hidden")}
 
   scope :indexable, -> { not_removed.includes(:repository) }
 
@@ -127,6 +130,12 @@ class Project < ApplicationRecord
   end
 
   def sync
+    check_status
+    if status == 'Removed'
+      set_last_synced_at
+      return
+    end
+
     result = platform_class.update(name)
     set_last_synced_at unless result
   rescue
@@ -164,7 +173,7 @@ class Project < ApplicationRecord
   end
 
   def keywords
-    keywords_array
+    (Array(keywords_array) + Array(repository.try(:keywords) || [])).compact.uniq(&:downcase)
   end
 
   def package_manager_url(version = nil)

@@ -10,7 +10,7 @@
         You're currently subscribed to updates for any new versions of <%= @project %>:
       </p>
       <p>
-        <%= link_to subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'btn btn-success', title: 'Stop being notified of new releases of this library' do %>
+        <%= link_to subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'btn btn-success', title: 'Stop being notified of new releases of this package' do %>
           <%= fa_icon('times') %>
           Unsubscribe from updates to <strong><%= @project %></strong>
         <% end %>
@@ -30,7 +30,7 @@
           <tr>
             <td>
               <%= link_to image_tag(repo.avatar_url(60), width: 30, height: 30, alt: repo), user_path(repo.owner.to_param) %>
-              <strong><%= link_to repo, repository_path(repository.to_param) %></strong>
+              <strong><%= link_to repo, repository_path(repo.to_param) %></strong>
             </td>
             <td>
               <%= link_to unwatch_path(repo.id), method: :post, class: 'tip btn btn-xs btn-success', title: 'Stop watching' do %>

@@ -17,8 +17,10 @@ module RepositoryIssue
     end
 
     def self.create_from_hash(name_with_owner, issue_hash, token = nil)
+      return if issue_hash.nil?
       issue_hash = issue_hash.to_hash
       repository = Repository.host('GitHub').find_by_full_name(name_with_owner) || RepositoryHost::Github.create(name_with_owner)
+      return if repository.nil?
       i = repository.issues.find_or_create_by(uuid: issue_hash[:id])
       user = RepositoryUser.where(host_type: 'GitHub').find_by_uuid(issue_hash[:user][:id]) || RepositoryOwner::Github.download_user_from_host('GitHub', issue_hash[:user][:login]) rescue nil
       i.repository_user_id = user.id if user.present?

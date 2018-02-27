@@ -8,7 +8,7 @@
 <div class='row'>
   <div class='col-md-8'>
     <div class="row">
-      <div class='col-md-8'>
+      <div class='col-md-7'>
         <h1>
           <%= @project %>
           <br>
@@ -22,7 +22,7 @@
           </small>
         </h1>
       </div>
-      <div class='col-md-4 sidebar'>
+      <div class='col-md-5 sidebar'>
         <%= render 'projects/actions' %>
       </div>
     </div>
@@ -42,20 +42,18 @@
 </div>
 <div class='row'>
   <div class='col-md-8'>
-    <%= render 'adsense/banner' %>
     <%= render 'projects/contributors' %>
 
     <% if @repository.present? && @repository.readme.present? %>
       <hr>
       <h3 data-ga-tracked-el='readme'>Documentation</h3>
-      <div class='well' id='readme-well'>
+      <div class='well well-large' id='readme'>
         <%== @repository.readme %>
       </div>
     <% end %>
   </div>
 
   <div class='col-md-4 sidebar'>
-    <%= render 'adsense/sidebar' %>
     <%= render 'projects/releases' %>
 
     <% if current_user %>
@@ -63,7 +61,7 @@
     <% end %>
 
     <% if @version %>
-      <div id='version_dependencies' style='display:none;' data-url="<%= version_dependencies_path(@version.to_param) %>"></div>
+      <div id='version_dependencies' style='display:none;' data-url="<%= version_dependencies_path(@project.to_param.merge(number: @version.number)) %>"></div>
     <% end %>
 
     <div id='top_dependent_repos' style='display:none;' data-url="<%= top_dependent_repos_path(@project.to_param) %>"></div>
@@ -75,7 +73,7 @@
     </p>
     <p>
       <%= fa_icon 'download' %>
-      <%= link_to 'Export .ABOUT file for this library', @version.present? ? about_version_path(@project.to_param.merge(number: @version.number)) : about_project_path(@project.to_param) %>
+      <%= link_to 'Export .ABOUT file for this package', @version.present? ? about_version_path(@project.to_param.merge(number: @version.number)) : about_project_path(@project.to_param) %>
     </p>
     <p>
       <small class='text-muted'>Last synced: <%= @project.last_synced_at || @project.created_at %></small>

@@ -39,7 +39,7 @@ class Repository < ApplicationRecord
   before_save  :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
   after_commit :save_projects, on: :update
-  after_commit :update_source_rank_async, on: [:create, :update]
+  after_commit :update_source_rank_async, on: [:update]
 
   scope :without_readme, -> { where("repositories.id NOT IN (SELECT repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
@@ -73,11 +73,12 @@ class Repository < ApplicationRecord
   scope :hacker_news, -> { order("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC") }
   scope :trending, -> { good_quality.recently_created.with_stars }
 
-  scope :maintained, -> { where('repositories."status" not in (?) OR repositories."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
+  scope :maintained, -> { where('repositories."status" not in (?) OR repositories."status" IS NULL', ["Deprecated", "Removed", "Unmaintained", "Hidden"])}
   scope :deprecated, -> { where('repositories."status" = ?', "Deprecated")}
-  scope :not_removed, -> { where('repositories."status" != ? OR repositories."status" IS NULL', "Removed")}
+  scope :not_removed, -> { where('repositories."status" not in (?) OR repositories."status" IS NULL', ["Removed", "Hidden"])}
   scope :removed, -> { where('repositories."status" = ?', "Removed")}
   scope :unmaintained, -> { where('repositories."status" = ?', "Unmaintained")}
+  scope :hidden, -> { where('repositories."status" = ?', "Hidden")}
 
   scope :indexable, -> { open_source.source.not_removed }
 
@@ -204,7 +205,7 @@ class Repository < ApplicationRecord
   end
 
   def manual_sync(token = nil)
-    update_all_info_async
+    update_all_info_async(token)
     self.last_synced_at = Time.zone.now
     save
   end
@@ -215,13 +216,17 @@ class Repository < ApplicationRecord
 
   def update_all_info(token = nil)
     token ||= AuthToken.token if host_type == 'GitHub'
+    check_status
+    return if status == 'Removed'
     update_from_repository(token)
-    download_owner
-    download_fork_source(token)
-    download_readme(token)
-    download_tags(token)
-    download_contributions(token)
-    download_manifests(token)
+    unless last_synced_at && last_synced_at > 2.minutes.ago
+      download_owner
+      download_fork_source(token)
+      download_readme(token)
+      download_tags(token)
+      download_contributions(token)
+      download_manifests(token)
+    end
     update_source_rank(true)
     update_attributes(last_synced_at: Time.now)
   end
@@ -238,14 +243,19 @@ class Repository < ApplicationRecord
     return unless repo_hash
     repo_hash = repo_hash.to_hash.with_indifferent_access
     ActiveRecord::Base.transaction do
-      g = Repository.find_by(uuid: repo_hash[:id])
+      g = Repository.where(host_type: (repo_hash[:host_type] || 'GitHub')).find_by(uuid: repo_hash[:id])
       g = Repository.host(repo_hash[:host_type] || 'GitHub').find_by('lower(full_name) = ?', repo_hash[:full_name].downcase) if g.nil?
       g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
       g.host_type = repo_hash[:host_type] || 'GitHub'
       g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
       g.uuid = repo_hash[:id] if g.uuid.nil?
       g.license = repo_hash[:license][:key] if repo_hash[:license]
-      g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
+      if repo_hash[:fork] && repo_hash[:parent]
+        g.source_name = repo_hash[:parent][:full_name]
+      else
+        g.source_name = nil
+      end
+
       g.assign_attributes repo_hash.slice(*Repository::API_FIELDS)
 
       if g.changed?
@@ -280,7 +290,7 @@ class Repository < ApplicationRecord
   end
 
   def self.update_from_hook(uuid, sender_id)
-    repository = Repository.host('GitHub').find_by_uuid(uuid)
+    repository = Repository.where(host_type:'Github').find_by_uuid(uuid)
     user = Identity.where('provider ILIKE ?', 'github%').where(uid: sender_id).first.try(:user)
     if user.present? && repository.present?
       repository.download_manifests(user.token)
@@ -312,6 +322,10 @@ class Repository < ApplicationRecord
 
   def github_id
     uuid # legacy alias
+  end
+
+  def sorted_tags
+    @sorted_tags ||= tags.sort
   end
 
   def repository_host

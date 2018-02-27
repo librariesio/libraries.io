@@ -35,7 +35,7 @@ module PackageManager
     end
 
     def self.recent_names
-      json = get("https://crates.io/summary")
+      json = get("https://crates.io/api/v1/summary")
       updated_names = json['just_updated'].map{|c| c['name']}
       new_names = json['new_crates'].map{|c| c['name']}
       (updated_names + new_names).uniq
@@ -46,12 +46,13 @@ module PackageManager
     end
 
     def self.mapping(project)
+      latest_version = project["versions"].to_a.first
       {
         :name => project['crate']['id'],
         :homepage => project['crate']['homepage'],
         :description => project['crate']['description'],
         :keywords_array => Array.wrap(project['crate']['keywords']),
-        :licenses => project['crate']['license'],
+        :licenses => latest_version['license'],
         :repository_url => repo_fallback(project['crate']['repository'], project['crate']['homepage'])
       }
     end

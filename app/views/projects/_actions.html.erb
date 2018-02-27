@@ -38,7 +38,7 @@
 
   <% if logged_in? && subscription = current_user.subscribed_to?(@project) %>
     <div class="btn-group pull-right-lg">
-      <span class='btn btn-success'>Subscribed to <%= 'stable' unless subscription.include_prerelease? %> releases</span>
+      <span class='btn btn-success'><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Already subscribed</span>
       <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="caret"></span>
         <span class="sr-only">Toggle Dropdown</span>
@@ -51,12 +51,12 @@
         </li>
         <li role="separator" class="divider"></li>
         <li>
-          <%= link_to 'Unsubscribe from updates', subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'text-danger', title: 'Stop being notified of new releases of this library' %>
+          <%= link_to 'Unsubscribe from updates', subscription_path(current_user.subscribed_to?(@project)), method: :delete, class: 'text-danger', title: 'Stop being notified of new releases of this package' %>
         </li>
       </ul>
     </div>
   <% elsif logged_in? %>
-    <%= link_to 'Subscribe to releases', subscribe_path(project_id: @project.id), class: 'tip btn btn-success pull-right-lg', rel: 'nofollow', title: 'Get notified by email of new releases of this library' %>
+    <%= link_to 'Subscribe to releases', subscribe_path(project_id: @project.id), class: 'tip btn btn-success pull-right-lg', rel: 'nofollow', title: 'Get notified by email of new releases of this package' %>
   <% else %>
     <%= link_to 'Subscribe to releases', subscribe_path(project_id: @project.id), class: 'tip btn btn-success pull-right-lg', rel: 'nofollow', title: 'Login to get notified by email of new releases' %>
   <% end %>

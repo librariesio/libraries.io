@@ -47,7 +47,7 @@ module RepoSearch
       end
     end
 
-    def as_indexed_json(_options)
+    def as_indexed_json(_options = {})
       as_json methods: [:exact_name, :keywords, :rank]
     end
 
@@ -88,7 +88,12 @@ module RepoSearch
                          term: {
                            "status" => "Removed"
                          }
-                       }
+                       },
+                       {
+                         term: {
+                           "status" => "Hidden"
+                          }
+                       },
                      ]
                   }
                 }
@@ -102,7 +107,6 @@ module RepoSearch
         },
         filter: {
           bool: {
-            must: [],
             must_not: options[:must_not]
           }
         }
@@ -115,19 +119,21 @@ module RepoSearch
           keywords: Project.facet_filter(:keywords, facet_limit, options),
           host_type: Project.facet_filter(:host_type, facet_limit, options)
         }
-        search_definition[:suggest] = {
-          did_you_mean: {
-            text: query,
-            term: {
-              size: 1,
-              field: "full_name"
+        if query.present?
+          search_definition[:suggest] = {
+            did_you_mean: {
+              text: query,
+              term: {
+                size: 1,
+                field: "full_name"
+              }
             }
           }
-        }
+        end
       end
 
       search_definition[:sort]  = { (options[:sort] || '_score') => (options[:order] || 'desc') }
-      search_definition[:filter][:bool][:must] = Project.filter_format(options[:filters])
+      search_definition[:query][:function_score][:query][:filtered][:filter][:bool][:must] = Project.filter_format(options[:filters])
 
       if query.present?
         search_definition[:query][:function_score][:query][:filtered][:query] = Project.query_options(query, FIELDS)
