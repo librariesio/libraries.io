@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180207110908) do
+ActiveRecord::Schema.define(version: 20180227170322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,13 +149,13 @@ ActiveRecord::Schema.define(version: 20180207110908) do
   end
 
   create_table "registry_permissions", force: :cascade do |t|
-    t.integer "registry_user_id"
-    t.integer "project_id"
+    t.integer "registry_user_id", :index=>{:name=>"index_registry_permissions_on_registry_user_id", :order=>{:registry_user_id=>:asc}}
+    t.integer "project_id",       :index=>{:name=>"index_registry_permissions_on_project_id", :order=>{:project_id=>:asc}}
     t.string  "kind"
   end
 
   create_table "registry_users", force: :cascade do |t|
-    t.string "platform"
+    t.string "platform", :index=>{:name=>"index_registry_users_on_platform_and_uuid", :with=>["uuid"], :unique=>true, :order=>{:platform=>:asc, :uuid=>:asc}}
     t.string "uuid"
     t.string "login"
     t.string "email"
