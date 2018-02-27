@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180207110908) do
+ActiveRecord::Schema.define(version: 20180227170322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,13 +115,13 @@ ActiveRecord::Schema.define(version: 20180207110908) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "name"
-    t.string   "platform",                    :index=>{:name=>"index_projects_on_platform_and_name", :with=>["name"], :unique=>true}
+    t.string   "name",                        :limit=>255
+    t.string   "platform",                    :limit=>255, :index=>{:name=>"index_projects_on_platform_and_name", :with=>["name"], :unique=>true}
     t.datetime "created_at",                  :index=>{:name=>"index_projects_on_created_at"}
-    t.datetime "updated_at",                  :index=>{:name=>"index_projects_on_updated_at"}
+    t.datetime "updated_at"
     t.text     "description"
     t.text     "keywords"
-    t.string   "homepage"
+    t.string   "homepage",                    :limit=>255
     t.string   "licenses"
     t.string   "repository_url"
     t.integer  "repository_id",               :index=>{:name=>"index_projects_on_repository_id"}
@@ -148,8 +148,23 @@ ActiveRecord::Schema.define(version: 20180207110908) do
     t.datetime "updated_at",    :null=>false
   end
 
+  create_table "registry_permissions", force: :cascade do |t|
+    t.integer "registry_user_id", :index=>{:name=>"index_registry_permissions_on_registry_user_id", :order=>{:registry_user_id=>:asc}}
+    t.integer "project_id",       :index=>{:name=>"index_registry_permissions_on_project_id", :order=>{:project_id=>:asc}}
+    t.string  "kind"
+  end
+
+  create_table "registry_users", force: :cascade do |t|
+    t.string "platform", :index=>{:name=>"index_registry_users_on_platform_and_uuid", :with=>["uuid"], :unique=>true, :order=>{:platform=>:asc, :uuid=>:asc}}
+    t.string "uuid"
+    t.string "login"
+    t.string "email"
+    t.string "name"
+    t.string "url"
+  end
+
   create_table "repositories", force: :cascade do |t|
-    t.string   "full_name"
+    t.string   "full_name",                  :index=>{:name=>"index_repositories_on_full_name"}
     t.string   "description"
     t.boolean  "fork"
     t.datetime "created_at",                 :null=>false

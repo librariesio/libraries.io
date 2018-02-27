@@ -85,5 +85,22 @@ module PackageManager
         }
       end
     end
+
+    def self.download_registry_users(name)
+      json = get_json("https://rubygems.org/api/v1/gems/#{name}/owners.json")
+      json.map do |user|
+        {
+          uuid: user['id'],
+          email: user['email'],
+          login: user['handle']
+        }
+      end
+    rescue
+      []
+    end
+
+    def self.registry_user_url(login)
+      "https://rubygems.org/profiles/#{login}"
+    end
   end
 end

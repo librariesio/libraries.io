@@ -79,5 +79,23 @@ module PackageManager
         }
       end
     end
+
+    def self.download_registry_users(name)
+      json = get_json("https://crates.io/api/v1/crates/#{name}/owner_user")
+      json['users'].map do |user|
+        {
+          uuid: user['id'],
+          name: user['name'],
+          login: user['login'],
+          url: user['url']
+        }
+      end
+    rescue
+      []
+    end
+
+    def self.registry_user_url(login)
+      "https://crates.io/users/#{login}"
+    end
   end
 end

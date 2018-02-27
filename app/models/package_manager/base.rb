@@ -60,6 +60,10 @@ module PackageManager
       nil
     end
 
+    def self.download_registry_users(_name)
+      nil
+    end
+
     def self.check_status_url(project)
       package_link(project)
     end
@@ -93,6 +97,7 @@ module PackageManager
         save_dependencies(mapped_project)
       end
       dbproject.reload
+      dbproject.download_registry_users
       dbproject.last_synced_at = Time.now
       dbproject.save
       dbproject
