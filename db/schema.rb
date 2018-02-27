@@ -155,12 +155,12 @@ ActiveRecord::Schema.define(version: 20180207110908) do
   end
 
   create_table "registry_users", force: :cascade do |t|
-    t.string  "platform"
-    t.integer "uuid"
-    t.string  "login"
-    t.string  "email"
-    t.string  "name"
-    t.string  "url"
+    t.string "platform"
+    t.string "uuid"
+    t.string "login"
+    t.string "email"
+    t.string "name"
+    t.string "url"
   end
 
   create_table "repositories", force: :cascade do |t|
