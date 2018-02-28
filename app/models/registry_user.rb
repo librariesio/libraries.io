@@ -42,6 +42,6 @@ class RegistryUser < ApplicationRecord
   end
 
   def to_s
-    name || login
+    name || login || ''
   end
 end
