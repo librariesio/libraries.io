@@ -64,6 +64,10 @@ module PackageManager
       nil
     end
 
+    def self.registry_user_url(_login)
+      nil
+    end
+
     def self.check_status_url(project)
       package_link(project)
     end
