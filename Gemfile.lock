@@ -247,7 +247,7 @@ GEM
     jwt (1.5.6)
     key_struct (0.4.2)
     librariesio-gem-parser (1.0.0)
-    license-compatibility (3.0.0)
+    license-compatibility (3.1.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
