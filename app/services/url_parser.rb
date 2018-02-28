@@ -14,11 +14,16 @@ class URLParser
       url
     else
       clean_url
+      format_url
     end
   end
 
   def self.parse_to_full_url(url)
     new(url).parse_to_full_url
+  end
+
+  def self.parse_to_full_user_url(url)
+    new(url).parse_to_full_user_url
   end
 
   def self.try_all(url)
@@ -30,6 +35,13 @@ class URLParser
   def parse_to_full_url
     path = parse
     return nil unless path.present?
+    [full_domain, path].join('/')
+  end
+
+  def parse_to_full_user_url
+    return nil unless parseable?
+    path = clean_url
+    return nil unless path.length == 1
     [full_domain, path].join('/')
   end
 
@@ -51,7 +63,6 @@ class URLParser
     remove_git_extension
     remove_git_scheme
     remove_extra_segments
-    format_url
   end
 
   def format_url
