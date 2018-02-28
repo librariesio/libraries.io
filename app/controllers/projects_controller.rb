@@ -50,6 +50,7 @@ class ProjectsController < ApplicationController
     end
     find_version
     @contributors = @project.contributors.order('count DESC').visible.limit(24).select(:host_type, :name, :login, :uuid)
+    @owners = @project.registry_users.limit(24)
   end
 
   def sourcerank

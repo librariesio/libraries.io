@@ -42,8 +42,6 @@
 </div>
 <div class='row'>
   <div class='col-md-8'>
-    <%= render 'projects/contributors' %>
-
     <% if @repository.present? && @repository.readme.present? %>
       <hr>
       <h3 data-ga-tracked-el='readme'>Documentation</h3>
@@ -55,6 +53,10 @@
 
   <div class='col-md-4 sidebar'>
     <%= render 'projects/releases' %>
+
+    <%= render 'projects/owners' %>
+
+    <%= render 'projects/contributors' %>
 
     <% if current_user %>
       <% render 'your_dependents' %>
