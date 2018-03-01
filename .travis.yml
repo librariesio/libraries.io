@@ -14,7 +14,7 @@ services:
   - elasticsearch
 
 script:
-  - RAILS_ENV=test bundle exec rake --trace db:migrate spec && bundle exec codeclimate-test-reporter
+  - RAILS_ENV=test bundle exec rake --trace db:migrate spec
 
 bundler_args: --without development production --deployment --jobs=3 --retry=3
 
