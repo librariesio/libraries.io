@@ -46,12 +46,13 @@ module PackageManager
     end
 
     def self.mapping(project)
+      latest_version = project["versions"].to_a.first
       {
         :name => project['crate']['id'],
         :homepage => project['crate']['homepage'],
         :description => project['crate']['description'],
         :keywords_array => Array.wrap(project['crate']['keywords']),
-        :licenses => project['crate']['license'],
+        :licenses => latest_version['license'],
         :repository_url => repo_fallback(project['crate']['repository'], project['crate']['homepage'])
       }
     end
@@ -77,6 +78,24 @@ module PackageManager
           platform: self.name.demodulize
         }
       end
+    end
+
+    def self.download_registry_users(name)
+      json = get_json("https://crates.io/api/v1/crates/#{name}/owner_user")
+      json['users'].map do |user|
+        {
+          uuid: user['id'],
+          name: user['name'],
+          login: user['login'],
+          url: user['url']
+        }
+      end
+    rescue
+      []
+    end
+
+    def self.registry_user_url(login)
+      "https://crates.io/users/#{login}"
     end
   end
 end

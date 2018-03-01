@@ -26,7 +26,7 @@ module SourcerankHelper
       one_point_oh:               '1.0.0 or greater?',
       all_prereleases:            'Prerelease?',
       stars:                      'Stars',
-      dependent_projects:         'Dependent Projects',
+      dependent_projects:         'Dependent Packages',
       dependent_repositories:     'Dependent Repositories',
       contributors:               'Contributors',
       subscribers:                'Libraries.io subscribers',
@@ -37,7 +37,7 @@ module SourcerankHelper
   def source_rank_explainations
     {
       basic_info_present:         'Description, homepage/repository link and keywords present?',
-      versions_present:           'Has the project had more than one release?',
+      versions_present:           'Has the package had more than one release?',
       follows_semver:             'Every version has a valid SemVer number',
       recent_release:             'Within the past 6 months?',
       not_brand_new:              'Existed for at least 6 months',

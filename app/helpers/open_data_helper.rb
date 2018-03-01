@@ -19,11 +19,11 @@ module OpenDataHelper
       },
       '1.1.1' => {
         date: 'November 29, 2017',
-        filename: 'Libraries.io-open-data-1.1.0.tar.gz',
+        filename: 'Libraries.io-open-data-1.1.1.tar.gz',
         md5: '053fcb882d0ee038632a819a7829e1b8',
         size: '7.1GB',
         rows: '311 million',
-        download: 'https://zenodo.org/record/1068916/files/Libraries.io-open-data-1.1.0.tar.gz'
+        download: 'https://zenodo.org/record/1068916/files/Libraries.io-open-data-1.1.1.tar.gz'
       }
     }
   end

@@ -1,0 +1,11 @@
+<% if @owners.length > 0 %>
+	<hr>
+	<div class="row">
+	  <div class="col-md-12">
+			<h3 data-ga-tracked-el='top-contributors'>Maintainers</h4>
+      <% @owners.each do |owner| %>
+        <%= link_to image_tag(owner.avatar_url(120), width: 60, height: 60, alt: owner, class: 'pull-left'), owner.profile_url, title: owner %>
+      <% end %>
+	  </div>
+	</div>
+<% end %>

@@ -33,7 +33,7 @@
               <tr>
                 <td>
                   <% if dependency.platform.present? %>
-                    <%= link_to  truncate_with_tip(dependency.project_name, 30), project_path(name: dependency.project_name, platform: PackageManager::Base.dependency_platform(dependency.platform)) %>
+                    <%= link_to  truncate_with_tip(dependency.project_name, 30), project_path(name: dependency.project_name, platform: dependency.platform.try(:downcase)) %>
                   <% else %>
                     <%= truncate_with_tip(dependency.project_name, 30) %>
                   <% end %>

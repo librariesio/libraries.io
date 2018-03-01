@@ -39,7 +39,7 @@ module PackageManager
         :name => project['name'],
         :description => project["summary"],
         :homepage => project["homepage"],
-        :licenses => project["license"],
+        :licenses => parse_license(project["license"]),
         :repository_url => repo_fallback(project['source']['git'], '')
       }
     end
@@ -50,6 +50,10 @@ module PackageManager
           :number => v.to_s
         }
       end
+    end
+
+    def self.parse_license(project_license)
+      project_license.is_a?(Hash) ? project_license["type"] : project_license
     end
   end
 end

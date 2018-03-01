@@ -18,7 +18,6 @@
 //= require bootstrap/transition
 //= require bootstrap/tab
 //= require bootstrap/tooltip
-//= require js.cookie
 //= require rails-timeago
 //= require subtome
 //= require turbolinks

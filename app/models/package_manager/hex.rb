@@ -75,5 +75,22 @@ module PackageManager
         }
       end
     end
+
+    def self.download_registry_users(name)
+      json = get_json("https://hex.pm/api/packages/#{name}")
+      json['owners'].map do |user|
+        {
+          uuid: "hex-"+user['username'],
+          email: user['email'],
+          login: user['username'],
+        }
+      end
+    rescue
+      []
+    end
+
+    def self.registry_user_url(login)
+      "https://hex.pm/users/#{login}"
+    end
   end
 end

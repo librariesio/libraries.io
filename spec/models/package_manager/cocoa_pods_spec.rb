@@ -36,4 +36,14 @@ describe PackageManager::CocoaPods do
       expect(described_class.documentation_url('foo', '2.0.0')).to eq("http://cocoadocs.org/docsets/foo/2.0.0")
     end
   end
+
+  describe '#parse_license' do
+    it 'returns the license when its a string' do
+      expect(described_class.parse_license('foobar')).to eq("foobar")
+    end
+
+    it 'returns the license type when its a hash' do
+      expect(described_class.parse_license({'type' => 'foobar'})).to eq("foobar")
+    end
+  end
 end

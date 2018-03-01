@@ -12,7 +12,7 @@ class Repository < ApplicationRecord
   API_FIELDS = [:full_name, :description, :fork, :created_at, :updated_at, :pushed_at, :homepage,
    :size, :stargazers_count, :language, :has_issues, :has_wiki, :has_pages,
    :forks_count, :mirror_url, :open_issues_count, :default_branch,
-   :subscribers_count, :private, :logo_url, :pull_requests_enabled, :scm, :keywords]
+   :subscribers_count, :private, :logo_url, :pull_requests_enabled, :scm, :keywords, :status]
 
   has_many :projects
   has_many :contributions, dependent: :delete_all
@@ -73,11 +73,12 @@ class Repository < ApplicationRecord
   scope :hacker_news, -> { order("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC") }
   scope :trending, -> { good_quality.recently_created.with_stars }
 
-  scope :maintained, -> { where('repositories."status" not in (?) OR repositories."status" IS NULL', ["Deprecated", "Removed", "Unmaintained"])}
+  scope :maintained, -> { where('repositories."status" not in (?) OR repositories."status" IS NULL', ["Deprecated", "Removed", "Unmaintained", "Hidden"])}
   scope :deprecated, -> { where('repositories."status" = ?', "Deprecated")}
-  scope :not_removed, -> { where('repositories."status" != ? OR repositories."status" IS NULL', "Removed")}
+  scope :not_removed, -> { where('repositories."status" not in (?) OR repositories."status" IS NULL', ["Removed", "Hidden"])}
   scope :removed, -> { where('repositories."status" = ?', "Removed")}
   scope :unmaintained, -> { where('repositories."status" = ?', "Unmaintained")}
+  scope :hidden, -> { where('repositories."status" = ?', "Hidden")}
 
   scope :indexable, -> { open_source.source.not_removed }
 
@@ -249,7 +250,12 @@ class Repository < ApplicationRecord
       g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
       g.uuid = repo_hash[:id] if g.uuid.nil?
       g.license = repo_hash[:license][:key] if repo_hash[:license]
-      g.source_name = repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent]
+      if repo_hash[:fork] && repo_hash[:parent]
+        g.source_name = repo_hash[:parent][:full_name]
+      else
+        g.source_name = nil
+      end
+
       g.assign_attributes repo_hash.slice(*Repository::API_FIELDS)
 
       if g.changed?

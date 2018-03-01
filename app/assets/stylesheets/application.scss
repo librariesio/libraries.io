@@ -388,10 +388,6 @@ tr.top td{
   min-height: 300px;
 }
 
-.adsbygoogle {
-  display: block;
-  margin: 10px 0 20px;
-}
 .pictogram-list .pictogram{
   margin-bottom: 5px;
 }
@@ -479,4 +475,8 @@ h4.panel-title{
   display: inline;
   padding: 0;
   text-decoration: underline;
+}
+
+.octicon {
+  fill: currentColor;
 }

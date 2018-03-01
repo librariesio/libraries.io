@@ -1,4 +1,4 @@
-<% title "Projects that depend on #{@project} on #{@project.platform_name} - Libraries.io" %>
+<% title "Packages that depend on #{@project} on #{@project.platform_name} - Libraries.io" %>
 
 <h1>
   <div class="pictogram pictogram-<%= @project.platform.downcase %>"></div>
@@ -6,7 +6,7 @@
 </h1>
 <hr>
 <% if @dependents.any? %>
-  <p class="lead"><strong><%= @dependents.total_entries %></strong> <%= 'projects'.pluralize(@dependents.total_entries) %> depend on <%= link_to @project, project_path(@project.to_param) %>:</p>
+  <p class="lead"><strong><%= @dependents.total_entries %></strong> <%= 'packages'.pluralize(@dependents.total_entries) %> depend on <%= link_to @project, project_path(@project.to_param) %>:</p>
 <% end %>
 
 <div class="row">
@@ -16,7 +16,7 @@
       <%= will_paginate @dependents, page_links: false %>
     <% else %>
       <p>
-        No projects found, go back to <%= link_to @project, project_path(@project.to_param) %>.
+        No packages found, go back to <%= link_to @project, project_path(@project.to_param) %>.
       </p>
     <% end %>
   </div>

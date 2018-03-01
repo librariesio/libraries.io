@@ -46,6 +46,7 @@ module RepositoryHost
       hash[:keywords] = hash[:topics]
       hash[:host_type] = 'GitHub'
       hash[:scm] = 'git'
+      hash[:status] = 'Unmaintained' if hash[:archived]
       hash
     rescue *IGNORABLE_EXCEPTIONS
       nil

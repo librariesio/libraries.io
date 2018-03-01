@@ -1,5 +1,5 @@
 <% title "Explore - Libraries.io" %>
-<% description "Find trending and popular libraries and repositories" %>
+<% description "Find trending and popular packages and repositories" %>
 
 <div class="row">
   <div class="col-md-12">
@@ -38,7 +38,7 @@
           <%= render @trending_projects, cache: true %>
         <% end %>
         <%= link_to trending_projects_path, class: 'text-muted' do %>
-          See more trending projects &raquo;
+          See more trending packages &raquo;
         <% end %>
       </div>
       <div class="tab-pane" id="new_projects">
@@ -46,7 +46,7 @@
           <%= render @new_projects, cache: true %>
         <% end %>
         <%= link_to search_path(sort: 'created_at'), class: 'text-muted' do %>
-          See more new projects &raquo;
+          See more new packages &raquo;
         <% end %>
       </div>
       <div class="tab-pane" id="dependend_projects">
@@ -54,7 +54,7 @@
           <%= render project_search('dependents_count'), cache: true %>
         <% end %>
         <%= link_to search_path(sort: 'dependents_count'), class: 'text-muted' do %>
-          See more most used projects &raquo;
+          See more most used packages &raquo;
         <% end %>
       </div>
     </div>

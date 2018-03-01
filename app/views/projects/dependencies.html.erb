@@ -8,7 +8,7 @@
         <dl data-ga-tracked-el='dependencies' class='row'>
           <% deps.each do |dependency| %>
             <dt class='col-xs-8'>
-              <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: PackageManager::Base.dependency_platform(dependency.platform)) %>
+              <%= link_to dependency.project_name, project_path(name: dependency.project_name, platform: dependency.platform.try(:downcase)) %>
             </dt>
             <dd class='col-xs-4'>
               <%= dependency.requirements %>

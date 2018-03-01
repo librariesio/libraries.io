@@ -12,7 +12,8 @@ class Project < ApplicationRecord
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
   API_FIELDS = [:name, :platform, :description, :language, :homepage,
                 :repository_url, :normalized_licenses, :rank, :status,
-                :latest_release_number, :latest_release_published_at]
+                :latest_release_number, :latest_release_published_at,
+                :dependents_count, :dependent_repos_count]
 
   validates_presence_of :name, :platform
   validates_uniqueness_of :name, scope: :platform, case_sensitive: true
@@ -31,6 +32,8 @@ class Project < ApplicationRecord
   has_many :dependent_repositories, -> { group('repositories.id').order('repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC') }, through: :dependent_manifests, source: :repository
   has_many :subscriptions
   has_many :project_suggestions, dependent: :delete_all
+  has_many :registry_permissions, dependent: :delete_all
+  has_many :registry_users, through: :registry_permissions
   has_one :readme, through: :repository
 
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
@@ -417,6 +420,41 @@ class Project < ApplicationRecord
       rescue
         false
       end
+    end
+  end
+
+  def download_registry_users
+    # download owner data
+    owner_json = platform_class.download_registry_users(name)
+    owners = []
+
+    return unless owner_json.present? 
+
+    # find or create registry users
+    owner_json.each do |user|
+      r = RegistryUser.find_or_create_by(platform: platform, uuid: user[:uuid])
+      r.email = user[:email]
+      r.login = user[:login]
+      r.name = user[:name]
+      r.url = user[:url]
+      r.save if r.changed?
+      owners << r
+    end
+
+    # update registry permissions
+    existing_permissions = registry_permissions.includes(:registry_user).all
+    existing_owners = existing_permissions.map(&:registry_user)
+
+    # add new owners
+    new_owners = owners - existing_owners
+    new_owners.each do |owner|
+      registry_permissions.create(registry_user: owner)
+    end
+
+    # remove missing users
+    removed_owners = existing_owners - owners
+    removed_owners.each do |owner|
+      registry_permissions.find{|rp| rp.registry_user == owner}.destroy
     end
   end
 end

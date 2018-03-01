@@ -1,7 +1,7 @@
-<% title "#{@platform_name} Deprecated Libraries - Libraries.io" %>
-<% description "Projects marked as deprecated which are no longer maintained or suitable for use" %>
+<% title "#{@platform_name} Deprecated Packages - Libraries.io" %>
+<% description "Packages marked as deprecated which are no longer maintained or suitable for use" %>
 <div class="row">
-  <h1><i class="fa fa-clock-o"></i> <%= @platform_name %> Deprecated Libraries</h1>
+  <h1><i class="fa fa-clock-o"></i> <%= @platform_name %> Deprecated Packages</h1>
 </div>
 <hr>
 
@@ -10,7 +10,7 @@
     <%= render @projects, cache: true %>
     <%= will_paginate @projects, page_links: false %>
     <p>
-      <small><%= page_entries_info @projects, model: 'deprecated libraries' %></small>
+      <small><%= page_entries_info @projects, model: 'deprecated packages' %></small>
     </p>
   </div>
   <div class="col-sm-4">

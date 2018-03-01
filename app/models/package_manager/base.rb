@@ -60,32 +60,20 @@ module PackageManager
       nil
     end
 
+    def self.download_registry_users(_name)
+      nil
+    end
+
+    def self.registry_user_url(_login)
+      nil
+    end
+
     def self.check_status_url(project)
       package_link(project)
     end
 
     def self.platform_name(platform)
       find(platform).try(:formatted_name) || platform
-    end
-
-    def self.dependency_platform(platform_string)
-      return platform_string if platform_string.nil?
-      case platform_string.downcase
-      when 'rubygemslockfile'
-        'rubygems'
-      when 'cocoapodslockfile'
-        'cocoapods'
-      when 'nugetlockfile', 'nuspec'
-        'nuget'
-      when 'packagistlockfile'
-        'packagist'
-      when 'gemspec'
-        'rubygems'
-      when 'npmshrinkwrap'
-        'npm'
-      else
-        platform_string.downcase
-      end
     end
 
     def self.save(project)
@@ -95,10 +83,10 @@ module PackageManager
       return false unless mapped_project.present?
       dbproject = Project.find_or_initialize_by({:name => mapped_project[:name], :platform => self.name.demodulize})
       if dbproject.new_record?
-        dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions))
+        dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies))
         dbproject.save
       else
-        dbproject.update_attributes(mapped_project.except(:name, :releases, :versions))
+        dbproject.update_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies))
       end
 
       if self::HAS_VERSIONS
@@ -113,6 +101,7 @@ module PackageManager
         save_dependencies(mapped_project)
       end
       dbproject.reload
+      dbproject.download_registry_users
       dbproject.last_synced_at = Time.now
       dbproject.save
       dbproject

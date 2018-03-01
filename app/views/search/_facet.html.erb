@@ -9,7 +9,7 @@
 
         <% term['key'] = term['key'].downcase if name == 'host_type' %>
         <% current_param = params[name.to_sym].try(:split,',') || [] %>
-        <% active = current_param.include?(term['key']) %>
+        <% active = current_param.map(&:downcase).include?(term['key'].try(:downcase)) %>
         <li class='<%= 'active' if active %>'>
           <% if active %>
             <a href="<%= url_for(params.except(:host).merge(name.to_sym => current_param.reject{ |x| x == term['key'] }.join(','), page: nil).permit!) %>">
@@ -29,7 +29,7 @@
 
       <% if params[name.to_sym].present? %>
         <% params[name.to_sym].split(',').each do |term| %>
-          <% if !facet.buckets.map{|t| t['key']}.include?(term) %>
+          <% if !facet.buckets.map{|t| t['key'].try(:downcase) }.include?(term.try(:downcase)) %>
             <li class='active'>
               <a href="<%= url_for(params.except(:host).merge(name.to_sym => params[name.to_sym].split(',').reject{ |x| x == term }.join(','), page: nil).permit!) %>">
                 <input type='checkbox' checked>

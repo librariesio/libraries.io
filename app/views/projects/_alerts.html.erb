@@ -6,14 +6,14 @@
 
 <% if @project.is_removed? %>
   <div class="alert alert-danger" role="alert">
-    <strong>This project has been removed from <%= @project.platform %></strong> and cannot be used anymore.
+    <strong>This package has been removed from <%= @project.platform %></strong> and cannot be used anymore.
   </div>
 <% elsif @project.is_deprecated? %>
   <div class="alert alert-danger" role="alert">
-    <strong>This project has been marked as deprecated</strong> you can use it but you might want to use an alternative.
+    <strong>This package has been marked as deprecated</strong> you can use it but you might want to use an alternative.
   </div>
 <% elsif @project.is_unmaintained? %>
   <div class="alert alert-danger" role="alert">
-    <strong>This project has been marked as unmaintained</strong> you can use it but it is no longer being updated.
+    <strong>This package has been marked as unmaintained</strong> you can use it but it is no longer being updated.
   </div>
 <% end %>
