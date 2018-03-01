@@ -18,7 +18,7 @@ module PackageManager
     end
 
     def self.check_status_url(project)
-      "https://repo1.maven.org/maven2/#{project.name.gsub(/\:|\./, '/')}"
+      "https://repo1.maven.org/maven2/#{project.name.gsub(/\:|\./, '/')}/"
     end
 
     def self.load_names(limit = nil)
