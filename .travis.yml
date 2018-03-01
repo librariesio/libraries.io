@@ -1,0 +1,21 @@
+language: ruby
+sudo: false
+rvm:
+  - 2.4.3
+
+before_install:
+  - gem update --system
+  - curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.4.4/elasticsearch-2.4.4.deb && sudo dpkg -i --force-confnew elasticsearch-2.4.4.deb && sudo service elasticsearch restart
+  - psql -c 'create database libraries_test' -U postgres
+
+services:
+  - postgresql
+  - redis
+  - elasticsearch
+
+script:
+  - RAILS_ENV=test bundle exec rake --trace db:migrate spec
+
+bundler_args: --without development production --deployment --jobs=3 --retry=3
+
+cache: bundler
