@@ -187,7 +187,7 @@ GEM
       rake
       rake-compiler
     fast_xs (0.8.0)
-    ffi (1.9.18)
+    ffi (1.9.23)
     fog-aws (2.0.1)
       fog-core (~> 1.38)
       fog-json (~> 1.0)
@@ -579,7 +579,7 @@ DEPENDENCIES
   fast_blank
   fast_xor
   fast_xs
-  ffi (= 1.9.18)
+  ffi
   fog-aws
   font-awesome-rails
   foreman
