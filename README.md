@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.org/librariesio/libraries.io.svg?branch=master)](https://travis-ci.org/librariesio/libraries.io)
 [![Slack chat](https://slack.libraries.io/badge.svg)](https://slack.libraries.io)
-[![Code Climate](https://img.shields.io/codeclimate/github/librariesio/libraries.io.svg?style=flat)](https://codeclimate.com/github/librariesio/libraries.io)
-[![Test Coverage](https://codeclimate.com/github/librariesio/libraries.io/badges/coverage.svg)](https://codeclimate.com/github/librariesio/libraries.io/coverage)
 [![Open Source Helpers](https://www.codetriage.com/librariesio/libraries.io/badges/users.svg)](https://www.codetriage.com/librariesio/libraries.io)
 
 Libraries.io helps developers find new open source libraries, modules and frameworks and keep track of ones they depend upon.
