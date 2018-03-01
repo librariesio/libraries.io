@@ -1,4 +1,4 @@
-class CreateProjectMutes < ActiveRecord::Migration
+class CreateProjectMutes < ActiveRecord::Migration[5.0]
   def change
     create_table :project_mutes do |t|
       t.integer :user_id, null: false

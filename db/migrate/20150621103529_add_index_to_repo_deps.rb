@@ -1,4 +1,4 @@
-class AddIndexToRepoDeps < ActiveRecord::Migration
+class AddIndexToRepoDeps < ActiveRecord::Migration[5.0]
   def change
     add_index :repository_dependencies, :project_id
   end

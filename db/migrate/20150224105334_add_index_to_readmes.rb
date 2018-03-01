@@ -1,4 +1,4 @@
-class AddIndexToReadmes < ActiveRecord::Migration
+class AddIndexToReadmes < ActiveRecord::Migration[5.0]
   def change
     add_index(:readmes, :created_at)
   end

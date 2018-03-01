@@ -1,4 +1,4 @@
-class CreateRepositoryPermissions < ActiveRecord::Migration
+class CreateRepositoryPermissions < ActiveRecord::Migration[5.0]
   def change
     create_table :repository_permissions do |t|
       t.integer :user_id

@@ -1,4 +1,4 @@
-class AddPopularIndexToGithubRepositories < ActiveRecord::Migration
+class AddPopularIndexToGithubRepositories < ActiveRecord::Migration[5.0]
   def change
     remove_index :github_repositories, :fork
     add_index :github_repositories, :fork, where: "fork = false"

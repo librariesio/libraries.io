@@ -1,4 +1,4 @@
-class AddCreatedAtIndexes < ActiveRecord::Migration
+class AddCreatedAtIndexes < ActiveRecord::Migration[5.0]
   def change
     add_index(:projects, :created_at)
     add_index(:versions, :created_at)

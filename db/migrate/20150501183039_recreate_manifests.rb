@@ -1,4 +1,4 @@
-class RecreateManifests < ActiveRecord::Migration
+class RecreateManifests < ActiveRecord::Migration[5.0]
   def change
     drop_table :manifests
     remove_column :subscriptions, :manifest_id

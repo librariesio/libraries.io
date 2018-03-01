@@ -1,4 +1,4 @@
-class AddMoreStatsIndexes < ActiveRecord::Migration
+class AddMoreStatsIndexes < ActiveRecord::Migration[5.0]
   def change
     add_index :github_tags, :created_at
     add_index :github_organisations, :created_at

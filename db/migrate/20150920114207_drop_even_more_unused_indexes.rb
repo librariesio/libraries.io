@@ -1,4 +1,4 @@
-class DropEvenMoreUnusedIndexes < ActiveRecord::Migration
+class DropEvenMoreUnusedIndexes < ActiveRecord::Migration[5.0]
   def change
     remove_index :versions, column: :created_at
     remove_index :projects, column: :language

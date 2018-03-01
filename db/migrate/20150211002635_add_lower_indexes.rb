@@ -1,4 +1,4 @@
-class AddLowerIndexes < ActiveRecord::Migration
+class AddLowerIndexes < ActiveRecord::Migration[5.0]
   def change
     execute "CREATE INDEX projects_lower_platform ON projects(lower(platform));"
     execute "CREATE INDEX projects_lower_name ON projects(lower(name));"

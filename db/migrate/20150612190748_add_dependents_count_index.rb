@@ -1,4 +1,4 @@
-class AddDependentsCountIndex < ActiveRecord::Migration
+class AddDependentsCountIndex < ActiveRecord::Migration[5.0]
   def change
     add_index :projects, :dependents_count
   end

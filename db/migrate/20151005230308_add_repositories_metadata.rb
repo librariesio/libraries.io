@@ -1,4 +1,4 @@
-class AddRepositoriesMetadata < ActiveRecord::Migration
+class AddRepositoriesMetadata < ActiveRecord::Migration[5.0]
   def change
     add_column :github_repositories, :has_readme, :string
     add_column :github_repositories, :has_changelog, :string

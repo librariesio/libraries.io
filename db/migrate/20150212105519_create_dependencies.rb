@@ -1,4 +1,4 @@
-class CreateDependencies < ActiveRecord::Migration
+class CreateDependencies < ActiveRecord::Migration[5.0]
   def change
     create_table :dependencies do |t|
       t.integer :version_id

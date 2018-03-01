@@ -1,4 +1,4 @@
-class ChangeOwnerIdToInteger < ActiveRecord::Migration
+class ChangeOwnerIdToInteger < ActiveRecord::Migration[5.0]
   def up
     change_column :github_repositories, :owner_id, 'integer USING CAST(owner_id AS integer)'
   end

@@ -1,4 +1,4 @@
-class CreateGithubOrganisations < ActiveRecord::Migration
+class CreateGithubOrganisations < ActiveRecord::Migration[5.0]
   def change
     create_table :github_organisations do |t|
       t.string :login

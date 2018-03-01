@@ -1,4 +1,4 @@
-class AddGithubIdIndexToRepos < ActiveRecord::Migration
+class AddGithubIdIndexToRepos < ActiveRecord::Migration[5.0]
   def change
     add_index :github_repositories, :github_id
   end

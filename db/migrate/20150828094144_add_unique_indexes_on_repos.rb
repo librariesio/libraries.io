@@ -1,4 +1,4 @@
-class AddUniqueIndexesOnRepos < ActiveRecord::Migration
+class AddUniqueIndexesOnRepos < ActiveRecord::Migration[5.0]
   def up
     remove_index :github_repositories, :full_name
     remove_index :github_repositories, :github_id

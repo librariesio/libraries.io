@@ -1,4 +1,4 @@
-class AddGithubIdIndexToGithubUsers < ActiveRecord::Migration
+class AddGithubIdIndexToGithubUsers < ActiveRecord::Migration[5.0]
   def change
     add_index :github_users, :github_id
     add_index :projects, :versions_count

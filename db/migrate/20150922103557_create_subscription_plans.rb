@@ -1,4 +1,4 @@
-class CreateSubscriptionPlans < ActiveRecord::Migration
+class CreateSubscriptionPlans < ActiveRecord::Migration[5.0]
   def change
     create_table :subscription_plans do |t|
       t.integer :amount

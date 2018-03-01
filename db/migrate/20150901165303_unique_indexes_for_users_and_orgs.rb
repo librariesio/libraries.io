@@ -1,4 +1,4 @@
-class UniqueIndexesForUsersAndOrgs < ActiveRecord::Migration
+class UniqueIndexesForUsersAndOrgs < ActiveRecord::Migration[5.0]
   def change
     remove_index :github_users, :github_id
     add_index :github_users, :github_id, :unique => true

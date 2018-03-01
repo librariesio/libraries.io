@@ -1,4 +1,4 @@
-class CreateWebHooks < ActiveRecord::Migration
+class CreateWebHooks < ActiveRecord::Migration[5.0]
   def change
     create_table :web_hooks do |t|
       t.integer :github_repository_id

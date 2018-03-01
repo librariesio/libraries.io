@@ -1,4 +1,4 @@
-class CreateRepositoryDependencies < ActiveRecord::Migration
+class CreateRepositoryDependencies < ActiveRecord::Migration[5.0]
   def change
     create_table :repository_dependencies do |t|
       t.integer :project_id

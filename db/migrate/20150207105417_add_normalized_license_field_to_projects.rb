@@ -1,4 +1,4 @@
-class AddNormalizedLicenseFieldToProjects < ActiveRecord::Migration
+class AddNormalizedLicenseFieldToProjects < ActiveRecord::Migration[5.0]
   def change
     add_column :projects, :normalized_licenses, :string, array: true, default: []
   end
