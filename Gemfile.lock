@@ -133,7 +133,7 @@ GEM
     concurrent-ruby-ext (1.0.5)
       concurrent-ruby (= 1.0.5)
     connection_pool (2.2.1)
-    counter_culture (1.9.0)
+    counter_culture (1.9.1)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
       after_commit_action (~> 1.0)
