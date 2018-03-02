@@ -59,7 +59,8 @@ module RepoManifests
           project_name: dep[:name].try(:strip),
           platform: platform,
           requirements: dep[:requirement],
-          kind: dep[:type]
+          kind: dep[:type],
+          repository_id: self.id
         })
       end
     end
