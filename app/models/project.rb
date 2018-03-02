@@ -95,7 +95,7 @@ class Project < ApplicationRecord
                           .where('repositories.stargazers_count > 0')}
 
   scope :hacker_news, -> { with_repo.where('repositories.stargazers_count > 0').order("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC") }
-  scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 1.month.ago)}
+  scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 2.weeks.ago)}
 
   after_commit :update_repository_async, on: :create
   after_commit :set_dependents_count, on: [:create, :update]
@@ -428,7 +428,7 @@ class Project < ApplicationRecord
     owner_json = platform_class.download_registry_users(name)
     owners = []
 
-    return unless owner_json.present? 
+    return unless owner_json.present?
 
     # find or create registry users
     owner_json.each do |user|
