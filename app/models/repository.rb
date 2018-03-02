@@ -20,6 +20,7 @@ class Repository < ApplicationRecord
   has_many :tags, dependent: :delete_all
   has_many :published_tags, -> { published }, anonymous_class: Tag
   has_many :manifests, dependent: :destroy
+  has_many :repository_dependencies
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :dependency_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :dependency_repos, -> { group('repositories.id') }, through: :dependency_projects, source: :repository
@@ -135,10 +136,6 @@ class Repository < ApplicationRecord
 
   def save_projects
     projects.find_each(&:forced_save) if previous_changes.any?
-  end
-
-  def repository_dependencies
-    manifests.latest.includes({repository_dependencies: {project: :versions}}).map(&:repository_dependencies).flatten.uniq
   end
 
   def owner
