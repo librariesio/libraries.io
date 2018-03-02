@@ -22,7 +22,7 @@ module Monitoring
 
   def unsubscribe_from_repo(repository)
     sub = subscribed_to_repo?(repository)
-    sub.destroy
+    sub.try(:destroy)
   end
 
   def subscribed_to?(project)
