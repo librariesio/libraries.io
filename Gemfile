@@ -82,7 +82,7 @@ gem 'amatch'
 gem 'concurrent-ruby-ext'
 gem 'charlock_holmes', '>= 0.7.5'
 gem 'octicons_helper'
-gem 'ffi', '1.9.18'
+gem 'ffi'
 
 group :development do
   gem 'spring'
