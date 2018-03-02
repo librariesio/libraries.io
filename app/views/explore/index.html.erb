@@ -15,19 +15,13 @@
       <li class="active">
         <a href="#trending_projects" data-toggle="tab">
           <%= fa_icon 'line-chart' %>
-          Trending
+          Trending Packages
         </a>
       </li>
       <li>
         <a href="#new_projects" data-toggle="tab">
           <%= fa_icon 'bullhorn' %>
-          New
-        </a>
-      </li>
-      <li>
-        <a href="#dependend_projects" data-toggle="tab">
-          <%= fa_icon 'users' %>
-          Most Used
+          New Packages
         </a>
       </li>
     </ul>
@@ -47,14 +41,6 @@
         <% end %>
         <%= link_to search_path(sort: 'created_at'), class: 'text-muted' do %>
           See more new packages &raquo;
-        <% end %>
-      </div>
-      <div class="tab-pane" id="dependend_projects">
-        <% cache 'explore-dependend_projects', expires_in: 1.week, race_condition_ttl: 1.minute do %>
-          <%= render project_search('dependents_count'), cache: true %>
-        <% end %>
-        <%= link_to search_path(sort: 'dependents_count'), class: 'text-muted' do %>
-          See more most used packages &raquo;
         <% end %>
       </div>
     </div>
