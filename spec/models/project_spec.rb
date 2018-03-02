@@ -8,7 +8,6 @@ describe Project, type: :model do
   it { should have_many(:tags) }
   it { should have_many(:dependents) }
   it { should have_many(:repository_dependencies) }
-  it { should have_many(:dependent_manifests) }
   it { should have_many(:dependent_repositories) }
   it { should have_many(:subscriptions) }
   it { should have_many(:project_suggestions) }
