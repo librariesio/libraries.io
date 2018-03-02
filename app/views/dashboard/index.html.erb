@@ -58,7 +58,7 @@
     <div class="col-md-9">
       <table class='table repositories table-hover table-condensed'>
         <thead>
-          <th colspan="3">
+          <th colspan="2">
             <small class='pull-right'>
               <%= page_entries_info @repos, model: "#{@org.try(:login)} repositories" %>
             </small>
@@ -75,9 +75,6 @@
                   <%= fa_icon("lock") if repository.private? %>
                   <%= fa_icon("code-fork") if repository.fork? %>
                 </small>
-            </td>
-            <td>
-              <small><%= pluralize(repository.repository_dependencies.count, 'dependencies') %></small>
             </td>
             <td>
               <% if sub = current_user.subscribed_to_repo?(repository) %>
