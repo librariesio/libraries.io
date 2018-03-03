@@ -3,6 +3,7 @@ class RepositoryDependency < ApplicationRecord
 
   belongs_to :manifest
   belongs_to :project
+  belongs_to :repository
 
   scope :with_project, -> { joins(:project).where('projects.id IS NOT NULL') }
   scope :without_project_id, -> { where(project_id: nil) }
@@ -21,10 +22,6 @@ class RepositoryDependency < ApplicationRecord
   delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :project, allow_nil: true
   delegate :filepath, to: :manifest
 
-  def repository
-    manifest.try(:repository)
-  end
-
   def find_project_id
     project_id = Project.platform(platform).where(name: project_name.try(:strip)).limit(1).pluck(:id).first
     return project_id if project_id
@@ -34,10 +31,10 @@ class RepositoryDependency < ApplicationRecord
   def compatible_license?
     return nil unless project
     return nil if project.normalized_licenses.empty?
-    return nil if manifest.repository.license.blank?
+    return nil if repository.license.blank?
     project.normalized_licenses.any? do |license|
       begin
-        License::Compatibility.forward_compatibility(license, manifest.repository.license)
+        License::Compatibility.forward_compatibility(license, repository.license)
       rescue
         true
       end
