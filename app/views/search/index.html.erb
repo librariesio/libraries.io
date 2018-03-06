@@ -58,12 +58,6 @@
         <p>
           If a package from one of these package managers is missing please <%= link_to 'report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>.
         </p>
-        <div class='row'>
-          <%= render partial: 'platforms/platform', collection: @platforms %>
-        </div>
-        <p>
-          Package manager not listed above? <%= link_to 'Consider adding support for it', "https://github.com/librariesio/libraries.io/blob/master/docs/add-a-package-manager.md" %>.
-        </p>
       <% end %>
     <% end %>
   </div>
