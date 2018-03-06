@@ -14,10 +14,6 @@ class Version < ApplicationRecord
 
   scope :newest_first, -> { order('versions.published_at DESC') }
 
-  # def as_json(options = nil)
-  #   super({ only: [:number, :published_at] }.merge(options || {}))
-  # end
-
   def save_project
     project.try(:forced_save)
     project.try(:update_repository_async)
