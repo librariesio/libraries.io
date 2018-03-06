@@ -9,7 +9,7 @@ module RepositoryOwner
     end
 
     def self.fetch_user(id_or_login)
-      if id_or_login.to_i.zero?
+      if id_or_login.to_i != id_or_login
         api_client.get("/users?username=#{id_or_login}").first
       else
         api_client.user(id_or_login)
