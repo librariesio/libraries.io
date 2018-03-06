@@ -1,5 +1,5 @@
 <% term['key'] = term['key'].downcase if name == 'host_type' %>
-<% current_param = params[name.to_sym].try(:split,',') || [] %>
+<% current_param = params[name.to_sym].to_s.split(',') %>
 <% active = current_param.include?(term['key']) %>
 <li class='<%= 'active' if active %>'>
   <% if active %>
