@@ -80,7 +80,7 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
       add keywords_path, :changefreq => 'daily'
 
       PackageManager::Base.platforms.each do |platform|
-        name = platform.to_s.demodulize
+        name = platform.formatted_name
         add platform_path(name.downcase), :lastmod => Project.platform(name).order('updated_at DESC').first.try(:updated_at)
       end
 

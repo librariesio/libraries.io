@@ -29,7 +29,7 @@ module PackageManager
     end
 
     def self.find(platform)
-      platforms.find{|p| p.to_s.demodulize.downcase == platform.downcase }
+      platforms.find{|p| p.formatted_name.downcase == platform.downcase }
     end
 
     def self.color

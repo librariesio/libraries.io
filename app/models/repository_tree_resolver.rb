@@ -18,7 +18,7 @@ class RepositoryTreeResolver
 
   def platforms
     @platforms ||= @manifests.pluck(:platform).map(&:downcase).uniq.select do |platform|
-      package_manager = PackageManager::Base.platforms.find{|pm| pm.formatted_name.downcase == platform }
+      package_manager = PackageManager::Base.PackageManager::Base.find(platform)
       package_manager && package_manager::HAS_VERSIONS # can only resolve trees for platforms with versions
     end
   end

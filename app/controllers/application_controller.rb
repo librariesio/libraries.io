@@ -63,9 +63,9 @@ class ApplicationController < ActionController::Base
   end
 
   def find_platform(param = :id)
-    @platform = PackageManager::Base.platforms.find{|p| p.to_s.demodulize.downcase == params[param].downcase }
+    @platform = PackageManager::Base.find(params[param])
     raise ActiveRecord::RecordNotFound if @platform.nil?
-    @platform_name = @platform.to_s.demodulize
+    @platform_name = @platform.formatted_name
   end
 
   def find_project

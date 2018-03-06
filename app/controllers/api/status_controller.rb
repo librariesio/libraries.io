@@ -13,10 +13,4 @@ class Api::StatusController < Api::ApplicationController
     end
     render json: @projects
   end
-
-  private
-
-  def find_platform_by_name(name)
-    PackageManager::Base.platforms.find{|p| p.to_s.demodulize.downcase == name.downcase }.try(:to_s).try(:demodulize)
-  end
 end

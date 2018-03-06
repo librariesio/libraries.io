@@ -32,7 +32,7 @@
         <strong><%= link_to platform.formatted_name, platform_path(platform.formatted_name.downcase) %></strong>
       </td>
       <td class='text-center'>
-        <%= number_with_delimiter Project.platform(platform.to_s.demodulize).count %>
+        <%= number_with_delimiter Project.platform(platform.formatted_name).count %>
       </td>
       <td class='text-center'>
         <%= feature_flag platform::HAS_VERSIONS %>

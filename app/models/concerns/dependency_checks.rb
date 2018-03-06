@@ -45,6 +45,6 @@ module DependencyChecks
   end
 
   def package_manager
-    PackageManager::Base.platforms.find{|pm| pm.formatted_name.downcase == platform.downcase }
+    PackageManager::Base.find(platform)
   end
 end
