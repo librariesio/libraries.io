@@ -125,7 +125,7 @@ module ApplicationHelper
 
   def format_language(language)
     return nil if language.blank?
-    Linguist::Language[language].try(:to_s)
+    Linguist::Language[language].to_s
   end
 
   def stats_for(title, records)

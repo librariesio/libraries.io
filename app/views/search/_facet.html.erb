@@ -1,3 +1,4 @@
+<% facet_bucket_keys = facet.buckets.map{|t| t['key'].to_s.downcase } %>
 <div class="panel panel-default">
   <div class="panel-heading">
     <h5><%= format_facet_name(name) %></h5>
@@ -9,17 +10,18 @@
 
         <% term['key'] = term['key'].downcase if name == 'host_type' %>
         <% current_param = params[name.to_sym].to_s.split(',') %>
-        <% active = current_param.map(&:downcase).include?(term['key'].try(:downcase)) %>
+        <% active = current_param.map(&:downcase).include?(term['key'].downcase) %>
+        <% formatted_term = format_term(term['key']) %>
         <li class='<%= 'active' if active %>'>
           <% if active %>
             <a href="<%= url_for(params.except(:host).merge(name.to_sym => current_param.reject{ |x| x == term['key'] }.join(','), page: nil).permit!) %>">
             	<input type='checkbox' checked>
-            	<%= format_term(term['key']) %>
+            	<%= formatted_term %>
             </a>
           <% else %>
             <a href="<%= url_for(params.except(:host).merge(name.to_sym => current_param.push(term['key']).join(','), page: nil).permit!) %>">
             	<input type='checkbox'>
-            	<%= format_term(term['key']) %>
+            	<%= formatted_term %>
             </a>
             <small><%= number_to_human term['doc_count'] %> projects</small>
           <% end %>
@@ -29,7 +31,8 @@
 
       <% if params[name.to_sym].present? %>
         <% params[name.to_sym].split(',').each do |term| %>
-          <% if !facet.buckets.map{|t| t['key'].try(:downcase) }.include?(term.try(:downcase)) %>
+          <% next if term.blank? %>
+          <% if !facet_bucket_keys.include?(term.downcase) %>
             <li class='active'>
               <a href="<%= url_for(params.except(:host).merge(name.to_sym => params[name.to_sym].split(',').reject{ |x| x == term }.join(','), page: nil).permit!) %>">
                 <input type='checkbox' checked>
