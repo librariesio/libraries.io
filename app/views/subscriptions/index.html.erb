@@ -10,13 +10,6 @@
       <p>
         Libraries.io lets you watch packages that you depend on and notifies you by email when there's a new release.
       </p>
-      <p>
-        Below are some recommended packages for you to watch:
-      </p>
-      <%= render collection: @projects, partial: 'subscriptions/project' %>
-      <p>
-        <%= link_to 'Browse and filter more recommendations &raquo;'.html_safe, recommendations_path %>
-      </p>
     <% end %>
   </div>
   <div class="col-md-4">

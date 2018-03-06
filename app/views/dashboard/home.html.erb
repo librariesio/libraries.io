@@ -41,12 +41,5 @@
       <h3>Repository Monitoring</h3>
       <%= render 'dashboard/monitoring_promo' %>
     <% end %>
-    <h3>
-      Recommended Packages
-      <small>
-        <%= link_to 'See more &raquo;'.html_safe, recommendations_path %>
-      </small>
-    </h3>
-    <%= render collection: @projects, partial: 'subscriptions/project' %>
   </div>
 </div>
