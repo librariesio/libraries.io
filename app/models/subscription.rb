@@ -1,6 +1,6 @@
 class Subscription < ApplicationRecord
   validates_presence_of :project
-  validates_uniqueness_of :project, scope: :user_id, if: 'user_id.present?'
+  validates_uniqueness_of :project, scope: :user_id, if: :user_id_present?
   belongs_to :project
   belongs_to :user
   belongs_to :repository_subscription
@@ -12,5 +12,9 @@ class Subscription < ApplicationRecord
 
   def notification_user
     repository_subscription.try(:user) || user
+  end
+
+  def user_id_present?
+    user_id.present?
   end
 end
