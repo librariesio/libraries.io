@@ -18,6 +18,12 @@ GIT
       actionpack (>= 3.1)
       activesupport (>= 3.1)
 
+GIT
+  remote: https://github.com/librariesio/semantic
+  revision: ed94eaa7107bdc60e8fd98e1904d4c065a9a576d
+  specs:
+    semantic (1.6.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -460,7 +466,6 @@ GEM
       schema_plus_core (~> 2.0)
       schema_plus_indexes (~> 0.2, >= 0.2.4)
     sdl4r (0.9.11)
-    semantic (1.6.1)
     semantic_range (2.0.0)
     sexp_processor (4.10.1)
     shoulda (3.5.0)
@@ -630,7 +635,7 @@ DEPENDENCIES
   sanitize-url
   sassc-rails
   schema_plus_pg_indexes
-  semantic
+  semantic!
   semantic_range
   shoulda
   sidekiq
