@@ -6,12 +6,12 @@ New to Ruby? No worries! You can follow these instructions to install a local se
 
 ### Installing a Local Server
 
-First things first, you'll need to install Ruby 2.4.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+First things first, you'll need to install Ruby 2.5.0. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build)
 
 ```bash
 brew install rbenv ruby-build
-rbenv install 2.4.3
+rbenv install 2.5.0
 ```
 
 Next, you'll need to make sure that you have PostgreSQL and Redis installed. This can be done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or postgres can be installed by using [http://postgresapp.com](http://postgresapp.com). Please also see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
