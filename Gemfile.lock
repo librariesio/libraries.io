@@ -189,6 +189,11 @@ GEM
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
     fast_blank (1.0.0)
+    fast_jsonapi (1.0.17)
+      activerecord (~> 5.0)
+      activesupport (~> 5.0)
+      multi_json (~> 1.12)
+      oj (~> 3.3)
     fast_xor (1.1.3)
       rake
       rake-compiler
@@ -582,6 +587,7 @@ DEPENDENCIES
   faraday-http-cache
   faraday_middleware
   fast_blank
+  fast_jsonapi
   fast_xor
   fast_xs
   ffi
