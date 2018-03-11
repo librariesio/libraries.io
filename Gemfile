@@ -83,6 +83,7 @@ gem 'concurrent-ruby-ext'
 gem 'charlock_holmes', '>= 0.7.5'
 gem 'octicons_helper'
 gem 'ffi'
+gem 'fast_jsonapi'
 
 group :development do
   gem 'spring'

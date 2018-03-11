@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe VersionSerializer do
-  subject { described_class.new(build(:version)) }
+  subject { described_class.new(build(:version)).serializable_hash[:data][:attributes].keys }
 
   it 'should have expected attribute names' do
-    expect(subject.attributes.keys).to eql([:number, :published_at])
+    is_expected.to eql([:number, :published_at])
   end
 end
