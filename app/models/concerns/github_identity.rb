@@ -52,6 +52,7 @@ module GithubIdentity
       end
       next if github_repo.nil?
       current_repo_ids << github_repo.id
+      github_repo.update_all_info_async(token)
 
       unless rp = existing_permissions.find{|p| p.repository_id == github_repo.id}
         rp = repository_permissions.build(repository_id: github_repo.id)
