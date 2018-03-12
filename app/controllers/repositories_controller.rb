@@ -106,7 +106,7 @@ class RepositoriesController < ApplicationController
     if @repository.recently_synced?
       flash[:error] = "Repository has already been synced recently"
     else
-      @repository.manual_sync
+      @repository.manual_sync(current_user.token)
       flash[:notice] = "Repository has been queued to be resynced"
     end
     redirect_back fallback_location: repository_path(@repository.to_param)
