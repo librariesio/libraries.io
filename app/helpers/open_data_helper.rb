@@ -31,7 +31,7 @@ module OpenDataHelper
         md5: 'TODO',
         size: 'TODO',
         rows: 'TODO',
-        download: 'TODO'
+        download: 'https://zenodo.org/record/1196312/files/Libraries.io-open-data-1.2.0.tar.gz'
       }
     }
   end
