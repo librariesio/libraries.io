@@ -81,7 +81,7 @@ GEM
       mize
       tins (~> 1.0)
     api-pagination (4.7.0)
-    appsignal (2.5.0)
+    appsignal (2.5.1)
       rack
     arel (8.0.0)
     asciidoctor (1.5.6.1)
@@ -133,7 +133,7 @@ GEM
     cliver (0.3.2)
     commander (4.4.4)
       highline (~> 1.7.2)
-    commonmarker (0.17.8)
+    commonmarker (0.17.9)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.0.5)
     concurrent-ruby-ext (1.0.5)
