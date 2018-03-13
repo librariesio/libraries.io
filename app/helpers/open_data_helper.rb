@@ -24,6 +24,14 @@ module OpenDataHelper
         size: '7.1GB',
         rows: '311 million',
         download: 'https://zenodo.org/record/1068916/files/Libraries.io-open-data-1.1.1.tar.gz'
+      },
+      '1.2.0' => {
+        date: 'March 13, 2018',
+        filename: 'Libraries.io-open-data-1.2.0.tar.gz',
+        md5: '5ada269fa799265b5ffc32902ccfbce1',
+        size: '8.7GB',
+        rows: '397 million',
+        download: 'https://zenodo.org/record/1196312/files/Libraries.io-open-data-1.2.0.tar.gz'
       }
     }
   end
