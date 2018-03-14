@@ -9,11 +9,11 @@ describe PackageManager::Pypi do
 
   describe '#package_link' do
     it 'returns a link to project website' do
-      expect(described_class.package_link(project)).to eq("https://pypi.python.org/pypi/foo/")
+      expect(described_class.package_link(project)).to eq("https://pypi.org/project/foo/")
     end
 
     it 'handles version' do
-      expect(described_class.package_link(project, '2.0.0')).to eq("https://pypi.python.org/pypi/foo/2.0.0")
+      expect(described_class.package_link(project, '2.0.0')).to eq("https://pypi.org/project/foo/2.0.0")
     end
   end
 
