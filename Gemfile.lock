@@ -324,7 +324,7 @@ GEM
       omniauth (~> 1.2)
     org-ruby (0.9.12)
       rubypants (~> 0.2)
-    ox (2.8.4)
+    ox (2.9.0)
     parallel (1.12.1)
     pg (1.0.0)
     pg_query (1.0.1)
