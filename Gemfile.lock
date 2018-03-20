@@ -84,7 +84,7 @@ GEM
     appsignal (2.5.1)
       rack
     arel (8.0.0)
-    asciidoctor (1.5.6.1)
+    asciidoctor (1.5.6.2)
     autoprefixer-rails (8.1.0.1)
       execjs
     bibliothecary (6.2.0)
@@ -263,7 +263,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.2.0)
+    loofah (2.2.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.0)
