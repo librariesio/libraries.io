@@ -43,7 +43,7 @@ module PackageManager
         :description => project['info']['summary'],
         :homepage => project['info']['home_page'],
         :keywords_array => Array.wrap(project['info']['keywords'].try(:split, ',')),
-        :licenses => project['info']['license'],
+        :licenses => self.licenses(project),
         :repository_url => repo_fallback('', project['info']['home_page'])
       }
     end
@@ -70,6 +70,12 @@ module PackageManager
           platform: self.name.demodulize
         }
       end
+    end
+
+    def self.licenses(project)
+      return project['info']['license'] if project['info']['license'].present?
+      license_classifiers = project['info']['classifiers'].select { |c| c.start_with?('License :: ')}
+      return license_classifiers.map { |l| l.split(':: ').last }.join(',')
     end
   end
 end
