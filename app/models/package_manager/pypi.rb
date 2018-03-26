@@ -73,9 +73,9 @@ module PackageManager
     end
 
     def self.licenses(project)
-      return project['info']['license'] unless project['info']['license'] == ''
+      return project['info']['license'] if project['info']['license'].present?
       license_classifiers = project['info']['classifiers'].select { |c| c.start_with?('License :: ')}
-      return license_classifiers.map {|l| l[l.rindex(":: ")+3..-1] }.join(',')
+      return license_classifiers.map { |l| l.split(':: ').last }.join(',')
     end
   end
 end
