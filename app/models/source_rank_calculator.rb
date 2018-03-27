@@ -17,12 +17,11 @@ class SourceRankCalculator
   end
 
   def community_score
-    0
+    contribution_docs_score
     # recent_release
     # not_brand_new
     # contributors
-    # code_of_conduct_present
-    # contributing docs present
+    # maintainers
   end
 
   def quality_score
@@ -43,6 +42,10 @@ class SourceRankCalculator
     basic_info.values.compact.length/basic_info.values.length.to_f*100
   end
 
+  def contribution_docs_score
+    contribution_docs.values.compact.length/contribution_docs.values.length.to_f*100
+  end
+
   private
 
   def dependencies_score
@@ -57,6 +60,14 @@ class SourceRankCalculator
       keywords:       @project.keywords.presence,
       readme:         @project.readme.presence,
       license:        @project.normalized_licenses.presence
+    }
+  end
+
+  def contribution_docs
+    {
+      code_of_conduct: @project.has_coc.presence,
+      contributing:    @project.has_contributing.presence,
+      changelog:    @project.has_changelog.presence
     }
   end
 
