@@ -8,8 +8,8 @@ class SourceRankCalculator
   end
 
   def popularity_score
-    0
-    # dependent_projects
+    popularity_scores.values.compact.length/popularity_scores.values.length.to_f*100
+
     # dependent_repositories
     # stars
     # forks
@@ -26,7 +26,6 @@ class SourceRankCalculator
 
   def quality_score
     basic_info_score
-    # license_present
     # multiple_versions_present
     # follows_semver
     # one_point_oh
@@ -46,10 +45,35 @@ class SourceRankCalculator
     contribution_docs.values.compact.length/contribution_docs.values.length.to_f*100
   end
 
+  def dependent_projects_score
+    return 0 if max_dependent_projects.to_f.zero?
+    @project.dependents_count/max_dependent_projects.to_f*100
+  end
+
+  def dependent_repositories_score
+    return 0 if max_dependent_repositories.to_f.zero?
+    @project.dependent_repos_count/max_dependent_repositories.to_f*100
+  end
+
   private
+
+  def max_dependent_projects
+    Project.platform(@project.platform).order('dependents_count DESC NULLS LAST').limit(1).pluck(:dependents_count).first
+  end
+
+  def max_dependent_repositories
+    Project.platform(@project.platform).order('dependent_repos_count DESC NULLS LAST').limit(1).pluck(:dependent_repos_count).first
+  end
 
   def dependencies_score
     # any_outdated_dependencies
+  end
+
+  def popularity_scores
+    {
+      dependent_projects: dependent_projects_score,
+      dependent_repositories: dependent_repositories_score
+    }
   end
 
   def basic_info
