@@ -102,7 +102,7 @@ class Project < ApplicationRecord
   before_save  :update_details
   before_destroy :destroy_versions
 
-  delegate :has_coc, :has_changelog, :has_contributing, to: :repository
+  delegate :has_coc, :has_changelog, :has_contributing, to: :repository, allow_nil: true
 
   def self.total
     Rails.cache.fetch 'projects:total', :expires_in => 1.day, race_condition_ttl: 2.minutes do
