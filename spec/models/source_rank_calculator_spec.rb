@@ -18,7 +18,7 @@ describe SourceRankCalculator do
     let(:repository) { create(:repository) }
     let!(:readme) { create(:readme, repository: repository) }
 
-    context "if all four basic info fields are present" do
+    context "if all basic info fields are present" do
       let!(:project) { build(:project, repository: repository,
                                        description: 'project description',
                                        homepage: 'http://homepage.com',
@@ -30,7 +30,7 @@ describe SourceRankCalculator do
       end
     end
 
-    context "if none of four basic info fields are present" do
+    context "if none of the basic info fields are present" do
       let!(:project) { build(:project, description: '',
                                         homepage: '',
                                         repository_url: '',
