@@ -51,12 +51,12 @@ class SourceRankCalculator
 
   def basic_info
     {
-      description: @project.description.presence,
-      homepage: @project.homepage.presence,
+      description:    @project.description.presence,
+      homepage:       @project.homepage.presence,
       repository_url: @project.repository_url.presence,
-      keywords: @project.keywords.presence,
-      readme: @project.readme.presence,
-      license: @project.normalized_licenses.presence
+      keywords:       @project.keywords.presence,
+      readme:         @project.readme.presence,
+      license:        @project.normalized_licenses.presence
     }
   end
 
