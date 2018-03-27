@@ -26,10 +26,7 @@ class SourceRankCalculator
   end
 
   def quality_score
-    0
-    # basic_info_present
-    # source repository_present
-    # readme_present
+    basic_info_score
     # license_present
     # multiple_versions_present
     # follows_semver
@@ -42,10 +39,25 @@ class SourceRankCalculator
     # dependencies_score
   end
 
+  def basic_info_score
+    basic_info.values.compact.length/basic_info.values.length.to_f*100
+  end
+
   private
 
   def dependencies_score
     # any_outdated_dependencies
+  end
+
+  def basic_info
+    {
+      description: @project.description.presence,
+      homepage: @project.homepage.presence,
+      repository_url: @project.repository_url.presence,
+      keywords: @project.keywords.presence,
+      readme: @project.readme.presence,
+      license: @project.normalized_licenses.presence
+    }
   end
 
   def total_score
