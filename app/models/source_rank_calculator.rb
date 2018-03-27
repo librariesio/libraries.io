@@ -67,7 +67,7 @@ class SourceRankCalculator
     {
       code_of_conduct: @project.has_coc.presence,
       contributing:    @project.has_contributing.presence,
-      changelog:    @project.has_changelog.presence
+      changelog:       @project.has_changelog.presence
     }
   end
 
