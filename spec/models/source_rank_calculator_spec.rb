@@ -5,8 +5,12 @@ describe SourceRankCalculator do
   let(:calculator) { SourceRankCalculator.new(project) }
 
   describe "#overall_score" do
-    it "returns combined sourcerank 2.0 score for a project" do
-      expect(calculator.overall_score).to eq(0)
+    it "should be the average of three category scores" do
+      allow(calculator).to receive(:popularity_score) { 10 }
+      allow(calculator).to receive(:community_score) { 20 }
+      allow(calculator).to receive(:quality_score) { 30 }
+
+      expect(calculator.overall_score).to eq(20)
     end
   end
 end
