@@ -41,4 +41,26 @@ describe SourceRankCalculator do
       end
     end
   end
+
+  describe '#contribution_docs_score' do
+    let!(:project) { build(:project, repository: repository) }
+
+    context "if all contribution docs are present" do
+      let(:repository) { create(:repository, has_coc: 'CODE_OF_CONDUCT',
+                                             has_contributing: 'contributing.md',
+                                             has_changelog: 'changelog.md') }
+      it "should be 100" do
+        expect(calculator.contribution_docs_score).to eq(100)
+      end
+    end
+
+    context "if none of the contribution docs are present" do
+      let(:repository) { create(:repository, has_coc: '',
+                                             has_contributing: nil,
+                                             has_changelog: '') }
+      it "should be 0" do
+        expect(calculator.contribution_docs_score).to eq(0)
+      end
+    end
+  end
 end
