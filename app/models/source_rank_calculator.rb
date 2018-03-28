@@ -93,20 +93,20 @@ class SourceRankCalculator
 
   def basic_info
     {
-      description:    @project.description.presence,
-      homepage:       @project.homepage.presence,
-      repository_url: @project.repository_url.presence,
-      keywords:       @project.keywords.presence,
-      readme:         @project.readme.presence,
-      license:        @project.normalized_licenses.presence
+      description:    @project.description.present?,
+      homepage:       @project.homepage.present?,
+      repository_url: @project.repository_url.present?,
+      keywords:       @project.keywords.present?,
+      readme:         @project.readme.present?,
+      license:        @project.normalized_licenses.present?
     }
   end
 
   def contribution_docs
     {
-      code_of_conduct: @project.has_coc.presence,
-      contributing:    @project.has_contributing.presence,
-      changelog:       @project.has_changelog.presence
+      code_of_conduct: @project.has_coc.present?,
+      contributing:    @project.has_contributing.present?,
+      changelog:       @project.has_changelog.present?
     }
   end
 
