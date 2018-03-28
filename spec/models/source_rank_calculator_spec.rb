@@ -104,12 +104,54 @@ describe SourceRankCalculator do
     end
   end
 
+  describe '#stars_score' do
+    context "if it has the highest number of stars in its ecosystem" do
+      it "should be 100" do
+        allow(project).to receive(:stars) { 19000 }
+        allow(calculator).to receive(:max_stars) { 19000 }
+
+        expect(calculator.stars_score).to eq(100)
+      end
+    end
+
+    context "if it doesn't have the highest number of stars in its ecosystem" do
+      it "should be a percentage of the highest" do
+        allow(project).to receive(:stars) { 19 }
+        allow(calculator).to receive(:max_stars) { 19000 }
+
+        expect(calculator.stars_score).to eq(0.1)
+      end
+    end
+  end
+
+  describe '#forks_score' do
+    context "if it has the highest number of forks in its ecosystem" do
+      it "should be 100" do
+        allow(project).to receive(:forks) { 56 }
+        allow(calculator).to receive(:max_forks) { 56 }
+
+        expect(calculator.forks_score).to eq(100)
+      end
+    end
+
+    context "if it doesn't have the highest number of forks in its ecosystem" do
+      it "should be a percentage of the highest" do
+        allow(project).to receive(:forks) { 1 }
+        allow(calculator).to receive(:max_forks) { 10 }
+
+        expect(calculator.forks_score).to eq(10)
+      end
+    end
+  end
+
   describe '#popularity_score' do
     it "should be the average of popularity category scores" do
       allow(calculator).to receive(:dependent_repositories_score) { 90 }
       allow(calculator).to receive(:dependent_projects_score) { 20 }
+      allow(calculator).to receive(:stars_score) { 55 }
+      allow(calculator).to receive(:forks_score) { 70 }
 
-      expect(calculator.popularity_score).to eq(55)
+      expect(calculator.popularity_score).to eq(58.75)
     end
   end
 
