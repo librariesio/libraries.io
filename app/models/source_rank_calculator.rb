@@ -31,7 +31,8 @@ class SourceRankCalculator
     # one_point_oh
     # all_prereleases
 
-    # dependencies_score
+    # any_outdated_dependencies
+    # direct_dependencies_score
   end
 
   def basic_info_score
@@ -68,10 +69,6 @@ class SourceRankCalculator
 
   def max_dependent_repositories
     Project.platform(@project.platform).order('dependent_repos_count DESC NULLS LAST').limit(1).pluck(:dependent_repos_count).first
-  end
-
-  def dependencies_score
-    # any_outdated_dependencies
   end
 
   def popularity_scores
