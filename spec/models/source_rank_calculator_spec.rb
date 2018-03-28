@@ -150,8 +150,9 @@ describe SourceRankCalculator do
       allow(calculator).to receive(:dependent_projects_score) { 20 }
       allow(calculator).to receive(:stars_score) { 55 }
       allow(calculator).to receive(:forks_score) { 70 }
+      allow(calculator).to receive(:watchers_score) { 10 }
 
-      expect(calculator.popularity_score).to eq(58.75)
+      expect(calculator.popularity_score).to eq(49)
     end
   end
 

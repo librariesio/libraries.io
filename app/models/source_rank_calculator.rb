@@ -9,7 +9,6 @@ class SourceRankCalculator
 
   def popularity_score
     popularity_scores.values.sum/popularity_scores.values.length.to_f
-    # watchers
   end
 
   def community_score
@@ -69,6 +68,11 @@ class SourceRankCalculator
     @project.forks/max_forks.to_f*100
   end
 
+  def watchers_score
+    return 0 if max_watchers.to_f.zero?
+    @project.forks/max_watchers.to_f*100
+  end
+
   def status_score
     inactive_statuses.include?(@project.status) ? 0 : 100
   end
@@ -113,12 +117,22 @@ class SourceRankCalculator
                            .first || 0)
   end
 
+  def max_watchers
+    @max_watchers ||= (Project.platform(@project.platform)
+                           .joins(:repository)
+                           .order('repositories.subscribers_count DESC NULLS LAST')
+                           .limit(1)
+                           .pluck(:subscribers_count)
+                           .first || 0)
+  end
+
   def popularity_scores
     {
       dependent_projects: dependent_projects_score,
       dependent_repositories: dependent_repositories_score,
       stars: stars_score,
-      forks: forks_score
+      forks: forks_score,
+      watchers: watchers_score
     }
   end
 
