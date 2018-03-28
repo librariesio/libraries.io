@@ -238,6 +238,10 @@ class Project < ApplicationRecord
     repository.try(:forks_count) || 0
   end
 
+  def watchers
+    repository.try(:subscribers_count) || 0
+  end
+
   def set_language
     return unless repository
     self.language = repository.try(:language)
