@@ -9,10 +9,6 @@ class SourceRankCalculator
 
   def popularity_score
     popularity_scores.values.sum/popularity_scores.values.length.to_f
-
-    # dependent_repositories
-    # stars
-    # forks
     # watchers
   end
 
@@ -63,6 +59,16 @@ class SourceRankCalculator
     @project.dependent_repos_count/max_dependent_repositories.to_f*100
   end
 
+  def stars_score
+    return 0 if max_stars.to_f.zero?
+    @project.stars/max_stars.to_f*100
+  end
+
+  def forks_score
+    return 0 if max_forks.to_f.zero?
+    @project.forks/max_forks.to_f*100
+  end
+
   def status_score
     inactive_statuses.include?(@project.status) ? 0 : 100
   end
@@ -74,17 +80,45 @@ class SourceRankCalculator
   end
 
   def max_dependent_projects
-    @max_dependent_projects ||= (Project.platform(@project.platform).order('dependents_count DESC NULLS LAST').limit(1).pluck(:dependents_count).first || 0)
+    @max_dependent_projects ||= (Project.platform(@project.platform)
+                                        .order('dependents_count DESC NULLS LAST')
+                                        .limit(1)
+                                        .pluck(:dependents_count)
+                                        .first || 0)
   end
 
   def max_dependent_repositories
-    @max_dependent_repositories ||= (Project.platform(@project.platform).order('dependent_repos_count DESC NULLS LAST').limit(1).pluck(:dependent_repos_count).first || 0)
+    @max_dependent_repositories ||= (Project.platform(@project.platform)
+                                            .order('dependent_repos_count DESC NULLS LAST')
+                                            .limit(1)
+                                            .pluck(:dependent_repos_count)
+                                            .first || 0)
+  end
+
+  def max_stars
+    @max_stars ||= (Project.platform(@project.platform)
+                           .joins(:repository)
+                           .order('repositories.stargazers_count DESC NULLS LAST')
+                           .limit(1)
+                           .pluck(:stargazers_count)
+                           .first || 0)
+  end
+
+  def max_forks
+    @max_forks ||= (Project.platform(@project.platform)
+                           .joins(:repository)
+                           .order('repositories.forks_count DESC NULLS LAST')
+                           .limit(1)
+                           .pluck(:forks_count)
+                           .first || 0)
   end
 
   def popularity_scores
     {
       dependent_projects: dependent_projects_score,
-      dependent_repositories: dependent_repositories_score
+      dependent_repositories: dependent_repositories_score,
+      stars: stars_score,
+      forks: forks_score
     }
   end
 
