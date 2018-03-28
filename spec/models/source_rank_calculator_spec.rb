@@ -112,4 +112,13 @@ describe SourceRankCalculator do
       expect(calculator.popularity_score).to eq(55)
     end
   end
+
+  describe '#quality_score' do
+    it "should be the average of quality category scores" do
+      allow(calculator).to receive(:basic_info_score) { 100 }
+      allow(calculator).to receive(:status_score) { 0 }
+
+      expect(calculator.quality_score).to eq(50)
+    end
+  end
 end

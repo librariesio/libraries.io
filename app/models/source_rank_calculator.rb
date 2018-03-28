@@ -25,14 +25,11 @@ class SourceRankCalculator
   end
 
   def quality_score
-    basic_info_score
+    quality_scores.values.sum/quality_scores.values.length.to_f
     # multiple_versions_present
     # follows_semver
     # one_point_oh
     # all_prereleases
-    # is_deprecated
-    # is_unmaintained
-    # is_removed
 
     # dependencies_score
   end
@@ -55,7 +52,15 @@ class SourceRankCalculator
     @project.dependent_repos_count/max_dependent_repositories.to_f*100
   end
 
+  def status_score
+    inactive_statuses.include?(@project.status) ? 0 : 100
+  end
+
   private
+
+  def inactive_statuses
+    ["Deprecated", "Removed", "Unmaintained", "Hidden"]
+  end
 
   def max_dependent_projects
     Project.platform(@project.platform).order('dependents_count DESC NULLS LAST').limit(1).pluck(:dependents_count).first
@@ -73,6 +78,13 @@ class SourceRankCalculator
     {
       dependent_projects: dependent_projects_score,
       dependent_repositories: dependent_repositories_score
+    }
+  end
+
+  def quality_scores
+    {
+      basic_info: basic_info_score,
+      status: status_score
     }
   end
 
