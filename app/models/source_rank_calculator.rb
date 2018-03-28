@@ -52,11 +52,11 @@ class SourceRankCalculator
   end
 
   def basic_info_score
-    basic_info.values.compact.length/basic_info.values.length.to_f*100
+    basic_info.values.select{|v| v}.length/basic_info.values.length.to_f*100
   end
 
   def contribution_docs_score
-    contribution_docs.values.compact.length/contribution_docs.values.length.to_f*100
+    contribution_docs.values.select{|v| v}.length/contribution_docs.values.length.to_f*100
   end
 
   def dependent_projects_score
