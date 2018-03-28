@@ -17,7 +17,7 @@ class SourceRankCalculator
   end
 
   def community_score
-    contribution_docs_score
+    community_scores.values.sum/community_scores.values.length.to_f
     # recent_release
     # not_brand_new
     # contributors
@@ -85,6 +85,12 @@ class SourceRankCalculator
     {
       basic_info: basic_info_score,
       status: status_score
+    }
+  end
+
+  def community_scores
+    {
+      contribution_docs: contribution_docs_score
     }
   end
 
