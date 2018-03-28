@@ -5,7 +5,7 @@ describe SourceRankCalculator do
   let(:calculator) { SourceRankCalculator.new(project) }
 
   describe "#overall_score" do
-    it "should be the average of three category scores" do
+    it "should be the average of all category scores" do
       allow(calculator).to receive(:popularity_score) { 10 }
       allow(calculator).to receive(:community_score) { 20 }
       allow(calculator).to receive(:quality_score) { 30 }

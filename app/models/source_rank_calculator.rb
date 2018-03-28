@@ -4,7 +4,7 @@ class SourceRankCalculator
   end
 
   def overall_score
-    total_score/3.0
+    overall_scores.values.sum/overall_scores.values.length.to_f
   end
 
   def popularity_score
@@ -113,7 +113,11 @@ class SourceRankCalculator
     }
   end
 
-  def total_score
-    popularity_score + community_score + quality_score
+  def overall_scores
+    {
+      popularity: popularity_score,
+      community: community_score,
+      quality: quality_score
+    }
   end
 end
