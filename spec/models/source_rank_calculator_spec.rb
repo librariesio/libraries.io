@@ -164,4 +164,29 @@ describe SourceRankCalculator do
       expect(calculator.quality_score).to eq(50)
     end
   end
+
+  describe '#breakdown' do
+    it "should be the contain details of each score category" do
+      expect(calculator.breakdown).to eq({
+        :popularity => {
+          :dependent_projects=>0,
+          :dependent_repositories=>0,
+          :stars=>0,
+          :forks=>0,
+          :watchers=>0
+        },
+        :community => {
+          :contribution_docs => {
+            :code_of_conduct=>false,
+            :contributing=>false,
+            :changelog=>false
+          }
+        },
+        :quality => {
+          :basic_info=>66.66666666666666,
+          :status=>100
+        }
+      })
+    end
+  end
 end
