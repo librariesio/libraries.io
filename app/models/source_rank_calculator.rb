@@ -35,6 +35,22 @@ class SourceRankCalculator
     # direct_dependencies_score
   end
 
+  def breakdown
+    {
+      popularity: {
+        dependent_projects: dependent_projects_score,
+        dependent_repositories: dependent_repositories_score
+      },
+      community: {
+        contribution_docs: contribution_docs
+      },
+      quality: {
+        basic_info: basic_info,
+        status: status_score
+      }
+    }
+  end
+
   def basic_info_score
     basic_info.values.compact.length/basic_info.values.length.to_f*100
   end
