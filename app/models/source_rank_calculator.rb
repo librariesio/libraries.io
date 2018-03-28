@@ -64,11 +64,11 @@ class SourceRankCalculator
   end
 
   def max_dependent_projects
-    Project.platform(@project.platform).order('dependents_count DESC NULLS LAST').limit(1).pluck(:dependents_count).first
+    @max_dependent_projects ||= (Project.platform(@project.platform).order('dependents_count DESC NULLS LAST').limit(1).pluck(:dependents_count).first || 0)
   end
 
   def max_dependent_repositories
-    Project.platform(@project.platform).order('dependent_repos_count DESC NULLS LAST').limit(1).pluck(:dependent_repos_count).first
+    @max_dependent_repositories ||= (Project.platform(@project.platform).order('dependent_repos_count DESC NULLS LAST').limit(1).pluck(:dependent_repos_count).first || 0)
   end
 
   def popularity_scores
