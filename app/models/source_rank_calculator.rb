@@ -8,7 +8,7 @@ class SourceRankCalculator
   end
 
   def popularity_score
-    popularity_scores.values.compact.length/popularity_scores.values.length.to_f*100
+    popularity_scores.values.sum/popularity_scores.values.length.to_f
 
     # dependent_repositories
     # stars
