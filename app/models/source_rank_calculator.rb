@@ -37,17 +37,11 @@ class SourceRankCalculator
 
   def breakdown
     {
-      popularity: {
-        dependent_projects: dependent_projects_score,
-        dependent_repositories: dependent_repositories_score
-      },
+      popularity: popularity_scores,
       community: {
         contribution_docs: contribution_docs
       },
-      quality: {
-        basic_info: basic_info,
-        status: status_score
-      }
+      quality: quality_scores
     }
   end
 
