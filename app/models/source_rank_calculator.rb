@@ -17,8 +17,12 @@ class SourceRankCalculator
 
   def quality_score
     quality_scores.values.sum/quality_scores.values.length.to_f
+  end
 
+  def dependencies_score
+    0
     # any_outdated_dependencies
+    # dependency_count
     # direct_dependencies_score
   end
 
@@ -26,7 +30,8 @@ class SourceRankCalculator
     {
       popularity: popularity_scores,
       community: community_scores,
-      quality: quality_scores
+      quality: quality_scores,
+      dependencies: dependencies_score
     }
   end
 
@@ -209,7 +214,8 @@ class SourceRankCalculator
     {
       popularity: popularity_score,
       community: community_score,
-      quality: quality_score
+      quality: quality_score,
+      dependencies: dependencies_score
     }
   end
 end

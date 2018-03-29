@@ -9,8 +9,9 @@ describe SourceRankCalculator do
       allow(calculator).to receive(:popularity_score) { 10 }
       allow(calculator).to receive(:community_score) { 20 }
       allow(calculator).to receive(:quality_score) { 30 }
+      allow(calculator).to receive(:dependencies_score) { 40 }
 
-      expect(calculator.overall_score).to eq(20)
+      expect(calculator.overall_score).to eq(25)
     end
   end
 
@@ -222,7 +223,8 @@ describe SourceRankCalculator do
           :multiple_versions => 0,
           :semver => 100,
           :stable_release => 0
-        }
+        },
+        :dependencies => 0
       })
     end
   end
