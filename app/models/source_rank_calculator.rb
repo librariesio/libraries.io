@@ -107,7 +107,7 @@ class SourceRankCalculator
 
   def outdated_dependencies_score
     return 100 unless has_versions?
-    latest_version.try(:any_outdated_dependencies?)
+    latest_version.try(:any_outdated_dependencies?) ? 0 : 100
   end
 
   def dependencies_count_score
@@ -118,8 +118,9 @@ class SourceRankCalculator
 
   def direct_dependencies_score
     return 100 unless has_versions?
-    return 100 if direct_dependencies.empty?
-    direct_dependencies.sum(&:source_rank_2_score)/direct_dependencies.length
+    dep_scores = direct_dependencies.map(&:source_rank_2_score).compact
+    return 100 if dep_scores.empty?
+    dep_scores.sum/dep_scores.length
   end
 
   private
