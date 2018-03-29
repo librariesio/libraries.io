@@ -187,6 +187,18 @@ describe SourceRankCalculator do
     end
   end
 
+  describe '#community_score' do
+    it "should be the average of community category scores" do
+      allow(calculator).to receive(:contribution_docs_score) { 100 }
+      allow(calculator).to receive(:recent_releases_score) { 0 }
+      allow(calculator).to receive(:brand_new_score) { 50 }
+      allow(calculator).to receive(:contributors_score) { 100 }
+      allow(calculator).to receive(:maintainers_score) { 0 }
+
+      expect(calculator.community_score).to eq(50)
+    end
+  end
+
   describe '#breakdown' do
     it "should be the contain details of each score category" do
       expect(calculator.breakdown).to eq({
