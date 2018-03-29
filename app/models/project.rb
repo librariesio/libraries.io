@@ -463,4 +463,12 @@ class Project < ApplicationRecord
       registry_permissions.find{|rp| rp.registry_user == owner}.destroy
     end
   end
+
+  def source_rank_calculator
+    SourceRankCalculator.new(self)
+  end
+
+  def source_rank_2_score
+    source_rank_calculator.overall_score
+  end
 end
