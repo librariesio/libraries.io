@@ -20,10 +20,7 @@ class SourceRankCalculator
   end
 
   def dependencies_score
-    0
-    # any_outdated_dependencies
-    # dependency_count
-    # direct_dependencies_score
+    dependencies_scores.values.sum/dependencies_scores.values.length.to_f
   end
 
   def breakdown
@@ -31,7 +28,7 @@ class SourceRankCalculator
       popularity: popularity_scores,
       community: community_scores,
       quality: quality_scores,
-      dependencies: dependencies_score
+      dependencies: dependencies_scores
     }
   end
 
@@ -106,6 +103,18 @@ class SourceRankCalculator
     return 0 if @project.registry_users.count < 2
     return 100 if @project.registry_users.count > 5
     50
+  end
+
+  def outdated_dependencies_score
+    0
+  end
+
+  def dependencies_count_score
+    0
+  end
+
+  def direct_dependencies_score
+    0
   end
 
   private
@@ -188,6 +197,14 @@ class SourceRankCalculator
       brand_new: brand_new_score,
       contributors: contributors_score,
       maintainers: maintainers_score
+    }
+  end
+
+  def dependencies_scores
+    {
+      outdated_dependencies: outdated_dependencies_score,
+      dependencies_count: dependencies_count_score,
+      direct_dependencies: direct_dependencies_score
     }
   end
 
