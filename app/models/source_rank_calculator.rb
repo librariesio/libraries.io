@@ -26,9 +26,25 @@ class SourceRankCalculator
   def breakdown
     {
       popularity: popularity_scores,
-      community: community_scores,
-      quality: quality_scores,
-      dependencies: dependencies_scores
+      community: {
+        contribution_docs: contribution_docs,
+        recent_releases: recent_releases_score,
+        brand_new: brand_new_score,
+        contributors: contributors_score,
+        maintainers: maintainers_score
+      },
+      quality: {
+        basic_info: basic_info,
+        status: status_score,
+        multiple_versions: multiple_versions_score,
+        semver: semver_score,
+        stable_release: stable_release_score
+      },
+      dependencies: {
+        outdated_dependencies: outdated_dependencies_score,
+        dependencies_count: dependencies_count_score,
+        direct_dependencies: direct_dependencies_scores
+      }
     }
   end
 
@@ -121,6 +137,10 @@ class SourceRankCalculator
     dep_scores = direct_dependencies.map(&:source_rank_2_score).compact
     return 100 if dep_scores.empty?
     dep_scores.sum/dep_scores.length
+  end
+
+  def direct_dependencies_scores
+    Hash[direct_dependencies.collect { |d| [d.project_name, d.source_rank_2_score] } ]
   end
 
   private

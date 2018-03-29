@@ -211,14 +211,24 @@ describe SourceRankCalculator do
           :watchers => 0
         },
         :community => {
-          :contribution_docs => 0.0,
+          :contribution_docs => {
+            :code_of_conduct => false,
+            :contributing => false,
+            :changelog => false
+          },
           :recent_releases => 0,
           :brand_new => 0,
           :contributors => 0,
           :maintainers => 0
         },
         :quality => {
-          :basic_info => 66.66666666666666,
+          :basic_info => {
+            :description => true,
+            :homepage => true,
+            :repository_url => true,
+            :keywords => true,
+            :readme => false,
+            :license => false},
           :status => 100,
           :multiple_versions => 0,
           :semver => 100,
@@ -227,7 +237,7 @@ describe SourceRankCalculator do
         :dependencies => {
           :outdated_dependencies => 100,
           :dependencies_count => 100,
-          :direct_dependencies => 100
+          :direct_dependencies => {}
         }
       })
     end
