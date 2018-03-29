@@ -119,7 +119,7 @@ class SourceRankCalculator
   def direct_dependencies_score
     return 100 unless has_versions?
     return 100 if direct_dependencies.empty?
-    direct_dependencies.sum(&:source_rank_2)/direct_dependencies.length
+    direct_dependencies.sum(&:source_rank_2_score)/direct_dependencies.length
   end
 
   private
