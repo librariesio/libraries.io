@@ -180,6 +180,8 @@ describe SourceRankCalculator do
     it "should be the average of quality category scores" do
       allow(calculator).to receive(:basic_info_score) { 100 }
       allow(calculator).to receive(:status_score) { 0 }
+      allow(calculator).to receive(:multiple_versions_score) { 50 }
+      allow(calculator).to receive(:semver_score) { 100 }
 
       expect(calculator.quality_score).to eq(50)
     end
@@ -204,7 +206,10 @@ describe SourceRankCalculator do
         },
         :quality => {
           :basic_info => 66.66666666666666,
-          :status => 100
+          :status => 100,
+          :multiple_versions => 0,
+          :semver => 100,
+          :stable_release => 0
         }
       })
     end
