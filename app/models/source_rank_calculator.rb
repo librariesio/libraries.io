@@ -13,10 +13,6 @@ class SourceRankCalculator
 
   def community_score
     community_scores.values.sum/community_scores.values.length.to_f
-    # recent_release
-    # not_brand_new
-    # contributors
-    # maintainers
   end
 
   def quality_score
@@ -33,9 +29,7 @@ class SourceRankCalculator
   def breakdown
     {
       popularity: popularity_scores,
-      community: {
-        contribution_docs: contribution_docs
-      },
+      community: community_scores,
       quality: quality_scores
     }
   end
@@ -75,6 +69,28 @@ class SourceRankCalculator
 
   def status_score
     inactive_statuses.include?(@project.status) ? 0 : 100
+  end
+
+  def recent_releases_score
+    return 0 unless @project.published_releases.length > 0
+    @project.published_releases.any? {|v| v.published_at && v.published_at > 6.months.ago } ? 100 : 0
+  end
+
+  def brand_new_score
+    return 0 unless @project.published_releases.length > 0
+    @project.published_releases.any? {|v| v.published_at && v.published_at < 6.months.ago } ? 100 : 0
+  end
+
+  def contributors_score
+    return 0 if @project.contributions_count < 2
+    return 100 if @project.contributions_count > 5
+    50
+  end
+
+  def maintainers_score
+    return 0 if @project.registry_users.count < 2
+    return 100 if @project.registry_users.count > 5
+    50
   end
 
   private
@@ -145,7 +161,11 @@ class SourceRankCalculator
 
   def community_scores
     {
-      contribution_docs: contribution_docs_score
+      contribution_docs: contribution_docs_score,
+      recent_releases: recent_releases_score,
+      brand_new: brand_new_score,
+      contributors: contributors_score,
+      maintainers: maintainers_score
     }
   end
 
