@@ -17,10 +17,6 @@ class SourceRankCalculator
 
   def quality_score
     quality_scores.values.sum/quality_scores.values.length.to_f
-    # multiple_versions_present
-    # follows_semver
-    # one_point_oh
-    # all_prereleases
 
     # any_outdated_dependencies
     # direct_dependencies_score
@@ -72,13 +68,27 @@ class SourceRankCalculator
   end
 
   def recent_releases_score
-    return 0 unless @project.published_releases.length > 0
-    @project.published_releases.any? {|v| v.published_at && v.published_at > 6.months.ago } ? 100 : 0
+    return 0 unless published_releases.length > 0
+    published_releases.any? {|v| v.published_at && v.published_at > 6.months.ago } ? 100 : 0
   end
 
   def brand_new_score
-    return 0 unless @project.published_releases.length > 0
-    @project.published_releases.any? {|v| v.published_at && v.published_at < 6.months.ago } ? 100 : 0
+    return 0 unless published_releases.length > 0
+    published_releases.any? {|v| v.published_at && v.published_at < 6.months.ago } ? 100 : 0
+  end
+
+  def semver_score
+    published_releases.sort_by(&:published_at).last(10).all?(&:follows_semver?) ? 100 : 0
+  end
+
+  def multiple_versions_score
+    return 0 if @project.versions_count < 2
+    return 100 if @project.versions_count > 5
+    50
+  end
+
+  def stable_release_score
+    published_releases.any?(&:greater_than_1?) ? 100 : 0
   end
 
   def contributors_score
@@ -94,6 +104,10 @@ class SourceRankCalculator
   end
 
   private
+
+  def published_releases
+    @published_releases ||= @project.versions_count > 0 ? @project.versions : @project.tags.published
+  end
 
   def inactive_statuses
     ["Deprecated", "Removed", "Unmaintained", "Hidden"]
@@ -155,7 +169,10 @@ class SourceRankCalculator
   def quality_scores
     {
       basic_info: basic_info_score,
-      status: status_score
+      status: status_score,
+      multiple_versions: multiple_versions_score,
+      semver: semver_score,
+      stable_release: stable_release_score
     }
   end
 
