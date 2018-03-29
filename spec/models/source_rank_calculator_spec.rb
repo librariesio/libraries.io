@@ -224,7 +224,11 @@ describe SourceRankCalculator do
           :semver => 100,
           :stable_release => 0
         },
-        :dependencies => 0
+        :dependencies => {
+          :outdated_dependencies => 0,
+          :dependencies_count => 0,
+          :direct_dependencies => 0
+        }
       })
     end
   end
