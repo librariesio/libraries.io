@@ -225,9 +225,9 @@ describe SourceRankCalculator do
           :stable_release => 0
         },
         :dependencies => {
-          :outdated_dependencies => 0,
-          :dependencies_count => 0,
-          :direct_dependencies => 0
+          :outdated_dependencies => 100,
+          :dependencies_count => 100,
+          :direct_dependencies => 100
         }
       })
     end

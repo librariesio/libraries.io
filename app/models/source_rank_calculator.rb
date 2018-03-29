@@ -106,21 +106,39 @@ class SourceRankCalculator
   end
 
   def outdated_dependencies_score
-    0
+    return 100 unless has_versions?
+    latest_version.try(:any_outdated_dependencies?)
   end
 
   def dependencies_count_score
-    0
+    return 100 unless has_versions?
+    return 0 if direct_dependencies.length > 100
+    (100 - direct_dependencies.length)/100
   end
 
   def direct_dependencies_score
-    0
+    return 100 unless has_versions?
+    return 100 if direct_dependencies.empty?
+    direct_dependencies.sum(&:source_rank_2)/direct_dependencies.length
   end
 
   private
 
+  def has_versions?
+    @project.versions_count > 0
+  end
+
+  def latest_version
+    @latest_version ||= @project.latest_version
+  end
+
+  def direct_dependencies
+    return [] unless has_versions?
+    latest_version.dependencies.kind('runtime')
+  end
+
   def published_releases
-    @published_releases ||= @project.versions_count > 0 ? @project.versions : @project.tags.published
+    @published_releases ||= has_versions? ? @project.versions : @project.tags.published
   end
 
   def inactive_statuses
