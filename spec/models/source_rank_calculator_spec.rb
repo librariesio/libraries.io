@@ -144,6 +144,26 @@ describe SourceRankCalculator do
     end
   end
 
+  describe '#watchers_score' do
+    context "if it has the highest number of watchers in its ecosystem" do
+      it "should be 100" do
+        allow(project).to receive(:watchers) { 56 }
+        allow(calculator).to receive(:max_watchers) { 56 }
+
+        expect(calculator.watchers_score).to eq(100)
+      end
+    end
+
+    context "if it doesn't have the highest number of watchers in its ecosystem" do
+      it "should be a percentage of the highest" do
+        allow(project).to receive(:watchers) { 1 }
+        allow(calculator).to receive(:max_watchers) { 10 }
+
+        expect(calculator.watchers_score).to eq(10)
+      end
+    end
+  end
+
   describe '#popularity_score' do
     it "should be the average of popularity category scores" do
       allow(calculator).to receive(:dependent_repositories_score) { 90 }

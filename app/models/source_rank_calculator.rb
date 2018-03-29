@@ -64,7 +64,7 @@ class SourceRankCalculator
 
   def watchers_score
     return 0 if max_watchers.to_f.zero?
-    @project.forks/max_watchers.to_f*100
+    @project.watchers/max_watchers.to_f*100
   end
 
   def status_score
