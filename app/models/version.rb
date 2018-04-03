@@ -7,6 +7,7 @@ class Version < ApplicationRecord
   belongs_to :project
   counter_culture :project
   has_many :dependencies, dependent: :delete_all
+  has_many :runtime_dependencies, -> { where kind: 'runtime' }, class_name: 'Dependency'
 
   after_commit :send_notifications_async, on: :create
   after_commit :update_repository_async, on: :create
