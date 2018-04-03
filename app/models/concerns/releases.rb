@@ -61,4 +61,8 @@ module Releases
   def set_latest_release_number
     self.latest_release_number = latest_release.try(:number)
   end
+
+  def set_runtime_dependencies_count
+    self.runtime_dependencies_count = latest_release.try(:runtime_dependencies_count)
+  end
 end

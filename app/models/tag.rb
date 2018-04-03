@@ -117,4 +117,8 @@ class Tag < ApplicationRecord
     return nil unless repository && previous_tag && previous_tag
     repository.compare_url(previous_tag.number, number)
   end
+
+  def runtime_dependencies_count
+    nil # tags can't have dependencies yet
+  end
 end
