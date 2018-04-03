@@ -20,4 +20,24 @@ describe "tree routes", :type => :routing do
       :number => "7.0.0-beta.44"
     )
   end
+
+  describe 'without version' do
+    it 'routes npm modules correctly' do
+      expect(:get => "/npm/webpack/tree").to route_to(
+        :controller => "tree",
+        :action => "show",
+        :platform => "npm",
+        :name => "webpack"
+      )
+    end
+
+    it 'routes npm modules with slashes correctly' do
+      expect(:get => "/npm/@babel%2Fcore/tree").to route_to(
+        :controller => "tree",
+        :action => "show",
+        :platform => "npm",
+        :name => "@babel/core"
+      )
+    end
+  end
 end
