@@ -129,7 +129,7 @@ GEM
       xpath (>= 2.0, < 4.0)
     case_transform (0.2)
       activesupport
-    charlock_holmes (0.7.5)
+    charlock_holmes (0.7.6)
     chartkick (2.3.2)
     citrus (3.0.2)
     cliver (0.3.2)
@@ -431,7 +431,7 @@ GEM
     ruby_parser (3.11.0)
       sexp_processor (~> 4.9)
     rubypants (0.7.0)
-    rugged (0.26.0)
+    rugged (0.27.0)
     sanitize-url (0.1.4)
     sass (3.5.5)
       sass-listen (~> 4.0.0)
