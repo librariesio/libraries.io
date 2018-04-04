@@ -19,7 +19,7 @@ class SourceRankCalculator
   end
 
   def overall_score
-    overall_scores.values.sum/overall_scores.values.length.to_f
+    (overall_scores.values.sum/overall_scores.values.length.to_f).round
   end
 
   def popularity_score

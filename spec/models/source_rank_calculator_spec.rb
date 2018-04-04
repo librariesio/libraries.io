@@ -13,6 +13,15 @@ describe SourceRankCalculator do
 
       expect(calculator.overall_score).to eq(25)
     end
+
+    it "should be the rounded to an integer" do
+      allow(calculator).to receive(:popularity_score) { 10 }
+      allow(calculator).to receive(:community_score) { 20 }
+      allow(calculator).to receive(:quality_score) { 30 }
+      allow(calculator).to receive(:dependencies_score) { 41 }
+
+      expect(calculator.overall_score).to eq(25)
+    end
   end
 
   describe '#basic_info_score' do
