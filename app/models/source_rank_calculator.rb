@@ -8,6 +8,16 @@ class SourceRankCalculator
     @max_watchers = max_watchers
   end
 
+  def self.maximums(platform)
+    {
+      max_stars: max_stars(platform),
+      max_dependent_projects:max_dependent_projects(platform),
+      max_dependent_repositories: max_dependent_repositories(platform),
+      max_forks: max_forks(platform),
+      max_watchers: max_watchers(platform)
+    }
+  end
+
   def overall_score
     overall_scores.values.sum/overall_scores.values.length.to_f
   end
