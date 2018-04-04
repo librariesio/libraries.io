@@ -155,7 +155,7 @@ class SourceRankCalculator
   def dependencies_count_score
     return 100 unless has_versions?
     return 0 if direct_dependencies.length > 100
-    (100 - direct_dependencies.length)/100
+    100 - direct_dependencies.length
   end
 
   def direct_dependencies_score
