@@ -124,7 +124,7 @@ describe SourceRankCalculator do
         allow(project).to receive(:dependents_count) { 50 }
         allow(calculator).to receive(:max_dependent_projects) { 100 }
 
-        expect(calculator.dependent_projects_score).to eq(50)
+        expect(calculator.dependent_projects_score).to eq(84.94850021680094)
       end
     end
   end
@@ -154,7 +154,7 @@ describe SourceRankCalculator do
         allow(project).to receive(:dependent_repos_count) { 50 }
         allow(calculator).to receive(:max_dependent_repositories) { 100 }
 
-        expect(calculator.dependent_repositories_score).to eq(50)
+        expect(calculator.dependent_repositories_score).to eq(84.94850021680094)
       end
     end
   end
@@ -184,7 +184,7 @@ describe SourceRankCalculator do
         allow(project).to receive(:stars) { 19 }
         allow(calculator).to receive(:max_stars) { 19000 }
 
-        expect(calculator.stars_score).to eq(0.1)
+        expect(calculator.stars_score).to eq(29.88612386252074)
       end
     end
   end
@@ -212,9 +212,9 @@ describe SourceRankCalculator do
     context "if it doesn't have the highest number of forks in its ecosystem" do
       it "should be a percentage of the highest" do
         allow(project).to receive(:forks) { 1 }
-        allow(calculator).to receive(:max_forks) { 10 }
+        allow(calculator).to receive(:max_forks) { 500 }
 
-        expect(calculator.forks_score).to eq(10)
+        expect(calculator.forks_score).to eq(0)
       end
     end
   end
@@ -241,10 +241,10 @@ describe SourceRankCalculator do
 
     context "if it doesn't have the highest number of watchers in its ecosystem" do
       it "should be a percentage of the highest" do
-        allow(project).to receive(:watchers) { 1 }
+        allow(project).to receive(:watchers) { 2 }
         allow(calculator).to receive(:max_watchers) { 10 }
 
-        expect(calculator.watchers_score).to eq(10)
+        expect(calculator.watchers_score).to eq(30.10299956639812)
       end
     end
   end
