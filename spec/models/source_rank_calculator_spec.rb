@@ -74,6 +74,31 @@ describe SourceRankCalculator do
     end
   end
 
+  describe '#dependencies_count_score' do
+    context "if project doesn't have any versions" do
+      it "should be 100" do
+        allow(calculator).to receive(:has_versions?) { false }
+        expect(calculator.dependencies_count_score).to eq(100)
+      end
+    end
+
+    context "if project has over 100 dependencies" do
+      it "should be 0" do
+        allow(calculator).to receive(:has_versions?) { true }
+        allow(calculator).to receive(:direct_dependencies) { (1..101).to_a }
+        expect(calculator.dependencies_count_score).to eq(0)
+      end
+    end
+
+    context "if project has less than 100 dependencies" do
+      it "should be one lower for every dep" do
+        allow(calculator).to receive(:has_versions?) { true }
+        allow(calculator).to receive(:direct_dependencies) { (1..10).to_a }
+        expect(calculator.dependencies_count_score).to eq(90)
+      end
+    end
+  end
+
   describe '#dependent_projects_score' do
     context "passing max_dependent_projects on init" do
       it "should use passed in value" do
