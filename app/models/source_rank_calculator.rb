@@ -149,13 +149,13 @@ class SourceRankCalculator
 
   def direct_dependencies_score
     return 100 unless has_versions?
-    dep_scores = direct_dependencies.map(&:source_rank_2_score).compact
+    dep_scores = direct_dependencies.map(&:sourcerank_2).compact
     return 100 if dep_scores.empty?
     dep_scores.sum/dep_scores.length
   end
 
   def direct_dependencies_scores
-    Hash[direct_dependencies.collect { |d| [d.project_name, d.source_rank_2_score] } ]
+    Hash[direct_dependencies.collect { |d| [d.project_name, d.sourcerank_2] } ]
   end
 
   def self.max_stars(platform)
