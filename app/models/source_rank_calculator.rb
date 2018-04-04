@@ -83,28 +83,28 @@ class SourceRankCalculator
   end
 
   def dependent_projects_score
-    return 0 if max_dependent_projects.to_f.zero?
-    @project.dependents_count/max_dependent_projects.to_f*100
+    return 0 if max_dependent_projects.zero?
+    Math.log10(@project.dependents_count)/Math.log10(max_dependent_projects)*100
   end
 
   def dependent_repositories_score
-    return 0 if max_dependent_repositories.to_f.zero?
-    @project.dependent_repos_count/max_dependent_repositories.to_f*100
+    return 0 if max_dependent_repositories.zero?
+    Math.log10(@project.dependent_repos_count)/Math.log10(max_dependent_repositories)*100
   end
 
   def stars_score
-    return 0 if max_stars.to_f.zero?
-    @project.stars/max_stars.to_f*100
+    return 0 if max_stars.zero?
+    Math.log10(@project.stars)/Math.log10(max_stars)*100
   end
 
   def forks_score
-    return 0 if max_forks.to_f.zero?
-    @project.forks/max_forks.to_f*100
+    return 0 if max_forks.zero?
+    Math.log10(@project.forks)/Math.log10(max_forks)*100
   end
 
   def watchers_score
     return 0 if max_watchers.to_f.zero?
-    @project.watchers/max_watchers.to_f*100
+    Math.log10(@project.watchers)/Math.log10(max_watchers)*100
   end
 
   def status_score
