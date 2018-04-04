@@ -121,8 +121,8 @@ class SourceRankCalculator
   end
 
   def maintainers_score
-    return 0 if @project.registry_users.count < 2
-    return 100 if @project.registry_users.count > 5
+    return 0 if @project.registry_users.size < 2
+    return 100 if @project.registry_users.size > 5
     50
   end
 
@@ -160,7 +160,7 @@ class SourceRankCalculator
 
   def direct_dependencies
     return [] unless has_versions?
-    latest_version.dependencies.kind('runtime')
+    latest_version.runtime_dependencies
   end
 
   def published_releases
@@ -258,7 +258,7 @@ class SourceRankCalculator
       homepage:       @project.homepage.present?,
       repository_url: @project.repository_url.present?,
       keywords:       @project.keywords.present?,
-      readme:         @project.readme.present?,
+      readme:         @project.try(:repository).try(:readme).present?,
       license:        @project.normalized_licenses.present?
     }
   end
