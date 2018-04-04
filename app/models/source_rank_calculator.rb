@@ -40,8 +40,17 @@ class SourceRankCalculator
 
   def breakdown
     {
-      popularity: popularity_scores,
+      overall_score: overall_score,
+      popularity: {
+        score: popularity_score,
+        dependent_projects: dependent_projects_score,
+        dependent_repositories: dependent_repositories_score,
+        stars: stars_score,
+        forks: forks_score,
+        watchers: watchers_score
+      },
       community: {
+        score: community_score,
         contribution_docs: contribution_docs,
         recent_releases: recent_releases_score,
         brand_new: brand_new_score,
@@ -49,6 +58,7 @@ class SourceRankCalculator
         maintainers: maintainers_score
       },
       quality: {
+        score: quality_score,
         basic_info: basic_info,
         status: status_score,
         multiple_versions: multiple_versions_score,
@@ -56,6 +66,7 @@ class SourceRankCalculator
         stable_release: stable_release_score
       },
       dependencies: {
+        score: dependencies_score,
         outdated_dependencies: outdated_dependencies_score,
         dependencies_count: dependencies_count_score,
         direct_dependencies: direct_dependencies_scores
