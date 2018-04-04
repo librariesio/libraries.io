@@ -66,6 +66,16 @@ describe SourceRankCalculator do
   end
 
   describe '#dependent_projects_score' do
+    context "passing max_dependent_projects on init" do
+      it "should use passed in value" do
+        calculator = SourceRankCalculator.new(project, max_dependent_projects: 1001)
+
+        allow(project).to receive(:dependents_count) { 1001 }
+
+        expect(calculator.dependent_projects_score).to eq(100)
+      end
+    end
+
     context "if it has the highest number of dependent projects in its ecosystem" do
       it "should be 100" do
         allow(project).to receive(:dependents_count) { 999 }
@@ -86,6 +96,16 @@ describe SourceRankCalculator do
   end
 
   describe '#dependent_repos_count' do
+    context "passing max_dependent_repositories on init" do
+      it "should use passed in value" do
+        calculator = SourceRankCalculator.new(project, max_dependent_repositories: 1001)
+
+        allow(project).to receive(:dependent_repos_count) { 1001 }
+
+        expect(calculator.dependent_repositories_score).to eq(100)
+      end
+    end
+
     context "if it has the highest number of dependent projects in its ecosystem" do
       it "should be 100" do
         allow(project).to receive(:dependent_repos_count) { 999 }
@@ -106,6 +126,16 @@ describe SourceRankCalculator do
   end
 
   describe '#stars_score' do
+    context "passing max_stars on init" do
+      it "should use passed in value" do
+        calculator = SourceRankCalculator.new(project, max_stars: 1001)
+
+        allow(project).to receive(:stars) { 1001 }
+
+        expect(calculator.stars_score).to eq(100)
+      end
+    end
+
     context "if it has the highest number of stars in its ecosystem" do
       it "should be 100" do
         allow(project).to receive(:stars) { 19000 }
@@ -126,6 +156,16 @@ describe SourceRankCalculator do
   end
 
   describe '#forks_score' do
+    context "passing max_forks on init" do
+      it "should use passed in value" do
+        calculator = SourceRankCalculator.new(project, max_forks: 1001)
+
+        allow(project).to receive(:forks) { 1001 }
+
+        expect(calculator.forks_score).to eq(100)
+      end
+    end
+
     context "if it has the highest number of forks in its ecosystem" do
       it "should be 100" do
         allow(project).to receive(:forks) { 56 }
@@ -146,6 +186,16 @@ describe SourceRankCalculator do
   end
 
   describe '#watchers_score' do
+    context "passing max_watchers on init" do
+      it "should use passed in value" do
+        calculator = SourceRankCalculator.new(project, max_watchers: 1001)
+
+        allow(project).to receive(:watchers) { 1001 }
+
+        expect(calculator.watchers_score).to eq(100)
+      end
+    end
+
     context "if it has the highest number of watchers in its ecosystem" do
       it "should be 100" do
         allow(project).to receive(:watchers) { 56 }
