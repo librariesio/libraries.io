@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180403154402) do
+ActiveRecord::Schema.define(version: 20180404110322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,28 +116,30 @@ ActiveRecord::Schema.define(version: 20180403154402) do
 
   create_table "projects", id: :serial, default: %q{nextval('projects_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "name"
-    t.string   "platform",                    :index=>{:name=>"index_projects_on_platform_and_name", :with=>["name"], :unique=>true, :order=>{:platform=>:asc, :name=>:asc}}
-    t.datetime "created_at",                  :null=>false, :index=>{:name=>"index_projects_on_created_at", :order=>{:created_at=>:asc}}
-    t.datetime "updated_at",                  :null=>false, :index=>{:name=>"index_projects_on_updated_at", :order=>{:updated_at=>:asc}}
+    t.string   "platform",                     :index=>{:name=>"index_projects_on_platform_and_name", :with=>["name"], :unique=>true, :order=>{:platform=>:asc, :name=>:asc}}
+    t.datetime "created_at",                   :null=>false, :index=>{:name=>"index_projects_on_created_at", :order=>{:created_at=>:asc}}
+    t.datetime "updated_at",                   :null=>false, :index=>{:name=>"index_projects_on_updated_at", :order=>{:updated_at=>:asc}}
     t.text     "description"
     t.text     "keywords"
     t.string   "homepage"
     t.string   "licenses"
     t.string   "repository_url"
-    t.integer  "repository_id",               :index=>{:name=>"index_projects_on_repository_id", :order=>{:repository_id=>:asc}}
-    t.string   "normalized_licenses",         :default=>[], :array=>true
-    t.integer  "versions_count",              :default=>0, :null=>false, :index=>{:name=>"index_projects_on_versions_count", :order=>{:versions_count=>:asc}}
-    t.integer  "rank",                        :default=>0
+    t.integer  "repository_id",                :index=>{:name=>"index_projects_on_repository_id", :order=>{:repository_id=>:asc}}
+    t.string   "normalized_licenses",          :default=>[], :array=>true
+    t.integer  "versions_count",               :default=>0, :null=>false, :index=>{:name=>"index_projects_on_versions_count", :order=>{:versions_count=>:asc}}
+    t.integer  "rank",                         :default=>0
     t.datetime "latest_release_published_at"
     t.string   "latest_release_number"
     t.integer  "pm_id"
-    t.string   "keywords_array",              :default=>[], :array=>true, :index=>{:name=>"index_projects_on_keywords_array", :using=>:gin}
-    t.integer  "dependents_count",            :default=>0, :null=>false, :index=>{:name=>"index_projects_on_dependents_count", :order=>{:dependents_count=>:asc}}
+    t.string   "keywords_array",               :default=>[], :array=>true, :index=>{:name=>"index_projects_on_keywords_array", :using=>:gin}
+    t.integer  "dependents_count",             :default=>0, :null=>false, :index=>{:name=>"index_projects_on_dependents_count", :order=>{:dependents_count=>:asc}}
     t.string   "language"
     t.string   "status"
     t.datetime "last_synced_at"
     t.integer  "dependent_repos_count"
     t.integer  "runtime_dependencies_count"
+    t.integer  "sourcerank_2",                 :default=>0, :null=>false
+    t.datetime "sourcerank_2_last_calculated"
 
     t.index ["platform", "name"], :name=>"index_projects_on_platform_and_name_lower", :case_sensitive=>false
   end
