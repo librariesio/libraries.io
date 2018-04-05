@@ -412,9 +412,9 @@ describe SourceRankCalculator do
           :community => {
             :score => 0,
             :contribution_docs => {
-              :code_of_conduct => false,
-              :contributing => false,
-              :changelog => false
+              :code_of_conduct => nil,
+              :contributing => nil,
+              :changelog => nil
             },
             :recent_releases => 0,
             :brand_new => 0,
