@@ -79,7 +79,8 @@ class SourceRankCalculator
   end
 
   def contribution_docs_score
-    contribution_docs.values.select{|v| v}.length/contribution_docs.values.length.to_f*100
+    return nil if contribution_docs.values.compact.empty?
+    contribution_docs.values.compact.select{|v| v}.length/contribution_docs.values.compact.length.to_f*100
   end
 
   def dependent_projects_score
@@ -310,10 +311,25 @@ class SourceRankCalculator
 
   def contribution_docs
     {
-      code_of_conduct: @project.has_coc.present?,
-      contributing:    @project.has_contributing.present?,
-      changelog:       @project.has_changelog.present?
+      code_of_conduct: coc_present?,
+      contributing:    contributing_present?,
+      changelog:       changelog_present?
     }
+  end
+
+  def coc_present?
+    return nil if @project.repository.nil?
+    @project.has_coc.present?
+  end
+
+  def contributing_present?
+    return nil if @project.repository.nil?
+    @project.has_contributing.present?
+  end
+
+  def changelog_present?
+    return nil if @project.repository.nil?
+    @project.has_changelog.present?
   end
 
   def overall_scores
