@@ -160,91 +160,127 @@ describe SourceRankCalculator do
   end
 
   describe '#stars_score' do
-    context "passing max_stars on init" do
-      it "should use passed in value" do
-        calculator = SourceRankCalculator.new(project, max_stars: 1001)
+    context 'when repository is present' do
+      let(:project) { build(:project, repository: repository) }
 
-        allow(project).to receive(:stars) { 1001 }
+      context "passing max_stars on init" do
+        it "should use passed in value" do
+          calculator = SourceRankCalculator.new(project, max_stars: 1001)
 
-        expect(calculator.stars_score).to eq(100)
+          allow(project).to receive(:stars) { 1001 }
+
+          expect(calculator.stars_score).to eq(100)
+        end
+      end
+
+      context "if it has the highest number of stars in its ecosystem" do
+        it "should be 100" do
+          allow(project).to receive(:stars) { 19000 }
+          allow(calculator).to receive(:max_stars) { 19000 }
+
+          expect(calculator.stars_score).to eq(100)
+        end
+      end
+
+      context "if it doesn't have the highest number of stars in its ecosystem" do
+        it "should be a percentage of the highest" do
+          allow(project).to receive(:stars) { 19 }
+          allow(calculator).to receive(:max_stars) { 19000 }
+
+          expect(calculator.stars_score).to eq(29.88612386252074)
+        end
       end
     end
 
-    context "if it has the highest number of stars in its ecosystem" do
-      it "should be 100" do
-        allow(project).to receive(:stars) { 19000 }
-        allow(calculator).to receive(:max_stars) { 19000 }
+    context 'when repository is missing' do
+      let(:project) { build(:project) }
 
-        expect(calculator.stars_score).to eq(100)
-      end
-    end
-
-    context "if it doesn't have the highest number of stars in its ecosystem" do
-      it "should be a percentage of the highest" do
-        allow(project).to receive(:stars) { 19 }
-        allow(calculator).to receive(:max_stars) { 19000 }
-
-        expect(calculator.stars_score).to eq(29.88612386252074)
+      it "should be nil" do
+        expect(calculator.stars_score).to eq(nil)
       end
     end
   end
 
   describe '#forks_score' do
-    context "passing max_forks on init" do
-      it "should use passed in value" do
-        calculator = SourceRankCalculator.new(project, max_forks: 1001)
+    context 'when repository is present' do
+      let(:project) { build(:project, repository: repository) }
 
-        allow(project).to receive(:forks) { 1001 }
+      context "passing max_forks on init" do
+        it "should use passed in value" do
+          calculator = SourceRankCalculator.new(project, max_forks: 1001)
 
-        expect(calculator.forks_score).to eq(100)
+          allow(project).to receive(:forks) { 1001 }
+
+          expect(calculator.forks_score).to eq(100)
+        end
+      end
+
+      context "if it has the highest number of forks in its ecosystem" do
+        it "should be 100" do
+          allow(project).to receive(:forks) { 56 }
+          allow(calculator).to receive(:max_forks) { 56 }
+
+          expect(calculator.forks_score).to eq(100)
+        end
+      end
+
+      context "if it doesn't have the highest number of forks in its ecosystem" do
+        it "should be a percentage of the highest" do
+          allow(project).to receive(:forks) { 1 }
+          allow(calculator).to receive(:max_forks) { 500 }
+
+          expect(calculator.forks_score).to eq(0)
+        end
       end
     end
 
-    context "if it has the highest number of forks in its ecosystem" do
-      it "should be 100" do
-        allow(project).to receive(:forks) { 56 }
-        allow(calculator).to receive(:max_forks) { 56 }
+    context 'when repository is missing' do
+      let(:project) { build(:project) }
 
-        expect(calculator.forks_score).to eq(100)
-      end
-    end
-
-    context "if it doesn't have the highest number of forks in its ecosystem" do
-      it "should be a percentage of the highest" do
-        allow(project).to receive(:forks) { 1 }
-        allow(calculator).to receive(:max_forks) { 500 }
-
-        expect(calculator.forks_score).to eq(0)
+      it "should be nil" do
+        expect(calculator.forks_score).to eq(nil)
       end
     end
   end
 
   describe '#watchers_score' do
-    context "passing max_watchers on init" do
-      it "should use passed in value" do
-        calculator = SourceRankCalculator.new(project, max_watchers: 1001)
+    context 'when repository is present' do
+      let(:project) { build(:project, repository: repository) }
 
-        allow(project).to receive(:watchers) { 1001 }
+      context "passing max_watchers on init" do
+        it "should use passed in value" do
+          calculator = SourceRankCalculator.new(project, max_watchers: 1001)
 
-        expect(calculator.watchers_score).to eq(100)
+          allow(project).to receive(:watchers) { 1001 }
+
+          expect(calculator.watchers_score).to eq(100)
+        end
+      end
+
+      context "if it has the highest number of watchers in its ecosystem" do
+        it "should be 100" do
+          allow(project).to receive(:watchers) { 56 }
+          allow(calculator).to receive(:max_watchers) { 56 }
+
+          expect(calculator.watchers_score).to eq(100)
+        end
+      end
+
+      context "if it doesn't have the highest number of watchers in its ecosystem" do
+        it "should be a percentage of the highest" do
+          allow(project).to receive(:watchers) { 2 }
+          allow(calculator).to receive(:max_watchers) { 10 }
+
+          expect(calculator.watchers_score).to eq(30.10299956639812)
+        end
       end
     end
 
-    context "if it has the highest number of watchers in its ecosystem" do
-      it "should be 100" do
-        allow(project).to receive(:watchers) { 56 }
-        allow(calculator).to receive(:max_watchers) { 56 }
+    context 'when repository is missing' do
+      let(:project) { build(:project) }
 
-        expect(calculator.watchers_score).to eq(100)
-      end
-    end
-
-    context "if it doesn't have the highest number of watchers in its ecosystem" do
-      it "should be a percentage of the highest" do
-        allow(project).to receive(:watchers) { 2 }
-        allow(calculator).to receive(:max_watchers) { 10 }
-
-        expect(calculator.watchers_score).to eq(30.10299956639812)
+      it "should be nil" do
+        expect(calculator.watchers_score).to eq(nil)
       end
     end
   end
@@ -369,9 +405,9 @@ describe SourceRankCalculator do
             :score => 0,
             :dependent_projects => 0,
             :dependent_repositories => 0,
-            :stars => 0,
-            :forks => 0,
-            :watchers => 0
+            :stars => nil,
+            :forks => nil,
+            :watchers => nil
           },
           :community => {
             :score => 0,

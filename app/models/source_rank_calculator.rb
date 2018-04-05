@@ -23,7 +23,7 @@ class SourceRankCalculator
   end
 
   def popularity_score
-    popularity_scores.values.sum/popularity_scores.values.length.to_f
+    popularity_scores.values.compact.sum/popularity_scores.values.compact.length.to_f
   end
 
   def community_score
@@ -93,16 +93,19 @@ class SourceRankCalculator
   end
 
   def stars_score
+    return nil if @project.repository.nil?
     return 0 if max_stars.zero? || @project.stars.zero?
     Math.log10(@project.stars)/Math.log10(max_stars)*100
   end
 
   def forks_score
+    return nil if @project.repository.nil?
     return 0 if max_forks.zero? || @project.forks.zero?
     Math.log10(@project.forks)/Math.log10(max_forks)*100
   end
 
   def watchers_score
+    return nil if @project.repository.nil?
     return 0 if max_watchers.zero? || @project.watchers.zero?
     Math.log10(@project.watchers)/Math.log10(max_watchers)*100
   end
