@@ -468,5 +468,54 @@ describe SourceRankCalculator do
         })
       end
     end
+
+    context 'when package manager lacks support for features' do
+      let(:project) { build(:project, platform: 'CocoaPods') }
+      it "should be the contain details of each score category" do
+        expect(calculator.breakdown).to eq({
+          :overall_score => 19,
+          :popularity => {
+            :score => 0.0,
+            :dependent_projects => 0,
+            :dependent_repositories => 0,
+            :stars => nil,
+            :forks => nil,
+            :watchers => nil
+          },
+          :community => {
+            :score => 0.0,
+            :contribution_docs => {
+              :code_of_conduct => nil,
+              :contributing => nil,
+              :changelog => nil
+            },
+            :recent_releases => 0,
+            :brand_new => 0,
+            :contributors => nil,
+            :maintainers => nil
+          },
+          :quality => {
+            :score => 56.0,
+            :basic_info => {
+              :description => true,
+              :homepage => true,
+              :repository_url => true,
+              :keywords => true,
+              :readme => nil,
+              :license => false},
+            :status => 100,
+            :multiple_versions => 0,
+            :semver => 100,
+            :stable_release => 0
+          },
+          :dependencies => {
+            :score => nil,
+            :outdated_dependencies => nil,
+            :dependencies_count => nil,
+            :direct_dependencies => nil
+          }
+        })
+      end
+    end
   end
 end
