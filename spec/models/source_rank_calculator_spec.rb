@@ -400,9 +400,9 @@ describe SourceRankCalculator do
       let(:project) { build(:project) }
       it "should be the contain details of each score category" do
         expect(calculator.breakdown).to eq({
-          :overall_score => 38,
+          :overall_score => 39,
           :popularity => {
-            :score => 0,
+            :score => 0.0,
             :dependent_projects => 0,
             :dependent_repositories => 0,
             :stars => nil,
@@ -410,7 +410,7 @@ describe SourceRankCalculator do
             :watchers => nil
           },
           :community => {
-            :score => 0,
+            :score => 0.0,
             :contribution_docs => {
               :code_of_conduct => nil,
               :contributing => nil,
@@ -422,13 +422,13 @@ describe SourceRankCalculator do
             :maintainers => 0
           },
           :quality => {
-            :score => 53.33333333333333,
+            :score => 56,
             :basic_info => {
               :description => true,
               :homepage => true,
               :repository_url => true,
               :keywords => true,
-              :readme => false,
+              :readme => nil,
               :license => false},
             :status => 100,
             :multiple_versions => 0,
