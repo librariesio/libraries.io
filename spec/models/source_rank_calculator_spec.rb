@@ -335,7 +335,7 @@ describe SourceRankCalculator do
       end
     end
 
-    context 'platform with support for registry user data' do
+    context 'platform without support for registry user data' do
       let(:project) { build(:project, platform: 'CocoaPods') }
 
       it 'should return nil' do
