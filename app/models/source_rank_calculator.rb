@@ -27,7 +27,7 @@ class SourceRankCalculator
   end
 
   def community_score
-    community_scores.values.sum/community_scores.values.length.to_f
+    community_scores.values.compact.sum/community_scores.values.compact.length.to_f
   end
 
   def quality_score
@@ -136,6 +136,7 @@ class SourceRankCalculator
   end
 
   def contributors_score
+    return nil if @project.repository.nil?
     return 0 if @project.contributions_count < 2
     return 100 if @project.contributions_count > 5
     50
