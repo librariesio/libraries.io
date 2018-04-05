@@ -75,7 +75,7 @@ class SourceRankCalculator
   end
 
   def basic_info_score
-    basic_info.values.select{|v| v}.length/basic_info.values.length.to_f*100
+    basic_info.values.compact.select{|v| v}.length/basic_info.values.compact.length.to_f*100
   end
 
   def contribution_docs_score
@@ -304,7 +304,7 @@ class SourceRankCalculator
       homepage:       @project.homepage.present?,
       repository_url: @project.repository_url.present?,
       keywords:       @project.keywords.present?,
-      readme:         @project.try(:repository).try(:readme).present?,
+      readme:         readme_present?,
       license:        @project.normalized_licenses.present?
     }
   end
@@ -315,6 +315,11 @@ class SourceRankCalculator
       contributing:    contributing_present?,
       changelog:       changelog_present?
     }
+  end
+
+  def readme_present?
+    return nil if @project.repository.nil?
+    @project.repository.readme.present?
   end
 
   def coc_present?
