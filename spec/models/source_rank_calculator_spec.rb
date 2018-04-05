@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe SourceRankCalculator do
   let(:project) { build(:project) }
+  let(:repository) { create(:repository) }
   let(:calculator) { SourceRankCalculator.new(project) }
 
   describe "#overall_score" do
@@ -25,7 +26,6 @@ describe SourceRankCalculator do
   end
 
   describe '#basic_info_score' do
-    let(:repository) { create(:repository) }
     let!(:readme) { create(:readme, repository: repository) }
 
     context "if all basic info fields are present" do
@@ -285,6 +285,8 @@ describe SourceRankCalculator do
   end
 
   describe '#contributors_score' do
+    let(:project) { build(:project, repository: repository) }
+
     it 'should return 0 if less than 2 contributors' do
       allow(project).to receive(:contributions_count) { 1 }
       expect(calculator.contributors_score).to eq(0)
@@ -299,53 +301,112 @@ describe SourceRankCalculator do
       allow(project).to receive(:contributions_count) { 3 }
       expect(calculator.contributors_score).to eq(50)
     end
+
+    context 'when no repository present' do
+      let(:project) { build(:project) }
+      it 'should return nil' do
+        expect(calculator.contributors_score).to eq(nil)
+      end
+    end
   end
 
   describe '#breakdown' do
-    it "should be the contain details of each score category" do
-      expect(calculator.breakdown).to eq({
-        :overall_score => 38,
-        :popularity => {
-          :score => 0,
-          :dependent_projects => 0,
-          :dependent_repositories => 0,
-          :stars => 0,
-          :forks => 0,
-          :watchers => 0
-        },
-        :community => {
-          :score => 0,
-          :contribution_docs => {
-            :code_of_conduct => false,
-            :contributing => false,
-            :changelog => false
+    context 'when repository is present' do
+      let(:project) { build(:project, repository: repository) }
+      it "should be the contain details of each score category" do
+        expect(calculator.breakdown).to eq({
+          :overall_score => 38,
+          :popularity => {
+            :score => 0,
+            :dependent_projects => 0,
+            :dependent_repositories => 0,
+            :stars => 0,
+            :forks => 0,
+            :watchers => 0
           },
-          :recent_releases => 0,
-          :brand_new => 0,
-          :contributors => 0,
-          :maintainers => 0
-        },
-        :quality => {
-          :score => 53.33333333333333,
-          :basic_info => {
-            :description => true,
-            :homepage => true,
-            :repository_url => true,
-            :keywords => true,
-            :readme => false,
-            :license => false},
-          :status => 100,
-          :multiple_versions => 0,
-          :semver => 100,
-          :stable_release => 0
-        },
-        :dependencies => {
-          :score => 100,
-          :outdated_dependencies => 100,
-          :dependencies_count => 100,
-          :direct_dependencies => {}
-        }
-      })
+          :community => {
+            :score => 0,
+            :contribution_docs => {
+              :code_of_conduct => false,
+              :contributing => false,
+              :changelog => false
+            },
+            :recent_releases => 0,
+            :brand_new => 0,
+            :contributors => 0,
+            :maintainers => 0
+          },
+          :quality => {
+            :score => 53.33333333333333,
+            :basic_info => {
+              :description => true,
+              :homepage => true,
+              :repository_url => true,
+              :keywords => true,
+              :readme => false,
+              :license => false},
+            :status => 100,
+            :multiple_versions => 0,
+            :semver => 100,
+            :stable_release => 0
+          },
+          :dependencies => {
+            :score => 100,
+            :outdated_dependencies => 100,
+            :dependencies_count => 100,
+            :direct_dependencies => {}
+          }
+        })
+      end
+    end
+
+    context 'when repository is missing' do
+      let(:project) { build(:project) }
+      it "should be the contain details of each score category" do
+        expect(calculator.breakdown).to eq({
+          :overall_score => 38,
+          :popularity => {
+            :score => 0,
+            :dependent_projects => 0,
+            :dependent_repositories => 0,
+            :stars => 0,
+            :forks => 0,
+            :watchers => 0
+          },
+          :community => {
+            :score => 0,
+            :contribution_docs => {
+              :code_of_conduct => false,
+              :contributing => false,
+              :changelog => false
+            },
+            :recent_releases => 0,
+            :brand_new => 0,
+            :contributors => nil,
+            :maintainers => 0
+          },
+          :quality => {
+            :score => 53.33333333333333,
+            :basic_info => {
+              :description => true,
+              :homepage => true,
+              :repository_url => true,
+              :keywords => true,
+              :readme => false,
+              :license => false},
+            :status => 100,
+            :multiple_versions => 0,
+            :semver => 100,
+            :stable_release => 0
+          },
+          :dependencies => {
+            :score => 100,
+            :outdated_dependencies => 100,
+            :dependencies_count => 100,
+            :direct_dependencies => {}
+          }
+        })
+      end
     end
   end
 end
