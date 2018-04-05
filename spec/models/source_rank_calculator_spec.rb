@@ -320,6 +320,30 @@ describe SourceRankCalculator do
     end
   end
 
+  describe '#maintainers_score' do
+    context 'platform with support for registry user data' do
+      let(:project) { build(:project, platform: 'Rubygems') }
+
+      it 'should return 0 if less than 2 maintainers' do
+        allow(calculator).to receive(:maintainers_count) { 1 }
+        expect(calculator.maintainers_score).to eq(0)
+      end
+
+      it 'should return 100 if more than 5 maintainers' do
+        allow(calculator).to receive(:maintainers_count) { 10 }
+        expect(calculator.maintainers_score).to eq(100)
+      end
+    end
+
+    context 'platform with support for registry user data' do
+      let(:project) { build(:project, platform: 'CocoaPods') }
+
+      it 'should return nil' do
+        expect(calculator.maintainers_score).to eq(nil)
+      end
+    end
+  end
+
   describe '#contributors_score' do
     let(:project) { build(:project, repository: repository) }
 

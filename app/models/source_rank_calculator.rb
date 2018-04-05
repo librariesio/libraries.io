@@ -147,8 +147,9 @@ class SourceRankCalculator
   end
 
   def maintainers_score
-    return 0 if @project.registry_users.size < 2
-    return 100 if @project.registry_users.size > 5
+    return nil unless platform_class::HAS_OWNERS
+    return 0 if maintainers_count < 2
+    return 100 if maintainers_count > 5
     50
   end
 
@@ -218,6 +219,14 @@ class SourceRankCalculator
   end
 
   private
+
+  def maintainers_count
+    @project.registry_users.size
+  end
+
+  def platform_class
+    @project.platform_class
+  end
 
   def has_versions?
     @project.versions_count > 0
