@@ -284,6 +284,23 @@ describe SourceRankCalculator do
     end
   end
 
+  describe '#contributors_score' do
+    it 'should return 0 if less than 2 contributors' do
+      allow(project).to receive(:contributions_count) { 1 }
+      expect(calculator.contributors_score).to eq(0)
+    end
+
+    it 'should return 100 if more than 5 contributors' do
+      allow(project).to receive(:contributions_count) { 10 }
+      expect(calculator.contributors_score).to eq(100)
+    end
+
+    it 'should return 50 if between 2 and 4 contributors' do
+      allow(project).to receive(:contributions_count) { 3 }
+      expect(calculator.contributors_score).to eq(50)
+    end
+  end
+
   describe '#breakdown' do
     it "should be the contain details of each score category" do
       expect(calculator.breakdown).to eq({
