@@ -19,7 +19,7 @@ class SourceRankCalculator
   end
 
   def overall_score
-    (overall_scores.values.sum/overall_scores.values.length.to_f).round
+    (overall_scores.values.compact.sum/overall_scores.values.compact.length.to_f).round
   end
 
   def popularity_score
@@ -35,6 +35,7 @@ class SourceRankCalculator
   end
 
   def dependencies_score
+    return nil unless platform_class::HAS_DEPENDENCIES
     dependencies_scores.values.sum/dependencies_scores.values.length.to_f
   end
 
@@ -154,11 +155,13 @@ class SourceRankCalculator
   end
 
   def outdated_dependencies_score
+    return nil unless platform_class::HAS_DEPENDENCIES
     return 100 unless has_versions?
     latest_version.try(:any_outdated_dependencies?) ? 0 : 100
   end
 
   def dependencies_count_score
+    return nil unless platform_class::HAS_DEPENDENCIES
     return 100 unless has_versions?
     return 0 if direct_dependencies.length > 100
     100 - direct_dependencies.length
@@ -172,6 +175,7 @@ class SourceRankCalculator
   end
 
   def direct_dependencies_scores
+    return nil unless platform_class::HAS_DEPENDENCIES
     Hash[direct_dependencies.collect { |d| [d.project_name, d.sourcerank_2] } ]
   end
 
