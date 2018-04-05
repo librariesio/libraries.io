@@ -5,6 +5,7 @@ module PackageManager
     BIBLIOTHECARY_PLANNED = false
     SECURITY_PLANNED = false
     HIDDEN = false
+    HAS_OWNERS = false
 
     def self.platforms
       @platforms ||= begin
