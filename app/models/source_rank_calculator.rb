@@ -345,17 +345,17 @@ class SourceRankCalculator
 
   def coc_present?
     return nil if @project.repository.nil?
-    @project.has_coc.present?
+    @project.repository.has_coc.present?
   end
 
   def contributing_present?
     return nil if @project.repository.nil?
-    @project.has_contributing.present?
+    @project.repository.has_contributing.present?
   end
 
   def changelog_present?
     return nil if @project.repository.nil?
-    @project.has_changelog.present?
+    @project.repository.has_changelog.present?
   end
 
   def overall_scores
