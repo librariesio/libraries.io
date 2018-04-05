@@ -370,6 +370,39 @@ describe SourceRankCalculator do
     end
   end
 
+  describe '#outdated_dependencies_score' do
+    context 'platform without support for dependencies' do
+      let(:project) { build(:project, platform: 'CocoaPods') }
+
+      it 'should return nil' do
+        expect(calculator.outdated_dependencies_score).to eq(nil)
+      end
+    end
+
+    context 'platform with support for dependencies' do
+      let(:project) { build(:project, platform: 'Rubygems') }
+
+      it 'should return nil for projects with no versions' do
+        allow(calculator).to receive(:has_versions?) { false }
+        expect(calculator.outdated_dependencies_score).to eq(nil)
+      end
+
+      it 'should return 100 for projects no outdated dependencies' do
+        allow(calculator).to receive(:has_versions?) { true }
+        allow(calculator).to receive(:outdated_dependencies) { [ ] }
+        allow(calculator).to receive(:direct_dependencies) { [ build(:dependency) ] }
+        expect(calculator.outdated_dependencies_score).to eq(100)
+      end
+
+      it 'should return 50 for projects where half of dependencies are outdated' do
+        allow(calculator).to receive(:has_versions?) { true }
+        allow(calculator).to receive(:outdated_dependencies) { [ build(:dependency) ] }
+        allow(calculator).to receive(:direct_dependencies) { [ build(:dependency), build(:dependency) ] }
+        expect(calculator.outdated_dependencies_score).to eq(50)
+      end
+    end
+  end
+
   describe '#breakdown' do
     context 'when repository is present' do
       let(:project) { build(:project, repository: repository) }
@@ -411,8 +444,8 @@ describe SourceRankCalculator do
             :stable_release => 0
           },
           :dependencies => {
-            :score => 100,
-            :outdated_dependencies => 100,
+            :score => 100.0,
+            :outdated_dependencies => nil,
             :dependencies_count => 100,
             :direct_dependencies => {}
           }
@@ -446,7 +479,7 @@ describe SourceRankCalculator do
             :maintainers => 0
           },
           :quality => {
-            :score => 56,
+            :score => 56.0,
             :basic_info => {
               :description => true,
               :homepage => true,
@@ -460,8 +493,8 @@ describe SourceRankCalculator do
             :stable_release => 0
           },
           :dependencies => {
-            :score => 100,
-            :outdated_dependencies => 100,
+            :score => 100.0,
+            :outdated_dependencies => nil,
             :dependencies_count => 100,
             :direct_dependencies => {}
           }

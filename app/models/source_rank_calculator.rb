@@ -36,7 +36,7 @@ class SourceRankCalculator
 
   def dependencies_score
     return nil unless platform_class::HAS_DEPENDENCIES
-    dependencies_scores.values.sum/dependencies_scores.values.length.to_f
+    dependencies_scores.values.compact.sum/dependencies_scores.values.compact.length.to_f
   end
 
   def breakdown
@@ -156,8 +156,9 @@ class SourceRankCalculator
 
   def outdated_dependencies_score
     return nil unless platform_class::HAS_DEPENDENCIES
-    return 100 unless has_versions?
-    latest_version.try(:any_outdated_dependencies?) ? 0 : 100
+    return nil if direct_dependencies.length.zero?
+    return nil if direct_dependencies.length.zero?
+    (direct_dependencies.length-outdated_dependencies.length)/direct_dependencies.length.to_f*100
   end
 
   def dependencies_count_score
@@ -224,6 +225,10 @@ class SourceRankCalculator
 
   private
 
+  def outdated_dependencies
+    direct_dependencies.select(&:outdated?)
+  end
+
   def maintainers_count
     @project.registry_users.size
   end
@@ -242,6 +247,7 @@ class SourceRankCalculator
 
   def direct_dependencies
     return [] unless has_versions?
+    return [] if latest_version.nil?
     latest_version.runtime_dependencies
   end
 
