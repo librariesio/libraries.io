@@ -169,7 +169,7 @@ module PackageManager
             version.dependencies.create(dep.merge(project_id: named_project_id.try(:strip)))
           end
         end
-        version.update_column(:runtime_dependencies_count, version.runtime_dependencies.count)
+        version.set_runtime_dependencies_count
       end
     end
 
