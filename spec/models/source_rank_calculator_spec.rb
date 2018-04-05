@@ -100,61 +100,84 @@ describe SourceRankCalculator do
   end
 
   describe '#dependent_projects_score' do
-    context "passing max_dependent_projects on init" do
-      it "should use passed in value" do
-        calculator = SourceRankCalculator.new(project, max_dependent_projects: 1001)
+    context "platform supports dependencies" do
+      let(:project) { build(:project, platform: 'Rubygems') }
 
-        allow(project).to receive(:dependents_count) { 1001 }
+      context "passing max_dependent_projects on init" do
+        it "should use passed in value" do
+          calculator = SourceRankCalculator.new(project, max_dependent_projects: 1001)
 
-        expect(calculator.dependent_projects_score).to eq(100)
+          allow(project).to receive(:dependents_count) { 1001 }
+
+          expect(calculator.dependent_projects_score).to eq(100)
+        end
+      end
+
+      context "if it has the highest number of dependent projects in its ecosystem" do
+        it "should be 100" do
+          allow(project).to receive(:dependents_count) { 999 }
+          allow(calculator).to receive(:max_dependent_projects) { 999 }
+
+          expect(calculator.dependent_projects_score).to eq(100)
+        end
+      end
+
+      context "if it doesn't have the highest number of dependent projects in its ecosystem" do
+        it "should be a percentage of the highest" do
+          allow(project).to receive(:dependents_count) { 50 }
+          allow(calculator).to receive(:max_dependent_projects) { 100 }
+
+          expect(calculator.dependent_projects_score).to eq(84.94850021680094)
+        end
       end
     end
 
-    context "if it has the highest number of dependent projects in its ecosystem" do
-      it "should be 100" do
-        allow(project).to receive(:dependents_count) { 999 }
-        allow(calculator).to receive(:max_dependent_projects) { 999 }
+    context "platform doesn't support dependencies" do
+      let(:project) { build(:project, platform: 'CocoaPods') }
 
-        expect(calculator.dependent_projects_score).to eq(100)
-      end
-    end
-
-    context "if it doesn't have the highest number of dependent projects in its ecosystem" do
-      it "should be a percentage of the highest" do
-        allow(project).to receive(:dependents_count) { 50 }
-        allow(calculator).to receive(:max_dependent_projects) { 100 }
-
-        expect(calculator.dependent_projects_score).to eq(84.94850021680094)
+      it "should be nil" do
+        expect(calculator.dependent_projects_score).to eq(nil)
       end
     end
   end
 
   describe '#dependent_repos_count' do
-    context "passing max_dependent_repositories on init" do
-      it "should use passed in value" do
-        calculator = SourceRankCalculator.new(project, max_dependent_repositories: 1001)
+    context 'platform supports dependent repos' do
+      let(:project) { build(:project, platform: 'Rubygems') }
+      context "passing max_dependent_repositories on init" do
+        it "should use passed in value" do
+          calculator = SourceRankCalculator.new(project, max_dependent_repositories: 1001)
 
-        allow(project).to receive(:dependent_repos_count) { 1001 }
+          allow(project).to receive(:dependent_repos_count) { 1001 }
 
-        expect(calculator.dependent_repositories_score).to eq(100)
+          expect(calculator.dependent_repositories_score).to eq(100)
+        end
+      end
+
+      context "if it has the highest number of dependent projects in its ecosystem" do
+        it "should be 100" do
+          allow(project).to receive(:dependent_repos_count) { 999 }
+          allow(calculator).to receive(:max_dependent_repositories) { 999 }
+
+          expect(calculator.dependent_repositories_score).to eq(100)
+        end
+      end
+
+      context "if it doesn't have the highest number of dependent projects in its ecosystem" do
+        it "should be a percentage of the highest" do
+          allow(project).to receive(:dependent_repos_count) { 50 }
+          allow(calculator).to receive(:max_dependent_repositories) { 100 }
+
+          expect(calculator.dependent_repositories_score).to eq(84.94850021680094)
+        end
       end
     end
 
-    context "if it has the highest number of dependent projects in its ecosystem" do
-      it "should be 100" do
-        allow(project).to receive(:dependent_repos_count) { 999 }
-        allow(calculator).to receive(:max_dependent_repositories) { 999 }
+    context "platform doesn't support dependent repos" do
+      let(:project) { build(:project, platform: 'Homebrew') }
 
-        expect(calculator.dependent_repositories_score).to eq(100)
-      end
-    end
-
-    context "if it doesn't have the highest number of dependent projects in its ecosystem" do
-      it "should be a percentage of the highest" do
-        allow(project).to receive(:dependent_repos_count) { 50 }
-        allow(calculator).to receive(:max_dependent_repositories) { 100 }
-
-        expect(calculator.dependent_repositories_score).to eq(84.94850021680094)
+      it "should be nil" do
+        expect(calculator.dependent_repositories_score).to eq(nil)
       end
     end
   end
@@ -509,7 +532,7 @@ describe SourceRankCalculator do
           :overall_score => 19,
           :popularity => {
             :score => 0.0,
-            :dependent_projects => 0,
+            :dependent_projects => nil,
             :dependent_repositories => 0,
             :stars => nil,
             :forks => nil,

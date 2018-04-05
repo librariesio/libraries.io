@@ -85,11 +85,13 @@ class SourceRankCalculator
   end
 
   def dependent_projects_score
+    return nil unless platform_class::HAS_DEPENDENCIES
     return 0 if max_dependent_projects.zero? || @project.dependents_count.zero?
     Math.log10(@project.dependents_count)/Math.log10(max_dependent_projects)*100
   end
 
   def dependent_repositories_score
+    return nil unless platform_class::BIBLIOTHECARY_SUPPORT
     return 0 if max_dependent_repositories.zero? || @project.dependent_repos_count.zero?
     Math.log10(@project.dependent_repos_count)/Math.log10(max_dependent_repositories)*100
   end
