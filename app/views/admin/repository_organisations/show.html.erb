@@ -27,7 +27,7 @@
     <h3>Package Manager Usage</h3>
     <% dep_breakdown = @org.dependencies.group('platform').count %>
     <ul>
-      <% dep_breakdown.sort_by {|_key, value| -value}.each do |k,v| %>
+      <% dep_breakdown.sort_by {|_key, value| -value}.first(10).each do |k,v| %>
         <li>
           <%= k %>: <%= number_to_percentage(v/dep_breakdown.values.sum.to_f*100) %>
         </li>
@@ -38,7 +38,7 @@
     <h3>Language Usage</h3>
     <% lang_breakdown = @org.repositories.group('language').count %>
     <ul>
-      <% lang_breakdown.sort_by {|_key, value| -value}.each do |k,v| %>
+      <% lang_breakdown.sort_by {|_key, value| -value}.first(10).each do |k,v| %>
         <li>
           <%= k || 'None' %>: <%= number_to_percentage(v/lang_breakdown.values.sum.to_f*100) %>
         </li>
