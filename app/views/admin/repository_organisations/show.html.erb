@@ -106,6 +106,7 @@
       </small>
     </div>
     <% end %>
+    <%= link_to "See all #{@orgs}'s repositories", user_repositories_path(@org.to_param) %>
   </div>
   <div class="col-md-6">
     <h3>Most used packages</h3>
@@ -113,40 +114,39 @@
     <% counts = @org.favourite_projects.count %>
 
     <% @org.favourite_projects.limit(10).each do |project| %>
-    <div class='project' style="border-color: <%= project.color %>;">
-      <h5>
-        <%= link_to project.name, project_path(project.to_param) %>
-      </h5>
+      <div class='project' style="border-color: <%= project.color %>;">
+        <h5>
+          <%= link_to project.name, project_path(project.to_param) %>
+        </h5>
 
-      <div class="">
-        <%= truncate project.description, :length => 100 %>
-      </div>
+        <div class="">
+          <%= truncate project.description, :length => 100 %>
+        </div>
 
-      <small>
-        <% if project.is_removed? %>
-          <%= fa_icon('exclamation-triangle') %> This package is no longer available on <%= project.platform %>
-        <% elsif project.is_deprecated? %>
-          <%= fa_icon('exclamation-triangle') %> This package is deprecated -
-          <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
-          <%= timeago_tag project.latest_release_published_at %>
-        <% elsif project.is_unmaintained? %>
-          <%= fa_icon('exclamation-triangle') %> This package is no longer maintained -
-          <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
-          <%= timeago_tag project.latest_release_published_at %>
-        <% else %>
-          Latest release <%= project.latest_release_number %> -
-          <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
-          <%= timeago_tag project.latest_release_published_at %>
-          <br>
-          <% if project.stars > 0 %>
-            <%= number_to_human project.stars %> stars
+        <small>
+          <% if project.is_removed? %>
+            <%= fa_icon('exclamation-triangle') %> This package is no longer available on <%= project.platform %>
+          <% elsif project.is_deprecated? %>
+            <%= fa_icon('exclamation-triangle') %> This package is deprecated -
+            <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+            <%= timeago_tag project.latest_release_published_at %>
+          <% elsif project.is_unmaintained? %>
+            <%= fa_icon('exclamation-triangle') %> This package is no longer maintained -
+            <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+            <%= timeago_tag project.latest_release_published_at %>
+          <% else %>
+            Latest release <%= project.latest_release_number %> -
+            <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+            <%= timeago_tag project.latest_release_published_at %>
+            <br>
+            <% if project.stars > 0 %>
+              <%= number_to_human project.stars %> stars
+            <% end %>
+            - Used by <%= counts[project.id] %> org repos (<%= number_to_percentage counts[project.id]/@org.repositories.count.to_f*100 %>)
           <% end %>
-          - Used by <%= counts[project.id] %> org repos (<%= number_to_percentage counts[project.id]/@org.repositories.count.to_f*100 %>)
-        <% end %>
-      </small>
-    </div>
-
+        </small>
+      </div>
     <% end %>
-
+    <%= link_to "See all #{@org}'s most used packages", user_dependencies_path(@org.to_param) %>
   </div>
 </div>
