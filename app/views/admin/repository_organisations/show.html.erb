@@ -1,0 +1,126 @@
+<h1>
+  <%= image_tag @org.avatar_url(100), width: 50, height: 50, alt: @org %>
+  <%= @org %>
+  <%= link_to fa_icon(@org.host_type.downcase), @org.repository_url, class: 'tip', title: "View #{@org.login} on #{@org.host_type}" %>
+</h1>
+<hr>
+
+<h3>Organisation Stats</h3>
+<ul>
+  <li>
+    Repositories: <%= number_to_human @org.repositories.count %>
+  </li>
+  <li>
+    Unique dependencies: <%= number_to_human @org.favourite_projects.length %>
+  </li>
+  <li>
+    Unique contributors: <%= number_to_human @org.contributors.visible.length %>
+  </li>
+  <li>
+    Total commits: <%= number_to_human @total_commits %>
+  </li>
+</ul>
+
+<div class="row">
+  <div class="col-md-6">
+    <h3>Top Repositories</h3>
+
+    <% @top_repos.each do |repository| %>
+    <div class='project' style="border-color: <%= repository.color %>;">
+      <h5>
+        <%= link_to repository.full_name, repository_path(repository.to_param) %>
+        <small>
+          <%= fa_icon("lock") if repository.private? %>
+          <%= fa_icon("code-fork") if repository.fork? %>
+        </small>
+      </h5>
+
+      <div>
+        <%= emojify truncate(repository.description, :length => 100) %>
+      </div>
+
+      <small>
+        <%= fa_icon repository.host_type.downcase %>
+        <% if repository.is_removed? %>
+          <%= fa_icon('exclamation-triangle') %> This repository is no longer available
+        <% elsif repository.is_deprecated? %>
+          <%= fa_icon('exclamation-triangle') %> This repository is deprecated -
+        <% elsif repository.is_unmaintained? %>
+          <%= fa_icon('exclamation-triangle') %> This repository is no longer maintained -
+        <% else %>
+          <% if repository.language.present? %>
+            <%= link_to repository.language, language_path(repository.language) %> -
+          <% end %>
+          <% if repository.license.present? %>
+            <%= linked_licenses [repository.license] %> -
+          <% end %>
+        <% end %>
+        <% unless repository.is_removed? %>
+          <% if repository.pushed_at && repository.pushed_at > repository.created_at + 1.minute %>
+            Last pushed <%= timeago_tag repository.pushed_at %>
+          <% elsif repository.updated_at && repository.updated_at > repository.created_at + 1.minute %>
+            Updated <%= timeago_tag repository.updated_at %>
+          <% else %>
+            Published <%= timeago_tag repository.created_at %>
+          <% end %>
+        <% end %>
+        <br>
+        <% unless repository.is_deprecated? || repository.is_unmaintained? %>
+          <% if repository.stargazers_count %>
+          <%= number_to_human repository.stars %> stars
+          <% end %>
+          <% if repository.forks > 0 %>
+            - <%= number_to_human repository.forks %> forks
+          <% end %>
+        <% end %>
+        - <%= number_to_human repository.contributors.count %> contributors
+        <% count = repository.contributors.sum(:count) %>
+        - <%= number_to_human count %> commits (<%= number_to_percentage(count/@total_commits.to_f*100) %>)
+        - <%= number_to_human repository.dependencies.count %> dependencies
+      </small>
+    </div>
+    <% end %>
+  </div>
+  <div class="col-md-6">
+    <h3>Most used packages</h3>
+
+    <% counts = @org.favourite_projects.count %>
+
+    <% @org.favourite_projects.each do |project| %>
+    <div class='project' style="border-color: <%= project.color %>;">
+      <h5>
+        <%= link_to project.name, project_path(project.to_param) %>
+      </h5>
+
+      <div class="">
+        <%= truncate project.description, :length => 100 %>
+      </div>
+
+      <small>
+        <% if project.is_removed? %>
+          <%= fa_icon('exclamation-triangle') %> This package is no longer available on <%= project.platform %>
+        <% elsif project.is_deprecated? %>
+          <%= fa_icon('exclamation-triangle') %> This package is deprecated -
+          <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+          <%= timeago_tag project.latest_release_published_at %>
+        <% elsif project.is_unmaintained? %>
+          <%= fa_icon('exclamation-triangle') %> This package is no longer maintained -
+          <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+          <%= timeago_tag project.latest_release_published_at %>
+        <% else %>
+          Latest release <%= project.latest_release_number %> -
+          <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+          <%= timeago_tag project.latest_release_published_at %>
+          <br>
+          <% if project.stars > 0 %>
+            <%= number_to_human project.stars %> stars
+          <% end %>
+          - Used by <%= counts[project.id] %> org repos (<%= number_to_percentage counts[project.id]/@org.repositories.count.to_f*100 %>)
+        <% end %>
+      </small>
+    </div>
+
+    <% end %>
+
+  </div>
+</div>
