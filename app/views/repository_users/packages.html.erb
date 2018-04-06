@@ -35,16 +35,16 @@
             <% @platforms.each do |platform| %>
               <li class='<%= 'active' if platform[0].downcase == params[:platform].try(:downcase) %>'>
                 <% if platform[0].downcase == params[:platform].try(:downcase) %>
-                  <%= link_to platform_name(platform[0]), user_packages_path(platforms: nil, license: params[:license]) %>
+                  <%= link_to platform_name(platform[0]), user_dependencies_path(platforms: nil, license: params[:license]) %>
                 <% else %>
-                  <%= link_to platform_name(platform[0]), user_packages_path(platforms: platform_name(platform[0]), license: params[:license]) %>
+                  <%= link_to platform_name(platform[0]), user_dependencies_path(platforms: platform_name(platform[0]), license: params[:license]) %>
                   <small><%= pluralize number_to_human(platform[1]), 'packages' %></small>
                 <% end %>
               </li>
             <% end %>
             <% if @platform && !@platforms.map{|l| l[0].downcase }.include?(@platform.name.downcase) %>
               <li class='active'>
-                <%= link_to platform_name(@platform.name), user_packages_path(platforms: nil, license: params[:license]) %>
+                <%= link_to platform_name(@platform.name), user_dependencies_path(platforms: nil, license: params[:license]) %>
               </li>
             <% end %>
           </ul>

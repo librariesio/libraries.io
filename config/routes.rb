@@ -157,7 +157,6 @@ Rails.application.routes.draw do
     get '/:host_type/timeline', to: 'repositories#timeline', as: :github_timeline
     get '/:host_type/:login/issues', to: 'repository_users#issues'
     get '/:host_type/:login/dependencies', to: 'repository_users#dependencies', as: :user_dependencies
-    get '/:host_type/:login/packages', to: 'repository_users#packages', as: :user_packages
     get '/:host_type/:login/dependency-issues', to: 'repository_users#dependency_issues'
     get '/:host_type/:login/repositories', to: 'repository_users#repositories', as: :user_repositories
     get '/:host_type/:login/contributions', to: 'repository_users#contributions', as: :user_contributions

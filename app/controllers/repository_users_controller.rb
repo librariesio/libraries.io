@@ -23,10 +23,6 @@ class RepositoryUsersController < ApplicationController
   end
 
   def dependencies
-    @projects = @user.all_dependent_repos.open_source.order('rank DESC NULLS LAST').paginate(page: page_number)
-  end
-
-  def packages
     orginal_scope = @user.favourite_projects.visible
     scope = params[:platforms].present? ? orginal_scope.platform(params[:platforms]) : orginal_scope
     @projects = scope.paginate(page: page_number)
