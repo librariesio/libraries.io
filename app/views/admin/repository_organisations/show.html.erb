@@ -86,7 +86,7 @@
 
     <% counts = @org.favourite_projects.count %>
 
-    <% @org.favourite_projects.each do |project| %>
+    <% @org.favourite_projects.limit(10).each do |project| %>
     <div class='project' style="border-color: <%= project.color %>;">
       <h5>
         <%= link_to project.name, project_path(project.to_param) %>
