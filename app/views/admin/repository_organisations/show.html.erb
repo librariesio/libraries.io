@@ -5,21 +5,47 @@
 </h1>
 <hr>
 
-<h3>Organisation Stats</h3>
-<ul>
-  <li>
-    Repositories: <%= number_to_human @org.repositories.count %>
-  </li>
-  <li>
-    Unique dependencies: <%= number_to_human @org.favourite_projects.length %>
-  </li>
-  <li>
-    Unique contributors: <%= number_to_human @org.contributors.visible.length %>
-  </li>
-  <li>
-    Total commits: <%= number_to_human @total_commits %>
-  </li>
-</ul>
+<div class="row">
+  <div class="col-md-4">
+    <h3>Organisation Stats</h3>
+    <ul>
+      <li>
+        Repositories: <%= number_to_human @org.repositories.count %>
+      </li>
+      <li>
+        Unique dependencies: <%= number_to_human @org.favourite_projects.length %>
+      </li>
+      <li>
+        Unique contributors: <%= number_to_human @org.contributors.visible.length %>
+      </li>
+      <li>
+        Total commits: <%= number_to_human @total_commits %>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-4">
+    <h3>Package Manager Usage</h3>
+    <% dep_breakdown = @org.dependencies.group('platform').count %>
+    <ul>
+      <% dep_breakdown.sort_by {|_key, value| -value}.each do |k,v| %>
+        <li>
+          <%= k %>: <%= number_to_percentage(v/dep_breakdown.values.sum.to_f*100) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="col-md-4">
+    <h3>Language Usage</h3>
+    <% lang_breakdown = @org.repositories.group('language').count %>
+    <ul>
+      <% lang_breakdown.sort_by {|_key, value| -value}.each do |k,v| %>
+        <li>
+          <%= k || 'None' %>: <%= number_to_percentage(v/lang_breakdown.values.sum.to_f*100) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
 
 <div class="row">
   <div class="col-md-6">
