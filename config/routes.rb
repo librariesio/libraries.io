@@ -81,10 +81,11 @@ Rails.application.routes.draw do
         get 'unmaintained'
       end
     end
-    get '/:host_type/:login', to: 'repository_organisations#show'
+
     get '/stats', to: 'stats#index', as: :stats
     get '/stats/repositories', to: 'stats#repositories', as: :repositories_stats
     get '/graphs', to: 'stats#graphs', as: :graphs
+    get '/:host_type/:login', to: 'repository_organisations#show'
     get '/', to: 'stats#overview', as: :overview
   end
 
