@@ -26,6 +26,13 @@ class RepositoryUsersController < ApplicationController
     @projects = @user.all_dependent_repos.open_source.order('rank DESC NULLS LAST').paginate(page: page_number)
   end
 
+  def packages
+    orginal_scope = @user.favourite_projects.visible
+    scope = params[:platforms].present? ? orginal_scope.platform(params[:platforms]) : orginal_scope
+    @projects = scope.paginate(page: page_number)
+    @platforms = orginal_scope.pluck(:platform).inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|_k,v| v }.reverse.first(20)
+  end
+
   def repositories
     @repositories = @user.repositories.open_source.source.order('status ASC NULLS FIRST, rank DESC NULLS LAST').paginate(page: page_number)
   end
