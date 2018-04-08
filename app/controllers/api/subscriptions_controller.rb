@@ -14,7 +14,7 @@ class Api::SubscriptionsController < Api::ApplicationController
   end
 
   def create
-    @subscription = current_user.subscriptions.create(subscription_params.merge(project_id: @project))
+    @subscription = current_user.subscriptions.create(subscription_params.merge(project_id: @project.id))
     render json: @subscription, include: 'project,project.versions'
   end
 
