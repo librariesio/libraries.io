@@ -18,6 +18,7 @@
 //= require bootstrap/transition
 //= require bootstrap/tab
 //= require bootstrap/tooltip
+//= require bootstrap/popover
 //= require rails-timeago
 //= require subtome
 //= require turbolinks
@@ -25,6 +26,10 @@
 
 document.addEventListener('turbolinks:load', function(){
   $('.tip').tooltip({placement: 'bottom'})
+
+  $('[data-toggle="popover"]').popover()
+
+
   stickFooter()
 
   // ga autotrack config

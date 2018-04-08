@@ -29,6 +29,7 @@ module ProjectSearch
         indexes :latest_release_published_at, type: 'date'
 
         indexes :rank, type: 'integer'
+        indexes :sourcerank_2, type: 'integer'
         indexes :stars, type: 'integer'
         indexes :dependents_count, type: 'integer'
         indexes :dependent_repos_count, type: 'integer'
@@ -69,7 +70,7 @@ module ProjectSearch
         },
         aggs: facets_options(facet_limit, options),
         filter: { bool: { must: [] } },
-        sort: [{'contributions_count' => 'asc'}, {'rank' => 'desc'}]
+        sort: [{'contributions_count' => 'asc'}, {'sourcerank_2' => 'desc'}]
       }
       search_definition[:filter][:bool][:must] = filter_format(options[:filters])
       __elasticsearch__.search(search_definition)
@@ -156,7 +157,7 @@ module ProjectSearch
               }
             },
             field_value_factor: {
-              field: "rank",
+              field: "sourcerank_2",
               "modifier": "square"
             }
           }
@@ -190,14 +191,14 @@ module ProjectSearch
       if query.present?
         search_definition[:query][:function_score][:query][:filtered][:query] = query_options(query, FIELDS)
       elsif options[:sort].blank?
-        search_definition[:sort]  = [{'rank' => 'desc'}, {'stars' => 'desc'}]
+        search_definition[:sort]  = [{'sourcerank_2' => 'desc'}, {'stars' => 'desc'}]
       end
 
       if options[:prefix].present?
         search_definition[:query][:function_score][:query][:filtered][:query] = {
           prefix: { exact_name: original_query }
         }
-        search_definition[:sort]  = [{'rank' => 'desc'}, {'stars' => 'desc'}]
+        search_definition[:sort]  = [{'sourcerank_2' => 'desc'}, {'stars' => 'desc'}]
       end
 
       __elasticsearch__.search(search_definition)

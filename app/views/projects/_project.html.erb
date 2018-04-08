@@ -1,30 +1,45 @@
 <div class='project' style="border-color: <%= project.color %>;">
-  <h5>
-    <%= link_to project.name, project_path(project.to_param) %>
-  </h5>
+  <div class="col-md-10">
+    <h5>
+      <%= link_to project.name, project_path(project.to_param) %>
+    </h5>
 
-  <div class="">
-    <%= truncate project.description, :length => 100 %>
+    <div class="">
+      <%= truncate project.description, :length => 100 %>
+    </div>
+
+    <small>
+      <% if project.is_removed? %>
+        <%= fa_icon('exclamation-triangle') %> This package is no longer available on <%= project.platform %>
+      <% elsif project.is_deprecated? %>
+        <%= fa_icon('exclamation-triangle') %> This package is deprecated -
+        <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+        <%= timeago_tag project.latest_release_published_at %>
+      <% elsif project.is_unmaintained? %>
+        <%= fa_icon('exclamation-triangle') %> This package is no longer maintained -
+        <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+        <%= timeago_tag project.latest_release_published_at %>
+      <% else %>
+        Latest release <%= project.latest_release_number %> -
+        <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
+        <%= timeago_tag project.latest_release_published_at %>
+        <% if project.stars > 0 %>
+         - <%= number_to_human project.stars %> stars
+        <% end %>
+      <% end %>
+    </small>
+  </div>
+  <div class="col-md-2">
+
+
+
+      <button type="button" data-html="true" style="font-weight:bold;background: <%= sourcerank_colour project.sourcerank_2 %>;color:#333;" class="btn bt-lg btn-default" data-container="body" data-toggle="popover" data-placement="left" data-content="
+        <%= render partial: 'projects/breakdown', locals: {project: project} %>
+        ">
+        <%= project.sourcerank_2 %>%
+      </button>
+
   </div>
 
-  <small>
-    <% if project.is_removed? %>
-      <%= fa_icon('exclamation-triangle') %> This package is no longer available on <%= project.platform %>
-    <% elsif project.is_deprecated? %>
-      <%= fa_icon('exclamation-triangle') %> This package is deprecated -
-      <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
-      <%= timeago_tag project.latest_release_published_at %>
-    <% elsif project.is_unmaintained? %>
-      <%= fa_icon('exclamation-triangle') %> This package is no longer maintained -
-      <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
-      <%= timeago_tag project.latest_release_published_at %>
-    <% else %>
-      Latest release <%= project.latest_release_number %> -
-      <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
-      <%= timeago_tag project.latest_release_published_at %>
-      <% if project.stars > 0 %>
-       - <%= number_to_human project.stars %> stars
-      <% end %>
-    <% end %>
-  </small>
+
 </div>

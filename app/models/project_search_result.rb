@@ -47,4 +47,20 @@ class ProjectSearchResult
   def to_partial_path
     'projects/project'
   end
+
+  def record
+    @record ||= Project.find(id)
+  end
+
+  def sourcerank_2
+    record.sourcerank_2
+  end
+
+  def sourcerank_calculator
+    SourceRankCalculator.new(record)
+  end
+
+  def sourcerank_breakdown
+    sourcerank_calculator.breakdown
+  end
 end

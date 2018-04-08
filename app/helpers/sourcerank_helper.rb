@@ -63,4 +63,19 @@ module SourcerankHelper
     return false unless negative_factors.include?(key)
     value == 0
   end
+
+  def sourcerank_colour(rank)
+    case rank
+    when 80..100
+      '#2ECC40'
+    when 70..79
+      '#D9E650'
+    when 50..69
+      '#FBE870'
+    when 30..49
+      '#FF851B'
+    else
+      '#FF4136'
+    end
+  end
 end

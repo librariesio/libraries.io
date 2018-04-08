@@ -1,0 +1,13 @@
+<% project.sourcerank_breakdown.each do |k,v| %>
+  <% next if k == :overall_score %>
+  <div>
+    <a href='#collapse-<%= project.id %>-<%= k %>' data-toggle='collapse'><%= k.to_s.humanize %>:
+      <span class='label' style='background-color: <%= sourcerank_colour(v[:score].round) %>;color:#333;'><%= v[:score].round %>%</span>
+
+
+    </a>
+    <div class='collapse' id='collapse-<%= project.id %>-<%= k %>'>
+      <pre><%= JSON.pretty_generate v %></pre>
+    </div>
+  <div>
+<% end %>
