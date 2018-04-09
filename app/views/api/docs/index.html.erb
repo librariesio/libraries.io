@@ -318,7 +318,7 @@
 <%= JSON.pretty_generate @repository_user.contributed_projects.includes(:versions, :repository).order('rank DESC NULLS LAST').paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
     <% end %>
 
-    <h3 id="user-projects">User Repository Contributions</h3>
+    <h3 id="user-repository-contributions">User Repository Contributions</h3>
 
     <p>
       Get a list of repositories that the given users has contributed to.
