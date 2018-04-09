@@ -1,7 +1,7 @@
 <h1>
-  <%= image_tag @org.avatar_url(100), width: 50, height: 50, alt: @org %>
-  <%= @org %>
-  <%= link_to fa_icon(@org.host_type.downcase), @org.repository_url, class: 'tip', title: "View #{@org.login} on #{@org.host_type}" %>
+  <%= image_tag @user.avatar_url(100), width: 50, height: 50, alt: @user %>
+  <%= @user %>
+  <%= link_to fa_icon(@user.host_type.downcase), @user.repository_url, class: 'tip', title: "View #{@user.login} on #{@user.host_type}" %>
 </h1>
 <hr>
 
@@ -10,13 +10,16 @@
     <h3>Organisation Stats</h3>
     <ul>
       <li>
-        Repositories: <%= number_to_human @org.repositories.count %>
+        Repositories: <%= number_to_human @user.repositories.count %>
       </li>
       <li>
-        Unique dependencies: <%= number_to_human @org.favourite_projects.length %>
+        Unique packages depended upon: <%= number_to_human @user.favourite_projects.length %>
       </li>
       <li>
-        Unique contributors: <%= number_to_human @org.contributors.visible.length %>
+        Total dependencies declared: <%= number_to_human @user.dependencies.count %>
+      </li>
+      <li>
+        Unique contributors: <%= number_to_human @user.contributors.visible.length %>
       </li>
       <li>
         Total commits: <%= number_to_human @total_commits %>
@@ -25,7 +28,7 @@
   </div>
   <div class="col-md-4">
     <h3>Package Manager Usage</h3>
-    <% dep_breakdown = @org.dependencies.group('platform').count %>
+    <% dep_breakdown = @user.dependencies.group('platform').count %>
     <ul>
       <% dep_breakdown.sort_by {|_key, value| -value}.first(10).each do |k,v| %>
         <li>
@@ -36,7 +39,7 @@
   </div>
   <div class="col-md-4">
     <h3>Language Usage</h3>
-    <% lang_breakdown = @org.repositories.group('language').count %>
+    <% lang_breakdown = @user.repositories.group('language').count %>
     <ul>
       <% lang_breakdown.sort_by {|_key, value| -value}.first(10).each do |k,v| %>
         <li>
@@ -106,47 +109,14 @@
       </small>
     </div>
     <% end %>
-    <%= link_to "See all #{@org}'s repositories", user_repositories_path(@org.to_param) %>
+    <%= link_to "See all #{@user}'s repositories", user_repositories_path(@user.to_param) %>
   </div>
   <div class="col-md-6">
     <h3>Most used packages</h3>
 
-    <% counts = @org.favourite_projects.count %>
-
-    <% @org.favourite_projects.limit(10).each do |project| %>
-      <div class='project' style="border-color: <%= project.color %>;">
-        <h5>
-          <%= link_to project.name, project_path(project.to_param) %>
-        </h5>
-
-        <div class="">
-          <%= truncate project.description, :length => 100 %>
-        </div>
-
-        <small>
-          <% if project.is_removed? %>
-            <%= fa_icon('exclamation-triangle') %> This package is no longer available on <%= project.platform %>
-          <% elsif project.is_deprecated? %>
-            <%= fa_icon('exclamation-triangle') %> This package is deprecated -
-            <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
-            <%= timeago_tag project.latest_release_published_at %>
-          <% elsif project.is_unmaintained? %>
-            <%= fa_icon('exclamation-triangle') %> This package is no longer maintained -
-            <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
-            <%= timeago_tag project.latest_release_published_at %>
-          <% else %>
-            Latest release <%= project.latest_release_number %> -
-            <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
-            <%= timeago_tag project.latest_release_published_at %>
-            <br>
-            <% if project.stars > 0 %>
-              <%= number_to_human project.stars %> stars
-            <% end %>
-            - Used by <%= counts[project.id] %> org repos (<%= number_to_percentage counts[project.id]/@org.repositories.count.to_f*100 %>)
-          <% end %>
-        </small>
-      </div>
+    <% @user.favourite_projects.limit(10).each do |project| %>
+      <%= render partial: 'project', object: project %>
     <% end %>
-    <%= link_to "See all #{@org}'s most used packages", user_dependencies_path(@org.to_param) %>
+    <%= link_to "See all #{@user}'s most used packages", admin_organisation_dependencies_path(@user.to_param) %>
   </div>
 </div>
