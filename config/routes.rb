@@ -37,6 +37,7 @@ Rails.application.routes.draw do
 
       get '/:host_type/search', to: 'repositories#search'
 
+      get '/:host_type/:login/dependencies', to: 'repository_users#dependencies'
       get '/:host_type/:login/project-contributions', to: 'repository_users#project_contributions'
       get '/:host_type/:login/repository-contributions', to: 'repository_users#repository_contributions'
       get '/:host_type/:login/repositories', to: 'repository_users#repositories'

@@ -336,6 +336,26 @@
 <%= JSON.pretty_generate @repository_user.contributed_repositories.order('stargazers_count DESC, rank DESC NULLS LAST').paginate(page: 1).map{|p| RepositorySerializer.new(p) }.as_json %></pre>
     <% end %>
 
+    <h3 id="user-dependencies">User Dependencies</h3>
+
+    <p>
+      Get a list of unique packages that the given user's repositories list as a dependency. Ordered by frequency of use in those repositories.
+    </p>
+    <p>
+      Parameters: <code>platforms</code>
+    </p>
+    <p>
+      <code>GET https://libraries.io/api/github/:login/dependencies?api_key=<%= @api_key %></code>
+    </p>
+    <hr>
+    <p>
+      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository_user.login}/dependencies?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
+    </p>
+    <% cache "api-docs-#{@cache_version}-github-user-dependencies", :expires_in => 1.day do %>
+      <pre class='well well-small'>
+<%= JSON.pretty_generate @repository_user.favourite_projects.visible.paginate(page: 1).map{|p| ProjectSerializer.new(p) }.as_json %></pre>
+    <% end %>
+
     <h3 id='subscriptions-index'>User Subscriptions</h3>
     <p>
       List packages that a user is subscribed to recieved notifications about new releases
@@ -463,6 +483,7 @@
       <li><a href="#user-projects">User Projects</a></li>
       <li><a href="#user-project-contributions">User Package Contributions</a></li>
       <li><a href="#user-repository-contributions">User Repository Contributions</a></li>
+      <li><a href="#user-dependencies">User Dependencies</a></li>
     </ul>
     <ul>
       <li><a href="#subscriptions-index">User Subscriptions</a></li>

@@ -50,4 +50,13 @@ describe "Api::RepositoryUsersController" do
       expect(json).to eq []
     end
   end
+
+  describe "GET /api/github/:login/dependencies", type: :request do
+    it "renders successfully" do
+      get "/api/github/#{@user.login}/dependencies"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq('application/json')
+      expect(json).to eq []
+    end
+  end
 end

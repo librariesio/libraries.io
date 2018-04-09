@@ -24,6 +24,12 @@ class Api::RepositoryUsersController < Api::ApplicationController
     paginate json: @repository_user.contributed_projects.visible.includes(:versions, :repository).order('rank DESC NULLS LAST')
   end
 
+  def dependencies
+    scope = @repository_user.favourite_projects.visible
+    scope = scope.platform(params[:platform]) if params[:platform].present?
+    paginate json: scope.paginate(page: page_number)
+  end
+
   private
 
   def find_user
