@@ -24,6 +24,9 @@
       <li>
         Total commits: <%= number_to_human @total_commits %>
       </li>
+      <li>
+        Average dependencies per repo: <%= number_to_human @user.dependencies.count/@user.repositories.count.to_f %>
+      </li>
     </ul>
   </div>
   <div class="col-md-4">
