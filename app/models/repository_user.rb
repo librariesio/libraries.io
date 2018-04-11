@@ -4,7 +4,7 @@ class RepositoryUser < ApplicationRecord
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository
   has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository
   has_many :dependencies, through: :open_source_repositories
-  has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
+  has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC, projects.rank DESC") }, through: :dependencies, source: :project
   has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
   has_many :contributed_repositories, -> { Repository.source.open_source }, through: :contributions, source: :repository
   has_many :contributed_projects, through: :contributed_repositories, source: :projects
