@@ -82,7 +82,7 @@
       </dd>
       <% if @project.repository.size.present? %>
         <dt class='col-xs-8'>
-          Size
+          Repository Size
         </dt>
         <dd class='col-xs-4'>
           <%= number_to_human_size @project.repository.size*1000 %>
