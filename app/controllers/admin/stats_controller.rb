@@ -28,6 +28,12 @@ class Admin::StatsController < Admin::ApplicationController
     @versions = Version.joins(:project).where('lower(projects.platform) = ?', @platform.downcase).where('versions.created_at > ?', 3.months.ago).group_by_day('versions.created_at').count
   end
 
+  def api
+    current_month_key = "api-usage-#{Date.today.strftime("%Y-%m")}"
+    @api_key_usage = REDIS.hgetall(current_month_key)
+    @api_keys = ApiKey.includes(:user).find(@api_key_usage.keys.map(&:to_i))
+  end
+
   private
 
   def stats_for(klass)

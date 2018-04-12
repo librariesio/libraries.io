@@ -1,0 +1,39 @@
+<%= render 'admin/nav' %>
+<% title 'API Usage - Libraries.io' %>
+<h1>
+  API Usage for <%= Date.today.strftime("%B %Y") %>
+</h1>
+
+
+<table class='table'>
+  <thead>
+    <th>Email</th>
+    <th>Signed up</th>
+    <th>Last login</th>
+    <th>Optin?</th>
+    <th>Requests</th>
+  </thead>
+  <tbody>
+    <% @api_key_usage.each do |api_key_id, usage| %>
+      <% api_key = @api_keys.first{|key| key.id == api_key_id.to_i } %>
+      <% next unless api_key.present? %>
+      <tr>
+        <td>
+          <%= api_key.user.email %>
+        </td>
+        <td>
+          <%= api_key.user.created_at.to_s(:short) %>
+        </td>
+        <td>
+          <%= api_key.user.last_login_at.try(:to_s, :short) %>
+        </td>
+        <td>
+          <%= fa_icon(api_key.user.optin? ? 'check-circle' : 'times-circle') %>
+        </td>
+        <td>
+          <%= number_to_human usage %>
+        </td>
+      </li>
+    <% end %>
+  </tbody>
+</table>
