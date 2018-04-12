@@ -25,6 +25,7 @@ class Api::ApplicationController < ApplicationController
   def check_api_key
     return true if params[:api_key].nil?
     require_api_key
+    record_api_usage
   end
 
   def require_api_key
@@ -38,6 +39,11 @@ class Api::ApplicationController < ApplicationController
   def current_api_key
     return nil if params[:api_key].blank?
     @current_api_key ||= ApiKey.active.find_by_access_token(params[:api_key])
+  end
+
+  def record_api_usage
+    return unless @current_api_key.present?
+    REDIS.hincrby "api-usage-#{Date.today.strftime("%Y-%m")}", @current_api_key.id, 1
   end
 
   def current_user
