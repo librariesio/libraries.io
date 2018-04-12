@@ -114,6 +114,11 @@ Rails.application.routes.draw do
     end
   end
 
+  scope :badges do
+    get '/:platform/:name/dependent_repositories', to: 'badges#dependent_repositories', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    get '/:platform/:name/dependent_packages', to: 'badges#dependent_packages', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+  end
+
   root to: 'projects#index'
 
   get '/404', to: 'errors#not_found'
