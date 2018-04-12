@@ -19,10 +19,10 @@
           <%= api_key.user.email %>
         </td>
         <td>
-          <%= api_key.user.created_at.to_s(:short) %>
+          <%= api_key.user.created_at.to_s(:long) %>
         </td>
         <td>
-          <%= api_key.user.last_login_at.try(:to_s, :short) %>
+          <%= api_key.user.last_login_at.try(:to_s, :long) %>
         </td>
         <td>
           <%= fa_icon(api_key.user.optin? ? 'check-circle' : 'times-circle') %>
