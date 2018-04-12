@@ -4,7 +4,6 @@
   API Usage for <%= Date.today.strftime("%B %Y") %>
 </h1>
 
-
 <table class='table'>
   <thead>
     <th>Email</th>
@@ -14,9 +13,7 @@
     <th>Requests</th>
   </thead>
   <tbody>
-    <% @api_key_usage.each do |api_key_id, usage| %>
-      <% api_key = @api_keys.first{|key| key.id == api_key_id.to_i } %>
-      <% next unless api_key.present? %>
+    <% @api_keys.each do |api_key| %>
       <tr>
         <td>
           <%= api_key.user.email %>
@@ -31,7 +28,7 @@
           <%= fa_icon(api_key.user.optin? ? 'check-circle' : 'times-circle') %>
         </td>
         <td>
-          <%= number_to_human usage %>
+          <%= number_to_human @api_key_usage[api_key.id.to_s] %>
         </td>
       </li>
     <% end %>
