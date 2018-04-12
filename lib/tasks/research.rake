@@ -303,4 +303,58 @@ namespace :research do
     end;nil
     puts output
   end
+
+  desc 'list dependencies org grouped by org'
+  task org_grouped_cumulative_dependency_list: :environment do
+
+    org_name = 'librariesio'
+    host = 'github'
+    platform = 'rubygems'
+    org = RepositoryOrganisation.host(host).find_by_login(org_name)
+
+    own_dependencies = org.dependencies.platform(platform).includes(project: :repository).select{|d| d.project.try(:repository).try(:full_name) && d.project.repository.full_name.split('/').first == org_name }.length
+
+    total = org.dependencies.platform(platform).count - own_dependencies
+
+    counts = org.favourite_projects.platform(platform).count
+
+    groups = org.favourite_projects.platform(platform).includes(:repository).group_by{|pr| pr.try(:repository).try(:full_name).try(:split,'/').try(:first) }
+
+    usage = []
+
+    groups.each do |owner_name, projects|
+      next if owner_name == org_name
+
+      if owner_name.present? && projects.length > 1 # multirepo
+        name = owner_name + '*'
+        count = projects.map(&:id).sum{|id| counts[id] }
+
+        usage << [name, count]
+      else
+        projects.each do |project|
+          name = project.name
+          count = counts[project.id]
+
+          usage << [name, count]
+        end
+      end
+    end;nil
+
+    rows = []
+    running_total = 0
+
+    usage.sort_by(&:second).reverse.each do |dep|
+      running_total += dep[1]
+      percentage = (running_total/total.to_f*100).round
+      rows << [dep[0], dep[1], running_total, percentage]
+    end
+
+    output = CSV.generate do |csv|
+      csv << ['Project Name', 'Used by Repos', 'Running Total', 'Running Percentage']
+
+      rows.each{|row| csv << row }
+    end;nil
+    puts output
+
+  end
 end
