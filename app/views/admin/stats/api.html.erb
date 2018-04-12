@@ -24,7 +24,7 @@
         <td>
           <%= api_key.user.last_login_at.try(:to_s, :long) %>
         </td>
-        <td>
+        <td class='text-<%= api_key.user.optin? ? 'success' : 'danger' %>'>
           <%= fa_icon(api_key.user.optin? ? 'check-circle' : 'times-circle') %>
         </td>
         <td>
