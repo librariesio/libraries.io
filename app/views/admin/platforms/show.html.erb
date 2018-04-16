@@ -1,0 +1,52 @@
+<h1>
+  <div class="pictogram pictogram-lg pictogram-<%= @platform_name.downcase %>"></div>
+  <%= platform_name(@platform_name) %>
+</h1>
+
+<table class='table'>
+  <thead>
+    <th>
+      Project/Org name
+    </th>
+    <th>Contriutors</th>
+    <th>
+      Used by Repos
+    </th>
+    <th>
+      Running Total
+    </th>
+    <th>
+      Running Percentage
+    </th>
+  </thead>
+  <tbody>
+    <% @rows.each do |row| %>
+      <tr>
+        <td>
+          <% if row[0].last == '*' %>
+            <% name = row[0][0..-2] %>
+            <%= link_to name, "/github/#{name}" %>
+            <%= fa_icon 'github' %>
+            <small class='text-muted'>
+              <%= row[3] %> packages
+            </small>
+          <% else %>
+            <%= link_to row[0], project_path(platform: @platform_name, name: row[0]) %>
+          <% end %>
+        </td>
+        <td>
+          <%= row[4] %>
+        </td>
+        <td>
+          <%= row[1] %>
+        </td>
+        <td>
+          <%= row[2] %>
+        </td>
+        <td>
+          <%= row[3] %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

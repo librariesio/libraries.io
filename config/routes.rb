@@ -83,6 +83,9 @@ Rails.application.routes.draw do
       end
     end
 
+    get '/platforms/:id', to: 'platforms#show', as: :platform
+    get '/platforms', to: 'platforms#index', as: :platforms
+
     get '/stats', to: 'stats#index', as: :stats
     get '/stats/api', to: 'stats#api', as: :api_stats
     get '/stats/repositories', to: 'stats#repositories', as: :repositories_stats
