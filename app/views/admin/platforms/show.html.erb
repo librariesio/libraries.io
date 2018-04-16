@@ -8,7 +8,7 @@
     <th>
       Project/Org name
     </th>
-    <th>Contriutors</th>
+    <th>Contributors</th>
     <th>
       Used by Repos
     </th>
@@ -38,13 +38,13 @@
           <%= row[4] %>
         </td>
         <td>
-          <%= row[1] %>
+          <%= number_to_human row[1] %>
         </td>
         <td>
-          <%= row[2] %>
+          <%= number_to_human row[2] %>
         </td>
         <td>
-          <%= row[3] %>
+          <%= row[3] %>%
         </td>
       </tr>
     <% end %>
