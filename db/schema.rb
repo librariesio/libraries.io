@@ -50,8 +50,27 @@ ActiveRecord::Schema.define(version: 20180403154402) do
     t.string   "kind"
     t.boolean  "optional",     :default=>false
     t.string   "requirements"
-    t.datetime "created_at",   :null=>false
-    t.datetime "updated_at",   :null=>false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "dependency_activities", id: :serial, default: %q{nextval('dependency_activities_id_seq'::regclass)}, force: :cascade do |t|
+    t.integer  "repository_id",        :index=>{:name=>"index_dependency_activities_on_repository_id", :order=>{:repository_id=>:asc}}
+    t.integer  "project_id",           :index=>{:name=>"index_dependency_activities_on_project_id", :order=>{:project_id=>:asc}}
+    t.string   "action"
+    t.string   "project_name"
+    t.string   "commit_message"
+    t.string   "requirement"
+    t.string   "kind"
+    t.string   "manifest_path"
+    t.string   "manifest_kind"
+    t.string   "commit_sha"
+    t.string   "platform"
+    t.string   "previous_requirement"
+    t.string   "previous_kind"
+    t.datetime "committed_at",         :index=>{:name=>"index_dependency_activities_on_committed_at", :order=>{:committed_at=>:asc}}
+    t.datetime "created_at",           :null=>false
+    t.datetime "updated_at",           :null=>false
   end
 
   create_table "identities", id: :serial, default: %q{nextval('identities_id_seq'::regclass)}, force: :cascade do |t|
@@ -117,8 +136,8 @@ ActiveRecord::Schema.define(version: 20180403154402) do
   create_table "projects", id: :serial, default: %q{nextval('projects_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "name"
     t.string   "platform",                    :index=>{:name=>"index_projects_on_platform_and_name", :with=>["name"], :unique=>true, :order=>{:platform=>:asc, :name=>:asc}}
-    t.datetime "created_at",                  :null=>false, :index=>{:name=>"index_projects_on_created_at", :order=>{:created_at=>:asc}}
-    t.datetime "updated_at",                  :null=>false, :index=>{:name=>"index_projects_on_updated_at", :order=>{:updated_at=>:asc}}
+    t.datetime "created_at",                  :index=>{:name=>"index_projects_on_created_at", :order=>{:created_at=>:asc}}
+    t.datetime "updated_at",                  :index=>{:name=>"index_projects_on_updated_at", :order=>{:updated_at=>:asc}}
     t.text     "description"
     t.text     "keywords"
     t.string   "homepage"
@@ -303,8 +322,8 @@ ActiveRecord::Schema.define(version: 20180403154402) do
 
   create_table "users", id: :serial, default: %q{nextval('users_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "email"
-    t.datetime "created_at",        :null=>false, :index=>{:name=>"index_users_on_created_at", :order=>{:created_at=>:asc}}
-    t.datetime "updated_at",        :null=>false
+    t.datetime "created_at",        :index=>{:name=>"index_users_on_created_at", :order=>{:created_at=>:asc}}
+    t.datetime "updated_at"
     t.boolean  "currently_syncing", :default=>false, :null=>false
     t.datetime "last_synced_at"
     t.boolean  "emails_enabled",    :default=>true
@@ -316,8 +335,8 @@ ActiveRecord::Schema.define(version: 20180403154402) do
     t.integer  "project_id",                 :index=>{:name=>"index_versions_on_project_id_and_number", :with=>["number"], :unique=>true, :order=>{:project_id=>:asc, :number=>:asc}}
     t.string   "number"
     t.datetime "published_at"
-    t.datetime "created_at",                 :null=>false
-    t.datetime "updated_at",                 :null=>false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "runtime_dependencies_count"
   end
 
