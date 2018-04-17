@@ -31,7 +31,10 @@ class ProjectScoreCalculationBatch
   private
 
   def projects_scope
-    Project.platform(@platform).includes(eager_loads).where(id: @project_ids)
+    Project.platform(@platform)
+           .includes(eager_loads)
+           .where(id: @project_ids)
+           .order('runtime_dependencies_count ASC NULLS LAST')
   end
 
   def eager_loads
