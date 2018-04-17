@@ -25,7 +25,7 @@ class ProjectScoreCalculationBatch
       @dependent_project_ids += project.dependent_project_ids
     end
 
-    return @dependent_project_ids
+    return @dependent_project_ids.uniq
   end
 
   private
