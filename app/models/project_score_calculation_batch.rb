@@ -31,7 +31,7 @@ class ProjectScoreCalculationBatch
   private
 
   def projects_scope
-    Project.platform(@platform).includes(eager_loads)
+    Project.platform(@platform).includes(eager_loads).where(id: @project_ids)
   end
 
   def eager_loads
