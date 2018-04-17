@@ -12,9 +12,9 @@ namespace :sourcerank do
 
     scope.where(runtime_dependencies_count: 0).find_each do |project|
       score = SourceRankCalculator.new(project, maximums).overall_score
-      next if project.sourcerank_2 == score
-      project.update_columns(sourcerank_2: score,
-                             sourcerank_2_last_calculated: Time.zone.now)
+      next if project.score == score
+      project.update_columns(score: score,
+                             score_last_calculated: Time.zone.now)
       puts "[#{project.runtime_dependencies_count}] #{project.name}: #{score}"
     end
 
@@ -25,9 +25,9 @@ namespace :sourcerank do
 
       scope.where(runtime_dependencies_count: counts).find_each do |project|
         score = SourceRankCalculator.new(project, maximums).overall_score
-        next if project.sourcerank_2 == score
-        project.update_columns(sourcerank_2: score,
-                               sourcerank_2_last_calculated: Time.zone.now)
+        next if project.score == score
+        project.update_columns(score: score,
+                               score_last_calculated: Time.zone.now)
         puts "[#{project.runtime_dependencies_count}] #{project.name}: #{score}"
       end
     end
@@ -37,9 +37,9 @@ namespace :sourcerank do
     # projects with even more dependencies
     scope.where('runtime_dependencies_count > ?', counts.last).find_each do |project|
       score = SourceRankCalculator.new(project, maximums).overall_score
-      next if project.sourcerank_2 == score
-      project.update_columns(sourcerank_2: score,
-                             sourcerank_2_last_calculated: Time.zone.now)
+      next if project.score == score
+      project.update_columns(score: score,
+                             score_last_calculated: Time.zone.now)
       puts "[#{project.runtime_dependencies_count}] #{project.name}: #{score}"
     end
   end
