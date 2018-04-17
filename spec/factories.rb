@@ -189,4 +189,9 @@ FactoryBot.define do
     login
     token { SecureRandom.hex }
   end
+
+  factory :readme do
+    repository
+    html_body 'Welcome to the jungle'
+  end
 end

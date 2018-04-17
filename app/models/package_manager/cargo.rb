@@ -2,6 +2,7 @@ module PackageManager
   class Cargo < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    HAS_OWNERS = true
     BIBLIOTHECARY_SUPPORT = true
     URL = 'https://crates.io'
     COLOR = '#dea584'

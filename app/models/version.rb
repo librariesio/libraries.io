@@ -134,4 +134,8 @@ class Version < ApplicationRecord
     return nil unless project && project.repository && related_tag && previous_version && previous_version.related_tag
     project.repository.compare_url(previous_version.related_tag.number, related_tag.number)
   end
+
+  def set_runtime_dependencies_count
+    update_column(:runtime_dependencies_count, runtime_dependencies.count)
+  end
 end

@@ -20,7 +20,7 @@ class Dependency < ApplicationRecord
   alias_attribute :deprecated, :is_deprecated?
   alias_method :outdated, :outdated?
 
-  delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :project, allow_nil: true
+  delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, :score, to: :project, allow_nil: true
 
   def filepath
     nil
