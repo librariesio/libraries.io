@@ -1,4 +1,4 @@
-class SourceRankCalculator
+class ProjectScoreCalculator
   def initialize(project, max_dependent_projects: nil, max_dependent_repositories: nil, max_stars: nil, max_forks: nil, max_watchers: nil)
     @project = project
     @max_dependent_projects = max_dependent_projects

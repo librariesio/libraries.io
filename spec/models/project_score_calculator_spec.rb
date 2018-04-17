@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe SourceRankCalculator do
+describe ProjectScoreCalculator do
   let(:project) { build(:project) }
   let(:repository) { create(:repository) }
-  let(:calculator) { SourceRankCalculator.new(project) }
+  let(:calculator) { ProjectScoreCalculator.new(project) }
 
   describe "#overall_score" do
     it "should be the average of all category scores" do
@@ -105,7 +105,7 @@ describe SourceRankCalculator do
 
       context "passing max_dependent_projects on init" do
         it "should use passed in value" do
-          calculator = SourceRankCalculator.new(project, max_dependent_projects: 1001)
+          calculator = ProjectScoreCalculator.new(project, max_dependent_projects: 1001)
 
           allow(project).to receive(:dependents_count) { 1001 }
 
@@ -146,7 +146,7 @@ describe SourceRankCalculator do
       let(:project) { build(:project, platform: 'Rubygems') }
       context "passing max_dependent_repositories on init" do
         it "should use passed in value" do
-          calculator = SourceRankCalculator.new(project, max_dependent_repositories: 1001)
+          calculator = ProjectScoreCalculator.new(project, max_dependent_repositories: 1001)
 
           allow(project).to receive(:dependent_repos_count) { 1001 }
 
@@ -188,7 +188,7 @@ describe SourceRankCalculator do
 
       context "passing max_stars on init" do
         it "should use passed in value" do
-          calculator = SourceRankCalculator.new(project, max_stars: 1001)
+          calculator = ProjectScoreCalculator.new(project, max_stars: 1001)
 
           allow(project).to receive(:stars) { 1001 }
 
@@ -230,7 +230,7 @@ describe SourceRankCalculator do
 
       context "passing max_forks on init" do
         it "should use passed in value" do
-          calculator = SourceRankCalculator.new(project, max_forks: 1001)
+          calculator = ProjectScoreCalculator.new(project, max_forks: 1001)
 
           allow(project).to receive(:forks) { 1001 }
 
@@ -272,7 +272,7 @@ describe SourceRankCalculator do
 
       context "passing max_watchers on init" do
         it "should use passed in value" do
-          calculator = SourceRankCalculator.new(project, max_watchers: 1001)
+          calculator = ProjectScoreCalculator.new(project, max_watchers: 1001)
 
           allow(project).to receive(:watchers) { 1001 }
 

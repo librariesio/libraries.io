@@ -1,4 +1,4 @@
-namespace :sourcerank do
+namespace :scores do
   task seed: :environment do
     Rails.logger.level = Logger::DEBUG
     # start with projects that have zero runtime dependencies
@@ -6,12 +6,12 @@ namespace :sourcerank do
     platform = 'Rubygems'
     eager_loads = [{versions: {runtime_dependencies: :project}}, :registry_users, {repository: :readme}]
 
-    maximums = SourceRankCalculator.maximums(platform)
+    maximums = ProjectScoreCalculator.maximums(platform)
 
     scope = Project.platform(platform).includes(eager_loads)
 
     scope.where(runtime_dependencies_count: 0).find_each do |project|
-      score = SourceRankCalculator.new(project, maximums).overall_score
+      score = ProjectScoreCalculator.new(project, maximums).overall_score
       next if project.score == score
       project.update_columns(score: score,
                              score_last_calculated: Time.zone.now)
@@ -24,7 +24,7 @@ namespace :sourcerank do
       puts "#{'*'*10} #{count} #{'*'*10}"
 
       scope.where(runtime_dependencies_count: counts).find_each do |project|
-        score = SourceRankCalculator.new(project, maximums).overall_score
+        score = ProjectScoreCalculator.new(project, maximums).overall_score
         next if project.score == score
         project.update_columns(score: score,
                                score_last_calculated: Time.zone.now)
@@ -36,7 +36,7 @@ namespace :sourcerank do
 
     # projects with even more dependencies
     scope.where('runtime_dependencies_count > ?', counts.last).find_each do |project|
-      score = SourceRankCalculator.new(project, maximums).overall_score
+      score = ProjectScoreCalculator.new(project, maximums).overall_score
       next if project.score == score
       project.update_columns(score: score,
                              score_last_calculated: Time.zone.now)
