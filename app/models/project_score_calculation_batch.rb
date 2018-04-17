@@ -34,7 +34,6 @@ class ProjectScoreCalculationBatch
     Project.platform(@platform)
            .includes(eager_loads)
            .where(id: @project_ids)
-           .order('runtime_dependencies_count ASC NULLS LAST')
   end
 
   def eager_loads
