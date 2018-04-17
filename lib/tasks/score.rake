@@ -5,10 +5,9 @@ namespace :scores do
 
     platform = 'Cargo'
 
-    project_ids = Project.platform(platform).pluck(:id)
+    project_ids = Project.platform(platform).where(runtime_dependencies_count: 0).pluck(:id)
 
     while project_ids.any?
-      p project_ids
       batch = ProjectScoreCalculationBatch.new(platform, project_ids)
       project_ids = batch.process
     end

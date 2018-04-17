@@ -9,7 +9,6 @@ class ProjectScoreCalculationBatch
 
   def process
     projects_scope.find_each do |project|
-      puts project.name
       score = ProjectScoreCalculator.new(project, @maximums).overall_score
       next if project.score == score
       project.update_columns(score: score,
