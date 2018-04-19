@@ -12,7 +12,7 @@ class ProjectScoreCalculationBatch
     new_project_ids = batch.process
 
     # put resulting ids back in the end of the set
-    enqueue(platform, new_project_ids)
+    enqueue(platform, new_project_ids) if new_project_ids.any?
   end
 
   def self.enqueue(platform, project_ids)
