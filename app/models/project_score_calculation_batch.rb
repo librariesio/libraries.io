@@ -37,7 +37,7 @@ class ProjectScoreCalculationBatch
       next if project.score == score
       project.update_columns(score: score,
                              score_last_calculated: Time.zone.now)
-      @updated_projects << project if project.dependents_count > 0 && project.platform == platform
+      @updated_projects << project if project.dependents_count > 0 && project.platform.downcase == @platform.downcase
     end
 
     calculate_dependents
