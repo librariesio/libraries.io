@@ -1,4 +1,28 @@
 class ProjectScoreCalculationBatch
+  def self.run(platform, limit = 5000)
+    # pull project ids from start of redis sorted set
+    key = queue_key(platform)
+    project_ids = REDIS.multi do
+      REDIS.zrange key, 0, limit-1
+      REDIS.zremrangebyrank key, 0, limit-1
+    end.first
+
+    # process
+    batch = ProjectScoreCalculationBatch.new(platform, project_ids)
+    new_project_ids = batch.process
+
+    # put resulting ids back in the end of the set
+    enqueue(platform, new_project_ids)
+  end
+
+  def self.enqueue(platform, project_ids)
+    REDIS.zadd(queue_key(platform), project_ids.map{|id| [Time.now.to_i, id] })
+  end
+
+  def self.queue_key(platform)
+    "project_score:#{platform.downcase}"
+  end
+
   def initialize(platform, project_ids)
     @platform = platform
     @project_ids = project_ids
