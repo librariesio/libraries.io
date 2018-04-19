@@ -22,5 +22,7 @@ class Api::DocsController < ApplicationController
     @search = Project.search('grunt', api: true).records
 
     @repository_user = RepositoryUser.host('GitHub').login('andrew').first || RepositoryUser.first
+
+    @all_counts = @project.repository_dependencies.where('repositories.fork = ?', false).joins(manifest: :repository).distinct('manifests.repository_id').group('repository_dependencies.requirements').count.select{|k,v| k.present? }
   end
 end
