@@ -54,6 +54,7 @@ Rails.application.routes.draw do
     PROJECT_CONSTRAINT = /[^\/]+/
     VERSION_CONSTRAINT = /[\w\.\-]+/
 
+    get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
     get '/:platform/:name/sourcerank', to: 'projects#sourcerank', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
     get '/:platform/:name/contributors', to: 'projects#contributors', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
     get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => PROJECT_CONSTRAINT, :version => VERSION_CONSTRAINT }, as: :version_tree
