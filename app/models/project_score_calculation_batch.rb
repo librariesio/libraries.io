@@ -23,6 +23,17 @@ class ProjectScoreCalculationBatch
     "project_score:#{platform.downcase}"
   end
 
+  def self.queue_length(platform)
+    REDIS.zcard(queue_key(platform))
+  end
+
+  def self.queue_status
+    PackageManager::Base.platforms.map do |platform|
+      name = platform.formatted_name.downcase
+      [name, queue_length(name)]
+    end.to_h
+  end
+
   def initialize(platform, project_ids)
     @platform = platform
     @project_ids = project_ids
