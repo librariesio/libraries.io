@@ -9,7 +9,15 @@ module SourceRank
   def update_source_rank_async
     UpdateSourceRankWorker.perform_async(self.id) if updated_at.present? && updated_at < 1.day.ago
 
-    ProjectScoreCalculationBatch.enqueue(platform, [id]) if ['rubygems', 'cargo', 'hex'].include?(platform.downcase)
+    ProjectScoreCalculationBatch.enqueue(platform, [id]) if platforms_with_scores_enabled.include?(platform.downcase)
+  end
+
+  def platforms_with_scores_enabled
+    [
+      "julia", "haxelib", "homebrew", "sublime", "alcatraz", "atom", "dub",
+      "purescript", "elm", "pub", "racket", "swiftpm", "rubygems", "nimble",
+      "cargo", "emacs", "inqlude", "hex", "carthage"
+    ]
   end
 
   def set_source_rank
