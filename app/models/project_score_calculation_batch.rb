@@ -15,6 +15,12 @@ class ProjectScoreCalculationBatch
     enqueue(platform, new_project_ids) if new_project_ids.any?
   end
 
+  def self.run_all
+    queue_status.each do |platform, count|
+      run(platform) unless count.zero?
+    end
+  end
+
   def self.enqueue(platform, project_ids)
     REDIS.zadd(queue_key(platform), project_ids.map{|id| [Time.now.to_i, id] })
   end
