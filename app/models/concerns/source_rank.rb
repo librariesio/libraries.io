@@ -8,6 +8,8 @@ module SourceRank
 
   def update_source_rank_async
     UpdateSourceRankWorker.perform_async(self.id) if updated_at.present? && updated_at < 1.day.ago
+
+    ProjectScoreCalculationBatch.enqueue(platform, [id]) if ['rubygems', 'cargo', 'hex'].include?(platform.downcase)
   end
 
   def set_source_rank
