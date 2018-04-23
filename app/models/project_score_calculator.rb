@@ -28,6 +28,7 @@ class ProjectScoreCalculator
   end
 
   def community_score
+    return nil if community_scores.values.compact.empty?
     community_scores.values.compact.sum/community_scores.values.compact.length.to_f
   end
 
