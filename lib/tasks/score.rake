@@ -12,4 +12,16 @@ namespace :scores do
       project_ids = batch.process
     end
   end
+
+  desc 'calculate scores for enqueued project ids'
+  task calculate: :environment do
+    ProjectScoreCalculationBatch.run_all
+  end
+
+  desc 'enqueue outdated project scores'
+  task update: :environment do
+    Project.where('score > 0').order('score_last_calculated ASC').limit(1000).each do |project|
+      ProjectScoreCalculationBatch.enqueue(project.platform, [project.id])
+    end
+  end
 end
