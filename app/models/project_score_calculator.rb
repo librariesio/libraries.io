@@ -23,6 +23,7 @@ class ProjectScoreCalculator
   end
 
   def popularity_score
+    return nil if popularity_scores.values.compact.empty?
     popularity_scores.values.compact.sum/popularity_scores.values.compact.length.to_f
   end
 
