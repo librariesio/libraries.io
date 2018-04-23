@@ -44,11 +44,15 @@ class ProjectScoreCalculationBatch
 
   def process
     projects_scope.find_each do |project|
-      score = ProjectScoreCalculator.new(project, @maximums).overall_score
-      next if project.score == score
-      project.update_columns(score: score,
-                             score_last_calculated: Time.zone.now)
-      @updated_projects << project if project.dependents_count > 0 && project.platform.downcase == @platform.downcase
+      begin
+        score = ProjectScoreCalculator.new(project, @maximums).overall_score
+        next if project.score == score
+        project.update_columns(score: score,
+                               score_last_calculated: Time.zone.now)
+        @updated_projects << project if project.dependents_count > 0 && project.platform.downcase == @platform.downcase
+      rescue
+        nil
+      end
     end
 
     calculate_dependents
