@@ -16,7 +16,8 @@ module SourceRank
     [
       "julia", "haxelib", "homebrew", "sublime", "alcatraz", "atom", "dub",
       "purescript", "elm", "pub", "racket", "swiftpm", "rubygems", "nimble",
-      "cargo", "emacs", "inqlude", "hex", "carthage"
+      "cargo", "emacs", "inqlude", "hex", "carthage", "platformio", "puppet",
+      "meteor", "hackage", "clojars", "cran", "cpan", "cocoapods", "wordpress"
     ]
   end
 
