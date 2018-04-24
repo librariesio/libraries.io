@@ -1,0 +1,42 @@
+<% title "Score Breakdown for #{@project} on #{@project.platform_name} - Libraries.io" %>
+
+<div class="row">
+  <div class="col-md-12">
+    <h1><i class="fa fa-star"></i> Score Breakdown for <%= link_to @project, project_path(@project.to_param) %></h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <% breakdown = @calculator.breakdown %>
+
+    <h2>Overall Score: <%= breakdown[:overall_score] %>/100</h2>
+
+    <% breakdown.each do |section, data| %>
+      <% next if section == :overall_score %>
+      <% if breakdown[section][:score] %>
+        <h3><%= section.to_s.humanize %>: <%= breakdown[section][:score].round %></h3>
+
+        <ul>
+          <% breakdown[section].each do |key, value| %>
+            <% next if key == :score %>
+            <li>
+              <%= key.to_s.humanize %>: <% if value.is_a?(Hash) %>
+                <ul>
+                  <% value.each do |k,v| %>
+                    <li>
+                      <%= k.to_s.humanize %>: <%= v.inspect %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% else %>
+                <%= value.inspect %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+
+  </div>
+</div>
