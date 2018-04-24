@@ -197,6 +197,11 @@ namespace :download do
     PackageManager::NPM.import
   end
 
+  desc 'Download all Opam packages'
+  task opam: :environment do
+    PackageManager::Opam.import
+  end
+
   desc 'Download recent Packagist packages asynchronously'
   task packagist: :environment do
     PackageManager::Packagist.import_recent_async
