@@ -41,22 +41,24 @@
       <% end %>
     <% end %>
 
-    <h2>Missing Elements</h2>
-    <% breakdown.each do |section, data| %>
-      <% next if section == :overall_score %>
-      <% next if breakdown[section].none?{|k,v| v.nil? } %>
-      <% if breakdown[section][:score] %>
-        <h3><%= section.to_s.humanize %>: <%= breakdown[section][:score].round %></h3>
+    <% if breakdown.any? {|_s, data| data.is_a?(Hash) && data.any?{|_k,v| v.nil? } } %>
+      <h2>Missing Elements</h2>
+      <% breakdown.each do |section, data| %>
+        <% next if section == :overall_score %>
+        <% next if breakdown[section].none?{|k,v| v.nil? } %>
+        <% if breakdown[section][:score] %>
+          <h3><%= section.to_s.humanize %>: <%= breakdown[section][:score].round %></h3>
 
-        <ul>
-          <% breakdown[section].each do |key, value| %>
-            <% next if key == :score %>
-            <% next unless value.nil? %>
-            <li>
-              <%= key.to_s.humanize %>
-            </li>
-          <% end %>
-        </ul>
+          <ul>
+            <% breakdown[section].each do |key, value| %>
+              <% next if key == :score %>
+              <% next unless value.nil? %>
+              <li>
+                <%= key.to_s.humanize %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
       <% end %>
     <% end %>
   </div>
