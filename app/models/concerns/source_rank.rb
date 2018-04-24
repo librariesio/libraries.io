@@ -9,16 +9,11 @@ module SourceRank
   def update_source_rank_async
     UpdateSourceRankWorker.perform_async(self.id) if updated_at.present? && updated_at < 1.day.ago
 
-    ProjectScoreCalculationBatch.enqueue(platform, [id]) if platforms_with_scores_enabled.include?(platform.downcase)
+    ProjectScoreCalculationBatch.enqueue(platform, [id]) unless platforms_without_scores_enabled.include?(platform.downcase)
   end
 
-  def platforms_with_scores_enabled
-    [
-      "julia", "haxelib", "homebrew", "sublime", "alcatraz", "atom", "dub",
-      "purescript", "elm", "pub", "racket", "swiftpm", "rubygems", "nimble",
-      "cargo", "emacs", "inqlude", "hex", "carthage", "platformio", "puppet",
-      "meteor", "hackage", "clojars", "cran", "cpan", "cocoapods", "wordpress"
-    ]
+  def platforms_without_scores_enabled
+    ["go", "npm", "packagist", "maven", "pypi", "nuget"]
   end
 
   def set_source_rank
