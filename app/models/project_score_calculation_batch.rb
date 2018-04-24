@@ -81,6 +81,6 @@ class ProjectScoreCalculationBatch
   end
 
   def eager_loads
-    [{versions: {runtime_dependencies: {project: :versions}}}, :registry_users, {repository: [:readme, :tags]}]
+    [{versions: {runtime_dependencies: {project: :versions}}}, :registry_users, {repository: [:readme]},  :published_tags]
   end
 end

@@ -256,7 +256,7 @@ class ProjectScoreCalculator
   end
 
   def published_releases
-    @published_releases ||= has_versions? ? @project.versions : @project.tags.published
+    @published_releases ||= has_versions? ? @project.versions : @project.published_tags
   end
 
   def inactive_statuses
