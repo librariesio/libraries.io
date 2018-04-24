@@ -172,7 +172,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/npm/base62/usage?api_key=#{@api_key}", "https://libraries.io/api/npm/base62/sourcerank?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to "https://libraries.io/api/npm/base62/usage?api_key=#{@api_key}", "https://libraries.io/api/npm/base62/usage?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}usage", :expires_in => 1.day do %>
       <pre class='well well-small'>
