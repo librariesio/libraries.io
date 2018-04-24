@@ -31,7 +31,7 @@
                   <% end %>
                 </ul>
               <% elsif value.is_a?(Numeric) %>
-                <%= value %>/100
+                <%= value.round %>/100
               <% else %>
                 <%= value.inspect %>
               <% end %>
