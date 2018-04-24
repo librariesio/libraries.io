@@ -12,7 +12,7 @@ module RepositorySourceRank
   end
 
   def update_source_rank_async
-    UpdateRepositorySourceRankWorker.perform_async(self.id)
+    UpdateRepositorySourceRankWorker.perform_async(self.id) unless rank_recently_updated?
   end
 
   def set_source_rank
