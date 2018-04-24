@@ -9,11 +9,7 @@ module SourceRank
   def update_source_rank_async
     UpdateSourceRankWorker.perform_async(self.id) if updated_at.present? && updated_at < 1.day.ago
 
-    ProjectScoreCalculationBatch.enqueue(platform, [id]) unless platforms_without_scores_enabled.include?(platform.downcase)
-  end
-
-  def platforms_without_scores_enabled
-    ["go", "npm", "packagist", "maven", "pypi", "nuget"]
+    ProjectScoreCalculationBatch.enqueue(platform, [id])
   end
 
   def set_source_rank
