@@ -234,7 +234,7 @@ class ProjectScoreCalculator
   end
 
   def maintainers_count
-    @project.registry_users.size
+    @maintainers_count ||= @project.registry_users.size
   end
 
   def platform_class
