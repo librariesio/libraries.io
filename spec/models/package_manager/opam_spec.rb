@@ -1,4 +1,4 @@
-require 'rails-helper'
+require 'rails_helper'
 
 describe PackageManager::Opam do
   let(:project) { create(:project, name: 'foo', platform: described_class.name) }
