@@ -54,6 +54,7 @@ Rails.application.routes.draw do
     PROJECT_CONSTRAINT = /[^\/]+/
     VERSION_CONSTRAINT = /[\w\.\-]+/
 
+    get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
     get '/:platform/:name/sourcerank', to: 'projects#sourcerank', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
     get '/:platform/:name/contributors', to: 'projects#contributors', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
     get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => PROJECT_CONSTRAINT, :version => VERSION_CONSTRAINT }, as: :version_tree
@@ -244,6 +245,7 @@ Rails.application.routes.draw do
   post '/:platform/:name/mute', to: 'projects#mute', as: :mute_project, constraints: { :name => /.*/ }
   delete '/:platform/:name/unmute', to: 'projects#unmute', as: :unmute_project, constraints: { :name => /.*/ }
   get '/:platform/:name/tree', to: 'tree#show', constraints: { :name => PROJECT_CONSTRAINT }, as: :tree
+  get '/:platform/:name/score', to: 'projects#score', as: :project_score, constraints: { :name => /.*/ }
   get '/:platform/:name/sourcerank', to: 'projects#sourcerank', as: :project_sourcerank, constraints: { :name => /.*/ }
   get '/:platform/:name/versions', to: 'projects#versions', as: :project_versions, constraints: { :name => /.*/ }
   get '/:platform/:name/tags', to: 'projects#tags', as: :project_tags, constraints: { :name => /.*/ }

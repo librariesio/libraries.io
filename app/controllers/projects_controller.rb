@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   before_action :find_project, only: [:show, :sourcerank, :about, :dependents,
                                       :dependent_repos, :your_dependent_repos,
                                       :versions, :tags, :mute, :unmute, :unsubscribe,
-                                      :sync]
+                                      :sync, :score]
   before_action :find_project_lite, only: [:top_dependent_repos, :top_dependent_projects]
 
   def index
@@ -161,6 +161,10 @@ class ProjectsController < ApplicationController
 
   def top_dependent_projects
     render layout: false
+  end
+
+  def score
+    @calculator = ProjectScoreCalculator.new(@project)
   end
 
   private

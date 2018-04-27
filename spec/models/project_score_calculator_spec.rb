@@ -318,6 +318,14 @@ describe ProjectScoreCalculator do
 
       expect(calculator.popularity_score).to eq(49)
     end
+
+    context 'when platform has no popularity metrics' do
+      let(:project) { build(:project, platform: 'Inqlude') }
+
+      it 'should be nil' do
+        expect(calculator.popularity_score).to eq(nil)
+      end
+    end
   end
 
   describe '#quality_score' do

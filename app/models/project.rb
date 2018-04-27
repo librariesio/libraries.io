@@ -24,6 +24,7 @@ class Project < ApplicationRecord
   has_many :contributions, through: :repository
   has_many :contributors, through: :contributions, source: :repository_user
   has_many :tags, through: :repository
+  has_many :published_tags, -> { where('published_at IS NOT NULL') }, through: :repository, class_name: 'Tag'
   has_many :dependents, class_name: 'Dependency'
   has_many :dependent_versions, through: :dependents, source: :version, class_name: 'Version'
   has_many :dependent_projects, -> { group('projects.id').order('projects.rank DESC NULLS LAST') }, through: :dependent_versions, source: :project, class_name: 'Project'

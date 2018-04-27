@@ -23,10 +23,12 @@ class ProjectScoreCalculator
   end
 
   def popularity_score
+    return nil if popularity_scores.values.compact.empty?
     popularity_scores.values.compact.sum/popularity_scores.values.compact.length.to_f
   end
 
   def community_score
+    return nil if community_scores.values.compact.empty?
     community_scores.values.compact.sum/community_scores.values.compact.length.to_f
   end
 
@@ -232,7 +234,7 @@ class ProjectScoreCalculator
   end
 
   def maintainers_count
-    @project.registry_users.size
+    @maintainers_count ||= @project.registry_users.size
   end
 
   def platform_class
@@ -254,7 +256,7 @@ class ProjectScoreCalculator
   end
 
   def published_releases
-    @published_releases ||= has_versions? ? @project.versions : @project.tags.published
+    @published_releases ||= has_versions? ? @project.versions : @project.published_tags
   end
 
   def inactive_statuses
