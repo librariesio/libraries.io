@@ -3,6 +3,7 @@ module PackageManager
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
     BIBLIOTHECARY_SUPPORT = false
+    BIBLIOTHECARY_PLANNED = true
     URL = 'https://opam.ocaml.org'
     COLOR = '#3be133'
 
