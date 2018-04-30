@@ -1,5 +1,5 @@
 class ProjectScoreCalculationBatch
-  def self.run(platform, limit = 5000)
+  def self.run(platform, limit = 1000)
     # pull project ids from start of redis sorted set
     key = queue_key(platform)
     project_ids = REDIS.multi do
