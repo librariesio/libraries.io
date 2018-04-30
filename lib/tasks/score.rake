@@ -20,7 +20,7 @@ namespace :scores do
 
   desc 'enqueue outdated project scores'
   task update: :environment do
-    Project.where('score > 0').order('score_last_calculated ASC').limit(1000).each do |project|
+    Project.where('score > 0').order('score_last_calculated ASC').limit(2000).each do |project|
       ProjectScoreCalculationBatch.enqueue(project.platform, [project.id])
     end
   end
