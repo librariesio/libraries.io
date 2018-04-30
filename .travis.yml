@@ -1,9 +1,10 @@
 language: ruby
 sudo: false
 rvm:
-- 2.5.0
+- 2.5.1
 before_install:
 - gem update --system
+- gem install bundler
 - curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.4.4/elasticsearch-2.4.4.deb
   && sudo dpkg -i --force-confnew elasticsearch-2.4.4.deb && sudo service elasticsearch
   restart
