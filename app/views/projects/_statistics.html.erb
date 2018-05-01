@@ -54,12 +54,14 @@
       <%= timeago_tag(@project.first_release.try(:published_at).presence || @project.repository.try(:created_at).presence || @project.created_at) %>
     </dd>
     <% if @project.repository.present? %>
-      <dt class='col-xs-8'>
-        Stars
-      </dt>
-      <dd class='col-xs-4'>
-        <%= link_to number_to_human(@project.repository.stargazers_count), @project.repository.stargazers_url %>
-      </dd>
+      <% if @project.repository.stargazers_count %>
+        <dt class='col-xs-8'>
+          Stars
+        </dt>
+        <dd class='col-xs-4'>
+          <%= link_to number_to_human(@project.repository.stargazers_count), @project.repository.stargazers_url %>
+        </dd>
+      <% end %>
       <dt class='col-xs-8'>
         Forks
       </dt>
