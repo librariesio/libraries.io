@@ -22,7 +22,7 @@ class ProjectScoreCalculationBatch
   end
 
   def self.run_async(platform)
-    UpdateSourceRankWorker.perform_async(platform)
+    ProjectScoreWorker.perform_async(platform)
   end
 
   def self.run_all_async
