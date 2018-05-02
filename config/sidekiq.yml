@@ -10,6 +10,7 @@ production:
   - [tree, 6]
   - [default, 4]
   - [small, 4]
+  - [score, 3]
   - [status, 2]
   - [issues, 2]
   - [owners, 2]
