@@ -15,7 +15,7 @@ namespace :scores do
 
   desc 'calculate scores for enqueued project ids'
   task calculate: :environment do
-    ProjectScoreCalculationBatch.run_all
+    ProjectScoreCalculationBatch.run_all_async
   end
 
   desc 'enqueue outdated project scores'

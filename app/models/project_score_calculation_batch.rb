@@ -21,6 +21,16 @@ class ProjectScoreCalculationBatch
     end
   end
 
+  def self.run_async(platform)
+    UpdateSourceRankWorker.perform_async(platform)
+  end
+
+  def self.run_all_async
+    queue_status.each do |platform, count|
+      run_async(platform) unless count.zero?
+    end
+  end
+
   def self.enqueue(platform, project_ids)
     REDIS.zadd(queue_key(platform), project_ids.map{|id| [Time.now.to_i, id] })
   end
