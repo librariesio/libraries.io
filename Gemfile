@@ -108,7 +108,7 @@ group :test do
   gem 'shoulda'
   gem 'simplecov', require: false
   gem 'faker'
-  gem 'poltergeist'
+  gem 'poltergeist', '1.17.0'
   gem 'json_spec'
   gem 'rspec-sidekiq'
 end
