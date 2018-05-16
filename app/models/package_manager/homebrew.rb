@@ -16,7 +16,7 @@ module PackageManager
     end
 
     def self.project_names
-      get("http://brewformulas.org/?format=json").map{|project| project['formula'] }.uniq
+      get("https://formulae.brew.sh/api/formula.json").map{|project| project['name'] }.uniq
     end
 
     def self.recent_names
@@ -25,7 +25,7 @@ module PackageManager
     end
 
     def self.project(name)
-      get("http://brewformulas.org/#{name}.json")
+      get("https://formulae.brew.sh/api/formula/#{name}.json")
     end
 
     def self.mapping(project)
