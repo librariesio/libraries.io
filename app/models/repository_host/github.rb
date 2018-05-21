@@ -9,7 +9,8 @@ module RepositoryHost
       Octokit::Forbidden,
       Octokit::InternalServerError,
       Octokit::BadGateway,
-      Octokit::ClientError
+      Octokit::ClientError,
+      Octokit::UnavailableForLegalReasons
     ]
 
     def self.api_missing_error_class
