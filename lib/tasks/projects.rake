@@ -44,7 +44,7 @@ namespace :projects do
   task chech_repo_status: :environment do
     exit if ENV['READ_ONLY'].present?
     ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].each do |platform|
-      projects = Project.platform(platform).maintained.where('projects.updated_at < ?', 1.week.ago).with_repo
+      projects = Project.platform(platform).maintained.where('projects.updated_at < ?', 1.week.ago).order('projects.updated_at ASC').with_repo.limit(500)
       repos = projects.map(&:repository)
       repos.each do |repo|
         CheckRepoStatusWorker.perform_async(repo.host_type, repo.full_name)
@@ -63,7 +63,7 @@ namespace :projects do
     end
 
     ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].each do |platform|
-      projects = Project.platform(platform).removed.with_repo
+      projects = Project.platform(platform).removed.with_repo.limit(500)
       repos = projects.map(&:repository)
       repos.each do |repo|
         CheckRepoStatusWorker.perform_async(repo.host_type, repo.full_name)
