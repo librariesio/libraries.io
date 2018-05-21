@@ -42,7 +42,7 @@ gem 'premailer-rails', '1.9.7'
 gem 'gemoji'
 gem 'foreman', require: false
 gem 'puma'
-gem 'rack-timeout'
+gem 'rack-timeout', '0.4.2'
 gem 'semantic_range'
 gem 'license-compatibility'
 gem 'escape_utils'
