@@ -4,6 +4,7 @@ class User < ApplicationRecord
   include Monitoring
 
   has_many :identities, dependent: :destroy
+  has_many :viewable_identities, -> { viewable }, anonymous_class: Identity
   has_many :repository_users, through: :identities
 
   has_many :subscriptions, dependent: :destroy
@@ -48,7 +49,7 @@ class User < ApplicationRecord
   end
 
   def main_identity
-    @main_identity ||= identities.viewable.first
+    @main_identity ||= viewable_identities.first
   end
 
   def to_param

@@ -105,7 +105,7 @@ module GithubIdentity
   end
 
   def github_identity
-    identities.find{|i| i.provider == 'github' }
+    viewable_identities.find{|i| i.provider == 'github' }
   end
 
   def github_public_identity

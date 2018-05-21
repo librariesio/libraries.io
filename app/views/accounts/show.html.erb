@@ -26,7 +26,7 @@
           <%= fa_icon('bitbucket') %> Connect Bitbucket
         <% end %>
         <h4>Connected Accounts</h4>
-        <% current_user.identities.viewable.each do |identity| %>
+        <% current_user.viewable_identities.each do |identity| %>
           <button class="btn btn-default tip" title="<%= RepositoryHost::Base.format(identity.provider) %>">
             <%= fa_icon(identity.provider) %> <%= identity.nickname %>
           </button>
