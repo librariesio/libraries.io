@@ -77,6 +77,16 @@ document.addEventListener('turbolinks:load', function(){
   load_async('#top_dependent_projects');
   load_async('#top_dependent_repos');
   load_async('#repository_dependencies');
+
+  $('.rss').on('click', function(){
+    subtome($(this).attr('href'))
+    return false;
+  })
+
+  $('input[name="subscription[include_prerelease]"]').on('change',function(){
+    console.log('chanage')
+    $(this).parents('form').submit();
+  });
 })
 
 function load_async(id) {
@@ -87,15 +97,6 @@ function load_async(id) {
     });
   }
 }
-
-$('.rss').on('click', function(){
-  subtome($(this).attr('href'))
-  return false;
-})
-
-$('input[name="subscription[include_prerelease]"]').on('change',function(){
-  $(this).parents('form').submit();
-});
 
 $(document).ready(stickFooter);
 
