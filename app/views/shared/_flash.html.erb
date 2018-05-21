@@ -45,3 +45,15 @@
     </div>
   </div>
 <% end %>
+
+<% if flash.empty? %>
+  <% if current_user && current_user.optin == false %>
+    <div class='alert alert-danger'>
+      We have updated our <a href='/terms'>terms of service</a> and <a href='/privacy'>privacy policy</a>. If you do not accept these changes <b>your account will be removed</b> at some point in the future. <%= link_to 'Accept', optin_account_path, method: 'put', class: 'btn btn-success btn-sm', rel: 'nofollow', title: 'Accept the new terms of service and privacy policy' %>
+    </div>
+  <% elsif !(logged_in? && current_user.admin?) %>
+    <div class="alert alert-info hidden-xs" role="alert">
+      <strong>Introducing <a href="https://tidelift.com" target="_blank" style="text-decoration:underline">the Tidelift Subscription</a>.</strong> Professional-quality security updates and maintenance for the open source projects you depend on.
+    </div>
+  <% end %>
+<% end %>
