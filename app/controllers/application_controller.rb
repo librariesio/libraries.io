@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
   def current_user
     return nil if in_read_only_mode?
     return nil if session[:user_id].blank?
-    @current_user ||= User.includes(:viewable_identities).find_by_id(session[:user_id])
+    @current_user ||= User.includes(viewable_identities: :repository_user).find_by_id(session[:user_id])
   end
 
   def logged_in?
