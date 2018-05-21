@@ -4,7 +4,7 @@ class DashboardController < ApplicationController
   def index
     @orgs = current_user.adminable_repository_organisations.order(:login)
     @org = @orgs.find{|org| org.login == params[:org] }
-    @repos = current_user.adminable_repositories.order('fork ASC, pushed_at DESC').includes(:repository_subscriptions).paginate(per_page: 30, page: page_number)
+    @repos = current_user.adminable_repositories.order('fork ASC, pushed_at DESC').paginate(per_page: 30, page: page_number)
     if @org
       @repos = @repos.from_org(@org)
     else
