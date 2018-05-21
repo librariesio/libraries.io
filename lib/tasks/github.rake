@@ -23,7 +23,7 @@ namespace :github do
   desc 'Update source rank'
   task update_source_rank: :environment do
     exit if ENV['READ_ONLY'].present?
-    Repository.source.not_removed.open_source.where(rank: nil).order('repositories.stargazers_count DESC').limit(5000).select('id').each(&:update_source_rank_async)
+    Repository.source.not_removed.open_source.where(rank: nil).order('repositories.stargazers_count DESC').limit(500).select('id').each(&:update_source_rank_async)
   end
 
   desc 'Sync github issues'
