@@ -32,6 +32,12 @@ class Admin::ProjectsController < Admin::ApplicationController
     search('unmaintained')
   end
 
+  def destroy
+    @project = Project.find(params[:id])
+    @project.destroy
+    redirect_to admin_stats_path, notice: 'Project deleted'
+  end
+
   private
 
   def project_params

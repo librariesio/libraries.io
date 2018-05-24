@@ -1,12 +1,12 @@
 <%= render 'admin/nav' %>
+<h2>
+  Admin / <%= @project.platform_name %> / <%= link_to @project, project_path(@project.to_param) %>
+  <% if @project.repository.present? %>
+    <%= link_to fa_icon(@project.repository.host_type.downcase), @project.repository.url, target: :blank %>
+  <% end %>
+</h2>
 <div class="row">
-  <%= simple_form_for(@project, url: admin_project_path(@project.id), html: { class: 'form-vertical col-md-6' }) do |form| %>
-    <h2>
-      Admin / <%= @project.platform_name %> / <%= link_to @project, project_path(@project.to_param) %>
-      <% if @project.repository.present? %>
-        <%= link_to fa_icon(@project.repository.host_type.downcase), @project.repository.url, target: :blank %>
-      <% end %>
-    </h2>
+  <%= simple_form_for(@project, url: admin_project_path(@project.id), html: { class: 'form-vertical col-md-8' }) do |form| %>
     <% if @project.description.present? %>
     <p>
       description: <%= @project.description %>
@@ -30,4 +30,7 @@
 
     <%= form.submit class: 'btn btn-primary' %>
   <% end %>
+  <div class="col-md-4">
+    <%= button_to 'Delete Package', admin_project_path, method: :delete, class: 'btn btn-danger', data: {confirm: 'Only do this if the package is gone, otherwise set status to "Hidden"'} %>
+  </div>
 </div>
