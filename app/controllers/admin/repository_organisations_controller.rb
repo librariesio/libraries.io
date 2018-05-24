@@ -16,12 +16,35 @@ class Admin::RepositoryOrganisationsController < Admin::ApplicationController
     @platforms = orginal_scope.pluck(:platform).inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|_k,v| v }.reverse.first(20)
   end
 
+  def edit
+
+  end
+
+  def update
+    @user.update_attributes(user_params)
+    redirect_to admin_edit_owner_path(@user.host_type.downcase, @user.login), notice: "#{@user.org? ? 'Organisation' : 'User'} updated"
+  end
+
+  def destroy
+    @user.repositories.each(&:destroy)
+    @user.destroy
+    redirect_to admin_stats_path, notice: "#{@user.org? ? 'Organisation' : 'User'} and their repositories deleted"
+  end
+
   private
 
   def find_user
-    @user = RepositoryUser.host(current_host).visible.login(params[:login]).first
-    @user = RepositoryOrganisation.host(current_host).visible.login(params[:login]).first if @user.nil?
+    @user = RepositoryUser.host(current_host).login(params[:login]).first
+    @user = RepositoryOrganisation.host(current_host).login(params[:login]).first if @user.nil?
     raise ActiveRecord::RecordNotFound if @user.nil?
     redirect_to url_for(login: @user.login), :status => :moved_permanently if params[:login] != @user.login
+  end
+
+  def user_params
+    if @user.org?
+      params.require(:repository_organisation).permit(:hidden)
+    else
+      params.require(:repository_user).permit(:hidden)
+    end
   end
 end

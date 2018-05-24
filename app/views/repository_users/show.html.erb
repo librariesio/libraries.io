@@ -8,6 +8,9 @@
       <%= image_tag @user.avatar_url(100), width: 50, height: 50, alt: @user %>
       <%= @user %>
       <%= link_to fa_icon(@user.host_type.downcase), @user.repository_url, class: 'tip', title: "View #{@user.login} on #{@user.host_type}" %>
+      <% if logged_in? && current_user.admin? %>
+        <%= link_to 'Edit in Admin', admin_edit_owner_path(@user.host_type.downcase, @user.login), class: 'btn btn-danger ', rel: 'nofollow' %>
+      <% end %>
     </h1>
     <% unless @user.org? %>
       <% count = @user.open_source_contributions.count %>
