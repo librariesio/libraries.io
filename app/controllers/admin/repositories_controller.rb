@@ -42,6 +42,12 @@ class Admin::RepositoriesController < Admin::ApplicationController
     search('unmaintained')
   end
 
+  def destroy
+    @repository = Repository.find(params[:id])
+    @repository.destroy
+    redirect_to admin_stats_path, notice: 'Repository deleted'
+  end
+
   private
 
   def repository_params

@@ -1,29 +1,24 @@
 <%= render 'admin/nav' %>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-8">
     <h2>
       Admin / <%= link_to @repository.full_name, repository_path(@repository.to_param) %>
       <%= link_to fa_icon(@repository.host_type.downcase), @repository.url, target: :blank %>
     </h2>
-
-    <p>
-      <%= @repository.description %>
-    </p>
-
-    <p>
-      <%= link_to "Deprecate", deprecate_admin_repository_path(@repository.id), class: 'btn btn-danger', method: :put, target: :blank %>
-      <%= link_to "Unmaintain", unmaintain_admin_repository_path(@repository.id), class: 'btn btn-warning', method: :put, target: :blank %>
-    </p>
-
-    <hr>
-
   </div>
 </div>
 <div class='row'>
   <%= simple_form_for(@repository, url: admin_repository_path(@repository.id), html: { class: 'form-vertical col-md-6' }) do |form| %>
+    <p>
+      <%= @repository.description %>
+    </p>
+
     <%= form.input :license, include_blank: true, selected: @repository.license, label: 'License', collection: Project.popular_licenses(:facet_limit => 100).map{|l| format_license(l['key']) } %>
     <%= form.input :status, include_blank: true, collection: Repository::STATUSES %>
 
     <%= form.submit class: 'btn btn-primary' %>
   <% end %>
+  <div class="col-md-6">
+    <%= button_to 'Delete Repository', admin_repository_path(@repository.id), method: :delete, class: 'btn btn-danger pull-right', data: {confirm: 'Only do this if the repository is gone, otherwise set status to "Hidden"'} %>
+  </div>
 </div>
