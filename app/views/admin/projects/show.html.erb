@@ -31,6 +31,6 @@
     <%= form.submit class: 'btn btn-primary' %>
   <% end %>
   <div class="col-md-4">
-    <%= button_to 'Delete Package', admin_project_path, method: :delete, class: 'btn btn-danger', data: {confirm: 'Only do this if the package is gone, otherwise set status to "Hidden"'} %>
+    <%= button_to 'Delete Package', admin_project_path(@project.id), method: :delete, class: 'btn btn-danger', data: {confirm: 'Only do this if the package is gone, otherwise set status to "Hidden"'} %>
   </div>
 </div>
