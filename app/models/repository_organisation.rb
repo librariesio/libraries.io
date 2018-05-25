@@ -91,6 +91,16 @@ class RepositoryOrganisation < ApplicationRecord
     update_attributes(last_synced_at: Time.now)
   end
 
+  def recently_synced?
+    last_synced_at && last_synced_at > 1.day.ago
+  end
+
+  def manual_sync
+    async_sync
+    self.last_synced_at = Time.zone.now
+    save
+  end
+
   def find_repositories
     Repository.host(host_type).where('full_name ILIKE ?', "#{login}/%").update_all(repository_user_id: nil, repository_organisation_id: self.id)
   end

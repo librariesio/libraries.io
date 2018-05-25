@@ -172,6 +172,7 @@ Rails.application.routes.draw do
     get '/:host_type/:login/contributions', to: 'repository_users#contributions', as: :user_contributions
     get '/:host_type/:login/projects', to: 'repository_users#projects', as: :user_projects
     get '/:host_type/:login/contributors', to: 'repository_users#contributors', as: :user_contributors
+    post '/:host_type/:login/sync', to: 'repository_users#sync', as: :sync_user
     get '/:host_type/:login', to: 'repository_users#show', as: :user
 
     get '/:host_type/:owner/:name', to: 'repositories#show', as: :repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }

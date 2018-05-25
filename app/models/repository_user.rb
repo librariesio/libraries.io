@@ -72,6 +72,16 @@ class RepositoryUser < ApplicationRecord
     update_attributes(last_synced_at: Time.now)
   end
 
+  def recently_synced?
+    last_synced_at && last_synced_at > 1.day.ago
+  end
+
+  def manual_sync
+    async_sync
+    self.last_synced_at = Time.zone.now
+    save
+  end
+
   def self.create_from_host(host_type, user_hash)
     RepositoryOwner.const_get(host_type.capitalize).create_user(user_hash)
   end

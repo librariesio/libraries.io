@@ -46,6 +46,16 @@ class RepositoryUsersController < ApplicationController
     @contributors = @user.contributors.select(:host_type, :name, :login, :uuid).paginate(page: params[:page])
   end
 
+  def sync
+    if @user.recently_synced?
+      flash[:error] = "User has already been synced recently"
+    else
+      @user.manual_sync
+      flash[:notice] = "User has been queued to be resynced"
+    end
+    redirect_back fallback_location: user_path(@user.to_param)
+  end
+
   private
 
   def find_user

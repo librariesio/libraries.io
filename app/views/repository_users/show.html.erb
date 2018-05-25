@@ -101,3 +101,26 @@
   </div>
 </div>
 <% end %>
+<div class="row">
+  <div class="col-md-12">
+    <p>
+      <small class='text-muted'>Last synced: <%= @user.last_synced_at || @user.created_at %></small>
+    </p>
+    <% unless @user.recently_synced? %>
+      <% if logged_in? %>
+        <p>
+          <%= link_to sync_user_path(@user.to_param), class: 'btn btn-primary btn-xs', method: :post do %>
+            <%= fa_icon 'refresh' %>
+            Resync
+          <% end %>
+        </p>
+      <% else %>
+        <p>
+          <small class='text-muted'>
+            <%= link_to 'Login', login_path(return_to: request.original_url) %> to resync this page
+          </small>
+        </p>
+      <% end %>
+    <% end %>
+  </div>
+</div>
