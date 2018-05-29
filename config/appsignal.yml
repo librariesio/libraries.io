@@ -12,6 +12,7 @@ default: &defaults
     - ActiveRecord::RecordNotFound
     - ActionController::RoutingError
     - ActiveRecord::RecordInvalid
+    - ActionController::UnknownFormat
 
   # Enable Garbage Collection instrumentation
   enable_gc_instrumentation: true
