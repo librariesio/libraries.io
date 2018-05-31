@@ -94,6 +94,7 @@ group :development do
   gem 'capistrano-maintenance', require: nil
   gem 'capistrano-rails-console', require: nil
   gem 'listen'
+  gem 'pry'
   gem 'spring-watcher-listen'
 end
 

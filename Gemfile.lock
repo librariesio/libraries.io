@@ -133,6 +133,7 @@ GEM
     chartkick (2.3.4)
     citrus (3.0.2)
     cliver (0.3.2)
+    coderay (1.1.2)
     commander (4.4.5)
       highline (~> 1.7.2)
     commonmarker (0.17.9)
@@ -349,6 +350,9 @@ GEM
       premailer (~> 1.7, >= 1.7.9)
     protocol (1.0.1)
       ruby_parser (~> 3.0)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
     public_suffix (3.0.2)
     puma (3.11.4)
     rack (2.0.5)
@@ -622,6 +626,7 @@ DEPENDENCIES
   pictogram
   poltergeist (= 1.17.0)
   premailer-rails (= 1.9.7)
+  pry
   puma
   rack-attack
   rack-attack-rate-limit
@@ -662,4 +667,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.1
+   1.16.2
