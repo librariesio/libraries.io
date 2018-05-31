@@ -5,13 +5,13 @@
   <%= link_to @project, project_path(@project.to_param) %>
 </h1>
 <hr>
-<% if @dependent_repos.any? %>
-  <p class="lead"><strong><%= @dependent_repos.total_entries %></strong> <%= 'repository'.pluralize(@dependent_repos.total_entries) %> depend on <%= link_to @project, project_path(@project.to_param) %>:</p>
+<% if @project.dependent_repos_count.positive? %>
+  <p class="lead"><strong><%= @project.dependent_repos_count %></strong> <%= 'repository'.pluralize(@project.dependent_repos_count) %> depend on <%= link_to @project, project_path(@project.to_param) %>:</p>
 <% end %>
 
 <div class="row">
   <div class="col-sm-8">
-    <% if @dependent_repos.any? %>
+    <% if @project.dependent_repos_count.positive? %>
       <%= render @dependent_repos, cache: true %>
       <%= will_paginate @dependent_repos, page_links: false %>
     <% else %>
