@@ -113,12 +113,14 @@ module RepoSearch
       }
 
       unless options[:api]
-        search_definition[:aggs] = {
-          language: Project.facet_filter(:language, facet_limit, options),
-          license: Project.facet_filter(:license, facet_limit, options),
-          keywords: Project.facet_filter(:keywords, facet_limit, options),
-          host_type: Project.facet_filter(:host_type, facet_limit, options)
-        }
+        unless options[:no_facet]
+          search_definition[:aggs] = {
+            language: Project.facet_filter(:language, facet_limit, options),
+            license: Project.facet_filter(:license, facet_limit, options),
+            keywords: Project.facet_filter(:keywords, facet_limit, options),
+            host_type: Project.facet_filter(:host_type, facet_limit, options)
+          }
+        end
         if query.present?
           search_definition[:suggest] = {
             did_you_mean: {

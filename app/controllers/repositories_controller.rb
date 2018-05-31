@@ -151,7 +151,7 @@ class RepositoriesController < ApplicationController
         language: current_language,
         keywords: current_keywords,
         host_type: formatted_host
-      }, sort: sort, order: 'desc').paginate(per_page: 6, page: 1)
+      }, sort: sort, order: 'desc', no_facet: true).paginate(per_page: 6, page: 1)
       search.results.map{|result| RepositorySearchResult.new(result) }
     end
   end
