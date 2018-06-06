@@ -182,7 +182,7 @@ class Project < ApplicationRecord
   end
 
   def download_url(version = nil)
-    platform_class.download_url(name, version)
+    platform_class.download_url(name, version) if version
   end
 
   def latest_download_url
