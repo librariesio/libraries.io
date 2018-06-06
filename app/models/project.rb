@@ -13,7 +13,7 @@ class Project < ApplicationRecord
   API_FIELDS = [:name, :platform, :description, :language, :homepage,
                 :repository_url, :normalized_licenses, :rank, :status,
                 :latest_release_number, :latest_release_published_at,
-                :dependents_count, :dependent_repos_count]
+                :dependents_count, :dependent_repos_count, :latest_download_url]
 
   validates_presence_of :name, :platform
   validates_uniqueness_of :name, scope: :platform, case_sensitive: true
@@ -183,6 +183,10 @@ class Project < ApplicationRecord
 
   def download_url(version = nil)
     platform_class.download_url(name, version)
+  end
+
+  def latest_download_url
+    download_url(latest_release_number)
   end
 
   def documentation_url(version = nil)
