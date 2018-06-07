@@ -25,7 +25,7 @@ RSpec.configure do |config|
 end
 
 def project_json_response(projects)
-  projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release], include: {versions: {only: [:number, :published_at]} })
+  projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release, :latest_download_url], include: {versions: {only: [:number, :published_at]} })
 end
 
 RSpec::Sidekiq.configure do |config|
