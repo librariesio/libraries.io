@@ -14,8 +14,10 @@
         </div>
         <div class="col-xs-4">
           <br>
-          <%= link_to project.repository.try(:url), class: 'btn btn-primary' do %>
-          Suggest a License
+          <% if project.repository.try(:url) %>
+            <%= link_to project.repository.try(:url), class: 'btn btn-primary' do %>
+            Suggest a License
+            <% end %>
           <% end %>
           <% if current_user && current_user.admin? %>
             <%= link_to admin_project_path(project.id), class: 'btn' do %>
