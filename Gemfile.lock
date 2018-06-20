@@ -80,7 +80,7 @@ GEM
     amatch (0.4.0)
       mize
       tins (~> 1.0)
-    api-pagination (4.8.0)
+    api-pagination (4.7.1)
     appsignal (2.6.1)
       rack
     arel (8.0.0)
