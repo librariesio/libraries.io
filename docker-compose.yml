@@ -49,6 +49,6 @@ services:
 
   web:
     <<: *app_base
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server --port 3000 --bind '0.0.0.0'"
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server --port 3000 --binding '0.0.0.0'"
     ports:
       - "3000:3000"
