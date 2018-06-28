@@ -16,4 +16,29 @@ describe PackageManager::Maven do
       expect(described_class.package_link(project, '2.0.0')).to eq("http://search.maven.org/#artifactdetails%7Ccom.github.jparkie%7Cpdd%7C2.0.0%7Cjar")
     end
   end
+
+  describe 'mapping_from_pom_xml' do
+    let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read) }
+    let(:parsed) { described_class.mapping_from_pom_xml(pom) }
+
+    it 'to find license' do
+      expect(parsed[:licenses]).to eq(["Apache-2.0"])
+    end
+
+    it 'to find name' do
+      expect(parsed[:name]).to eq("com.google.api.grpc:proto-google-common-protos")
+    end
+
+    it 'to find description' do
+      expect(parsed[:description]).to eq("PROTO library for proto-google-common-protos")
+    end
+
+    it 'to find homepage' do
+      expect(parsed[:homepage]).to eq("https://github.com/googleapis/googleapis")
+    end
+
+    it 'to find repository url' do
+      expect(parsed[:repository_url]).to eq("https://github.com/googleapis/googleapis-dummy")
+    end
+  end
 end
