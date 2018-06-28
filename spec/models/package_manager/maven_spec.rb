@@ -22,7 +22,7 @@ describe PackageManager::Maven do
     let(:parsed) { described_class.mapping_from_pom_xml(pom) }
 
     it 'to find license' do
-      expect(parsed[:licenses]).to eq(["Apache-2.0"])
+      expect(parsed[:licenses]).to eq("Apache-2.0")
     end
 
     it 'to find name' do
