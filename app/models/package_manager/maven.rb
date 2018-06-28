@@ -84,7 +84,7 @@ module PackageManager
         homepage: xml.locate('url').first.try(:nodes).try(:first),
         repository_url: repo_fallback(xml.locate('scm/url').first.try(:nodes).try(:first),
                                       xml.locate('url').first.try(:nodes).try(:first)),
-        licenses: xml.locate('licenses/license/name').map{|l| l.nodes}.flatten
+        licenses: xml.locate('licenses/license/name').map{|l| l.nodes}.flatten.join(",")
       }
     end
 
