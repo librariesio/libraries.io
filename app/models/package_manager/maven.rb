@@ -69,7 +69,7 @@ module PackageManager
       base_url = "http://repo1.maven.org/maven2/#{project[:groupId]}/#{project[:artifactId]}"
       latest_version = project[:versions].last[:number]
       version_xml = get_xml(base_url + "/#{latest_version}/#{project[:artifactId]}-#{latest_version}.pom")
-      self.mapping_from_pom_xml(version_xml)
+      self.mapping_from_pom_xml(version_xml).merge({name: project[:name]})
     end
 
     def self.mapping_from_pom_xml(version_xml)
@@ -79,7 +79,6 @@ module PackageManager
         xml = version_xml
       end
       {
-        name:  xml.locate('name').first.try(:nodes).try(:first),
         description: xml.locate('description').first.try(:nodes).try(:first),
         homepage: xml.locate('url').first.try(:nodes).try(:first),
         repository_url: repo_fallback(xml.locate('scm/url').first.try(:nodes).try(:first),

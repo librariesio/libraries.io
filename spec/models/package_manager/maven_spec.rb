@@ -25,10 +25,6 @@ describe PackageManager::Maven do
       expect(parsed[:licenses]).to eq("Apache-2.0")
     end
 
-    it 'to find name' do
-      expect(parsed[:name]).to eq("com.google.api.grpc:proto-google-common-protos")
-    end
-
     it 'to find description' do
       expect(parsed[:description]).to eq("PROTO library for proto-google-common-protos")
     end
