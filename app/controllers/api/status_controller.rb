@@ -11,6 +11,10 @@ class Api::StatusController < Api::ApplicationController
     else
       @projects = []
     end
+    fields = Project::API_FIELDS
+    if params[:score]
+      fields.push :score
+    end
     render json: @projects.to_json({
       only: Project::API_FIELDS,
       methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release],
