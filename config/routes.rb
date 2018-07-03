@@ -31,6 +31,8 @@ Rails.application.routes.draw do
     put '/subscription/:platform/:name', to: 'subscriptions#update'
     delete '/subscription/:platform/:name', to: 'subscriptions#destroy'
 
+    post '/projects/dependencies', to: 'projects#dependencies_bulk'
+
     scope constraints: {host_type: /(github|gitlab|bitbucket)/i}, defaults: { host_type: 'github' } do
       get '/:host_type/issues/help-wanted', to: 'issues#help_wanted'
       get '/:host_type/issues/first-pull-request', to: 'issues#first_pull_request'

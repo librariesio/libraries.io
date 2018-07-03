@@ -466,4 +466,33 @@ class Project < ApplicationRecord
       registry_permissions.find{|rp| rp.registry_user == owner}.destroy
     end
   end
+
+  def self.find_with_includes!(platform, name, includes)
+    # this clunkiness is because .includes() doesn't allow zero args and we want
+    # to allow that.
+    query = self.visible.platform(platform).where(name: name)
+    query = query.includes(*includes) unless includes.empty?
+    project = query.first
+    if project.nil?
+      query = self.visible.lower_platform(platform).lower_name(name)
+      query = query.includes(*includes) unless includes.empty?
+      project = query.first
+    end
+    raise ActiveRecord::RecordNotFound if project.nil?
+    raise ActiveRecord::RecordNotFound if project.status == 'Hidden'
+    project
+  end
+
+  def find_version!(version_name)
+    version = if version_name == 'latest'
+                versions.sort.first
+              else
+                versions.find_by_number(version_name)
+              end
+
+    raise ActiveRecord::RecordNotFound if version.nil?
+
+    version
+  end
+
 end

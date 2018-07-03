@@ -1,6 +1,7 @@
 require "rails_helper"
 
 describe "Api::ProjectsController" do
+  let!(:user) { create(:user) }
   let!(:project) { create(:project, name: 'foo.bar@baz:bah,name') }
   let!(:dependent_project) { create(:project) }
   let!(:version) { create(:version, project: project) }
@@ -74,6 +75,7 @@ describe "Api::ProjectsController" do
         "dependents_count": project.dependents_count,
         "dependent_repos_count": project.dependent_repos_count,
         "versions": project.versions.as_json(only: [:number, :published_at]),
+        "dependencies_for_version": version.number,
         "dependencies": version.dependencies.map do |dependency|
           {
           "project_name": dependency.name,
@@ -89,6 +91,118 @@ describe "Api::ProjectsController" do
           }
         end
         }.to_json)
+    end
+  end
+
+  describe "GET /api/:platform/:name/dependencies?subset=minimum", type: :request do
+    it "renders successfully" do
+      get "/api/#{project.platform}/#{project.name}/#{version.number}/dependencies?subset=minimum"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq('application/json')
+      expect(response.body).to be_json_eql({
+        "name": project.name,
+        "platform": project.platform,
+        "dependencies_for_version": version.number,
+        "dependencies": version.dependencies.map do |dependency|
+          {
+          "project_name": dependency.name,
+          "name": dependency.name,
+          "platform": dependency.platform,
+          "requirements": dependency.requirements,
+          "latest_stable": dependency.latest_stable,
+          "latest": dependency.latest,
+          "deprecated": dependency.deprecated,
+          "outdated": dependency.outdated,
+          "filepath": dependency.filepath,
+          "kind": dependency.kind
+          }
+        end
+        }.to_json)
+    end
+  end
+
+  describe "POST /api/projects/dependencies", type: :request do
+    it "renders successfully" do
+      post "/api/projects/dependencies", params: {
+             api_key: user.api_key,
+             subset: "minimum",
+             projects: [
+               {name: project.name,
+                platform: project.platform,
+                version: version.number},
+               # supposed to lowercase name/platform when needed,
+               # and omit version to use latest
+               {name: project.name.upcase,
+                platform: project.platform.upcase},
+               # 404 on platform
+               {name: 'nope',
+                platform: 'unplatform'},
+               # 404 on name
+               {name:'noooooo',
+                platform: 'rubygems'}]
+           }
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq('application/json')
+      expect(response.body).to be_json_eql([
+        { status: 200,
+          body: {
+            "name": project.name,
+            "platform": project.platform,
+            "dependencies_for_version": version.number,
+            "dependencies": version.dependencies.map do |dependency|
+            {
+              "project_name": dependency.name,
+              "name": dependency.name,
+              "platform": dependency.platform,
+              "requirements": dependency.requirements,
+              "latest_stable": dependency.latest_stable,
+              "latest": dependency.latest,
+              "deprecated": dependency.deprecated,
+              "outdated": dependency.outdated,
+              "filepath": dependency.filepath,
+              "kind": dependency.kind
+            }
+            end
+          }
+        },
+        { status: 200,
+          body: {
+            "name": project.name,
+            "platform": project.platform,
+            "dependencies_for_version": version.number,
+            "dependencies": version.dependencies.map do |dependency|
+            {
+              "project_name": dependency.name,
+              "name": dependency.name,
+              "platform": dependency.platform,
+              "requirements": dependency.requirements,
+              "latest_stable": dependency.latest_stable,
+              "latest": dependency.latest,
+              "deprecated": dependency.deprecated,
+              "outdated": dependency.outdated,
+              "filepath": dependency.filepath,
+              "kind": dependency.kind
+            }
+            end
+          }
+        },
+        { status: 404,
+          body: {
+            "error": "Error 404, project or project version not found.",
+            "name": "nope",
+            "platform": "unplatform",
+            "dependencies_for_version": "latest"
+          }
+        },
+        { status: 404,
+          body: {
+            "error": "Error 404, project or project version not found.",
+            "name": "noooooo",
+            "platform": "rubygems",
+            "dependencies_for_version": "latest"
+          }
+        }
+        ].to_json)
     end
   end
 
