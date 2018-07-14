@@ -1,6 +1,6 @@
 ## Individual Repository Search
 
-The repository search endpoint allows you to search a specific platform (e.g. Github, Gitlab, Bitbucket) for the repositories which contain the query string. The request will find all projects that contain the search parameter within the title.
+The repository search endpoint allows you to search (currently Github, Gitlab, or Bitbucket) for the repositories which contain the query string. The request will find all projects that contain the search parameter within the title.
 
 Caution: This search will NOT query the keywords of each project, the title has to contain the query string.
 
@@ -12,7 +12,7 @@ A basic request to the repository search endpoint with minimal parameters will l
 
 Example: ```GET https://libraries.io/api/:platform/search?q=:project```
 
-### Sorting Request Response
+#### Sorting the Response
 
 It is also possible to sort the response of repositories by:
 
@@ -37,7 +37,7 @@ https://libraries.io/api/:platform/search?1=:project&sort=:sort_method
 
 ### Response
 
-The response body will be a collection of all the repositories containing that query string. If a single repository is somehow returned, it will still be inside a collection.
+The response body will be a collection of all the repositories containing that query string.
 
 The current first response for ```GET https://libraries.io/api/github/search?q=rails``` will return:
 ```
