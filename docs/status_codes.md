@@ -21,7 +21,7 @@ A forbidden status code will be returned if a valid API key is not passed with t
 
 `Status: 404 Not Found`
 
-The most common use case for a not found status is when ActiveRecord cannot find the intended request in the database.
+The most common case for a not found status is when ActiveRecord cannot find the intended request in the database.
 
 
 #### Unprocessable Entity
