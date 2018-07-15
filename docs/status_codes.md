@@ -1,6 +1,6 @@
 ## HTTP Status Codes
 
-The Libraries.io will return the following HTTP Status Codes as intended responses.
+Libraries.io will return the following HTTP Status Codes as intended responses.
 
 
 #### Successful Response:
