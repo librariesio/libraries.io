@@ -1,37 +1,42 @@
-server '51.15.130.54',    user: 'root', roles: %w{cron}
+require "fog/google"
+require "json"
+google_creds = JSON.load(File.open('.google_creds.json'))
+goog_config = {
+  google_project: google_creds['project_id'],
+  google_client_email: google_creds['client_email'],
+  google_json_key_location: '.google_creds.json'
+}
+goog = Fog::Compute::Google.new(config=goog_config)
 
-server '163.172.185.77',  user: 'root', roles: %w{app web}
-server '163.172.154.122', user: 'root', roles: %w{app web}
-server '163.172.161.163', user: 'root', roles: %w{app web}
-server '163.172.139.6',   user: 'root', roles: %w{app web}
+web = goog.servers.all(filter: 'labels.project = libraries AND labels.environment = production AND labels.type = app')
 
-server '163.172.139.253', user: 'root', roles: %w{app worker}
-server '163.172.138.184', user: 'root', roles: %w{app worker}
-server '163.172.155.116', user: 'root', roles: %w{app worker}
-server '163.172.165.101', user: 'root', roles: %w{app worker}
-server '51.15.141.224', user: 'root', roles: %w{app worker}
+web.each do |s|
+  server s.network_interfaces[0][:access_configs][0][:nat_ip], user: 'deploy', roles: [s.labels.fetch(:type, ''), s.labels.fetch(:role, '')]
+end
+
+# server '51.15.130.54',    user: 'root', roles: %w{cron}
 
 namespace :deploy do
   task :restart do
     on roles(:app) do |host|
-      execute "sleep #{rand(100)} && restart librariesio"
+      execute "sleep #{rand(100)} && systemctl --user restart librariesio"
     end
   end
 
   task :restart_web do
     on roles(:web) do |host|
-      execute "sleep #{rand(100)} && restart librariesio"
+      execute "sleep #{rand(100)} && systemctl --user restart librariesio"
     end
   end
 
   task :stop do
     on roles(:worker) do |host|
-      execute "stop librariesio"
+      execute "systemctl --user stop librariesio"
     end
   end
   task :start do
     on roles(:worker) do |host|
-      execute "start librariesio"
+      execute "systemctl --user start librariesio"
     end
   end
   after :publishing, :restart
