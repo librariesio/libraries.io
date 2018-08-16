@@ -18,7 +18,8 @@ module PackageManager
     end
 
     def self.download_url(name, version = nil)
-      "https://repo1.maven.org/maven2/#{name.gsub(/\:|\./, '/')}/#{version}/#{name}-#{version}.jar"
+      _group, artifact = name.split(":")
+      "https://repo1.maven.org/maven2/#{name.gsub(/\:|\./, '/')}/#{version}/#{artifact}-#{version}.jar"
     end
 
     def self.check_status_url(project)
