@@ -38,7 +38,7 @@
     <h3 id='platforms'>Platforms</h3>
 
     <p>
-      Get list of supported package managers
+      Get a list of supported package managers.
     </p>
 
     <p>
@@ -268,7 +268,7 @@
 
     <h3 id='user'>User</h3>
     <p>
-      Get information for a given User or Organization
+      Get information for a given user or organization.
     </p>
     <p>
       <code>GET https://libraries.io/api/github/:login?api_key=<%= @api_key %></code>
@@ -285,7 +285,7 @@
     <h3 id="user-repositories">User Repositories</h3>
 
     <p>
-      Get repositories owned by a User
+      Get repositories owned by a user.
     </p>
 
     <p>
@@ -303,7 +303,7 @@
     <h3 id="user-projects">User Packages</h3>
 
     <p>
-      Get a list of packages referencing the given users repositories.
+      Get a list of packages referencing the given user's repositories.
     </p>
 
     <p>
@@ -321,7 +321,7 @@
     <h3 id="user-project-contributions">User Packages Contributions</h3>
 
     <p>
-      Get a list of packages that the given users has contributed to.
+      Get a list of packages that the given user has contributed to.
     </p>
 
     <p>
@@ -339,7 +339,7 @@
     <h3 id="user-repository-contributions">User Repository Contributions</h3>
 
     <p>
-      Get a list of repositories that the given users has contributed to.
+      Get a list of repositories that the given user has contributed to.
     </p>
 
     <p>
@@ -376,7 +376,7 @@
 
     <h3 id='subscriptions-index'>User Subscriptions</h3>
     <p>
-      List packages that a user is subscribed to recieved notifications about new releases
+      List packages that a user is subscribed to receive notifications about new releases.
     </p>
 
     <p>
@@ -393,7 +393,7 @@
 
     <h3 id='subscriptions-create'>Subscribe to a project</h3>
     <p>
-      Subscribe to recieved notifications about new releases of a project
+      Subscribe to receive notifications about new releases of a project.
     </p>
     <p>
       Parameters: <code>include_prerelease</code>
@@ -412,7 +412,7 @@
 
     <h3 id='subscriptions-show'>Check if subscribed to a project</h3>
     <p>
-      Check if a users is subscribed to recieved notifications about new releases of a project
+      Check if a users is subscribed to receive notifications about new releases of a project.
     </p>
     <p>
       <code>GET https://libraries.io/api/subscriptions/:platform/:name?api_key=<%= @api_key %></code>
@@ -447,7 +447,7 @@
 
     <h3 id='subscriptions-destroy'>Unsubscribe from a project</h3>
     <p>
-      Stop recieving release notifications from a project
+      Stop receiving release notifications from a project.
     </p>
     <p>
       <code>DELETE https://libraries.io/api/subscriptions/:platform/:name?api_key=<%= @api_key %></code>
