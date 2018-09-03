@@ -29,7 +29,14 @@ module PackageManager
 
     def self.mapping(project)
       return false unless project["versions"].any?
-      latest_version = project["versions"].to_a.last[1]
+      # for version comparison of php, we want to reject any dev versions unless
+      # there are only dev versions of the project
+      versions = project["versions"].values.reject {|v| v["version"].include? "dev" }
+      if versions.empty?
+        versions = project["versions"].values
+      end
+      # then we'll use the most recently published as our most recent version
+      latest_version = versions.sort_by { |v| v["time"] }.last
       {
         :name =>  latest_version['name'],
         :description => latest_version['description'],
