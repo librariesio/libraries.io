@@ -120,6 +120,10 @@ GEM
     capistrano-rails-console (2.3.0)
       capistrano (>= 3.5.0, < 4.0.0)
       sshkit-interactive (~> 0.3.0)
+    capistrano3-puma (3.1.1)
+      capistrano (~> 3.7)
+      capistrano-bundler
+      puma (~> 3.4)
     capybara (2.18.0)
       addressable
       mini_mime (>= 0.1.3)
@@ -608,6 +612,7 @@ DEPENDENCIES
   capistrano-maintenance
   capistrano-rails
   capistrano-rails-console
+  capistrano3-puma
   charlock_holmes (>= 0.7.5)
   chartkick
   commonmarker

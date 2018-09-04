@@ -92,8 +92,10 @@ group :development do
   gem 'brakeman', :require => false
   gem 'capistrano'
   gem 'capistrano-rails'
+  gem 'capistrano3-puma'
   gem 'capistrano-maintenance', require: nil
   gem 'capistrano-rails-console', require: nil
+  gem 'fog-google'
   gem 'listen'
   gem 'pry'
   gem 'spring-watcher-listen'
