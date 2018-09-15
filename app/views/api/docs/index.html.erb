@@ -46,7 +46,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/platforms?api_key=#{@api_key}", "https://libraries.io/api/platforms?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/platforms?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-platforms", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -65,7 +65,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt?api_key=#{@api_key}", "https://libraries.io/api/npm/grunt?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/npm/grunt?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-project", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -82,7 +82,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/latest/dependencies?api_key=#{@api_key}", "https://libraries.io/api/rubygems/rails/4.2.4/dependencies?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/rubygems/rails/4.2.4/dependencies?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependencies", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -101,7 +101,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/dependents?api_key=#{@api_key}", "https://libraries.io/api/npm/grunt/dependents?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/npm/grunt/dependents?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependents", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -118,7 +118,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/dependent_repositories?api_key=#{@api_key}", "https://libraries.io/api/npm/grunt/dependent_repositories?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/npm/grunt/dependent_repositories?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependent-repositories", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -136,7 +136,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/contributors?api_key=#{@api_key}", "https://libraries.io/api/npm/grunt/contributors?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/npm/grunt/contributors?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-project-contributors", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -154,7 +154,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/npm/grunt/sourcerank?api_key=#{@api_key}", "https://libraries.io/api/npm/grunt/sourcerank?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/npm/grunt/sourcerank?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}sourcerank", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -172,7 +172,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/npm/base62/usage?api_key=#{@api_key}", "https://libraries.io/api/npm/base62/usage?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/npm/base62/usage?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}usage", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -211,7 +211,7 @@
     </ul>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/search?q=grunt&api_key=#{@api_key}", "https://libraries.io/api/search?q=grunt&api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/search?q=grunt&api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-project-search", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -227,7 +227,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository.full_name}?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository.full_name}?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/github/#{@repository.full_name}?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-repository", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -243,7 +243,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository.full_name}/dependencies?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository.full_name}/dependencies?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/github/#{@repository.full_name}/dependencies?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-repository-dependencies", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -259,7 +259,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository.full_name}/projects?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository.full_name}/projects?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/github/#{@repository.full_name}/projects?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-repository-projects", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -275,7 +275,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong><%= link_to "https://libraries.io/api/github/#{@repository_user.login}?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}?api_key=#{@api_key}" %></strong>
+      Example: <strong><%= link_to nil, "https://libraries.io/api/github/#{@repository_user.login}?api_key=#{@api_key}" %></strong>
     </p>
     <% cache "api-docs-#{@cache_version}-user", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -293,7 +293,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/github/andrew/repositories?api_key=#{@api_key}", "https://libraries.io/api/github/andrew/repositories?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/github/andrew/repositories?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-repositories", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -311,7 +311,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-projects", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -329,7 +329,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository_user.login}/project-contributions?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-project-contributions", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -347,7 +347,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository_user.login}/repository-contributions?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-repository-contributions", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -367,7 +367,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/github/#{@repository_user.login}/dependencies?api_key=#{@api_key}", "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/github/#{@repository_user.login}/projects?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-github-user-dependencies", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -384,7 +384,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/subscriptions?api_key=#{@api_key}", "https://libraries.io/api/subscriptions?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/subscriptions?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-subscriptions-index", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -403,7 +403,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}", "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-subscriptions-create", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -419,7 +419,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}", "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-subscriptions-show", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -438,7 +438,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}", "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-subscriptions-update", :expires_in => 1.day do %>
       <pre class='well well-small'>
@@ -454,7 +454,7 @@
     </p>
     <hr>
     <p>
-      Example: <strong> <%= link_to "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}", "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
+      Example: <strong> <%= link_to nil, "https://libraries.io/api/subscriptions/#{@project.platform}/#{@project.name}?api_key=#{@api_key}" %> </strong>
     </p>
     <hr>
     <h3 id='api-wrappers'>API Wrappers</h3>
