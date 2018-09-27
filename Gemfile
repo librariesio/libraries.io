@@ -13,8 +13,8 @@ gem 'octokit'
 gem 'bootstrap-sass'
 gem 'will_paginate-bootstrap'
 gem 'elasticsearch', '~> 2'
-gem 'elasticsearch-model'
-gem 'elasticsearch-rails'
+gem 'elasticsearch-model', '~> 5'
+gem 'elasticsearch-rails', '~> 5'
 gem 'nokogiri'
 gem 'typhoeus'
 gem 'redis'
@@ -99,7 +99,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.7.0'
 end
 
 group :test do
