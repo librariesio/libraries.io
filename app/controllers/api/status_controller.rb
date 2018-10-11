@@ -1,3 +1,4 @@
+require 'pry'
 class Api::StatusController < Api::ApplicationController
   before_action :require_api_key
 
@@ -19,11 +20,10 @@ class Api::StatusController < Api::ApplicationController
         missing = params[:projects].select { |project| !found.include?([project[:platform].downcase, project[:name].downcase]) }
 
         lowercase_project_named = missing.group_by{|project| project[:platform] }.map do |platform, projects|
-          projects.map do |project|
-            # Get the name from the strong params
-            permitted_name = project.permit(:name).to_h['name']
-            # Filter by platform and lowercase compare the names
-            Project.platform(platform).where('lower(name) = lower(?)', permitted_name).includes(:repository, :versions)
+          projects.each_slice(1000).map do |slice|
+            downcased_names = slice.map {|project| project[:name].downcase }
+            # Filter by platform and lowercase compare the downcased_names
+            Project.platform(platform).where('lower(name) in (?)', downcased_names).includes(:repository, :versions)
           end
         end.flatten.compact
         # Concatanate any new items found.
