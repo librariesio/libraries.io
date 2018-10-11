@@ -1,4 +1,3 @@
-require 'pry'
 class Api::StatusController < Api::ApplicationController
   before_action :require_api_key
 
