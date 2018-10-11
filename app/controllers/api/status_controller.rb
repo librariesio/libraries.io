@@ -7,27 +7,27 @@ class Api::StatusController < Api::ApplicationController
       @projects = params[:projects].group_by{|project| project[:platform] }.map do |platform, projects|
         projects.each_slice(1000).map do |slice|
           Project.platform(platform).where(name: slice.map{|project| project[:name] }.uniq).includes(:repository, :versions)
-        end.flatten.compact
+        end
       end.flatten.compact
 
       # If there are any that don't get found, downcase them and try again
       if params[:projects].length != @projects.length
-        # "slugify" the platform projects that we found
-        found = @projects.map { |project| slug_project project }
+
+        # downcase all platform/name pairs we've found so we can match against them later
+        found = @projects.map { |project| [project[:platform].downcase, project[:name].downcase] }
         # Find any projects that were passed that we didn't find, to try them again but case insensitive
-        missing = params[:projects].select { |project| !found.include?(slug_project project) }
+        missing = params[:projects].select { |project| !found.include?([project[:platform].downcase, project[:name].downcase]) }
+
         lowercase_project_named = missing.group_by{|project| project[:platform] }.map do |platform, projects|
-          projects.each_slice(1000).map do |slice|
-            slice.map do |project|
-              # Get the name from the strong params
-              permitted_name = project.permit(:name).to_h['name']
-              # Filter by platform and lowercase compare the names
-              Project.platform(platform).where('lower(name) = lower(?)', permitted_name).includes(:repository, :versions)
-            end
-          end.flatten.compact
+          projects.map do |project|
+            # Get the name from the strong params
+            permitted_name = project.permit(:name).to_h['name']
+            # Filter by platform and lowercase compare the names
+            Project.platform(platform).where('lower(name) = lower(?)', permitted_name).includes(:repository, :versions)
+          end
         end.flatten.compact
         # Concatanate any new items found.
-        @projects = @projects + lowercase_project_named
+        @projects.concat(lowercase_project_named)
       end
     else
       @projects = []
@@ -46,8 +46,4 @@ class Api::StatusController < Api::ApplicationController
       }
     })
   end
-end
-
-def slug_project project
-  "#{project[:platform].downcase}#{project[:name].downcase}"
 end
