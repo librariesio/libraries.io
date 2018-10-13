@@ -94,6 +94,9 @@ group :development do
   gem 'capistrano3-puma'
   gem 'capistrano-maintenance', require: nil
   gem 'capistrano-rails-console', require: nil
+  gem 'capistrano-env'
+  gem 'capistrano-linked-files'
+  gem 'capistrano-sidekiq'
   gem 'fog-google'
   gem 'listen'
   gem 'pry'
