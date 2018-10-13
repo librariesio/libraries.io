@@ -112,6 +112,11 @@ GEM
     capistrano-bundler (1.4.0)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
+    capistrano-env (1.0.0)
+      capistrano
+      sshkit
+    capistrano-linked-files (1.2.0)
+      capistrano (~> 3.1)
     capistrano-maintenance (1.2.0)
       capistrano (>= 3.0)
     capistrano-rails (1.4.0)
@@ -120,6 +125,9 @@ GEM
     capistrano-rails-console (2.3.0)
       capistrano (>= 3.5.0, < 4.0.0)
       sshkit-interactive (~> 0.3.0)
+    capistrano-sidekiq (1.0.2)
+      capistrano (>= 3.9.0)
+      sidekiq (>= 3.4)
     capistrano3-puma (3.1.1)
       capistrano (~> 3.7)
       capistrano-bundler
@@ -609,9 +617,12 @@ DEPENDENCIES
   bugsnag
   bundler
   capistrano
+  capistrano-env
+  capistrano-linked-files
   capistrano-maintenance
   capistrano-rails
   capistrano-rails-console
+  capistrano-sidekiq
   capistrano3-puma
   charlock_holmes (>= 0.7.5)
   chartkick
