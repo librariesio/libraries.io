@@ -20,7 +20,8 @@ module PackageManager
     end
 
     def self.project_names
-      get_raw("https://pypi.org/simple/").scan(/href='(\w+)'/).flatten
+      index = Nokogiri::HTML(get_raw("https://pypi.org/simple/"))
+      index.css("a").map(&:text)
     end
 
     def self.recent_names
