@@ -26,6 +26,8 @@ describe "Api::BowerSearchController", elasticsearch: true do
         "forks": project.forks,
         "keywords": project.keywords,
         "latest_stable_release": project.latest_stable_release,
+        "latest_stable_release_number": project.latest_stable_release_number,
+        "latest_stable_release_published_at": project.latest_stable_release_published_at,
         "latest_download_url": nil,
         "dependents_count": project.dependents_count,
         "dependent_repos_count": project.dependent_repos_count,
