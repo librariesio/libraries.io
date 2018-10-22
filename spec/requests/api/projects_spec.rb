@@ -60,6 +60,8 @@ describe "Api::ProjectsController" do
         "description": project.description,
         "homepage": project.homepage,
         "repository_url": project.repository_url,
+        "latest_stable_release_number": project.latest_stable_release_number,
+        "latest_stable_release_published_at": project.latest_stable_release_published_at,
         "normalized_licenses": project.normalized_licenses,
         "rank": project.rank,
         "latest_release_published_at": project.latest_release_published_at,
