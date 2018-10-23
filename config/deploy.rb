@@ -2,7 +2,7 @@
 lock '3.11.0'
 
 set :application, 'librariesio'
-set :repo_url, 'git@github.com:BoundlessNotions/libraries.io.git'
+set :repo_url, 'git@github.com:librariesio/libraries.io.git'
 set :branch, 'gce_cap_fixes'
 
 set :linked_files, fetch(:linked_files, []).push('.env', 'config/secrets.yml')
