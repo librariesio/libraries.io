@@ -16,7 +16,7 @@
       Dependencies
     </dt>
     <dd class='col-xs-4'>
-      <%= number_to_human(@project.latest_version.dependencies.kind('runtime').count) %>
+      <%= number_to_human(@project.latest_version.runtime_dependencies.count) %>
     </dd>
     <dt class='col-xs-8'>
       Dependent Packages

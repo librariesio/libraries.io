@@ -7,7 +7,7 @@ class Version < ApplicationRecord
   belongs_to :project
   counter_culture :project
   has_many :dependencies, dependent: :delete_all
-  has_many :runtime_dependencies, -> { where kind: 'runtime' }, class_name: 'Dependency'
+  has_many :runtime_dependencies, -> { where kind: ['runtime', 'normal'] }, class_name: 'Dependency'
 
   after_commit :send_notifications_async, on: :create
   after_commit :update_repository_async, on: :create
@@ -90,7 +90,7 @@ class Version < ApplicationRecord
   end
 
   def any_outdated_dependencies?
-    @any_outdated_dependencies ||= dependencies.kind('runtime').any?(&:outdated?)
+    @any_outdated_dependencies ||= runtime_dependencies.any?(&:outdated?)
   end
 
   def to_param
