@@ -14,9 +14,9 @@ class Api::StatusController < Api::ApplicationController
       if params[:projects].length != @projects.length
 
         # downcase all platform/name pairs we've found so we can match against them later
-        found = @projects.map { |project| [project[:platform].downcase, project[:name].downcase] }
+        found = @projects.map { |project| [project[:platform]&.downcase, project[:name].downcase] }
         # Find any projects that were passed that we didn't find, to try them again but case insensitive
-        missing = params[:projects].select { |project| !found.include?([project[:platform].downcase, project[:name].downcase]) }
+        missing = params[:projects].select { |project| !found.include?([project[:platform]&.downcase, project[:name].downcase]) }
 
         lowercase_project_named = missing.group_by{|project| project[:platform] }.map do |platform, projects|
           projects.each_slice(1000).map do |slice|
