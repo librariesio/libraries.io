@@ -8,14 +8,14 @@
   We have updated our <a href='https://libraries.io/terms'>terms of service</a> and <a href='https://libraries.io/privacy'>privacy policy</a>. If you do not accept these changes <b>your account will be removed</b> at some point in the future.
 </p>
 <p>
-  <%= link_to 'Click here to read and accept the new terms of service and privacy policy', account_url %>
+  <%= link_to 'Click here to read and accept the new terms of service and privacy policy', account_url(protocol: 'https') %>
 </p>
 <hr>
 <% end %>
 
 <p>
   I detected that version <%= link_to @version.number, version_url(@project.to_param.merge(number: @version.number)) %>
-  of <%= link_to @project, project_url(@project.to_param) %> was released
+  of <%= link_to @project, project_url(@project.to_param.merge(protocol: 'https')) %> was released
   on <%= @project.platform_name %>
   <% if @version.published_at.present? %>
   at <%= @version.published_at.to_s(:long) %>
@@ -55,6 +55,6 @@
 </p>
 <hr>
 <p>
-  <em>p.s. You can unsubscribe from notifications about <%= @project %> here: <%= link_to unsubscribe_project_url(@project.to_param), unsubscribe_project_url(@project.to_param) %></em>
-  <em>You can opt out of emails from your account here: <%= link_to account_url, account_url %></em>
+  <em>p.s. You can unsubscribe from notifications about <%= @project %> here: <%= link_to unsubscribe_project_url(@project.to_param.merge(protocol: 'https')), unsubscribe_project_url(@project.to_param.merge(protocol: 'https')) %></em>
+  <em>You can opt out of emails from your account here: <%= link_to account_url, account_url(protocol: 'https') %></em>
 </p>
