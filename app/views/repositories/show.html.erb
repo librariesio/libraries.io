@@ -92,11 +92,6 @@
           <%= link_to repo.homepage, sanitize_url(repo.homepage), :rel => 'nofollow' %>
         </p>
       <% end %>
-      <% if repo.host_type.present? %>
-        <p>
-          Host: <%= link_to format_host(repo.host_type), hosts_path(host_type: repo.host_type.downcase) %>
-        </p>
-      <% end %>
       <% if repo.license.present? %>
         <p>
           License: <%= link_to format_license(repo.license), license_path(repo.license) %>
