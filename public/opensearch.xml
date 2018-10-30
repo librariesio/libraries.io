@@ -3,7 +3,7 @@
   <Description>Discover open source libraries, modules and frameworks you can use in your code</Description>
   <Url type="text/html" method="get" template="https://libraries.io/search?q={searchTerms}"/>
   <Contact>support@libraries.io</Contact>
-  <Developer>Andrew Nesbitt</Developer>
+  <Developer>Tidelift, Inc.</Developer>
   <InputEncoding>UTF-8</InputEncoding>
   <moz:SearchForm>https://libraries.io</moz:SearchForm>
 </OpenSearchDescription>
