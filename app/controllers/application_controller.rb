@@ -4,9 +4,13 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_user, :logged_in?, :logged_out?, :current_host, :formatted_host
+  helper_method :current_user, :logged_in?, :logged_out?, :current_host, :formatted_host, :tidelift_flash_partial
 
   private
+
+  def tidelift_flash_partial
+    Dir[Rails.root.join('app', 'views', 'shared', 'flashes', '*')].sample
+  end
 
   def current_host
     params[:host_type].try(:downcase)
