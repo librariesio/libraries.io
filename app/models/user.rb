@@ -38,7 +38,7 @@ class User < ApplicationRecord
 
   after_commit :update_repo_permissions_async, :download_self, :create_api_key, on: :create
 
-  ADMIN_USERS = ['andrew', 'BenJam', 'havocp', 'katzj']
+  ADMIN_USERS = ['havocp', 'katzj']
 
   validates_presence_of :email, :on => :update
   validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
