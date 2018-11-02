@@ -346,7 +346,25 @@ class Project < ApplicationRecord
     elsif licenses.length > 150
       normalized = ['Other']
     else
-      normalized = licenses.split(/[,\/]/).map do |license|
+      downcased = licenses.downcase
+      # chomp off leading/trailing () to make Spdx.find happier
+      if downcased.start_with?('(')
+        downcased[0] = ''
+      end
+      if downcased.start_with?(')')
+        downcased[-1] = ''
+      end
+      # splits are OR, AND, COMMA (,), and SLASH (/)
+      # technically OR and AND are different in meaning
+      # but our model doesn't allow the distinction
+      if downcased.include?("or")
+        split = downcased.split(/or/)
+      elsif downcased.include?("and")
+        split = downcased.split(/and/)
+      else
+        split = licenses.split(/[,\/]/)
+      end
+      normalized = split.map do |license|
         Spdx.find(license).try(:id)
       end.compact
       normalized = ['Other'] if normalized.empty?

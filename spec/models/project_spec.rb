@@ -16,4 +16,50 @@ describe Project, type: :model do
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:platform) }
+
+  describe 'license normalization' do
+    let(:project) { create(:project, name: 'foo', platform: PackageManager::Rubygems) }
+
+    it 'handles a single license' do
+      project.licenses = "mit"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["MIT"])
+    end
+
+    it 'handles comma separated license' do
+      project.licenses = "mit,isc"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+    end
+
+    it 'handles OR separated licenses' do
+      project.licenses = "mit OR isc"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+    end
+
+    it 'handles or separated licenses' do
+      project.licenses = "mit or ISC"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+    end
+
+    it 'handles (OR) separated licenses' do
+      project.licenses = "(mit OR isc)"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+    end
+
+    it 'handles AND separated licenses' do
+      project.licenses = "mit AND ISC"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+    end
+
+    it 'handles and separated licenses' do
+      project.licenses = "mit and ISC"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+    end
+  end
 end
