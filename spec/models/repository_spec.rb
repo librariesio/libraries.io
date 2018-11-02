@@ -17,8 +17,8 @@ describe Repository, type: :model do
   it { should belong_to(:repository_user) }
   it { should belong_to(:source) }
 
-  it { should validate_uniqueness_of(:full_name) }
-  it { should validate_uniqueness_of(:uuid) }
+  it { should validate_uniqueness_of(:full_name).scoped_to(:host_type) }
+  it { should validate_uniqueness_of(:uuid).scoped_to(:host_type) }
 
   describe '#domain' do
     it 'should be https://github.com for GitHub repos' do
