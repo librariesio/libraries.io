@@ -98,7 +98,6 @@ group :development do
   gem 'capistrano-env'
   gem 'capistrano-linked-files'
   gem 'capistrano-sidekiq'
-  gem 'fog-google'
   gem 'listen'
   gem 'pry'
   gem 'spring-watcher-listen'
