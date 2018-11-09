@@ -1,38 +1,28 @@
-server '51.15.130.54',    user: 'root', roles: %w{cron}
+require "fog/google"
+require "json"
+google_creds = JSON.load(File.open('.google_creds.json'))
+goog_config = {
+  google_project: google_creds['project_id'],
+  google_client_email: google_creds['client_email'],
+  google_json_key_location: '.google_creds.json'
+}
+goog = Fog::Compute::Google.new(config=goog_config)
 
-server '163.172.185.77',  user: 'root', roles: %w{app web}
-server '163.172.154.122', user: 'root', roles: %w{app web}
-server '163.172.161.163', user: 'root', roles: %w{app web}
-server '163.172.139.6',   user: 'root', roles: %w{app web}
+web = goog.servers.all(filter: 'labels.project = libraries AND labels.environment = production AND labels.type = app')
 
-server '163.172.139.253', user: 'root', roles: %w{app worker}
-server '163.172.138.184', user: 'root', roles: %w{app worker}
-server '163.172.155.116', user: 'root', roles: %w{app worker}
-server '163.172.165.101', user: 'root', roles: %w{app worker}
-server '51.15.141.224', user: 'root', roles: %w{app worker}
+memcached = goog.servers.all(filter: 'labels.project = libraries AND labels.environment = production AND labels.role = memcached')
 
-namespace :deploy do
-  task :restart do
-    on roles(:app) do |host|
-      execute "sleep #{rand(100)} && restart librariesio"
-    end
-  end
+redis = goog.servers.all(filter: 'labels.project = libraries AND labels.environment = production AND labels.role = redis')
 
-  task :restart_web do
-    on roles(:web) do |host|
-      execute "sleep #{rand(100)} && restart librariesio"
-    end
-  end
+elastic = goog.servers.all(filter: 'labels.project = libraries AND labels.environment = production AND labels.role = elasticsearch')
 
-  task :stop do
-    on roles(:worker) do |host|
-      execute "stop librariesio"
-    end
-  end
-  task :start do
-    on roles(:worker) do |host|
-      execute "start librariesio"
-    end
-  end
-  after :publishing, :restart
+set :capenv, ->(env) {
+  Dotenv.load.keys.each {|k| env.add k}
+  env.add 'MEMCACHIER_SERVERS', memcached.map {|mem| mem.network_interfaces[0][:network_ip] + ':11211'}.join(',')
+  env.add 'REDISCLOUD_URL', "redis://#{redis.first.network_interfaces[0][:network_ip]}:6379/0"
+  env.add 'ELASTICSEARCH_CLUSTER_URL', elastic.map {|es| es.network_interfaces[0][:network_ip] + ':9200'}.join(',')
+}
+
+web.each do |s|
+  server s.network_interfaces[0][:access_configs][0][:nat_ip], user: 'deploy', roles: [s.labels.fetch(:type, ''), s.labels.fetch(:role, '')]
 end

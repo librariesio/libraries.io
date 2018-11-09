@@ -15,6 +15,7 @@ gem 'will_paginate-bootstrap'
 gem 'elasticsearch', '~> 2'
 gem 'elasticsearch-model', '~> 5'
 gem 'elasticsearch-rails', '~> 5'
+gem 'fog-google'
 gem 'nokogiri'
 gem 'typhoeus'
 gem 'redis'
@@ -91,8 +92,12 @@ group :development do
   gem 'brakeman', :require => false
   gem 'capistrano'
   gem 'capistrano-rails'
+  gem 'capistrano3-puma'
   gem 'capistrano-maintenance', require: nil
   gem 'capistrano-rails-console', require: nil
+  gem 'capistrano-env'
+  gem 'capistrano-linked-files'
+  gem 'capistrano-sidekiq'
   gem 'listen'
   gem 'pry'
   gem 'spring-watcher-listen'
