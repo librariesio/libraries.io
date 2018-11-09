@@ -123,4 +123,5 @@ group :production do
   gem 'bugsnag'
   gem 'lograge'
   gem 'rails_safe_tasks'
+  gem "stackdriver", "~> 0.15.0"
 end
