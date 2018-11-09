@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181010192042) do
+ActiveRecord::Schema.define(version: 20181109014916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 20181010192042) do
 
   create_table "projects", id: :serial, default: %q{nextval('projects_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "name"
-    t.string   "platform",                           :index=>{:name=>"index_projects_on_platform_and_name", :with=>["name"], :unique=>true, :order=>{:platform=>:asc, :name=>:asc}}
+    t.string   "platform",                           :index=>{:name=>"index_projects_on_platform_and_dependents_count", :with=>["dependents_count"], :order=>{:platform=>:asc, :dependents_count=>:asc}}
     t.datetime "created_at",                         :index=>{:name=>"index_projects_on_created_at", :order=>{:created_at=>:asc}}
     t.datetime "updated_at",                         :index=>{:name=>"index_projects_on_updated_at", :order=>{:updated_at=>:asc}}
     t.text     "description"
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 20181010192042) do
     t.string   "latest_stable_release_number"
     t.datetime "latest_stable_release_published_at"
 
+    t.index ["platform", "name"], :name=>"index_projects_on_platform_and_name", :unique=>true, :order=>{:platform=>:asc, :name=>:asc}
     t.index ["platform", "name"], :name=>"index_projects_on_platform_and_name_lower", :case_sensitive=>false
   end
 
