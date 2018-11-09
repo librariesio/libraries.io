@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   mount PgHero::Engine, at: "pghero"
 
+  get "/healthcheck", to: "healthcheck#index", as: :healthcheck
   get '/home', to: 'dashboard#home'
 
   namespace :api do
