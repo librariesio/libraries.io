@@ -1,7 +1,7 @@
 ---
 :concurrency: 2
 production:
-  :concurrency: 120
+  :concurrency: 25
 :timeout: 8
 :queues:
   - [user, 40]
