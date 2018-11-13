@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181109014916) do
+ActiveRecord::Schema.define(version: 20181113234356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 20181109014916) do
   end
 
   create_table "issues", id: :serial, default: %q{nextval('issues_id_seq'::regclass)}, force: :cascade do |t|
-    t.integer  "repository_id",      :index=>{:name=>"index_issues_on_repository_id", :order=>{:repository_id=>:asc}}
+    t.integer  "repository_id",      :index=>{:name=>"index_issues_on_repository_id_and_uuid", :with=>["uuid"], :order=>{:repository_id=>:asc, :uuid=>:asc}}
     t.string   "uuid"
     t.integer  "number"
     t.string   "state"
