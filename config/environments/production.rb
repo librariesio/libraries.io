@@ -78,6 +78,9 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  # disable sql logging in production
+  config.active_record.logger = nil
+
   config.action_mailer.default_url_options = { host: 'libraries.io' }
 
   config.cache_store = :dalli_store,
