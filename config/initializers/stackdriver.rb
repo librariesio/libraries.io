@@ -6,4 +6,8 @@ if Rails.env.production?
     sampler.send(:initialize, path_blacklist: ["/_ah/health", "/healthz", "/healthcheck"].freeze, qps: 0.01)
     config.sampler = sampler
   end
+
+  Google::Cloud::ErrorReporting.configure do |config|
+    config.ignore_classes = [ActiveRecord::RecordNotFound]
+  end
 end
