@@ -1,5 +1,4 @@
-# Enable tracing if GCLOUD_PROJECT_ID is set
-unless ENV["GCLOUD_PROJECT_ID"].nil?
+if Rails.env.production?
   Google::Cloud::Trace.configure do |config|
     sampler = Google::Cloud::Trace::TimeSampler.default
     # there doesn't seem to be a good way to override the configuration for trace as initialize
