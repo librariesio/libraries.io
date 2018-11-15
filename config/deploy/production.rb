@@ -17,7 +17,7 @@ redis = goog.servers.all(filter: 'labels.project = libraries AND labels.environm
 elastic = goog.servers.all(filter: 'labels.project = libraries AND labels.environment = production AND labels.role = elasticsearch')
 
 set :capenv, ->(env) {
-  Dotenv.load.keys.each {|k| env.add k}
+  Dotenv.load('.env.prod').keys.each {|k| env.add k}
   env.add 'MEMCACHIER_SERVERS', memcached.map {|mem| mem.network_interfaces[0][:network_ip] + ':11211'}.join(',')
   env.add 'REDISCLOUD_URL', "redis://#{redis.first.network_interfaces[0][:network_ip]}:6379/0"
   env.add 'ELASTICSEARCH_CLUSTER_URL', elastic.map {|es| es.network_interfaces[0][:network_ip] + ':9200'}.join(',')
