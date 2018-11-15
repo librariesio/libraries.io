@@ -81,8 +81,6 @@ GEM
       mize
       tins (~> 1.0)
     api-pagination (4.8.1)
-    appsignal (2.7.2)
-      rack
     arel (8.0.0)
     asciidoctor (1.5.8)
     autoprefixer-rails (9.3.1)
@@ -660,7 +658,6 @@ DEPENDENCIES
   active_model_serializers
   amatch
   api-pagination
-  appsignal
   asciidoctor
   bibliothecary
   bitbucket_rest_api!
