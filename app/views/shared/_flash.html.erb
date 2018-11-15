@@ -48,6 +48,7 @@
 
 <% if flash.empty? %>
   <div class="alert alert-info hidden-xs" role="alert" style="background-color: #F6914D; border-color: #F6914D; color: white;">
+    <img src="<%= image_url('tidelift-small.png') %>" width="36px" style="padding-right: 12px;" />
     <%= render :file => tidelift_flash_partial %>
   </div>
 <% end %>
