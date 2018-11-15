@@ -350,6 +350,9 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
+    marginalia (1.6.0)
+      actionpack (>= 2.3)
+      activerecord (>= 2.3)
     memoist (0.16.0)
     method_source (0.9.1)
     mime-types (3.2.2)
@@ -712,6 +715,7 @@ DEPENDENCIES
   listen
   lograge
   mail
+  marginalia
   mime-types
   nokogiri
   octicons_helper
