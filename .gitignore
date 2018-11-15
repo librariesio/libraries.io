@@ -36,3 +36,6 @@ coverage
 *.dump
 *.csv
 data
+
+# google cloud creds using by capistrano
+.google_creds.json
