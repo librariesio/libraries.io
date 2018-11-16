@@ -86,6 +86,7 @@ gem 'charlock_holmes', '>= 0.7.5'
 gem 'octicons_helper'
 gem 'ffi'
 gem 'bootsnap', require: false
+gem 'listen'
 
 group :development do
   gem 'spring'
@@ -99,7 +100,6 @@ group :development do
   gem 'capistrano-env'
   gem 'capistrano-linked-files'
   gem 'capistrano-sidekiq'
-  gem 'listen'
   gem 'pry'
   gem 'spring-watcher-listen'
 end
