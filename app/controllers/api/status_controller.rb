@@ -21,8 +21,8 @@ class Api::StatusController < Api::ApplicationController
         lowercase_project_named = missing.group_by{|project| project[:platform] }.map do |platform, projects|
           projects.each_slice(1000).map do |slice|
             downcased_names = slice.map {|project| project[:name].downcase }
-            # Filter by platform and lowercase compare the downcased_names
-            Project.platform(platform).where('lower(name) in (?)', downcased_names).includes(:repository, :versions)
+            # lowercase compare the downcased_names... use lower(platform) to improve index usage
+            Project.where('lower(platform)=? AND lower(name) in (?)', platform.downcase, downcased_names).includes(:repository, :versions)
           end
         end.flatten.compact
         # Concatanate any new items found.
