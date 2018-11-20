@@ -17,25 +17,5 @@
       <div class="pictogram pictogram-<%= project.platform.downcase %>"></div>
     <% end %>
 
-    <% your_dependent_repos = current_user.your_dependent_repos(version.project) %>
-    <h5 class='<%= 'with_dependent_repos' if your_dependent_repos.length > 0 %>'>
-      <%= link_to project, project_path(project.to_param) %> - <%= link_to version, version_url(version.to_param) %>
-      <small>published <%= timeago_tag(version.published_at) %></small>
-
-      <% if your_dependent_repos.length > 0 %>
-        <div class="your_dependent_repos">
-          <small class='text-muted'>
-            Used by
-            <% your_dependent_repos.limit(3).each_with_index do |repo, i| %>
-                <%= link_to repo.full_name, repository_path(repo.to_param) %><%= ',' unless i == your_dependent_repos.length-1 || i == 2 %>
-            <% end %>
-
-            <% if your_dependent_repos.count > 3 %>
-              and <%= link_to "more", your_project_dependent_repos_path(version.project.to_param) %>
-            <% end %>
-          </small>
-        </div>
-      <% end %>
-    </h5>
   </div>
 <% end %>
