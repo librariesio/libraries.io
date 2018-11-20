@@ -3,7 +3,6 @@
   <div class="col-sm 6 col-md-8">
     <% if @versions.length > 0 %>
       <%= render collection: @versions, partial: 'dashboard/new_version', as: :version  %>
-      <%= will_paginate @versions, page_links: false %>
       <p>
         <small class='text-muted'>
           <% if current_user.muted_projects.length > 0 %>

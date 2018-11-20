@@ -17,7 +17,7 @@ class DashboardController < ApplicationController
       format.atom do
         if params[:api_key].present? && api_key = ApiKey.active.find_by_access_token(params[:api_key])
           @user = api_key.user
-          @versions = @user.all_subscribed_versions.where.not(project_id: @user.muted_project_ids).where.not(published_at: nil).newest_first.includes(project: :versions).paginate(per_page: 100, page: page_number)
+          @versions = @user.all_subscribed_versions.where.not(project_id: @user.muted_project_ids).where.not(published_at: nil).newest_first.includes(project: :versions).limit(50)
         else
           raise ActiveRecord::RecordNotFound
         end
