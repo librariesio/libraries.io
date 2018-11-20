@@ -17,7 +17,7 @@
       <div class="pictogram pictogram-<%= project.platform.downcase %>"></div>
     <% end %>
 
-    <h5 class='<%= 'with_dependent_repos' if your_dependent_repos.length > 0 %>'>
+    <h5>
       <%= link_to project, project_path(project.to_param) %> - <%= link_to version, version_url(version.to_param) %>
       <small>published <%= timeago_tag(version.published_at) %></small>
     </h5>
