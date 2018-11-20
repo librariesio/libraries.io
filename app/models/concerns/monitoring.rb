@@ -30,7 +30,7 @@ module Monitoring
   end
 
   def subscribed_to_repo?(repository)
-    repository_subscriptions.find{|r| r.id == repository.id }
+    repository_subscriptions.find{|r| r.repository_id == repository.id }
   end
 
   def can_read?(repository)
