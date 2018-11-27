@@ -48,6 +48,7 @@ gem 'semantic_range'
 gem 'license-compatibility'
 gem 'escape_utils'
 gem 'marginalia'
+gem 'marginalia-sidekiq'
 gem 'mail', require: ['mail', 'mail/utilities', 'mail/parsers']
 gem 'pictogram'
 gem 'rails-timeago', git: 'https://github.com/librariesio/rails-timeago'

@@ -351,6 +351,9 @@ GEM
     marginalia (1.6.0)
       actionpack (>= 2.3)
       activerecord (>= 2.3)
+    marginalia-sidekiq (0.1.0)
+      marginalia (>= 1.1.0)
+      sidekiq (>= 3)
     memoist (0.16.0)
     method_source (0.9.1)
     mime-types (3.2.2)
@@ -713,6 +716,7 @@ DEPENDENCIES
   lograge
   mail
   marginalia
+  marginalia-sidekiq
   mime-types
   nokogiri
   octicons_helper
