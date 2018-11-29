@@ -37,7 +37,7 @@ class Api::StatusController < Api::ApplicationController
     end
     render json: @projects.to_json({
       only: fields,
-      methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release, :latest_download_url],
+      methods: [:package_manager_url, :stars, :forks, :keywords, :latest_download_url],
       include: {
         versions: {
           only: [:number, :published_at]
