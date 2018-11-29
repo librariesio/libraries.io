@@ -22,4 +22,4 @@ set :conditionally_migrate, true
 set :bugsnag_api_key, ENV['BUGSNAG_API_KEY']
 
 set :sidekiq_roles, :worker
-set :sidekiq_processes, 4
+set :sidekiq_processes, 3
