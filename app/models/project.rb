@@ -429,11 +429,11 @@ class Project < ApplicationRecord
   end
 
   def unique_repo_requirement_ranges
-    repository_dependencies.group('repository_dependencies.requirements').count.keys
+    repository_dependencies.select('repository_dependencies.requirements').distinct.pluck(:requirements)
   end
 
   def unique_project_requirement_ranges
-    dependents.group('dependencies.requirements').count.keys
+    dependents.select('dependencies.requirements').distinct.pluck(:requirements)
   end
 
   def unique_requirement_ranges
