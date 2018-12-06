@@ -3,7 +3,7 @@
 Libraries.io already has support for most of the largest package managers but there are many more
 that we've not added yet. This guide will take you through the steps for adding support for another.
 
-Adding support for a new package manager is fairly easy assuming that the package manager repository has an API for extracting data about it's packages over the internet. Follow these steps:
+Adding support for a new package manager is fairly easy assuming that the package manager repository has an API for extracting data about its packages over the internet. Follow these steps:
 
 ## Add the `PackageManager` class file
 
@@ -54,7 +54,7 @@ end
 
 ### `#project`
 
-Once we have a list of package names, we need to be able to get the information for each package by it's name from the registry. This is also used for syncing/updating a package we already know about when a new version is published.
+Once we have a list of package names, we need to be able to get the information for each package by its name from the registry. This is also used for syncing/updating a package we already know about when a new version is published.
 
 This method takes a string of the name as an argument and usually makes a http request to the registry for the given name and returns a ruby hash of information, often parsed from json or xml.
 
@@ -202,7 +202,7 @@ end
 
 ### `#formatted_name`
 
-If the package manager's official name doesn't fit with Ruby's class name rules you can add it's official name in this method, for example [`npm`](../app/models/package_manager/npm.rb) is always lower case, the class name is `NPM` so we have added the following:
+If the package manager's official name doesn't fit with Ruby's class name rules you can add its official name in this method, for example [`npm`](../app/models/package_manager/npm.rb) is always lower case, the class name is `NPM` so we have added the following:
 
 ```ruby
 def self.formatted_name
