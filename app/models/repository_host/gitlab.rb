@@ -184,7 +184,7 @@ module RepositoryHost
         has_issues: project.issues_enabled,
         has_wiki: project.wiki_enabled,
         scm: 'git',
-        private: !project.public,
+        private: project.visibility != "public",
         pull_requests_enabled: project.merge_requests_enabled,
         logo_url: project.avatar_url,
         keywords: project.tag_list,
