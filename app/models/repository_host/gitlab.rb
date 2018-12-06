@@ -178,7 +178,7 @@ module RepositoryHost
         host_type: 'GitLab',
         full_name: project.path_with_namespace,
         owner: {},
-        fork: project.forked_from_project.present?,
+        fork: project.try(:forked_from_project).present?,
         updated_at: project.last_activity_at,
         stargazers_count: project.star_count,
         has_issues: project.issues_enabled,
@@ -189,7 +189,7 @@ module RepositoryHost
         logo_url: project.avatar_url,
         keywords: project.tag_list,
         parent: {
-          full_name: project.forked_from_project.try(:path_with_namespace)
+          full_name: project.try(:forked_from_project).try(:path_with_namespace)
         }
       })
     rescue *IGNORABLE_EXCEPTIONS
