@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181113234356) do
+ActiveRecord::Schema.define(version: 20181204153549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,8 +117,8 @@ ActiveRecord::Schema.define(version: 20181113234356) do
   create_table "projects", id: :serial, default: %q{nextval('projects_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "name"
     t.string   "platform",                           :index=>{:name=>"index_projects_on_platform_and_dependents_count", :with=>["dependents_count"], :order=>{:platform=>:asc, :dependents_count=>:asc}}
-    t.datetime "created_at",                         :index=>{:name=>"index_projects_on_created_at", :order=>{:created_at=>:asc}}
-    t.datetime "updated_at",                         :index=>{:name=>"index_projects_on_updated_at", :order=>{:updated_at=>:asc}}
+    t.datetime "created_at",                         :null=>false, :index=>{:name=>"index_projects_on_created_at", :order=>{:created_at=>:asc}}
+    t.datetime "updated_at",                         :null=>false, :index=>{:name=>"index_projects_on_updated_at", :order=>{:updated_at=>:asc}}
     t.text     "description"
     t.text     "keywords"
     t.string   "homepage"
@@ -228,6 +228,12 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.datetime "created_at",    :null=>false
     t.datetime "updated_at",    :null=>false
     t.integer  "repository_id", :index=>{:name=>"index_repository_dependencies_on_repository_id", :order=>{:repository_id=>:asc}}
+  end
+
+  create_table "repository_maintenance_stats", force: :cascade do |t|
+    t.bigint "repository_id", :index=>{:name=>"index_repository_maintenance_stats_on_repository_id", :order=>{:repository_id=>:asc}}
+    t.string "category"
+    t.string "value"
   end
 
   create_table "repository_organisations", id: :serial, default: %q{nextval('repository_organisations_id_seq'::regclass)}, force: :cascade do |t|

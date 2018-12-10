@@ -87,6 +87,7 @@ gem 'octicons_helper'
 gem 'ffi'
 gem 'bootsnap', require: false
 gem 'listen'
+gem "graphql-client", "~> 0.14.0"
 
 group :development do
   gem 'spring'
