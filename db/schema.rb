@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181210155612) do
+ActiveRecord::Schema.define(version: 20181113234356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,8 +52,6 @@ ActiveRecord::Schema.define(version: 20181210155612) do
     t.string   "requirements"
     t.datetime "created_at",   :null=>false
     t.datetime "updated_at",   :null=>false
-
-    t.index ["project_id", "requirements"], :name=>"index_dependencies_on_project_id_and_requirements", :order=>{:project_id=>:asc, :requirements=>:asc}
   end
 
   create_table "identities", id: :serial, default: %q{nextval('identities_id_seq'::regclass)}, force: :cascade do |t|
@@ -230,8 +228,6 @@ ActiveRecord::Schema.define(version: 20181210155612) do
     t.datetime "created_at",    :null=>false
     t.datetime "updated_at",    :null=>false
     t.integer  "repository_id", :index=>{:name=>"index_repository_dependencies_on_repository_id", :order=>{:repository_id=>:asc}}
-
-    t.index ["project_id", "requirements"], :name=>"index_repository_dependencies_on_project_id_and_requirements", :order=>{:project_id=>:asc, :requirements=>:asc}
   end
 
   create_table "repository_organisations", id: :serial, default: %q{nextval('repository_organisations_id_seq'::regclass)}, force: :cascade do |t|
