@@ -19,7 +19,7 @@ class Api::ApplicationController < ApplicationController
   end
 
   def max_page
-    1000
+    300
   end
 
   def check_api_key
