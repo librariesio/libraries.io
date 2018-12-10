@@ -1,4 +1,5 @@
 require 'typhoeus/adapters/faraday'
+require 'google/cloud/trace/faraday_middleware'
 
 url = ENV['ELASTICSEARCH_CLUSTER_URL'] || 'localhost:9200'
 
