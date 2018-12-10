@@ -1,5 +1,5 @@
 require 'typhoeus/adapters/faraday'
-require 'google/cloud/trace/faraday_middleware'
+require 'google/cloud/trace/faraday_middleware' if Rails.env.production?
 
 url = ENV['ELASTICSEARCH_CLUSTER_URL'] || 'localhost:9200'
 
