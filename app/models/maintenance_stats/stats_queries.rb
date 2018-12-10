@@ -1,5 +1,5 @@
 module Queries
-    FullRepoQuery = AuthToken.v4_client.parse <<-'GRAPHQL'
+    FullRepoQuery = Rails.application.config.graphql.client.parse <<-'GRAPHQL'
         query($owner: String!, $repo_name: String!) {
             repository(owner: $owner, name: $repo_name) {
                 nameWithOwner
@@ -65,7 +65,7 @@ module Queries
         }
     GRAPHQL
 
-    CommitCountsQuery = AuthToken.v4_client.parse <<-'GRAPHQL'
+    CommitCountsQuery = Rails.application.config.graphql.client.parse <<-'GRAPHQL'
         query($owner: String!, $repo_name: String!, $start_date: GitTimestamp!) {
             repository(owner: $owner, name: $repo_name) {
                 defaultBranchRef {
@@ -82,7 +82,7 @@ module Queries
         }
     GRAPHQL
 
-    ReleasesQuery = AuthToken.v4_client.parse <<-'GRAPHQL'
+    ReleasesQuery = Rails.application.config.graphql.client.parse <<-'GRAPHQL'
         query($owner: String!, $repo_name: String!, $cursor: String){
             repository(owner: $owner, name: $repo_name){
                 releases(first: 100, after: $cursor, orderBy: {field: CREATED_AT, direction: DESC}){

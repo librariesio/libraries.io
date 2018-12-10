@@ -1,3 +1,5 @@
+require "graphql/client/http"
+
 class AuthToken < ApplicationRecord
   validates_presence_of :token
   scope :authorized, -> { where(authorized: [true, nil]) }
