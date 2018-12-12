@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
   enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
 
-  create_table "api_keys", id: :serial, default: %q{nextval('api_keys_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "api_keys", default: %q{nextval('api_keys_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "access_token", :index=>{:name=>"index_api_keys_on_access_token", :order=>{:access_token=>:asc}}
     t.datetime "created_at",   :null=>false
     t.datetime "updated_at",   :null=>false
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.integer  "rate_limit",   :default=>60
   end
 
-  create_table "auth_tokens", id: :serial, default: %q{nextval('auth_tokens_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "auth_tokens", default: %q{nextval('auth_tokens_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "login"
     t.string   "token"
     t.datetime "created_at", :null=>false
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.boolean  "authorized"
   end
 
-  create_table "contributions", id: :serial, default: %q{nextval('contributions_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "contributions", default: %q{nextval('contributions_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "repository_id",      :index=>{:name=>"index_contributions_on_repository_id_and_user_id", :with=>["repository_user_id"], :order=>{:repository_id=>:asc, :repository_user_id=>:asc}}
     t.integer  "repository_user_id", :index=>{:name=>"index_contributions_on_repository_user_id", :order=>{:repository_user_id=>:asc}}
     t.integer  "count"
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.string   "platform"
   end
 
-  create_table "dependencies", id: :serial, default: %q{nextval('dependencies_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "dependencies", default: %q{nextval('dependencies_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "version_id",   :index=>{:name=>"index_dependencies_on_version_id", :order=>{:version_id=>:asc}}
     t.integer  "project_id",   :index=>{:name=>"index_dependencies_on_project_id", :order=>{:project_id=>:asc}}
     t.string   "project_name"
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.datetime "updated_at",   :null=>false
   end
 
-  create_table "identities", id: :serial, default: %q{nextval('identities_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "identities", default: %q{nextval('identities_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "uid",                :index=>{:name=>"index_identities_on_uid", :order=>{:uid=>:asc}}
     t.string   "provider"
     t.integer  "user_id",            :index=>{:name=>"index_identities_on_user_id", :order=>{:user_id=>:asc}}
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.integer  "repository_user_id", :index=>{:name=>"index_identities_on_repository_user_id", :order=>{:repository_user_id=>:asc}}
   end
 
-  create_table "issues", id: :serial, default: %q{nextval('issues_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "issues", default: %q{nextval('issues_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "repository_id",      :index=>{:name=>"index_issues_on_repository_id_and_uuid", :with=>["uuid"], :order=>{:repository_id=>:asc, :uuid=>:asc}}
     t.string   "uuid"
     t.integer  "number"
@@ -85,7 +85,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.integer  "repository_user_id"
   end
 
-  create_table "manifests", id: :serial, default: %q{nextval('manifests_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "manifests", default: %q{nextval('manifests_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "repository_id", :index=>{:name=>"index_manifests_on_repository_id", :order=>{:repository_id=>:asc}}
     t.string   "platform"
     t.string   "filepath"
@@ -96,14 +96,14 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.string   "kind"
   end
 
-  create_table "project_mutes", id: :serial, default: %q{nextval('project_mutes_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "project_mutes", default: %q{nextval('project_mutes_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "user_id",    :null=>false
     t.integer  "project_id", :null=>false, :index=>{:name=>"index_project_mutes_on_project_id_and_user_id", :with=>["user_id"], :unique=>true, :order=>{:project_id=>:asc, :user_id=>:asc}}
     t.datetime "created_at", :null=>false
     t.datetime "updated_at", :null=>false
   end
 
-  create_table "project_suggestions", id: :serial, default: %q{nextval('project_suggestions_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "project_suggestions", default: %q{nextval('project_suggestions_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "project_id"
     t.integer  "user_id"
     t.string   "licenses"
@@ -114,7 +114,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.string   "status"
   end
 
-  create_table "projects", id: :serial, default: %q{nextval('projects_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "projects", default: %q{nextval('projects_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "name"
     t.string   "platform",                           :index=>{:name=>"index_projects_on_platform_and_dependents_count", :with=>["dependents_count"], :order=>{:platform=>:asc, :dependents_count=>:asc}}
     t.datetime "created_at",                         :index=>{:name=>"index_projects_on_created_at", :order=>{:created_at=>:asc}}
@@ -144,23 +144,23 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.datetime "latest_stable_release_published_at"
 
     t.index ["platform", "name"], :name=>"index_projects_on_platform_and_name", :unique=>true, :order=>{:platform=>:asc, :name=>:asc}
-    t.index ["platform", "name"], :name=>"index_projects_on_platform_and_name_lower", :case_sensitive=>false
+    t.index ["platform", "name"], :name=>"index_projects_on_platform_and_name_lower"
   end
 
-  create_table "readmes", id: :serial, default: %q{nextval('readmes_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "readmes", default: %q{nextval('readmes_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "repository_id", :index=>{:name=>"index_readmes_on_repository_id", :unique=>true, :order=>{:repository_id=>:asc}}
     t.text     "html_body"
     t.datetime "created_at",    :null=>false
     t.datetime "updated_at",    :null=>false
   end
 
-  create_table "registry_permissions", id: :serial, default: %q{nextval('registry_permissions_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "registry_permissions", default: %q{nextval('registry_permissions_id_seq'::regclass)}, force: :cascade do |t|
     t.integer "registry_user_id", :index=>{:name=>"index_registry_permissions_on_registry_user_id", :order=>{:registry_user_id=>:asc}}
     t.integer "project_id",       :index=>{:name=>"index_registry_permissions_on_project_id", :order=>{:project_id=>:asc}}
     t.string  "kind"
   end
 
-  create_table "registry_users", id: :serial, default: %q{nextval('registry_users_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "registry_users", default: %q{nextval('registry_users_id_seq'::regclass)}, force: :cascade do |t|
     t.string "platform", :index=>{:name=>"index_registry_users_on_platform_and_uuid", :with=>["uuid"], :unique=>true, :order=>{:platform=>:asc, :uuid=>:asc}}
     t.string "uuid"
     t.string "login"
@@ -169,7 +169,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.string "url"
   end
 
-  create_table "repositories", id: :serial, default: %q{nextval('repositories_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "repositories", default: %q{nextval('repositories_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "full_name"
     t.string   "description"
     t.boolean  "fork"
@@ -179,7 +179,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.string   "homepage"
     t.integer  "size"
     t.integer  "stargazers_count"
-    t.string   "language",                   :index=>{:name=>"github_repositories_lower_language", :case_sensitive=>false}
+    t.string   "language",                   :index=>{:name=>"github_repositories_lower_language"}
     t.boolean  "has_issues"
     t.boolean  "has_wiki"
     t.boolean  "has_pages"
@@ -204,7 +204,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.string   "status",                     :index=>{:name=>"index_repositories_on_status", :order=>{:status=>:asc}}
     t.datetime "last_synced_at"
     t.integer  "rank"
-    t.string   "host_type",                  :index=>{:name=>"index_repositories_on_host_type_and_full_name", :with=>["full_name"], :unique=>true, :case_sensitive=>false}
+    t.string   "host_type",                  :index=>{:name=>"index_repositories_on_host_type_and_full_name", :with=>["full_name"], :unique=>true}
     t.string   "host_domain"
     t.string   "name"
     t.string   "scm"
@@ -217,7 +217,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.index ["host_type", "uuid"], :name=>"index_repositories_on_host_type_and_uuid", :unique=>true, :order=>{:host_type=>:asc, :uuid=>:asc}
   end
 
-  create_table "repository_dependencies", id: :serial, default: %q{nextval('repository_dependencies_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "repository_dependencies", default: %q{nextval('repository_dependencies_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "project_id",    :index=>{:name=>"index_repository_dependencies_on_project_id", :order=>{:project_id=>:asc}}
     t.integer  "manifest_id",   :index=>{:name=>"index_repository_dependencies_on_manifest_id", :order=>{:manifest_id=>:asc}}
     t.boolean  "optional"
@@ -230,7 +230,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.integer  "repository_id", :index=>{:name=>"index_repository_dependencies_on_repository_id", :order=>{:repository_id=>:asc}}
   end
 
-  create_table "repository_organisations", id: :serial, default: %q{nextval('repository_organisations_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "repository_organisations", default: %q{nextval('repository_organisations_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "login"
     t.string   "uuid"
     t.string   "name"
@@ -242,12 +242,12 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.datetime "updated_at",     :null=>false
     t.boolean  "hidden",         :default=>false, :index=>{:name=>"index_repository_organisations_on_hidden", :order=>{:hidden=>:asc}}
     t.datetime "last_synced_at"
-    t.string   "host_type",      :index=>{:name=>"index_repository_organisations_on_host_type_and_login", :with=>["login"], :unique=>true, :case_sensitive=>false}
+    t.string   "host_type",      :index=>{:name=>"index_repository_organisations_on_host_type_and_login", :with=>["login"], :unique=>true}
 
     t.index ["host_type", "uuid"], :name=>"index_repository_organisations_on_host_type_and_uuid", :unique=>true, :order=>{:host_type=>:asc, :uuid=>:asc}
   end
 
-  create_table "repository_permissions", id: :serial, default: %q{nextval('repository_permissions_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "repository_permissions", default: %q{nextval('repository_permissions_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "user_id",       :index=>{:name=>"user_repo_unique_repository_permissions", :with=>["repository_id"], :unique=>true, :order=>{:user_id=>:asc, :repository_id=>:asc}}
     t.integer  "repository_id"
     t.boolean  "admin"
@@ -257,7 +257,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.datetime "updated_at",    :null=>false
   end
 
-  create_table "repository_subscriptions", id: :serial, default: %q{nextval('repository_subscriptions_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "repository_subscriptions", default: %q{nextval('repository_subscriptions_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "repository_id"
     t.integer  "user_id"
     t.datetime "created_at",         :null=>false, :index=>{:name=>"index_repository_subscriptions_on_created_at", :order=>{:created_at=>:asc}}
@@ -266,7 +266,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.boolean  "include_prerelease", :default=>true
   end
 
-  create_table "repository_users", id: :serial, default: %q{nextval('repository_users_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "repository_users", default: %q{nextval('repository_users_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "uuid"
     t.string   "login"
     t.string   "user_type"
@@ -282,12 +282,12 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.string   "bio"
     t.integer  "followers"
     t.integer  "following"
-    t.string   "host_type",      :index=>{:name=>"index_repository_users_on_host_type_and_login", :with=>["login"], :unique=>true, :case_sensitive=>false}
+    t.string   "host_type",      :index=>{:name=>"index_repository_users_on_host_type_and_login", :with=>["login"], :unique=>true}
 
     t.index ["host_type", "uuid"], :name=>"index_repository_users_on_host_type_and_uuid", :unique=>true, :order=>{:host_type=>:asc, :uuid=>:asc}
   end
 
-  create_table "subscriptions", id: :serial, default: %q{nextval('subscriptions_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "subscriptions", default: %q{nextval('subscriptions_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "project_id",                 :index=>{:name=>"index_subscriptions_on_project_id", :order=>{:project_id=>:asc}}
     t.integer  "user_id",                    :index=>{:name=>"index_subscriptions_on_user_id_and_project_id", :with=>["project_id"], :order=>{:user_id=>:asc, :project_id=>:asc}}
     t.datetime "created_at",                 :null=>false, :index=>{:name=>"index_subscriptions_on_created_at", :order=>{:created_at=>:asc}}
@@ -296,7 +296,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.boolean  "include_prerelease",         :default=>true
   end
 
-  create_table "tags", id: :serial, default: %q{nextval('tags_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "tags", default: %q{nextval('tags_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "repository_id", :index=>{:name=>"index_tags_on_repository_id_and_name", :with=>["name"], :order=>{:repository_id=>:asc, :name=>:asc}}
     t.string   "name"
     t.string   "sha"
@@ -306,7 +306,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.datetime "updated_at",    :null=>false
   end
 
-  create_table "users", id: :serial, default: %q{nextval('users_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "users", default: %q{nextval('users_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "email"
     t.datetime "created_at",        :null=>false, :index=>{:name=>"index_users_on_created_at", :order=>{:created_at=>:asc}}
     t.datetime "updated_at",        :null=>false
@@ -317,7 +317,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.datetime "last_login_at"
   end
 
-  create_table "versions", id: :serial, default: %q{nextval('versions_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "versions", default: %q{nextval('versions_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "project_id",                 :index=>{:name=>"index_versions_on_project_id_and_number", :with=>["number"], :unique=>true, :order=>{:project_id=>:asc, :number=>:asc}}
     t.string   "number"
     t.datetime "published_at"
@@ -326,7 +326,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.integer  "runtime_dependencies_count"
   end
 
-  create_table "web_hooks", id: :serial, default: %q{nextval('web_hooks_id_seq'::regclass)}, force: :cascade do |t|
+  create_table "web_hooks", default: %q{nextval('web_hooks_id_seq'::regclass)}, force: :cascade do |t|
     t.integer  "repository_id", :index=>{:name=>"index_web_hooks_on_repository_id", :order=>{:repository_id=>:asc}}
     t.integer  "user_id"
     t.string   "url"
