@@ -144,7 +144,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.datetime "latest_stable_release_published_at"
 
     t.index ["platform", "name"], :name=>"index_projects_on_platform_and_name", :unique=>true, :order=>{:platform=>:asc, :name=>:asc}
-    t.index ["platform", "name"], :name=>"index_projects_on_platform_and_name_lower"
+    t.index ["platform", "name"], :name=>"index_projects_on_platform_and_name_lower", :case_sensitive=> false
   end
 
   create_table "readmes", id: :serial, force: :cascade do |t|
@@ -179,7 +179,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.string   "homepage"
     t.integer  "size"
     t.integer  "stargazers_count"
-    t.string   "language",                   :index=>{:name=>"github_repositories_lower_language"}
+    t.string   "language",                   :index=>{:name=>"github_repositories_lower_language", :case_sensitive=> false}
     t.boolean  "has_issues"
     t.boolean  "has_wiki"
     t.boolean  "has_pages"
@@ -204,7 +204,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.string   "status",                     :index=>{:name=>"index_repositories_on_status", :order=>{:status=>:asc}}
     t.datetime "last_synced_at"
     t.integer  "rank"
-    t.string   "host_type",                  :index=>{:name=>"index_repositories_on_host_type_and_full_name", :with=>["full_name"], :unique=>true}
+    t.string   "host_type",                  :index=>{:name=>"index_repositories_on_host_type_and_full_name",:case_sensitive=> false, :with=>["full_name"], :unique=>true}
     t.string   "host_domain"
     t.string   "name"
     t.string   "scm"
@@ -242,7 +242,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.datetime "updated_at",     :null=>false
     t.boolean  "hidden",         :default=>false, :index=>{:name=>"index_repository_organisations_on_hidden", :order=>{:hidden=>:asc}}
     t.datetime "last_synced_at"
-    t.string   "host_type",      :index=>{:name=>"index_repository_organisations_on_host_type_and_login", :with=>["login"], :unique=>true}
+    t.string   "host_type",      :index=>{:name=>"index_repository_organisations_on_host_type_and_login", :with=>["login"], :case_sensitive=> false, :unique=>true}
 
     t.index ["host_type", "uuid"], :name=>"index_repository_organisations_on_host_type_and_uuid", :unique=>true, :order=>{:host_type=>:asc, :uuid=>:asc}
   end
@@ -282,7 +282,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.string   "bio"
     t.integer  "followers"
     t.integer  "following"
-    t.string   "host_type",      :index=>{:name=>"index_repository_users_on_host_type_and_login", :with=>["login"], :unique=>true}
+    t.string   "host_type",      :index=>{:name=>"index_repository_users_on_host_type_and_login", :case_sensitive=> false, :unique=>true, :with=>["login"]}
 
     t.index ["host_type", "uuid"], :name=>"index_repository_users_on_host_type_and_uuid", :unique=>true, :order=>{:host_type=>:asc, :uuid=>:asc}
   end
