@@ -1,20 +1,40 @@
-class CommitCounts
-    attr_accessor :last_week_commits, :last_month_commits, :last_two_month_commits, :last_year_commits
-    def initialize
-        @last_week_commits = @last_two_week_commits = @last_month_commits = @last_year_commits = 0
+module MaintenanceStats
+    class BaseCommitCount < BaseStat
+        def pull_out_commit_count(dataset)
+            return 0 if dataset.data.nil?
+            dataset.data.repository.default_branch_ref.target.history.total_count
+        end
     end
 
-    def get_stats
-        {
-            "last_week_commits": last_week_commits,
-            "last_month_commits": last_month_commits,
-            "last_two_month_commits": last_two_month_commits,
-            "last_year_commits": last_year_commits,
-        }
+    class LastWeekCommitsStat < BaseCommitCount
+        def get_stats
+            {
+                "last_week_commits": pull_out_commit_count(@results)
+            }
+        end
     end
 
-    def self.pull_out_count(dataset)
-        return 0 if dataset.data.nil?
-        dataset.data.repository.default_branch_ref.target.history.total_count
+    class LastMonthCommitsStat < BaseCommitCount
+        def get_stats
+            {
+                "last_month_commits": pull_out_commit_count(@results)
+            }
+        end
+    end
+
+    class LastTwoMonthCommitsStat < BaseCommitCount
+        def get_stats
+            {
+                "last_two_month_commits": pull_out_commit_count(@results)
+            }
+        end
+    end
+
+    class LastYearCommitsStat < BaseCommitCount
+        def get_stats
+            {
+                "last_year_commits": pull_out_commit_count(@results)
+            }
+        end
     end
 end

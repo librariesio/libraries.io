@@ -73,7 +73,6 @@ class AuthToken < ApplicationRecord
       @@token = token
       
       def headers(context)
-        puts "Here's your f'in token!!!!! #{@@token}"
           {
           "Authorization" => "Bearer #{@@token}"
           }

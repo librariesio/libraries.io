@@ -1,50 +1,28 @@
 class GatherRepositoryMaintenanceStats
-    attr_accessor :client
-
-    def self.gather_stats(repository)
+    def self.gather_stats(repository: nil)
+        repository = Repository.first if repository.nil?
         client = AuthToken.v4_client
         v3_client = AuthToken.client
-        now = DateTime.now
+        stats_to_run = get_stats_to_run(repository)
 
-        metric_results = []
+        clients = {
+            v3: v3_client,
+            v4: client
+        }
 
-        result = client.query(Queries::FullRepoQuery, variables: {owner: repository.owner_name, repo_name: repository.project_name})
+        metrics = []
 
-        # sometimes the repo just doesn't exist
-        # there a few that I've seen that redirect when you try and go to the github URL in libraries
-        if result.data.nil? || result.data.repository.nil?
-            Rails.logger.warn("#{repository.owner_name}/#{repository.project_name} is not a valid repository and should be fixed")
+        stats_to_run.each do |stat_run|
+            query_to_run = stat_run[:query].new(clients[stat_run[:query].client_type])
+            result = query_to_run.query(params: stat_run[:variables])
+            stat_run[:stat_class].each do |stat_class|
+                metrics << stat_class.new(result).get_stats
+            end
         end
 
-        release_stats = ReleaseStats.new(result)
+        add_metrics_to_repo(repository, metrics)
 
-        page_info = { has_next_page: true, cursor: nil}
-        while(page_info[:has_next_page])
-            releases = client.query(Queries::ReleasesQuery, variables: {owner: repository.owner_name, repo_name: repository.project_name, cursor: page_info[:cursor]})
-            page_info = release_stats.add_releases(releases, now - 365)
-        end
-        release_stats = release_stats.get_stats(now)
-
-        metric_results << release_stats
-
-        metric_results << IssueRates.new(result).get_stats
-
-        metric_results << PullRequestRates.new(result).get_stats
-        metric_results << AverageCommitDate.new(result).get_stats
-
-        commit_stats = CommitCounts.new
-
-        commit_stats.last_week_commits = CommitCounts.pull_out_count(client.query(Queries::CommitCountsQuery, variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 7).iso8601}))
-        commit_stats.last_month_commits = CommitCounts.pull_out_count(client.query(Queries::CommitCountsQuery, variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 30).iso8601}))
-        commit_stats.last_two_month_commits = CommitCounts.pull_out_count(client.query(Queries::CommitCountsQuery, variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 60).iso8601}))
-        commit_stats.last_year_commits = CommitCounts.pull_out_count(client.query(Queries::CommitCountsQuery, variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 365).iso8601}))
-
-        metric_results << commit_stats.get_stats
-
-        contributor_result = Queries::RepositoryContributorsQuery.repository_contributors(v3_client, result.data.repository.name_with_owner)
-        metric_results << Contributors.new(contributor_result).get_stats
-
-        add_metrics_to_repo(repository, metric_results)
+        metrics
     end
 
     private
@@ -55,4 +33,86 @@ class GatherRepositoryMaintenanceStats
             repository.repository_maintenance_stats.find_or_create_by(value: value.to_s, category: category.to_s)
         end
     end
+
+    def self.get_stats_to_run(repository)
+        now = DateTime.now
+        [{
+            query: MaintenanceStats::FullRepoQuery,
+            variables: {owner: repository.owner_name, repo_name: repository.project_name},
+            stat_class: [MaintenanceStats::IssueRates, MaintenanceStats::PullRequestRates, MaintenanceStats::AverageCommitDate]
+        },
+        {
+            query: MaintenanceStats::RepositoryContributorsQuery,
+            variables: {full_name: repository.full_name},
+            stat_class: [MaintenanceStats::Contributors]
+        },
+        {
+            query: MaintenanceStats::RepoReleasesQuery,
+            variables: {owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 365},
+            stat_class: [MaintenanceStats::ReleaseStats]
+        },
+        {
+            query: MaintenanceStats::CommitCountQuery,
+            variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 7).iso8601},
+            stat_class: [MaintenanceStats::LastWeekCommitsStat]
+        },
+        {
+            query: MaintenanceStats::CommitCountQuery,
+            variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 30).iso8601},
+            stat_class: [MaintenanceStats::LastMonthCommitsStat]
+        },
+        {
+            query: MaintenanceStats::CommitCountQuery,
+            variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 60).iso8601},
+            stat_class: [MaintenanceStats::LastTwoMonthCommitsStat]
+        },
+        {
+            query: MaintenanceStats::CommitCountQuery,
+            variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 365).iso8601},
+            stat_class: [MaintenanceStats::LastYearCommitsStat]
+        }]
+    end
 end
+
+=begin
+Pseudo code
+
+Keep map of stat_class : queries : params
+
+for each stat_class
+    look up if query with params has been run
+    
+    if true
+        send in the result from that query into the stat class
+    else
+        run query
+        store in query result map
+        send in the result from that query
+    end
+
+=end
+
+
+=begin
+Pseudo Code
+
+Keep map of queries : params : stat classes that use that query
+
+for each query
+    run query and then create stat classes, passing in query
+    store stat_class.get_stats in hash
+end
+
+
+Query class
+initialize with client
+store the graphql queries in that class
+query method that takes in hash for parameters and returns resultset
+
+
+Stat class
+maybe an empty generic class?
+initialize takes in result set
+def get_stats returns hash {"category": result}
+
+=end

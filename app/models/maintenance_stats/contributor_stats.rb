@@ -1,13 +1,16 @@
-class Contributors
-    attr_accessor :total_contributors
-    def initialize(dataset)
-        @total_contributors = 0
-        @total_contributors = dataset.count unless dataset.nil?
-    end
+module MaintenanceStats
+    class Contributors < BaseStat
+        def get_stats
+            {
+                "total_contributors": total_contributors,
+            }
+        end
 
-    def get_stats
-        {
-            "total_contributors": total_contributors,
-        }
+        private
+
+        def total_contributors
+            @results.count unless @results.nil?
+            0
+        end
     end
 end
