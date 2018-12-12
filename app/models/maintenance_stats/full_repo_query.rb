@@ -4,16 +4,6 @@ module MaintenanceStats
             query($owner: String!, $repo_name: String!) {
                 repository(owner: $owner, name: $repo_name) {
                     nameWithOwner
-                    forks {
-                        totalCount
-                    }
-                    stargazers {
-                        totalCount
-                    }
-                    watchers {
-                        totalCount
-                    }
-                    createdAt
                     defaultBranchRef {
                         name
                         target {
@@ -28,20 +18,6 @@ module MaintenanceStats
                             }
                         }
                     }
-                    description
-                    hasIssuesEnabled
-                    hasWikiEnabled
-                    homepageUrl
-                    isArchived
-                    isFork
-                    isMirror
-                    licenseInfo {
-                        key
-                    }
-                    primaryLanguage {
-                        name
-                    }
-                    pushedAt
                     closedIssues: issues(states: CLOSED) {
                         totalCount
                     }
