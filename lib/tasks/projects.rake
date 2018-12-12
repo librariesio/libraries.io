@@ -116,6 +116,7 @@ namespace :projects do
 
   desc 'Refresh dependent repos materialized view'
   task refresh_dependent_repos_view: :environment do
+    # This task can take about 30 minutes,
     exit if ENV['READ_ONLY'].present?
     ActiveRecord::Base.connection.execute("refresh materialized view project_dependent_repositories")
   end

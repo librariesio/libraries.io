@@ -1,6 +1,7 @@
 class CreateMatViewForDependentRepos < ActiveRecord::Migration[5.1]
 
   def up
+    # This can take about 45 - 60 minutes
     execute 'create materialized view project_dependent_repositories as
             select t1.project_id, t1.id as repository_id, t1.rank, t1.stargazers_count
             from (SELECT "repositories".* , repository_dependencies.project_id FROM "repositories" INNER JOIN "repository_dependencies" ON "repositories"."id" = "repository_dependencies"."repository_id" WHERE "repositories"."private" = false GROUP BY repositories.id, repository_dependencies.project_id) as t1 inner join projects on t1.project_id = projects.id;'
