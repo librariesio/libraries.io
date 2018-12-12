@@ -72,7 +72,7 @@ class AuthToken < ApplicationRecord
     http_adapter = GraphQL::Client::HTTP.new("https://api.github.com/graphql") do
       @@token = token
       
-      def headers(context)
+      def headers(_context)
           {
           "Authorization" => "Bearer #{@@token}"
           }
