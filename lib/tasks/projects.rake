@@ -113,4 +113,10 @@ namespace :projects do
       end
     end
   end
+
+  desc 'Refresh dependent repos materialized view'
+  task refresh_dependent_repos_view: :environment do
+    exit if ENV['READ_ONLY'].present?
+    ActiveRecord::Base.connection.execute("refresh materialized view project_dependent_repositories")
+  end
 end

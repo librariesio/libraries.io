@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181113234356) do
+ActiveRecord::Schema.define(version: 20181211181245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,8 +50,8 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.string   "kind"
     t.boolean  "optional",     :default=>false
     t.string   "requirements"
-    t.datetime "created_at",   :null=>false
-    t.datetime "updated_at",   :null=>false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "identities", id: :serial, default: %q{nextval('identities_id_seq'::regclass)}, force: :cascade do |t|
@@ -115,13 +115,13 @@ ActiveRecord::Schema.define(version: 20181113234356) do
   end
 
   create_table "projects", id: :serial, default: %q{nextval('projects_id_seq'::regclass)}, force: :cascade do |t|
-    t.string   "name"
-    t.string   "platform",                           :index=>{:name=>"index_projects_on_platform_and_dependents_count", :with=>["dependents_count"], :order=>{:platform=>:asc, :dependents_count=>:asc}}
+    t.string   "name",                               :limit=>255
+    t.string   "platform",                           :limit=>255, :index=>{:name=>"index_projects_on_platform_and_dependents_count", :with=>["dependents_count"], :order=>{:platform=>:asc, :dependents_count=>:asc}}
     t.datetime "created_at",                         :index=>{:name=>"index_projects_on_created_at", :order=>{:created_at=>:asc}}
-    t.datetime "updated_at",                         :index=>{:name=>"index_projects_on_updated_at", :order=>{:updated_at=>:asc}}
+    t.datetime "updated_at"
     t.text     "description"
     t.text     "keywords"
-    t.string   "homepage"
+    t.string   "homepage",                           :limit=>255
     t.string   "licenses"
     t.string   "repository_url"
     t.integer  "repository_id",                      :index=>{:name=>"index_projects_on_repository_id", :order=>{:repository_id=>:asc}}
@@ -170,7 +170,7 @@ ActiveRecord::Schema.define(version: 20181113234356) do
   end
 
   create_table "repositories", id: :serial, default: %q{nextval('repositories_id_seq'::regclass)}, force: :cascade do |t|
-    t.string   "full_name"
+    t.string   "full_name",                  :index=>{:name=>"index_repositories_on_full_name", :order=>{:full_name=>:asc}}
     t.string   "description"
     t.boolean  "fork"
     t.datetime "created_at",                 :null=>false
@@ -228,6 +228,8 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.datetime "created_at",    :null=>false
     t.datetime "updated_at",    :null=>false
     t.integer  "repository_id", :index=>{:name=>"index_repository_dependencies_on_repository_id", :order=>{:repository_id=>:asc}}
+
+    t.index ["project_id"], :name=>"repository_dependencies_project_id_substring_idx", :expression=>"\"substring\"((requirements)::text, 0, 100)"
   end
 
   create_table "repository_organisations", id: :serial, default: %q{nextval('repository_organisations_id_seq'::regclass)}, force: :cascade do |t|
@@ -308,8 +310,8 @@ ActiveRecord::Schema.define(version: 20181113234356) do
 
   create_table "users", id: :serial, default: %q{nextval('users_id_seq'::regclass)}, force: :cascade do |t|
     t.string   "email"
-    t.datetime "created_at",        :null=>false, :index=>{:name=>"index_users_on_created_at", :order=>{:created_at=>:asc}}
-    t.datetime "updated_at",        :null=>false
+    t.datetime "created_at",        :index=>{:name=>"index_users_on_created_at", :order=>{:created_at=>:asc}}
+    t.datetime "updated_at"
     t.boolean  "currently_syncing", :default=>false, :null=>false
     t.datetime "last_synced_at"
     t.boolean  "emails_enabled",    :default=>true
@@ -321,8 +323,8 @@ ActiveRecord::Schema.define(version: 20181113234356) do
     t.integer  "project_id",                 :index=>{:name=>"index_versions_on_project_id_and_number", :with=>["number"], :unique=>true, :order=>{:project_id=>:asc, :number=>:asc}}
     t.string   "number"
     t.datetime "published_at"
-    t.datetime "created_at",                 :null=>false
-    t.datetime "updated_at",                 :null=>false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "runtime_dependencies_count"
   end
 
