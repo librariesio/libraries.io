@@ -113,4 +113,10 @@ namespace :projects do
       end
     end
   end
+
+  desc 'Refresh project_dependent_repos view'
+  task refresh_project_dependent_repos_view: :environment do
+    exit if ENV['READ_ONLY'].present?
+    ProjectDependentRepository.refresh
+  end
 end
