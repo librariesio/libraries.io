@@ -30,4 +30,19 @@ module MaintenanceStats
             @client.query(CommitCountsQuery, variables: params)
         end
     end
+
+    class CommitCountQueryV3 < BaseQuery
+        @@valid_params = [:full_name]
+        @@required_params = [:full_name]
+
+        def self.client_type
+            :v3
+        end
+
+        def query(params: {})
+            validate_params(params)
+
+            @client.participation_stats(params[:full_name])
+        end
+    end
 end

@@ -92,6 +92,12 @@ class GatherRepositoryMaintenanceStats
             query: MaintenanceStats::CommitCountQuery,
             variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 365).iso8601},
             stat_class: [MaintenanceStats::LastYearCommitsStat]
-        }]
+        },
+        {
+            query: MaintenanceStats::CommitCountQueryV3,
+            variables: {full_name: repository.full_name},
+            stat_class: [MaintenanceStats::V3CommitsStat]
+        }
+    ]
     end
 end

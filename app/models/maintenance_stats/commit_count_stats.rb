@@ -36,4 +36,21 @@ module MaintenanceStats
             }
         end
     end
+
+    class V3CommitsStat < BaseStat
+        def count_up_commits(start_index, finish_index)
+            if !@results.nil? && @results.key?(:all)
+                @results[:all][start_index..finish_index].sum
+            end
+        end
+
+        def get_stats
+            {
+                "v3_last_week_commits": count_up_commits(0, 0),
+                "v3_last_month_commits": count_up_commits(0, 4),
+                "v3_last_two_month_commits": count_up_commits(0, 8),
+                "v3_last_year_commits": count_up_commits(0, 52)
+            }
+        end
+    end
 end
