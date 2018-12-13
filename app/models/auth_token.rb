@@ -1,31 +1,13 @@
-require "graphql/client/http"
-
 class AuthToken < ApplicationRecord
   validates_presence_of :token
   scope :authorized, -> { where(authorized: [true, nil]) }
 
   def self.client(options = {})
-    if @auth_token && @auth_token.high_rate_limit?
-      return @auth_token.github_client(options)
-    end
-    auth_token = authorized.order("RANDOM()").limit(100).sample
-    if auth_token.high_rate_limit?
-      @auth_token = auth_token
-      return auth_token.github_client(options)
-    end
-    client
+    find_token(:v3).github_client(options)
   end
 
   def self.v4_client
-    if @auth_token && @auth_token.high_rate_limit?
-      return @auth_token.v4_github_client
-    end
-    auth_token = authorized.order("RANDOM()").limit(100).sample
-    if auth_token.high_rate_limit?
-      @auth_token = auth_token
-      return auth_token.v4_github_client
-    end
-    v4_client
+    find_token(:v4).v4_github_client
   end
 
   def self.token
@@ -38,10 +20,13 @@ class AuthToken < ApplicationRecord
     end
   end
 
-  def high_rate_limit?
+  def high_rate_limit?(api_version)
+    if api_version == :v4
+      return v4_remaining_rate > 500
+    end
     github_client.rate_limit.remaining > 500
-  rescue Octokit::Unauthorized, Octokit::AccountSuspended
-    false
+    rescue Octokit::Unauthorized, Octokit::AccountSuspended
+      false
   end
 
   def still_authorized?
@@ -84,4 +69,36 @@ class AuthToken < ApplicationRecord
   
     GraphQL::Client.new(schema: schema, execute: http_adapter)
   end
+
+  private
+
+  def self.find_token(api_version)
+    return @auth_token if @auth_token && @auth_token.high_rate_limit?(api_version)
+    auth_token = authorized.order("RANDOM()").limit(100).sample
+    if auth_token.high_rate_limit?(api_version)
+      @auth_token = auth_token
+    end
+    find_token(api_version)
+  end
+
+  def v4_remaining_rate
+    query_result = v4_github_client.query(V4RateLimitQuery)
+    unless query_result.data.nil?
+      # check the return
+      query_result.data.rate_limit.remaining
+    else
+      return 0
+    end
+  end
+
+  V4RateLimitQuery = Rails.application.config.graphql.client.parse <<-'GRAPHQL'
+    query {
+      viewer {
+        login
+      }
+      rateLimit {
+        remaining
+      }
+    }
+  GRAPHQL
 end
