@@ -9,7 +9,7 @@ module MaintenanceStats
         private
 
         def total_contributors
-            @results.count unless @results.nil?
+            @results.count unless @results.nil? || @results.blank?
         end
     end
 end

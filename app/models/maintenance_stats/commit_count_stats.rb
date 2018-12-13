@@ -1,6 +1,7 @@
 module MaintenanceStats
     class BaseCommitCount < BaseStat
         def pull_out_commit_count(dataset)
+            return nil if dataset.data.repository.nil? || dataset.data.repository.default_branch_ref.nil?
             dataset.data.repository.default_branch_ref.target.history.total_count
         end
     end
