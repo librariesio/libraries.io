@@ -1,6 +1,6 @@
 class GatherRepositoryMaintenanceStats
-    def self.gather_stats(repository: nil)
-        repository = Repository.first if repository.nil?
+    def self.gather_stats(repository)
+        return unless repository.host_type == "GitHub" # only support Github repos for now
         client = AuthToken.v4_client
         v3_client = AuthToken.client
         stats_to_run = get_stats_to_run(repository)
@@ -14,9 +14,15 @@ class GatherRepositoryMaintenanceStats
 
         stats_to_run.each do |stat_run|
             query_to_run = stat_run[:query].new(clients[stat_run[:query].client_type])
-            result = query_to_run.query(params: stat_run[:variables])
-            stat_run[:stat_class].each do |stat_class|
-                metrics << stat_class.new(result).get_stats
+            begin
+                result = query_to_run.query(params: stat_run[:variables])
+                unless check_for_error_response(result, stat_run[:query].client_type)
+                    stat_run[:stat_class].each do |stat_class|
+                        metrics << stat_class.new(result).get_stats
+                    end
+                end
+            rescue Octokit::Error
+                next
             end
         end
 
@@ -26,6 +32,22 @@ class GatherRepositoryMaintenanceStats
     end
 
     private
+
+    def self.check_for_error_response(response, client_version)
+        if client_version == :v4
+            # errors can be stored in the response from Github or can be stored in the response object from HTTP errors
+            response.errors.each do |message|
+                Rails.logger.warn(message)
+            end
+            response.data.errors.each do |message|
+                Rails.logger.warn(message)
+            end unless response.data.errors.nil?
+            # if we have either type of error or there is no data return true
+            return response.data.nil? || response.errors.any? || response.data.errors.any?
+        end
+        # return false for v3 for right now since those raise errors
+        false
+    end
 
     def self.add_metrics_to_repo(repository, results)
         # create one hash with all results

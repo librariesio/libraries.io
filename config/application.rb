@@ -41,6 +41,7 @@ module Libraries
     Client = GraphQL::Client.new(schema: Schema)
     Application.config.graphql = ActiveSupport::OrderedOptions.new
     Application.config.graphql.client = Client
+    Application.config.graphql.schema = Schema
 
     config.active_job.queue_adapter = :sidekiq
 

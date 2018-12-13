@@ -33,29 +33,46 @@ module MaintenanceStats
             end_date = params.slice(:end_date)
             params = params.slice!(:end_date)
 
-            @releases = []
+            @releases = nil
 
             page_info = { has_next_page: true, cursor: nil}
             while(page_info[:has_next_page])
                 params[:cursor] = page_info[:cursor] if page_info[:cursor]
                 result = @client.query(ReleasesQuery, variables: params)
 
+                if check_for_errors(result)
+                    @releases = result if @releases.nil?
+                    return @releases
+                end
+
                 has_next_page = result.data.repository.releases.page_info.has_next_page
                 cursor = result.data.repository.releases.page_info.end_cursor
+                page_info = { has_next_page: has_next_page, cursor: cursor}
 
-                result.data.repository.releases.nodes.each do |release|
+                if @releases.nil?
+                    @releases = result
+                    next
+                end
+                
+                result.data.repository&.releases.nodes.each do |release|
                     publish_date = DateTime.parse(release.published_at)
                     if publish_date > end_date
-                        @releases << { name: release.name, published_at: publish_date }
+                        @releases.data.repository.releases.nodes << release
                     else
                         has_next_page = false
                         break
                     end
                 end
-                page_info = { has_next_page: has_next_page, cursor: cursor}
+                
             end
 
             @releases
+        end
+
+        private
+
+        def check_for_errors(result)
+            return result.data.nil? || result.errors.any? || result.data.errors.any?
         end
     end
 end
