@@ -3,6 +3,7 @@
 set -e
 
 export RAILS_ENV=test
+cp db/schema.rb db/unmodified_schema.rb
 rake db:drop || true
 rake db:create db:migrate
 
