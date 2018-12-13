@@ -10,24 +10,25 @@ module MaintenanceStats
         end
 
         def total_pull_requests_count
+            return 0 if closed_requests_count.nil? && open_requests_count.nil? && merged_requests_count.nil?
             closed_requests_count + open_requests_count + merged_requests_count
         end
 
         def request_acceptance_rate
-            return 0.0 if total_pull_requests_count == 0
+            return 100.0 if total_pull_requests_count == 0
             (merged_requests_count * 100.0) / total_pull_requests_count
         end
 
         def closed_requests_count
-            @results.data.repository.closed_pull_requests.total_count || 0
+            @results.data.repository&.closed_pull_requests.total_count
         end
 
         def open_requests_count
-            @results.data.repository.open_pull_requests.total_count || 0
+            @results.data.repository&.open_pull_requests.total_count
         end
 
         def merged_requests_count
-            @results.data.repository.merged_pull_requests.total_count || 0
+            @results.data.repository&.merged_pull_requests.total_count
         end
     end
 end

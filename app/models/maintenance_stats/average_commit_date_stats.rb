@@ -13,6 +13,7 @@ module MaintenanceStats
             edges = @results.data.repository.default_branch_ref.target.history.edges
     
             dates = edges.map { |edge| Time.parse(edge.node.authored_date) }
+            return nil if dates.count == 0
             Time.at(dates.map(&:to_i).sum / dates.count)
         end
     end

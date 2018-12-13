@@ -52,12 +52,12 @@ class GatherRepositoryMaintenanceStats
     def self.add_metrics_to_repo(repository, results)
         # create one hash with all results
         results.reduce(Hash.new, :merge).each do |category, value|
-            repository.repository_maintenance_stats.find_or_create_by(value: value.to_s, category: category.to_s)
+            repository.repository_maintenance_stats.find_or_create_by(value: value.to_s, category: category.to_s) unless value.nil?
         end
     end
 
     def self.get_stats_to_run(repository)
-        now = DateTime.now
+        now = DateTime.current
         [{
             query: MaintenanceStats::FullRepoQuery,
             variables: {owner: repository.owner_name, repo_name: repository.project_name},

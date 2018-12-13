@@ -10,7 +10,6 @@ module MaintenanceStats
 
         def total_contributors
             @results.count unless @results.nil?
-            0
         end
     end
 end

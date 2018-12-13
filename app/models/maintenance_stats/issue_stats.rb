@@ -9,20 +9,21 @@ module MaintenanceStats
         end
 
         def total_issues_count
+            return 0 if closed_issues_count.nil? && open_issues_count.nil?
             closed_issues_count + open_issues_count
         end
 
         def issue_closure_rate
-            return 0.0 if total_issues_count == 0
-            (closed_issues_count * 100.0) / (open_issues_count + closed_issues_count)
+            return 100.0 if total_issues_count == 0
+            (closed_issues_count * 100.0) / total_issues_count
         end
 
         def open_issues_count
-            @results.data.repository.open_issues.total_count || 0
+            @results.data.repository&.open_issues.total_count
         end
 
         def closed_issues_count
-            @results.data.repository.closed_issues.total_count || 0
+            @results.data.repository&.closed_issues.total_count
         end
     end
 end
