@@ -1,0 +1,17 @@
+#! /bin/bash
+
+set -e
+
+export RAILS_ENV=test
+rake db:drop || true
+rake db:create db:migrate
+
+# unmodified_schema.rb is created in Dockerfile
+if ! diff -u db/unmodified_schema.rb db/schema.rb ; then
+    echo "*** Migrations must result in the same schema found in db/schema.rb!" 1>&2
+    echo "*** Migrations are out of sync with db/schema.rb" 1>&2
+    exit 1
+else
+    echo "Migrations look good!"
+    exit 0
+fi
