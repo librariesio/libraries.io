@@ -63,11 +63,9 @@ class AuthToken < ApplicationRecord
           }
       end
     end
-
-    # Fetch latest schema on init, this will make a network request
-    schema = GraphQL::Client.load_schema(http_adapter)
   
-    GraphQL::Client.new(schema: schema, execute: http_adapter)
+    # create new client with HTTP adapter set to use token and the loaded GraphQL schema
+    GraphQL::Client.new(schema: Rails.application.config.graphql.schema, execute: http_adapter)
   end
 
   private
