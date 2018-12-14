@@ -49,7 +49,7 @@ module RepositoryOwner
 
     def download_repos
       if owner.org?
-        repos = api_client.group_projects(owner.login).map(&:full_name)
+        repos = api_client.group_projects(owner.login).map(&:path_with_namespace)
       else
         # GitLab doesn't have an API to get a users public projects so we scrape it instead
         projects_html = Nokogiri::HTML(PackageManager::Base.get_json("https://gitlab.com/users/#{owner.login}/projects")['html'])
@@ -68,7 +68,7 @@ module RepositoryOwner
       return unless owner.org?
 
       api_client.group_members(owner.login).each do |org|
-        RepositoryCreateUserWorker.perform_async('GitLab', org.login)
+        RepositoryCreateUserWorker.perform_async('GitLab', org.username)
       end
       true
     rescue *RepositoryHost::Gitlab::IGNORABLE_EXCEPTIONS
