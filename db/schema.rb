@@ -231,9 +231,11 @@ ActiveRecord::Schema.define(version: 20181204153549) do
   end
 
   create_table "repository_maintenance_stats", force: :cascade do |t|
-    t.bigint "repository_id", :index=>{:name=>"index_repository_maintenance_stats_on_repository_id", :order=>{:repository_id=>:asc}}
-    t.string "category"
-    t.string "value"
+    t.bigint   "repository_id", :index=>{:name=>"index_repository_maintenance_stats_on_repository_id", :order=>{:repository_id=>:asc}}
+    t.string   "category"
+    t.string   "value"
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
   end
 
   create_table "repository_organisations", id: :serial, default: %q{nextval('repository_organisations_id_seq'::regclass)}, force: :cascade do |t|

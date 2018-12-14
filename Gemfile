@@ -119,6 +119,8 @@ group :test do
   gem 'poltergeist', '1.17.0'
   gem 'json_spec'
   gem 'rspec-sidekiq'
+  gem "webmock", "~> 3.4"
+  gem "vcr", "~> 4.0"
 end
 
 group :production do

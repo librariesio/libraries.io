@@ -52,7 +52,12 @@ class GatherRepositoryMaintenanceStats
     def self.add_metrics_to_repo(repository, results)
         # create one hash with all results
         results.reduce(Hash.new, :merge).each do |category, value|
-            repository.repository_maintenance_stats.find_or_create_by(value: value.to_s, category: category.to_s) unless value.nil?
+            unless value.nil?
+                stat = repository.repository_maintenance_stats.find_or_create_by(category: category.to_s)
+                stat.update_attributes!(value: value.to_s)
+                # force rails to set updated_at
+                stat.touch
+            end
         end
     end
 

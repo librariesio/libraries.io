@@ -4,10 +4,23 @@ require File.expand_path('../../config/environment', __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'spec_helper'
 require 'rspec/rails'
+require 'webmock/rspec'
 
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
+
+# Enforce that tests can't make unmocked http requests
+WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.enable!
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
+  config.ignore_localhost = true
+  config.hook_into :webmock
+  # set to record once only
+  config.default_cassette_options = { record: :once, decode_compressed_response: true }
+end
 
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
