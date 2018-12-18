@@ -26,7 +26,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:07 GMT
+      - Tue, 18 Dec 2018 20:43:15 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -44,7 +44,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4984'
+      - '4962'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -66,12 +66,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBBA:2330:2BD2AB0:5D8A3D5:5C195023
+      - FCD8:232F:1AE2F84:3FAD7F2:5C195BE3
     body:
       encoding: ASCII-8BIT
-      string: '{"data":{"viewer":{"login":"mikeyoung85"},"rateLimit":{"remaining":4984}}}'
+      string: '{"data":{"viewer":{"login":"mikeyoung85"},"rateLimit":{"remaining":4962}}}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:07 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:15 GMT
 - request:
     method: get
     uri: https://api.github.com/rate_limit
@@ -99,7 +99,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:08 GMT
+      - Tue, 18 Dec 2018 20:43:16 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -109,9 +109,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4952'
+      - '4961'
       X-Ratelimit-Reset:
-      - '1545162915'
+      - '1545166515'
       Cache-Control:
       - no-cache
       X-Oauth-Scopes:
@@ -139,12 +139,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBAC:2331:3250E27:6D0BCED:5C195022
+      - FCCA:232F:1AE2F95:3FAD7D4:5C195BE2
     body:
       encoding: ASCII-8BIT
-      string: '{"resources":{"core":{"limit":5000,"remaining":4952,"reset":1545162915},"search":{"limit":30,"remaining":30,"reset":1545162848},"graphql":{"limit":5000,"remaining":4984,"reset":1545166369}},"rate":{"limit":5000,"remaining":4952,"reset":1545162915}}'
+      string: '{"resources":{"core":{"limit":5000,"remaining":4961,"reset":1545166515},"search":{"limit":30,"remaining":30,"reset":1545165856},"graphql":{"limit":5000,"remaining":4962,"reset":1545166369}},"rate":{"limit":5000,"remaining":4961,"reset":1545166515}}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:08 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -179,7 +179,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:08 GMT
+      - Tue, 18 Dec 2018 20:43:16 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -197,7 +197,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4983'
+      - '4961'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -219,12 +219,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBBC:2330:2BD2B09:5D8A47B:5C195024
+      - FCD9:2330:2BFD2F9:5DE4C94:5C195BE4
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"nameWithOwner":"buddhamagnet/heidigoodchild","defaultBranchRef":null,"closedIssues":{"totalCount":0},"openIssues":{"totalCount":0},"closedPullRequests":{"totalCount":0},"openPullRequests":{"totalCount":0},"mergedPullRequests":{"totalCount":0},"releases":{"nodes":[]}}}}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:08 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: get
     uri: https://api.github.com/repos/buddhamagnet/heidigoodchild/contributors?per_page=100
@@ -252,7 +252,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:08 GMT
+      - Tue, 18 Dec 2018 20:43:16 GMT
       Content-Type:
       - application/octet-stream
       Status:
@@ -260,9 +260,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4951'
+      - '4960'
       X-Ratelimit-Reset:
-      - '1545162915'
+      - '1545166515'
       X-Oauth-Scopes:
       - notifications, read:discussion, read:gpg_key, repo, user
       X-Accepted-Oauth-Scopes:
@@ -288,12 +288,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBAC:2331:3250E41:6D0BE39:5C195024
+      - FCCA:232F:1AE2F9E:3FAD82D:5C195BE4
     body:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:08 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -323,7 +323,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:09 GMT
+      - Tue, 18 Dec 2018 20:43:16 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -341,7 +341,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4982'
+      - '4960'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -363,12 +363,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBBD:232E:E0F9F6:235F26C:5C195024
+      - FCDA:232F:1AE2FA8:3FAD85D:5C195BE4
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"releases":{"nodes":[],"totalCount":0,"pageInfo":{"hasPreviousPage":false,"hasNextPage":false,"endCursor":null,"startCursor":null}}}}}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:09 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -397,7 +397,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:09 GMT
+      - Tue, 18 Dec 2018 20:43:17 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -415,7 +415,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4981'
+      - '4959'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -437,12 +437,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBBE:2330:2BD2B3C:5D8A4E0:5C195025
+      - FCDB:2330:2BFD31D:5DE4CE1:5C195BE4
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:09 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -471,7 +471,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:09 GMT
+      - Tue, 18 Dec 2018 20:43:17 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -489,7 +489,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4980'
+      - '4958'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -511,12 +511,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBBF:2331:3250E7B:6D0BEE1:5C195025
+      - FCDC:2331:3281D38:6D75DD3:5C195BE5
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:09 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -525,7 +525,7 @@ http_interactions:
       string: '{"query":"query MaintenanceStats__Queries__CommitCountQuery__CommitCountsQuery($owner:
         String!, $repo_name: String!, $start_date: GitTimestamp!) {\n  repository(owner:
         $owner, name: $repo_name) {\n    defaultBranchRef {\n      target {\n        __typename\n        ...
-        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild","start_date":"2018-10-15T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__CommitCountQuery__CommitCountsQuery"}'
+        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild","start_date":"2018-10-14T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__CommitCountQuery__CommitCountsQuery"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -545,7 +545,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:09 GMT
+      - Tue, 18 Dec 2018 20:43:17 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -563,7 +563,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4979'
+      - '4957'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -585,12 +585,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBC0:232E:E0FA01:235F28B:5C195025
+      - FCDD:2331:3281D45:6D75DE8:5C195BE5
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:09 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -619,7 +619,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:09 GMT
+      - Tue, 18 Dec 2018 20:43:17 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -637,7 +637,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4978'
+      - '4956'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -659,12 +659,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBC1:2331:3250E9C:6D0BF26:5C195025
+      - FCDE:2330:2BFD334:5DE4D23:5C195BE5
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:09 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: get
     uri: https://api.github.com/repos/buddhamagnet/heidigoodchild/stats/participation
@@ -692,7 +692,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:09 GMT
+      - Tue, 18 Dec 2018 20:43:17 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -702,9 +702,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4950'
+      - '4959'
       X-Ratelimit-Reset:
-      - '1545162915'
+      - '1545166515'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Vary:
@@ -736,10 +736,10 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBAC:2331:3250EA8:6D0BE7D:5C195024
+      - FCCA:232F:1AE2FC4:3FAD851:5C195BE4
     body:
       encoding: ASCII-8BIT
       string: '{"all":[],"owner":[]}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:09 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 recorded_with: VCR 4.0.0

@@ -25,7 +25,7 @@ describe MaintenanceStats::Stats::LastYearCommitsStat do
         expect(results.keys).to eql expected_keys
         
         # check values against the VCR cassette data
-        expect(results[:last_year_commits]).to eql 3473
+        expect(results[:last_year_commits]).to eql 3476
     end
   end
   
@@ -69,15 +69,15 @@ describe MaintenanceStats::Stats::V3CommitsStat do
         it "should get timed commit counts for the last year from the request" do
             results = stat.get_stats
 
-            expected_keys = %W(v3_last_week_commits v3_last_month_commits v3_last_two_month_commits v3_last_year_commits).map(&:to_sym)
+            expected_keys = %W(v3_last_week_commits v3_last_4_weeks_commits v3_last_8_weeks_commits v3_last_52_weeks_commits).map(&:to_sym)
 
             expect(results.keys).to eql expected_keys
             
             # check values against the VCR cassette data
             expect(results[:v3_last_week_commits]).to eql 63
-            expect(results[:v3_last_month_commits]).to eql 239
-            expect(results[:v3_last_two_month_commits]).to eql 488
-            expect(results[:v3_last_year_commits]).to eql 3355
+            expect(results[:v3_last_4_weeks_commits]).to eql 239
+            expect(results[:v3_last_8_weeks_commits]).to eql 488
+            expect(results[:v3_last_52_weeks_commits]).to eql 3355
         end
     end
 
@@ -92,15 +92,15 @@ describe MaintenanceStats::Stats::V3CommitsStat do
         it "should handle no data from query" do
             results = stat.get_stats
 
-            expected_keys = %W(v3_last_week_commits v3_last_month_commits v3_last_two_month_commits v3_last_year_commits).map(&:to_sym)
+            expected_keys = %W(v3_last_week_commits v3_last_4_weeks_commits v3_last_8_weeks_commits v3_last_52_weeks_commits).map(&:to_sym)
 
             expect(results.keys).to eql expected_keys
             
             # check values against the VCR cassette data
             expect(results[:v3_last_week_commits]).to be 0
-            expect(results[:v3_last_month_commits]).to be 0
-            expect(results[:v3_last_two_month_commits]).to be 0
-            expect(results[:v3_last_year_commits]).to be 0
+            expect(results[:v3_last_4_weeks_commits]).to be 0
+            expect(results[:v3_last_8_weeks_commits]).to be 0
+            expect(results[:v3_last_52_weeks_commits]).to be 0
         end
     end
 end

@@ -74,22 +74,22 @@ class GatherRepositoryMaintenanceStats
         },
         {
             query: MaintenanceStats::Queries::RepoReleasesQuery,
-            variables: {owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 365},
+            variables: {owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 1.year},
             stat_class: [MaintenanceStats::Stats::ReleaseStats]
         },
         {
             query: MaintenanceStats::Queries::CommitCountQuery,
-            variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 7).iso8601},
+            variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.week).iso8601},
             stat_class: [MaintenanceStats::Stats::LastWeekCommitsStat]
         },
         {
             query: MaintenanceStats::Queries::CommitCountQuery,
-            variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 30).iso8601},
+            variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.month).iso8601},
             stat_class: [MaintenanceStats::Stats::LastMonthCommitsStat]
         },
         {
             query: MaintenanceStats::Queries::CommitCountQuery,
-            variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 60).iso8601},
+            variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 2.months).iso8601},
             stat_class: [MaintenanceStats::Stats::LastTwoMonthCommitsStat]
         },
         {

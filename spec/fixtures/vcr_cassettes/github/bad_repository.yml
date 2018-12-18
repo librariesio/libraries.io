@@ -26,7 +26,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:03 GMT
+      - Tue, 18 Dec 2018 20:43:12 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -44,7 +44,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4991'
+      - '4969'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -66,12 +66,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBB3:2330:2BD29A6:5D8A1C0:5C19501F
+      - FCD1:232F:1AE2F41:3FAD722:5C195BE0
     body:
       encoding: ASCII-8BIT
-      string: '{"data":{"viewer":{"login":"mikeyoung85"},"rateLimit":{"remaining":4991}}}'
+      string: '{"data":{"viewer":{"login":"mikeyoung85"},"rateLimit":{"remaining":4969}}}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:03 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:12 GMT
 - request:
     method: get
     uri: https://api.github.com/rate_limit
@@ -99,7 +99,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:04 GMT
+      - Tue, 18 Dec 2018 20:43:13 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -109,9 +109,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4954'
+      - '4963'
       X-Ratelimit-Reset:
-      - '1545162915'
+      - '1545166515'
       Cache-Control:
       - no-cache
       X-Oauth-Scopes:
@@ -139,12 +139,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBAC:2331:3250D0F:6D0B8B7:5C19501B
+      - FCCA:232F:1AE2F64:3FAD5C2:5C195BDC
     body:
       encoding: ASCII-8BIT
-      string: '{"resources":{"core":{"limit":5000,"remaining":4954,"reset":1545162915},"search":{"limit":30,"remaining":30,"reset":1545162844},"graphql":{"limit":5000,"remaining":4991,"reset":1545166369}},"rate":{"limit":5000,"remaining":4954,"reset":1545162915}}'
+      string: '{"resources":{"core":{"limit":5000,"remaining":4963,"reset":1545166515},"search":{"limit":30,"remaining":30,"reset":1545165853},"graphql":{"limit":5000,"remaining":4969,"reset":1545166369}},"rate":{"limit":5000,"remaining":4963,"reset":1545166515}}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:04 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:13 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -179,7 +179,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:04 GMT
+      - Tue, 18 Dec 2018 20:43:13 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -197,7 +197,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4990'
+      - '4968'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -219,13 +219,13 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBB4:2330:2BD29D4:5D8A227:5C195020
+      - FCD2:2331:3281C4D:6D75BE4:5C195BE1
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:04 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:13 GMT
 - request:
     method: get
     uri: https://api.github.com/repos/bad/example-for-testing/contributors?per_page=100
@@ -253,7 +253,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:04 GMT
+      - Tue, 18 Dec 2018 20:43:13 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -263,9 +263,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4953'
+      - '4962'
       X-Ratelimit-Reset:
-      - '1545162915'
+      - '1545166515'
       X-Oauth-Scopes:
       - notifications, read:discussion, read:gpg_key, repo, user
       X-Accepted-Oauth-Scopes:
@@ -291,12 +291,12 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBAC:2331:3250D1D:6D0BBB8:5C195020
+      - FCCA:232F:1AE2F6B:3FAD779:5C195BE1
     body:
       encoding: ASCII-8BIT
       string: '{"message":"Not Found","documentation_url":"https://developer.github.com/v3/repos/#list-contributors"}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:04 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:13 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -326,7 +326,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:04 GMT
+      - Tue, 18 Dec 2018 20:43:13 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -344,7 +344,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4989'
+      - '4967'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -366,13 +366,13 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBB5:2331:3250D25:6D0BBE6:5C195020
+      - FCD3:2331:3281C68:6D75C13:5C195BE1
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:04 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:13 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -401,7 +401,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:04 GMT
+      - Tue, 18 Dec 2018 20:43:14 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -419,7 +419,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4988'
+      - '4966'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -441,13 +441,13 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBB6:232E:E0F9A2:235F19B:5C195020
+      - FCD4:2331:3281C70:6D75C2A:5C195BE1
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:04 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:14 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -476,7 +476,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:06 GMT
+      - Tue, 18 Dec 2018 20:43:14 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -494,7 +494,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4987'
+      - '4965'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -516,13 +516,13 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBB7:232F:1AC988E:3F70632:5C195020
+      - FCD5:2331:3281C82:6D75C47:5C195BE2
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:06 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:14 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -531,7 +531,7 @@ http_interactions:
       string: '{"query":"query MaintenanceStats__Queries__CommitCountQuery__CommitCountsQuery($owner:
         String!, $repo_name: String!, $start_date: GitTimestamp!) {\n  repository(owner:
         $owner, name: $repo_name) {\n    defaultBranchRef {\n      target {\n        __typename\n        ...
-        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"bad","repo_name":"example-for-testing","start_date":"2018-10-15T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__CommitCountQuery__CommitCountsQuery"}'
+        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"bad","repo_name":"example-for-testing","start_date":"2018-10-14T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__CommitCountQuery__CommitCountsQuery"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -551,7 +551,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:06 GMT
+      - Tue, 18 Dec 2018 20:43:14 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -569,7 +569,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4986'
+      - '4964'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -591,13 +591,13 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBB8:2331:3250D84:6D0BCBF:5C195022
+      - FCD6:2331:3281C8E:6D75C61:5C195BE2
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:06 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:14 GMT
 - request:
     method: post
     uri: https://api.github.com/graphql
@@ -626,7 +626,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:06 GMT
+      - Tue, 18 Dec 2018 20:43:14 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -644,7 +644,7 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4985'
+      - '4963'
       X-Ratelimit-Reset:
       - '1545166369'
       Access-Control-Expose-Headers:
@@ -666,13 +666,13 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBB9:2330:2BD2A58:5D8A327:5C195022
+      - FCD7:2330:2BFD285:5DE4BBE:5C195BE2
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:06 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:14 GMT
 - request:
     method: get
     uri: https://api.github.com/repos/bad/example-for-testing/stats/participation
@@ -700,7 +700,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 18 Dec 2018 19:53:06 GMT
+      - Tue, 18 Dec 2018 20:43:14 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -710,9 +710,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4952'
+      - '4961'
       X-Ratelimit-Reset:
-      - '1545162915'
+      - '1545166515'
       X-Oauth-Scopes:
       - notifications, read:discussion, read:gpg_key, repo, user
       X-Accepted-Oauth-Scopes:
@@ -738,10 +738,10 @@ http_interactions:
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - FBAC:2331:3250D91:6D0BBDB:5C195020
+      - FCCA:232F:1AE2F7C:3FAD796:5C195BE1
     body:
       encoding: ASCII-8BIT
       string: '{"message":"Not Found","documentation_url":"https://developer.github.com/v3/repos/statistics/#get-the-weekly-commit-count-for-the-repository-owner-and-everyone-else"}'
     http_version: 
-  recorded_at: Tue, 18 Dec 2018 19:53:06 GMT
+  recorded_at: Tue, 18 Dec 2018 20:43:14 GMT
 recorded_with: VCR 4.0.0
