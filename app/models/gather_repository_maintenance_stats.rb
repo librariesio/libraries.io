@@ -21,7 +21,8 @@ class GatherRepositoryMaintenanceStats
                         metrics << stat_class.new(result).get_stats
                     end
                 end
-            rescue Octokit::Error
+            rescue Octokit::Error => e
+                Rails.logger.warn(e.message)
                 next
             end
         end
@@ -45,7 +46,6 @@ class GatherRepositoryMaintenanceStats
             # if we have either type of error or there is no data return true
             return response.data.nil? || response.errors.any? || response.data.errors.any?
         end
-        # return false for v3 for right now since those raise errors
         false
     end
 
