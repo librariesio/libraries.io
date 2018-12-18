@@ -9,7 +9,6 @@ describe "Api::TreesController" do
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq('application/json')
 
-      version.reload
       expect(response.body).to be_json_eql TreeResolver.new(version, 'runtime', Date.today).tree.to_json
     end
   end
