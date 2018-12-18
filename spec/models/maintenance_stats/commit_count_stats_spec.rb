@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe MaintenanceStats::LastYearCommitsStat do
+describe MaintenanceStats::Stats::LastYearCommitsStat do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { auth_token.v4_github_client }
-  let(:query_klass) { MaintenanceStats::CommitCountQuery.new(client) }
+  let(:query_klass) { MaintenanceStats::Queries::CommitCountQuery.new(client) }
   let(:start_date) { DateTime.parse("2018-12-14T17:49:49+00:00") }
   let(:query_params) { {owner: repository.owner_name, repo_name: repository.project_name, start_date: (start_date - 365).iso8601} }
 
@@ -25,7 +25,7 @@ describe MaintenanceStats::LastYearCommitsStat do
         expect(results.keys).to eql expected_keys
         
         # check values against the VCR cassette data
-        expect(results[:last_year_commits]).to eql 3455
+        expect(results[:last_year_commits]).to eql 3473
     end
   end
   
@@ -50,10 +50,10 @@ describe MaintenanceStats::LastYearCommitsStat do
   end
 end
 
-describe MaintenanceStats::V3CommitsStat do
+describe MaintenanceStats::Stats::V3CommitsStat do
     let!(:auth_token) { create(:auth_token) }
     let(:client) { auth_token.github_client }
-    let(:query_klass) { MaintenanceStats::CommitCountQueryV3.new(client) }
+    let(:query_klass) { MaintenanceStats::Queries::CommitCountQueryV3.new(client) }
     let(:query_params) { {full_name: repository.full_name} }
 
     let(:stat) { described_class.new(query_results) }
@@ -74,10 +74,10 @@ describe MaintenanceStats::V3CommitsStat do
             expect(results.keys).to eql expected_keys
             
             # check values against the VCR cassette data
-            expect(results[:v3_last_week_commits]).to eql 90
-            expect(results[:v3_last_month_commits]).to eql 265
-            expect(results[:v3_last_two_month_commits]).to eql 507
-            expect(results[:v3_last_year_commits]).to eql 3392
+            expect(results[:v3_last_week_commits]).to eql 63
+            expect(results[:v3_last_month_commits]).to eql 239
+            expect(results[:v3_last_two_month_commits]).to eql 488
+            expect(results[:v3_last_year_commits]).to eql 3355
         end
     end
 

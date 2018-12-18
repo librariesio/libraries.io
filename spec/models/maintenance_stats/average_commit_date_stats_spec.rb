@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe MaintenanceStats::AverageCommitDate do
+describe MaintenanceStats::Stats::AverageCommitDate do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { auth_token.v4_github_client }
-  let(:query_klass) { MaintenanceStats::FullRepoQuery.new(client) }
+  let(:query_klass) { MaintenanceStats::Queries::FullRepoQuery.new(client) }
   let(:query_params) { {owner: repository.owner_name, repo_name: repository.project_name} }
 
   let(:stat) { described_class.new(query_results) }
@@ -21,7 +21,7 @@ describe MaintenanceStats::AverageCommitDate do
 
         expect(results.key?(:average_commit_date)).to be true
         # this will be the average pulled from the VCR cassette
-        expected_date = Time.parse("2018-09-26 10:05:07 GMT").utc
+        expected_date = Time.parse("2018-09-25 12:21:32 GMT").utc
         expect(results[:average_commit_date]).to eql expected_date
     end
   end

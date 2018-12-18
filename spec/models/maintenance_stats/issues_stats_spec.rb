@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe MaintenanceStats::IssueRates do
+describe MaintenanceStats::Stats::IssueRates do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { auth_token.v4_github_client }
-  let(:query_klass) { MaintenanceStats::FullRepoQuery.new(client) }
+  let(:query_klass) { MaintenanceStats::Queries::FullRepoQuery.new(client) }
   let(:query_params) { {owner: repository.owner_name, repo_name: repository.project_name} }
 
   let(:stat) { described_class.new(query_results) }
@@ -24,8 +24,8 @@ describe MaintenanceStats::IssueRates do
         expect(results.keys).to eql expected_keys
         
         # check values against the VCR cassette data
-        expect(results[:closed_issue_count]).to eql 11784
-        expect(results[:open_issue_count]).to eql 335
+        expect(results[:closed_issue_count]).to eql 11790
+        expect(results[:open_issue_count]).to eql 339
 
         expected_closure_rate = (results[:closed_issue_count] * 100.0) / stat.total_issues_count
         expect(results[:issue_closure_rate]).to eql expected_closure_rate

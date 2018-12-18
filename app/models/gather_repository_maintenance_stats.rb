@@ -64,44 +64,44 @@ class GatherRepositoryMaintenanceStats
     def self.get_stats_to_run(repository)
         now = DateTime.current
         [{
-            query: MaintenanceStats::FullRepoQuery,
+            query: MaintenanceStats::Queries::FullRepoQuery,
             variables: {owner: repository.owner_name, repo_name: repository.project_name},
-            stat_class: [MaintenanceStats::IssueRates, MaintenanceStats::PullRequestRates, MaintenanceStats::AverageCommitDate]
+            stat_class: [MaintenanceStats::Stats::IssueRates, MaintenanceStats::Stats::PullRequestRates, MaintenanceStats::Stats::AverageCommitDate]
         },
         {
-            query: MaintenanceStats::RepositoryContributorsQuery,
+            query: MaintenanceStats::Queries::RepositoryContributorsQuery,
             variables: {full_name: repository.full_name},
-            stat_class: [MaintenanceStats::Contributors]
+            stat_class: [MaintenanceStats::Stats::Contributors]
         },
         {
-            query: MaintenanceStats::RepoReleasesQuery,
+            query: MaintenanceStats::Queries::RepoReleasesQuery,
             variables: {owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 365},
-            stat_class: [MaintenanceStats::ReleaseStats]
+            stat_class: [MaintenanceStats::Stats::ReleaseStats]
         },
         {
-            query: MaintenanceStats::CommitCountQuery,
+            query: MaintenanceStats::Queries::CommitCountQuery,
             variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 7).iso8601},
-            stat_class: [MaintenanceStats::LastWeekCommitsStat]
+            stat_class: [MaintenanceStats::Stats::LastWeekCommitsStat]
         },
         {
-            query: MaintenanceStats::CommitCountQuery,
+            query: MaintenanceStats::Queries::CommitCountQuery,
             variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 30).iso8601},
-            stat_class: [MaintenanceStats::LastMonthCommitsStat]
+            stat_class: [MaintenanceStats::Stats::LastMonthCommitsStat]
         },
         {
-            query: MaintenanceStats::CommitCountQuery,
+            query: MaintenanceStats::Queries::CommitCountQuery,
             variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 60).iso8601},
-            stat_class: [MaintenanceStats::LastTwoMonthCommitsStat]
+            stat_class: [MaintenanceStats::Stats::LastTwoMonthCommitsStat]
         },
         {
-            query: MaintenanceStats::CommitCountQuery,
+            query: MaintenanceStats::Queries::CommitCountQuery,
             variables: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 365).iso8601},
-            stat_class: [MaintenanceStats::LastYearCommitsStat]
+            stat_class: [MaintenanceStats::Stats::LastYearCommitsStat]
         },
         {
-            query: MaintenanceStats::CommitCountQueryV3,
+            query: MaintenanceStats::Queries::CommitCountQueryV3,
             variables: {full_name: repository.full_name},
-            stat_class: [MaintenanceStats::V3CommitsStat]
+            stat_class: [MaintenanceStats::Stats::V3CommitsStat]
         }
     ]
     end

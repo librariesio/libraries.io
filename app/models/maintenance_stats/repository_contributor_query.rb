@@ -1,16 +1,18 @@
 module MaintenanceStats
-    class RepositoryContributorsQuery < BaseQuery
-        @@valid_params = [:full_name]
-        @@required_params = [:full_name]
+    module Queries
+        class RepositoryContributorsQuery < BaseQuery
+            @@valid_params = [:full_name]
+            @@required_params = [:full_name]
 
-        def self.client_type
-            :v3
-        end
+            def self.client_type
+                :v3
+            end
 
-        def query(params: {})
-            validate_params(params)
+            def query(params: {})
+                validate_params(params)
 
-            @client.contribs(params[:full_name])
+                @client.contribs(params[:full_name])
+            end
         end
     end
 end

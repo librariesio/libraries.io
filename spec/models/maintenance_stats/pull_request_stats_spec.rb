@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe MaintenanceStats::PullRequestRates do
+describe MaintenanceStats::Stats::PullRequestRates do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { auth_token.v4_github_client }
-  let(:query_klass) { MaintenanceStats::FullRepoQuery.new(client) }
+  let(:query_klass) { MaintenanceStats::Queries::FullRepoQuery.new(client) }
   let(:query_params) { {owner: repository.owner_name, repo_name: repository.project_name} }
 
   let(:stat) { described_class.new(query_results) }
@@ -24,9 +24,9 @@ describe MaintenanceStats::PullRequestRates do
         expect(results.keys).to eql expected_keys
         
         # check values against the VCR cassette data
-        expect(results[:closed_pull_request_count]).to eql 7041
-        expect(results[:open_pull_request_count]).to eql 692
-        expect(results[:merged_pull_request_count]).to eql 14757
+        expect(results[:closed_pull_request_count]).to eql 7045
+        expect(results[:open_pull_request_count]).to eql 701
+        expect(results[:merged_pull_request_count]).to eql 14764
 
         expected_acceptance_rate = (results[:merged_pull_request_count] * 100.0) / stat.total_pull_requests_count
         expect(results[:pull_request_acceptance]).to eql expected_acceptance_rate

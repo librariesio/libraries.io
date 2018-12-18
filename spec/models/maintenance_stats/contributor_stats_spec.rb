@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe MaintenanceStats::Contributors do
+describe MaintenanceStats::Stats::Contributors do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { auth_token.github_client }
-  let(:query_klass) { MaintenanceStats::RepositoryContributorsQuery.new(client) }
+  let(:query_klass) { MaintenanceStats::Queries::RepositoryContributorsQuery.new(client) }
   let(:query_params) { {full_name: repository.full_name} }
 
   let(:stat) { described_class.new(query_results) }
@@ -24,7 +24,7 @@ describe MaintenanceStats::Contributors do
         expect(results.keys).to eql expected_keys
         
         # check values against the VCR cassette data
-        expect(results[:total_contributors]).to eql 380
+        expect(results[:total_contributors]).to eql 379
     end
   end
   
