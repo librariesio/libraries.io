@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe MaintenanceStats::LastYearCommitsStat do
   let!(:auth_token) { create(:auth_token) }
-  let(:client) { AuthToken.v4_client }
+  let(:client) { auth_token.v4_github_client }
   let(:query_klass) { MaintenanceStats::CommitCountQuery.new(client) }
   let(:start_date) { DateTime.parse("2018-12-14T17:49:49+00:00") }
   let(:query_params) { {owner: repository.owner_name, repo_name: repository.project_name, start_date: (start_date - 365).iso8601} }
@@ -52,7 +52,7 @@ end
 
 describe MaintenanceStats::V3CommitsStat do
     let!(:auth_token) { create(:auth_token) }
-    let(:client) { AuthToken.client }
+    let(:client) { auth_token.github_client }
     let(:query_klass) { MaintenanceStats::CommitCountQueryV3.new(client) }
     let(:query_params) { {full_name: repository.full_name} }
 

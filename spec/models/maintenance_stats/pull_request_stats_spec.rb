@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe MaintenanceStats::PullRequestRates do
   let!(:auth_token) { create(:auth_token) }
-  let(:client) { AuthToken.v4_client }
+  let(:client) { auth_token.v4_github_client }
   let(:query_klass) { MaintenanceStats::FullRepoQuery.new(client) }
   let(:query_params) { {owner: repository.owner_name, repo_name: repository.project_name} }
 

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe MaintenanceStats::ReleaseStats do
   let!(:auth_token) { create(:auth_token) }
-  let(:client) { AuthToken.v4_client }
+  let(:client) { auth_token.v4_github_client }
   let(:start_date) { DateTime.parse("2018-12-14T17:49:49+00:00") }
   let(:query_klass) { MaintenanceStats::RepoReleasesQuery.new(client) }
   let(:query_params) { {owner: repository.owner_name, repo_name: repository.project_name, end_date: start_date - 365} }

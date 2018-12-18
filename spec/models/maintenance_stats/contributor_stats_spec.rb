@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe MaintenanceStats::Contributors do
   let!(:auth_token) { create(:auth_token) }
-  let(:client) { AuthToken.client }
+  let(:client) { auth_token.github_client }
   let(:query_klass) { MaintenanceStats::RepositoryContributorsQuery.new(client) }
   let(:query_params) { {full_name: repository.full_name} }
 
@@ -11,7 +11,7 @@ describe MaintenanceStats::Contributors do
   context "with a valid repository" do
     let(:repository) { create(:repository) }
     let(:query_results) do
-        VCR.use_cassette('github/rails_api', :match_requests_on => [:body]) do
+        VCR.use_cassette('github/rails_api') do
            return query_klass.query(params: query_params)
         end
     end
@@ -31,7 +31,7 @@ describe MaintenanceStats::Contributors do
   context "repository with no commits" do
     let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
     let(:query_results) do
-        VCR.use_cassette('github/empty_repository', :match_requests_on => [:body]) do
+        VCR.use_cassette('github/empty_repository') do
            return query_klass.query(params: query_params)
         end
     end
