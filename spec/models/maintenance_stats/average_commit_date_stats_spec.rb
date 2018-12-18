@@ -21,7 +21,7 @@ describe MaintenanceStats::AverageCommitDate do
 
         expect(results.key?(:average_commit_date)).to be true
         # this will be the average pulled from the VCR cassette
-        expected_date = Time.parse("2018-09-26 06:05:07").utc
+        expected_date = Time.parse("2018-09-26 10:05:07 GMT").utc
         expect(results[:average_commit_date]).to eql expected_date
     end
   end
