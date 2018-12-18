@@ -48,9 +48,9 @@ module MaintenanceStats
         def get_stats
             {
                 "v3_last_week_commits": count_up_commits(0, 0),
-                "v3_last_month_commits": count_up_commits(0, 4),
-                "v3_last_two_month_commits": count_up_commits(0, 8),
-                "v3_last_year_commits": count_up_commits(0, 52)
+                "v3_last_month_commits": count_up_commits(0, 3),
+                "v3_last_two_month_commits": count_up_commits(0, 7),
+                "v3_last_year_commits": count_up_commits(0, 51)
             }
         end
     end

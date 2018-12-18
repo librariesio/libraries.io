@@ -75,8 +75,8 @@ describe MaintenanceStats::V3CommitsStat do
             
             # check values against the VCR cassette data
             expect(results[:v3_last_week_commits]).to eql 90
-            expect(results[:v3_last_month_commits]).to eql 315
-            expect(results[:v3_last_two_month_commits]).to eql 579
+            expect(results[:v3_last_month_commits]).to eql 265
+            expect(results[:v3_last_two_month_commits]).to eql 507
             expect(results[:v3_last_year_commits]).to eql 3392
         end
     end
