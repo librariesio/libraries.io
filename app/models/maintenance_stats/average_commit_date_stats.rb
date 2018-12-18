@@ -15,7 +15,7 @@ module MaintenanceStats
     
             dates = edges.map { |edge| Time.parse(edge.node.authored_date) }
             return if dates.count == 0
-            Time.at(dates.map(&:to_i).sum / dates.count)
+            Time.at(dates.map(&:to_i).sum / dates.count).utc
         end
     end
 end
