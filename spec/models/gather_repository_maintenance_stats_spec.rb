@@ -12,7 +12,7 @@ describe GatherRepositoryMaintenanceStats do
   describe "#gather_stats" do
       context "with a valid repository" do
         before do
-          VCR.use_cassette('github/rails_api', :match_requests_on => [:body]) do
+          VCR.use_cassette('github/rails_api', :match_requests_on => [:method, :uri, :body]) do
             GatherRepositoryMaintenanceStats.gather_stats(repository)
           end
         end
@@ -31,7 +31,7 @@ describe GatherRepositoryMaintenanceStats do
           first_updated_at = repository.repository_maintenance_stats.first.updated_at
           category = repository.repository_maintenance_stats.first.category
 
-          VCR.use_cassette('github/rails_api', :match_requests_on => [:body]) do
+          VCR.use_cassette('github/rails_api', :match_requests_on => [:method, :uri, :body]) do
             GatherRepositoryMaintenanceStats.gather_stats(repository)
           end
 
@@ -45,7 +45,7 @@ describe GatherRepositoryMaintenanceStats do
         let(:repository) { create(:repository, full_name: 'bad/example-for-testing') }
 
         it "should save metrics for repository" do
-          VCR.use_cassette('github/bad_repository', :match_requests_on => [:body]) do
+          VCR.use_cassette('github/bad_repository', :match_requests_on => [:method, :uri, :body]) do
             GatherRepositoryMaintenanceStats.gather_stats(repository)
           end
 
@@ -58,7 +58,7 @@ describe GatherRepositoryMaintenanceStats do
         let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
 
         it "should save default values" do
-          VCR.use_cassette('github/empty_repository', :match_requests_on => [:body]) do
+          VCR.use_cassette('github/empty_repository', :match_requests_on => [:method, :uri, :body]) do
             GatherRepositoryMaintenanceStats.gather_stats(repository)
           end
 
@@ -79,7 +79,7 @@ describe GatherRepositoryMaintenanceStats do
         let(:repository) { create(:repository, host_type: "Bitbucket") }
 
         it "should not save any values" do
-          VCR.use_cassette('github/rails_api', :match_requests_on => [:body]) do
+          VCR.use_cassette('github/rails_api', :match_requests_on => [:method, :uri, :body]) do
             GatherRepositoryMaintenanceStats.gather_stats(repository)
           end
 
