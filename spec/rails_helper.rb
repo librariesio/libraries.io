@@ -18,8 +18,12 @@ VCR.configure do |config|
   config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
   config.ignore_localhost = true
   config.hook_into :webmock
-  # set to record once only
-  config.default_cassette_options = { record: :once, decode_compressed_response: true }
+  # when you add a new cassette name, you have to
+  # VCR_ENABLE_NEW_RECORDING=1 the first time you run that test.
+  config.default_cassette_options = { 
+    record: ENV["VCR_ENABLE_NEW_RECORDING"] ? :once : :none,
+    decode_compressed_response: true 
+  }
 end
 
 require 'capybara/poltergeist'
