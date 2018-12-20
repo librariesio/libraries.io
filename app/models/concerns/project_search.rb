@@ -51,6 +51,13 @@ module ProjectSearch
       name
     end
 
+    def marshal_dump
+      instance_variables.reject{|m| :__elasticsearch__ == m}.inject({}) do |vars, attr|
+        vars[attr] = instance_variable_get(attr)
+        vars
+      end
+    end
+
     def self.facets(options = {})
       Rails.cache.fetch "facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
         search('', options).response.aggregations
