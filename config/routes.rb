@@ -207,7 +207,7 @@ Rails.application.routes.draw do
 
   get '/search', to: 'search#index'
 
-  get '/sitemap.xml.gz', to: redirect("https://#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com/sitemaps/sitemap.xml.gz")
+  get '/sitemap.xml.gz', to: redirect("/sitemaps/sitemap.xml.gz")
 
   get '/enable_private', to: 'sessions#enable_private', as: :enable_private
   get '/enable_public', to: 'sessions#enable_public', as: :enable_public
