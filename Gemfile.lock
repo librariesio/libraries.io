@@ -526,7 +526,7 @@ GEM
     ruby_parser (3.11.0)
       sexp_processor (~> 4.9)
     rubypants (0.7.0)
-    rugged (0.27.7)
+    rugged (0.27.5)
     sanitize-url (0.1.4)
     sass (3.7.1)
       sass-listen (~> 4.0.0)
