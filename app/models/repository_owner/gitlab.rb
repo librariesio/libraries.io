@@ -36,9 +36,10 @@ module RepositoryOwner
       return if owner.org?
 
       # GitLab doesn't have an API to get a users public group memberships so we scrape it instead
-      rsp = Nokogiri::HTML(PackageManager::Base.get_json("https://gitlab.com/users/#{owner.login}/groups"))
+      rsp = PackageManager::Base.get_json("https://gitlab.com/users/#{owner.login}/groups")
       return if rsp.nil?
-      groups_html = rsp['html']
+      groups_html = Nokogiri::HTML(rsp['html'])
+      return if groups_html.nil?
       links = groups_html.css('a.group-name').map{|l| l['href'][1..-1]}.compact
 
       links.each do |org_login|
@@ -54,9 +55,10 @@ module RepositoryOwner
         repos = api_client.group_projects(owner.login).map(&:path_with_namespace)
       else
         # GitLab doesn't have an API to get a users public projects so we scrape it instead
-        rsp = Nokogiri::HTML(PackageManager::Base.get_json("https://gitlab.com/users/#{owner.login}/projects"))
+        rsp = PackageManager::Base.get_json("https://gitlab.com/users/#{owner.login}/projects")
         return if rsp.nil?
-        projects_html = rsp['html']
+        projects_html = Nokogiri::HTML(rsp['html'])
+        return if projects_html.nil?
         repos = projects_html.css('a.project').map{|l| l['href'][1..-1] }.uniq.compact
       end
 
