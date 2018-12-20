@@ -15,7 +15,7 @@ memcached = goog.servers.all(filter: 'labels.project = libraries AND labels.envi
 elastic = goog.servers.all(filter: 'labels.project = libraries AND labels.environment = production AND labels.role = elasticsearch')
 
 set :capenv, ->(env) {
-  Dotenv.load('.env.prod').keys.each {|k| env.add k}
+  Dotenv.load('.env.prod').each {|k,v| env.add k,v}
   # we're using cloud memorystore for redis and fog doesn't support querying it so hard-code it
   env.add 'REDISCLOUD_URL', "redis://10.0.1.4:6379/0"
   env.add 'MEMCACHIER_SERVERS', memcached.map {|mem| mem.network_interfaces[0][:network_ip] + ':11211'}.join(',')
