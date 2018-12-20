@@ -38,7 +38,7 @@ module PackageManager
         :description => project['abstract'],
         :licenses => project.fetch('license', []).join(','),
         :repository_url => repo_fallback(project.fetch('resources',{}).fetch('repository',{})['web'], project.fetch('resources',{})['homepage']),
-        :versions => get("https://fastapi.metacpan.org/v1/release/_search?q=distribution:#{project['distribution']}&size=5000&fields=version,dependency")['hits']['hits']
+        :versions => self.versions(project),
       }
     end
 
