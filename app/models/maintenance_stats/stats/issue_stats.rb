@@ -15,8 +15,8 @@ module MaintenanceStats
             end
 
             def issue_closure_rate
-                return 100.0 if total_issues_count == 0
-                (closed_issues_count * 100.0) / total_issues_count
+                return 1.0 if total_issues_count == 0
+                closed_issues_count.to_f / total_issues_count.to_f
             end
 
             def open_issues_count

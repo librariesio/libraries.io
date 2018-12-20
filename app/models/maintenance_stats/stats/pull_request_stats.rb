@@ -16,8 +16,8 @@ module MaintenanceStats
             end
 
             def request_acceptance_rate
-                return 100.0 if total_pull_requests_count == 0
-                (merged_requests_count * 100.0) / total_pull_requests_count
+                return 1.0 if total_pull_requests_count == 0
+                merged_requests_count.to_f / total_pull_requests_count.to_f
             end
 
             def closed_requests_count

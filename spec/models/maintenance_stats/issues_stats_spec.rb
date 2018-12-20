@@ -27,7 +27,7 @@ describe MaintenanceStats::Stats::IssueRates do
         expect(results[:closed_issue_count]).to eql 11790
         expect(results[:open_issue_count]).to eql 339
 
-        expected_closure_rate = (results[:closed_issue_count] * 100.0) / stat.total_issues_count
+        expected_closure_rate = results[:closed_issue_count].to_f / stat.total_issues_count.to_f
         expect(results[:issue_closure_rate]).to eql expected_closure_rate
     end
   end
@@ -49,7 +49,7 @@ describe MaintenanceStats::Stats::IssueRates do
 
         expect(results[:closed_issue_count]).to eql 0
         expect(results[:open_issue_count]).to eql 0
-        expect(results[:issue_closure_rate]).to eql 100.0
+        expect(results[:issue_closure_rate]).to eql 1.0
     end
   end
 end
