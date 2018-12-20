@@ -40,7 +40,7 @@ module PackageManager
       {
         :name => project[:name],
         :description => project["description"],
-        :repository_url => repo_fallback(project["scm"]["url"], '')
+        :repository_url => repo_fallback(project.fetch("scm", {})["url"], '')
       }
     end
 
