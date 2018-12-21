@@ -5,6 +5,7 @@ if Rails.env.production?
     # is private and you can't override the defaults?
     sampler.send(:initialize, path_blacklist: ["/_ah/health", "/healthz", "/healthcheck"].freeze, qps: 0.01)
     config.sampler = sampler
+    config.notifications << 'cache_read.active_support'
   end
 
   Google::Cloud::ErrorReporting.configure do |config|

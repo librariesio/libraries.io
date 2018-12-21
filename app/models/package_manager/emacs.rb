@@ -22,6 +22,7 @@ module PackageManager
     end
 
     def self.project(name)
+      return nil if projects[name].nil?
       projects[name].merge({"name" => name})
     end
 

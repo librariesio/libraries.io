@@ -1,10 +1,10 @@
 class ProjectUsageController < ApplicationController
   before_action :find_project
   def show
-    @all_counts = @project.repository_dependencies.where('repositories.fork = ?', false).joins(manifest: :repository).distinct('manifests.repository_id').group('repository_dependencies.requirements').count.select{|k,v| k.present? }
+    @all_counts = @project.repository_dependencies.where('repositories.fork = ?', false).joins(:repository).distinct('repository_dependencies.repository_id').group('repository_dependencies.requirements').count.select{|k,v| k.present? }
     @total = @all_counts.sum{|k,v| v }
     if @all_counts.any?
-      @kinds = @project.repository_dependencies.where('repositories.fork = ?', false).joins(manifest: :repository).distinct('manifests.repository_id').group('repository_dependencies.kind').count
+      @kinds = @project.repository_dependencies.where('repositories.fork = ?', false).joins(:repository).distinct('repository_dependencies.repository_id').group('repository_dependencies.kind').count
       @counts = sort_by_semver_range(@all_counts.length > 18 ? 17 : 18)
       @highest_percentage = @counts.map{|_k,v| v.to_f/@total*100 }.max
       scope = @project.dependent_repositories.open_source.source

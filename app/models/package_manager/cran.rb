@@ -35,6 +35,7 @@ module PackageManager
       html = get_html("https://cran.r-project.org/web/packages/#{name}/index.html")
       info = {}
       table = html.css('table')[0]
+      return nil if table.nil?
       table.css('tr').each do |tr|
         tds = tr.css('td').map(&:text)
         info[tds[0]] = tds[1]
