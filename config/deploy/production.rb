@@ -42,11 +42,15 @@ namespace :deploy do
 
   task :ensure_container_built do
     checks = 0
+    max_checks = 10
     revision = `git show-ref origin/master`.split.first
-    while checks < 10 && !system("gcloud container images describe gcr.io/#{ENV['GOOGLE_PROJECT']}/libraries.io:#{revision}") do
+    while checks <= max_checks && !system("gcloud container images describe gcr.io/#{ENV['GOOGLE_PROJECT']}/libraries.io:#{revision}") do
       checks += 1
       print "Waiting for revision #{revision} to be built on Google Container Registry..."
       sleep(60)
+    end
+    if checks > max_checks
+      raise "Didn't build container successfully"
     end
   end
   after :starting, :ensure_container_built
