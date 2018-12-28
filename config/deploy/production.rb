@@ -23,5 +23,31 @@ set :capenv, ->(env) {
 }
 
 web.each do |s|
+  next unless s.status == "RUNNING"
   server s.network_interfaces[0][:access_configs][0][:nat_ip], user: 'deploy', roles: [s.labels.fetch(:type, ''), s.labels.fetch(:role, '')]
+end
+
+namespace :deploy do
+  task :tag_docker_live do
+    revision = `git show-ref origin/master`.split.first
+    system "gcloud --quiet container images add-tag gcr.io/#{ENV['GOOGLE_PROJECT']}/libraries.io:#{revision} gcr.io/#{ENV['GOOGLE_PROJECT']}/libraries.io:latest"
+  end
+  after :published , :tag_docker_live
+
+  task :update_k8s do
+    revision = `git show-ref origin/master`.split.first
+    system "kubectl set image deployment/libraries-sidekiq-worker-deploy libraries-sidekiq-worker=gcr.io/#{ENV['GOOGLE_PROJECT']}/libraries.io:#{revision}"
+  end
+  before :publishing, :update_k8s
+
+  task :ensure_container_built do
+    checks = 0
+    revision = `git show-ref origin/master`.split.first
+    while checks < 10 && !system("gcloud container images describe gcr.io/#{ENV['GOOGLE_PROJECT']}/libraries.io:#{revision}") do
+      checks += 1
+      print "Waiting for revision #{revision} to be built on Google Container Registry..."
+      sleep(60)
+    end
+  end
+  after :starting, :ensure_container_built
 end
