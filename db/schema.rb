@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_04_153549) do
+ActiveRecord::Schema.define(version: 2018_12_13_214340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -387,5 +387,25 @@ ActiveRecord::Schema.define(version: 2018_12_04_153549) do
     t.datetime "updated_at", null: false
     t.index ["repository_id"], name: "index_web_hooks_on_repository_id"
   end
+
+
+  create_view "project_dependent_repositories", materialized: true,  sql_definition: <<-SQL
+      SELECT t1.project_id,
+      t1.id AS repository_id,
+      t1.rank,
+      t1.stargazers_count
+     FROM (( SELECT repositories.id,
+              repositories.rank,
+              repositories.stargazers_count,
+              repository_dependencies.project_id
+             FROM (repositories
+               JOIN repository_dependencies ON ((repositories.id = repository_dependencies.repository_id)))
+            WHERE (repositories.private = false)
+            GROUP BY repositories.id, repository_dependencies.project_id) t1
+       JOIN projects ON ((t1.project_id = projects.id)));
+  SQL
+
+  add_index "project_dependent_repositories", ["project_id", "rank", "stargazers_count"], name: "index_project_dependent_repos_on_rank", order: { rank: "DESC NULLS LAST", stargazers_count: :desc }
+  add_index "project_dependent_repositories", ["project_id", "repository_id"], name: "index_project_dependent_repos_on_proj_id_and_repo_id", unique: true
 
 end
