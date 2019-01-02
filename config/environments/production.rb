@@ -43,7 +43,9 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = ENV['FORCE_SSL']
+  config.force_ssl = true
+  # opt /healthcheck out of SSL for load balancer healthchecks to work
+  config.ssl_options = { redirect: { exclude: ->(request) { request.path =~ /healthcheck/ } } }
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.

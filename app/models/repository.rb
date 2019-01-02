@@ -21,6 +21,7 @@ class Repository < ApplicationRecord
   has_many :published_tags, -> { published }, anonymous_class: Tag
   has_many :manifests, dependent: :destroy
   has_many :repository_dependencies
+  has_many :repository_maintenance_stats, dependent: :destroy
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :dependency_projects, -> { group('projects.id').order("COUNT(projects.id) DESC") }, through: :dependencies, source: :project
   has_many :dependency_repos, -> { group('repositories.id') }, through: :dependency_projects, source: :repository
@@ -327,5 +328,9 @@ class Repository < ApplicationRecord
 
   def repository_host
     @repository_host ||= RepositoryHost.const_get(host_type.capitalize).new(self)
+  end
+
+  def gather_maintenance_stats
+    CriticalRepositoryMaintenanceStatWorker.perform_async(id)
   end
 end

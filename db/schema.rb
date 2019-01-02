@@ -261,6 +261,14 @@ ActiveRecord::Schema.define(version: 2018_12_13_214340) do
     t.index ["repository_id"], name: "index_repository_dependencies_on_repository_id"
   end
 
+  create_table "repository_maintenance_stats", force: :cascade do |t|
+    t.bigint   "repository_id", :index=>{:name=>"index_repository_maintenance_stats_on_repository_id", :order=>{:repository_id=>:asc}}
+    t.string   "category"
+    t.string   "value"
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
+  end
+
   create_table "repository_organisations", id: :serial, force: :cascade do |t|
     t.string "login"
     t.string "uuid"

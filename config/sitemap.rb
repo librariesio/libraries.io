@@ -3,10 +3,7 @@ require 'parallel'
 SitemapGenerator::Sitemap.default_host = "https://libraries.io"
 SitemapGenerator::Sitemap.public_path = 'tmp/'
 SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
-if Rails.env.production?
-  SitemapGenerator::Sitemap.adapter = SitemapGenerator::S3Adapter.new
-  SitemapGenerator::Sitemap.sitemaps_host = "https://#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com/"
-end
+SitemapGenerator::Sitemap.search_engines[:yandex] = 'https://blogs.yandex.ru/pings/?status=success&url=%s'
 
 SitemapGenerator::Sitemap.create(:create_index => true) do
   projects = lambda {
@@ -118,4 +115,11 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
   end
 end
 
-SitemapGenerator::Sitemap.ping_search_engines('https://libraries.io/sitemap.xml.gz', yandex: 'https://blogs.yandex.ru/pings/?status=success&url=%s')
+# upload to gcs... the gem can upload to gcs but only using fog which can't use
+# instance credentials which ends up being complicated so just punt and call
+# gsutil directly
+if Rails.env.production?
+  Dir.chdir(sitemap.public_path.to_s)
+  `gsutil rsync -dr sitemaps/ gs://libraries-sitemap/sitemaps/`
+end
+

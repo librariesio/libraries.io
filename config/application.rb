@@ -8,6 +8,7 @@ require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
 require "sprockets/railtie"
+require "graphql/client/http"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -30,6 +31,17 @@ module Libraries
     # config.i18n.default_locale = :de
 
     # config.middleware.use Rack::Deflater
+
+    # Initialize GraphQL client for Github API v4
+    # Load schema from previous Github API schema dump
+    Schema = Application.root.join("config/github_graphql_schema.json").to_s
+  
+    # Create new client from schema to parse queries with
+    # Actual client for querying should come from AuthToken
+    Client = GraphQL::Client.new(schema: Schema)
+    Application.config.graphql = ActiveSupport::OrderedOptions.new
+    Application.config.graphql.client = Client
+    Application.config.graphql.schema = Schema
 
     config.active_job.queue_adapter = :sidekiq
 
