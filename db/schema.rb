@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_13_234356) do
+ActiveRecord::Schema.define(version: 2018_12_04_153549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -259,6 +259,14 @@ ActiveRecord::Schema.define(version: 2018_11_13_234356) do
     t.index ["manifest_id"], name: "index_repository_dependencies_on_manifest_id"
     t.index ["project_id"], name: "index_repository_dependencies_on_project_id"
     t.index ["repository_id"], name: "index_repository_dependencies_on_repository_id"
+  end
+
+  create_table "repository_maintenance_stats", force: :cascade do |t|
+    t.bigint   "repository_id", :index=>{:name=>"index_repository_maintenance_stats_on_repository_id", :order=>{:repository_id=>:asc}}
+    t.string   "category"
+    t.string   "value"
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
   end
 
   create_table "repository_organisations", id: :serial, force: :cascade do |t|
