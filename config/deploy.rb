@@ -16,7 +16,7 @@ set :app_server_port, 5000
 
 set :maintenance_template_path, File.join(File.expand_path('../../public/system', __FILE__), 'maintenance.html')
 
-set :migration_role, :app
+set :migration_role, :cron
 set :conditionally_migrate, true
 
 set :bugsnag_api_key, ENV['BUGSNAG_API_KEY']
