@@ -1,5 +1,5 @@
 <% cache(['v2', @project.id, 'top_dependent_repos'], :expires_in => 2.weeks) do %>
-  <% @top_dependent_repos = @project.dependent_repositories.open_source.limit(10) %>
+  <% @top_dependent_repos = @project.dependent_repos_top_ten %>
   <% if @top_dependent_repos.length > 0 %>
     <h4 data-ga-tracked-el='dependent-repositories'>
       Used by
