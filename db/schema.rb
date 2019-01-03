@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_13_214340) do
+ActiveRecord::Schema.define(version: 2018_12_20_164827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2018_12_13_214340) do
     t.integer "user_id"
     t.datetime "deleted_at"
     t.integer "rate_limit", default: 60
+    t.boolean "is_internal", default: false, null: false
     t.index ["access_token"], name: "index_api_keys_on_access_token"
     t.index ["user_id"], name: "index_api_keys_on_user_id"
   end
