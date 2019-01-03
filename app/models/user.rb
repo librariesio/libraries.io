@@ -20,8 +20,6 @@ class User < ApplicationRecord
   has_many :public_repositories, -> { where private: false }, anonymous_class: Repository, through: :repository_users
 
   has_many :watched_repositories, source: :repository, through: :repository_subscriptions
-  has_many :watched_dependencies, through: :watched_repositories, source: :dependencies
-  has_many :watched_dependent_projects, -> { group('projects.id') }, through: :watched_dependencies, source: :project
 
   has_many :dependencies, through: :source_repositories
   has_many :really_all_dependencies, through: :all_repositories, source: :dependencies
@@ -70,6 +68,11 @@ class User < ApplicationRecord
 
   def to_s
     nickname
+  end
+
+  def watched_dependent_projects
+    repo_subs = repository_subscriptions.pluck(:repository_id)
+    Project.where(id: RepositoryDependency.where(repository_id: repo_subs).pluck(:project_id).uniq)
   end
 
   def all_subscribed_project_ids
