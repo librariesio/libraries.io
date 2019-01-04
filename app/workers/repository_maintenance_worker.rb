@@ -7,5 +7,15 @@ end
 
 class CriticalRepositoryMaintenanceStatWorker < BaseRepositoryMaintenanceStatWorker
     include Sidekiq::Worker
-    sidekiq_options queue: :critical, unique: :until_executed
+    sidekiq_options queue: :critical, unique: :until_executed, retry: 3
+end
+
+class RepositoryMaintenanceStatWorker < BaseRepositoryMaintenanceStatWorker
+    include Sidekiq::Worker
+    sidekiq_options queue: :default, unique: :until_executed, retry: 3
+end
+
+class LowPriorityRepositoryMaintenanceStatWorker < BaseRepositoryMaintenanceStatWorker
+    include Sidekiq::Worker
+    sidekiq_options queue: :repo, unique: :until_executed, retry: 3
 end
