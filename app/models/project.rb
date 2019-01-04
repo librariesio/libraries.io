@@ -271,15 +271,8 @@ class Project < ApplicationRecord
   def set_dependents_count
     return if destroyed?
     new_dependents_count = dependents.joins(:version).pluck('DISTINCT versions.project_id').count
+    new_dependent_repos_count = dependent_repos_fast_count
 
-    # Most of the time we truncate this count if it is larger than 1,000 anyways, so only do slow version if less
-    # Just as an example, rubygems/rake takes 500 ms for counting from the view, but 10 minutes if we do the
-    # actual query on a database with no other load.
-    if dependent_repos_count < 1000
-      new_dependent_repos_count = dependent_repositories.open_source.count.length
-    else
-      new_dependent_repos_count = dependent_repos_fast_count
-    end
     updates = {}
     updates[:dependents_count] = new_dependents_count if read_attribute(:dependents_count) != new_dependents_count
     updates[:dependent_repos_count] = new_dependent_repos_count if read_attribute(:dependent_repos_count) != new_dependent_repos_count
@@ -424,7 +417,17 @@ class Project < ApplicationRecord
   end
 
   def dependent_repos_view_query(limit, offset=0)
-    Repository.find_by_sql(["select * from repositories where id in (select repository_id from project_dependent_repositories where project_id = ? order by rank desc nulls last, stargazers_count desc limit ? offset ?);", id, limit, offset])
+    sql = "SELECT *
+           FROM   repositories
+           WHERE  id IN
+                  (
+                        SELECT   repository_id
+                        FROM     project_dependent_repositories
+                        WHERE    project_id = ?
+                        ORDER BY rank DESC nulls last,
+                                 stargazers_count DESC limit ? offset ?);"
+
+    Repository.find_by_sql([sql, id, limit, offset])
   end
 
   def dependent_repos_top_ten
