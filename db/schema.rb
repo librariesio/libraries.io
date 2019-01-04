@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_20_164827) do
+ActiveRecord::Schema.define(version: 2019_01_04_170619) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -342,6 +342,7 @@ ActiveRecord::Schema.define(version: 2018_12_20_164827) do
     t.boolean "include_prerelease", default: true
     t.index ["created_at"], name: "index_subscriptions_on_created_at"
     t.index ["project_id"], name: "index_subscriptions_on_project_id"
+    t.index ["repository_subscription_id"], name: "index_subscriptions_on_repository_subscription_id"
     t.index ["user_id", "project_id"], name: "index_subscriptions_on_user_id_and_project_id"
   end
 
