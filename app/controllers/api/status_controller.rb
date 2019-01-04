@@ -1,5 +1,6 @@
 class Api::StatusController < Api::ApplicationController
   before_action :require_api_key
+  before_action :require_internal_api_key
 
   def check
     if params[:projects].any?
@@ -41,6 +42,9 @@ class Api::StatusController < Api::ApplicationController
       include: {
         versions: {
           only: [:number, :published_at]
+        },
+        repository_maintenance_stats: {
+          only: [:category, :value, :updated_at]
         }
       }
     })
