@@ -41,6 +41,10 @@ class Api::ApplicationController < ApplicationController
     @current_api_key ||= ApiKey.active.find_by_access_token(params[:api_key])
   end
 
+  def internal_api_key?
+    current_api_key.is_internal?
+  end
+
   def record_api_usage
     return unless @current_api_key.present?
     REDIS.hincrby "api-usage-#{Date.today.strftime("%Y-%m")}", @current_api_key.id, 1

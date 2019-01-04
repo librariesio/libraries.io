@@ -59,9 +59,14 @@ describe "API::StatusController" do
         user.current_api_key.update_attribute(:is_internal, false)
       end
 
-      it "returns a 403 response code" do
+      it "returns no maintenance stats" do
         post "/api/check", params: {api_key: user.api_key, projects: [{name: project_django.name, platform: project_django.platform}] }
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to eq('application/json')
+        expect(response.body.include?(project_django.name)).to be == true
+
+        json_response = JSON.parse(response.body)
+        expect(json_response.first.key? "repository_maintenance_stats").to be false
       end
     end
   end

@@ -1,6 +1,5 @@
 class Api::StatusController < Api::ApplicationController
   before_action :require_api_key
-  before_action :require_internal_api_key
 
   def check
     if params[:projects].any?
@@ -36,17 +35,6 @@ class Api::StatusController < Api::ApplicationController
     if params[:score]
       fields.push :score
     end
-    render json: @projects.to_json({
-      only: fields,
-      methods: [:package_manager_url, :stars, :forks, :keywords, :latest_download_url],
-      include: {
-        versions: {
-          only: [:number, :published_at]
-        },
-        repository_maintenance_stats: {
-          only: [:category, :value, :updated_at]
-        }
-      }
-    })
+    render json: @projects, each_serializer: ProjectStatusSerializer, show_score: params[:score], show_stats: internal_api_key?
   end
 end
