@@ -58,10 +58,6 @@
 
     <%= render 'projects/contributors' %>
 
-    <% if current_user %>
-      <% render 'your_dependents' %>
-    <% end %>
-
     <% if @version %>
       <div id='version_dependencies' style='display:none;' data-url="<%= version_dependencies_path(@project.to_param.merge(number: @version.number)) %>"></div>
     <% end %>
