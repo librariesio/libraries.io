@@ -6,8 +6,10 @@ production:
 :queues:
   - [user, 40]
   - [critical, 30]
+  - [repo_maintenance_stat_high, 25]
   - [mailers, 8]
   - [tree, 6]
+  - [maintenance_stat, 4]
   - [default, 4]
   - [small, 4]
   - [score, 3]
@@ -16,3 +18,4 @@ production:
   - [owners, 2]
   - [repo, 2]
   - [sourcerank, 1]
+  - [repo_maintenance_stat_low, 1]
