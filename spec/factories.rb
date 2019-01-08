@@ -26,6 +26,7 @@ FactoryBot.define do
     licenses        'MIT'
     keywords_array  ['web']
     repository_url
+    repository { nil }
   end
 
   factory :platform do
