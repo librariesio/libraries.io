@@ -1072,6 +1072,11 @@
             },
             {
               "kind": "OBJECT",
+              "name": "PinnedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
               "name": "Project",
               "ofType": null
             },
@@ -1258,6 +1263,11 @@
             {
               "kind": "OBJECT",
               "name": "UnlockedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "UnpinnedEvent",
               "ofType": null
             },
             {
@@ -1495,49 +1505,6 @@
 
           ],
           "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "SCALAR",
-          "name": "Int",
-          "description": "Represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "SCALAR",
-          "name": "DateTime",
-          "description": "An ISO-8601 encoded UTC date string.",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "ENUM",
-          "name": "OrderDirection",
-          "description": "Possible directions in which to order a list of items when provided an `orderBy` argument.",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": [
-            {
-              "name": "ASC",
-              "description": "Specifies an ascending order for a given `orderBy` argument.",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "DESC",
-              "description": "Specifies a descending order for a given `orderBy` argument.",
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
           "possibleTypes": null
         },
         {
@@ -3497,6 +3464,26 @@
               "ofType": null
             }
           ]
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Int",
+          "description": "Represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "DateTime",
+          "description": "An ISO-8601 encoded UTC date string.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
         },
         {
           "kind": "INTERFACE",
@@ -7026,6 +7013,29 @@
             {
               "name": "NAME",
               "description": "Order projects by name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "OrderDirection",
+          "description": "Possible directions in which to order a list of items when provided an `orderBy` argument.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "ASC",
+              "description": "Specifies an ascending order for a given `orderBy` argument.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "DESC",
+              "description": "Specifies a descending order for a given `orderBy` argument.",
               "isDeprecated": false,
               "deprecationReason": null
             }
@@ -24496,7 +24506,7 @@
           "fields": [
             {
               "name": "edges",
-              "description": null,
+              "description": "A list of edges.",
               "args": [
 
               ],
@@ -34373,6 +34383,11 @@
             },
             {
               "kind": "OBJECT",
+              "name": "PinnedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
               "name": "ReferencedEvent",
               "ofType": null
             },
@@ -34414,6 +34429,11 @@
             {
               "kind": "OBJECT",
               "name": "UnlockedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "UnpinnedEvent",
               "ofType": null
             },
             {
@@ -34932,6 +34952,91 @@
         },
         {
           "kind": "OBJECT",
+          "name": "PinnedEvent",
+          "description": "Represents a 'pinned' event on a given issue or pull request.",
+          "fields": [
+            {
+              "name": "actor",
+              "description": "Identifies the actor who performed the event.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "INTERFACE",
+                "name": "Actor",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "createdAt",
+              "description": "Identifies the date and time when the object was created.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "issue",
+              "description": "Identifies the issue associated with the event.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Issue",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "Node",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
           "name": "RemovedFromProjectEvent",
           "description": "Represents a 'removed_from_project' event on a given issue or pull request.",
           "fields": [
@@ -35058,6 +35163,91 @@
                 "kind": "OBJECT",
                 "name": "Repository",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "issue",
+              "description": "Identifies the issue associated with the event.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Issue",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "Node",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "UnpinnedEvent",
+          "description": "Represents an 'unpinned' event on a given issue or pull request.",
+          "fields": [
+            {
+              "name": "actor",
+              "description": "Identifies the actor who performed the event.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "INTERFACE",
+                "name": "Actor",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "createdAt",
+              "description": "Identifies the date and time when the object was created.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -35293,6 +35483,12 @@
               "deprecationReason": null
             },
             {
+              "name": "PINNED_EVENT",
+              "description": "Represents a 'pinned' event on a given issue or pull request.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "REFERENCED_EVENT",
               "description": "Represents a 'referenced' event on a given `ReferencedSubject`.",
               "isDeprecated": false,
@@ -35343,6 +35539,12 @@
             {
               "name": "UNLOCKED_EVENT",
               "description": "Represents an 'unlocked' event on a given issue or pull request.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "UNPINNED_EVENT",
+              "description": "Represents an 'unpinned' event on a given issue or pull request.",
               "isDeprecated": false,
               "deprecationReason": null
             },
@@ -35797,6 +35999,11 @@
             },
             {
               "kind": "OBJECT",
+              "name": "PinnedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
               "name": "ReferencedEvent",
               "ofType": null
             },
@@ -35838,6 +36045,11 @@
             {
               "kind": "OBJECT",
               "name": "UnlockedEvent",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "UnpinnedEvent",
               "ofType": null
             },
             {
@@ -35934,6 +36146,12 @@
               "deprecationReason": null
             },
             {
+              "name": "PINNED_EVENT",
+              "description": "Represents a 'pinned' event on a given issue or pull request.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "REFERENCED_EVENT",
               "description": "Represents a 'referenced' event on a given `ReferencedSubject`.",
               "isDeprecated": false,
@@ -35984,6 +36202,12 @@
             {
               "name": "UNLOCKED_EVENT",
               "description": "Represents an 'unlocked' event on a given issue or pull request.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "UNPINNED_EVENT",
+              "description": "Represents an 'unpinned' event on a given issue or pull request.",
               "isDeprecated": false,
               "deprecationReason": null
             },
@@ -37406,9 +37630,18 @@
             },
             {
               "name": "relatedTopics",
-              "description": "A list of related topics, including aliases of this topic, sorted with the most relevant\nfirst.\n",
+              "description": "A list of related topics, including aliases of this topic, sorted with the most relevant\nfirst. Returns up to 10 Topics.\n",
               "args": [
-
+                {
+                  "name": "first",
+                  "description": "How many topics to return.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": "3"
+                }
               ],
               "type": {
                 "kind": "NON_NULL",
@@ -40308,6 +40541,70 @@
               "deprecationReason": null
             },
             {
+              "name": "firstIssueContribution",
+              "description": "The first issue the user opened on GitHub. This will be null if that issue was opened outside the collection's time range and ignoreTimeRange is false. If the issue is not visible but the user has opted to show private contributions, a RestrictedContribution will be returned.",
+              "args": [
+                {
+                  "name": "ignoreTimeRange",
+                  "description": "If true, the first issue will be returned even if it was opened outside of the collection's time range.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": "false"
+                }
+              ],
+              "type": {
+                "kind": "UNION",
+                "name": "CreatedIssueOrRestrictedContribution",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "firstPullRequestContribution",
+              "description": "The first pull request the user opened on GitHub. This will be null if that pull request was opened outside the collection's time range and ignoreTimeRange is not true. If the pull request is not visible but the user has opted to show private contributions, a RestrictedContribution will be returned.",
+              "args": [
+                {
+                  "name": "ignoreTimeRange",
+                  "description": "If true, the first pull request will be returned even if it was opened outside of the collection's time range.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": "false"
+                }
+              ],
+              "type": {
+                "kind": "UNION",
+                "name": "CreatedPullRequestOrRestrictedContribution",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "hasActivityInThePast",
+              "description": "Does the user have any more activity in the timeline that occurred prior to the collection's time range?",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "hasAnyContributions",
               "description": "Determine if there are any contributions in this collection.",
               "args": [
@@ -40362,6 +40659,29 @@
               "deprecationReason": null
             },
             {
+              "name": "joinedGitHubContribution",
+              "description": "When the user signed up for GitHub. This will be null if that sign up date falls outside the collection's time range and ignoreTimeRange is false.",
+              "args": [
+                {
+                  "name": "ignoreTimeRange",
+                  "description": "If true, the contribution will be returned even if the user signed up outside of the collection's time range.",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": "false"
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "JoinedGitHubContribution",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "latestRestrictedContributionDate",
               "description": "The date of the most recent restricted contribution the user made in this time period. Can only be non-null when the user has enabled private contribution counts.",
               "args": [
@@ -40384,6 +40704,48 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "ContributionsCollection",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "mostRecentCollectionWithoutActivity",
+              "description": "Returns a different contributions collection from an earlier time range than this one\nthat does not have any contributions.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "ContributionsCollection",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "popularIssueContribution",
+              "description": "The issue the user opened on GitHub that received the most comments in the specified\ntime frame.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "CreatedIssueContribution",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "popularPullRequestContribution",
+              "description": "The pull request the user opened on GitHub that received the most comments in the\nspecified time frame.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "CreatedPullRequestContribution",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -40694,6 +41056,764 @@
           "inputFields": null,
           "interfaces": [
 
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreatedIssueContributionConnection",
+          "description": "The connection type for CreatedIssueContribution.",
+          "fields": [
+            {
+              "name": "edges",
+              "description": "A list of edges.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreatedIssueContributionEdge",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nodes",
+              "description": "A list of nodes.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreatedIssueContribution",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "Information to aid in pagination.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "totalCount",
+              "description": "Identifies the total count of items in the connection.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreatedIssueContributionEdge",
+          "description": "An edge in a connection.",
+          "fields": [
+            {
+              "name": "cursor",
+              "description": "A cursor for use in pagination.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "node",
+              "description": "The item at the end of the edge.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "CreatedIssueContribution",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreatedIssueContribution",
+          "description": "Represents the contribution a user made on GitHub by opening an issue.",
+          "fields": [
+            {
+              "name": "isRestricted",
+              "description": "Whether this contribution is associated with a record you do not have access to. For\nexample, your own 'first issue' contribution may have been made on a repository you can no\nlonger access.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "issue",
+              "description": "The issue that was opened.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Issue",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this contribution was made.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "resourcePath",
+              "description": "The HTTP path for this contribution.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "URI",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "url",
+              "description": "The HTTP URL for this contribution.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "URI",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user",
+              "description": "The user who made this contribution.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "User",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "Contribution",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INTERFACE",
+          "name": "Contribution",
+          "description": "Represents a contribution a user made on GitHub, such as opening an issue.",
+          "fields": [
+            {
+              "name": "isRestricted",
+              "description": "Whether this contribution is associated with a record you do not have access to. For\nexample, your own 'first issue' contribution may have been made on a repository you can no\nlonger access.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this contribution was made.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "resourcePath",
+              "description": "The HTTP path for this contribution.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "URI",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "url",
+              "description": "The HTTP URL for this contribution.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "URI",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user",
+              "description": "The user who made this contribution.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "User",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "CreatedIssueContribution",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "CreatedPullRequestContribution",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "JoinedGitHubContribution",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "RestrictedContribution",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "JoinedGitHubContribution",
+          "description": "Represents a user signing up for a GitHub account.",
+          "fields": [
+            {
+              "name": "isRestricted",
+              "description": "Whether this contribution is associated with a record you do not have access to. For\nexample, your own 'first issue' contribution may have been made on a repository you can no\nlonger access.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this contribution was made.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "resourcePath",
+              "description": "The HTTP path for this contribution.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "URI",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "url",
+              "description": "The HTTP URL for this contribution.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "URI",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user",
+              "description": "The user who made this contribution.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "User",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "Contribution",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "RestrictedContribution",
+          "description": "Represents a private contribution a user made on GitHub.",
+          "fields": [
+            {
+              "name": "isRestricted",
+              "description": "Whether this contribution is associated with a record you do not have access to. For\nexample, your own 'first issue' contribution may have been made on a repository you can no\nlonger access.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this contribution was made.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "resourcePath",
+              "description": "The HTTP path for this contribution.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "URI",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "url",
+              "description": "The HTTP URL for this contribution.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "URI",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user",
+              "description": "The user who made this contribution.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "User",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "Contribution",
+              "ofType": null
+            }
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "CreatedIssueOrRestrictedContribution",
+          "description": "Represents either a issue the viewer can access or a restricted contribution.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "CreatedIssueContribution",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "RestrictedContribution",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "UNION",
+          "name": "CreatedPullRequestOrRestrictedContribution",
+          "description": "Represents either a pull request the viewer can access or a restricted contribution.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "CreatedPullRequestContribution",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "RestrictedContribution",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreatedPullRequestContribution",
+          "description": "Represents the contribution a user made on GitHub by opening a pull request.",
+          "fields": [
+            {
+              "name": "isRestricted",
+              "description": "Whether this contribution is associated with a record you do not have access to. For\nexample, your own 'first issue' contribution may have been made on a repository you can no\nlonger access.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "occurredAt",
+              "description": "When this contribution was made.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pullRequest",
+              "description": "The pull request that was opened.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PullRequest",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "resourcePath",
+              "description": "The HTTP path for this contribution.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "URI",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "url",
+              "description": "The HTTP URL for this contribution.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "URI",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user",
+              "description": "The user who made this contribution.\n",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "User",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+            {
+              "kind": "INTERFACE",
+              "name": "Contribution",
+              "ofType": null
+            }
           ],
           "enumValues": null,
           "possibleTypes": null
@@ -41040,6 +42160,136 @@
                   "name": "Int",
                   "ofType": null
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreatedPullRequestContributionConnection",
+          "description": "The connection type for CreatedPullRequestContribution.",
+          "fields": [
+            {
+              "name": "edges",
+              "description": "A list of edges.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreatedPullRequestContributionEdge",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nodes",
+              "description": "A list of nodes.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CreatedPullRequestContribution",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": "Information to aid in pagination.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "totalCount",
+              "description": "Identifies the total count of items in the connection.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "CreatedPullRequestContributionEdge",
+          "description": "An edge in a connection.",
+          "fields": [
+            {
+              "name": "cursor",
+              "description": "A cursor for use in pagination.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "node",
+              "description": "The item at the end of the edge.",
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "CreatedPullRequestContribution",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -43423,36 +44673,28 @@
             },
             {
               "name": "reaction",
-              "description": "The reaction object.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `reaction` will change from `Reaction!` to `Reaction`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The reaction object.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Reaction",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Reaction",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "subject",
-              "description": "The reactable subject.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `subject` will change from `Reactable!` to `Reactable`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The reactable subject.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INTERFACE",
-                  "name": "Reactable",
-                  "ofType": null
-                }
+                "kind": "INTERFACE",
+                "name": "Reactable",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -43535,36 +44777,28 @@
             },
             {
               "name": "reaction",
-              "description": "The reaction object.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `reaction` will change from `Reaction!` to `Reaction`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The reaction object.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Reaction",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Reaction",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "subject",
-              "description": "The reactable subject.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `subject` will change from `Reactable!` to `Reactable`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The reactable subject.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INTERFACE",
-                  "name": "Reactable",
-                  "ofType": null
-                }
+                "kind": "INTERFACE",
+                "name": "Reactable",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -43647,18 +44881,14 @@
             },
             {
               "name": "subscribable",
-              "description": "The input subscribable entity.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `subscribable` will change from `Subscribable!` to `Subscribable`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The input subscribable entity.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INTERFACE",
-                  "name": "Subscribable",
-                  "ofType": null
-                }
+                "kind": "INTERFACE",
+                "name": "Subscribable",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -43741,54 +44971,42 @@
             },
             {
               "name": "commentEdge",
-              "description": "The edge from the subject's comment connection.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `commentEdge` will change from `IssueCommentEdge!` to `IssueCommentEdge`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The edge from the subject's comment connection.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "IssueCommentEdge",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "IssueCommentEdge",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "subject",
-              "description": "The subject\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `subject` will change from `Node!` to `Node`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The subject",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INTERFACE",
-                  "name": "Node",
-                  "ofType": null
-                }
+                "kind": "INTERFACE",
+                "name": "Node",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "timelineEdge",
-              "description": "The edge from the subject's timeline connection.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `timelineEdge` will change from `IssueTimelineItemEdge!` to `IssueTimelineItemEdge`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The edge from the subject's timeline connection.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "IssueTimelineItemEdge",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "IssueTimelineItemEdge",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -43996,18 +45214,14 @@
             },
             {
               "name": "project",
-              "description": "The new project.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `project` will change from `Project!` to `Project`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The new project.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Project",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Project",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -44100,18 +45314,14 @@
             },
             {
               "name": "project",
-              "description": "The updated project.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `project` will change from `Project!` to `Project`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The updated project.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Project",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Project",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -44220,18 +45430,14 @@
             },
             {
               "name": "owner",
-              "description": "The repository or organization the project was removed from.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `owner` will change from `ProjectOwner!` to `ProjectOwner`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The repository or organization the project was removed from.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INTERFACE",
-                  "name": "ProjectOwner",
-                  "ofType": null
-                }
+                "kind": "INTERFACE",
+                "name": "ProjectOwner",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -44300,36 +45506,28 @@
             },
             {
               "name": "columnEdge",
-              "description": "The edge from the project's column connection.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `columnEdge` will change from `ProjectColumnEdge!` to `ProjectColumnEdge`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The edge from the project's column connection.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectColumnEdge",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "ProjectColumnEdge",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "project",
-              "description": "The project\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `project` will change from `Project!` to `Project`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The project",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Project",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Project",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -44412,18 +45610,14 @@
             },
             {
               "name": "columnEdge",
-              "description": "The new edge of the moved column.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `columnEdge` will change from `ProjectColumnEdge!` to `ProjectColumnEdge`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The new edge of the moved column.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectColumnEdge",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "ProjectColumnEdge",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -44502,18 +45696,14 @@
             },
             {
               "name": "projectColumn",
-              "description": "The updated project column.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `projectColumn` will change from `ProjectColumn!` to `ProjectColumn`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The updated project column.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectColumn",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "ProjectColumn",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -44596,36 +45786,28 @@
             },
             {
               "name": "deletedColumnId",
-              "description": "The deleted column ID.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `deletedColumnId` will change from `ID!` to `ID`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The deleted column ID.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "project",
-              "description": "The project the deleted column was in.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `project` will change from `Project!` to `Project`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The project the deleted column was in.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Project",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Project",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -44680,18 +45862,14 @@
           "fields": [
             {
               "name": "cardEdge",
-              "description": "The edge from the ProjectColumn's card connection.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `cardEdge` will change from `ProjectCardEdge!` to `ProjectCardEdge`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The edge from the ProjectColumn's card connection.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectCardEdge",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "ProjectCardEdge",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -44712,18 +45890,14 @@
             },
             {
               "name": "projectColumn",
-              "description": "The ProjectColumn\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `projectColumn` will change from `Project!` to `ProjectColumn`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The ProjectColumn",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Project",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "ProjectColumn",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -44812,18 +45986,14 @@
             },
             {
               "name": "projectCard",
-              "description": "The updated ProjectCard.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `projectCard` will change from `ProjectCard!` to `ProjectCard`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The updated ProjectCard.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectCard",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "ProjectCard",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -44898,18 +46068,14 @@
           "fields": [
             {
               "name": "cardEdge",
-              "description": "The new edge of the moved card.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `cardEdge` will change from `ProjectCardEdge!` to `ProjectCardEdge`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The new edge of the moved card.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectCardEdge",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "ProjectCardEdge",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -45016,36 +46182,28 @@
             },
             {
               "name": "column",
-              "description": "The column the deleted card was in.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `column` will change from `ProjectColumn!` to `ProjectColumn`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The column the deleted card was in.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectColumn",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "ProjectColumn",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "deletedCardId",
-              "description": "The deleted card ID.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `deletedCardId` will change from `ID!` to `ID`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The deleted card ID.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -45256,6 +46414,111 @@
           "possibleTypes": null
         },
         {
+          "kind": "INPUT_OBJECT",
+          "name": "DeleteIssueInput",
+          "description": "Autogenerated input type of DeleteIssue",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "issueId",
+              "description": "The ID of the issue to delete.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "PinIssueInput",
+          "description": "Autogenerated input type of PinIssue",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "issueId",
+              "description": "The ID of the issue to be pinned",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "UnpinIssueInput",
+          "description": "Autogenerated input type of UnpinIssue",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "issueId",
+              "description": "The ID of the issue to be unpinned",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
           "kind": "OBJECT",
           "name": "AddPullRequestReviewPayload",
           "description": "Autogenerated return type of AddPullRequestReview",
@@ -45276,36 +46539,28 @@
             },
             {
               "name": "pullRequestReview",
-              "description": "The newly created pull request review.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `pullRequestReview` will change from `PullRequestReview!` to `PullRequestReview`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The newly created pull request review.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PullRequestReview",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "PullRequestReview",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "reviewEdge",
-              "description": "The edge from the pull request's review connection.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `reviewEdge` will change from `PullRequestReviewEdge!` to `PullRequestReviewEdge`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The edge from the pull request's review connection.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PullRequestReviewEdge",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "PullRequestReviewEdge",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -45506,18 +46761,14 @@
             },
             {
               "name": "pullRequestReview",
-              "description": "The submitted pull request review.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `pullRequestReview` will change from `PullRequestReview!` to `PullRequestReview`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The submitted pull request review.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PullRequestReview",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "PullRequestReview",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -45610,18 +46861,14 @@
             },
             {
               "name": "pullRequestReview",
-              "description": "The updated pull request review.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `pullRequestReview` will change from `PullRequestReview!` to `PullRequestReview`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The updated pull request review.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PullRequestReview",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "PullRequestReview",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -45704,18 +46951,14 @@
             },
             {
               "name": "pullRequestReview",
-              "description": "The dismissed pull request review.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `pullRequestReview` will change from `PullRequestReview!` to `PullRequestReview`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The dismissed pull request review.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PullRequestReview",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "PullRequestReview",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -45798,18 +47041,14 @@
             },
             {
               "name": "pullRequestReview",
-              "description": "The deleted pull request review.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `pullRequestReview` will change from `PullRequestReview!` to `PullRequestReview`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The deleted pull request review.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PullRequestReview",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "PullRequestReview",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -45948,36 +47187,28 @@
             },
             {
               "name": "comment",
-              "description": "The newly created comment.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `comment` will change from `PullRequestReviewComment!` to `PullRequestReviewComment`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The newly created comment.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PullRequestReviewComment",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "PullRequestReviewComment",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "commentEdge",
-              "description": "The edge from the review's comment connection.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `commentEdge` will change from `PullRequestReviewCommentEdge!` to `PullRequestReviewCommentEdge`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The edge from the review's comment connection.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PullRequestReviewCommentEdge",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "PullRequestReviewCommentEdge",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -46100,18 +47331,14 @@
             },
             {
               "name": "pullRequestReviewComment",
-              "description": "The updated comment.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `pullRequestReviewComment` will change from `PullRequestReviewComment!` to `PullRequestReviewComment`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The updated comment.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PullRequestReviewComment",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "PullRequestReviewComment",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -46194,18 +47421,14 @@
             },
             {
               "name": "removedUser",
-              "description": "The user that was removed as an outside collaborator.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `removedUser` will change from `User!` to `User`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The user that was removed as an outside collaborator.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "User",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "User",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -46288,36 +47511,28 @@
             },
             {
               "name": "pullRequest",
-              "description": "The pull request that is getting requests.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `pullRequest` will change from `PullRequest!` to `PullRequest`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The pull request that is getting requests.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "PullRequest",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "PullRequest",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "requestedReviewersEdge",
-              "description": "The edge from the pull request to the requested reviewers.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `requestedReviewersEdge` will change from `UserEdge!` to `UserEdge`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The edge from the pull request to the requested reviewers.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "UserEdge",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "UserEdge",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -46432,18 +47647,14 @@
             },
             {
               "name": "starrable",
-              "description": "The starrable.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `starrable` will change from `Starrable!` to `Starrable`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The starrable.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INTERFACE",
-                  "name": "Starrable",
-                  "ofType": null
-                }
+                "kind": "INTERFACE",
+                "name": "Starrable",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -46512,18 +47723,14 @@
             },
             {
               "name": "starrable",
-              "description": "The starrable.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `starrable` will change from `Starrable!` to `Starrable`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The starrable.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INTERFACE",
-                  "name": "Starrable",
-                  "ofType": null
-                }
+                "kind": "INTERFACE",
+                "name": "Starrable",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -46592,18 +47799,14 @@
             },
             {
               "name": "topic",
-              "description": "The accepted topic.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `topic` will change from `Topic!` to `Topic`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The accepted topic.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Topic",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Topic",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -46686,18 +47889,14 @@
             },
             {
               "name": "topic",
-              "description": "The declined topic.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `topic` will change from `Topic!` to `Topic`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The declined topic.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Topic",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Topic",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -46851,18 +48050,14 @@
             },
             {
               "name": "repository",
-              "description": "The updated repository.\n\n**Upcoming Change on 2019-01-01 UTC**\n**Description:** Type for `repository` will change from `Repository!` to `Repository`.\n**Reason:** In preparation for an upcoming change to the way we report mutation errors, non-nullable payload fields are becoming nullable.\n",
+              "description": "The updated repository.",
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Repository",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Repository",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
