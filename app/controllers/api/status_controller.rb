@@ -6,7 +6,7 @@ class Api::StatusController < Api::ApplicationController
       # Try to get all the projects passed in.
       @projects = params[:projects].group_by{|project| project[:platform] }.map do |platform, projects|
         projects.each_slice(1000).map do |slice|
-          Project.platform(platform).where(name: slice.map{|project| project[:name] }.uniq).includes(:repository, :versions)
+          Project.platform(platform).where(name: slice.map{|project| project[:name] }.uniq).includes(:repository, :versions, :repository_maintenance_stats)
         end
       end.flatten.compact
 
@@ -22,7 +22,7 @@ class Api::StatusController < Api::ApplicationController
           projects.each_slice(1000).map do |slice|
             downcased_names = slice.map {|project| project[:name].downcase }
             # lowercase compare the downcased_names... use lower(platform) to improve index usage
-            Project.where('lower(platform)=? AND lower(name) in (?)', platform.downcase, downcased_names).includes(:repository, :versions)
+            Project.where('lower(platform)=? AND lower(name) in (?)', platform.downcase, downcased_names).includes(:repository, :versions, :repository_maintenance_stats)
           end
         end.flatten.compact
         # Concatanate any new items found.
