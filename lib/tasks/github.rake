@@ -71,4 +71,20 @@ namespace :github do
       sleep 0.5
     end
   end
+
+  desc 'Update Github V4 API Schema File'
+  task :update_github_v4_api_file, [:github_token] => :environment do |_task, args|
+    token = args.github_token || ENV['GITHUB_TOKEN']
+    raise ArgumentError.new('Github token not found! Pass one into this rake task or define an environment variable GITHUB_TOKEN') if token.nil?
+    
+    http = GraphQL::Client::HTTP.new("https://api.github.com/graphql") do
+      @@token = token
+      def headers(_context)
+          # Send Github Token
+          { "Authorization": "bearer #{@@token}" }
+      end
+    end  
+
+    GraphQL::Client.dump_schema(http, "config/github_graphql_schema.json")
+  end
 end
