@@ -22,7 +22,7 @@ describe RepositoryMaintenanceStatWorker do
       expect(Sidekiq::Queues["repo_maintenance_stat_high"].size).to eql 0
       expect(RepositoryMaintenanceStatWorker.jobs.size).to eql 0
 
-      RepositoryMaintenanceStatWorker.queue(repository.id, priority: :high)
+      RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: :high)
     
       expect(RepositoryMaintenanceStatWorker.jobs.size).to eql 1
       expect(Sidekiq::Queues["repo_maintenance_stat_high"].size).to eql 1
@@ -35,7 +35,7 @@ describe RepositoryMaintenanceStatWorker do
       expect(Sidekiq::Queues["repo_maintenance_stat_low"].size).to eql 0
       expect(RepositoryMaintenanceStatWorker.jobs.size).to eql 0
 
-      RepositoryMaintenanceStatWorker.queue(repository.id, priority: :low)
+      RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: :low)
     
       expect(RepositoryMaintenanceStatWorker.jobs.size).to eql 1
       expect(Sidekiq::Queues["repo_maintenance_stat_low"].size).to eql 1
