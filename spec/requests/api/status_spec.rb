@@ -52,6 +52,27 @@ describe "API::StatusController" do
       expect(json_response.first["repository_maintenance_stats"].length).to be 0
     end
 
+    it "contains all expected fields" do
+      # all the fields we expect to come back in the response for a project
+      expected_fields = [
+        "name", "platform", "description", "homepage", "repository_url", "normalized_licenses",
+        "rank", "latest_release_published_at", "latest_release_number", "dependents_count",
+        "language", "status", "dependent_repos_count", "score", "latest_stable_release_number",
+        "latest_stable_release_published_at", "package_manager_url", "stars", "forks",
+        "keywords", "latest_download_url", "versions", "repository_maintenance_stats"
+      ]
+
+      post "/api/check", params: {api_key: internal_user.api_key, projects: [{name: project_django.name, platform: project_django.platform}], score: true }
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq('application/json')
+
+      json_response = JSON.parse(response.body)
+      project = json_response.first
+      expected_fields.each do |field|
+        expect(project.key? field).to be true
+      end
+    end
+
     context "with normal API key" do
 
       it "returns no maintenance stats" do
