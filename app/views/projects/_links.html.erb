@@ -1,6 +1,6 @@
 <p class='project-links'>
   <% if @project.homepage.present? && @project.homepage != @project.package_manager_url %>
-    <span><%= link_to('Homepage', sanitize_url(@project.homepage), :rel => 'nofollow') %></span> 
+    <span><%= link_to('Homepage', sanitize_url(@project.homepage), :rel => 'nofollow') %></span>
   <% end %>
 
   <% if @project.repository_url.present? && @project.repository_url != @project.homepage %>
@@ -8,7 +8,7 @@
   <% end %>
 
   <% if link = @project.package_manager_url(@version.try(:number)) %>
-    <span><%= link_to @project.platform, link %></span>
+    <span><%= link_to @project.platform_name, link %></span>
   <% end %>
 
   <% if @project.language.present? %>
