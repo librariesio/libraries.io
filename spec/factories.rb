@@ -26,6 +26,7 @@ FactoryBot.define do
     licenses        'MIT'
     keywords_array  ['web']
     repository_url
+    repository { nil }
   end
 
   factory :platform do
@@ -151,6 +152,12 @@ FactoryBot.define do
     forks_count 1
   end
 
+  factory :repository_maintenance_stat do
+    category { "test_category" }
+    value { "test value" }
+    repository
+  end
+
   factory :user do
     email
     after(:create) do |user, _evaluator|
@@ -183,6 +190,7 @@ FactoryBot.define do
   factory :api_key do
     user
     access_token { SecureRandom.hex }
+    is_internal { false }
   end
 
   factory :auth_token do

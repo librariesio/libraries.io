@@ -36,6 +36,7 @@ class Project < ApplicationRecord
   has_many :registry_permissions, dependent: :delete_all
   has_many :registry_users, through: :registry_permissions
   has_one :readme, through: :repository
+  has_many :repository_maintenance_stats, through: :repository
 
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
   scope :lower_platform, ->(platform) { where('lower(projects.platform) = ?', platform.try(:downcase)) }
