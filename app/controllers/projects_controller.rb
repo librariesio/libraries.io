@@ -66,7 +66,8 @@ class ProjectsController < ApplicationController
   end
 
   def dependent_repos
-    @dependent_repos = @project.dependent_repositories.open_source.paginate(page: page_number)
+    page_number = 0 if page_number.nil?
+    @dependent_repos = @project.dependent_repos_view_query(15, page_number).paginate(page: page_number + 1, per_page: 15)
   end
 
   def your_dependent_repos
