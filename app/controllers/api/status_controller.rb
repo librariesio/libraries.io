@@ -31,10 +31,6 @@ class Api::StatusController < Api::ApplicationController
     else
       @projects = []
     end
-    fields = Project::API_FIELDS
-    if params[:score]
-      fields.push :score
-    end
     render json: @projects, each_serializer: ProjectStatusSerializer, show_score: params[:score], show_stats: internal_api_key?
   end
 end
