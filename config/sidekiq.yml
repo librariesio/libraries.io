@@ -9,7 +9,7 @@ production:
   - [repo_maintenance_stat_high, 25]
   - [mailers, 8]
   - [tree, 6]
-  - [maintenance_stat, 4]
+  - [repo_maintenance_stat, 4]
   - [default, 4]
   - [small, 4]
   - [score, 3]
