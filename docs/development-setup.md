@@ -51,6 +51,7 @@ Go create a [Personal access token on GitHub](https://help.github.com/articles/c
  irb> PackageManager::NPM.update "pictogram"
  irb> PackageManager::Rubygems.update "split"
  irb> PackageManager::Bower.update "sbteclipse"
+ irb> Repository.create_from_host("github", "librariesio/bibliothecary")
 ```
 
 You can then index that data into elasticsearch with the following rake task:
