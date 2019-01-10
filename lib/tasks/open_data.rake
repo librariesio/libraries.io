@@ -1,7 +1,7 @@
 require 'csv'
 
-EXPORT_VERSION = '1.2.0'
-EXPORT_DATE = "2018-03-12"
+EXPORT_VERSION = '1.4.0'
+EXPORT_DATE = "2018-12-22"
 
 namespace :open_data do
   desc 'Export all open data csvs'
