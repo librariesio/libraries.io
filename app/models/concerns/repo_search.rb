@@ -61,7 +61,6 @@ module RepoSearch
 
     def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 35)
-      query = Project.sanitize_query(query)
       options[:filters] ||= []
       options[:must_not] ||= []
       search_definition = {
