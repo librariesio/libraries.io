@@ -37,6 +37,7 @@ namespace :deploy do
   task :update_k8s do
     revision = `git show-ref origin/master`.split.first
     system "kubectl set image deployment/libraries-sidekiq-worker-deploy libraries-sidekiq-worker=gcr.io/#{ENV['GOOGLE_PROJECT']}/libraries.io:#{revision}"
+    system "kubectl set image deployment/libraries-rails libraries-rails=gcr.io/#{ENV['GOOGLE_PROJECT']}/libraries.io:#{revision}"
   end
   before :publishing, :update_k8s
 
