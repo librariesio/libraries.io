@@ -38,6 +38,9 @@ class Project < ApplicationRecord
   has_one :readme, through: :repository
   has_many :repository_maintenance_stats, through: :repository
 
+  scope :least_recently_updated_stats, -> { joins(:repository_maintenance_stats).group('projects.id').where.not(repository: nil).order('max(repository_maintenance_stats.updated_at) ASC') }
+  scope :no_existing_stats, -> { includes(:repository_maintenance_stats).where(repository_maintenance_stats: {id: nil}).where.not(repository: nil) }
+
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
   scope :lower_platform, ->(platform) { where('lower(projects.platform) = ?', platform.try(:downcase)) }
   scope :lower_name, ->(name) { where('lower(projects.name) = ?', name.try(:downcase)) }
@@ -537,6 +540,10 @@ class Project < ApplicationRecord
     raise ActiveRecord::RecordNotFound if version.nil?
 
     version
+  end
+
+  def update_maintenance_stats_async(priority: :medium)
+    RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: priority) unless repository.nil?
   end
 
 end

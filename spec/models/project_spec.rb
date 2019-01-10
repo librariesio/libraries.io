@@ -13,6 +13,7 @@ describe Project, type: :model do
   it { should have_many(:project_suggestions) }
   it { should have_one(:readme) }
   it { should belong_to(:repository) }
+  it { should have_many(:repository_maintenance_stats)}
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:platform) }
