@@ -141,9 +141,8 @@ module ProjectSearch
       }
     end
 
-    def self.search(original_query, options = {})
+    def self.search(query, options = {})
       facet_limit = options.fetch(:facet_limit, 36)
-      query = sanitize_query(original_query)
       options[:filters] ||= []
       search_definition = {
         query: {
