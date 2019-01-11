@@ -38,7 +38,7 @@ class Project < ApplicationRecord
   has_one :readme, through: :repository
   has_many :repository_maintenance_stats, through: :repository
 
-  scope :least_recently_updated_stats, -> { joins(:repository_maintenance_stats).group('projects.id').where.not(repository: nil).order('max(repository_maintenance_stats.updated_at) ASC') }
+  scope :least_recently_updated_stats, -> { joins(:repository_maintenance_stats).group('projects.id').where.not(repository: nil).order(Arel.sql('max(repository_maintenance_stats.updated_at) ASC')) }
   scope :no_existing_stats, -> { includes(:repository_maintenance_stats).where(repository_maintenance_stats: {id: nil}).where.not(repository: nil) }
 
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
@@ -274,7 +274,7 @@ class Project < ApplicationRecord
 
   def set_dependents_count
     return if destroyed?
-    new_dependents_count = dependents.joins(:version).pluck('DISTINCT versions.project_id').count
+    new_dependents_count = dependents.joins(:version).pluck(Arel.sql('DISTINCT versions.project_id')).count
     new_dependent_repos_count = dependent_repos_fast_count
 
     updates = {}
