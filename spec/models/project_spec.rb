@@ -64,7 +64,7 @@ describe Project, type: :model do
     end
   end
 
-  describe 'maintenance stats', focus: true do
+  describe 'maintenance stats' do
     let!(:repository) { create(:repository) }
     let!(:project) { create(:project, repository: repository) }
 
