@@ -63,4 +63,60 @@ describe Project, type: :model do
       expect(project.normalized_licenses).to eq(["MIT", "ISC"])
     end
   end
+
+  describe 'maintenance stats', focus: true do
+    let!(:repository) { create(:repository) }
+    let!(:project) { create(:project, repository: repository) }
+
+    context "without existing stats" do
+      it "should be included in no_existing_stats query" do
+        results = Project.no_existing_stats.where(id: project.id)
+        expect(results.count).to eql 1
+      end
+    end
+
+    context "with stats" do
+      let!(:stat1) { create(:repository_maintenance_stat, repository: repository) }
+
+      it "should not be in no_existing_stats query" do
+        results = Project.no_existing_stats.where(id: project.id)
+        expect(results.count).to eql 0
+      end
+
+      it "should show up in least_recently_updated_stats query" do
+        results = Project.least_recently_updated_stats.where(id: project.id)
+        # count will return a hash
+        # the key is the grouped column which is the project id
+        # the value is the count for that project id
+        expect(results.count.key? project.id).to be true
+        expect(results.count[project.id]).to eql 1
+      end
+    end
+
+    context "two projects with stats" do
+      let!(:stat1) { create(:repository_maintenance_stat, repository: repository) }
+      let!(:repository2) { create(:repository, full_name: "octokit/octokit") }
+      let!(:project2) { create(:project, repository: repository2) }
+      let!(:stat2) { create(:repository_maintenance_stat, repository: repository2) }
+
+      before do
+        stat2.update_column(:updated_at, Date.today - 1.month)
+      end
+
+      it "should return project with oldest stats first" do
+        results = Project.least_recently_updated_stats
+        expect(results.first.id).to eql project2.id
+      end
+
+      it "should return both projects" do
+        results = Project.least_recently_updated_stats
+        expect(results.length).to eql 2
+      end
+
+      it "no_existing_stats query should be empty" do
+        results = Project.no_existing_stats
+        expect(results.length).to eql 0
+      end
+    end
+  end
 end
