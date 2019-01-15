@@ -462,7 +462,6 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
-    rack-timeout (0.4.2)
     rails (5.2.2)
       actioncable (= 5.2.2)
       actionmailer (= 5.2.2)
@@ -744,7 +743,6 @@ DEPENDENCIES
   rack-attack-rate-limit
   rack-canonical-host
   rack-cors
-  rack-timeout (= 0.4.2)
   rails (= 5.2.2)
   rails-timeago!
   rails_safe_tasks
