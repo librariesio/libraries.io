@@ -6,12 +6,13 @@ module ProjectSearch
 
     index_name "projects-#{Rails.env}"
 
-    FIELDS = ['name^2', 'exact_name^2', 'repo_name', 'description', 'homepage', 'language', 'keywords_array', 'normalized_licenses', 'platform']
+    FIELDS = ['name^2', 'exact_name^2', 'maven_name^2', 'repo_name', 'description', 'homepage', 'language', 'keywords_array', 'normalized_licenses', 'platform']
 
     settings index: { number_of_shards: 3, number_of_replicas: 1 } do
       mapping do
         indexes :name, type: 'string', :analyzer => 'snowball', :boost => 6
         indexes :exact_name, type: 'string', :index => :not_analyzed, :boost => 2
+        indexes :maven_name, type: 'string', :index => :not_analyzed, :boost => 2
 
         indexes :description, type: 'string', :analyzer => 'snowball'
         indexes :homepage, type: 'string'
@@ -40,7 +41,7 @@ module ProjectSearch
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def as_indexed_json(_options = {})
-      as_json(methods: [:stars, :repo_name, :exact_name, :contributions_count, :dependent_repos_count]).merge(keywords_array: keywords)
+      as_json(methods: [:stars, :repo_name, :exact_name, :maven_name, :contributions_count, :dependent_repos_count]).merge(keywords_array: keywords)
     end
 
     def dependent_repos_count
@@ -49,6 +50,14 @@ module ProjectSearch
 
     def exact_name
       name
+    end
+
+    def maven_name
+      if platform == "Maven"
+        name.split(":")[-1]
+      else
+        name
+      end
     end
 
     def marshal_dump
