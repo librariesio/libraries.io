@@ -119,4 +119,18 @@ namespace :projects do
     exit if ENV['READ_ONLY'].present?
     ProjectDependentRepository.refresh
   end
+
+  supported_platforms = ['Maven', 'npm', 'Bower', 'PyPI', 'Rubygems', 'Packagist']
+
+  desc 'Create maintenance stats for projects'
+  task create_maintenance_stats: :environment do
+    exit if ENV['READ_ONLY'].present?
+    Project.no_existing_stats.where(platform: supported_platforms).limit(500).each(&:update_maintenance_stats_async)
+  end
+
+  desc 'Update maintenance stats for projects'
+  task update_maintenance_stats: :environment do
+    exit if ENV['READ_ONLY'].present?
+    Project.least_recently_updated_stats.where(platform: supported_platforms).limit(500).each{|project| project.update_maintenance_stats_async(priority: :low)}
+  end
 end
