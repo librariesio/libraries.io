@@ -105,6 +105,7 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
     brakeman (4.4.0)
+    brotli (0.2.2)
     bugsnag (6.11.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.3)
@@ -666,6 +667,7 @@ DEPENDENCIES
   bootsnap
   bootstrap-sass
   brakeman
+  brotli
   bugsnag
   bundler
   capistrano

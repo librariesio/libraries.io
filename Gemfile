@@ -86,6 +86,7 @@ gem 'ffi'
 gem 'bootsnap', require: false
 gem 'listen'
 gem "graphql-client", "~> 0.14.0"
+gem 'brotli'
 
 group :development do
   gem 'spring'
