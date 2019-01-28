@@ -36,9 +36,24 @@ class Project < ApplicationRecord
   has_many :registry_permissions, dependent: :delete_all
   has_many :registry_users, through: :registry_permissions
   has_one :readme, through: :repository
+  has_one :project_update_priority
   has_many :repository_maintenance_stats, through: :repository
 
-  scope :least_recently_updated_stats, -> { joins(:repository_maintenance_stats).group('projects.id').where.not(repository: nil).order(Arel.sql('max(repository_maintenance_stats.updated_at) ASC')) }
+
+  scope :by_last_maintenance_update, -> (date) { joins(:repository_maintenance_stats)
+                                                   .group('projects.id').where.not(repository: nil)
+                                                   .where('(select MAX(repository_maintenance_stats.updated_at) from repository_maintenance_stats where repository_maintenance_stats.repository_id = projects.repository_id) < ?', date) }
+  scope :by_update_priority, -> (priority) { joins(:project_update_priority).where(project_update_priorities: { priority: priority }) }
+
+  scope :low_priority_updates, -> { by_update_priority("low")
+                                      .by_last_maintenance_update(ProjectUpdatePriority.low_priority_date) }
+  scope :high_priority_updates, -> { by_update_priority("high")
+                                       .by_last_maintenance_update(ProjectUpdatePriority.high_priority_date) }
+  scope :medium_priority_updates, -> { by_update_priority("medium")
+                                         .by_last_maintenance_update(ProjectUpdatePriority.medium_priority_date) }
+  scope :unknown_priority_updates, -> { where.not(id: ProjectUpdatePriority.select(:id).uniq).least_recently_updated_stats }
+
+  scope :least_recently_updated_stats, -> { joins(:repository_maintenance_stats).group('projects.id').where.not(repository: nil).order(Arel.sql('max(repository_maintenance_stats.updated_at)')) }
   scope :no_existing_stats, -> { includes(:repository_maintenance_stats).where(repository_maintenance_stats: {id: nil}).where.not(repository: nil) }
 
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }

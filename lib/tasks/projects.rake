@@ -133,6 +133,10 @@ namespace :projects do
   task :update_maintenance_stats, [:number_to_sync] => :environment do |_task, args|
     exit if ENV['READ_ONLY'].present?
     number_to_sync = args.number_to_sync || 2000
-    Project.least_recently_updated_stats.where(platform: supported_platforms).limit(number_to_sync).each{|project| project.update_maintenance_stats_async(priority: :low)}
+    Project.low_priority_updates.where(platform: supported_platforms).limit(number_to_sync).each{|project| project.update_maintenance_stats_async(priority: :low)}
+    Project.medium_priority_updates.where(platform: supported_platforms).limit(number_to_sync).each{|project| project.update_maintenance_stats_async(priority: :medium)}
+    Project.high_priority_updates.where(platform: supported_platforms).limit(number_to_sync).each{|project| project.update_maintenance_stats_async(priority: :high)}
+
+    Project.unknown_priority_updates.where(platform: supported_platforms).limit(number_to_sync).each{|project| project.update_maintenance_stats_async(priority: :low)}
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_04_170619) do
+ActiveRecord::Schema.define(version: 2019_01_28_142743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -126,6 +126,14 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status"
+  end
+
+  create_table "project_update_priorities", force: :cascade do |t|
+    t.bigint "project_id"
+    t.integer "priority", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_project_update_priorities_on_project_id"
   end
 
   create_table "projects", id: :serial, force: :cascade do |t|
@@ -263,11 +271,12 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
   end
 
   create_table "repository_maintenance_stats", force: :cascade do |t|
-    t.bigint   "repository_id", :index=>{:name=>"index_repository_maintenance_stats_on_repository_id", :order=>{:repository_id=>:asc}}
-    t.string   "category"
-    t.string   "value"
-    t.datetime "created_at",    :null=>false
-    t.datetime "updated_at",    :null=>false
+    t.bigint "repository_id"
+    t.string "category"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["repository_id"], name: "index_repository_maintenance_stats_on_repository_id"
   end
 
   create_table "repository_organisations", id: :serial, force: :cascade do |t|

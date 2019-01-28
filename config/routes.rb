@@ -58,6 +58,8 @@ Rails.application.routes.draw do
     PROJECT_CONSTRAINT = /[^\/]+/
     VERSION_CONSTRAINT = /[\w\.\-]+/
 
+    get '/priority/:platform/:name/:priority', to: 'project_update_priority#update', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+
     get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
     get '/:platform/:name/sourcerank', to: 'projects#sourcerank', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
     get '/:platform/:name/contributors', to: 'projects#contributors', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
@@ -67,6 +69,7 @@ Rails.application.routes.draw do
     get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
     get '/:platform/:name/tree', to: 'tree#show', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }, as: :tree
     get '/:platform/:name', to: 'projects#show', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+
   end
 
   namespace :admin do
