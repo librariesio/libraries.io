@@ -1,6 +1,6 @@
 class ProjectUpdatePriority < ApplicationRecord
   belongs_to :project
-  enum priority: [ :low, :medium, :high ]
+  enum priority: { low: 0, medium: 1, high: 2 }
 
   def self.low_priority_date
     1.month.ago

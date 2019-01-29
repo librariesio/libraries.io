@@ -158,6 +158,10 @@ FactoryBot.define do
     repository
   end
 
+  factory :project_update_priority do
+    project
+  end
+
   factory :user do
     email
     after(:create) do |user, _evaluator|

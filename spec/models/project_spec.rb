@@ -100,7 +100,7 @@ describe Project, type: :model do
       let!(:stat2) { create(:repository_maintenance_stat, repository: repository2) }
 
       before do
-        stat2.update_column(:updated_at, Date.today - 1.month)
+        stat2.update_column(:updated_at, 1.month.ago)
       end
 
       it "should return project with oldest stats first" do
@@ -117,6 +117,47 @@ describe Project, type: :model do
         results = Project.no_existing_stats
         expect(results.length).to eql 0
       end
+    end
+  end
+
+  describe "#by_last_maintenance_update" do
+    let!(:repository) { create(:repository) }
+    let!(:project) { create(:project, repository: repository) }
+    let!(:stat1) { create(:repository_maintenance_stat, repository: repository, updated_at: 2.months.ago) }
+
+    it "should not return when date is larger" do
+      expect(Project.by_last_maintenance_update(3.months.ago).length).to eq 0
+    end
+
+    it "should return when date is within range" do
+      expect(Project.by_last_maintenance_update(1.month.ago).length).to eq 1
+    end
+  end
+
+  describe "#by_update_priority" do
+    let!(:repository) { create(:repository) }
+    let!(:project) { create(:project, repository: repository) }
+    let!(:pup) { create(:project_update_priority, project: project) }
+
+    it "should return by a given priority" do
+      expect(Project.by_update_priority("low").length).to eq 1
+      expect(Project.by_update_priority("medium").length).to eq 0
+    end
+  end
+
+  describe "#priority_updates" do
+    let!(:repository) { create(:repository) }
+    let!(:project) { create(:project, repository: repository) }
+    let!(:pup) { create(:project_update_priority, project: project) }
+    let!(:stat1) { create(:repository_maintenance_stat, repository: repository, updated_at: 2.months.ago) }
+
+    it "should return because the last maintenance state is old" do
+      expect(Project.low_priority_updates.length).to eq 1
+    end
+
+    it "shouldn't return when the last maintenance stat is new" do
+      stat1.update_attributes(updated_at: 1.minute.ago)
+      expect(Project.low_priority_updates.length).to eq 0
     end
   end
 end

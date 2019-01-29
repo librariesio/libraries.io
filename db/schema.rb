@@ -133,7 +133,7 @@ ActiveRecord::Schema.define(version: 2019_01_28_142743) do
     t.integer "priority", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["project_id"], name: "index_project_update_priorities_on_project_id"
+    t.index ["project_id"], name: "index_project_update_priorities_on_project_id", unique: true
   end
 
   create_table "projects", id: :serial, force: :cascade do |t|
