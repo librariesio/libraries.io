@@ -34,9 +34,21 @@ module GithubIdentity
     SyncPermissionsWorker.perform_async(self.id)
   end
 
+  def update_auth_token
+    at = AuthToken.find_or_create_by(login: nickname)
+    at.token = token
+    if at.still_authorized?
+      at.authorized = true
+      at.save if at.changed?
+    else
+      at.delete
+    end
+  end
+
   def update_repo_permissions
     return unless token
     self.update_column(:currently_syncing, true)
+    update_auth_token
     download_orgs
     r = github_client.repos
 
