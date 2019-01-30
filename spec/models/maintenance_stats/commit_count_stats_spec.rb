@@ -23,12 +23,12 @@ describe MaintenanceStats::Stats::LastYearCommitsStat do
         expected_keys = %W(last_year_commits).map(&:to_sym)
 
         expect(results.keys).to eql expected_keys
-        
+
         # check values against the VCR cassette data
         expect(results[:last_year_commits]).to eql 3476
     end
   end
-  
+
   context "repository with no commits" do
     let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
     let(:query_results) do
@@ -43,7 +43,7 @@ describe MaintenanceStats::Stats::LastYearCommitsStat do
         expected_keys = %W(last_year_commits).map(&:to_sym)
 
         expect(results.keys).to eql expected_keys
-        
+
         # check values against the VCR cassette data
         expect(results[:last_year_commits]).to eql nil
     end
@@ -72,7 +72,7 @@ describe MaintenanceStats::Stats::V3CommitsStat do
             expected_keys = %W(v3_last_week_commits v3_last_4_weeks_commits v3_last_8_weeks_commits v3_last_52_weeks_commits).map(&:to_sym)
 
             expect(results.keys).to eql expected_keys
-            
+
             # check values against the VCR cassette data
             expect(results[:v3_last_week_commits]).to eql 63
             expect(results[:v3_last_4_weeks_commits]).to eql 239
@@ -95,7 +95,7 @@ describe MaintenanceStats::Stats::V3CommitsStat do
             expected_keys = %W(v3_last_week_commits v3_last_4_weeks_commits v3_last_8_weeks_commits v3_last_52_weeks_commits).map(&:to_sym)
 
             expect(results.keys).to eql expected_keys
-            
+
             # check values against the VCR cassette data
             expect(results[:v3_last_week_commits]).to be 0
             expect(results[:v3_last_4_weeks_commits]).to be 0
