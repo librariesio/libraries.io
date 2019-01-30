@@ -61,6 +61,6 @@ class Api::ApplicationController < ApplicationController
   end
 
   def require_internal_api_key
-    render json: { error: "Error 403, you don't have permissions for this operation." }, status: :forbidden unless current_api_key.is_internal?
+    render json: { error: "Error 403, you don't have permissions for this operation." }, status: :forbidden unless current_api_key.present? && current_api_key.is_internal?
   end
 end
