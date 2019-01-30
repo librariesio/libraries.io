@@ -39,13 +39,6 @@ class GatherRepositoryMaintenanceStats
         end
 
         begin
-            result = MaintenanceStats::Queries::RepositoryContributorsQuery.new(v3_client).query(params: {full_name: repository.full_name} )
-            metrics << MaintenanceStats::Stats::Contributors.new(result).get_stats
-        rescue Octokit::Error => e
-            Rails.logger.warn(e.message)
-        end
-
-        begin
           result = MaintenanceStats::Queries::RepositoryContributorStatsQuery.new(v3_client).query(params: {full_name: repository.full_name})
           metrics << MaintenanceStats::Stats::V3ContributorCountStats.new(result).get_stats
         rescue Octokit::Error => e
