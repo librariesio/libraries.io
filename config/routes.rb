@@ -59,6 +59,7 @@ Rails.application.routes.draw do
     VERSION_CONSTRAINT = /[\w\.\-]+/
 
     get '/maintenance/stats/enqueue/:platform/:name', to: 'maintenance_stats#enqueue'
+    get '/maintenance/stats/begin/:platform/:name', to: 'maintenance_stats#begin_watching'
 
     get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
     get '/:platform/:name/sourcerank', to: 'projects#sourcerank', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
