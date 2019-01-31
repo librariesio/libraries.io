@@ -89,4 +89,3 @@ describe GatherRepositoryMaintenanceStats do
       end
   end
 end
-

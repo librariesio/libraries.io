@@ -56,14 +56,14 @@ class AuthToken < ApplicationRecord
     token ||= AuthToken.token
     http_adapter = GraphQL::Client::HTTP.new("https://api.github.com/graphql") do
       @@token = token
-      
+
       def headers(_context)
           {
           "Authorization" => "Bearer #{@@token}"
           }
       end
     end
-  
+
     # create new client with HTTP adapter set to use token and the loaded GraphQL schema
     GraphQL::Client.new(schema: Rails.application.config.graphql.schema, execute: http_adapter)
   end
@@ -72,7 +72,7 @@ class AuthToken < ApplicationRecord
 
   def self.find_token(api_version)
     return @auth_token if @auth_token && @auth_token.high_rate_limit?(api_version)
-    auth_token = authorized.order("RANDOM()").limit(100).sample
+    auth_token = authorized.order(Arel.sql("RANDOM()")).limit(100).sample
     if auth_token.high_rate_limit?(api_version)
       @auth_token = auth_token
     end

@@ -70,7 +70,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"viewer":{"login":"mikeyoung85"},"rateLimit":{"remaining":4969}}}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:12 GMT
 - request:
     method: get
@@ -143,7 +143,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"resources":{"core":{"limit":5000,"remaining":4963,"reset":1545166515},"search":{"limit":30,"remaining":30,"reset":1545165853},"graphql":{"limit":5000,"remaining":4969,"reset":1545166369}},"rate":{"limit":5000,"remaining":4963,"reset":1545166515}}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:13 GMT
 - request:
     method: post
@@ -224,7 +224,7 @@ http_interactions:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:13 GMT
 - request:
     method: get
@@ -295,7 +295,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"message":"Not Found","documentation_url":"https://developer.github.com/v3/repos/#list-contributors"}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:13 GMT
 - request:
     method: post
@@ -371,7 +371,7 @@ http_interactions:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:13 GMT
 - request:
     method: post
@@ -446,7 +446,7 @@ http_interactions:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:14 GMT
 - request:
     method: post
@@ -521,7 +521,7 @@ http_interactions:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:14 GMT
 - request:
     method: post
@@ -596,7 +596,7 @@ http_interactions:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:14 GMT
 - request:
     method: post
@@ -671,7 +671,7 @@ http_interactions:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":null},"errors":[{"message":"Could not resolve
         to a Repository with the name ''example-for-testing''.","type":"NOT_FOUND","path":["repository"],"locations":[{"line":2,"column":3}]}]}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:14 GMT
 - request:
     method: get
@@ -742,6 +742,147 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"message":"Not Found","documentation_url":"https://developer.github.com/v3/repos/statistics/#get-the-weekly-commit-count-for-the-repository-owner-and-everyone-else"}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:14 GMT
+- request:
+    method: post
+    uri: https://api.github.com/graphql
+    body:
+      encoding: UTF-8
+      string: '{"query":"query AuthToken__V4RateLimitQuery {\n  viewer {\n    login\n  }\n  rateLimit
+        {\n    remaining\n  }\n}","operationName":"AuthToken__V4RateLimitQuery"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - application/json
+      User-Agent:
+      - Ruby
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer a1d80b92dea21f31fe6544dff73b4ce211fee3df
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 30 Jan 2019 20:29:16 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      Cache-Control:
+      - no-cache
+      X-Oauth-Scopes:
+      - public_repo
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Github-Media-Type:
+      - github.v4
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4999'
+      X-Ratelimit-Reset:
+      - '1548883756'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - E004:0EEF:646FD6:D94E1B:5C52091C
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"viewer":{"login":"mellisio"},"rateLimit":{"remaining":4999}}}'
+    http_version:
+  recorded_at: Wed, 30 Jan 2019 20:29:16 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/bad/example-for-testing/stats/contributors
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Octokit Ruby Gem 4.13.0
+      Accept:
+      - application/vnd.github.v3+json
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      Expect:
+      - ''
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 30 Jan 2019 20:29:17 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 404 Not Found
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4983'
+      X-Ratelimit-Reset:
+      - '1548881722'
+      X-Oauth-Scopes:
+      - public_repo
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - DFA8:4EBE:7C0668:121ED8A:5C52091D
+    body:
+      encoding: ASCII-8BIT
+      string: '{"message":"Not Found","documentation_url":"https://developer.github.com/v3/repos/statistics/#get-contributors-list-with-additions-deletions-and-commit-counts"}'
+    http_version:
+  recorded_at: Wed, 30 Jan 2019 20:29:17 GMT
 recorded_with: VCR 4.0.0

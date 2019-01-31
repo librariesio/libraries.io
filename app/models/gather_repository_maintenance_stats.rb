@@ -30,7 +30,7 @@ class GatherRepositoryMaintenanceStats
 
         result = MaintenanceStats::Queries::CommitCountQuery.new(client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.year).iso8601} )
         metrics << MaintenanceStats::Stats::LastYearCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
-                
+
         begin
             result = MaintenanceStats::Queries::CommitCountQueryV3.new(v3_client).query(params: {full_name: repository.full_name} )
             metrics << MaintenanceStats::Stats::V3CommitsStat.new(result).get_stats
@@ -39,10 +39,10 @@ class GatherRepositoryMaintenanceStats
         end
 
         begin
-            result = MaintenanceStats::Queries::RepositoryContributorsQuery.new(v3_client).query(params: {full_name: repository.full_name} )
-            metrics << MaintenanceStats::Stats::Contributors.new(result).get_stats
+          result = MaintenanceStats::Queries::RepositoryContributorStatsQuery.new(v3_client).query(params: {full_name: repository.full_name})
+          metrics << MaintenanceStats::Stats::V3ContributorCountStats.new(result).get_stats
         rescue Octokit::Error => e
-            Rails.logger.warn(e.message)
+          Rails.logger.warn(e.message)
         end
 
         add_metrics_to_repo(repository, metrics)
@@ -62,7 +62,6 @@ class GatherRepositoryMaintenanceStats
         end unless response.data.errors.nil?
         # if we have either type of error or there is no data return true
         return response.data.nil? || response.errors.any? || response.data.errors.any?
-        false
     end
 
     def self.add_metrics_to_repo(repository, results)

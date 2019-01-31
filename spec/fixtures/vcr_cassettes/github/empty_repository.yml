@@ -70,7 +70,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"viewer":{"login":"mikeyoung85"},"rateLimit":{"remaining":4962}}}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:15 GMT
 - request:
     method: get
@@ -143,7 +143,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"resources":{"core":{"limit":5000,"remaining":4961,"reset":1545166515},"search":{"limit":30,"remaining":30,"reset":1545165856},"graphql":{"limit":5000,"remaining":4962,"reset":1545166369}},"rate":{"limit":5000,"remaining":4961,"reset":1545166515}}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: post
@@ -223,7 +223,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"nameWithOwner":"buddhamagnet/heidigoodchild","defaultBranchRef":null,"closedIssues":{"totalCount":0},"openIssues":{"totalCount":0},"closedPullRequests":{"totalCount":0},"openPullRequests":{"totalCount":0},"mergedPullRequests":{"totalCount":0},"releases":{"nodes":[]}}}}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: get
@@ -292,7 +292,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: post
@@ -367,7 +367,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"releases":{"nodes":[],"totalCount":0,"pageInfo":{"hasPreviousPage":false,"hasNextPage":false,"endCursor":null,"startCursor":null}}}}}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: post
@@ -441,7 +441,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: post
@@ -515,7 +515,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: post
@@ -589,7 +589,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: post
@@ -663,7 +663,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: get
@@ -740,6 +740,67 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"all":[],"owner":[]}'
-    http_version: 
+    http_version:
   recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/buddhamagnet/heidigoodchild/stats/contributors
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Octokit Ruby Gem 4.13.0
+      Accept:
+      - application/vnd.github.v3+json
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      Expect:
+      - ''
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 30 Jan 2019 20:29:19 GMT
+      Content-Type:
+      - application/octet-stream
+      Status:
+      - 204 No Content
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4982'
+      X-Ratelimit-Reset:
+      - '1548881722'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - DFA8:4EBE:7C06D6:121ED91:5C52091D
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Wed, 30 Jan 2019 20:29:19 GMT
 recorded_with: VCR 4.0.0
