@@ -7,7 +7,7 @@ class Api::MaintenanceStatsController < Api::ApplicationController
   end
 
   def begin_watching
-    @project.update_maintenance_stats_async(priority: high) if @project.repository_maintenance_stats.length == 0
+    @project.update_maintenance_stats_async(priority: high) unless @project.repository_maintenance_stats.exists?
     head :accepted
   end
 end
