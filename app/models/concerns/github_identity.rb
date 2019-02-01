@@ -37,12 +37,8 @@ module GithubIdentity
   def update_auth_token
     at = AuthToken.find_or_create_by(login: nickname)
     at.token = token
-    if at.still_authorized?
-      at.authorized = true
-      at.save if at.changed?
-    else
-      at.delete
-    end
+    at.authorized = at.sill_authorized?
+    at.save if at.changed?
   end
 
   def update_repo_permissions
