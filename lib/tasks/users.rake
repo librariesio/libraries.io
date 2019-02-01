@@ -8,11 +8,7 @@ namespace :users do
   task fix_auth_tokens: :environment do
     exit if ENV['READ_ONLY'].present?
     AuthToken.authorized.find_each do |token|
-      if token.still_authorized?
-        token.update_attributes(login: token.github_client.user[:login])
-      else
-        token.delete
-      end
+      token.update_attributes(login: token.github_client.user[:login], authorized: token.still_authorized?)
     end
   end
 end
