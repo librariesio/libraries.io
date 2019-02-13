@@ -56,7 +56,7 @@ module ProjectSearch
       if platform == "Maven"
         name.split(":")
       else
-        [name]
+        []
       end
     end
 
