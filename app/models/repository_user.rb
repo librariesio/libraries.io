@@ -4,12 +4,12 @@ class RepositoryUser < ApplicationRecord
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository
   has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository
   has_many :dependencies, through: :open_source_repositories
-  has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC, projects.rank DESC") }, through: :dependencies, source: :project
+  has_many :favourite_projects, -> { group('projects.id').order(Arel.sql("COUNT(projects.id) DESC, projects.rank DESC")) }, through: :dependencies, source: :project
   has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
   has_many :contributed_repositories, -> { Repository.source.open_source }, through: :contributions, source: :repository
   has_many :contributed_projects, through: :contributed_repositories, source: :projects
-  has_many :contributors, -> { group('repository_users.id').order("sum(contributions.count) DESC") }, through: :open_source_repositories, source: :contributors
-  has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('repository_users.id').order("COUNT(repository_users.id) DESC") }, through: :contributed_repositories, source: :contributors
+  has_many :contributors, -> { group('repository_users.id').order(Arel.sql("sum(contributions.count) DESC")) }, through: :open_source_repositories, source: :contributors
+  has_many :fellow_contributors, -> (object){ where.not(id: object.id).group('repository_users.id').order(Arel.sql("COUNT(repository_users.id) DESC")) }, through: :contributed_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
   has_many :identities
 

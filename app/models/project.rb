@@ -70,9 +70,9 @@ class Project < ApplicationRecord
   scope :with_launchpad_url, -> { where('repository_url ILIKE ?', '%launchpad.net%') }
   scope :with_sourceforge_url, -> { where('repository_url ILIKE ?', '%sourceforge.net%') }
 
-  scope :most_watched, -> { joins(:subscriptions).group('projects.id').order("COUNT(subscriptions.id) DESC") }
-  scope :most_dependents, -> { with_dependents.order('dependents_count DESC') }
-  scope :most_dependent_repos, -> { with_dependent_repos.order('dependent_repos_count DESC') }
+  scope :most_watched, -> { joins(:subscriptions).group('projects.id').order(Arel.sql("COUNT(subscriptions.id) DESC")) }
+  scope :most_dependents, -> { with_dependents.order(Arel.sql('dependents_count DESC')) }
+  scope :most_dependent_repos, -> { with_dependent_repos.order(Arel.sql('dependent_repos_count DESC')) }
 
   scope :visible, -> { where('projects."status" != ? OR projects."status" IS NULL', "Hidden")}
   scope :maintained, -> { where('projects."status" not in (?) OR projects."status" IS NULL', ["Deprecated", "Removed", "Unmaintained", "Hidden"])}
@@ -99,7 +99,7 @@ class Project < ApplicationRecord
                           .where('repositories.contributions_count > 0')
                           .where('repositories.stargazers_count > 0')}
 
-  scope :hacker_news, -> { with_repo.where('repositories.stargazers_count > 0').order("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC") }
+  scope :hacker_news, -> { with_repo.where('repositories.stargazers_count > 0').order(Arel.sql("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC")) }
   scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 2.weeks.ago)}
 
   after_commit :update_repository_async, on: :create
