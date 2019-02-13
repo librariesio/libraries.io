@@ -1,14 +1,18 @@
 class ErrorsController < ApplicationController
   def not_found
     respond_to do |format|
-      format.html { render status: 404 }
-      format.atom { render xml: "not found", root: "error", status: 404 }
+      format.html { render status: :not_found }
+      format.atom { render xml: "not found", root: "error", status: :not_found }
       format.json { render json: { error: "not found" }, status: :not_found }
     end
   end
 
   def unprocessable
-    render status: 422
+    respond_to do |format|
+      format.html { render status: :unprocessable_entity }
+      format.atom { render xml: "unprocessable", root: "error", status: :unprocessable_entity }
+      format.json { render json: { error: "unprocessable" }, status: :unprocessable_entity }
+    end
   end
 
   def not_acceptable
