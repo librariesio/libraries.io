@@ -11,10 +11,10 @@ Rails.application.routes.draw do
   get "/healthcheck", to: "healthcheck#index", as: :healthcheck
   get '/home', to: 'dashboard#home'
 
-  namespace :api do
+  namespace :api, defaults: { format: :json }  do
     post '/check', to: 'status#check'
 
-    get '/', to: 'docs#index'
+    get '/', to: 'docs#index', defaults: { format: :html }
     get '/search', to: 'search#index'
     get '/bower-search', to: 'bower_search#index'
     get '/searchcode', to: 'projects#searchcode'
@@ -130,9 +130,10 @@ Rails.application.routes.draw do
 
   root to: 'projects#index'
 
-  get '/404', to: 'errors#not_found'
-  get '/422', to: 'errors#unprocessable'
-  get '/500', to: 'errors#internal'
+  match '/404', to: 'errors#not_found', via: :all
+  match '/406', to: 'errors#not_acceptable', via: :all
+  match '/422', to: 'errors#unprocessable', via: :all
+  match '/500', to: 'errors#internal', via: :all
 
   resources :licenses, constraints: { :id => /.*/ }, :defaults => { :format => 'html' }
   resources :languages
