@@ -2,14 +2,6 @@ class Api::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :check_api_key
 
-  rescue_from ActiveRecord::RecordNotFound do |e|
-    render json: { message: e.message }, status: :not_found
-  end
-
-  rescue_from ActiveRecord::RecordInvalid do |e|
-    render json: { message: e.message }, status: :unprocessable_entity
-  end
-
   private
 
   def disabled_in_read_only
