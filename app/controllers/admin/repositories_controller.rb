@@ -31,7 +31,7 @@ class Admin::RepositoriesController < Admin::ApplicationController
     end
 
     @languages = Repository.maintained.without_license.with_projects.group('repositories.language').count.sort_by(&:last).reverse.first(20)
-    @repositories = scope.maintained.without_license.with_projects.order("COUNT(projects.id) DESC").group("repositories.id").paginate(page: params[:page])
+    @repositories = scope.maintained.without_license.with_projects.order(Arel.sql("COUNT(projects.id) DESC")).group("repositories.id").paginate(page: params[:page])
   end
 
   def deprecated

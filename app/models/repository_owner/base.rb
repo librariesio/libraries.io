@@ -15,11 +15,11 @@ module RepositoryOwner
     end
 
     def top_favourite_projects
-      Project.visible.where(id: top_favourite_project_ids).maintained.order("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')")
+      Project.visible.where(id: top_favourite_project_ids).maintained.order(Arel.sql("position(','||projects.id::text||',' in '#{top_favourite_project_ids.join(',')}')"))
     end
 
     def top_contributors
-      RepositoryUser.where(id: top_contributor_ids).order("position(','||repository_users.id::text||',' in '#{top_contributor_ids.join(',')}')")
+      RepositoryUser.where(id: top_contributor_ids).order(Arel.sql("position(','||repository_users.id::text||',' in '#{top_contributor_ids.join(',')}')"))
     end
 
     def to_s
