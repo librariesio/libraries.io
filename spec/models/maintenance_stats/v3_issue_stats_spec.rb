@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'pry'
 
 describe MaintenanceStats::Stats::V3IssueStats do
   let!(:auth_token) { create(:auth_token) }
