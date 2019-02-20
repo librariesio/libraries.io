@@ -10,11 +10,17 @@ module MaintenanceStats
       end
 
       def closed_issues_count
-        count_issues(issues, state: "closed")
+        return @closed_issues_count unless @closed_issues_count.nil?
+
+        @closed_issues_count = count_issues(issues, state: "closed")
+        @closed_issues_count
       end
 
       def open_issues_count
-        count_issues(issues, state: "open")
+        return @open_issues_count unless @open_issues_count.nil?
+
+        @open_issues_count = count_issues(issues, state: "open")
+        @open_issues_count
       end
 
       def issue_closure_rate
@@ -23,11 +29,17 @@ module MaintenanceStats
       end
 
       def closed_pull_request_count
-        count_issues(pull_requests, state: "closed")
+        return @closed_pull_request_count unless @closed_pull_request_count.nil?
+
+        @closed_pull_request_count = count_issues(pull_requests, state: "closed")
+        @closed_pull_request_count
       end
 
       def open_pull_request_count
-        count_issues(pull_requests, state: "open")
+        return @open_pull_request_count unless @open_pull_request_count.nil?
+
+        @open_pull_request_count = count_issues(pull_requests, state: "open")
+        @open_pull_request_count
       end
 
       def pull_request_closure_rate
@@ -36,14 +48,14 @@ module MaintenanceStats
       end
 
       def pull_requests
-        @pull_requests unless @pull_requests.nil?
+        return @pull_requests unless @pull_requests.nil?
 
         @pull_requests = @results.select { |issue| issue.key?(:pull_request) }
         @pull_requests
       end
 
       def issues
-        @issues unless @issues.nil?
+        return @issues unless @issues.nil?
 
         @issues = @results.select { |issue| !issue.key?(:pull_request) }
         @issues
@@ -53,11 +65,11 @@ module MaintenanceStats
         {
          "one_year_open_issues": open_issues_count,
          "one_year_closed_issues": closed_issues_count,
-         "one_year_total_issues": count_issues(issues),
+         "one_year_total_issues": issues.length,
          "one_year_issue_closure_rate": issue_closure_rate,
          "one_year_open_pull_requests": open_pull_request_count,
          "one_year_closed_pull_requests": closed_pull_request_count,
-         "one_year_total_pull_requests": count_issues(pull_requests),
+         "one_year_total_pull_requests": pull_requests.length,
          "one_year_pull_request_closure_rate": pull_request_closure_rate,
         }
       end
