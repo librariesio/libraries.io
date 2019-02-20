@@ -45,6 +45,13 @@ class GatherRepositoryMaintenanceStats
           Rails.logger.warn(e.message)
         end
 
+        begin
+          result = MaintenanceStats::Queries::IssuesQuery.new(v3_client).query(params: {full_name: repository.full_name, since: (now - 1.year).iso8601})
+          metrics << MaintenanceStats::Stats::V3IssueStats.new(result).get_stats
+        rescue Octokit::Error => e
+
+        end
+
         add_metrics_to_repo(repository, metrics)
 
         metrics

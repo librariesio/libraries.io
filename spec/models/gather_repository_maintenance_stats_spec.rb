@@ -65,7 +65,9 @@ describe GatherRepositoryMaintenanceStats do
           maintenance_stats = repository.repository_maintenance_stats
           non_zeros = {
             issue_closure_rate: "1.0",
-            pull_request_acceptance: "1.0"
+            pull_request_acceptance: "1.0",
+            one_year_issue_closure_rate: "1.0",
+            one_year_pull_request_closure_rate: "1.0"
           }
           expect(maintenance_stats.count).to be > 0
           maintenance_stats.each do |stat|
