@@ -67,7 +67,8 @@ describe GatherRepositoryMaintenanceStats do
             issue_closure_rate: "1.0",
             pull_request_acceptance: "1.0",
             one_year_issue_closure_rate: "1.0",
-            one_year_pull_request_closure_rate: "1.0"
+            one_year_pull_request_closure_rate: "1.0",
+            issues_stats_truncated: "false",
           }
           expect(maintenance_stats.count).to be > 0
           maintenance_stats.each do |stat|

@@ -50,14 +50,14 @@ module MaintenanceStats
       def pull_requests
         return @pull_requests unless @pull_requests.nil?
 
-        @pull_requests = @results.select { |issue| issue.key?(:pull_request) }
+        @pull_requests = @results[:issues].select { |issue| issue.key?(:pull_request) }
         @pull_requests
       end
 
       def issues
         return @issues unless @issues.nil?
 
-        @issues = @results.select { |issue| !issue.key?(:pull_request) }
+        @issues = @results[:issues].select { |issue| !issue.key?(:pull_request) }
         @issues
       end
 
@@ -71,6 +71,7 @@ module MaintenanceStats
          "one_year_closed_pull_requests": closed_pull_request_count,
          "one_year_total_pull_requests": pull_requests.length,
          "one_year_pull_request_closure_rate": pull_request_closure_rate,
+         "issues_stats_truncated": @results[:truncated]
         }
       end
     end

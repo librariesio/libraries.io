@@ -2,7 +2,7 @@ class GatherRepositoryMaintenanceStats
     def self.gather_stats(repository)
         return unless repository.host_type == "GitHub" # only support Github repos for now
         client = AuthToken.v4_client
-        v3_client = AuthToken.client
+        v3_client = AuthToken.client({auto_paginate: false})
         now = DateTime.current
 
         metrics = []

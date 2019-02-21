@@ -24,9 +24,9 @@ describe MaintenanceStats::Stats::PullRequestRates do
         expect(results.keys).to eql expected_keys
         
         # check values against the VCR cassette data
-        expect(results[:closed_pull_request_count]).to eql 7045
-        expect(results[:open_pull_request_count]).to eql 700
-        expect(results[:merged_pull_request_count]).to eql 14765
+        expect(results[:closed_pull_request_count]).to eql 7115
+        expect(results[:open_pull_request_count]).to eql 747
+        expect(results[:merged_pull_request_count]).to eql 15069
 
         expected_acceptance_rate = results[:merged_pull_request_count].to_f/ stat.total_pull_requests_count.to_f
         expect(results[:pull_request_acceptance]).to eql expected_acceptance_rate

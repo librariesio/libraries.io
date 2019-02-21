@@ -19,7 +19,7 @@ describe MaintenanceStats::Stats::V3IssueStats do
     it "should include issue and pull request stats" do
       results = stat.get_stats
 
-      expected_keys = %W(one_year_open_issues one_year_closed_issues one_year_total_issues one_year_issue_closure_rate one_year_open_pull_requests one_year_closed_pull_requests one_year_total_pull_requests one_year_pull_request_closure_rate).map(&:to_sym)
+      expected_keys = %W(one_year_open_issues one_year_closed_issues one_year_total_issues one_year_issue_closure_rate one_year_open_pull_requests one_year_closed_pull_requests one_year_total_pull_requests one_year_pull_request_closure_rate issues_stats_truncated).map(&:to_sym)
 
       expect(results.keys).to eql expected_keys
     end
@@ -28,9 +28,9 @@ describe MaintenanceStats::Stats::V3IssueStats do
         results = stat.get_stats
         
         # check values against the VCR cassette data
-        expect(results[:one_year_open_issues]).to eql 59
-        expect(results[:one_year_closed_issues]).to eql 362
-        expect(results[:one_year_total_issues]).to eql 421
+        expect(results[:one_year_open_issues]).to eql 53
+        expect(results[:one_year_closed_issues]).to eql 363
+        expect(results[:one_year_total_issues]).to eql 416
 
         expected_closure_rate = results[:one_year_closed_issues].to_f / results[:one_year_total_issues].to_f
         expect(results[:one_year_issue_closure_rate]).to eql expected_closure_rate
@@ -41,8 +41,8 @@ describe MaintenanceStats::Stats::V3IssueStats do
 
       # check values against the VCR cassette data
       expect(results[:one_year_open_pull_requests]).to eql 47
-      expect(results[:one_year_closed_pull_requests]).to eql 87
-      expect(results[:one_year_total_pull_requests]).to eql 134
+      expect(results[:one_year_closed_pull_requests]).to eql 92
+      expect(results[:one_year_total_pull_requests]).to eql 139
 
       expected_closure_rate = results[:one_year_closed_pull_requests].to_f / results[:one_year_total_pull_requests].to_f
       expect(results[:one_year_pull_request_closure_rate]).to eql expected_closure_rate
@@ -62,7 +62,7 @@ describe MaintenanceStats::Stats::V3IssueStats do
     it "should handle no data from query" do
         results = stat.get_stats
 
-        expected_keys = %W(one_year_open_issues one_year_closed_issues one_year_total_issues one_year_issue_closure_rate one_year_open_pull_requests one_year_closed_pull_requests one_year_total_pull_requests one_year_pull_request_closure_rate).map(&:to_sym)
+        expected_keys = %W(one_year_open_issues one_year_closed_issues one_year_total_issues one_year_issue_closure_rate one_year_open_pull_requests one_year_closed_pull_requests one_year_total_pull_requests one_year_pull_request_closure_rate issues_stats_truncated).map(&:to_sym)
 
         expect(results.keys).to eql expected_keys
 
@@ -75,6 +75,8 @@ describe MaintenanceStats::Stats::V3IssueStats do
         expect(results[:one_year_closed_pull_requests]).to eql 0
         expect(results[:one_year_total_pull_requests]).to eql 0
         expect(results[:one_year_pull_request_closure_rate]).to eql 1.0
+
+        expect(results[:issues_stats_truncated]).to eql false
     end
   end
 end

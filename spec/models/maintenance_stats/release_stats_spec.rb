@@ -30,12 +30,12 @@ describe MaintenanceStats::Stats::ReleaseStats do
         expect(results.keys).to eql expected_keys
         
         # check values against the VCR cassette data
-        expect(results[:last_week_releases]).to eql 0
-        expect(results[:last_month_releases]).to eql 1
-        expect(results[:last_two_month_releases]).to eql 1
-        expect(results[:last_year_releases]).to eql 1
+        expect(results[:last_week_releases]).to eql 1
+        expect(results[:last_month_releases]).to eql 2
+        expect(results[:last_two_month_releases]).to eql 2
+        expect(results[:last_year_releases]).to eql 2
 
-        expect(results[:last_release_date]).to eql "2018-12-04T18:17:39Z"
+        expect(results[:last_release_date]).to eql "2019-01-18T21:32:44Z"
     end
   end
   
