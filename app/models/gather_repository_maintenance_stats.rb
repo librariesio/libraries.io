@@ -2,7 +2,7 @@ class GatherRepositoryMaintenanceStats
     def self.gather_stats(repository)
         return unless repository.host_type == "GitHub" # only support Github repos for now
         client = AuthToken.v4_client
-        v3_client = AuthToken.client
+        v3_client = AuthToken.client({auto_paginate: false})
         now = DateTime.current
 
         metrics = []
@@ -43,6 +43,13 @@ class GatherRepositoryMaintenanceStats
           metrics << MaintenanceStats::Stats::V3ContributorCountStats.new(result).get_stats
         rescue Octokit::Error => e
           Rails.logger.warn(e.message)
+        end
+
+        begin
+          result = MaintenanceStats::Queries::IssuesQuery.new(v3_client).query(params: {full_name: repository.full_name, since: (now - 1.year).iso8601})
+          metrics << MaintenanceStats::Stats::V3IssueStats.new(result).get_stats
+        rescue Octokit::Error => e
+
         end
 
         add_metrics_to_repo(repository, metrics)

@@ -25,7 +25,7 @@ describe MaintenanceStats::Stats::LastYearCommitsStat do
         expect(results.keys).to eql expected_keys
 
         # check values against the VCR cassette data
-        expect(results[:last_year_commits]).to eql 3476
+        expect(results[:last_year_commits]).to eql 4677
     end
   end
 
@@ -74,10 +74,10 @@ describe MaintenanceStats::Stats::V3CommitsStat do
             expect(results.keys).to eql expected_keys
 
             # check values against the VCR cassette data
-            expect(results[:v3_last_week_commits]).to eql 63
-            expect(results[:v3_last_4_weeks_commits]).to eql 239
-            expect(results[:v3_last_8_weeks_commits]).to eql 488
-            expect(results[:v3_last_52_weeks_commits]).to eql 3355
+            expect(results[:v3_last_week_commits]).to eql 87
+            expect(results[:v3_last_4_weeks_commits]).to eql 273
+            expect(results[:v3_last_8_weeks_commits]).to eql 560
+            expect(results[:v3_last_52_weeks_commits]).to eql 3908
         end
     end
 

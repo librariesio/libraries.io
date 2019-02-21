@@ -70,7 +70,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"viewer":{"login":"mikeyoung85"},"rateLimit":{"remaining":4962}}}'
-    http_version:
+    http_version: 
   recorded_at: Tue, 18 Dec 2018 20:43:15 GMT
 - request:
     method: get
@@ -143,7 +143,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"resources":{"core":{"limit":5000,"remaining":4961,"reset":1545166515},"search":{"limit":30,"remaining":30,"reset":1545165856},"graphql":{"limit":5000,"remaining":4962,"reset":1545166369}},"rate":{"limit":5000,"remaining":4961,"reset":1545166515}}'
-    http_version:
+    http_version: 
   recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: post
@@ -223,7 +223,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"nameWithOwner":"buddhamagnet/heidigoodchild","defaultBranchRef":null,"closedIssues":{"totalCount":0},"openIssues":{"totalCount":0},"closedPullRequests":{"totalCount":0},"openPullRequests":{"totalCount":0},"mergedPullRequests":{"totalCount":0},"releases":{"nodes":[]}}}}'
-    http_version:
+    http_version: 
   recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: get
@@ -292,7 +292,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version:
+    http_version: 
   recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: post
@@ -367,7 +367,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"releases":{"nodes":[],"totalCount":0,"pageInfo":{"hasPreviousPage":false,"hasNextPage":false,"endCursor":null,"startCursor":null}}}}}'
-    http_version:
+    http_version: 
   recorded_at: Tue, 18 Dec 2018 20:43:16 GMT
 - request:
     method: post
@@ -441,7 +441,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
-    http_version:
+    http_version: 
   recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: post
@@ -515,7 +515,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
-    http_version:
+    http_version: 
   recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: post
@@ -589,7 +589,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
-    http_version:
+    http_version: 
   recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: post
@@ -663,7 +663,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"data":{"repository":{"defaultBranchRef":null}}}'
-    http_version:
+    http_version: 
   recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: get
@@ -740,7 +740,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"all":[],"owner":[]}'
-    http_version:
+    http_version: 
   recorded_at: Tue, 18 Dec 2018 20:43:17 GMT
 - request:
     method: get
@@ -801,6 +801,386 @@ http_interactions:
     body:
       encoding: UTF-8
       string: ''
-    http_version:
+    http_version: 
   recorded_at: Wed, 30 Jan 2019 20:29:19 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/buddhamagnet/heidigoodchild/issues?per_page=100&since=2017-12-14T17:49:49%2B00:00&state=all
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Octokit Ruby Gem 4.13.0
+      Accept:
+      - application/vnd.github.v3+json
+      Content-Type:
+      - application/json
+      Authorization:
+      - token test_token
+      Accept-Encoding:
+      - gzip,deflate,br
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 20 Feb 2019 16:09:07 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '2'
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4792'
+      X-Ratelimit-Reset:
+      - '1550681133'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      Etag:
+      - '"56b1d4877bb2a36499b8c2dd939a5cc5"'
+      X-Oauth-Scopes:
+      - notifications, read:discussion, read:gpg_key, repo, user
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - B86A:7E04:55A8FA:BA0170:5C6D7BA1
+    body:
+      encoding: UTF-8
+      string: "[]"
+    http_version: 
+  recorded_at: Wed, 20 Feb 2019 16:09:07 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/buddhamagnet/heidigoodchild/issues?per_page=100&since=2018-02-20T14:44:36Z&state=all
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Octokit Ruby Gem 4.13.0
+      Accept:
+      - application/vnd.github.v3+json
+      Content-Type:
+      - application/json
+      Authorization:
+      - token test_token
+      Accept-Encoding:
+      - gzip,deflate,br
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 20 Feb 2019 16:09:44 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '2'
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4785'
+      X-Ratelimit-Reset:
+      - '1550681133'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      Etag:
+      - '"56b1d4877bb2a36499b8c2dd939a5cc5"'
+      X-Oauth-Scopes:
+      - notifications, read:discussion, read:gpg_key, repo, user
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - B86A:7E04:55B681:BA1D65:5C6D7BC7
+    body:
+      encoding: UTF-8
+      string: "[]"
+    http_version: 
+  recorded_at: Wed, 20 Feb 2019 16:09:44 GMT
+- request:
+    method: post
+    uri: https://api.github.com/graphql
+    body:
+      encoding: UTF-8
+      string: '{"query":"query AuthToken__V4RateLimitQuery {\n  viewer {\n    login\n  }\n  rateLimit
+        {\n    remaining\n  }\n}","operationName":"AuthToken__V4RateLimitQuery"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - application/json
+      User-Agent:
+      - Ruby
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer test_token
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 20 Feb 2019 18:21:11 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      Cache-Control:
+      - no-cache
+      X-Oauth-Scopes:
+      - notifications, read:discussion, read:gpg_key, repo, user
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Github-Media-Type:
+      - github.v4
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4999'
+      X-Ratelimit-Reset:
+      - '1550690471'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - 7413:23EA:5AF1F1:C65D7D:5C6D9A97
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"viewer":{"login":"mikeyoung85"},"rateLimit":{"remaining":4999}}}'
+    http_version: 
+  recorded_at: Wed, 20 Feb 2019 18:21:11 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/buddhamagnet/heidigoodchild/issues?page=1&per_page=100&since=2017-12-14T17:49:49%2B00:00&state=all
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Octokit Ruby Gem 4.13.0
+      Accept:
+      - application/vnd.github.v3+json
+      Content-Type:
+      - application/json
+      Authorization:
+      - token test_token
+      Accept-Encoding:
+      - gzip,deflate,br
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Thu, 21 Feb 2019 19:30:04 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '2'
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4901'
+      X-Ratelimit-Reset:
+      - '1550778673'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      Etag:
+      - '"56b1d4877bb2a36499b8c2dd939a5cc5"'
+      X-Oauth-Scopes:
+      - notifications, read:discussion, read:gpg_key, repo, user
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - FDB5:3771:353051:9089DB:5C6EFC3A
+    body:
+      encoding: UTF-8
+      string: "[]"
+    http_version: 
+  recorded_at: Thu, 21 Feb 2019 19:30:04 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/buddhamagnet/heidigoodchild/issues?page=1&per_page=100&since=2018-02-20T14:44:36Z&state=all
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Octokit Ruby Gem 4.13.0
+      Accept:
+      - application/vnd.github.v3+json
+      Content-Type:
+      - application/json
+      Authorization:
+      - token test_token
+      Accept-Encoding:
+      - gzip,deflate,br
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Thu, 21 Feb 2019 19:30:27 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '2'
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4899'
+      X-Ratelimit-Reset:
+      - '1550778673'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      Etag:
+      - '"56b1d4877bb2a36499b8c2dd939a5cc5"'
+      X-Oauth-Scopes:
+      - notifications, read:discussion, read:gpg_key, repo, user
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - FDB5:3771:3532B9:908F67:5C6EFC51
+    body:
+      encoding: UTF-8
+      string: "[]"
+    http_version: 
+  recorded_at: Thu, 21 Feb 2019 19:30:27 GMT
 recorded_with: VCR 4.0.0

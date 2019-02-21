@@ -24,8 +24,8 @@ describe MaintenanceStats::Stats::IssueRates do
         expect(results.keys).to eql expected_keys
         
         # check values against the VCR cassette data
-        expect(results[:closed_issue_count]).to eql 11790
-        expect(results[:open_issue_count]).to eql 339
+        expect(results[:closed_issue_count]).to eql 11964
+        expect(results[:open_issue_count]).to eql 360
 
         expected_closure_rate = results[:closed_issue_count].to_f / stat.total_issues_count.to_f
         expect(results[:issue_closure_rate]).to eql expected_closure_rate
