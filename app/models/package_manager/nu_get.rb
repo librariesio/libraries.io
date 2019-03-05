@@ -84,7 +84,8 @@ module PackageManager
         homepage: item['projectUrl'],
         keywords_array: Array(item['tags']),
         repository_url: repo_fallback('', item['projectUrl']),
-        releases: project[:releases]
+        releases: project[:releases],
+        licenses: item['licenseExpression']
       }
     end
 
