@@ -91,7 +91,7 @@ describe GatherRepositoryMaintenanceStats do
         end
       end
 
-      context "with a GitHub repository but for some reason not a GitHub Project", focus: true do
+      context "with a GitHub repository but for some reason not a GitHub Project" do
         let!(:project) do
           repository.projects.create!(
             name: 'test-project',
