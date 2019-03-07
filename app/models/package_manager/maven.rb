@@ -72,7 +72,7 @@ module PackageManager
 
     def self.mapping(project)
       base_url = "http://repo1.maven.org/maven2/#{project[:groupId]}/#{project[:artifactId]}"
-      latest_version = project[:versions].last[:number]
+      latest_version = project[:versions].sort_by {|version| Date.parse(version[:published_at])}.reverse.first[:number]
       version_xml = get_xml(base_url + "/#{latest_version}/#{project[:artifactId]}-#{latest_version}.pom")
       self.mapping_from_pom_xml(version_xml).merge({name: project[:name]})
     end
