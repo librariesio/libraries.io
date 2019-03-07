@@ -3,6 +3,14 @@ require 'rails_helper'
 describe GatherRepositoryMaintenanceStats do
   let(:repository) { create(:repository) }
   let!(:auth_token) { create(:auth_token) }
+  let!(:project) do
+    repository.projects.create!(
+      name: 'test-project',
+      platform: 'Maven',
+      repository_url: 'https://github.com/librariesio/libraries.io',
+      homepage: 'https://libraries.io'
+    )
+  end
 
   before do
     # set the value for DateTime.current so that the queries always have the same variables and can be matched in VCR
