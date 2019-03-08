@@ -109,14 +109,24 @@ describe GatherRepositoryMaintenanceStats do
           )
         end
 
-          it "should not save any values" do
-            VCR.use_cassette('github/rails_api', :match_requests_on => [:method, :uri, :body]) do
-              GatherRepositoryMaintenanceStats.gather_stats(repository)
-            end
-  
-            maintenance_stats = repository.repository_maintenance_stats
-            expect(maintenance_stats.count).to be 0
-          end
+        it "should not save any values" do
+          GatherRepositoryMaintenanceStats.gather_stats(repository)
+
+          maintenance_stats = repository.repository_maintenance_stats
+          expect(maintenance_stats.count).to be 0
+        end
+
+        it "should delete existing stats" do
+          repository.repository_maintenance_stats.create!(
+            category: 'test',
+            value: 'yep'
+          )
+          
+          GatherRepositoryMaintenanceStats.gather_stats(repository)
+
+          maintenance_stats = repository.repository_maintenance_stats
+          expect(maintenance_stats.count).to be 0
+        end
       end
   end
 end
