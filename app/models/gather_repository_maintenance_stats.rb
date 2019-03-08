@@ -2,7 +2,11 @@ class GatherRepositoryMaintenanceStats
     def self.gather_stats(repository)
         # only support Github repos for now
         # check to make sure the Project URLs are also pointing to a Github repository
-        return unless repository.host_type == "GitHub" && repository.projects.all? {|project| project.github_name_with_owner.present?} 
+        unless stats_enabled?(repository)
+            # if this repository should not have stats, delete any existing ones and return immediately
+            repository.repository_maintenance_stats.destroy_all
+            return
+        end 
         client = AuthToken.v4_client
         v3_client = AuthToken.client({auto_paginate: false})
         now = DateTime.current
@@ -82,5 +86,9 @@ class GatherRepositoryMaintenanceStats
                 stat.touch unless stat.changed?  # we always want to update updated_at for later querying
             end
         end
+    end
+
+    def self.stats_enabled?(repository)
+        repository.host_type == "GitHub" && repository.projects.all? {|project| project.github_name_with_owner.present?} 
     end
 end
