@@ -1,3 +1,4 @@
+require "pry"
 class Project < ApplicationRecord
   include ProjectSearch
   include SourceRank
@@ -544,6 +545,11 @@ class Project < ApplicationRecord
 
   def update_maintenance_stats_async(priority: :medium)
     RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: priority) unless repository.nil?
+  end
+
+  def reformat_repository_url
+    repository_url = URLParser.try_all(self.repository_url)
+    update_attributes(repository_url: repository_url)
   end
 
 end

@@ -119,4 +119,16 @@ describe Project, type: :model do
       end
     end
   end
+
+  describe 'reformat_urls' do
+    let!(:project) { create(:project) }
+
+    it "should save the updated format URL" do
+      project.update_attributes!(homepage: 'https://libraries.io', repository_url: 'scm:git:git://github.com/librariesio/libraries.io/libaries.io.git')
+      project.reformat_repository_url
+      
+      expect(project.homepage).to eql 'https://libraries.io'
+      expect(project.repository_url).to eql 'https://github.com/librariesio/libraries.io'
+    end
+  end
 end
