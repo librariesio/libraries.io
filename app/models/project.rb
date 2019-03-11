@@ -1,4 +1,3 @@
-require "pry"
 class Project < ApplicationRecord
   include ProjectSearch
   include SourceRank
