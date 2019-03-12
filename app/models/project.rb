@@ -546,4 +546,9 @@ class Project < ApplicationRecord
     RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: priority) unless repository.nil?
   end
 
+  def reformat_repository_url
+    repository_url = URLParser.try_all(self.repository_url)
+    update_attributes(repository_url: repository_url)
+  end
+
 end

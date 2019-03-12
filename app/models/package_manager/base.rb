@@ -87,6 +87,7 @@ module PackageManager
         dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies))
         dbproject.save
       else
+        dbproject.reformat_repository_url
         dbproject.update_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies))
       end
 
