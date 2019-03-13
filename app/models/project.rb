@@ -125,7 +125,6 @@ class Project < ApplicationRecord
   def manual_sync
     async_sync
     update_repository_async
-    self.last_synced_at = Time.zone.now
     forced_save
   end
 

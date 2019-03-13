@@ -4,6 +4,7 @@ class PackageManagerDownloadWorker
 
   def perform(class_name, name)
     return unless class_name.present?
+    logger.info("Beginning update for #{class_name}/#{name}")
     "PackageManager::#{class_name}".constantize.update(name)
   end
 end
