@@ -59,7 +59,7 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def contributors
-    paginate json: @project.contributors
+    paginate json: @project.contributors.order('count DESC')
   end
 
   private
