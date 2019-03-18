@@ -1,4 +1,4 @@
-FROM ruby:2.5.1
+FROM ruby:2.5.4
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev libxml2-dev libxslt1-dev nodejs libicu-dev cmake
 
 ENV APP_HOME /libraries.io
