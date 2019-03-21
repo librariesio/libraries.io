@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.5.4'
+ruby '2.6.2'
 
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
 gem 'rb-readline'
