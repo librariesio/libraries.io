@@ -331,6 +331,6 @@ class Repository < ApplicationRecord
   end
 
   def gather_maintenance_stats
-    CriticalRepositoryMaintenanceStatWorker.perform_async(id)
+    RepositoryMaintenanceStatWorker.enqueue(id, priority: :medium)
   end
 end
