@@ -1,0 +1,36 @@
+{
+  "apiVersion": "v1",
+  "spec": {
+    "containers": [
+      {
+        "name": "db-migration",
+        "image": "gcr.io/symbolic-yeti-208501/libraries.io",
+        "args": ["sh", "-c", "echo 'Running migrations' && ln -s /secrets/libraries/.env.production .env && bundle exec rake db:migrate && bundle exec rake db:version"],
+        "env": [
+          {
+            "name": "RAILS_ENV",
+            "value": "production"
+          }
+        ],
+        "stdin": true,
+        "stdinOnce": true,
+        "tty": true,
+        "volumeMounts": [
+          {
+            "name": "libraries-env",
+            "mountPath": "/secrets/libraries",
+            "readOnly": true
+          }
+        ]
+      }
+    ],
+    "volumes": [
+      {
+        "name": "libraries-env",
+        "secret": {
+          "secretName": "libraries-env"
+        }
+      }
+    ]
+  }
+}
