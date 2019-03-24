@@ -85,7 +85,7 @@ gem 'octicons_helper'
 gem 'ffi'
 gem 'bootsnap', require: false
 gem 'listen'
-gem "graphql-client", "~> 0.14.0"
+gem 'graphql-client', '~> 0.14.0'
 gem 'brotli'
 
 group :development do
@@ -118,15 +118,15 @@ group :test do
   gem 'poltergeist', '1.17.0'
   gem 'json_spec'
   gem 'rspec-sidekiq'
-  gem "webmock", "~> 3.4"
-  gem "vcr", "~> 4.0"
+  gem 'webmock', '~> 3.4'
+  gem 'vcr', '~> 4.0'
 end
 
 group :production do
   gem 'bugsnag'
   gem 'lograge'
   gem 'rails_safe_tasks'
-  gem "stackdriver", "~> 0.15.0"
+  gem 'stackdriver', '~> 0.15.0'
 end
 
-gem "scenic", "~> 1.4"
+gem 'scenic', '~> 1.4'
