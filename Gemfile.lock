@@ -561,7 +561,7 @@ GEM
     simplecov-html (0.10.2)
     sitemap_generator (6.0.2)
       builder (~> 3.0)
-    spdx (1.4.2)
+    spdx (1.4.3)
       fuzzy_match (~> 2.1)
       spdx-licenses (~> 1.2)
     spdx-licenses (1.2.0)
