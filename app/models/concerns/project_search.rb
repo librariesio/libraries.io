@@ -67,6 +67,12 @@ module ProjectSearch
       end
     end
 
+    def marshal_load(hash)
+      hash.each do |attr, value|
+        instance_variable_set(attr, value)
+      end
+    end
+
     def self.facets(options = {})
       Rails.cache.fetch "facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
         search('', options).response.aggregations
