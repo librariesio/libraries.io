@@ -31,7 +31,7 @@ module MaintenanceStats
             def query(params: {})
                 validate_params(params)
 
-                end_date = params.slice(:end_date)
+                end_date = params[:end_date]
                 params = params.slice!(:end_date)
 
                 @releases = nil
