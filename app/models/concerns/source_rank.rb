@@ -7,7 +7,7 @@ module SourceRank
   end
 
   def update_source_rank_async
-    UpdateSourceRankWorker.perform_async(self.id) if updated_at.present? && updated_at < 1.day.ago
+    UpdateSourceRankWorker.perform_async(self.id)
 
     ProjectScoreCalculationBatch.enqueue(platform, [id])
   end
