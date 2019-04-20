@@ -19,7 +19,7 @@
       <%= number_to_human(@project.latest_version.runtime_dependencies.count) %>
     </dd>
     <dt class='col-xs-8'>
-      Dependent Packages
+      Dependent packages
     </dt>
     <dd class='col-xs-4'>
       <%= link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %>
@@ -84,7 +84,7 @@
       </dd>
       <% if @project.repository.size.present? %>
         <dt class='col-xs-8'>
-          Repository Size
+          Repository size
         </dt>
         <dd class='col-xs-4'>
           <%= number_to_human_size @project.repository.size*1000 %>
