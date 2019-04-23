@@ -79,7 +79,7 @@ class Api::ProjectsController < Api::ApplicationController
 
     project_json = serializer.new(project).as_json
     project_json[:dependencies_for_version] = version.number
-    project_json[:dependencies] = map_dependencies(version.dependencies || [])
+    project_json[:dependencies] = map_dependencies(version.dependencies.includes(:project) || [])
 
     project_json
   end
