@@ -7,6 +7,6 @@ describe DependencySerializer do
     expect(subject.attributes.keys).to eql([:project_name, :name, :platform,
                                             :requirements, :latest_stable,
                                             :latest, :deprecated, :outdated,
-                                            :filepath, :kind])
+                                            :filepath, :kind, :normalized_licenses])
   end
 end

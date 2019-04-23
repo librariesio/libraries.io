@@ -89,7 +89,8 @@ describe "Api::ProjectsController" do
           "deprecated": dependency.deprecated,
           "outdated": dependency.outdated,
           "filepath": dependency.filepath,
-          "kind": dependency.kind
+          "kind": dependency.kind,
+          "normalized_licenses": dependency.project.normalized_licenses,
           }
         end
         }.to_json)
@@ -116,7 +117,8 @@ describe "Api::ProjectsController" do
           "deprecated": dependency.deprecated,
           "outdated": dependency.outdated,
           "filepath": dependency.filepath,
-          "kind": dependency.kind
+          "kind": dependency.kind,
+          "normalized_licenses": dependency.project.normalized_licenses,
           }
         end
         }.to_json)
@@ -162,7 +164,8 @@ describe "Api::ProjectsController" do
               "deprecated": dependency.deprecated,
               "outdated": dependency.outdated,
               "filepath": dependency.filepath,
-              "kind": dependency.kind
+              "kind": dependency.kind,
+              "normalized_licenses": dependency.project.normalized_licenses,
             }
             end
           }
@@ -183,7 +186,8 @@ describe "Api::ProjectsController" do
               "deprecated": dependency.deprecated,
               "outdated": dependency.outdated,
               "filepath": dependency.filepath,
-              "kind": dependency.kind
+              "kind": dependency.kind,
+              "normalized_licenses": dependency.project.normalized_licenses,
             }
             end
           }
