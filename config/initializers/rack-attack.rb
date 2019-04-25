@@ -12,3 +12,8 @@ Rack::Attack.throttle('api', :limit => limit_proc, :period => 1.minute) do |req|
     req.params['api_key'] || req.ip
   end
 end
+
+# throttle scraping
+Rack::Attack.throttle('scrapers', :limit => 30, :period => 5.minutes) do |req|
+  req.remote_ip if req.user_agent && req.user_agent.match(/Scrapy.*/)
+end
