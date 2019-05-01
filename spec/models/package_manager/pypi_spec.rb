@@ -27,6 +27,12 @@ describe PackageManager::Pypi do
     end
   end
 
+  describes 'finds repository urls' do
+    it 'from the rarely-populated repository url' do
+    requests = JSON.parse(File.open("spec/fixtures/pypi-with-repository.json").read)
+    expect(described_class.mapping(requests)[:repository_url]).to eq("https://github.com/python-attrs/attrs")
+  end
+
   describe 'handles licenses' do
     it 'from classifiers' do
       requests = JSON.parse(File.open("spec/fixtures/pypi-specified-license.json").read)
