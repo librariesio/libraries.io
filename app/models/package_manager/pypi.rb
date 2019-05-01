@@ -45,7 +45,10 @@ module PackageManager
         :homepage => project['info']['home_page'],
         :keywords_array => Array.wrap(project['info']['keywords'].try(:split, ',')),
         :licenses => self.licenses(project),
-        :repository_url => repo_fallback('', project['info']['home_page'])
+        :repository_url => repo_fallback(
+          project.dig('info', 'project_urls', 'Source').presence || project.dig('info', 'project_urls', 'Source Code'),
+          project['info']['home_page'].presence || project.dig('info', 'project_urls', 'Homepage')
+        )
       }
     end
 
