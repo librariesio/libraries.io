@@ -1,4 +1,18 @@
 GIT
+  remote: https://github.com/librariesio/bibliothecary
+  revision: 22e47f979ee9c1189ae528aa41c092d64b335fe6
+  tag: v6.7.0
+  specs:
+    bibliothecary (6.7.0)
+      commander
+      deb_control
+      librariesio-gem-parser
+      ox (>= 2.8.1)
+      sdl4r
+      toml-rb (~> 1.0)
+      typhoeus
+
+GIT
   remote: https://github.com/librariesio/bitbucket
   revision: 43f8f97be403091debab480235413b20059337bd
   specs:
@@ -87,14 +101,6 @@ GEM
     asciidoctor (1.5.8)
     autoprefixer-rails (9.5.0)
       execjs
-    bibliothecary (6.4.0)
-      commander
-      deb_control
-      librariesio-gem-parser
-      ox (>= 2.8.1)
-      sdl4r
-      toml-rb (~> 1.0)
-      typhoeus
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
     bootsnap (1.4.1)
@@ -188,7 +194,7 @@ GEM
       rake
       rake-compiler
     fast_xs (0.8.0)
-    ffi (1.10.0)
+    ffi (1.11.1)
     fog-aws (3.4.0)
       fog-core (~> 2.1)
       fog-json (~> 1.1)
@@ -294,7 +300,7 @@ GEM
       googleapis-common-protos-types (~> 1.0.0)
     hashdiff (0.3.8)
     hashie (3.6.0)
-    highline (2.0.1)
+    highline (2.0.2)
     hiredis (0.6.3)
     htmlentities (4.3.4)
     httparty (0.16.4)
@@ -628,7 +634,7 @@ DEPENDENCIES
   amatch
   api-pagination
   asciidoctor
-  bibliothecary
+  bibliothecary!
   bitbucket_rest_api!
   bootsnap
   bootstrap-sass

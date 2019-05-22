@@ -72,7 +72,7 @@ gem 'asciidoctor'
 gem 'org-ruby'
 gem 'creole'
 gem 'bundler'
-gem 'bibliothecary'
+gem 'bibliothecary', git: 'https://github.com/librariesio/bibliothecary', tag: "v6.7.0"
 gem 'github-linguist'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'active_model_serializers'
