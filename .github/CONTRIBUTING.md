@@ -73,7 +73,7 @@ The simplest thing that you can do to help us is by filing good bug reports, so 
 * Double-check that the bug is persistent. The site is still in it's infancy and sometimes artifacts may appear and disappear.
 * Double-check the bug hasn't already been reported [on our issue tracker](https://github.com/search?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+org%3Alibrariesio), they *should* be labelled `bug` or `bugsnag`.
 
-If something hasn't been raised, you can go ahead and create a new issue using [the template](/issue_template.md). If you'd like to help investigate further or fix the bug just mention it in your issue and check out our [workflow](#workflow).
+If something hasn't been raised, you can go ahead and create a new issue using [the template](/.github/ISSUE_TEMPLATE.md). If you'd like to help investigate further or fix the bug just mention it in your issue and check out our [workflow](#workflow).
 
 ### Suggesting Enhancements
 
@@ -83,7 +83,7 @@ The next simplest thing you can do to help us is by telling us how we can improv
 
 * Check that the enhancement is not already [in our issue tracker](https://github.com/search?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+org%3Alibrariesio), they should be labelled 'enhancement'.
 
-If there isn't already an issue for feature then go ahead and create a new issue for it using the [template](/issue_template.md). If you'd like to work on the enhancement then just mention it in a comment and check out our [workflow](#workflow).
+If there isn't already an issue for feature then go ahead and create a new issue for it using the [template](/.github/ISSUE_TEMPLATE.md). If you'd like to work on the enhancement then just mention it in a comment and check out our [workflow](#workflow).
 
 ### Suggesting New Features
 
@@ -94,7 +94,7 @@ If you're into this zone then you need to understand a little more about what we
 * Check that it aligns with [our strategy](strategy.md) and is specifically not in line with something we have said we will not do (for the moment this is anything to do with ranking *people*).
 * Check that the feature is not already [in our issue tracker](https://github.com/search?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+org%3Alibrariesio), they should be tagged 'feature'.
 
-If you're still thinking about that killer feature that no one else is thinking about then *please* create an issue for it using the [template](/issue_template.md).
+If you're still thinking about that killer feature that no one else is thinking about then *please* create an issue for it using the [template](/.github/ISSUE_TEMPLATE.md).
 
 ### Your First Contribution
 You're in luck! We label issues that are ideal for first time contributors with [`first-pr`](https://github.com/search?l=&q=is%3Aopen+is%3Aissue+org%3Alibrariesio+label%3Afirst-pr&ref=advsearch&type=Issues&utf8=%E2%9C%93). For someone who wants something a little more meaty you might find an issue that needs some assistance with [`help wanted`](https://github.com/search?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+org%3Alibrariesio+label%3A%22help+wanted%22&type=Issues). Next you'll want to read our [workflow](#workflow).
