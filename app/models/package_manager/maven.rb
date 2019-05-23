@@ -148,19 +148,17 @@ module PackageManager
     end
 
     def self.versions(project)
-      # multiple version pages
-      initial_page = get_html("https://maven-repository.com/artifact/#{project[:path]}/")
-      version_pages(initial_page).reduce(extract_versions(initial_page)) do |acc, page|
-        acc.concat( extract_versions(get_html(page)) )
-      end
+      sections = project[:name].split(":")
+      query = "g:#{sections[0]} AND a:#{sections[1]}"
+      json_versions = JSON.parse(get_raw("https://search.maven.org/solrsearch/select?q=#{query}&core=gav&wt=json&rows=1000"))
+      extract_versions(json_versions)
     end
 
-    def self.extract_versions(page)
-      page.css('tr')[1..-1].map do |tr|
-        tds = tr.css('td')
+    def self.extract_versions(versions)
+      versions["response"]["docs"].map do |version|
         {
-          :number => tds[0].text,
-          :published_at => tds[2].text
+          :number => version["v"],
+          :published_at => DateTime.strptime(version["timestamp"].to_s, "%Q").to_s
         }
       end
     end
