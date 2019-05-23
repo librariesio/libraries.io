@@ -158,7 +158,7 @@ module PackageManager
       versions["response"]["docs"].map do |version|
         {
           :number => version["v"],
-          :published_at => DateTime.strptime(version["timestamp"].to_s, "%Q").to_s
+          :published_at => Time.at(version["timestamp"] / 1000).to_date
         }
       end
     end
