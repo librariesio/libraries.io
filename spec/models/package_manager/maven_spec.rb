@@ -19,9 +19,17 @@ describe PackageManager::Maven do
 
   describe 'mapping_from_pom_xml' do
     let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read) }
+    let(:parent_pom) { {homepage: 'https://github.com/googleapis/googleapis', licenses: 'unknown'} }
+    let(:parent_project) { {name: 'com.google.api.grpc:proto-google-common-parent', groupId: 'com.google.api.grpc', artifactId: 'proto-google-common-parent', versions: []} }
     let(:parsed) { described_class.mapping_from_pom_xml(pom) }
 
+    before do 
+      expect(described_class).to receive(:project).and_return(parent_project)
+      expect(described_class).to receive(:mapping).with(parent_project).and_return(parent_pom)
+    end
+
     it 'to find license' do
+      # parent license should be overwritten by direct pom
       expect(parsed[:licenses]).to eq("Apache-2.0")
     end
 
@@ -30,6 +38,7 @@ describe PackageManager::Maven do
     end
 
     it 'to find homepage' do
+      # homepage value should come from parent pom
       expect(parsed[:homepage]).to eq("https://github.com/googleapis/googleapis")
     end
 

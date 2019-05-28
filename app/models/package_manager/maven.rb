@@ -83,13 +83,26 @@ module PackageManager
       else
         xml = version_xml
       end
-      {
+
+      keys = %i[description homepage repository_url licenses]
+      parent = Hash[keys.product([nil])]
+      if xml.locate('parent').first
+        group_id = xml.locate('parent/groupId').first.try(:nodes).try(:first)
+        artifact_id = xml.locate('parent/artifactId').first.try(:nodes).try(:first)
+        unless [group_id, artifact_id].any?(nil)
+          parent = mapping(project([group_id, artifact_id].join(":")))
+        end
+      end
+
+      # merge with parent data if available and take child values on overlap
+      child = {
         description: xml.locate('description').first.try(:nodes).try(:first),
         homepage: xml.locate('url').first.try(:nodes).try(:first),
         repository_url: repo_fallback(xml.locate('scm/url').first.try(:nodes).try(:first),
                                       xml.locate('url').first.try(:nodes).try(:first)),
         licenses: xml.locate('licenses/license/name').map{|l| l.nodes}.flatten.join(",")
-      }
+      }.reject!{|k,v| v.nil?}
+      parent.merge(child)
     end
 
     def self.dependencies(name, version, project)
