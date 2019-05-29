@@ -87,19 +87,19 @@ module PackageManager
       keys = %i[description homepage repository_url licenses]
       parent = Hash[keys.product([nil])]
       if xml.locate('parent').first
-        group_id = xml.locate('parent/groupId').first.try(:nodes).try(:first)
-        artifact_id = xml.locate('parent/artifactId').first.try(:nodes).try(:first)
-        unless [group_id, artifact_id].any?(nil)
+        group_id = xml.locate('parent/groupId').first&.nodes&.first
+        artifact_id = xml.locate('parent/artifactId').first&.nodes&.first
+        if group_id && artifact_id
           parent = mapping(project([group_id, artifact_id].join(":")))
         end
       end
 
       # merge with parent data if available and take child values on overlap
       child = {
-        description: xml.locate('description').first.try(:nodes).try(:first),
-        homepage: xml.locate('url').first.try(:nodes).try(:first),
-        repository_url: repo_fallback(xml.locate('scm/url').first.try(:nodes).try(:first),
-                                      xml.locate('url').first.try(:nodes).try(:first)),
+        description: xml.locate('description').first&.nodes&.first,
+        homepage: xml.locate('url').first&.nodes&.first,
+        repository_url: repo_fallback(xml.locate('scm/url').first&.nodes&.first,
+                                      xml.locate('url').first&.nodes&.first),
         licenses: xml.locate('licenses/license/name').map{|l| l.nodes}.flatten.join(",")
       }.reject{|k,v| v.nil?}
       parent.merge(child)
