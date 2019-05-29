@@ -9,10 +9,10 @@
   <description>PROTO library for proto-google-common-protos</description>
 
   <parent>
-		<groupId>com.google.api.grpc</groupId>
-		<artifactId>proto-google-common-parent</artifactId>
-		<version>0.1.9</version>
-	</parent>
+    <groupId>com.google.api.grpc</groupId>
+    <artifactId>proto-google-common-parent</artifactId>
+    <version>0.1.9</version>
+  </parent>
 
   <licenses>
     <license>
