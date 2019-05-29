@@ -101,7 +101,7 @@ module PackageManager
         repository_url: repo_fallback(xml.locate('scm/url').first.try(:nodes).try(:first),
                                       xml.locate('url').first.try(:nodes).try(:first)),
         licenses: xml.locate('licenses/license/name').map{|l| l.nodes}.flatten.join(",")
-      }.reject!{|k,v| v.nil?}
+      }.reject{|k,v| v.nil?}
       parent.merge(child)
     end
 
