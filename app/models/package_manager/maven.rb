@@ -123,6 +123,8 @@ module PackageManager
 
     def self.version_pages(page)
       page.css('.pagination li a').map{|link| BASE_URL + link['href'] }.uniq
+    end
+
     def self.project_name(name)
       sections = name.split(':')
       {
