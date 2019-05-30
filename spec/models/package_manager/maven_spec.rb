@@ -17,6 +17,22 @@ describe PackageManager::Maven do
     end
   end
 
+  describe '#check_status_url' do
+    let(:project) { create(:project, name: 'javax.faces:javax.faces-api', platform: described_class.name) }
+
+    it 'returns link to maven central folder' do
+      expect(described_class.check_status_url(project)).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api")
+    end
+  end
+
+  describe '#download_url' do
+    let(:project) { create(:project, name: 'javax.faces:javax.faces-api', platform: described_class.name) }
+
+    it 'returns link to maven central jar file' do
+      expect(described_class.download_url(project.name, '2.3')).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api/2.3/javax.faces-api-2.3.jar")
+    end
+  end
+
   describe 'mapping_from_pom_xml' do
     let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read) }
     let(:parsed) { described_class.mapping_from_pom_xml(pom) }
