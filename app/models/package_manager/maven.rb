@@ -148,8 +148,7 @@ module PackageManager
     end
 
     def self.versions(project)
-      sections = project[:name].split(":")
-      query = "g:#{sections[0]} AND a:#{sections[1]}"
+      query = "g:#{project[:groupId]} AND a:#{project[:artifactId]}"
       json_versions = JSON.parse(get_raw("https://search.maven.org/solrsearch/select?q=#{query}&core=gav&wt=json&rows=1000"))
       extract_versions(json_versions)
     end
