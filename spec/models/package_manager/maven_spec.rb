@@ -73,4 +73,69 @@ describe PackageManager::Maven do
       described_class.mapping_from_pom_xml(pom)
     end
   end
+
+  describe '.get_pom(group_id, artifact_id, version)' do
+    context 'with no relocation' do
+      it 'returns the expected data' do
+        simple_pom = Ox.parse('<project></project>')
+
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id\/artifact_id\/version/)
+          .and_return(simple_pom)
+
+        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
+          .to eq(simple_pom)
+      end
+    end
+
+    context 'with a simple relocation' do
+      it 'returns the expected data' do
+        simple_pom = Ox.parse('<project></project>')
+        redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>')
+
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id\/artifact_id\/version/)
+          .and_return(redirect_pom)
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id_2\/artifact_id\/version/)
+          .and_return(simple_pom)
+
+        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
+          .to eq(simple_pom)
+      end
+    end
+
+    context 'with a broken relocation' do
+      it 'returns the expected data' do
+        redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>')
+
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id\/artifact_id\/version/)
+          .and_return(redirect_pom)
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id_2\/artifact_id\/version/)
+          .and_raise(Faraday::Error)
+
+        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
+          .to eq(redirect_pom)
+      end
+    end
+
+    context 'with an infinite relocation loop' do
+      it 'terminates' do
+        redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>')
+        redirect_pom_2 = Ox.parse('<project><distributionManagement><relocation><groupId>group_id</groupId></relocation></distributionManagement></project>')
+
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id\/artifact_id\/version/)
+          .and_return(redirect_pom)
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id_2\/artifact_id\/version/)
+          .and_return(redirect_pom_2)
+
+        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
+          .to eq(redirect_pom_2)
+      end
+    end
+  end
 end
