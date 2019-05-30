@@ -10,7 +10,7 @@ describe "Api::RepositoryUsersController" do
       get "/api/github/#{@user.login}"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq('application/json')
-      expect(response.body).to be_json_eql @user.to_json({methods: [:github_id, :user_type]})
+      expect(response.body["github_id"]).to eq(@user.to_json({methods: [:github_id, :user_type]})["github_id"])
     end
   end
 
