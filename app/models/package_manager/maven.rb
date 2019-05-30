@@ -18,12 +18,13 @@ module PackageManager
     end
 
     def self.download_url(name, version = nil)
-      _group, artifact = name.split(":")
-      "https://repo1.maven.org/maven2/#{name.gsub(/\:|\./, '/')}/#{version}/#{artifact}-#{version}.jar"
+      maven_name = project_name(name)
+      "https://repo1.maven.org/maven2/#{maven_name[:groupId]}/#{maven_name[:artifactId]}/#{version}/#{maven_name[:artifactId]}-#{version}.jar"
     end
 
     def self.check_status_url(project)
-      "https://repo1.maven.org/maven2/#{project.name.gsub(/\:|\./, '/')}/"
+      maven_name = project_name(project.name)
+      "https://repo1.maven.org/maven2/#{maven_name[:groupId]}/#{maven_name[:artifactId]}"
     end
 
     def self.load_names(limit = nil)
@@ -59,13 +60,7 @@ module PackageManager
     end
 
     def self.project(name)
-      sections = name.split(':')
-      h = {
-        name: name,
-        path: name.split(':').join('/'),
-        groupId: sections[0].gsub('.', '/'),
-        artifactId: sections[1]
-      }
+      h = project_name(name)
       h[:versions] = versions(h)
       h
     end
@@ -128,6 +123,14 @@ module PackageManager
 
     def self.version_pages(page)
       page.css('.pagination li a').map{|link| BASE_URL + link['href'] }.uniq
+    def self.project_name(name)
+      sections = name.split(':')
+      {
+        name: name,
+        path: name.split(':').join('/'),
+        groupId: sections[0].gsub('.', '/'),
+        artifactId: sections[1]
+      }
     end
   end
 end
