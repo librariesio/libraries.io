@@ -7,6 +7,7 @@ module PackageManager
     URL = "http://maven.org"
     BASE_URL = "https://maven-repository.com"
     COLOR = '#b07219'
+    MAX_DEPTH = 5
 
     def self.package_link(project, version = nil)
       if version
@@ -70,14 +71,14 @@ module PackageManager
       h
     end
 
-    def self.mapping(project)
+    def self.mapping(project, depth = 0)
       base_url = "http://repo1.maven.org/maven2/#{project[:groupId]}/#{project[:artifactId]}"
       latest_version = project[:versions].sort_by {|version| Date.parse(version[:published_at])}.reverse.first[:number]
       version_xml = get_xml(base_url + "/#{latest_version}/#{project[:artifactId]}-#{latest_version}.pom")
-      self.mapping_from_pom_xml(version_xml).merge({name: project[:name]})
+      self.mapping_from_pom_xml(version_xml, depth).merge({name: project[:name]})
     end
 
-    def self.mapping_from_pom_xml(version_xml)
+    def self.mapping_from_pom_xml(version_xml, depth = 0)
       if version_xml.respond_to?('project')
         xml = version_xml.project
       else
@@ -86,11 +87,11 @@ module PackageManager
 
       keys = %i[description homepage repository_url licenses]
       parent = Hash[keys.product([nil])]
-      if xml.locate('parent').first
+      if xml.locate('parent').first && depth < MAX_DEPTH
         group_id = xml.locate('parent/groupId').first&.nodes&.first
         artifact_id = xml.locate('parent/artifactId').first&.nodes&.first
         if group_id && artifact_id
-          parent = mapping(project([group_id, artifact_id].join(":")))
+          parent = mapping(project([group_id, artifact_id].join(":")), depth += 1)
         end
       end
 
