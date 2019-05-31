@@ -51,6 +51,12 @@ describe Project, type: :model do
       expect(project.normalized_licenses).to eq(["MIT", "ISC"])
     end
 
+    it 'handles (OR) separated licenses' do
+      project.licenses = "(MIT or CC0-1.0)"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["MIT", "CC0-1.0"])
+    end
+
     it 'handles AND separated licenses' do
       project.licenses = "mit AND ISC"
       project.normalize_licenses

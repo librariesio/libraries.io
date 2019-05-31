@@ -356,7 +356,7 @@ class Project < ApplicationRecord
       if downcased.start_with?('(')
         downcased[0] = ''
       end
-      if downcased.start_with?(')')
+      if downcased.end_with?(')')
         downcased[-1] = ''
       end
       # splits are OR, AND, COMMA (,), and SLASH (/)
@@ -367,7 +367,7 @@ class Project < ApplicationRecord
       elsif downcased.include?("and")
         split = downcased.split(/and/)
       else
-        split = licenses.split(/[,\/]/)
+        split = downcased.split(/[,\/]/)
       end
       normalized = split.map do |license|
         Spdx.find(license).try(:id)
