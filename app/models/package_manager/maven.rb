@@ -8,6 +8,10 @@ module PackageManager
     BASE_URL = "https://maven-repository.com"
     COLOR = '#b07219'
     MAX_DEPTH = 5
+    LICENSE_STRINGS = {
+      "http://www.apache.org/licenses/LICENSE-2.0" => "Apache-2.0",
+      "http://www.eclipse.org/legal/epl-v10.html" => "Eclipse Public License (EPL), Version 1.0",
+    }
 
     def self.package_link(project, version = nil)
       if version
@@ -101,7 +105,7 @@ module PackageManager
         homepage: xml.locate('url').first&.nodes&.first,
         repository_url: repo_fallback(xml.locate('scm/url').first&.nodes&.first,
                                       xml.locate('url').first&.nodes&.first),
-        licenses: xml.locate('licenses/license/name').map{|l| l.nodes}.flatten.join(",")
+        licenses: licenses(xml).join(","),
       }.reject{|k,v| v.nil? || v.empty?}
       parent.merge(child)
     end
@@ -176,6 +180,18 @@ module PackageManager
           xml
         end
       end
+    end
+
+    def self.licenses(xml)
+      xml_licenses = xml
+        .locate('licenses/license/name')
+        .flat_map(&:nodes)
+      return xml_licenses if xml_licenses.any?
+
+      comments = xml.locate('*/^Comment')
+      LICENSE_STRINGS
+        .select { |string, _| comments.any? { |c| c.value.include?(string) } }
+        .map(&:last)
     end
   end
 end
