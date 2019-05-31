@@ -80,8 +80,12 @@ module PackageManager
         xml = version_xml
       end
 
-      keys = %i[description homepage repository_url licenses]
-      parent = Hash[keys.product([nil])]
+      parent = {
+        description: nil,
+        homepage: nil,
+        repository_url: "",
+        licenses: ""
+      }
       if xml.locate('parent').first && depth < MAX_DEPTH
         group_id = xml.locate('parent/groupId').first&.nodes&.first
         artifact_id = xml.locate('parent/artifactId').first&.nodes&.first
@@ -97,7 +101,7 @@ module PackageManager
         repository_url: repo_fallback(xml.locate('scm/url').first&.nodes&.first,
                                       xml.locate('url').first&.nodes&.first),
         licenses: xml.locate('licenses/license/name').map{|l| l.nodes}.flatten.join(",")
-      }.reject{|k,v| v.nil?}
+      }.reject{|k,v| v.nil? || v.empty?}
       parent.merge(child)
     end
 
