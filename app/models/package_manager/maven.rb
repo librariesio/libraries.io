@@ -20,12 +20,12 @@ module PackageManager
 
     def self.download_url(name, version = nil)
       maven_name = project_name(name)
-      "https://repo1.maven.org/maven2/#{maven_name[:groupId]}/#{maven_name[:artifactId]}/#{version}/#{maven_name[:artifactId]}-#{version}.jar"
+      "https://repo1.maven.org/maven2/#{maven_name[:groupPath]}/#{maven_name[:artifactId]}/#{version}/#{maven_name[:artifactId]}-#{version}.jar"
     end
 
     def self.check_status_url(project)
       maven_name = project_name(project.name)
-      "https://repo1.maven.org/maven2/#{maven_name[:groupId]}/#{maven_name[:artifactId]}"
+      "https://repo1.maven.org/maven2/#{maven_name[:groupPath]}/#{maven_name[:artifactId]}"
     end
 
     def self.load_names(limit = nil)
@@ -67,7 +67,7 @@ module PackageManager
     end
 
     def self.mapping(project, depth = 0)
-      base_url = "http://repo1.maven.org/maven2/#{project[:groupId]}/#{project[:artifactId]}"
+      base_url = "http://repo1.maven.org/maven2/#{project[:groupPath]}/#{project[:artifactId]}"
       latest_version = project[:versions].sort_by {|version| Date.parse(version[:published_at])}.reverse.first[:number]
       version_xml = get_xml(base_url + "/#{latest_version}/#{project[:artifactId]}-#{latest_version}.pom")
       self.mapping_from_pom_xml(version_xml, depth).merge({name: project[:name]})
@@ -109,7 +109,7 @@ module PackageManager
       sections = project[:name].split(':')
       groupId = sections[0].gsub('.', '/')
       artifactId = sections[1]
-      base_url = "http://repo1.maven.org/maven2/#{groupId}/#{artifactId}"
+      base_url = "http://repo1.maven.org/maven2/#{groupPath}/#{artifactId}"
       pom_file = get_raw(base_url + "/#{version}/#{artifactId}-#{version}.pom")
       Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file).map do |dep|
         {
@@ -148,7 +148,8 @@ module PackageManager
       {
         name: name,
         path: name.split(':').join('/'),
-        groupId: sections[0].gsub('.', '/'),
+        groupId: sections[0],
+        groupPath: sections[0].gsub('.', '/'),
         artifactId: sections[1]
       }
     end
