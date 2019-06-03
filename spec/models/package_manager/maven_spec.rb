@@ -73,4 +73,115 @@ describe PackageManager::Maven do
       described_class.mapping_from_pom_xml(pom)
     end
   end
+
+  describe '.get_pom(group_id, artifact_id, version)' do
+    context 'with no relocation' do
+      it 'returns the expected data' do
+        simple_pom = Ox.parse('<project></project>')
+
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id\/artifact_id\/version/)
+          .and_return(simple_pom)
+
+        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
+          .to eq(simple_pom)
+      end
+    end
+
+    context 'with a simple relocation' do
+      it 'returns the expected data' do
+        simple_pom = Ox.parse('<project></project>')
+        redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>')
+
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id\/artifact_id\/version/)
+          .and_return(redirect_pom)
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id_2\/artifact_id\/version/)
+          .and_return(simple_pom)
+
+        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
+          .to eq(simple_pom)
+      end
+    end
+
+    context 'with a broken relocation' do
+      it 'returns the expected data' do
+        redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>')
+
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id\/artifact_id\/version/)
+          .and_return(redirect_pom)
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id_2\/artifact_id\/version/)
+          .and_raise(Faraday::Error)
+
+        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
+          .to eq(redirect_pom)
+      end
+    end
+
+    context 'with an infinite relocation loop' do
+      it 'terminates' do
+        redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>')
+        redirect_pom_2 = Ox.parse('<project><distributionManagement><relocation><groupId>group_id</groupId></relocation></distributionManagement></project>')
+
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id\/artifact_id\/version/)
+          .and_return(redirect_pom)
+        allow(described_class).to receive(:get_xml)
+          .with(/group_id_2\/artifact_id\/version/)
+          .and_return(redirect_pom_2)
+
+        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
+          .to eq(redirect_pom_2)
+      end
+    end
+  end
+
+  describe '.licenses(xml)' do
+    context 'with licences in the XML' do
+      it 'returns those licenses' do
+        pom = Ox.parse('<project><licenses><license><name>Apache-2.0</name><url>http://www.apache.org/licenses/LICENSE-2.0.txt</url></license></licenses></project>')
+
+        expect(described_class.licenses(pom)).to eq(['Apache-2.0'])
+      end
+    end
+
+    context 'with licences in the comments' do
+      it 'returns those licenses' do
+        pom = Ox.parse(
+          <<-EOF
+            <?xml version="1.0"?>
+            <!--
+               Licensed to the Apache Software Foundation (ASF) under one or more
+               contributor license agreements.  See the NOTICE file distributed with
+               this work for additional information regarding copyright ownership.
+               The ASF licenses this file to You under the Apache License, Version 2.0
+               (the "License"); you may not use this file except in compliance with
+               the License.  You may obtain a copy of the License at
+
+                   http://www.apache.org/licenses/LICENSE-2.0
+
+               Unless required by applicable law or agreed to in writing, software
+               distributed under the License is distributed on an "AS IS" BASIS,
+               WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+               See the License for the specific language governing permissions and
+               limitations under the License.
+            -->
+            <project></project>
+          EOF
+        )
+
+        expect(described_class.licenses(pom)).to eq(['Apache-2.0'])
+      end
+    end
+
+    context 'with no licences' do
+      it 'returns empty' do
+        pom = Ox.parse('<project></project>')
+        expect(described_class.licenses(pom)).to be_empty
+      end
+    end
+  end
 end

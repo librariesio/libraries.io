@@ -8,6 +8,10 @@ module PackageManager
     BASE_URL = "https://maven-repository.com"
     COLOR = '#b07219'
     MAX_DEPTH = 5
+    LICENSE_STRINGS = {
+      "http://www.apache.org/licenses/LICENSE-2.0" => "Apache-2.0",
+      "http://www.eclipse.org/legal/epl-v10.html" => "Eclipse Public License (EPL), Version 1.0",
+    }
 
     def self.package_link(project, version = nil)
       if version
@@ -67,9 +71,10 @@ module PackageManager
     end
 
     def self.mapping(project, depth = 0)
-      base_url = "http://repo1.maven.org/maven2/#{project[:groupPath]}/#{project[:artifactId]}"
-      latest_version = project[:versions].sort_by {|version| Date.parse(version[:published_at])}.reverse.first[:number]
-      version_xml = get_xml(base_url + "/#{latest_version}/#{project[:artifactId]}-#{latest_version}.pom")
+      latest_version = project[:versions]
+        .max_by { |version| version[:published_at] }
+        .dig(:number)
+      version_xml = get_pom(project[:groupPath], project[:artifactId], latest_version)
       self.mapping_from_pom_xml(version_xml, depth).merge({name: project[:name]})
     end
 
@@ -100,7 +105,7 @@ module PackageManager
         homepage: xml.locate('url').first&.nodes&.first,
         repository_url: repo_fallback(xml.locate('scm/url').first&.nodes&.first,
                                       xml.locate('url').first&.nodes&.first),
-        licenses: xml.locate('licenses/license/name').map{|l| l.nodes}.flatten.join(",")
+        licenses: licenses(xml).join(","),
       }.reject{|k,v| v.nil? || v.empty?}
       parent.merge(child)
     end
@@ -152,6 +157,41 @@ module PackageManager
         groupPath: sections[0].gsub('.', '/'),
         artifactId: sections[1]
       }
+    end
+
+    def self.get_pom(group_path, artifact_id, version, seen=[])
+      xml = get_xml(
+        "http://repo1.maven.org/maven2/#{group_path}/#{artifact_id}/#{version}/#{artifact_id}-#{version}.pom"
+      )
+
+      seen << [group_path, artifact_id, version]
+
+      next_group_path = xml.locate('distributionManagement/relocation/groupId/?[0]').first || group_path
+      next_artifact_id = xml.locate('distributionManagement/relocation/artifactId/?[0]').first || artifact_id
+      next_version = xml.locate('distributionManagement/relocation/version/?[0]').first || version
+
+      if seen.include?([next_group_path, next_artifact_id, next_version])
+        xml
+
+      else
+        begin
+          get_pom(next_group_path, next_artifact_id, next_version, seen)
+        rescue Faraday::Error
+          xml
+        end
+      end
+    end
+
+    def self.licenses(xml)
+      xml_licenses = xml
+        .locate('licenses/license/name')
+        .flat_map(&:nodes)
+      return xml_licenses if xml_licenses.any?
+
+      comments = xml.locate('*/^Comment')
+      LICENSE_STRINGS
+        .select { |string, _| comments.any? { |c| c.value.include?(string) } }
+        .map(&:last)
     end
   end
 end

@@ -269,7 +269,7 @@ GEM
       google-cloud-core (~> 1.2)
       google-gax (~> 1.3)
       stackdriver-core (~> 1.3)
-    google-gax (1.6.1)
+    google-gax (1.6.2)
       google-protobuf (~> 3.2)
       googleapis-common-protos (>= 1.3.5, < 2.0)
       googleauth (>= 0.6.2, < 0.10.0)
