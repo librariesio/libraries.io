@@ -71,10 +71,7 @@ module PackageManager
     end
 
     def self.mapping(project, depth = 0)
-      latest_version = project[:versions]
-        .max_by { |version| version[:published_at] }
-        .dig(:number)
-      version_xml = get_pom(project[:groupPath], project[:artifactId], latest_version)
+      version_xml = get_pom(project[:groupPath], project[:artifactId], latest_version(project))
       self.mapping_from_pom_xml(version_xml, depth).merge({name: project[:name]})
     end
 
@@ -192,6 +189,22 @@ module PackageManager
       LICENSE_STRINGS
         .select { |string, _| comments.any? { |c| c.value.include?(string) } }
         .map(&:last)
+    end
+
+    def self.latest_version(project)
+      if project[:versions].present?
+        project[:versions]
+          .max_by { |version| version[:published_at] }
+          .dig(:number)
+      else
+        # TODO this is in place to handle packages that are no longer on maven-repository.com
+        # this could be removed if we switched to a package data provider that supplied full information
+        Project
+          .find_by(name: project[:name], platform: 'Maven')
+          &.versions
+          &.max_by(&:published_at)
+          &.number
+      end
     end
   end
 end

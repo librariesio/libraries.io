@@ -184,4 +184,45 @@ describe PackageManager::Maven do
       end
     end
   end
+
+  describe '.latest_version(project)' do
+    context 'with versions in the project' do
+      it 'returns the latest version' do
+        project = {
+          versions: [
+            { number: 'previous', published_at: Time.parse('2019-06-04T00:00:00Z') },
+            { number: 'latest', published_at: Time.parse('2019-06-04T00:00:01Z') },
+          ],
+        }
+        expect(described_class.latest_version(project)).to eq('latest')
+      end
+    end
+
+    context 'with no versions in the project' do
+      context 'with versions in the DB' do
+        it 'falls back to the DB' do
+          project = create(:project, name: 'com.tidelift:test', platform: 'Maven')
+          create(:version, project: project, number: '1.0.0', published_at: Time.parse('2019-06-04T00:00:00Z'))
+          create(:version, project: project, number: '1.0.1', published_at: Time.parse('2019-06-04T00:00:01Z'))
+
+          project = {
+            artifactId: 'test',
+            groupId: 'com.tidelift',
+            name: 'com.tidelift:test',
+            versions: [],
+          }
+          expect(described_class.latest_version(project)).to eq('1.0.1')
+        end
+      end
+
+      context 'with no versions in the DB' do
+        it 'returns nothing' do
+          project = {
+            versions: [],
+          }
+          expect(described_class.latest_version(project)).to be_nil
+        end
+      end
+    end
+  end
 end
