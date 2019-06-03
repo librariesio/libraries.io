@@ -88,28 +88,34 @@ module PackageManager
         repository_url: "",
         licenses: ""
       }
-      if xml.locate('parent').first && depth < MAX_DEPTH
-        group_id = xml.locate('parent/groupId').first&.nodes&.first
-        artifact_id = xml.locate('parent/artifactId').first&.nodes&.first
-        if group_id && artifact_id
-          parent = mapping(project([group_id, artifact_id].join(":")), depth += 1)
+      if xml.locate('parent').present? && depth < MAX_DEPTH
+        group_id = xml.locate('parent/groupId/?[0]').first
+        artifact_id = xml.locate('parent/artifactId/?[0]').first
+        version = xml.locate('parent/version/?[0]').first
+        if group_id && artifact_id && version
+          parent = mapping_from_pom_xml(
+            get_pom(group_id, artifact_id, version),
+            depth + 1
+          )
         end
       end
 
       # merge with parent data if available and take child values on overlap
       child = {
-        description: xml.locate('description').first&.nodes&.first,
-        homepage: xml.locate('url').first&.nodes&.first,
-        repository_url: repo_fallback(xml.locate('scm/url').first&.nodes&.first,
-                                      xml.locate('url').first&.nodes&.first),
+        description: xml.locate('description/?[0]').first,
+        homepage: xml.locate('url/?[0]').first,
+        repository_url: repo_fallback(
+          xml.locate('scm/url/?[0]').first,
+          xml.locate('url/?[0]').first
+        ),
         licenses: licenses(xml).join(","),
-      }.reject{|k,v| v.nil? || v.empty?}
+      }.select { |k, v| v.present? }
+
       parent.merge(child)
     end
 
     def self.dependencies(name, version, project)
       sections = project[:name].split(':')
-      groupId = sections[0].gsub('.', '/')
       artifactId = sections[1]
       base_url = "http://repo1.maven.org/maven2/#{groupPath}/#{artifactId}"
       pom_file = get_raw(base_url + "/#{version}/#{artifactId}-#{version}.pom")
