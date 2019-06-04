@@ -102,13 +102,13 @@ describe PackageManager::Maven do
     context 'with a simple relocation' do
       it 'returns the expected data' do
         simple_pom = Ox.parse('<project></project>')
-        redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>')
+        redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group.id.2</groupId></relocation></distributionManagement></project>')
 
         allow(described_class).to receive(:get_xml)
           .with(/group_id\/artifact_id\/version/)
           .and_return(redirect_pom)
         allow(described_class).to receive(:get_xml)
-          .with(/group_id_2\/artifact_id\/version/)
+          .with(/group\/id\/2\/artifact_id\/version/)
           .and_return(simple_pom)
 
         expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
