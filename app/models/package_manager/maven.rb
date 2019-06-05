@@ -61,21 +61,24 @@ module PackageManager
       sections = name.split(':')
       path = sections.join('/')
       versions = versions({ path: path })
-      return {} unless versions.present?
+      latest_version = latest_version(versions, name)
+      return {} unless latest_version.present?
 
       {
         name: name,
         path: path,
-        groupId: sections[0],
-        artifactId: sections[1],
+        group_id: sections[0],
+        artifact_id: sections[1],
         versions: versions,
+        latest_version: latest_version,
       }
+
     rescue
       {}
     end
 
     def self.mapping(project, depth = 0)
-      version_xml = get_pom(project[:groupId], project[:artifactId], latest_version(project))
+      version_xml = get_pom(project[:group_id], project[:artifact_id], project[:latest_version])
       self.mapping_from_pom_xml(version_xml, depth).merge({name: project[:name]})
     end
 
@@ -185,16 +188,16 @@ module PackageManager
         .map(&:last)
     end
 
-    def self.latest_version(project)
-      if project[:versions].present?
-        project[:versions]
+    def self.latest_version(versions, name)
+      if versions.present?
+        versions
           .max_by { |version| version[:published_at] }
           .dig(:number)
       else
         # TODO this is in place to handle packages that are no longer on maven-repository.com
         # this could be removed if we switched to a package data provider that supplied full information
         Project
-          .find_by(name: project[:name], platform: 'Maven')
+          .find_by(name: name, platform: 'Maven')
           &.versions
           &.max_by(&:published_at)
           &.number
