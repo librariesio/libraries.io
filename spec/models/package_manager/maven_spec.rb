@@ -42,9 +42,10 @@ describe PackageManager::Maven do
       expected = {
         name: 'javax.faces:javax.faces-api',
         path: 'javax.faces/javax.faces-api', # This is the proper format for a maven-repository.com path component, which differs from maven.org format (dots vs slashes)
-        groupId: 'javax.faces',
-        artifactId: 'javax.faces-api',
+        group_id: 'javax.faces',
+        artifact_id: 'javax.faces-api',
         versions: [{ number: '2.3', published_at: '2019-06-05T10:50:00Z' }],
+        latest_version: '2.3',
       }
 
       expect(described_class.project('javax.faces:javax.faces-api')).to eq(expected)
@@ -214,16 +215,14 @@ describe PackageManager::Maven do
     end
   end
 
-  describe '.latest_version(project)' do
+  describe '.latest_version(versions, names)' do
     context 'with versions in the project' do
       it 'returns the latest version' do
-        project = {
-          versions: [
-            { number: 'previous', published_at: Time.parse('2019-06-04T00:00:00Z') },
-            { number: 'latest', published_at: Time.parse('2019-06-04T00:00:01Z') },
-          ],
-        }
-        expect(described_class.latest_version(project)).to eq('latest')
+        versions = [
+          { number: 'previous', published_at: Time.parse('2019-06-04T00:00:00Z') },
+          { number: 'latest', published_at: Time.parse('2019-06-04T00:00:01Z') },
+        ]
+        expect(described_class.latest_version(versions, 'com.tidelift:test')).to eq('latest')
       end
     end
 
@@ -234,22 +233,13 @@ describe PackageManager::Maven do
           create(:version, project: project, number: '1.0.0', published_at: Time.parse('2019-06-04T00:00:00Z'))
           create(:version, project: project, number: '1.0.1', published_at: Time.parse('2019-06-04T00:00:01Z'))
 
-          project = {
-            artifactId: 'test',
-            groupId: 'com.tidelift',
-            name: 'com.tidelift:test',
-            versions: [],
-          }
-          expect(described_class.latest_version(project)).to eq('1.0.1')
+          expect(described_class.latest_version([], 'com.tidelift:test')).to eq('1.0.1')
         end
       end
 
       context 'with no versions in the DB' do
         it 'returns nothing' do
-          project = {
-            versions: [],
-          }
-          expect(described_class.latest_version(project)).to be_nil
+          expect(described_class.latest_version([], 'com.tidelift:test')).to be_nil
         end
       end
     end
