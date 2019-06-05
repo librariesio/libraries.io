@@ -112,7 +112,7 @@ module PackageManager
           xml.locate('scm/url/?[0]').first,
           xml.locate('url/?[0]').first
         ),
-        licenses: licenses(xml).join(","),
+        licenses: licenses(version_xml).join(","),
       }.select { |k, v| v.present? }
 
       parent.merge(child)
@@ -175,7 +175,7 @@ module PackageManager
 
     def self.licenses(xml)
       xml_licenses = xml
-        .locate('licenses/license/name')
+        .locate('*/licenses/license/name')
         .flat_map(&:nodes)
       return xml_licenses if xml_licenses.any?
 
