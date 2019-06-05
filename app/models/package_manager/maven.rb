@@ -60,14 +60,18 @@ module PackageManager
     def self.project(name)
       sections = name.split(':')
       path = sections.join('/')
+      versions = versions({ path: path })
+      return {} unless versions.present?
 
       {
         name: name,
         path: path,
         groupId: sections[0],
         artifactId: sections[1],
-        versions: versions({ path: path }),
+        versions: versions,
       }
+    rescue
+      {}
     end
 
     def self.mapping(project, depth = 0)
