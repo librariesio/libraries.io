@@ -14,22 +14,15 @@ module PackageManager
     }
 
     def self.package_link(project, version = nil)
-      if version
-        "http://search.maven.org/#artifactdetails%7C#{project.name.gsub(':', '%7C')}%7C#{version}%7Cjar"
-      else
-        group, artifact = project.name.split(':')
-        "http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22#{group}%22%20AND%20a%3A%22#{artifact}%22"
-      end
+      MavenUrl.from_name(project.name).search(version)
     end
 
     def self.download_url(name, version = nil)
-      maven_name = project_name(name)
-      "https://repo1.maven.org/maven2/#{maven_name[:groupPath]}/#{maven_name[:artifactId]}/#{version}/#{maven_name[:artifactId]}-#{version}.jar"
+      MavenUrl.from_name(name).jar(version)
     end
 
     def self.check_status_url(project)
-      maven_name = project_name(project.name)
-      "https://repo1.maven.org/maven2/#{maven_name[:groupPath]}/#{maven_name[:artifactId]}"
+      MavenUrl.from_name(project.name).base
     end
 
     def self.load_names(limit = nil)
@@ -65,13 +58,18 @@ module PackageManager
     end
 
     def self.project(name)
-      h = project_name(name)
-      h[:versions] = versions(h)
-      h
+      sections = name.split(':')
+      {
+        name: name,
+        path: sections.join('/'),
+        groupId: sections[0],
+        artifactId: sections[1],
+        versions: versions(h),
+      }
     end
 
     def self.mapping(project, depth = 0)
-      version_xml = get_pom(project[:groupPath], project[:artifactId], latest_version(project))
+      version_xml = get_pom(project[:groupId], project[:artifactId], latest_version(project))
       self.mapping_from_pom_xml(version_xml, depth).merge({name: project[:name]})
     end
 
@@ -115,10 +113,7 @@ module PackageManager
     end
 
     def self.dependencies(name, version, project)
-      sections = project[:name].split(':')
-      artifactId = sections[1]
-      base_url = "http://repo1.maven.org/maven2/#{groupPath}/#{artifactId}"
-      pom_file = get_raw(base_url + "/#{version}/#{artifactId}-#{version}.pom")
+      pom_file = get_raw(MavenUrl.from_name(name).pom(version))
       Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file).map do |dep|
         {
           project_name: dep[:name],
@@ -151,35 +146,22 @@ module PackageManager
       page.css('.pagination li a').map{|link| BASE_URL + link['href'] }.uniq
     end
 
-    def self.project_name(name)
-      sections = name.split(':')
-      {
-        name: name,
-        path: name.split(':').join('/'),
-        groupId: sections[0],
-        groupPath: sections[0].gsub('.', '/'),
-        artifactId: sections[1]
-      }
-    end
+    def self.get_pom(group_id, artifact_id, version, seen=[])
+      xml = get_xml(MavenUrl.new(group_id, artifact_id).pom(version))
 
-    def self.get_pom(group_path, artifact_id, version, seen=[])
-      xml = get_xml(
-        "http://repo1.maven.org/maven2/#{group_path}/#{artifact_id}/#{version}/#{artifact_id}-#{version}.pom"
-      )
+      seen << [group_id, artifact_id, version]
 
-      seen << [group_path, artifact_id, version]
-
-      next_group_path = xml.locate('distributionManagement/relocation/groupId/?[0]').first || group_path
+      next_group_id = xml.locate('distributionManagement/relocation/groupId/?[0]').first || group_id
       next_artifact_id = xml.locate('distributionManagement/relocation/artifactId/?[0]').first || artifact_id
       next_version = xml.locate('distributionManagement/relocation/version/?[0]').first || version
 
-      if seen.include?([next_group_path, next_artifact_id, next_version])
+      if seen.include?([next_group_id, next_artifact_id, next_version])
         xml
 
       else
         begin
-          get_pom(next_group_path, next_artifact_id, next_version, seen)
-        rescue Faraday::Error
+          get_pom(next_group_id, next_artifact_id, next_version, seen)
+        rescue Faraday::Error, Ox::Error
           xml
         end
       end
@@ -210,6 +192,43 @@ module PackageManager
           &.versions
           &.max_by(&:published_at)
           &.number
+      end
+    end
+
+    class MavenUrl
+      def self.from_name(name)
+        new(*name.split(':', 2))
+      end
+
+      def initialize(group_id, artifact_id)
+        @group_id = group_id
+        @artifact_id = artifact_id
+      end
+
+      def base
+        "https://repo1.maven.org/maven2/#{group_path}/#{@artifact_id}"
+      end
+
+      def jar(version)
+        base + "/#{version}/#{@artifact_id}-#{version}.jar"
+      end
+
+      def pom(version)
+        base + "/#{version}/#{@artifact_id}-#{version}.pom"
+      end
+
+      def search(version=nil)
+        if version
+          "http://search.maven.org/#artifactdetails%7C#{@group_id}%7C#{@artifact_id}%7C#{version}%7Cjar"
+        else
+          "http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22#{@group_id}%22%20AND%20a%3A%22#{@artifact_id}%22"
+        end
+      end
+
+      private
+
+      def group_path
+        @group_id.gsub('.', '/')
       end
     end
   end
