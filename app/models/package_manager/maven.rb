@@ -59,12 +59,14 @@ module PackageManager
 
     def self.project(name)
       sections = name.split(':')
+      path = sections.join('/')
+
       {
         name: name,
-        path: sections.join('/'),
+        path: path,
         groupId: sections[0],
         artifactId: sections[1],
-        versions: versions(h),
+        versions: versions({ path: path }),
       }
     end
 

@@ -33,6 +33,24 @@ describe PackageManager::Maven do
     end
   end
 
+  describe '.project(name)' do
+    it 'returns the expected project data' do
+      allow(described_class)
+        .to receive(:versions)
+        .and_return([{number: '2.3', published_at: '2019-06-05T10:50:00Z'}])
+
+      expected = {
+        name: 'javax.faces:javax.faces-api',
+        path: 'javax.faces/javax.faces-api', # This is the proper format for a maven-repository.com path component, which differs from maven.org format (dots vs slashes)
+        groupId: 'javax.faces',
+        artifactId: 'javax.faces-api',
+        versions: [{ number: '2.3', published_at: '2019-06-05T10:50:00Z' }],
+      }
+
+      expect(described_class.project('javax.faces:javax.faces-api')).to eq(expected)
+    end
+  end
+
   describe 'mapping_from_pom_xml' do
     let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read) }
     let(:parent_pom) { Ox.parse('<project><licenses><license><name>unknown</name></license></licenses><url>https://github.com/googleapis/googleapis</url></project>') }
