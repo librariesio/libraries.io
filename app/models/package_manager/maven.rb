@@ -1,3 +1,5 @@
+require 'pry'
+
 module PackageManager
   class Maven < Base
     HAS_VERSIONS = true
@@ -90,12 +92,13 @@ module PackageManager
         description: nil,
         homepage: nil,
         repository_url: "",
-        licenses: ""
+        licenses: "",
+        properties: {},
       }
       if xml.locate('parent').present? && depth < MAX_DEPTH
-        group_id = xml.locate('parent/groupId/?[0]').first
-        artifact_id = xml.locate('parent/artifactId/?[0]').first
-        version = xml.locate('parent/version/?[0]').first
+        group_id = extract_pom_value(xml, 'parent/groupId')
+        artifact_id = extract_pom_value(xml, 'parent/artifactId')
+        version = extract_pom_value(xml, 'parent/version')
         if group_id && artifact_id && version
           parent = mapping_from_pom_xml(
             get_pom(group_id, artifact_id, version),
@@ -106,21 +109,37 @@ module PackageManager
 
       # merge with parent data if available and take child values on overlap
       child = {
-        description: xml.locate('description/?[0]').first,
-        homepage: xml.locate('url/?[0]').first,
+        description: extract_pom_value(xml, 'description', parent[:properties]),
+        homepage: extract_pom_value(xml, 'url', parent[:properties]),
         repository_url: repo_fallback(
-          xml.locate('scm/url/?[0]').first,
-          xml.locate('url/?[0]').first
+          extract_pom_value(xml, 'scm/url', parent[:properties]),
+          extract_pom_value(xml, 'url', parent[:properties])
         ),
         licenses: licenses(version_xml).join(","),
+        properties: parent[:properties].merge(extract_pom_properties(xml)),
       }.select { |k, v| v.present? }
 
       parent.merge(child)
     end
 
+    def self.extract_pom_value(xml, location, parent_properties = {})
+      # Bibliothecary will help handle property expansion within the xml
+      Bibliothecary::Parsers::Maven.extract_pom_info(xml, location, parent_properties)
+    end
+
+    def self.extract_pom_properties(xml)
+      props = {}
+      if xml.respond_to? 'properties'
+        xml.properties.each do |prop_node|
+          props[prop_node.value] = prop_node.nodes.first
+        end
+      end
+      props
+    end
+
     def self.dependencies(name, version, project)
       pom_file = get_raw(MavenUrl.from_name(name).pom(version))
-      Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file).map do |dep|
+      Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file, project[:properties]).map do |dep|
         {
           project_name: dep[:name],
           requirements: dep[:requirement],
