@@ -1,4 +1,18 @@
 GIT
+  remote: https://github.com/librariesio/bibliothecary
+  revision: 010fb70818125f9a9814b1f233f6428edffaf446
+  tag: v6.7.2
+  specs:
+    bibliothecary (6.7.2)
+      commander
+      deb_control
+      librariesio-gem-parser
+      ox (>= 2.8.1)
+      sdl4r
+      toml-rb (~> 1.0)
+      typhoeus
+
+GIT
   remote: https://github.com/librariesio/bitbucket
   revision: 43f8f97be403091debab480235413b20059337bd
   specs:
@@ -23,18 +37,6 @@ GIT
   revision: ed94eaa7107bdc60e8fd98e1904d4c065a9a576d
   specs:
     semantic (1.6.1)
-
-PATH
-  remote: /Users/mike/Developer/libraries/bibliothecary
-  specs:
-    bibliothecary (6.7.2)
-      commander
-      deb_control
-      librariesio-gem-parser
-      ox (>= 2.8.1)
-      sdl4r
-      toml-rb (~> 1.0)
-      typhoeus
 
 GEM
   remote: https://rubygems.org/
