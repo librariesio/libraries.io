@@ -1,5 +1,3 @@
-require 'pry'
-
 module PackageManager
   class Maven < Base
     HAS_VERSIONS = true
