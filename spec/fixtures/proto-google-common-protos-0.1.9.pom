@@ -8,6 +8,10 @@
   <name>com.google.api.grpc:proto-google-common-protos</name>
   <description>PROTO library for proto-google-common-protos</description>
 
+  <properties>
+    <api.version>1.0.0-rc1</api.version>
+  </properties>
+
   <parent>
     <groupId>com.google.api.grpc</groupId>
     <artifactId>proto-google-common-parent</artifactId>
@@ -44,7 +48,7 @@
     <dependency>
       <groupId>com.google.api</groupId>
       <artifactId>api-common</artifactId>
-      <version>1.0.0-rc1</version>
+      <version>${api.version}</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

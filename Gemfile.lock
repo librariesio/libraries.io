@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/librariesio/bibliothecary
-  revision: 22e47f979ee9c1189ae528aa41c092d64b335fe6
-  tag: v6.7.0
+  revision: 010fb70818125f9a9814b1f233f6428edffaf446
+  tag: v6.7.2
   specs:
-    bibliothecary (6.7.0)
+    bibliothecary (6.7.2)
       commander
       deb_control
       librariesio-gem-parser

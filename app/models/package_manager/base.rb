@@ -84,11 +84,11 @@ module PackageManager
       return false unless mapped_project.present?
       dbproject = Project.find_or_initialize_by({:name => mapped_project[:name], :platform => self.name.demodulize})
       if dbproject.new_record?
-        dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies))
+        dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
         dbproject.save
       else
         dbproject.reformat_repository_url
-        dbproject.update_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies))
+        dbproject.update_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
       end
 
       if self::HAS_VERSIONS
