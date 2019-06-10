@@ -126,13 +126,9 @@ module PackageManager
     end
 
     def self.extract_pom_properties(xml)
-      props = {}
-      if xml.respond_to? 'properties'
-        xml.properties.each do |prop_node|
-          props[prop_node.value] = prop_node.nodes.first
-        end
+      xml.locate("properties/*").each_with_object({}) do |prop_node, all|
+        all[prop_node.value] = prop_node.nodes.first
       end
-      props
     end
 
     def self.dependencies(name, version, project)
