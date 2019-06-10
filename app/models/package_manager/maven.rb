@@ -10,7 +10,8 @@ module PackageManager
     MAX_DEPTH = 5
     LICENSE_STRINGS = {
       "http://www.apache.org/licenses/LICENSE-2.0" => "Apache-2.0",
-      "http://www.eclipse.org/legal/epl-v10.html" => "Eclipse Public License (EPL), Version 1.0",
+      "http://www.eclipse.org/legal/epl-v10" => "Eclipse Public License (EPL), Version 1.0",
+      "http://www.eclipse.org/org/documents/edl-v10" => "Eclipse Distribution License (EDL), Version 1.0",
     }
 
     def self.package_link(project, version = nil)
