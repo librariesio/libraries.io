@@ -82,7 +82,7 @@ module PackageManager
       return license_classifiers.map { |l| l.split(':: ').last }.join(',')
     end
 
-    def self.search_names(project_name)
+    def self.project_find_names(project_name)
       [project_name, project_name.downcase].flat_map {|name| [name, name.gsub('-', '_'), name.gsub('_', '-')]}.uniq
     end
   end
