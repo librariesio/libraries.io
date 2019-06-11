@@ -219,6 +219,10 @@ module PackageManager
       end
     end
 
+    def self.search_names(project_name)
+      [project_name, project_name.downcase]
+    end
+
     private
 
     def self.get(url, options = {})
