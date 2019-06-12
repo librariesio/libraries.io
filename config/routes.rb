@@ -251,6 +251,7 @@ Rails.application.routes.draw do
   get '/:platform/:name/:number/dependencies', to: 'projects#dependencies', constraints: { :number => /.*/, :name => /.*/ }, as: :version_dependencies
 
   post '/:platform/:name/sync', to: 'projects#sync', constraints: { :name => /.*/ }, as: :sync_project
+  post '/:platform/:name/refresh-stats', to: 'projects#refresh_stats', constraints: { :name => /.*/ }, as: :project_refresh_stats
   get '/:platform/:name/unsubscribe', to: 'projects#unsubscribe', constraints: { :name => /.*/ }, as: :unsubscribe_project
   get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
   get '/:platform/:name/timeline', to: 'timeline#show', as: :project_timeline, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
