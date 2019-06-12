@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   before_action :find_project, only: [:show, :sourcerank, :about, :dependents,
                                       :dependent_repos, :your_dependent_repos,
                                       :versions, :tags, :mute, :unmute, :unsubscribe,
-                                      :sync, :score]
+                                      :sync, :score, :refresh_stats]
   before_action :find_project_lite, only: [:top_dependent_repos, :top_dependent_projects]
 
   def index
@@ -166,6 +166,12 @@ class ProjectsController < ApplicationController
 
   def score
     @calculator = ProjectScoreCalculator.new(@project)
+  end
+
+  def refresh_stats
+    @project.update_maintenance_stats_async
+    flash[:notice] = "Project has been queued to refresh maintenance stats"
+    redirect_back fallback_location: project_path(@project.to_param)
   end
 
   private
