@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
   end
 
   def find_project
-    @project = Project.find_with_includes!(params[:platform], params[:name], [:repository, :versions])
+    @project = Project.find_with_includes!(params[:platform], CGI.unescape(params[:name]), [:repository, :versions])
     @color = @project.color
   end
 

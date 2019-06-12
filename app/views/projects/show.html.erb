@@ -94,7 +94,7 @@
     <% end %>
     <% if logged_in? && current_user.admin? && current_user.current_api_key.is_internal? %>
       <p>
-        <%= link_to api_maintenance_stat_enqueue_path(@project.platform_name, @project.name, api_key: current_user.api_key), method: :put, class: 'btn btn-primary btn-xs' do %>
+        <%= link_to api_maintenance_stat_enqueue_path(@project.platform_name, CGI.escape(@project.name), api_key: current_user.api_key), method: :put, class: 'btn btn-primary btn-xs' do %>
           <%= fa_icon 'refresh' %>
           Resync Stats
         <% end %>
