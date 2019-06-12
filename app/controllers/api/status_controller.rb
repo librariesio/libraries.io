@@ -16,8 +16,8 @@ class Api::StatusController < Api::ApplicationController
   private
 
   def find_projects(projects, platform)
-    project_find_names = projects.map{|project| project_names(project, platform)}
-    Project.platform(platform).where(name: project_find_names).includes(:repository, :versions, :repository_maintenance_stats)
+    project_find_names = projects.flat_map{|project| project_names(project, platform)}.map(&:downcase)
+    Project.platform(platform).where('lower(platform)=? AND lower(name) in (?)', platform.downcase, project_find_names).includes(:repository, :versions, :repository_maintenance_stats)
   end
 
   def project_names(project, platform)
