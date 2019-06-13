@@ -24,10 +24,8 @@ class Api::StatusController < Api::ApplicationController
   end
 
   def project_names(project, platform)
-    begin
       "PackageManager::#{platform.capitalize}".constantize.project_find_names(project[:name])
-    rescue => exception
-      PackageManager::Base.project_find_names(project[:name])
-    end
+  rescue NameError
+    PackageManager::Base.project_find_names(project[:name])
   end
 end

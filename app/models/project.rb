@@ -518,7 +518,7 @@ class Project < ApplicationRecord
     # to allow that.
     project_find_names = begin
        "PackageManager::#{platform.capitalize}".constantize.project_find_names(name)
-    rescue => exception
+    rescue NameError
       raise ActiveRecord::RecordNotFound
     end
     
