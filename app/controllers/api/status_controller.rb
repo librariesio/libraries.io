@@ -6,7 +6,7 @@ class Api::StatusController < Api::ApplicationController
       # Try to get all the projects passed in.
       @projects = params[:projects]
         .group_by { |project| project[:platform] }
-        .flat_map { |platform, projects| find_projects(projects, platform) }
+        .flat_map(&method(:find_projects))
         .compact
     else
       @projects = []
@@ -16,7 +16,7 @@ class Api::StatusController < Api::ApplicationController
 
   private
 
-  def find_projects(projects, platform)
+  def find_projects((platform, projects))
     projects.each_slice(1000).flat_map do |slice|
       project_find_names = slice.flat_map { |project| project_names(project, platform) }.map(&:downcase)
       Project.platform(platform).where('lower(platform)=? AND lower(name) in (?)', platform.downcase, project_find_names).includes(:repository, :versions, :repository_maintenance_stats)
