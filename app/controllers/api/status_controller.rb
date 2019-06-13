@@ -4,9 +4,10 @@ class Api::StatusController < Api::ApplicationController
   def check
     if params[:projects].any?
       # Try to get all the projects passed in.
-      @projects = params[:projects].group_by{|project| project[:platform] }.map do |platform, projects|
-        projects.each_slice(1000).map{|slice| find_projects(slice, platform)}
-      end.flatten.compact
+      @projects = params[:projects]
+        .group_by { |project| project[:platform] }
+        .flat_map { |platform, projects| find_projects(projects, platform) }
+        .compact
     else
       @projects = []
     end
@@ -16,8 +17,10 @@ class Api::StatusController < Api::ApplicationController
   private
 
   def find_projects(projects, platform)
-    project_find_names = projects.flat_map{|project| project_names(project, platform)}.map(&:downcase)
-    Project.platform(platform).where('lower(platform)=? AND lower(name) in (?)', platform.downcase, project_find_names).includes(:repository, :versions, :repository_maintenance_stats)
+    projects.each_slice(1000).flat_map do |slice|
+      project_find_names = slice.flat_map { |project| project_names(project, platform) }.map(&:downcase)
+      Project.platform(platform).where('lower(platform)=? AND lower(name) in (?)', platform.downcase, project_find_names).includes(:repository, :versions, :repository_maintenance_stats)
+    end
   end
 
   def project_names(project, platform)
