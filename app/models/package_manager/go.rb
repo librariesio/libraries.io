@@ -5,6 +5,20 @@ module PackageManager
     BIBLIOTHECARY_SUPPORT = true
     URL = 'http://go-search.org/'
     COLOR = '#375eab'
+    KNOWN_HOSTS = [
+      'bitbucket.org',
+      'github.com',
+      'launchpad.net',
+      'hub.jazz.net',
+    ]
+    KNOWN_VCS = [
+      '.bzr',
+      '.fossil',
+      '.git',
+      '.hg',
+      '.svn',
+    ]
+
 
     def self.package_link(project, version = nil)
       "http://go-search.org/view?id=#{project.name}"
@@ -33,6 +47,23 @@ module PackageManager
         homepage: project['ProjectURL'],
         repository_url: "https://#{project['Package']}"
       }
+    end
+
+    # https://golang.org/cmd/go/#hdr-Import_path_syntax
+    def self.resolved_name(name)
+      return name if name.start_with?(*KNOWN_HOSTS)
+      return name if KNOWN_VCS.any?(&name.method(:include?))
+
+      go_import = get_html('https://' + name + '?go-get=1')
+        .xpath('//meta[@name="go-import"]')
+        .first
+        &.attribute("content")
+        &.value
+        &.split(" ")
+        &.last
+        &.sub(/https?:\/\//, "")
+
+      go_import&.start_with?(*KNOWN_HOSTS) ? go_import : name
     end
   end
 end

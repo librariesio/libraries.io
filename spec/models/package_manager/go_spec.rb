@@ -36,4 +36,60 @@ describe PackageManager::Go do
       expect(described_class.install_instructions(project, '2.0.0')).to eq("go get foo")
     end
   end
+
+  describe ".resolved_name(name)" do
+    context "for names from a a known host" do
+      it "returns the name" do
+        expect(described_class.resolved_name("github.com/user/project"))
+          .to eq("github.com/user/project")
+      end
+    end
+
+    context "for names with a known vcs" do
+      it "returns the name" do
+        expect(described_class.resolved_name("example.org/user/foo.hg"))
+          .to eq("example.org/user/foo.hg")
+      end
+    end
+
+    context "for other names" do
+      context "with a redirect" do
+        it "follows the redirect" do
+          html = <<~EOHTML
+            <!DOCTYPE html>
+            <html>
+                <head>
+                    <meta name="go-import" content="go.uber.org/multierr git https://github.com/uber-go/multierr">
+                    <meta name="go-source" content="go.uber.org/multierr https://github.com/uber-go/multierr https://github.com/uber-go/multierr/tree/master{/dir} https://github.com/uber-go/multierr/tree/master{/dir}/{file}#L{line}">
+                    <meta http-equiv="refresh" content="0; url=https://godoc.org/go.uber.org/multierr">
+                </head>
+                <body>
+                    Nothing to see here. Please <a href="https://godoc.org/go.uber.org/multierr">move along</a>.
+                </body>
+            </html>
+          EOHTML
+
+          allow(described_class)
+            .to receive(:get_html)
+            .with("https://go.uber.org/multierr?go-get=1")
+            .and_return(Nokogiri::HTML(html))
+
+          expect(described_class.resolved_name("go.uber.org/multierr"))
+            .to eq("github.com/uber-go/multierr")
+        end
+      end
+
+      context "with an unknown result" do
+        it "returns the original name" do
+          allow(described_class)
+            .to receive(:get_html)
+            .with("https://go.example.org/user/foo?go-get=1")
+            .and_return(Nokogiri::HTML("<html><body>Hello, world!</body></html>"))
+
+          expect(described_class.resolved_name("go.example.org/user/foo"))
+            .to eq("go.example.org/user/foo")
+        end
+      end
+    end
+  end
 end
