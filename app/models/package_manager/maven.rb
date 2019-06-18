@@ -223,7 +223,7 @@ module PackageManager
         new(*name.split(':', 2))
       end
 
-      def initialize(group_id, artifact_id)
+      def initialize(group_id = nil, artifact_id = nil)
         @group_id = group_id
         @artifact_id = artifact_id
       end
