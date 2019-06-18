@@ -516,7 +516,13 @@ class Project < ApplicationRecord
   def self.find_with_includes!(platform, name, includes)
     # this clunkiness is because .includes() doesn't allow zero args and we want
     # to allow that.
-    query = self.visible.platform(platform).where(name: name)
+    project_find_names = begin
+       "PackageManager::#{platform.capitalize}".constantize.project_find_names(name)
+    rescue NameError
+      raise ActiveRecord::RecordNotFound
+    end
+    
+    query = self.visible.platform(platform).where(name: project_find_names)
     query = query.includes(*includes) unless includes.empty?
     project = query.first
     if project.nil?

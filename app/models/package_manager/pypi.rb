@@ -81,5 +81,9 @@ module PackageManager
       license_classifiers = project['info']['classifiers'].select { |c| c.start_with?('License :: ')}
       return license_classifiers.map { |l| l.split(':: ').last }.join(',')
     end
+
+    def self.project_find_names(project_name)
+      [project_name, project_name.downcase].flat_map {|name| [name, name.gsub('-', '_'), name.gsub('_', '-')]}.uniq
+    end
   end
 end

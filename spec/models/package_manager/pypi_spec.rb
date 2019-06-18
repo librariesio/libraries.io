@@ -45,4 +45,16 @@ describe PackageManager::Pypi do
       expect(described_class.mapping(bandit)[:licenses]).to eq("Apache Software License")
     end
   end
+
+  describe 'project_find_names' do
+    it 'suggests underscore version of name' do
+      suggested_find_names = described_class.project_find_names('test-hyphen')
+      expect(suggested_find_names).to include('test_hyphen', 'test-hyphen')
+    end
+
+    it 'suggests hyphen version of name' do
+      suggested_find_names = described_class.project_find_names('test_underscore')
+      expect(suggested_find_names).to include('test-underscore', 'test_underscore')
+    end
+  end
 end
