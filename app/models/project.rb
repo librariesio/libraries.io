@@ -520,7 +520,6 @@ class Project < ApplicationRecord
     platform_class = PackageManager::Base.find(platform)
     raise ActiveRecord::RecordNotFound if platform_class.nil?
     project_find_names = platform_class.project_find_names(name)
-      
     
     query = self.visible.platform(platform).where(name: project_find_names)
     query = query.includes(*includes) unless includes.empty?

@@ -25,6 +25,7 @@ class Api::StatusController < Api::ApplicationController
 
   def project_names(project, platform)
     platform_class = PackageManager::Base.find(platform)
-    PackageManager::Base.project_find_names(project[:name]) if platform_class.nil?
-    project_find_names = platform_class.project_find_names(project[:name])
+    return PackageManager::Base.project_find_names(project[:name]) if platform_class.nil?
+    platform_class.project_find_names(project[:name])
+  end
 end
