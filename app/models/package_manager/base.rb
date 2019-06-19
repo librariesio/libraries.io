@@ -220,7 +220,7 @@ module PackageManager
     end
 
     def self.project_find_names(project_name)
-      [project_name, project_name.downcase]
+      [project_name, project_name.downcase].uniq
     end
 
     private
