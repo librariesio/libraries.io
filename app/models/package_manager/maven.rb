@@ -61,7 +61,7 @@ module PackageManager
     def self.project(name)
       sections = name.split(':')
       path = sections.join('/')
-      versions = versions({ path: path })
+      versions = versions({ name: name })
       latest_version = latest_version(versions, name)
       return {} unless latest_version.present?
 
@@ -148,9 +148,7 @@ module PackageManager
     end
 
     def self.versions(project)
-      binding.pry
-      query = "g:#{project[:groupId]} AND a:#{project[:artifactId]}"
-      json_versions = JSON.parse(get_raw("https://search.maven.org/solrsearch/select?q=#{query}&core=gav&wt=json&rows=1000"))
+      json_versions = JSON.parse(get_raw(MavenUrl.from_name(project[:name]).solrsearch))
       extract_versions(json_versions)
     end
 
@@ -244,6 +242,11 @@ module PackageManager
         else
           "http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22#{@group_id}%22%20AND%20a%3A%22#{@artifact_id}%22"
         end
+      end
+
+      def solrsearch
+        query = "g:#{@group_id} AND a:#{@artifact_id}"
+        "https://search.maven.org/solrsearch/select?q=#{query}&core=gav&wt=json&rows=1000"
       end
 
       private
