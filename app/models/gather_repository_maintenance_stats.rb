@@ -1,14 +1,5 @@
 class GatherRepositoryMaintenanceStats
     def self.gather_bitbucket_stats(repository)
-        # only support Github and Bitbucket repos for now
-        # check to make sure the Project URLs are also pointing to a Github or Bitbucket repository
-        unless stats_enabled?(repository)
-            # if this repository should not have stats, delete any existing ones and return immediately
-            repository.repository_maintenance_stats.destroy_all
-            return
-        end
-
-        now = DateTime.current
         metrics = []
 
         # get latest issues and pull requests and store them in the database
