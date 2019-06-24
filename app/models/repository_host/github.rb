@@ -149,6 +149,10 @@ module RepositoryHost
       nil
     end
 
+    def retrieve_commits(token = nil)
+      api_client(token).commits(repository.full_name)
+    end
+
     def download_owner
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
       o = api_client.user(repository.owner_name)

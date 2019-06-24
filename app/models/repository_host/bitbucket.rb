@@ -70,6 +70,10 @@ module RepositoryHost
       nil
     end
 
+    def retrieve_commits(token = nil)
+      api_client(token).repos.commits.list(repository.owner_name, repository.project_name)['values']
+    end
+
     def download_forks(token = nil)
       # not implemented yet
     end

@@ -40,7 +40,7 @@ module RepositoryIssue
 
       i.repository_id = repository.id
       i.labels = [issue_hash.fetch(:metadata, {})[:kind]]
-      i.pull_request = issue_hash[:type] == 'pull_request'
+      i.pull_request = issue_hash[:type] == 'pullrequest'
       i.comments_count = issue_hash[:comment_count]
       i.host_type = 'Bitbucket'
       i.number = issue_hash[:local_id]

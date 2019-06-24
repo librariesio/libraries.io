@@ -1,4 +1,28 @@
 class GatherRepositoryMaintenanceStats
+    def self.gather_bitbucket_stats(repository)
+        # only support Github and Bitbucket repos for now
+        # check to make sure the Project URLs are also pointing to a Github or Bitbucket repository
+        unless stats_enabled?(repository)
+            # if this repository should not have stats, delete any existing ones and return immediately
+            repository.repository_maintenance_stats.destroy_all
+            return
+        end
+
+        now = DateTime.current
+        metrics = []
+
+        # get latest issues and pull requests and store them in the database
+        repository.download_issues
+        repository.download_pull_requests
+
+        metrics << MaintenanceStats::Stats::Bitbucket::CommitsStat.new(repository.retrieve_commits).get_stats
+
+        metrics << MaintenanceStats::Stats::Bitbucket::IssueRates.new(repository.issues).get_stats
+
+        # add_metrics_to_repo(repository, metrics)
+        metrics
+    end
+
     def self.gather_stats(repository)
         # only support Github repos for now
         # check to make sure the Project URLs are also pointing to a Github repository
@@ -6,7 +30,13 @@ class GatherRepositoryMaintenanceStats
             # if this repository should not have stats, delete any existing ones and return immediately
             repository.repository_maintenance_stats.destroy_all
             return
-        end 
+        end
+
+        return gather_github_stats(repository) if github?(repository)
+        return gather_bitbucket_stats(repository) if bitbucket?(repository)
+    end
+
+    def self.gather_github_stats(repository)
         client = AuthToken.v4_client
         v3_client = AuthToken.client({auto_paginate: false})
         now = DateTime.current
@@ -89,6 +119,14 @@ class GatherRepositoryMaintenanceStats
     end
 
     def self.stats_enabled?(repository)
+        github?(repository) || bitbucket?(repository)
+    end
+
+    def self.github?(repository)
         repository.host_type == "GitHub" && repository.projects.all? {|project| project.github_name_with_owner.present?} 
+    end
+
+    def self.bitbucket?(repository)
+        repository.host_type == "Bitbucket" && repository.projects.all? {|project| project.bitbucket_name_with_owner.present?} 
     end
 end
