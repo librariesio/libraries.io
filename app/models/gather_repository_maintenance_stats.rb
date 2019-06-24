@@ -19,7 +19,7 @@ class GatherRepositoryMaintenanceStats
 
         metrics << MaintenanceStats::Stats::Bitbucket::IssueRates.new(repository.issues).get_stats
 
-        # add_metrics_to_repo(repository, metrics)
+        add_metrics_to_repo(repository, metrics)
         metrics
     end
 
