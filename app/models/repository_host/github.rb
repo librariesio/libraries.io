@@ -239,14 +239,14 @@ module RepositoryHost
 
       result = MaintenanceStats::Queries::FullRepoQuery.new(client).query( params: {owner: repository.owner_name, repo_name: repository.project_name} )
       unless check_for_v4_error_response(result)
-          metrics << MaintenanceStats::Stats::Github::IssueRates.new(result).get_stats
-          metrics << MaintenanceStats::Stats::Github::PullRequestRates.new(result).get_stats
-          metrics << MaintenanceStats::Stats::Github::AverageCommitDate.new(result).get_stats
+        metrics << MaintenanceStats::Stats::Github::IssueRates.new(result).get_stats
+        metrics << MaintenanceStats::Stats::Github::PullRequestRates.new(result).get_stats
+        metrics << MaintenanceStats::Stats::Github::AverageCommitDate.new(result).get_stats
       end
 
       result = MaintenanceStats::Queries::RepoReleasesQuery.new(client).query( params: {owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 1.year} )
       unless check_for_v4_error_response(result)
-          metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).get_stats
+        metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).get_stats
       end
 
       result = MaintenanceStats::Queries::CommitCountQuery.new(client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.week).iso8601} )
@@ -262,10 +262,10 @@ module RepositoryHost
       metrics << MaintenanceStats::Stats::Github::LastYearCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
 
       begin
-          result = MaintenanceStats::Queries::CommitCountQueryV3.new(v3_client).query(params: {full_name: repository.full_name} )
-          metrics << MaintenanceStats::Stats::Github::V3CommitsStat.new(result).get_stats
+        result = MaintenanceStats::Queries::CommitCountQueryV3.new(v3_client).query(params: {full_name: repository.full_name} )
+        metrics << MaintenanceStats::Stats::Github::V3CommitsStat.new(result).get_stats
       rescue Octokit::Error => e
-          Rails.logger.warn(e.message)
+        Rails.logger.warn(e.message)
       end
 
       begin
@@ -296,10 +296,10 @@ module RepositoryHost
     def check_for_v4_error_response(response)
       # errors can be stored in the response from Github or can be stored in the response object from HTTP errors
       response.errors.each do |message|
-          Rails.logger.warn(message)
+        Rails.logger.warn(message)
       end
       response.data.errors.each do |message|
-          Rails.logger.warn(message)
+        Rails.logger.warn(message)
       end unless response.data.errors.nil?
       # if we have either type of error or there is no data return true
       return response.data.nil? || response.errors.any? || response.data.errors.any?
