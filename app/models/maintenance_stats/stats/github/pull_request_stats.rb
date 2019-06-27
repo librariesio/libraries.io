@@ -4,12 +4,14 @@ module MaintenanceStats
       class PullRequestRates < BaseStat
         def get_stats
           {
-            "pull_request_acceptance": request_acceptance_rate,
-            "closed_pull_request_count": closed_requests_count,
-            "open_pull_request_count": open_requests_count,
-            "merged_pull_request_count": merged_requests_count,
+            pull_request_acceptance: request_acceptance_rate,
+            closed_pull_request_count: closed_requests_count,
+            open_pull_request_count: open_requests_count,
+            merged_pull_request_count: merged_requests_count,
           }
         end
+
+        private
 
         def total_pull_requests_count
           return 0 if closed_requests_count.nil? && open_requests_count.nil? && merged_requests_count.nil?

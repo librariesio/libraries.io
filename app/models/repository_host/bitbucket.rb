@@ -160,7 +160,7 @@ module RepositoryHost
     end
 
     def gather_maintenance_stats
-      unless repository.host_type == "Bitbucket" && repository.projects.all? { |project| project.bitbucket_name_with_owner.present? } 
+      if repository.host_type != "Bitbucket" || repository.projects.any? { |project| project.bitbucket_name_with_owner.blank? }
         repository.repository_maintenance_stats.destroy_all
         return []
       end

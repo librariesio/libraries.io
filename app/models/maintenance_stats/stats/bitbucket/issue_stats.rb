@@ -2,6 +2,22 @@ module MaintenanceStats
   module Stats
     module Bitbucket
       class IssueRates < MaintenanceStats::Stats::BaseStat
+        def get_stats
+          {
+            one_year_open_issues: open_issues_count,
+            one_year_closed_issues: closed_issues_count,
+            one_year_total_issues: issues.length,
+            one_year_issue_closure_rate: issue_closure_rate,
+            one_year_open_pull_requests: open_pull_request_count,
+            one_year_closed_pull_requests: closed_pull_request_count,
+            one_year_total_pull_requests: pull_requests.length,
+            one_year_pull_request_closure_rate: pull_request_closure_rate,
+            issues_stats_truncated: false
+          }
+        end
+
+        private
+        
         def count_issues(issues, state: nil)
           state.nil? ? issues.size : issues.where(state: state).size
         end
@@ -38,20 +54,6 @@ module MaintenanceStats
   
         def issues
           @issues ||= @results.where(pull_request: false)
-        end
-  
-        def get_stats
-          {
-            one_year_open_issues: open_issues_count,
-            one_year_closed_issues: closed_issues_count,
-            one_year_total_issues: issues.length,
-            one_year_issue_closure_rate: issue_closure_rate,
-            one_year_open_pull_requests: open_pull_request_count,
-            one_year_closed_pull_requests: closed_pull_request_count,
-            one_year_total_pull_requests: pull_requests.length,
-            one_year_pull_request_closure_rate: pull_request_closure_rate,
-            issues_stats_truncated: false
-          }
         end
       end
     end

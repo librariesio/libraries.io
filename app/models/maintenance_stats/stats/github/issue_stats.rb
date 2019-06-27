@@ -4,11 +4,13 @@ module MaintenanceStats
       class IssueRates < BaseStat
         def get_stats
           {
-            "issue_closure_rate": issue_closure_rate,
-            "closed_issue_count": closed_issues_count,
-            "open_issue_count": open_issues_count,
+            issue_closure_rate: issue_closure_rate,
+            closed_issue_count: closed_issues_count,
+            open_issue_count: open_issues_count,
           }
         end
+
+        private
         
         def total_issues_count
           return 0 if closed_issues_count.nil? && open_issues_count.nil?

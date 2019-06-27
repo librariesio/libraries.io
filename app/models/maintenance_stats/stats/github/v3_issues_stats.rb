@@ -2,26 +2,32 @@ module MaintenanceStats
   module Stats
     module Github
       class V3IssueStats < BaseStat
+        def get_stats
+          {
+          one_year_open_issues: open_issues_count,
+          one_year_closed_issues: closed_issues_count,
+          one_year_total_issues: issues.length,
+          one_year_issue_closure_rate: issue_closure_rate,
+          one_year_open_pull_requests: open_pull_request_count,
+          one_year_closed_pull_requests: closed_pull_request_count,
+          one_year_total_pull_requests: pull_requests.length,
+          one_year_pull_request_closure_rate: pull_request_closure_rate,
+          issues_stats_truncated: @results[:truncated]
+          }
+        end
+
+        private
+
         def count_issues(issues, state: nil)
-          if state.nil?
-            issues.length
-          else
-            issues.select {|issue| issue[:state] == state}.length
-          end
+          state.nil? ? issues.length : issues.select {|issue| issue[:state] == state}.length
         end
 
         def closed_issues_count
-          return @closed_issues_count unless @closed_issues_count.nil?
-
-          @closed_issues_count = count_issues(issues, state: "closed")
-          @closed_issues_count
+          @closed_issues_count ||= count_issues(issues, state: "closed")
         end
 
         def open_issues_count
-          return @open_issues_count unless @open_issues_count.nil?
-
-          @open_issues_count = count_issues(issues, state: "open")
-          @open_issues_count
+          @open_issues_count ||= count_issues(issues, state: "open")
         end
 
         def issue_closure_rate
@@ -30,17 +36,11 @@ module MaintenanceStats
         end
 
         def closed_pull_request_count
-          return @closed_pull_request_count unless @closed_pull_request_count.nil?
-
-          @closed_pull_request_count = count_issues(pull_requests, state: "closed")
-          @closed_pull_request_count
+          @closed_pull_request_count ||= count_issues(pull_requests, state: "closed")
         end
 
         def open_pull_request_count
-          return @open_pull_request_count unless @open_pull_request_count.nil?
-
-          @open_pull_request_count = count_issues(pull_requests, state: "open")
-          @open_pull_request_count
+          @open_pull_request_count ||= count_issues(pull_requests, state: "open")
         end
 
         def pull_request_closure_rate
@@ -49,31 +49,11 @@ module MaintenanceStats
         end
 
         def pull_requests
-          return @pull_requests unless @pull_requests.nil?
-
-          @pull_requests = @results[:issues].select { |issue| issue.key?(:pull_request) }
-          @pull_requests
+          @pull_requests ||= @results[:issues].select { |issue| issue.key?(:pull_request) }
         end
 
         def issues
-          return @issues unless @issues.nil?
-
-          @issues = @results[:issues].select { |issue| !issue.key?(:pull_request) }
-          @issues
-        end
-
-        def get_stats
-          {
-          "one_year_open_issues": open_issues_count,
-          "one_year_closed_issues": closed_issues_count,
-          "one_year_total_issues": issues.length,
-          "one_year_issue_closure_rate": issue_closure_rate,
-          "one_year_open_pull_requests": open_pull_request_count,
-          "one_year_closed_pull_requests": closed_pull_request_count,
-          "one_year_total_pull_requests": pull_requests.length,
-          "one_year_pull_request_closure_rate": pull_request_closure_rate,
-          "issues_stats_truncated": @results[:truncated]
-          }
+          @issues ||= @results[:issues].select { |issue| !issue.key?(:pull_request) }
         end
       end
     end

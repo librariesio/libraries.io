@@ -226,7 +226,7 @@ module RepositoryHost
     end
 
     def gather_maintenance_stats
-      unless repository.host_type == "GitHub" && repository.projects.all? {|project| project.github_name_with_owner.present?}
+      if repository.host_type != "GitHub" || repository.projects.any? { |project| project.github_name_with_owner.blank? }
         repository.repository_maintenance_stats.destroy_all
         return []
       end
@@ -295,12 +295,8 @@ module RepositoryHost
 
     def check_for_v4_error_response(response)
       # errors can be stored in the response from Github or can be stored in the response object from HTTP errors
-      response.errors.each do |message|
-        Rails.logger.warn(message)
-      end
-      response.data.errors.each do |message|
-        Rails.logger.warn(message)
-      end unless response.data.errors.nil?
+      response.errors.each(&Rails.logger.method(:warn))
+      response.data.errors.messages.each(&Rails.logger.method(:warn)) if response.data.errors.present?
       # if we have either type of error or there is no data return true
       return response.data.nil? || response.errors.any? || response.data.errors.any?
     end
