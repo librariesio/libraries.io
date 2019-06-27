@@ -225,10 +225,84 @@ module RepositoryHost
       repository.tags.create(tag_hash)
     end
 
+    def gather_maintenance_stats
+      unless repository.host_type == "GitHub" && repository.projects.all? {|project| project.github_name_with_owner.present?}
+        repository.repository_maintenance_stats.destroy_all
+        return []
+      end
+
+      client = AuthToken.v4_client
+      v3_client = AuthToken.client({auto_paginate: false})
+      now = DateTime.current
+
+      metrics = []
+
+      result = MaintenanceStats::Queries::FullRepoQuery.new(client).query( params: {owner: repository.owner_name, repo_name: repository.project_name} )
+      unless check_for_v4_error_response(result)
+          metrics << MaintenanceStats::Stats::Github::IssueRates.new(result).get_stats
+          metrics << MaintenanceStats::Stats::Github::PullRequestRates.new(result).get_stats
+          metrics << MaintenanceStats::Stats::Github::AverageCommitDate.new(result).get_stats
+      end
+
+      result = MaintenanceStats::Queries::RepoReleasesQuery.new(client).query( params: {owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 1.year} )
+      unless check_for_v4_error_response(result)
+          metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).get_stats
+      end
+
+      result = MaintenanceStats::Queries::CommitCountQuery.new(client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.week).iso8601} )
+      metrics << MaintenanceStats::Stats::Github::LastWeekCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
+
+      result = MaintenanceStats::Queries::CommitCountQuery.new(client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.month).iso8601} )
+      metrics << MaintenanceStats::Stats::Github::LastMonthCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
+
+      result = MaintenanceStats::Queries::CommitCountQuery.new(client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 2.months).iso8601} )
+      metrics << MaintenanceStats::Stats::Github::LastTwoMonthCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
+
+      result = MaintenanceStats::Queries::CommitCountQuery.new(client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.year).iso8601} )
+      metrics << MaintenanceStats::Stats::Github::LastYearCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
+
+      begin
+          result = MaintenanceStats::Queries::CommitCountQueryV3.new(v3_client).query(params: {full_name: repository.full_name} )
+          metrics << MaintenanceStats::Stats::Github::V3CommitsStat.new(result).get_stats
+      rescue Octokit::Error => e
+          Rails.logger.warn(e.message)
+      end
+
+      begin
+        result = MaintenanceStats::Queries::RepositoryContributorStatsQuery.new(v3_client).query(params: {full_name: repository.full_name})
+        metrics << MaintenanceStats::Stats::Github::V3ContributorCountStats.new(result).get_stats
+      rescue Octokit::Error => e
+        Rails.logger.warn(e.message)
+      end
+
+      begin
+        result = MaintenanceStats::Queries::IssuesQuery.new(v3_client).query(params: {full_name: repository.full_name, since: (now - 1.year).iso8601})
+        metrics << MaintenanceStats::Stats::Github::V3IssueStats.new(result).get_stats
+      rescue Octokit::Error => e
+
+      end
+
+      add_metrics_to_repo(metrics)
+
+      metrics
+    end
+
     private
 
     def api_client(token = nil)
       AuthToken.fallback_client(token)
+    end
+
+    def check_for_v4_error_response(response)
+      # errors can be stored in the response from Github or can be stored in the response object from HTTP errors
+      response.errors.each do |message|
+          Rails.logger.warn(message)
+      end
+      response.data.errors.each do |message|
+          Rails.logger.warn(message)
+      end unless response.data.errors.nil?
+      # if we have either type of error or there is no data return true
+      return response.data.nil? || response.errors.any? || response.data.errors.any?
     end
   end
 end

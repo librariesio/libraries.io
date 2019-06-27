@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe MaintenanceStats::Stats::ReleaseStats do
+describe MaintenanceStats::Stats::Github::ReleaseStats do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { auth_token.v4_github_client }
   let(:start_date) { DateTime.parse("2018-12-14T17:49:49+00:00") }

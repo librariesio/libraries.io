@@ -159,6 +159,26 @@ module RepositoryHost
       end
     end
 
+    def gather_maintenance_stats
+      unless repository.host_type == "Bitbucket" && repository.projects.all? { |project| project.bitbucket_name_with_owner.present? } 
+        repository.repository_maintenance_stats.destroy_all
+        return []
+      end
+
+      metrics = []
+
+      # get latest issues and pull requests and store them in the database
+      repository.download_issues
+      repository.download_pull_requests
+
+      metrics << MaintenanceStats::Stats::Bitbucket::CommitsStat.new(repository.retrieve_commits).get_stats
+
+      metrics << MaintenanceStats::Stats::Bitbucket::IssueRates.new(repository.issues).get_stats
+
+      add_metrics_to_repo(metrics)
+      metrics
+    end
+
     private
 
     def self.api_client(token = nil)

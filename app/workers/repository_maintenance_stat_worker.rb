@@ -3,7 +3,7 @@ class RepositoryMaintenanceStatWorker
     sidekiq_options queue: :repo_maintenance_stat, retry: 3
 
     def perform(repo_id)
-        GatherRepositoryMaintenanceStats.gather_stats(Repository.find_by_id(repo_id))
+        Repository.find(repo_id).gather_maintenance_stats
     end
 
     def self.enqueue(repo_id, priority: :medium)

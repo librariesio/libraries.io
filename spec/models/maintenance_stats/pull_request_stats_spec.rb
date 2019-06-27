@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe MaintenanceStats::Stats::PullRequestRates do
+describe MaintenanceStats::Stats::Github::PullRequestRates do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { auth_token.v4_github_client }
   let(:query_klass) { MaintenanceStats::Queries::FullRepoQuery.new(client) }
