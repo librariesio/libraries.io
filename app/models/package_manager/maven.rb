@@ -131,7 +131,7 @@ module PackageManager
 
     def self.extract_pom_properties(xml)
       xml.locate("properties/*").each_with_object({}) do |prop_node, all|
-        all[prop_node.value] = prop_node.nodes.first
+        all[prop_node.value] = prop_node.nodes.first if prop_node&.nodes.present?
       end
     end
 
