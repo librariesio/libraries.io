@@ -12,7 +12,8 @@ describe RepositoryMaintenanceStatWorker do
   end
 
   it "should gather stats for the repository" do
-    expect(GatherRepositoryMaintenanceStats).to receive(:gather_stats).with(repository)
+    expect(Repository).to receive(:find).with(repository.id).and_return(repository)
+    expect(repository).to receive(:gather_maintenance_stats).and_return([])
     subject.perform(repository.id)
   end
 

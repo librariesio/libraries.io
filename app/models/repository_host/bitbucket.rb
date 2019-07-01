@@ -70,6 +70,10 @@ module RepositoryHost
       nil
     end
 
+    def retrieve_commits(token = nil)
+      api_client(token).repos.commits.list(repository.owner_name, repository.project_name)['values']
+    end
+
     def download_forks(token = nil)
       # not implemented yet
     end
@@ -153,6 +157,26 @@ module RepositoryHost
         REDIS.set 'bitbucket-after', Addressable::URI.parse(json['next']).query_values['after']
         recursive_bitbucket_repos(json['next'], limit)
       end
+    end
+
+    def gather_maintenance_stats
+      if repository.host_type != "Bitbucket" || repository.projects.any? { |project| project.bitbucket_name_with_owner.blank? }
+        repository.repository_maintenance_stats.destroy_all
+        return []
+      end
+
+      metrics = []
+
+      # get latest issues and pull requests and store them in the database
+      repository.download_issues
+      repository.download_pull_requests
+
+      metrics << MaintenanceStats::Stats::Bitbucket::CommitsStat.new(repository.retrieve_commits).get_stats
+
+      metrics << MaintenanceStats::Stats::Bitbucket::IssueRates.new(repository.issues).get_stats
+
+      add_metrics_to_repo(metrics)
+      metrics
     end
 
     private

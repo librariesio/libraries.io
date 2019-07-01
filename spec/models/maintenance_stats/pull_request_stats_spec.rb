@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe MaintenanceStats::Stats::PullRequestRates do
+describe MaintenanceStats::Stats::Github::PullRequestRates do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { auth_token.v4_github_client }
   let(:query_klass) { MaintenanceStats::Queries::FullRepoQuery.new(client) }
@@ -28,7 +28,8 @@ describe MaintenanceStats::Stats::PullRequestRates do
         expect(results[:open_pull_request_count]).to eql 747
         expect(results[:merged_pull_request_count]).to eql 15069
 
-        expected_acceptance_rate = results[:merged_pull_request_count].to_f/ stat.total_pull_requests_count.to_f
+        total_pull_requests = [:closed_pull_request_count, :open_pull_request_count, :merged_pull_request_count].map{ |key| results[key] }.sum
+        expected_acceptance_rate = results[:merged_pull_request_count].to_f/ total_pull_requests.to_f
         expect(results[:pull_request_acceptance]).to eql expected_acceptance_rate
     end
   end

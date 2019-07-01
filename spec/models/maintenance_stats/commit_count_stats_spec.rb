@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe MaintenanceStats::Stats::LastYearCommitsStat do
+describe MaintenanceStats::Stats::Github::LastYearCommitsStat do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { auth_token.v4_github_client }
   let(:query_klass) { MaintenanceStats::Queries::CommitCountQuery.new(client) }
@@ -50,7 +50,7 @@ describe MaintenanceStats::Stats::LastYearCommitsStat do
   end
 end
 
-describe MaintenanceStats::Stats::V3CommitsStat do
+describe MaintenanceStats::Stats::Github::V3CommitsStat do
     let!(:auth_token) { create(:auth_token) }
     let(:client) { auth_token.github_client }
     let(:query_klass) { MaintenanceStats::Queries::CommitCountQueryV3.new(client) }

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe MaintenanceStats::Stats::V3IssueStats do
+describe MaintenanceStats::Stats::Github::V3IssueStats do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { AuthToken.client }
   let(:query_klass) { MaintenanceStats::Queries::IssuesQuery.new(client) }

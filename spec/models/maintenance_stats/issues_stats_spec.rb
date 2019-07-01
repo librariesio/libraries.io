@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe MaintenanceStats::Stats::IssueRates do
+describe MaintenanceStats::Stats::Github::IssueRates do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { auth_token.v4_github_client }
   let(:query_klass) { MaintenanceStats::Queries::FullRepoQuery.new(client) }
@@ -27,7 +27,8 @@ describe MaintenanceStats::Stats::IssueRates do
         expect(results[:closed_issue_count]).to eql 11964
         expect(results[:open_issue_count]).to eql 360
 
-        expected_closure_rate = results[:closed_issue_count].to_f / stat.total_issues_count.to_f
+        total_issues = [:closed_issue_count, :open_issue_count].map{ |key| results[key] }.sum
+        expected_closure_rate = results[:closed_issue_count].to_f / total_issues.to_f
         expect(results[:issue_closure_rate]).to eql expected_closure_rate
     end
   end

@@ -55,6 +55,10 @@ module RepositoryHost
       # not implemented yet
     end
 
+    def retrieve_commits
+      # not implemented yet
+    end
+
     def download_owner
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
       namespace = api_client.project(repository.full_name).try(:namespace)

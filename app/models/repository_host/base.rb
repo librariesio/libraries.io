@@ -109,8 +109,23 @@ module RepositoryHost
       end
     end
 
+    def gather_maintenance_stats_async
+      RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: :medium)
+    end
+
     private
 
     attr_reader :repository
+
+    def add_metrics_to_repo(results)
+      # create one hash with all results
+      results.reduce(Hash.new, :merge).each do |category, value|
+          unless value.nil?
+              stat = repository.repository_maintenance_stats.find_or_create_by(category: category.to_s)
+              stat.update!(value: value.to_s)
+              stat.touch unless stat.changed?  # we always want to update updated_at for later querying
+          end
+      end
+    end
   end
 end
