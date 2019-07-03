@@ -3,7 +3,7 @@ require 'rails_helper'
 describe MaintenanceStats::Stats::Github::V3ContributorCountStats do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { AuthToken.client }
-  let(:query_klass) { MaintenanceStats::Queries::RepositoryContributorStatsQuery.new(client) }
+  let(:query_klass) { MaintenanceStats::Queries::Github::RepositoryContributorStatsQuery.new(client) }
   let(:query_params) { {full_name: "vuejs/vue"} }
 
   let(:stat) { described_class.new(query_results) }
