@@ -534,6 +534,11 @@ class Project < ApplicationRecord
     project
   end
 
+  def self.known?(platform, name)
+    self.visible.platform(platform).where(name: name).exists? ||
+      self.visible.lower_platform(platform&.downcase).lower_name(name&.downcase).exists?
+  end
+
   def find_version!(version_name)
     version = if version_name == 'latest'
                 versions.sort.first
@@ -554,5 +559,4 @@ class Project < ApplicationRecord
     repository_url = URLParser.try_all(self.repository_url)
     update_attributes(repository_url: repository_url)
   end
-
 end
