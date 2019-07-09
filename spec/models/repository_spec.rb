@@ -215,7 +215,7 @@ describe Repository, type: :model do
 
     context "with a valid repository" do
       before do
-        VCR.use_cassette('github/rails_api', :match_requests_on => [:method, :uri, :body]) do
+        VCR.use_cassette('github/chalk_api', :match_requests_on => [:method, :uri, :body]) do
           repository.gather_maintenance_stats
         end
       end
@@ -234,7 +234,7 @@ describe Repository, type: :model do
         first_updated_at = repository.repository_maintenance_stats.first.updated_at
         category = repository.repository_maintenance_stats.first.category
 
-        VCR.use_cassette('github/rails_api', :match_requests_on => [:method, :uri, :body]) do
+        VCR.use_cassette('github/chalk_api', :match_requests_on => [:method, :uri, :body, :query]) do
           repository.gather_maintenance_stats
         end
 
@@ -248,7 +248,7 @@ describe Repository, type: :model do
       let(:repository) { create(:repository, full_name: 'bad/example-for-testing') }
 
       it "should save metrics for repository" do
-        VCR.use_cassette('github/bad_repository', :match_requests_on => [:method, :uri, :body]) do
+        VCR.use_cassette('github/bad_repository', :match_requests_on => [:method, :uri, :body, :query]) do
           repository.gather_maintenance_stats
         end
 
@@ -261,7 +261,7 @@ describe Repository, type: :model do
       let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
 
       it "should save default values" do
-        VCR.use_cassette('github/empty_repository', :match_requests_on => [:method, :uri, :body]) do
+        VCR.use_cassette('github/empty_repository', :match_requests_on => [:method, :uri, :body, :query]) do
           repository.gather_maintenance_stats
         end
 
@@ -285,7 +285,7 @@ describe Repository, type: :model do
       let(:repository) { create(:repository, host_type: "Bitbucket") }
 
       it "should not save any values" do
-        VCR.use_cassette('github/rails_api', :match_requests_on => [:method, :uri, :body]) do
+        VCR.use_cassette('github/chalk_api', :match_requests_on => [:method, :uri, :body, :query]) do
           repository.gather_maintenance_stats
         end
 

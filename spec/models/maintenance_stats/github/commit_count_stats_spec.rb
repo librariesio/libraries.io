@@ -10,9 +10,9 @@ describe MaintenanceStats::Stats::Github::LastYearCommitsStat do
   let(:stat) { described_class.new(query_results) }
 
   context "with a valid repository" do
-    let(:repository) { create(:repository) }
+    let(:repository) { create(:repository, full_name: 'chalk/chalk') }
     let(:query_results) do
-        VCR.use_cassette('github/rails_api', :match_requests_on => [:body]) do
+        VCR.use_cassette('github/chalk_api', :match_requests_on => [:method, :uri, :body, :query]) do
            return query_klass.query(params: query_params)
         end
     end
@@ -25,14 +25,14 @@ describe MaintenanceStats::Stats::Github::LastYearCommitsStat do
         expect(results.keys).to eql expected_keys
 
         # check values against the VCR cassette data
-        expect(results[:last_year_commits]).to eql 4677
+        expect(results[:last_year_commits]).to eql 52
     end
   end
 
   context "repository with no commits" do
     let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
     let(:query_results) do
-        VCR.use_cassette('github/empty_repository', :match_requests_on => [:body]) do
+        VCR.use_cassette('github/empty_repository', :match_requests_on => [:method, :uri, :body, :query]) do
             return query_klass.query(params: query_params)
         end
     end
@@ -59,9 +59,9 @@ describe MaintenanceStats::Stats::Github::V3CommitsStat do
     let(:stat) { described_class.new(query_results) }
 
     context "with a valid repository" do
-        let(:repository) { create(:repository) }
+        let(:repository) { create(:repository, full_name: 'chalk/chalk') }
         let(:query_results) do
-            VCR.use_cassette('github/rails_api') do
+            VCR.use_cassette('github/chalk_api', :match_requests_on => [:method, :uri, :body, :query]) do
                 return query_klass.query(params: query_params)
             end
         end
@@ -74,17 +74,17 @@ describe MaintenanceStats::Stats::Github::V3CommitsStat do
             expect(results.keys).to eql expected_keys
 
             # check values against the VCR cassette data
-            expect(results[:v3_last_week_commits]).to eql 87
-            expect(results[:v3_last_4_weeks_commits]).to eql 273
-            expect(results[:v3_last_8_weeks_commits]).to eql 560
-            expect(results[:v3_last_52_weeks_commits]).to eql 3908
+            expect(results[:v3_last_week_commits]).to eql 0
+            expect(results[:v3_last_4_weeks_commits]).to eql 1
+            expect(results[:v3_last_8_weeks_commits]).to eql 2
+            expect(results[:v3_last_52_weeks_commits]).to eql 31
         end
     end
 
     context "repository with no commits" do
         let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
         let(:query_results) do
-            VCR.use_cassette('github/empty_repository') do
+            VCR.use_cassette('github/empty_repository', :match_requests_on => [:method, :uri, :body, :query]) do
                 return query_klass.query(params: query_params)
             end
         end

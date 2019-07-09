@@ -1,4 +1,5 @@
 require 'simplecov'
+require 'pry'
 SimpleCov.start 'rails'
 
 RSpec.configure do |config|
@@ -24,4 +25,7 @@ RSpec.configure do |config|
       model.__elasticsearch__.client.indices.delete index: model.index_name
     end
   end
+
+  config.filter_run :focus
+  config.run_all_when_everything_filtered = true
 end

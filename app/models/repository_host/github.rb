@@ -231,6 +231,7 @@ module RepositoryHost
         return []
       end
 
+      exists = !Github.fetch_repo(repository.full_name).nil?
       repository.download_issues
       repository.download_pull_requests
 
@@ -246,7 +247,6 @@ module RepositoryHost
         metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).get_stats
       end
 
-      # just use v3 stats? remove these
       result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.week).iso8601} )
       metrics << MaintenanceStats::Stats::Github::LastWeekCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
 
@@ -266,9 +266,9 @@ module RepositoryHost
         Rails.logger.warn(e.message)
       end
 
-      metrics << MaintenanceStats::Stats::Github::DBIssueStats.new(repository.issues).get_stats
+      metrics << MaintenanceStats::Stats::Github::DBIssueStats.new(repository.issues).get_stats if exists
 
-      # add_metrics_to_repo(metrics)
+      add_metrics_to_repo(metrics)
 
       metrics
     end

@@ -15,9 +15,9 @@ describe MaintenanceStats::Stats::Github::ReleaseStats do
   end
 
   context "with a valid repository" do
-    let(:repository) { create(:repository) }
+    let(:repository) { create(:repository, full_name: 'chalk/chalk') }
     let(:query_results) do
-        VCR.use_cassette('github/rails_api', :match_requests_on => [:body]) do
+        VCR.use_cassette('github/chalk_api', :match_requests_on => [:method, :uri, :body, :query]) do
            return query_klass.query(params: query_params)
         end
     end
@@ -31,18 +31,18 @@ describe MaintenanceStats::Stats::Github::ReleaseStats do
         
         # check values against the VCR cassette data
         expect(results[:last_week_releases]).to eql 1
-        expect(results[:last_month_releases]).to eql 2
-        expect(results[:last_two_month_releases]).to eql 2
-        expect(results[:last_year_releases]).to eql 2
+        expect(results[:last_month_releases]).to eql 1
+        expect(results[:last_two_month_releases]).to eql 1
+        expect(results[:last_year_releases]).to eql 5
 
-        expect(results[:last_release_date]).to eql "2019-01-18T21:32:44Z"
+        expect(results[:last_release_date]).to eql "2019-01-05T15:47:46Z"
     end
   end
   
   context "repository with no commits" do
     let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
     let(:query_results) do
-        VCR.use_cassette('github/empty_repository', :match_requests_on => [:body]) do
+        VCR.use_cassette('github/empty_repository', :match_requests_on => [:method, :uri, :body, :query]) do
            return query_klass.query(params: query_params)
         end
     end
