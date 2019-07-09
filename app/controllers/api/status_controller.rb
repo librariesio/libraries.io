@@ -2,30 +2,33 @@ class Api::StatusController < Api::ApplicationController
   before_action :require_api_key
 
   def check
-    if params[:projects].any?
-      # Try to get all the projects passed in.
-      @projects = params[:projects]
-        .group_by { |project| project[:platform] }
-        .flat_map(&method(:find_projects))
-        .compact
-    else
-      @projects = []
-    end
-    render json: @projects, each_serializer: ProjectStatusSerializer, show_score: params[:score], show_stats: internal_api_key?
+    render(
+      json: projects.values,
+      each_serializer: ProjectStatusSerializer,
+      show_score: params[:score],
+      show_stats: internal_api_key?,
+      project_names: project_names
+    )
   end
 
   private
 
-  def find_projects((platform, projects))
-    projects.each_slice(1000).flat_map do |slice|
-      project_find_names = slice.flat_map { |project| project_names(project, platform) }.map(&:downcase)
-      Project.visible.platform(platform).where('lower(platform)=? AND lower(name) in (?)', platform.downcase, project_find_names).includes(:repository, :versions, :repository_maintenance_stats)
-    end
+  def projects
+    @projects ||= params[:projects]
+      .group_by { |project| project[:platform] }
+      .map(&method(:platform_projects))
+      .reduce({}, :merge)
   end
 
-  def project_names(project, platform)
-    platform_class = PackageManager::Base.find(platform)
-    return PackageManager::Base.project_find_names(project[:name]) if platform_class.nil?
-    platform_class.project_find_names(project[:name])
+  def platform_projects((platform, group))
+    ProjectStatusQuery
+      .new(platform, group.map { |p| p[:name] })
+      .projects_by_name
+  end
+
+  def project_names
+    projects
+      .map { |requested_name, project| [project.name, requested_name] }
+      .to_h
   end
 end

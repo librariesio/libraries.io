@@ -13,4 +13,8 @@ class ProjectStatusSerializer < ActiveModel::Serializer
   def show_stats?
     instance_options[:show_stats]
   end
+
+  def name
+    instance_options[:project_names][object.name]
+  end
 end
