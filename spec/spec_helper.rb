@@ -1,5 +1,4 @@
 require 'simplecov'
-require 'pry'
 SimpleCov.start 'rails'
 
 RSpec.configure do |config|
