@@ -197,7 +197,7 @@ describe Repository, type: :model do
   end
 
   describe '#gather_maintenance_stats' do
-    let(:repository) { create(:repository) }
+    let(:repository) { create(:repository, full_name: 'chalk/chalk') }
     let!(:auth_token) { create(:auth_token) }
     let!(:project) do
       repository.projects.create!(
