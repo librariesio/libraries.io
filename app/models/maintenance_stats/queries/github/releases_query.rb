@@ -2,7 +2,7 @@ module MaintenanceStats
   module Queries
     module Github
       class RepoReleasesQuery < BaseQuery
-        ReleasesQuery = Rails.application.config.graphql.client.parse <<-'GRAPHQL'
+        RELEASES_QUERY = Rails.application.config.graphql.client.parse <<-GRAPHQL
           query($owner: String!, $repo_name: String!, $cursor: String){
             repository(owner: $owner, name: $repo_name){
               releases(first: 100, after: $cursor, orderBy: {field: CREATED_AT, direction: DESC}){
@@ -22,8 +22,8 @@ module MaintenanceStats
           }
         GRAPHQL
 
-        @@valid_params = [:owner, :repo_name, :end_date]
-        @@required_params = [:owner, :repo_name]
+        VALID_PARAMS = [:owner, :repo_name, :end_date]
+        REQUIRED_PARAMS = [:owner, :repo_name]
 
         def self.client_type
           :v4
@@ -40,7 +40,7 @@ module MaintenanceStats
           page_info = { has_next_page: true, cursor: nil}
           while(page_info[:has_next_page])
             params[:cursor] = page_info[:cursor] if page_info[:cursor]
-            result = @client.query(ReleasesQuery, variables: params)
+            result = @client.query(RELEASES_QUERY, variables: params)
 
             if check_for_errors(result)
               @releases = result if @releases.nil?
@@ -73,7 +73,7 @@ module MaintenanceStats
         private
 
         def check_for_errors(result)
-          return result.data.nil? || result.errors.any? || result.data.errors.any?
+          result.data.nil? || result.errors.any? || result.data.errors.any?
         end
       end
     end

@@ -2,14 +2,16 @@ module MaintenanceStats
   module Queries
     module Github
       class RepositoryContributorStatsQuery < BaseQuery
-        @@valid_params = [:full_name]
-        @@required_params = [:full_name]
-        @@retry_amount = 4
+        VALID_PARAMS = [:full_name]
+        REQUIRED_PARAMS = [:full_name]
+        RETRY_AMOUNT = 4
+
         def self.client_type
           :v3
         end
+
         def query(params: {}, count: 0)
-          raise Octokit::Error.new "Didn't get a response after #{@@retry_amount} attempts" if params[:count].present? && params[:count] >= @@retry_amount
+          raise Octokit::Error.new "Didn't get a response after #{RETRY_AMOUNT} attempts" if params[:count].present? && params[:count] >= RETRY_AMOUNT
           validate_params(params)
 
           resp = @client.contributor_stats(params[:full_name])

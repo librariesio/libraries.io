@@ -609,11 +609,11 @@ http_interactions:
     uri: https://api.github.com/graphql
     body:
       encoding: UTF-8
-      string: '{"query":"query MaintenanceStats__Queries__Github__RepoReleasesQuery__ReleasesQuery($owner:
+      string: '{"query":"query MaintenanceStats__Queries__Github__RepoReleasesQuery__RELEASES_QUERY($owner:
         String!, $repo_name: String!, $cursor: String) {\n  repository(owner: $owner,
         name: $repo_name) {\n    releases(first: 100, after: $cursor, orderBy: {field:
         CREATED_AT, direction: DESC}) {\n      nodes {\n        name\n        publishedAt\n      }\n      totalCount\n      pageInfo
-        {\n        hasPreviousPage\n        hasNextPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild"},"operationName":"MaintenanceStats__Queries__Github__RepoReleasesQuery__ReleasesQuery"}'
+        {\n        hasPreviousPage\n        hasNextPage\n        endCursor\n        startCursor\n      }\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild"},"operationName":"MaintenanceStats__Queries__Github__RepoReleasesQuery__RELEASES_QUERY"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -686,10 +686,10 @@ http_interactions:
     uri: https://api.github.com/graphql
     body:
       encoding: UTF-8
-      string: '{"query":"query MaintenanceStats__Queries__Github__CommitCountQuery__CommitCountsQuery($owner:
+      string: '{"query":"query MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY($owner:
         String!, $repo_name: String!, $start_date: GitTimestamp!) {\n  repository(owner:
         $owner, name: $repo_name) {\n    defaultBranchRef {\n      target {\n        __typename\n        ...
-        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild","start_date":"2018-12-07T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__Github__CommitCountQuery__CommitCountsQuery"}'
+        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild","start_date":"2018-12-07T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -762,10 +762,10 @@ http_interactions:
     uri: https://api.github.com/graphql
     body:
       encoding: UTF-8
-      string: '{"query":"query MaintenanceStats__Queries__Github__CommitCountQuery__CommitCountsQuery($owner:
+      string: '{"query":"query MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY($owner:
         String!, $repo_name: String!, $start_date: GitTimestamp!) {\n  repository(owner:
         $owner, name: $repo_name) {\n    defaultBranchRef {\n      target {\n        __typename\n        ...
-        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild","start_date":"2018-11-14T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__Github__CommitCountQuery__CommitCountsQuery"}'
+        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild","start_date":"2018-11-14T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -838,10 +838,10 @@ http_interactions:
     uri: https://api.github.com/graphql
     body:
       encoding: UTF-8
-      string: '{"query":"query MaintenanceStats__Queries__Github__CommitCountQuery__CommitCountsQuery($owner:
+      string: '{"query":"query MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY($owner:
         String!, $repo_name: String!, $start_date: GitTimestamp!) {\n  repository(owner:
         $owner, name: $repo_name) {\n    defaultBranchRef {\n      target {\n        __typename\n        ...
-        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild","start_date":"2018-10-14T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__Github__CommitCountQuery__CommitCountsQuery"}'
+        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild","start_date":"2018-10-14T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -914,10 +914,10 @@ http_interactions:
     uri: https://api.github.com/graphql
     body:
       encoding: UTF-8
-      string: '{"query":"query MaintenanceStats__Queries__Github__CommitCountQuery__CommitCountsQuery($owner:
+      string: '{"query":"query MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY($owner:
         String!, $repo_name: String!, $start_date: GitTimestamp!) {\n  repository(owner:
         $owner, name: $repo_name) {\n    defaultBranchRef {\n      target {\n        __typename\n        ...
-        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild","start_date":"2017-12-14T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__Github__CommitCountQuery__CommitCountsQuery"}'
+        on Commit {\n          history(since: $start_date) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild","start_date":"2017-12-14T17:49:49+00:00"},"operationName":"MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY"}'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
