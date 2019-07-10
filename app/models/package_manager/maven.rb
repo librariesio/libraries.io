@@ -40,13 +40,13 @@ module PackageManager
 
       (1..num).to_a.reverse.each do |number|
         page = get_html "https://maven-repository.com/artifact/latest?page=#{number}"
-        parse_names(page).each { |name| REDIS.sadd 'maven-names', name }
-        REDIS.set 'maven-page', number
+        parse_names(page).each { |name| REDIS.sadd('maven-names', name) }
+        REDIS.set('maven-page', number)
       end
     end
 
     def self.project_names
-      REDIS.smembers 'maven-names'
+      REDIS.smembers('maven-names')
     end
 
     def self.recent_names
@@ -209,10 +209,10 @@ module PackageManager
     def self.parse_names(page)
       # parse the names from maven-repository.com/artifact/latest pages
       names = page.css('tr')[1..-1]&.map do |tr|
-        tr.css('td')[0..1]&.map(&:text).join(':')
+        tr.css('td')[0..1]&.map(&:text)&.join(':')
       end || []
 
-      names.select(&MavenUrl.method(:legal_name?)).uniq
+      names.compact.select(&MavenUrl.method(:legal_name?)).uniq
     end
 
     class MavenUrl
@@ -221,7 +221,7 @@ module PackageManager
       end
 
       def self.legal_name?(name)
-        name.split(':').size == 2
+        name.present? && name.split(':').size == 2
       end
 
       def initialize(group_id, artifact_id)
