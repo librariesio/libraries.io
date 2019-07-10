@@ -16,7 +16,7 @@ module MaintenanceStats
 
           resp = @client.contributor_stats(params[:full_name])
           if @client.last_response.status == 202
-            sleep 1
+            sleep (count + 1) * 0.5
             return query(params: params, count: count+=1)
           end
           resp
