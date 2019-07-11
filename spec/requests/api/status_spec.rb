@@ -18,7 +18,7 @@ describe "API::StatusController" do
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq('application/json')
       expect(response.body.include?(project.name)).to be == true
-      
+
       # check for maintenance stats being returned
       json_response = JSON.parse(response.body)
       maintenance_stats = json_response.first["repository_maintenance_stats"]
@@ -71,6 +71,47 @@ describe "API::StatusController" do
       expected_fields.each do |field|
         expect(project.key? field).to be true
       end
+    end
+
+    it "correctly serves the original name" do
+      requested_name = project_django.name.downcase
+
+      post(
+        "/api/check",
+        params: {
+          api_key: internal_user.api_key,
+          projects: [
+            { name: requested_name, platform: project_django.platform }
+          ],
+          score: true
+        }
+      )
+
+      expect(response).to have_http_status(:success)
+      expect(JSON.parse(response.body).dig(0, "name")).to eq(requested_name)
+    end
+
+    it "correctly handles go redirects" do
+      project = create(:project, platform: "Go", name: "known/project")
+      requested_name = "unknown/project"
+      allow(PackageManager::Go)
+        .to receive(:resolved_name)
+        .with(requested_name)
+        .and_return(project.name)
+
+      post(
+        "/api/check",
+        params: {
+          api_key: internal_user.api_key,
+          projects: [
+            { name: requested_name, platform: project.platform }
+          ],
+          score: true
+        }
+      )
+
+      expect(response).to have_http_status(:success)
+      expect(JSON.parse(response.body).dig(0, "name")).to eq(requested_name)
     end
 
     context "with normal API key" do
