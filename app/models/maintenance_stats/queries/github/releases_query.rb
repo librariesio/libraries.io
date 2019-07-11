@@ -35,39 +35,35 @@ module MaintenanceStats
           end_date = params[:end_date]
           params = params.slice!(:end_date)
 
-          @releases = nil
+          releases = nil
 
-          page_info = { has_next_page: true, cursor: nil}
-          while(page_info[:has_next_page])
-            params[:cursor] = page_info[:cursor] if page_info[:cursor]
+          has_next_page = true
+          cursor = nil
+          while(has_next_page)
+            params[:cursor] = cursor if cursor.present?
             result = @client.query(RELEASES_QUERY, variables: params)
 
-            if check_for_errors(result)
-              @releases = result if @releases.nil?
-              return @releases
-            end
+            # send back the releases we have so far if we encounter an error
+            return releases if check_for_errors(result)
 
             has_next_page = result.data.repository.releases.page_info.has_next_page
             cursor = result.data.repository.releases.page_info.end_cursor
-            page_info = { has_next_page: has_next_page, cursor: cursor}
 
-            if @releases.nil?
-              @releases = result
-              next
-            end
+            # initalize releases if we have not started gathering data
+            releases ||= []
             
-            result.data.repository&.releases.nodes.each do |release|
+            result.data.repository&.releases&.nodes&.each do |release|
+              # if release is within our search window or we don't have a specific date window then add it to the list
               publish_date = DateTime.parse(release.published_at)
-              if publish_date > end_date
-                @releases.data.repository.releases.nodes << release
+              if end_date.nil? || publish_date > end_date
+                releases << release
               else
-                has_next_page = false
                 break
               end
             end
           end
 
-          @releases
+          releases
         end
 
         private

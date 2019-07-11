@@ -1,11 +1,12 @@
 require 'rails_helper'
+require 'pry'
 
 describe MaintenanceStats::Stats::Github::ReleaseStats do
   let!(:auth_token) { create(:auth_token) }
   let(:client) { auth_token.v4_github_client }
   let(:start_date) { DateTime.parse("2018-12-14T17:49:49+00:00") }
   let(:query_klass) { MaintenanceStats::Queries::Github::RepoReleasesQuery.new(client) }
-  let(:query_params) { {owner: repository.owner_name, repo_name: repository.project_name, end_date: start_date - 365} }
+  let(:query_params) { {owner: repository.owner_name, repo_name: repository.project_name, end_date: start_date - 1.year} }
 
   let(:stat) { described_class.new(query_results) }
 
@@ -37,28 +38,28 @@ describe MaintenanceStats::Stats::Github::ReleaseStats do
 
         expect(results[:last_release_date]).to eql "2019-01-05T15:47:46Z"
     end
+
+    it "should ignore releases older than one year ago" do
+      release_dates = query_results.map { |node| DateTime.parse(node.published_at) }
+
+      last_date = release_dates.sort.first
+
+      expect(last_date > start_date - 1.year).to be true
+    end
   end
   
   context "repository with no commits" do
     let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
     let(:query_results) do
-        VCR.use_cassette('github/empty_repository', :match_requests_on => [:method, :uri, :body, :query]) do
-           return query_klass.query(params: query_params)
-        end
+      VCR.use_cassette('github/empty_repository', :match_requests_on => [:method, :uri, :body, :query]) do
+        return query_klass.query(params: query_params)
+      end
     end
 
     it "should handle no data from query" do
-        results = stat.get_stats
+      results = stat.get_stats
 
-        expected_keys = %W(last_release_date last_week_releases last_month_releases last_two_month_releases last_year_releases).map(&:to_sym)
-
-        expect(results.keys).to eql expected_keys
-
-        expect(results[:last_week_releases]).to eql 0
-        expect(results[:last_month_releases]).to eql 0
-        expect(results[:last_two_month_releases]).to eql 0
-        expect(results[:last_year_releases]).to eql 0
-        expect(results[:last_release_date]).to be nil
+      expect(results).to be {}
     end
   end
 end

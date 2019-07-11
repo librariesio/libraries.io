@@ -243,9 +243,7 @@ module RepositoryHost
       metrics = []
 
       result = MaintenanceStats::Queries::Github::RepoReleasesQuery.new(v4_client).query( params: {owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 1.year} )
-      unless check_for_v4_error_response(result)
-        metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).get_stats
-      end
+      metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).get_stats
 
       result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.week).iso8601} )
       metrics << MaintenanceStats::Stats::Github::LastWeekCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
