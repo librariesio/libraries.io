@@ -1,44 +1,20 @@
 module MaintenanceStats
   module Stats
     module Github
-      class BaseCommitCount < BaseStat
+      class CommitsStat < BaseStat
+        def get_stats
+          {
+            last_week_commits: pull_out_commit_count(@results, "lastWeek"),
+            last_month_commits: pull_out_commit_count(@results, "lastMonth"),
+            last_two_month_commits: pull_out_commit_count(@results, "lastTwoMonths"),
+            last_year_commits: pull_out_commit_count(@results, "lastYear")
+          }
+        end
+
         private
 
-        def pull_out_commit_count(dataset)
-            return nil if dataset.data.repository.nil? || dataset.data.repository.default_branch_ref.nil?
-            dataset.data.repository.default_branch_ref.target.history.total_count
-        end
-      end
-
-      class LastWeekCommitsStat < BaseCommitCount
-        def get_stats
-          {
-            last_week_commits: pull_out_commit_count(@results)
-          }
-        end
-      end
-
-      class LastMonthCommitsStat < BaseCommitCount
-        def get_stats
-          {
-            last_month_commits: pull_out_commit_count(@results)
-          }
-        end
-      end
-
-      class LastTwoMonthCommitsStat < BaseCommitCount
-        def get_stats
-          {
-            last_two_month_commits: pull_out_commit_count(@results)
-          }
-        end
-      end
-
-      class LastYearCommitsStat < BaseCommitCount
-        def get_stats
-          {
-            last_year_commits: pull_out_commit_count(@results)
-          }
+        def pull_out_commit_count(dataset, key)
+            dataset.original_hash.dig("data", "repository", "defaultBranchRef", "target", key, "totalCount")
         end
       end
 

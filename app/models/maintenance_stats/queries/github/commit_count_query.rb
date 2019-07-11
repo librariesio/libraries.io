@@ -3,12 +3,21 @@ module MaintenanceStats
     module Github
       class CommitCountQuery < BaseQuery
         COMMIT_COUNTS_QUERY = Rails.application.config.graphql.client.parse <<-GRAPHQL
-          query($owner: String!, $repo_name: String!, $start_date: GitTimestamp!) {
-            repository(owner: $owner, name: $repo_name) {
+          query ($owner: String!, $name: String!, $one_week: GitTimestamp!, $one_month: GitTimestamp!, $two_months: GitTimestamp!, $one_year: GitTimestamp!) {
+            repository(owner: $owner, name: $name) {
               defaultBranchRef {
                 target {
                   ... on Commit {
-                    history(since: $start_date) {
+                    lastWeek: history(since: $one_week) {
+                      totalCount
+                    }
+                    lastMonth: history(since: $one_month) {
+                      totalCount
+                    }
+                    lastTwoMonths: history(since: $two_months) {
+                      totalCount
+                    }
+                    lastYear: history(since: $one_year) {
                       totalCount
                     }
                   }
@@ -16,7 +25,7 @@ module MaintenanceStats
                 name
               }
             }
-          }
+          }        
         GRAPHQL
 
         VALID_PARAMS = [:owner, :name, :start_date]
@@ -29,7 +38,18 @@ module MaintenanceStats
         def query(params: {})
           validate_params(params)
 
-          @client.query(COMMIT_COUNTS_QUERY, variables: params)
+          # generate the four dates needed
+          date_params = Hash.new { |k,v| k[v] = v.iso8601 }
+          start_date = params[:start_date]
+          date_params[:one_week] = start_date - 1.week
+          date_params[:one_month] = start_date - 1.month
+          date_params[:two_months] = start_date - 2.months
+          date_params[:one_year] = start_date - 1.year
+
+          # merge params for query
+          date_params.merge!(params.slice(:owner, :name))
+
+          @client.query(COMMIT_COUNTS_QUERY, variables: date_params)
         end
       end
 
