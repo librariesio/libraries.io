@@ -9,7 +9,7 @@ describe MaintenanceStats::Stats::Github::V3ContributorCountStats do
   let(:stat) { described_class.new(query_results) }
 
   context "with a valid repository" do
-    let(:repository) { create(:repository) }
+    let(:repository) { create(:repository, full_name: 'vuejs/vue') }
     let(:query_results) do
       VCR.use_cassette('github/vue') do
         return query_klass.query(params: query_params)
