@@ -25,7 +25,7 @@ describe MaintenanceStats::Stats::Github::ReleaseStats do
     it "should have repository release stats" do
         results = stat.get_stats
 
-        expected_keys = %W(last_release_date last_week_releases last_month_releases last_two_month_releases last_year_releases).map(&:to_sym)
+        expected_keys = %i(last_release_date last_week_releases last_month_releases last_two_month_releases last_year_releases)
 
         expect(results.keys).to eql expected_keys
         

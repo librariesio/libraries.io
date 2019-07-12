@@ -20,7 +20,7 @@ describe MaintenanceStats::Stats::Github::LastYearCommitsStat do
     it "should get timed commit count stats from the results" do
         results = stat.get_stats
 
-        expected_keys = %W(last_year_commits).map(&:to_sym)
+        expected_keys = %i(last_year_commits)
 
         expect(results.keys).to eql expected_keys
 
@@ -40,7 +40,7 @@ describe MaintenanceStats::Stats::Github::LastYearCommitsStat do
     it "should handle no data from query" do
         results = stat.get_stats
 
-        expected_keys = %W(last_year_commits).map(&:to_sym)
+        expected_keys = %i(last_year_commits)
 
         expect(results.keys).to eql expected_keys
 
@@ -69,7 +69,7 @@ describe MaintenanceStats::Stats::Github::V3CommitsStat do
         it "should get timed commit counts for the last year from the request" do
             results = stat.get_stats
 
-            expected_keys = %W(v3_last_week_commits v3_last_4_weeks_commits v3_last_8_weeks_commits v3_last_52_weeks_commits).map(&:to_sym)
+            expected_keys = %i(v3_last_week_commits v3_last_4_weeks_commits v3_last_8_weeks_commits v3_last_52_weeks_commits)
 
             expect(results.keys).to eql expected_keys
 
@@ -92,7 +92,7 @@ describe MaintenanceStats::Stats::Github::V3CommitsStat do
         it "should handle no data from query" do
             results = stat.get_stats
 
-            expected_keys = %W(v3_last_week_commits v3_last_4_weeks_commits v3_last_8_weeks_commits v3_last_52_weeks_commits).map(&:to_sym)
+            expected_keys = %i(v3_last_week_commits v3_last_4_weeks_commits v3_last_8_weeks_commits v3_last_52_weeks_commits)
 
             expect(results.keys).to eql expected_keys
 
