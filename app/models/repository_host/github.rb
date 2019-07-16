@@ -231,56 +231,40 @@ module RepositoryHost
         return []
       end
 
-      client = AuthToken.v4_client
+      exists = !Github.fetch_repo(repository.full_name).nil?
+      repository.download_issues
+      repository.download_pull_requests
+
+      # use api_client methods?
+      v4_client = AuthToken.v4_client
       v3_client = AuthToken.client({auto_paginate: false})
       now = DateTime.current
 
       metrics = []
 
-      result = MaintenanceStats::Queries::FullRepoQuery.new(client).query( params: {owner: repository.owner_name, repo_name: repository.project_name} )
-      unless check_for_v4_error_response(result)
-        metrics << MaintenanceStats::Stats::Github::IssueRates.new(result).get_stats
-        metrics << MaintenanceStats::Stats::Github::PullRequestRates.new(result).get_stats
-        metrics << MaintenanceStats::Stats::Github::AverageCommitDate.new(result).get_stats
-      end
+      result = MaintenanceStats::Queries::Github::RepoReleasesQuery.new(v4_client).query( params: {owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 1.year} )
+      metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).get_stats
 
-      result = MaintenanceStats::Queries::RepoReleasesQuery.new(client).query( params: {owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 1.year} )
-      unless check_for_v4_error_response(result)
-        metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).get_stats
-      end
-
-      result = MaintenanceStats::Queries::CommitCountQuery.new(client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.week).iso8601} )
+      result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.week).iso8601} )
       metrics << MaintenanceStats::Stats::Github::LastWeekCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
 
-      result = MaintenanceStats::Queries::CommitCountQuery.new(client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.month).iso8601} )
+      result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.month).iso8601} )
       metrics << MaintenanceStats::Stats::Github::LastMonthCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
 
-      result = MaintenanceStats::Queries::CommitCountQuery.new(client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 2.months).iso8601} )
+      result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 2.months).iso8601} )
       metrics << MaintenanceStats::Stats::Github::LastTwoMonthCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
 
-      result = MaintenanceStats::Queries::CommitCountQuery.new(client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.year).iso8601} )
+      result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.year).iso8601} )
       metrics << MaintenanceStats::Stats::Github::LastYearCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
 
       begin
-        result = MaintenanceStats::Queries::CommitCountQueryV3.new(v3_client).query(params: {full_name: repository.full_name} )
-        metrics << MaintenanceStats::Stats::Github::V3CommitsStat.new(result).get_stats
-      rescue Octokit::Error => e
-        Rails.logger.warn(e.message)
-      end
-
-      begin
-        result = MaintenanceStats::Queries::RepositoryContributorStatsQuery.new(v3_client).query(params: {full_name: repository.full_name})
+        result = MaintenanceStats::Queries::Github::RepositoryContributorStatsQuery.new(v3_client).query(params: {full_name: repository.full_name})
         metrics << MaintenanceStats::Stats::Github::V3ContributorCountStats.new(result).get_stats
       rescue Octokit::Error => e
         Rails.logger.warn(e.message)
       end
 
-      begin
-        result = MaintenanceStats::Queries::IssuesQuery.new(v3_client).query(params: {full_name: repository.full_name, since: (now - 1.year).iso8601})
-        metrics << MaintenanceStats::Stats::Github::V3IssueStats.new(result).get_stats
-      rescue Octokit::Error => e
-
-      end
+      metrics << MaintenanceStats::Stats::Github::DBIssueStats.new(repository.issues).get_stats if exists
 
       add_metrics_to_repo(metrics)
 

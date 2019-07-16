@@ -8,11 +8,13 @@ module MaintenanceStats
         end
 
         def get_stats
-          last_week_releases = @results.data.repository.releases.nodes.select {|release| release.published_at > @now - 7}.count
-          last_month_releases = @results.data.repository.releases.nodes.select {|release| release.published_at > @now - 30}.count
-          last_two_month_releases = @results.data.repository.releases.nodes.select {|release| release.published_at > @now - 60}.count
-          last_year_releases = @results.data.repository.releases.nodes.select {|release| release.published_at > @now - 365}.count
-          {
+          return {} if @results.nil?
+          
+          last_week_releases = @results.select {|release| DateTime.parse(release.published_at) > @now - 1.week}.count
+          last_month_releases = @results.select {|release| DateTime.parse(release.published_at) > @now - 1.month}.count
+          last_two_month_releases = @results.select {|release| DateTime.parse(release.published_at) > @now - 2.months}.count
+          last_year_releases = @results.select {|release| DateTime.parse(release.published_at) > @now - 1.year}.count
+          stats = {
             last_release_date: last_release_date,
             last_week_releases: last_week_releases,
             last_month_releases: last_month_releases,
@@ -24,7 +26,7 @@ module MaintenanceStats
         private
 
         def last_release_date
-          @results.data.repository.releases.nodes.first&.published_at 
+          @results&.map { |node| DateTime.parse(node.published_at) }.first&.strftime('%FT%TZ')
         end
       end
     end

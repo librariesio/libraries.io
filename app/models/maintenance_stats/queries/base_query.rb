@@ -5,8 +5,8 @@ module MaintenanceStats
             # store the graphql queries in that class
             # query method that takes in hash for parameters and returns resultset
 
-            @@valid_params = []
-            @@required_params = []
+            VALID_PARAMS = []
+            REQUIRED_PARAMS = []
 
             def initialize(client)
                 @client = client
@@ -23,12 +23,12 @@ module MaintenanceStats
             end
 
             def validate_params(params)
-                @@required_params.each do |key|
+                REQUIRED_PARAMS.each do |key|
                     return false unless params.include? key
                 end
 
                 params.each do |key, _|
-                    return false unless @@valid_params.include? key
+                    return false unless VALID_PARAMS.include? key
                 end
                 true
             end
