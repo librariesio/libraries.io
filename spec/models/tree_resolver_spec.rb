@@ -18,7 +18,7 @@ RSpec.describe TreeResolver do
 
       expect(subject.tree.as_json).to eq(expected_tree.deep_stringify_keys)
       expect(subject.project_names).to eq([])
-      expect(subject.license_names).to eq([["MIT"]])
+      expect(subject.license_names).to eq(["MIT"])
     end
   end
 
@@ -91,7 +91,7 @@ RSpec.describe TreeResolver do
 
       expect(subject.tree.as_json).to eq(expected_tree.deep_stringify_keys)
       expect(subject.project_names).to match_array(["one", "two", "three", "four"])
-      expect(subject.license_names).to eq([["MIT"], ["MIT"], ["MIT"], ["MIT"], ["MIT"]])
+      expect(subject.license_names).to eq(["MIT"])
     end
   end
 
@@ -135,7 +135,7 @@ RSpec.describe TreeResolver do
 
       expect(terminal_dependency).to eq(expected_terminal_dependency.deep_stringify_keys)
       expect(subject.project_names).to match_array(projects[0..max_depth].map { |p| p[:project].name })
-      expect(subject.license_names).to eq([["MIT"]] * (max_depth + 1)) # includes root
+      expect(subject.license_names).to eq(["MIT"])
     end
   end
 end
