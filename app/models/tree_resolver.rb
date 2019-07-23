@@ -1,5 +1,5 @@
 class TreeResolver
-  MAX_TREE_DEPTH = 10
+  MAX_TREE_DEPTH = 15
 
   def initialize(version, kind, date = nil)
     @version = version
@@ -57,7 +57,7 @@ class TreeResolver
     append_license_names(version)
     should_fetch = append_project_name(dependency)
 
-    return ["MORE"] if index > MAX_TREE_DEPTH
+    return if index > MAX_TREE_DEPTH
 
     dependencies = should_fetch ? fetch_dependencies(version, kind) : []
 
@@ -66,14 +66,9 @@ class TreeResolver
       requirements: dependency&.requirements,
       dependency: dependency,
       normalized_licenses: version.project.normalized_licenses,
-      dependencies: dependencies.map do |dep|
-        load_dependencies_for(
-          dep.latest_resolvable_version(@date),
-          dep,
-          "runtime",
-          index + 1
-        )
-      end
+      dependencies: dependencies
+        .map { |dep| load_dependencies_for(dep.latest_resolvable_version(@date), dep, "runtime", index + 1) }
+        .compact,
     }
   end
 

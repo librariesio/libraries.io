@@ -97,9 +97,6 @@ RSpec.describe TreeResolver do
 
   context "with a max-depth tree" do
     it "produces the truncated tree" do
-      max_depth = 10
-      num_projects = max_depth + 2
-
       #    root
       #       \
       #        1
@@ -107,7 +104,7 @@ RSpec.describe TreeResolver do
       #          2
       #          ...
       previous_version = root_version
-      projects = (1..num_projects).map do |i|
+      projects = (1..described_class::MAX_TREE_DEPTH + 2).map do |i|
         project = create(:project, name: i)
         version = create(:version, project: project)
         dependency = create(:dependency, version: previous_version, project: project, project_name: project.name, requirements: "> 0")
@@ -121,20 +118,20 @@ RSpec.describe TreeResolver do
       end
 
       expected_terminal_dependency = {
-        version: projects[max_depth - 1][:version].as_json,
-        dependency: projects[max_depth - 1][:dependency].as_json,
+        version: projects[described_class::MAX_TREE_DEPTH - 1][:version].as_json,
+        dependency: projects[described_class::MAX_TREE_DEPTH - 1][:dependency].as_json,
         requirements: "> 0",
         normalized_licenses: ["MIT"],
-        dependencies: [["MORE"]],
+        dependencies: [],
       }
 
       terminal_dependency = subject
         .tree
         .as_json
-        .dig(*["dependencies", 0] * max_depth)
+        .dig(*["dependencies", 0] * described_class::MAX_TREE_DEPTH)
 
       expect(terminal_dependency).to eq(expected_terminal_dependency.deep_stringify_keys)
-      expect(subject.project_names).to match_array(projects[0..max_depth].map { |p| p[:project].name })
+      expect(subject.project_names).to match_array(projects[0..described_class::MAX_TREE_DEPTH].map { |p| p[:project].name })
       expect(subject.license_names).to eq(["MIT"])
     end
   end
