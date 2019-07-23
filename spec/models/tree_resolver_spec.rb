@@ -9,14 +9,14 @@ RSpec.describe TreeResolver do
   context "with a single node tree" do
     it "produces the expected tree" do
       expected_tree = {
-        version: root_version.as_json,
+        version: root_version,
         dependency: nil,
         requirements: nil,
         normalized_licenses: ["MIT"],
         dependencies: [],
       }
 
-      expect(subject.tree.as_json).to eq(expected_tree.deep_stringify_keys)
+      expect(JSON.parse(subject.tree.to_json)).to eq(JSON.parse(expected_tree.to_json))
       expect(subject.project_names).to eq([])
       expect(subject.license_names).to eq(["MIT"])
     end
@@ -44,20 +44,20 @@ RSpec.describe TreeResolver do
       deep_one_dependency = create(:dependency, version: two_version, project: one, project_name: one.name, requirements: "> 0")
 
       expected_tree = {
-        version: root_version.as_json,
+        version: root_version,
         dependency: nil,
         requirements: nil,
         normalized_licenses: ["MIT"],
         dependencies: [
           {
-            version: one_version.as_json,
-            dependency: one_dependency.as_json,
+            version: one_version,
+            dependency: one_dependency,
             requirements: "> 0",
             normalized_licenses: ["MIT"],
             dependencies: [
               {
-                version: three_version.as_json,
-                dependency: three_dependency.as_json,
+                version: three_version,
+                dependency: three_dependency,
                 requirements: "> 0",
                 normalized_licenses: ["MIT"],
                 dependencies: [],
@@ -65,21 +65,21 @@ RSpec.describe TreeResolver do
             ],
           },
           {
-            version: two_version.as_json,
-            dependency: two_dependency.as_json,
+            version: two_version,
+            dependency: two_dependency,
             requirements: "> 0",
             normalized_licenses: ["MIT"],
             dependencies: [
               {
-                version: four_version.as_json,
-                dependency: four_dependency.as_json,
+                version: four_version,
+                dependency: four_dependency,
                 requirements: "> 0",
                 normalized_licenses: ["MIT"],
                 dependencies: [],
               },
               {
-                version: one_version.as_json,
-                dependency: deep_one_dependency.as_json,
+                version: one_version,
+                dependency: deep_one_dependency,
                 requirements: "> 0",
                 normalized_licenses: ["MIT"],
                 dependencies: [], # Dependencies truncated since this dependency already appears above
@@ -89,7 +89,7 @@ RSpec.describe TreeResolver do
         ],
       }
 
-      expect(subject.tree.as_json).to eq(expected_tree.deep_stringify_keys)
+      expect(JSON.parse(subject.tree.to_json)).to eq(JSON.parse(expected_tree.to_json))
       expect(subject.project_names).to match_array(["one", "two", "three", "four"])
       expect(subject.license_names).to eq(["MIT"])
     end
@@ -118,19 +118,18 @@ RSpec.describe TreeResolver do
       end
 
       expected_terminal_dependency = {
-        version: projects[described_class::MAX_TREE_DEPTH - 1][:version].as_json,
-        dependency: projects[described_class::MAX_TREE_DEPTH - 1][:dependency].as_json,
+        version: projects[described_class::MAX_TREE_DEPTH - 1][:version],
+        dependency: projects[described_class::MAX_TREE_DEPTH - 1][:dependency],
         requirements: "> 0",
         normalized_licenses: ["MIT"],
         dependencies: [],
       }
 
-      terminal_dependency = subject
-        .tree
-        .as_json
+      terminal_dependency = JSON
+        .parse(subject.tree.to_json)
         .dig(*["dependencies", 0] * described_class::MAX_TREE_DEPTH)
 
-      expect(terminal_dependency).to eq(expected_terminal_dependency.deep_stringify_keys)
+      expect(terminal_dependency).to eq(JSON.parse(expected_terminal_dependency.to_json))
       expect(subject.project_names).to match_array(projects[0..described_class::MAX_TREE_DEPTH].map { |p| p[:project].name })
       expect(subject.license_names).to eq(["MIT"])
     end
