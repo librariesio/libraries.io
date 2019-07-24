@@ -1,15 +1,12 @@
 class TreeResolver
-  attr_accessor :project_names
-  attr_accessor :license_names
-  attr_accessor :tree
+  MAX_TREE_DEPTH = 15
 
   def initialize(version, kind, date = nil)
     @version = version
     @kind = kind
-    @project_names = []
-    @license_names = []
-    @tree = nil
     @date = date
+    @project_names = Set.new
+    @license_names = Set.new
   end
 
   def cached?
@@ -25,53 +22,82 @@ class TreeResolver
   end
 
   def load_dependencies_tree
-    tree_data = Rails.cache.fetch cache_key, :expires_in => 1.day, race_condition_ttl: 2.minutes do
-      generate_dependency_tree
-    end
+    tree_data = Rails.cache.fetch(
+      cache_key,
+      expires_in: 1.day,
+      race_condition_ttl: 2.minutes,
+      &method(:generate_dependency_tree)
+    )
     @project_names = tree_data[:project_names]
     @license_names = tree_data[:license_names]
     @tree = tree_data[:tree]
   end
 
+  def project_names
+    @project_names.to_a
+  end
+
+  def license_names
+    @license_names.to_a
+  end
+
   private
 
-  def generate_dependency_tree
+  def generate_dependency_tree(_key)
     {
       tree: load_dependencies_for(@version, nil, @kind, 0),
-      project_names: project_names,
-      license_names: license_names
+      project_names: @project_names,
+      license_names: @license_names,
     }
   end
 
   def load_dependencies_for(version, dependency, kind, index)
-    if version
-      @license_names << version.project.try(:normalized_licenses)
-      kind = index.zero? ? kind : 'runtime'
-      dependencies = version.dependencies.kind(kind).includes(project: :versions).limit(100).order(:project_name)
-      {
-        version: version,
-        dependency: dependency,
-        requirements: dependency.try(:requirements),
-        normalized_licenses: version.project.try(:normalized_licenses),
-        dependencies: dependencies.map do |dep|
-          if dep.project && !@project_names.include?(dep.project_name)
-            @project_names << dep.project_name
-            index < 10 ? load_dependencies_for(dep.latest_resolvable_version(@date), dep, kind, index + 1) : ['MORE']
-          else
-            {
-              version: dep.latest_resolvable_version(@date),
-              requirements: dep.try(:requirements),
-              dependency: dep,
-              normalized_licenses: dep.project.try(:normalized_licenses),
-              dependencies: []
-            }
-          end
-        end
-      }
+    return unless version
+
+    append_license_names(version)
+    should_fetch = append_project_name(dependency)
+
+    if index > MAX_TREE_DEPTH
+      Rails.logger.info("Max tree depth #{MAX_TREE_DEPTH} reached when loading dependencies for #{version.project.platform}/#{version.project.name} for parent #{@version.project.platform}/#{@version.project.name}")
+
+      return
     end
+
+    dependencies = should_fetch ? fetch_dependencies(version, kind) : []
+
+    {
+      version: version,
+      requirements: dependency&.requirements,
+      dependency: dependency,
+      normalized_licenses: version.project.normalized_licenses,
+      dependencies: dependencies
+        .map { |dep| load_dependencies_for(dep.latest_resolvable_version(@date), dep, "runtime", index + 1) }
+        .compact,
+    }
   end
 
   def cache_key
-    ['tree', @version, @kind, @date].compact
+    ["tree", @version, @kind, @date].compact
+  end
+
+  def append_project_name(dependency)
+    return true unless dependency
+    @project_names.add?(dependency.project_name).present?
+  end
+
+  def append_license_names(version)
+    version
+      .project
+      .normalized_licenses
+      .each(&@license_names.method(:add))
+  end
+
+  def fetch_dependencies(version, kind)
+    version
+      .dependencies
+      .kind(kind)
+      .includes(project: :versions)
+      .limit(100)
+      .order(:project_name)
   end
 end
