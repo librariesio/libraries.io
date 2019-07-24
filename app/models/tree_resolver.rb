@@ -57,7 +57,11 @@ class TreeResolver
     append_license_names(version)
     should_fetch = append_project_name(dependency)
 
-    return if index > MAX_TREE_DEPTH
+    if index > MAX_TREE_DEPTH
+      Rails.logger.info("Max tree depth #{MAX_TREE_DEPTH} reached when loading dependencies for #{version.project.platform}/#{version.project.name} for parent #{@version.project.platform}/#{@version.project.name}")
+
+      return
+    end
 
     dependencies = should_fetch ? fetch_dependencies(version, kind) : []
 
