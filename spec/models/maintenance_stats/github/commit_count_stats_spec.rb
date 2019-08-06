@@ -17,17 +17,16 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
         end
     end
 
-    it "should get timed commit count stats from the results", focus: true do
+    it "should get timed commit count stats from the results" do
         results = stat.get_stats
 
-        expected_keys = %i(last_year_commits)
-        # expected_keys = [:last_week_commits, :last_month_commits, :last_two_month_commits, :last_year_commits]
+        expected_keys = [:last_week_commits, :last_month_commits, :last_two_month_commits, :last_year_commits]
 
         expect(results.keys).to eql expected_keys
 
         # check values against the VCR cassette data
         
-        expect(results[:last_year_commits]).to eql 52
+        expect(results[:last_year_commits]).to eql 59
     end
   end
 
@@ -42,7 +41,7 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
     it "should handle no data from query" do
         results = stat.get_stats
 
-        expected_keys = %i(last_year_commits)
+        expected_keys = [:last_week_commits, :last_month_commits, :last_two_month_commits, :last_year_commits]
 
         expect(results.keys).to eql expected_keys
 
@@ -78,8 +77,8 @@ describe MaintenanceStats::Stats::Github::V3CommitsStat do
             # check values against the VCR cassette data
             expect(results[:v3_last_week_commits]).to eql 0
             expect(results[:v3_last_4_weeks_commits]).to eql 1
-            expect(results[:v3_last_8_weeks_commits]).to eql 2
-            expect(results[:v3_last_52_weeks_commits]).to eql 31
+            expect(results[:v3_last_8_weeks_commits]).to eql 6
+            expect(results[:v3_last_52_weeks_commits]).to eql 37
         end
     end
 

@@ -1127,4 +1127,164 @@ http_interactions:
       string: '{"all":[],"owner":[]}'
     http_version: 
   recorded_at: Tue, 09 Jul 2019 17:52:36 GMT
+- request:
+    method: post
+    uri: https://api.github.com/graphql
+    body:
+      encoding: UTF-8
+      string: '{"query":"query MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY($owner:
+        String!, $name: String!, $one_week: GitTimestamp!, $one_month: GitTimestamp!,
+        $two_months: GitTimestamp!, $one_year: GitTimestamp!) {\n  repository(owner:
+        $owner, name: $name) {\n    defaultBranchRef {\n      target {\n        __typename\n        ...
+        on Commit {\n          lastWeek: history(since: $one_week) {\n            totalCount\n          }\n          lastMonth:
+        history(since: $one_month) {\n            totalCount\n          }\n          lastTwoMonths:
+        history(since: $two_months) {\n            totalCount\n          }\n          lastYear:
+        history(since: $one_year) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"one_week":"2018-12-07T17:49:49+00:00","one_month":"2018-11-14T17:49:49+00:00","two_months":"2018-10-14T17:49:49+00:00","one_year":"2017-12-14T17:49:49+00:00","owner":"buddhamagnet","name":"heidigoodchild"},"operationName":"MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - application/json
+      User-Agent:
+      - Ruby
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer test_token
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 06 Aug 2019 15:12:56 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      Cache-Control:
+      - no-cache
+      X-Oauth-Scopes:
+      - notifications, read:discussion, read:gpg_key, repo, user
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Github-Media-Type:
+      - github.v4
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4998'
+      X-Ratelimit-Reset:
+      - '1565107976'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - D279:7F4D:19DA0A5:3DBF5C3:5D4998F8
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"repository":{"defaultBranchRef":null}}}'
+    http_version: 
+  recorded_at: Tue, 06 Aug 2019 15:12:56 GMT
+- request:
+    method: post
+    uri: https://api.github.com/graphql
+    body:
+      encoding: UTF-8
+      string: '{"query":"query MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY($owner:
+        String!, $name: String!, $one_week: GitTimestamp!, $one_month: GitTimestamp!,
+        $two_months: GitTimestamp!, $one_year: GitTimestamp!) {\n  repository(owner:
+        $owner, name: $name) {\n    defaultBranchRef {\n      target {\n        __typename\n        ...
+        on Commit {\n          lastWeek: history(since: $one_week) {\n            totalCount\n          }\n          lastMonth:
+        history(since: $one_month) {\n            totalCount\n          }\n          lastTwoMonths:
+        history(since: $two_months) {\n            totalCount\n          }\n          lastYear:
+        history(since: $one_year) {\n            totalCount\n          }\n        }\n      }\n      name\n    }\n  }\n}","variables":{"one_week":"2018-12-07T17:49:49+00:00","one_month":"2018-11-14T17:49:49+00:00","two_months":"2018-10-14T17:49:49+00:00","one_year":"2017-12-14T17:49:49+00:00","owner":"buddhamagnet"},"operationName":"MaintenanceStats__Queries__Github__CommitCountQuery__COMMIT_COUNTS_QUERY"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - application/json
+      User-Agent:
+      - Ruby
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer test_token
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 06 Aug 2019 15:14:31 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - GitHub.com
+      Status:
+      - 200 OK
+      Cache-Control:
+      - no-cache
+      X-Oauth-Scopes:
+      - notifications, read:discussion, read:gpg_key, repo, user
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Github-Media-Type:
+      - github.v4
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4996'
+      X-Ratelimit-Reset:
+      - '1565107976'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Vary:
+      - Accept-Encoding
+      X-Github-Request-Id:
+      - 1B73:2243:47508:648FA:5D499956
+    body:
+      encoding: ASCII-8BIT
+      string: '{"errors":[{"extensions":{"value":null,"problems":[{"path":[],"explanation":"Expected
+        value to not be null"}]},"locations":[{"line":1,"column":97}],"message":"Variable
+        name of type String! was provided invalid value"}]}'
+    http_version: 
+  recorded_at: Tue, 06 Aug 2019 15:14:31 GMT
 recorded_with: VCR 4.0.0

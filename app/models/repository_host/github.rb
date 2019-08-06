@@ -270,8 +270,8 @@ module RepositoryHost
 
     def check_for_v4_error_response(response)
       # errors can be stored in the response from Github or can be stored in the response object from HTTP errors
-      response.errors.each(&Rails.logger.method(:warn))
-      response.data.errors.messages.each(&Rails.logger.method(:warn)) if response.data.errors.present?
+      response.errors.messages.each(&Rails.logger.method(:warn)) if response.errors.present?
+      response.data.errors.messages.each(&Rails.logger.method(:warn)) if response.data&.errors.present?
       # if we have either type of error or there is no data return true
       return response.data.nil? || response.errors.any? || response.data.errors.any?
     end
