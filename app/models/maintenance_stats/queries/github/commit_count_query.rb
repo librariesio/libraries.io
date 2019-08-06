@@ -25,7 +25,7 @@ module MaintenanceStats
                 name
               }
             }
-          }        
+          }
         GRAPHQL
 
         VALID_PARAMS = [:owner, :name, :start_date]
