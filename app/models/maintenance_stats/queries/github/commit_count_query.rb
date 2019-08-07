@@ -39,12 +39,13 @@ module MaintenanceStats
           validate_params(params)
 
           # generate the four dates needed
-          date_params = Hash.new { |k,v| k[v] = v.iso8601 }
           start_date = params[:start_date]
-          date_params[:one_week] = start_date - 1.week
-          date_params[:one_month] = start_date - 1.month
-          date_params[:two_months] = start_date - 2.months
-          date_params[:one_year] = start_date - 1.year
+          date_params = {
+            one_week: (start_date - 1.week).iso8601,
+            one_month: (start_date - 1.month).iso8601,
+            two_months: (start_date - 2.months).iso8601,
+            one_year: (start_date - 1.year).iso8601,
+          }
 
           # merge params for query
           date_params.merge!(params.slice(:owner, :name))
