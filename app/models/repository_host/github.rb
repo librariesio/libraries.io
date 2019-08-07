@@ -245,17 +245,8 @@ module RepositoryHost
       result = MaintenanceStats::Queries::Github::RepoReleasesQuery.new(v4_client).query( params: {owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 1.year} )
       metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).get_stats
 
-      result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.week).iso8601} )
-      metrics << MaintenanceStats::Stats::Github::LastWeekCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
-
-      result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.month).iso8601} )
-      metrics << MaintenanceStats::Stats::Github::LastMonthCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
-
-      result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 2.months).iso8601} )
-      metrics << MaintenanceStats::Stats::Github::LastTwoMonthCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
-
-      result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: (now - 1.year).iso8601} )
-      metrics << MaintenanceStats::Stats::Github::LastYearCommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
+      result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: now} )
+      metrics << MaintenanceStats::Stats::Github::CommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
 
       begin
         result = MaintenanceStats::Queries::Github::RepositoryContributorStatsQuery.new(v3_client).query(params: {full_name: repository.full_name})
@@ -279,8 +270,8 @@ module RepositoryHost
 
     def check_for_v4_error_response(response)
       # errors can be stored in the response from Github or can be stored in the response object from HTTP errors
-      response.errors.each(&Rails.logger.method(:warn))
-      response.data.errors.messages.each(&Rails.logger.method(:warn)) if response.data.errors.present?
+      response.errors.messages.each(&Rails.logger.method(:warn)) if response.errors.present?
+      response.data.errors.messages.each(&Rails.logger.method(:warn)) if response.data&.errors.present?
       # if we have either type of error or there is no data return true
       return response.data.nil? || response.errors.any? || response.data.errors.any?
     end

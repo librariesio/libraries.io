@@ -22,7 +22,7 @@ module MaintenanceStats
           # this assumes the latest week is the last item in the weeks array for this contributor
           # count up the weeks counting backwards from the end of the array
           # return true if there is a commit in any of those weeks
-          contributor.weeks[-1*weeks_ago..contributor.weeks.length].sum(&:c) > 0
+          contributor.weeks[-1*weeks_ago..-1].sum(&:c) > 0
         end
       end
     end
