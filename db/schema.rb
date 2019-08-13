@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_04_170619) do
+ActiveRecord::Schema.define(version: 2019_08_13_152301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -263,11 +263,12 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
   end
 
   create_table "repository_maintenance_stats", force: :cascade do |t|
-    t.bigint   "repository_id", :index=>{:name=>"index_repository_maintenance_stats_on_repository_id", :order=>{:repository_id=>:asc}}
-    t.string   "category"
-    t.string   "value"
-    t.datetime "created_at",    :null=>false
-    t.datetime "updated_at",    :null=>false
+    t.bigint "repository_id"
+    t.string "category"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["repository_id"], name: "index_repository_maintenance_stats_on_repository_id"
   end
 
   create_table "repository_organisations", id: :serial, force: :cascade do |t|
@@ -366,6 +367,7 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
     t.boolean "emails_enabled", default: true
     t.boolean "optin", default: false
     t.datetime "last_login_at"
+    t.boolean "is_admin", default: false, null: false
     t.index ["created_at"], name: "index_users_on_created_at"
   end
 
@@ -391,7 +393,7 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
   end
 
 
-  create_view "project_dependent_repositories", materialized: true,  sql_definition: <<-SQL
+  create_view "project_dependent_repositories", materialized: true, sql_definition: <<-SQL
       SELECT t1.project_id,
       t1.id AS repository_id,
       t1.rank,
@@ -406,7 +408,6 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
             GROUP BY repositories.id, repository_dependencies.project_id) t1
        JOIN projects ON ((t1.project_id = projects.id)));
   SQL
-
   add_index "project_dependent_repositories", ["project_id", "rank", "stargazers_count"], name: "index_project_dependent_repos_on_rank", order: { rank: "DESC NULLS LAST", stargazers_count: :desc }
   add_index "project_dependent_repositories", ["project_id", "repository_id"], name: "index_project_dependent_repos_on_proj_id_and_repo_id", unique: true
 
