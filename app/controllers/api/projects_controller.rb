@@ -74,7 +74,7 @@ class Api::ProjectsController < Api::ApplicationController
                 raise ActionController::BadRequest.new("Unsupported subset")
               end
 
-    project = Project.find_with_includes!(platform, name, includes)
+    project = Project.find_best!(platform, name, includes)
     version = project.find_version!(version_name)
 
     project_json = serializer.new(project).as_json
