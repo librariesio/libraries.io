@@ -50,9 +50,9 @@ module PackageManager
     end
 
     # https://golang.org/cmd/go/#hdr-Import_path_syntax
-    def self.resolved_name(name)
-      return name if name.start_with?(*KNOWN_HOSTS)
-      return name if KNOWN_VCS.any?(&name.method(:include?))
+    def self.project_find_names(name)
+      return [name] if name.start_with?(*KNOWN_HOSTS)
+      return [name] if KNOWN_VCS.any?(&name.method(:include?))
 
       go_import = get_html('https://' + name + '?go-get=1')
         .xpath('//meta[@name="go-import"]')
@@ -63,7 +63,7 @@ module PackageManager
         &.last
         &.sub(/https?:\/\//, "")
 
-      go_import&.start_with?(*KNOWN_HOSTS) ? go_import : name
+      go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
     end
   end
 end

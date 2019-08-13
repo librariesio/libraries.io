@@ -255,9 +255,9 @@ describe "Api::ProjectsController" do
     context "that redirects to a known project" do
       it "redirects" do
         allow(PackageManager::Go)
-          .to receive(:resolved_name)
+          .to receive(:project_find_names)
           .with("unknown/project")
-          .and_return(project.name)
+          .and_return([project.name])
 
         get "/api/go/unknown%2Fproject/contributors"
         expect(response).to redirect_to("/api/go/known%2Fproject/contributors")
@@ -267,9 +267,9 @@ describe "Api::ProjectsController" do
     context "that redirects to an unknown project" do
       it "redirects" do
         allow(PackageManager::Go)
-          .to receive(:resolved_name)
+          .to receive(:project_find_names)
           .with("unknown/project")
-          .and_return("other/unknown/project")
+          .and_return(["other/unknown/project"])
 
         expect { get "/api/go/unknown%2Fproject/contributors" }
           .to raise_exception(ActiveRecord::RecordNotFound)
@@ -279,9 +279,9 @@ describe "Api::ProjectsController" do
     context "that does not redirect" do
       it "returns not found" do
         allow(PackageManager::Go)
-          .to receive(:resolved_name)
+          .to receive(:project_find_names)
           .with("unknown/project")
-          .and_return("unknown/project")
+          .and_return(["unknown/project"])
 
         expect { get "/api/go/unknown%2Fproject/contributors" }
           .to raise_exception(ActiveRecord::RecordNotFound)
