@@ -36,8 +36,6 @@ class User < ApplicationRecord
 
   after_commit :update_repo_permissions_async, :download_self, :create_api_key, on: :create
 
-  ADMIN_USERS = ['havocp', 'katzj', 'brennaheaps', 'kszu', 'mellisio', 'mikeyoung85', 'phated', 'kbarrette']
-
   validates_presence_of :email, :on => :update
   validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
 
@@ -84,7 +82,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    github_enabled? && ADMIN_USERS.include?(nickname)
+    github_enabled? && is_admin?
   end
 
   def create_api_key
