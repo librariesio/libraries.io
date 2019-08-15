@@ -54,22 +54,47 @@ describe "API::StatusController" do
 
     it "contains all expected fields" do
       # all the fields we expect to come back in the response for a project
-      expected_fields = [
-        "name", "platform", "description", "homepage", "repository_url", "normalized_licenses",
-        "rank", "latest_release_published_at", "latest_release_number", "dependents_count",
-        "language", "status", "dependent_repos_count", "score", "latest_stable_release_number",
-        "latest_stable_release_published_at", "package_manager_url", "stars", "forks",
-        "keywords", "latest_download_url", "versions", "repository_maintenance_stats"
+      expected_fields = %w[
+        canonical_name
+        dependent_repos_count
+        dependents_count
+        description
+        forks
+        homepage
+        keywords
+        language
+        latest_download_url
+        latest_release_number
+        latest_release_published_at
+        latest_stable_release_number
+        latest_stable_release_published_at
+        name
+        normalized_licenses
+        package_manager_url
+        platform
+        rank
+        repository_maintenance_stats
+        repository_url
+        score
+        stars
+        status
+        versions
       ]
 
-      post "/api/check", params: {api_key: internal_user.api_key, projects: [{name: project_django.name, platform: project_django.platform}], score: true }
+      post(
+        "/api/check",
+        params: {
+          api_key: internal_user.api_key,
+          projects: [{ name: project_django.name, platform: project_django.platform }],
+          score: true
+        }
+      )
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq('application/json')
+      expect(response.content_type).to eq("application/json")
 
-      json_response = JSON.parse(response.body)
-      project = json_response.first
+      project = JSON.parse(response.body).first
       expected_fields.each do |field|
-        expect(project.key? field).to be true
+        expect(project).to have_key(field)
       end
     end
 
@@ -112,6 +137,7 @@ describe "API::StatusController" do
 
       expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body).dig(0, "name")).to eq(requested_name)
+      expect(JSON.parse(response.body).dig(0, "canonical_name")).to eq(project.name)
     end
 
     context "with normal API key" do
