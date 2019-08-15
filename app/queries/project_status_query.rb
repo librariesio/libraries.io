@@ -5,48 +5,42 @@ class ProjectStatusQuery
   end
 
   def projects_by_name
-    projects.merge(missing_projects)
+    exact_projects.merge(missing_projects)
   end
 
   private
 
-  def projects
-    @projects ||= fetch_projects(
-      @requested_project_names,
-      &platform_class.method(:project_find_names)
-    )
+  def exact_projects
+    @exact_projects ||= Project
+      .visible
+      .platform(@platform)
+      .where(name: @requested_project_names)
+      .includes(:repository, :versions, :repository_maintenance_stats)
+      .find_each
+      .index_by(&:name)
   end
 
   def missing_projects
-    return {} unless @platform.downcase == "go"
-
-    fetch_projects(
-      @requested_project_names.reject(&projects.method(:key?)),
-      &PackageManager::Go.method(:resolved_name)
-    )
-  end
-
-  def fetch_projects(requested_project_names, &resolver)
-    resolved_project_names = requested_project_names
-      .map { |requested_name| resolve_project_names(requested_name, &resolver) }
-      .reduce({}, :merge)
-
-    Project
+    @missing_projects ||= Project
       .visible
-      .where(
-        "lower(platform)=? AND lower(name) in (?)",
-        @platform.downcase,
-        resolved_project_names.keys
-      )
+      .lower_platform(@platform)
+      .where("lower(name) in (?)", project_find_names.keys)
       .includes(:repository, :versions, :repository_maintenance_stats)
       .find_each
-      .index_by { |project| resolved_project_names[project.name.downcase] }
+      .index_by { |project| project_find_names[project.name.downcase] }
   end
 
-  def resolve_project_names(requested_name)
-    Array(yield(requested_name))
-      .map { |resolved_name| [resolved_name.downcase, requested_name] }
-      .to_h
+  def missing_project_names
+    @missing_project_names ||= @requested_project_names - exact_projects.keys
+  end
+
+  def project_find_names
+    @project_find_names ||= missing_project_names
+      .each_with_object({}) do |requested_name, hash|
+        platform_class
+          .project_find_names(requested_name)
+          .each { |find_name| hash[find_name.downcase] = requested_name }
+    end
   end
 
   def platform_class

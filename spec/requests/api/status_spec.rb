@@ -95,9 +95,9 @@ describe "API::StatusController" do
       project = create(:project, platform: "Go", name: "known/project")
       requested_name = "unknown/project"
       allow(PackageManager::Go)
-        .to receive(:resolved_name)
+        .to receive(:project_find_names)
         .with(requested_name)
-        .and_return(project.name)
+        .and_return([project.name])
 
       post(
         "/api/check",

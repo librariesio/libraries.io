@@ -14,13 +14,13 @@ describe ProjectStatusQuery do
       project = create(:project, platform: "Go", name: "known/project")
 
       allow(PackageManager::Go)
-        .to receive(:resolved_name)
+        .to receive(:project_find_names)
         .with("unknown/project")
-        .and_return("known/project")
+        .and_return(["known/project"])
       allow(PackageManager::Go)
-        .to receive(:resolved_name)
+        .to receive(:project_find_names)
         .with("second/unknown/project")
-        .and_return("other/unknown/project")
+        .and_return(["other/unknown/project"])
 
       instance = described_class.new("Go", ["unknown/project", "second/unknown/project"])
 
