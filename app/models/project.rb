@@ -345,6 +345,48 @@ class Project < ApplicationRecord
     Spdx.find(license).try(:id) || license
   end
 
+  def self.find_best(*args)
+    find_best!(*args)
+  rescue ActiveRecord::RecordNotFound
+    nil
+  end
+
+  def self.find_best!(platform, name, includes=[])
+    find_exact(platform, name, includes) ||
+      find_lower(platform, name, includes) ||
+      find_with_package_manager!(platform, name, includes)
+  end
+
+  private_class_method def self.find_exact(platform, name, includes=[])
+    visible
+      .platform(platform)
+      .where(name: name)
+      .includes(includes.present? ? includes : nil)
+      .first
+  end
+
+  private_class_method def self.find_lower(platform, name, includes=[])
+    visible
+      .lower_platform(platform)
+      .lower_name(name)
+      .includes(includes.present? ? includes : nil)
+      .first
+  end
+
+  private_class_method def self.find_with_package_manager!(platform, name, includes=[])
+    platform_class = PackageManager::Base.find(platform)
+    raise ActiveRecord::RecordNotFound if platform_class.nil?
+    names = platform_class
+      .project_find_names(name)
+      .map(&:downcase)
+
+    visible
+      .lower_platform(platform)
+      .where("lower(projects.name) in (?)", names)
+      .includes(includes.present? ? includes : nil)
+      .first!
+  end
+
   def normalize_licenses
     if licenses.blank?
       normalized = []
@@ -511,32 +553,6 @@ class Project < ApplicationRecord
     removed_owners.each do |owner|
       registry_permissions.find{|rp| rp.registry_user == owner}.destroy
     end
-  end
-
-  def self.find_with_includes!(platform, name, includes)
-    # this clunkiness is because .includes() doesn't allow zero args and we want
-    # to allow that.
-    
-    platform_class = PackageManager::Base.find(platform)
-    raise ActiveRecord::RecordNotFound if platform_class.nil?
-    project_find_names = platform_class.project_find_names(name)
-    
-    query = self.visible.platform(platform).where(name: project_find_names)
-    query = query.includes(*includes) unless includes.empty?
-    project = query.first
-    if project.nil?
-      query = self.visible.lower_platform(platform).lower_name(name)
-      query = query.includes(*includes) unless includes.empty?
-      project = query.first
-    end
-    raise ActiveRecord::RecordNotFound if project.nil?
-    raise ActiveRecord::RecordNotFound if project.status == 'Hidden'
-    project
-  end
-
-  def self.known?(platform, name)
-    self.visible.platform(platform).where(name: name).exists? ||
-      self.visible.lower_platform(platform&.downcase).lower_name(name&.downcase).exists?
   end
 
   def find_version!(version_name)

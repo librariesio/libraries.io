@@ -166,8 +166,10 @@ module PackageManager
         next unless deps && deps.any? && version.dependencies.empty?
         deps.each do |dep|
           unless dep[:project_name].blank? || version.dependencies.find_by_project_name(dep[:project_name])
-            named_project_id = Project.platform(self.name.demodulize).where(name: dep[:project_name].strip).first.try(:id)
-            named_project_id = Project.lower_platform(self.name.demodulize).lower_name(dep[:project_name].strip).first.try(:id) if named_project_id.nil?
+
+            named_project_id = Project
+              .find_best(self.name.demodulize, dep[:project_name].strip)
+              &.id
             version.dependencies.create(dep.merge(project_id: named_project_id.try(:strip)))
           end
         end
@@ -220,7 +222,7 @@ module PackageManager
     end
 
     def self.project_find_names(project_name)
-      [project_name, project_name.downcase].uniq
+      [project_name]
     end
 
     private

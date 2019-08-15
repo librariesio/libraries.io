@@ -37,18 +37,18 @@ describe PackageManager::Go do
     end
   end
 
-  describe ".resolved_name(name)" do
+  describe ".project_find_names(name)" do
     context "for names from a a known host" do
       it "returns the name" do
-        expect(described_class.resolved_name("github.com/user/project"))
-          .to eq("github.com/user/project")
+        expect(described_class.project_find_names("github.com/user/project"))
+          .to eq(["github.com/user/project"])
       end
     end
 
     context "for names with a known vcs" do
       it "returns the name" do
-        expect(described_class.resolved_name("example.org/user/foo.hg"))
-          .to eq("example.org/user/foo.hg")
+        expect(described_class.project_find_names("example.org/user/foo.hg"))
+          .to eq(["example.org/user/foo.hg"])
       end
     end
 
@@ -74,8 +74,8 @@ describe PackageManager::Go do
             .with("https://go.uber.org/multierr?go-get=1")
             .and_return(Nokogiri::HTML(html))
 
-          expect(described_class.resolved_name("go.uber.org/multierr"))
-            .to eq("github.com/uber-go/multierr")
+          expect(described_class.project_find_names("go.uber.org/multierr"))
+            .to eq(["github.com/uber-go/multierr"])
         end
       end
 
@@ -86,8 +86,8 @@ describe PackageManager::Go do
             .with("https://go.example.org/user/foo?go-get=1")
             .and_return(Nokogiri::HTML("<html><body>Hello, world!</body></html>"))
 
-          expect(described_class.resolved_name("go.example.org/user/foo"))
-            .to eq("go.example.org/user/foo")
+          expect(described_class.project_find_names("go.example.org/user/foo"))
+            .to eq(["go.example.org/user/foo"])
         end
       end
     end

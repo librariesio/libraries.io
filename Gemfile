@@ -92,12 +92,12 @@ group :development do
   gem 'spring'
   gem 'sql_queries_count'
   gem 'brakeman', :require => false
-  gem 'pry'
   gem 'pry-rails'
   gem 'spring-watcher-listen'
 end
 
 group :development, :test do
+  gem 'pry'
   gem 'rspec-rails'
 end
 

@@ -132,9 +132,51 @@ describe Project, type: :model do
     it "should save the updated format URL" do
       project.update_attributes!(homepage: 'https://libraries.io', repository_url: 'scm:git:git://github.com/librariesio/libraries.io/libaries.io.git')
       project.reformat_repository_url
-      
+
       expect(project.homepage).to eql 'https://libraries.io'
       expect(project.repository_url).to eql 'https://github.com/librariesio/libraries.io'
+    end
+  end
+
+  describe ".find_best!(platform, name, includes=[])" do
+    context "with an exact match" do
+      it "returns the record" do
+        project = create(:project, name: "Django")
+        expect(Project.find_best!(project.platform, project.name))
+          .to eq(project)
+      end
+    end
+
+    context "with a case-insensitive match" do
+      it "returns the record" do
+        project = create(:project, name: "Django")
+        expect(Project.find_best!(project.platform, "django"))
+          .to eq(project)
+      end
+    end
+
+    context "with no match" do
+      it "raises an error" do
+        expect { Project.find_best!("unknown", "unknown") }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe ".find_best(platform, name, includes=[])" do
+    context "with a match" do
+      it "returns the record" do
+        project = create(:project, name: "Django")
+        expect(Project.find_best(project.platform, project.name))
+          .to eq(project)
+      end
+    end
+
+    context "with no match" do
+      it "returns nil" do
+        expect(Project.find_best("unknown", "unknown"))
+          .to be_nil
+      end
     end
   end
 end

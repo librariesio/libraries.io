@@ -1,6 +1,13 @@
 class ProjectStatusSerializer < ActiveModel::Serializer
   attributes Project::API_FIELDS
-  attributes :package_manager_url, :stars, :forks, :keywords, :latest_download_url
+  attributes %i[
+    canonical_name
+    forks
+    keywords
+    latest_download_url
+    package_manager_url
+    stars
+  ]
   attribute :score, if: :score?
 
   has_many :versions
@@ -16,5 +23,9 @@ class ProjectStatusSerializer < ActiveModel::Serializer
 
   def name
     instance_options[:project_names][object.name]
+  end
+
+  def canonical_name
+    object.name
   end
 end
