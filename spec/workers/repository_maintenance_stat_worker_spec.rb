@@ -42,4 +42,17 @@ describe RepositoryMaintenanceStatWorker do
       expect(Sidekiq::Queues["repo_maintenance_stat_low"].size).to eql 1
     end
   end
+
+  context "with unsupported repository host_type" do
+    let!(:repository) { create(:repository, host_type: 'gitlab') }
+
+    it "should gracefully not gather stats" do
+      # call directly
+      expect(repository.gather_maintenance_stats).to eql []
+
+      # call worker and fail on error
+      expect(Repository).to receive(:find).with(repository.id).and_return(repository)
+      subject.perform(repository.id)
+    end
+  end
 end
