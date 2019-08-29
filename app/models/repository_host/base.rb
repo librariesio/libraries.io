@@ -113,6 +113,11 @@ module RepositoryHost
       RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: :medium)
     end
 
+    def gather_maintenance_stats
+      # should be overwritten in individual repository_host class
+      []
+    end
+
     private
 
     attr_reader :repository
