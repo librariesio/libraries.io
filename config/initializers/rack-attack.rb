@@ -17,3 +17,6 @@ end
 Rack::Attack.throttle('scrapers', :limit => 30, :period => 5.minutes) do |req|
   req.remote_ip if req.user_agent && req.user_agent.match(/Scrapy.*/)
 end
+
+# block ips that are being bad actors and scraping
+Rack::Attack.blocklist_ip("182.150.22.233")
