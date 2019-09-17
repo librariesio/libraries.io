@@ -3,6 +3,7 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
+    URL = "https://anaconda.org"
 
     def self.project_names
       get_json("http://conda.libraries.io/packages")
