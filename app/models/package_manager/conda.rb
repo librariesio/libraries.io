@@ -13,7 +13,7 @@ module PackageManager
     end
 
     def self.project(name)
-      latest_version = get_json("http://conda.libraries.io/packages?name=#{name}")
+      latest_version = get_json("http://conda.libraries.io/package?name=#{name}")
       latest_version[:name] = name
 
       latest_version
