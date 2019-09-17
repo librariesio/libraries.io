@@ -1,34 +1,44 @@
-require 'uri'
-
 module PackageManager
   class Conda < Base
+    HAS_VERSIONS = true
+    HAS_DEPENDENCIES = true
+    BIBLIOTHECARY_SUPPORT = true
+
     def self.project_names
       get_json("http://conda.libraries.io/packages")
     end
 
-    def self.project(name)
-      chanel, name = urlize_channel_name(name)
-      latest_version = URI.escape(get_json("http://conda.libraries.io/packages/#{channel}/#{name}"))
-      latest_version_data = get_json("http://conda-parser.libraries.io/info/#{channel}/#{name}/#{latest_version}")
+    def self.package_link(project, _version = nil)
+      "https://anaconda.org/anaconda/#{project.name}"
+    end
 
-      latest_version_data
+    def self.project(name)
+      latest_version = get_json("http://conda.libraries.io/packages?name=#{name}")
+      latest_version[:name] = name
+
+      latest_version
     end
 
     def self.mapping(project)
       {
+        :name => project[:name],
+        :description => project["description"],
+        :homepage => project["home"],
+        :keywords_array => Array.wrap(project.fetch("keywords", [])),
+        :licenses => project["license"],
+        :repository_url => project["dev_url"],
+        :versions => [{ version: project["version"], timestamp: project["timestamp"] }]
       }
     end
 
-    private
+    def self.versions(project)
+      [{ number: project["version"], published_at: project["timestamp"] }]
+    end
 
-    def self.urlize_channel_name(name)
-      channel = name.rpartition('/').first
-      name = name.rpartition('/').last
-
-      [
-        URI.escape(URI.escape(channel)),
-        name
-      ]
+    def self.dependencies(name, version, project)
+      version_data = get_json("http://conda-parser.libraries.io/package?name=#{name}&version=#{version}")
+      deps = version_data["depends"].map { |d| d.split(" ") }
+      map_dependencies(deps, "runtime")
     end
   end
 end
