@@ -48,6 +48,10 @@ namespace :download do
     PackageManager::Clojars.import_recent
   end
 
+  task conda_all: :environment do
+    PackageManager::Conda.import_async
+  end
+
   desc 'Download all Puppet packages asynchronously'
   task puppet_all: :environment do
     PackageManager::Puppet.import_async
