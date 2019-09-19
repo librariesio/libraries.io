@@ -10,7 +10,6 @@ module PackageManager
     end
 
     def self.project_names
-      # TODO figure out how to support multiple channels from here
       get_json("http://conda.libraries.io/packages").flat_map{|name| name.split("/").last}
     end
 
@@ -23,10 +22,10 @@ module PackageManager
     end
 
     def self.project(name)
-      latest_version = get_json("http://conda.libraries.io/package?name=#{name}")
-      latest_version[:name] = name
+      project_latest_version = get_json("http://conda.libraries.io/package?name=#{name}")
+      project_latest_version[:name] = name
 
-      latest_version
+      project_latest_version
     end
 
     def self.mapping(project)
@@ -37,12 +36,12 @@ module PackageManager
         :keywords_array => Array.wrap(project.fetch("keywords", [])),
         :licenses => project["license"],
         :repository_url => project["dev_url"],
-        :versions => [{ version: project["version"], timestamp: project["timestamp"] }]
+        :versions => [project["version"]]
       }
     end
 
     def self.versions(project)
-      [{ number: project["version"], published_at: project["timestamp"] }]
+      [{ number: project["version"], published_at: Time.at(project["timestamp"]) }]
     end
 
     def self.dependencies(name, version, project)

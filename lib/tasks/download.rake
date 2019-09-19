@@ -48,10 +48,6 @@ namespace :download do
     PackageManager::Clojars.import_recent
   end
 
-  task conda_all: :environment do
-    PackageManager::Conda.import_async
-  end
-
   desc 'Download all Puppet packages asynchronously'
   task puppet_all: :environment do
     PackageManager::Puppet.import_async
@@ -75,6 +71,16 @@ namespace :download do
   desc 'Download all CocoaPods packages asynchronously'
   task cocoapods_all: :environment do
     PackageManager::CocoaPods.import_async
+  end
+
+  desc 'Download all Conda packages asynchronously'
+  task conda_all: :environment do
+    PackageManager::Conda.import_async
+  end
+
+  desc 'Download recent Conda packages asynchronously'
+  task conda: :environment do
+    PackageManager::Conda.import_recent_async
   end
 
   desc 'Download recent CRAN packages asynchronously'
