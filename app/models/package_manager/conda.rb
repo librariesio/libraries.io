@@ -14,7 +14,7 @@ module PackageManager
     end
 
     def self.recent_names
-      get_json("http://conda.libraries.io/feed.json")
+      get_json("https://conda.libraries.io/feed.json")
     end
 
     def self.package_link(project, _version = nil)
@@ -26,7 +26,7 @@ module PackageManager
     end
 
     def self.project(name)
-      project_latest_version = get_json("http://conda.libraries.io/package?name=#{name}")
+      project_latest_version = get_json("https://conda.libraries.io/package?name=#{name}")
       project_latest_version[:name] = name
 
       project_latest_version
@@ -49,7 +49,7 @@ module PackageManager
     end
 
     def self.dependencies(name, version, project)
-      version_data = get_json("http://conda-parser.libraries.io/package?name=#{name}&version=#{version}")
+      version_data = get_json("https://conda-parser.libraries.io/package?name=#{name}&version=#{version}")
       deps = version_data["depends"].map { |d| d.split(" ") }
       map_dependencies(deps, "runtime")
     end
