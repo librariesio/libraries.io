@@ -26,15 +26,12 @@ module PackageManager
     end
 
     def self.project(name)
-      project_latest_version = get_json("https://conda.libraries.io/package?name=#{name}")
-      project_latest_version[:name] = name
-
-      project_latest_version
+      get_json("https://conda.libraries.io/package?name=#{name}")
     end
 
     def self.mapping(project)
       {
-        :name => project[:name],
+        :name => project["name"],
         :description => project["description"],
         :homepage => project["home"],
         :keywords_array => Array.wrap(project.fetch("keywords", [])),
