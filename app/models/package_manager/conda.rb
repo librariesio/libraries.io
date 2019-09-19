@@ -10,7 +10,7 @@ module PackageManager
     end
 
     def self.project_names
-      get_json("http://conda.libraries.io/packages").flat_map{|name| name.split("/").last}
+      get_json("https://conda.libraries.io/packages").flat_map{|name| name.split("/").last}
     end
 
     def self.recent_names
