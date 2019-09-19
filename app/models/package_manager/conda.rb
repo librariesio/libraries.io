@@ -13,6 +13,10 @@ module PackageManager
       get_json("http://conda.libraries.io/packages").flat_map{|name| name.split("/").last}
     end
 
+    def self.recent_names
+      get_json("http://conda.libraries.io/feed.json")
+    end
+
     def self.package_link(project, _version = nil)
       "https://anaconda.org/anaconda/#{project.name}"
     end
