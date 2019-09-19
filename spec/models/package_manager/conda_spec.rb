@@ -22,4 +22,28 @@ describe PackageManager::Conda do
       expect(described_class.install_instructions(project)).to eq("conda install -c anaconda foo")
     end
   end
+
+  describe '#versions' do
+    it 'parses the conda timestamp as publish_date' do
+      timestamp = 1568903457
+      expected_date = Time.at(timestamp)
+      unmapped_project = {
+        "version"=>"1.0.0",
+        "timestamp"=>timestamp
+      }
+
+      expect(described_class.versions(unmapped_project).first).to eq({number: "1.0.0", published_at: expected_date})
+    end
+
+    it 'can handle a 0 timestamp from conda' do
+      timestamp = 0
+      expected_date = Time.at(timestamp)
+      unmapped_project = {
+        "version"=>"1.0.0",
+        "timestamp"=>timestamp
+      }
+
+      expect(described_class.versions(unmapped_project).first).to eq({number: "1.0.0", published_at: expected_date})
+    end
+  end
 end
