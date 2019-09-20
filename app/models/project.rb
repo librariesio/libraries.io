@@ -491,6 +491,8 @@ class Project < ApplicationRecord
       update_attribute(:status, 'Removed')
     elsif platform.downcase != 'packagist' && [400, 404].include?(response.response_code)
       update_attribute(:status, 'Removed')
+    elsif platform.downcase == "conda" && response.response_code == 404
+      update_attribute(:status, 'Removed')
     elsif removed
       update_attribute(:status, nil)
     end

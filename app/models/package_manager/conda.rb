@@ -29,6 +29,10 @@ module PackageManager
       get_json("https://conda.libraries.io/package?name=#{name}")
     end
 
+    def self.check_status_url(project)
+      "https://conda-parser.libraries.io/package?name=#{project.name}"
+    end
+
     def self.mapping(project)
       {
         :name => project["name"],
