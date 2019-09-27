@@ -8,7 +8,7 @@ SitemapGenerator::Sitemap.search_engines[:yandex] = 'https://blogs.yandex.ru/pin
 SitemapGenerator::Sitemap.create(:create_index => true) do
   projects = lambda {
     group = sitemap.group(:filename => :projects, :sitemaps_path => 'sitemaps/projects') do
-      Project.not_removed.find_each do |project|
+      Project.not_removed.where("rank > 0").find_each do |project|
         add project_path(project.to_param), :lastmod => project.updated_at
       end
     end
@@ -35,7 +35,7 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
 
   repos = lambda {
     group = sitemap.group(:filename => :repos, :sitemaps_path => 'sitemaps/repos') do
-      Repository.open_source.source.not_removed.find_each do |repo|
+      Repository.open_source.source.not_removed.where("rank > 0").find_each do |repo|
         add repository_path(repo.to_param), :lastmod => repo.updated_at
         add repository_contributors_path(repo.to_param), :lastmod => repo.updated_at
       end
