@@ -90,11 +90,6 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
         name = language['key']
         add language_path(name), :lastmod => Project.language(name).order('updated_at DESC').first.try(:updated_at)
       end
-
-      Project.popular_keywords(:facet_limit => 1000).each do |keyword|
-        name = keyword['key']
-        add keyword_path(name), :lastmod => Project.keyword(name).order('updated_at DESC').first.try(:updated_at)
-      end
     end
     group.sitemap.write unless group.sitemap.written?
   }
