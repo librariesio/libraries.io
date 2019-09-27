@@ -51,30 +51,9 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
       add search_path
       add about_path
 
-      add bus_factor_path
-      add unlicensed_path
-      add unmaintained_path
-      add deprecated_path
-      add removed_path
-      add help_wanted_path
-      add first_pull_request_path
-
-      add hosts_path
-      add issues_path
-      add repository_organisations_path
-      add github_search_path
-      add trending_path
-      add trending_projects_path
-      add new_repos_path
-      add github_timeline_path
-      add github_languages_path
-
-      add explore_path
-
       add platforms_path, :changefreq => 'daily'
       add licenses_path, :changefreq => 'daily'
       add languages_path, :changefreq => 'daily'
-      add keywords_path, :changefreq => 'daily'
 
       PackageManager::Base.platforms.each do |platform|
         name = platform.formatted_name
