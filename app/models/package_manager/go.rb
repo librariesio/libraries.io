@@ -45,7 +45,6 @@ module PackageManager
         name: project['Package'],
         description: project['Synopsis'],
         homepage: project['ProjectURL'],
-        # repository_url: "https://#{project['Package']}"
         repository_url: get_repository_url(project)
       }
     end
