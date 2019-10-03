@@ -45,7 +45,7 @@ module PackageManager
         name: project['Package'],
         description: project['Synopsis'],
         homepage: project['ProjectURL'],
-        repository_url: "https://#{project['Package']}"
+        repository_url: get_repository_url(project)
       }
     end
 
@@ -64,6 +64,10 @@ module PackageManager
         &.sub(/https?:\/\//, "")
 
       go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
+    end
+
+    def self.get_repository_url(project)
+      request("https://#{project['Package']}").to_hash[:url].to_s
     end
   end
 end
