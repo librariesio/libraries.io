@@ -241,7 +241,8 @@ module PackageManager
         builder.use :http_cache, store: Rails.cache, logger: Rails.logger, shared_cache: false, serializer: Marshal
         builder.use FaradayMiddleware::Gzip
         builder.use FaradayMiddleware::FollowRedirects, limit: 3
-        builder.request :retry
+        builder.request :retry, { max: 2, interval: 0.05, interval_randomness: 0.5, backoff_factor: 2 }
+        
         builder.use :instrumentation
         builder.adapter :typhoeus
       end
