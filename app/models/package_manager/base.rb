@@ -162,6 +162,7 @@ module PackageManager
       name = mapped_project[:name]
       proj = Project.find_by(name: name, platform: self.name.demodulize)
       proj.versions.includes(:dependencies).each do |version|
+        next if version.dependencies.any?
         deps = dependencies(name, version.number, mapped_project) rescue []
         next unless deps && deps.any? && version.dependencies.empty?
         deps.each do |dep|
@@ -240,6 +241,8 @@ module PackageManager
         builder.use :http_cache, store: Rails.cache, logger: Rails.logger, shared_cache: false, serializer: Marshal
         builder.use FaradayMiddleware::Gzip
         builder.use FaradayMiddleware::FollowRedirects, limit: 3
+        builder.request :retry, { max: 2, interval: 0.05, interval_randomness: 0.5, backoff_factor: 2 }
+        
         builder.use :instrumentation
         builder.adapter :typhoeus
       end
