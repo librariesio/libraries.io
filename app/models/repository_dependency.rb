@@ -23,9 +23,7 @@ class RepositoryDependency < ApplicationRecord
   delegate :filepath, to: :manifest
 
   def find_project_id
-    project_id = Project.platform(platform).where(name: project_name.try(:strip)).limit(1).pluck(:id).first
-    return project_id if project_id
-    Project.lower_platform(platform).lower_name(project_name.try(:strip)).limit(1).pluck(:id).first
+    Project.find_best(platform, project_name&.strip)&.id
   end
 
   def compatible_license?

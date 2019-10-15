@@ -45,14 +45,14 @@ module PackageManager
         name: project['Package'],
         description: project['Synopsis'],
         homepage: project['ProjectURL'],
-        repository_url: "https://#{project['Package']}"
+        repository_url: get_repository_url(project)
       }
     end
 
     # https://golang.org/cmd/go/#hdr-Import_path_syntax
-    def self.resolved_name(name)
-      return name if name.start_with?(*KNOWN_HOSTS)
-      return name if KNOWN_VCS.any?(&name.method(:include?))
+    def self.project_find_names(name)
+      return [name] if name.start_with?(*KNOWN_HOSTS)
+      return [name] if KNOWN_VCS.any?(&name.method(:include?))
 
       go_import = get_html('https://' + name + '?go-get=1')
         .xpath('//meta[@name="go-import"]')
@@ -63,7 +63,11 @@ module PackageManager
         &.last
         &.sub(/https?:\/\//, "")
 
-      go_import&.start_with?(*KNOWN_HOSTS) ? go_import : name
+      go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
+    end
+
+    def self.get_repository_url(project)
+      request("https://#{project['Package']}").to_hash[:url].to_s
     end
   end
 end

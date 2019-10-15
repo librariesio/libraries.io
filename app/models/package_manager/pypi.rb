@@ -83,7 +83,11 @@ module PackageManager
     end
 
     def self.project_find_names(project_name)
-      [project_name, project_name.downcase].flat_map {|name| [name, name.gsub('-', '_'), name.gsub('_', '-')]}.uniq
+      [
+        project_name,
+        project_name.gsub('-', '_'),
+        project_name.gsub('_', '-'),
+      ]
     end
   end
 end

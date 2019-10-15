@@ -73,6 +73,16 @@ namespace :download do
     PackageManager::CocoaPods.import_async
   end
 
+  desc 'Download all Conda packages asynchronously'
+  task conda_all: :environment do
+    PackageManager::Conda.import_async
+  end
+
+  desc 'Download recent Conda packages asynchronously'
+  task conda: :environment do
+    PackageManager::Conda.import_recent_async
+  end
+
   desc 'Download recent CRAN packages asynchronously'
   task cran: :environment do
     PackageManager::CRAN.import_recent_async

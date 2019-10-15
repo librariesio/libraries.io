@@ -358,7 +358,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     nio4r (2.4.0)
-    nokogiri (1.10.3)
+    nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     oauth (0.5.4)
     oauth2 (1.4.1)
@@ -403,7 +403,7 @@ GEM
     pg_query (1.1.0)
     pghero (2.2.0)
       activerecord
-    pictogram (2.0.10)
+    pictogram (2.0.12)
       railties
     poltergeist (1.17.0)
       capybara (~> 2.1)
@@ -454,7 +454,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.0.4)
+    rails-html-sanitizer (1.2.0)
       loofah (~> 2.2, >= 2.2.2)
     rails_safe_tasks (1.0.0)
     railties (5.2.3)

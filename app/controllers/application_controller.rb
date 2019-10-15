@@ -73,31 +73,21 @@ class ApplicationController < ActionController::Base
   end
 
   def find_project
-    @project = Project.find_with_includes!(params[:platform], params[:name], [:repository, :versions])
+    @project = Project.find_best!(params[:platform], params[:name], [:repository, :versions])
     @color = @project.color
-  rescue ActiveRecord::RecordNotFound
-    raise if params[:name].blank? || params[:platform]&.downcase != "go"
 
-    resolved_name = PackageManager::Go.resolved_name(params[:name])
-    if resolved_name != params[:name] && Project.known?(params[:platform], resolved_name)
+    if @project.name != params[:name]
       redirect_to(
-        # Unescape since url_for automatically escapes our already-escaped resolved_name
+        # Unescape since url_for automatically escapes our already-escaped project name
         URI.unescape(
           url_for(
             params
               .to_unsafe_h
-              .merge({ "name" => CGI.escape(resolved_name) })
+              .merge({ "name" => CGI.escape(@project.name) })
           )
         )
       )
-    else
-      raise
     end
-  end
-
-  def find_project_lite
-    @project = Project.visible.platform(params[:platform]).where(name: params[:name]).first
-    raise ActiveRecord::RecordNotFound if @project.nil?
   end
 
   def current_platforms

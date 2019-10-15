@@ -1,11 +1,25 @@
 class ProjectsController < ApplicationController
   before_action :ensure_logged_in, only: [:your_dependent_repos, :mute, :unmute,
                                           :unsubscribe, :sync]
-  before_action :find_project, only: [:show, :sourcerank, :about, :dependents,
-                                      :dependent_repos, :your_dependent_repos,
-                                      :versions, :tags, :mute, :unmute, :unsubscribe,
-                                      :sync, :score, :refresh_stats]
-  before_action :find_project_lite, only: [:top_dependent_repos, :top_dependent_projects]
+  before_action :find_project, only: %i[
+    about
+    dependencies
+    dependent_repos
+    dependents
+    mute
+    refresh_stats
+    score
+    show
+    sourcerank
+    sync
+    tags
+    top_dependent_projects
+    top_dependent_repos
+    unmute
+    unsubscribe
+    versions
+    your_dependent_repos
+  ]
 
   def index
     if current_user
@@ -151,7 +165,6 @@ class ProjectsController < ApplicationController
   end
 
   def dependencies
-    find_project_lite
     find_version
     render layout: false
   end
