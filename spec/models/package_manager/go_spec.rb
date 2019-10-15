@@ -37,7 +37,7 @@ describe PackageManager::Go do
     end
   end
 
-  describe '#get_repository_url', focus: true do
+  describe '#get_repository_url' do
     it 'follows redirects to get correct url' do
       VCR.use_cassette('go_redirects') do
         expect(described_class.get_repository_url({'Package' => 'github.com/DarthSim/imgproxy'})).to eq("https://github.com/imgproxy/imgproxy")
