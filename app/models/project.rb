@@ -21,6 +21,7 @@ class Project < ApplicationRecord
     latest_release_published_at
     latest_stable_release_number
     latest_stable_release_published_at
+    license_normalized
     licenses
     name
     normalized_licenses

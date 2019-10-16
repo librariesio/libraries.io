@@ -19,6 +19,7 @@ describe ProjectSerializer do
         latest_stable_release
         latest_stable_release_number
         latest_stable_release_published_at
+        license_normalized
         licenses
         name
         normalized_licenses
