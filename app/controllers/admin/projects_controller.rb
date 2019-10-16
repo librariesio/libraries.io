@@ -5,7 +5,10 @@ class Admin::ProjectsController < Admin::ApplicationController
 
   def update
     @project = Project.find(params[:id])
-    if @project.update_attributes(project_params.merge(license_set_by_admin: true))
+    # set the flag saying this license was set by admins if there is a value in the form and it is different than what is currently saved
+    update_params = project_params
+    update_params = update_params.merge(license_set_by_admin: true) if !project_params[:licenses].blank? && project_params[:licenses] != @project.licenses
+    if @project.update_attributes(update_params)
       @project.normalize_licenses
       @project.update_repository_async
       @project.async_sync
