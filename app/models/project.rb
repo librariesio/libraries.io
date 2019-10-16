@@ -10,11 +10,25 @@ class Project < ApplicationRecord
 
   HAS_DEPENDENCIES = false
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
-  API_FIELDS = [:name, :platform, :description, :language, :homepage,
-                :repository_url, :normalized_licenses, :rank, :status,
-                :latest_release_number, :latest_release_published_at,
-                :latest_stable_release_number, :latest_stable_release_published_at,
-                :dependents_count, :dependent_repos_count, :latest_download_url]
+  API_FIELDS = %i[
+    dependent_repos_count
+    dependents_count
+    description
+    homepage
+    language
+    latest_download_url
+    latest_release_number
+    latest_release_published_at
+    latest_stable_release_number
+    latest_stable_release_published_at
+    licenses
+    name
+    normalized_licenses
+    platform
+    rank
+    repository_url
+    status
+  ]
 
   validates_presence_of :name, :platform
   validates_uniqueness_of :name, scope: :platform, case_sensitive: true

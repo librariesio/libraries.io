@@ -54,46 +54,49 @@ describe "Api::ProjectsController" do
       get "/api/#{project.platform}/#{project.name}/#{version.number}/dependencies"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq('application/json')
-      expect(response.body).to be_json_eql({
-        "name": project.name,
-        "platform": project.platform,
-        "description": project.description,
-        "homepage": project.homepage,
-        "repository_url": project.repository_url,
-        "latest_stable_release_number": project.latest_stable_release_number,
-        "latest_stable_release_published_at": project.latest_stable_release_published_at,
-        "normalized_licenses": project.normalized_licenses,
-        "rank": project.rank,
-        "latest_release_published_at": project.latest_release_published_at,
-        "latest_release_number": project.latest_release_number,
-        "language": project.language,
-        "status": project.status,
-        "package_manager_url": project.package_manager_url,
-        "stars": project.stars,
-        "forks": project.forks,
-        "keywords": project.keywords,
-        "latest_stable_release": project.latest_stable_release,
-        "latest_download_url": project.latest_download_url,
-        "dependents_count": project.dependents_count,
-        "dependent_repos_count": project.dependent_repos_count,
-        "versions": project.versions.as_json(only: [:number, :published_at]),
-        "dependencies_for_version": version.number,
-        "dependencies": version.dependencies.map do |dependency|
-          {
-          "project_name": dependency.name,
-          "name": dependency.name,
-          "platform": dependency.platform,
-          "requirements": dependency.requirements,
-          "latest_stable": dependency.latest_stable,
-          "latest": dependency.latest,
-          "deprecated": dependency.deprecated,
-          "outdated": dependency.outdated,
-          "filepath": dependency.filepath,
-          "kind": dependency.kind,
-          "normalized_licenses": dependency.project.normalized_licenses,
-          }
-        end
-        }.to_json)
+      expect(response.body).to be_json_eql(
+        {
+          dependencies_for_version: version.number,
+          dependent_repos_count: project.dependent_repos_count,
+          dependents_count: project.dependents_count,
+          dependencies: version.dependencies.map do |dependency|
+            {
+              project_name: dependency.name,
+              name: dependency.name,
+              platform: dependency.platform,
+              requirements: dependency.requirements,
+              latest_stable: dependency.latest_stable,
+              latest: dependency.latest,
+              deprecated: dependency.deprecated,
+              outdated: dependency.outdated,
+              filepath: dependency.filepath,
+              kind: dependency.kind,
+              normalized_licenses: dependency.project.normalized_licenses,
+            }
+          end,
+          description: project.description,
+          forks: project.forks,
+          homepage: project.homepage,
+          keywords: project.keywords,
+          language: project.language,
+          latest_download_url: project.latest_download_url,
+          latest_release_number: project.latest_release_number,
+          latest_release_published_at: project.latest_release_published_at,
+          latest_stable_release: project.latest_stable_release,
+          latest_stable_release_number: project.latest_stable_release_number,
+          latest_stable_release_published_at: project.latest_stable_release_published_at,
+          licenses: project.licenses,
+          name: project.name,
+          normalized_licenses: project.normalized_licenses,
+          package_manager_url: project.package_manager_url,
+          platform: project.platform,
+          rank: project.rank,
+          repository_url: project.repository_url,
+          stars: project.stars,
+          status: project.status,
+          versions: project.versions.as_json(only: [:number, :published_at]),
+        }.to_json
+      )
     end
   end
 
