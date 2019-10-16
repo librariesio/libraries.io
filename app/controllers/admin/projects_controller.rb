@@ -5,7 +5,7 @@ class Admin::ProjectsController < Admin::ApplicationController
 
   def update
     @project = Project.find(params[:id])
-    if @project.update_attributes(project_params)
+    if @project.update_attributes(project_params.merge(license_set_by_admin: true))
       @project.normalize_licenses
       @project.update_repository_async
       @project.async_sync
