@@ -68,6 +68,14 @@ describe Project, type: :model do
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["MIT", "ISC"])
     end
+
+    it 'disables license normalization for licenses set by admin' do
+      project.normalized_licenses = ["Apache-2.0"]
+      project.license_set_by_admin = true
+      project.licenses = "mit"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["Apache-2.0"])
+    end
   end
 
   describe 'maintenance stats' do

@@ -388,6 +388,8 @@ class Project < ApplicationRecord
   end
 
   def normalize_licenses
+    # avoid changing the license if it has been set directly through the admin console
+    return if license_set_by_admin?
     if licenses.blank?
       normalized = []
     elsif licenses.length > 150
