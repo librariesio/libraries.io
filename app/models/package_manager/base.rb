@@ -89,6 +89,7 @@ module PackageManager
       else
         dbproject.reformat_repository_url
         attrs = mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties)
+        # avoid changing the license if it has been set directly through the admin console
         attrs = attrs.except(:licenses) if dbproject.license_set_by_admin?
         dbproject.update_attributes(attrs)
       end
