@@ -391,7 +391,7 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
   end
 
 
-  create_view "project_dependent_repositories", materialized: true,  sql_definition: <<-SQL
+  create_view "project_dependent_repositories", materialized: true, sql_definition: <<-SQL
       SELECT t1.project_id,
       t1.id AS repository_id,
       t1.rank,
@@ -406,7 +406,6 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
             GROUP BY repositories.id, repository_dependencies.project_id) t1
        JOIN projects ON ((t1.project_id = projects.id)));
   SQL
-
   add_index "project_dependent_repositories", ["project_id", "rank", "stargazers_count"], name: "index_project_dependent_repos_on_rank", order: { rank: "DESC NULLS LAST", stargazers_count: :desc }
   add_index "project_dependent_repositories", ["project_id", "repository_id"], name: "index_project_dependent_repos_on_proj_id_and_repo_id", unique: true
 
