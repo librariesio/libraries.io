@@ -25,48 +25,77 @@ describe Project, type: :model do
       project.licenses = "mit"
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["MIT"])
+      expect(project.license_normalized).to be_truthy
     end
 
     it 'handles comma separated license' do
       project.licenses = "mit,isc"
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.license_normalized).to be_truthy
     end
 
     it 'handles OR separated licenses' do
       project.licenses = "mit OR isc"
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.license_normalized).to be_truthy
     end
 
     it 'handles or separated licenses' do
       project.licenses = "mit or ISC"
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.license_normalized).to be_truthy
     end
 
     it 'handles (OR) separated licenses' do
       project.licenses = "(mit OR isc)"
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.license_normalized).to be_truthy
     end
 
     it 'handles (OR) separated licenses' do
       project.licenses = "(MIT or CC0-1.0)"
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["MIT", "CC0-1.0"])
+      expect(project.license_normalized).to be_truthy
     end
 
     it 'handles AND separated licenses' do
       project.licenses = "mit AND ISC"
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.license_normalized).to be_truthy
     end
 
     it 'handles and separated licenses' do
       project.licenses = "mit and ISC"
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.license_normalized).to be_truthy
+    end
+
+    it "handles exact licenses" do
+      project.licenses = "MIT"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["MIT"])
+      expect(project.license_normalized).to be_falsey
+    end
+
+    it "handles long licenses" do
+      project.licenses = "x" * 200
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["Other"])
+      expect(project.license_normalized).to be_truthy
+    end
+
+    it "handles unknown licenses" do
+      project.licenses = "Nonsense"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["Other"])
+      expect(project.license_normalized).to be_truthy
     end
 
     it 'disables license normalization for licenses set by admin' do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_15_200357) do
+ActiveRecord::Schema.define(version: 2019_10_16_195047) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -156,6 +156,7 @@ ActiveRecord::Schema.define(version: 2019_10_15_200357) do
     t.datetime "score_last_calculated"
     t.string "latest_stable_release_number"
     t.datetime "latest_stable_release_published_at"
+    t.boolean "license_normalized", default: false
     t.boolean "license_set_by_admin", default: false
     t.index "lower((platform)::text), lower((name)::text)", name: "index_projects_on_platform_and_name_lower"
     t.index ["created_at"], name: "index_projects_on_created_at"
