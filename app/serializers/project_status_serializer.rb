@@ -7,6 +7,7 @@ class ProjectStatusSerializer < ActiveModel::Serializer
     latest_download_url
     package_manager_url
     stars
+    license_set_by_admin
   ]
   attribute :score, if: :score?
 
