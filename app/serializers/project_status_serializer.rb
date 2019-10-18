@@ -8,6 +8,7 @@ class ProjectStatusSerializer < ActiveModel::Serializer
     package_manager_url
     stars
     license_set_by_admin
+    repository_license
   ]
   attribute :score, if: :score?
 
@@ -28,5 +29,9 @@ class ProjectStatusSerializer < ActiveModel::Serializer
 
   def canonical_name
     object.name
+  end
+
+  def repository_license
+    object.repository&.license
   end
 end
