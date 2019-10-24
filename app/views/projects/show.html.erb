@@ -2,6 +2,9 @@
 <% description project_description(@project, @version) %>
 <% content_for :atom, auto_discovery_link_tag(:atom, rss_url(@project)) %>
 <%= content_for :meta, render_meta(@project) %>
+<% if params[:number] %>
+<% content_for :canonical_url do %><%= url_for project_path(@project.to_param) %><% end %>
+<% end %>
 
 <%= render 'projects/alerts' %>
 
