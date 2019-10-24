@@ -242,7 +242,7 @@ module ApplicationHelper
   end
 
   def meta_seo_tags_for(record)
-    return {noindex: true} if record.nil?
+    return {noindex: false} if record.nil?
     case record.class.name
     when 'Project', 'Repository'
       hash = {noindex: record.is_removed?}
