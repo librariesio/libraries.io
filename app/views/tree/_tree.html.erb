@@ -1,3 +1,7 @@
+<% if params[:number] %>
+<% content_for :canonical_url do %><%= url_for tree_path(@project.to_param) %><% end %>
+<% end %>
+
 <% if @tree %>
   <% cache ['tree', @project, @version, @kind, @date].compact, expires_in: 1.day do  %>
     <div class="col-sm-8">
