@@ -135,4 +135,19 @@ namespace :projects do
     number_to_sync = args.number_to_sync || 2000
     Project.least_recently_updated_stats.where(platform: supported_platforms).limit(number_to_sync).each{|project| project.update_maintenance_stats_async(priority: :low)}
   end
+
+  desc 'Set license_normalized flag'
+  task set_license_normalized: :environment do
+    supported_platforms = ["Maven", "NPM", "Pypi", "Rubygems", "Nuget", "Packagist"]
+    Project.where(platform: supported_platforms, license_normalized: false).find_in_batches do |group|
+      group.each do |project|
+        project.normalize_licenses
+        # check if we set a new value
+        if project.license_normalized_changed?
+          # update directly to skip any callbacks
+          project.update_column(:license_normalized, project.license_normalized)
+        end
+      end
+    end
+  end
 end
