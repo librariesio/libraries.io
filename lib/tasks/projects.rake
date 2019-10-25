@@ -138,7 +138,7 @@ namespace :projects do
 
   desc 'Set license_normalized flag'
   task set_license_normalized: :environment do
-    supported_platforms = ["Maven", "NPM", "Pypi", "Rubygems", "Nuget", "Packagist"]
+    supported_platforms = ["Maven", "NPM", "Pypi", "Rubygems", "NuGet", "Packagist"]
     Project.where(platform: supported_platforms, license_normalized: false).find_in_batches do |group|
       group.each do |project|
         project.normalize_licenses
