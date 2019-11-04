@@ -20,13 +20,25 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
     it "should get timed commit count stats from the results" do
         results = stat.get_stats
 
-        expected_keys = [:last_week_commits, :last_month_commits, :last_two_month_commits, :last_year_commits]
+        expected_keys = [:last_week_commits, :last_month_commits, :last_two_month_commits, :last_year_commits, :latest_commit]
 
         expect(results.keys).to eql expected_keys
 
         # check values against the VCR cassette data
         
-        expect(results[:last_year_commits]).to eql 59
+        expect(results[:last_year_commits]).to eql 69
+    end
+
+    it "should get the latest commit date" do
+        results = stat.get_stats
+
+        expected_keys = [:last_week_commits, :last_month_commits, :last_two_month_commits, :last_year_commits, :latest_commit]
+
+        expect(results.keys).to eql expected_keys
+
+        # check values against the VCR cassette data
+        
+        expect(results[:latest_commit]).to eql "2019-10-30T12:38:56Z"
     end
   end
 
@@ -41,7 +53,7 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
     it "should handle no data from query" do
         results = stat.get_stats
 
-        expected_keys = [:last_week_commits, :last_month_commits, :last_two_month_commits, :last_year_commits]
+        expected_keys = [:last_week_commits, :last_month_commits, :last_two_month_commits, :last_year_commits, :latest_commit]
 
         expect(results.keys).to eql expected_keys
 
@@ -77,8 +89,8 @@ describe MaintenanceStats::Stats::Github::V3CommitsStat do
             # check values against the VCR cassette data
             expect(results[:v3_last_week_commits]).to eql 0
             expect(results[:v3_last_4_weeks_commits]).to eql 1
-            expect(results[:v3_last_8_weeks_commits]).to eql 6
-            expect(results[:v3_last_52_weeks_commits]).to eql 37
+            expect(results[:v3_last_8_weeks_commits]).to eql 9
+            expect(results[:v3_last_52_weeks_commits]).to eql 39
         end
     end
 

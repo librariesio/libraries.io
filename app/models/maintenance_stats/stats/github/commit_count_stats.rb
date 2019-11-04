@@ -7,7 +7,8 @@ module MaintenanceStats
             last_week_commits: pull_out_commit_count(@results, "lastWeek"),
             last_month_commits: pull_out_commit_count(@results, "lastMonth"),
             last_two_month_commits: pull_out_commit_count(@results, "lastTwoMonths"),
-            last_year_commits: pull_out_commit_count(@results, "lastYear")
+            last_year_commits: pull_out_commit_count(@results, "lastYear"),
+            latest_commit: pull_out_latest_commit(@results)
           }
         end
 
@@ -15,6 +16,11 @@ module MaintenanceStats
 
         def pull_out_commit_count(dataset, key)
             dataset.original_hash.dig("data", "repository", "defaultBranchRef", "target", key, "totalCount")
+        end
+
+        def pull_out_latest_commit(dataset)
+          nodes = dataset.original_hash.dig("data", "repository", "defaultBranchRef", "target", "latestCommit", "nodes")
+          nodes.first["committedDate"] if nodes.present?
         end
       end
 

@@ -30,12 +30,12 @@ describe MaintenanceStats::Stats::Github::ReleaseStats do
         expect(results.keys).to eql expected_keys
         
         # check values against the VCR cassette data
-        expect(results[:last_week_releases]).to eql 1
-        expect(results[:last_month_releases]).to eql 1
-        expect(results[:last_two_month_releases]).to eql 1
-        expect(results[:last_year_releases]).to eql 5
+        expect(results[:last_week_releases]).to eql 3
+        expect(results[:last_month_releases]).to eql 3
+        expect(results[:last_two_month_releases]).to eql 3
+        expect(results[:last_year_releases]).to eql 7
 
-        expect(results[:last_release_date]).to eql "2019-01-05T15:47:46Z"
+        expect(results[:last_release_date]).to eql "2019-10-08T09:33:49Z"
     end
 
     it "should ignore releases older than one year ago" do

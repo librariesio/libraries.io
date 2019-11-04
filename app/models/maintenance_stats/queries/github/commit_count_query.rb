@@ -8,6 +8,11 @@ module MaintenanceStats
               defaultBranchRef {
                 target {
                   ... on Commit {
+                    latestCommit: history(first: 1){
+                      nodes {
+                        committedDate
+                      }
+                    }
                     lastWeek: history(since: $one_week) {
                       totalCount
                     }
