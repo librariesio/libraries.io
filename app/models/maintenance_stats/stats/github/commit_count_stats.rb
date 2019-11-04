@@ -20,7 +20,7 @@ module MaintenanceStats
 
         def pull_out_latest_commit(dataset)
           nodes = dataset.original_hash.dig("data", "repository", "defaultBranchRef", "target", "latestCommit", "nodes")
-          nodes.first["committedDate"] if nodes.present?
+          Date.parse(nodes.first["committedDate"]) if nodes.present?
         end
       end
 

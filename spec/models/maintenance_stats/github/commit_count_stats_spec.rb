@@ -37,8 +37,7 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
         expect(results.keys).to eql expected_keys
 
         # check values against the VCR cassette data
-        
-        expect(results[:latest_commit]).to eql "2019-10-30T12:38:56Z"
+        expect(results[:latest_commit]).to eql Date.new(2019, 10, 30)
     end
   end
 
