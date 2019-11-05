@@ -25,7 +25,7 @@ module MaintenanceStats
         end
 
         def latest_commit(dataset)
-          latest = dataset&.sort_by{|commit| Date.parse(commit["date"])}&.last
+          latest = dataset&.sort_by{|commit| commit["date"]}&.last
           Date.parse(latest["date"]) if latest.present? && latest["date"].present?
         end
       end
