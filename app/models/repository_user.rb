@@ -82,6 +82,10 @@ class RepositoryUser < ApplicationRecord
     save
   end
 
+  def hide
+    update!(hidden: true)
+  end
+
   def self.create_from_host(host_type, user_hash)
     RepositoryOwner.const_get(host_type.capitalize).create_user(user_hash)
   end

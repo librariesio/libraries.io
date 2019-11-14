@@ -101,6 +101,7 @@ Rails.application.routes.draw do
     get '/:host_type/:login/dependencies', to: 'repository_organisations#dependencies', as: :organisation_dependencies
     delete '/:host_type/:login', to: 'repository_organisations#destroy'
     patch '/:host_type/:login', to: 'repository_organisations#update'
+    post '/:host_type/:login/hide', to: 'repository_organisations#hide', as: :hide_owner
     get '/:host_type/:login/edit', to: 'repository_organisations#edit', as: :edit_owner
     get '/:host_type/:login', to: 'repository_organisations#show', as: :organisation
     get '/', to: 'stats#overview', as: :overview
