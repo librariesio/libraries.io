@@ -3,8 +3,8 @@ module MaintenanceStats
     module Github
       class CommitCountQuery < BaseQuery
         COMMIT_COUNTS_QUERY = Rails.application.config.graphql.client.parse <<-GRAPHQL
-          query ($owner: String!, $name: String!, $one_week: GitTimestamp!, $one_month: GitTimestamp!, $two_months: GitTimestamp!, $one_year: GitTimestamp!) {
-            repository(owner: $owner, name: $name) {
+          query ($owner: String!, $repo_name: String!, $one_week: GitTimestamp!, $one_month: GitTimestamp!, $two_months: GitTimestamp!, $one_year: GitTimestamp!) {
+            repository(owner: $owner, name: $repo_name) {
               defaultBranchRef {
                 target {
                   ... on Commit {
@@ -33,8 +33,8 @@ module MaintenanceStats
           }
         GRAPHQL
 
-        VALID_PARAMS = [:owner, :name, :start_date]
-        REQUIRED_PARAMS = [:owner, :name, :start_date]
+        VALID_PARAMS = [:owner, :repo_name, :start_date]
+        REQUIRED_PARAMS = [:owner, :repo_name, :start_date]
 
         def self.client_type
           :v4
@@ -53,7 +53,7 @@ module MaintenanceStats
           }
 
           # merge params for query
-          date_params.merge!(params.slice(:owner, :name))
+          date_params.merge!(params.slice(:owner, :repo_name))
 
           @client.query(COMMIT_COUNTS_QUERY, variables: date_params)
         end
