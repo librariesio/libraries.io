@@ -8,7 +8,7 @@ class Admin::ProjectsController < Admin::ApplicationController
     # set the flag saying this license was set by admins if there is a value in the form and it is different than what is currently saved
     update_params = project_params
     update_params[:normalized_licenses] = Array(update_params[:normalized_licenses]) # convert selected license to an array for normalized_licenses
-    update_params = update_params.merge(license_set_by_admin: true) if project_params[:licenses].present? && project_params[:licenses] != @project.licenses
+    update_params = update_params.merge(license_set_by_admin: true) if project_params[:normalized_licenses].present? && project_params[:normalized_licenses] != @project.normalized_licenses
     if @project.update_attributes(update_params)
       @project.update_repository_async
       @project.async_sync
