@@ -3,7 +3,7 @@ class Api::StatusController < Api::ApplicationController
 
   def check
     render(
-      json: projects.values,
+      json: projects,
       each_serializer: ProjectStatusSerializer,
       show_score: params[:score],
       show_stats: internal_api_key?,
@@ -13,22 +13,23 @@ class Api::StatusController < Api::ApplicationController
 
   private
 
-  def projects
-    @projects ||= params[:projects]
+  def project_status_queries
+    @project_status_queries ||= params[:projects]
       .group_by { |project| project[:platform] }
-      .map(&method(:platform_projects))
-      .reduce({}, :merge)
+      .map { |platform, group| ProjectStatusQuery.new(platform, group.map { |p| p[:name] }) }
   end
 
-  def platform_projects((platform, group))
-    ProjectStatusQuery
-      .new(platform, group.map { |p| p[:name] })
-      .projects_by_name
+  def projects
+    project_status_queries
+      .map(&:projects_by_name)
+      .flat_map(&:values)
   end
 
   def project_names
-    projects
-      .map { |requested_name, project| [project.name, requested_name] }
-      .to_h
+    project_status_queries.each_with_object({}) do |psq, result|
+      psq.projects_by_name.each do |requested_name, project|
+        result[[project.platform, project.name]] = requested_name
+      end
+    end
   end
 end

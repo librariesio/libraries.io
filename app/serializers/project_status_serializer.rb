@@ -24,7 +24,7 @@ class ProjectStatusSerializer < ActiveModel::Serializer
   end
 
   def name
-    instance_options[:project_names][object.name]
+    instance_options[:project_names][[object.platform, object.name]]
   end
 
   def canonical_name

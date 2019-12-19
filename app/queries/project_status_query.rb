@@ -5,7 +5,7 @@ class ProjectStatusQuery
   end
 
   def projects_by_name
-    exact_projects.merge(missing_projects)
+    @projects_by_name ||= exact_projects.merge(missing_projects)
   end
 
   private
