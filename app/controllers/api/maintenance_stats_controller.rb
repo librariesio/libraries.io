@@ -13,7 +13,7 @@ class Api::MaintenanceStatsController < Api::BulkProjectController
   end
 
   def begin_watching_bulk
-    projects.map(&method(:begin_project_watch))
+    projects.each(&method(:begin_project_watch))
     head :accepted
   end
 
