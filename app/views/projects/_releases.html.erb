@@ -46,9 +46,9 @@
   </h4>
   <dl class='row releases'>
     <% @tags.each do |tag| %>
-      <dl class='col-sm-4'>
+      <dt class='col-sm-4'>
         <%= link_to tag, version_path(@project.to_param.merge(number: tag.name)) %>
-      </dl>
+      </dt>
       <dd class='col-sm-4 hidden-xs'>
         <% if tag.published_at.present? %>
           <small class='text-muted'>
