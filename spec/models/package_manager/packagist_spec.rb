@@ -25,9 +25,9 @@ describe PackageManager::Packagist do
         "time" =>	"2012-09-18T06:46:25+00:00",
         "maintainers" => [],
         "versions" => {
-          "dev-master" => {"version" => "dev-master", "time" => "2020-01-08T08:45:45+00:00"},
-          "1.2.3" => {"version" => "1.2.3", "time" => "2020-01-08T08:45:45+00:00"},
-          "1.2.x-dev" => {"version" => "1.2.x-dev", "time" => "2020-01-08T08:45:45+00:00"},
+          "dev-master" => {"version" => "dev-master", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package."},
+          "1.2.3" => {"version" => "1.2.3", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package."},
+          "1.2.x-dev" => {"version" => "1.2.x-dev", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package."},
         },
         "type" =>	"library",
         "repository" => "https://github.com/librariesio/fakepkg"
@@ -39,14 +39,14 @@ describe PackageManager::Packagist do
         expect(described_class.mapping(subject)).to eq({
           name: "librariesio/fakepkg",
           description: "A Libraries package.",
-          homepage: "",
+          homepage: nil,
           keywords_array: [],
-          licenses: "",
-          repository_url: "https://github.com/libariesio/fakepkg",
+          licenses: "BSD-3-Clause",
+          repository_url: "https://github.com/librariesio/fakepkg",
           versions: {
-            "dev-master" => {"version" => "dev-master", "time" => "2020-01-08T08:45:45+00:00"},
-            "1.2.3" => {"version" => "1.2.3", "time" => "2020-01-08T08:45:45+00:00"},
-            "1.2.x-dev" => {"version" => "1.2.x-dev", "time" => "2020-01-08T08:45:45+00:00"},
+            "dev-master" => {"version" => "dev-master", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package."},
+            "1.2.3" => {"version" => "1.2.3", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package."},
+            "1.2.x-dev" => {"version" => "1.2.x-dev", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package."},
           }
         })
       end
