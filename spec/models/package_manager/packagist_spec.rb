@@ -16,4 +16,17 @@ describe PackageManager::Packagist do
       expect(described_class.package_link(project, '2.0.0')).to eq("https://packagist.org/packages/foo#2.0.0")
     end
   end
+
+  describe ".versions" do
+    it "rejects dev branches that aren't really releases" do
+      unmapped_project = {
+        "versions" => {
+          "1.2.3" => {"version" => "1.2.3", "time" => "2020-01-08T08:45:45+00:00"},
+          "1.2.x-dev" => {"version" => "1.2.x-dev", "time" => "2020-01-08T08:45:45+00:00"},
+        }
+      }
+
+      expect(described_class.versions(unmapped_project)).to eq([{number: "1.2.3", published_at: "2020-01-08T08:45:45+00:00"}])
+    end
+  end
 end
