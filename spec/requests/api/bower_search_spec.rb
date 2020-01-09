@@ -9,30 +9,36 @@ describe "Api::BowerSearchController", elasticsearch: true do
       get '/api/bower-search'
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq('application/json')
-      expect(json).to eq [{
-        "name": project.name,
-        "platform": project.platform,
-        "description": project.description,
-        "homepage": project.homepage,
-        "repository_url": project.repository_url,
-        "normalized_licenses": project.normalized_licenses,
-        "rank": project.rank,
-        "latest_release_published_at": project.latest_release_published_at,
-        "latest_release_number": project.latest_release_number,
-        "language": project.language,
-        "status": project.status,
-        "package_manager_url": project.package_manager_url,
-        "stars": project.stars,
-        "forks": project.forks,
-        "keywords": project.keywords,
-        "latest_stable_release": project.latest_stable_release,
-        "latest_stable_release_number": project.latest_stable_release_number,
-        "latest_stable_release_published_at": project.latest_stable_release_published_at,
-        "latest_download_url": nil,
-        "dependents_count": project.dependents_count,
-        "dependent_repos_count": project.dependent_repos_count,
-        "versions": project.versions
-        }].as_json
+      expect(json).to eq(
+        [
+          {
+            dependent_repos_count: project.dependent_repos_count,
+            dependents_count: project.dependents_count,
+            description: project.description,
+            forks: project.forks,
+            homepage: project.homepage,
+            keywords: project.keywords,
+            language: project.language,
+            latest_download_url: nil,
+            latest_release_number: project.latest_release_number,
+            latest_release_published_at: project.latest_release_published_at,
+            latest_stable_release: project.latest_stable_release,
+            latest_stable_release_number: project.latest_stable_release_number,
+            latest_stable_release_published_at: project.latest_stable_release_published_at,
+            license_normalized: project.license_normalized,
+            licenses: project.licenses,
+            name: project.name,
+            normalized_licenses: project.normalized_licenses,
+            package_manager_url: project.package_manager_url,
+            platform: project.platform,
+            rank: project.rank,
+            repository_url: project.repository_url,
+            stars: project.stars,
+            status: project.status,
+            versions: project.versions
+          }
+        ].as_json
+      )
     end
   end
 end

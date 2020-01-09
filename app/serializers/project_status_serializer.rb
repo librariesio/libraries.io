@@ -7,6 +7,8 @@ class ProjectStatusSerializer < ActiveModel::Serializer
     latest_download_url
     package_manager_url
     stars
+    license_set_by_admin
+    repository_license
   ]
   attribute :score, if: :score?
 
@@ -22,10 +24,14 @@ class ProjectStatusSerializer < ActiveModel::Serializer
   end
 
   def name
-    instance_options[:project_names][object.name]
+    instance_options[:project_names][[object.platform, object.name]]
   end
 
   def canonical_name
     object.name
+  end
+
+  def repository_license
+    object.repository&.license
   end
 end

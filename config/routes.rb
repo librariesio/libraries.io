@@ -59,6 +59,7 @@ Rails.application.routes.draw do
     VERSION_CONSTRAINT = /[\w\.\-]+/
 
     put '/maintenance/stats/enqueue/:platform/:name', as: :maintenance_stat_enqueue, to: 'maintenance_stats#enqueue', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    post '/maintenance/stats/begin/bulk', to: 'maintenance_stats#begin_watching_bulk'
     get '/maintenance/stats/begin/:platform/:name', to: 'maintenance_stats#begin_watching', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
 
     get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
@@ -101,6 +102,7 @@ Rails.application.routes.draw do
     get '/:host_type/:login/dependencies', to: 'repository_organisations#dependencies', as: :organisation_dependencies
     delete '/:host_type/:login', to: 'repository_organisations#destroy'
     patch '/:host_type/:login', to: 'repository_organisations#update'
+    post '/:host_type/:login/hide', to: 'repository_organisations#hide', as: :hide_owner
     get '/:host_type/:login/edit', to: 'repository_organisations#edit', as: :edit_owner
     get '/:host_type/:login', to: 'repository_organisations#show', as: :organisation
     get '/', to: 'stats#overview', as: :overview

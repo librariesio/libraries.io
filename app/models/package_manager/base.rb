@@ -88,7 +88,8 @@ module PackageManager
         dbproject.save
       else
         dbproject.reformat_repository_url
-        dbproject.update_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
+        attrs = mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties)
+        dbproject.update_attributes(attrs)
       end
 
       if self::HAS_VERSIONS

@@ -27,6 +27,9 @@
   <meta property="fb:admins" content="508462908" />
   <meta name="yandex-verification" content="2a6b144b8bd37026" />
   <%= content_for(:meta).presence || render_meta %>
+  <% if content_for?(:canonical_url) %>
+  <link rel="canonical" href="https://libraries.io<%= yield(:canonical_url) %>" />
+  <% end %>
   <link href="/opensearch.xml" title="Libraries.io" rel="search" type="application/opensearchdescription+xml">
   <% if ENV["GA_ANALYTICS_ID"].present? %>
     <script>
