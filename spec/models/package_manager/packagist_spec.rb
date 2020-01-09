@@ -17,16 +17,45 @@ describe PackageManager::Packagist do
     end
   end
 
-  describe ".versions" do
-    it "rejects dev branches that aren't really releases" do
-      unmapped_project = {
+  context "with an unmapped package" do
+   subject do
+      {
+        "name" =>	"librariesio/fakepkg",
+        "description" => "A Libraries package.",
+        "time" =>	"2012-09-18T06:46:25+00:00",
+        "maintainers" => [],
         "versions" => {
+          "dev-master" => {"version" => "dev-master", "time" => "2020-01-08T08:45:45+00:00"},
           "1.2.3" => {"version" => "1.2.3", "time" => "2020-01-08T08:45:45+00:00"},
           "1.2.x-dev" => {"version" => "1.2.x-dev", "time" => "2020-01-08T08:45:45+00:00"},
-        }
+        },
+        "type" =>	"library",
+        "repository" => "https://github.com/librariesio/fakepkg"
       }
+    end
 
-      expect(described_class.versions(unmapped_project)).to eq([{number: "1.2.3", published_at: "2020-01-08T08:45:45+00:00"}])
+    describe ".mapping" do
+      it "maps correctly" do
+        expect(described_class.mapping(subject)).to eq({
+          name: "librariesio/fakepkg",
+          description: "A Libraries package.",
+          homepage: "",
+          keywords_array: [],
+          licenses: "",
+          repository_url: "https://github.com/libariesio/fakepkg",
+          versions: {
+            "dev-master" => {"version" => "dev-master", "time" => "2020-01-08T08:45:45+00:00"},
+            "1.2.3" => {"version" => "1.2.3", "time" => "2020-01-08T08:45:45+00:00"},
+            "1.2.x-dev" => {"version" => "1.2.x-dev", "time" => "2020-01-08T08:45:45+00:00"},
+          }
+        })
+      end
+    end
+
+    describe ".versions" do
+      it "rejects dev branches that aren't really releases" do
+        expect(described_class.versions(subject)).to eq([{number: "1.2.3", published_at: "2020-01-08T08:45:45+00:00"}])
+      end
     end
   end
 end
