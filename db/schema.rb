@@ -369,6 +369,7 @@ ActiveRecord::Schema.define(version: 2019_10_16_195047) do
     t.boolean "emails_enabled", default: true
     t.boolean "optin", default: false
     t.datetime "last_login_at"
+    t.boolean "is_admin", default: false, null: false
     t.index ["created_at"], name: "index_users_on_created_at"
   end
 
