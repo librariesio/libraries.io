@@ -5,13 +5,16 @@
   <%= link_to fa_icon(@user.host_type.downcase), @user.repository_url, class: 'tip', title: "View #{@user.login} on #{@user.host_type}" %>
 </h2>
 <div class="row">
-  <%= simple_form_for(@user, url: admin_organisation_path(@user.host_type.downcase, @user.login), html: { class: 'form-vertical col-md-8' }) do |form| %>
+  <%= simple_form_for(@user, url: admin_organisation_path(@user.host_type.downcase, @user.login), html: { class: 'form-vertical col-md-6' }) do |form| %>
 
     <%= form.input :hidden %>
 
     <%= form.submit class: 'btn btn-primary' %>
   <% end %>
-  <div class="col-md-4">
+  <div class="col-md-3">
     <%= button_to "Delete #{@user.org? ? 'organisation' : 'user'} and their repositories", admin_organisation_path(@user.host_type.downcase, @user.login), method: :delete, class: 'btn btn-danger', data: {confirm: "Only do this if the #{@user.org? ? 'Organisation' : 'User'} is gone, otherwise set status to 'Hidden'"} %>
+  </div>
+  <div class="col-md-3">
+    <%= button_to "Hide #{@user.org? ? 'organisation' : 'user'} and their repositories", admin_hide_owner_path(@user.host_type.downcase, @user.login), method: :post, class: 'btn btn-danger', data: {confirm: "Are you sure?"} %>
   </div>
 </div>

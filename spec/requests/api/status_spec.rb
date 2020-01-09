@@ -152,5 +152,29 @@ describe "API::StatusController" do
         expect(json_response.first.key? "repository_maintenance_stats").to be false
       end
     end
+
+    context "with two projects that have the same name but different platforms" do
+      it "returns both" do
+        create(:project, platform: "NPM", name: "bcrypt")
+        create(:project, platform: "Pypi", name: "bcrypt")
+
+        post(
+          "/api/check",
+          params: {
+            api_key: internal_user.api_key,
+            projects: [
+              { name: "bcrypt", platform: "npm" },
+              { name: "bcrypt", platform: "pypi" },
+            ]
+          }
+        )
+
+        expect(response).to have_http_status(:success)
+        json = JSON.parse(response.body)
+        expect(json.size).to eq(2)
+        expect(json.select { |p| p[:name] == "bcrypt" && p[:platform] == "NPM" }).to be
+        expect(json.select { |p| p[:name] == "bcrypt" && p[:platform] == "Pypi" }).to be
+      end
+    end
   end
 end

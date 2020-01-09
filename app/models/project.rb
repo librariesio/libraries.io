@@ -10,11 +10,26 @@ class Project < ApplicationRecord
 
   HAS_DEPENDENCIES = false
   STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
-  API_FIELDS = [:name, :platform, :description, :language, :homepage,
-                :repository_url, :normalized_licenses, :rank, :status,
-                :latest_release_number, :latest_release_published_at,
-                :latest_stable_release_number, :latest_stable_release_published_at,
-                :dependents_count, :dependent_repos_count, :latest_download_url]
+  API_FIELDS = %i[
+    dependent_repos_count
+    dependents_count
+    description
+    homepage
+    language
+    latest_download_url
+    latest_release_number
+    latest_release_published_at
+    latest_stable_release_number
+    latest_stable_release_published_at
+    license_normalized
+    licenses
+    name
+    normalized_licenses
+    platform
+    rank
+    repository_url
+    status
+  ]
 
   validates_presence_of :name, :platform
   validates_uniqueness_of :name, scope: :platform, case_sensitive: true
@@ -388,35 +403,30 @@ class Project < ApplicationRecord
   end
 
   def normalize_licenses
-    if licenses.blank?
-      normalized = []
-    elsif licenses.length > 150
-      normalized = ['Other']
-    else
-      downcased = licenses.downcase
-      # chomp off leading/trailing () to make Spdx.find happier
-      if downcased.start_with?('(')
-        downcased[0] = ''
-      end
-      if downcased.end_with?(')')
-        downcased[-1] = ''
-      end
-      # splits are OR, AND, COMMA (,), and SLASH (/)
-      # technically OR and AND are different in meaning
-      # but our model doesn't allow the distinction
-      if downcased.include?("or")
-        split = downcased.split(/or/)
-      elsif downcased.include?("and")
-        split = downcased.split(/and/)
+    # avoid changing the license if it has been set directly through the admin console
+    return if license_set_by_admin?
+
+    self.normalized_licenses =
+      if licenses.blank?
+        []
+
+      elsif licenses.length > 150
+        self.license_normalized = true
+        ["Other"]
+
       else
-        split = downcased.split(/[,\/]/)
+        spdx = spdx_license
+
+        if spdx.empty?
+          self.license_normalized = true
+          ["Other"]
+
+        else
+          self.license_normalized = spdx.first != licenses
+          spdx
+
+        end
       end
-      normalized = split.map do |license|
-        Spdx.find(license).try(:id)
-      end.compact
-      normalized = ['Other'] if normalized.empty?
-    end
-    self.normalized_licenses = normalized
   end
 
   def update_repository_async
@@ -574,5 +584,20 @@ class Project < ApplicationRecord
   def reformat_repository_url
     repository_url = URLParser.try_all(self.repository_url)
     update_attributes(repository_url: repository_url)
+  end
+
+  private
+
+  def spdx_license
+    licenses
+      .downcase
+      .sub(/^\(/, "")
+      .sub(/\)$/, "")
+      .split("or")
+      .flat_map { |l| l.split("and") }
+      .flat_map { |l| l.split(/[,\/]/) }
+      .map(&Spdx.method(:find))
+      .compact
+      .map(&:id)
   end
 end

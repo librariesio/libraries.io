@@ -330,6 +330,10 @@ class Repository < ApplicationRecord
     @repository_host ||= RepositoryHost.const_get(host_type.capitalize).new(self)
   end
 
+  def hide
+    update!(status: "Hidden")
+  end
+
   def gather_maintenance_stats_async
     RepositoryMaintenanceStatWorker.enqueue(id, priority: :medium)
   end

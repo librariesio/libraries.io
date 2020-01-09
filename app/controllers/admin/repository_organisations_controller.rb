@@ -31,6 +31,12 @@ class Admin::RepositoryOrganisationsController < Admin::ApplicationController
     redirect_to admin_stats_path, notice: "#{@user.org? ? 'Organisation' : 'User'} and their repositories deleted"
   end
 
+  def hide
+    @user.repositories.each(&:hide)
+    @user.hide
+    redirect_to admin_stats_path, notice: "#{@user.org? ? 'Organisation' : 'User'} and their repositories hidden"
+  end
+
   private
 
   def find_user

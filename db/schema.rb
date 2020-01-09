@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_04_170619) do
+ActiveRecord::Schema.define(version: 2019_10_16_195047) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -156,6 +156,8 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
     t.datetime "score_last_calculated"
     t.string "latest_stable_release_number"
     t.datetime "latest_stable_release_published_at"
+    t.boolean "license_normalized", default: false
+    t.boolean "license_set_by_admin", default: false
     t.index "lower((platform)::text), lower((name)::text)", name: "index_projects_on_platform_and_name_lower"
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["dependents_count"], name: "index_projects_on_dependents_count"
@@ -237,7 +239,7 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
     t.string "logo_url"
     t.integer "repository_user_id"
     t.string "keywords", default: [], array: true
-    t.index "lower((host_type)::text), lower((full_name)::text)", name: "index_repositories_on_lower_host_type_lower_full_name", unique: true
+    t.index "lower((host_type)::text), lower((full_name)::text)", name: "index_repositories_on_host_type_and_full_name", unique: true
     t.index "lower((language)::text)", name: "github_repositories_lower_language"
     t.index ["host_type", "uuid"], name: "index_repositories_on_host_type_and_uuid", unique: true
     t.index ["repository_organisation_id"], name: "index_repositories_on_repository_organisation_id"
@@ -263,11 +265,12 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
   end
 
   create_table "repository_maintenance_stats", force: :cascade do |t|
-    t.bigint   "repository_id", :index=>{:name=>"index_repository_maintenance_stats_on_repository_id", :order=>{:repository_id=>:asc}}
-    t.string   "category"
-    t.string   "value"
-    t.datetime "created_at",    :null=>false
-    t.datetime "updated_at",    :null=>false
+    t.bigint "repository_id"
+    t.string "category"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["repository_id"], name: "index_repository_maintenance_stats_on_repository_id"
   end
 
   create_table "repository_organisations", id: :serial, force: :cascade do |t|
@@ -283,7 +286,7 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
     t.boolean "hidden", default: false
     t.datetime "last_synced_at"
     t.string "host_type"
-    t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_organisations_on_lower_host_type_lower_login", unique: true
+    t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_organisations_on_host_type_and_login", unique: true
     t.index ["created_at"], name: "index_repository_organisations_on_created_at"
     t.index ["hidden"], name: "index_repository_organisations_on_hidden"
     t.index ["host_type", "uuid"], name: "index_repository_organisations_on_host_type_and_uuid", unique: true
@@ -327,7 +330,7 @@ ActiveRecord::Schema.define(version: 2019_01_04_170619) do
     t.integer "followers"
     t.integer "following"
     t.string "host_type"
-    t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_users_on_lower_host_type_lower_login", unique: true
+    t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_users_on_host_type_and_login", unique: true
     t.index ["created_at"], name: "index_repository_users_on_created_at"
     t.index ["hidden"], name: "index_repository_users_on_hidden"
     t.index ["host_type", "uuid"], name: "index_repository_users_on_host_type_and_uuid", unique: true

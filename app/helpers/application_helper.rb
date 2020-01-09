@@ -204,7 +204,8 @@ module ApplicationHelper
 
   def render_meta(record = nil)
     render(partial: 'meta/facebook', locals: { meta: meta_tags_for(record) }) +
-    render(partial: 'meta/twitter', locals: { meta: meta_tags_for(record) })
+    render(partial: 'meta/twitter', locals: { meta: meta_tags_for(record) }) +
+    render(partial: 'meta/seo', locals: { seo: meta_seo_tags_for(record) })
   end
 
   def default_meta_tags
@@ -238,6 +239,16 @@ module ApplicationHelper
       hash = {}
     end
     default_meta_tags.merge(hash)
+  end
+
+  def meta_seo_tags_for(record)
+    return {noindex: false} if record.nil?
+    case record.class.name
+    when 'Project', 'Repository'
+      hash = {noindex: record.is_removed?}
+    else
+      hash = {noindex: false}
+    end
   end
 
   def tree_path(options={})
