@@ -6,6 +6,7 @@ module PackageManager
     SECURITY_PLANNED = false
     HIDDEN = false
     HAS_OWNERS = false
+    ENTIRE_PACKAGE_CAN_BE_DEPRECATED = false
 
     def self.platforms
       @platforms ||= begin
@@ -225,6 +226,10 @@ module PackageManager
 
     def self.project_find_names(project_name)
       [project_name]
+    end
+
+    def self.entire_package_deprecation_info(_name)
+      { is_deprecated: false, message: nil }
     end
 
     private

@@ -216,4 +216,34 @@ describe Project, type: :model do
       end
     end
   end
+
+  describe '#check_status' do
+    context 'entire project deprecated' do
+      let!(:project) { Project.create(platform: 'NPM', name: 'nomnom', status: '') }
+
+      it 'should use the result of entire_package_deprecation_info' do
+        VCR.use_cassette('project/check_status/nomnom') do
+          project.check_status
+
+          project.reload
+
+          expect(project.status).to eq('Deprecated')
+        end
+      end
+    end
+
+    context 'some of project deprecated' do
+      let!(:project) { Project.create(platform: 'NPM', name: 'react', status: '') }
+
+      it 'should use the result of entire_package_deprecation_info' do
+        VCR.use_cassette('project/check_status/react') do
+          project.check_status
+
+          project.reload
+
+          expect(project.status).to eq('')
+        end
+      end
+    end
+  end
 end
