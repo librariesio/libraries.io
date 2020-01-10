@@ -37,7 +37,7 @@ module PackageManager
       get("http://registry.npmjs.org/#{name.gsub('/', '%2F')}")
     end
 
-    def self.entire_package_deprecation_info(name)
+    def self.deprecation_info(name)
       versions = project(name)["versions"].values
 
       {

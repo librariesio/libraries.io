@@ -228,7 +228,7 @@ module PackageManager
       [project_name]
     end
 
-    def self.entire_package_deprecation_info(_name)
+    def self.deprecation_info(_name)
       { is_deprecated: false, message: nil }
     end
 
