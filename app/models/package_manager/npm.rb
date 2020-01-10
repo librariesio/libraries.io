@@ -6,6 +6,7 @@ module PackageManager
     SECURITY_PLANNED = true
     URL = 'https://www.npmjs.com'
     COLOR = '#f1e05a'
+    ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
 
     def self.package_link(project, _version = nil)
       "https://www.npmjs.com/package/#{project.name}"
@@ -34,6 +35,15 @@ module PackageManager
 
     def self.project(name)
       get("http://registry.npmjs.org/#{name.gsub('/', '%2F')}")
+    end
+
+    def self.entire_package_deprecation_info(name)
+      versions = project(name)["versions"].values
+
+      {
+        is_deprecated: versions.all? { |v| v["deprecated"] },
+        message: versions.last["deprecated"]
+      }
     end
 
     def self.mapping(project)

@@ -448,6 +448,11 @@ class Project < ApplicationRecord
     platform_class::HAS_DEPENDENCIES
   end
 
+  def can_have_entire_package_deprecated?
+    return false if platform_class == Project
+    platform_class::ENTIRE_PACKAGE_CAN_BE_DEPRECATED
+  end
+
   def can_have_versions?
     return false if platform_class == Project
     platform_class::HAS_VERSIONS
@@ -501,6 +506,11 @@ class Project < ApplicationRecord
       update_attribute(:status, 'Removed')
     elsif platform.downcase != 'packagist' && [400, 404].include?(response.response_code)
       update_attribute(:status, 'Removed')
+    elsif can_have_entire_package_deprecated?
+      result = platform_class.entire_package_deprecation_info(name)
+      if result[:is_deprecated]
+        update_attribute(:status, 'Deprecated')
+      end
     elsif removed
       update_attribute(:status, nil)
     end
