@@ -1,8 +1,8 @@
 namespace :one_off do
   desc 'backfill Dependency#version_project'
   task backfill_dependency_version_project: :environment do
+    max_id = Dependency.maximum(:id)
     scope = Dependency.where(version_project_id: nil)
-    max_id = scope.maximum(:id)
     puts "Before: #{scope.count}"
     scope.includes(:version).find_in_batches do |b|
       b.each do |dep|

@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 2020_01_11_210321) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "version_project_id"
-    t.index ["project_id"], name: "index_dependencies_on_project_id"
+    t.index ["project_id", "version_project_id"], name: "index_dependencies_on_project_id_and_version_project_id"
     t.index ["version_id"], name: "index_dependencies_on_version_id"
   end
 
