@@ -2,6 +2,7 @@ class Dependency < ApplicationRecord
   include DependencyChecks
 
   belongs_to :version
+  belongs_to :version_project, class_name: 'Project'
   belongs_to :project
 
   validates_presence_of :project_name, :version_id, :requirements, :platform
@@ -13,6 +14,7 @@ class Dependency < ApplicationRecord
   scope :platform, ->(platform) { where('lower(dependencies.platform) = ?', platform.try(:downcase)) }
 
   before_create :set_project_id
+  before_create :set_version_project_id
 
   alias_attribute :name, :project_name
   alias_attribute :latest_stable, :latest_stable_release_number
@@ -47,6 +49,10 @@ class Dependency < ApplicationRecord
 
   def set_project_id
     self.project_id = find_project_id unless project_id.present?
+  end
+
+  def set_version_project_id
+    self.version_project_id = version.project_id if version.present?
   end
 
   def update_project_id

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_16_195047) do
+ActiveRecord::Schema.define(version: 2020_01_11_210321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2019_10_16_195047) do
     t.string "requirements"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "version_project_id"
     t.index ["project_id"], name: "index_dependencies_on_project_id"
     t.index ["version_id"], name: "index_dependencies_on_version_id"
   end

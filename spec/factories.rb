@@ -43,6 +43,7 @@ FactoryBot.define do
   factory :dependency do
     version
     project
+    version_project { version.project }
     kind { 'runtime' }
     platform { 'Rubygems' }
     project_name { 'rails' }

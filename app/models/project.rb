@@ -43,7 +43,9 @@ class Project < ApplicationRecord
   has_many :published_tags, -> { where('published_at IS NOT NULL') }, through: :repository, class_name: 'Tag'
   has_many :dependents, class_name: 'Dependency'
   has_many :dependent_versions, through: :dependents, source: :version, class_name: 'Version'
+  # Deprecated in favor of dependent_projects_v2, which uses the new version_project_id column.
   has_many :dependent_projects, -> { group('projects.id').order('projects.rank DESC NULLS LAST') }, through: :dependent_versions, source: :project, class_name: 'Project'
+  has_many :dependent_projects_v2, -> { distinct('projects.id').order('projects.rank DESC NULLS LAST') }, through: :dependents, source: :version_project, class_name: 'Project'
   has_many :repository_dependencies
   has_many :dependent_repositories, -> { group('repositories.id').order('repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC') }, through: :repository_dependencies, source: :repository
   has_many :subscriptions
