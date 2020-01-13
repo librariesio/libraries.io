@@ -76,7 +76,7 @@ class ProjectsController < ApplicationController
   end
 
   def dependents
-    @dependents = @project.dependent_projects_v2.visible.paginate(page: page_number)
+    @dependents = @project.dependent_projects.visible.paginate(page: page_number)
   end
 
   def dependent_repos
