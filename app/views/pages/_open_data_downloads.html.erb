@@ -12,9 +12,6 @@
       <th>
         Archive Size
       </th>
-      <th>
-        Number of rows
-      </th>
       <th>Download link</th>
     </tr>
   </thead>
@@ -32,7 +29,6 @@
       <td>
         <%= release[:size] %>
       </td>
-      <td><%= release[:rows] %></td>
       <td>
         <a href="<%= release[:download] %>" class='btn btn-<%= version == latest_open_data_release_number ? 'success' : 'primary' %>'>Download</a>
       </td>
