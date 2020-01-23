@@ -40,6 +40,14 @@ module OpenDataHelper
         size: '13.1 GB',
         rows: '495 million',
         download: 'https://zenodo.org/record/2536573/files/Libraries.io-open-data-1.4.0.tar.gz'
+      },
+      '1.6.0' => {
+        date: 'January 12, 2020',
+        filename: 'libraries-1.6.0-2020-01-12.tar.gz',
+        md5: '4f2275284b86827751bb31ce74238b15',
+        size: '24 GB',
+        rows: '495 million',
+        download: 'https://zenodo.org/api/files/61a599a3-d681-4731-bab9-8150bb7a7c9e/libraries-1.6.0-2020-01-12.tar.gz'
       }
     }
   end
