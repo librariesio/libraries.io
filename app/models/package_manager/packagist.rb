@@ -6,6 +6,7 @@ module PackageManager
     SECURITY_PLANNED = true
     URL = 'https://packagist.org'
     COLOR = '#4F5D95'
+    ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
 
     def self.package_link(project, version = nil)
       "https://packagist.org/packages/#{project.name}##{version}"
@@ -25,6 +26,15 @@ module PackageManager
 
     def self.project(name)
       get("https://packagist.org/packages/#{name}.json")['package']
+    end
+
+    def self.deprecation_info(name)
+      is_deprecated = project(name).dig("abandoned") || ""
+
+      {
+        is_deprecated: is_deprecated != "",
+        message: ""
+      }
     end
 
     def self.mapping(project)
