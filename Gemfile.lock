@@ -531,7 +531,7 @@ GEM
       activerecord (>= 4.0.0)
       railties (>= 4.0.0)
     sdl4r (0.9.11)
-    semantic_range (2.2.1)
+    semantic_range (2.3.0)
     sexp_processor (4.12.0)
     shoulda (3.6.0)
       shoulda-context (~> 1.0, >= 1.0.1)
