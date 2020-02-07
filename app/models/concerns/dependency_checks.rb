@@ -36,6 +36,8 @@ module DependencyChecks
     end
     version_numbers = versions.map {|v| SemanticRange.clean(v.number) }.compact
     number = SemanticRange.max_satisfying(version_numbers, semantic_requirements, false, platform)
+    return nil unless number.present?
+
     versions.find{|v| SemanticRange.clean(v.number) == number }
   end
 
