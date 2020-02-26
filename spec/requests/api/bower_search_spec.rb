@@ -14,6 +14,7 @@ describe "Api::BowerSearchController", elasticsearch: true do
           {
             dependent_repos_count: project.dependent_repos_count,
             dependents_count: project.dependents_count,
+            deprecation_reason: project.deprecation_reason,
             description: project.description,
             forks: project.forks,
             homepage: project.homepage,

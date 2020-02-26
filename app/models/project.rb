@@ -13,6 +13,7 @@ class Project < ApplicationRecord
   API_FIELDS = %i[
     dependent_repos_count
     dependents_count
+    deprecation_reason
     description
     homepage
     language
@@ -510,6 +511,7 @@ class Project < ApplicationRecord
       result = platform_class.deprecation_info(name)
       if result[:is_deprecated]
         update_attribute(:status, 'Deprecated')
+        update_attribute(:deprecation_reason, result[:message])
       end
     elsif removed
       update_attribute(:status, nil)
