@@ -218,16 +218,17 @@ describe Project, type: :model do
   end
 
   describe '#check_status' do
-    context 'entire project deprecated' do
-      let!(:project) { Project.create(platform: 'NPM', name: 'nomnom', status: '') }
+    context 'entire project deprecated with message' do
+      let!(:project) { Project.create(platform: 'NPM', name: 'jade', status: '') }
 
       it 'should use the result of entire_package_deprecation_info' do
-        VCR.use_cassette('project/check_status/nomnom') do
+        VCR.use_cassette('project/check_status/jade') do
           project.check_status
 
           project.reload
 
           expect(project.status).to eq('Deprecated')
+          expect(project.deprecation_reason).not_to eq(nil)
         end
       end
     end

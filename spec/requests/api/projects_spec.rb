@@ -59,6 +59,7 @@ describe "Api::ProjectsController" do
           dependencies_for_version: version.number,
           dependent_repos_count: project.dependent_repos_count,
           dependents_count: project.dependents_count,
+          deprecation_reason: project.deprecation_reason,
           dependencies: version.dependencies.map do |dependency|
             {
               project_name: dependency.name,

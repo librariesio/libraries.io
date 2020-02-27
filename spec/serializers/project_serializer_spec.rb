@@ -8,6 +8,7 @@ describe ProjectSerializer do
       %i[
         dependent_repos_count
         dependents_count
+        deprecation_reason
         description
         forks
         homepage
