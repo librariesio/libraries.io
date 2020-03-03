@@ -37,7 +37,7 @@ services:
     image: librariesio/libraries.io
     environment:
       - DATABASE_URL=postgresql://librariesio:not-a-secret@postgres/librariesio
-      - REDIS_URL=redis://redis:6379/1
+      - REDISCLOUD_URL=redis://redis:6379/1
       - ELASTICSEARCH_CLUSTER_URL=elasticsearch:9200
     volumes:
       - .:/libraries.io
