@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -22,8 +24,8 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
-  config.public_file_server.headers = { 'Cache-Control' => 'public, max-age=2592000' }
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+  config.public_file_server.headers = { "Cache-Control" => "public, max-age=2592000" }
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -61,9 +63,9 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.action_controller.asset_host = config.action_mailer.asset_host  = 'https://libraries.io'
+  config.action_controller.asset_host = config.action_mailer.asset_host = "https://libraries.io"
   # default mail links to https
-  config.action_mailer.default_url_options = { :protocol => 'https' }
+  config.action_mailer.default_url_options = { protocol: "https" }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -85,25 +87,24 @@ Rails.application.configure do
   # disable sql logging in production
   config.active_record.logger = nil
 
-  config.action_mailer.default_url_options = { host: 'libraries.io' }
+  config.action_mailer.default_url_options = { host: "libraries.io" }
 
   config.cache_store = :dalli_store,
-                    (ENV["MEMCACHIER_SERVERS"] || "").split(","),
-                    {:username => ENV["MEMCACHIER_USERNAME"],
-                     :password => ENV["MEMCACHIER_PASSWORD"],
-                     :failover => true,
-                     :compress => true,
-                     :socket_timeout => 0.5,
-                     :socket_failure_delay => 0.1
-                    }
+                       (ENV["MEMCACHIER_SERVERS"] || "").split(","),
+                       { username: ENV["MEMCACHIER_USERNAME"],
+                         password: ENV["MEMCACHIER_PASSWORD"],
+                         failover: true,
+                         compress: true,
+                         socket_timeout: 0.5,
+                         socket_failure_delay: 0.1 }
   config.action_mailer.smtp_settings = {
-    address:              'smtp.sendgrid.net',
-    port:                 '2525',
-    authentication:       :plain,
-    user_name:            ENV['SENDGRID_USERNAME'],
-    password:             ENV['SENDGRID_PASSWORD'],
-    domain:               'heroku.com',
-    enable_starttls_auto: true
+    address: "smtp.sendgrid.net",
+    port: "2525",
+    authentication: :plain,
+    user_name: ENV["SENDGRID_USERNAME"],
+    password: ENV["SENDGRID_PASSWORD"],
+    domain: "heroku.com",
+    enable_starttls_auto: true,
   }
   config.action_mailer.delivery_method = :smtp
 

@@ -1,34 +1,35 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Go < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
     BIBLIOTHECARY_SUPPORT = true
-    URL = 'http://go-search.org/'
-    COLOR = '#375eab'
+    URL = "http://go-search.org/"
+    COLOR = "#375eab"
     KNOWN_HOSTS = [
-      'bitbucket.org',
-      'github.com',
-      'launchpad.net',
-      'hub.jazz.net',
-    ]
+      "bitbucket.org",
+      "github.com",
+      "launchpad.net",
+      "hub.jazz.net",
+    ].freeze
     KNOWN_VCS = [
-      '.bzr',
-      '.fossil',
-      '.git',
-      '.hg',
-      '.svn',
-    ]
+      ".bzr",
+      ".fossil",
+      ".git",
+      ".hg",
+      ".svn",
+    ].freeze
 
-
-    def self.package_link(project, version = nil)
+    def self.package_link(project, _version = nil)
       "http://go-search.org/view?id=#{project.name}"
     end
 
-    def self.documentation_url(name, version = nil)
+    def self.documentation_url(name, _version = nil)
       "http://godoc.org/#{name}"
     end
 
-    def self.install_instructions(project, version = nil)
+    def self.install_instructions(project, _version = nil)
       "go get #{project.name}"
     end
 
@@ -42,10 +43,10 @@ module PackageManager
 
     def self.mapping(project)
       {
-        name: project['Package'],
-        description: project['Synopsis'],
-        homepage: project['ProjectURL'],
-        repository_url: get_repository_url(project)
+        name: project["Package"],
+        description: project["Synopsis"],
+        homepage: project["ProjectURL"],
+        repository_url: get_repository_url(project),
       }
     end
 
@@ -54,7 +55,7 @@ module PackageManager
       return [name] if name.start_with?(*KNOWN_HOSTS)
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
 
-      go_import = get_html('https://' + name + '?go-get=1')
+      go_import = get_html("https://" + name + "?go-get=1")
         .xpath('//meta[@name="go-import"]')
         .first
         &.attribute("content")

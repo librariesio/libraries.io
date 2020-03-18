@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::BulkProjectController < Api::ApplicationController
   def project_status_queries
     @project_status_queries ||= params[:projects]

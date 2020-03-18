@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe Project, type: :model do
   it { should have_many(:versions) }
@@ -13,67 +15,67 @@ describe Project, type: :model do
   it { should have_many(:project_suggestions) }
   it { should have_one(:readme) }
   it { should belong_to(:repository) }
-  it { should have_many(:repository_maintenance_stats)}
+  it { should have_many(:repository_maintenance_stats) }
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:platform) }
 
-  describe 'license normalization' do
-    let(:project) { create(:project, name: 'foo', platform: PackageManager::Rubygems) }
+  describe "license normalization" do
+    let(:project) { create(:project, name: "foo", platform: PackageManager::Rubygems) }
 
-    it 'handles a single license' do
+    it "handles a single license" do
       project.licenses = "mit"
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["MIT"])
       expect(project.license_normalized).to be_truthy
     end
 
-    it 'handles comma separated license' do
+    it "handles comma separated license" do
       project.licenses = "mit,isc"
       project.normalize_licenses
-      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.normalized_licenses).to eq(%w[MIT ISC])
       expect(project.license_normalized).to be_truthy
     end
 
-    it 'handles OR separated licenses' do
+    it "handles OR separated licenses" do
       project.licenses = "mit OR isc"
       project.normalize_licenses
-      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.normalized_licenses).to eq(%w[MIT ISC])
       expect(project.license_normalized).to be_truthy
     end
 
-    it 'handles or separated licenses' do
+    it "handles or separated licenses" do
       project.licenses = "mit or ISC"
       project.normalize_licenses
-      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.normalized_licenses).to eq(%w[MIT ISC])
       expect(project.license_normalized).to be_truthy
     end
 
-    it 'handles (OR) separated licenses' do
+    it "handles (OR) separated licenses" do
       project.licenses = "(mit OR isc)"
       project.normalize_licenses
-      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.normalized_licenses).to eq(%w[MIT ISC])
       expect(project.license_normalized).to be_truthy
     end
 
-    it 'handles (OR) separated licenses' do
+    it "handles (OR) separated licenses" do
       project.licenses = "(MIT or CC0-1.0)"
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["MIT", "CC0-1.0"])
       expect(project.license_normalized).to be_truthy
     end
 
-    it 'handles AND separated licenses' do
+    it "handles AND separated licenses" do
       project.licenses = "mit AND ISC"
       project.normalize_licenses
-      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.normalized_licenses).to eq(%w[MIT ISC])
       expect(project.license_normalized).to be_truthy
     end
 
-    it 'handles and separated licenses' do
+    it "handles and separated licenses" do
       project.licenses = "mit and ISC"
       project.normalize_licenses
-      expect(project.normalized_licenses).to eq(["MIT", "ISC"])
+      expect(project.normalized_licenses).to eq(%w[MIT ISC])
       expect(project.license_normalized).to be_truthy
     end
 
@@ -98,7 +100,7 @@ describe Project, type: :model do
       expect(project.license_normalized).to be_truthy
     end
 
-    it 'disables license normalization for licenses set by admin' do
+    it "disables license normalization for licenses set by admin" do
       project.normalized_licenses = ["Apache-2.0"]
       project.license_set_by_admin = true
       project.licenses = "mit"
@@ -107,7 +109,7 @@ describe Project, type: :model do
     end
   end
 
-  describe 'maintenance stats' do
+  describe "maintenance stats" do
     let!(:repository) { create(:repository) }
     let!(:project) { create(:project, repository: repository) }
 
@@ -131,7 +133,7 @@ describe Project, type: :model do
         # count will return a hash
         # the key is the grouped column which is the project id
         # the value is the count for that project id
-        expect(results.count.key? project.id).to be true
+        expect(results.count.key?(project.id)).to be true
         expect(results.count[project.id]).to eql 1
       end
     end
@@ -163,15 +165,15 @@ describe Project, type: :model do
     end
   end
 
-  describe 'reformat_urls' do
+  describe "reformat_urls" do
     let!(:project) { create(:project) }
 
     it "should save the updated format URL" do
-      project.update_attributes!(homepage: 'https://libraries.io', repository_url: 'scm:git:git://github.com/librariesio/libraries.io/libaries.io.git')
+      project.update_attributes!(homepage: "https://libraries.io", repository_url: "scm:git:git://github.com/librariesio/libraries.io/libaries.io.git")
       project.reformat_repository_url
 
-      expect(project.homepage).to eql 'https://libraries.io'
-      expect(project.repository_url).to eql 'https://github.com/librariesio/libraries.io'
+      expect(project.homepage).to eql "https://libraries.io"
+      expect(project.repository_url).to eql "https://github.com/librariesio/libraries.io"
     end
   end
 
@@ -217,32 +219,32 @@ describe Project, type: :model do
     end
   end
 
-  describe '#check_status' do
-    context 'entire project deprecated with message' do
-      let!(:project) { Project.create(platform: 'NPM', name: 'jade', status: '') }
+  describe "#check_status" do
+    context "entire project deprecated with message" do
+      let!(:project) { Project.create(platform: "NPM", name: "jade", status: "") }
 
-      it 'should use the result of entire_package_deprecation_info' do
-        VCR.use_cassette('project/check_status/jade') do
+      it "should use the result of entire_package_deprecation_info" do
+        VCR.use_cassette("project/check_status/jade") do
           project.check_status
 
           project.reload
 
-          expect(project.status).to eq('Deprecated')
+          expect(project.status).to eq("Deprecated")
           expect(project.deprecation_reason).not_to eq(nil)
         end
       end
     end
 
-    context 'some of project deprecated' do
-      let!(:project) { Project.create(platform: 'NPM', name: 'react', status: '') }
+    context "some of project deprecated" do
+      let!(:project) { Project.create(platform: "NPM", name: "react", status: "") }
 
-      it 'should use the result of entire_package_deprecation_info' do
-        VCR.use_cassette('project/check_status/react') do
+      it "should use the result of entire_package_deprecation_info" do
+        VCR.use_cassette("project/check_status/react") do
           project.check_status
 
           project.reload
 
-          expect(project.status).to eq('')
+          expect(project.status).to eq("")
         end
       end
     end

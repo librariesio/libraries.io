@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectSuggestion < ApplicationRecord
   validates_presence_of :user, :project, :notes
 
@@ -6,6 +8,7 @@ class ProjectSuggestion < ApplicationRecord
 
   def done?
     return true if project.nil?
+
     !pending
   end
 
@@ -15,17 +18,20 @@ class ProjectSuggestion < ApplicationRecord
 
   def valid_repository_change?
     return false unless repository_url.present?
+
     repository_url != project.try(:repository_url)
   end
 
   def valid_license_change?
     return false unless licenses.present?
+
     licenses != project.try(:licenses)
   end
 
   def valid_status_change?
     return false unless status.present?
-    return false if project.status.blank? && status == 'Active'
+    return false if project.status.blank? && status == "Active"
+
     status != project.try(:status)
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe KeywordsController do
@@ -6,7 +8,7 @@ RSpec.describe KeywordsController do
   describe "GET #index" do
     it "responds successfully", type: :request do
       visit keywords_path
-      expect(page).to have_content 'Keywords'
+      expect(page).to have_content "Keywords"
     end
   end
 

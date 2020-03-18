@@ -1,9 +1,11 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe ProjectSerializer do
   subject { described_class.new(build(:project)) }
 
-  it 'should have expected attribute names' do
+  it "should have expected attribute names" do
     expect(subject.attributes.keys).to eq(
       %i[
         dependent_repos_count

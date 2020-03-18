@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectSearchResult
   include Status
 
@@ -29,7 +31,12 @@ class ProjectSearchResult
 
   def parse_timestamp(timestamp)
     return nil unless timestamp.present?
-    DateTime.parse(timestamp) rescue nil
+
+    begin
+      DateTime.parse(timestamp)
+    rescue StandardError
+      nil
+    end
   end
 
   def color
@@ -45,6 +52,6 @@ class ProjectSearchResult
   end
 
   def to_partial_path
-    'projects/project'
+    "projects/project"
   end
 end

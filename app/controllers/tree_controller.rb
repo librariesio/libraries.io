@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TreeController < ApplicationController
   before_action :find_project
   before_action :load_tree_resolver
@@ -12,9 +14,7 @@ class TreeController < ApplicationController
     if request.xhr?
       render :_tree, layout: false, tree: @tree
     else
-      if !@tree_resolver.cached?
-        @tree_resolver.enqueue_tree_resolution
-      end
+      @tree_resolver.enqueue_tree_resolution unless @tree_resolver.cached?
     end
   end
 end

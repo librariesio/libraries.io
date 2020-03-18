@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::StatusController < Api::BulkProjectController
   before_action :require_api_key
 

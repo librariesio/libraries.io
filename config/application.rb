@@ -1,4 +1,6 @@
-require_relative 'boot'
+# frozen_string_literal: true
+
+require_relative "boot"
 
 require "rails"
 require "active_model/railtie"
@@ -35,7 +37,7 @@ module Libraries
     # Initialize GraphQL client for Github API v4
     # Load schema from previous Github API schema dump
     Schema = Application.root.join("config/github_graphql_schema.json").to_s
-  
+
     # Create new client from schema to parse queries with
     # Actual client for querying should come from AuthToken
     Client = GraphQL::Client.new(schema: Schema)
@@ -50,20 +52,20 @@ module Libraries
     config.assets.paths << Emoji.images_path
     config.assets.precompile << "emoji/**/*.png"
 
-    Rails::Timeago.default_options :limit => proc { 60.days.ago }, :nojs => true, :format => proc { |time, options| time.strftime('%b %e, %Y') }
+    Rails::Timeago.default_options limit: proc { 60.days.ago }, nojs: true, format: proc { |time, _options| time.strftime("%b %e, %Y") }
 
     # GC::Profiler.enable
 
     config.middleware.use Rack::Attack
-    config.middleware.use Rack::Attack::RateLimit, throttle: ['api']
+    config.middleware.use Rack::Attack::RateLimit, throttle: ["api"]
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins '*'
+        origins "*"
         resource /^\/api\/.+/,
-          :headers => :any,
-          :methods => [:get, :post, :patch, :put, :delete, :options, :head],
-          :max_age => 86400
+                 headers: :any,
+                 methods: %i[get post patch put delete options head],
+                 max_age: 86400
       end
     end
   end

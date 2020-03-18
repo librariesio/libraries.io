@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TreeResolver
   MAX_TREE_DEPTH = 15
 
@@ -82,6 +84,7 @@ class TreeResolver
 
   def append_project_name(dependency)
     return true unless dependency
+
     @project_names.add?(dependency.project_name).present?
   end
 

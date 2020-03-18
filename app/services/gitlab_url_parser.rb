@@ -1,19 +1,21 @@
+# frozen_string_literal: true
+
 class GitlabURLParser < URLParser
   private
 
   def full_domain
-    'https://gitlab.com'
+    "https://gitlab.com"
   end
 
   def tlds
-    %w(com)
+    %w[com]
   end
 
   def domain
-    'gitlab'
+    "gitlab"
   end
 
   def remove_domain
-    url.gsub!(/(gitlab.com)+?(:|\/)?/i, '')
+    url.gsub!(/(gitlab.com)+?(:|\/)?/i, "")
   end
 end

@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe RepositoryUpdateOrgWorker do
   it "should use the low priority queue" do
@@ -7,7 +9,7 @@ describe RepositoryUpdateOrgWorker do
 
   it "should sync an org" do
     org = create(:repository_organisation)
-    host_type = 'GitHub'
+    host_type = "GitHub"
     expect(RepositoryOrganisation).to receive(:login).with(org.login).and_return([org])
     expect(org).to receive(:sync)
     subject.perform(host_type, org.login)

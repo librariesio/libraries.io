@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe RepositoryOrganisation, type: :model do
   it { should have_many(:repositories) }

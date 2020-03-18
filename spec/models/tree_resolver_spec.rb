@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe TreeResolver do
@@ -90,7 +92,7 @@ RSpec.describe TreeResolver do
       }
 
       expect(JSON.parse(subject.tree.to_json)).to eq(JSON.parse(expected_tree.to_json))
-      expect(subject.project_names).to match_array(["one", "two", "three", "four"])
+      expect(subject.project_names).to match_array(%w[one two three four])
       expect(subject.license_names).to eq(["MIT"])
     end
   end
@@ -135,4 +137,3 @@ RSpec.describe TreeResolver do
     end
   end
 end
-

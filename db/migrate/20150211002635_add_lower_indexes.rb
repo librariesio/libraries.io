@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLowerIndexes < ActiveRecord::Migration[5.0]
   def change
     execute "CREATE INDEX projects_lower_platform ON projects(lower(platform));"

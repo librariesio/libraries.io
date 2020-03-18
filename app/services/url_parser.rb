@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class URLParser
   def self.parse(url)
     new(url).parse
@@ -28,21 +30,24 @@ class URLParser
 
   def self.try_all(url)
     GithubURLParser.parse_to_full_url(url) ||
-    GitlabURLParser.parse_to_full_url(url) ||
-    BitbucketURLParser.parse_to_full_url(url)
+      GitlabURLParser.parse_to_full_url(url) ||
+      BitbucketURLParser.parse_to_full_url(url)
   end
 
   def parse_to_full_url
     path = parse
     return nil unless path.present?
-    [full_domain, path].join('/')
+
+    [full_domain, path].join("/")
   end
 
   def parse_to_full_user_url
     return nil unless parseable?
+
     path = clean_url
     return nil unless path.length == 1
-    [full_domain, path].join('/')
+
+    [full_domain, path].join("/")
   end
 
   private
@@ -58,6 +63,7 @@ class URLParser
     remove_equals_sign
     remove_scheme
     return nil unless includes_domain?
+
     remove_subdomain
     remove_domain
     remove_git_extension
@@ -67,7 +73,8 @@ class URLParser
 
   def format_url
     return nil unless url.length == 2
-    url.join('/')
+
+    url.join("/")
   end
 
   def parseable?
@@ -106,19 +113,17 @@ class URLParser
     return false if website_url?
 
     match = url.match(/([\w\.@\:\-_~]+)\.#{domain_regex}\/([\w\.@\:\-\_\~]+)/i)
-    if match && match.length == 4
-      return "#{match[1]}/#{match[3]}"
-    end
+    return "#{match[1]}/#{match[3]}" if match && match.length == 4
 
     nil
   end
 
   def remove_anchors
-    url.gsub!(/(#\S*)$/i, '')
+    url.gsub!(/(#\S*)$/i, "")
   end
 
   def remove_auth_user
-    self.url = url.split('@')[-1]
+    self.url = url.split("@")[-1]
   end
 
   def remove_domain
@@ -126,38 +131,38 @@ class URLParser
   end
 
   def remove_brackets
-    url.gsub!(/>|<|\(|\)|\[|\]/, '')
+    url.gsub!(/>|<|\(|\)|\[|\]/, "")
   end
 
   def remove_equals_sign
-    self.url = url.split('=')[-1]
+    self.url = url.split("=")[-1]
   end
 
   def remove_extra_segments
-    self.url = url.split('/').reject(&:blank?)[0..1]
+    self.url = url.split("/").reject(&:blank?)[0..1]
   end
 
   def remove_git_extension
-    url.gsub!(/(\.git|\/)$/i, '')
+    url.gsub!(/(\.git|\/)$/i, "")
   end
 
   def remove_git_scheme
-    url.gsub!(/git\/\//i, '')
+    url.gsub!(/git\/\//i, "")
   end
 
   def remove_querystring
-    url.gsub!(/(\?\S*)$/i, '')
+    url.gsub!(/(\?\S*)$/i, "")
   end
 
   def remove_scheme
-    url.gsub!(/(((git\+https|git|ssh|hg|svn|scm|http|https)+?:)+?)/i, '')
+    url.gsub!(/(((git\+https|git|ssh|hg|svn|scm|http|https)+?:)+?)/i, "")
   end
 
   def remove_subdomain
-    url.gsub!(/(www|ssh|raw|git|wiki)+?\./i, '')
+    url.gsub!(/(www|ssh|raw|git|wiki)+?\./i, "")
   end
 
   def remove_whitespace
-    url.gsub!(/\s/, '')
+    url.gsub!(/\s/, "")
   end
 end

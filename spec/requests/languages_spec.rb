@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe LanguagesController do
@@ -6,7 +8,7 @@ RSpec.describe LanguagesController do
   describe "GET #index" do
     it "responds successfully", type: :request do
       visit languages_path
-      expect(page).to have_content 'Languages'
+      expect(page).to have_content "Languages"
     end
   end
 

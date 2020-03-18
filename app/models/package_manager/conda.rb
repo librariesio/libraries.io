@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Conda < Base
     HAS_VERSIONS = true
@@ -6,11 +8,11 @@ module PackageManager
     URL = "https://anaconda.org"
 
     def self.formatted_name
-      'conda'
+      "conda"
     end
 
     def self.project_names
-      get_json("https://conda.libraries.io/packages").flat_map{|name| name.split("/").last}
+      get_json("https://conda.libraries.io/packages").flat_map { |name| name.split("/").last }
     end
 
     def self.recent_names
@@ -21,7 +23,7 @@ module PackageManager
       "https://anaconda.org/anaconda/#{project.name}"
     end
 
-    def self.install_instructions(project, version = nil)
+    def self.install_instructions(project, _version = nil)
       "conda install -c anaconda #{project.name}"
     end
 
@@ -35,13 +37,13 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project["name"],
-        :description => project["description"],
-        :homepage => project["home"],
-        :keywords_array => Array.wrap(project.fetch("keywords", [])),
-        :licenses => project["license"],
-        :repository_url => project["dev_url"],
-        :versions => [project["version"]]
+        name: project["name"],
+        description: project["description"],
+        homepage: project["home"],
+        keywords_array: Array.wrap(project.fetch("keywords", [])),
+        licenses: project["license"],
+        repository_url: project["dev_url"],
+        versions: [project["version"]],
       }
     end
 
@@ -49,7 +51,7 @@ module PackageManager
       [{ number: project["version"], published_at: Time.at(project["timestamp"]) }]
     end
 
-    def self.dependencies(name, version, project)
+    def self.dependencies(name, version, _project)
       version_data = get_json("https://conda-parser.libraries.io/package?name=#{name}&version=#{version}")
       deps = version_data["depends"].map { |d| d.split(" ") }
       map_dependencies(deps, "runtime")

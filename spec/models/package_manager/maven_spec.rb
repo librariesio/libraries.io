@@ -1,59 +1,61 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe PackageManager::Maven do
   it 'has formatted name of "Maven"' do
-    expect(described_class.formatted_name).to eq('Maven')
+    expect(described_class.formatted_name).to eq("Maven")
   end
 
-  describe '#package_link' do
-    let(:project) { create(:project, name: 'com.github.jparkie:pdd', platform: described_class.name) }
+  describe "#package_link" do
+    let(:project) { create(:project, name: "com.github.jparkie:pdd", platform: described_class.name) }
 
-    it 'returns a link to project website' do
+    it "returns a link to project website" do
       expect(described_class.package_link(project)).to eq("http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jparkie%22%20AND%20a%3A%22pdd%22")
     end
 
-    it 'handles version' do
-      expect(described_class.package_link(project, '2.0.0')).to eq("http://search.maven.org/#artifactdetails%7Ccom.github.jparkie%7Cpdd%7C2.0.0%7Cjar")
+    it "handles version" do
+      expect(described_class.package_link(project, "2.0.0")).to eq("http://search.maven.org/#artifactdetails%7Ccom.github.jparkie%7Cpdd%7C2.0.0%7Cjar")
     end
   end
 
-  describe '#check_status_url' do
-    let(:project) { create(:project, name: 'javax.faces:javax.faces-api', platform: described_class.name) }
+  describe "#check_status_url" do
+    let(:project) { create(:project, name: "javax.faces:javax.faces-api", platform: described_class.name) }
 
-    it 'returns link to maven central folder' do
+    it "returns link to maven central folder" do
       expect(described_class.check_status_url(project)).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api")
     end
   end
 
-  describe '#download_url' do
-    let(:project) { create(:project, name: 'javax.faces:javax.faces-api', platform: described_class.name) }
+  describe "#download_url" do
+    let(:project) { create(:project, name: "javax.faces:javax.faces-api", platform: described_class.name) }
 
-    it 'returns link to maven central jar file' do
-      expect(described_class.download_url(project.name, '2.3')).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api/2.3/javax.faces-api-2.3.jar")
+    it "returns link to maven central jar file" do
+      expect(described_class.download_url(project.name, "2.3")).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api/2.3/javax.faces-api-2.3.jar")
     end
   end
 
-  describe '.project(name)' do
-    it 'returns the expected project data' do
+  describe ".project(name)" do
+    it "returns the expected project data" do
       allow(described_class)
         .to receive(:versions)
-        .and_return([{number: '2.3', published_at: '2019-06-05T10:50:00Z'}])
+        .and_return([{ number: "2.3", published_at: "2019-06-05T10:50:00Z" }])
 
       expected = {
-        name: 'javax.faces:javax.faces-api',
-        path: 'javax.faces/javax.faces-api', # This is the proper format for a maven-repository.com path component, which differs from maven.org format (dots vs slashes)
-        group_id: 'javax.faces',
-        artifact_id: 'javax.faces-api',
-        versions: [{ number: '2.3', published_at: '2019-06-05T10:50:00Z' }],
-        latest_version: '2.3',
+        name: "javax.faces:javax.faces-api",
+        path: "javax.faces/javax.faces-api", # This is the proper format for a maven-repository.com path component, which differs from maven.org format (dots vs slashes)
+        group_id: "javax.faces",
+        artifact_id: "javax.faces-api",
+        versions: [{ number: "2.3", published_at: "2019-06-05T10:50:00Z" }],
+        latest_version: "2.3",
       }
 
-      expect(described_class.project('javax.faces:javax.faces-api')).to eq(expected)
+      expect(described_class.project("javax.faces:javax.faces-api")).to eq(expected)
     end
   end
 
-  describe '#parse_names' do
-    it 'returns parsed named from HTML' do
+  describe "#parse_names" do
+    it "returns parsed named from HTML" do
       html = "
         <table>
           <tr>
@@ -74,11 +76,11 @@ describe PackageManager::Maven do
       "
       parsed_names = described_class.parse_names(Nokogiri::HTML.fragment(html))
 
-      expect(parsed_names.include?('javax.faces:javax.faces-api')).to be true
-      expect(parsed_names.include?('org.scala-lang:scala-library')).to be true
+      expect(parsed_names.include?("javax.faces:javax.faces-api")).to be true
+      expect(parsed_names.include?("org.scala-lang:scala-library")).to be true
     end
 
-    it 'excludes invalid names from HTML' do
+    it "excludes invalid names from HTML" do
       html = "
         <table>
           <tr>
@@ -99,15 +101,15 @@ describe PackageManager::Maven do
       "
       parsed_names = described_class.parse_names(Nokogiri::HTML.fragment(html))
 
-      expect(parsed_names.include?('javax.faces:javax.faces-api')).to be true
-      expect(parsed_names.include?('mysql')).to be false
+      expect(parsed_names.include?("javax.faces:javax.faces-api")).to be true
+      expect(parsed_names.include?("mysql")).to be false
     end
   end
 
-  describe 'mapping_from_pom_xml' do
+  describe "mapping_from_pom_xml" do
     let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read) }
-    let(:parent_pom) { Ox.parse('<project><licenses><license><name>unknown</name></license></licenses><url>https://github.com/googleapis/googleapis</url></project>') }
-    let(:parent_project) { {name: 'com.google.api.grpc:proto-google-common-parent', groupId: 'com.google.api.grpc', artifactId: 'proto-google-common-parent', versions: [{number: "1.0", published_at: Time.now.to_s}]} }
+    let(:parent_pom) { Ox.parse("<project><licenses><license><name>unknown</name></license></licenses><url>https://github.com/googleapis/googleapis</url></project>") }
+    let(:parent_project) { { name: "com.google.api.grpc:proto-google-common-parent", groupId: "com.google.api.grpc", artifactId: "proto-google-common-parent", versions: [{ number: "1.0", published_at: Time.now.to_s }] } }
     let(:parsed) { described_class.mapping_from_pom_xml(pom) }
 
     context "with parsed pom" do
@@ -117,30 +119,30 @@ describe PackageManager::Maven do
           .and_return(parent_project)
         allow(described_class)
           .to receive(:get_pom)
-          .with('com.google.api.grpc', 'proto-google-common-parent', '0.1.9')
+          .with("com.google.api.grpc", "proto-google-common-parent", "0.1.9")
           .and_return(parent_pom)
       end
 
-      it 'to find license' do
+      it "to find license" do
         # parent license should be overwritten by direct pom
         expect(parsed[:licenses]).to eq("Apache-2.0")
       end
 
-      it 'to find description' do
+      it "to find description" do
         expect(parsed[:description]).to eq("PROTO library for proto-google-common-protos")
       end
 
-      it 'to find homepage' do
+      it "to find homepage" do
         # homepage value should come from parent pom
         expect(parsed[:homepage]).to eq("https://github.com/googleapis/googleapis")
       end
 
-      it 'to find repository url' do
+      it "to find repository url" do
         expect(parsed[:repository_url]).to eq("https://github.com/googleapis/googleapis-dummy")
       end
     end
 
-    it 'to stop calling parent poms at maximum depth' do
+    it "to stop calling parent poms at maximum depth" do
       allow(described_class)
         .to receive(:get_pom)
         .and_return(pom)
@@ -156,24 +158,24 @@ describe PackageManager::Maven do
     end
   end
 
-  describe '.get_pom(group_id, artifact_id, version)' do
-    context 'with no relocation' do
-      it 'returns the expected data' do
-        simple_pom = Ox.parse('<project></project>')
+  describe ".get_pom(group_id, artifact_id, version)" do
+    context "with no relocation" do
+      it "returns the expected data" do
+        simple_pom = Ox.parse("<project></project>")
 
         allow(described_class).to receive(:get_xml)
           .with(/group_id\/artifact_id\/version/)
           .and_return(simple_pom)
 
-        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
+        expect(described_class.get_pom("group_id", "artifact_id", "version"))
           .to eq(simple_pom)
       end
     end
 
-    context 'with a simple relocation' do
-      it 'returns the expected data' do
-        simple_pom = Ox.parse('<project></project>')
-        redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group.id.2</groupId></relocation></distributionManagement></project>')
+    context "with a simple relocation" do
+      it "returns the expected data" do
+        simple_pom = Ox.parse("<project></project>")
+        redirect_pom = Ox.parse("<project><distributionManagement><relocation><groupId>group.id.2</groupId></relocation></distributionManagement></project>")
 
         allow(described_class).to receive(:get_xml)
           .with(/group_id\/artifact_id\/version/)
@@ -182,14 +184,14 @@ describe PackageManager::Maven do
           .with(/group\/id\/2\/artifact_id\/version/)
           .and_return(simple_pom)
 
-        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
+        expect(described_class.get_pom("group_id", "artifact_id", "version"))
           .to eq(simple_pom)
       end
     end
 
-    context 'with a broken relocation' do
-      it 'returns the expected data' do
-        redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>')
+    context "with a broken relocation" do
+      it "returns the expected data" do
+        redirect_pom = Ox.parse("<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>")
 
         allow(described_class).to receive(:get_xml)
           .with(/group_id\/artifact_id\/version/)
@@ -198,42 +200,42 @@ describe PackageManager::Maven do
           .with(/group_id_2\/artifact_id\/version/)
           .and_raise(Faraday::Error)
 
-        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
+        expect(described_class.get_pom("group_id", "artifact_id", "version"))
           .to eq(redirect_pom)
       end
     end
 
-    context 'with an infinite relocation loop' do
-      it 'terminates' do
-        redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>')
-        redirect_pom_2 = Ox.parse('<project><distributionManagement><relocation><groupId>group_id</groupId></relocation></distributionManagement></project>')
+    context "with an infinite relocation loop" do
+      it "terminates" do
+        redirect_pom = Ox.parse("<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>")
+        redirect_pom2 = Ox.parse("<project><distributionManagement><relocation><groupId>group_id</groupId></relocation></distributionManagement></project>")
 
         allow(described_class).to receive(:get_xml)
           .with(/group_id\/artifact_id\/version/)
           .and_return(redirect_pom)
         allow(described_class).to receive(:get_xml)
           .with(/group_id_2\/artifact_id\/version/)
-          .and_return(redirect_pom_2)
+          .and_return(redirect_pom2)
 
-        expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
-          .to eq(redirect_pom_2)
+        expect(described_class.get_pom("group_id", "artifact_id", "version"))
+          .to eq(redirect_pom2)
       end
     end
   end
 
-  describe '.licenses(xml)' do
-    context 'with licences in the XML' do
-      it 'returns those licenses' do
-        pom = Ox.parse('<project><licenses><license><name>Apache-2.0</name><url>http://www.apache.org/licenses/LICENSE-2.0.txt</url></license></licenses></project>')
+  describe ".licenses(xml)" do
+    context "with licences in the XML" do
+      it "returns those licenses" do
+        pom = Ox.parse("<project><licenses><license><name>Apache-2.0</name><url>http://www.apache.org/licenses/LICENSE-2.0.txt</url></license></licenses></project>")
 
-        expect(described_class.licenses(pom)).to eq(['Apache-2.0'])
+        expect(described_class.licenses(pom)).to eq(["Apache-2.0"])
       end
     end
 
-    context 'with licences in the comments' do
-      it 'returns those licenses' do
+    context "with licences in the comments" do
+      it "returns those licenses" do
         pom = Ox.parse(
-          <<-EOF
+          <<-XMLLICENSE
             <?xml version="1.0"?>
             <!--
                Licensed to the Apache Software Foundation (ASF) under one or more
@@ -252,46 +254,46 @@ describe PackageManager::Maven do
                limitations under the License.
             -->
             <project></project>
-          EOF
+          XMLLICENSE
         )
 
-        expect(described_class.licenses(pom)).to eq(['Apache-2.0'])
+        expect(described_class.licenses(pom)).to eq(["Apache-2.0"])
       end
     end
 
-    context 'with no licences' do
-      it 'returns empty' do
-        pom = Ox.parse('<project></project>')
+    context "with no licences" do
+      it "returns empty" do
+        pom = Ox.parse("<project></project>")
         expect(described_class.licenses(pom)).to be_empty
       end
     end
   end
 
-  describe '.latest_version(versions, names)' do
-    context 'with versions in the project' do
-      it 'returns the latest version' do
+  describe ".latest_version(versions, names)" do
+    context "with versions in the project" do
+      it "returns the latest version" do
         versions = [
-          { number: 'previous', published_at: Time.parse('2019-06-04T00:00:00Z') },
-          { number: 'latest', published_at: Time.parse('2019-06-04T00:00:01Z') },
+          { number: "previous", published_at: Time.parse("2019-06-04T00:00:00Z") },
+          { number: "latest", published_at: Time.parse("2019-06-04T00:00:01Z") },
         ]
-        expect(described_class.latest_version(versions, 'com.tidelift:test')).to eq('latest')
+        expect(described_class.latest_version(versions, "com.tidelift:test")).to eq("latest")
       end
     end
 
-    context 'with no versions in the project' do
-      context 'with versions in the DB' do
-        it 'falls back to the DB' do
-          project = create(:project, name: 'com.tidelift:test', platform: 'Maven')
-          create(:version, project: project, number: '1.0.0', published_at: Time.parse('2019-06-04T00:00:00Z'))
-          create(:version, project: project, number: '1.0.1', published_at: Time.parse('2019-06-04T00:00:01Z'))
+    context "with no versions in the project" do
+      context "with versions in the DB" do
+        it "falls back to the DB" do
+          project = create(:project, name: "com.tidelift:test", platform: "Maven")
+          create(:version, project: project, number: "1.0.0", published_at: Time.parse("2019-06-04T00:00:00Z"))
+          create(:version, project: project, number: "1.0.1", published_at: Time.parse("2019-06-04T00:00:01Z"))
 
-          expect(described_class.latest_version([], 'com.tidelift:test')).to eq('1.0.1')
+          expect(described_class.latest_version([], "com.tidelift:test")).to eq("1.0.1")
         end
       end
 
-      context 'with no versions in the DB' do
-        it 'returns nothing' do
-          expect(described_class.latest_version([], 'com.tidelift:test')).to be_nil
+      context "with no versions in the DB" do
+        it "returns nothing" do
+          expect(described_class.latest_version([], "com.tidelift:test")).to be_nil
         end
       end
     end
@@ -299,15 +301,15 @@ describe PackageManager::Maven do
 end
 
 describe PackageManager::Maven::MavenUrl do
-  describe '#legal_name?' do
-    it 'allows names with the format {group_id}:{artifact_name}' do
-      ['com.google:guava', 'junit:junit', 'org.springframework.boot:spring-boot-starter-web', 'org.scala-lang:scala-library'].each do |name|
+  describe "#legal_name?" do
+    it "allows names with the format {group_id}:{artifact_name}" do
+      ["com.google:guava", "junit:junit", "org.springframework.boot:spring-boot-starter-web", "org.scala-lang:scala-library"].each do |name|
         expect(described_class.legal_name?(name)).to be true
       end
     end
 
-    it 'does not allow names without the format {group_id}:{artifact_name}' do
-      ['guava', 'junit', 'org.springframework.boot', 'org.scala-lang'].each do |name|
+    it "does not allow names without the format {group_id}:{artifact_name}" do
+      ["guava", "junit", "org.springframework.boot", "org.scala-lang"].each do |name|
         expect(described_class.legal_name?(name)).to be false
       end
     end

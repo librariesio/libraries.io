@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectScoreCalculator
   def initialize(project, max_dependent_projects: nil, max_dependent_repositories: nil, max_stars: nil, max_forks: nil, max_watchers: nil)
     @project = project
@@ -11,34 +13,37 @@ class ProjectScoreCalculator
   def self.maximums(platform)
     {
       max_stars: max_stars(platform),
-      max_dependent_projects:max_dependent_projects(platform),
+      max_dependent_projects: max_dependent_projects(platform),
       max_dependent_repositories: max_dependent_repositories(platform),
       max_forks: max_forks(platform),
-      max_watchers: max_watchers(platform)
+      max_watchers: max_watchers(platform),
     }
   end
 
   def overall_score
-    (overall_scores.values.compact.sum/overall_scores.values.compact.length.to_f).round
+    (overall_scores.values.compact.sum / overall_scores.values.compact.length.to_f).round
   end
 
   def popularity_score
     return nil if popularity_scores.values.compact.empty?
-    popularity_scores.values.compact.sum/popularity_scores.values.compact.length.to_f
+
+    popularity_scores.values.compact.sum / popularity_scores.values.compact.length.to_f
   end
 
   def community_score
     return nil if community_scores.values.compact.empty?
-    community_scores.values.compact.sum/community_scores.values.compact.length.to_f
+
+    community_scores.values.compact.sum / community_scores.values.compact.length.to_f
   end
 
   def quality_score
-    quality_scores.values.sum/quality_scores.values.length.to_f
+    quality_scores.values.sum / quality_scores.values.length.to_f
   end
 
   def dependencies_score
     return nil unless platform_class::HAS_DEPENDENCIES
-    dependencies_scores.values.compact.sum/dependencies_scores.values.compact.length.to_f
+
+    dependencies_scores.values.compact.sum / dependencies_scores.values.compact.length.to_f
   end
 
   def breakdown
@@ -50,7 +55,7 @@ class ProjectScoreCalculator
         dependent_repositories: dependent_repositories_score,
         stars: stars_score,
         forks: forks_score,
-        watchers: watchers_score
+        watchers: watchers_score,
       },
       community: {
         score: community_score,
@@ -58,7 +63,7 @@ class ProjectScoreCalculator
         recent_releases: recent_releases_score,
         brand_new: brand_new_score,
         contributors: contributors_score,
-        maintainers: maintainers_score
+        maintainers: maintainers_score,
       },
       quality: {
         score: quality_score,
@@ -66,54 +71,60 @@ class ProjectScoreCalculator
         status: status_score,
         multiple_versions: multiple_versions_score,
         semver: semver_score,
-        stable_release: stable_release_score
+        stable_release: stable_release_score,
       },
       dependencies: {
         score: dependencies_score,
         outdated_dependencies: outdated_dependencies_score,
         dependencies_count: dependencies_count_score,
-        direct_dependencies: direct_dependencies_scores
-      }
+        direct_dependencies: direct_dependencies_scores,
+      },
     }
   end
 
   def basic_info_score
-    basic_info.values.compact.select{|v| v}.length/basic_info.values.compact.length.to_f*100
+    basic_info.values.compact.select { |v| v }.length / basic_info.values.compact.length.to_f * 100
   end
 
   def contribution_docs_score
     return nil if contribution_docs.values.compact.empty?
-    contribution_docs.values.compact.select{|v| v}.length/contribution_docs.values.compact.length.to_f*100
+
+    contribution_docs.values.compact.select { |v| v }.length / contribution_docs.values.compact.length.to_f * 100
   end
 
   def dependent_projects_score
     return nil unless platform_class::HAS_DEPENDENCIES
     return 0 if max_dependent_projects.zero? || @project.dependents_count.zero?
-    Math.log10(@project.dependents_count)/Math.log10(max_dependent_projects)*100
+
+    Math.log10(@project.dependents_count) / Math.log10(max_dependent_projects) * 100
   end
 
   def dependent_repositories_score
     return nil unless platform_class::BIBLIOTHECARY_SUPPORT
     return 0 if max_dependent_repositories.zero? || @project.dependent_repos_count.zero?
-    Math.log10(@project.dependent_repos_count)/Math.log10(max_dependent_repositories)*100
+
+    Math.log10(@project.dependent_repos_count) / Math.log10(max_dependent_repositories) * 100
   end
 
   def stars_score
     return nil if @project.repository.nil?
     return 0 if max_stars.zero? || @project.stars.zero?
-    Math.log10(@project.stars)/Math.log10(max_stars)*100
+
+    Math.log10(@project.stars) / Math.log10(max_stars) * 100
   end
 
   def forks_score
     return nil if @project.repository.nil?
     return 0 if max_forks.zero? || @project.forks.zero?
-    Math.log10(@project.forks)/Math.log10(max_forks)*100
+
+    Math.log10(@project.forks) / Math.log10(max_forks) * 100
   end
 
   def watchers_score
     return nil if @project.repository.nil?
     return 0 if max_watchers.zero? || @project.watchers.zero?
-    Math.log10(@project.watchers)/Math.log10(max_watchers)*100
+
+    Math.log10(@project.watchers) / Math.log10(max_watchers) * 100
   end
 
   def status_score
@@ -121,13 +132,15 @@ class ProjectScoreCalculator
   end
 
   def recent_releases_score
-    return 0 unless published_releases.length > 0
-    published_releases.any? {|v| v.published_at && v.published_at > 6.months.ago } ? 100 : 0
+    return 0 if published_releases.empty?
+
+    published_releases.any? { |v| v.published_at && v.published_at > 6.months.ago } ? 100 : 0
   end
 
   def brand_new_score
-    return 0 unless published_releases.length > 0
-    published_releases.any? {|v| v.published_at && v.published_at < 6.months.ago } ? 100 : 0
+    return 0 if published_releases.empty?
+
+    published_releases.any? { |v| v.published_at && v.published_at < 6.months.ago } ? 100 : 0
   end
 
   def semver_score
@@ -137,6 +150,7 @@ class ProjectScoreCalculator
   def multiple_versions_score
     return 0 if @project.versions_count < 2
     return 100 if @project.versions_count > 5
+
     50
   end
 
@@ -148,6 +162,7 @@ class ProjectScoreCalculator
     return nil if @project.repository.nil?
     return 0 if @project.contributions_count < 2
     return 100 if @project.contributions_count > 5
+
     50
   end
 
@@ -155,6 +170,7 @@ class ProjectScoreCalculator
     return nil unless platform_class::HAS_OWNERS
     return 0 if maintainers_count < 2
     return 100 if maintainers_count > 5
+
     50
   end
 
@@ -162,69 +178,74 @@ class ProjectScoreCalculator
     return nil unless platform_class::HAS_DEPENDENCIES
     return nil if direct_dependencies.length.zero?
     return nil if direct_dependencies.length.zero?
-    (direct_dependencies.length-outdated_dependencies.length)/direct_dependencies.length.to_f*100
+
+    (direct_dependencies.length - outdated_dependencies.length) / direct_dependencies.length.to_f * 100
   end
 
   def dependencies_count_score
     return nil unless platform_class::HAS_DEPENDENCIES
     return 100 unless has_versions?
     return 0 if direct_dependencies.length > 100
+
     100 - direct_dependencies.length
   end
 
   def direct_dependencies_score
     return 100 unless has_versions?
+
     dep_scores = direct_dependencies.map(&:score).compact
     return 100 if dep_scores.empty?
-    dep_scores.sum/dep_scores.length
+
+    dep_scores.sum / dep_scores.length
   end
 
   def direct_dependencies_scores
     return nil unless platform_class::HAS_DEPENDENCIES
-    Hash[direct_dependencies.collect { |d| [d.project_name, d.score] } ]
+
+    Hash[direct_dependencies.collect { |d| [d.project_name, d.score] }]
   end
 
   def self.max_stars(platform)
     Project.platform(platform)
-           .joins(:repository)
-           .order('repositories.stargazers_count DESC NULLS LAST')
-           .limit(1)
-           .pluck(:stargazers_count)
-           .first || 0
+      .joins(:repository)
+      .order("repositories.stargazers_count DESC NULLS LAST")
+      .limit(1)
+      .pluck(:stargazers_count)
+      .first || 0
   end
 
   def self.max_dependent_projects(platform)
     Project.platform(platform)
-           .order('dependents_count DESC NULLS LAST')
-           .limit(1)
-           .pluck(:dependents_count)
-           .first || 0
+      .order("dependents_count DESC NULLS LAST")
+      .limit(1)
+      .pluck(:dependents_count)
+      .first || 0
   end
 
   def self.max_dependent_repositories(platform)
     Project.platform(platform)
-           .order('dependent_repos_count DESC NULLS LAST')
-           .limit(1)
-           .pluck(:dependent_repos_count)
-           .first || 0
+      .order("dependent_repos_count DESC NULLS LAST")
+      .limit(1)
+      .pluck(:dependent_repos_count)
+      .first || 0
   end
 
   def self.max_forks(platform)
     Project.platform(platform)
-           .joins(:repository)
-           .order('repositories.forks_count DESC NULLS LAST')
-           .limit(1)
-           .pluck(:forks_count)
-           .first || 0
+      .joins(:repository)
+      .order("repositories.forks_count DESC NULLS LAST")
+      .limit(1)
+      .pluck(:forks_count)
+      .first || 0
   end
 
   def self.max_watchers(platform)
     Project.platform(platform)
-           .joins(:repository)
-           .order('repositories.subscribers_count DESC NULLS LAST')
-           .limit(1)
-           .pluck(:subscribers_count)
-           .first || 0
+      .joins(:repository)
+      .order("repositories.subscribers_count DESC NULLS LAST")
+      .limit(1)
+      .pluck(:subscribers_count)
+      .first || 0
   end
 
   private
@@ -252,6 +273,7 @@ class ProjectScoreCalculator
   def direct_dependencies
     return [] unless has_versions?
     return [] if latest_version.nil?
+
     latest_version.runtime_dependencies
   end
 
@@ -260,7 +282,7 @@ class ProjectScoreCalculator
   end
 
   def inactive_statuses
-    ["Deprecated", "Removed", "Unmaintained", "Hidden"]
+    %w[Deprecated Removed Unmaintained Hidden]
   end
 
   def max_dependent_projects
@@ -289,7 +311,7 @@ class ProjectScoreCalculator
       dependent_repositories: dependent_repositories_score,
       stars: stars_score,
       forks: forks_score,
-      watchers: watchers_score
+      watchers: watchers_score,
     }
   end
 
@@ -299,7 +321,7 @@ class ProjectScoreCalculator
       status: status_score,
       multiple_versions: multiple_versions_score,
       semver: semver_score,
-      stable_release: stable_release_score
+      stable_release: stable_release_score,
     }
   end
 
@@ -309,7 +331,7 @@ class ProjectScoreCalculator
       recent_releases: recent_releases_score,
       brand_new: brand_new_score,
       contributors: contributors_score,
-      maintainers: maintainers_score
+      maintainers: maintainers_score,
     }
   end
 
@@ -317,46 +339,50 @@ class ProjectScoreCalculator
     {
       outdated_dependencies: outdated_dependencies_score,
       dependencies_count: dependencies_count_score,
-      direct_dependencies: direct_dependencies_score
+      direct_dependencies: direct_dependencies_score,
     }
   end
 
   def basic_info
     {
-      description:    @project.description.present?,
-      homepage:       @project.homepage.present?,
+      description: @project.description.present?,
+      homepage: @project.homepage.present?,
       repository_url: @project.repository_url.present?,
-      keywords:       @project.keywords.present?,
-      readme:         readme_present?,
-      license:        @project.normalized_licenses.present?
+      keywords: @project.keywords.present?,
+      readme: readme_present?,
+      license: @project.normalized_licenses.present?,
     }
   end
 
   def contribution_docs
     {
       code_of_conduct: coc_present?,
-      contributing:    contributing_present?,
-      changelog:       changelog_present?
+      contributing: contributing_present?,
+      changelog: changelog_present?,
     }
   end
 
   def readme_present?
     return nil if @project.repository.nil?
+
     @project.repository.readme.present?
   end
 
   def coc_present?
     return nil if @project.repository.nil?
+
     @project.repository.has_coc.present?
   end
 
   def contributing_present?
     return nil if @project.repository.nil?
+
     @project.repository.has_contributing.present?
   end
 
   def changelog_present?
     return nil if @project.repository.nil?
+
     @project.repository.has_changelog.present?
   end
 
@@ -365,7 +391,7 @@ class ProjectScoreCalculator
       popularity: popularity_score,
       community: community_score,
       quality: quality_score,
-      dependencies: dependencies_score
+      dependencies: dependencies_score,
     }
   end
 end

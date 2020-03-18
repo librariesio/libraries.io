@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   include Recommendable
   include GithubIdentity
@@ -15,7 +17,7 @@ class User < ApplicationRecord
   has_many :all_repositories, through: :repository_permissions, source: :repository
   has_many :adminable_repository_permissions, -> { where admin: true }, anonymous_class: RepositoryPermission
   has_many :adminable_repositories, through: :adminable_repository_permissions, source: :repository
-  has_many :adminable_repository_organisations, -> { group('repository_organisations.id') }, through: :adminable_repositories, source: :repository_organisation
+  has_many :adminable_repository_organisations, -> { group("repository_organisations.id") }, through: :adminable_repositories, source: :repository_organisation
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, through: :repository_users
   has_many :public_repositories, -> { where private: false }, anonymous_class: Repository, through: :repository_users
 
@@ -23,10 +25,10 @@ class User < ApplicationRecord
 
   has_many :dependencies, through: :source_repositories
   has_many :really_all_dependencies, through: :all_repositories, source: :dependencies
-  has_many :all_dependent_projects, -> { group('projects.id') }, through: :really_all_dependencies, source: :project
-  has_many :all_dependent_repos, -> { group('repositories.id') }, through: :all_dependent_projects, source: :repository
+  has_many :all_dependent_projects, -> { group("projects.id") }, through: :really_all_dependencies, source: :project
+  has_many :all_dependent_repos, -> { group("repositories.id") }, through: :all_dependent_projects, source: :repository
 
-  has_many :favourite_projects, -> { group('projects.id').order("COUNT(projects.id) DESC, projects.rank DESC") }, through: :dependencies, source: :project
+  has_many :favourite_projects, -> { group("projects.id").order("COUNT(projects.id) DESC, projects.rank DESC") }, through: :dependencies, source: :project
 
   has_many :project_mutes, dependent: :delete_all
   has_many :muted_projects, through: :project_mutes, source: :project
@@ -36,12 +38,13 @@ class User < ApplicationRecord
 
   after_commit :update_repo_permissions_async, :download_self, :create_api_key, on: :create
 
-  validates_presence_of :email, :on => :update
-  validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
+  validates_presence_of :email, on: :update
+  validates_format_of :email, with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, on: :update
 
   def assign_from_auth_hash(hash)
     return unless new_record?
-    update_attributes({email: hash.fetch('info', {}).fetch('email', nil)})
+
+    update_attributes({ email: hash.fetch("info", {}).fetch("email", nil) })
   end
 
   def main_identity

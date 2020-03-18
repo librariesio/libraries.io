@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Nimble < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
     BIBLIOTHECARY_PLANNED = true
-    URL = 'https://github.com/nim-lang/nimble'
-    COLOR = '#37775b'
+    URL = "https://github.com/nim-lang/nimble"
+    COLOR = "#37775b"
 
     def self.install_instructions(project, version = nil)
       "nimble install #{project.name}" + (version ? "@##{version}" : "")
@@ -19,7 +21,7 @@ module PackageManager
         prjcts = {}
         packages = get("https://raw.githubusercontent.com/nim-lang/packages/master/packages.json")
         packages.each do |hash|
-          prjcts[hash['name'].downcase] = hash.slice('name', 'url', 'description', 'tags', 'license', 'web')
+          prjcts[hash["name"].downcase] = hash.slice("name", "url", "description", "tags", "license", "web")
         end
         prjcts
       end
@@ -31,12 +33,12 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project["name"],
-        :description => project["description"],
-        :repository_url => repo_fallback(project['url'],project['web']),
-        :keywords_array => Array.wrap(project["tags"]),
-        :licenses => project['license'],
-        :homepage => project['web']
+        name: project["name"],
+        description: project["description"],
+        repository_url: repo_fallback(project["url"], project["web"]),
+        keywords_array: Array.wrap(project["tags"]),
+        licenses: project["license"],
+        homepage: project["web"],
       }
     end
   end

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Api::IssuesController < Api::ApplicationController
   def help_wanted
-    search_issues(labels: (['help wanted'] + [params[:labels]]).compact)
+    search_issues(labels: (["help wanted"] + [params[:labels]]).compact)
 
     render json: @issues
   end

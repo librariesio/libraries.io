@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RepositoryDownloadWorker
   include Sidekiq::Worker
   sidekiq_options queue: :repo, unique: :until_executed

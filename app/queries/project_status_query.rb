@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectStatusQuery
   def initialize(platform, requested_project_names)
     @platform = platform
@@ -37,9 +39,9 @@ class ProjectStatusQuery
   def project_find_names
     @project_find_names ||= missing_project_names
       .each_with_object({}) do |requested_name, hash|
-        platform_class
-          .project_find_names(requested_name)
-          .each { |find_name| hash[find_name.downcase] = requested_name }
+      platform_class
+        .project_find_names(requested_name)
+        .each { |find_name| hash[find_name.downcase] = requested_name }
     end
   end
 

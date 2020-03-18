@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "IssuesController", elasticsearch: true do
@@ -7,7 +9,7 @@ describe "IssuesController", elasticsearch: true do
     it "renders successfully when logged out" do
       Issue.__elasticsearch__.refresh_index!
       visit help_wanted_path
-      expect(page).to have_content 'Help Wanted'
+      expect(page).to have_content "Help Wanted"
     end
   end
 
@@ -15,14 +17,14 @@ describe "IssuesController", elasticsearch: true do
     it "renders successfully when logged out" do
       Issue.__elasticsearch__.refresh_index!
       visit first_pull_request_path
-      expect(page).to have_content 'First Pull Request'
+      expect(page).to have_content "First Pull Request"
     end
   end
 
   describe "GET /github/issues", type: :request do
     it "renders successfully when logged out" do
       visit issues_path
-      expect(page).to have_content 'Issues'
+      expect(page).to have_content "Issues"
     end
   end
 
@@ -32,7 +34,7 @@ describe "IssuesController", elasticsearch: true do
       user = create(:user)
       login(user)
       visit your_dependencies_issues_path
-      expect(page).to have_content 'Issues on Your Dependencies'
+      expect(page).to have_content "Issues on Your Dependencies"
     end
   end
 end

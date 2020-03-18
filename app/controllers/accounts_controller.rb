@@ -1,9 +1,9 @@
+# frozen_string_literal: true
+
 class AccountsController < ApplicationController
   before_action :ensure_logged_in
 
-  def show
-
-  end
+  def show; end
 
   def optin
     current_user.update_attributes(optin: true)
@@ -13,7 +13,7 @@ class AccountsController < ApplicationController
 
   def update
     if current_user.update_attributes(user_params)
-      redirect_to account_path, notice: 'Preferences updated'
+      redirect_to account_path, notice: "Preferences updated"
     else
       flash.now[:error] = "Couldn't update your email address"
       render action: :show

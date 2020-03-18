@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RepositorySearchResult
   include Status
 
@@ -20,8 +22,8 @@ class RepositorySearchResult
     @language = search_result.language
     @full_name = search_result.full_name
     @host_type = search_result.host_type
-    @private = search_result._source['private']
-    @fork = search_result._source['fork']
+    @private = search_result._source["private"]
+    @fork = search_result._source["fork"]
     @description = search_result.description
     @created_at = parse_timestamp(search_result.created_at)
     @updated_at = parse_timestamp(search_result.updated_at)
@@ -35,7 +37,12 @@ class RepositorySearchResult
 
   def parse_timestamp(timestamp)
     return nil unless timestamp.present?
-    DateTime.parse(timestamp) rescue nil
+
+    begin
+      DateTime.parse(timestamp)
+    rescue StandardError
+      nil
+    end
   end
 
   def color
@@ -46,16 +53,16 @@ class RepositorySearchResult
     {
       host_type: host_type.downcase,
       owner: owner_name,
-      name: project_name
+      name: project_name,
     }
   end
 
   def owner_name
-    full_name.split('/')[0]
+    full_name.split("/")[0]
   end
 
   def project_name
-    full_name.split('/')[1]
+    full_name.split("/")[1]
   end
 
   def private?
@@ -71,6 +78,6 @@ class RepositorySearchResult
   end
 
   def to_partial_path
-    'repositories/repository'
+    "repositories/repository"
   end
 end

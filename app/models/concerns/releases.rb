@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Releases
   def stable_releases
     versions.select(&:stable?)
@@ -8,12 +10,13 @@ module Releases
   end
 
   def latest_stable_version
-    @latest_version ||= stable_releases.sort.first
+    @latest_version ||= stable_releases.min
   end
 
   def latest_stable_tag
     return nil if repository.nil?
-    tags.published.select(&:stable?).sort.first
+
+    tags.published.select(&:stable?).min
   end
 
   def latest_stable_release
@@ -25,12 +28,13 @@ module Releases
   end
 
   def latest_version
-    versions.sort.first
+    versions.min
   end
 
   def latest_tag
     return nil if repository.nil?
-    tags.published.order('published_at DESC').first
+
+    tags.published.order("published_at DESC").first
   end
 
   def latest_release
@@ -38,12 +42,13 @@ module Releases
   end
 
   def first_version
-    @first_version ||= versions.sort.last
+    @first_version ||= versions.max
   end
 
   def first_tag
     return nil if repository.nil?
-    tags.published.order('published_at ASC').first
+
+    tags.published.order("published_at ASC").first
   end
 
   def first_release

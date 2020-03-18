@@ -1,12 +1,14 @@
-ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../../config/environment', __FILE__)
+# frozen_string_literal: true
+
+ENV["RAILS_ENV"] ||= "test"
+require File.expand_path("../config/environment", __dir__)
 
 abort("The Rails environment is running in production mode!") if Rails.env.production?
-require 'spec_helper'
-require 'rspec/rails'
-require 'webmock/rspec'
+require "spec_helper"
+require "rspec/rails"
+require "webmock/rspec"
 
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -20,13 +22,13 @@ VCR.configure do |config|
   config.hook_into :webmock
   # when you add a new cassette name, you have to
   # VCR_ENABLE_NEW_RECORDING=1 the first time you run that test.
-  config.default_cassette_options = { 
+  config.default_cassette_options = {
     record: ENV["VCR_ENABLE_NEW_RECORDING"] ? :once : :none,
-    decode_compressed_response: true 
+    decode_compressed_response: true,
   }
 end
 
-require 'capybara/poltergeist'
+require "capybara/poltergeist"
 Capybara.javascript_driver = :poltergeist
 Capybara.default_max_wait_time = 10
 
@@ -42,7 +44,7 @@ RSpec.configure do |config|
 end
 
 def project_json_response(projects)
-  projects.as_json(only: Project::API_FIELDS, methods: [:package_manager_url, :stars, :forks, :keywords, :latest_stable_release, :latest_download_url], include: {versions: {only: [:number, :published_at]} })
+  projects.as_json(only: Project::API_FIELDS, methods: %i[package_manager_url stars forks keywords latest_stable_release latest_download_url], include: { versions: { only: %i[number published_at] } })
 end
 
 RSpec::Sidekiq.configure do |config|

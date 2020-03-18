@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Emacs < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    URL = 'http://melpa.org'
-    COLOR = '#c065db'
+    URL = "http://melpa.org"
+    COLOR = "#c065db"
 
-    def self.package_link(project, version = nil)
+    def self.package_link(project, _version = nil)
       "http://melpa.org/#/#{project.name}"
     end
 
@@ -23,15 +25,16 @@ module PackageManager
 
     def self.project(name)
       return nil if projects[name].nil?
-      projects[name].merge({"name" => name})
+
+      projects[name].merge({ "name" => name })
     end
 
     def self.mapping(project)
       {
-        :name => project["name"],
-        :description => project["desc"],
-        :repository_url => project.fetch("props", {}).try(:fetch, 'url', ''),
-        :keywords_array => Array.wrap(project.fetch("props", {}).try(:fetch, 'keywords', []))
+        name: project["name"],
+        description: project["desc"],
+        repository_url: project.fetch("props", {}).try(:fetch, "url", ""),
+        keywords_array: Array.wrap(project.fetch("props", {}).try(:fetch, "keywords", [])),
       }
     end
   end

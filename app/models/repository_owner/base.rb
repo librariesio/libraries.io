@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RepositoryOwner
   class Base
     attr_reader :owner
@@ -6,7 +8,7 @@ module RepositoryOwner
       @owner = owner
     end
 
-    def avatar_url(size = 60)
+    def avatar_url(_size = 60)
       raise NotImplementedError
     end
 
@@ -29,7 +31,7 @@ module RepositoryOwner
     def to_param
       {
         host_type: owner.host_type.downcase,
-        login: owner.login
+        login: owner.login,
       }
     end
 
@@ -45,18 +47,18 @@ module RepositoryOwner
       raise NotImplementedError
     end
 
-    def api_client(token = nil)
+    def api_client(_token = nil)
       self.class.api_client
     end
 
     def self.format(host_type)
       case host_type.try(:downcase)
-      when 'github'
-        'GitHub'
-      when 'gitlab'
-        'GitLab'
-      when 'bitbucket'
-        'Bitbucket'
+      when "github"
+        "GitHub"
+      when "gitlab"
+        "GitLab"
+      when "bitbucket"
+        "Bitbucket"
       end
     end
 
@@ -76,7 +78,9 @@ module RepositoryOwner
     end
 
     def download_user_from_host
-      download_user_from_host_by(owner.uuid) rescue download_user_from_host_by_login
+      download_user_from_host_by(owner.uuid)
+    rescue StandardError
+      download_user_from_host_by_login
     end
 
     def download_user_from_host_by_login
@@ -88,11 +92,13 @@ module RepositoryOwner
     end
 
     def self.download_user_from_host(host_type, id_or_login)
-      RepositoryUser.create_from_host(host_type, self.fetch_user(id_or_login))
+      RepositoryUser.create_from_host(host_type, fetch_user(id_or_login))
     end
 
     def download_org_from_host
-      download_org_from_host_by(owner.uuid) rescue download_org_from_host_by_login
+      download_org_from_host_by(owner.uuid)
+    rescue StandardError
+      download_org_from_host_by_login
     end
 
     def download_org_from_host_by_login
@@ -104,27 +110,27 @@ module RepositoryOwner
     end
 
     def self.download_org_from_host(host_type, id_or_login)
-      RepositoryOrganisation.create_from_host(host_type, self.fetch_org(id_or_login))
+      RepositoryOrganisation.create_from_host(host_type, fetch_org(id_or_login))
     end
 
-    def self.fetch_user(id_or_login)
+    def self.fetch_user(_id_or_login)
       raise NotImplementedError
     end
 
-    def self.fetch_org(id_or_login)
+    def self.fetch_org(_id_or_login)
       raise NotImplementedError
     end
 
     private
 
     def top_favourite_project_ids
-      Rails.cache.fetch [owner, "top_favourite_project_ids"], :expires_in => 1.week, race_condition_ttl: 2.minutes do
+      Rails.cache.fetch [owner, "top_favourite_project_ids"], expires_in: 1.week, race_condition_ttl: 2.minutes do
         owner.favourite_projects.limit(10).pluck(:id)
       end
     end
 
     def top_contributor_ids
-      Rails.cache.fetch [owner, "top_contributor_ids"], :expires_in => 1.week, race_condition_ttl: 2.minutes do
+      Rails.cache.fetch [owner, "top_contributor_ids"], expires_in: 1.week, race_condition_ttl: 2.minutes do
         owner.contributors.visible.limit(50).pluck(:id)
       end
     end

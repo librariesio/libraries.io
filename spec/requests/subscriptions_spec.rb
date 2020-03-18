@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "SubscriptionsController" do
@@ -12,7 +14,7 @@ describe "SubscriptionsController" do
     it "renders successfully for logged in users" do
       login(user)
       visit subscriptions_path
-      expect(page).to have_content 'Subscriptions'
+      expect(page).to have_content "Subscriptions"
     end
   end
 end

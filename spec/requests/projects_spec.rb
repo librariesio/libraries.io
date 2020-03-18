@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ProjectsController do
@@ -8,20 +10,20 @@ RSpec.describe ProjectsController do
   describe "GET #index" do
     it "responds successfully", type: :request do
       visit root_path
-      expect(page).to have_content 'Libraries.io'
+      expect(page).to have_content "Libraries.io"
     end
   end
 
   describe "GET #bus_factor" do
     it "responds successfully", type: :request do
       visit bus_factor_path
-      expect(page).to have_content 'Bus Factor'
+      expect(page).to have_content "Bus Factor"
     end
 
     context "filtered by language" do
       it "responds successfully", type: :request do
-        visit bus_factor_path(language: 'Ruby')
-        expect(page).to have_content 'Bus Factor'
+        visit bus_factor_path(language: "Ruby")
+        expect(page).to have_content "Bus Factor"
       end
     end
   end
@@ -29,13 +31,13 @@ RSpec.describe ProjectsController do
   describe "GET #unlicensed" do
     it "responds successfully", type: :request do
       visit unlicensed_path
-      expect(page).to have_content 'Unlicensed Packages'
+      expect(page).to have_content "Unlicensed Packages"
     end
 
     context "filtered by platform" do
       it "responds successfully" do
-        visit unlicensed_path(platform: 'Rubygems')
-        expect(page).to have_content 'Unlicensed Packages'
+        visit unlicensed_path(platform: "Rubygems")
+        expect(page).to have_content "Unlicensed Packages"
       end
     end
   end
@@ -43,13 +45,13 @@ RSpec.describe ProjectsController do
   describe "GET #deprecated" do
     it "responds successfully", type: :request do
       visit deprecated_path
-      expect(page).to have_content 'Deprecated'
+      expect(page).to have_content "Deprecated"
     end
 
     context "filtered by platform" do
       it "responds successfully" do
-        visit deprecated_path(platform: 'Rubygems')
-        expect(page).to have_content 'Deprecated'
+        visit deprecated_path(platform: "Rubygems")
+        expect(page).to have_content "Deprecated"
       end
     end
   end
@@ -57,13 +59,13 @@ RSpec.describe ProjectsController do
   describe "GET #removed" do
     it "responds successfully", type: :request do
       visit removed_path
-      expect(page).to have_content 'Removed'
+      expect(page).to have_content "Removed"
     end
 
     context "filtered by platform" do
       it "responds successfully" do
-        visit removed_path(platform: 'Rubygems')
-        expect(page).to have_content 'Removed'
+        visit removed_path(platform: "Rubygems")
+        expect(page).to have_content "Removed"
       end
     end
   end
@@ -71,13 +73,13 @@ RSpec.describe ProjectsController do
   describe "GET #unmaintained" do
     it "responds successfully", type: :request do
       visit unmaintained_path
-      expect(page).to have_content 'Unmaintained'
+      expect(page).to have_content "Unmaintained"
     end
 
     context "filtered by platform" do
       it "responds successfully" do
-        visit unmaintained_path(platform: 'Rubygems')
-        expect(page).to have_content 'Unmaintained'
+        visit unmaintained_path(platform: "Rubygems")
+        expect(page).to have_content "Unmaintained"
       end
     end
   end
@@ -85,13 +87,13 @@ RSpec.describe ProjectsController do
   describe "GET #trending" do
     it "responds successfully", type: :request do
       visit trending_path
-      expect(page).to have_content 'Trending'
+      expect(page).to have_content "Trending"
     end
 
     context "filtered by platform" do
       it "responds successfully" do
-        visit trending_path(platform: 'Rubygems')
-        expect(page).to have_content 'Trending'
+        visit trending_path(platform: "Rubygems")
+        expect(page).to have_content "Trending"
       end
     end
   end
@@ -99,13 +101,13 @@ RSpec.describe ProjectsController do
   describe "GET #digital_infrastructure" do
     it "responds successfully", type: :request do
       visit digital_infrastructure_path
-      expect(page).to have_content 'Digital Infrastructure'
+      expect(page).to have_content "Digital Infrastructure"
     end
 
     context "filtered by platform" do
       it "responds successfully" do
-        visit digital_infrastructure_path(platform: 'Rubygems')
-        expect(page).to have_content 'Digital Infrastructure'
+        visit digital_infrastructure_path(platform: "Rubygems")
+        expect(page).to have_content "Digital Infrastructure"
       end
     end
   end
@@ -113,7 +115,7 @@ RSpec.describe ProjectsController do
   describe "GET #unseen_infrastructure" do
     it "responds successfully", type: :request do
       visit unseen_infrastructure_path
-      expect(page).to have_content 'Unseen Infrastructure'
+      expect(page).to have_content "Unseen Infrastructure"
     end
   end
 
@@ -140,7 +142,7 @@ RSpec.describe ProjectsController do
 
   describe "GET #about" do
     it "responds successfully", type: :request do
-      visit project_path(project.to_param.merge(format: 'about'))
+      visit project_path(project.to_param.merge(format: "about"))
       expect(page).to have_content project.name
     end
   end

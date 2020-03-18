@@ -1,19 +1,21 @@
+# frozen_string_literal: true
+
 class BitbucketURLParser < URLParser
   private
 
   def full_domain
-    'https://bitbucket.org'
+    "https://bitbucket.org"
   end
 
   def tlds
-    %w(com org)
+    %w[com org]
   end
 
   def domain
-    'bitbucket'
+    "bitbucket"
   end
 
   def remove_domain
-    url.gsub!(/(bitbucket.com|bitbucket.org)+?(:|\/)?/i, '')
+    url.gsub!(/(bitbucket.com|bitbucket.org)+?(:|\/)?/i, "")
   end
 end

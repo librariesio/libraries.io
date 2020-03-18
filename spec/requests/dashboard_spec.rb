@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "DashboardController" do
@@ -5,7 +7,7 @@ describe "DashboardController" do
 
   describe "GET /dashboard", type: :request do
     it "redirects to /repositories" do
-      get '/dashboard'
+      get "/dashboard"
       expect(response).to redirect_to(repositories_path)
     end
   end
@@ -14,13 +16,13 @@ describe "DashboardController" do
     it "renders successfully when logged in" do
       login(user)
       visit muted_path
-      expect(page).to have_content 'Muted Packages'
+      expect(page).to have_content "Muted Packages"
     end
   end
 
   describe "GET /home", type: :request do
     it "redirects to /" do
-      get '/home'
+      get "/home"
       expect(response).to redirect_to(root_path)
     end
   end
@@ -29,7 +31,7 @@ describe "DashboardController" do
     it "renders successfully when logged in" do
       login(user)
       visit repositories_path
-      expect(page).to have_content 'Repository Monitoring'
+      expect(page).to have_content "Repository Monitoring"
     end
   end
 
@@ -42,7 +44,7 @@ describe "DashboardController" do
       rack_test_session_wrapper = Capybara.current_session.driver
       rack_test_session_wrapper.submit :post, unwatch_path(repository.id), nil
 
-      expect(page.current_path).to eq '/'
+      expect(page.current_path).to eq "/"
     end
   end
 end

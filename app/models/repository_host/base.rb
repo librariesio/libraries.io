@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RepositoryHost
   class Base
     def initialize(repository)
@@ -51,7 +53,7 @@ module RepositoryHost
       nil
     end
 
-    def avatar_url(size = 60)
+    def avatar_url(_size = 60)
       raise NotImplementedError
     end
 
@@ -65,12 +67,12 @@ module RepositoryHost
 
     def self.format(host_type)
       case host_type.try(:downcase)
-      when 'github'
-        'GitHub'
-      when 'gitlab'
-        'GitLab'
-      when 'bitbucket'
-        'Bitbucket'
+      when "github"
+        "GitHub"
+      when "gitlab"
+        "GitLab"
+      when "bitbucket"
+        "Bitbucket"
       end
     end
 
@@ -83,30 +85,23 @@ module RepositoryHost
     end
 
     def update_from_host(token = nil)
-      begin
-        r = self.class.fetch_repo(repository.id_or_name)
-        return unless r.present?
-        repository.uuid = r[:id] unless repository.uuid.to_s == r[:id].to_s
-        if repository.full_name.downcase != r[:full_name].downcase
-          clash = Repository.host(r[:host_type]).where('lower(full_name) = ?', r[:full_name].downcase).first
-          if clash && (!clash.repository_host.update_from_host(token) || clash.status == "Removed")
-            clash.destroy
-          end
-          repository.full_name = r[:full_name]
-        end
-        repository.license = Project.format_license(r[:license][:key]) if r[:license]
-        if r[:fork]
-          repository.source_name = r[:parent][:full_name]
-        else
-          repository.source_name = nil
-        end
-        repository.assign_attributes r.slice(*Repository::API_FIELDS)
-        repository.save! if repository.changed?
-      rescue self.class.api_missing_error_class
-        repository.update_attribute(:status, 'Removed') if !repository.private?
-      rescue *self.class::IGNORABLE_EXCEPTIONS
-        nil
+      r = self.class.fetch_repo(repository.id_or_name)
+      return unless r.present?
+
+      repository.uuid = r[:id] unless repository.uuid.to_s == r[:id].to_s
+      if repository.full_name.downcase != r[:full_name].downcase
+        clash = Repository.host(r[:host_type]).where("lower(full_name) = ?", r[:full_name].downcase).first
+        clash.destroy if clash && (!clash.repository_host.update_from_host(token) || clash.status == "Removed")
+        repository.full_name = r[:full_name]
       end
+      repository.license = Project.format_license(r[:license][:key]) if r[:license]
+      repository.source_name = (r[:parent][:full_name] if r[:fork])
+      repository.assign_attributes r.slice(*Repository::API_FIELDS)
+      repository.save! if repository.changed?
+    rescue self.class.api_missing_error_class
+      repository.update_attribute(:status, "Removed") unless repository.private?
+    rescue *self.class::IGNORABLE_EXCEPTIONS
+      nil
     end
 
     def gather_maintenance_stats_async
@@ -124,12 +119,12 @@ module RepositoryHost
 
     def add_metrics_to_repo(results)
       # create one hash with all results
-      results.reduce(Hash.new, :merge).each do |category, value|
-          unless value.nil?
-              stat = repository.repository_maintenance_stats.find_or_create_by(category: category.to_s)
-              stat.update!(value: value.to_s)
-              stat.touch unless stat.changed?  # we always want to update updated_at for later querying
-          end
+      results.reduce({}, :merge).each do |category, value|
+        next if value.nil?
+
+        stat = repository.repository_maintenance_stats.find_or_create_by(category: category.to_s)
+        stat.update!(value: value.to_s)
+        stat.touch unless stat.changed? # we always want to update updated_at for later querying
       end
     end
   end

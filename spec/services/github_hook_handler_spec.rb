@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe GithubHookHandler do
   describe "#run" do
@@ -7,7 +9,7 @@ describe GithubHookHandler do
         it "runs a repository event" do
           params = {
             "ref_type" => "repository",
-            "repository" => {}
+            "repository" => {},
           }
 
           expect(subject).to receive(:run).with("create", params).and_call_original
@@ -56,7 +58,7 @@ describe GithubHookHandler do
           "action" => "opened",
           "repository" => {},
           "pull_request" => {},
-          "sender" => {}
+          "sender" => {},
         }
       end
 
@@ -76,7 +78,7 @@ describe GithubHookHandler do
 
     describe "public, release, repository event" do
       it "enqueues CreateRepositoryWorker" do
-        ["public", "release", "repository"].each do |event|
+        %w[public release repository].each do |event|
           expect(CreateRepositoryWorker).to receive(:perform_async)
           subject.run(event, { "repository" => {} })
         end

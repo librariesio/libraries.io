@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateGithubIssues < ActiveRecord::Migration[5.0]
   def change
     create_table :github_issues do |t|

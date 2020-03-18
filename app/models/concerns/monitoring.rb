@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Monitoring
   def can_enable_private_repo_tracking?
     private_repo_token.blank?
@@ -30,7 +32,7 @@ module Monitoring
   end
 
   def subscribed_to_repo?(repository)
-    repository_subscriptions.find{|r| r.repository_id == repository.id }
+    repository_subscriptions.find { |r| r.repository_id == repository.id }
   end
 
   def can_read?(repository)
@@ -39,6 +41,6 @@ module Monitoring
 
   def your_dependent_repos(project)
     ids = really_all_dependencies.where(project_id: project.id).pluck(:repository_id).uniq
-    all_repositories.where(id: ids).order('fork ASC, pushed_at DESC, rank DESC NULLS LAST')
+    all_repositories.where(id: ids).order("fork ASC, pushed_at DESC, rank DESC NULLS LAST")
   end
 end

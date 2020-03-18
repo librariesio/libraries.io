@@ -1,30 +1,33 @@
+# frozen_string_literal: true
+
 module PackageManager
   class CPAN < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
-    URL = 'https://metacpan.org'
-    COLOR = '#0298c3'
+    URL = "https://metacpan.org"
+    COLOR = "#0298c3"
 
-    def self.package_link(project, version = nil)
+    def self.package_link(project, _version = nil)
       "https://metacpan.org/release/#{project.name}"
     end
 
     def self.project_names
       page = 1
       projects = []
-      while true
-        r = get("https://fastapi.metacpan.org/v1/release/_search?q=status:latest&fields=distribution&sort=date:desc&size=5000&from=#{page*5000}")['hits']['hits']
+      loop do
+        r = get("https://fastapi.metacpan.org/v1/release/_search?q=status:latest&fields=distribution&sort=date:desc&size=5000&from=#{page * 5000}")["hits"]["hits"]
         break if r == []
+
         projects += r
-        page +=1
+        page += 1
       end
-      projects.map{|project| project['fields']['distribution'] }.uniq
+      projects.map { |project| project["fields"]["distribution"] }.uniq
     end
 
     def self.recent_names
-      names = get('https://fastapi.metacpan.org/v1/release/_search?q=status:latest&fields=distribution&sort=date:desc&size=100')['hits']['hits']
-      names.map{|project| project['fields']['distribution'] }.uniq
+      names = get("https://fastapi.metacpan.org/v1/release/_search?q=status:latest&fields=distribution&sort=date:desc&size=100")["hits"]["hits"]
+      names.map { |project| project["fields"]["distribution"] }.uniq
     end
 
     def self.project(name)
@@ -33,34 +36,34 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project['distribution'],
-        :homepage => project.fetch('resources',{})['homepage'],
-        :description => project['abstract'],
-        :licenses => project.fetch('license', []).join(','),
-        :repository_url => repo_fallback(project.fetch('resources',{}).fetch('repository',{})['web'], project.fetch('resources',{})['homepage']),
-        :versions => self.versions(project),
+        name: project["distribution"],
+        homepage: project.fetch("resources", {})["homepage"],
+        description: project["abstract"],
+        licenses: project.fetch("license", []).join(","),
+        repository_url: repo_fallback(project.fetch("resources", {}).fetch("repository", {})["web"], project.fetch("resources", {})["homepage"]),
+        versions: versions(project),
       }
     end
 
     def self.versions(project)
-      versions = get("https://fastapi.metacpan.org/v1/release/_search?q=distribution:#{project['distribution']}&size=5000&fields=version,date")['hits']['hits']
+      versions = get("https://fastapi.metacpan.org/v1/release/_search?q=distribution:#{project['distribution']}&size=5000&fields=version,date")["hits"]["hits"]
       versions.map do |version|
         {
-          :number => version['fields']['version'],
-          :published_at => version['fields']['date']
+          number: version["fields"]["version"],
+          published_at: version["fields"]["date"],
         }
       end
     end
 
-    def self.dependencies(name, version, project)
+    def self.dependencies(_name, version, project)
       versions = project[:versions]
-      version_data = versions.find{|v| v['fields']['version'] == version }
-      version_data['fields']['dependency'].select{|dep| dep['relationship'] == 'requires' }.map do |dep|
+      version_data = versions.find { |v| v["fields"]["version"] == version }
+      version_data["fields"]["dependency"].select { |dep| dep["relationship"] == "requires" }.map do |dep|
         {
-          project_name: dep['module'].gsub('::', '-'),
-          requirements: dep['version'],
-          kind: dep['phase'],
-          platform: self.name.demodulize
+          project_name: dep["module"].gsub("::", "-"),
+          requirements: dep["version"],
+          kind: dep["phase"],
+          platform: name.demodulize,
         }
       end
     end

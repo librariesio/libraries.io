@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddGuidToPayolaSubscriptions < ActiveRecord::Migration[5.0]
   def change
     add_column :payola_subscriptions, :guid, :string, limit: 191

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectStatusSerializer < ActiveModel::Serializer
   attributes Project::API_FIELDS
   attributes %i[

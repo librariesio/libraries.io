@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe RepositoryMaintenanceStatWorker do
   let!(:repository) { create(:repository) }
@@ -24,7 +26,7 @@ describe RepositoryMaintenanceStatWorker do
       expect(RepositoryMaintenanceStatWorker.jobs.size).to eql 0
 
       RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: :high)
-    
+
       expect(RepositoryMaintenanceStatWorker.jobs.size).to eql 1
       expect(Sidekiq::Queues["repo_maintenance_stat_high"].size).to eql 1
     end
@@ -37,14 +39,14 @@ describe RepositoryMaintenanceStatWorker do
       expect(RepositoryMaintenanceStatWorker.jobs.size).to eql 0
 
       RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: :low)
-    
+
       expect(RepositoryMaintenanceStatWorker.jobs.size).to eql 1
       expect(Sidekiq::Queues["repo_maintenance_stat_low"].size).to eql 1
     end
   end
 
   context "with unsupported repository host_type" do
-    let!(:repository) { create(:repository, host_type: 'gitlab') }
+    let!(:repository) { create(:repository, host_type: "gitlab") }
 
     it "should gracefully not gather stats" do
       # call directly

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Platform
   include ActiveModel::Model
   include ActiveModel::Serialization
@@ -5,7 +7,7 @@ class Platform
 
   def self.all
     Project.popular_platforms.map do |platform|
-      Platform.new(name: platform['key'], project_count: platform['doc_count'])
+      Platform.new(name: platform["key"], project_count: platform["doc_count"])
     end
   end
 

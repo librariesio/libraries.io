@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :check_api_key
@@ -5,9 +7,7 @@ class Api::ApplicationController < ApplicationController
   private
 
   def disabled_in_read_only
-    if in_read_only_mode?
-      render json: { error: "Error 503, Can't perform this action, the site is in read-only mode temporarily." }, status: :service_unavailable
-    end
+    render json: { error: "Error 503, Can't perform this action, the site is in read-only mode temporarily." }, status: :service_unavailable if in_read_only_mode?
   end
 
   def max_page
@@ -16,6 +16,7 @@ class Api::ApplicationController < ApplicationController
 
   def check_api_key
     return true if params[:api_key].nil?
+
     require_api_key
     record_api_usage
   end
@@ -30,6 +31,7 @@ class Api::ApplicationController < ApplicationController
 
   def current_api_key
     return nil if params[:api_key].blank?
+
     @current_api_key ||= ApiKey.active.find_by_access_token(params[:api_key])
   end
 
@@ -39,7 +41,8 @@ class Api::ApplicationController < ApplicationController
 
   def record_api_usage
     return unless @current_api_key.present?
-    REDIS.hincrby "api-usage-#{Date.today.strftime("%Y-%m")}", @current_api_key.id, 1
+
+    REDIS.hincrby "api-usage-#{Date.today.strftime('%Y-%m')}", @current_api_key.id, 1
   end
 
   def current_user

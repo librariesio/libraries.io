@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "Admin::ProjectSuggestionsController" do
@@ -18,7 +20,7 @@ describe "Admin::ProjectSuggestionsController" do
       mock_is_admin
       login(user)
       visit admin_project_suggestions_path
-      expect(page).to have_content 'Project Suggestions'
+      expect(page).to have_content "Project Suggestions"
     end
   end
 end

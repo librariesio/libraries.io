@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class SessionsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:create, :failure]
-  before_action :read_only, only: [:new, :create]
+  skip_before_action :verify_authenticity_token, only: %i[create failure]
+  before_action :read_only, only: %i[new create]
 
   def new
     if params[:host_type].present?
@@ -20,13 +22,11 @@ class SessionsController < ApplicationController
   end
 
   def create
-    auth = request.env['omniauth.auth']
+    auth = request.env["omniauth.auth"]
 
     identity = Identity.find_with_omniauth(auth)
 
-    if identity.nil?
-      identity = Identity.create_with_omniauth(auth)
-    end
+    identity = Identity.create_with_omniauth(auth) if identity.nil?
 
     identity.update_from_auth_hash(auth)
 
@@ -35,7 +35,7 @@ class SessionsController < ApplicationController
         identity.user = current_user
         identity.save
       else
-        flash[:notice] = 'Already connected'
+        flash[:notice] = "Already connected"
       end
     else
       if identity.user.nil?
@@ -48,7 +48,7 @@ class SessionsController < ApplicationController
       flash[:notice] = nil
       session[:user_id] = identity.user.id
     end
-    
+
     identity.user.update_columns(last_login_at: Time.current)
     identity.user.update_repo_permissions_async
     login_destination = pre_login_destination
@@ -71,6 +71,6 @@ class SessionsController < ApplicationController
   def pre_login_destination
     destination = session[:pre_login_destination]
     session.delete :pre_login_destination
-    return destination
+    destination
   end
 end

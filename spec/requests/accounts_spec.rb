@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "AccountsController" do
@@ -12,7 +14,7 @@ describe "AccountsController" do
     it "renders successfully for logged in users" do
       login(user)
       visit account_path
-      expect(page).to have_content 'Account'
+      expect(page).to have_content "Account"
     end
   end
 end

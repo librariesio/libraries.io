@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RepositoryPermission < ApplicationRecord
   belongs_to :user
   belongs_to :repository

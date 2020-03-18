@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Api::ProjectsController < Api::ApplicationController
-  before_action :find_project, except: [:searchcode, :dependencies, :dependencies_bulk]
+  before_action :find_project, except: %i[searchcode dependencies dependencies_bulk]
 
   def show
     render json: @project
@@ -19,7 +21,7 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def searchcode
-    render json: Project.visible.where('updated_at > ?', 1.day.ago).order(:repository_url).pluck(:repository_url).compact.reject(&:blank?)
+    render json: Project.visible.where("updated_at > ?", 1.day.ago).order(:repository_url).pluck(:repository_url).compact.reject(&:blank?)
   end
 
   def dependencies
@@ -37,7 +39,7 @@ class Api::ProjectsController < Api::ApplicationController
       params[:projects].each do |project_param|
         platform = project_param[:platform]
         name = project_param[:name]
-        version_string = project_param.fetch(:version, 'latest')
+        version_string = project_param.fetch(:version, "latest")
         begin
           body = find_project_as_json_with_dependencies!(platform, name, version_string, subset)
           results.push({ status: 200,
@@ -48,9 +50,8 @@ class Api::ProjectsController < Api::ApplicationController
                            error: "Error 404, project or project version not found.",
                            platform: platform,
                            name: name,
-                           dependencies_for_version: version_string
-                         }
-                       })
+                           dependencies_for_version: version_string,
+                         } })
         end
       end
     end
@@ -59,19 +60,19 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def contributors
-    paginate json: @project.contributors.order('count DESC')
+    paginate json: @project.contributors.order("count DESC")
   end
 
   private
 
   def find_project_as_json_with_dependencies!(platform, name, version_name, subset)
     serializer, includes = case subset
-              when "default"
-                [ProjectSerializer, [:repository, :versions]]
-              when "minimum"
-                [MinimumProjectSerializer, []]
-              else
-                raise ActionController::BadRequest.new("Unsupported subset")
+                           when "default"
+                             [ProjectSerializer, %i[repository versions]]
+                           when "minimum"
+                             [MinimumProjectSerializer, []]
+                           else
+                             raise ActionController::BadRequest, "Unsupported subset"
               end
 
     project = Project.find_best!(platform, name, includes)
@@ -83,5 +84,4 @@ class Api::ProjectsController < Api::ApplicationController
 
     project_json
   end
-
 end

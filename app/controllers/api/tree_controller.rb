@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::TreeController < Api::ApplicationController
   before_action :require_api_key
   before_action :find_project

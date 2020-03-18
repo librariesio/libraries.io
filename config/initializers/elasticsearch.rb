@@ -1,9 +1,11 @@
-require 'typhoeus/adapters/faraday'
-require 'google/cloud/trace/faraday_middleware' if Rails.env.production?
+# frozen_string_literal: true
 
-url = ENV['ELASTICSEARCH_CLUSTER_URL'] || 'localhost:9200'
+require "typhoeus/adapters/faraday"
+require "google/cloud/trace/faraday_middleware" if Rails.env.production?
 
-Elasticsearch::Model.client = Elasticsearch::Client.new hosts: url.split(','),
+url = ENV["ELASTICSEARCH_CLUSTER_URL"] || "localhost:9200"
+
+Elasticsearch::Model.client = Elasticsearch::Client.new hosts: url.split(","),
                                                         retry_on_failure: true,
                                                         randomize_hosts: true,
                                                         transport_options: { request: { timeout: 10 } } do |builder|

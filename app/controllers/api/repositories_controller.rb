@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::RepositoriesController < Api::ApplicationController
   before_action :find_repo, except: :search
 
@@ -26,13 +28,13 @@ class Api::RepositoriesController < Api::ApplicationController
   private
 
   def find_repo
-    full_name = [params[:owner], params[:name]].join('/')
-    @repository = Repository.host(current_host).open_source.where('lower(full_name) = ?', full_name.downcase).first
+    full_name = [params[:owner], params[:name]].join("/")
+    @repository = Repository.host(current_host).open_source.where("lower(full_name) = ?", full_name.downcase).first
 
     raise ActiveRecord::RecordNotFound if @repository.nil?
   end
 
   def allowed_sorts
-    ['rank', 'stargazers_count', 'contributions_count', 'created_at', 'pushed_at', 'subscribers_count', 'open_issues_count', 'forks_count', 'size']
+    %w[rank stargazers_count contributions_count created_at pushed_at subscribers_count open_issues_count forks_count size]
   end
 end

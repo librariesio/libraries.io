@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "RepositoriesController" do
@@ -8,8 +10,8 @@ describe "RepositoriesController" do
 
   describe "GET /github", type: :request do
     it "renders successfully when logged out" do
-      visit hosts_path(host_type: 'github')
-      expect(page).to have_content 'Repositories'
+      visit hosts_path(host_type: "github")
+      expect(page).to have_content "Repositories"
     end
   end
 
@@ -32,21 +34,21 @@ describe "RepositoriesController" do
   describe "GET /github/languages", type: :request do
     it "renders successfully when logged out" do
       visit github_languages_path
-      expect(page).to have_content 'Languages'
+      expect(page).to have_content "Languages"
     end
   end
 
   describe "GET /github/trending", type: :request do
     it "renders successfully when logged out" do
       visit trending_path
-      expect(page).to have_content 'Trending'
+      expect(page).to have_content "Trending"
     end
   end
 
   describe "GET /github/new", type: :request do
     it "renders successfully when logged out" do
       visit new_repos_path
-      expect(page).to have_content 'New'
+      expect(page).to have_content "New"
     end
   end
 

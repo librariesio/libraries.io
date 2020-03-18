@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RepositoryHost
   class Github < Base
     IGNORABLE_EXCEPTIONS = [
@@ -10,8 +12,8 @@ module RepositoryHost
       Octokit::InternalServerError,
       Octokit::BadGateway,
       Octokit::ClientError,
-      Octokit::UnavailableForLegalReasons
-    ]
+      Octokit::UnavailableForLegalReasons,
+    ].freeze
 
     def self.api_missing_error_class
       Octokit::NotFound
@@ -22,7 +24,7 @@ module RepositoryHost
     end
 
     def domain
-      'https://github.com'
+      "https://github.com"
     end
 
     def watchers_url
@@ -47,25 +49,25 @@ module RepositoryHost
     end
 
     def commits_url(author = nil)
-      author_param = author.present? ? "?author=#{author}" : ''
+      author_param = author.present? ? "?author=#{author}" : ""
       "#{url}/commits#{author_param}"
     end
 
     def self.fetch_repo(id_or_name, token = nil)
       id_or_name = id_or_name.to_i if id_or_name.match(/\A\d+\Z/)
-      hash = AuthToken.fallback_client(token).repo(id_or_name, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json').to_hash
+      hash = AuthToken.fallback_client(token).repo(id_or_name, accept: "application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json").to_hash
       hash[:keywords] = hash[:topics]
-      hash[:host_type] = 'GitHub'
-      hash[:scm] = 'git'
-      hash[:status] = 'Unmaintained' if hash[:archived]
+      hash[:host_type] = "GitHub"
+      hash[:scm] = "git"
+      hash[:status] = "Unmaintained" if hash[:archived]
       hash
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
 
     def get_file_list(token = nil)
-      tree = api_client(token).tree(repository.full_name, repository.default_branch, :recursive => true).tree
-      tree.select{|item| item.type == 'blob' }.map{|file| file.path }
+      tree = api_client(token).tree(repository.full_name, repository.default_branch, recursive: true).tree
+      tree.select { |item| item.type == "blob" }.map(&:path)
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
@@ -74,7 +76,7 @@ module RepositoryHost
       file = api_client(token).contents(repository.full_name, path: path)
       {
         sha: file.sha,
-        content: file.content.present? ? Base64.decode64(file.content) : file.content
+        content: file.content.present? ? Base64.decode64(file.content) : file.content,
       }
     rescue URI::InvalidURIError
       nil
@@ -85,14 +87,14 @@ module RepositoryHost
     def create_webhook(token = nil)
       api_client(token).create_hook(
         repository.full_name,
-        'web',
+        "web",
         {
-          :url => 'https://libraries.io/hooks/github',
-          :content_type => 'json'
+          url: "https://libraries.io/hooks/github",
+          content_type: "json",
         },
         {
-          :events => ['push', 'pull_request'],
-          :active => true
+          events: %w[push pull_request],
+          active: true,
         }
       )
     rescue Octokit::UnprocessableEntity
@@ -101,15 +103,18 @@ module RepositoryHost
 
     def download_contributions(token = nil)
       return if repository.fork?
+
       gh_contributions = api_client(token).contributors(repository.full_name)
       return if gh_contributions.empty?
+
       existing_contributions = repository.contributions.includes(:repository_user).to_a
       platform = repository.projects.first.try(:platform)
       gh_contributions.each do |c|
-        next unless c['id']
-        cont = existing_contributions.find{|cnt| cnt.repository_user.try(:uuid) == c.id }
+        next unless c["id"]
+
+        cont = existing_contributions.find { |cnt| cnt.repository_user.try(:uuid) == c.id }
         unless cont
-          user = RepositoryUser.create_from_host('GitHub', c)
+          user = RepositoryUser.create_from_host("GitHub", c)
           cont = repository.contributions.find_or_create_by(repository_user: user)
         end
 
@@ -126,6 +131,7 @@ module RepositoryHost
       return true if repository.fork?
       return true unless repository.forks_count && repository.forks_count > 0 && repository.forks_count < 100
       return true if repository.forks_count == repository.forked_repositories.host(repository.host_type).count
+
       AuthToken.new_client(token).forks(repository.full_name).each do |fork|
         Repository.create_from_hash(fork)
       end
@@ -155,16 +161,17 @@ module RepositoryHost
 
     def download_owner
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
+
       o = api_client.user(repository.owner_name)
       if o.type == "Organization"
-        go = RepositoryOrganisation.create_from_host('GitHub', o)
+        go = RepositoryOrganisation.create_from_host("GitHub", o)
         if go
           repository.repository_organisation_id = go.id
           repository.repository_user_id = nil
           repository.save
         end
       else
-        u = RepositoryUser.create_from_host('GitHub', o)
+        u = RepositoryUser.create_from_host("GitHub", o)
         if u
           repository.repository_user_id = u.id
           repository.repository_organisation_id = nil
@@ -177,7 +184,7 @@ module RepositoryHost
 
     def download_readme(token = nil)
       contents = {
-        html_body: api_client(token).readme(repository.full_name, accept: 'application/vnd.github.V3.html')
+        html_body: api_client(token).readme(repository.full_name, accept: "application/vnd.github.V3.html"),
       }
 
       if repository.readme.nil?
@@ -191,9 +198,10 @@ module RepositoryHost
 
     def download_tags(token = nil)
       existing_tag_names = repository.tags.pluck(:name)
-      tags = api_client(token).refs(repository.full_name, 'tags')
+      tags = api_client(token).refs(repository.full_name, "tags")
       Array(tags).each do |tag|
-        next unless tag && tag.is_a?(Sawyer::Resource) && tag['ref']
+        next unless tag&.is_a?(Sawyer::Resource) && tag["ref"]
+
         download_tag(token, tag, existing_tag_names)
       end
       repository.projects.find_each(&:forced_save) if tags.present?
@@ -204,6 +212,7 @@ module RepositoryHost
     def download_tag(token, tag, existing_tag_names)
       match = tag.ref.match(/refs\/tags\/(.*)/)
       return unless match
+
       name = match[1]
       return if existing_tag_names.include?(name)
 
@@ -212,13 +221,13 @@ module RepositoryHost
       tag_hash = {
         name: name,
         kind: tag.object.type,
-        sha: tag.object.sha
+        sha: tag.object.sha,
       }
 
       case tag.object.type
-      when 'commit'
+      when "commit"
         tag_hash[:published_at] = object.committer.date
-      when 'tag'
+      when "tag"
         tag_hash[:published_at] = object.tagger.date
       end
 
@@ -237,19 +246,19 @@ module RepositoryHost
 
       # use api_client methods?
       v4_client = AuthToken.v4_client
-      v3_client = AuthToken.client({auto_paginate: false})
+      v3_client = AuthToken.client({ auto_paginate: false })
       now = DateTime.current
 
       metrics = []
 
-      result = MaintenanceStats::Queries::Github::RepoReleasesQuery.new(v4_client).query( params: {owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 1.year} )
+      result = MaintenanceStats::Queries::Github::RepoReleasesQuery.new(v4_client).query(params: { owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 1.year })
       metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).get_stats
 
-      result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: now} )
+      result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: { owner: repository.owner_name, repo_name: repository.project_name, start_date: now })
       metrics << MaintenanceStats::Stats::Github::CommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
 
       begin
-        result = MaintenanceStats::Queries::Github::RepositoryContributorStatsQuery.new(v3_client).query(params: {full_name: repository.full_name})
+        result = MaintenanceStats::Queries::Github::RepositoryContributorStatsQuery.new(v3_client).query(params: { full_name: repository.full_name })
         metrics << MaintenanceStats::Stats::Github::V3ContributorCountStats.new(result).get_stats
       rescue Octokit::Error => e
         Rails.logger.warn(e.message)
@@ -273,7 +282,7 @@ module RepositoryHost
       response.errors.messages.each(&Rails.logger.method(:warn)) if response.errors.present?
       response.data.errors.messages.each(&Rails.logger.method(:warn)) if response.data&.errors.present?
       # if we have either type of error or there is no data return true
-      return response.data.nil? || response.errors.any? || response.data.errors.any?
+      response.data.nil? || response.errors.any? || response.data.errors.any?
     end
   end
 end

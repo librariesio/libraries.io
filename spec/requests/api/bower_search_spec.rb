@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "Api::BowerSearchController", elasticsearch: true do
-  let!(:project) { create(:project, platform: 'Bower') }
+  let!(:project) { create(:project, platform: "Bower") }
 
   describe "GET /api/bower-search", type: :request do
     it "renders successfully" do
       Project.__elasticsearch__.refresh_index!
-      get '/api/bower-search'
+      get "/api/bower-search"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq('application/json')
+      expect(response.content_type).to eq("application/json")
       expect(json).to eq(
         [
           {
@@ -36,8 +38,8 @@ describe "Api::BowerSearchController", elasticsearch: true do
             repository_url: project.repository_url,
             stars: project.stars,
             status: project.status,
-            versions: project.versions
-          }
+            versions: project.versions,
+          },
         ].as_json
       )
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe LicensesController do
@@ -6,7 +8,7 @@ RSpec.describe LicensesController do
   describe "GET #index" do
     it "responds successfully", type: :request do
       visit licenses_path
-      expect(page).to have_content 'Licenses'
+      expect(page).to have_content "Licenses"
     end
   end
 

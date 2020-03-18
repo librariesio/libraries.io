@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddHostToOwnerIndexes < ActiveRecord::Migration[5.0]
   def change
     # drop indexes
@@ -13,10 +15,10 @@ class AddHostToOwnerIndexes < ActiveRecord::Migration[5.0]
     change_column :repository_organisations, :uuid, :string
 
     # recreate indexes
-    add_index :repository_users, 'lower(host_type), lower(login)', unique: true
-    add_index :repository_users, [:host_type, :uuid], unique: true
+    add_index :repository_users, "lower(host_type), lower(login)", unique: true
+    add_index :repository_users, %i[host_type uuid], unique: true
 
-    add_index :repository_organisations, 'lower(host_type), lower(login)', unique: true
-    add_index :repository_organisations, [:host_type, :uuid], unique: true
+    add_index :repository_organisations, "lower(host_type), lower(login)", unique: true
+    add_index :repository_organisations, %i[host_type uuid], unique: true
   end
 end

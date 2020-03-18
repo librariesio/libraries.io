@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VersionNotificationsWorker
   include Sidekiq::Worker
   sidekiq_options queue: :critical, unique: :until_executed

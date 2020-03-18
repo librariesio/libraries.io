@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe ProjectScoreCalculator do
   let(:project) { build(:project) }
@@ -25,56 +27,64 @@ describe ProjectScoreCalculator do
     end
   end
 
-  describe '#basic_info_score' do
+  describe "#basic_info_score" do
     let!(:readme) { create(:readme, repository: repository) }
 
     context "if all basic info fields are present" do
-      let!(:project) { build(:project, repository: repository,
-                                       description: 'project description',
-                                       homepage: 'http://homepage.com',
-                                       repository_url: 'https://github.com/foo/bar',
-                                       keywords_array: ['foo', 'bar', 'baz'],
-                                       normalized_licenses: ['MIT']) }
+      let!(:project) do
+        build(:project, repository: repository,
+                        description: "project description",
+                        homepage: "http://homepage.com",
+                        repository_url: "https://github.com/foo/bar",
+                        keywords_array: %w[foo bar baz],
+                        normalized_licenses: ["MIT"])
+      end
       it "should be 100" do
         expect(calculator.basic_info_score).to eq(100)
       end
     end
 
     context "if none of the basic info fields are present" do
-      let!(:project) { build(:project, description: '',
-                                        homepage: '',
-                                        repository_url: '',
-                                        keywords_array: [],
-                                        normalized_licenses: []) }
+      let!(:project) do
+        build(:project, description: "",
+                        homepage: "",
+                        repository_url: "",
+                        keywords_array: [],
+                        normalized_licenses: [])
+      end
       it "should be 0" do
         expect(calculator.basic_info_score).to eq(0)
       end
     end
   end
 
-  describe '#contribution_docs_score' do
+  describe "#contribution_docs_score" do
     let!(:project) { build(:project, repository: repository) }
 
     context "if all contribution docs are present" do
-      let(:repository) { create(:repository, has_coc: 'CODE_OF_CONDUCT',
-                                             has_contributing: 'contributing.md',
-                                             has_changelog: 'changelog.md') }
+      let(:repository) do
+        create(:repository, has_coc: "CODE_OF_CONDUCT",
+                            has_contributing: "contributing.md",
+                            has_changelog: "changelog.md")
+      end
       it "should be 100" do
         expect(calculator.contribution_docs_score).to eq(100)
       end
     end
 
     context "if none of the contribution docs are present" do
-      let(:repository) { create(:repository, has_coc: '',
-                                             has_contributing: nil,
-                                             has_changelog: '') }
+      let(:repository) do
+        create(:repository, has_coc: "",
+                            has_contributing: nil,
+                            has_changelog: "")
+      end
       it "should be 0" do
         expect(calculator.contribution_docs_score).to eq(0)
       end
     end
   end
 
-  describe '#dependencies_count_score' do
+  describe "#dependencies_count_score" do
     context "if project doesn't have any versions" do
       it "should be 100" do
         allow(calculator).to receive(:has_versions?) { false }
@@ -99,9 +109,9 @@ describe ProjectScoreCalculator do
     end
   end
 
-  describe '#dependent_projects_score' do
+  describe "#dependent_projects_score" do
     context "platform supports dependencies" do
-      let(:project) { build(:project, platform: 'Rubygems') }
+      let(:project) { build(:project, platform: "Rubygems") }
 
       context "passing max_dependent_projects on init" do
         it "should use passed in value" do
@@ -133,7 +143,7 @@ describe ProjectScoreCalculator do
     end
 
     context "platform doesn't support dependencies" do
-      let(:project) { build(:project, platform: 'CocoaPods') }
+      let(:project) { build(:project, platform: "CocoaPods") }
 
       it "should be nil" do
         expect(calculator.dependent_projects_score).to eq(nil)
@@ -141,9 +151,9 @@ describe ProjectScoreCalculator do
     end
   end
 
-  describe '#dependent_repos_count' do
-    context 'platform supports dependent repos' do
-      let(:project) { build(:project, platform: 'Rubygems') }
+  describe "#dependent_repos_count" do
+    context "platform supports dependent repos" do
+      let(:project) { build(:project, platform: "Rubygems") }
       context "passing max_dependent_repositories on init" do
         it "should use passed in value" do
           calculator = ProjectScoreCalculator.new(project, max_dependent_repositories: 1001)
@@ -174,7 +184,7 @@ describe ProjectScoreCalculator do
     end
 
     context "platform doesn't support dependent repos" do
-      let(:project) { build(:project, platform: 'Homebrew') }
+      let(:project) { build(:project, platform: "Homebrew") }
 
       it "should be nil" do
         expect(calculator.dependent_repositories_score).to eq(nil)
@@ -182,8 +192,8 @@ describe ProjectScoreCalculator do
     end
   end
 
-  describe '#stars_score' do
-    context 'when repository is present' do
+  describe "#stars_score" do
+    context "when repository is present" do
       let(:project) { build(:project, repository: repository) }
 
       context "passing max_stars on init" do
@@ -215,7 +225,7 @@ describe ProjectScoreCalculator do
       end
     end
 
-    context 'when repository is missing' do
+    context "when repository is missing" do
       let(:project) { build(:project) }
 
       it "should be nil" do
@@ -224,8 +234,8 @@ describe ProjectScoreCalculator do
     end
   end
 
-  describe '#forks_score' do
-    context 'when repository is present' do
+  describe "#forks_score" do
+    context "when repository is present" do
       let(:project) { build(:project, repository: repository) }
 
       context "passing max_forks on init" do
@@ -257,7 +267,7 @@ describe ProjectScoreCalculator do
       end
     end
 
-    context 'when repository is missing' do
+    context "when repository is missing" do
       let(:project) { build(:project) }
 
       it "should be nil" do
@@ -266,8 +276,8 @@ describe ProjectScoreCalculator do
     end
   end
 
-  describe '#watchers_score' do
-    context 'when repository is present' do
+  describe "#watchers_score" do
+    context "when repository is present" do
       let(:project) { build(:project, repository: repository) }
 
       context "passing max_watchers on init" do
@@ -299,7 +309,7 @@ describe ProjectScoreCalculator do
       end
     end
 
-    context 'when repository is missing' do
+    context "when repository is missing" do
       let(:project) { build(:project) }
 
       it "should be nil" do
@@ -308,7 +318,7 @@ describe ProjectScoreCalculator do
     end
   end
 
-  describe '#popularity_score' do
+  describe "#popularity_score" do
     it "should be the average of popularity category scores" do
       allow(calculator).to receive(:dependent_repositories_score) { 90 }
       allow(calculator).to receive(:dependent_projects_score) { 20 }
@@ -319,16 +329,16 @@ describe ProjectScoreCalculator do
       expect(calculator.popularity_score).to eq(49)
     end
 
-    context 'when platform has no popularity metrics' do
-      let(:project) { build(:project, platform: 'Inqlude') }
+    context "when platform has no popularity metrics" do
+      let(:project) { build(:project, platform: "Inqlude") }
 
-      it 'should be nil' do
+      it "should be nil" do
         expect(calculator.popularity_score).to eq(nil)
       end
     end
   end
 
-  describe '#quality_score' do
+  describe "#quality_score" do
     it "should be the average of quality category scores" do
       allow(calculator).to receive(:basic_info_score) { 100 }
       allow(calculator).to receive(:status_score) { 0 }
@@ -339,7 +349,7 @@ describe ProjectScoreCalculator do
     end
   end
 
-  describe '#community_score' do
+  describe "#community_score" do
     it "should be the average of community category scores" do
       allow(calculator).to receive(:contribution_docs_score) { 100 }
       allow(calculator).to receive(:recent_releases_score) { 0 }
@@ -351,234 +361,237 @@ describe ProjectScoreCalculator do
     end
   end
 
-  describe '#maintainers_score' do
-    context 'platform with support for registry user data' do
-      let(:project) { build(:project, platform: 'Rubygems') }
+  describe "#maintainers_score" do
+    context "platform with support for registry user data" do
+      let(:project) { build(:project, platform: "Rubygems") }
 
-      it 'should return 0 if less than 2 maintainers' do
+      it "should return 0 if less than 2 maintainers" do
         allow(calculator).to receive(:maintainers_count) { 1 }
         expect(calculator.maintainers_score).to eq(0)
       end
 
-      it 'should return 100 if more than 5 maintainers' do
+      it "should return 100 if more than 5 maintainers" do
         allow(calculator).to receive(:maintainers_count) { 10 }
         expect(calculator.maintainers_score).to eq(100)
       end
     end
 
-    context 'platform without support for registry user data' do
-      let(:project) { build(:project, platform: 'CocoaPods') }
+    context "platform without support for registry user data" do
+      let(:project) { build(:project, platform: "CocoaPods") }
 
-      it 'should return nil' do
+      it "should return nil" do
         expect(calculator.maintainers_score).to eq(nil)
       end
     end
   end
 
-  describe '#contributors_score' do
+  describe "#contributors_score" do
     let(:project) { build(:project, repository: repository) }
 
-    it 'should return 0 if less than 2 contributors' do
+    it "should return 0 if less than 2 contributors" do
       allow(project).to receive(:contributions_count) { 1 }
       expect(calculator.contributors_score).to eq(0)
     end
 
-    it 'should return 100 if more than 5 contributors' do
+    it "should return 100 if more than 5 contributors" do
       allow(project).to receive(:contributions_count) { 10 }
       expect(calculator.contributors_score).to eq(100)
     end
 
-    it 'should return 50 if between 2 and 4 contributors' do
+    it "should return 50 if between 2 and 4 contributors" do
       allow(project).to receive(:contributions_count) { 3 }
       expect(calculator.contributors_score).to eq(50)
     end
 
-    context 'when no repository present' do
+    context "when no repository present" do
       let(:project) { build(:project) }
-      it 'should return nil' do
+      it "should return nil" do
         expect(calculator.contributors_score).to eq(nil)
       end
     end
   end
 
-  describe '#outdated_dependencies_score' do
-    context 'platform without support for dependencies' do
-      let(:project) { build(:project, platform: 'CocoaPods') }
+  describe "#outdated_dependencies_score" do
+    context "platform without support for dependencies" do
+      let(:project) { build(:project, platform: "CocoaPods") }
 
-      it 'should return nil' do
+      it "should return nil" do
         expect(calculator.outdated_dependencies_score).to eq(nil)
       end
     end
 
-    context 'platform with support for dependencies' do
-      let(:project) { build(:project, platform: 'Rubygems') }
+    context "platform with support for dependencies" do
+      let(:project) { build(:project, platform: "Rubygems") }
 
-      it 'should return nil for projects with no versions' do
+      it "should return nil for projects with no versions" do
         allow(calculator).to receive(:has_versions?) { false }
         expect(calculator.outdated_dependencies_score).to eq(nil)
       end
 
-      it 'should return 100 for projects no outdated dependencies' do
+      it "should return 100 for projects no outdated dependencies" do
         allow(calculator).to receive(:has_versions?) { true }
-        allow(calculator).to receive(:outdated_dependencies) { [ ] }
-        allow(calculator).to receive(:direct_dependencies) { [ build(:dependency) ] }
+        allow(calculator).to receive(:outdated_dependencies) { [] }
+        allow(calculator).to receive(:direct_dependencies) { [build(:dependency)] }
         expect(calculator.outdated_dependencies_score).to eq(100)
       end
 
-      it 'should return 50 for projects where half of dependencies are outdated' do
+      it "should return 50 for projects where half of dependencies are outdated" do
         allow(calculator).to receive(:has_versions?) { true }
-        allow(calculator).to receive(:outdated_dependencies) { [ build(:dependency) ] }
-        allow(calculator).to receive(:direct_dependencies) { [ build(:dependency), build(:dependency) ] }
+        allow(calculator).to receive(:outdated_dependencies) { [build(:dependency)] }
+        allow(calculator).to receive(:direct_dependencies) { [build(:dependency), build(:dependency)] }
         expect(calculator.outdated_dependencies_score).to eq(50)
       end
     end
   end
 
-  describe '#breakdown' do
-    context 'when repository is present' do
+  describe "#breakdown" do
+    context "when repository is present" do
       let(:project) { build(:project, repository: repository) }
       it "should be the contain details of each score category" do
         expect(calculator.breakdown).to eq({
-          :overall_score => 38,
-          :popularity => {
-            :score => 0,
-            :dependent_projects => 0,
-            :dependent_repositories => 0,
-            :stars => 0,
-            :forks => 0,
-            :watchers => 0
-          },
-          :community => {
-            :score => 0,
-            :contribution_docs => {
-              :code_of_conduct => false,
-              :contributing => false,
-              :changelog => false
-            },
-            :recent_releases => 0,
-            :brand_new => 0,
-            :contributors => 0,
-            :maintainers => 0
-          },
-          :quality => {
-            :score => 53.33333333333333,
-            :basic_info => {
-              :description => true,
-              :homepage => true,
-              :repository_url => true,
-              :keywords => true,
-              :readme => false,
-              :license => false},
-            :status => 100,
-            :multiple_versions => 0,
-            :semver => 100,
-            :stable_release => 0
-          },
-          :dependencies => {
-            :score => 100.0,
-            :outdated_dependencies => nil,
-            :dependencies_count => 100,
-            :direct_dependencies => {}
-          }
-        })
+                                             overall_score: 38,
+                                             popularity: {
+                                               score: 0,
+                                               dependent_projects: 0,
+                                               dependent_repositories: 0,
+                                               stars: 0,
+                                               forks: 0,
+                                               watchers: 0,
+                                             },
+                                             community: {
+                                               score: 0,
+                                               contribution_docs: {
+                                                 code_of_conduct: false,
+                                                 contributing: false,
+                                                 changelog: false,
+                                               },
+                                               recent_releases: 0,
+                                               brand_new: 0,
+                                               contributors: 0,
+                                               maintainers: 0,
+                                             },
+                                             quality: {
+                                               score: 53.33333333333333,
+                                               basic_info: {
+                                                 description: true,
+                                                 homepage: true,
+                                                 repository_url: true,
+                                                 keywords: true,
+                                                 readme: false,
+                                                 license: false,
+                                               },
+                                               status: 100,
+                                               multiple_versions: 0,
+                                               semver: 100,
+                                               stable_release: 0,
+                                             },
+                                             dependencies: {
+                                               score: 100.0,
+                                               outdated_dependencies: nil,
+                                               dependencies_count: 100,
+                                               direct_dependencies: {},
+                                             },
+                                           })
       end
     end
 
-    context 'when repository is missing' do
+    context "when repository is missing" do
       let(:project) { build(:project) }
       it "should be the contain details of each score category" do
         expect(calculator.breakdown).to eq({
-          :overall_score => 39,
-          :popularity => {
-            :score => 0.0,
-            :dependent_projects => 0,
-            :dependent_repositories => 0,
-            :stars => nil,
-            :forks => nil,
-            :watchers => nil
-          },
-          :community => {
-            :score => 0.0,
-            :contribution_docs => {
-              :code_of_conduct => nil,
-              :contributing => nil,
-              :changelog => nil
-            },
-            :recent_releases => 0,
-            :brand_new => 0,
-            :contributors => nil,
-            :maintainers => 0
-          },
-          :quality => {
-            :score => 56.0,
-            :basic_info => {
-              :description => true,
-              :homepage => true,
-              :repository_url => true,
-              :keywords => true,
-              :readme => nil,
-              :license => false},
-            :status => 100,
-            :multiple_versions => 0,
-            :semver => 100,
-            :stable_release => 0
-          },
-          :dependencies => {
-            :score => 100.0,
-            :outdated_dependencies => nil,
-            :dependencies_count => 100,
-            :direct_dependencies => {}
-          }
-        })
+                                             overall_score: 39,
+                                             popularity: {
+                                               score: 0.0,
+                                               dependent_projects: 0,
+                                               dependent_repositories: 0,
+                                               stars: nil,
+                                               forks: nil,
+                                               watchers: nil,
+                                             },
+                                             community: {
+                                               score: 0.0,
+                                               contribution_docs: {
+                                                 code_of_conduct: nil,
+                                                 contributing: nil,
+                                                 changelog: nil,
+                                               },
+                                               recent_releases: 0,
+                                               brand_new: 0,
+                                               contributors: nil,
+                                               maintainers: 0,
+                                             },
+                                             quality: {
+                                               score: 56.0,
+                                               basic_info: {
+                                                 description: true,
+                                                 homepage: true,
+                                                 repository_url: true,
+                                                 keywords: true,
+                                                 readme: nil,
+                                                 license: false,
+                                               },
+                                               status: 100,
+                                               multiple_versions: 0,
+                                               semver: 100,
+                                               stable_release: 0,
+                                             },
+                                             dependencies: {
+                                               score: 100.0,
+                                               outdated_dependencies: nil,
+                                               dependencies_count: 100,
+                                               direct_dependencies: {},
+                                             },
+                                           })
       end
     end
 
-    context 'when package manager lacks support for features' do
-      let(:project) { build(:project, platform: 'CocoaPods') }
+    context "when package manager lacks support for features" do
+      let(:project) { build(:project, platform: "CocoaPods") }
       it "should be the contain details of each score category" do
         expect(calculator.breakdown).to eq({
-          :overall_score => 19,
-          :popularity => {
-            :score => 0.0,
-            :dependent_projects => nil,
-            :dependent_repositories => 0,
-            :stars => nil,
-            :forks => nil,
-            :watchers => nil
-          },
-          :community => {
-            :score => 0.0,
-            :contribution_docs => {
-              :code_of_conduct => nil,
-              :contributing => nil,
-              :changelog => nil
-            },
-            :recent_releases => 0,
-            :brand_new => 0,
-            :contributors => nil,
-            :maintainers => nil
-          },
-          :quality => {
-            :score => 56.0,
-            :basic_info => {
-              :description => true,
-              :homepage => true,
-              :repository_url => true,
-              :keywords => true,
-              :readme => nil,
-              :license => false},
-            :status => 100,
-            :multiple_versions => 0,
-            :semver => 100,
-            :stable_release => 0
-          },
-          :dependencies => {
-            :score => nil,
-            :outdated_dependencies => nil,
-            :dependencies_count => nil,
-            :direct_dependencies => nil
-          }
-        })
+                                             overall_score: 19,
+                                             popularity: {
+                                               score: 0.0,
+                                               dependent_projects: nil,
+                                               dependent_repositories: 0,
+                                               stars: nil,
+                                               forks: nil,
+                                               watchers: nil,
+                                             },
+                                             community: {
+                                               score: 0.0,
+                                               contribution_docs: {
+                                                 code_of_conduct: nil,
+                                                 contributing: nil,
+                                                 changelog: nil,
+                                               },
+                                               recent_releases: 0,
+                                               brand_new: 0,
+                                               contributors: nil,
+                                               maintainers: nil,
+                                             },
+                                             quality: {
+                                               score: 56.0,
+                                               basic_info: {
+                                                 description: true,
+                                                 homepage: true,
+                                                 repository_url: true,
+                                                 keywords: true,
+                                                 readme: nil,
+                                                 license: false,
+                                               },
+                                               status: 100,
+                                               multiple_versions: 0,
+                                               semver: 100,
+                                               stable_release: 0,
+                                             },
+                                             dependencies: {
+                                               score: nil,
+                                               outdated_dependencies: nil,
+                                               dependencies_count: nil,
+                                               direct_dependencies: nil,
+                                             },
+                                           })
       end
     end
   end

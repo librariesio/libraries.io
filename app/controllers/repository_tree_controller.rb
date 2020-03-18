@@ -1,8 +1,14 @@
+# frozen_string_literal: true
+
 class RepositoryTreeController < ApplicationController
   before_action :load_repo
 
   def show
-    @date = Date.parse(params[:date]) rescue Date.today
+    @date = begin
+              Date.parse(params[:date])
+            rescue StandardError
+              Date.today
+            end
 
     @tree_resolver = RepositoryTreeResolver.new(@repository, @date)
 
@@ -15,9 +21,7 @@ class RepositoryTreeController < ApplicationController
     if request.xhr?
       render :_tree, layout: false, tree: @tree
     else
-      if !@tree_resolver.cached?
-        @tree_resolver.enqueue_tree_resolution
-      end
+      @tree_resolver.enqueue_tree_resolution unless @tree_resolver.cached?
     end
   end
 end
