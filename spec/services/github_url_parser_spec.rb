@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+_# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -62,6 +62,7 @@ describe GithubURLParser do
       ["scm:git:https://michaelkrog@github.com/michaelkrog/filter4j.git", "michaelkrog/filter4j"],
     ].each do |row|
       url, full_name = row
+      url.unfreeze
       result = GithubURLParser.parse(url)
       expect(result).to eq(full_name)
     end

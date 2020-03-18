@@ -62,6 +62,7 @@ describe BitbucketURLParser do
       ["scm:git:https://michaelkrog@bitbucket.com/michaelkrog/filter4j.git", "michaelkrog/filter4j"],
     ].each do |row|
       url, full_name = row
+      url.unfreeze
       result = BitbucketURLParser.parse(url)
       expect(result).to eq(full_name)
     end
