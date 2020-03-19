@@ -58,9 +58,12 @@ module PackageManager
     def self.versions(project)
       json = get_json("https://rubygems.org/api/v1/versions/#{project['name']}.json")
       json.map do |v|
+        spdx_string = project.fetch("licenses", []).try(:join, ' AND ')
+        spdx_string = project.fetch("license", nil) unless spdx_string.present?
         {
           :number => v['number'],
-          :published_at => v['created_at']
+          :published_at => v['created_at'],
+          :original_license_string => spdx_string
         }
       end
     rescue

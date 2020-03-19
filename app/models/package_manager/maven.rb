@@ -150,9 +150,11 @@ module PackageManager
 
     def self.extract_versions(versions)
       versions["response"]["docs"].map do |version|
+        license_string = licenses(get_pom(version["g"], version["a"], version["v"]))
         {
           :number => version["v"],
-          :published_at => Time.at(version["timestamp"] / 1000).to_date
+          :published_at => Time.at(version["timestamp"] / 1000).to_date,
+          :original_license_string => license_string
         }
       end
     end

@@ -52,11 +52,13 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, name)
       project['releases'].select{ |k, v| v != [] }.map do |k, v|
+        release = get("https://pypi.org/pypi/#{name}/#{k}/json")
         {
           :number => k,
-          :published_at => v[0]['upload_time']
+          :published_at => v[0]['upload_time'],
+          :original_license_string => release.dig("info", "license")
         }
       end
     end

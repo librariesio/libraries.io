@@ -46,7 +46,7 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, name)
       versions = find_attribute(project[:page], 'Versions')
       versions = find_attribute(project[:page], 'Version') if versions.nil?
       versions.delete('(info)').split(',').map(&:strip).map do |v|

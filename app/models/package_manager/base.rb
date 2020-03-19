@@ -94,7 +94,7 @@ module PackageManager
       end
 
       if self::HAS_VERSIONS
-        versions(project).each do |version|
+        versions(project, dbproject.name).each do |version|
           unless dbproject.versions.find {|v| v.number == version[:number] }
             dbproject.versions.create(version)
           end
@@ -248,7 +248,7 @@ module PackageManager
         builder.use FaradayMiddleware::Gzip
         builder.use FaradayMiddleware::FollowRedirects, limit: 3
         builder.request :retry, { max: 2, interval: 0.05, interval_randomness: 0.5, backoff_factor: 2 }
-        
+
         builder.use :instrumentation
         builder.adapter :typhoeus
       end

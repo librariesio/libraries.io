@@ -96,7 +96,7 @@ describe "Api::ProjectsController" do
           repository_url: project.repository_url,
           stars: project.stars,
           status: project.status,
-          versions: project.versions.as_json(only: [:number, :published_at]),
+          versions: project.versions.as_json(only: [:number, :published_at, :spdx_expression]),
         }.to_json
       )
     end

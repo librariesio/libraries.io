@@ -44,7 +44,7 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, name)
       [{
         :number => project['version'],
         :published_at => Time.at(project['published']['$date']/1000.0)

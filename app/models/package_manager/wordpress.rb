@@ -63,7 +63,7 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, name)
       [
         {
           :number => project['version'],
