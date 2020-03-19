@@ -11,6 +11,7 @@ Metrics/BlockLength:
   Max: 100
   Exclude:
     - config/routes.rb
+    - config/initializers/*
     - spec/**/*_spec.rb
     - spec/factories.rb
     - lib/tasks/*.rake
