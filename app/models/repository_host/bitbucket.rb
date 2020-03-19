@@ -191,7 +191,7 @@ module RepositoryHost
       BitBucket.new oauth_token: token || ENV["BITBUCKET_KEY"]
     end
 
-    private_class_method def api_client(token = nil)
+    def api_client(token = nil)
       self.class.api_client(token)
     end
 

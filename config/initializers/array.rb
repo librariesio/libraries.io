@@ -4,7 +4,7 @@ class Array
   # Generates a single quoted postgres array string format. This is the format used
   # to insert or update stuff in the database.
   def to_postgres_array(omit_quotes = false)
-    result = "#{omit_quotes ? '' : "'"}{"
+    result = +"#{omit_quotes ? '' : "'"}{"
 
     result << collect do |value|
       if value.is_a?(Array)

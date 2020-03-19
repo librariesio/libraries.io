@@ -56,8 +56,7 @@ describe GitlabURLParser do
       ["scm:git:https://michaelkrog@gitlab.com/michaelkrog/filter4j.git", "michaelkrog/filter4j"],
     ].each do |row|
       url, full_name = row
-      url = +url
-      result = GitlabURLParser.parse(url)
+      result = GitlabURLParser.parse(+url)
       expect(result).to eq(full_name)
     end
   end
@@ -65,7 +64,7 @@ describe GitlabURLParser do
   it "handles anchors" do
     full_name = "michaelkrog/filter4j"
     url       = "scm:git:https://michaelkrog@gitlab.com/michaelkrog/filter4j.git#anchor"
-    result    = GitlabURLParser.parse(url)
+    result    = GitlabURLParser.parse(+url)
 
     expect(result).to eq(full_name)
   end
