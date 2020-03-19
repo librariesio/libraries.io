@@ -92,7 +92,7 @@ class Version < ApplicationRecord
     if semantic_version && semantic_version.pre.present?
       true
     elsif platform.try(:downcase) == "rubygems"
-      str.count("a-zA-Z") > 0
+      number.count("a-zA-Z") > 0
     else
       false
     end
