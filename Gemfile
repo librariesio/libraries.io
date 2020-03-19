@@ -99,6 +99,7 @@ end
 group :development, :test do
   gem 'pry'
   gem 'rspec-rails'
+  gem 'solargraph'
 end
 
 group :test do
@@ -123,3 +124,5 @@ group :production do
 end
 
 gem 'scenic', '~> 1.4'
+
+gem "rubocop", "~> 0.80.1"
