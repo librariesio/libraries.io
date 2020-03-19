@@ -54,7 +54,7 @@ describe PackageManager::Packagist do
 
     describe ".versions" do
       it "rejects dev branches that aren't really releases" do
-        expect(described_class.versions(subject, "librariesio/fakefpkg")).to eq([{number: "1.2.3", published_at: "2020-01-08T08:45:45+00:00", spdx_expression: nil}])
+        expect(described_class.versions(subject, "librariesio/fakefpkg")).to eq([{number: "1.2.3", published_at: "2020-01-08T08:45:45+00:00"}])
       end
     end
   end
