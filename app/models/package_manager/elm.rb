@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Elm < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
-    URL = 'http://package.elm-lang.org/'
-    COLOR = '#60B5CC'
+    URL = "http://package.elm-lang.org/"
+    COLOR = "#60B5CC"
 
     def self.package_link(project, version = nil)
       "http://package.elm-lang.org/packages/#{project.name}/#{version || 'latest'}"
     end
 
-    def self.download_url(name, version = 'master')
+    def self.download_url(name, version = "master")
       "https://github.com/#{name}/archive/#{version}.zip"
     end
 
@@ -25,8 +27,8 @@ module PackageManager
     def self.projects
       @projects ||= begin
         prjs = {}
-        get('http://package.elm-lang.org/all-packages').each do |prj|
-          prjs[prj['name']] = prj
+        get("http://package.elm-lang.org/all-packages").each do |prj|
+          prjs[prj["name"]] = prj
         end
         prjs
       end
@@ -42,15 +44,15 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project["name"],
-        :description => project["summary"],
-        :repository_url => "https://github.com/#{project["name"]}"
+        name: project["name"],
+        description: project["summary"],
+        repository_url: "https://github.com/#{project['name']}",
       }
     end
 
-    def self.versions(project, name)
-      project['versions'].map do |v|
-        { :number => v }
+    def self.versions(project, _name)
+      project["versions"].map do |v|
+        { number: v }
       end
     end
 
@@ -65,12 +67,12 @@ module PackageManager
         response = request(url)
         if response.status == 200
           contents = response.body
-          dependencies = Bibliothecary.analyse_file('elm-package.json', contents).first.try(:fetch, :dependencies)
-          return dependencies
+          dependencies = Bibliothecary.analyse_file("elm-package.json", contents).first.try(:fetch, :dependencies)
+          dependencies
         else
-          return []
+          []
         end
-      rescue
+      rescue StandardError
         []
       end
     end

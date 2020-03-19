@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Rubygems < Base
     HAS_VERSIONS = true
@@ -5,8 +7,8 @@ module PackageManager
     HAS_OWNERS = true
     BIBLIOTHECARY_SUPPORT = true
     SECURITY_PLANNED = true
-    URL = 'https://rubygems.org'
-    COLOR = '#701516'
+    URL = "https://rubygems.org"
+    COLOR = "#701516"
 
     def self.package_link(project, version = nil)
       "https://rubygems.org/gems/#{project.name}" + (version ? "/versions/#{version}" : "")
@@ -34,58 +36,58 @@ module PackageManager
     end
 
     def self.recent_names
-      updated = get('https://rubygems.org/api/v1/activity/just_updated.json').map{|h| h['name']}
-      new_gems = get('https://rubygems.org/api/v1/activity/latest.json').map{|h| h['name']}
+      updated = get("https://rubygems.org/api/v1/activity/just_updated.json").map { |h| h["name"] }
+      new_gems = get("https://rubygems.org/api/v1/activity/latest.json").map { |h| h["name"] }
       (updated + new_gems).uniq
     end
 
     def self.project(name)
       get_json("https://rubygems.org/api/v1/gems/#{name}.json")
-    rescue
+    rescue StandardError
       {}
     end
 
     def self.mapping(project)
       {
-        :name => project["name"],
-        :description => project["info"],
-        :homepage => project["homepage_uri"],
-        :licenses => project.fetch("licenses", []).try(:join, ','),
-        :repository_url => repo_fallback(project['source_code_uri'],project["homepage_uri"])
+        name: project["name"],
+        description: project["info"],
+        homepage: project["homepage_uri"],
+        licenses: project.fetch("licenses", []).try(:join, ","),
+        repository_url: repo_fallback(project["source_code_uri"], project["homepage_uri"]),
       }
     end
 
     def self.versions(project)
       json = get_json("https://rubygems.org/api/v1/versions/#{project['name']}.json")
       json.map do |v|
-        spdx_string = project.fetch("licenses", []).try(:join, ' AND ')
+        spdx_string = project.fetch("licenses", []).try(:join, " AND ")
         spdx_string = project.fetch("license", nil) unless spdx_string.present?
         {
-          :number => v['number'],
-          :published_at => v['created_at'],
-          :original_license_string => spdx_string
+          number: v["number"],
+          published_at: v["created_at"],
+          original_license_string: spdx_string,
         }
       end
-    rescue
+    rescue StandardError
       []
     end
 
     def self.dependencies(name, version, _project)
       json = get_json("https://rubygems.org/api/v2/rubygems/#{name}/versions/#{version}.json")
 
-      deps = json['dependencies']
-      map_dependencies(deps['development'], 'Development') + map_dependencies(deps['runtime'], 'runtime')
-    rescue
+      deps = json["dependencies"]
+      map_dependencies(deps["development"], "Development") + map_dependencies(deps["runtime"], "runtime")
+    rescue StandardError
       []
     end
 
     def self.map_dependencies(deps, kind)
       deps.map do |dep|
         {
-          project_name: dep['name'],
-          requirements: dep['requirements'],
+          project_name: dep["name"],
+          requirements: dep["requirements"],
           kind: kind,
-          platform: self.name.demodulize
+          platform: name.demodulize,
         }
       end
     end
@@ -94,12 +96,12 @@ module PackageManager
       json = get_json("https://rubygems.org/api/v1/gems/#{name}/owners.json")
       json.map do |user|
         {
-          uuid: user['id'],
-          email: user['email'],
-          login: user['handle']
+          uuid: user["id"],
+          email: user["email"],
+          login: user["handle"],
         }
       end
-    rescue
+    rescue StandardError
       []
     end
 

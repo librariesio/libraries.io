@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,8 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_19_170455) do
-
+ActiveRecord::Schema.define(version: 20_200_319_170_455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -43,7 +44,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "platform"
-    t.index ["repository_id", "repository_user_id"], name: "index_contributions_on_repository_id_and_user_id"
+    t.index %w[repository_id repository_user_id], name: "index_contributions_on_repository_id_and_user_id"
     t.index ["repository_user_id"], name: "index_contributions_on_repository_user_id"
   end
 
@@ -93,7 +94,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.boolean "pull_request"
     t.string "host_type"
     t.integer "repository_user_id"
-    t.index ["repository_id", "uuid"], name: "index_issues_on_repository_id_and_uuid"
+    t.index %w[repository_id uuid], name: "index_issues_on_repository_id_and_uuid"
   end
 
   create_table "manifests", id: :serial, force: :cascade do |t|
@@ -114,7 +115,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.integer "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["project_id", "user_id"], name: "index_project_mutes_on_project_id_and_user_id", unique: true
+    t.index %w[project_id user_id], name: "index_project_mutes_on_project_id_and_user_id", unique: true
   end
 
   create_table "project_suggestions", id: :serial, force: :cascade do |t|
@@ -171,8 +172,8 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["dependents_count"], name: "index_projects_on_dependents_count"
     t.index ["keywords_array"], name: "index_projects_on_keywords_array", using: :gin
-    t.index ["platform", "dependents_count"], name: "index_projects_on_platform_and_dependents_count"
-    t.index ["platform", "name"], name: "index_projects_on_platform_and_name", unique: true
+    t.index %w[platform dependents_count], name: "index_projects_on_platform_and_dependents_count"
+    t.index %w[platform name], name: "index_projects_on_platform_and_name", unique: true
     t.index ["repository_id"], name: "index_projects_on_repository_id"
     t.index ["updated_at"], name: "index_projects_on_updated_at"
     t.index ["versions_count"], name: "index_projects_on_versions_count"
@@ -201,7 +202,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.string "email"
     t.string "name"
     t.string "url"
-    t.index ["platform", "uuid"], name: "index_registry_users_on_platform_and_uuid", unique: true
+    t.index %w[platform uuid], name: "index_registry_users_on_platform_and_uuid", unique: true
   end
 
   create_table "repositories", id: :serial, force: :cascade do |t|
@@ -250,7 +251,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.string "keywords", default: [], array: true
     t.index "lower((host_type)::text), lower((full_name)::text)", name: "index_repositories_on_lower_host_type_lower_full_name", unique: true
     t.index "lower((language)::text)", name: "github_repositories_lower_language"
-    t.index ["host_type", "uuid"], name: "index_repositories_on_host_type_and_uuid", unique: true
+    t.index %w[host_type uuid], name: "index_repositories_on_host_type_and_uuid", unique: true
     t.index ["repository_organisation_id"], name: "index_repositories_on_repository_organisation_id"
     t.index ["repository_user_id"], name: "index_repositories_on_repository_user_id"
     t.index ["source_name"], name: "index_repositories_on_source_name"
@@ -298,7 +299,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_organisations_on_lower_host_type_lower_login", unique: true
     t.index ["created_at"], name: "index_repository_organisations_on_created_at"
     t.index ["hidden"], name: "index_repository_organisations_on_hidden"
-    t.index ["host_type", "uuid"], name: "index_repository_organisations_on_host_type_and_uuid", unique: true
+    t.index %w[host_type uuid], name: "index_repository_organisations_on_host_type_and_uuid", unique: true
   end
 
   create_table "repository_permissions", id: :serial, force: :cascade do |t|
@@ -309,7 +310,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.boolean "pull"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id", "repository_id"], name: "user_repo_unique_repository_permissions", unique: true
+    t.index %w[user_id repository_id], name: "user_repo_unique_repository_permissions", unique: true
   end
 
   create_table "repository_subscriptions", id: :serial, force: :cascade do |t|
@@ -342,7 +343,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_users_on_lower_host_type_lower_login", unique: true
     t.index ["created_at"], name: "index_repository_users_on_created_at"
     t.index ["hidden"], name: "index_repository_users_on_hidden"
-    t.index ["host_type", "uuid"], name: "index_repository_users_on_host_type_and_uuid", unique: true
+    t.index %w[host_type uuid], name: "index_repository_users_on_host_type_and_uuid", unique: true
   end
 
   create_table "subscriptions", id: :serial, force: :cascade do |t|
@@ -355,7 +356,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.index ["created_at"], name: "index_subscriptions_on_created_at"
     t.index ["project_id"], name: "index_subscriptions_on_project_id"
     t.index ["repository_subscription_id"], name: "index_subscriptions_on_repository_subscription_id"
-    t.index ["user_id", "project_id"], name: "index_subscriptions_on_user_id_and_project_id"
+    t.index %w[user_id project_id], name: "index_subscriptions_on_user_id_and_project_id"
   end
 
   create_table "tags", id: :serial, force: :cascade do |t|
@@ -366,7 +367,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.datetime "published_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["repository_id", "name"], name: "index_tags_on_repository_id_and_name"
+    t.index %w[repository_id name], name: "index_tags_on_repository_id_and_name"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
@@ -391,7 +392,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.integer "runtime_dependencies_count"
     t.string "spdx_expression"
     t.string "original_license_string"
-    t.index ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true
+    t.index %w[project_id number], name: "index_versions_on_project_id_and_number", unique: true
   end
 
   create_table "web_hooks", id: :serial, force: :cascade do |t|
@@ -404,7 +405,6 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.datetime "updated_at", null: false
     t.index ["repository_id"], name: "index_web_hooks_on_repository_id"
   end
-
 
   create_view "project_dependent_repositories", materialized: true, sql_definition: <<-SQL
       SELECT t1.project_id,
@@ -421,7 +421,6 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
             GROUP BY repositories.id, repository_dependencies.project_id) t1
        JOIN projects ON ((t1.project_id = projects.id)));
   SQL
-  add_index "project_dependent_repositories", ["project_id", "rank", "stargazers_count"], name: "index_project_dependent_repos_on_rank", order: { rank: "DESC NULLS LAST", stargazers_count: :desc }
-  add_index "project_dependent_repositories", ["project_id", "repository_id"], name: "index_project_dependent_repos_on_proj_id_and_repo_id", unique: true
-
+  add_index "project_dependent_repositories", %w[project_id rank stargazers_count], name: "index_project_dependent_repos_on_rank", order: { rank: "DESC NULLS LAST", stargazers_count: :desc }
+  add_index "project_dependent_repositories", %w[project_id repository_id], name: "index_project_dependent_repos_on_proj_id_and_repo_id", unique: true
 end

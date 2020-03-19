@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Julia < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
     BIBLIOTHECARY_SUPPORT = true
-    URL = 'http://pkg.julialang.org/'
-    COLOR = '#a270ba'
+    URL = "http://pkg.julialang.org/"
+    COLOR = "#a270ba"
 
-    def self.package_link(project, version = nil)
+    def self.package_link(project, _version = nil)
       "http://pkg.julialang.org/?pkg=#{project.name}&ver=release"
     end
 
@@ -20,21 +22,21 @@ module PackageManager
       {
         name: name,
         versions: versions,
-        repository_url: repository_url
+        repository_url: repository_url,
       }
     end
 
     def self.mapping(project)
       {
-        :name => project[:name],
-        :repository_url => repo_fallback(project[:repository_url], '')
+        name: project[:name],
+        repository_url: repo_fallback(project[:repository_url], ""),
       }
     end
 
-    def self.versions(project, name)
-      project['versions'].map do |v|
+    def self.versions(project, _name)
+      project["versions"].map do |v|
         {
-          :number => v
+          number: v,
         }
       end
     end
