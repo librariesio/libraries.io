@@ -62,8 +62,7 @@ describe GithubURLParser do
       ["scm:git:https://michaelkrog@github.com/michaelkrog/filter4j.git", "michaelkrog/filter4j"],
     ].each do |row|
       url, full_name = row
-      url = +url
-      result = GithubURLParser.parse(url)
+      result = GithubURLParser.parse(+url)
       expect(result).to eq(full_name)
     end
   end
@@ -71,7 +70,7 @@ describe GithubURLParser do
   it "handles anchors" do
     full_name = "michaelkrog/filter4j"
     url       = "scm:git:https://michaelkrog@github.com/michaelkrog/filter4j.git#anchor"
-    result    = GithubURLParser.parse(url)
+    result    = GithubURLParser.parse(+url)
 
     expect(result).to eq(full_name)
   end
@@ -79,7 +78,7 @@ describe GithubURLParser do
   it "handles querystrings" do
     full_name = "michaelkrog/filter4j"
     url       = "scm:git:https://michaelkrog@github.com/michaelkrog/filter4j.git?foo=bar&wut=wah"
-    result    = GithubURLParser.parse(url)
+    result    = GithubURLParser.parse(+url)
 
     expect(result).to eq(full_name)
   end
@@ -91,8 +90,7 @@ describe GithubURLParser do
       ["(scm:git:https://michaelkrog@github.com/michaelkrog/filter4j.git)", "michaelkrog/filter4j"],
     ].each do |row|
       url, full_name = row
-      url = +url
-      result = GithubURLParser.parse(url)
+      result = GithubURLParser.parse(+url)
       expect(result).to eq(full_name)
     end
   end
@@ -105,8 +103,7 @@ describe GithubURLParser do
       "https://foo.github.io",
       "https://github.ibm.com/apiconnect/apiconnect",
     ].each do |url|
-      url = +url
-      result = GithubURLParser.parse(url)
+      result = GithubURLParser.parse(+url)
       expect(result).to eq(nil)
     end
   end

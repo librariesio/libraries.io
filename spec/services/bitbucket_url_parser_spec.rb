@@ -62,8 +62,7 @@ describe BitbucketURLParser do
       ["scm:git:https://michaelkrog@bitbucket.com/michaelkrog/filter4j.git", "michaelkrog/filter4j"],
     ].each do |row|
       url, full_name = row
-      url = +url
-      result = BitbucketURLParser.parse(url)
+      result = BitbucketURLParser.parse(+url)
       expect(result).to eq(full_name)
     end
   end
@@ -71,7 +70,7 @@ describe BitbucketURLParser do
   it "handles anchors" do
     full_name = "michaelkrog/filter4j"
     url       = "scm:git:https://michaelkrog@bitbucket.com/michaelkrog/filter4j.git#anchor"
-    result    = BitbucketURLParser.parse(url)
+    result    = BitbucketURLParser.parse(+url)
 
     expect(result).to eq(full_name)
   end
@@ -79,7 +78,7 @@ describe BitbucketURLParser do
   it "handles querystrings" do
     full_name = "michaelkrog/filter4j"
     url       = "scm:git:https://michaelkrog@bitbucket.com/michaelkrog/filter4j.git?foo=bar&wut=wah"
-    result    = BitbucketURLParser.parse(url)
+    result    = BitbucketURLParser.parse(+url)
 
     expect(result).to eq(full_name)
   end
@@ -91,7 +90,7 @@ describe BitbucketURLParser do
       ["(scm:git:https://michaelkrog@bitbucket.com/michaelkrog/filter4j.git)", "michaelkrog/filter4j"],
     ].each do |row|
       url, full_name = row
-      result = BitbucketURLParser.parse(url)
+      result = BitbucketURLParser.parse(+url)
       expect(result).to eq(full_name)
     end
   end
@@ -104,7 +103,7 @@ describe BitbucketURLParser do
       "https://foo.bitbucket.io",
       "https://bitbucket.ibm.com/apiconnect/apiconnect",
     ].each do |url|
-      result = BitbucketURLParser.parse(url)
+      result = BitbucketURLParser.parse(+url)
       expect(result).to eq(nil)
     end
   end
