@@ -24,7 +24,7 @@ class Version < ApplicationRecord
   end
 
   def update_spdx_expression
-    self.spdx_expression = original_license_string if original_license_string.present? && Spdx.valid_spdx?(original_license_string)
+    self.spdx_expression = original_license_string if Spdx.valid_spdx?(original_license_string)
   end
 
   def platform
