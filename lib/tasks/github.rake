@@ -66,7 +66,7 @@ namespace :github do
       since = users.last.id + 1
       REDIS.set("githubuserid", since)
       puts "*" * 20
-      puts "#{since} - #{format('%.4f', (since.to_f / 250_000))}%"
+      puts "#{since} - #{format('%<since>.4f', (since.to_f / 250_000))}%"
       puts "*" * 20
       sleep 0.5
     end
@@ -78,10 +78,10 @@ namespace :github do
     raise ArgumentError, "Github token not found! Pass one into this rake task or define an environment variable GITHUB_TOKEN" if token.nil?
 
     http = GraphQL::Client::HTTP.new("https://api.github.com/graphql") do
-      @@token = token
+      @token = token
       def headers(_context)
         # Send Github Token
-        { "Authorization": "bearer #{@@token}" }
+        { "Authorization": "bearer #{@token}" }
       end
     end
 

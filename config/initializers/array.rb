@@ -17,6 +17,7 @@ class Array
         value
       elsif value.is_a?(NilClass)
         value = "NULL"
+        value
       else
         value
       end

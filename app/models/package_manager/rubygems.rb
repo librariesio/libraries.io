@@ -63,6 +63,7 @@ module PackageManager
         {
           number: v["number"],
           published_at: v["created_at"],
+          licenses: project.fetch("licenses", []).try(:join, ","),
         }
       end
     rescue StandardError

@@ -187,17 +187,15 @@ module RepositoryHost
       metrics
     end
 
-    private
-
-    def self.api_client(token = nil)
+    private_class_method def self.api_client(token = nil)
       BitBucket.new oauth_token: token || ENV["BITBUCKET_KEY"]
     end
 
-    def api_client(token = nil)
+    private_class_method def api_client(token = nil)
       self.class.api_client(token)
     end
 
-    def self.fetch_repo(full_name, token = nil)
+    private_class_method def self.fetch_repo(full_name, token = nil)
       client = api_client(token)
       user_name, repo_name = full_name.split("/")
       project = client.repos.get(user_name, repo_name)
