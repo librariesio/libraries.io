@@ -62,7 +62,7 @@ describe GithubURLParser do
       ["scm:git:https://michaelkrog@github.com/michaelkrog/filter4j.git", "michaelkrog/filter4j"],
     ].each do |row|
       url, full_name = row
-      url.unfreeze
+      url = +url
       result = GithubURLParser.parse(url)
       expect(result).to eq(full_name)
     end
@@ -91,6 +91,7 @@ describe GithubURLParser do
       ["(scm:git:https://michaelkrog@github.com/michaelkrog/filter4j.git)", "michaelkrog/filter4j"],
     ].each do |row|
       url, full_name = row
+      url = +url
       result = GithubURLParser.parse(url)
       expect(result).to eq(full_name)
     end
@@ -104,6 +105,7 @@ describe GithubURLParser do
       "https://foo.github.io",
       "https://github.ibm.com/apiconnect/apiconnect",
     ].each do |url|
+      url = +url
       result = GithubURLParser.parse(url)
       expect(result).to eq(nil)
     end

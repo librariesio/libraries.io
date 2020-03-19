@@ -56,7 +56,7 @@ describe GitlabURLParser do
       ["scm:git:https://michaelkrog@gitlab.com/michaelkrog/filter4j.git", "michaelkrog/filter4j"],
     ].each do |row|
       url, full_name = row
-      url.unfreeze
+      url = +url
       result = GitlabURLParser.parse(url)
       expect(result).to eq(full_name)
     end
@@ -85,6 +85,7 @@ describe GitlabURLParser do
       ["(scm:git:https://michaelkrog@gitlab.com/michaelkrog/filter4j.git)", "michaelkrog/filter4j"],
     ].each do |row|
       url, full_name = row
+      url = +url
       result = GitlabURLParser.parse(url)
       expect(result).to eq(full_name)
     end
@@ -98,6 +99,7 @@ describe GitlabURLParser do
       "https://foo.gitlab.io",
       "https://gitlab.ibm.com/apiconnect/apiconnect",
     ].each do |url|
+      url = +url
       result = GitlabURLParser.parse(url)
       expect(result).to eq(nil)
     end
