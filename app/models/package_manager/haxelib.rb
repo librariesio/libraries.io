@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Haxelib < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
-    URL = 'https://lib.haxe.org'
-    COLOR = '#df7900'
+    URL = "https://lib.haxe.org"
+    COLOR = "#df7900"
 
     def self.package_link(project, version = nil)
       "https://lib.haxe.org/p/#{project.name}/#{version}"
@@ -19,13 +21,13 @@ module PackageManager
     end
 
     def self.project_names
-      get_html("https://lib.haxe.org/all/").css('.project-list tbody th').map{|th| th.css('a').first.try(:text) }
+      get_html("https://lib.haxe.org/all/").css(".project-list tbody th").map { |th| th.css("a").first.try(:text) }
     end
 
     def self.recent_names
-      u = 'https://lib.haxe.org/rss/'
+      u = "https://lib.haxe.org/rss/"
       titles = SimpleRSS.parse(get_raw(u)).items.map(&:title)
-      titles.map { |t| t.split(' ').first }.uniq
+      titles.map { |t| t.split(" ").first }.uniq
     end
 
     def self.project(name)
@@ -34,35 +36,36 @@ module PackageManager
 
     def self.mapping(project)
       {
-        name: project['name'],
-        keywords_array: project['info']['tags'],
-        description: project['info']['desc'],
-        licenses: project['info']['license'],
-        repository_url: repo_fallback(project['info']['website'], '')
+        name: project["name"],
+        keywords_array: project["info"]["tags"],
+        description: project["info"]["desc"],
+        licenses: project["info"]["license"],
+        repository_url: repo_fallback(project["info"]["website"], ""),
       }
     end
 
     def self.versions(project)
-      project['info']['versions'].map do |version|
+      project["info"]["versions"].map do |version|
         {
-          :number => version['name'],
-          :published_at => version['date']
+          number: version["name"],
+          published_at: version["date"],
         }
       end
     end
 
     def self.dependencies(name, version, _project)
       json = get_json("https://lib.haxe.org/p/#{name}/#{version}/raw-files/haxelib.json")
-      return [] unless json['dependencies']
-      json['dependencies'].map do |dep_name, dep_version|
+      return [] unless json["dependencies"]
+
+      json["dependencies"].map do |dep_name, dep_version|
         {
           project_name: dep_name,
-          requirements: dep_version.empty? ? '*' : dep_version,
-          kind: 'runtime',
-          platform: self.name.demodulize
+          requirements: dep_version.empty? ? "*" : dep_version,
+          kind: "runtime",
+          platform: self.name.demodulize,
         }
       end
-    rescue
+    rescue StandardError
       []
     end
   end

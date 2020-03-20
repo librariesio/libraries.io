@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Maven < Base
     HAS_VERSIONS = true
@@ -6,13 +8,13 @@ module PackageManager
     SECURITY_PLANNED = true
     URL = "http://maven.org"
     BASE_URL = "https://maven-repository.com"
-    COLOR = '#b07219'
+    COLOR = "#b07219"
     MAX_DEPTH = 5
     LICENSE_STRINGS = {
       "http://www.apache.org/licenses/LICENSE-2.0" => "Apache-2.0",
       "http://www.eclipse.org/legal/epl-v10" => "Eclipse Public License (EPL), Version 1.0",
       "http://www.eclipse.org/org/documents/edl-v10" => "Eclipse Distribution License (EDL), Version 1.0",
-    }
+    }.freeze
 
     def self.package_link(project, version = nil)
       MavenUrl.from_name(project.name).search(version)
@@ -27,12 +29,12 @@ module PackageManager
     end
 
     def self.load_names(limit = nil)
-      num = REDIS.get('maven-page')
+      num = REDIS.get("maven-page")
       if limit
-        REDIS.set 'maven-page', limit
+        REDIS.set "maven-page", limit
         num = limit
       elsif num.nil?
-        REDIS.set 'maven-page', 41753
+        REDIS.set "maven-page", 41753
         num = 41753
       else
         num = num.to_i
@@ -40,13 +42,13 @@ module PackageManager
 
       (1..num).to_a.reverse.each do |number|
         page = get_html "https://maven-repository.com/artifact/latest?page=#{number}"
-        parse_names(page).each { |name| REDIS.sadd('maven-names', name) }
-        REDIS.set('maven-page', number)
+        parse_names(page).each { |name| REDIS.sadd("maven-names", name) }
+        REDIS.set("maven-page", number)
       end
     end
 
     def self.project_names
-      REDIS.smembers('maven-names')
+      REDIS.smembers("maven-names")
     end
 
     def self.recent_names
@@ -55,8 +57,8 @@ module PackageManager
     end
 
     def self.project(name)
-      sections = name.split(':')
-      path = sections.join('/')
+      sections = name.split(":")
+      path = sections.join("/")
       versions = versions({ name: name })
       latest_version = latest_version(versions, name)
       return {} unless latest_version.present?
@@ -69,22 +71,21 @@ module PackageManager
         versions: versions,
         latest_version: latest_version,
       }
-
-    rescue
+    rescue StandardError
       {}
     end
 
     def self.mapping(project, depth = 0)
       version_xml = get_pom(project[:group_id], project[:artifact_id], project[:latest_version])
-      self.mapping_from_pom_xml(version_xml, depth).merge({name: project[:name]})
+      mapping_from_pom_xml(version_xml, depth).merge({ name: project[:name] })
     end
 
     def self.mapping_from_pom_xml(version_xml, depth = 0)
-      if version_xml.respond_to?('project')
-        xml = version_xml.project
-      else
-        xml = version_xml
-      end
+      xml = if version_xml.respond_to?("project")
+              version_xml.project
+            else
+              version_xml
+            end
 
       parent = {
         description: nil,
@@ -93,10 +94,10 @@ module PackageManager
         licenses: "",
         properties: {},
       }
-      if xml.locate('parent').present? && depth < MAX_DEPTH
-        group_id = extract_pom_value(xml, 'parent/groupId')
-        artifact_id = extract_pom_value(xml, 'parent/artifactId')
-        version = extract_pom_value(xml, 'parent/version')
+      if xml.locate("parent").present? && depth < MAX_DEPTH
+        group_id = extract_pom_value(xml, "parent/groupId")
+        artifact_id = extract_pom_value(xml, "parent/artifactId")
+        version = extract_pom_value(xml, "parent/version")
         if group_id && artifact_id && version
           parent = mapping_from_pom_xml(
             get_pom(group_id, artifact_id, version),
@@ -107,15 +108,15 @@ module PackageManager
 
       # merge with parent data if available and take child values on overlap
       child = {
-        description: extract_pom_value(xml, 'description', parent[:properties]),
-        homepage: extract_pom_value(xml, 'url', parent[:properties]),
+        description: extract_pom_value(xml, "description", parent[:properties]),
+        homepage: extract_pom_value(xml, "url", parent[:properties]),
         repository_url: repo_fallback(
-          extract_pom_value(xml, 'scm/url', parent[:properties]),
-          extract_pom_value(xml, 'url', parent[:properties])
+          extract_pom_value(xml, "scm/url", parent[:properties]),
+          extract_pom_value(xml, "url", parent[:properties])
         ),
         licenses: licenses(version_xml).join(","),
         properties: parent[:properties].merge(extract_pom_properties(xml)),
-      }.select { |k, v| v.present? }
+      }.select { |_k, v| v.present? }
 
       parent.merge(child)
     end
@@ -138,7 +139,7 @@ module PackageManager
           project_name: dep[:name],
           requirements: dep[:requirement],
           kind: dep[:type],
-          platform: 'Maven'
+          platform: "Maven",
         }
       end
     end
@@ -151,20 +152,20 @@ module PackageManager
     def self.extract_versions(versions)
       versions["response"]["docs"].map do |version|
         {
-          :number => version["v"],
-          :published_at => Time.at(version["timestamp"] / 1000).to_date
+          number: version["v"],
+          published_at: Time.at(version["timestamp"] / 1000).to_date,
         }
       end
     end
 
-    def self.get_pom(group_id, artifact_id, version, seen=[])
+    def self.get_pom(group_id, artifact_id, version, seen = [])
       xml = get_xml(MavenUrl.new(group_id, artifact_id).pom(version))
 
       seen << [group_id, artifact_id, version]
 
-      next_group_id = xml.locate('distributionManagement/relocation/groupId/?[0]').first || group_id
-      next_artifact_id = xml.locate('distributionManagement/relocation/artifactId/?[0]').first || artifact_id
-      next_version = xml.locate('distributionManagement/relocation/version/?[0]').first || version
+      next_group_id = xml.locate("distributionManagement/relocation/groupId/?[0]").first || group_id
+      next_artifact_id = xml.locate("distributionManagement/relocation/artifactId/?[0]").first || artifact_id
+      next_version = xml.locate("distributionManagement/relocation/version/?[0]").first || version
 
       if seen.include?([next_group_id, next_artifact_id, next_version])
         xml
@@ -180,11 +181,11 @@ module PackageManager
 
     def self.licenses(xml)
       xml_licenses = xml
-        .locate('*/licenses/license/name')
+        .locate("*/licenses/license/name")
         .flat_map(&:nodes)
       return xml_licenses if xml_licenses.any?
 
-      comments = xml.locate('*/^Comment')
+      comments = xml.locate("*/^Comment")
       LICENSE_STRINGS
         .select { |string, _| comments.any? { |c| c.value.include?(string) } }
         .map(&:last)
@@ -196,10 +197,10 @@ module PackageManager
           .max_by { |version| version[:published_at] }
           .dig(:number)
       else
-        # TODO this is in place to handle packages that are no longer on maven-repository.com
+        # TODO: this is in place to handle packages that are no longer on maven-repository.com
         # this could be removed if we switched to a package data provider that supplied full information
         Project
-          .find_by(name: name, platform: 'Maven')
+          .find_by(name: name, platform: "Maven")
           &.versions
           &.max_by(&:published_at)
           &.number
@@ -208,8 +209,8 @@ module PackageManager
 
     def self.parse_names(page)
       # parse the names from maven-repository.com/artifact/latest pages
-      names = page.css('tr')[1..-1]&.map do |tr|
-        tr.css('td')[0..1]&.map(&:text)&.join(':')
+      names = page.css("tr")[1..-1]&.map do |tr|
+        tr.css("td")[0..1]&.map(&:text)&.join(":")
       end || []
 
       names.compact.select(&MavenUrl.method(:legal_name?)).uniq
@@ -217,11 +218,11 @@ module PackageManager
 
     class MavenUrl
       def self.from_name(name)
-        new(*name.split(':', 2))
+        new(*name.split(":", 2))
       end
 
       def self.legal_name?(name)
-        name.present? && name.split(':').size == 2
+        name.present? && name.split(":").size == 2
       end
 
       def initialize(group_id, artifact_id)
@@ -241,7 +242,7 @@ module PackageManager
         base + "/#{version}/#{@artifact_id}-#{version}.pom"
       end
 
-      def search(version=nil)
+      def search(version = nil)
         if version
           "http://search.maven.org/#artifactdetails%7C#{@group_id}%7C#{@artifact_id}%7C#{version}%7Cjar"
         else
@@ -257,7 +258,7 @@ module PackageManager
       private
 
       def group_path
-        @group_id.gsub('.', '/')
+        @group_id.gsub(".", "/")
       end
     end
   end
