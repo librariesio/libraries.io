@@ -31,7 +31,7 @@ module PackageManager
     end
 
     def self.project_names
-      gems = Marshal.load(Gem.gunzip(get_raw("http://production.cf.rubygems.org/specs.4.8.gz")))
+      gems = Marshal.safe_load(Gem.gunzip(get_raw("http://production.cf.rubygems.org/specs.4.8.gz")))
       gems.map(&:first).uniq
     end
 

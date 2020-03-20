@@ -66,10 +66,11 @@ module PackageManager
 
     def self.find_old_versions(project)
       archive_page = get_html("https://cran.r-project.org/src/contrib/Archive/#{project[:name]}/")
-      archive_page.css("table").css("tr").select do |tr|
+      trs = archive_page.css("table").css("tr").select do |tr|
         tds = tr.css("td")
         tds[1]&.text&.match(/tar\.gz$/)
-      end.map do |tr|
+      end
+      trs.map do |tr|
         tds = tr.css("td")
         {
           number: tds[1].text.strip.split("_").last.gsub(".tar.gz", ""),

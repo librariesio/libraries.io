@@ -22,7 +22,7 @@ module PackageManager
       loop do
         sleep 1
         r = PackageManager::Base.get("http://api.platformio.org/lib/search?page=#{page}")
-        break if page > r["total"].to_f / r["perpage"].to_f
+        break if page > r["total"] / r["perpage"].to_f
 
         projects += r["items"]
         page += 1

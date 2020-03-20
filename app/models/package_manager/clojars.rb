@@ -13,7 +13,7 @@ module PackageManager
     end
 
     def self.project_names
-      @names ||= get("https://clojars.libraries.io/packages.json").keys
+      @project_names ||= get("https://clojars.libraries.io/packages.json").keys
     end
 
     def self.recent_names

@@ -94,10 +94,10 @@ class Version < ApplicationRecord
   end
 
   def prerelease?
-    if semantic_version
-      !!semantic_version.pre
+    if semantic_version && semantic_version.pre.present?
+      true
     elsif platform.try(:downcase) == "rubygems"
-      !!(number =~ /[a-zA-Z]/)
+      number.count("a-zA-Z") > 0
     else
       false
     end

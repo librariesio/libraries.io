@@ -16,7 +16,7 @@ module PackageManager
     end
 
     def self.project(name)
-      get("https://packagecontrol.io/packages/#{URI.escape(name)}.json")
+      get("https://packagecontrol.io/packages/#{CGI.escape(name)}.json")
     end
 
     def self.mapping(project)
