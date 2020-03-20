@@ -11,6 +11,7 @@ class Version < ApplicationRecord
   has_many :dependencies, dependent: :delete_all
   has_many :runtime_dependencies, -> { where kind: %w[runtime normal] }, class_name: "Dependency"
 
+  before_save :update_spdx_expression
   after_commit :send_notifications_async, on: :create
   after_commit :update_repository_async, on: :create
   after_commit :save_project, on: :create
@@ -20,6 +21,10 @@ class Version < ApplicationRecord
   def save_project
     project.try(:forced_save)
     project.try(:update_repository_async)
+  end
+
+  def update_spdx_expression
+    self.spdx_expression = original_license_string if Spdx.valid_spdx?(original_license_string)
   end
 
   def platform
@@ -89,10 +94,10 @@ class Version < ApplicationRecord
   end
 
   def prerelease?
-    if semantic_version && semantic_version.pre.present?
-      true
+    if semantic_version
+      !!semantic_version.pre
     elsif platform.try(:downcase) == "rubygems"
-      number.count("a-zA-Z") > 0
+      !!(number =~ /[a-zA-Z]/)
     else
       false
     end

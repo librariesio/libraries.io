@@ -16,7 +16,7 @@ module PackageManager
     end
 
     def self.project(name)
-      get("https://packagecontrol.io/packages/#{CGI.escape(name)}.json")
+      get("https://packagecontrol.io/packages/#{URI.escape(name)}.json")
     end
 
     def self.mapping(project)
@@ -29,7 +29,7 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, _name)
       project["versions"].map do |v|
         {
           number: v["version"],

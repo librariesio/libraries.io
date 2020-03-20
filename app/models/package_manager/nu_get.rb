@@ -96,7 +96,7 @@ module PackageManager
       item["description"].blank? ? item["summary"] : item["description"]
     end
 
-    def self.versions(project)
+    def self.versions(project, _name)
       project[:releases].map do |item|
         {
           number: item["catalogEntry"]["version"],
@@ -146,13 +146,15 @@ module PackageManager
       high_sign = high_bound == "]" ? "<=" : "<"
 
       # highest
-      if high_number != low_number
+      if high_number
+        if high_number != low_number
+          requirements << "#{low_sign} #{low_number}" if low_number.present?
+          requirements << "#{high_sign} #{high_number}" if high_number.present?
+        elsif high_number == low_number
+          requirements << "= #{high_number}"
+        end
+      else
         requirements << "#{low_sign} #{low_number}" if low_number.present?
-        requirements << "#{high_sign} #{high_number}" if high_number.present?
-      elsif high_number == low_number
-        requirements << "= #{high_number}"
-      elsif low_number.present?
-        requirements << "#{low_sign} #{low_number}"
       end
       requirements << ">= 0" if requirements.empty?
       requirements.join(" ")

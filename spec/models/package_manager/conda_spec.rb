@@ -32,7 +32,7 @@ describe PackageManager::Conda do
         "timestamp"=>timestamp
       }
 
-      expect(described_class.versions(unmapped_project).first).to eq({number: "1.0.0", published_at: expected_date})
+      expect(described_class.versions(unmapped_project, "fakename").first).to eq({number: "1.0.0", published_at: expected_date})
     end
 
     it 'can handle a 0 timestamp from conda' do
@@ -43,7 +43,7 @@ describe PackageManager::Conda do
         "timestamp"=>timestamp
       }
 
-      expect(described_class.versions(unmapped_project).first).to eq({number: "1.0.0", published_at: expected_date})
+      expect(described_class.versions(unmapped_project, "fakename").first).to eq({number: "1.0.0", published_at: expected_date})
     end
   end
 end

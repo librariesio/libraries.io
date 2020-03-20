@@ -31,7 +31,7 @@ module PackageManager
     end
 
     def self.project_names
-      gems = Marshal.safe_load(Gem.gunzip(get_raw("http://production.cf.rubygems.org/specs.4.8.gz")))
+      gems = Marshal.load(Gem.gunzip(get_raw("http://production.cf.rubygems.org/specs.4.8.gz")))
       gems.map(&:first).uniq
     end
 
@@ -60,9 +60,12 @@ module PackageManager
     def self.versions(project)
       json = get_json("https://rubygems.org/api/v1/versions/#{project['name']}.json")
       json.map do |v|
+        spdx_string = project.fetch("licenses", []).try(:join, " AND ")
+        spdx_string = project.fetch("license", nil) unless spdx_string.present?
         {
           number: v["number"],
           published_at: v["created_at"],
+          original_license_string: spdx_string,
         }
       end
     rescue StandardError

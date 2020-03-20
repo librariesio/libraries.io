@@ -99,7 +99,7 @@ module PackageManager
       end
 
       if self::HAS_VERSIONS
-        versions(project).each do |version|
+        versions(project, dbproject.name).each do |version|
           dbproject.versions.create(version) unless dbproject.versions.find { |v| v.number == version[:number] }
         end
       end
@@ -117,7 +117,7 @@ module PackageManager
       save(project) if project.present?
     rescue SystemExit, Interrupt
       exit 0
-    rescue StandardError => e
+    rescue Exception => e
       if ENV["RACK_ENV"] == "production"
         Bugsnag.notify(e)
       else
@@ -240,15 +240,17 @@ module PackageManager
       { is_deprecated: false, message: nil }
     end
 
-    private_class_method def self.get(url, options = {})
+    private
+
+    def self.get(url, options = {})
       Oj.load(get_raw(url, options))
     end
 
-    private_class_method def self.get_raw(url, options = {})
+    def self.get_raw(url, options = {})
       request(url, options).body
     end
 
-    private_class_method def self.request(url, options = {})
+    def self.request(url, options = {})
       connection = Faraday.new url.strip, options do |builder|
         builder.use :http_cache, store: Rails.cache, logger: Rails.logger, shared_cache: false, serializer: Marshal
         builder.use FaradayMiddleware::Gzip
@@ -261,19 +263,19 @@ module PackageManager
       connection.get
     end
 
-    private_class_method def self.get_html(url, options = {})
+    def self.get_html(url, options = {})
       Nokogiri::HTML(get_raw(url, options))
     end
 
-    private_class_method def self.get_xml(url, options = {})
+    def self.get_xml(url, options = {})
       Ox.parse(get_raw(url, options))
     end
 
-    private_class_method def self.get_json(url)
+    def self.get_json(url)
       get(url, headers: { "Accept" => "application/json" })
     end
 
-    private_class_method def self.download_async(names)
+    def self.download_async(names)
       names.each { |name| PackageManagerDownloadWorker.perform_async(self.name.demodulize, name) }
     end
   end

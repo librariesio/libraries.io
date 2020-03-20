@@ -13,7 +13,7 @@ module PackageManager
     end
 
     def self.project_names
-      @project_names ||= get("https://clojars.libraries.io/packages.json").keys
+      @names ||= get("https://clojars.libraries.io/packages.json").keys
     end
 
     def self.recent_names
@@ -46,7 +46,7 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, _name)
       project["versions"].map do |v|
         {
           number: v,

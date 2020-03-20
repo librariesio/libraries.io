@@ -57,7 +57,7 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, _name)
       project["releases"].map do |version|
         {
           number: version["version"],
