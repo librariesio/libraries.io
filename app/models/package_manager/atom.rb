@@ -10,11 +10,11 @@ module PackageManager
     COLOR = "#244776"
 
     def self.package_link(project, _version = nil)
-      "https://atom.io/packages/#{URI.encode(project.name.strip)}"
+      "https://atom.io/packages/#{CGI.escape(project.name.strip)}"
     end
 
     def self.download_url(name, version = nil)
-      "https://www.atom.io/api/packages/#{URI.encode(name.strip)}/versions/#{version}/tarball"
+      "https://www.atom.io/api/packages/#{CGI.escape(name.strip)}/versions/#{version}/tarball"
     end
 
     def self.install_instructions(project, version = nil)
@@ -41,7 +41,7 @@ module PackageManager
     end
 
     def self.project(name)
-      get("https://atom.io/api/packages/#{URI.encode(name.strip)}")
+      get("https://atom.io/api/packages/#{CGI.escape(name.strip)}")
     end
 
     def self.mapping(project)
