@@ -37,7 +37,7 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, _name)
       acceptable_versions(project).map do |v|
         {
           number: v["version"],

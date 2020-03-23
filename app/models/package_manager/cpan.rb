@@ -45,7 +45,7 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, _name)
       versions = get("https://fastapi.metacpan.org/v1/release/_search?q=distribution:#{project['distribution']}&size=5000&fields=version,date")["hits"]["hits"]
       versions.map do |version|
         {

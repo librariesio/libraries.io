@@ -57,7 +57,7 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, _name)
       [{
         number: project[:info]["Version:"],
         published_at: project[:info]["Published:"],

@@ -96,7 +96,7 @@ module PackageManager
       item["description"].blank? ? item["summary"] : item["description"]
     end
 
-    def self.versions(project)
+    def self.versions(project, _name)
       project[:releases].map do |item|
         {
           number: item["catalogEntry"]["version"],

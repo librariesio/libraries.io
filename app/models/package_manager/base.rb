@@ -99,7 +99,7 @@ module PackageManager
       end
 
       if self::HAS_VERSIONS
-        versions(project).each do |version|
+        versions(project, dbproject.name).each do |version|
           dbproject.versions.create(version) unless dbproject.versions.find { |v| v.number == version[:number] }
         end
       end
@@ -113,8 +113,8 @@ module PackageManager
     end
 
     def self.update(name)
-      project = project(name)
-      save(project) if project.present?
+      proj = project(name)
+      save(proj) if proj.present?
     rescue SystemExit, Interrupt
       exit 0
     rescue StandardError => e

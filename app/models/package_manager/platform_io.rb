@@ -46,7 +46,7 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, _name)
       version = project["version"]
       return [] if version.nil?
 

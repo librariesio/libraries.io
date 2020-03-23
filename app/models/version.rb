@@ -11,6 +11,7 @@ class Version < ApplicationRecord
   has_many :dependencies, dependent: :delete_all
   has_many :runtime_dependencies, -> { where kind: %w[runtime normal] }, class_name: "Dependency"
 
+  before_save :update_spdx_expression
   after_commit :send_notifications_async, on: :create
   after_commit :update_repository_async, on: :create
   after_commit :save_project, on: :create
@@ -20,6 +21,15 @@ class Version < ApplicationRecord
   def save_project
     project.try(:forced_save)
     project.try(:update_repository_async)
+  end
+
+  def update_spdx_expression
+    if original_license.is_a?(String)
+      self.spdx_expression = original_license if Spdx.valid_spdx?(original_license)
+    elsif original_license.is_a?(Array)
+      possible_license = original_license.join(" AND ")
+      self.spdx_expression = possible_license if Spdx.valid_spdx?(possible_license)
+    end
   end
 
   def platform

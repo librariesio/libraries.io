@@ -57,12 +57,15 @@ module PackageManager
       }
     end
 
-    def self.versions(project)
+    def self.versions(project, _name)
       json = get_json("https://rubygems.org/api/v1/versions/#{project['name']}.json")
       json.map do |v|
+        spdx_string = project.fetch("licenses", [])
+        spdx_string = project.fetch("license", nil) unless spdx_string.present?
         {
           number: v["number"],
           published_at: v["created_at"],
+          original_license: spdx_string,
         }
       end
     rescue StandardError
