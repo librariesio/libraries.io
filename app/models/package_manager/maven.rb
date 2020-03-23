@@ -59,7 +59,7 @@ module PackageManager
     def self.project(name)
       sections = name.split(":")
       path = sections.join("/")
-      versions = versions({ name: name })
+      versions = versions({ name: name }, name)
       latest_version = latest_version(versions, name)
       return {} unless latest_version.present?
 
@@ -144,18 +144,22 @@ module PackageManager
       end
     end
 
-    def self.versions(project)
+    def self.versions(project, _name)
       json_versions = JSON.parse(get_raw(MavenUrl.from_name(project[:name]).solrsearch))
       extract_versions(json_versions)
     end
 
     def self.extract_versions(versions)
       versions["response"]["docs"].map do |version|
-        license_string = licenses(get_pom(version["g"], version["a"], version["v"]))
+        begin
+          license_list = licenses(get_pom(version["g"], version["a"], version["v"]))
+        rescue StandardError
+          license_list = nil
+        end
         {
           number: version["v"],
           published_at: Time.at(version["timestamp"] / 1000).to_date,
-          original_license_string: license_string,
+          original_license: license_list,
         }
       end
     end

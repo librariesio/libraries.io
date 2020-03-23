@@ -96,7 +96,7 @@ module PackageManager
         {
           number: k,
           published_at: project.fetch("time", {}).fetch(k, nil),
-          original_license_string: license,
+          original_license: license,
         }
       end
     end

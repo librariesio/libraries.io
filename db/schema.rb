@@ -382,7 +382,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.datetime "updated_at", null: false
     t.integer "runtime_dependencies_count"
     t.string "spdx_expression"
-    t.string "original_license_string"
+    t.jsonb "original_license"
     t.index ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true
   end
 
