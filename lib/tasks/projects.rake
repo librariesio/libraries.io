@@ -150,4 +150,14 @@ namespace :projects do
       end
     end
   end
+
+  desc 'Backfill old version licenses'
+  task :backfill_old_version_licenses, [:name, :platform] => :environment do |_task, args|
+    exit if ENV['READ_ONLY'].present?
+    project = Project.find_by(name: args.name, platform: args.platform)
+    pm = project.platform_class
+    json_project = pm.project(project.name)
+    versions = pm.versions(json_project, project.name)
+    versions.each { |vers| project.versions.find_by(number: vers[:number]).update!(original_license: vers[:original_license]) }
+  end
 end
