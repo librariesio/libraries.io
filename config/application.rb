@@ -35,7 +35,7 @@ module Libraries
     # Initialize GraphQL client for Github API v4
     # Load schema from previous Github API schema dump
     Schema = Application.root.join("config/github_graphql_schema.json").to_s
-  
+
     # Create new client from schema to parse queries with
     # Actual client for querying should come from AuthToken
     Client = GraphQL::Client.new(schema: Schema)
@@ -46,9 +46,6 @@ module Libraries
     config.active_job.queue_adapter = :sidekiq
 
     config.exceptions_app = routes
-
-    config.assets.paths << Emoji.images_path
-    config.assets.precompile << "emoji/**/*.png"
 
     Rails::Timeago.default_options :limit => proc { 60.days.ago }, :nojs => true, :format => proc { |time, options| time.strftime('%b %e, %Y') }
 
