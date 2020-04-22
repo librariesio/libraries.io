@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_19_170455) do
+ActiveRecord::Schema.define(version: 2020_04_22_143041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -383,6 +383,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_170455) do
     t.integer "runtime_dependencies_count"
     t.string "spdx_expression"
     t.jsonb "original_license"
+    t.datetime "researched_at"
     t.index ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true
   end
 
