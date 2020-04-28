@@ -51,14 +51,14 @@ module PackageManager
         name: name,
       }
       h[:releases] = get_releases(name)
-      h[:versions] = versions(h)
+      h[:versions] = versions(h, name)
       return {} unless h[:versions].any?
 
       h
     end
 
     def self.get_releases(name)
-      latest_version = get_json("https://api.nuget.org/v3/registration3/#{name.downcase}/index.json")
+      latest_version = get_json("https://api.nuget.org/v3/registration5-semver1/#{name.downcase}/index.json")
       if latest_version["items"][0]["items"]
         releases = []
         latest_version["items"].each do |items|
