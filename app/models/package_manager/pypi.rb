@@ -45,7 +45,7 @@ module PackageManager
         name: project["info"]["name"],
         description: project["info"]["summary"],
         homepage: project["info"]["home_page"],
-        keywords_array: Array.wrap(project["info"]["keywords"].try(:split, ",")),
+        keywords_array: Array.wrap(project["info"]["keywords"].try(:split, /[\s.,]+/)),
         licenses: licenses(project),
         repository_url: repo_fallback(
           project.dig("info", "project_urls", "Source").presence || project.dig("info", "project_urls", "Source Code"),
