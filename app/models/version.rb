@@ -25,10 +25,20 @@ class Version < ApplicationRecord
 
   def update_spdx_expression
     if original_license.is_a?(String)
-      self.spdx_expression = original_license if Spdx.valid_spdx?(original_license)
+      self.spdx_expression = handle_string_spdx_expression(original_license)
     elsif original_license.is_a?(Array)
       possible_license = original_license.join(" AND ")
-      self.spdx_expression = possible_license if Spdx.valid_spdx?(possible_license)
+      self.spdx_expression = handle_string_spdx_expression(possible_license)
+    end
+  end
+
+  def handle_string_spdx_expression(license_string)
+    if license_string == ""
+      "NONE"
+    elsif Spdx.valid_spdx?(license_string)
+      license_string
+    else
+      "NOASSERTION"
     end
   end
 
