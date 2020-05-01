@@ -36,7 +36,7 @@ class Version < ApplicationRecord
     if license_string == ""
       "NONE"
     elsif Spdx.valid_spdx?(license_string)
-      original_license
+      license_string
     else
       "NOASSERTION"
     end
