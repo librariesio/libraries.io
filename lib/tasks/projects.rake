@@ -165,7 +165,7 @@ namespace :projects do
   end
 
   desc 'Batch backfill old licenses'
-  task :batch_backfill_old_version_licenses :environment do
+  task batch_backfill_old_version_licenses: :environment do
     PMS = ["NPM", "Maven", "Rubygems", "Pypi"]
     Project.where(platform: PMS).joins(:versions).where("versions.original_license IS NULL").limit(1000).each do |project|
       begin
