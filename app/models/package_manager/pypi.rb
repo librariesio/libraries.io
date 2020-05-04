@@ -55,6 +55,7 @@ module PackageManager
     end
 
     def self.versions(project, name)
+      return [] if project.nil?
       project["releases"].reject { |_k, v| v == [] }.map do |k, v|
         release = get("https://pypi.org/pypi/#{name}/#{k}/json")
         {

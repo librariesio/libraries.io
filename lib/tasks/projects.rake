@@ -158,6 +158,27 @@ namespace :projects do
     pm = project.platform_class
     json_project = pm.project(project.name)
     versions = pm.versions(json_project, project.name)
-    versions.each { |vers| project.versions.find_by(number: vers[:number]).update!(original_license: vers[:original_license]) }
+    versions.each do |vers|
+      version = project.versions.find_by(number: vers[:number])
+      version.update!(original_license: vers[:original_license]) if version.original_license.nil?
+    end
+  end
+
+  desc 'Batch backfill old licenses'
+  task batch_backfill_old_version_licenses: :environment do
+    PMS = ["NPM", "Maven", "Rubygems", "Pypi"]
+    Project.where(platform: PMS).joins(:versions).where("versions.original_license IS NULL").limit(1000).each do |project|
+      begin
+        pm = project.platform_class
+        json_project = pm.project(project.name)
+        versions = pm.versions(json_project, project.name)
+        versions.each do |vers|
+          version = project.versions.find_by(number: vers[:number])
+          version.update!(original_license: vers[:original_license]) if version&.original_license&.nil?
+        end
+      rescue StandardError
+        Rails.logger.warn("Issue updating #{project.platform}/#{project.name}")
+      end
+    end
   end
 end
