@@ -60,10 +60,12 @@ module PackageManager
     def self.versions(project, _name)
       json = get_json("https://rubygems.org/api/v1/versions/#{project['name']}.json")
       json.map do |v|
+        license = v.fetch("licenses", "")
+        license = "" if license.nil?
         {
           number: v["number"],
           published_at: v["created_at"],
-          original_license: v.fetch("licenses", ""),
+          original_license: license,
         }
       end
     rescue StandardError
