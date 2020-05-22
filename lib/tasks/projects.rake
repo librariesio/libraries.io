@@ -154,31 +154,14 @@ namespace :projects do
   desc 'Backfill old version licenses'
   task :backfill_old_version_licenses, [:name, :platform] => :environment do |_task, args|
     exit if ENV['READ_ONLY'].present?
-    project = Project.find_by(name: args.name, platform: args.platform)
-    pm = project.platform_class
-    json_project = pm.project(project.name)
-    versions = pm.versions(json_project, project.name)
-    versions.each do |vers|
-      version = project.versions.find_by(number: vers[:number])
-      version.update!(original_license: vers[:original_license]) if version&.original_license.nil?
-    end
+    LicenseBackfillWorker.perform_async(args.platform, args.name)
   end
 
   desc 'Batch backfill old licenses'
   task :batch_backfill_old_version_licenses, [:platform] => :environment do |_task, args|
     projects = Project.where(platform: args.platform).joins(:versions).where("versions.original_license IS NULL").limit(15000).uniq
     projects.each do |project|
-      begin
-        pm = project.platform_class
-        json_project = pm.project(project.name)
-        versions = pm.versions(json_project, project.name)
-        versions.each do |vers|
-          version = project.versions.find_by(number: vers[:number])
-          version.update(original_license: vers[:original_license]) if version&.original_license.nil?
-        end
-      rescue StandardError => e
-        Rails.logger.error(e)
-      end
+      LicenseBackfillWorker.perform_async(project.platform, project.name)
     end
   end
 end
