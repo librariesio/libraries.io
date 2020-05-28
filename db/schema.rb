@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_22_143041) do
+ActiveRecord::Schema.define(version: 2020_05_26_151754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 2020_04_22_143041) do
     t.boolean "pull_request"
     t.string "host_type"
     t.integer "repository_user_id"
+    t.index ["last_synced_at"], name: "index_issues_on_last_synced_at"
     t.index ["repository_id", "uuid"], name: "index_issues_on_repository_id_and_uuid"
   end
 
@@ -333,6 +334,7 @@ ActiveRecord::Schema.define(version: 2020_04_22_143041) do
     t.string "host_type"
     t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_users_on_host_type_and_login", unique: true
     t.index ["created_at"], name: "index_repository_users_on_created_at"
+    t.index ["hidden", "last_synced_at"], name: "index_repository_users_on_hidden_and_last_synced_at"
     t.index ["hidden"], name: "index_repository_users_on_hidden"
     t.index ["host_type", "uuid"], name: "index_repository_users_on_host_type_and_uuid", unique: true
   end
