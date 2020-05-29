@@ -198,15 +198,6 @@ module PackageManager
       end
     end
 
-    def self.parse_names(page)
-      # parse the names from maven-repository.com/artifact/latest pages
-      names = page.css("tr")[1..-1]&.map do |tr|
-        tr.css("t2d")[0..1]&.map(&:text)&.join(":")
-      end || []
-
-      names.compact.select(&MavenUrl.method(:legal_name?)).uniq
-    end
-
     class MavenUrl
       def self.from_name(name)
         new(*name.split(":", 2))
