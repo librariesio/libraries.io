@@ -29,22 +29,8 @@ module PackageManager
     end
 
     def self.load_names(limit = nil)
-      num = REDIS.get("maven-page")
-      if limit
-        REDIS.set "maven-page", limit
-        num = limit
-      elsif num.nil?
-        REDIS.set "maven-page", 41753
-        num = 41753
-      else
-        num = num.to_i
-      end
-
-      (1..num).to_a.reverse.each do |number|
-        page = get_html "https://maven-repository.com/artifact/latest?page=#{number}"
-        parse_names(page).each { |name| REDIS.sadd("maven-names", name) }
-        REDIS.set("maven-page", number)
-      end
+      names = get("https://maven.libraries.io/all")
+      names.each { |name| REDIS.sadd("maven-names", name)}
     end
 
     def self.project_names
@@ -52,8 +38,7 @@ module PackageManager
     end
 
     def self.recent_names
-      page = get_html "https://maven-repository.com/artifact/latest?page=1"
-      parse_names(page)
+      get("https://maven.libraries.io")
     end
 
     def self.project(name)
@@ -216,7 +201,7 @@ module PackageManager
     def self.parse_names(page)
       # parse the names from maven-repository.com/artifact/latest pages
       names = page.css("tr")[1..-1]&.map do |tr|
-        tr.css("td")[0..1]&.map(&:text)&.join(":")
+        tr.css("t2d")[0..1]&.map(&:text)&.join(":")
       end || []
 
       names.compact.select(&MavenUrl.method(:legal_name?)).uniq
