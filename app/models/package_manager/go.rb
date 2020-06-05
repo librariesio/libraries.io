@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Go < Base
-    HAS_VERSIONS = false
+    HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
     BIBLIOTHECARY_SUPPORT = true
     URL = 'http://go-search.org/'
@@ -21,7 +23,7 @@ module PackageManager
 
 
     def self.package_link(project, version = nil)
-      "http://go-search.org/view?id=#{project.name}"
+      "https://pkg.go.dev/#{project.name}"
     end
 
     def self.documentation_url(name, version = nil)
@@ -33,20 +35,59 @@ module PackageManager
     end
 
     def self.project_names
-      get("http://go-search.org/api?action=packages")
+      # Currently the index only shows the last <=2000 modules from the date given. (https://proxy.golang.org/)
+      project_window = 1.day.ago.strftime("%FT%TZ")
+      get_raw("https://index.golang.org/index?since=#{project_window}&limit=2000")
+        .lines
+        .map { |line| JSON.parse(line)["Path"] }
     end
 
     def self.project(name)
-      get("http://go-search.org/api?action=package&id=#{name}")
+      if pkg_html = get_html("https://pkg.go.dev/#{name}?tab=doc")
+        go_module, _latest_version = pkg_html.css('a[data-test-id="DetailsHeader-infoLabelModule"]').first&.text&.split('@', 2)
+        go_module_html = get_html("https://pkg.go.dev/mod/#{go_module}")
+        # NB this requires a quick request for each version, but we could alternatively fetch from
+        # https://pkg.go.dev/mod/#{go_module}?tab=versions and the '.Versions-commitTime', selector,
+        # but the dates are a combination of date-only or natural language (e.g. '1 day ago')
+        versions = get_raw("http://proxy.golang.org/#{go_module}/@v/list")
+          &.lines
+          &.map(&:strip)
+          &.reject(&:blank?)
+          &.map do |v|
+            info = get("http://proxy.golang.org/#{go_module}/@v/#{v}.info")
+            {
+              number: info["Version"],
+              published_at: info["Time"].presence && Time.parse(info["Time"])
+            }
+          end
+
+        { name: name, go_module: go_module, html: pkg_html, go_module_html: go_module_html, versions: versions }
+      else
+        { name: name }
+      end
+    rescue => e
+      puts caller
+      raise e
+    end
+
+    def self.versions(project, name)
+      return [] if project.nil?
+      return project[:versions]
     end
 
     def self.mapping(project)
-      {
-        name: project['Package'],
-        description: project['Synopsis'],
-        homepage: project['ProjectURL'],
-        repository_url: get_repository_url(project)
-      }
+      if project[:html]
+        {
+          name: project[:name],
+          description: project[:html].css('.Documentation-overview p').map(&:text).join("\n").strip,
+          licenses: project[:go_module_html].css('*[data-test-id="DetailsHeader-infoLabelLicense"] a').map(&:text),
+          repository_url: project[:go_module_html].css('.Overview-sourceCodeLink a').first&.text,
+          homepage: project[:go_module_html].css('.Overview-sourceCodeLink a').first&.text,
+          versions: project[:versions]
+        }
+      else
+        { name: project[:name] }
+      end
     end
 
     # https://golang.org/cmd/go/#hdr-Import_path_syntax
