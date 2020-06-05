@@ -130,6 +130,7 @@ GEM
       activesupport
     charlock_holmes (0.7.6)
     chartkick (3.3.1)
+    chronic (0.10.2)
     citrus (3.0.2)
     cliver (0.3.2)
     coderay (1.1.2)
@@ -674,6 +675,7 @@ DEPENDENCIES
   bundler
   charlock_holmes (>= 0.7.5)
   chartkick
+  chronic
   commonmarker
   concurrent-ruby-ext
   counter_culture

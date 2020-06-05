@@ -46,20 +46,19 @@ module PackageManager
       if pkg_html = get_html("https://pkg.go.dev/#{name}?tab=doc")
         go_module, _latest_version = pkg_html.css('a[data-test-id="DetailsHeader-infoLabelModule"]').first&.text&.split('@', 2)
         go_module_html = get_html("https://pkg.go.dev/mod/#{go_module}")
-        # NB this requires a quick request for each version, but we could alternatively fetch from
-        # https://pkg.go.dev/mod/#{go_module}?tab=versions and the '.Versions-commitTime', selector,
-        # but the dates are a combination of date-only or natural language (e.g. '1 day ago')
-        versions = get_raw("http://proxy.golang.org/#{go_module}/@v/list")
-          &.lines
-          &.map(&:strip)
-          &.reject(&:blank?)
-          &.map do |v|
-            info = get("http://proxy.golang.org/#{go_module}/@v/#{v}.info")
+        # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
+        #   1) Fetch the list of versions: http://proxy.golang.org/#{go_module}/@v/list
+        #   2) And for each version, fetch http://proxy.golang.org/#{go_module}/@v/#{v}.info
+        versions = if (versions_html = get_html("https://pkg.go.dev/mod/#{go_module}?tab=versions"))
+          versions_html.css('.Versions-item').map do |v|
             {
-              number: info["Version"],
-              published_at: info["Time"].presence && Time.parse(info["Time"])
+              name: v.css('a').first.text,
+              published_at: Chronic.parse(v.css('.Versions-commitTime').first.text)
             }
           end
+        else
+          nil
+        end
 
         { name: name, go_module: go_module, html: pkg_html, go_module_html: go_module_html, versions: versions }
       else
