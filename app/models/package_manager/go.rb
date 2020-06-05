@@ -23,11 +23,11 @@ module PackageManager
 
 
     def self.package_link(project, version = nil)
-      "https://pkg.go.dev/#{project.name}"
+      "https://pkg.go.dev/#{project.name}#{"@#{version}" if version}"
     end
 
     def self.documentation_url(name, version = nil)
-      "http://godoc.org/#{name}"
+      "https://pkg.go.dev/#{name}#{"@#{version}" if version}?tab=doc"
     end
 
     def self.install_instructions(project, version = nil)
