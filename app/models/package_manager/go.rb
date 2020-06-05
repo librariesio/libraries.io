@@ -52,7 +52,7 @@ module PackageManager
         versions = if (versions_html = get_html("https://pkg.go.dev/mod/#{go_module}?tab=versions"))
           versions_html.css('.Versions-item').map do |v|
             {
-              name: v.css('a').first.text,
+              number: v.css('a').first.text,
               published_at: Chronic.parse(v.css('.Versions-commitTime').first.text)
             }
           end
