@@ -3,9 +3,9 @@
 module PackageManager
   class Go < Base
     HAS_VERSIONS = true
-    HAS_DEPENDENCIES = false
+    HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
-    URL = 'http://go-search.org/'
+    URL = 'https://pkg.go.dev/'
     COLOR = '#375eab'
     KNOWN_HOSTS = [
       'bitbucket.org',
@@ -86,6 +86,25 @@ module PackageManager
         }
       else
         { name: project[:name] }
+      end
+    end
+
+    def self.dependencies(name, version, _project)
+      # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
+      resp = request("https://proxy.golang.org/#{name}/@v/#{version}.mod")
+      if resp.status == 200
+        go_mod_file = resp.body
+        Bibliothecary::Parsers::Go.parse_go_mod(go_mod_file)
+          .map do |dep|
+            {
+              project_name: dep[:name],
+              requirements: dep[:requirement],
+              kind: dep[:type],
+              platform: "Go",
+            }
+          end
+      else
+        []
       end
     end
 
