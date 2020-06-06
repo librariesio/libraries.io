@@ -60,9 +60,6 @@ module PackageManager
       else
         { name: name }
       end
-    rescue => e
-      puts caller
-      raise e
     end
 
     def self.versions(project, name)
