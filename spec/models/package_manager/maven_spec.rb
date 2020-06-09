@@ -52,58 +52,6 @@ describe PackageManager::Maven do
     end
   end
 
-  describe '#parse_names' do
-    it 'returns parsed named from HTML' do
-      html = "
-        <table>
-          <tr>
-            <td>groupid</td>
-            <td>artifactid</td>
-          </tr>
-          <tr>
-            <td>javax.faces</td>
-            <td>javax.faces-api</td>
-            <td>1.0.0</td>
-          </tr>
-          <tr>
-            <td>org.scala-lang</td>
-            <td>scala-library</td>
-            <td>2.5.3</td>
-          </tr>
-        </table>
-      "
-      parsed_names = described_class.parse_names(Nokogiri::HTML.fragment(html))
-
-      expect(parsed_names.include?('javax.faces:javax.faces-api')).to be true
-      expect(parsed_names.include?('org.scala-lang:scala-library')).to be true
-    end
-
-    it 'excludes invalid names from HTML' do
-      html = "
-        <table>
-          <tr>
-            <td>groupid</td>
-            <td>artifactid</td>
-          </tr>
-          <tr>
-            <td>javax.faces</td>
-            <td>javax.faces-api</td>
-            <td>1.0.0</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>mysql</td>
-            <td>2.5.3</td>
-          </tr>
-        </table>
-      "
-      parsed_names = described_class.parse_names(Nokogiri::HTML.fragment(html))
-
-      expect(parsed_names.include?('javax.faces:javax.faces-api')).to be true
-      expect(parsed_names.include?('mysql')).to be false
-    end
-  end
-
   describe 'mapping_from_pom_xml' do
     let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read) }
     let(:parent_pom) { Ox.parse('<project><licenses><license><name>unknown</name></license></licenses><url>https://github.com/googleapis/googleapis</url></project>') }
