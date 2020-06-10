@@ -111,14 +111,7 @@ class Repository < ApplicationRecord
   def normalize_license_and_language
     self.language = Linguist::Language[self.language].to_s
     self.language = nil if self.language.blank?
-    return if license.blank?
-    if license.downcase == 'other'
-      self.license = 'Other'
-    else
-      l = Spdx.find(license).try(:id)
-      l = 'Other' if l.blank?
-      self.license = l
-    end
+    self.license = license.strip unless license.blank?
   end
 
   def deprecate!

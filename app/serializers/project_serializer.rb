@@ -22,6 +22,7 @@ class ProjectSerializer < ActiveModel::Serializer
     platform
     rank
     repository_url
+    scm_license
     stars
     status
   ]

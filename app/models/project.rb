@@ -29,6 +29,7 @@ class Project < ApplicationRecord
     platform
     rank
     repository_url
+    scm_license
     status
   ]
 
@@ -353,6 +354,10 @@ class Project < ApplicationRecord
 
   def normalized_licenses
     read_attribute(:normalized_licenses).presence || [Project.format_license(repository.try(:license))].compact
+  end
+
+  def scm_license
+    repository.try(:license)
   end
 
   def self.format_license(license)

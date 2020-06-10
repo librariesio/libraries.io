@@ -28,6 +28,7 @@ describe ProjectSerializer do
         platform
         rank
         repository_url
+        scm_license
         stars
         status
       ]

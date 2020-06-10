@@ -96,6 +96,7 @@ describe "Api::ProjectsController" do
           platform: project.platform,
           rank: project.rank,
           repository_url: project.repository_url,
+          scm_license: project.scm_license,
           stars: project.stars,
           status: project.status,
           versions: project.versions.as_json(only: %i[number original_license published_at spdx_expression researched_at]),
