@@ -590,7 +590,7 @@ GEM
     simplecov-html (0.10.2)
     sitemap_generator (6.0.2)
       builder (~> 3.0)
-    spdx (2.0.9)
+    spdx (2.0.11)
       fuzzy_match (~> 2.1)
       treetop (~> 1.6)
     spring (2.0.2)
