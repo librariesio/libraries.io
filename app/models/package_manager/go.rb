@@ -88,6 +88,8 @@ module PackageManager
 
     def self.dependencies(name, version, _project)
       # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
+      # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
+      # to scrape the webpage or wait for an API for a faster fetch here.
       resp = request("https://proxy.golang.org/#{name}/@v/#{version}.mod")
       if resp.status == 200
         go_mod_file = resp.body
