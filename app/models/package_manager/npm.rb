@@ -91,7 +91,7 @@ module PackageManager
     def self.versions(project, _name)
       # npm license fields are supposed to be SPDX expressions now https://docs.npmjs.com/files/package.json#license
       return [] if project.nil?
-      project["versions"].map do |k, v|
+      project.fetch("versions", {}).map do |k, v|
         license = v.fetch("license", nil)
         license = licenses(v) unless license.is_a?(String)
         license = "" if license.nil?
@@ -104,7 +104,7 @@ module PackageManager
     end
 
     def self.dependencies(_name, version, project)
-      vers = project[:versions][version]
+      vers = project.fetch(:versions, {})[version]
       return [] if vers.nil?
 
       map_dependencies(vers.fetch("dependencies", {}), "runtime") +

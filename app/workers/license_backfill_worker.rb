@@ -11,7 +11,7 @@ class LicenseBackfillWorker
     versions = pm.versions(json_project, project.name)
     versions.each do |vers|
       version = project.versions.find_by(number: vers[:number])
-      version.update(original_license: vers[:original_license]) if version&.original_license.nil?
+      version.update(original_license: vers[:original_license]) if version && version&.original_license.nil?
     end
   end
 end
