@@ -110,16 +110,20 @@ module PackageManager
       return [name] if name.start_with?(*KNOWN_HOSTS)
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
 
-      go_import = get_html('https://' + name + '?go-get=1')
-        .xpath('//meta[@name="go-import"]')
-        .first
-        &.attribute("content")
-        &.value
-        &.split(" ")
-        &.last
-        &.sub(/https?:\/\//, "")
+      begin
+        go_import = get_html('https://' + name + '?go-get=1')
+          .xpath('//meta[@name="go-import"]')
+          .first
+          &.attribute("content")
+          &.value
+          &.split(" ")
+          &.last
+          &.sub(/https?:\/\//, "")
 
-      go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
+        go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
+      rescue
+        [name]
+      end
     end
 
     def self.get_repository_url(project)
