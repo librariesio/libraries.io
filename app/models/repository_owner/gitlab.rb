@@ -36,9 +36,7 @@ module RepositoryOwner
       return if owner.org?
 
       # GitLab doesn't have an API to get a users public group memberships so we scrape it instead
-      json = get_json("https://gitlab.com/users/#{owner.login}/groups",
-        method: :get,
-        headers: { 'Accept' => 'application/json' }).run
+      json = get_json("https://gitlab.com/users/#{owner.login}/groups")
 
       return if json.nil?
       groups_html = Nokogiri::HTML(json['html'])
