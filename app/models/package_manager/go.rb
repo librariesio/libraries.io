@@ -47,8 +47,8 @@ module PackageManager
         overview_html = get_html("https://pkg.go.dev/#{name}?tab=overview")
 
         # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
-        #   1) Fetch the list of versions: http://proxy.golang.org/#{module_name}/@v/list
-        #   2) And for each version, fetch http://proxy.golang.org/#{module_name}/@v/#{v}.info
+        #   1) Fetch the list of versions: https://proxy.golang.org/#{module_name}/@v/list
+        #   2) And for each version, fetch https://proxy.golang.org/#{module_name}/@v/#{v}.info
         versions_html = get_html("https://pkg.go.dev/#{name}?tab=versions")
 
         # Some package pages don't have a Versions tab, but the parent module page may have the Versions tab (e.g. golang.org/x/tools)
