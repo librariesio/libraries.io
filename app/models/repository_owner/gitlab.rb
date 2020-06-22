@@ -36,9 +36,13 @@ module RepositoryOwner
       return if owner.org?
 
       # GitLab doesn't have an API to get a users public group memberships so we scrape it instead
-      rsp = PackageManager::Base.get_json("https://gitlab.com/users/#{owner.login}/groups")
+      r = Typhoeus::Request.new("https://gitlab.com/users/#{owner.login}/groups",
+        method: :get,
+        headers: { 'Accept' => 'application/json' }).run
+      json = Oj.load(r.body)
+
       return if rsp.nil?
-      groups_html = Nokogiri::HTML(rsp['html'])
+      groups_html = Nokogiri::HTML(json['html'])
       return if groups_html.nil?
       links = groups_html.css('a.group-name').map{|l| l['href'][1..-1]}.compact
 
