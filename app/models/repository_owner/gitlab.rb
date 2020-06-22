@@ -171,7 +171,7 @@ module RepositoryOwner
     private
 
     def get_json(url)
-      r = Typhoeus::Request.new("https://gitlab.com/users/#{owner.login}/groups",
+      r = Typhoeus::Request.new(url,
         method: :get,
         headers: { 'Accept' => 'application/json' }).run
       Oj.load(r.body)
