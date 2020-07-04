@@ -9,8 +9,10 @@ describe "Api::ProjectsController" do
   let!(:version) { create(:version, project: project) }
   let!(:dependent_version) { create(:version, project: dependent_project) }
   let!(:dependency) { create(:dependency, version: version, project: dependent_project) }
+  let!(:internal_user) { create(:user) }
 
   before :each do
+    internal_user.current_api_key.update_attribute(:is_internal, true)
     project.reload
     dependent_project.reload
   end
@@ -21,6 +23,17 @@ describe "Api::ProjectsController" do
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq("application/json")
       expect(response.body).to be_json_eql project_json_response(project).to_json
+    end
+
+    it "renders successfully with internal API key" do
+      get "/api/#{project.platform}/#{project.name}?api_key=#{internal_user.api_key}"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq("application/json")
+
+      # with internal API key we add updated_at field
+      expected_response = project_json_response(project)
+      expected_response[:updated_at] = project.updated_at.iso8601(3)
+      expect(response.body).to be_json_eql expected_response.to_json
     end
   end
 
@@ -48,6 +61,93 @@ describe "Api::ProjectsController" do
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq("application/json")
       expect(JSON.parse(response.body)).to contain_exactly(project.repository_url, dependent_project.repository_url)
+    end
+  end
+
+  describe "GET /api/projects/updated", type: :request do
+    it "renders successfully" do
+      get "/api/projects/updated?start_time=#{1.year.ago.utc.iso8601}&api_key=#{internal_user.api_key}"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq("application/json")
+      expect(response.body).to be_json_eql ({
+        updated: [
+          {
+            platform: project.platform,
+            name: project.name,
+            updated_at: project.updated_at.utc.iso8601(3)
+          },
+          {
+            platform: dependent_project.platform,
+            name: dependent_project.name,
+            updated_at: dependent_project.updated_at.utc.iso8601(3)
+          }
+        ],
+        deleted: []
+      }).to_json
+    end
+
+    it "ignores stuff after end_time" do
+      get "/api/projects/updated?start_time=#{1.year.ago.utc.iso8601}&end_time=#{1.month.ago.utc.iso8601}&api_key=#{internal_user.api_key}"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq("application/json")
+      expect(response.body).to be_json_eql ({
+        updated: [],
+        deleted: []
+      }).to_json
+    end
+
+    it "ignores stuff before start_time" do
+      after_everything = [project.updated_at, dependent_project.updated_at].max + 1
+      get "/api/projects/updated?start_time=#{after_everything.utc.iso8601}&api_key=#{internal_user.api_key}"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq("application/json")
+      expect(response.body).to be_json_eql ({
+        updated: [],
+        deleted: []
+      }).to_json
+    end
+
+    it "errors if no start_time" do
+      expect { get "/api/projects/updated?api_key=#{internal_user.api_key}" }
+        .to raise_exception(ActionController::ParameterMissing)
+    end
+
+    it "errors if api_key is not internal" do
+      expect { get "/api/projects/updated?api_key=#{user.api_key}" }
+        .to raise_exception(ActionController::BadRequest)
+    end
+
+    it "errors if start_time is garbage" do
+      expect { get "/api/projects/updated?start_time=NOTADATE&api_key=#{internal_user.api_key}" }
+        .to raise_exception(ArgumentError)
+    end
+
+    it "errors if end_time is garbage" do
+      expect { get "/api/projects/updated?start_time=#{1.year.ago.utc.iso8601}&end_time=NOTADATE&api_key=#{internal_user.api_key}" }
+        .to raise_exception(ArgumentError)
+    end
+
+    it "notices deletions" do
+      deleted_digest = DeletedProject.digest_from_platform_and_name(project.platform, project.name)
+      project.destroy!
+      get "/api/projects/updated?start_time=#{1.year.ago.utc.iso8601}&api_key=#{internal_user.api_key}"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq("application/json")
+      expect(response.body).to be_json_eql ({
+        updated: [
+          {
+            platform: dependent_project.platform,
+            name: dependent_project.name,
+            updated_at: dependent_project.updated_at.utc.iso8601(3)
+          }
+        ],
+        deleted: [
+          {
+            digest: deleted_digest,
+            updated_at: DeletedProject.first.updated_at.utc.iso8601(3)
+          }
+        ]
+      }).to_json
     end
   end
 

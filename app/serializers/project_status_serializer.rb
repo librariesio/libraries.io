@@ -14,6 +14,7 @@ class ProjectStatusSerializer < ActiveModel::Serializer
 
   has_many :versions
   has_many :repository_maintenance_stats, if: :show_stats?
+  attribute :updated_at, if: :show_updated_at?
 
   def score?
     instance_options[:show_score]
@@ -21,6 +22,10 @@ class ProjectStatusSerializer < ActiveModel::Serializer
 
   def show_stats?
     instance_options[:show_stats]
+  end
+
+  def show_updated_at?
+    instance_options[:show_updated_at]
   end
 
   def name

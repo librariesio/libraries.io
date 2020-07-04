@@ -54,6 +54,7 @@ class Project < ApplicationRecord
   has_one :readme, through: :repository
   has_many :repository_maintenance_stats, through: :repository
 
+  scope :updated_within, ->(start, stop) { where('updated_at >= ? and updated_at <= ? ', start, stop).order(updated_at: :asc) }
   scope :least_recently_updated_stats, -> { joins(:repository_maintenance_stats).group('projects.id').where.not(repository: nil).order(Arel.sql('max(repository_maintenance_stats.updated_at) ASC')) }
   scope :no_existing_stats, -> { includes(:repository_maintenance_stats).where(repository_maintenance_stats: {id: nil}).where.not(repository: nil) }
 
@@ -123,6 +124,8 @@ class Project < ApplicationRecord
   after_commit :update_source_rank_async, on: [:create, :update]
   before_save  :update_details
   before_destroy :destroy_versions
+  before_destroy :create_deleted_project
+  after_create :destroy_deleted_project
 
   def self.total
     Rails.cache.fetch 'projects:total', :expires_in => 1.day, race_condition_ttl: 2.minutes do
@@ -252,6 +255,16 @@ class Project < ApplicationRecord
 
   def destroy_versions
     versions.find_each(&:destroy)
+  end
+
+  def create_deleted_project
+    DeletedProject.create_from_platform_and_name!(platform, name)
+  end
+
+  def destroy_deleted_project
+    # this happens when bringing a project back to life
+    digest = DeletedProject.digest_from_platform_and_name(platform, name)
+    DeletedProject.where(digest: digest).destroy_all
   end
 
   def stars

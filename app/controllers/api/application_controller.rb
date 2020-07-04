@@ -34,7 +34,7 @@ class Api::ApplicationController < ApplicationController
   end
 
   def internal_api_key?
-    current_api_key.is_internal?
+    !!current_api_key&.is_internal?
   end
 
   def record_api_usage
