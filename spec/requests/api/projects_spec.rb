@@ -47,7 +47,7 @@ describe "Api::ProjectsController" do
       get "/api/searchcode"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq("application/json")
-      expect(response.body).to be_json_eql [project.repository_url, dependent_project.repository_url].to_json
+      expect(JSON.parse(response.body)).to contain_exactly(project.repository_url, dependent_project.repository_url)
     end
   end
 
