@@ -9,6 +9,7 @@ Thanks for considering contributing. These guidelines outline how to contribute 
 [What should I know Before I get started?](#what-should-i-know-before-i-get-started)
 * [Code of conduct](#code-of-conduct)
 * [Language](#language)
+* [Documentation](#documentation)
 * [Installation and setup](#setup)
 
 [How can I contribute?](#how-can-i-contribute)
@@ -37,12 +38,12 @@ By outlining our [mission and strategy](/strategy.md) we hope to give you more p
 * Maintainability: _Helping maintainers understand more about the software they depend upon and the consumers of their software._
 * Sustainability: _Supporting undervalued software by highlighting shortfalls in contribution and funneling support to them._
 
-The first of these problems is our foccus for Libraries.io. The other two we are trying to tackle at [Tidelift](https://tidelift.com).
+The first of these problems is our focus for Libraries.io. The other two we are trying to tackle at [Tidelift](https://tidelift.com).
 
 ## Who is Libraries.io For?
 Libraries.io currently caters for the needs of three distinct user groups:
 
-* Google: _is hungry for your linked datas so she can serve you up search traffic_
+* Google: _is hungry for your linked data so she can serve you up search traffic_
 * Searcher: _is a developer with a problem, she is looking for something to help solve it._
 * Maintainer: _has a project that is used within and/or incorporates open dependencies. She needs to ensure her project(s) are working as expected for users._
 
@@ -83,7 +84,7 @@ The next simplest thing you can do to help us is by telling us how we can improv
 
 * Check that the enhancement is not already [in our issue tracker](https://github.com/search?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+org%3Alibrariesio), they should be labelled 'enhancement'.
 
-If there isn't already an issue for feature then go ahead and create a new issue for it using the [template](/.github/ISSUE_TEMPLATE.md). If you'd like to work on the enhancement then just mention it in a comment and check out our [workflow](#workflow).
+If there isn't already an issue for a feature then go ahead and create a new issue for it using the [template](/.github/ISSUE_TEMPLATE.md). If you'd like to work on the enhancement then just mention it in a comment and check out our [workflow](#workflow).
 
 ### Suggesting New Features
 
