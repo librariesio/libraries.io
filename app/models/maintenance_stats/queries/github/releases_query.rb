@@ -48,7 +48,7 @@ module MaintenanceStats
             has_next_page = result.data.repository.releases.page_info.has_next_page
             cursor = result.data.repository.releases.page_info.end_cursor
 
-            # initalize releases if we have not started gathering data
+            # initialize releases if we have not started gathering data
             releases ||= []
             
             result.data.repository&.releases&.nodes&.each do |release|
