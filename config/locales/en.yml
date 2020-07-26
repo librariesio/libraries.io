@@ -20,13 +20,12 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  hello: "Hello world"
   number:
     currency:
       format:
         format: "%n%u"
         unit: "GBP"
-  hello: "Hello world"
-  number:
     human:
       decimal_units:
         format: "%n%u"
