@@ -267,7 +267,7 @@ namespace :research do
     end;nil
 
     output = CSV.generate do |csv|
-    csv << ['Project',	'Repo',	'Commits', 'Percentage',	'Maintainer URI',	'Maintener email', 'Maintainer Location']
+    csv << ['Project',	'Repo',	'Commits', 'Percentage',	'Maintainer URI',	'Maintainer email', 'Maintainer Location']
 
       projects.each do |project|
         total_commits = project.contributions.sum(:count)

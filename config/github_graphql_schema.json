@@ -15801,7 +15801,7 @@
             },
             {
               "name": "idpCertificate",
-              "description": "The x509 certificate used by the Identity Provder to sign assertions and responses.",
+              "description": "The x509 certificate used by the Identity Provider to sign assertions and responses.",
               "args": [
 
               ],
@@ -23421,7 +23421,7 @@
             },
             {
               "name": "committedViaWeb",
-              "description": "Check if commited via GitHub web UI.",
+              "description": "Check if committed via GitHub web UI.",
               "args": [
 
               ],

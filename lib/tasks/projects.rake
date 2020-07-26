@@ -30,7 +30,7 @@ namespace :projects do
     end
   end
 
-  desc 'Update project repositoires'
+  desc 'Update project repositories'
   task update_repos: :environment do
     exit if ENV['READ_ONLY'].present?
     projects = Project.maintained.where('projects.updated_at < ?', 1.week.ago).with_repo
@@ -40,7 +40,7 @@ namespace :projects do
     end
   end
 
-  desc 'Check project repositoires statuses'
+  desc 'Check project repositories statuses'
   task chech_repo_status: :environment do
     exit if ENV['READ_ONLY'].present?
     ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].each do |platform|
