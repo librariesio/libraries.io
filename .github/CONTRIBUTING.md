@@ -51,7 +51,7 @@ These groups have been expanded into [personas](/personas.md) for contributors t
 ## What Should I Know Before I Get Started?
 
 ### Code of Conduct
-Libraries.io is an open and inclusive [community of people](https://github.com/orgs/librariesio/people) working together. We expect contributors to abide by our [contributor code of conduct](CODE_OF_CONDUCT.md) which basically say 'be excellent to each other'. Please report unacceptable behavior to conduct@libraries.io
+Libraries.io is an open and inclusive [community of people](https://github.com/orgs/librariesio/people) working together. We expect contributors to abide by our [contributor code of conduct](https://github.com/librariesio/libraries.io/blob/master/CODE_OF_CONDUCT.md) which basically say 'be excellent to each other'. Please report unacceptable behavior to conduct@libraries.io
 
 ### Language
 We communicate predominately in English. Contributions to the project should be made with English as the first language. We are happy for members of the community to communicate in a language other than English in chat, email and video but be aware that this might be considered exclusive by other members of the community.
@@ -169,7 +169,7 @@ We *try* to create an issue for everything. That is any bug, feature or enhancem
 We constrain labels as they are a key part of our workflow. Tickets will be labeled according to our [labelling policy](/labelling.md).
 
 #### Templates
-We use templates to guide contributors toward good practice in [filing bugs, requesting enhancements and features](/issue_template.md) and in [issuing pull-requests](/pull_request_template.md).
+We use templates to guide contributors toward good practice in [filing bugs, requesting enhancements and features](https://github.com/librariesio/libraries.io/blob/master/.github/ISSUE_TEMPLATE.md) and in [issuing pull-requests](https://github.com/librariesio/libraries.io/blob/master/.github/PULL_REQUEST_TEMPLATE.md).
 
 #### Commenting
 If it is possible to comment your contribution — for instance if you are contributing code — then do so in a way that is simple, clear, concise and lowers the level of understanding necessary for others to comprehend what comes afterward. If you are contributing code it is very likely it will be rejected if it does not contain sufficient comments.
