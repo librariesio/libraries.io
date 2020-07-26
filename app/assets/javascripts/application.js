@@ -84,7 +84,7 @@ document.addEventListener('turbolinks:load', function(){
   })
 
   $('input[name="subscription[include_prerelease]"]').on('change',function(){
-    console.log('chanage')
+    console.log('change')
     $(this).parents('form').submit();
   });
 })
