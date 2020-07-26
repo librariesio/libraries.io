@@ -33,7 +33,7 @@ Issues that we'd like to implement but aren't likely to happen in the near futur
 - [Add support for Scala](https://github.com/librariesio/libraries.io/issues/991)
 - [Regular open source usage emails for maintainers](https://github.com/librariesio/libraries.io/issues/1078)
 - [Dangerise libraries.io](https://github.com/librariesio/libraries.io/issues/1164)
-- [SourceRank should probably incorporate some basic code qualiy criteria, like at least comments to code line ratio](https://github.com/librariesio/libraries.io/issues/1221)
+- [SourceRank should probably incorporate some basic code quality criteria, like at least comments to code line ratio](https://github.com/librariesio/libraries.io/issues/1221)
 - [Community Action Lists](https://github.com/librariesio/libraries.io/issues/1416)
 - [System level package managers](https://github.com/librariesio/libraries.io/issues/1420)
 - [More useful release information](https://github.com/librariesio/libraries.io/issues/1473)
