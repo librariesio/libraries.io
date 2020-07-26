@@ -18,7 +18,7 @@ class RepositoryUser < ApplicationRecord
 
   has_many :issues
 
-  validate :login_uniqueness_with_case_insenitive_host, if: lambda { self.login_changed? }
+  validate :login_uniqueness_with_case_insensitive_host, if: lambda { self.login_changed? }
   validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
   validates :uuid, presence: true
 
@@ -33,7 +33,7 @@ class RepositoryUser < ApplicationRecord
            :to_s, :to_param, :github_id, :download_user_from_host, :download_orgs,
            :download_user_from_host_by_login, :download_repos, :check_status, to: :repository_owner
 
- def login_uniqueness_with_case_insenitive_host
+ def login_uniqueness_with_case_insensitive_host
    if RepositoryUser.host(host_type).login(login).exists?
      errors.add(:login, "must be unique")
    end

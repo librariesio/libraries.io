@@ -14,7 +14,7 @@ class RepositoryOrganisation < ApplicationRecord
   RepositoryOwner::Gitlab
 
   validates :uuid, presence: true
-  validate :login_uniqueness_with_case_insenitive_host, if: lambda { self.login_changed? }
+  validate :login_uniqueness_with_case_insensitive_host, if: lambda { self.login_changed? }
   validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
 
   after_commit :async_sync, on: :create
@@ -32,7 +32,7 @@ class RepositoryOrganisation < ApplicationRecord
            :download_org_from_host_by_login, :download_repos, :download_members,
            :check_status, to: :repository_owner
 
-  def login_uniqueness_with_case_insenitive_host
+  def login_uniqueness_with_case_insensitive_host
     if RepositoryOrganisation.host(host_type).login(login).exists?
       errors.add(:login, "must be unique")
     end
