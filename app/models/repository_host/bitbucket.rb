@@ -100,7 +100,7 @@ module RepositoryHost
       nil
     end
 
-    def create_webook(token = nil)
+    def create_webhook(token = nil)
       # not implemented yet
     end
 
