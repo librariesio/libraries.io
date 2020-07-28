@@ -46,7 +46,6 @@ class Repository < ApplicationRecord
   scope :without_readme, -> { where("repositories.id NOT IN (SELECT repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
   scope :without_projects, -> { includes(:projects).where(projects: { repository_id: nil }) }
-  scope :without_subscriptons, -> { includes(:repository_subscriptions).where(repository_subscriptions: { repository_id: nil }) }
   scope :with_tags, -> { joins(:tags) }
   scope :without_tags, -> { includes(:tags).where(tags: { repository_id: nil }) }
 
