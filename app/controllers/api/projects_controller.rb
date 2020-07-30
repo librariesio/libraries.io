@@ -1,8 +1,8 @@
 class Api::ProjectsController < Api::ApplicationController
-  before_action :find_project, except: [:searchcode, :dependencies, :dependencies_bulk]
+  before_action :find_project, except: [:searchcode, :dependencies, :dependencies_bulk, :updated]
 
   def show
-    render json: @project
+    render(json: @project, show_updated_at: internal_api_key?)
   end
 
   def sourcerank
@@ -20,6 +20,49 @@ class Api::ProjectsController < Api::ApplicationController
 
   def searchcode
     render json: Project.visible.where('updated_at > ?', 1.day.ago).order(:repository_url).pluck(:repository_url).compact.reject(&:blank?)
+  end
+
+  # we have an arbitrary limit on this to prevent pathology, since there's no pagination.
+  # can be pretty high since we're returning only a few fields per row.
+  MAX_UPDATED_PROJECTS = 5000
+
+  # returns any updated projects in a time window, the caller can
+  # then decide which ones it needs to refetch.
+  def updated
+    # there's no ActionController::Forbidden
+    raise ActionController::BadRequest unless internal_api_key?
+
+    start = DateTime.iso8601(params.require(:start_time))
+    stop = if params[:end_time].nil?
+             DateTime.current
+           else
+             DateTime.iso8601(params.require(:end_time))
+           end
+
+    results = Project.visible.updated_within(start, stop).limit(MAX_UPDATED_PROJECTS + 1).pluck(:platform, :name, :updated_at)
+    deleted_results = DeletedProject.updated_within(start, stop).limit(MAX_UPDATED_PROJECTS + 1).pluck(:digest, :updated_at)
+
+    # seems better to be loud than to just truncate?
+    raise ActionController::BadRequest.new("query matches too many records") if results.length > MAX_UPDATED_PROJECTS || deleted_results.length > MAX_UPDATED_PROJECTS
+
+    reply = {}
+
+    reply[:updated] = results.map do |platform, name, updated_at|
+      {
+        platform: platform,
+        name: name,
+        updated_at: updated_at
+      }
+    end
+
+    reply[:deleted] = deleted_results.map do |digest, updated_at|
+      {
+        digest: digest,
+        updated_at: updated_at
+      }
+    end
+
+    render json: reply
   end
 
   def dependencies

@@ -247,4 +247,28 @@ describe Project, type: :model do
       end
     end
   end
+
+  describe 'DeletedProject management' do
+    let!(:project) { Project.create(platform: 'NPM', name: 'react') }
+
+    it 'should create a DeletedProject when destroyed' do
+      expect(DeletedProject.count).to eq(0)
+      digest = DeletedProject.digest_from_platform_and_name(project.platform, project.name)
+      expect(digest).to eq("ef64ba66a6ca7f649a3e384bf2345e05698d6100b931fe14a21853a3af82900c")
+      project.destroy!
+      expect(DeletedProject.count).to eq(1)
+      dp = DeletedProject.first
+      expect(dp.digest).to eq(digest)
+    end
+
+    it 'should remove a DeletedProject when resurrected' do
+      expect(DeletedProject.count).to eq(0)
+      digest = DeletedProject.digest_from_platform_and_name(project.platform, project.name)
+      expect(digest).to eq("ef64ba66a6ca7f649a3e384bf2345e05698d6100b931fe14a21853a3af82900c")
+      project.destroy!
+      expect(DeletedProject.count).to eq(1)
+      recreated = Project.create(platform: 'NPM', name: 'react')
+      expect(DeletedProject.count).to eq(0)
+    end
+  end
 end

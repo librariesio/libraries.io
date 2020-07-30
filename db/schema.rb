@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_26_151754) do
+ActiveRecord::Schema.define(version: 2020_07_09_221449) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -45,6 +45,14 @@ ActiveRecord::Schema.define(version: 2020_05_26_151754) do
     t.string "platform"
     t.index ["repository_id", "repository_user_id"], name: "index_contributions_on_repository_id_and_user_id"
     t.index ["repository_user_id"], name: "index_contributions_on_repository_user_id"
+  end
+
+  create_table "deleted_projects", force: :cascade do |t|
+    t.string "digest", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["digest"], name: "index_deleted_projects_on_digest", unique: true
+    t.index ["updated_at"], name: "index_deleted_projects_on_updated_at"
   end
 
   create_table "dependencies", id: :serial, force: :cascade do |t|
