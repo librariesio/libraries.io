@@ -101,6 +101,7 @@ module PackageManager
         {
           number: item["catalogEntry"]["version"],
           published_at: item["catalogEntry"]["published"],
+          original_license: item.dig("catalogEntry", "licenseExpression"),
         }
       end
     end

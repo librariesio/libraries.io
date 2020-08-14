@@ -66,6 +66,7 @@ module PackageManager
         {
           number: version["num"],
           published_at: version["created_at"],
+          original_license: version["license"],
         }
       end
     end
