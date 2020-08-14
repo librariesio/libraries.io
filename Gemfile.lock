@@ -129,7 +129,7 @@ GEM
     case_transform (0.2)
       activesupport
     charlock_holmes (0.7.6)
-    chartkick (3.3.1)
+    chartkick (3.4.0)
     chronic (0.10.2)
     citrus (3.0.2)
     cliver (0.3.2)
@@ -413,8 +413,8 @@ GEM
       ast (~> 2.4.0)
     pg (1.1.4)
     pg_query (1.1.0)
-    pghero (2.2.0)
-      activerecord
+    pghero (2.7.0)
+      activerecord (>= 5)
     pictogram (2.0.12)
       railties
     poltergeist (1.17.0)
@@ -776,4 +776,4 @@ RUBY VERSION
    ruby 2.6.5p114
 
 BUNDLED WITH
-   1.17.2
+   1.17.3
