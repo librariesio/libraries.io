@@ -58,7 +58,7 @@ module PackageManager
     end
 
     def self.get_releases(name)
-      latest_version = get_json("https://api.nuget.org/v3/registration5-semver1/#{name.downcase}/index.json")
+      latest_version = get_json("https://api.nuget.org/v3/registration5-gz-semver2/#{name.downcase}/index.json")
       if latest_version["items"][0]["items"]
         releases = []
         latest_version["items"].each do |items|
