@@ -18,6 +18,6 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get -y -qq update
-      - run: sudo apt-get -y --no-install-recommends cmake libpq-dev
+      - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
       - ruby/bundle-install
       - run: bundle exec rspec
