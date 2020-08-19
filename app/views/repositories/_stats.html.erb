@@ -1,14 +1,4 @@
 <table class='table table-striped'>
-  <% if repo.rank %>
-  <tr>
-    <td>
-      Sourcerank
-    </td>
-    <td>
-      <strong><%= link_to repo.rank, repository_sourcerank_path(repo.to_param) %></strong>
-    </td>
-  </tr>
-  <% end %>
   <% if repo.size %>
   <tr>
     <td>

@@ -1,14 +1,4 @@
 <% cache(['v1', @project, 'stats'], :expires_in => 1.day) do %>
-<dl class='row'>
-    <h2>
-    <dt class='col-xs-8'>
-      SourceRank
-    </dt>
-    <dd class='col-xs-4'>
-      <%= link_to @project.rank, project_sourcerank_path(@project.to_param) %>
-    </dd>
-  </h2>
-</dl>
 <hr>
 <dl class='row'>
   <% if @project.can_have_dependencies? && @project.latest_version %>

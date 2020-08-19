@@ -1,6 +1,5 @@
 class Project < ApplicationRecord
   include ProjectSearch
-  include SourceRank
   include Status
   include Releases
 
@@ -121,7 +120,6 @@ class Project < ApplicationRecord
 
   after_commit :update_repository_async, on: :create
   after_commit :set_dependents_count, on: [:create, :update]
-  after_commit :update_source_rank_async, on: [:create, :update]
   before_save  :update_details
   before_destroy :destroy_versions
   before_destroy :create_deleted_project

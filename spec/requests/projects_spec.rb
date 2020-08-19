@@ -131,13 +131,6 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #sourcerank" do
-    it "responds successfully", type: :request do
-      visit project_sourcerank_path(project.to_param)
-      expect(page).to have_content project.name
-    end
-  end
-
   describe "GET #about" do
     it "responds successfully", type: :request do
       visit project_path(project.to_param.merge(format: 'about'))

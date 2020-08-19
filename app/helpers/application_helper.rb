@@ -51,7 +51,6 @@ module ApplicationHelper
   def sort_options
     [
       ['Relevance', nil],
-      ['SourceRank', 'rank'],
       ['Stars', 'stars'],
       ['Dependents', 'dependents_count'],
       ['Most Used', 'dependent_repos_count'],
@@ -72,7 +71,6 @@ module ApplicationHelper
   def repo_sort_options
     [
       ['Relevance', nil],
-      ['SourceRank', 'rank'],
       ['Stars', 'stargazers_count'],
       ['Forks', 'forks_count'],
       ['Watchers', 'subscribers_count'],

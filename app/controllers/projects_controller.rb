@@ -10,7 +10,6 @@ class ProjectsController < ApplicationController
     refresh_stats
     score
     show
-    sourcerank
     sync
     tags
     top_dependent_projects
@@ -64,10 +63,6 @@ class ProjectsController < ApplicationController
     find_version
     @contributors = @project.contributors.order('count DESC').visible.limit(24).select(:host_type, :name, :login, :uuid)
     @owners = @project.registry_users.limit(24)
-  end
-
-  def sourcerank
-
   end
 
   def about

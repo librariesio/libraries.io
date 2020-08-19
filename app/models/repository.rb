@@ -2,7 +2,6 @@ class Repository < ApplicationRecord
   include RepoSearch
   include Status
   include RepoManifests
-  include RepositorySourceRank
 
   # eager load this module to avoid clashing with Gitlab gem in development
   RepositoryHost::Gitlab
@@ -41,7 +40,6 @@ class Repository < ApplicationRecord
   before_save  :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
   after_commit :save_projects, on: :update
-  after_commit :update_source_rank_async, on: [:update]
 
   scope :without_readme, -> { where("repositories.id NOT IN (SELECT repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
@@ -223,7 +221,6 @@ class Repository < ApplicationRecord
       download_tags(token)
       download_contributions(token)
       download_manifests(token)
-      update_source_rank(true)
     end
     update_attributes(last_synced_at: Time.now)
   end
