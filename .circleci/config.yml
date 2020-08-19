@@ -1,108 +1,15 @@
-version: 2
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2
+
 jobs:
-  test:
-    working_directory: ~/
+  build:
     docker:
-      - image: ruby:2.6.6-slim-stretch
-        environment:
-          PGHOST: 127.0.0.1
-          PGUSER: postgres
-      - image: circleci/postgres:9.6-alpine
-        environment:
-          POSTGRES_USER: postgres
-          POSTGRES_DB: dependency-ci_test
-          POSTGRES_PASSWORD: ""
-      - image: redis:3.2-alpine
-      - image: elasticsearch:2.4.5
-
+      - image: circleci/ruby:2.6.6-stretch-node
+    executor: ruby/default
     steps:
+      - checkout
       - run:
-          name: Update system libraries
-          command: |
-            apt-get -y -qq update
-            apt-get -y --no-install-recommends -qq install netcat nodejs curl libgmp-dev libpq-dev build-essential openssh-client git-core tar
-
-      - checkout:
-          path: librariesio
-
-      - run:
-          name: Prep ruby
-          command: |
-            echo "gem: --no-document" > /root/.gemrc
-            gem install bundler -v 1.17.3
-            gem -v
-            bundle -v
-
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "librariesio/Gemfile.lock" }}
-            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
-            - v1-gem-cache-{{ arch }}-
-
-      - run:
-          name: Bundle
-          working_directory: librariesio
-          command: |
-            echo "StrictHostKeyChecking no" >> ~/.ssh/config
-            bundle config --global frozen 1 # throw errors if Gemfile has been modified since Gemfile.lock
-            bundle install --jobs 4 --path vendor/bundle
-            bundle clean
-
-      - save_cache:
-          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "librariesio/Gemfile.lock" }}
-          paths:
-            - librariesio/vendor/bundle
-
-      - run:
-          name: Run linter
-          working_directory: librariesio
-          command: bundle exec rake lint
-
-      - run:
-          name: Checking for focused specs
-          working_directory: librariesio
-          command: "! grep -r -e '^\\s*focus\\s' -e 'focus: true' ./spec"
-
-      - run:
-          name: Wait for Redis
-          command: timeout 30 sh -c 'until nc -z -v -w30 localhost 6379 > /dev/null; do sleep 1; done'
-
-      - run:
-          name: Wait for postgres
-          command: timeout 30 sh -c 'until nc -z -v -w30 localhost 5432 > /dev/null; do sleep 1; done'
-
-      - run:
-          name: Wait for elasticsearch
-          command: timeout 30 sh -c 'until nc -z -v -w30 localhost 9200 > /dev/null; do sleep 1; done'
-
-      - run:
-          name: Database migrate
-          working_directory: librariesio
-          command: |
-            cp db/schema.rb db/unmodified_schema.rb && \
-            bundle exec rake db:create db:migrate
-
-      - run:
-          name: Migration check
-          working_directory: librariesio
-          command: bundle exec bin/migration_check
-
-      - run:
-          name: Set up rspec
-          working_directory: librariesio
-          command: echo -e "--format RspecJunitFormatter\nformat progress\n--out test-results/rspec.xml" > ~/.rspec
-
-      - run:
-          name: RSpec tests
-          working_directory: librariesio
-          command: bundle exec rake spec
-
-      - store_test_results:
-          path: librariesio/test-results/
-
-workflows:
-  version: 2
-  circleci_build:
-    jobs:
-      - test
+          name: Which bundler?
+          command: bundle -v
+      - ruby/bundle-install
