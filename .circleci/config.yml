@@ -21,4 +21,3 @@ jobs:
       - run: sudo apt-get -y --no-install-recommends cmake libpq-dev
       - ruby/bundle-install
       - run: bundle exec rspec
-      - ruby/rspec-test
