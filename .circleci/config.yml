@@ -3,7 +3,8 @@ orbs:
   ruby: circleci/ruby@0.1.2
 
 jobs:
-  build:
+  test:
+  parallelism: 4
     docker:
       - image: circleci/ruby:2.6.5-stretch-node
       - image: circleci/postgres:9.6-alpine
@@ -16,15 +17,10 @@ jobs:
     executor: ruby/default
     steps:
       - checkout
-      - run:
-          name: Update system libraries
-          command: |
-            apt-get -y -qq update
-            apt-get -y --no-install-recommends cmake libpq-dev
-      - run:
-          name: Which bundler?
-          command: bundle -v
+      - run: sudo apt-get -y -qq update
+      - run: sudo apt-get -y --no-install-recommends cmake libpq-dev
       - ruby/bundle-install
       - run:
           name: "Tests"
           command: bundle exec rspec
+      - ruby/rspec-test
