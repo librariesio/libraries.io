@@ -6,10 +6,25 @@ jobs:
   build:
     docker:
       - image: circleci/ruby:2.6.5-stretch-node
+      - image: circleci/postgres:9.6-alpine
+        environment:
+           POSTGRES_USER: postgres
+           POSTGRES_DB: libraries_test
+           POSTGRES_PASSWORD: ""
+      - image: redis:3.2-alpine
+      - image: elasticsearch:2.4.5
     executor: ruby/default
     steps:
       - checkout
       - run:
+          name: Update system libraries
+          command: |
+            apt-get -y -qq update
+            apt-get -y --no-install-recommends cmake libpq-dev
+      - run:
           name: Which bundler?
           command: bundle -v
       - ruby/bundle-install
+      - run:
+          name: "Tests"
+          command: bundle exec rspec
