@@ -21,6 +21,7 @@ class ProjectSerializer < ActiveModel::Serializer
     package_manager_url
     platform
     rank
+    repository_license
     repository_url
     stars
     status
@@ -32,5 +33,9 @@ class ProjectSerializer < ActiveModel::Serializer
 
   def show_updated_at?
     instance_options[:show_updated_at]
+  end
+
+  def repository_license
+    object.repository&.license
   end
 end
