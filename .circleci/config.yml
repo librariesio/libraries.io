@@ -7,6 +7,9 @@ jobs:
     parallelism: 4
     docker:
       - image: circleci/ruby:2.6.5-stretch-node
+        environment:
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
       - image: circleci/postgres:9.6-alpine
         environment:
           POSTGRES_USER: postgres
@@ -17,7 +20,17 @@ jobs:
     executor: ruby/default
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "librariesio/Gemfile.lock" }}
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
+            - v1-gem-cache-{{ arch }}-
       - run: sudo apt-get -y -qq update
       - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
       - ruby/bundle-install
+      - save_cache:
+          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "librariesio/Gemfile.lock" }}
+          paths:
+            - librariesio/vendor/bundle
       - run: bundle exec rspec
