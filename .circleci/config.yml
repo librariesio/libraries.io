@@ -4,7 +4,7 @@ orbs:
 
 jobs:
   test:
-  parallelism: 4
+    parallelism: 4
     docker:
       - image: circleci/ruby:2.6.5-stretch-node
       - image: circleci/postgres:9.6-alpine
