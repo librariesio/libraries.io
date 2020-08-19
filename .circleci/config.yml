@@ -9,9 +9,9 @@ jobs:
       - image: circleci/ruby:2.6.5-stretch-node
       - image: circleci/postgres:9.6-alpine
         environment:
-           POSTGRES_USER: postgres
-           POSTGRES_DB: libraries_test
-           POSTGRES_PASSWORD: ""
+          POSTGRES_USER: postgres
+          POSTGRES_DB: libraries_test
+          POSTGRES_PASSWORD: ""
       - image: redis:3.2-alpine
       - image: elasticsearch:2.4.5
     executor: ruby/default
@@ -20,7 +20,5 @@ jobs:
       - run: sudo apt-get -y -qq update
       - run: sudo apt-get -y --no-install-recommends cmake libpq-dev
       - ruby/bundle-install
-      - run:
-          name: "Tests"
-          command: bundle exec rspec
+      - run: bundle exec rspec
       - ruby/rspec-test
