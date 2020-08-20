@@ -33,5 +33,4 @@ jobs:
           key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-      - run: circleci tests glob test/**/*.rb | circleci tests split > /tmp/tests-to-run
-bundle exec rspec $(cat /tmp/tests-to-run)
+      - run: circleci tests glob test/**/*.rb | circleci tests split > /tmp/tests-to-run && bundle exec rspec $(cat /tmp/tests-to-run)
