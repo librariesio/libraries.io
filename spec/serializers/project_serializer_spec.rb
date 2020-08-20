@@ -24,6 +24,7 @@ describe ProjectSerializer do
       package_manager_url
       platform
       rank
+      repository_license
       repository_url
       stars
       status

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "Admin::ProjectController" do
+describe "Admin::ProjectController", elasticsearch: true do
   let(:user) { create :user }
 
   describe "GET /admin/projects", type: :request do

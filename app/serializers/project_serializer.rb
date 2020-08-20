@@ -21,6 +21,7 @@ class ProjectSerializer < ActiveModel::Serializer
     package_manager_url
     platform
     rank
+    repository_license
     repository_url
     stars
     status

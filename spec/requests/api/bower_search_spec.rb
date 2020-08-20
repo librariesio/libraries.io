@@ -33,6 +33,7 @@ describe "Api::BowerSearchController", elasticsearch: true do
             package_manager_url: project.package_manager_url,
             platform: project.platform,
             rank: project.rank,
+            repository_license: project.repository&.license,
             repository_url: project.repository_url,
             stars: project.stars,
             status: project.status,
