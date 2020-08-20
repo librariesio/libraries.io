@@ -17,6 +17,7 @@ executors:
       - image: redis:3.2-alpine
       - image: elasticsearch:2.4.5
         environment:
+          - cluster.name: elasticsearch
           - action.auto_create_index: true
 jobs:
   build:
