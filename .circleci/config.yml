@@ -1,0 +1,67 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2
+
+executors:
+  libraries:
+    docker:
+      - image: circleci/ruby:2.6.5-stretch-node
+        environment:
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+      - image: circleci/postgres:9.6-alpine
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: libraries_test
+          POSTGRES_PASSWORD: ""
+      - image: redis:3.2-alpine
+      - image: elasticsearch:2.4.4
+        environment:
+          - cluster.name: elasticsearch
+          - action.auto_create_index: true
+jobs:
+  build:
+    executor: libraries
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
+            - v1-gem-cache-{{ arch }}-
+      - run: sudo apt-get -y -qq update
+      - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
+      - ruby/bundle-install
+      - save_cache:
+          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+  test:
+    parallelism: 4
+    executor: libraries
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
+            - v1-gem-cache-{{ arch }}-
+      - run: sudo apt-get -y -qq update
+      - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
+      - ruby/bundle-install
+      - save_cache:
+          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - ruby/test
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build

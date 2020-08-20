@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "Admin::StatsController" do
+describe "Admin::StatsController", elasticsearch: true do
   let(:user) { create :user }
 
   describe "GET /admin/stats", type: :request do
