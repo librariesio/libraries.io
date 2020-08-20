@@ -15,10 +15,10 @@ executors:
           POSTGRES_DB: libraries_test
           POSTGRES_PASSWORD: ""
       - image: redis:3.2-alpine
-      - image: elasticsearch:2.4.5
-        environment:
-          - cluster.name: elasticsearch
-          - action.auto_create_index: true
+      # - image: elasticsearch:2.4.5
+      #   environment:
+      #     - cluster.name: elasticsearch
+      #     - action.auto_create_index: true
 jobs:
   build:
     executor: libraries
@@ -50,6 +50,7 @@ jobs:
             - v1-gem-cache-{{ arch }}-
       - run: sudo apt-get -y -qq update
       - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
+      - run: curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.4.4/elasticsearch-2.4.4.deb && sudo dpkg -i --force-confnew elasticsearch-2.4.4.deb && sudo service elasticsearch
       - ruby/bundle-install
       - save_cache:
           key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
