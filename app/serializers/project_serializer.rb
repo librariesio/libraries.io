@@ -34,8 +34,4 @@ class ProjectSerializer < ActiveModel::Serializer
   def show_updated_at?
     instance_options[:show_updated_at]
   end
-
-  def repository_license
-    object.repository&.license
-  end
 end

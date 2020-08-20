@@ -205,6 +205,10 @@ class Project < ApplicationRecord
     platform_class.package_link(self, version)
   end
 
+  def repository_license
+    repository&.license
+  end
+
   def download_url(version = nil)
     platform_class.download_url(name, version) if version
   end
