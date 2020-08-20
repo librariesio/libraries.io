@@ -127,3 +127,5 @@ end
 gem "scenic", "~> 1.4"
 
 gem "rubocop", "~> 0.80.1"
+
+gem "chartkick", "~> 3.4"
