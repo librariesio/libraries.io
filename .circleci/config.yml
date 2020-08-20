@@ -50,7 +50,7 @@ jobs:
             - v1-gem-cache-{{ arch }}-
       - run: sudo apt-get -y -qq update
       - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
-      - run: curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.4.4/elasticsearch-2.4.4.deb && sudo dpkg -i --force-confnew elasticsearch-2.4.4.deb && sudo service elasticsearch
+      - run: curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.4.4/elasticsearch-2.4.4.deb && sudo dpkg -i --force-confnew elasticsearch-2.4.4.deb && sudo service elasticsearch start
       - ruby/bundle-install
       - save_cache:
           key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
