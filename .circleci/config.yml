@@ -16,7 +16,8 @@ executors:
           POSTGRES_PASSWORD: ""
       - image: redis:3.2-alpine
       - image: elasticsearch:2.4.5
-        command: -Daction.auto_create_index=true
+        environment:
+          - action.auto_create_index: true
 jobs:
   build:
     executor: libraries
