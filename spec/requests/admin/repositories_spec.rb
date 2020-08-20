@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "Admin::RepositoriesController" do
+describe "Admin::RepositoriesController", elasticsearch: true do
   let(:user) { create :user }
   let!(:repository) { create :repository }
 
