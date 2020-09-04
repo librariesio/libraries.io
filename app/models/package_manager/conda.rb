@@ -6,17 +6,29 @@ module PackageManager
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
     URL = "https://anaconda.org"
+    API_URL = "https://conda.libraries.io"
 
     def self.formatted_name
       "conda"
     end
 
     def self.project_names
-      get_json("https://conda.libraries.io/packages").flat_map { |name| name.split("/").last }
+      get_json("#{API_URL}/packages").keys
+    end
+
+    def self.all_projects
+      get_json("#{API_URL}/packages")
     end
 
     def self.recent_names
-      get_json("https://conda.libraries.io/feed.json")
+      last_update = Version.where(project: Project.where(platform: "Conda")).select(:updated_at).order(updated_at: :desc).limit(1).first&.updated_at
+      packages = get_json("#{API_URL}/packages")
+
+      return packages.keys if last_update.nil?
+
+      packages.keys.filter do |name|
+        packages[name].any? { |version| Time.at(version["timestamp"]) > last_update }
+      end
     end
 
     def self.package_link(project, _version = nil)
@@ -28,32 +40,24 @@ module PackageManager
     end
 
     def self.project(name)
-      get_json("https://conda.libraries.io/package?name=#{name}")
+      get_json("#{API_URL}/package/#{name}")
     end
 
     def self.check_status_url(project)
-      "https://conda-parser.libraries.io/package?name=#{project.name}"
+      "#{API_URL}/package/#{project.name}"
     end
 
     def self.mapping(project)
-      {
-        name: project["name"],
-        description: project["description"],
-        homepage: project["home"],
-        keywords_array: Array.wrap(project.fetch("keywords", [])),
-        licenses: project["license"],
-        repository_url: project["dev_url"],
-        versions: [project["version"]],
-      }
+      project.deep_symbolize_keys
     end
 
     def self.versions(project, _name)
-      [{ number: project["version"], published_at: Time.at(project["timestamp"]) }]
+      project["versions"]
     end
 
     def self.dependencies(name, version, _project)
-      version_data = get_json("https://conda-parser.libraries.io/package?name=#{name}&version=#{version}")
-      deps = version_data["depends"].map { |d| d.split(" ") }
+      version_data = get_json("#{API_URL}/package/#{name}")["versions"]
+      deps = version_data.find { |item| item["number"] == version }&.dig("dependencies")&.map { |d| d.split(" ") }
       map_dependencies(deps, "runtime")
     end
   end
