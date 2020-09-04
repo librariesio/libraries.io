@@ -27,7 +27,7 @@ module PackageManager
       return packages.keys if last_update.nil?
 
       packages.keys.filter do |name|
-        packages[name].any? { |version| Time.at(version["timestamp"]) > last_update }
+        packages[name]["versions"].any? { |version| version["published_at"].is_a?(String) && Time.parse(version["published_at"]) > last_update }
       end
     end
 
