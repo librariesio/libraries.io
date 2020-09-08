@@ -9,11 +9,11 @@ describe PackageManager::PlatformIO do
 
   describe '#package_link' do
     it 'returns a link to project website' do
-      expect(PackageManager::PlatformIO.package_link(project)).to eq('http://platformio.org/lib/show/1/foo')
+      expect(PackageManager::PlatformIO.package_link(project)).to eq('https://platformio.org/lib/show/1/foo')
     end
 
     it 'ignores version' do
-      expect(PackageManager::PlatformIO.package_link(project, '2.0.0')).to eq('http://platformio.org/lib/show/1/foo')
+      expect(PackageManager::PlatformIO.package_link(project, '2.0.0')).to eq('https://platformio.org/lib/show/1/foo')
     end
   end
 
