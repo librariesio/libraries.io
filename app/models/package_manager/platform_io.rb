@@ -5,11 +5,11 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
     BIBLIOTHECARY_PLANNED = true
-    URL = "http://platformio.org"
+    URL = "https://platformio.org"
     COLOR = "#f34b7d"
 
     def self.package_link(project, _version = nil)
-      "http://platformio.org/lib/show/#{project.pm_id}/#{project.name}"
+      "https://platformio.org/lib/show/#{project.pm_id}/#{project.name}"
     end
 
     def self.install_instructions(project, _version = nil)
@@ -21,7 +21,7 @@ module PackageManager
       projects = []
       loop do
         sleep 1
-        r = PackageManager::Base.get("http://api.platformio.org/lib/search?page=#{page}")
+        r = get("https://api.platformio.org/lib/search?page=#{page}")
         break if page > r["total"] / r["perpage"].to_f
 
         projects += r["items"]
@@ -32,7 +32,7 @@ module PackageManager
 
     def self.project(id)
       sleep 1
-      get("http://api.platformio.org/lib/info/#{id}")
+      get("https://api.platformio.org/lib/info/#{id}")
     end
 
     def self.mapping(project)
