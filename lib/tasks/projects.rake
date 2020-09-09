@@ -164,4 +164,20 @@ namespace :projects do
       LicenseBackfillWorker.perform_async(project.platform, project.name)
     end
   end
+
+  desc 'Batch backfill conda'
+  task backfill_conda: :environment do
+    projects = PackageManager::Conda.all_projects
+    projects.keys.each do |project_name|
+      project = Project.find_by(platform: "Conda", name: project_name)
+      if project.nil?
+        PackageManager::Conda.update(project_name)
+      elsif project.versions.count != projects[project_name]["versions"].count
+        PackageManager::Conda.update(project_name)
+        LicenseBackfillWorker.perform_async("Conda", project_name)
+      else
+        LicenseBackfillWorker.perform_async("Conda", project_name)
+      end
+    end
+  end
 end
