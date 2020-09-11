@@ -52,7 +52,7 @@ module PackageManager
     end
 
     def self.versions(project, _name)
-      project["versions"].map(&:deep_symbolize_keys)
+      project["versions"].map { |version| version.deep_symbolize_keys.slice(:number, :original_license, :published_at) }
     end
 
     def self.dependencies(name, version, _project)
