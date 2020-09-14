@@ -17,11 +17,11 @@ module PackageManager
     end
 
     def self.project_names
-      get("http://localhost:8080/clojars/all")
+      get("https://maven.libraries.io/clojars/all")
     end
 
     def self.recent_names
-      get("http://localhost:8080/clojars/recent")
+      get("https://maven.libraries.io/clojars/recent")
     end
   end
 end

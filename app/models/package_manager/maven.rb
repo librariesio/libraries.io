@@ -17,11 +17,11 @@ module PackageManager
     }.freeze
 
     def self.package_link(project, version = nil)
-      MavenUrl.from_name(project.name, REPOSITORY_BASE).search(version)
+      MavenUrl.from_name(project.name, repository_base).search(version)
     end
 
     def self.download_url(name, version = nil)
-      MavenUrl.from_name(name, REPOSITORY_BASE).jar(version)
+      MavenUrl.from_name(name, repository_base).jar(version)
     end
 
     def self.check_status_url(project)
