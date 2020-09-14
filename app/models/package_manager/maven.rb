@@ -17,15 +17,19 @@ module PackageManager
     }.freeze
 
     def self.package_link(project, version = nil)
-      MavenUrl.from_name(project.name).search(version)
+      MavenUrl.from_name(project.name, REPOSITORY_BASE).search(version)
     end
 
     def self.download_url(name, version = nil)
-      MavenUrl.from_name(name).jar(version)
+      MavenUrl.from_name(name, REPOSITORY_BASE).jar(version)
     end
 
     def self.check_status_url(project)
       MavenUrl.from_name(project.name).base
+    end
+
+    def self.repository_base
+      "https://repo1.maven.org/maven2"
     end
 
     def self.load_names(limit = nil)
@@ -44,7 +48,7 @@ module PackageManager
     def self.project(name)
       sections = name.split(":")
       path = sections.join("/")
-      versions = versions({ name: name }, name)
+      versions = versions(nil, name)
       latest_version = latest_version(versions, name)
       return {} unless latest_version.present?
 
@@ -118,40 +122,46 @@ module PackageManager
     end
 
     def self.dependencies(name, version, project)
-      pom_file = get_raw(MavenUrl.from_name(name).pom(version))
+      pom_file = get_raw(MavenUrl.from_name(name, repository_base).pom(version))
       Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file, project[:properties]).map do |dep|
         {
           project_name: dep[:name],
           requirements: dep[:requirement],
           kind: dep[:type],
-          platform: "Maven",
+          platform: formatted_name,
         }
       end
     end
 
-    def self.versions(project, _name)
-      json_versions = JSON.parse(get_raw(MavenUrl.from_name(project[:name]).solrsearch))
-      extract_versions(json_versions)
+    def self.versions(_project, name)
+      xml_metadata = get_raw(MavenUrl.from_name(name, repository_base).maven_metadata)
+      xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
+      retrieve_versions(xml_versions.filter {|item| !item.ends_with?("-SNAPSHOT")}, name)
     end
 
-    def self.extract_versions(versions)
-      versions["response"]["docs"].map do |version|
+    def self.retrieve_versions(versions, name)
+      versions.map do |version|
         begin
-          license_list = licenses(get_pom(version["g"], version["a"], version["v"]))
+          pom = get_pom(*name.split(":", 2), version)
+          license_list = licenses(pom)
         rescue StandardError
           license_list = nil
         end
         {
-          number: version["v"],
-          published_at: Time.at(version["timestamp"] / 1000).to_date,
+          number: version,
+          published_at: Time.parse(pom.locate("publishedAt").first.text),
           original_license: license_list,
         }
       end
     end
 
     def self.get_pom(group_id, artifact_id, version, seen = [])
-      xml = get_xml(MavenUrl.new(group_id, artifact_id).pom(version))
-
+      pom_request = request(MavenUrl.new(group_id, artifact_id, repository_base).pom(version))
+      xml = Ox.parse(pom_request.body)
+      published_at = pom_request.headers["Last-Modified"]
+      pat = Ox::Element.new("publishedAt")
+      pat << published_at
+      xml << pat
       seen << [group_id, artifact_id, version]
 
       next_group_id = xml.locate("distributionManagement/relocation/groupId/?[0]").first || group_id
@@ -191,7 +201,7 @@ module PackageManager
         # TODO: this is in place to handle packages that are no longer on maven-repository.com
         # this could be removed if we switched to a package data provider that supplied full information
         Project
-          .find_by(name: name, platform: "Maven")
+          .find_by(name: name, platform: formatted_class)
           &.versions
           &.max_by(&:published_at)
           &.number
@@ -199,29 +209,30 @@ module PackageManager
     end
 
     class MavenUrl
-      def self.from_name(name)
-        new(*name.split(":", 2))
+      def self.from_name(name, repo_base)
+        new(*name.split(":", 2), repo_base)
       end
 
       def self.legal_name?(name)
         name.present? && name.split(":").size == 2
       end
 
-      def initialize(group_id, artifact_id)
+      def initialize(group_id, artifact_id, repo_base)
         @group_id = group_id
         @artifact_id = artifact_id
+        @repo_base = repo_base
       end
 
       def base
-        "https://repo1.maven.org/maven2/#{group_path}/#{@artifact_id}"
+        "#{@repo_base}/#{group_path}/#{@artifact_id}"
       end
 
       def jar(version)
-        base + "/#{version}/#{@artifact_id}-#{version}.jar"
+        "#{base}/#{version}/#{@artifact_id}-#{version}.jar"
       end
 
       def pom(version)
-        base + "/#{version}/#{@artifact_id}-#{version}.pom"
+        "#{base}/#{version}/#{@artifact_id}-#{version}.pom"
       end
 
       def search(version = nil)
@@ -232,9 +243,8 @@ module PackageManager
         end
       end
 
-      def solrsearch
-        query = "g:#{@group_id} AND a:#{@artifact_id}"
-        "https://search.maven.org/solrsearch/select?q=#{query}&core=gav&wt=json&rows=1000"
+      def maven_metadata
+        "#{@repo_base}/#{group_path}/#{@artifact_id}/maven-metadata.xml"
       end
 
       private
