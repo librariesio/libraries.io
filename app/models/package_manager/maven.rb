@@ -25,7 +25,7 @@ module PackageManager
     end
 
     def self.check_status_url(project)
-      MavenUrl.from_name(project.name).base
+      MavenUrl.from_name(project.name, repository_base).base
     end
 
     def self.repository_base
@@ -155,13 +155,18 @@ module PackageManager
       end
     end
 
-    def self.get_pom(group_id, artifact_id, version, seen = [])
+    def self.download_pom(group_id, artifact_id, version)
       pom_request = request(MavenUrl.new(group_id, artifact_id, repository_base).pom(version))
       xml = Ox.parse(pom_request.body)
       published_at = pom_request.headers["Last-Modified"]
       pat = Ox::Element.new("publishedAt")
       pat << published_at
       xml << pat
+      xml
+    end
+
+    def self.get_pom(group_id, artifact_id, version, seen = [])
+      xml = download_pom(group_id, artifact_id, version)
       seen << [group_id, artifact_id, version]
 
       next_group_id = xml.locate("distributionManagement/relocation/groupId/?[0]").first || group_id
@@ -201,7 +206,7 @@ module PackageManager
         # TODO: this is in place to handle packages that are no longer on maven-repository.com
         # this could be removed if we switched to a package data provider that supplied full information
         Project
-          .find_by(name: name, platform: formatted_class)
+          .find_by(name: name, platform: formatted_name)
           &.versions
           &.max_by(&:published_at)
           &.number

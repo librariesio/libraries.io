@@ -109,8 +109,7 @@ describe PackageManager::Maven do
       it 'returns the expected data' do
         simple_pom = Ox.parse('<project></project>')
 
-        allow(described_class).to receive(:get_xml)
-          .with(/group_id\/artifact_id\/version/)
+        allow(described_class).to receive(:download_pom)
           .and_return(simple_pom)
 
         expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
@@ -123,12 +122,8 @@ describe PackageManager::Maven do
         simple_pom = Ox.parse('<project></project>')
         redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group.id.2</groupId></relocation></distributionManagement></project>')
 
-        allow(described_class).to receive(:get_xml)
-          .with(/group_id\/artifact_id\/version/)
-          .and_return(redirect_pom)
-        allow(described_class).to receive(:get_xml)
-          .with(/group\/id\/2\/artifact_id\/version/)
-          .and_return(simple_pom)
+        allow(described_class).to receive(:download_pom)
+          .and_return(redirect_pom, simple_pom)
 
         expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
           .to eq(simple_pom)
@@ -139,12 +134,11 @@ describe PackageManager::Maven do
       it 'returns the expected data' do
         redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>')
 
-        allow(described_class).to receive(:get_xml)
-          .with(/group_id\/artifact_id\/version/)
-          .and_return(redirect_pom)
-        allow(described_class).to receive(:get_xml)
-          .with(/group_id_2\/artifact_id\/version/)
-          .and_raise(Faraday::Error)
+        call_count = 0
+        allow(described_class).to receive(:download_pom) do
+          call_count+=1
+          call_count > 1 ? raise(Faraday::Error) : redirect_pom
+        end
 
         expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
           .to eq(redirect_pom)
@@ -156,12 +150,8 @@ describe PackageManager::Maven do
         redirect_pom = Ox.parse('<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>')
         redirect_pom_2 = Ox.parse('<project><distributionManagement><relocation><groupId>group_id</groupId></relocation></distributionManagement></project>')
 
-        allow(described_class).to receive(:get_xml)
-          .with(/group_id\/artifact_id\/version/)
-          .and_return(redirect_pom)
-        allow(described_class).to receive(:get_xml)
-          .with(/group_id_2\/artifact_id\/version/)
-          .and_return(redirect_pom_2)
+        allow(described_class).to receive(:download_pom)
+          .and_return(redirect_pom, redirect_pom_2)
 
         expect(described_class.get_pom('group_id', 'artifact_id', 'version'))
           .to eq(redirect_pom_2)
