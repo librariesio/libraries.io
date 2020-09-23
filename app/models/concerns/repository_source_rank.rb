@@ -34,7 +34,7 @@ module RepositorySourceRank
       dependent_repositories:     log_scale(dependent_repos_count),
       stars:                      log_scale(stars),
       contributors:               (log_scale(contributions_count) / 2.0).ceil,
-      any_outdated_dependencies:  any_outdated_dependencies? ? -1 : 0,
+      any_outdated_dependencies:  0, # any_outdated_dependencies? ? -1 : 0,
       is_deprecated:              is_deprecated? ? -5 : 0,
       is_unmaintained:            is_unmaintained? ? -5 : 0,
       is_removed:                 is_removed? ? -5 : 0
