@@ -509,7 +509,6 @@ class Project < ApplicationRecord
   end
 
   def dependent_repos_top_ten
-    return []
     dependent_repos_view_query(10)
   end
 
@@ -537,7 +536,7 @@ class Project < ApplicationRecord
   end
 
   def unique_repo_requirement_ranges
-    [] # repository_dependencies.select('repository_dependencies.requirements').distinct.pluck(:requirements)
+    repository_dependencies.select('repository_dependencies.requirements').distinct.pluck(:requirements)
   end
 
   def unique_project_requirement_ranges

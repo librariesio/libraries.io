@@ -22,10 +22,6 @@ class RepositoryDependency < ApplicationRecord
   delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :project, allow_nil: true
   delegate :filepath, to: :manifest
 
-  def self.where(**args)
-    throw 1
-  end
-
   def find_project_id
     Project.find_best(platform, project_name&.strip)&.id
   end

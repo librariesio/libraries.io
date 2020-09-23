@@ -4,7 +4,7 @@
     <h4>Dependencies</h4>
     <% @manifests.each do |manifest| %>
       <% cache(manifest, expires_in: 1.week) do %>
-        <% deps = [] # manifest.repository_dependencies %>
+        <% deps = manifest.repository_dependencies %>
         <% if deps.length > 0 %>
           <table class='table table-hover table-condensed'>
             <thead>
