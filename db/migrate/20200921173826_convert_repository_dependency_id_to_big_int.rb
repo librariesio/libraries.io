@@ -1,6 +1,6 @@
 class ConvertRepositoryDependencyIdToBigInt < ActiveRecord::Migration[5.2]
   # This is a long-running migration so we don't want to do the entire thing in a transaction.
-  # disable_ddl_transaction!
+  disable_ddl_transaction!
 
   def up
     if ENV['CIRCLE_CI']
