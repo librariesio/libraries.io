@@ -32,7 +32,7 @@ class Tag < ApplicationRecord
     repository.projects.without_versions.each do |project|
       repos = project.subscriptions.map(&:repository).compact.uniq
       repos.each do |repo|
-        requirements = repo.repository_dependencies.select{|rd| rd.project == project }.map(&:requirements)
+        requirements = [] # repo.repository_dependencies.select{|rd| rd.project == project }.map(&:requirements)
         repo.web_hooks.each do |web_hook|
           web_hook.send_new_version(project, project.platform, self, requirements)
         end
