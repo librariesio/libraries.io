@@ -44,6 +44,8 @@ module RepoManifests
   end
 
   def sync_manifest(m)
+    return
+
     args = {platform: m[:platform], kind: m[:kind], filepath: m[:path], sha: m[:sha]}
 
     unless manifests.find_by(args)

@@ -45,7 +45,7 @@
         <small>
           <%= timeago_tag(sub.created_at) %>
           <% if sub.repository %>
-            - <%= link_to pluralize(sub.repository.repository_dependencies.count, 'dependencies'), repository_path(sub.repository.to_param.merge(anchor: 'dependencies')) %>
+            - <%= link_to pluralize([], 'dependencies'), repository_path(sub.repository.to_param.merge(anchor: 'dependencies')) %>
           <% end %>
         </small>
       </div>
