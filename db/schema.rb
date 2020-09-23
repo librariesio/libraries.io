@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_09_221449) do
+ActiveRecord::Schema.define(version: 2020_09_21_173826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -258,7 +258,7 @@ ActiveRecord::Schema.define(version: 2020_07_09_221449) do
     t.index ["status"], name: "index_repositories_on_status"
   end
 
-  create_table "repository_dependencies", id: :serial, force: :cascade do |t|
+  create_table "repository_dependencies", id: :bigint, default: -> { "nextval('repository_dependencies_new_id_seq6'::regclass)" }, force: :cascade do |t|
     t.integer "project_id"
     t.integer "manifest_id"
     t.boolean "optional"
@@ -269,9 +269,9 @@ ActiveRecord::Schema.define(version: 2020_07_09_221449) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "repository_id"
-    t.index ["manifest_id"], name: "index_repository_dependencies_on_manifest_id"
-    t.index ["project_id"], name: "index_repository_dependencies_on_project_id"
-    t.index ["repository_id"], name: "index_repository_dependencies_on_repository_id"
+    t.index ["manifest_id"], name: "index_repository_dependencies_on_manifest_id_1600871050"
+    t.index ["project_id"], name: "index_repository_dependencies_on_project_id_1600871050"
+    t.index ["repository_id"], name: "index_repository_dependencies_on_repository_id_1600871050"
   end
 
   create_table "repository_maintenance_stats", force: :cascade do |t|
@@ -417,11 +417,11 @@ ActiveRecord::Schema.define(version: 2020_07_09_221449) do
      FROM (( SELECT repositories.id,
               repositories.rank,
               repositories.stargazers_count,
-              repository_dependencies.project_id
+              archived_2020_09_23_09_53_18_556_repository_dependencies.project_id
              FROM (repositories
-               JOIN repository_dependencies ON ((repositories.id = repository_dependencies.repository_id)))
+               JOIN archived_2020_09_23_09_53_18_556_repository_dependencies ON ((repositories.id = archived_2020_09_23_09_53_18_556_repository_dependencies.repository_id)))
             WHERE (repositories.private = false)
-            GROUP BY repositories.id, repository_dependencies.project_id) t1
+            GROUP BY repositories.id, archived_2020_09_23_09_53_18_556_repository_dependencies.project_id) t1
        JOIN projects ON ((t1.project_id = projects.id)));
   SQL
   add_index "project_dependent_repositories", ["project_id", "rank", "stargazers_count"], name: "index_project_dependent_repos_on_rank", order: { rank: "DESC NULLS LAST", stargazers_count: :desc }
