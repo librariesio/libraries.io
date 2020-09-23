@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_09_221449) do
+ActiveRecord::Schema.define(version: 2020_09_21_173826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -258,7 +258,7 @@ ActiveRecord::Schema.define(version: 2020_07_09_221449) do
     t.index ["status"], name: "index_repositories_on_status"
   end
 
-  create_table "repository_dependencies", id: :serial, force: :cascade do |t|
+  create_table "repository_dependencies", force: :cascade do |t|
     t.integer "project_id"
     t.integer "manifest_id"
     t.boolean "optional"
