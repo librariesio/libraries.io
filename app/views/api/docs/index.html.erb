@@ -121,7 +121,8 @@
       Example: <strong> <%= link_to nil, "https://libraries.io/api/#{@project.platform}/#{@project.name}/dependent_repositories?api_key=#{@api_key}" %> </strong>
     </p>
     <% cache "api-docs-#{@cache_version}-project-dependent-repositories", :expires_in => 1.day do %>
-      <pre class='well well-small'></pre>
+      <pre class='well well-small'>
+<%= # JSON.pretty_generate @project.dependent_repositories.paginate(page: 1).as_json(except: [:id, :repository_organisation_id, :repository_user_id], methods: [:github_contributions_count, :github_id]) %></pre>
     <% end %>
 
     <h3 id="project-contributors">Project Contributors</h3>
