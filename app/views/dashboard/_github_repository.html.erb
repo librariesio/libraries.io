@@ -9,7 +9,7 @@
       <%= button_to 'Watch', watch_path(repository.id), method: :post, class: 'btn btn-primary' %>
     <% end %>
     <small>
-      <%= link_to pluralize(repository.repository_dependencies.count, 'dependencies'), repository_path(repository.to_param.merge(anchor: 'dependencies')) %>
+      <%= link_to pluralize([], 'dependencies'), repository_path(repository.to_param.merge(anchor: 'dependencies')) %>
     </small>
   </div>
 </div>

@@ -15,7 +15,7 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def dependent_repositories
-    paginate json: @project.dependent_repositories
+    paginate json: [] # @project.dependent_repositories
   end
 
   def searchcode
