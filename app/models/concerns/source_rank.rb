@@ -37,7 +37,7 @@ module SourceRank
       contributors:               (log_scale(contributions_count) / 2.0).ceil,
       subscribers:                (log_scale(subscriptions.length) / 2.0).ceil,
       all_prereleases:            all_prereleases? ? -2 : 0,
-      any_outdated_dependencies:  0, # any_outdated_dependencies? ? -1 : 0,
+      any_outdated_dependencies:  any_outdated_dependencies? ? -1 : 0,
       is_deprecated:              is_deprecated? ? -5 : 0,
       is_unmaintained:            is_unmaintained? ? -5 : 0,
       is_removed:                 is_removed? ? -5 : 0

@@ -58,9 +58,8 @@ class RepositoryTreeResolver
 
       dependencies = []
       manifests.each do |manifest|
-        # manifest.repository_dependencies.each do |repository_dependency|
-        [].each do |repository_dependency|
-            dependencies << repository_dependency
+        manifest.repository_dependencies.each do |repository_dependency|
+          dependencies << repository_dependency
         end
       end
       # resolve tree for each platform
