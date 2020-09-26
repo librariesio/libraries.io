@@ -158,7 +158,7 @@
     </p>
     <% cache "api-docs-#{@cache_version}sourcerank", :expires_in => 1.day do %>
       <pre class='well well-small'>
-<%= JSON.pretty_generate @project.source_rank.as_json %></pre>
+<%= JSON.pretty_generate @project.source_rank_breakdown.as_json %></pre>
     <% end %>
 
     <h3 id="project-usage">Project Usage</h3>
