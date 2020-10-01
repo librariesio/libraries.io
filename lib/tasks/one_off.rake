@@ -24,13 +24,13 @@ namespace :one_off do
     end
   end
 
-  desc "backfill all versions to have a source set to the project platform"
-  task set_default_sources: :environment do
+  desc "backfill all versions to have repository_sources set to the project platform"
+  task set_default_repository_sources: :environment do
     Version.find_in_batches do |versions|
       ActiveRecord::Base.transaction do
         versions.each do |v|
           class_name = v.project.platform
-          v.update(sources: [class_name])
+          v.update(repository_sources: [class_name])
         end
       end
     end
