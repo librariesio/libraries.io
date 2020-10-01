@@ -99,8 +99,14 @@ module PackageManager
       end
 
       if self::HAS_VERSIONS
+        class_name = name.demodulize
         versions(project, dbproject.name).each do |version|
-          dbproject.versions.create(version) unless dbproject.versions.find { |v| v.number == version[:number] }
+          existing = dbproject.versions.find_by(number: version[:number])
+          if existing
+            existing.update(sources: existing.sources.append(class_name)) unless existing.sources.include?(class_name)
+          else
+            dbproject.versions.create(version.merge(sources: [class_name]))
+          end
         end
       end
 
@@ -275,7 +281,7 @@ module PackageManager
 
     private_class_method def self.download_async(names)
       names.each_slice(1000).each_with_index do |group, index|
-        group.each { |name| PackageManagerDownloadWorker.perform_in(index.hours, self.name.demodulize, name)}
+        group.each { |name| PackageManagerDownloadWorker.perform_in(index.hours, self.name.demodulize, name) }
       end
     end
   end
