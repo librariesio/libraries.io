@@ -5,6 +5,7 @@ module PackageManager
     COLOR = "#fff"
     BIBLIOTHECARY_SUPPORT = false
     BIBLIOTHECARY_PLANNED = false
+    HAS_MULTIPLE_REPO_SOURCES = false
     SECURITY_PLANNED = false
     HIDDEN = false
     HAS_OWNERS = false
@@ -102,7 +103,7 @@ module PackageManager
         class_name = name.demodulize
         versions(project, dbproject.name).each do |version|
           existing = dbproject.versions.find_or_initialize_by(number: version[:number])
-          existing.repository_sources = Set.new(existing.repository_sources).add(class_name).to_a
+          existing.repository_sources = Set.new(existing.repository_sources).add(class_name).to_a if self::HAS_MULTIPLE_REPO_SOURCES
           existing.save
         end
       end
