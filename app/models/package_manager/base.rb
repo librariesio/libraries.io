@@ -101,12 +101,9 @@ module PackageManager
       if self::HAS_VERSIONS
         class_name = name.demodulize
         versions(project, dbproject.name).each do |version|
-          existing = dbproject.versions.find_by(number: version[:number])
-          if existing
-            existing.update(repository_sources: existing.repository_sources.append(class_name)) unless existing.repository_sources.include?(class_name)
-          else
-            dbproject.versions.create(version.merge(repository_sources: [class_name]))
-          end
+          existing = dbproject.versions.find_or_initialize_by(number: version[:number])
+          existing.repository_sources = Set.new(existing.repository_sources).add(class_name).to_a
+          existing.save
         end
       end
 
