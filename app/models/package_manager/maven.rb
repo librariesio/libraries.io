@@ -214,6 +214,10 @@ module PackageManager
       end
     end
 
+    def self.repository_source_name
+      "Maven"
+    end
+
     class MavenUrl
       def self.from_name(name, repo_base)
         new(*name.split(":", 2), repo_base)
