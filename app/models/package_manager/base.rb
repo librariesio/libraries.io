@@ -5,6 +5,7 @@ module PackageManager
     COLOR = "#fff"
     BIBLIOTHECARY_SUPPORT = false
     BIBLIOTHECARY_PLANNED = false
+    HAS_MULTIPLE_REPO_SOURCES = false
     SECURITY_PLANNED = false
     HIDDEN = false
     HAS_OWNERS = false
@@ -99,8 +100,11 @@ module PackageManager
       end
 
       if self::HAS_VERSIONS
+        class_name = name.demodulize
         versions(project, dbproject.name).each do |version|
-          dbproject.versions.create(version) unless dbproject.versions.find { |v| v.number == version[:number] }
+          existing = dbproject.versions.find_or_initialize_by(number: version[:number])
+          existing.repository_sources = Set.new(existing.repository_sources).add(class_name).to_a if self::HAS_MULTIPLE_REPO_SOURCES
+          existing.save
         end
       end
 
@@ -275,7 +279,7 @@ module PackageManager
 
     private_class_method def self.download_async(names)
       names.each_slice(1000).each_with_index do |group, index|
-        group.each { |name| PackageManagerDownloadWorker.perform_in(index.hours, self.name.demodulize, name)}
+        group.each { |name| PackageManagerDownloadWorker.perform_in(index.hours, self.name.demodulize, name) }
       end
     end
   end

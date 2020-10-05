@@ -4,6 +4,7 @@ module PackageManager
   class Maven < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    HAS_MULTIPLE_REPO_SOURCES = true
     BIBLIOTHECARY_SUPPORT = true
     SECURITY_PLANNED = true
     URL = "http://maven.org"
