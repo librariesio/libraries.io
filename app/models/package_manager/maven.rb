@@ -5,6 +5,7 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     HAS_MULTIPLE_REPO_SOURCES = true
+    REPOSITORY_SOURCE_NAME = 'Maven'
     BIBLIOTHECARY_SUPPORT = true
     SECURITY_PLANNED = true
     URL = "http://maven.org"
@@ -18,15 +19,41 @@ module PackageManager
     }.freeze
 
     def self.package_link(project, version = nil)
+      if version
+        db_version = project.versions.find_by(number: version)
+        if db_version.repository_sources.include?(REPOSITORY_SOURCE_NAME)
+          return MavenUrl.from_name(project.name, repository_base).search(version)
+        else
+          repository_source = db_version.repository_sources.first
+          return "MavenManager::#{repository_source}".constantize.package_link(project, version)
+        end
+      end
+
       MavenUrl.from_name(project.name, repository_base).search(version)
     end
 
     def self.download_url(name, version = nil)
+      if version
+        project = Project.find_by(name: name, platform: self.name.demodulize)
+        db_version = project.versions.find_by(number: version)
+        if db_version.repository_sources.include?(REPOSITORY_SOURCE_NAME)
+          return MavenUrl.from_name(name, repository_base).jar(version)
+        else
+          repository_source = db_version.repository_sources.first
+          return "MavenManager::#{repository_source}".constantize.download_url(name, version)
+        end
+      end
+
       MavenUrl.from_name(name, repository_base).jar(version)
     end
 
     def self.check_status_url(project)
-      MavenUrl.from_name(project.name, repository_base).base
+      sources = project.versions.flat_map(&:repository_sources).uniq
+      if sources.include?(REPOSITORY_SOURCE_NAME) 
+        MavenUrl.from_name(project.name, repository_base).base
+      else
+        "MavenManager::#{sources.first}".constantize.check_status_url(project)
+      end
     end
 
     def self.repository_base

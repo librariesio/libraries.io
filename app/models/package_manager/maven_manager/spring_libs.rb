@@ -1,5 +1,7 @@
 module MavenManager
   class SpringLibs < PackageManager::Maven
+    REPOSITORY_SOURCE_NAME = 'SpringLibs'
+
     def self.repository_base
       "https://repo.spring.io/libs-release-local"
     end
@@ -14,6 +16,26 @@ module MavenManager
 
     def self.load_names(limit = nil)
       project_names.each { |name| REDIS.sadd("maven-spring-lib-names", name)}
+    end
+
+    def self.package_link(project, version = nil)
+      if version
+        MavenUrl.from_name(project.name, repository_base).jar(version)
+      else 
+        MavenUrl.from_name(project.name, repository_base).base
+      end
+    end
+
+    def self.download_url(name, version = nil)
+      if version
+        MavenUrl.from_name(name, repository_base).jar(version)
+      else 
+        MavenUrl.from_name(name, repository_base).base
+      end
+    end
+
+    def self.check_status_url(project)
+      MavenUrl.from_name(project.name, repository_base).base
     end
 
     def self.versions(_project, name)
@@ -34,10 +56,6 @@ module MavenManager
 
     def self.name
       PackageManager::Maven.name
-    end
-
-    def self.repository_source_name
-      "SpringLibs"
     end
   end
 end
