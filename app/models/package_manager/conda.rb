@@ -6,8 +6,7 @@ module PackageManager
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
     URL = "https://anaconda.org"
-    #API_URL = "https://conda.libraries.io"
-    API_URL = "http://localhost:9292/"
+    API_URL = "https://conda.libraries.io"
 
     def self.formatted_name
       "conda"
