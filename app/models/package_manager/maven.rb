@@ -5,6 +5,7 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     HAS_MULTIPLE_REPO_SOURCES = true
+    REPOSITORY_SOURCE_NAME = "Maven"
     BIBLIOTHECARY_SUPPORT = true
     SECURITY_PLANNED = true
     URL = "http://maven.org"
@@ -17,25 +18,37 @@ module PackageManager
       "http://www.eclipse.org/org/documents/edl-v10" => "Eclipse Distribution License (EDL), Version 1.0",
     }.freeze
 
+    PROVIDER_MAP = {
+      "SpringLibs" => SpringLibs,
+      "Maven" => MavenCentral,
+      "default" => MavenCentral,
+    }.freeze
+
     def self.package_link(project, version = nil)
-      MavenUrl.from_name(project.name, repository_base).search(version)
+      db_version = project.versions.find_by(number: version)
+      repository_source = db_version&.repository_sources&.first.presence || "default"
+      PROVIDER_MAP[repository_source].package_link(project, version)
     end
 
     def self.download_url(name, version = nil)
-      MavenUrl.from_name(name, repository_base).jar(version)
+      project = Project.find_by(name: name, platform: "Maven")
+      db_version = project.versions.find_by(number: version)
+      repository_source = db_version&.repository_sources&.first.presence || "default"
+      PROVIDER_MAP[repository_source].download_url(name, version)
     end
 
     def self.check_status_url(project)
-      MavenUrl.from_name(project.name, repository_base).base
+      source = project.versions.flat_map(&:repository_sources).compact.uniq.first.presence || "default"
+      PROVIDER_MAP[source].check_status_url(project)
+    end
+
+    def self.load_names(_limit = nil)
+      names = get("https://maven.libraries.io/mavenCentral/all")
+      names.each { |name| REDIS.sadd("maven-names", name) }
     end
 
     def self.repository_base
       "https://repo1.maven.org/maven2"
-    end
-
-    def self.load_names(limit = nil)
-      names = get("https://maven.libraries.io/all")
-      names.each { |name| REDIS.sadd("maven-names", name)}
     end
 
     def self.project_names
@@ -43,7 +56,7 @@ module PackageManager
     end
 
     def self.recent_names
-      get("https://maven.libraries.io")
+      get("https://maven.libraries.io/mavenCentral/recent")
     end
 
     def self.project(name)
@@ -137,7 +150,7 @@ module PackageManager
     def self.versions(_project, name)
       xml_metadata = get_raw(MavenUrl.from_name(name, repository_base).maven_metadata)
       xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
-      retrieve_versions(xml_versions.filter {|item| !item.ends_with?("-SNAPSHOT")}, name)
+      retrieve_versions(xml_versions.filter { |item| !item.ends_with?("-SNAPSHOT") }, name)
     end
 
     def self.retrieve_versions(versions, name)
@@ -212,6 +225,10 @@ module PackageManager
           &.max_by(&:published_at)
           &.number
       end
+    end
+
+    def self.repository_source_name
+      "Maven"
     end
 
     class MavenUrl

@@ -38,6 +38,7 @@ FactoryBot.define do
     project
     number { '1.0.0' }
     published_at { 1.day.ago }
+    repository_sources { nil }
   end
 
   factory :dependency do
