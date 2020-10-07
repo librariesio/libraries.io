@@ -20,7 +20,7 @@ module PackageManager
 
     PROVIDER_MAP = {
       "SpringLibs" => SpringLibs,
-      "Maven" => self.class,
+      "Maven" => MavenCentral,
     }.freeze
 
     def self.package_link(project, version = nil)
