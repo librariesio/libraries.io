@@ -8,15 +8,11 @@ class PackageManager::Maven::SpringLibs < PackageManager::Maven
   end
 
   def self.project_names
-    get("http://localhost:8080/springLibReleases/all")
+    get("https://maven.libraries.io/springLibsRelease/all")
   end
 
   def self.recent_names
-    get("http://localhost:8080/springLibReleases/recent")
-  end
-
-  def self.load_names(_limit = nil)
-    project_names.each { |name| REDIS.sadd("maven-spring-lib-names", name) }
+    get("https://maven.libraries.io/springLibsRelease/all")
   end
 
   def self.package_link(project, version = nil)

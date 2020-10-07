@@ -55,6 +55,11 @@ module PackageManager
       MavenUrl.from_name(project.name, repository_base).base
     end
 
+    def self.load_names(limit = nil)
+      names = get("https://maven.libraries.io/all")
+      names.each { |name| REDIS.sadd("maven-names", name)}
+    end
+
     def self.repository_base
       "https://repo1.maven.org/maven2"
     end
