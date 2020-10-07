@@ -21,43 +21,34 @@ module PackageManager
     PROVIDER_MAP = {
       "SpringLibs" => SpringLibs,
       "Maven" => MavenCentral,
+      "default" => MavenCentral,
     }.freeze
 
     def self.package_link(project, version = nil)
-      if version
-        db_version = project.versions.find_by(number: version)
-        unless db_version&.repository_sources.blank?
-          repository_source = db_version.repository_sources.first
-          return PROVIDER_MAP[repository_source].package_link(project, version)
-        end
-      end
-
-      MavenUrl.from_name(project.name, repository_base).search(version)
+      db_version = project.versions.find_by(number: version)
+      repository_source = db_version&.repository_sources&.first.presence || "default"
+      PROVIDER_MAP[repository_source].package_link(project, version)
     end
 
     def self.download_url(name, version = nil)
       if version
         project = Project.find_by(name: name, platform: "Maven")
         db_version = project.versions.find_by(number: version)
-        unless db_version&.repository_sources.blank?
-          repository_source = db_version.repository_sources.first
-          return PROVIDER_MAP[repository_source].download_url(name, version)
-        end
+        repository_source = db_version&.repository_sources&.first.presence || "default"
+        return PROVIDER_MAP[repository_source].download_url(name, version)
       end
 
       MavenUrl.from_name(name, repository_base).jar(version)
     end
 
     def self.check_status_url(project)
-      sources = project.versions.flat_map(&:repository_sources).compact.uniq
-      return PROVIDER_MAP[sources.first].check_status_url(project) unless sources.blank?
-
-      MavenUrl.from_name(project.name, repository_base).base
+      source = project.versions.flat_map(&:repository_sources).compact.uniq.first.presence || "default"
+      PROVIDER_MAP[source].check_status_url(project)
     end
 
-    def self.load_names(limit = nil)
+    def self.load_names(_limit = nil)
       names = get("https://maven.libraries.io/all")
-      names.each { |name| REDIS.sadd("maven-names", name)}
+      names.each { |name| REDIS.sadd("maven-names", name) }
     end
 
     def self.repository_base
