@@ -26,7 +26,7 @@ describe PackageManager::Maven do
   end
 
   describe '#download_url' do
-    let(:project) { create(:project, name: 'javax.faces:javax.faces-api', platform: described_class.name) }
+    let(:project) { create(:project, name: 'javax.faces:javax.faces-api', platform: described_class.name.demodulize) }
 
     it 'returns link to maven central jar file' do
       expect(described_class.download_url(project.name, '2.3')).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api/2.3/javax.faces-api-2.3.jar")

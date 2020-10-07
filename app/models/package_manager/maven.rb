@@ -5,7 +5,7 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     HAS_MULTIPLE_REPO_SOURCES = true
-    REPOSITORY_SOURCE_NAME = 'Maven'
+    REPOSITORY_SOURCE_NAME = "Maven"
     BIBLIOTHECARY_SUPPORT = true
     SECURITY_PLANNED = true
     URL = "http://maven.org"
@@ -18,14 +18,17 @@ module PackageManager
       "http://www.eclipse.org/org/documents/edl-v10" => "Eclipse Distribution License (EDL), Version 1.0",
     }.freeze
 
+    PROVIDER_MAP = {
+      "SpringLibs" => SpringLibs,
+      "Maven" => self.class,
+    }.freeze
+
     def self.package_link(project, version = nil)
       if version
         db_version = project.versions.find_by(number: version)
-        if db_version.repository_sources.include?(REPOSITORY_SOURCE_NAME)
-          return MavenUrl.from_name(project.name, repository_base).search(version)
-        else
+        unless db_version&.repository_sources.blank?
           repository_source = db_version.repository_sources.first
-          return "MavenManager::#{repository_source}".constantize.package_link(project, version)
+          return PROVIDER_MAP[repository_source].package_link(project, version)
         end
       end
 
@@ -34,13 +37,11 @@ module PackageManager
 
     def self.download_url(name, version = nil)
       if version
-        project = Project.find_by(name: name, platform: self.name.demodulize)
+        project = Project.find_by(name: name, platform: "Maven")
         db_version = project.versions.find_by(number: version)
-        if db_version.repository_sources.include?(REPOSITORY_SOURCE_NAME)
-          return MavenUrl.from_name(name, repository_base).jar(version)
-        else
+        unless db_version&.repository_sources.blank?
           repository_source = db_version.repository_sources.first
-          return "MavenManager::#{repository_source}".constantize.download_url(name, version)
+          return PROVIDER_MAP[repository_source].download_url(name, version)
         end
       end
 
@@ -48,21 +49,14 @@ module PackageManager
     end
 
     def self.check_status_url(project)
-      sources = project.versions.flat_map(&:repository_sources).uniq
-      if sources.include?(REPOSITORY_SOURCE_NAME) 
-        MavenUrl.from_name(project.name, repository_base).base
-      else
-        "MavenManager::#{sources.first}".constantize.check_status_url(project)
-      end
+      sources = project.versions.flat_map(&:repository_sources).compact.uniq
+      return PROVIDER_MAP[sources.first].check_status_url(project) unless sources.blank?
+
+      MavenUrl.from_name(project.name, repository_base).base
     end
 
     def self.repository_base
       "https://repo1.maven.org/maven2"
-    end
-
-    def self.load_names(limit = nil)
-      names = get("https://maven.libraries.io/all")
-      names.each { |name| REDIS.sadd("maven-names", name)}
     end
 
     def self.project_names
@@ -164,7 +158,7 @@ module PackageManager
     def self.versions(_project, name)
       xml_metadata = get_raw(MavenUrl.from_name(name, repository_base).maven_metadata)
       xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
-      retrieve_versions(xml_versions.filter {|item| !item.ends_with?("-SNAPSHOT")}, name)
+      retrieve_versions(xml_versions.filter { |item| !item.ends_with?("-SNAPSHOT") }, name)
     end
 
     def self.retrieve_versions(versions, name)
