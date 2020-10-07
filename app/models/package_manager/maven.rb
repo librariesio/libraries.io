@@ -31,14 +31,10 @@ module PackageManager
     end
 
     def self.download_url(name, version = nil)
-      if version
-        project = Project.find_by(name: name, platform: "Maven")
-        db_version = project.versions.find_by(number: version)
-        repository_source = db_version&.repository_sources&.first.presence || "default"
-        return PROVIDER_MAP[repository_source].download_url(name, version)
-      end
-
-      MavenUrl.from_name(name, repository_base).jar(version)
+      project = Project.find_by(name: name, platform: "Maven")
+      db_version = project.versions.find_by(number: version)
+      repository_source = db_version&.repository_sources&.first.presence || "default"
+      PROVIDER_MAP[repository_source].download_url(name, version)
     end
 
     def self.check_status_url(project)
@@ -47,7 +43,7 @@ module PackageManager
     end
 
     def self.load_names(_limit = nil)
-      names = get("https://maven.libraries.io/all")
+      names = get("https://maven.libraries.io/mavenCentral/all")
       names.each { |name| REDIS.sadd("maven-names", name) }
     end
 
@@ -60,7 +56,7 @@ module PackageManager
     end
 
     def self.recent_names
-      get("https://maven.libraries.io")
+      get("https://maven.libraries.io/mavenCentral/recent")
     end
 
     def self.project(name)
