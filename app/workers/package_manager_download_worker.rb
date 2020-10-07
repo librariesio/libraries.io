@@ -1,10 +1,15 @@
+# frozen_string_literal: true
+
 class PackageManagerDownloadWorker
   include Sidekiq::Worker
   sidekiq_options queue: :critical
 
-  def perform(class_name, name)
-    return unless class_name.present?
-    logger.info("Beginning update for #{class_name}/#{name}")
-    "PackageManager::#{class_name}".constantize.update(name)
+  def perform(clazz, name)
+    return unless clazz.present?
+
+    # need to maintain compatibility with things that pass in the name of the class under PackageManager module
+    clazz = "PackageManager::#{clazz}".constantize if clazz.is_a? String
+    logger.info("Beginning update for #{clazz.name}/#{name}")
+    clazz.update(name)
   end
 end
