@@ -170,7 +170,7 @@ class Project < ApplicationRecord
   end
 
   def async_sync
-    PackageManagerDownloadWorker.perform_async(platform, name)
+    PackageManagerDownloadWorker.perform_async(platform_class, name)
   end
 
   def recently_synced?
