@@ -38,6 +38,10 @@ module PackageManager
       platforms.find { |p| p.formatted_name.downcase == platform.downcase }
     end
 
+    def self.db_platform
+      name.demodulize
+    end
+
     def self.color
       self::COLOR
     end
@@ -89,7 +93,7 @@ module PackageManager
       mapped_project = mapped_project.delete_if { |_key, value| value.blank? } if mapped_project.present?
       return false unless mapped_project.present?
 
-      dbproject = Project.find_or_initialize_by({ name: mapped_project[:name], platform: name.demodulize })
+      dbproject = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
       if dbproject.new_record?
         dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
         dbproject.save
@@ -163,13 +167,13 @@ module PackageManager
     def self.new_names
       names = project_names
       existing_names = []
-      Project.platform(name.demodulize).select(:id, :name).find_each { |project| existing_names << project.name }
+      Project.platform(db_platform).select(:id, :name).find_each { |project| existing_names << project.name }
       names - existing_names
     end
 
     def self.save_dependencies(mapped_project)
       name = mapped_project[:name]
-      proj = Project.find_by(name: name, platform: self.name.demodulize)
+      proj = Project.find_by(name: name, platform: db_platform)
       proj.versions.includes(:dependencies).each do |version|
         next if version.dependencies.any?
 
@@ -184,7 +188,7 @@ module PackageManager
           next if dep[:project_name].blank? || version.dependencies.find_by_project_name(dep[:project_name])
 
           named_project_id = Project
-            .find_best(self.name.demodulize, dep[:project_name].strip)
+            .find_best(db_platform, dep[:project_name].strip)
             &.id
           version.dependencies.create(dep.merge(project_id: named_project_id.try(:strip)))
         end
@@ -196,7 +200,7 @@ module PackageManager
       []
     end
 
-    def self.map_dependencies(deps, kind, optional = false, platform = name.demodulize)
+    def self.map_dependencies(deps, kind, optional = false, platform = db_platform)
       deps.map do |k, v|
         {
           project_name: k,
@@ -218,7 +222,7 @@ module PackageManager
           project_name: dependency["name"],
           requirements: dependency["requirement"] || "*",
           kind: dependency["type"],
-          platform: self.name.demodulize,
+          platform: db_platform,
         }
       end
     end

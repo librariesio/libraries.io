@@ -2,6 +2,7 @@
 
 class PackageManager::Maven::SpringLibs < PackageManager::Maven
   REPOSITORY_SOURCE_NAME = "SpringLibs"
+  HIDDEN = true
 
   def self.repository_base
     "https://repo.spring.io/libs-release-local"
@@ -47,11 +48,7 @@ class PackageManager::Maven::SpringLibs < PackageManager::Maven
     retrieve_versions(found_versions.filter { |item| !item.ends_with?("-SNAPSHOT") }, name)
   end
 
-  def self.formatted_name
-    PackageManager::Maven.formatted_name
-  end
-
-  def self.name
-    PackageManager::Maven.name
+  def self.db_platform
+    "Maven"
   end
 end
