@@ -38,6 +38,14 @@ describe PackageManager::Maven do
       end
     end
 
+    context "with atlassian provider" do
+      let!(:version) { create(:version, project: project, repository_sources: [PackageManager::Maven::Atlassian::REPOSITORY_SOURCE_NAME], number: "2.0.0") }
+
+      it "handles version" do
+        expect(described_class.package_link(project, "2.0.0")).to eq("https://packages.atlassian.com/maven-central-local/com/github/jparkie/pdd/2.0.0/pdd-2.0.0.jar")
+      end
+    end
+
     context "with multiple providers" do
       let!(:version) { create(:version, project: project, repository_sources: ["Maven", PackageManager::Maven::SpringLibs::REPOSITORY_SOURCE_NAME], number: "2.0.0") }
 
@@ -53,6 +61,14 @@ describe PackageManager::Maven do
     it "returns link to maven central folder" do
       expect(described_class.check_status_url(project)).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api")
     end
+
+    context "with atlassian provider" do
+      let!(:version) { create(:version, project: project, repository_sources: [PackageManager::Maven::Atlassian::REPOSITORY_SOURCE_NAME], number: "2.0.0") }
+
+      it "returns link to atlassian folder" do
+        expect(described_class.check_status_url(project.reload)).to eq("https://packages.atlassian.com/maven-central-local/javax/faces/javax.faces-api")
+      end
+    end
   end
 
   describe "#download_url" do
@@ -60,6 +76,14 @@ describe PackageManager::Maven do
 
     it "returns link to maven central jar file" do
       expect(described_class.download_url(project.name, "2.3")).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api/2.3/javax.faces-api-2.3.jar")
+    end
+
+    context "with atlassian provider" do
+      let!(:version) { create(:version, project: project, repository_sources: [PackageManager::Maven::Atlassian::REPOSITORY_SOURCE_NAME], number: "2.0.0") }
+
+      it "returns link to atlassian folder" do
+        expect(described_class.download_url(project.name, "2.0.0")).to eq("https://packages.atlassian.com/maven-central-local/javax/faces/javax.faces-api/2.0.0/javax.faces-api-2.0.0.jar")
+      end
     end
   end
 
