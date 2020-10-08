@@ -8,11 +8,11 @@ class PackageManager::Maven::Atlassian < PackageManager::Maven
   end
 
   def self.project_names
-    get("http://localhost:8080/atlassian/all")
+    get("https://maven.libraries.io/atlassian/all")
   end
 
   def self.recent_names
-    get("http://localhost:8080/atlassian/recent")
+    get("https://maven.libraries.io/atlassian/recent")
   end
 
   def self.package_link(project, version = nil)
@@ -35,11 +35,7 @@ class PackageManager::Maven::Atlassian < PackageManager::Maven
     MavenUrl.from_name(project.name, repository_base).base
   end
 
-  def self.formatted_name
-    PackageManager::Maven.formatted_name
-  end
-
-  def self.name
-    PackageManager::Maven.name
+  def self.db_platform
+    "Maven"
   end
 end
