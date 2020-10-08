@@ -2,6 +2,21 @@
 
 class PackageManager::Maven::MavenCentral < PackageManager::Maven
   REPOSITORY_SOURCE_NAME = "Maven"
+  HIDDEN = true
+
+  def self.repository_base
+    "https://repo1.maven.org/maven2"
+  end
+
+  def self.recent_names
+    get("https://maven.libraries.io/mavenCentral/recent")
+  end
+
+  def self.versions(_project, name)
+    xml_metadata = get_raw(MavenUrl.from_name(name, repository_base).maven_metadata)
+    xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
+    retrieve_versions(xml_versions.filter { |item| !item.ends_with?("-SNAPSHOT") }, name)
+  end
 
   def self.package_link(project, version = nil)
     MavenUrl.from_name(project.name, repository_base).search(version)
@@ -23,7 +38,7 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven
     PackageManager::Maven.formatted_name
   end
 
-  def self.name
-    PackageManager::Maven.name
+  def self.db_platform
+    "Maven"
   end
 end
