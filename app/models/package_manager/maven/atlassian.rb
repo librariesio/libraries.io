@@ -30,8 +30,4 @@ class PackageManager::Maven::Atlassian < PackageManager::Maven
   def self.check_status_url(project)
     MavenUrl.from_name(project.name, repository_base).base
   end
-
-  def self.db_platform
-    "Maven"
-  end
 end
