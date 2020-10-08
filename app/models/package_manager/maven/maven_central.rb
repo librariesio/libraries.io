@@ -41,8 +41,4 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven
   def self.db_platform
     "Maven"
   end
-
-  def self.repository_source_name
-    "Maven"
-  end
 end
