@@ -5,11 +5,9 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     HAS_MULTIPLE_REPO_SOURCES = true
-    REPOSITORY_SOURCE_NAME = "Maven"
     BIBLIOTHECARY_SUPPORT = true
     SECURITY_PLANNED = true
     URL = "http://maven.org"
-    BASE_URL = "https://maven-repository.com"
     COLOR = "#b07219"
     MAX_DEPTH = 5
     LICENSE_STRINGS = {
@@ -48,7 +46,7 @@ module PackageManager
     end
 
     def self.repository_base
-      "https://repo1.maven.org/maven2"
+      PROVIDER_MAP["default"].repository_base
     end
 
     def self.project_names
@@ -56,7 +54,7 @@ module PackageManager
     end
 
     def self.recent_names
-      get("https://maven.libraries.io/mavenCentral/recent")
+      PROVIDER_MAP["default"].recent_names
     end
 
     def self.project(name)
@@ -227,10 +225,6 @@ module PackageManager
       end
     end
 
-    def self.repository_source_name
-      "Maven"
-    end
-
     class MavenUrl
       def self.from_name(name, repo_base)
         new(*name.split(":", 2), repo_base)
@@ -258,6 +252,7 @@ module PackageManager
         "#{base}/#{version}/#{@artifact_id}-#{version}.pom"
       end
 
+      # this is very specific to Maven Central
       def search(version = nil)
         if version
           "http://search.maven.org/#artifactdetails%7C#{@group_id}%7C#{@artifact_id}%7C#{version}%7Cjar"
