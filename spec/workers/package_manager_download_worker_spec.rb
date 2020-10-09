@@ -6,7 +6,7 @@ describe PackageManagerDownloadWorker do
   end
 
   it "should sync an org" do
-    class_name = 'Rubygems'
+    class_name = PackageManager::Rubygems.name
     name = 'rails'
     expect(PackageManager::Rubygems).to receive(:update).with(name)
     subject.perform(class_name, name)
