@@ -3,9 +3,20 @@
 require "rails_helper"
 
 describe VersionSerializer do
-  subject { described_class.new(build(:version)) }
+  let(:version) { build(:version) }
+
+  def serialized(version)
+    described_class.new(version).attributes
+  end
 
   it "should have expected attribute names" do
-    expect(subject.attributes.keys).to eql(%i[number published_at spdx_expression original_license researched_at])
+    expect(serialized(version).keys).to eql(%i[number published_at spdx_expression original_license researched_at repository_sources])
+  end
+
+  it "should default repository_source to the project platform" do
+    expect(serialized(version)[:repository_sources]).to contain_exactly("Rubygems")
+
+    version = build(:version, repository_sources: %w[SpringLibs Maven])
+    expect(serialized(version)[:repository_sources]).to contain_exactly("SpringLibs", "Maven")
   end
 end

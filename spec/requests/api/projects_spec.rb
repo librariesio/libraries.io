@@ -6,7 +6,7 @@ describe "Api::ProjectsController" do
   let!(:user) { create(:user) }
   let!(:project) { create(:project, name: "foo.bar@baz:bah,name") }
   let!(:dependent_project) { create(:project) }
-  let!(:version) { create(:version, project: project) }
+  let!(:version) { create(:version, project: project, repository_sources: ["Rubygems"]) }
   let!(:dependent_version) { create(:version, project: dependent_project) }
   let!(:dependency) { create(:dependency, version: version, project: dependent_project) }
   let!(:internal_user) { create(:user) }
@@ -199,7 +199,7 @@ describe "Api::ProjectsController" do
           repository_url: project.repository_url,
           stars: project.stars,
           status: project.status,
-          versions: project.versions.as_json(only: %i[number original_license published_at spdx_expression researched_at]),
+          versions: project.versions.as_json(only: %i[number original_license published_at spdx_expression researched_at repository_sources]),
         }.to_json
       )
     end
