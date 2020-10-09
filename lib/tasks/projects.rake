@@ -109,7 +109,7 @@ namespace :projects do
       if project
         project.async_sync if project.potentially_outdated? rescue nil
       else
-        PackageManagerDownloadWorker.perform_async(platform, name)
+        PackageManagerDownloadWorker.perform_async("PackageManager::#{platform}", name)
       end
     end
   end

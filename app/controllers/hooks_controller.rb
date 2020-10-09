@@ -14,7 +14,7 @@ class HooksController < ApplicationController
   end
 
   def package
-    PackageManagerDownloadWorker.perform_async(params['platform'], params['name'])
+    PackageManagerDownloadWorker.perform_async("PackageManager::#{params['platform']}", params['name'])
 
     render json: nil, status: :ok
   end

@@ -234,10 +234,6 @@ module PackageManager
       "Maven"
     end
 
-    def self.provider(provider)
-      PROVIDER_MAP[provider]
-    end
-
     class MavenUrl
       def self.from_name(name, repo_base)
         new(*name.split(":", 2), repo_base)

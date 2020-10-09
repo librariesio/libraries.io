@@ -166,10 +166,14 @@ namespace :download do
   end
 
   desc "Download recent Maven packages asynchronously"
-  task :maven, [:provider] => :environment do |_task, args|
-    provider = args.provider.presence || "default"
-    provider_class = PackageManager::Maven.provider(provider)
-    provider_class.import_recent_async
+  task maven: :environment do
+    PackageManager::Maven::PROVIDER_MAP.values do |sub_class|
+      begin
+        sub_class.import_recent_async
+      rescue StandardError
+        next
+      end
+    end
   end
 
   desc "Download all Maven packages asynchronously"

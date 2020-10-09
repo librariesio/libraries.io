@@ -4,12 +4,11 @@ class PackageManagerDownloadWorker
   include Sidekiq::Worker
   sidekiq_options queue: :critical
 
-  def perform(clazz, name)
-    return unless clazz.present?
+  def perform(class_name, name)
+    return unless class_name.present?
 
     # need to maintain compatibility with things that pass in the name of the class under PackageManager module
-    clazz = "PackageManager::#{clazz}".constantize if clazz.is_a? String
-    logger.info("Beginning update for #{clazz.name}/#{name}")
-    clazz.update(name)
+    logger.info("Beginning update for #{class_name}/#{name}")
+    class_name.constantize.update(name)
   end
 end

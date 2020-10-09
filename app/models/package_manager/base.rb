@@ -284,7 +284,7 @@ module PackageManager
 
     private_class_method def self.download_async(names)
       names.each_slice(1000).each_with_index do |group, index|
-        group.each { |name| PackageManagerDownloadWorker.perform_in(index.hours, self, name) }
+        group.each { |name| PackageManagerDownloadWorker.perform_in(index.hours, self.name, name) }
       end
     end
   end
