@@ -178,9 +178,13 @@ namespace :download do
 
   desc "Download all Maven packages asynchronously"
   task :maven_all, [:provider] => :environment do |_task, args|
-    provider = args.provider.presence || "default"
-    provider_class = PackageManager::Maven.provider(provider)
-    provider_class.import_async
+    PackageManager::Maven::PROVIDER_MAP.values do |sub_class|
+      begin
+        sub_class.import_async
+      rescue StandardError
+        next
+      end
+    end
   end
 
   desc "Download all Meteor packages asynchronously"
