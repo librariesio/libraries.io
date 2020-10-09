@@ -176,7 +176,7 @@ namespace :download do
   end
 
   desc "Download all Maven packages asynchronously"
-  task :maven_all, [:provider] => :environment do |_task, _args|
+  task maven_all: :environment do
     PackageManager::Maven::PROVIDER_MAP.values.each do |sub_class|
       sub_class.import_async
     rescue StandardError => e
