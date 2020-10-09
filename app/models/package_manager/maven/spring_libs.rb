@@ -47,8 +47,4 @@ class PackageManager::Maven::SpringLibs < PackageManager::Maven
 
     retrieve_versions(found_versions.filter { |item| !item.ends_with?("-SNAPSHOT") }, name)
   end
-
-  def self.db_platform
-    "Maven"
-  end
 end

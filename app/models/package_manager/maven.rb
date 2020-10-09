@@ -17,9 +17,10 @@ module PackageManager
     }.freeze
 
     PROVIDER_MAP = {
-      "SpringLibs" => SpringLibs,
-      "Maven" => MavenCentral,
+      "Atlassian" => Atlassian,
       "default" => MavenCentral,
+      "Maven" => MavenCentral,
+      "SpringLibs" => SpringLibs,
     }.freeze
 
     def self.package_link(project, version = nil)
@@ -223,6 +224,14 @@ module PackageManager
           &.max_by(&:published_at)
           &.number
       end
+    end
+
+    def self.repository_source_name
+      "Maven"
+    end
+
+    def self.db_platform
+      "Maven"
     end
 
     class MavenUrl

@@ -33,12 +33,4 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven
   def self.check_status_url(project)
     MavenUrl.from_name(project.name, repository_base).base
   end
-
-  def self.formatted_name
-    PackageManager::Maven.formatted_name
-  end
-
-  def self.db_platform
-    "Maven"
-  end
 end
