@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 describe PackageManagerDownloadWorker do
   it "should use the critical priority queue" do
@@ -7,7 +9,7 @@ describe PackageManagerDownloadWorker do
 
   it "should sync an org" do
     class_name = PackageManager::Rubygems.name
-    name = 'rails'
+    name = "rails"
     expect(PackageManager::Rubygems).to receive(:update).with(name)
     subject.perform(class_name, name)
   end
