@@ -159,7 +159,7 @@ class Project < ApplicationRecord
       return
     end
 
-    result = sync_class.update(name)
+    result = sync_classes.each{ |sync_class| sync_class.update(name)}
     set_last_synced_at unless result
   rescue StandardError
     set_last_synced_at
@@ -170,13 +170,13 @@ class Project < ApplicationRecord
   end
 
   def async_sync
-    PackageManagerDownloadWorker.perform_async(sync_class.name, name)
+    sync_classes.each{ |sync_class| PackageManagerDownloadWorker.perform_async(sync_class.name, name) }
   end
 
-  def sync_class
-    return platform_class.provider(self) if platform_class::HAS_MULTIPLE_REPOS
+  def sync_classes
+    return platform_class.providers(self) if platform_class::HAS_MULTIPLE_REPOS
 
-    platform_class
+    [platform_class]
   end
 
   def recently_synced?
