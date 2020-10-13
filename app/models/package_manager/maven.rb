@@ -24,6 +24,15 @@ module PackageManager
       "SpringLibs" => SpringLibs,
     }.freeze
 
+    def self.providers(project)
+      project
+        .versions
+        .flat_map(&:repository_sources)
+        .compact
+        .uniq
+        .map { |source| PROVIDER_MAP[source] } || [PROVIDER_MAP["default"]]
+    end
+
     def self.package_link(project, version = nil)
       db_version = project.versions.find_by(number: version)
       repository_source = db_version&.repository_sources&.first.presence || "default"
