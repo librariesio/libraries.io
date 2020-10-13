@@ -5,6 +5,7 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     HAS_MULTIPLE_REPO_SOURCES = true
+    REPOSITORY_SOURCE_NAME = "Maven"
     BIBLIOTHECARY_SUPPORT = true
     SECURITY_PLANNED = true
     URL = "http://maven.org"
@@ -224,10 +225,6 @@ module PackageManager
           &.max_by(&:published_at)
           &.number
       end
-    end
-
-    def self.repository_source_name
-      "Maven"
     end
 
     def self.db_platform
