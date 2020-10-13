@@ -174,7 +174,7 @@ class Project < ApplicationRecord
   end
 
   def sync_classes
-    return platform_class.providers(self) if platform_class::HAS_MULTIPLE_REPOS
+    return platform_class.providers(self) if platform_class::HAS_MULTIPLE_REPO_SOURCES
 
     [platform_class]
   end
