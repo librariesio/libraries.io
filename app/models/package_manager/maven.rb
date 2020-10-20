@@ -20,6 +20,7 @@ module PackageManager
     PROVIDER_MAP = {
       "Atlassian" => Atlassian,
       "default" => MavenCentral,
+      "Hortonworks" => Hortonworks,
       "Maven" => MavenCentral,
       "SpringLibs" => SpringLibs,
     }.freeze
