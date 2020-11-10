@@ -161,24 +161,6 @@
 <%= JSON.pretty_generate @project.source_rank_breakdown.as_json %></pre>
     <% end %>
 
-    <h3 id="project-usage">Project Usage</h3>
-
-    <p>
-      Get breakdown of version usage for a given project.
-    </p>
-
-    <p>
-      <code>GET https://libraries.io/api/:platform/:name/usage?api_key=<%= @api_key %></code>
-    </p>
-    <hr>
-    <p>
-      Example: <strong> <%= link_to nil, "https://libraries.io/api/#{@project.platform}/#{@project.name}/usage?api_key=#{@api_key}" %> </strong>
-    </p>
-    <% cache "api-docs-#{@cache_version}usage", :expires_in => 1.day do %>
-      <pre class='well well-small'>
-<%= JSON.pretty_generate @all_counts.as_json %></pre>
-    <% end %>
-
     <h3 id="project-search">Project Search</h3>
 
     <p>
@@ -510,7 +492,6 @@
       <li><a href="#project-dependent-repositories">Project Dependent Repositories</a></li>
       <li><a href="#project-contributors">Project Contributors</a></li>
       <li><a href="#project-sourcerank">Project SourceRank</a></li>
-      <li><a href="#project-usage">Project Usage</a></li>
       <li><a href="#project-search">Project Search</a></li>
     </ul>
     <ul>
