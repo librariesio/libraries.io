@@ -299,7 +299,7 @@ namespace :download do
 
   desc "Download new Go packages asynchronously"
   task go: :environment do
-    PackageManager::Go.import_new_async
+    PackageManager::Go.import_recent_async
   end
 
   desc "Download all Go packages asynchronously"
