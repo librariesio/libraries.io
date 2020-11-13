@@ -5,22 +5,21 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
-    URL = 'https://pkg.go.dev/'
-    COLOR = '#375eab'
+    URL = "https://pkg.go.dev/"
+    COLOR = "#375eab"
     KNOWN_HOSTS = [
-      'bitbucket.org',
-      'github.com',
-      'launchpad.net',
-      'hub.jazz.net',
-    ]
+      "bitbucket.org",
+      "github.com",
+      "launchpad.net",
+      "hub.jazz.net",
+    ].freeze
     KNOWN_VCS = [
-      '.bzr',
-      '.fossil',
-      '.git',
-      '.hg',
-      '.svn',
-    ]
-
+      ".bzr",
+      ".fossil",
+      ".git",
+      ".hg",
+      ".svn",
+    ].freeze
 
     def self.package_link(project, version = nil)
       "https://pkg.go.dev/#{project.name}#{"@#{version}" if version}"
@@ -30,8 +29,12 @@ module PackageManager
       "https://pkg.go.dev/#{name}#{"@#{version}" if version}?tab=doc"
     end
 
-    def self.install_instructions(project, version = nil)
+    def self.install_instructions(project, _version = nil)
       "go get #{project.name}"
+    end
+
+    def self.recent_names
+      project_names
     end
 
     def self.project_names
@@ -52,7 +55,7 @@ module PackageManager
         versions_html = get_html("https://pkg.go.dev/#{name}?tab=versions")
 
         # Some package pages don't have a Versions tab, but the parent module page may have the Versions tab (e.g. golang.org/x/tools)
-        if versions_html&.css('.Versions-item').size.zero? && (mod_path = doc_html.css('a[data-test-id="DetailsHeader-infoLabelModule"]').first&.attr('href'))
+        if versions_html&.css(".Versions-item").size.zero? && (mod_path = doc_html.css('a[data-test-id="DetailsHeader-infoLabelModule"]').first&.attr("href"))
           versions_html = get_html("https://pkg.go.dev/#{mod_path}?tab=versions")
         end
 
@@ -62,10 +65,11 @@ module PackageManager
       end
     end
 
-    def self.versions(project, name)
+    def self.versions(project, _name)
       return [] if project.nil?
-      project[:versions_html]&.css('.Versions-item')&.map do |v|
-        { number: v.css('a').first.text, published_at: Chronic.parse(v.css('.Versions-commitTime').first.text) }
+
+      project[:versions_html]&.css(".Versions-item")&.map do |v|
+        { number: v.css("a").first.text, published_at: Chronic.parse(v.css(".Versions-commitTime").first.text) }
       end
     end
 
@@ -73,13 +77,13 @@ module PackageManager
       if project[:html]
         {
           name: project[:name],
-          description: project[:html].css('.Documentation-overview p').map(&:text).join("\n").strip,
+          description: project[:html].css(".Documentation-overview p").map(&:text).join("\n").strip,
           licenses: project[:html].css('*[data-test-id="DetailsHeader-infoLabelLicense"] a').map(&:text).join(","),
-          repository_url: project[:overview_html]&.css('.Overview-sourceCodeLink a')&.first&.text,
-          homepage: project[:overview_html]&.css('.Overview-sourceCodeLink a')&.first&.text,
-          versions: project[:versions_html]&.css('.Versions-item')&.map do |v|
-            { number: v.css('a').first.text, published_at: Chronic.parse(v.css('.Versions-commitTime').first.text) }
-          end
+          repository_url: project[:overview_html]&.css(".Overview-sourceCodeLink a")&.first&.text,
+          homepage: project[:overview_html]&.css(".Overview-sourceCodeLink a")&.first&.text,
+          versions: project[:versions_html]&.css(".Versions-item")&.map do |v|
+            { number: v.css("a").first.text, published_at: Chronic.parse(v.css(".Versions-commitTime").first.text) }
+          end,
         }
       else
         { name: project[:name] }
@@ -113,7 +117,7 @@ module PackageManager
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
 
       begin
-        go_import = get_html('https://' + name + '?go-get=1')
+        go_import = get_html("https://" + name + "?go-get=1")
           .xpath('//meta[@name="go-import"]')
           .first
           &.attribute("content")
@@ -123,7 +127,7 @@ module PackageManager
           &.sub(/https?:\/\//, "")
 
         go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
-      rescue
+      rescue StandardError
         [name]
       end
     end
