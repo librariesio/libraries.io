@@ -26,7 +26,7 @@ module PackageManager
     end
 
     def self.documentation_url(name, version = nil)
-      "https://pkg.go.dev/#{name}#{"@#{version}" if version}?tab=doc"
+      "https://pkg.go.dev/#{name}#{"@#{version}" if version}#section-documentation"
     end
 
     def self.install_instructions(project, _version = nil)
@@ -46,9 +46,7 @@ module PackageManager
     end
 
     def self.project(name)
-      if doc_html = get_html("https://pkg.go.dev/#{name}?tab=doc")
-        overview_html = get_html("https://pkg.go.dev/#{name}?tab=overview")
-
+      if doc_html = get_html("https://pkg.go.dev/#{name}")
         # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
         #   1) Fetch the list of versions: https://proxy.golang.org/#{module_name}/@v/list
         #   2) And for each version, fetch https://proxy.golang.org/#{module_name}/@v/#{v}.info
@@ -59,7 +57,7 @@ module PackageManager
           versions_html = get_html("https://pkg.go.dev/#{mod_path}?tab=versions")
         end
 
-        { name: name, html: doc_html, overview_html: overview_html, versions_html: versions_html }
+        { name: name, html: doc_html, overview_html: doc_html, versions_html: versions_html }
       else
         { name: name }
       end
@@ -78,9 +76,9 @@ module PackageManager
         {
           name: project[:name],
           description: project[:html].css(".Documentation-overview p").map(&:text).join("\n").strip,
-          licenses: project[:html].css('*[data-test-id="DetailsHeader-infoLabelLicense"] a').map(&:text).join(","),
-          repository_url: project[:overview_html]&.css(".Overview-sourceCodeLink a")&.first&.text,
-          homepage: project[:overview_html]&.css(".Overview-sourceCodeLink a")&.first&.text,
+          licenses: project[:html].css('*[data-test-id="UnitHeader-license"]').map(&:text).join(","),
+          repository_url: project[:overview_html]&.css(".UnitMeta-repo")&.first&.next_element&.attribute("href")&.value,
+          homepage: project[:overview_html]&.css(".UnitMeta-repo")&.first&.next_element&.attribute("href")&.value,
           versions: project[:versions_html]&.css(".Versions-item")&.map do |v|
             { number: v.css("a").first.text, published_at: Chronic.parse(v.css(".Versions-commitTime").first.text) }
           end,
