@@ -21,6 +21,8 @@ module PackageManager
       ".svn",
     ].freeze
 
+    VERSION_MODULE_REGEX = /(.+)\/(v\d+)/.freeze
+
     def self.package_link(project, version = nil)
       "https://pkg.go.dev/#{project.name}#{"@#{version}" if version}"
     end
@@ -45,17 +47,21 @@ module PackageManager
         .map { |line| JSON.parse(line)["Path"] }
     end
 
+    def self.update(name)
+      super(name)
+      # call update on base module name if the name is appended with major version
+      # example: github.com/myexample/modulename/v2
+      if (matches = name.match(VERSION_MODULE_REGEX))
+        PackageManagerDownloadWorker.perform_async(self.name, matches[1])
+      end
+    end
+
     def self.project(name)
-      if doc_html = get_html("https://pkg.go.dev/#{name}")
+      if (doc_html = get_html("https://pkg.go.dev/#{name}"))
         # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
         #   1) Fetch the list of versions: https://proxy.golang.org/#{module_name}/@v/list
         #   2) And for each version, fetch https://proxy.golang.org/#{module_name}/@v/#{v}.info
         versions_html = get_html("https://pkg.go.dev/#{name}?tab=versions")
-
-        # Some package pages don't have a Versions tab, but the parent module page may have the Versions tab (e.g. golang.org/x/tools)
-        if versions_html&.css(".Versions-item").size.zero? && (mod_path = doc_html.css('a[data-test-id="DetailsHeader-infoLabelModule"]').first&.attr("href"))
-          versions_html = get_html("https://pkg.go.dev/#{mod_path}?tab=versions")
-        end
 
         { name: name, html: doc_html, overview_html: doc_html, versions_html: versions_html }
       else
@@ -66,9 +72,15 @@ module PackageManager
     def self.versions(project, _name)
       return [] if project.nil?
 
-      project[:versions_html]&.css(".Versions-item")&.map do |v|
+      versions = project[:versions_html]&.css(".Versions-item")&.map do |v|
         { number: v.css("a").first.text, published_at: Chronic.parse(v.css(".Versions-commitTime").first.text) }
       end
+
+      if (matches = project[:name].match(VERSION_MODULE_REGEX))
+        versions = versions.select { |version| version[:number].start_with?(matches[2]) }
+      end
+
+      versions
     end
 
     def self.mapping(project)
@@ -79,9 +91,7 @@ module PackageManager
           licenses: project[:html].css('*[data-test-id="UnitHeader-license"]').map(&:text).join(","),
           repository_url: project[:overview_html]&.css(".UnitMeta-repo")&.first&.next_element&.attribute("href")&.value,
           homepage: project[:overview_html]&.css(".UnitMeta-repo")&.first&.next_element&.attribute("href")&.value,
-          versions: project[:versions_html]&.css(".Versions-item")&.map do |v|
-            { number: v.css("a").first.text, published_at: Chronic.parse(v.css(".Versions-commitTime").first.text) }
-          end,
+          versions: versions(project, project[:name]),
         }
       else
         { name: project[:name] }
