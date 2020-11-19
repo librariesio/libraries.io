@@ -46,13 +46,61 @@ describe PackageManager::Go do
   describe "#mapping" do
     it "maps data correctly from pkg.go.dev" do
       VCR.use_cassette("pkg_go_dev") do
-        project = described_class.project("github.com/stretchr/testify")
+        project = described_class.project("github.com/urfave/cli")
         mapping = described_class.mapping(project)
 
         expect(mapping[:description].blank?).to be false
         expect(mapping[:repository_url].blank?).to be false
         expect(mapping[:homepage].blank?).to be false
         expect(mapping[:versions].count).to be > 0
+      end
+    end
+
+    it "maps all versions to base module" do
+      VCR.use_cassette("pkg_go_dev") do
+        project = described_class.project("github.com/urfave/cli")
+        mapping = described_class.mapping(project)
+
+        expect(mapping[:versions].find { |v| v[:number] == "v1.0.0" }).to_not be nil
+        expect(mapping[:versions].find { |v| v[:number] == "v2.0.0" }).to_not be nil
+      end
+    end
+
+    it "maps only major revision versions to module" do
+      VCR.use_cassette("pkg_go_dev_v2") do
+        project = described_class.project("github.com/urfave/cli/v2")
+        mapping = described_class.mapping(project)
+
+        expect(mapping[:versions].find { |v| v[:number] == "v1.0.0" }).to be nil
+        expect(mapping[:versions].find { |v| v[:number] == "v2.0.0" }).to_not be nil
+      end
+    end
+  end
+
+  describe "VERSION_MODULE_REGEX" do
+    it "should match on module names with major revisions" do
+      name = "github.com/example/module/v3"
+      matches = name.match(described_class::VERSION_MODULE_REGEX)
+
+      expect(matches).to_not be nil
+      expect(matches[1]).to eql "github.com/example/module"
+      expect(matches[2]).to eql "v3"
+    end
+
+    it "should not match on a module name without major revision" do
+      name = "github.com/example/module"
+      matches = name.match(described_class::VERSION_MODULE_REGEX)
+
+      expect(matches).to be nil
+    end
+  end
+
+  describe "#update" do
+    it "should queue update for non versioned module" do
+      VCR.use_cassette("pkg_go_dev_v2") do
+        expect(PackageManagerDownloadWorker).to receive(:perform_async).with(described_class.name, "github.com/urfave/cli")
+
+        described_class.update("github.com/urfave/cli/v2")
       end
     end
   end
