@@ -21,7 +21,7 @@ module PackageManager
       ".svn",
     ].freeze
 
-    VERSION_MODULE_REGEX = /(.+)\/(v\d)/.freeze
+    VERSION_MODULE_REGEX = /(.+)\/(v\d+)/.freeze
 
     def self.package_link(project, version = nil)
       "https://pkg.go.dev/#{project.name}#{"@#{version}" if version}"
