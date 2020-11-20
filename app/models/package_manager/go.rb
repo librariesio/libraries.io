@@ -36,12 +36,12 @@ module PackageManager
     end
 
     def self.recent_names
-      project_names
+      project_names(1.day.ago)
     end
 
-    def self.project_names
+    def self.project_names(since = 1.day.ago)
       # Currently the index only shows the last <=2000 package version releases from the date given. (https://proxy.golang.org/)
-      project_window = 1.day.ago.strftime("%FT%TZ")
+      project_window = since.strftime("%FT%TZ")
       get_raw("https://index.golang.org/index?since=#{project_window}&limit=2000")
         .lines
         .map { |line| JSON.parse(line)["Path"] }
@@ -53,17 +53,23 @@ module PackageManager
       # example: github.com/myexample/modulename/v2
       if (matches = name.match(VERSION_MODULE_REGEX))
         PackageManagerDownloadWorker.perform_async(self.name, matches[1])
+
+        module_project = Project.find_by(platform: "Go", name: name)
+        base_module_project = Project.find_by(platform: "Go", name: matches[1])
+        return if module_project.nil? || base_module_project.nil?
+
+        module_project.versions.each do |version|
+          base_module_project.versions.find_or_create_by(number: version[:number]) do |new_version|
+            new_version.update(published_at: version[:published_at])
+            new_version.save
+          end
+        end
       end
     end
 
     def self.project(name)
       if (doc_html = get_html("https://pkg.go.dev/#{name}"))
-        # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
-        #   1) Fetch the list of versions: https://proxy.golang.org/#{module_name}/@v/list
-        #   2) And for each version, fetch https://proxy.golang.org/#{module_name}/@v/#{v}.info
-        versions_html = get_html("https://pkg.go.dev/#{name}?tab=versions")
-
-        { name: name, html: doc_html, overview_html: doc_html, versions_html: versions_html }
+        { name: name, html: doc_html, overview_html: doc_html }
       else
         { name: name }
       end
@@ -71,16 +77,31 @@ module PackageManager
 
     def self.versions(project, _name)
       return [] if project.nil?
+      return project[:versions] if project[:versions]
 
-      versions = project[:versions_html]&.css(".Versions-item")&.map do |v|
-        { number: v.css("a").first.text, published_at: Chronic.parse(v.css(".Versions-commitTime").first.text) }
-      end
+      known_versions = Project.find_by(platform: "Go", name: project[:name])&.versions || []
 
-      if (matches = project[:name].match(VERSION_MODULE_REGEX))
-        versions = versions.select { |version| version[:number].start_with?(matches[2]) }
-      end
+      lookup_versions = get_raw("http://proxy.golang.org/#{project[:name]}/@v/list")
+                          &.lines
+                          &.map(&:strip)
+                          &.reject(&:blank?)
 
-      versions
+      lookup_versions.reject! { |v| known_versions.where(number: v).exists? } unless known_versions.blank?
+
+      # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
+      #   1) Fetch the list of versions: https://proxy.golang.org/#{module_name}/@v/list
+      #   2) And for each version, fetch https://proxy.golang.org/#{module_name}/@v/#{v}.info
+      new_versions = lookup_versions.map do |v|
+        info = get("http://proxy.golang.org/#{project[:name]}/@v/#{v}.info")
+        {
+          number: info["Version"],
+          published_at: info["Time"].presence && Time.parse(info["Time"]),
+        }
+      rescue Oj::ParseError
+        next
+      end.compact
+
+      known_versions.map { |db_version| db_version.slice(:number, :published_at) }.concat(new_versions)
     end
 
     def self.mapping(project)
