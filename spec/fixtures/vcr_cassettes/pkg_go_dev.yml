@@ -54,7 +54,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:27 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/list
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/list
     body:
       encoding: US-ASCII
       string: ''
@@ -105,7 +105,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:27 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.3.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.3.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -150,7 +150,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:27 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.2.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.2.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -195,7 +195,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:27 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.2.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.2.info
     body:
       encoding: US-ASCII
       string: ''
@@ -240,7 +240,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:27 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -285,7 +285,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:27 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.info
     body:
       encoding: US-ASCII
       string: ''
@@ -330,7 +330,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:27 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -375,7 +375,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:28 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.1.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.1.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -420,7 +420,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:28 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.1.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.1.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -465,7 +465,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:28 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/list
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/list
     body:
       encoding: US-ASCII
       string: ''
@@ -518,7 +518,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:28 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.3.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.3.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -563,7 +563,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:28 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.2.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.2.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -608,7 +608,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:28 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.2.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.2.info
     body:
       encoding: US-ASCII
       string: ''
@@ -653,7 +653,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:28 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -698,7 +698,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:28 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.info
     body:
       encoding: US-ASCII
       string: ''
@@ -743,7 +743,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:28 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.0.0-alpha.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -788,7 +788,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:28 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.1.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.1.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -833,7 +833,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:41:28 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.1.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/v2/@v/v2.1.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2050,7 +2050,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/list
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/list
     body:
       encoding: US-ASCII
       string: ''
@@ -2132,7 +2132,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.16.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.16.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2177,7 +2177,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.9.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.9.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2222,7 +2222,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.3.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.3.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2267,7 +2267,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.7.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.7.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2312,7 +2312,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.19.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.19.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2357,7 +2357,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.18.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.18.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2402,7 +2402,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.17.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.17.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2447,7 +2447,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.8.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.8.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2492,7 +2492,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.19.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.19.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2537,7 +2537,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.20.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.20.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2582,7 +2582,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.6.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.6.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2627,7 +2627,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.0.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.0.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2672,7 +2672,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.14.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.14.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2717,7 +2717,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.18.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.18.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2762,7 +2762,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.12.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.12.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2807,7 +2807,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.3.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.3.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2852,7 +2852,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.5.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.5.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2897,7 +2897,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.2.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.2.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2942,7 +2942,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.7.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.7.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -2987,7 +2987,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.4.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.4.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3032,7 +3032,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.21.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.21.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3077,7 +3077,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.10.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.10.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3122,7 +3122,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3167,7 +3167,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3212,7 +3212,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.11.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.11.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3257,7 +3257,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.10.2.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.10.2.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3302,7 +3302,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.5.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.5.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3347,7 +3347,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.17.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.17.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3392,7 +3392,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v0.1.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v0.1.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3437,7 +3437,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.4.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.4.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3482,7 +3482,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.2.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.2.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3527,7 +3527,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:43 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.3.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.3.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3572,7 +3572,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.10.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.10.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3617,7 +3617,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.4.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.4.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3662,7 +3662,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.13.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.13.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3707,7 +3707,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.16.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.16.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3752,7 +3752,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.15.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.15.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3797,7 +3797,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.1.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.1.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3842,7 +3842,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.11.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.11.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -3887,7 +3887,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/list
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/list
     body:
       encoding: US-ASCII
       string: ''
@@ -3971,7 +3971,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.16.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.16.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4016,7 +4016,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.9.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.9.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4061,7 +4061,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.3.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.3.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4106,7 +4106,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.7.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.7.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4151,7 +4151,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.19.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.19.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4196,7 +4196,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.18.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.18.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4241,7 +4241,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.17.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.17.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4286,7 +4286,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.8.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.8.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4331,7 +4331,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.19.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.19.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4376,7 +4376,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.20.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.20.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4421,7 +4421,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.6.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.6.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4466,7 +4466,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.0.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.0.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4511,7 +4511,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.14.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.14.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4556,7 +4556,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.18.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.18.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4601,7 +4601,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.12.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.12.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4646,7 +4646,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.3.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.3.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4691,7 +4691,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.5.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.5.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4736,7 +4736,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.2.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.2.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4781,7 +4781,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.7.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.7.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4826,7 +4826,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.4.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.4.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4871,7 +4871,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.21.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.21.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4916,7 +4916,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.10.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.10.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -4961,7 +4961,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5006,7 +5006,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5051,7 +5051,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.11.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.11.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5096,7 +5096,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.10.2.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.10.2.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5141,7 +5141,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.5.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.5.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5186,7 +5186,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.17.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.17.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5231,7 +5231,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v0.1.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v0.1.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5276,7 +5276,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.4.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.4.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5321,7 +5321,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.2.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.2.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5366,7 +5366,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.3.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.3.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5411,7 +5411,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.10.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.10.1.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5456,7 +5456,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.22.4.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.22.4.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5501,7 +5501,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.13.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.13.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5546,7 +5546,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.16.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.16.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5591,7 +5591,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.15.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.15.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5636,7 +5636,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:44 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.1.0.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.1.0.info
     body:
       encoding: US-ASCII
       string: ''
@@ -5681,7 +5681,7 @@ http_interactions:
   recorded_at: Fri, 20 Nov 2020 17:43:45 GMT
 - request:
     method: get
-    uri: http://proxy.golang.org/github.com/urfave/cli/@v/v1.11.1.info
+    uri: https://proxy.golang.org/github.com/urfave/cli/@v/v1.11.1.info
     body:
       encoding: US-ASCII
       string: ''

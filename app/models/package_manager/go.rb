@@ -20,6 +20,7 @@ module PackageManager
       ".hg",
       ".svn",
     ].freeze
+    PROXY_BASE_URL = "https://proxy.golang.org"
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)/.freeze
 
@@ -51,19 +52,23 @@ module PackageManager
       super(name)
       # call update on base module name if the name is appended with major version
       # example: github.com/myexample/modulename/v2
-      if (matches = name.match(VERSION_MODULE_REGEX))
-        PackageManagerDownloadWorker.perform_async(self.name, matches[1])
+      update_base_module(name) if name.match(VERSION_MODULE_REGEX)
+    end
 
-        module_project = Project.find_by(platform: "Go", name: name)
-        base_module_project = Project.find_by(platform: "Go", name: matches[1])
-        return if module_project.nil? || base_module_project.nil?
+    def self.update_base_module(name)
+      matches = name.match(VERSION_MODULE_REGEX)
 
-        module_project.versions.each do |version|
-          base_module_project.versions.find_or_create_by(number: version[:number]) do |new_version|
-            new_version.update(published_at: version[:published_at])
-            new_version.save
-          end
-        end
+      PackageManagerDownloadWorker.perform_async(self.name, matches[1])
+
+      module_project = Project.find_by(platform: "Go", name: name)
+      base_module_project = Project.find_by(platform: "Go", name: matches[1])
+      return if module_project.nil? || base_module_project.nil?
+
+      # find any versions the /vx module knows about that the base module does have already
+      new_base_versions = module_project.versions.where.not(number: base_module_project.versions.pluck(:number))
+
+      new_base_versions.each do |version|
+        base_module_project.versions.create(number: version.number, published_at: version.published_at)
       end
     end
 
@@ -79,20 +84,24 @@ module PackageManager
       return [] if project.nil?
       return project[:versions] if project[:versions]
 
-      known_versions = Project.find_by(platform: "Go", name: project[:name])&.versions
+      known_versions = Project
+        .find_by(platform: "Go", name: project[:name])
+        &.versions
+        &.select(:number, :published_at)
+        &.to_h || {}
 
       # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
       #   1) Fetch the list of versions: https://proxy.golang.org/#{module_name}/@v/list
       #   2) And for each version, fetch https://proxy.golang.org/#{module_name}/@v/#{v}.info
 
-      get_raw("http://proxy.golang.org/#{project[:name]}/@v/list")
+      get_raw("#{PROXY_BASE_URL}/#{project[:name]}/@v/list")
         &.lines
         &.map(&:strip)
         &.reject(&:blank?)
         &.map do |v|
-          return known_versions.find_by(number: v).slice(:number, :published_at) if known_versions&.find_by(number: v).present?
+          return known_versions[v].slice(:number, :published_at) if known_versions.key?(v)
 
-          info = get("http://proxy.golang.org/#{project[:name]}/@v/#{v}.info")
+          info = get("#{PROXY_BASE_URL}/#{project[:name]}/@v/#{v}.info")
           {
             number: info["Version"],
             published_at: info["Time"].presence && Time.parse(info["Time"]),
@@ -122,7 +131,7 @@ module PackageManager
       # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
       # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
       # to scrape the webpage or wait for an API for a faster fetch here.
-      resp = request("https://proxy.golang.org/#{name}/@v/#{version}.mod")
+      resp = request("#{PROXY_BASE_URL}/#{name}/@v/#{version}.mod")
       if resp.status == 200
         go_mod_file = resp.body
         Bibliothecary::Parsers::Go.parse_go_mod(go_mod_file)

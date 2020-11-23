@@ -107,7 +107,7 @@ describe PackageManager::Go do
         expect(versioned_module.versions.count).to eql 8
         expect(versioned_module.versions.where("number like ?", "v2%").count).to eql 8
 
-        expect(versioned_module.versions.where("number like ?", "v2%").count).to eql 8
+        expect(non_versioned_module.versions.where("number like ?", "v2%").count).to eql 8
       end
     end
   end
