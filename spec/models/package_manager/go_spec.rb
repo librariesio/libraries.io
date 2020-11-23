@@ -56,18 +56,8 @@ describe PackageManager::Go do
       end
     end
 
-    it "maps all versions to base module" do
-      VCR.use_cassette("pkg_go_dev") do
-        project = described_class.project("github.com/urfave/cli")
-        mapping = described_class.mapping(project)
-
-        expect(mapping[:versions].find { |v| v[:number] == "v1.0.0" }).to_not be nil
-        expect(mapping[:versions].find { |v| v[:number] == "v2.0.0" }).to_not be nil
-      end
-    end
-
     it "maps only major revision versions to module" do
-      VCR.use_cassette("pkg_go_dev_v2") do
+      VCR.use_cassette("pkg_go_dev") do
         project = described_class.project("github.com/urfave/cli/v2")
         mapping = described_class.mapping(project)
 
@@ -97,7 +87,7 @@ describe PackageManager::Go do
 
   describe "#update" do
     it "should queue update for non versioned module" do
-      VCR.use_cassette("pkg_go_dev_v2") do
+      VCR.use_cassette("pkg_go_dev") do
         expect(PackageManagerDownloadWorker).to receive(:perform_async).with(described_class.name, "github.com/urfave/cli")
 
         described_class.update("github.com/urfave/cli/v2")
@@ -105,27 +95,20 @@ describe PackageManager::Go do
     end
 
     it "should update both the major release module and base module" do
-      VCR.use_cassette("pkg_go_dev_v2") do
-        described_class.update("github.com/urfave/cli/v2")
-      end
-
-      expect(Project.where(platform: "Go").count).to eql 1
-      expect(PackageManagerDownloadWorker.jobs.size).to eql 1
-
-      versioned_module = Project.find_by(platform: "Go", name: "github.com/urfave/cli/v2")
-      expect(versioned_module.versions.count).to eql 8
-      expect(versioned_module.versions.where("number like ?", "v2%").count).to eql 8
-
       VCR.use_cassette("pkg_go_dev") do
-        PackageManagerDownloadWorker.drain
+        described_class.update("github.com/urfave/cli")
+        non_versioned_module = Project.find_by(platform: "Go", name: "github.com/urfave/cli")
+        expect(non_versioned_module.versions.count).to eql 39
+        expect(non_versioned_module.versions.where("number like ?", "v2%").count).to eql 0
+        expect(non_versioned_module.versions.where("number like ?", "v1%").count).to be > 0
+
+        described_class.update("github.com/urfave/cli/v2")
+        versioned_module = Project.find_by(platform: "Go", name: "github.com/urfave/cli/v2")
+        expect(versioned_module.versions.count).to eql 8
+        expect(versioned_module.versions.where("number like ?", "v2%").count).to eql 8
+
+        expect(non_versioned_module.versions.where("number like ?", "v2%").count).to eql 8
       end
-
-      expect(Project.where(platform: "Go").count).to eql 2
-
-      non_versioned_module = Project.find_by(platform: "Go", name: "github.com/urfave/cli")
-      expect(non_versioned_module.versions.count).to eql 47
-      expect(non_versioned_module.versions.where("number like ?", "v2%").count).to eql 8
-      expect(non_versioned_module.versions.where("number like ?", "v1%").count).to be > 0
     end
   end
 
