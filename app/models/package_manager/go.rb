@@ -84,11 +84,10 @@ module PackageManager
       return [] if project.nil?
       return project[:versions] if project[:versions]
 
-      known_versions = Project
-        .find_by(platform: "Go", name: project[:name])
+      known_versions = Project.find_by(platform: "Go", name: project[:name])
         &.versions
         &.select(:number, :published_at)
-        &.to_h || {}
+        &.index_by(&:number) || {}
 
       # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
       #   1) Fetch the list of versions: https://proxy.golang.org/#{module_name}/@v/list
@@ -99,13 +98,15 @@ module PackageManager
         &.map(&:strip)
         &.reject(&:blank?)
         &.map do |v|
-          return known_versions[v].slice(:number, :published_at) if known_versions.key?(v)
-
-          info = get("#{PROXY_BASE_URL}/#{project[:name]}/@v/#{v}.info")
-          {
-            number: info["Version"],
-            published_at: info["Time"].presence && Time.parse(info["Time"]),
-          }
+          if known_versions.key?(v)
+            known_versions[v].slice(:number, :published_at)
+          else
+            info = get("#{PROXY_BASE_URL}/#{project[:name]}/@v/#{v}.info")
+            {
+              number: info["Version"],
+              published_at: info["Time"].presence && Time.parse(info["Time"]),
+            }
+          end
         rescue Oj::ParseError
           next
         end
