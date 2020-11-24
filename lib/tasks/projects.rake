@@ -180,4 +180,18 @@ namespace :projects do
       end
     end
   end
+
+  desc 'Update Go Base Modules'
+  task :update_go_base_modules, [:version] => :environment do |_task, args|
+    # go through versioned module names and rerun update on them to get their versions
+    # added to the base module Project
+    Project.where(platform: "Go").where("name like ?", "%/v#{args[:version]}").find_in_batches do |projects|
+      projects.each do |project|
+        matches = PackageManager::Go::VERSION_MODULE_REGEX.match(project.name)
+        Project.create(platform: "Go", name: matches[1])
+        PackageManagerDownloadWorker.perform_async("PackageManager::Go", project.name)
+        puts "Queued #{project.name} for update"
+      end
+    end
+  end
 end
