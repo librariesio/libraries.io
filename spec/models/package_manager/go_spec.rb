@@ -121,7 +121,7 @@ describe PackageManager::Go do
 
         expect(project.versions.count).to eql 39
         expect(project.versions.where("number like ?", "v1%").count).to be > 0
-        expect(project.versions.find_by(number: "v1.3.0").published_at).to eql publish_date
+        expect(project.versions.find_by(number: "v1.3.0").published_at.to_date).to eql publish_date.to_date
       end
     end
   end
