@@ -188,7 +188,7 @@ namespace :projects do
     Project.where(platform: "Go").where("name like ?", "%/v#{args[:version]}").find_in_batches do |projects|
       projects.each do |project|
         matches = PackageManager::Go::VERSION_MODULE_REGEX.match(project.name)
-        Project.create(platform: "Go", name: matches[1])
+        Project.find_or_create_by(platform: "Go", name: matches[1])
         PackageManagerDownloadWorker.perform_async("PackageManager::Go", project.name)
         puts "Queued #{project.name} for update"
       end
