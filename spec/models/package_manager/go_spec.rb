@@ -110,6 +110,20 @@ describe PackageManager::Go do
         expect(non_versioned_module.versions.where("number like ?", "v2%").count).to eql 8
       end
     end
+
+    it "should use known versions" do
+      project = create(:project, platform: "Go", name: "github.com/urfave/cli")
+      publish_date = Time.now
+      project.versions.create(number: "v1.3.0", published_at: publish_date)
+
+      VCR.use_cassette("pkg_go_dev") do
+        described_class.update("github.com/urfave/cli")
+
+        expect(project.versions.count).to eql 39
+        expect(project.versions.where("number like ?", "v1%").count).to be > 0
+        expect(project.versions.find_by(number: "v1.3.0").published_at.to_date).to eql publish_date.to_date
+      end
+    end
   end
 
   describe ".project_find_names(name)" do
