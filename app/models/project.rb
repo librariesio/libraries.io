@@ -36,7 +36,7 @@ class Project < ApplicationRecord
   validates_uniqueness_of :name, scope: :platform, case_sensitive: true
 
   belongs_to :repository
-  has_many :versions
+  has_many :versions, dependent: :destroy
   has_many :dependencies, -> { group 'project_name' }, through: :versions
   has_many :contributions, through: :repository
   has_many :contributors, through: :contributions, source: :repository_user
@@ -47,7 +47,7 @@ class Project < ApplicationRecord
   has_many :dependent_projects, -> { group('projects.id').order('projects.rank DESC NULLS LAST') }, through: :dependent_versions, source: :project, class_name: 'Project'
   has_many :repository_dependencies
   has_many :dependent_repositories, -> { group('repositories.id').order('repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC') }, through: :repository_dependencies, source: :repository
-  has_many :subscriptions
+  has_many :subscriptions, dependent: :destroy
   has_many :project_suggestions, dependent: :delete_all
   has_many :registry_permissions, dependent: :delete_all
   has_many :registry_users, through: :registry_permissions
