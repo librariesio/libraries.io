@@ -204,7 +204,7 @@ namespace :projects do
       .where(platform: "Go")
       .where("created_at < ?", before_date)
       .limit(limit)
-      .order(:created_at)
+      .order(created_at: :desc)
       .map do |project|
         puts "Queueing verification for #{project.name}"
         GoProjectVerificationWorker.perform_async(project.name)
