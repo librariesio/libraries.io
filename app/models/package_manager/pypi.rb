@@ -67,13 +67,13 @@ module PackageManager
     end
 
     def self.dependencies(name, version, _project)
-      deps = get("http://pip.libraries.io/#{name}/#{version}.json")
-      return [] if deps.is_a?(Hash) && deps["error"].present?
+      deps = get("https://pypi.org/pypi/#{name}/#{version}/json").dig("info", "requires_dist")
 
       deps.map do |dep|
+        name, version = dep.split
         {
-          project_name: dep["name"],
-          requirements: dep["requirements"] || "*",
+          project_name: name,
+          requirements: (version.nil? || version == ";") ? "*": version.gsub(/\(|\)/,""),
           kind: "runtime",
           optional: false,
           platform: self.name.demodulize,
