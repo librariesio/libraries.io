@@ -73,7 +73,7 @@ module PackageManager
         name, version = dep.split
         {
           project_name: name,
-          requirements: version.nil? || version == ";" ? "*": version.gsub(/\(|\)/,""),
+          requirements: (version.nil? || version == ";") ? "*": version.gsub(/\(|\)/,""),
           kind: "runtime",
           optional: false,
           platform: self.name.demodulize,
