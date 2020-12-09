@@ -128,7 +128,10 @@ describe PackageManager::Maven do
 
       expect(described_class.project("javax.faces:javax.faces-api")).to eq(expected)
     end
+  end
 
+
+  describe ".versions" do
     it "skips versions that can't be parsed" do
       expect(described_class)
         .to receive(:get_raw)
