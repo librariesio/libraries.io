@@ -130,6 +130,32 @@ describe PackageManager::Maven do
     end
   end
 
+
+  describe ".versions" do
+    it "skips versions that can't be parsed" do
+      expect(described_class)
+        .to receive(:get_raw)
+          .with("https://repo1.maven.org/maven2/com/google/api/grpc/proto-google-common-protos/maven-metadata.xml")
+          .and_return(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read)
+      allow(described_class)
+        .to receive(:get_pom)
+          .with("com.google.api.grpc", "proto-google-common-protos", "0.1.9")
+          .and_raise(Ox::ParseError.new(""))
+
+      # TODO: these are probably bugs... it's using the version 3.2.0/etc of a depdendency and looking that up on itself
+      allow(described_class)
+        .to receive(:get_pom)
+          .with("com.google.api.grpc", "proto-google-common-protos", "3.2.0")
+          .and_raise(Ox::ParseError.new(""))
+      allow(described_class)
+        .to receive(:get_pom)
+          .with("com.google.api.grpc", "proto-google-common-protos", "${api.version}")
+          .and_raise(Ox::ParseError.new(""))
+
+      expect(described_class.versions(nil, "com.google.api.grpc:proto-google-common-protos")).to eq([])
+    end
+  end
+
   describe "mapping_from_pom_xml" do
     let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read) }
     let(:parent_pom) { Ox.parse("<project><licenses><license><name>unknown</name></license></licenses><url>https://github.com/googleapis/googleapis</url></project>") }

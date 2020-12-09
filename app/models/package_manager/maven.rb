@@ -164,19 +164,23 @@ module PackageManager
     end
 
     def self.retrieve_versions(versions, name)
-      versions.map do |version|
-        begin
+      versions
+        .map do |version|
           pom = get_pom(*name.split(":", 2), version)
-          license_list = licenses(pom)
-        rescue StandardError
-          license_list = nil
+          begin
+            license_list = licenses(pom)
+          rescue StandardError
+            license_list = nil
+          end
+          {
+            number: version,
+            published_at: Time.parse(pom.locate("publishedAt").first.text),
+            original_license: license_list,
+          }
+        rescue Ox::Error
+          next
         end
-        {
-          number: version,
-          published_at: Time.parse(pom.locate("publishedAt").first.text),
-          original_license: license_list,
-        }
-      end
+        .compact
     end
 
     def self.download_pom(group_id, artifact_id, version)
