@@ -218,7 +218,7 @@ describe Project, type: :model do
   end
 
   describe "#async_sync" do
-    let!(:project) { Project.create(platform: 'NPM', name: 'jade',) }
+    let!(:project) { Project.create(platform: 'NPM', name: 'jade') }
 
     it "should kick off package manager download jobs" do
       expect { project.async_sync }.to change { PackageManagerDownloadWorker.jobs.size }.by(1)
