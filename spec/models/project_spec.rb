@@ -217,6 +217,18 @@ describe Project, type: :model do
     end
   end
 
+  describe "#async_sync" do
+    let!(:project) { Project.create(platform: 'NPM', name: 'jade') }
+
+    it "should kick off package manager download jobs" do
+      expect { project.async_sync }.to change { PackageManagerDownloadWorker.jobs.size }.by(1)
+    end
+
+    it "should kick off status check job" do
+      expect { project.async_sync }.to change { CheckStatusWorker.jobs.size }.by(1)
+    end
+  end
+
   describe '#check_status' do
     context 'entire project deprecated with message' do
       let!(:project) { Project.create(platform: 'NPM', name: 'jade', status: '') }

@@ -152,25 +152,13 @@ class Project < ApplicationRecord
     save
   end
 
-  def sync
-    check_status
-    if status == 'Removed'
-      set_last_synced_at
-      return
-    end
-
-    result = sync_classes.each{ |sync_class| sync_class.update(name)}
-    set_last_synced_at unless result
-  rescue StandardError
-    set_last_synced_at
-  end
-
   def set_last_synced_at
     update_attribute(:last_synced_at, Time.zone.now)
   end
 
   def async_sync
     sync_classes.each{ |sync_class| PackageManagerDownloadWorker.perform_async(sync_class.name, name) }
+    CheckStatusWorker.perform_async(id)
   end
 
   def sync_classes
