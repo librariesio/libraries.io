@@ -195,11 +195,13 @@ namespace :projects do
     end
   end
 
+  # bin/rake projects:verify_go_projects[2020-01-01,2020-12-31]
   desc 'Verify Go Projects'
-  task :verify_go_projects, [:after_date, :before_date, :limit] => :environment do |_task, args|
+  task :verify_go_projects, [:after_date, :before_date] => :environment do |_task, args|
     limit = args.limit || 1000
-    before_date = Date.parse(args.before_date) || Date.today + 1.day
-    after_date = Date.parse(args.after_date) || Time.new(0)
+    before_date = Date.parse(args.before_date)
+    after_date = Date.parse(args.after_date)
+    puts "Date range: #{before_date} - #{after_date}"
 
     Project
       .where(platform: "Go")
@@ -208,6 +210,5 @@ namespace :projects do
         puts "Queueing verification for #{project.name}"
         GoProjectVerificationWorker.perform_async(project.name)
       end
-
   end
 end
