@@ -195,20 +195,28 @@ namespace :projects do
     end
   end
 
-  # bin/rake projects:verify_go_projects[2020-01-01,2020-12-31]
   desc 'Verify Go Projects'
-  task :verify_go_projects, [:after_date, :before_date] => :environment do |_task, args|
-    limit = args.limit || 1000
-    before_date = Date.parse(args.before_date)
-    after_date = Date.parse(args.after_date)
-    puts "Date range: #{before_date} - #{after_date}"
+  task :verify_go_projects, [:count] => :environment do |_task, args|
+    loop do
+      count ||= 1000
+      start_id = REDIS.get("go:update:latest_updated_id").presence || 0
+      puts "Start id: #{start_id}, count: #{start_id.to_i + count}"
+      projects = Project
+        .where("id > ?", start_id)
+        .order(:id)
+        .limit(count)
 
-    Project
-      .where(platform: "Go")
-      .where("created_at BETWEEN ? AND ?", after_date, before_date)
-      .find_each do |project|
-        puts "Queueing verification for #{project.name}"
-        GoProjectVerificationWorker.perform_async(project.name)
+      if projects.count.zero?
+        puts "Done!"
+        exit
+      elsif (queue_size = Sidekiq::Queue.new('small').size) > 0
+        puts "Waiting for #{queue_size} jobs..."
+        sleep 5
+      else
+        projects
+          .each { |p| PackageManagerDownloadWorker.perform_async("PackageManager::Go", p.name) }
+        REDIS.set("go:update:latest_updated_id", projects.last.id)
       end
+    end
   end
 end

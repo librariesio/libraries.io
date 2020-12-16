@@ -2,6 +2,7 @@
 
 class GoProjectVerificationWorker
   include Sidekiq::Worker
+  sidekiq_options queue: :small
 
   def perform(name)
     project = Project.find_by(platform: "Go", name: name)
