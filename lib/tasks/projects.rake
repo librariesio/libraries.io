@@ -196,16 +196,15 @@ namespace :projects do
   end
 
   desc 'Verify Go Projects'
-  task :verify_go_projects, [:before_date, :limit] => :environment do |_task, args|
+  task :verify_go_projects, [:after_date, :before_date, :limit] => :environment do |_task, args|
     limit = args.limit || 1000
     before_date = Date.parse(args.before_date) || Date.today + 1.day
+    after_date = Date.parse(args.after_date) || Time.new(0)
 
     Project
       .where(platform: "Go")
-      .where("created_at < ?", before_date)
-      .limit(limit)
-      .order(created_at: :desc)
-      .map do |project|
+      .where("created_at BETWEEN ? AND ?", after_date, before_date)
+      .find_each do |project|
         puts "Queueing verification for #{project.name}"
         GoProjectVerificationWorker.perform_async(project.name)
       end
