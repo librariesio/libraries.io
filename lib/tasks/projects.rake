@@ -211,7 +211,7 @@ namespace :projects do
       exit
     else
       projects
-        .each { |p| PackageManagerDownloadWorker.perform_async("PackageManager::Go", p.name) }
+        .each { |p| GoProjectVerificationWorker.perform_async(p.name) }
       REDIS.set("go:update:latest_updated_id", projects.last.id)
     end
   end
