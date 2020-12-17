@@ -194,4 +194,25 @@ namespace :projects do
       end
     end
   end
+
+  desc 'Verify Go Projects'
+  task :verify_go_projects, [:count] => :environment do |_task, args|
+    args.with_defaults(count: 1000)
+
+    start_id = REDIS.get("go:update:latest_updated_id").presence || 0
+    puts "Start id: #{start_id}, limit: #{args.count}."
+    projects = Project
+      .where("id > ?", start_id)
+      .order(:id)
+      .limit(args.count)
+
+    if projects.count.zero?
+      puts "Done!"
+      exit
+    else
+      projects
+        .each { |p| GoProjectVerificationWorker.perform_async(p.name) }
+      REDIS.set("go:update:latest_updated_id", projects.last.id)
+    end
+  end
 end

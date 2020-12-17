@@ -173,5 +173,10 @@ module PackageManager
     def self.get_repository_url(project)
       request("https://#{project['Package']}").to_hash[:url].to_s
     end
+
+    def self.valid_project?(name)
+      response = request("#{PROXY_BASE_URL}/#{name}/@v/list")
+      response.status != 410
+    end
   end
 end
