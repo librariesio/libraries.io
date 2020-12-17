@@ -1,15 +1,8 @@
 class Api::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :check_api_key
-  before_action :log_active_connections
 
   private
-
-  def log_active_connections
-    # Only log 1 in 10 requests
-    return unless rand(10) == 5
-    Rails.logger.info("Active ActiveRecord connection count: #{ActiveRecord::Base.connection_pool.connections.size}")
-  end
 
   def disabled_in_read_only
     if in_read_only_mode?

@@ -6,7 +6,15 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :logged_in?, :logged_out?, :current_host, :formatted_host, :tidelift_flash_partial
 
+  before_action :log_active_connections
+
   private
+
+  def log_active_connections
+    # Only log 1 in 10 requests
+    return unless rand(10) == 5
+    Rails.logger.info("Active ActiveRecord connection count: #{ActiveRecord::Base.connection_pool.connections.size}")
+  end
 
   def tidelift_flash_partial
     Dir[Rails.root.join('app', 'views', 'shared', 'flashes', '*')].sample
