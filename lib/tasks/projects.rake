@@ -197,26 +197,21 @@ namespace :projects do
 
   desc 'Verify Go Projects'
   task :verify_go_projects, [:count] => :environment do |_task, args|
-    loop do
-      count ||= 1000
-      start_id = REDIS.get("go:update:latest_updated_id").presence || 0
-      puts "Start id: #{start_id}, count: #{start_id.to_i + count}"
-      projects = Project
-        .where("id > ?", start_id)
-        .order(:id)
-        .limit(count)
+    count = args.count || 1000
+    start_id = REDIS.get("go:update:latest_updated_id").presence || 0
+    puts "Start id: #{start_id}, limit: #{count}."
+    projects = Project
+      .where("id > ?", start_id)
+      .order(:id)
+      .limit(count)
 
-      if projects.count.zero?
-        puts "Done!"
-        exit
-      elsif (queue_size = Sidekiq::Queue.new('small').size) > 0
-        puts "Waiting for #{queue_size} jobs..."
-        sleep 5
-      else
-        projects
-          .each { |p| PackageManagerDownloadWorker.perform_async("PackageManager::Go", p.name) }
-        REDIS.set("go:update:latest_updated_id", projects.last.id)
-      end
+    if projects.count.zero?
+      puts "Done!"
+      exit
+    else
+      projects
+        .each { |p| PackageManagerDownloadWorker.perform_async("PackageManager::Go", p.name) }
+      REDIS.set("go:update:latest_updated_id", projects.last.id)
     end
   end
 end
