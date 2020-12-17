@@ -200,11 +200,11 @@ namespace :projects do
     args.with_defaults(count: 1000)
 
     start_id = REDIS.get("go:update:latest_updated_id").presence || 0
-    puts "Start id: #{start_id}, limit: #{args.count}."
+    puts "Start id: #{start_id}, limit: #{args[:count]}."
     projects = Project
       .where("id > ?", start_id)
       .order(:id)
-      .limit(args.count)
+      .limit(args[:count])
 
     if projects.count.zero?
       puts "Done!"
