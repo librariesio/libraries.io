@@ -197,13 +197,14 @@ namespace :projects do
 
   desc 'Verify Go Projects'
   task :verify_go_projects, [:count] => :environment do |_task, args|
-    count = args.count || 1000
+    args.with_defaults(count: 1000)
+
     start_id = REDIS.get("go:update:latest_updated_id").presence || 0
-    puts "Start id: #{start_id}, limit: #{count}."
+    puts "Start id: #{start_id}, limit: #{args.count}."
     projects = Project
       .where("id > ?", start_id)
       .order(:id)
-      .limit(count)
+      .limit(args.count)
 
     if projects.count.zero?
       puts "Done!"
