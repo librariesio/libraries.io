@@ -1,0 +1,98 @@
+---
+http_interactions:
+    - request:
+          method: get
+          uri: https://pre-commit.com/all-hooks.json
+          body:
+              encoding: US-ASCII
+              string: ''
+          headers:
+              Accept-Encoding:
+                  - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+              Accept:
+                  - '*/*'
+              User-Agent:
+                  - Ruby
+      response:
+          status:
+              code: 200
+              message: OK
+          headers:
+              Date:
+                  - Tue, 22 Dec 2020 19:18:40 GMT
+              Content-Type:
+                  - application/json; charset=utf-8
+              Transfer-Encoding:
+                  - chunked
+              Connection:
+                  - keep-alive
+              Set-Cookie:
+                  - __cfduid=dd47f15b6be976c1293bfcca37b59d5341608664719; expires=Thu, 21-Jan-21
+                    19:18:39 GMT; path=/; domain=.pre-commit.com; HttpOnly; SameSite=Lax; Secure
+              Last-Modified:
+                  - Mon, 21 Dec 2020 08:50:52 GMT
+              Vary:
+                  - Accept-Encoding
+              Access-Control-Allow-Origin:
+                  - '*'
+              Etag:
+                  - W/"5fe061ec-23901"
+              Expires:
+                  - Tue, 22 Dec 2020 19:28:40 GMT
+              Cache-Control:
+                  - max-age=600
+              X-Proxy-Cache:
+                  - MISS
+              X-Github-Request-Id:
+                  - 30EA:02D5:5A7B96:6F9860:5FE24690
+              Cf-Cache-Status:
+                  - DYNAMIC
+              Cf-Request-Id:
+                  - 072d7cba4f0000ce8b8d231000000001
+              Expect-Ct:
+                  - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+              Report-To:
+                  - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report?s=2pFhFG%2B8I7DpOoTIMwXZpOPyT3UsndRuAu%2B%2FMz2yU9wVzL5YHYUIJagv%2BcQkXZrWJkY%2BEo%2Fj8tppjfQgKPY5IanA4WP7tfD2cy4U5XFrx8dEOXjK59fpHjpobg%3D%3D"}],"group":"cf-nel","max_age":604800}'
+              Nel:
+                  - '{"report_to":"cf-nel","max_age":604800}'
+              Server:
+                  - cloudflare
+              Cf-Ray:
+                  - 605c30a3ba71ce8b-LHR
+          body:
+              encoding: ASCII-8BIT
+              string: |-
+                  {
+                      "https://github.com/pre-commit/pre-commit-hooks": [
+                          {
+                              "id": "check-added-large-files",
+                              "name": "Check for added large files",
+                              "description": "Prevent giant files from being committed",
+                              "entry": "check-added-large-files",
+                              "language": "python"
+                          },
+                          {
+                              "id": "check-ast",
+                              "name": "Check python ast",
+                              "description": "Simply check whether the files parse as valid python.",
+                              "entry": "check-ast",
+                              "language": "python",
+                              "types": ["python"]
+                          }
+                      ],
+                      "https://github.com/pre-commit/mirrors-autopep8": [
+                          {
+                              "id": "autopep8",
+                              "name": "autopep8",
+                              "entry": "autopep8",
+                              "language": "python",
+                              "types": ["python"],
+                              "args": ["-i"],
+                              "require_serial": false,
+                              "additional_dependencies": []
+                          }
+                      ]
+                  }
+          http_version:
+      recorded_at: Tue, 22 Dec 2020 19:18:40 GMT
+recorded_with: VCR 4.0.0

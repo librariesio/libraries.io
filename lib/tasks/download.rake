@@ -232,6 +232,16 @@ namespace :download do
     PackageManager::PlatformIO.import_async
   end
 
+  desc "Download new pre-commit packages asynchronously"
+  task precommit: :environment do
+    PackageManager::PreCommit.import_new_async
+  end
+
+  desc "Download all pre-commit packages asynchronously"
+  task precommit_all: :environment do
+    PackageManager::PreCommit.import_async
+  end
+
   desc "Download new PureScript packages asynchronously"
   task purescript: :environment do
     PackageManager::PureScript.import_new_async
