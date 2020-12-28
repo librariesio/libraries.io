@@ -2,17 +2,15 @@
 
 module ASMTrace
   def serializable_hash(*)
-    if Rails.env.production?
-      Google::Cloud::Trace.in_span "active_model_serializers#serializable_hash##{self.class.name}" do |_span|
-        super
-      end
-    elsif ENV["ASM_TRACING"]
+    if ENV["ASM_TRACING"]
       result = nil
       b = Benchmark.measure { result = super }
       puts "active_model_serializers#serializable_hash##{self.class.name}: #{b.real}ms"
       result
     else
-      super
+      Google::Cloud::Trace.in_span "active_model_serializers#serializable_hash##{self.class.name}" do |_span|
+        super
+      end
     end
   end
 end
