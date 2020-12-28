@@ -18,6 +18,7 @@
 .env.prod
 
 public/sitemap*
+public/assets/*
 
 # Vim
 *.swp
