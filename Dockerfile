@@ -12,6 +12,9 @@ ADD Gemfile* $APP_HOME/
 RUN bundle install --jobs=4
 
 ADD . $APP_HOME
-RUN bundle exec rake assets:precompile
 
-RUN git show-ref --head --dereference HEAD |cut -d ' ' -f 1 > REVISION
+ARG REVISION_ID
+RUN echo $REVISION_ID > REVISION
+ENV REVISION_ID $REVISION_ID
+
+RUN RAILS_ENV=production bundle exec rake assets:precompile
