@@ -69,29 +69,35 @@ class OptimizedProjectSerializer
           canonical_name: project.name,
           name: @requested_name_map[[project.platform, project.name]],
           repository_license: project.repository&.license,
-          versions: versions(project)
+          versions: versions[project.id]
         ).tap do |result|
           if @internal_key
             result[:updated_at] = project.updated_at
-            result[:repository_maintenance_stats] = maintenance_stats(project)
+            result[:repository_maintenance_stats] = maintenance_stats[project.repository_id]
           end
         end
     end
   end
 
-  def versions(project)
-    Google::Cloud::Trace.in_span "optimized_project_serializer#versions" do |_span|
-      project.versions.map do |version|
-        version.slice(*VERSION_ATTRIBUTES)
-      end
+  def versions
+    @versions ||= Google::Cloud::Trace.in_span "optimized_project_serializer#versions" do |_span|
+      Version
+        .where(project_id: @projects.map(&:id))
+        .pluck(*VERSION_ATTRIBUTES, :project_id)
+        .each_with_object(Hash.new { |h, k| h[k] = [] }) do |row, versions|
+          versions[row[-1]] << VERSION_ATTRIBUTES.zip(row).to_h
+        end
     end
   end
 
-  def maintenance_stats(project)
-    Google::Cloud::Trace.in_span "optimized_project_serializer#maintenance_stats" do |_span|
-      project.repository_maintenance_stats.map do |stat|
-        stat.slice(*MAINTENANCE_STAT_ATTRIBUTES)
-      end
+  def maintenance_stats
+    @maintenance_stats ||= Google::Cloud::Trace.in_span "optimized_project_serializer#maintenance_stats" do |_span|
+      RepositoryMaintenanceStat
+        .where(repository_id: @projects.map { |p| p.repository&.id }.compact)
+        .pluck(*MAINTENANCE_STAT_ATTRIBUTES, :repository_id)
+        .each_with_object(Hash.new { |h, k| h[k] = [] }) do |row, stats|
+          stats[row[-1]] << MAINTENANCE_STAT_ATTRIBUTES.zip(row).to_h
+        end
     end
   end
 end
