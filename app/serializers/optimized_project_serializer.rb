@@ -83,9 +83,13 @@ class OptimizedProjectSerializer
     @versions ||= Google::Cloud::Trace.in_span "optimized_project_serializer#versions" do |_span|
       Version
         .where(project_id: @projects.map(&:id))
-        .pluck(*VERSION_ATTRIBUTES, :project_id)
+        .pluck(*VERSION_ATTRIBUTES, :created_at, :project_id)
         .each_with_object(Hash.new { |h, k| h[k] = [] }) do |row, versions|
-          versions[row[-1]] << VERSION_ATTRIBUTES.zip(row).to_h
+          # Use created_at if no published date
+          version = VERSION_ATTRIBUTES.zip(row).to_h
+          version["published_at"] ||= row[-2]
+
+          versions[row[-1]] << version
         end
     end
   end
