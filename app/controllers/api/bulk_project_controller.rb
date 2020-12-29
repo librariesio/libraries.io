@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Api::BulkProjectController < Api::ApplicationController
   def project_status_queries
     @project_status_queries ||= params[:projects]
       .group_by { |project| project[:platform] }
-      .map { |platform, group| ProjectStatusQuery.new(platform, group.map { |p| p[:name] }) }
+      .map { |platform, group| ProjectStatusQuery.new(platform, group.map { |p| p[:name] }, includes: @includes) }
   end
 
   def projects

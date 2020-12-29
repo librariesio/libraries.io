@@ -12,6 +12,8 @@ class Api::StatusController < Api::BulkProjectController
   end
 
   def check_legacy
+    @includes = %i[repository versions repository_maintenance_stats]
+
     render(
       json: projects,
       each_serializer: ProjectStatusSerializer,
@@ -23,9 +25,11 @@ class Api::StatusController < Api::BulkProjectController
   end
 
   def check_new
+    @includes = %i[repository]
+
     # This forces serialization with Oj
     # TODO: Investigate calling Oj.mimic_JSON on initializationh to swap universally
     serializer = OptimizedProjectSerializer.new(projects, project_names, internal_api_key?)
-    render json: Oj.dump(serializer.serialize)
+    render json: serializer.serialize
   end
 end
