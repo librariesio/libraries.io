@@ -54,59 +54,6 @@
         </tbody>
     </table>
   <% end %>
-  <hr>
-  <div class="row">
-    <div class="col-sm-8">
-      <h4>
-        Repositories that depend on <%= link_to @project, project_path(@project.to_param) %>
-        <% if params[:requirements].present? %>
-          <code><%= params[:requirements] %></code>
-        <% end %>
-      </h4>
-
-      <%= render @repos, cache: true %>
-      <%= will_paginate @repos, page_links: false %>
-    </div>
-    <div class="col-sm-4">
-      <h4>
-        <%= fa_icon 'link' %>
-        Filter by requirement kind
-      </h4>
-      <ul class='filter'>
-        <% @kinds.sort_by{|k,v| -v}.each do |kind, count| %>
-          <% next unless kind.present? %>
-          <% active = kind == params[:kind] %>
-          <li class='<%= 'active' if active %>'>
-            <% if active %>
-              <%= link_to kind, url_for(params.permit(:name, :platform, :requirements).merge(kind: nil, page: nil)) %>
-            <% else %>
-              <%= link_to kind, url_for(params.permit(:name, :platform, :requirements).merge(kind: kind)) %>
-              <small><%= number_to_human(count) %></small>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
-
-      <h4>
-        <%= fa_icon 'arrows-h' %>
-        Filter by required version range
-      </h4>
-      <ul class='filter'>
-        <% sort_by_semver_range(60).each do |requirements,count| %>
-          <% next unless requirements.present? %>
-          <% active = requirements == params[:requirements] %>
-          <li class='<%= 'active' if active %>'>
-            <% if active %>
-              <%= link_to requirements, url_for(params.permit(:name, :platform, :kind).merge(requirements: nil, page: nil)) %>
-            <% else %>
-              <%= link_to requirements, url_for(params.permit(:name, :platform, :kind).merge(requirements: requirements)) %>
-              <small><%= number_to_human(count) %></small>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  </div>
 <% else %>
   No dependent repositories found.
 <% end %>

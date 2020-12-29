@@ -7,10 +7,6 @@ class ProjectUsageController < ApplicationController
       @kinds = @project.repository_dependencies.joins(:repository).group('repository_dependencies.kind').count
       @counts = sort_by_semver_range(@all_counts.length > 18 ? 17 : 18)
       @highest_percentage = @counts.map{|_k,v| v.to_f/@total*100 }.max
-      scope = @project.dependent_repositories.open_source.source
-      scope = scope.where("repository_dependencies.requirements = ?", params[:requirements]) if params[:requirements].present?
-      scope = scope.where("repository_dependencies.kind = ?", params[:kind]) if params[:kind].present?
-      @repos = scope.paginate(page: page_number, per_page: 20)
     end
   end
 
