@@ -15,35 +15,6 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
     group.sitemap.write unless group.sitemap.written?
   }
 
-  orgs = lambda {
-    group = sitemap.group(:filename => :orgs, :sitemaps_path => 'sitemaps/orgs') do
-      RepositoryOrganisation.visible.with_login.find_each do |user|
-        add user_path(user.to_param), :lastmod => user.updated_at
-      end
-    end
-    group.sitemap.write unless group.sitemap.written?
-  }
-
-  users = lambda {
-    group = sitemap.group(:filename => :users, :sitemaps_path => 'sitemaps/users') do
-      RepositoryUser.visible.with_login.find_each do |user|
-        add user_path(user.to_param), :lastmod => user.updated_at
-      end
-    end
-    group.sitemap.write unless group.sitemap.written?
-  }
-
-  repos = lambda {
-    group = sitemap.group(:filename => :repos, :sitemaps_path => 'sitemaps/repos') do
-      Repository.open_source.source.not_removed.where("rank > 0").find_each do |repo|
-        add repository_path(repo.to_param), :lastmod => repo.updated_at
-        add repository_contributors_path(repo.to_param), :lastmod => repo.updated_at
-      end
-    end
-    group.sitemap.write unless group.sitemap.written?
-  }
-
-
   misc = lambda {
     group = sitemap.group(:filename => :misc, :sitemaps_path => 'sitemaps/misc') do
       add root_path, :priority => 1, :changefreq => 'daily'
@@ -73,7 +44,7 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
     group.sitemap.write unless group.sitemap.written?
   }
 
-  Parallel.each([projects, orgs, users, repos, misc]) do |group|
+  Parallel.each([projects, misc]) do |group|
     group.call
   end
 end
