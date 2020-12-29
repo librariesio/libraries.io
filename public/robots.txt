@@ -6,4 +6,5 @@ Disallow: /gitlab/
 Disallow: /bitbucket/
 Disallow: */usage$
 Disallow: */dependents$
+Disallow: /auth/
 Sitemap: https://libraries.io/sitemaps/sitemap.xml.gz
