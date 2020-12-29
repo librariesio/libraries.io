@@ -26,20 +26,6 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #unlicensed" do
-    it "responds successfully", type: :request do
-      visit unlicensed_path
-      expect(page).to have_content 'Unlicensed Packages'
-    end
-
-    context "filtered by platform" do
-      it "responds successfully" do
-        visit unlicensed_path(platform: 'Rubygems')
-        expect(page).to have_content 'Unlicensed Packages'
-      end
-    end
-  end
-
   describe "GET #deprecated" do
     it "responds successfully", type: :request do
       visit deprecated_path
