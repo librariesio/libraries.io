@@ -48,7 +48,7 @@ module GithubIdentity
 
     r.each do |repo|
       unless github_repo = existing_repos.find{|re| re.uuid.to_s == repo.id.to_s}
-        github_repo = Repository.where(host_type:'GitHub').find_by('lower(full_name) = ?', repo.full_name.downcase) || Repository.create_from_hash(repo)
+        github_repo = Repository.host('GitHub').find_by('lower(full_name) = ?', repo.full_name.downcase) || Repository.create_from_hash(repo)
       end
       next if github_repo.nil?
       current_repo_ids << github_repo.id
