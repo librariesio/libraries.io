@@ -21,7 +21,7 @@
     </ul>
 
     <div class="tab-content ">
-      <div class="tab-pane" id="new_projects">
+      <div class="tab-pane active" id="new_projects">
         <% cache 'explore-new_projects', expires_in: 10.minutes, race_condition_ttl: 1.minute do %>
           <%= render @new_projects, cache: true %>
         <% end %>
