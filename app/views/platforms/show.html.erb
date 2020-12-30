@@ -25,18 +25,6 @@
 <div class="row">
   <div class="col-md-8">
     <div class="row">
-      <% if @trending.any? %>
-        <div class='col-sm-6 platform-column'>
-          <h4>
-            Trending <%= platform_name(@platform_name) %> Packages
-            <small class='more'>
-              <%= link_to 'See more &raquo;'.html_safe, trending_projects_path(platforms: @platform_name) %>
-            </small>
-          </h4>
-          <%= render @trending, cache: true %>
-        </div>
-      <% end %>
-
       <% if @popular.any? %>
         <div class='col-sm-6 platform-column'>
           <h4>
