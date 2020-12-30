@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_30_185510) do
+ActiveRecord::Schema.define(version: 2020_12_30_202848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -175,6 +175,7 @@ ActiveRecord::Schema.define(version: 2020_09_30_185510) do
     t.index ["platform", "dependents_count"], name: "index_projects_on_platform_and_dependents_count"
     t.index ["platform", "name"], name: "index_projects_on_platform_and_name", unique: true
     t.index ["repository_id"], name: "index_projects_on_repository_id"
+    t.index ["status"], name: "index_projects_on_status"
     t.index ["updated_at"], name: "index_projects_on_updated_at"
     t.index ["versions_count"], name: "index_projects_on_versions_count"
   end
@@ -249,9 +250,11 @@ ActiveRecord::Schema.define(version: 2020_09_30_185510) do
     t.string "logo_url"
     t.integer "repository_user_id"
     t.string "keywords", default: [], array: true
-    t.index "lower((host_type)::text), lower((full_name)::text)", name: "index_repositories_on_host_type_and_full_name", unique: true
+    t.index "lower((host_type)::text), lower((full_name)::text)", name: "index_repositories_on_lower_host_type_lower_full_name", unique: true
     t.index "lower((language)::text)", name: "github_repositories_lower_language"
+    t.index ["fork"], name: "index_repositories_on_fork"
     t.index ["host_type", "uuid"], name: "index_repositories_on_host_type_and_uuid", unique: true
+    t.index ["private"], name: "index_repositories_on_private"
     t.index ["repository_organisation_id"], name: "index_repositories_on_repository_organisation_id"
     t.index ["repository_user_id"], name: "index_repositories_on_repository_user_id"
     t.index ["source_name"], name: "index_repositories_on_source_name"
