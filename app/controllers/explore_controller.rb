@@ -7,7 +7,6 @@ class ExploreController < ApplicationController
 
     project_scope = Project.includes(:repository).maintained.with_description
 
-    @trending_projects = project_scope.recently_created.hacker_news.limit(20).to_a.uniq(&:name).first(10)
     @new_projects = project_scope.order('projects.created_at desc').limit(10)
   end
 end

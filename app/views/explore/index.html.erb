@@ -1,5 +1,5 @@
 <% title "Explore - Libraries.io" %>
-<% description "Find trending and popular packages and repositories" %>
+<% description "Find new packages and repositories" %>
 
 <div class="row">
   <div class="col-md-12">
@@ -13,12 +13,6 @@
   <div class="col-sm-8">
     <ul class="nav nav-tabs">
       <li class="active">
-        <a href="#trending_projects" data-toggle="tab">
-          <%= fa_icon 'line-chart' %>
-          Trending Packages
-        </a>
-      </li>
-      <li>
         <a href="#new_projects" data-toggle="tab">
           <%= fa_icon 'bullhorn' %>
           New Packages
@@ -27,14 +21,6 @@
     </ul>
 
     <div class="tab-content ">
-      <div class="tab-pane active" id="trending_projects">
-        <% cache 'explore-trending_projects', expires_in: 30.minutes, race_condition_ttl: 1.minute do %>
-          <%= render @trending_projects, cache: true %>
-        <% end %>
-        <%= link_to trending_projects_path, class: 'text-muted' do %>
-          See more trending packages &raquo;
-        <% end %>
-      </div>
       <div class="tab-pane" id="new_projects">
         <% cache 'explore-new_projects', expires_in: 10.minutes, race_condition_ttl: 1.minute do %>
           <%= render @new_projects, cache: true %>
