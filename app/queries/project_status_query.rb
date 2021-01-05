@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class ProjectStatusQuery
-  def initialize(platform, requested_project_names, includes: nil)
+  def initialize(platform, requested_project_names)
     @platform = platform
     @requested_project_names = requested_project_names
-    @includes = includes || %i[repository versions repository_maintenance_stats]
   end
 
   def projects_by_name
@@ -18,7 +17,7 @@ class ProjectStatusQuery
       .visible
       .platform(@platform)
       .where(name: @requested_project_names)
-      .includes(*@includes)
+      .includes(:repository)
       .find_each
       .index_by(&:name)
   end
@@ -28,7 +27,7 @@ class ProjectStatusQuery
       .visible
       .lower_platform(@platform)
       .where("lower(name) in (?)", project_find_names.keys)
-      .includes(*@includes)
+      .includes(:repository)
       .find_each
       .index_by { |project| project_find_names[project.name.downcase] }
   end

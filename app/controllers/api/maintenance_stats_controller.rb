@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::MaintenanceStatsController < Api::BulkProjectController
   before_action :require_internal_api_key
   before_action :find_project, except: [:begin_watching_bulk]

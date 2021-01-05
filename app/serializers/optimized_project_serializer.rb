@@ -8,12 +8,9 @@ class OptimizedProjectSerializer
     dependents_count
     deprecation_reason
     description
-    forks
     homepage
     keywords
     language
-    latest_download_url
-    latest_download_url
     latest_release_number
     latest_release_published_at
     latest_stable_release_number
@@ -22,12 +19,10 @@ class OptimizedProjectSerializer
     license_set_by_admin
     licenses
     normalized_licenses
-    package_manager_url
     platform
     rank
     repository_url
     score
-    stars
     status
   ].freeze
 
@@ -68,7 +63,12 @@ class OptimizedProjectSerializer
         .merge!(
           canonical_name: project.name,
           name: @requested_name_map[[project.platform, project.name]],
-          repository_license: project.repository&.license,
+          download_url: project.download_url,
+          forks: project.forks,
+          latest_download_url: project.latest_download_url,
+          package_manager_url: project.package_manager_url,
+          repository_license: project.repository_license,
+          stars: project.stars,
           versions: versions[project.id]
         ).tap do |result|
           if @internal_key
