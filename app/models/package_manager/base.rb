@@ -259,7 +259,6 @@ module PackageManager
 
     private_class_method def self.request(url, options = {})
       connection = Faraday.new url.strip, options do |builder|
-        builder.use :http_cache, store: Rails.cache, logger: Rails.logger, shared_cache: false, serializer: Marshal
         builder.use FaradayMiddleware::Gzip
         builder.use FaradayMiddleware::FollowRedirects, limit: 3
         builder.request :retry, { max: 2, interval: 0.05, interval_randomness: 0.5, backoff_factor: 2 }
