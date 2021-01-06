@@ -37,13 +37,6 @@
         </div>
       <% end %>
 
-      <% if @dependent_repos.any? %>
-        <div class='col-sm-6 platform-column'>
-          <h4>Most Used <%= platform_name(@platform_name) %> Packages</h4>
-          <%= render @dependent_repos, cache: true %>
-        </div>
-      <% end %>
-
       <% if @dependend.any? %>
         <div class='col-sm-6 platform-column'>
           <h4>Most Depended upon <%= platform_name(@platform_name) %> Packages</h4>
@@ -78,16 +71,6 @@
           </h4>
           <%= render @created, cache: true %>
         </div>
-      <% end %>
-
-      <% if @watched.any? %>
-          <div class='col-sm-6 platform-column'>
-            <h4>Most Watched <%= platform_name(@platform_name) %> Packages</h4>
-            <%= render @watched, cache: true %>
-          </div>
-          <div class="col-sm-6">
-
-          </div>
       <% end %>
     </div>
   </div>
