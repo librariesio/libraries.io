@@ -71,19 +71,6 @@
         <%= render @updated, cache: true %>
       </div>
       <% end %>
-      <% if @watched.any? %>
-      <div class='col-sm-6 platform-column'>
-        <h4>Most Watched <%= @license.id %> Packages</h4>
-        <%= render @watched, cache: true %>
-      </div>
-      <% end %>
-
-      <% if @dependent_repos.any? %>
-        <div class='col-sm-6 platform-column'>
-          <h4>Most Used <%= @license.id %> Packages</h4>
-          <%= render @dependent_repos, cache: true %>
-        </div>
-      <% end %>
 
       <% if @dependend.any? %>
         <div class='col-sm-6 platform-column'>
