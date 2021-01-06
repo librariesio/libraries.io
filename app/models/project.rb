@@ -518,6 +518,9 @@ class Project < ApplicationRecord
       update_attribute(:status, 'Removed')
     elsif platform.downcase != 'packagist' && [400, 404].include?(response.response_code)
       update_attribute(:status, 'Removed')
+    elsif platform.downcase == 'pypi' && [404].include?(response.response_code)
+      # TODO: remove this stanza once this bug is fixed: https://github.com/pypa/warehouse/issues/3709#issuecomment-754973958
+      update_attribute(:status, 'Deprecated')
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(name)
       if result[:is_deprecated]

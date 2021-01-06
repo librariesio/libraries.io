@@ -8,9 +8,14 @@ module PackageManager
     SECURITY_PLANNED = true
     URL = "https://pypi.org/"
     COLOR = "#3572A5"
+    ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
 
     def self.package_link(project, version = nil)
       "https://pypi.org/project/#{project.name}/#{version}"
+    end
+
+    def self.check_status_url(project)
+      "https://pypi.org/pypi/#{project}/json"
     end
 
     def self.install_instructions(project, version = nil)
@@ -38,6 +43,15 @@ module PackageManager
       get("https://pypi.org/pypi/#{name}/json")
     rescue StandardError
       {}
+    end
+
+    def self.deprecation_info(name)
+      last_version = project(name)["releases"].values.last.first
+
+      {
+        is_deprecated: last_version["yanked"] == true,
+        message: last_version["yanked_reason"],
+      }
     end
 
     def self.mapping(project)

@@ -57,4 +57,30 @@ describe PackageManager::Pypi do
       expect(suggested_find_names).to include('test-underscore', 'test_underscore')
     end
   end
+
+  describe '#deprecation_info' do
+    it "returns not-deprecated if last version isn't deprecated" do
+      expect(PackageManager::Pypi).to receive(:project).with('foo').and_return({
+        "releases" => {
+            "0.0.1" => [{}],
+            "0.0.2" => [{"yanked" => true, "yanked_reason" => "This package is deprecated"}],
+            "0.0.3" => [{}]
+        }
+      })
+
+      expect(described_class.deprecation_info('foo')).to eq({is_deprecated: false, message: nil})
+    end
+
+    it "returns deprecated if last version is deprecated" do
+      expect(PackageManager::Pypi).to receive(:project).with('foo').and_return({
+        "releases" => {
+            "0.0.1" => [{}],
+            "0.0.2" => [{"yanked" => true, "yanked_reason" => "This package is deprecated"}],
+            "0.0.3" => [{"yanked" => true, "yanked_reason" => "This package is deprecated"}]
+        }
+      })
+
+      expect(described_class.deprecation_info('foo')).to eq({is_deprecated: true, message: "This package is deprecated"})
+    end
+  end
 end
