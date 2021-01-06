@@ -516,11 +516,11 @@ class Project < ApplicationRecord
     response = Typhoeus.head(url)
     if platform.downcase == 'packagist' && response.response_code == 302
       update_attribute(:status, 'Removed')
-    elsif platform.downcase != 'packagist' && [400, 404].include?(response.response_code)
-      update_attribute(:status, 'Removed')
-    elsif platform.downcase == 'pypi' && [404].include?(response.response_code)
+    elsif platform.downcase == 'pypi' && response.response_code == 404
       # TODO: remove this stanza once this bug is fixed: https://github.com/pypa/warehouse/issues/3709#issuecomment-754973958
       update_attribute(:status, 'Deprecated')
+    elsif platform.downcase != 'packagist' && [400, 404].include?(response.response_code)
+      update_attribute(:status, 'Removed')
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(name)
       if result[:is_deprecated]
