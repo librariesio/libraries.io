@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_30_202848) do
+ActiveRecord::Schema.define(version: 2021_01_06_132735) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -168,10 +168,12 @@ ActiveRecord::Schema.define(version: 2020_12_30_202848) do
     t.boolean "license_set_by_admin", default: false
     t.boolean "license_normalized", default: false
     t.text "deprecation_reason"
+    t.index "lower((language)::text)", name: "index_projects_on_lower_language"
     t.index "lower((platform)::text), lower((name)::text)", name: "index_projects_on_platform_and_name_lower"
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["dependents_count"], name: "index_projects_on_dependents_count"
     t.index ["keywords_array"], name: "index_projects_on_keywords_array", using: :gin
+    t.index ["normalized_licenses"], name: "index_projects_on_normalized_licenses", using: :gin
     t.index ["platform", "dependents_count"], name: "index_projects_on_platform_and_dependents_count"
     t.index ["platform", "name"], name: "index_projects_on_platform_and_name", unique: true
     t.index ["repository_id"], name: "index_projects_on_repository_id"
