@@ -37,10 +37,18 @@
         </div>
       <% end %>
 
-      <% if @dependend.any? %>
+      <% if @created.any? %>
         <div class='col-sm-6 platform-column'>
-          <h4>Most Depended upon <%= platform_name(@platform_name) %> Packages</h4>
-          <%= render @dependend, cache: true %>
+          <h4>
+            <%= link_to search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
+              <%= fa_icon "rss-square" %>
+            <% end %>
+            New <%= platform_name(@platform_name) %> Packages
+            <small class='more'>
+              <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc') %>
+            </small>
+          </h4>
+          <%= render @created, cache: true %>
         </div>
       <% end %>
 
@@ -58,20 +66,14 @@
         <%= render @updated, cache: true %>
       </div>
       <% end %>
-      <% if @created.any? %>
+
+      <% if @dependend.any? %>
         <div class='col-sm-6 platform-column'>
-          <h4>
-            <%= link_to search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), class: 'rss' do %>
-              <%= fa_icon "rss-square" %>
-            <% end %>
-            New <%= platform_name(@platform_name) %> Packages
-            <small class='more'>
-              <%= link_to 'See more &raquo;'.html_safe, search_path(platforms: @platform_name, sort: 'created_at', order: 'desc') %>
-            </small>
-          </h4>
-          <%= render @created, cache: true %>
+          <h4>Most Depended upon <%= platform_name(@platform_name) %> Packages</h4>
+          <%= render @dependend, cache: true %>
         </div>
       <% end %>
+
     </div>
   </div>
   <div class="col-md-4">
