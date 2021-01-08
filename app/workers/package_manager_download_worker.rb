@@ -47,7 +47,7 @@ class PackageManagerDownloadWorker
   }.freeze
 
   def perform(platform_name, name)
-    platform = PLATFORMS[platform_name&.downcase&.to_sym]
+    platform = PLATFORMS[platform_name&.demodulize&.downcase&.to_sym]
     raise "Platform '#{platform_name}' not found" unless platform
 
     # need to maintain compatibility with things that pass in the name of the class under PackageManager module
