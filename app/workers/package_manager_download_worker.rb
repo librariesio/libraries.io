@@ -28,6 +28,10 @@ class PackageManagerDownloadWorker
     jam: PackageManager::Jam,
     julia: PackageManager::Julia,
     maven: PackageManager::Maven,
+    maven_atlassian: PackageManager::Maven::Atlassian,
+    maven_hortonworks: PackageManager::Maven::Hortonworks,
+    maven_mavencentral: PackageManager::Maven::MavenCentral,
+    maven_springlibs: PackageManager::Maven::SpringLibs,
     meteor: PackageManager::Meteor,
     nimble: PackageManager::Nimble,
     npm: PackageManager::NPM,
@@ -47,7 +51,17 @@ class PackageManagerDownloadWorker
   }.freeze
 
   def perform(platform_name, name)
-    platform = PLATFORMS[platform_name&.demodulize&.downcase&.to_sym]
+    key = begin
+            platform_name
+              .gsub(/PackageManager::/, "")
+              .gsub(/::/, "_")
+              .downcase
+              .to_sym
+          rescue StandardError
+            nil
+          end
+
+    platform = PLATFORMS[key]
     raise "Platform '#{platform_name}' not found" unless platform
 
     # need to maintain compatibility with things that pass in the name of the class under PackageManager module
