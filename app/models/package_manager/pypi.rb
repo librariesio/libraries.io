@@ -46,11 +46,21 @@ module PackageManager
     end
 
     def self.deprecation_info(name)
-      last_version = project(name)["releases"].values.last.first
+      p = project(name)
+
+      is_deprecated, message = if (last_version = p["releases"].values.last&.first)
+        # PEP-0423: newer way of deleting specific versions (https://www.python.org/dev/peps/pep-0592/)
+        [last_version["yanked"] == true, last_version["yanked_reason"]]
+      elsif p["classifiers"].include?("Development Status :: 7 - Inactive")
+        # PEP-0423: older way of renaming/deprecating a project (https://www.python.org/dev/peps/pep-0423/#how-to-rename-a-project)
+        [true, "Development Status :: 7 - Inactive"]
+      else
+        [false, nil]
+      end
 
       {
-        is_deprecated: last_version["yanked"] == true,
-        message: last_version["yanked_reason"],
+        is_deprecated: is_deprecated,
+        message: message,
       }
     end
 
