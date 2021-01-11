@@ -3,7 +3,6 @@
 <% end %>
 
 <% if @tree %>
-  <% cache ['tree', @project, @version, @kind, @date].compact, expires_in: 1.day do  %>
     <div class="col-sm-8">
       <div class="tree">
         <ul class="top-level">
@@ -21,7 +20,6 @@
         <p class="h5"><%= @license_names.flatten.uniq.sort.join(', ') %></p>
       </div>
     </div>
-  <% end %>
 <% else %>
   <div class="col-12">
     <h3 class='text-center'>

@@ -43,7 +43,7 @@
       <% end %>
 
     <% if @projects.length > 0 %>
-      <%= render @projects, cache: true %>
+      <%= render @projects %>
       <%= will_paginate @search, page_links: false %>
     <% else %>
       <p>

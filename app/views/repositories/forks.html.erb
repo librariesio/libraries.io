@@ -5,7 +5,7 @@
 <div class="row">
   <div class="col-sm-8">
     <% if @forks.length > 0 %>
-      <%= render @forks, cache: true %>
+      <%= render @forks %>
       <%= will_paginate @forks, page_links: false %>
     <% else %>
       <p>

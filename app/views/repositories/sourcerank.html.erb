@@ -8,7 +8,6 @@
 <hr>
 
 <div class="row">
-  <% cache(['SourceRank', @repository]) do  %>
     <% @breakdown = @repository.source_rank_breakdown %>
     <div class="col-sm-8">
       <ul class="list-group">
@@ -32,7 +31,6 @@
         </li>
       </ul>
     </div>
-  <% end %>
   <div class="col-sm-4">
     <h3>
       <strong>

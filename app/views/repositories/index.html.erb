@@ -15,7 +15,7 @@
           <h4>
             Highest ranked <%= @title %>
           </h4>
-          <%= render @popular, cache: true %>
+          <%= render @popular %>
         </div>
       <% end %>
       <% if @forked.any? %>
@@ -23,7 +23,7 @@
           <h4>
             Most Forked <%= @title %>
           </h4>
-          <%= render @forked, cache: true %>
+          <%= render @forked %>
         </div>
       <% end %>
     </div>
@@ -34,7 +34,7 @@
         <h4>
           New <%= @title %>
         </h4>
-        <%= render @created, cache: true %>
+        <%= render @created %>
       </div>
       <% end %>
       <% if @updated.any? %>
@@ -42,7 +42,7 @@
         <h4>
           Recently Updated <%= @title %>
         </h4>
-        <%= render @updated, cache: true %>
+        <%= render @updated %>
       </div>
       <% end %>
     </div>

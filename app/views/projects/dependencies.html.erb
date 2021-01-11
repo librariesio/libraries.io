@@ -1,4 +1,3 @@
-<% cache(['v2', @version.id, 'dependencies'], expires_in: 1.week) do %>
   <% @dependencies = (@versions.size > 0 ? (@version || @versions.first).dependencies.includes(project: :versions).order('project_name ASC').limit(100) : []) %>
   <% if @dependencies.length > 0 %>
     <% @dependencies.group_by(&:kind).sort_by{|k,v| k == 'runtime' ? 0 : 1}.each do |kind, deps| %>
@@ -29,4 +28,3 @@
     <% end %>
     <hr>
   <% end %>
-<% end %>

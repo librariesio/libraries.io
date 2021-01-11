@@ -12,7 +12,7 @@
 <div class="row">
   <div class="col-sm-8">
     <% if @dependents.any? %>
-      <%= render @dependents, cache: true %>
+      <%= render @dependents %>
       <%= will_paginate @dependents, page_links: false %>
     <% else %>
       <p>

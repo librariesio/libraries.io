@@ -1,4 +1,3 @@
-<% cache(['v2', @project.id, 'top_dependent_repos'], :expires_in => 2.weeks) do %>
   <% @top_dependent_repos = @project.dependent_repos_top_ten %>
   <% if @top_dependent_repos.length > 0 %>
     <h4 data-ga-tracked-el='dependent-repositories'>
@@ -21,4 +20,4 @@
     <%= link_to "See usage by version", project_usage_path(@project.to_param) %>
     <hr>
   <% end %>
-<% end %>
+

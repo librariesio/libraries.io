@@ -3,7 +3,6 @@
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(languages: @language, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@language} Packages") %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(languages: @language, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@language} Packages") %>
 
-<% cache([@language, 'languages:show', 'v1'], :expires_in => 1.hour) do %>
 <div class="row">
   <div class="col-sm-6">
     <h1>
@@ -32,7 +31,7 @@
             <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'rank', order: 'desc') %>
           </small>
         </h4>
-        <%= render @popular, cache: true %>
+        <%= render @popular %>
       </div>
       <% end %>
 
@@ -45,7 +44,7 @@
           New <%= @language %> Packages
           <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'created_at', order: 'desc') %>
         </h4>
-        <%= render @created, cache: true %>
+        <%= render @created %>
       </div>
       <% end %>
       <% if @updated.any? %>
@@ -59,13 +58,13 @@
             <%= link_to 'See more &raquo;'.html_safe, search_path(languages: @language, sort: 'latest_release_published_at', order: 'desc') %>
           </small>
         </h4>
-        <%= render @updated, cache: true %>
+        <%= render @updated %>
       </div>
       <% end %>
       <% if @dependend.any? %>
         <div class='col-sm-6 platform-column'>
           <h4>Most Depended upon <%= @language %> Packages</h4>
-          <%= render @dependend, cache: true %>
+          <%= render @dependend %>
         </div>
       <% end %>
     </div>
@@ -104,4 +103,3 @@
     </div>
   </div>
 </div>
-<% end %>

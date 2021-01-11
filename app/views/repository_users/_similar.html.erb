@@ -1,7 +1,5 @@
-<% cache("users:#{@user.id}:similar", :expires_in => 1.week) do  %>
   <% related_users = @user.fellow_contributors.visible.limit(40) %>
   <% if related_users.any? %>
     <h4>Related Users</h4>
     <%= render related_users %>
   <% end %>
-<% end %>

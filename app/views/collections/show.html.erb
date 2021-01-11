@@ -7,7 +7,7 @@
 </h1>
 
 <div class="col-sm-8">
-  <%= render @projects, cache: true %>
+  <%= render @projects %>
   <%= will_paginate @search, page_links: false %>
 </div>
 <div class='col-sm-4 facets'>

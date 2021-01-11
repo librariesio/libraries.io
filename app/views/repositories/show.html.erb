@@ -82,7 +82,6 @@
 </div>
 <hr>
 <div class='row'>
-  <% cache([@repository, 'show', 'v2'], :expires_in => 1.day) do %>
     <div class='col-md-8'>
       <p>
         <%= emojify repo.description %>
@@ -119,10 +118,8 @@
 
       <div id='repository_dependencies' style='display:none;' data-url="<%= repository_dependencies_path(repo.to_param) %>"></div>
     </div>
-  <% end %>
 
   <div class='col-md-4'>
-    <% cache([@repository, 'sidebar', 'v1'], :expires_in => 1.day) do %>
       <h4>Project Statistics</h4>
       <%= render 'repositories/stats', repo: repo %>
 
@@ -149,7 +146,6 @@
         </h4>
         <%= render @forks, cache: true %>
       <% end %>
-    <% end %>
 
     <div class="row"></div>
     <br>

@@ -7,7 +7,6 @@
 <div class="row">
   <div class="col-sm-8">
     <% @projects.each do |project| %>
-      <% cache(['bus-factor', project]) do  %>
         <div class="row">
           <div class='project col-xs-8' style="border-color: <%= project.color %>;">
             <h5>
@@ -42,7 +41,6 @@
             <% end %>
           </div>
         </div>
-      <% end %>
     <% end %>
     <%= will_paginate @search, page_links: false %>
   </div>

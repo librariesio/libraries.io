@@ -9,7 +9,7 @@
 <div class="row">
   <div class="col-sm-8">
     <% if @contributions.any? %>
-      <%= render @contributions.map(&:repository), cache: true  %>
+      <%= render @contributions.map(&:repository)  %>
       <%= will_paginate @contributions, page_links: false %>
     <% else %>
       <p>

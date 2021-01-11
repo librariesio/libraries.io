@@ -7,7 +7,6 @@
 </h1>
 <hr>
 
-<% cache 'collections:index', expires_in: 1.day do  %>
   <div class="row">
     <% @languages.each_with_index do |language, index| %>
       <% keywords = Project.popular_keywords({filters: {language: [language]}}).map{|k| k['key'].downcase }.uniq.first(15) %>
@@ -32,4 +31,3 @@
       </div>
     <% end %>
   </div>
-<% end %>
