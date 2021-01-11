@@ -4,7 +4,6 @@ source "https://rubygems.org"
 ruby "2.6.5"
 
 gem "active_model_serializers"
-gem "amatch"
 gem "api-pagination"
 gem "asciidoctor"
 gem "bibliothecary"
