@@ -12,7 +12,6 @@
   Required version breakdown across <strong><%= number_to_human(@total) %></strong> open source repositories
 </p>
 <% if @all_counts.any? %>
-  <% cache ['usage', @project.id, 'v3'], expires_in: usage_cache_length(@total).week, race_condition_ttl: 1.minute do %>
     <table id="q-graph">
         <tbody>
         <% max_height = 400 %>
@@ -53,7 +52,6 @@
           <% end %>
         </tbody>
     </table>
-  <% end %>
 <% else %>
   No dependent repositories found.
 <% end %>

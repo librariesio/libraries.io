@@ -12,7 +12,7 @@
 <div class="row">
   <div class="col-sm-8">
     <% if @project.dependent_repos_count.positive? %>
-      <%= render @dependent_repos, cache: true %>
+      <%= render @dependent_repos %>
       <%= will_paginate @dependent_repos, page_links: false %>
     <% else %>
       <p>

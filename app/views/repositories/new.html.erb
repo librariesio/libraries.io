@@ -3,7 +3,7 @@
 
 <div class="row">
   <div class="col-sm-8">
-    <%= render @repos, cache: true %>
+    <%= render @repos %>
     <%= will_paginate @repos, page_links: false %>
   </div>
   <div class="col-sm-4">

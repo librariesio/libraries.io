@@ -1,6 +1,5 @@
 <div class="row">
   <div class="col-xs-8">
-    <% cache(['v2', repository]) do  %>
       <div class='project' style="border-color: <%= repository.color %>;">
         <h5>
           <%= link_to repository.full_name, repository_path(repository.to_param) %>
@@ -36,7 +35,6 @@
           <% end %>
         </small>
       </div>
-    <% end %>
   </div>
   <div class="col-xs-4">
     <%= link_to "Deprecate", deprecate_admin_repository_path(repository.id), class: 'btn btn-danger', method: :put, target: :blank %>

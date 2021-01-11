@@ -22,9 +22,7 @@
 
     <div class="tab-content ">
       <div class="tab-pane active" id="new_projects">
-        <% cache 'explore-new_projects', expires_in: 10.minutes, race_condition_ttl: 1.minute do %>
-          <%= render @new_projects, cache: true %>
-        <% end %>
+        <%= render @new_projects %>
         <%= link_to search_path(sort: 'created_at'), class: 'text-muted' do %>
           See more new packages &raquo;
         <% end %>
@@ -32,8 +30,6 @@
     </div>
   </div>
   <div class="col-sm-4">
-    <% cache 'explore-sidebar', expires_in: 1.week do %>
       <%= render 'sidebar' %>
-    <% end %>
   </div>
 </div>
