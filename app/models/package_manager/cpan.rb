@@ -41,7 +41,7 @@ module PackageManager
         description: project["abstract"],
         licenses: project.fetch("license", []).join(","),
         repository_url: repo_fallback(project.fetch("resources", {}).fetch("repository", {})["web"], project.fetch("resources", {})["homepage"]),
-        versions: versions(project),
+        versions: versions(project, project["distribution"]),
       }
     end
 
