@@ -15,7 +15,7 @@ module PackageManager
     end
 
     def self.check_status_url(project)
-      "https://pypi.org/pypi/#{project.name}/json"
+      "https://pypi.org/pypi/#{project.name}/json/"
     end
 
     def self.install_instructions(project, version = nil)
