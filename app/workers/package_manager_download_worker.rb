@@ -65,7 +65,7 @@ class PackageManagerDownloadWorker
     raise "Platform '#{platform_name}' not found" unless platform
 
     # need to maintain compatibility with things that pass in the name of the class under PackageManager module
-    logger.info("Package update for platform=#{platform.to_s.demodulize.downcase} name=#{name}")
+    logger.info("Package update for platform=#{key} name=#{name}")
     platform.update(name)
   end
 end
