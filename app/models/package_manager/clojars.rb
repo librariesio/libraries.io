@@ -23,5 +23,9 @@ module PackageManager
     def self.recent_names
       get("https://maven.libraries.io/clojars/recent")
     end
+
+    def self.download_url(name, version = nil)
+      MavenUrl.from_name(name, repository_base).jar(version)
+    end
   end
 end
