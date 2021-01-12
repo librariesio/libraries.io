@@ -86,7 +86,9 @@ describe PackageManager::Pypi do
     it "return not-deprecated if 'development status' is not 'inactive'" do
       expect(PackageManager::Pypi).to receive(:project).with('foo').and_return({
         "releases" => {},
-        "classifiers" => ["Development Status :: 5 - Production/Stable"]
+        "info" => {
+          "classifiers" => ["Development Status :: 5 - Production/Stable"]
+        }
       })
 
       expect(described_class.deprecation_info('foo')).to eq({is_deprecated: false, message: nil})
@@ -95,7 +97,9 @@ describe PackageManager::Pypi do
     it "return deprecated if 'development status' is 'inactive'" do
       expect(PackageManager::Pypi).to receive(:project).with('foo').and_return({
         "releases" => {},
-        "classifiers" => ["Development Status :: 7 - Inactive"]
+        "info" => {
+          "classifiers" => ["Development Status :: 7 - Inactive"],
+        }
       })
 
       expect(described_class.deprecation_info('foo')).to eq({is_deprecated: true, message: "Development Status :: 7 - Inactive"})
