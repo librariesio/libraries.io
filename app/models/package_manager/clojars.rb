@@ -25,7 +25,9 @@ module PackageManager
     end
 
     def self.download_url(name, version = nil)
-      MavenUrl.from_name(name, repository_base).jar(version)
+      group_id, artifact_id = name.split("/", 2)
+      artifact_id = group_id if artifact_id.nil?
+      MavenUrl(group_id, artifact_id, repository_base).jar(version)
     end
   end
 end
