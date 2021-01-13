@@ -406,6 +406,7 @@ GEM
     parallel (1.17.0)
     parser (2.7.0.4)
       ast (~> 2.4.0)
+    parslet (1.8.2)
     pg (1.1.4)
     pg_query (1.1.0)
     pghero (2.7.0)
@@ -615,6 +616,8 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.9)
+    toml (0.2.0)
+      parslet (~> 1.8.0)
     toml-rb (1.1.2)
       citrus (~> 3.0, > 3.0)
     treetop (1.6.10)
@@ -753,6 +756,7 @@ DEPENDENCIES
   spring-watcher-listen
   sql_queries_count
   stackdriver (~> 0.15.0)
+  toml
   turbolinks
   typhoeus
   uglifier

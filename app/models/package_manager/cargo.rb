@@ -8,6 +8,7 @@ module PackageManager
     BIBLIOTHECARY_SUPPORT = true
     URL = "https://crates.io"
     COLOR = "#dea584"
+    ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
 
     def self.package_link(project, version = nil)
       "https://crates.io/crates/#{project.name}/#{version}"
@@ -23,6 +24,23 @@ module PackageManager
 
     def self.check_status_url(project)
       "https://crates.io/api/v1/crates/#{project.name}"
+    end
+
+    def self.deprecation_info(name)
+      item = project(name)
+      version = item.dig("crate", "newest_version")
+      url = download_url(name, version)
+      body = get_raw(url)
+      tar_extract = Gem::Package::TarReader.new(Zlib::GzipReader.new(StringIO.new(body)))
+      tar_extract.rewind
+      toml = tar_extract.find { |entry| entry.full_name.end_with?("/Cargo.toml") }.read
+      cargo_toml = TOML.load(toml)
+      status = cargo_toml.dig("badges", "maintenance", "status")
+      is_deprecated = status == "deprecated"
+      {
+        is_deprecated: is_deprecated,
+        message: is_deprecated ? "Marked as deprecated in Cargo.toml": nil
+      }
     end
 
     def self.project_names
