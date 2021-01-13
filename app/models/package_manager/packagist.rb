@@ -35,7 +35,7 @@ module PackageManager
 
       {
         is_deprecated: is_deprecated != "",
-        message: "",
+        message: is_deprecated.is_a?(String) && is_deprecated.present? ? "Replacement: #{is_deprecated}"  : "",
       }
     end
 
