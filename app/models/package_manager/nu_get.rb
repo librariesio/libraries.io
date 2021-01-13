@@ -7,6 +7,7 @@ module PackageManager
     BIBLIOTHECARY_SUPPORT = true
     URL = "https://www.nuget.org"
     COLOR = "#178600"
+    ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
 
     def self.package_link(project, version = nil)
       "https://www.nuget.org/packages/#{project.name}/#{version}"
@@ -18,6 +19,18 @@ module PackageManager
 
     def self.install_instructions(project, version = nil)
       "Install-Package #{project.name}" + (version ? " -Version #{version}" : "")
+    end
+
+    def self.deprecation_info(name)
+      info = get("https://api.nuget.org/v3/registration5-gz-semver2/#{name.downcase}/index.json")
+      deprecation = info.dig("items")&.first&.dig("items")&.first&.dig("catalogEntry", "deprecation")
+
+      #alternate_package is not currently stored in DB but I wanted to record it because it seems useful
+      {
+        is_deprecated: deprecation.present?,
+        message: deprecation.present? ? deprecation["message"] : "",
+        alternate_package: deprecation.present? ? deprecation.dig("alternatePackage", "id") : nil
+      }
     end
 
     def self.load_names(limit = nil)
