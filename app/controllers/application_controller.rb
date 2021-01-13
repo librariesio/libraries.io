@@ -143,26 +143,6 @@ class ApplicationController < ActionController::Base
     "#{format_sort} #{format_order}"
   end
 
-  def search_issues(options = {})
-    @search = paginate Issue.search(filters: {
-      license: current_license,
-      language: current_language,
-      labels: options[:labels]
-    }, repo_ids: options[:repo_ids]), page: page_number, per_page: per_page_number
-    @issues = @search.records.includes(:repository)
-    @facets = @search.response.aggregations
-  end
-
-  def first_pull_request_issues(labels)
-    @search = paginate Issue.first_pr_search(filters: {
-      license: current_license,
-      language: current_language,
-      labels: labels
-    }), page: page_number, per_page: per_page_number
-    @issues = @search.records.includes(:repository)
-    @facets = @search.response.aggregations
-  end
-
   def search_repos(query)
     es_query(Repository, query, {
       license: current_license,

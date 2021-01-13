@@ -37,9 +37,6 @@ Rails.application.routes.draw do
     get '/projects/updated', to: 'projects#updated'
 
     scope constraints: {host_type: /(github|gitlab|bitbucket)/i}, defaults: { host_type: 'github' } do
-      get '/:host_type/issues/help-wanted', to: 'issues#help_wanted'
-      get '/:host_type/issues/first-pull-request', to: 'issues#first_pull_request'
-
       get '/:host_type/search', to: 'repositories#search'
 
       get '/:host_type/:login/dependencies', to: 'repository_users#dependencies'
@@ -147,27 +144,9 @@ Rails.application.routes.draw do
 
   get '/stats', to: redirect('/admin/stats')
 
-  #explore
-  get '/explore/unlicensed-libraries', to: 'projects#unlicensed', as: :unlicensed
-  get '/explore/unmaintained-libraries', to: 'projects#unmaintained', as: :unmaintained
-  get '/explore/deprecated-libraries', to: 'projects#deprecated', as: :deprecated
-  get '/explore/removed-libraries', to: 'projects#removed', as: :removed
-  get '/explore/help-wanted', to: 'issues#help_wanted', as: :help_wanted
-  get '/explore/first-pull-request', to: 'issues#first_pull_request', as: :first_pull_request
-  get '/explore/issues', to: 'issues#index', as: :all_issues
-  get '/unlicensed-libraries', to: redirect("/explore/unlicensed-libraries")
-  get 'unmaintained-libraries', to: redirect("/explore/unmaintained-libraries")
-  get 'deprecated-libraries', to: redirect("/explore/deprecated-libraries")
-  get 'removed-libraries', to: redirect("/explore/removed-libraries")
-  get '/help-wanted', to: redirect("/explore/help-wanted")
-  get '/first-pull-request', to: redirect("/explore/first-pull-request")
-
   get '/platforms', to: 'platforms#index', as: :platforms
 
   scope constraints: {host_type: /(github|gitlab|bitbucket)/i}, defaults: { host_type: 'github' } do
-    get '/:host_type/issues', to: 'issues#index', as: :issues
-    get '/:host_type/issues/your-dependencies', to: 'issues#your_dependencies', as: :your_dependencies_issues
-
     post '/hooks/:host_type', to: 'hooks#github'
 
     get '/:host_type/languages', to: 'repositories#languages', as: :github_languages
@@ -176,9 +155,7 @@ Rails.application.routes.draw do
     get '/:host_type/new', to: 'repositories#new', as: :new_repos
     get '/:host_type/organisations', to: 'repository_organisations#index', as: :repository_organisations
     get '/:host_type/timeline', to: 'repositories#timeline', as: :github_timeline
-    get '/:host_type/:login/issues', to: 'repository_users#issues'
     get '/:host_type/:login/dependencies', to: 'repository_users#dependencies', as: :user_dependencies
-    get '/:host_type/:login/dependency-issues', to: 'repository_users#dependency_issues'
     get '/:host_type/:login/repositories', to: 'repository_users#repositories', as: :user_repositories
     get '/:host_type/:login/contributions', to: 'repository_users#contributions', as: :user_contributions
     get '/:host_type/:login/projects', to: 'repository_users#projects', as: :user_projects
@@ -192,7 +169,6 @@ Rails.application.routes.draw do
     get '/:host_type/:owner/:name/sourcerank', to: 'repositories#sourcerank', as: :repository_sourcerank, format: false, constraints: { :name => /[^\/]+/ }
     get '/:host_type/:owner/:name/forks', to: 'repositories#forks', as: :repository_forks, format: false, constraints: { :name => /[^\/]+/ }
     get '/:host_type/:owner/:name/tags', to: 'repositories#tags', as: :repository_tags, format: false, constraints: { :name => /[^\/]+/ }
-    get '/:host_type/:owner/:name/dependency-issues', to: 'repositories#dependency_issues', format: false, constraints: { :name => /[^\/]+/ }
     get '/:host_type/:owner/:name/dependencies', to: 'repositories#dependencies', format: false, constraints: { :name => /[^\/]+/ }, as: :repository_dependencies
     get '/:host_type/:owner/:name/tree', to: 'repository_tree#show', as: :repository_tree, format: false, constraints: { :name => /[^\/]+/ }
 
@@ -206,9 +182,6 @@ Rails.application.routes.draw do
 
     get '/:host_type', to: 'repositories#index', as: :hosts
   end
-
-  #redirect after other issues routes created
-  get '/issues', to: redirect('explore/issues')
 
   get '/repos/search', to: 'repositories#search', as: :repo_search
   get '/repos', to: 'repositories#index', as: :repos

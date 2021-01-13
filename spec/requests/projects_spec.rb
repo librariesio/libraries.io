@@ -26,48 +26,6 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #deprecated" do
-    it "responds successfully", type: :request do
-      visit deprecated_path
-      expect(page).to have_content 'Deprecated'
-    end
-
-    context "filtered by platform" do
-      it "responds successfully" do
-        visit deprecated_path(platform: 'Rubygems')
-        expect(page).to have_content 'Deprecated'
-      end
-    end
-  end
-
-  describe "GET #removed" do
-    it "responds successfully", type: :request do
-      visit removed_path
-      expect(page).to have_content 'Removed'
-    end
-
-    context "filtered by platform" do
-      it "responds successfully" do
-        visit removed_path(platform: 'Rubygems')
-        expect(page).to have_content 'Removed'
-      end
-    end
-  end
-
-  describe "GET #unmaintained" do
-    it "responds successfully", type: :request do
-      visit unmaintained_path
-      expect(page).to have_content 'Unmaintained'
-    end
-
-    context "filtered by platform" do
-      it "responds successfully" do
-        visit unmaintained_path(platform: 'Rubygems')
-        expect(page).to have_content 'Unmaintained'
-      end
-    end
-  end
-
   describe "GET #trending" do
     it "responds successfully", type: :request do
       visit trending_path
