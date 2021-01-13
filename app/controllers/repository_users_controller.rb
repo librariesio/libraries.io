@@ -12,16 +12,6 @@ class RepositoryUsersController < ApplicationController
     end
   end
 
-  def issues
-    @repo_ids = @user.repositories.open_source.source.pluck(:id)
-    search_issues(repo_ids: @repo_ids)
-  end
-
-  def dependency_issues
-    @repo_ids = @user.all_dependent_repos.open_source.pluck(:id) - @user.repositories.pluck(:id)
-    search_issues(repo_ids: @repo_ids)
-  end
-
   def dependencies
     orginal_scope = @user.favourite_projects.visible
     scope = params[:platforms].present? ? orginal_scope.platform(params[:platforms]) : orginal_scope
