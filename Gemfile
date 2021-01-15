@@ -89,6 +89,7 @@ gem "turbolinks"
 gem "typhoeus"
 gem "uglifier"
 gem "will_paginate-bootstrap"
+gem "yajl-ruby"
 
 group :development do
   gem "brakeman", require: false

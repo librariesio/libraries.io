@@ -647,6 +647,7 @@ GEM
       will_paginate (>= 3.0.3)
     xpath (3.2.0)
       nokogiri (~> 1.8)
+    yajl-ruby (1.4.1)
 
 PLATFORMS
   ruby
@@ -763,6 +764,7 @@ DEPENDENCIES
   vcr (~> 4.0)
   webmock (~> 3.4)
   will_paginate-bootstrap
+  yajl-ruby
 
 RUBY VERSION
    ruby 2.6.5p114
