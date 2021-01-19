@@ -1,6 +1,10 @@
 module RepositoryHost
   class Gitlab < Base
-    IGNORABLE_EXCEPTIONS = [::Gitlab::Error::NotFound, ::Gitlab::Error::Forbidden, ::Gitlab::Error::InternalServerError, ::Gitlab::Error::Parsing]
+    IGNORABLE_EXCEPTIONS = [::Gitlab::Error::NotFound,
+                            ::Gitlab::Error::Forbidden,
+                            ::Gitlab::Error::Unauthorized,
+                            ::Gitlab::Error::InternalServerError,
+                            ::Gitlab::Error::Parsing]
 
     def self.api_missing_error_class
       ::Gitlab::Error::NotFound
