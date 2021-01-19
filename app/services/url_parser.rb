@@ -4,7 +4,7 @@ class URLParser
   end
 
   def initialize(url)
-    @url = url.to_s
+    @url = url.to_s.dup
   end
 
   def parse
