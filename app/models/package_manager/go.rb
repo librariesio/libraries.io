@@ -24,6 +24,10 @@ module PackageManager
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)/.freeze
 
+    def self.check_status_url(project)
+      "#{PROXY_BASE_URL}/#{project.name}/@v/list"
+    end
+
     def self.package_link(project, version = nil)
       "https://pkg.go.dev/#{project.name}#{"@#{version}" if version}"
     end
