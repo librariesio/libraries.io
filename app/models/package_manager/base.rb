@@ -254,7 +254,9 @@ module PackageManager
     end
 
     private_class_method def self.get_raw(url, options = {})
-      request(url, options).body
+      rsp = request(url, options)
+      return "" unless rsp.status == 200
+      return rsp.body
     end
 
     private_class_method def self.request(url, options = {})
