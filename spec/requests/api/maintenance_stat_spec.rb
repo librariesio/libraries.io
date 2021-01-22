@@ -14,8 +14,8 @@ describe "API::MaintenanceStatsController" do
 
   describe "POST /api/maintenance/stats/begin/bulk", type: :request do
     it "begins watching projects" do
-      expect(RepositoryMaintenanceStatWorker).to receive(:enqueue).with(repository_django.id, priority: :high).exactly(1).times
-      expect(RepositoryMaintenanceStatWorker).to receive(:enqueue).with(repository.id, priority: :high).exactly(1).times
+      expect(RepositoryMaintenanceStatWorker).to receive(:perform_async).with(repository_django.id).exactly(1).times
+      expect(RepositoryMaintenanceStatWorker).to receive(:perform_async).with(repository.id).exactly(1).times
 
       post(
         "/api/maintenance/stats/begin/bulk",
