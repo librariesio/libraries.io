@@ -33,8 +33,8 @@ describe "API::MaintenanceStatsController" do
 
     it "skips projects with stats" do
       create(:repository_maintenance_stat, repository: repository)
-      expect(RepositoryMaintenanceStatWorker).to receive(:enqueue).with(repository_django.id, priority: :high).exactly(1).times
-      expect(RepositoryMaintenanceStatWorker).to receive(:enqueue).with(repository.id, priority: :high).exactly(0).times
+      expect(RepositoryMaintenanceStatWorker).to receive(:perform_async).with(repository_django.id).exactly(1).times
+      expect(RepositoryMaintenanceStatWorker).to receive(:perform_async).with(repository.id).exactly(0).times
 
       post(
         "/api/maintenance/stats/begin/bulk",
