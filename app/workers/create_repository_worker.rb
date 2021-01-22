@@ -1,6 +1,6 @@
 class CreateRepositoryWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :repo, unique: :until_executed
+  sidekiq_options queue: :low, unique: :until_executed
 
   def perform(host_type, repo_name, token = nil)
     return unless repo_name.present?

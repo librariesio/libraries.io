@@ -110,7 +110,7 @@ module RepositoryHost
     end
 
     def gather_maintenance_stats_async
-      RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: :medium)
+      RepositoryMaintenanceStatWorker.perform_async(repository.id)
     end
 
     def gather_maintenance_stats

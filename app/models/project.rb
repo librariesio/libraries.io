@@ -604,7 +604,7 @@ class Project < ApplicationRecord
   end
 
   def update_maintenance_stats_async(priority: :medium)
-    RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: priority) unless repository.nil?
+    RepositoryMaintenanceStatWorker.perform_async(repository.id) unless repository.nil?
   end
 
   def reformat_repository_url
