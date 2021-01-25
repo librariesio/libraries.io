@@ -50,7 +50,7 @@ class PackageManagerDownloadWorker
     wordpress: PackageManager::Wordpress,
   }.freeze
 
-  def perform(platform_name, name)
+  def perform(platform_name, name, version = nil)
     key = begin
             platform_name
               .gsub(/PackageManager::/, "")
