@@ -106,11 +106,8 @@ module PackageManager
             known_versions[v].slice(:number, :published_at)
           else
             info = get("#{PROXY_BASE_URL}/#{project[:name]}/@v/#{v}.info")
-            # NB there is a known issue with Go Modules (+Godep) where modules with case-insensitive name collisions
-            # break and the Go Proxy returns an error. Skip these versions for now. For example:
-            # Git tag w/name collision: https://github.com/ysweid/aws-sdk-go/tree/v1.12.68/models/apis
-            # And its proxy request: https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
-            # Related GH issue: https://github.com/golang/go/issues/33778
+            # Known Go Modules issue where versions with case-insensitive name collisions break go get
+            # e.g. https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
             next if info.nil?
 
             {
