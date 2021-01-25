@@ -5,6 +5,7 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
+    SUPPORTS_SINGLE_VERSION_UPDATE = true
     URL = "https://pkg.go.dev/"
     COLOR = "#375eab"
     KNOWN_HOSTS = [
@@ -52,8 +53,20 @@ module PackageManager
         .map { |line| JSON.parse(line)["Path"] }
     end
 
-    def self.update(name)
-      super(name)
+    def self.one_version(name, version_string)
+      info = get("#{PROXY_BASE_URL}/#{name}/@v/#{version_string}.info")
+      # Store nil published_at for known Go Modules issue where case-insensitive name collisions break go get
+      # e.g. https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
+      version_string = info.nil? ? version_string : info["Version"]
+      published_at = info && info["Time"].presence && Time.parse(info["Time"])
+      {
+        number: version_string,
+        published_at: published_at,
+      }
+    end
+
+    def self.update(name, sync_versions: true)
+      super(name, sync_versions: sync_versions)
       # call update on base module name if the name is appended with major version
       # example: github.com/myexample/modulename/v2
       update_base_module(name) if name.match(VERSION_MODULE_REGEX)
@@ -71,8 +84,8 @@ module PackageManager
       # find any versions the /vx module knows about that the base module does have already
       new_base_versions = module_project.versions.where.not(number: base_module_project.versions.pluck(:number))
 
-      new_base_versions.each do |version|
-        base_module_project.versions.create(number: version.number, published_at: version.published_at)
+      new_base_versions.each do |vers|
+        base_module_project.versions.create(number: vers.number, published_at: vers.published_at)
       end
     end
 
@@ -105,16 +118,7 @@ module PackageManager
           if known_versions.key?(v)
             known_versions[v].slice(:number, :published_at)
           else
-            info = get("#{PROXY_BASE_URL}/#{project[:name]}/@v/#{v}.info")
-            # Store nil published_at for known Go Modules issue where case-insensitive name collisions break go get
-            # e.g. https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
-            version = info.nil? ? v : info["Version"]
-            published_at = info && info["Time"].presence && Time.parse(info["Time"])
-
-            {
-              number: version,
-              published_at: published_at,
-            }
+            one_version(project[:name], v)
           end
         rescue Oj::ParseError
           next
