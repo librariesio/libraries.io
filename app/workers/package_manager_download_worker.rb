@@ -70,7 +70,7 @@ class PackageManagerDownloadWorker
       platform.update_version(name, version)
     else
       logger.info("Package update for platform=#{key} name=#{name}")
-      platform.update(name, sync_versions: true)
+      platform.update(name)
     end
   end
 end

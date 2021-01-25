@@ -93,7 +93,7 @@ module PackageManager
       mapped_project
     end
 
-    def self.save(project, sync_versions: false)
+    def self.save(project, sync_versions: true)
       return unless project.present?
 
       mapped_project = map_project(project)
@@ -125,7 +125,7 @@ module PackageManager
         return
       end
 
-      update(name)
+      update(name, sync_versions: false)
       mapped_project=map_project(project(name))
       unless mapped_project.present?
         logger.warn("No mapped project for #{db_platform}/#{name}")
@@ -154,7 +154,7 @@ module PackageManager
       dbproject
     end
 
-    def self.update(name, sync_versions: false)
+    def self.update(name, sync_versions: true)
       proj = project(name)
       save(proj, sync_versions: sync_versions) if proj.present?
     rescue SystemExit, Interrupt
