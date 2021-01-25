@@ -106,13 +106,14 @@ module PackageManager
             known_versions[v].slice(:number, :published_at)
           else
             info = get("#{PROXY_BASE_URL}/#{project[:name]}/@v/#{v}.info")
-            # Known Go Modules issue where versions with case-insensitive name collisions break go get
+            # Store nil published_at for known Go Modules issue where case-insensitive name collisions break go get
             # e.g. https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
-            next if info.nil?
+            version = info.nil? ? v : info["Version"]
+            published_at = info && info["Time"].presence && Time.parse(info["Time"])
 
             {
-              number: info["Version"],
-              published_at: info["Time"].presence && Time.parse(info["Time"]),
+              number: version,
+              published_at: published_at,
             }
           end
         rescue Oj::ParseError
