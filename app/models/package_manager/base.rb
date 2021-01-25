@@ -10,6 +10,7 @@ module PackageManager
     HIDDEN = false
     HAS_OWNERS = false
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = false
+    SUPPORTS_SINGLE_VERSION_UPDATE = false
 
     def self.platforms
       @platforms ||= begin
@@ -86,11 +87,16 @@ module PackageManager
       find(platform).try(:formatted_name) || platform
     end
 
-    def self.save(project)
-      return unless project.present?
-
+    def self.map_project(project)
       mapped_project = mapping(project)
       mapped_project = mapped_project.delete_if { |_key, value| value.blank? } if mapped_project.present?
+      mapped_project
+    end
+
+    def self.save(project, sync_versions: false)
+      return unless project.present?
+
+      mapped_project = map_project(project)
       return false unless mapped_project.present?
 
       dbproject = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
@@ -103,17 +109,44 @@ module PackageManager
         dbproject.update_attributes(attrs)
       end
 
-      if self::HAS_VERSIONS
-        versions(project, dbproject.name).each do |version|
-          existing = dbproject.versions.find_or_initialize_by(number: version[:number]) do |new_version|
-            new_version.update_attributes(version)
-          end
-          existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
-          existing.save
+      if self::HAS_VERSIONS && sync_versions
+        versions(project, dbproject.name).each do |vers|
+          add_version(dbproject, vers)
         end
       end
 
       save_dependencies(mapped_project) if self::HAS_DEPENDENCIES
+      finalize_dbproject(dbproject)
+    end
+
+    def self.update_version(name, version)
+      unless self::SUPPORTS_SINGLE_VERSION_UPDATE
+        logger.warn("#{db_platform}.update_version(#{name}, #{version}) called but not supported on platform")
+        return
+      end
+
+      update(name)
+      mapped_project=map_project(project(name))
+      unless mapped_project.present?
+        logger.warn("No mapped project for #{db_platform}/#{name}")
+        return
+      end
+
+      dbproject = Project.find_by!(name: mapped_project[:name], platform: db_platform)
+      add_version(dbproject, one_version(dbproject.name, version))
+      save_dependencies(mapped_project) if self::HAS_DEPENDENCIES
+      finalize_dbproject(dbproject)
+    end
+
+    def self.add_version(dbproject, version_hash)
+      existing = dbproject.versions.find_or_initialize_by(number: version_hash[:number]) do |new_version|
+        new_version.update_attributes(version_hash)
+      end
+      existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
+      existing.save
+    end
+
+    def self.finalize_dbproject(dbproject)
       dbproject.reload
       dbproject.download_registry_users
       dbproject.last_synced_at = Time.now
@@ -121,9 +154,9 @@ module PackageManager
       dbproject
     end
 
-    def self.update(name)
+    def self.update(name, sync_versions: false)
       proj = project(name)
-      save(proj) if proj.present?
+      save(proj, sync_versions: sync_versions) if proj.present?
     rescue SystemExit, Interrupt
       exit 0
     rescue StandardError => e
