@@ -30,7 +30,7 @@ class Project < ApplicationRecord
     rank
     repository_url
     status
-].freeze
+  ].freeze
 
   validates :name, :platform, presence: true
   validates :name, uniqueness: { scope: :platform, case_sensitive: true }
