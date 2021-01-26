@@ -43,16 +43,6 @@ describe PackageManager::Rubygems do
     end
   end
 
-  describe '#deprecation_info' do
-    it "returns not-deprecated because Rubygems packages are not deprecatable" do
-      expect(PackageManager::Rubygems).to receive(:project).with('foo').and_return({
-        "versions" => { "0.0.1" => {} }
-      })
-
-      expect(described_class.deprecation_info('foo')).to eq({is_deprecated: false, message: nil})
-    end
-  end
-
   describe "#deprecate_versions" do
     it "should mark missing versions as Removed" do
       project.versions.create!(number: "1.0.0")

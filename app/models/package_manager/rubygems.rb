@@ -47,16 +47,6 @@ module PackageManager
       {}
     end
 
-    def self.deprecation_info(name)
-      last_version = project(name)["versions"].values.last
-
-      # NB there's no way to deprecate a package in Rubygems, only delete versions.
-      {
-        is_deprecated: false,
-        message: nil,
-      }
-    end
-
     def self.mapping(project)
       {
         name: project["name"],
