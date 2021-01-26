@@ -3,8 +3,11 @@
 class Version < ApplicationRecord
   include Releaseable
 
-  validates_presence_of :project_id, :number
-  validates_uniqueness_of :number, scope: :project_id
+  STATUSES = ['Deprecated', 'Removed'].freeze
+
+  validates :project_id, :number, presence: true
+  validates :number, uniqueness: { scope: :project_id }
+  validates :status, inclusion: { in: STATUSES, allow_blank: true }
 
   belongs_to :project
   counter_culture :project
