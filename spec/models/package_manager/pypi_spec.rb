@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe PackageManager::Pypi do
-  let(:project) { create(:project, name: 'foo', platform: described_class.name) }
+  let(:project) { create(:project, name: 'foo', platform: described_class.formatted_name) }
 
   it 'has formatted name of "PyPI"' do
     expect(described_class.formatted_name).to eq('PyPI')

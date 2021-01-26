@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe PackageManager::Rubygems do
-  let(:project) { create(:project, name: 'foo', platform: described_class.name) }
+  let(:project) { create(:project, name: 'foo', platform: described_class.formatted_name) }
 
   it 'has formatted name of "Rubygems"' do
     expect(described_class.formatted_name).to eq('Rubygems')

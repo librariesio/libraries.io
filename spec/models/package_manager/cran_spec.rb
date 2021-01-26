@@ -6,7 +6,7 @@ describe PackageManager::CRAN do
   end
 
   describe '#package_link' do
-    let(:project) { create(:project, name: 'foo', platform: described_class.name) }
+    let(:project) { create(:project, name: 'foo', platform: described_class.formatted_name) }
 
     it 'returns a link to project website' do
       expect(described_class.package_link(project)).to eq("https://cran.r-project.org/package=foo")
