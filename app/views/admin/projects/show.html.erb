@@ -26,7 +26,7 @@
 
     <%= form.input :repository_url %>
     <%= form.input :normalized_licenses, include_blank: true, selected: @project.normalized_licenses, label: 'License', collection: Project.popular_licenses(:facet_limit => 300).map{|l| format_license(l['key']) } %>
-    <%= form.input :status, include_blank: true, collection: Project::STATUSES + ['Hidden'] %>
+    <%= form.input :status, include_blank: true, collection: Project::STATUSES %>
 
     <%= form.submit class: 'btn btn-primary' %>
   <% end %>
