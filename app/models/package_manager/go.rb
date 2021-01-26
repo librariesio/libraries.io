@@ -103,7 +103,7 @@ module PackageManager
 
       known_versions = Project.find_by(platform: "Go", name: project[:name])
         &.versions
-        &.select(:number, :published_at)
+        &.select(:number, :published_at, :created_at)
         &.index_by(&:number) || {}
 
       # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
