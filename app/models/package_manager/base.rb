@@ -110,9 +110,9 @@ module PackageManager
       end
 
       if self::HAS_VERSIONS && sync_versions
-        versions(project, dbproject.name).each do |vers|
-          add_version(dbproject, vers)
-        end
+        versions(project, dbproject.name)
+          .each { |v| add_version(dbproject, v) }
+          .tap { |vs| deprecate_versions(dbproject, vs) }
       end
 
       save_dependencies(mapped_project) if self::HAS_DEPENDENCIES
@@ -134,6 +134,7 @@ module PackageManager
 
       dbproject = Project.find_by!(name: mapped_project[:name], platform: db_platform)
       add_version(dbproject, one_version(dbproject.name, version))
+      # TODO handle deprecation here too
       save_dependencies(mapped_project) if self::HAS_DEPENDENCIES
       finalize_dbproject(dbproject)
     end
@@ -144,6 +145,16 @@ module PackageManager
       end
       existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
       existing.save
+    end
+
+    def self.deprecate_versions(dbproject, version_hash)
+      case dbproject.platform.downcase
+      when "rubygems" # yanked gems will be omitted from project JSON versions
+        dbproject
+          .versions
+          .where.not(number: version_hash.pluck(:number))
+          .update_all(status: "Removed")
+      end
     end
 
     def self.finalize_dbproject(dbproject)
