@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe PackageManager::Bower do
-  let(:project) { create(:project, name: 'foo', platform: described_class.name) }
+  let(:project) { create(:project, name: 'foo', platform: described_class.formatted_name) }
 
   it 'has formatted name of "Bower"' do
     expect(PackageManager::Bower.formatted_name).to eq('Bower')

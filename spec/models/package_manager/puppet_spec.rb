@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe PackageManager::Puppet do
-  let(:project) { create(:project, name: 'foo-bar', platform: described_class.name) }
+  let(:project) { create(:project, name: 'foo-bar', platform: described_class.formatted_name) }
 
   it 'has formatted name of "Puppet"' do
     expect(described_class.formatted_name).to eq('Puppet')

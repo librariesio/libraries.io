@@ -8,7 +8,7 @@ describe PackageManager::Maven do
   end
 
   describe "#package_link" do
-    let(:project) { create(:project, name: "com.github.jparkie:pdd", platform: described_class.name) }
+    let(:project) { create(:project, name: "com.github.jparkie:pdd", platform: described_class.formatted_name) }
 
     it "returns a link to project website" do
       expect(described_class.package_link(project)).to eq("http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jparkie%22%20AND%20a%3A%22pdd%22")
@@ -64,7 +64,7 @@ describe PackageManager::Maven do
   end
 
   describe "#check_status_url" do
-    let(:project) { create(:project, name: "javax.faces:javax.faces-api", platform: described_class.name) }
+    let(:project) { create(:project, name: "javax.faces:javax.faces-api", platform: described_class.formatted_name) }
 
     it "returns link to maven central folder" do
       expect(described_class.check_status_url(project)).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api")
@@ -88,7 +88,7 @@ describe PackageManager::Maven do
   end
 
   describe "#download_url" do
-    let(:project) { create(:project, name: "javax.faces:javax.faces-api", platform: described_class.name.demodulize) }
+    let(:project) { create(:project, name: "javax.faces:javax.faces-api", platform: described_class.formatted_name.demodulize) }
 
     it "returns link to maven central jar file" do
       expect(described_class.download_url(project.name, "2.3")).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api/2.3/javax.faces-api-2.3.jar")
