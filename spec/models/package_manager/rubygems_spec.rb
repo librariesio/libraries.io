@@ -42,4 +42,15 @@ describe PackageManager::Rubygems do
       expect(described_class.install_instructions(project, '2.0.0')).to eq("gem install foo -v 2.0.0")
     end
   end
+
+  describe "#deprecate_versions" do
+    it "should mark missing versions as Removed" do
+      project.versions.create!(number: "1.0.0")
+      project.versions.create!(number: "1.0.1")
+      json_versions = [{number: "1.0.0", published_at: nil, original_license: nil}]
+      described_class.deprecate_versions(project, json_versions)
+
+      expect(project.reload.versions.pluck(:number, :status)).to eq([["1.0.0", nil], ["1.0.1", "Removed"]])
+    end
+  end
 end

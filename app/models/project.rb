@@ -9,7 +9,7 @@ class Project < ApplicationRecord
   include BitbucketProject
 
   HAS_DEPENDENCIES = false
-  STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed']
+  STATUSES = ['Active', 'Deprecated', 'Unmaintained', 'Help Wanted', 'Removed', 'Hidden'].freeze
   API_FIELDS = %i[
     dependent_repos_count
     dependents_count
@@ -30,10 +30,11 @@ class Project < ApplicationRecord
     rank
     repository_url
     status
-  ]
+  ].freeze
 
-  validates_presence_of :name, :platform
-  validates_uniqueness_of :name, scope: :platform, case_sensitive: true
+  validates :name, :platform, presence: true
+  validates :name, uniqueness: { scope: :platform, case_sensitive: true }
+  validates :status, inclusion: { in: STATUSES, allow_blank: true }
 
   belongs_to :repository
   has_many :versions, dependent: :destroy
