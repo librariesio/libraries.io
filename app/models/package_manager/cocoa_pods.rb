@@ -31,7 +31,7 @@ module PackageManager
     end
 
     def self.project(name)
-      versions = get_json("http://cocoapods.libraries.io/pods/#{name}.json")
+      versions = get_json("http://cocoapods.libraries.io/pods/#{name}.json") || {}
       latest_version = versions.keys.max_by { |version| version.split(".").map(&:to_i) }
       versions[latest_version].merge("versions" => versions)
     end
@@ -42,12 +42,12 @@ module PackageManager
         description: project["summary"],
         homepage: project["homepage"],
         licenses: parse_license(project["license"]),
-        repository_url: repo_fallback(project["source"]["git"], ""),
+        repository_url: repo_fallback(project.dig("source", "git"), ""),
       }
     end
 
     def self.versions(project, _name)
-      project["versions"].keys.map do |v|
+      project.fetch("versions", {}).keys.map do |v|
         {
           number: v.to_s,
         }
