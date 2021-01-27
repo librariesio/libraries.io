@@ -33,7 +33,7 @@ module PackageManager
     def self.project(name)
       versions = get_json("http://cocoapods.libraries.io/pods/#{name}.json") || {}
       latest_version = versions.keys.max_by { |version| version.split(".").map(&:to_i) }
-      versions[latest_version].merge("versions" => versions)
+      versions.fetch(latest_version, {}).merge("versions" => versions)
     end
 
     def self.mapping(project)
