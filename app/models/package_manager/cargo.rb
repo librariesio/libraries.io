@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'rubygems/package'
+
 module PackageManager
   class Cargo < Base
     HAS_VERSIONS = true
