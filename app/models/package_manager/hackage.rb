@@ -59,7 +59,7 @@ module PackageManager
     end
 
     def self.find_attribute(page, name)
-      tr = page.css("#content tr").select { |t| t.css("th").text == name }.first
+      tr = page.css("#content tr").select { |t| t.css("th").text.to_s.start_with?(name) }.first
       tr&.css("td")&.text
     end
 
