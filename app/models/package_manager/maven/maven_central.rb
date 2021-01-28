@@ -2,6 +2,7 @@
 
 class PackageManager::Maven::MavenCentral < PackageManager::Maven
   REPOSITORY_SOURCE_NAME = "Maven"
+  SUPPORTS_SINGLE_VERSION_UPDATE = true
   HIDDEN = true
 
   def self.repository_base
@@ -10,6 +11,10 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven
 
   def self.recent_names
     get("https://maven.libraries.io/mavenCentral/recent")
+  end
+
+  def self.one_version(name, version_string)
+    retrieve_versions([version_string], name)&.first
   end
 
   def self.versions(_project, name)
