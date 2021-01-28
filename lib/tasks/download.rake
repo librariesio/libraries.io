@@ -195,12 +195,6 @@ namespace :download do
     PackageManager::Nimble.import_async
   end
 
-  desc "Download recent NuGet packages asynchronously"
-  task nuget: :environment do
-    PackageManager::NuGet.load_names(3)
-    PackageManager::NuGet.import_recent_async
-  end
-
   desc "Download all NuGet packages asynchronously"
   task nuget_all: :environment do
     PackageManager::NuGet.load_names
