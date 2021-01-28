@@ -3,7 +3,7 @@
 class Version < ApplicationRecord
   include Releaseable
 
-  STATUSES = ['Deprecated', 'Removed'].freeze
+  STATUSES = %w[Deprecated Removed].freeze
 
   validates :project_id, :number, presence: true
   validates :number, uniqueness: { scope: :project_id }
@@ -89,14 +89,21 @@ class Version < ApplicationRecord
   end
 
   def send_notifications
-    begin
-      project.try(:repository).try(:download_tags)
-    rescue StandardError
-      nil
+    dt = ns = nf = nw = nil
+
+    overall = Benchmark.measure do
+      dt = Benchmark.measure do
+        project.try(:repository).try(:download_tags)
+      rescue StandardError
+        nil
+      end
+
+      ns = Benchmark.measure { notify_subscribers }
+      nf = Benchmark.measure { notify_firehose }
+      nw = Benchmark.measure { notify_web_hooks }
     end
-    notify_subscribers
-    notify_firehose
-    notify_web_hooks
+
+    Rails.logger.info("Version#send_notifications benchmark overall: #{overall.real * 1000}ms dt:#{dt.real * 1000}ms ns:#{ns.real * 1000}ms nf:#{nf.real * 1000}ms nw:#{nw.real * 1000}ms")
   end
 
   def published_at
