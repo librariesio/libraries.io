@@ -159,7 +159,7 @@ class Project < ApplicationRecord
 
   def async_sync
     sync_classes.each{ |sync_class| PackageManagerDownloadWorker.perform_async(sync_class.name, name) }
-    CheckStatusWorker.perform_async(id)
+    CheckStatusWorker.perform_async(id, status == "Removed")
   end
 
   def sync_classes
