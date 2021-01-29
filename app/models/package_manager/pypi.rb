@@ -86,7 +86,7 @@ module PackageManager
         {
           number: k,
           published_at: v[0]["upload_time"],
-          original_license: release.dig("info", "license"),
+          original_license: release&.dig("info", "license"),
         }
       end
     end
