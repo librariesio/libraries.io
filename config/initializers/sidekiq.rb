@@ -8,3 +8,7 @@ end
 Sidekiq.configure_client do |config|
   config.redis = { url: ENV["REDISCLOUD_URL"], id: nil }
 end
+
+Sidekiq.default_worker_options = {
+  backtrace: true,
+}
