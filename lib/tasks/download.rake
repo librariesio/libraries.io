@@ -211,11 +211,6 @@ namespace :download do
     PackageManager::NPM.import
   end
 
-  desc "Download recent Packagist packages asynchronously"
-  task packagist: :environment do
-    PackageManager::Packagist.import_recent_async
-  end
-
   desc "Download all Packagist packages asynchronously"
   task packagist_all: :environment do
     PackageManager::Packagist.import_async
