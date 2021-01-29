@@ -6,6 +6,7 @@ steps:
   - --cache=true
   - --cache-ttl=336h
   - --build-arg=REVISION_ID
+  timeout: 720s
 # copy the compiled assets from the docker container to the workspace to then push to GCS
 - name: 'docker'
   args: ['run', '-v', '/workspace:/workspace', 'gcr.io/$PROJECT_ID/libraries.io:$REVISION_ID', 'cp', '-R', '/libraries.io/public/assets/', '/workspace/']
