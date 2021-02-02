@@ -154,7 +154,6 @@ Rails.application.routes.draw do
     get '/:host_type/trending', to: 'repositories#hacker_news', as: :trending
     get '/:host_type/new', to: 'repositories#new', as: :new_repos
     get '/:host_type/organisations', to: 'repository_organisations#index', as: :repository_organisations
-    get '/:host_type/timeline', to: 'repositories#timeline', as: :github_timeline
     get '/:host_type/:login/dependencies', to: 'repository_users#dependencies', as: :user_dependencies
     get '/:host_type/:login/repositories', to: 'repository_users#repositories', as: :user_repositories
     get '/:host_type/:login/contributions', to: 'repository_users#contributions', as: :user_contributions
@@ -230,7 +229,6 @@ Rails.application.routes.draw do
   post '/:platform/:name/refresh-stats', to: 'projects#refresh_stats', constraints: { :name => /.*/ }, as: :project_refresh_stats
   get '/:platform/:name/unsubscribe', to: 'projects#unsubscribe', constraints: { :name => /.*/ }, as: :unsubscribe_project
   get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
-  get '/:platform/:name/timeline', to: 'timeline#show', as: :project_timeline, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
   post '/:platform/:name/mute', to: 'projects#mute', as: :mute_project, constraints: { :name => /.*/ }
   delete '/:platform/:name/unmute', to: 'projects#unmute', as: :unmute_project, constraints: { :name => /.*/ }
   get '/:platform/:name/tree', to: 'tree#show', constraints: { :name => PROJECT_CONSTRAINT }, as: :tree
