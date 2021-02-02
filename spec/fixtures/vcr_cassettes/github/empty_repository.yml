@@ -893,4 +893,88 @@ http_interactions:
       string: ''
     http_version: 
   recorded_at: Mon, 18 Nov 2019 20:48:54 GMT
+- request:
+    method: post
+    uri: https://api.github.com/graphql
+    body:
+      encoding: UTF-8
+      string: '{"query":"query MaintenanceStats__Queries__Github__IssuesQuery__ISSUES_QUERY($owner:
+        String!, $repo_name: String!, $open_pr_query: String!, $closed_pr_query: String!,
+        $one_year: GitTimestamp!) {\n  openPullRequests: search(query: $open_pr_query,
+        type: ISSUE) {\n    issueCount\n  }\n  closedPullRequests: search(query: $closed_pr_query,
+        type: ISSUE) {\n    issueCount\n  }\n  repository(owner: $owner, name: $repo_name)
+        {\n    openIssues: issues(states: OPEN, filterBy: {since: $one_year}) {\n      totalCount\n    }\n    closedIssues:
+        issues(states: CLOSED, filterBy: {since: $one_year}) {\n      totalCount\n    }\n  }\n}","variables":{"owner":"buddhamagnet","repo_name":"heidigoodchild","start_date":"2018-12-14T17:49:49+00:00","one_year":"2017-12-14T17:49:49+00:00","open_pr_query":"repo:buddhamagnet/heidigoodchild
+        is:pr is:open created:>2017-12-14","closed_pr_query":"repo:buddhamagnet/heidigoodchild
+        is:pr is:closed created:>2017-12-14"},"operationName":"MaintenanceStats__Queries__Github__IssuesQuery__ISSUES_QUERY"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - application/json
+      User-Agent:
+      - Ruby
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer test_token
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 05 May 2021 15:38:19 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Cache-Control:
+      - no-cache
+      X-Oauth-Scopes:
+      - public_repo, read:user, user:email
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Github-Media-Type:
+      - github.v4
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4995'
+      X-Ratelimit-Reset:
+      - '1620232646'
+      X-Ratelimit-Used:
+      - '5'
+      X-Ratelimit-Resource:
+      - graphql
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, Deprecation,
+        Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Vary:
+      - Accept-Encoding, Accept, X-Requested-With
+      X-Github-Request-Id:
+      - 0414:30A2:BF8074:14F434F:6092BBEB
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":{"openPullRequests":{"issueCount":0},"closedPullRequests":{"issueCount":0},"repository":{"openIssues":{"totalCount":0},"closedIssues":{"totalCount":0}}}}'
+    http_version: 
+  recorded_at: Wed, 05 May 2021 15:38:19 GMT
 recorded_with: VCR 4.0.0
