@@ -232,10 +232,6 @@ module RepositoryHost
         return []
       end
 
-      exists = !Github.fetch_repo(repository.full_name).nil?
-      repository.download_issues
-      repository.download_pull_requests
-
       # use api_client methods?
       v4_client = AuthToken.v4_client
       v3_client = AuthToken.client({auto_paginate: false})
@@ -256,7 +252,8 @@ module RepositoryHost
         Rails.logger.warn(e.message)
       end
 
-      metrics << MaintenanceStats::Stats::Github::DBIssueStats.new(repository.issues).get_stats if exists
+      result = MaintenanceStats::Queries::Github::IssuesQuery.new(v4_client).query(params: {owner: repository.owner_name, repo_name: repository.project_name, start_date: now})
+      metrics << MaintenanceStats::Stats::Github::IssueStats.new(result).get_stats unless check_for_v4_error_response(result)
 
       add_metrics_to_repo(metrics)
 
