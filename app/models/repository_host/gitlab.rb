@@ -39,22 +39,6 @@ module RepositoryHost
       # not implemented yet
     end
 
-    def download_issues(token = nil)
-      api_client(token).issues(repository.full_name).auto_paginate do |issue|
-        RepositoryIssue::Gitlab.create_from_hash(repository.full_name, issue, token)
-      end
-    rescue *IGNORABLE_EXCEPTIONS
-      nil
-    end
-
-    def download_pull_requests(token = nil)
-      api_client(token).merge_requests(repository.full_name).auto_paginate do |pull_request|
-        RepositoryIssue::Gitlab.create_from_hash(repository.full_name, pull_request, token)
-      end
-    rescue *IGNORABLE_EXCEPTIONS
-      nil
-    end
-
     def download_forks(token = nil)
       # not implemented yet
     end

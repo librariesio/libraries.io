@@ -53,23 +53,6 @@ module RepositoryHost
       # not implemented yet
     end
 
-    def download_issues(token = nil)
-      api_client(token).issues.list_repo(repository.owner_name, repository.project_name) do |issue|
-        RepositoryIssue::Bitbucket.create_from_hash(repository.full_name, issue, token)
-      end
-    rescue *IGNORABLE_EXCEPTIONS
-      nil
-    end
-
-    def download_pull_requests(token = nil)
-      pull_requests = api_client(token).repos.pull_request.list(repository.owner_name, repository.project_name)['values']
-      pull_requests.each do |pull_request|
-        RepositoryIssue::Bitbucket.create_from_hash(repository.full_name, pull_request, token)
-      end
-    rescue *IGNORABLE_EXCEPTIONS
-      nil
-    end
-
     def retrieve_commits(token = nil)
       api_client(token).repos.commits.list(repository.owner_name, repository.project_name)['values']
     end
@@ -166,10 +149,6 @@ module RepositoryHost
       end
 
       metrics = []
-
-      # get latest issues and pull requests and store them in the database
-      repository.download_issues
-      repository.download_pull_requests
 
       metrics << MaintenanceStats::Stats::Bitbucket::CommitsStat.new(repository.retrieve_commits).get_stats
 

@@ -16,12 +16,12 @@ RSpec.configure do |config|
   end
 
   config.around :each, elasticsearch: true do |example|
-    [Project, Repository, Issue].each do |model|
+    [Project, Repository].each do |model|
       model.__elasticsearch__.create_index!(force: true)
       model.__elasticsearch__.import force: true
     end
     example.run
-    [Project, Repository, Issue].each do |model|
+    [Project, Repository].each do |model|
       model.__elasticsearch__.client.indices.delete index: model.index_name
     end
   end

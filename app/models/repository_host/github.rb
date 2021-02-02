@@ -131,24 +131,6 @@ module RepositoryHost
       end
     end
 
-    def download_issues(token = nil)
-      issues = api_client(token).search_issues("repo:#{repository.full_name} type:issue").items
-      issues.each do |issue|
-        RepositoryIssue::Github.create_from_hash(repository.full_name, issue, token)
-      end
-    rescue *IGNORABLE_EXCEPTIONS
-      nil
-    end
-
-    def download_pull_requests(token = nil)
-      pull_requests = api_client(token).search_issues("repo:#{repository.full_name} type:pr").items
-      pull_requests.each do |pull_request|
-        RepositoryIssue::Github.create_from_hash(repository.full_name, pull_request, token)
-      end
-    rescue *IGNORABLE_EXCEPTIONS
-      nil
-    end
-
     def retrieve_commits(token = nil)
       api_client(token).commits(repository.full_name)
     end
@@ -232,8 +214,6 @@ module RepositoryHost
       end
 
       exists = !Github.fetch_repo(repository.full_name).nil?
-      repository.download_issues
-      repository.download_pull_requests
 
       # use api_client methods?
       v4_client = AuthToken.v4_client
