@@ -103,7 +103,7 @@ class Version < ApplicationRecord
       nw = Benchmark.measure { notify_web_hooks }
     end
 
-    Rails.logger.info("Version#send_notifications benchmark overall: #{overall.real * 1000}ms dt:#{dt.real * 1000}ms ns:#{ns.real * 1000}ms nf:#{nf.real * 1000}ms nw:#{nw.real * 1000}ms")
+    Rails.logger.info("Version#send_notifications benchmark overall: #{overall.real * 1000}ms dt:#{dt.real * 1000}ms ns:#{ns.real * 1000}ms nf:#{nf.real * 1000}ms nw:#{nw.real * 1000}ms v_id:#{self.id}")
   end
 
   def published_at
