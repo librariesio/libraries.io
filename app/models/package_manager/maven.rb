@@ -16,6 +16,7 @@ module PackageManager
       "http://www.eclipse.org/legal/epl-v10" => "Eclipse Public License (EPL), Version 1.0",
       "http://www.eclipse.org/org/documents/edl-v10" => "Eclipse Distribution License (EDL), Version 1.0",
     }.freeze
+    NAME_DELIMITER = ":"
 
     PROVIDER_MAP = {
       "Atlassian" => Atlassian,
@@ -70,7 +71,7 @@ module PackageManager
     end
 
     def self.project(name)
-      sections = name.split(":")
+      sections = name.split(NAME_DELIMITER)
       path = sections.join("/")
       versions = versions(nil, name)
       latest_version = latest_version(versions, name)
@@ -166,7 +167,7 @@ module PackageManager
     def self.retrieve_versions(versions, name)
       versions
         .map do |version|
-          pom = get_pom(*name.split(":", 2), version)
+          pom = get_pom(*name.split(NAME_DELIMITER, 2), version)
           begin
             license_list = licenses(pom)
           rescue StandardError
@@ -246,12 +247,14 @@ module PackageManager
     end
 
     class MavenUrl
+      NAME_DELIMITER = ":"
+
       def self.from_name(name, repo_base)
-        new(*name.split(":", 2), repo_base)
+        new(*name.split(NAME_DELIMITER, 2), repo_base)
       end
 
       def self.legal_name?(name)
-        name.present? && name.split(":").size == 2
+        name.present? && name.split(NAME_DELIMITER).size == 2
       end
 
       def initialize(group_id, artifact_id, repo_base)

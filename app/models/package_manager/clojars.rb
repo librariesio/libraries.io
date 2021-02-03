@@ -7,6 +7,7 @@ module PackageManager
     BIBLIOTHECARY_SUPPORT = true
     URL = "https://clojars.org"
     COLOR = "#db5855"
+    NAME_DELIMITER = ":"
 
     def self.package_link(project, version = nil)
       "https://clojars.org/#{project.name}" + (version ? "/versions/#{version}" : "")
@@ -27,7 +28,11 @@ module PackageManager
     def self.download_url(name, version = nil)
       group_id, artifact_id = name.split("/", 2)
       artifact_id = group_id if artifact_id.nil?
-      MavenUrl.new(group_id, artifact_id, repository_base).jar(version)
+      ClojarsUrl.new(group_id, artifact_id, repository_base).jar(version)
+    end
+
+    class ClojarsUrl < MavenUrl
+      NAME_DELIMITER = "/"
     end
   end
 end
