@@ -23,4 +23,16 @@ namespace :one_off do
       end
     end
   end
+
+  desc "delete all hidden maven projects missing a group id"
+  task delete_groupless_maven_projects: :environment do
+    Project.
+      where(platform: "Maven").
+      where(status: "Hidden").
+      where("name NOT LIKE '%:%'").
+      find_each do |p|
+        puts "Deleting Maven project #{p.name} (#{p.id})"
+        p.destroy!
+      end
+  end
 end
