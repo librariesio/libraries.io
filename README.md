@@ -1,6 +1,6 @@
 # Libraries.io &#128218;
 
-[![Build Status](https://travis-ci.org/librariesio/libraries.io.svg?branch=master)](https://travis-ci.org/librariesio/libraries.io)
+[![Build Status](https://travis-ci.org/librariesio/libraries.io.svg?branch=main)](https://travis-ci.org/librariesio/libraries.io)
 [![Slack chat](https://slack.libraries.io/badge.svg)](https://slack.libraries.io)
 [![Open Source Helpers](https://www.codetriage.com/librariesio/libraries.io/badges/users.svg)](https://www.codetriage.com/librariesio/libraries.io)
 
@@ -44,5 +44,5 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Copyright
 
-Copyright (c) Tidelift, Inc. See [LICENSE](https://github.com/librariesio/libraries.io/blob/master/LICENSE.txt) for details.
+Copyright (c) Tidelift, Inc. See [LICENSE](https://github.com/librariesio/libraries.io/blob/main/LICENSE.txt) for details.
 
