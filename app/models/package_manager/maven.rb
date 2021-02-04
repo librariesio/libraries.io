@@ -248,7 +248,14 @@ module PackageManager
 
     class MavenUrl
       def self.from_name(name, repo_base, delimiter = ":")
-        new(*name.split(delimiter, 2), repo_base)
+        group_id, artifact_id = *name.split(delimiter, 2)
+
+        # Clojars names, when missing a group id, are implied to have the same group and artifact ids.
+        if artifact_id == nil && delimiter == PackageManager::Clojars::NAME_DELIMITER
+          artifact_id = group_id
+        end
+
+        new(group_id, artifact_id, repo_base)
       end
 
       def self.legal_name?(name, delimiter = ":")
