@@ -7,7 +7,7 @@ module PackageManager
     BIBLIOTHECARY_SUPPORT = true
     URL = "https://clojars.org"
     COLOR = "#db5855"
-    NAME_DELIMITER = ":"
+    NAME_DELIMITER = "/"
 
     def self.package_link(project, version = nil)
       "https://clojars.org/#{project.name}" + (version ? "/versions/#{version}" : "")
