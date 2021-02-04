@@ -247,11 +247,11 @@ module PackageManager
     end
 
     class MavenUrl
-      def self.from_name(name, repo_base, delimiter)
+      def self.from_name(name, repo_base, delimiter = ":")
         new(*name.split(delimiter, 2), repo_base)
       end
 
-      def self.legal_name?(name, delimiter)
+      def self.legal_name?(name, delimiter = ":")
         name.present? && name.split(delimiter).size == 2
       end
 
