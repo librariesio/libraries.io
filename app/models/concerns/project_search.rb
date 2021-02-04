@@ -55,6 +55,8 @@ module ProjectSearch
     def extra_searchable_names
       if platform == "Maven"
         name.split(":")
+      elsif platform == "Clojars"
+        name.split("/")
       else
         []
       end
