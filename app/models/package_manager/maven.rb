@@ -147,7 +147,7 @@ module PackageManager
     end
 
     def self.dependencies(name, version, project)
-      pom_file = get_raw(MavenUrl.from_name(name, repository_base).pom(version))
+      pom_file = get_raw(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).pom(version))
       Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file, project[:properties]).map do |dep|
         {
           project_name: dep[:name],
@@ -159,7 +159,7 @@ module PackageManager
     end
 
     def self.versions(_project, name)
-      xml_metadata = get_raw(MavenUrl.from_name(name, repository_base).maven_metadata)
+      xml_metadata = get_raw(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).maven_metadata)
       xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
       retrieve_versions(xml_versions.filter { |item| !item.ends_with?("-SNAPSHOT") }, name)
     end
@@ -185,7 +185,7 @@ module PackageManager
     end
 
     def self.download_pom(group_id, artifact_id, version)
-      pom_request = request(MavenUrl.new(group_id, artifact_id, repository_base).pom(version))
+      pom_request = request(MavenUrl.new(group_id, artifact_id, repository_base, NAME_DELIMITER).pom(version))
       xml = Ox.parse(pom_request.body)
       published_at = pom_request.headers["Last-Modified"]
       pat = Ox::Element.new("publishedAt")
@@ -247,14 +247,12 @@ module PackageManager
     end
 
     class MavenUrl
-      NAME_DELIMITER = ":"
-
-      def self.from_name(name, repo_base)
-        new(*name.split(NAME_DELIMITER, 2), repo_base)
+      def self.from_name(name, repo_base, delimiter)
+        new(*name.split(delimiter, 2), repo_base)
       end
 
-      def self.legal_name?(name)
-        name.present? && name.split(NAME_DELIMITER).size == 2
+      def self.legal_name?(name, delimiter)
+        name.present? && name.split(delimiter).size == 2
       end
 
       def initialize(group_id, artifact_id, repo_base)

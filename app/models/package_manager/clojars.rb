@@ -28,11 +28,7 @@ module PackageManager
     def self.download_url(name, version = nil)
       group_id, artifact_id = name.split("/", 2)
       artifact_id = group_id if artifact_id.nil?
-      ClojarsUrl.new(group_id, artifact_id, repository_base).jar(version)
-    end
-
-    class ClojarsUrl < MavenUrl
-      NAME_DELIMITER = "/"
+      MavenUrl.new(group_id, artifact_id, repository_base, NAME_DELIMITER).jar(version)
     end
   end
 end
