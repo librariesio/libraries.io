@@ -29,7 +29,7 @@ module PackageManager
     def self.download_url(name, version = nil)
       group_id, artifact_id = name.split("/", 2)
       artifact_id = group_id if artifact_id.nil?
-      MavenUrl.new(group_id, artifact_id, repository_base, NAME_DELIMITER).jar(version)
+      MavenUrl.new(group_id, artifact_id, repository_base).jar(version)
     end
 
     def self.check_status_url(project)
