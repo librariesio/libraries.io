@@ -15,9 +15,10 @@ class Version < ApplicationRecord
   has_many :runtime_dependencies, -> { where kind: %w[runtime normal] }, class_name: "Dependency"
 
   before_save :update_spdx_expression
-  after_commit :send_notifications_async, on: :create
-  after_commit :update_repository_async, on: :create
-  after_commit :save_project, on: :create
+  after_create_commit :send_notifications_async,
+                      :update_repository_async,
+                      :save_project,
+                      :log_version_creation
 
   scope :newest_first, -> { order("versions.published_at DESC") }
 
@@ -103,7 +104,12 @@ class Version < ApplicationRecord
       nw = Benchmark.measure { notify_web_hooks }
     end
 
-    Rails.logger.info("Version#send_notifications benchmark overall: #{overall.real * 1000}ms dt:#{dt.real * 1000}ms ns:#{ns.real * 1000}ms nf:#{nf.real * 1000}ms nw:#{nw.real * 1000}ms v_id:#{self.id}")
+    Rails.logger.info("Version#send_notifications benchmark overall: #{overall.real * 1000}ms dt:#{dt.real * 1000}ms ns:#{ns.real * 1000}ms nf:#{nf.real * 1000}ms nw:#{nw.real * 1000}ms v_id:#{id}")
+  end
+
+  def log_version_creation
+    lag = (created_at - published_at).round
+    logger.info("[NEW VERSION] platform=#{platform&.downcase || 'unknown'} name=#{project&.name} version=#{number} lag=#{lag}")
   end
 
   def published_at
