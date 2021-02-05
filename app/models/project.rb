@@ -522,6 +522,8 @@ class Project < ApplicationRecord
       update_attribute(:status, 'Deprecated')
     elsif platform.downcase != 'packagist' && [400, 404, 410].include?(response.response_code)
       update_attribute(:status, 'Removed')
+    elsif platform.downcase == 'clojars' && response.response_code == 404
+      update_attribute(:status, 'Removed')
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(name)
       if result[:is_deprecated]
