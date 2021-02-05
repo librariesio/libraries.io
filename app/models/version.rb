@@ -109,7 +109,7 @@ class Version < ApplicationRecord
 
   def log_version_creation
     lag = (created_at - published_at).round
-    logger.info("[NEW VERSION] platform=#{platform&.downcase || 'unknown'} name=#{project&.name} version=#{number} lag=#{lag}")
+    Rails.logger.info("[NEW VERSION] platform=#{platform&.downcase || 'unknown'} name=#{project&.name} version=#{number} lag=#{lag}")
   end
 
   def published_at
