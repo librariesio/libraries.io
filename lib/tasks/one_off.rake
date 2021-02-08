@@ -24,28 +24,16 @@ namespace :one_off do
     end
   end
 
-  desc "backfill missing clojars packages with a slash, and remove packages with a dot"
-  task cleanup_clojar_projects: :environment do
+  desc "backfill all latest_stable_release_numbers"
+  task backfill_latest_stable_release_numbers: :environment do
+    count = 0
     Project.
-      where(platform: "Clojars").
-      where("name LIKE '%:%'").
+      where(latest_stable_release_number: nil).
       find_each do |p|
-        good_name, bad_name = p.name.gsub(/:/, '/'), p.name
-        puts "Updating #{good_name}, deleting #{bad_name}"
-        PackageManager::Clojars.update(good_name)
-        p.destroy!
+      p.set_latest_stable_release_info
+      count += 0
     end
-  end
-
-  desc "delete all hidden maven projects missing a group id"
-  task delete_groupless_maven_projects: :environment do
-    Project.
-      where(platform: "Maven").
-      where(status: "Hidden").
-      where("name NOT LIKE '%:%'").
-      find_each do |p|
-        puts "Deleting Maven project #{p.name} (#{p.id})"
-        p.destroy!
-      end
+  ensure
+    puts "Backfilled #{count} projects' latest_stable_release_number."
   end
 end
