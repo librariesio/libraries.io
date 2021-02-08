@@ -20,10 +20,6 @@ module Releases
     latest_stable_version || latest_stable_tag
   end
 
-  def latest_stable_release_number
-    latest_stable_release.try(:number)
-  end
-
   def latest_version
     versions.sort.first
   end
