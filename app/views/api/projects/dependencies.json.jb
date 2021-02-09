@@ -1,8 +1,7 @@
 dependencies_fields = {
   dependencies_for_version: @version.number,
   dependencies: (@version.dependencies.includes(:project) || []).
-    map {|dependency| DependencySerializer.new(dependency) }.
-    as_json
+    map { |d| DependencySerializer.new(d) }
 }
 
 case @subset
@@ -10,16 +9,15 @@ when "default"
   @project.
     slice(Project::API_FIELDS).
     merge({
-      versions: @project.versions.map do |v|
-        {
-          number: v.number,
-          published_at: v.published_at,
-          spdx_expression: v.spdx_expression,
-          original_license: v.original_license,
-          researched_at: v.researched_at,
-          repository_sources: v.repository_sources.presence || [v.project.platform],
-        }
-      end
+      versions: @project.
+        versions.
+        pluck(*Version::API_FIELDS).
+        map do |v|
+          Version::API_FIELDS.
+            zip(v).
+            to_h.
+            tap { |v| v[:repository_sources] = [@project.platform] unless v[:repository_sources].present? }
+        end
     }).
     merge(dependencies_fields)
 when "minimum"

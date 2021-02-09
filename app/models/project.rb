@@ -600,11 +600,11 @@ class Project < ApplicationRecord
   end
 
   def find_version!(version_name)
-    version = if version_name == 'latest'
-                versions.sort.first
-              else
-                versions.find_by_number(version_name)
-              end
+    if version_name == 'latest'
+      version_name = versions.pluck(:number).sort.last
+    end
+
+    version = versions.find_by_number(version_name)
 
     raise ActiveRecord::RecordNotFound if version.nil?
 
