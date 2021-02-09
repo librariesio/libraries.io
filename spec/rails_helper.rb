@@ -44,7 +44,7 @@ RSpec.configure do |config|
 end
 
 def project_json_response(projects)
-  projects.as_json(only: Project::API_FIELDS, methods: %i[package_manager_url stars forks keywords latest_stable_release latest_download_url repository_license], include: { versions: { only: %i[number published_at original_license spdx_expression researched_at repository_sources] } })
+  projects.as_json(only: Project::API_FIELDS, methods: %i[package_manager_url stars forks keywords latest_download_url repository_license], include: { versions: { only: %i[number published_at original_license spdx_expression researched_at repository_sources] } })
 end
 
 RSpec::Sidekiq.configure do |config|

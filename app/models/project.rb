@@ -15,7 +15,9 @@ class Project < ApplicationRecord
     dependents_count
     deprecation_reason
     description
+    forks
     homepage
+    keywords
     language
     latest_download_url
     latest_release_number
@@ -26,9 +28,12 @@ class Project < ApplicationRecord
     licenses
     name
     normalized_licenses
+    package_manager_url
     platform
     rank
+    repository_license
     repository_url
+    stars
     status
   ].freeze
 
