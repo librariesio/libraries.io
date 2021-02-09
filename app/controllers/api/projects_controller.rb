@@ -72,7 +72,7 @@ class Api::ProjectsController < Api::ApplicationController
       @project = Project.find_best!(params[:platform], params[:name], [:repository, :versions])
       @version = @project.find_version!(params[:version])
       @subset = subset
-      # render
+      # render app/views/api/projects/dependencies.json.b
     else
       project_json = find_project_as_json_with_dependencies!(params[:platform], params[:name], params[:version], subset)
       render json: project_json
