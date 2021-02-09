@@ -1,0 +1,30 @@
+dependencies_fields = {
+  dependencies_for_version: @version.number,
+  dependencies: (@version.dependencies.includes(:project) || []).
+    map {|dependency| DependencySerializer.new(dependency) }.
+    as_json
+}
+
+case @subset
+when "default"
+  @project.
+    slice(Project::API_FIELDS).
+    merge({
+      versions: @project.versions.map do |v|
+        {
+          number: v.number,
+          published_at: v.published_at,
+          spdx_expression: v.spdx_expression,
+          original_license: v.original_license,
+          researched_at: v.researched_at,
+          repository_sources: v.repository_sources.presence || [v.project.platform],
+        }
+      end
+    }).
+    merge(dependencies_fields)
+when "minimum"
+  @project.slice(:name, :platform).merge(dependencies_fields)
+else
+  raise ActionController::BadRequest.new("Unsupported subset")
+end
+
