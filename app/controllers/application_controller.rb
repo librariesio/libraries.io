@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
 
   def trace_span(&block)
     Google::Cloud::Trace
-      .in_span("endpoint##{controller_name}##{action_name}", &block)
+      .in_span("endpoint##{controller_path}##{action_name}", &block)
   end
 
   def log_active_connections
