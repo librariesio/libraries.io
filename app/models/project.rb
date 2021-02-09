@@ -15,7 +15,9 @@ class Project < ApplicationRecord
     dependents_count
     deprecation_reason
     description
+    forks
     homepage
+    keywords
     language
     latest_download_url
     latest_release_number
@@ -26,9 +28,12 @@ class Project < ApplicationRecord
     licenses
     name
     normalized_licenses
+    package_manager_url
     platform
     rank
+    repository_license
     repository_url
+    stars
     status
   ].freeze
 
@@ -595,11 +600,11 @@ class Project < ApplicationRecord
   end
 
   def find_version!(version_name)
-    version = if version_name == 'latest'
-                versions.sort.first
-              else
-                versions.find_by_number(version_name)
-              end
+    if version_name == 'latest'
+      version_name = versions.pluck(:number).sort.last
+    end
+
+    version = versions.find_by_number(version_name)
 
     raise ActiveRecord::RecordNotFound if version.nil?
 

@@ -4,6 +4,14 @@ class Version < ApplicationRecord
   include Releaseable
 
   STATUSES = %w[Deprecated Removed].freeze
+  API_FIELDS = [
+    :number,
+    :published_at,
+    :spdx_expression,
+    :original_license,
+    :researched_at,
+    :repository_sources
+  ]
 
   validates :project_id, :number, presence: true
   validates :number, uniqueness: { scope: :project_id }

@@ -42,6 +42,7 @@ gem "graphql-client", "~> 0.14.0"
 gem "groupdate"
 gem "hiredis"
 gem "indefinite_article"
+gem 'jb'
 gem "jquery-rails"
 gem "license-compatibility"
 gem "listen"

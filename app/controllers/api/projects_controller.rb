@@ -66,10 +66,16 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def dependencies
-    subset = params.fetch(:subset, "default")
-    project_json = find_project_as_json_with_dependencies!(params[:platform], params[:name], params[:version], subset)
+    @subset = params.fetch(:subset, "default")
 
-    render json: project_json
+    if params[:v2] == "true"
+      @project = Project.find_best!(params[:platform], params[:name], [:repository, :versions])
+      @version = @project.find_version!(params[:version])
+      # render app/views/api/projects/dependencies.json.jb
+    else
+      project_json = find_project_as_json_with_dependencies!(params[:platform], params[:name], params[:version], @subset)
+      render json: project_json
+    end
   end
 
   def dependencies_bulk
