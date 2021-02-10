@@ -185,7 +185,7 @@ module PackageManager
     end
 
     def self.download_pom(group_id, artifact_id, version)
-      pom_request = request(MavenUrl.new(group_id, artifact_id, repository_base, NAME_DELIMITER).pom(version))
+      pom_request = request(MavenUrl.new(group_id, artifact_id, repository_base).pom(version))
       xml = Ox.parse(pom_request.body)
       published_at = pom_request.headers["Last-Modified"]
       pat = Ox::Element.new("publishedAt")
