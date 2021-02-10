@@ -4,14 +4,14 @@ class Version < ApplicationRecord
   include Releaseable
 
   STATUSES = %w[Deprecated Removed].freeze
-  API_FIELDS = [
-    :number,
-    :published_at,
-    :spdx_expression,
-    :original_license,
-    :researched_at,
-    :repository_sources
-  ]
+  API_FIELDS = %i[
+    number
+    published_at
+    spdx_expression
+    original_license
+    researched_at
+    repository_sources
+  ].freeze
 
   validates :project_id, :number, presence: true
   validates :number, uniqueness: { scope: :project_id }
@@ -116,6 +116,8 @@ class Version < ApplicationRecord
   end
 
   def log_version_creation
+    return if published_at == Time.at(-2_208_988_800) # NuGet sets published_at to 1/1/1900 on yank
+
     lag = (created_at - published_at).round
     Rails.logger.info("[NEW VERSION] platform=#{platform&.downcase || 'unknown'} name=#{project&.name} version=#{number} lag=#{lag}")
   end
