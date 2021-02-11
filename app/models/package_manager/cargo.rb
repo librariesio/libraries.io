@@ -36,7 +36,7 @@ module PackageManager
       tar_extract = Gem::Package::TarReader.new(Zlib::GzipReader.new(StringIO.new(body)))
       tar_extract.rewind
       toml = tar_extract.find { |entry| entry.full_name.end_with?("/Cargo.toml") }.read
-      cargo_toml = TOML.load(toml)
+      cargo_toml = Tomlrb.parse(toml)
       status = cargo_toml.dig("badges", "maintenance", "status")
       is_deprecated = status == "deprecated"
       {
