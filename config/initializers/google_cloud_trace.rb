@@ -5,7 +5,7 @@
 unless Rails.env.production?
   module Google
     module Cloud
-      class Trace
+      module Trace
         def self.in_span(_span_name)
           yield
         end
