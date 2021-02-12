@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "google/cloud/trace"
+
 # Sidekiq middleware to send traces to Stackdriver, based off the Stackdriver/GoogleCloudTrace
 # Rails middleware:
 # https://github.com/googleapis/google-cloud-ruby/blob/master/google-cloud-trace/lib/google/cloud/trace/middleware.rb
@@ -27,12 +29,6 @@
 #     chain.add Sidekiq::GoogleCloudTraceMiddleware, {}
 #   end
 # end
-
-# require "google/cloud/env"
-# require "google/cloud/trace/async_reporter"
-# require "stackdriver/core/trace_context"
-require "google/cloud/trace"
-
 module Sidekiq
   class GoogleCloudTraceMiddleware
     ##
