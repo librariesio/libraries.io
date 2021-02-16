@@ -60,7 +60,7 @@ module PackageManager
         name: project["slug"],
         description: project["short_description"],
         homepage: project["homepage"],
-        keywords_array: Array.wrap(project.fetch("tags", {}).values),
+        keywords_array: (project["tags"].presence || {}).values,
         repository_url: repo_fallback("", project["homepage"]),
       }
     end
