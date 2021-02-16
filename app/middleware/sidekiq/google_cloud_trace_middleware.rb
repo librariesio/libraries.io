@@ -162,7 +162,7 @@ module Sidekiq
       span.labels[SIDEKIQ_ARGS_LABEL_KEY] = job_args.to_s
       if span.trace.trace_context.capture_stack?
         Google::Cloud::Trace::LabelKey.set_stack_trace span.labels,
-                                                       skip_frames: 13
+                                                       skip_frames: 3
                                                       end
 
       end
