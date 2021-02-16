@@ -5,7 +5,7 @@ require 'resolv-replace' # pure ruby DNS
 Sidekiq.configure_server do |config|
   config.redis = { url: ENV["REDISCLOUD_URL"], id: nil }
   config.server_middleware do |chain|
-    chain.add Sidekiq::GoogleCloudTraceMiddleware, capture_stack: true
+    chain.add Sidekiq::GoogleCloudTraceMiddleware, capture_stack: false
   end
 end
 Sidekiq.configure_client do |config|

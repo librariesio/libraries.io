@@ -28,11 +28,13 @@ require "google/cloud/trace"
 #     chain.add Sidekiq::GoogleCloudTraceMiddleware, {}
 #   end
 # end
+
 module Sidekiq
   class GoogleCloudTraceMiddleware
     ##
     # The name of this trace agent as reported to the Stackdriver backend.
     AGENT_NAME = "ruby #{::Google::Cloud::Trace::VERSION}"
+    SIDEKIQ_ARGS_LABEL_KEY = "/sidekiq/args"
 
     def initialize(options = {})
       load_config options
@@ -51,11 +53,12 @@ module Sidekiq
       if @service
         trace = create_trace
         job_name = "sidekiq:#{job['class'].underscore}"
+        job_args = job["args"]
 
         begin
           Google::Cloud::Trace.set trace
           Google::Cloud::Trace.in_span job_name do |span|
-            configure_span span, job_name
+            configure_span span, job_name, job_args
             yield
           end
         ensure
@@ -151,11 +154,12 @@ module Sidekiq
     #     configure.
     # @param [String] The job name to use as this span name.
     #
-    def configure_span(span, job_name)
+    def configure_span(span, job_name, job_args)
       span.name = job_name
       span.labels[Google::Cloud::Trace::LabelKey::AGENT] = AGENT_NAME
       span.labels[Google::Cloud::Trace::LabelKey::PID] = ::Process.pid.to_s
       span.labels[Google::Cloud::Trace::LabelKey::TID] = ::Thread.current.object_id.to_s
+      span.labels[SIDEKIQ_ARGS_LABEL_KEY] = job_args.to_s
       if span.trace.trace_context.capture_stack?
         Google::Cloud::Trace::LabelKey.set_stack_trace span.labels,
                                                        skip_frames: 3

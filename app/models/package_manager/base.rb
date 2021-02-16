@@ -126,7 +126,7 @@ module PackageManager
       end
 
       update(name, sync_versions: false)
-      mapped_project=map_project(project(name))
+      mapped_project = map_project(project(name))
       unless mapped_project.present?
         logger.warn("No mapped project for #{db_platform}/#{name}")
         return
