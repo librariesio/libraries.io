@@ -157,7 +157,7 @@ module Sidekiq
       span.labels[Google::Cloud::Trace::LabelKey::PID] = ::Process.pid.to_s
       span.labels[Google::Cloud::Trace::LabelKey::TID] = ::Thread.current.object_id.to_s
       if span.trace.trace_context.capture_stack?
-        Google::Cloud::Trace::LabelKey.set_stack_trace labels,
+        Google::Cloud::Trace::LabelKey.set_stack_trace span.labels,
                                                        skip_frames: 3
       end
 
