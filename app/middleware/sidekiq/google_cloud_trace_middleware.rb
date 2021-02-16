@@ -163,8 +163,6 @@ module Sidekiq
       if span.trace.trace_context.capture_stack?
         Google::Cloud::Trace::LabelKey.set_stack_trace span.labels,
                                                        skip_frames: 3
-                                                      end
-
       end
 
       span
