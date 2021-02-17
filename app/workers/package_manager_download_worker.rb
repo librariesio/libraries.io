@@ -62,6 +62,7 @@ class PackageManagerDownloadWorker
           end
 
     platform = PLATFORMS[key]
+    version = version.to_s.strip
     raise "Platform '#{platform_name}' not found" unless platform
 
     # need to maintain compatibility with things that pass in the name of the class under PackageManager module
