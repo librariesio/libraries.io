@@ -128,6 +128,6 @@ end
 
 gem "scenic", "~> 1.4"
 
-gem "rubocop", "~> 0.80.1"
+gem "rubocop", "~> 0.80.1", require: false
 
 gem "chartkick", "~> 3.4"
