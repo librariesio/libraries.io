@@ -92,25 +92,43 @@ module PackageManager
         &.delete_if { |_key, value| value.blank? }
     end
 
-    def self.update_version(name, version)
-      unless self::SUPPORTS_SINGLE_VERSION_UPDATE
-        logger.warn("#{db_platform}.update_version(#{name}, #{version}) called but not supported on platform")
+    def self.update(name, sync_version: :all)
+      if sync_version != :all && !self::SUPPORTS_SINGLE_VERSION_UPDATE
+        logger.warn("#{db_platform}.update(#{name}, sync_versions: #{sync_version}) called but not supported on platform")
         return
       end
 
-      update(name, sync_versions: false)
       raw_project = project(name)
+      return unless raw_project.present?
+
       mapped_project = map_project(raw_project)
-      unless mapped_project.present?
-        logger.warn("No mapped project for #{db_platform}/#{name}")
-        return
+      return false unless mapped_project.present?
+
+      db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
+      db_project.reformat_repository_url unless db_project.new_record?
+      db_project.update(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
+
+      if self::HAS_VERSIONS
+        if sync_version == :all
+          versions(raw_project, db_project.name)
+            .each { |v| add_version(db_project, v) }
+            .tap { |vs| deprecate_versions(db_project, vs) }
+        else
+          add_version(db_project, one_version(db_project.name, sync_version))
+          # TODO handle deprecation here too
+        end
       end
 
-      db_project = Project.find_by!(name: mapped_project[:name], platform: db_platform)
-      add_version(db_project, one_version(db_project.name, version))
-      # TODO handle deprecation here too
       save_dependencies(mapped_project) if self::HAS_DEPENDENCIES
       finalize_db_project(db_project)
+    rescue SystemExit, Interrupt
+      exit 0
+    rescue StandardError => e
+      if ENV["RACK_ENV"] == "production"
+        Bugsnag.notify(e)
+      else
+        raise
+      end
     end
 
     def self.add_version(db_project, version_hash)
@@ -136,35 +154,6 @@ module PackageManager
       db_project.download_registry_users
       db_project.update(last_synced_at: Time.now)
       db_project
-    end
-
-    def self.update(name, sync_versions: true)
-      raw_project = project(name)
-      return unless raw_project.present?
-
-      mapped_project = map_project(raw_project)
-      return false unless mapped_project.present?
-
-      db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
-      db_project.reformat_repository_url unless db_project.new_record?
-      db_project.update(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
-
-      if self::HAS_VERSIONS && sync_versions
-        versions(raw_project, db_project.name)
-          .each { |v| add_version(db_project, v) }
-          .tap { |vs| deprecate_versions(db_project, vs) }
-      end
-
-      save_dependencies(mapped_project) if self::HAS_DEPENDENCIES
-      finalize_db_project(db_project)
-    rescue SystemExit, Interrupt
-      exit 0
-    rescue StandardError => e
-      if ENV["RACK_ENV"] == "production"
-        Bugsnag.notify(e)
-      else
-        raise
-      end
     end
 
     def self.import_async

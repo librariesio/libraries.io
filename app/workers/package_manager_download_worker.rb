@@ -68,7 +68,7 @@ class PackageManagerDownloadWorker
     # need to maintain compatibility with things that pass in the name of the class under PackageManager module
     if platform::SUPPORTS_SINGLE_VERSION_UPDATE && version.present?
       logger.info("Version update for platform=#{key} name=#{name} version=#{version}")
-      platform.update_version(name, version)
+      platform.update(name, sync_version: version)
     else
       logger.info("Package update for platform=#{key} name=#{name}")
       platform.update(name)
