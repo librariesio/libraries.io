@@ -99,7 +99,8 @@ module PackageManager
       end
 
       update(name, sync_versions: false)
-      mapped_project = map_project(project(name))
+      raw_project = project(name)
+      mapped_project = map_project(raw_project)
       unless mapped_project.present?
         logger.warn("No mapped project for #{db_platform}/#{name}")
         return
@@ -138,10 +139,10 @@ module PackageManager
     end
 
     def self.update(name, sync_versions: true)
-      proj = project(name)
-      return unless project.present?
+      raw_project = project(name)
+      return unless raw_project.present?
 
-      mapped_project = map_project(project)
+      mapped_project = map_project(raw_project)
       return false unless mapped_project.present?
 
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
@@ -149,7 +150,7 @@ module PackageManager
       db_project.update(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
 
       if self::HAS_VERSIONS && sync_versions
-        versions(project, db_project.name)
+        versions(raw_project, db_project.name)
           .each { |v| add_version(db_project, v) }
           .tap { |vs| deprecate_versions(db_project, vs) }
       end
