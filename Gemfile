@@ -103,6 +103,7 @@ end
 group :development, :test do
   gem "pry"
   gem "rspec-rails"
+  gem "rubocop", "~> 0.80.1", require: false
 end
 
 group :test do
@@ -128,6 +129,5 @@ end
 
 gem "scenic", "~> 1.4"
 
-gem "rubocop", "~> 0.80.1"
 
 gem "chartkick", "~> 3.4"
