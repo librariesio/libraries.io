@@ -88,35 +88,8 @@ module PackageManager
     end
 
     def self.map_project(project)
-      mapped_project = mapping(project)
-      mapped_project = mapped_project.delete_if { |_key, value| value.blank? } if mapped_project.present?
-      mapped_project
-    end
-
-    def self.save(project, sync_versions: true)
-      return unless project.present?
-
-      mapped_project = map_project(project)
-      return false unless mapped_project.present?
-
-      dbproject = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
-      if dbproject.new_record?
-        dbproject.assign_attributes(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
-        dbproject.save
-      else
-        dbproject.reformat_repository_url
-        attrs = mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties)
-        dbproject.update_attributes(attrs)
-      end
-
-      if self::HAS_VERSIONS && sync_versions
-        versions(project, dbproject.name)
-          .each { |v| add_version(dbproject, v) }
-          .tap { |vs| deprecate_versions(dbproject, vs) }
-      end
-
-      save_dependencies(mapped_project) if self::HAS_DEPENDENCIES
-      finalize_dbproject(dbproject)
+      mapping(project)
+        &.delete_if { |_key, value| value.blank? }
     end
 
     def self.update_version(name, version)
@@ -132,42 +105,57 @@ module PackageManager
         return
       end
 
-      dbproject = Project.find_by!(name: mapped_project[:name], platform: db_platform)
-      add_version(dbproject, one_version(dbproject.name, version))
+      db_project = Project.find_by!(name: mapped_project[:name], platform: db_platform)
+      add_version(db_project, one_version(db_project.name, version))
       # TODO handle deprecation here too
       save_dependencies(mapped_project) if self::HAS_DEPENDENCIES
-      finalize_dbproject(dbproject)
+      finalize_db_project(db_project)
     end
 
-    def self.add_version(dbproject, version_hash)
-      existing = dbproject.versions.find_or_initialize_by(number: version_hash[:number]) do |new_version|
-        new_version.update_attributes(version_hash)
+    def self.add_version(db_project, version_hash)
+      existing = db_project.versions.find_or_initialize_by(number: version_hash[:number]) do |new_version|
+        new_version.assign_attributes version_hash
       end
       existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
       existing.save
     end
 
-    def self.deprecate_versions(dbproject, version_hash)
-      case dbproject.platform.downcase
+    def self.deprecate_versions(db_project, version_hash)
+      case db_project.platform.downcase
       when "rubygems" # yanked gems will be omitted from project JSON versions
-        dbproject
+        db_project
           .versions
           .where.not(number: version_hash.pluck(:number))
           .update_all(status: "Removed")
       end
     end
 
-    def self.finalize_dbproject(dbproject)
-      dbproject.reload
-      dbproject.download_registry_users
-      dbproject.last_synced_at = Time.now
-      dbproject.save
-      dbproject
+    def self.finalize_db_project(db_project)
+      db_project.reload
+      db_project.download_registry_users
+      db_project.update(last_synced_at: Time.now)
+      db_project
     end
 
     def self.update(name, sync_versions: true)
       proj = project(name)
-      save(proj, sync_versions: sync_versions) if proj.present?
+      return unless project.present?
+
+      mapped_project = map_project(project)
+      return false unless mapped_project.present?
+
+      db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
+      db_project.reformat_repository_url unless db_project.new_record?
+      db_project.update(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
+
+      if self::HAS_VERSIONS && sync_versions
+        versions(project, db_project.name)
+          .each { |v| add_version(db_project, v) }
+          .tap { |vs| deprecate_versions(db_project, vs) }
+      end
+
+      save_dependencies(mapped_project) if self::HAS_DEPENDENCIES
+      finalize_db_project(db_project)
     rescue SystemExit, Interrupt
       exit 0
     rescue StandardError => e
@@ -217,26 +205,25 @@ module PackageManager
 
     def self.save_dependencies(mapped_project)
       name = mapped_project[:name]
-      proj = Project.find_by(name: name, platform: db_platform)
-      proj.versions.includes(:dependencies).each do |version|
-        next if version.dependencies.any?
+      db_project = Project.find_by(name: name, platform: db_platform)
+      db_project.versions.includes(:dependencies).each do |db_version|
+        next if db_version.dependencies.any?
 
         deps = begin
-                 dependencies(name, version.number, mapped_project)
+                 dependencies(name, db_version.number, mapped_project)
                rescue StandardError
                  []
                end
-        next unless deps&.any? && version.dependencies.empty?
 
         deps.each do |dep|
-          next if dep[:project_name].blank? || version.dependencies.find_by_project_name(dep[:project_name])
+          next if dep[:project_name].blank? || db_version.dependencies.any? { |d| d.project_name == dep[:project_name] }
 
           named_project_id = Project
             .find_best(db_platform, dep[:project_name].strip)
             &.id
-          version.dependencies.create(dep.merge(project_id: named_project_id.try(:strip)))
+          db_version.dependencies.create(dep.merge(project_id: named_project_id.try(:strip)))
         end
-        version.set_runtime_dependencies_count
+        db_version.set_runtime_dependencies_count if deps.any?
       end
     end
 
