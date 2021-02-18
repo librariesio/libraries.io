@@ -105,7 +105,7 @@ module PackageManager
       return false unless mapped_project.present?
 
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
-      db_project.reformat_repository_url unless db_project.new_record?
+      db_project.reformat_repository_url if sync_version == :all && !db_project.new_record?
       db_project.update(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
 
       if self::HAS_VERSIONS
