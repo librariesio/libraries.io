@@ -121,8 +121,6 @@ module PackageManager
 
       save_dependencies(mapped_project) if self::HAS_DEPENDENCIES
       finalize_db_project(db_project)
-    rescue SystemExit, Interrupt
-      exit 0
     rescue StandardError => e
       if ENV["RACK_ENV"] == "production"
         Bugsnag.notify(e)
