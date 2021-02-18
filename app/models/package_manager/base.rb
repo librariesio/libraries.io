@@ -99,7 +99,7 @@ module PackageManager
       end
 
       raw_project = project(name)
-      return unless raw_project.present?
+      return false unless raw_project.present?
 
       mapped_project = map_project(raw_project)
       return false unless mapped_project.present?
