@@ -158,10 +158,14 @@ module PackageManager
       end
     end
 
-    def self.versions(_project, name)
-      xml_metadata = get_raw(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).maven_metadata)
-      xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
-      retrieve_versions(xml_versions.filter { |item| !item.ends_with?("-SNAPSHOT") }, name)
+    def self.versions(project, name)
+      if project && project[:versions]
+        return project[:versions]
+      else
+        xml_metadata = get_raw(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).maven_metadata)
+        xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
+        retrieve_versions(xml_versions.filter { |item| !item.ends_with?("-SNAPSHOT") }, name)
+      end
     end
 
     def self.retrieve_versions(versions, name)

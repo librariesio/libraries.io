@@ -65,8 +65,8 @@ module PackageManager
       }
     end
 
-    def self.update(name, sync_versions: true)
-      super(name, sync_versions: sync_versions)
+    def self.update(name, sync_version: :all)
+      super(name, sync_version: sync_version)
       # call update on base module name if the name is appended with major version
       # example: github.com/myexample/modulename/v2
       update_base_module(name) if name.match(VERSION_MODULE_REGEX)
