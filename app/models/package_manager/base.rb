@@ -94,7 +94,7 @@ module PackageManager
 
     def self.update(name, sync_version: :all)
       if sync_version != :all && !self::SUPPORTS_SINGLE_VERSION_UPDATE
-        logger.warn("#{db_platform}.update(#{name}, sync_versions: #{sync_version}) called but not supported on platform")
+        logger.warn("#{db_platform}.update(#{name}, sync_version: #{sync_version}) called but not supported on platform")
         return
       end
 
