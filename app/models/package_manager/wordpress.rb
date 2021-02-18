@@ -66,12 +66,23 @@ module PackageManager
     end
 
     def self.versions(project, _name)
-      [
-        {
-          number: project["version"],
-          published_at: project["last_updated"],
-        },
-      ]
+      if project["versions"].present?
+        project["versions"]
+          .reject { |k, _v| k == "trunk" }
+          .map do |k, _v|
+          {
+            number: k,
+            published_at: k == project["version"] ? project["last_updated"] : nil
+          }
+        end
+      else
+        [
+          {
+            number: project["version"],
+            published_at: project["last_updated"],
+          }
+        ]
+      end
     end
   end
 end

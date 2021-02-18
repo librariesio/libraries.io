@@ -123,7 +123,7 @@ This method takes the returned data from the `#project` method and should return
 Here's an example from [NuGet](../app/models/package_manager/nu_get.rb):
 
 ```ruby
-def self.versions(project)
+def self.versions(project, _name)
   project[:releases].map do |item|
     {
       number: item['catalogEntry']['version'],
