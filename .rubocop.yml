@@ -24,7 +24,7 @@ Lint/AmbiguousBlockAssociation:
 # and docs shouldn't be required. add them when needed.
 Metrics/AbcSize:
   Enabled: false
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
 Metrics/ClassLength:
   Enabled: false
