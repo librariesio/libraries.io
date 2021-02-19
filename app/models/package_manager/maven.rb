@@ -73,9 +73,11 @@ module PackageManager
     def self.project(name)
       sections = name.split(NAME_DELIMITER)
       path = sections.join("/")
+
       versions = versions(nil, name)
-      latest_version = latest_version(versions, name)
-      return {} unless latest_version.present?
+      latest = latest_version(name)
+
+      return {} unless latest.present?
 
       {
         name: name,
@@ -83,7 +85,7 @@ module PackageManager
         group_id: sections[0],
         artifact_id: sections[1],
         versions: versions,
-        latest_version: latest_version,
+        latest_version: latest,
       }
     rescue StandardError
       {}
@@ -162,7 +164,7 @@ module PackageManager
       if project && project[:versions]
         return project[:versions]
       else
-        xml_metadata = get_raw(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).maven_metadata)
+        xml_metadata = maven_metadata(name)
         xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
         retrieve_versions(xml_versions.filter { |item| !item.ends_with?("-SNAPSHOT") }, name)
       end
@@ -230,20 +232,16 @@ module PackageManager
         .map(&:last)
     end
 
-    def self.latest_version(versions, name)
-      if versions.present?
-        versions
-          .max_by { |version| version[:published_at] }
-          .dig(:number)
-      else
-        # TODO: this is in place to handle packages that are no longer on maven-repository.com
-        # this could be removed if we switched to a package data provider that supplied full information
-        Project
-          .find_by(name: name, platform: formatted_name)
-          &.versions
-          &.max_by(&:published_at)
-          &.number
-      end
+    def self.maven_metadata(name)
+      get_raw(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).maven_metadata)
+    end
+
+    def self.latest_version(name)
+      xml_metadata = maven_metadata(name)
+      latest = Nokogiri::XML(xml_metadata)
+        .css("versioning > latest, versioning > release, metadata > version")
+        .map(&:text)
+        .first
     end
 
     def self.db_platform
