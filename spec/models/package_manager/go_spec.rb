@@ -52,7 +52,6 @@ describe PackageManager::Go do
         expect(mapping[:description].blank?).to be false
         expect(mapping[:repository_url].blank?).to be false
         expect(mapping[:homepage].blank?).to be false
-        expect(mapping[:versions].count).to be > 0
       end
     end
 

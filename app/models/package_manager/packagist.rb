@@ -55,7 +55,6 @@ module PackageManager
         keywords_array: Array.wrap(latest_version["keywords"]),
         licenses: latest_version["license"].join(","),
         repository_url: repo_fallback(project["repository"], latest_version["home_page"]),
-        versions: project["versions"],
       }
     end
 

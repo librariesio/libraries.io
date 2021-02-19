@@ -48,7 +48,6 @@ module PackageManager
         homepage: latest_version["pubspec"]["homepage"],
         description: latest_version["pubspec"]["description"],
         repository_url: repo_fallback("", latest_version["pubspec"]["homepage"]),
-        versions: project["versions"],
       }
     end
 
