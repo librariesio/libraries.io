@@ -6,7 +6,7 @@ atom_feed do |feed|
     feed.entry(tag, url: version_url(@project.to_param.merge(number: tag.name))) do |entry|
       entry.title(tag.number)
       entry.published Time.at(tag.published_at).rfc822
-      entry.content "", :type => "html"
+      entry.content "", type: "html"
       entry.author do |author|
         author.name('Libraries.io')
       end

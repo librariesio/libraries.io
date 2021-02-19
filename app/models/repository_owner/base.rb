@@ -118,13 +118,13 @@ module RepositoryOwner
     private
 
     def top_favourite_project_ids
-      Rails.cache.fetch [owner, "top_favourite_project_ids"], :expires_in => 1.week, race_condition_ttl: 2.minutes do
+      Rails.cache.fetch [owner, "top_favourite_project_ids"], expires_in: 1.week, race_condition_ttl: 2.minutes do
         owner.favourite_projects.limit(10).pluck(:id)
       end
     end
 
     def top_contributor_ids
-      Rails.cache.fetch [owner, "top_contributor_ids"], :expires_in => 1.week, race_condition_ttl: 2.minutes do
+      Rails.cache.fetch [owner, "top_contributor_ids"], expires_in: 1.week, race_condition_ttl: 2.minutes do
         owner.contributors.visible.limit(50).pluck(:id)
       end
     end

@@ -211,7 +211,7 @@ class ApplicationController < ActionController::Base
     raise ActiveRecord::RecordNotFound if @repository.nil?
     raise ActiveRecord::RecordNotFound if @repository.status == 'Hidden'
     raise ActiveRecord::RecordNotFound unless authorized?
-    redirect_to url_for(@repository.to_param), :status => :moved_permanently if full_name != @repository.full_name
+    redirect_to url_for(@repository.to_param), status: :moved_permanently if full_name != @repository.full_name
   end
 
   def authorized?
