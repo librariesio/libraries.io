@@ -232,7 +232,7 @@ module PackageManager
         .map(&:last)
     end
 
-    def self.maven_metadata
+    def self.maven_metadata(name)
       get_raw(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).maven_metadata)
     end
 
