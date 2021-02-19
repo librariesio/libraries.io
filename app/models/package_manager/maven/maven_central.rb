@@ -18,7 +18,7 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven
   end
 
   def self.versions(_project, name)
-    xml_metadata = get_raw(MavenUrl.from_name(name, repository_base).maven_metadata)
+    xml_metadata = maven_metadata(name)
     xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
     retrieve_versions(xml_versions.filter { |item| !item.ends_with?("-SNAPSHOT") }, name)
   end
