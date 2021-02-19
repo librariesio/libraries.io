@@ -116,6 +116,9 @@ describe PackageManager::Maven do
       allow(described_class)
         .to receive(:versions)
         .and_return([{ number: "2.3", published_at: "2019-06-05T10:50:00Z" }])
+      allow(described_class)
+        .to receive(:latest_version)
+        .and_return("2.3")
 
       expected = {
         name: "javax.faces:javax.faces-api",
@@ -309,32 +312,15 @@ describe PackageManager::Maven do
     end
   end
 
-  describe ".latest_version(versions, names)" do
+  describe ".latest_version(names)" do
     context "with versions in the project" do
       it "returns the latest version" do
-        versions = [
-          { number: "previous", published_at: Time.parse("2019-06-04T00:00:00Z") },
-          { number: "latest", published_at: Time.parse("2019-06-04T00:00:01Z") },
-        ]
-        expect(described_class.latest_version(versions, "com.tidelift:test")).to eq("latest")
-      end
-    end
+        expect(described_class)
+          .to receive(:get_raw)
+            .with("https://repo1.maven.org/maven2/com/tidelift/test/maven-metadata.xml")
+            .and_return(File.open("spec/fixtures/tidelift-maven_metadata.xml").read)
 
-    context "with no versions in the project" do
-      context "with versions in the DB" do
-        it "falls back to the DB" do
-          project = create(:project, name: "com.tidelift:test", platform: "Maven")
-          create(:version, project: project, number: "1.0.0", published_at: Time.parse("2019-06-04T00:00:00Z"))
-          create(:version, project: project, number: "1.0.1", published_at: Time.parse("2019-06-04T00:00:01Z"))
-
-          expect(described_class.latest_version([], "com.tidelift:test")).to eq("1.0.1")
-        end
-      end
-
-      context "with no versions in the DB" do
-        it "returns nothing" do
-          expect(described_class.latest_version([], "com.tidelift:test")).to be_nil
-        end
+        expect(described_class.latest_version("com.tidelift:test")).to eq("1.0.5")
       end
     end
   end
