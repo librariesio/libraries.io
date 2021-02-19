@@ -204,7 +204,7 @@ module PackageManager
                end
 
         deps.each do |dep|
-          next if dep[:project_name].blank? || db_version.dependencies.any? { |d| d.project_name == dep[:project_name] }
+          next if dep[:project_name].blank? || dep[:requirement].blank? || db_version.dependencies.any? { |d| d.project_name == dep[:project_name] }
 
           named_project_id = Project
             .find_best(db_platform, dep[:project_name].strip)
