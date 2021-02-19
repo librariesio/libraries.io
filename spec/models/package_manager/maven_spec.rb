@@ -111,17 +111,6 @@ describe PackageManager::Maven do
     end
   end
 
-  describe ".versions(project, name)" do
-    it "returns the expected version data" do
-      allow(described_class)
-        .to receive(:latest_version)
-        .and_return("2.3")
-      allow(described_class)
-        .to receive(:versions)
-        .and_return([{ number: "2.3", published_at: "2019-06-05T10:50:00Z" }])
-    end
-  end
-
   describe ".project(name)" do
     it "returns the expected project data" do
       allow(described_class)
@@ -133,7 +122,6 @@ describe PackageManager::Maven do
         path: "javax.faces/javax.faces-api", # This is the proper format for a maven-repository.com path component, which differs from maven.org format (dots vs slashes)
         group_id: "javax.faces",
         artifact_id: "javax.faces-api",
-        versions: [{ number: "2.3", published_at: "2019-06-05T10:50:00Z" }],
         latest_version: "2.3",
       }
 
@@ -143,6 +131,17 @@ describe PackageManager::Maven do
 
 
   describe ".versions" do
+    it "returns the expected version data" do
+      allow(described_class)
+        .to receive(:versions)
+        .and_return([{ number: "2.3", published_at: "2019-06-05T10:50:00Z" }])
+
+      project = described_class.project("javax.faces:javax.faces-api")
+      expect(described_class.versions(project, "javax.faces:javax.faces-api")).to eq([
+        { number: "2.3", published_at: "2019-06-05T10:50:00Z" }
+      ])
+    end
+
     it "skips versions that can't be parsed" do
       expect(described_class)
         .to receive(:get_raw)

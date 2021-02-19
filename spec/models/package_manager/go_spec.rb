@@ -60,7 +60,7 @@ describe PackageManager::Go do
     it "maps only major revision versions to module" do
       VCR.use_cassette("pkg_go_dev") do
         project = described_class.project("github.com/urfave/cli/v2")
-        versions = versions(project, project[:name])
+        versions = described_class.versions(project, project[:name])
 
         expect(versions.find { |v| v[:number] == "v1.0.0" }).to be nil
         expect(versions.find { |v| v[:number] == "v2.0.0" }).to_not be nil
