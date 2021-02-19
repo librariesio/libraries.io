@@ -106,7 +106,7 @@ module PackageManager
 
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
       db_project.reformat_repository_url if sync_version == :all && !db_project.new_record?
-      db_project.update(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
+      db_project.update!(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
 
       if self::HAS_VERSIONS
         if sync_version == :all
@@ -134,7 +134,7 @@ module PackageManager
         new_version.assign_attributes version_hash
       end
       existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
-      existing.save
+      existing.save!
     end
 
     def self.deprecate_versions(db_project, version_hash)
@@ -150,7 +150,7 @@ module PackageManager
     def self.finalize_db_project(db_project)
       db_project.reload
       db_project.download_registry_users
-      db_project.update(last_synced_at: Time.now)
+      db_project.update!(last_synced_at: Time.now)
       db_project
     end
 
@@ -209,7 +209,7 @@ module PackageManager
           named_project_id = Project
             .find_best(db_platform, dep[:project_name].strip)
             &.id
-          db_version.dependencies.create(dep.merge(project_id: named_project_id.try(:strip)))
+          db_version.dependencies.create!(dep.merge(project_id: named_project_id.try(:strip)))
         end
         db_version.set_runtime_dependencies_count if deps.any?
       end
