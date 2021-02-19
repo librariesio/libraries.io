@@ -111,11 +111,19 @@ describe PackageManager::Maven do
     end
   end
 
-  describe ".project(name)" do
-    it "returns the expected project data" do
+  describe ".versions(project, name)" do
+    it "returns the expected version data" do
+      allow(described_class)
+        .to receive(:latest_version)
+        .and_return("2.3")
       allow(described_class)
         .to receive(:versions)
         .and_return([{ number: "2.3", published_at: "2019-06-05T10:50:00Z" }])
+    end
+  end
+
+  describe ".project(name)" do
+    it "returns the expected project data" do
       allow(described_class)
         .to receive(:latest_version)
         .and_return("2.3")

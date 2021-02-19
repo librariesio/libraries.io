@@ -43,11 +43,6 @@ describe PackageManager::Packagist do
           keywords_array: [],
           licenses: "BSD-3-Clause",
           repository_url: "https://github.com/librariesio/fakepkg",
-          versions: {
-            "dev-master" => {"version" => "dev-master", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package."},
-            "1.2.3" => {"version" => "1.2.3", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package."},
-            "1.2.x-dev" => {"version" => "1.2.x-dev", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package."},
-          }
         })
       end
     end
