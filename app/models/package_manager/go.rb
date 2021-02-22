@@ -134,7 +134,6 @@ module PackageManager
           licenses: project[:html].css('*[data-test-id="UnitHeader-license"]').map(&:text).join(","),
           repository_url: project[:overview_html]&.css(".UnitMeta-repo")&.first&.next_element&.attribute("href")&.value,
           homepage: project[:overview_html]&.css(".UnitMeta-repo")&.first&.next_element&.attribute("href")&.value,
-          versions: versions(project, project[:name]),
         }
       else
         { name: project[:name] }

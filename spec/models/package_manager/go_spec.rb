@@ -52,17 +52,18 @@ describe PackageManager::Go do
         expect(mapping[:description].blank?).to be false
         expect(mapping[:repository_url].blank?).to be false
         expect(mapping[:homepage].blank?).to be false
-        expect(mapping[:versions].count).to be > 0
       end
     end
+  end
 
+  describe "#versions" do
     it "maps only major revision versions to module" do
       VCR.use_cassette("pkg_go_dev") do
         project = described_class.project("github.com/urfave/cli/v2")
-        mapping = described_class.mapping(project)
+        versions = described_class.versions(project, project[:name])
 
-        expect(mapping[:versions].find { |v| v[:number] == "v1.0.0" }).to be nil
-        expect(mapping[:versions].find { |v| v[:number] == "v2.0.0" }).to_not be nil
+        expect(versions.find { |v| v[:number] == "v1.0.0" }).to be nil
+        expect(versions.find { |v| v[:number] == "v2.0.0" }).to_not be nil
       end
     end
   end

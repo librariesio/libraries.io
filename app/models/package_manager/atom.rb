@@ -52,7 +52,6 @@ module PackageManager
         name: project["name"],
         description: metadata["description"],
         repository_url: repo_fallback(repo, ""),
-        versions: project["versions"],
       }
     end
 

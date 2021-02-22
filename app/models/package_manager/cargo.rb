@@ -70,13 +70,13 @@ module PackageManager
     end
 
     def self.mapping(project)
-      latest_version = project["versions"].to_a.first
+      latest_version = versions(project).to_a.first
       {
         name: project["crate"]["id"],
         homepage: project["crate"]["homepage"],
         description: project["crate"]["description"],
         keywords_array: Array.wrap(project["crate"]["keywords"]),
-        licenses: latest_version["license"],
+        licenses: latest_version&.fetch(:original_license),
         repository_url: repo_fallback(project["crate"]["repository"], project["crate"]["homepage"]),
       }
     end
