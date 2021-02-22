@@ -190,7 +190,7 @@ module PackageManager
       name = mapped_project[:name]
       db_project = Project.find_by(name: name, platform: db_platform)
       db_versions = db_project.versions.includes(:dependencies)
-      db_versions = versions.where(id: sync_version) unless sync_version == :all
+      db_versions = db_versions.where(id: sync_version) unless sync_version == :all
       db_versions.each do |db_version|
         next if db_version.dependencies.any?
 
