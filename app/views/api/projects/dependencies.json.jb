@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 dependencies_fields = {
   dependencies_for_version: @version.number,
   dependencies: (@version.dependencies.includes(:project) || []).

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class WebHooksController < ApplicationController
   before_action :ensure_logged_in
   before_action :load_repo

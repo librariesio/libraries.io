@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Array
   # Generates a single quoted postgres array string format. This is the format used
   # to insert or update stuff in the database.

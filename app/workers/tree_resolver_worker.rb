@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TreeResolverWorker
   include Sidekiq::Worker
   sidekiq_options queue: :tree, unique: :until_executed

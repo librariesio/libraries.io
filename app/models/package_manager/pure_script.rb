@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module PackageManager
   class PureScript < Base
     HAS_VERSIONS = false

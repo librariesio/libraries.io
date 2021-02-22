@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module LoginHelpers
   def mock_is_admin(admin = true)
     allow_any_instance_of(User).to receive(:admin?).and_return(admin)

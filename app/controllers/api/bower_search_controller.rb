@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Api::BowerSearchController < Api::ApplicationController
   skip_before_action :check_api_key
 

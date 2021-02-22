@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RepositoryOrganisation < ApplicationRecord
   API_FIELDS = [:name, :login, :blog, :email, :location, :bio]
 

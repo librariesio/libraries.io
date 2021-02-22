@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Api::RepositoryUsersController < Api::ApplicationController
   before_action :find_user
 

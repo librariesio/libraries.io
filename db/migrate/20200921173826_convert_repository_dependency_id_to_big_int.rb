@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ConvertRepositoryDependencyIdToBigInt < ActiveRecord::Migration[5.2]
   def up
     # NB this locks the table, so we're disabling related code temporarily, while it runs.

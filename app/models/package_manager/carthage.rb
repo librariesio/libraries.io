@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module PackageManager
   class Carthage < Base
     HAS_VERSIONS = false

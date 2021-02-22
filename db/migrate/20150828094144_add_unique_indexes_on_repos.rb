@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddUniqueIndexesOnRepos < ActiveRecord::Migration[5.0]
   def up
     remove_index :github_repositories, :full_name
