@@ -225,7 +225,7 @@ class Repository < ApplicationRecord
       download_manifests(token)
       update_source_rank(true)
     end
-    update_attributes(last_synced_at: Time.now)
+    update(last_synced_at: Time.now)
   end
 
   def update_from_repository(token)

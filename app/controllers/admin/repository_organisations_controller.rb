@@ -21,7 +21,7 @@ class Admin::RepositoryOrganisationsController < Admin::ApplicationController
   end
 
   def update
-    @user.update_attributes(user_params)
+    @user.update(user_params)
     redirect_to admin_edit_owner_path(@user.host_type.downcase, @user.login), notice: "#{@user.org? ? 'Organisation' : 'User'} updated"
   end
 

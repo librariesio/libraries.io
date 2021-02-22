@@ -617,7 +617,7 @@ class Project < ApplicationRecord
 
   def reformat_repository_url
     repository_url = URLParser.try_all(self.repository_url)
-    update_attributes(repository_url: repository_url)
+    update(repository_url: repository_url)
   end
 
   private

@@ -183,7 +183,7 @@ module RepositoryHost
       if repository.readme.nil?
         repository.create_readme(contents)
       else
-        repository.readme.update_attributes(contents)
+        repository.readme.update(contents)
       end
     rescue *IGNORABLE_EXCEPTIONS
       nil

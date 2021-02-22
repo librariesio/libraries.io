@@ -5,7 +5,7 @@ class Admin::RepositoriesController < Admin::ApplicationController
 
   def update
     @repository = Repository.find(params[:id])
-    if @repository.update_attributes(repository_params)
+    if @repository.update(repository_params)
       @repository.update_all_info_async
       redirect_to repository_path(@repository.to_param)
     else

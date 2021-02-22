@@ -19,7 +19,7 @@ class Api::SubscriptionsController < Api::ApplicationController
   end
 
   def update
-    @subscription.update_attributes(subscription_params)
+    @subscription.update(subscription_params)
     render json: @subscription, include: 'project,project.versions'
   end
 
