@@ -96,8 +96,7 @@ module PackageManager
       raw_project = project(name)
       return false unless raw_project.present?
 
-      mapped_project = mapping(raw_project)
-        &.delete_if { |_key, value| value.blank? }
+      mapped_project = mapping(raw_project).try(&:compact)
       return false unless mapped_project.present?
 
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
