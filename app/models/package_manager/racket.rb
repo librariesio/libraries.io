@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module PackageManager
   class Racket < Base
     HAS_VERSIONS = false

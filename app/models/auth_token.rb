@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AuthToken < ApplicationRecord
   validates_presence_of :token
   scope :authorized, -> { where(authorized: [true, nil]) }

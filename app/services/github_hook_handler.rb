@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class GithubHookHandler
   VALID_ISSUE_ACTIONS = ["opened", "closed", "reopened", "labeled" "unlabeled", "edited"]
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class LicensesController < ApplicationController
   def index
     @licenses = Project.popular_licenses(facet_limit: 300)

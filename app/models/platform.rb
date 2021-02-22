@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Platform
   include ActiveModel::Model
   include ActiveModel::Serialization

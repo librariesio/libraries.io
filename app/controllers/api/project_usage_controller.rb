@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Api::ProjectUsageController < ApplicationController
   before_action :find_project
   def show

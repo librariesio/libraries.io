@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddGithubIdIndexToGithubUsers < ActiveRecord::Migration[5.0]
   def change
     add_index :github_users, :github_id

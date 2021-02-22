@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RepositoryHost
   class Gitlab < Base
     IGNORABLE_EXCEPTIONS = [::Gitlab::Error::NotFound,

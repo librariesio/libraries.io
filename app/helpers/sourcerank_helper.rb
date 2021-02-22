@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module SourcerankHelper
   def source_rank_badge_class(value)
     if value > 0

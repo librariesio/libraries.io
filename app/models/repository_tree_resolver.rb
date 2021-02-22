@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RepositoryTreeResolver
   attr_accessor :project_names
   attr_accessor :license_names

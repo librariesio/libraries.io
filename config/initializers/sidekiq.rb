@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'resolv-replace' # pure ruby DNS
 
 # disable id so that sidekiq will work with google cloud memorystore redis

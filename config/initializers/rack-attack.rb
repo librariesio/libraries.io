@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 limit_proc = proc do |req|
   if req.params['api_key'].present?
     key = ApiKey.active.find_by_access_token(req.params['api_key'])

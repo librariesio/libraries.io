@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RepositoryMaintenanceStatWorker
     include Sidekiq::Worker
     sidekiq_options queue: :repo_maintenance_stat, retry: 3

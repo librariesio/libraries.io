@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ProjectSuggestionsController < ApplicationController
   before_action :ensure_logged_in
   before_action :find_project, only: [:new, :create]

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RepositoryUser < ApplicationRecord
   has_many :contributions, dependent: :delete_all
   has_many :repositories

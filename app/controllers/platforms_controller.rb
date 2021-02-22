@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class PlatformsController < ApplicationController
   def index
     @platforms = Project.popular_platforms

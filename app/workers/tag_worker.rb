@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TagWorker
   include Sidekiq::Worker
   sidekiq_options queue: :small, unique: :until_executed

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ProjectsController < ApplicationController
   before_action :ensure_logged_in, only: [:your_dependent_repos, :mute, :unmute,
                                           :unsubscribe, :sync]

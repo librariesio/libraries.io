@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Admin::ProjectsController < Admin::ApplicationController
   def show
     @project = Project.find(params[:id])

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RepositoryOwner
   class Base
     attr_reader :owner

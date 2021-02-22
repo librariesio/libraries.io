@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TreeController < ApplicationController
   before_action :find_project
   before_action :load_tree_resolver

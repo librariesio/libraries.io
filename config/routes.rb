@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.routes.draw do
   require 'sidekiq/web'
   require 'sidekiq_unique_jobs/web'
