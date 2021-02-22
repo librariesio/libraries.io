@@ -115,7 +115,7 @@ module PackageManager
         end
       end
 
-      save_dependencies(mapped_project) if self::HAS_DEPENDENCIES
+      save_dependencies(mapped_project, sync_version) if self::HAS_DEPENDENCIES
       finalize_db_project(db_project)
     rescue StandardError => e
       if ENV["RACK_ENV"] == "production"
@@ -187,10 +187,12 @@ module PackageManager
       names - existing_names
     end
 
-    def self.save_dependencies(mapped_project)
+    def self.save_dependencies(mapped_project, sync_version = :all)
       name = mapped_project[:name]
       db_project = Project.find_by(name: name, platform: db_platform)
-      db_project.versions.includes(:dependencies).each do |db_version|
+      db_versions = db_project.versions.includes(:dependencies)
+      db_versions = versions.where(id: sync_version) unless sync_version == :all
+      db_versions.each do |db_version|
         next if db_version.dependencies.any?
 
         deps = begin
