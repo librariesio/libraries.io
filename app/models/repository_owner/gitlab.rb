@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RepositoryOwner
   class Gitlab < Base
     def avatar_url(size = 60)

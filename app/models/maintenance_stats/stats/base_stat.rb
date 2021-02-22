@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # class to set interface for implementing Stat classes
 module MaintenanceStats
     module Stats

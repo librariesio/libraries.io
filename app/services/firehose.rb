@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Firehose
   class << self
     def new_version(project, platform, version_or_tag)

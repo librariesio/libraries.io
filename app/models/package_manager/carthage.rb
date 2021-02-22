@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module PackageManager
   class Carthage < Base
     HAS_VERSIONS = false
@@ -42,12 +43,12 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project[:full_name],
-        :description => project[:description],
-        :homepage => project[:homepage],
-        :keywords_array => project[:topics],
-        :licenses => (project.fetch(:license, {}) || {})[:key],
-        :repository_url => project[:html_url]
+        name: project[:full_name],
+        description: project[:description],
+        homepage: project[:homepage],
+        keywords_array: project[:topics],
+        licenses: (project.fetch(:license, {}) || {})[:key],
+        repository_url: project[:html_url]
       }
     end
   end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'pry'
 require 'simplecov'
 SimpleCov.start 'rails'

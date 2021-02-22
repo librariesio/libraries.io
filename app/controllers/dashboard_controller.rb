@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class DashboardController < ApplicationController
   before_action :ensure_logged_in, except: :home
 

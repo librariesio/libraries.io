@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :github do
   desc 'Sync github users'
   task sync_users: :environment do

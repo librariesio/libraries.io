@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module PackageManager
   class Emacs < Base
     HAS_VERSIONS = false
@@ -28,10 +29,10 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project["name"],
-        :description => project["desc"],
-        :repository_url => project.fetch("props", {}).try(:fetch, 'url', ''),
-        :keywords_array => Array.wrap(project.fetch("props", {}).try(:fetch, 'keywords', []))
+        name: project["name"],
+        description: project["desc"],
+        repository_url: project.fetch("props", {}).try(:fetch, 'url', ''),
+        keywords_array: Array.wrap(project.fetch("props", {}).try(:fetch, 'keywords', []))
       }
     end
   end

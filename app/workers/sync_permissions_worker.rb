@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SyncPermissionsWorker
   include Sidekiq::Worker
   sidekiq_options queue: :user, unique: :until_executed

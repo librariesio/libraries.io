@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module PackageManager
   class Shards < Base
     HAS_VERSIONS = false
@@ -21,8 +22,8 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project["name"],
-        :repository_url => repo_fallback(project["url"], nil)
+        name: project["name"],
+        repository_url: repo_fallback(project["url"], nil)
       }
     end
   end

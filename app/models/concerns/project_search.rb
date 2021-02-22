@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ProjectSearch
   extend ActiveSupport::Concern
 
@@ -10,20 +11,20 @@ module ProjectSearch
 
     settings index: { number_of_shards: 3, number_of_replicas: 1 } do
       mapping do
-        indexes :name, type: 'string', :analyzer => 'snowball', :boost => 6
-        indexes :exact_name, type: 'string', :index => :not_analyzed, :boost => 2
-        indexes :extra_searchable_names, type: 'string', :index => :not_analyzed, :boost => 2
+        indexes :name, type: 'string', analyzer: 'snowball', boost: 6
+        indexes :exact_name, type: 'string', index: :not_analyzed, boost: 2
+        indexes :extra_searchable_names, type: 'string', index: :not_analyzed, boost: 2
 
-        indexes :description, type: 'string', :analyzer => 'snowball'
+        indexes :description, type: 'string', analyzer: 'snowball'
         indexes :homepage, type: 'string'
         indexes :repository_url, type: 'string'
         indexes :repo_name, type: 'string'
-        indexes :latest_release_number, type: 'string', :analyzer => 'keyword'
-        indexes :keywords_array, type: 'string', :analyzer => 'keyword'
-        indexes :language, type: 'string', :analyzer => 'keyword'
-        indexes :normalized_licenses, type: 'string', :analyzer => 'keyword'
-        indexes :platform, type: 'string', :analyzer => 'keyword'
-        indexes :status, type: 'string', :index => :not_analyzed
+        indexes :latest_release_number, type: 'string', analyzer: 'keyword'
+        indexes :keywords_array, type: 'string', analyzer: 'keyword'
+        indexes :language, type: 'string', analyzer: 'keyword'
+        indexes :normalized_licenses, type: 'string', analyzer: 'keyword'
+        indexes :platform, type: 'string', analyzer: 'keyword'
+        indexes :status, type: 'string', index: :not_analyzed
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
@@ -76,7 +77,7 @@ module ProjectSearch
     end
 
     def self.facets(options = {})
-      Rails.cache.fetch "facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
+      Rails.cache.fetch "facet:#{options.to_s.gsub(/\W/, '')}", expires_in: 1.hour, race_condition_ttl: 2.minutes do
         search('', options).response.aggregations
       end
     end

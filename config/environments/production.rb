@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -56,7 +57,7 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   # default mail links to https
-  config.action_mailer.default_url_options = { :protocol => 'https' }
+  config.action_mailer.default_url_options = { protocol: 'https' }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -82,12 +83,12 @@ Rails.application.configure do
 
   config.cache_store = :dalli_store,
                     (ENV["MEMCACHIER_SERVERS"] || "").split(","),
-                    {:username => ENV["MEMCACHIER_USERNAME"],
-                     :password => ENV["MEMCACHIER_PASSWORD"],
-                     :failover => true,
-                     :compress => true,
-                     :socket_timeout => 0.5,
-                     :socket_failure_delay => 0.1
+                    {username: ENV["MEMCACHIER_USERNAME"],
+                     password: ENV["MEMCACHIER_PASSWORD"],
+                     failover: true,
+                     compress: true,
+                     socket_timeout: 0.5,
+                     socket_failure_delay: 0.1
                     }
   config.action_mailer.smtp_settings = {
     address:              'smtp.sendgrid.net',

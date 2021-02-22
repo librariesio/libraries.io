@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module PackageManager
   class SwiftPM < Base
     HAS_VERSIONS = false
@@ -20,8 +21,8 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project[:name],
-        :repository_url => project[:repository_url]
+        name: project[:name],
+        repository_url: project[:repository_url]
       }
     end
   end

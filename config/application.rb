@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative 'boot'
 
 require "rails"
@@ -47,7 +48,7 @@ module Libraries
 
     config.exceptions_app = routes
 
-    Rails::Timeago.default_options :limit => proc { 60.days.ago }, :nojs => true, :format => proc { |time, options| time.strftime('%b %e, %Y') }
+    Rails::Timeago.default_options limit: proc { 60.days.ago }, nojs: true, format: proc { |time, options| time.strftime('%b %e, %Y') }
 
     # GC::Profiler.enable
 
@@ -58,9 +59,9 @@ module Libraries
       allow do
         origins '*'
         resource /^\/api\/.+/,
-          :headers => :any,
-          :methods => [:get, :post, :patch, :put, :delete, :options, :head],
-          :max_age => 86400
+          headers: :any,
+          methods: [:get, :post, :patch, :put, :delete, :options, :head],
+          max_age: 86400
       end
     end
   end

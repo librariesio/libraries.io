@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class URLParser
   def self.parse(url)
     new(url).parse

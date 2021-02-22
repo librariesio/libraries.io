@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 describe Project, type: :model do
@@ -167,7 +168,7 @@ describe Project, type: :model do
     let!(:project) { create(:project) }
 
     it "should save the updated format URL" do
-      project.update_attributes!(homepage: 'https://libraries.io', repository_url: 'scm:git:git://github.com/librariesio/libraries.io/libaries.io.git')
+      project.update!(homepage: 'https://libraries.io', repository_url: 'scm:git:git://github.com/librariesio/libraries.io/libaries.io.git')
       project.reformat_repository_url
 
       expect(project.homepage).to eql 'https://libraries.io'

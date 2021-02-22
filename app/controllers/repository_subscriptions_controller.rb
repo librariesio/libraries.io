@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RepositorySubscriptionsController < ApplicationController
   before_action :ensure_logged_in
 
@@ -8,7 +9,7 @@ class RepositorySubscriptionsController < ApplicationController
 
   def update
     @repository_subscription = current_user.repository_subscriptions.find(params[:id])
-    @repository_subscription.update_attributes(repository_subscription_params)
+    @repository_subscription.update(repository_subscription_params)
     redirect_to repositories_path
   end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module PackageManager
   class Inqlude < Base
     HAS_VERSIONS = false
@@ -26,11 +27,11 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project['name'],
-        :description => project["summary"],
-        :homepage => project["urls"]["homepage"],
-        :licenses => project['licenses'].join(','),
-        :repository_url => repo_fallback(project["urls"]["vcs"], '')
+        name: project['name'],
+        description: project["summary"],
+        homepage: project["urls"]["homepage"],
+        licenses: project['licenses'].join(','),
+        repository_url: repo_fallback(project["urls"]["vcs"], '')
       }
     end
   end

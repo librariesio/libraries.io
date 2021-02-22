@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class WebHooksController < ApplicationController
   before_action :ensure_logged_in
   before_action :load_repo
@@ -26,7 +27,7 @@ class WebHooksController < ApplicationController
   end
 
   def update
-    if @web_hook.update_attributes(web_hook_params)
+    if @web_hook.update(web_hook_params)
       redirect_to repository_web_hooks_path(@repository.to_param), notice: 'Web hook updated'
     else
       render :edit

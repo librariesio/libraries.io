@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :users do
   desc 'Sync users permissions'
   task sync_permissions: :environment do
