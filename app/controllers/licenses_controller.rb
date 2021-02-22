@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class LicensesController < ApplicationController
   def index
-    @licenses = Project.popular_licenses(:facet_limit => 300)
+    @licenses = Project.popular_licenses(facet_limit: 300)
   end
 
   def show
@@ -12,7 +12,7 @@ class LicensesController < ApplicationController
     @popular = scope.order('projects.rank DESC NULLS LAST').limit(5).includes(:repository)
     @dependend = scope.most_dependents.limit(5).includes(:repository)
 
-    facets = Project.facets(filters: {normalized_licenses: @license.id}, :facet_limit => 10)
+    facets = Project.facets(filters: {normalized_licenses: @license.id}, facet_limit: 10)
 
     @languages = facets[:languages].language.buckets
     @platforms = facets[:platforms].platform.buckets
@@ -24,6 +24,6 @@ class LicensesController < ApplicationController
   def find_license
     @license = Spdx.find(params[:id])
     raise ActiveRecord::RecordNotFound if @license.nil?
-    redirect_to license_path(@license.id), :status => :moved_permanently if @license.id != params[:id]
+    redirect_to license_path(@license.id), status: :moved_permanently if @license.id != params[:id]
   end
 end

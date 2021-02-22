@@ -11,7 +11,7 @@ class RepositoriesController < ApplicationController
     @created = repo_search('created_at')
     @updated = repo_search('updated_at')
 
-    facets = Repository.facets(filters: {language: current_language, license: current_license, keywords: current_keywords, host_type: formatted_host}, :facet_limit => 20)
+    facets = Repository.facets(filters: {language: current_language, license: current_license, keywords: current_keywords, host_type: formatted_host}, facet_limit: 20)
 
     @host_types = facets[:host_type].host_type.buckets
     @languages = facets[:language].language.buckets
@@ -33,7 +33,7 @@ class RepositoriesController < ApplicationController
   end
 
   def languages
-    @languages = Repository.search('', :facet_limit => 150).response.aggregations[:language].language.buckets
+    @languages = Repository.search('', facet_limit: 150).response.aggregations[:language].language.buckets
   end
 
   def hacker_news

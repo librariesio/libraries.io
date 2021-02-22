@@ -103,7 +103,7 @@ end
 group :development, :test do
   gem "pry"
   gem "rspec-rails"
-  gem "rubocop", "~> 0.80.1", require: false
+  gem "rubocop", "~> 1.0.0", require: false
 end
 
 group :test do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class KeywordsController < ApplicationController
   def index
-    @keywords = Project.popular_keywords(:facet_limit => 160)
+    @keywords = Project.popular_keywords(facet_limit: 160)
   end
 
   def show
@@ -13,7 +13,7 @@ class KeywordsController < ApplicationController
     @popular = scope.order('projects.rank DESC NULLS LAST').limit(5).includes(:repository)
     @dependend = scope.most_dependents.limit(5).includes(:repository)
 
-    facets = Project.facets(filters: {keywords_array: @keyword}, :facet_limit => 10)
+    facets = Project.facets(filters: {keywords_array: @keyword}, facet_limit: 10)
 
     @languages = facets[:languages].language.buckets
     @platforms = facets[:platforms].platform.buckets

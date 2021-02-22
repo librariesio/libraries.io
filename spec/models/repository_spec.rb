@@ -226,7 +226,7 @@ describe Repository, type: :model do
     # GitHub API V4 calls all use the same endpoint, but have unique request bodies with the GraphQL queries. They will need to match on :body.
     context "with a valid repository" do
       before do
-        VCR.use_cassette('github/chalk_api', :match_requests_on => [:method, :uri, :body, :query]) do
+        VCR.use_cassette('github/chalk_api', match_requests_on: [:method, :uri, :body, :query]) do
           repository.gather_maintenance_stats
         end
       end
@@ -245,7 +245,7 @@ describe Repository, type: :model do
         first_updated_at = repository.repository_maintenance_stats.first.updated_at
         category = repository.repository_maintenance_stats.first.category
 
-        VCR.use_cassette('github/chalk_api', :match_requests_on => [:method, :uri, :body, :query]) do
+        VCR.use_cassette('github/chalk_api', match_requests_on: [:method, :uri, :body, :query]) do
           repository.gather_maintenance_stats
         end
 
@@ -259,7 +259,7 @@ describe Repository, type: :model do
       let(:repository) { create(:repository, full_name: 'bad/example-for-testing') }
 
       it "should save metrics for repository" do
-        VCR.use_cassette('github/bad_repository', :match_requests_on => [:method, :uri, :body, :query]) do
+        VCR.use_cassette('github/bad_repository', match_requests_on: [:method, :uri, :body, :query]) do
           repository.gather_maintenance_stats
         end
 
@@ -272,7 +272,7 @@ describe Repository, type: :model do
       let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
 
       it "should save default values" do
-        VCR.use_cassette('github/empty_repository', :match_requests_on => [:method, :uri, :body, :query]) do
+        VCR.use_cassette('github/empty_repository', match_requests_on: [:method, :uri, :body, :query]) do
           repository.gather_maintenance_stats
         end
 
@@ -296,7 +296,7 @@ describe Repository, type: :model do
       let(:repository) { create(:repository, host_type: "Bitbucket") }
 
       it "should not save any values" do
-        VCR.use_cassette('github/chalk_api', :match_requests_on => [:method, :uri, :body, :query]) do
+        VCR.use_cassette('github/chalk_api', match_requests_on: [:method, :uri, :body, :query]) do
           repository.gather_maintenance_stats
         end
 

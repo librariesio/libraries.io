@@ -30,9 +30,9 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project["name"],
-        :description => project["description"],
-        :repository_url => project['url']
+        name: project["name"],
+        description: project["description"],
+        repository_url: project['url']
       }
     end
   end

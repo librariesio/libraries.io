@@ -7,13 +7,13 @@ class AccountsController < ApplicationController
   end
 
   def optin
-    current_user.update_attributes(optin: true)
+    current_user.update(optin: true)
     flash[:notice] = "You have accepted the terms of service and privacy policy. Thanks!"
     redirect_back(fallback_location: root_path)
   end
 
   def update
-    if current_user.update_attributes(user_params)
+    if current_user.update(user_params)
       redirect_to account_path, notice: 'Preferences updated'
     else
       flash.now[:error] = "Couldn't update your email address"
@@ -29,7 +29,7 @@ class AccountsController < ApplicationController
   end
 
   def disable_emails
-    current_user.update_attributes(emails_enabled: false)
+    current_user.update(emails_enabled: false)
     flash[:notice] = "All Libraries.io Emails to your account have been disabled"
     redirect_back(fallback_location: root_path)
   end

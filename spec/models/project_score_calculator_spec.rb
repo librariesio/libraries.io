@@ -440,46 +440,46 @@ describe ProjectScoreCalculator do
       let(:project) { build(:project, repository: repository) }
       it "should be the contain details of each score category" do
         expect(calculator.breakdown).to eq({
-          :overall_score => 38,
-          :popularity => {
-            :score => 0,
-            :dependent_projects => 0,
-            :dependent_repositories => 0,
-            :stars => 0,
-            :forks => 0,
-            :watchers => 0
+          overall_score: 38,
+          popularity: {
+            score: 0,
+            dependent_projects: 0,
+            dependent_repositories: 0,
+            stars: 0,
+            forks: 0,
+            watchers: 0
           },
-          :community => {
-            :score => 0,
-            :contribution_docs => {
-              :code_of_conduct => false,
-              :contributing => false,
-              :changelog => false
+          community: {
+            score: 0,
+            contribution_docs: {
+              code_of_conduct: false,
+              contributing: false,
+              changelog: false
             },
-            :recent_releases => 0,
-            :brand_new => 0,
-            :contributors => 0,
-            :maintainers => 0
+            recent_releases: 0,
+            brand_new: 0,
+            contributors: 0,
+            maintainers: 0
           },
-          :quality => {
-            :score => 53.33333333333333,
-            :basic_info => {
-              :description => true,
-              :homepage => true,
-              :repository_url => true,
-              :keywords => true,
-              :readme => false,
-              :license => false},
-            :status => 100,
-            :multiple_versions => 0,
-            :semver => 100,
-            :stable_release => 0
+          quality: {
+            score: 53.33333333333333,
+            basic_info: {
+              description: true,
+              homepage: true,
+              repository_url: true,
+              keywords: true,
+              readme: false,
+              license: false},
+            status: 100,
+            multiple_versions: 0,
+            semver: 100,
+            stable_release: 0
           },
-          :dependencies => {
-            :score => 100.0,
-            :outdated_dependencies => nil,
-            :dependencies_count => 100,
-            :direct_dependencies => {}
+          dependencies: {
+            score: 100.0,
+            outdated_dependencies: nil,
+            dependencies_count: 100,
+            direct_dependencies: {}
           }
         })
       end
@@ -489,46 +489,46 @@ describe ProjectScoreCalculator do
       let(:project) { build(:project) }
       it "should be the contain details of each score category" do
         expect(calculator.breakdown).to eq({
-          :overall_score => 39,
-          :popularity => {
-            :score => 0.0,
-            :dependent_projects => 0,
-            :dependent_repositories => 0,
-            :stars => nil,
-            :forks => nil,
-            :watchers => nil
+          overall_score: 39,
+          popularity: {
+            score: 0.0,
+            dependent_projects: 0,
+            dependent_repositories: 0,
+            stars: nil,
+            forks: nil,
+            watchers: nil
           },
-          :community => {
-            :score => 0.0,
-            :contribution_docs => {
-              :code_of_conduct => nil,
-              :contributing => nil,
-              :changelog => nil
+          community: {
+            score: 0.0,
+            contribution_docs: {
+              code_of_conduct: nil,
+              contributing: nil,
+              changelog: nil
             },
-            :recent_releases => 0,
-            :brand_new => 0,
-            :contributors => nil,
-            :maintainers => 0
+            recent_releases: 0,
+            brand_new: 0,
+            contributors: nil,
+            maintainers: 0
           },
-          :quality => {
-            :score => 56.0,
-            :basic_info => {
-              :description => true,
-              :homepage => true,
-              :repository_url => true,
-              :keywords => true,
-              :readme => nil,
-              :license => false},
-            :status => 100,
-            :multiple_versions => 0,
-            :semver => 100,
-            :stable_release => 0
+          quality: {
+            score: 56.0,
+            basic_info: {
+              description: true,
+              homepage: true,
+              repository_url: true,
+              keywords: true,
+              readme: nil,
+              license: false},
+            status: 100,
+            multiple_versions: 0,
+            semver: 100,
+            stable_release: 0
           },
-          :dependencies => {
-            :score => 100.0,
-            :outdated_dependencies => nil,
-            :dependencies_count => 100,
-            :direct_dependencies => {}
+          dependencies: {
+            score: 100.0,
+            outdated_dependencies: nil,
+            dependencies_count: 100,
+            direct_dependencies: {}
           }
         })
       end
@@ -538,46 +538,46 @@ describe ProjectScoreCalculator do
       let(:project) { build(:project, platform: 'CocoaPods') }
       it "should be the contain details of each score category" do
         expect(calculator.breakdown).to eq({
-          :overall_score => 19,
-          :popularity => {
-            :score => 0.0,
-            :dependent_projects => nil,
-            :dependent_repositories => 0,
-            :stars => nil,
-            :forks => nil,
-            :watchers => nil
+          overall_score: 19,
+          popularity: {
+            score: 0.0,
+            dependent_projects: nil,
+            dependent_repositories: 0,
+            stars: nil,
+            forks: nil,
+            watchers: nil
           },
-          :community => {
-            :score => 0.0,
-            :contribution_docs => {
-              :code_of_conduct => nil,
-              :contributing => nil,
-              :changelog => nil
+          community: {
+            score: 0.0,
+            contribution_docs: {
+              code_of_conduct: nil,
+              contributing: nil,
+              changelog: nil
             },
-            :recent_releases => 0,
-            :brand_new => 0,
-            :contributors => nil,
-            :maintainers => nil
+            recent_releases: 0,
+            brand_new: 0,
+            contributors: nil,
+            maintainers: nil
           },
-          :quality => {
-            :score => 56.0,
-            :basic_info => {
-              :description => true,
-              :homepage => true,
-              :repository_url => true,
-              :keywords => true,
-              :readme => nil,
-              :license => false},
-            :status => 100,
-            :multiple_versions => 0,
-            :semver => 100,
-            :stable_release => 0
+          quality: {
+            score: 56.0,
+            basic_info: {
+              description: true,
+              homepage: true,
+              repository_url: true,
+              keywords: true,
+              readme: nil,
+              license: false},
+            status: 100,
+            multiple_versions: 0,
+            semver: 100,
+            stable_release: 0
           },
-          :dependencies => {
-            :score => nil,
-            :outdated_dependencies => nil,
-            :dependencies_count => nil,
-            :direct_dependencies => nil
+          dependencies: {
+            score: nil,
+            outdated_dependencies: nil,
+            dependencies_count: nil,
+            direct_dependencies: nil
           }
         })
       end

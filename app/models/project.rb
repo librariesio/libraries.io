@@ -135,7 +135,7 @@ class Project < ApplicationRecord
   after_create :destroy_deleted_project
 
   def self.total
-    Rails.cache.fetch 'projects:total', :expires_in => 1.day, race_condition_ttl: 2.minutes do
+    Rails.cache.fetch 'projects:total', expires_in: 1.day, race_condition_ttl: 2.minutes do
       self.all.count
     end
   end
@@ -252,7 +252,7 @@ class Project < ApplicationRecord
   end
 
   def mlt_ids
-    Rails.cache.fetch "projects:#{self.id}:mlt_ids", :expires_in => 1.week do
+    Rails.cache.fetch "projects:#{self.id}:mlt_ids", expires_in: 1.week do
       results = Project.__elasticsearch__.client.mlt(id: self.id, index: 'projects', type: 'project', mlt_fields: 'keywords_array,platform,description,repository_url', min_term_freq: 1, min_doc_freq: 2)
       results['hits']['hits'].map{|h| h['_id']}
     end
@@ -618,7 +618,7 @@ class Project < ApplicationRecord
 
   def reformat_repository_url
     repository_url = URLParser.try_all(self.repository_url)
-    update_attributes(repository_url: repository_url)
+    update(repository_url: repository_url)
   end
 
   private

@@ -37,12 +37,12 @@ class User < ApplicationRecord
 
   after_commit :update_repo_permissions_async, :download_self, :create_api_key, on: :create
 
-  validates_presence_of :email, :on => :update
-  validates_format_of :email, :with => /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, :on => :update
+  validates_presence_of :email, on: :update
+  validates_format_of :email, with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, on: :update
 
   def assign_from_auth_hash(hash)
     return unless new_record?
-    update_attributes({email: hash.fetch('info', {}).fetch('email', nil)})
+    update({email: hash.fetch('info', {}).fetch('email', nil)})
   end
 
   def main_identity

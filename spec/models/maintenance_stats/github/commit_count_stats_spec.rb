@@ -13,7 +13,7 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
   context "with a valid repository" do
     let(:repository) { create(:repository, full_name: 'chalk/chalk') }
     let(:query_results) do
-        VCR.use_cassette('github/chalk_api', :match_requests_on => [:method, :uri, :body, :query]) do
+        VCR.use_cassette('github/chalk_api', match_requests_on: [:method, :uri, :body, :query]) do
            return query_klass.query(params: query_params)
         end
     end
@@ -45,7 +45,7 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
   context "repository with no commits" do
     let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
     let(:query_results) do
-        VCR.use_cassette('github/empty_repository', :match_requests_on => [:method, :uri, :body, :query]) do
+        VCR.use_cassette('github/empty_repository', match_requests_on: [:method, :uri, :body, :query]) do
             return query_klass.query(params: query_params)
         end
     end
@@ -74,7 +74,7 @@ describe MaintenanceStats::Stats::Github::V3CommitsStat do
     context "with a valid repository" do
         let(:repository) { create(:repository, full_name: 'chalk/chalk') }
         let(:query_results) do
-            VCR.use_cassette('github/chalk_api', :match_requests_on => [:method, :uri, :body, :query]) do
+            VCR.use_cassette('github/chalk_api', match_requests_on: [:method, :uri, :body, :query]) do
                 return query_klass.query(params: query_params)
             end
         end
@@ -97,7 +97,7 @@ describe MaintenanceStats::Stats::Github::V3CommitsStat do
     context "repository with no commits" do
         let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
         let(:query_results) do
-            VCR.use_cassette('github/empty_repository', :match_requests_on => [:method, :uri, :body, :query]) do
+            VCR.use_cassette('github/empty_repository', match_requests_on: [:method, :uri, :body, :query]) do
                 return query_klass.query(params: query_params)
             end
         end

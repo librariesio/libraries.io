@@ -21,8 +21,8 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project[:name],
-        :repository_url => project[:repository_url]
+        name: project[:name],
+        repository_url: project[:repository_url]
       }
     end
   end

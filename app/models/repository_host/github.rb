@@ -65,7 +65,7 @@ module RepositoryHost
     end
 
     def get_file_list(token = nil)
-      tree = api_client(token).tree(repository.full_name, repository.default_branch, :recursive => true).tree
+      tree = api_client(token).tree(repository.full_name, repository.default_branch, recursive: true).tree
       tree.select{|item| item.type == 'blob' }.map{|file| file.path }
     rescue *IGNORABLE_EXCEPTIONS
       nil
@@ -88,12 +88,12 @@ module RepositoryHost
         repository.full_name,
         'web',
         {
-          :url => 'https://libraries.io/hooks/github',
-          :content_type => 'json'
+          url: 'https://libraries.io/hooks/github',
+          content_type: 'json'
         },
         {
-          :events => ['push', 'pull_request'],
-          :active => true
+          events: ['push', 'pull_request'],
+          active: true
         }
       )
     rescue Octokit::UnprocessableEntity
@@ -184,7 +184,7 @@ module RepositoryHost
       if repository.readme.nil?
         repository.create_readme(contents)
       else
-        repository.readme.update_attributes(contents)
+        repository.readme.update(contents)
       end
     rescue *IGNORABLE_EXCEPTIONS
       nil
