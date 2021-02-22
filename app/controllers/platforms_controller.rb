@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class PlatformsController < ApplicationController
   def index
     @platforms = Project.popular_platforms
@@ -13,7 +14,7 @@ class PlatformsController < ApplicationController
 
     @color = @platform.color
 
-    facets = Project.facets(filters: {platform: @platform_name}, :facet_limit => 10)
+    facets = Project.facets(filters: {platform: @platform_name}, facet_limit: 10)
 
     @languages = facets[:languages].language.buckets
     @licenses = facets[:licenses].normalized_licenses.buckets.reject{ |t| t['key'].downcase == 'other' }

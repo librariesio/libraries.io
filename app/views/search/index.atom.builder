@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 atom_feed do |feed|
   feed.title(@title)
   feed.updated(@projects[0].created_at) if @projects.length > 0

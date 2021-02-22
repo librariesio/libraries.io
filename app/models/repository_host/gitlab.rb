@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RepositoryHost
   class Gitlab < Base
     IGNORABLE_EXCEPTIONS = [::Gitlab::Error::NotFound,
@@ -122,7 +123,7 @@ module RepositoryHost
       if repository.readme.nil?
         repository.create_readme(html_body: content)
       else
-        repository.readme.update_attributes(html_body: content)
+        repository.readme.update(html_body: content)
       end
     rescue *IGNORABLE_EXCEPTIONS
       nil

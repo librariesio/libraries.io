@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module PackageManager
   class PureScript < Base
     HAS_VERSIONS = false
@@ -19,8 +20,8 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project['name'],
-        :repository_url => project['repo']
+        name: project['name'],
+        repository_url: project['repo']
       }
     end
 

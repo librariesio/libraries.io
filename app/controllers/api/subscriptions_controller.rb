@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Api::SubscriptionsController < Api::ApplicationController
   before_action :require_api_key
   before_action :find_project, except: :index
@@ -19,7 +20,7 @@ class Api::SubscriptionsController < Api::ApplicationController
   end
 
   def update
-    @subscription.update_attributes(subscription_params)
+    @subscription.update(subscription_params)
     render json: @subscription, include: 'project,project.versions'
   end
 

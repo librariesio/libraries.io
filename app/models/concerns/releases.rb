@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Releases
   def stable_releases
     versions.select(&:stable?)

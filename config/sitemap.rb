@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'parallel'
 
 SitemapGenerator::Sitemap.default_host = "https://libraries.io"
@@ -5,40 +6,40 @@ SitemapGenerator::Sitemap.public_path = 'tmp/'
 SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
 SitemapGenerator::Sitemap.search_engines[:yandex] = 'https://blogs.yandex.ru/pings/?status=success&url=%s'
 
-SitemapGenerator::Sitemap.create(:create_index => true) do
+SitemapGenerator::Sitemap.create(create_index: true) do
   projects = lambda {
-    group = sitemap.group(:filename => :projects, :sitemaps_path => 'sitemaps/projects') do
+    group = sitemap.group(filename: :projects, sitemaps_path: 'sitemaps/projects') do
       Project.not_removed.where("rank > 0").find_each do |project|
-        add project_path(project.to_param), :lastmod => project.updated_at
+        add project_path(project.to_param), lastmod: project.updated_at
       end
     end
     group.sitemap.write unless group.sitemap.written?
   }
 
   misc = lambda {
-    group = sitemap.group(:filename => :misc, :sitemaps_path => 'sitemaps/misc') do
-      add root_path, :priority => 1, :changefreq => 'daily'
+    group = sitemap.group(filename: :misc, sitemaps_path: 'sitemaps/misc') do
+      add root_path, priority: 1, changefreq: 'daily'
 
       add search_path
       add about_path
 
-      add platforms_path, :changefreq => 'daily'
-      add licenses_path, :changefreq => 'daily'
-      add languages_path, :changefreq => 'daily'
+      add platforms_path, changefreq: 'daily'
+      add licenses_path, changefreq: 'daily'
+      add languages_path, changefreq: 'daily'
 
       PackageManager::Base.platforms.each do |platform|
         name = platform.formatted_name
-        add platform_path(name.downcase), :lastmod => Project.platform(name).order('updated_at DESC').first.try(:updated_at)
+        add platform_path(name.downcase), lastmod: Project.platform(name).order('updated_at DESC').first.try(:updated_at)
       end
 
-      Project.popular_licenses(:facet_limit => 300).each do |license|
+      Project.popular_licenses(facet_limit: 300).each do |license|
         name = license['key']
-        add license_path(name), :lastmod => Project.license(name).order('updated_at DESC').first.try(:updated_at)
+        add license_path(name), lastmod: Project.license(name).order('updated_at DESC').first.try(:updated_at)
       end
 
-      Project.popular_languages(:facet_limit => 200).each do |language|
+      Project.popular_languages(facet_limit: 200).each do |language|
         name = language['key']
-        add language_path(name), :lastmod => Project.language(name).order('updated_at DESC').first.try(:updated_at)
+        add language_path(name), lastmod: Project.language(name).order('updated_at DESC').first.try(:updated_at)
       end
     end
     group.sitemap.write unless group.sitemap.written?
@@ -49,7 +50,7 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
   end
 end
 
-SitemapGenerator::Sitemap.create(:create_index => true) do
+SitemapGenerator::Sitemap.create(create_index: true) do
   Dir.chdir(sitemap.public_path.to_s)
   xml_files      = File.join("**", "sitemaps", "**", "*.xml.gz")
   xml_file_paths = Dir.glob(xml_files)

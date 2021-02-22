@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Recommendable
   extend ActiveSupport::Concern
 
@@ -8,7 +9,7 @@ module Recommendable
   end
 
   def recommended_project_ids
-    Rails.cache.fetch "recommendations:#{self.id}", :expires_in => 1.day do
+    Rails.cache.fetch "recommendations:#{self.id}", expires_in: 1.day do
       ids = favourite_recommendation_ids + most_depended_on_recommendation_ids + most_watched_recommendation_ids
       sort_array_by_frequency(ids)
     end

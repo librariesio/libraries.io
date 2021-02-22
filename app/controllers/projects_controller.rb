@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ProjectsController < ApplicationController
   before_action :ensure_logged_in, only: [:your_dependent_repos, :mute, :unmute,
                                           :unsubscribe, :sync]
@@ -27,7 +28,7 @@ class ProjectsController < ApplicationController
       @versions = current_user.all_subscribed_versions.where.not(project_id: muted_ids).where.not(published_at: nil).newest_first.includes(project: :versions).paginate(per_page: 20, page: page_number)
       render 'dashboard/home'
     else
-      facets = Project.facets(:facet_limit => 40)
+      facets = Project.facets(facet_limit: 40)
 
       @platforms = facets[:platforms].platform.buckets
     end
@@ -56,9 +57,9 @@ class ProjectsController < ApplicationController
   def show
     if incorrect_case?
       if params[:number].present?
-        return redirect_to(version_path(@project.to_param.merge(number: params[:number])), :status => :moved_permanently)
+        return redirect_to(version_path(@project.to_param.merge(number: params[:number])), status: :moved_permanently)
       else
-        return redirect_to(project_path(@project.to_param), :status => :moved_permanently)
+        return redirect_to(project_path(@project.to_param), status: :moved_permanently)
       end
     end
     find_version
@@ -90,7 +91,7 @@ class ProjectsController < ApplicationController
 
   def versions
     if incorrect_case?
-      return redirect_to(project_versions_path(@project.to_param), :status => :moved_permanently)
+      return redirect_to(project_versions_path(@project.to_param), status: :moved_permanently)
     else
       @versions = @project.versions.sort.paginate(page: page_number)
       respond_to do |format|
@@ -102,7 +103,7 @@ class ProjectsController < ApplicationController
 
   def tags
     if incorrect_case?
-      return redirect_to(project_tags_path(@project.to_param), :status => :moved_permanently)
+      return redirect_to(project_tags_path(@project.to_param), status: :moved_permanently)
     else
       if @project.repository.nil?
         @tags = []

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.routes.draw do
   require 'sidekiq/web'
   require 'sidekiq_unique_jobs/web'
@@ -45,9 +46,9 @@ Rails.application.routes.draw do
       get '/:host_type/:login/repositories', to: 'repository_users#repositories'
       get '/:host_type/:login/projects', to: 'repository_users#projects'
 
-      get '/:host_type/:owner/:name/dependencies', to: 'repositories#dependencies', constraints: { :name => /[^\/]+/ }
-      get '/:host_type/:owner/:name/projects', to: 'repositories#projects', constraints: { :name => /[^\/]+/ }
-      get '/:host_type/:owner/:name', to: 'repositories#show', constraints: { :name => /[^\/]+/ }
+      get '/:host_type/:owner/:name/dependencies', to: 'repositories#dependencies', constraints: { name: /[^\/]+/ }
+      get '/:host_type/:owner/:name/projects', to: 'repositories#projects', constraints: { name: /[^\/]+/ }
+      get '/:host_type/:owner/:name', to: 'repositories#show', constraints: { name: /[^\/]+/ }
 
       get '/:host_type/:login', to: 'repository_users#show'
     end
@@ -56,19 +57,19 @@ Rails.application.routes.draw do
     PROJECT_CONSTRAINT = /[^\/]+/
     VERSION_CONSTRAINT = /[\w\.\-]+/
 
-    put '/maintenance/stats/enqueue/:platform/:name', as: :maintenance_stat_enqueue, to: 'maintenance_stats#enqueue', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    put '/maintenance/stats/enqueue/:platform/:name', as: :maintenance_stat_enqueue, to: 'maintenance_stats#enqueue', constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     post '/maintenance/stats/begin/bulk', to: 'maintenance_stats#begin_watching_bulk'
-    get '/maintenance/stats/begin/:platform/:name', to: 'maintenance_stats#begin_watching', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    get '/maintenance/stats/begin/:platform/:name', to: 'maintenance_stats#begin_watching', constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
 
-    get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
-    get '/:platform/:name/sourcerank', to: 'projects#sourcerank', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
-    get '/:platform/:name/contributors', to: 'projects#contributors', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
-    get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { :platform => /[\w\-]+/, :name => PROJECT_CONSTRAINT, :version => VERSION_CONSTRAINT }, as: :version_tree
-    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT, :version => VERSION_CONSTRAINT }
-    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
-    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
-    get '/:platform/:name/tree', to: 'tree#show', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }, as: :tree
-    get '/:platform/:name', to: 'projects#show', constraints: { :platform => PLATFORM_CONSTRAINT, :name => PROJECT_CONSTRAINT }
+    get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
+    get '/:platform/:name/sourcerank', to: 'projects#sourcerank', constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
+    get '/:platform/:name/contributors', to: 'projects#contributors', constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
+    get '/:platform/:name/:version/tree', to: 'tree#show', constraints: { platform: /[\w\-]+/, name: PROJECT_CONSTRAINT, version: VERSION_CONSTRAINT }, as: :version_tree
+    get '/:platform/:name/:version/dependencies', to: 'projects#dependencies', constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT, version: VERSION_CONSTRAINT }
+    get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repositories', constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
+    get '/:platform/:name/dependents', to: 'projects#dependents', constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
+    get '/:platform/:name/tree', to: 'tree#show', constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }, as: :tree
+    get '/:platform/:name', to: 'projects#show', constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
   end
 
   namespace :admin do
@@ -135,9 +136,9 @@ Rails.application.routes.draw do
   match '/422', to: 'errors#unprocessable', via: :all
   match '/500', to: 'errors#internal', via: :all
 
-  resources :licenses, constraints: { :id => /.*/ }, :defaults => { :format => 'html' }
+  resources :licenses, constraints: { id: /.*/ }, defaults: { format: 'html' }
   resources :languages
-  resources :keywords, constraints: { :id => /.*/ }, :defaults => { :format => 'html' }
+  resources :keywords, constraints: { id: /.*/ }, defaults: { format: 'html' }
   resources :subscriptions
   resources :repository_subscriptions
   get '/subscribe/:project_id', to: 'subscriptions#subscribe', as: :subscribe
@@ -162,22 +163,22 @@ Rails.application.routes.draw do
     post '/:host_type/:login/sync', to: 'repository_users#sync', as: :sync_user
     get '/:host_type/:login', to: 'repository_users#show', as: :user
 
-    get '/:host_type/:owner/:name', to: 'repositories#show', as: :repository, :defaults => { :format => 'html' }, constraints: { :name => /[\w\.\-\%]+/ }
-    get '/:host_type/:owner/:name/contributors', to: 'repositories#contributors', as: :repository_contributors, format: false, constraints: { :name => /[^\/]+/ }
-    post '/:host_type/:owner/:name/sync', to: 'repositories#sync', as: :sync_repository, format: false, constraints: { :name => /[^\/]+/ }
-    get '/:host_type/:owner/:name/sourcerank', to: 'repositories#sourcerank', as: :repository_sourcerank, format: false, constraints: { :name => /[^\/]+/ }
-    get '/:host_type/:owner/:name/forks', to: 'repositories#forks', as: :repository_forks, format: false, constraints: { :name => /[^\/]+/ }
-    get '/:host_type/:owner/:name/tags', to: 'repositories#tags', as: :repository_tags, format: false, constraints: { :name => /[^\/]+/ }
-    get '/:host_type/:owner/:name/dependencies', to: 'repositories#dependencies', format: false, constraints: { :name => /[^\/]+/ }, as: :repository_dependencies
-    get '/:host_type/:owner/:name/tree', to: 'repository_tree#show', as: :repository_tree, format: false, constraints: { :name => /[^\/]+/ }
+    get '/:host_type/:owner/:name', to: 'repositories#show', as: :repository, defaults: { format: 'html' }, constraints: { name: /[\w\.\-\%]+/ }
+    get '/:host_type/:owner/:name/contributors', to: 'repositories#contributors', as: :repository_contributors, format: false, constraints: { name: /[^\/]+/ }
+    post '/:host_type/:owner/:name/sync', to: 'repositories#sync', as: :sync_repository, format: false, constraints: { name: /[^\/]+/ }
+    get '/:host_type/:owner/:name/sourcerank', to: 'repositories#sourcerank', as: :repository_sourcerank, format: false, constraints: { name: /[^\/]+/ }
+    get '/:host_type/:owner/:name/forks', to: 'repositories#forks', as: :repository_forks, format: false, constraints: { name: /[^\/]+/ }
+    get '/:host_type/:owner/:name/tags', to: 'repositories#tags', as: :repository_tags, format: false, constraints: { name: /[^\/]+/ }
+    get '/:host_type/:owner/:name/dependencies', to: 'repositories#dependencies', format: false, constraints: { name: /[^\/]+/ }, as: :repository_dependencies
+    get '/:host_type/:owner/:name/tree', to: 'repository_tree#show', as: :repository_tree, format: false, constraints: { name: /[^\/]+/ }
 
-    get '/:host_type/:owner/:name/web_hooks', to: 'web_hooks#index', as: :repository_web_hooks, format: false, constraints: { :name => /[^\/]+/ }
-    get '/:host_type/:owner/:name/web_hooks/new', to: 'web_hooks#new', as: :new_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
-    delete '/:host_type/:owner/:name/web_hooks/:id', to: 'web_hooks#destroy', as: :repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
-    patch '/:host_type/:owner/:name/web_hooks/:id', to: 'web_hooks#update', format: false, constraints: { :name => /[^\/]+/ }
-    get '/:host_type/:owner/:name/web_hooks/:id/edit', to: 'web_hooks#edit', as: :edit_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
-    post '/:host_type/:owner/:name/web_hooks/:id/test', to: 'web_hooks#test', as: :test_repository_web_hook, format: false, constraints: { :name => /[^\/]+/ }
-    post '/:host_type/:owner/:name/web_hooks', to: 'web_hooks#create', format: false, constraints: { :name => /[^\/]+/ }
+    get '/:host_type/:owner/:name/web_hooks', to: 'web_hooks#index', as: :repository_web_hooks, format: false, constraints: { name: /[^\/]+/ }
+    get '/:host_type/:owner/:name/web_hooks/new', to: 'web_hooks#new', as: :new_repository_web_hook, format: false, constraints: { name: /[^\/]+/ }
+    delete '/:host_type/:owner/:name/web_hooks/:id', to: 'web_hooks#destroy', as: :repository_web_hook, format: false, constraints: { name: /[^\/]+/ }
+    patch '/:host_type/:owner/:name/web_hooks/:id', to: 'web_hooks#update', format: false, constraints: { name: /[^\/]+/ }
+    get '/:host_type/:owner/:name/web_hooks/:id/edit', to: 'web_hooks#edit', as: :edit_repository_web_hook, format: false, constraints: { name: /[^\/]+/ }
+    post '/:host_type/:owner/:name/web_hooks/:id/test', to: 'web_hooks#test', as: :test_repository_web_hook, format: false, constraints: { name: /[^\/]+/ }
+    post '/:host_type/:owner/:name/web_hooks', to: 'web_hooks#create', format: false, constraints: { name: /[^\/]+/ }
 
     get '/:host_type', to: 'repositories#index', as: :hosts
   end
@@ -217,35 +218,35 @@ Rails.application.routes.draw do
 
   post '/hooks/package', to: 'hooks#package'
 
-  get '/:platform/:name/suggestions', to: 'project_suggestions#new', as: :project_suggestions, constraints: { :name => /.*/ }
-  post '/:platform/:name/suggestions', to: 'project_suggestions#create', constraints: { :name => /.*/ }
+  get '/:platform/:name/suggestions', to: 'project_suggestions#new', as: :project_suggestions, constraints: { name: /.*/ }
+  post '/:platform/:name/suggestions', to: 'project_suggestions#create', constraints: { name: /.*/ }
 
   # project routes
-  get '/:platform/:name/top_dependent_repos', to: 'projects#top_dependent_repos', as: :top_dependent_repos, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
-  get '/:platform/:name/top_dependent_projects', to: 'projects#top_dependent_projects', as: :top_dependent_projects, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
-  get '/:platform/:name/:number/dependencies', to: 'projects#dependencies', constraints: { :number => /.*/, :name => /.*/ }, as: :version_dependencies
+  get '/:platform/:name/top_dependent_repos', to: 'projects#top_dependent_repos', as: :top_dependent_repos, constraints: { name: /.*/ }, defaults: { format: 'html' }
+  get '/:platform/:name/top_dependent_projects', to: 'projects#top_dependent_projects', as: :top_dependent_projects, constraints: { name: /.*/ }, defaults: { format: 'html' }
+  get '/:platform/:name/:number/dependencies', to: 'projects#dependencies', constraints: { number: /.*/, name: /.*/ }, as: :version_dependencies
 
-  post '/:platform/:name/sync', to: 'projects#sync', constraints: { :name => /.*/ }, as: :sync_project
-  post '/:platform/:name/refresh-stats', to: 'projects#refresh_stats', constraints: { :name => /.*/ }, as: :project_refresh_stats
-  get '/:platform/:name/unsubscribe', to: 'projects#unsubscribe', constraints: { :name => /.*/ }, as: :unsubscribe_project
-  get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
-  post '/:platform/:name/mute', to: 'projects#mute', as: :mute_project, constraints: { :name => /.*/ }
-  delete '/:platform/:name/unmute', to: 'projects#unmute', as: :unmute_project, constraints: { :name => /.*/ }
-  get '/:platform/:name/tree', to: 'tree#show', constraints: { :name => PROJECT_CONSTRAINT }, as: :tree
-  get '/:platform/:name/score', to: 'projects#score', as: :project_score, constraints: { :name => /.*/ }
-  get '/:platform/:name/sourcerank', to: 'projects#sourcerank', as: :project_sourcerank, constraints: { :name => /.*/ }
-  get '/:platform/:name/versions', to: 'projects#versions', as: :project_versions, constraints: { :name => /.*/ }
-  get '/:platform/:name/tags', to: 'projects#tags', as: :project_tags, constraints: { :name => /.*/ }
-  get '/:platform/:name/dependents', to: 'projects#dependents', as: :project_dependents, constraints: { :name => /.*/ }
-  get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repos', as: :legacy_project_dependent_repos, constraints: { :name => /.*/ }
-  get '/:platform/:name/dependent-repositories', to: 'projects#dependent_repos', as: :project_dependent_repos, constraints: { :name => /.*/ }
-  get '/:platform/:name/dependent-repositories/yours', to: 'projects#your_dependent_repos', as: :your_project_dependent_repos, constraints: { :name => /.*/ }
-  get '/:platform/:name/:number.about', to: 'projects#about', as: :about_version, constraints: { :number => /.*/, :name => /.*/ }
-  get '/:platform/:name/:number.ABOUT', to: 'projects#about', constraints: { :number => /.*/, :name => /.*/ }
-  get '/:platform/:name/:number/tree', to: 'tree#show', constraints: { :number => /[\w\.\-\%]+/, :name => PROJECT_CONSTRAINT }, as: :version_tree
-  get '/:platform/:name/:number', to: 'projects#show', as: :version, constraints: { :number => /.*/, :name => /.*/ }
-  get '/:platform/:name.about', to: 'projects#about', as: :about_project, constraints: { :name => /.*/ }
-  get '/:platform/:name.ABOUT', to: 'projects#about', constraints: { :name => /.*/ }
-  get '/:platform/:name', to: 'projects#show', as: :project, constraints: { :name => /.*/ }, :defaults => { :format => 'html' }
+  post '/:platform/:name/sync', to: 'projects#sync', constraints: { name: /.*/ }, as: :sync_project
+  post '/:platform/:name/refresh-stats', to: 'projects#refresh_stats', constraints: { name: /.*/ }, as: :project_refresh_stats
+  get '/:platform/:name/unsubscribe', to: 'projects#unsubscribe', constraints: { name: /.*/ }, as: :unsubscribe_project
+  get '/:platform/:name/usage', to: 'project_usage#show', as: :project_usage, constraints: { name: /.*/ }, defaults: { format: 'html' }
+  post '/:platform/:name/mute', to: 'projects#mute', as: :mute_project, constraints: { name: /.*/ }
+  delete '/:platform/:name/unmute', to: 'projects#unmute', as: :unmute_project, constraints: { name: /.*/ }
+  get '/:platform/:name/tree', to: 'tree#show', constraints: { name: PROJECT_CONSTRAINT }, as: :tree
+  get '/:platform/:name/score', to: 'projects#score', as: :project_score, constraints: { name: /.*/ }
+  get '/:platform/:name/sourcerank', to: 'projects#sourcerank', as: :project_sourcerank, constraints: { name: /.*/ }
+  get '/:platform/:name/versions', to: 'projects#versions', as: :project_versions, constraints: { name: /.*/ }
+  get '/:platform/:name/tags', to: 'projects#tags', as: :project_tags, constraints: { name: /.*/ }
+  get '/:platform/:name/dependents', to: 'projects#dependents', as: :project_dependents, constraints: { name: /.*/ }
+  get '/:platform/:name/dependent_repositories', to: 'projects#dependent_repos', as: :legacy_project_dependent_repos, constraints: { name: /.*/ }
+  get '/:platform/:name/dependent-repositories', to: 'projects#dependent_repos', as: :project_dependent_repos, constraints: { name: /.*/ }
+  get '/:platform/:name/dependent-repositories/yours', to: 'projects#your_dependent_repos', as: :your_project_dependent_repos, constraints: { name: /.*/ }
+  get '/:platform/:name/:number.about', to: 'projects#about', as: :about_version, constraints: { number: /.*/, name: /.*/ }
+  get '/:platform/:name/:number.ABOUT', to: 'projects#about', constraints: { number: /.*/, name: /.*/ }
+  get '/:platform/:name/:number/tree', to: 'tree#show', constraints: { number: /[\w\.\-\%]+/, name: PROJECT_CONSTRAINT }, as: :version_tree
+  get '/:platform/:name/:number', to: 'projects#show', as: :version, constraints: { number: /.*/, name: /.*/ }
+  get '/:platform/:name.about', to: 'projects#about', as: :about_project, constraints: { name: /.*/ }
+  get '/:platform/:name.ABOUT', to: 'projects#about', constraints: { name: /.*/ }
+  get '/:platform/:name', to: 'projects#show', as: :project, constraints: { name: /.*/ }, defaults: { format: 'html' }
   get '/:id', to: 'platforms#show', as: :platform
 end

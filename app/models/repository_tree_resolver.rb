@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RepositoryTreeResolver
   attr_accessor :project_names
   attr_accessor :license_names
@@ -32,7 +33,7 @@ class RepositoryTreeResolver
   end
 
   def load_dependencies_tree
-    tree_data = Rails.cache.fetch cache_key, :expires_in => 1.day, race_condition_ttl: 2.minutes do
+    tree_data = Rails.cache.fetch cache_key, expires_in: 1.day, race_condition_ttl: 2.minutes do
       generate_dependency_tree
     end
 

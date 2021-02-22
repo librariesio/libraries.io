@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ProjectScoreCalculationBatch
   def self.run(platform, limit = 1000)
     # pull project ids from start of redis sorted set

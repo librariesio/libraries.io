@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 class WebHook < ApplicationRecord
   belongs_to :repository
   belongs_to :user
   validates_presence_of :url
-  validates :url, :format => URI::regexp(%w(http https))
+  validates :url, format: URI::regexp(%w(http https))
 
   before_save :clear_timestamps
 
@@ -42,6 +43,6 @@ class WebHook < ApplicationRecord
 
   def send_payload(data)
     response = request(data).run
-    update_attributes(last_sent_at: Time.now.utc, last_response: response.response_code)
+    update(last_sent_at: Time.now.utc, last_response: response.response_code)
   end
 end

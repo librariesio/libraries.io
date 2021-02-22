@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class PagesController < ApplicationController
   def about
 
@@ -16,11 +17,11 @@ class PagesController < ApplicationController
   end
 
   def experiments
-    @platforms = Project.popular_platforms(:facet_limit => 40).first(28)
+    @platforms = Project.popular_platforms(facet_limit: 40).first(28)
   end
 
   def data
-    @platforms = Project.popular_platforms(:facet_limit => 40).first(28)
+    @platforms = Project.popular_platforms(facet_limit: 40).first(28)
   end
 
   def terms

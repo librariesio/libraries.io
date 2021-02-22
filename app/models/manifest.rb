@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Manifest < ApplicationRecord
   belongs_to :repository
   has_many :repository_dependencies, dependent: :delete_all

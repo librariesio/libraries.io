@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :research do
   desc 'civic tech dependency research'
   task civic_tech: :environment do

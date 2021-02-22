@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Api::ProjectsController < Api::ApplicationController
   before_action :find_project, except: [:searchcode, :dependencies, :dependencies_bulk, :updated]
 
