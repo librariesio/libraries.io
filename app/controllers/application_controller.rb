@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ApplicationController < ActionController::Base
   include Rails::Pagination
   # Prevent CSRF attacks by raising an exception.

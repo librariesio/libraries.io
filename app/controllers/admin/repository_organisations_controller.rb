@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Admin::RepositoryOrganisationsController < Admin::ApplicationController
   before_action :find_user
 

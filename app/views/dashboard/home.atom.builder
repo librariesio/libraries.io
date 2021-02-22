@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 atom_feed do |feed|
   feed.title("#{@user}'s version feed - Libraries.io")
   feed.updated(@versions[0].published_at) if @versions.size > 0

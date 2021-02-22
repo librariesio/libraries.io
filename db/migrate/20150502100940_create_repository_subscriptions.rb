@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateRepositorySubscriptions < ActiveRecord::Migration[5.0]
   def change
     create_table :repository_subscriptions do |t|

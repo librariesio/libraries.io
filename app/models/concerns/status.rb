@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Status
   def is_deprecated?
     status == 'Deprecated'

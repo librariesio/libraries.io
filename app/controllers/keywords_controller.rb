@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class KeywordsController < ApplicationController
   def index
     @keywords = Project.popular_keywords(:facet_limit => 160)

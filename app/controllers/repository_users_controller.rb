@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RepositoryUsersController < ApplicationController
   before_action :find_user
 

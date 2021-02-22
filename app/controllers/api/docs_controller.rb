@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Api::DocsController < ApplicationController
   skip_before_action :check_api_key, raise: false
 

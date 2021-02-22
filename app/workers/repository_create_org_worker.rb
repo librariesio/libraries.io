@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RepositoryCreateOrgWorker
   include Sidekiq::Worker
   sidekiq_options queue: :owners, unique: :until_executed

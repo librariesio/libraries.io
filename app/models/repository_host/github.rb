@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RepositoryHost
   class Github < Base
     IGNORABLE_EXCEPTIONS = [
