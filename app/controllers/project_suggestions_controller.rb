@@ -8,7 +8,7 @@ class ProjectSuggestionsController < ApplicationController
 
   def create
     @project_suggestions = @project.project_suggestions.build(user: current_user)
-    if @project_suggestions.update_attributes(project_suggestion_params)
+    if @project_suggestions.update(project_suggestion_params)
       flash[:notice] = "Thanks for the suggestion, we'll update the project shortly"
       redirect_to project_path(@project.to_param)
     else

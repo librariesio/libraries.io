@@ -69,7 +69,7 @@ class RepositoryUser < ApplicationRecord
     download_user_from_host
     download_orgs
     download_repos
-    update_attributes(last_synced_at: Time.now)
+    update(last_synced_at: Time.now)
   end
 
   def recently_synced?

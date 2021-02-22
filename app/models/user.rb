@@ -41,7 +41,7 @@ class User < ApplicationRecord
 
   def assign_from_auth_hash(hash)
     return unless new_record?
-    update_attributes({email: hash.fetch('info', {}).fetch('email', nil)})
+    update({email: hash.fetch('info', {}).fetch('email', nil)})
   end
 
   def main_identity

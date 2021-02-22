@@ -7,7 +7,7 @@ class SubscriptionsController < ApplicationController
 
   def update
     @subscription = current_user.subscriptions.find(params[:id])
-    @subscription.update_attributes(subscription_params)
+    @subscription.update(subscription_params)
     flash[:notice] = "Updated #{@subscription.project} subscription options"
     redirect_back fallback_location: project_path(@subscription.project.to_param)
   end

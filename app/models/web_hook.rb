@@ -42,6 +42,6 @@ class WebHook < ApplicationRecord
 
   def send_payload(data)
     response = request(data).run
-    update_attributes(last_sent_at: Time.now.utc, last_response: response.response_code)
+    update(last_sent_at: Time.now.utc, last_response: response.response_code)
   end
 end
