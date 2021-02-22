@@ -101,7 +101,15 @@ module PackageManager
 
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
       db_project.reformat_repository_url if sync_version == :all && !db_project.new_record?
-      db_project.update!(mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties))
+      db_project.attributes = mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties)
+
+      begin
+        db_project.save!
+      rescue ActiveRecord::RecordInvalid => e
+        raise e unless e.message =~ /Name has already been taken/
+        # Probably a race condition with multiple versions of a new project being updated.
+        db_project = Project.find_by(platform: db_platform, name: mapped_project[:name])
+      end
 
       if self::HAS_VERSIONS
         if sync_version == :all
