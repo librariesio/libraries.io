@@ -10,17 +10,17 @@ module RepoSearch
 
     settings index: { number_of_shards: 3, number_of_replicas: 1 } do
       mapping do
-        indexes :full_name, type: 'string', :analyzer => 'snowball', :boost => 6
-        indexes :exact_name, type: 'string', :index => :not_analyzed, :boost => 2
+        indexes :full_name, type: 'string', analyzer: 'snowball', boost: 6
+        indexes :exact_name, type: 'string', index: :not_analyzed, boost: 2
 
-        indexes :description, type: 'string', :analyzer => 'snowball'
+        indexes :description, type: 'string', analyzer: 'snowball'
         indexes :homepage, type: 'string'
-        indexes :language, type: 'string', :index => :not_analyzed
-        indexes :license, type: 'string', :index => :not_analyzed
-        indexes :keywords, type: 'string', :index => :not_analyzed
-        indexes :host_type, type: 'string', :index => :not_analyzed
+        indexes :language, type: 'string', index: :not_analyzed
+        indexes :license, type: 'string', index: :not_analyzed
+        indexes :keywords, type: 'string', index: :not_analyzed
+        indexes :host_type, type: 'string', index: :not_analyzed
 
-        indexes :status, type: 'string', :index => :not_analyzed
+        indexes :status, type: 'string', index: :not_analyzed
 
         indexes :created_at, type: 'date'
         indexes :updated_at, type: 'date'
@@ -42,7 +42,7 @@ module RepoSearch
     after_commit lambda { __elasticsearch__.delete_document rescue nil },  on: :destroy
 
     def self.facets(options = {})
-      Rails.cache.fetch "repo_facet:#{options.to_s.gsub(/\W/, '')}", :expires_in => 1.hour, race_condition_ttl: 2.minutes do
+      Rails.cache.fetch "repo_facet:#{options.to_s.gsub(/\W/, '')}", expires_in: 1.hour, race_condition_ttl: 2.minutes do
         search('', options).response.aggregations
       end
     end

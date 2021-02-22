@@ -52,7 +52,7 @@ class RepositoryUsersController < ApplicationController
     @user = RepositoryUser.host(current_host).visible.login(params[:login]).first
     @user = RepositoryOrganisation.host(current_host).visible.login(params[:login]).first if @user.nil?
     raise ActiveRecord::RecordNotFound if @user.nil?
-    redirect_to url_for(login: @user.login), :status => :moved_permanently if params[:login] != @user.login
+    redirect_to url_for(login: @user.login), status: :moved_permanently if params[:login] != @user.login
   end
 
   def find_contributions

@@ -21,8 +21,8 @@ module PackageManager
 
     def self.mapping(project)
       {
-        :name => project["name"],
-        :repository_url => repo_fallback(project["url"], nil)
+        name: project["name"],
+        repository_url: repo_fallback(project["url"], nil)
       }
     end
   end

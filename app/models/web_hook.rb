@@ -2,7 +2,7 @@ class WebHook < ApplicationRecord
   belongs_to :repository
   belongs_to :user
   validates_presence_of :url
-  validates :url, :format => URI::regexp(%w(http https))
+  validates :url, format: URI::regexp(%w(http https))
 
   before_save :clear_timestamps
 
