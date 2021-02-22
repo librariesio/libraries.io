@@ -48,6 +48,7 @@ module PackageManager
     end
 
     def self.mapping(project)
+      # TODO can we make this more explicit?
       project.deep_symbolize_keys
     end
 

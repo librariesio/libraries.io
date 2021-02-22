@@ -87,11 +87,6 @@ module PackageManager
       find(platform).try(:formatted_name) || platform
     end
 
-    def self.map_project(project)
-      mapping(project)
-        &.delete_if { |_key, value| value.blank? }
-    end
-
     def self.update(name, sync_version: :all)
       if sync_version != :all && !self::SUPPORTS_SINGLE_VERSION_UPDATE
         logger.warn("#{db_platform}.update(#{name}, sync_version: #{sync_version}) called but not supported on platform")
@@ -101,7 +96,8 @@ module PackageManager
       raw_project = project(name)
       return false unless raw_project.present?
 
-      mapped_project = map_project(raw_project)
+      mapped_project = mapping(raw_project)
+        &.delete_if { |_key, value| value.blank? }
       return false unless mapped_project.present?
 
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })

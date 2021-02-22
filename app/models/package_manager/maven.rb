@@ -74,7 +74,6 @@ module PackageManager
       sections = name.split(NAME_DELIMITER)
       path = sections.join("/")
 
-      versions = versions(nil, name)
       latest = latest_version(name)
 
       return {} unless latest.present?
@@ -84,7 +83,6 @@ module PackageManager
         path: path,
         group_id: sections[0],
         artifact_id: sections[1],
-        versions: versions,
         latest_version: latest,
       }
     rescue StandardError
@@ -92,8 +90,8 @@ module PackageManager
     end
 
     def self.mapping(project, depth = 0)
-      version_xml = get_pom(project[:group_id], project[:artifact_id], project[:latest_version])
-      mapping_from_pom_xml(version_xml, depth).merge({ name: project[:name] })
+      latest_version_xml = get_pom(project[:group_id], project[:artifact_id], project[:latest_version])
+      mapping_from_pom_xml(latest_version_xml, depth).merge({ name: project[:name] })
     end
 
     def self.mapping_from_pom_xml(version_xml, depth = 0)
