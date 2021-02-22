@@ -100,7 +100,7 @@ namespace :research do
     # cii_projects_used_by_civic_tech
 
     cii_projects_used_by_civic_tech = dependencies.uniq & cii_projects
-    cii_projects_used_by_civic_tech.sort_by(&:dependent_repos_count).reverse.each {|project| puts "#{project.platform}/#{project.name}" };nil
+    cii_projects_used_by_civic_tech.sort_by(&:dependent_repos_count).reverse_each {|project| puts "#{project.platform}/#{project.name}" };nil
 
     # cii_projects_used_by_civic_tech with usage counts
 
@@ -156,7 +156,7 @@ namespace :research do
     # cii deps with less than 100 stars (unseen infrastucture)
     unique_cii_deps = cii_deps.uniq
     unseen = unique_cii_deps.select{|project| project.stars < 100 rescue true } # 207
-    unseen.sort_by(&:stars).reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.stars})" };nil
+    unseen.sort_by(&:stars).reverse_each {|project| puts "#{project.platform}/#{project.name} (#{project.stars})" };nil
 
     json = unseen.sort_by(&:stars).reverse.map do |project|
       {
@@ -168,7 +168,7 @@ namespace :research do
 
     # cii deps with less than 6 contributors (bus factor)
     bus_factor = unique_cii_deps.select{|project| project.contributors.length < 6 } # 144
-    bus_factor.sort_by{|project| project.contributors.length}.reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.contributors.length})" };nil
+    bus_factor.sort_by{|project| project.contributors.length}.reverse_each {|project| puts "#{project.platform}/#{project.name} (#{project.contributors.length})" };nil
 
     json= bus_factor.sort_by{|project| project.repository.try(:open_issues_count) || 0}.map do |project|
       {
@@ -180,7 +180,7 @@ namespace :research do
 
     # bus_factor unseen intersection
     unseen_bus_factor_ids = unseen.map(&:id) & bus_factor.map(&:id) # 127
-    Project.where(id:unseen_bus_factor_ids).sort_by(&:dependent_repos_count).reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.dependent_repos_count})" };nil
+    Project.where(id:unseen_bus_factor_ids).sort_by(&:dependent_repos_count).reverse_each {|project| puts "#{project.platform}/#{project.name} (#{project.dependent_repos_count})" };nil
 
     json= Project.where(id:unseen_bus_factor_ids).sort_by(&:dependent_repos_count).reverse.map do |project|
       {
@@ -194,7 +194,7 @@ namespace :research do
 
     # high open issues
     open_issues = unique_cii_deps.select{|project| (project.repository.try(:open_issues_count) || 0) > 100  } # 165
-    open_issues.sort_by{|project| project.repository.try(:open_issues_count) || 0}.reverse.each {|project| puts "#{project.platform}/#{project.name} (#{project.repository.try(:open_issues_count)})" };nil
+    open_issues.sort_by{|project| project.repository.try(:open_issues_count) || 0}.reverse_each {|project| puts "#{project.platform}/#{project.name} (#{project.repository.try(:open_issues_count)})" };nil
 
     json= open_issues.sort_by{|project| project.repository.try(:open_issues_count) || 0}.map do |project|
       {
@@ -295,7 +295,7 @@ namespace :research do
     output = CSV.generate do |csv|
     csv << ['Name', 'CII commits', 'URI',	'email', 'company', 'Location']
 
-    top_1percent.sort_by(&:last).reverse.each do |user, commits|
+    top_1percent.sort_by(&:last).reverse_each do |user, commits|
 
       csv << [user.login, commits, user.repository_url, user.email, user.company, user.location]
 
@@ -313,7 +313,7 @@ namespace :research do
     platform = 'rubygems'
     org = RepositoryOrganisation.host(host).find_by_login(org_name)
 
-    own_dependencies = org.dependencies.platform(platform).includes(project: :repository).select{|d| d.project.try(:repository).try(:full_name) && d.project.repository.full_name.split('/').first == org_name }.length
+    own_dependencies = org.dependencies.platform(platform).includes(project: :repository).count{|d| d.project.try(:repository).try(:full_name) && d.project.repository.full_name.split('/').first == org_name }
 
     total = org.dependencies.platform(platform).count - own_dependencies
 
@@ -344,7 +344,7 @@ namespace :research do
     rows = []
     running_total = 0
 
-    usage.sort_by(&:second).reverse.each do |dep|
+    usage.sort_by(&:second).reverse_each do |dep|
       running_total += dep[1]
       percentage = (running_total/total.to_f*100).round
       rows << [dep[0], dep[1], running_total, percentage]
@@ -390,7 +390,7 @@ namespace :research do
     rows = []
     running_total = 0
 
-    usage.sort_by(&:second).reverse.each do |dep|
+    usage.sort_by(&:second).reverse_each do |dep|
       running_total += dep[1]
       percentage = (running_total/total.to_f*100).round
       rows << [dep[0], dep[1], running_total, percentage]

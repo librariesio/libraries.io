@@ -12,7 +12,7 @@ module PackageManager
     end
 
     def self.project(name)
-      if name.match(/^([-\w]+)\/([-.\w]+)$/)
+      if /^([-\w]+)\/([-.\w]+)$/.match?(name)
         begin
           repo = AuthToken.client.repo(name, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json')
           return repo.to_hash
@@ -26,7 +26,7 @@ module PackageManager
         rescue
           return nil
         end
-      elsif name.match(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)
+      elsif /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.match?(name)
         begin
           response = request(name)
           if response.status == 200

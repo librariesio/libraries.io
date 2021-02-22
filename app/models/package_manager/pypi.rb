@@ -119,8 +119,8 @@ module PackageManager
     def self.project_find_names(project_name)
       [
         project_name,
-        project_name.gsub("-", "_"),
-        project_name.gsub("_", "-"),
+        project_name.tr("-", "_"),
+        project_name.tr("_", "-"),
       ]
     end
   end

@@ -23,7 +23,7 @@ module RepoManifests
       if file.present? && file[:content].present?
         begin
           manifest = Bibliothecary.analyse_file(manifest_path, file[:content]).first
-          manifest.merge!(sha: file[:sha]) if manifest
+          manifest[:sha] = file[:sha] if manifest
           manifest
         rescue
           nil

@@ -56,7 +56,7 @@ SitemapGenerator::Sitemap.create(:create_index => true) do
   xml_file_paths = Dir.glob(xml_files)
 
   xml_file_paths.each do |file|
-    next if file.match(/sitemaps\/sitemap/)
+    next if /sitemaps\/sitemap/.match?(file)
     add_to_index file
   end
 end

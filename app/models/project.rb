@@ -361,7 +361,7 @@ class Project < ApplicationRecord
   end
 
   def self.popular_licenses(options = {})
-    facets(options)[:licenses].normalized_licenses.buckets.reject{ |t| t['key'].downcase == 'other' }
+    facets(options)[:licenses].normalized_licenses.buckets.reject{ |t| t['key'].casecmp('other').zero? }
   end
 
   def self.popular(options = {})

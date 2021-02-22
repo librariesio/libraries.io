@@ -42,7 +42,7 @@ module PackageManager
         num = num.to_i
       end
 
-      (1..num).to_a.reverse.each do |number|
+      (1..num).to_a.reverse_each do |number|
         r = Typhoeus.post "http://api.wordpress.org/plugins/info/1.0/", body: "action=query_plugins&request=O%3A8%3A%22stdClass%22%3A3%3A%7Bs%3A6%3A%22browse%22%3Bs%3A3%3A%22new%22%3Bs%3A8%3A%22per_page%22%3Bi%3A100%3Bs%3A4%3A%22page%22%3Bi%3A#{number}%3B%7D"
         r.body.scan(/"slug";s:[0-9]+:"([^"]+)";/).flatten.compact.uniq.each do |name|
           REDIS.sadd "wordpress-names", name

@@ -298,7 +298,7 @@ module PackageManager
       private
 
       def group_path
-        @group_id.gsub(".", "/")
+        @group_id.tr(".", "/")
       end
     end
   end

@@ -36,7 +36,7 @@ class Admin::PlatformsController < ApplicationController
     @rows = []
     running_total = 0
 
-    usage.sort_by(&:second).reverse.each do |dep|
+    usage.sort_by(&:second).reverse_each do |dep|
       running_total += dep[1]
       if total.zero?
         0

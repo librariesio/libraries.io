@@ -15,7 +15,7 @@ module MaintenanceStats
         private
 
         def count_up_contributors(weeks_ago)
-          @results.select{ |contributor| contributed?(contributor, weeks_ago) }.size
+          @results.count{ |contributor| contributed?(contributor, weeks_ago) }
         end
 
         def contributed?(contributor, weeks_ago)

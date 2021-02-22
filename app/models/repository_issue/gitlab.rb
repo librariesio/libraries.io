@@ -30,7 +30,7 @@ module RepositoryIssue
       i.repository_user_id = user.id if user.present?
       i.repository_id = repository.id
       i.labels = issue_hash[:labels]
-      i.pull_request = issue_hash.keys.include?("merge_status")
+      i.pull_request = issue_hash.key?("merge_status")
       i.comments_count = issue_hash[:user_notes_count]
       i.host_type = 'GitLab'
       i.number = issue_hash[:iid]

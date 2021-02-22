@@ -52,7 +52,7 @@ class Readme < ApplicationRecord
   end
 
   def unmaintained?
-    html_body.downcase.gsub("\n", '').include?('unmaintained.tech/badge.svg')
+    html_body.downcase.delete("\n").include?('unmaintained.tech/badge.svg')
   end
 
   def reformat

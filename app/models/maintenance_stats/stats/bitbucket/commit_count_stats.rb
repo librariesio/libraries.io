@@ -22,7 +22,7 @@ module MaintenanceStats
 
         def count_up_commits(dataset, since)
           return unless dataset.present?
-          dataset.select {|commit| Date.parse(commit["date"]) >= since}.size
+          dataset.count {|commit| Date.parse(commit["date"]) >= since}
         end
 
         def latest_commit(dataset)

@@ -15,7 +15,7 @@ module PackageManager
     def self.platforms
       @platforms ||= begin
         Dir[Rails.root.join("app", "models", "package_manager", "*.rb")].sort.each do |file|
-          require file unless file.match(/base\.rb$/)
+          require file unless /base\.rb$/.match?(file)
         end
         PackageManager.constants
           .reject { |platform| platform == :Base }

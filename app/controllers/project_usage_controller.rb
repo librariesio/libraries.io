@@ -19,7 +19,7 @@ class ProjectUsageController < ApplicationController
                .first(limit)
                .sort_by{|k,_v|
                  k.gsub(/\~|\>|\<|\^|\=|\*|\s/,'')
-                 .gsub('-','.')
+                 .tr('-','.')
                  .split('.').map{|i| i.to_i}
                }
   end

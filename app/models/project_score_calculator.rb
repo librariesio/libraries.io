@@ -79,12 +79,12 @@ class ProjectScoreCalculator
   end
 
   def basic_info_score
-    basic_info.values.compact.select{|v| v}.length/basic_info.values.compact.length.to_f*100
+    basic_info.values.compact.count{|v| v}/basic_info.values.compact.length.to_f*100
   end
 
   def contribution_docs_score
     return nil if contribution_docs.values.compact.empty?
-    contribution_docs.values.compact.select{|v| v}.length/contribution_docs.values.compact.length.to_f*100
+    contribution_docs.values.compact.count{|v| v}/contribution_docs.values.compact.length.to_f*100
   end
 
   def dependent_projects_score

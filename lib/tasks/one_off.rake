@@ -30,7 +30,7 @@ namespace :one_off do
       where(platform: "Clojars").
       where("name LIKE '%:%'").
       find_each do |p|
-        good_name, bad_name = p.name.gsub(/:/, '/'), p.name
+        good_name, bad_name = p.name.tr(':', '/'), p.name
         puts "Updating #{good_name}, deleting #{bad_name}"
         PackageManager::Clojars.update(good_name)
         p.destroy!
