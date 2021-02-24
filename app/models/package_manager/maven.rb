@@ -53,17 +53,12 @@ module PackageManager
       PROVIDER_MAP[source].check_status_url(project)
     end
 
-    def self.load_names(_limit = nil)
-      names = get("https://maven.libraries.io/mavenCentral/all")
-      names.each { |name| REDIS.sadd("maven-names", name) }
-    end
-
     def self.repository_base
       PROVIDER_MAP["default"].repository_base
     end
 
     def self.project_names
-      REDIS.smembers("maven-names")
+      get("https://maven.libraries.io/mavenCentral/all")
     end
 
     def self.recent_names
@@ -160,7 +155,7 @@ module PackageManager
 
     def self.versions(project, name)
       if project && project[:versions]
-        return project[:versions]
+        project[:versions]
       else
         xml_metadata = maven_metadata(name)
         xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
@@ -182,8 +177,8 @@ module PackageManager
             published_at: Time.parse(pom.locate("publishedAt").first.text),
             original_license: license_list,
           }
-        rescue Ox::Error
-          next
+      rescue Ox::Error
+        next
         end
         .compact
     end
@@ -251,9 +246,7 @@ module PackageManager
         group_id, artifact_id = *name.split(delimiter, 2)
 
         # Clojars names, when missing a group id, are implied to have the same group and artifact ids.
-        if artifact_id == nil && delimiter == PackageManager::Clojars::NAME_DELIMITER
-          artifact_id = group_id
-        end
+        artifact_id = group_id if artifact_id.nil? && delimiter == PackageManager::Clojars::NAME_DELIMITER
 
         new(group_id, artifact_id, repo_base)
       end
