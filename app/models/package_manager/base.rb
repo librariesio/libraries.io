@@ -107,6 +107,7 @@ module PackageManager
         db_project.save!
       rescue ActiveRecord::RecordInvalid => e
         raise e unless e.message =~ /Name has already been taken/
+
         # Probably a race condition with multiple versions of a new project being updated.
         db_project = Project.find_by(platform: db_platform, name: mapped_project[:name])
       end
@@ -118,7 +119,7 @@ module PackageManager
             .tap { |vs| deprecate_versions(db_project, vs) }
         else
           add_version(db_project, one_version(db_project.name, sync_version))
-          # TODO handle deprecation here too
+          # TODO: handle deprecation here too
         end
       end
 
@@ -133,9 +134,20 @@ module PackageManager
     end
 
     def self.add_version(db_project, version_hash)
-      existing = db_project.versions.find_or_initialize_by(number: version_hash[:number]) do |new_version|
-        new_version.assign_attributes version_hash
-      end
+      # Protect version against stray data
+      version_hash = version_hash.symbolize_keys.slice(
+        :number,
+        :published_at,
+        :runtime_dependencies_count,
+        :spdx_expression,
+        :original_license,
+        :repository_sources,
+        :status
+      )
+
+      existing = db_project.versions.find_or_initialize_by(number: version_hash[:number])
+      existing.assign_attributes(version_hash)
+
       existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
       existing.save!
     end
@@ -203,10 +215,10 @@ module PackageManager
         next if db_version.dependencies.any?
 
         deps = begin
-                 dependencies(name, db_version.number, mapped_project)
-               rescue StandardError
-                 []
-               end
+          dependencies(name, db_version.number, mapped_project)
+        rescue StandardError
+          []
+        end
 
         deps.each do |dep|
           next if dep[:project_name].blank? || dep[:requirements].blank? || db_version.dependencies.any? { |d| d.project_name == dep[:project_name] }
@@ -280,7 +292,8 @@ module PackageManager
     private_class_method def self.get_raw(url, options = {})
       rsp = request(url, options)
       return "" unless rsp.status == 200
-      return rsp.body
+
+      rsp.body
     end
 
     private_class_method def self.request(url, options = {})
