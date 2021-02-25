@@ -125,12 +125,6 @@ module PackageManager
 
       save_dependencies(mapped_project, sync_version: sync_version) if self::HAS_DEPENDENCIES
       finalize_db_project(db_project)
-    rescue StandardError => e
-      if ENV["RACK_ENV"] == "production"
-        Bugsnag.notify(e)
-      else
-        raise
-      end
     end
 
     def self.add_version(db_project, version_hash)
