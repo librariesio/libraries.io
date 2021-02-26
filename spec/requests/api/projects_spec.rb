@@ -151,86 +151,84 @@ describe "Api::ProjectsController" do
     end
   end
 
-  %w[true false].each do |v2_value|
-    describe "GET /api/:platform/:name/dependencies", type: :request do
-      it "renders successfully" do
-        get "/api/#{project.platform}/#{project.name}/#{version.number}/dependencies?v2=#{v2_value}"
-        expect(response).to have_http_status(:success)
-        expect(response.content_type).to eq("application/json")
-        expect(response.body).to be_json_eql(
-          {
-            dependencies_for_version: version.number,
-            dependent_repos_count: project.dependent_repos_count,
-            dependents_count: project.dependents_count,
-            deprecation_reason: project.deprecation_reason,
-            dependencies: version.dependencies.map do |dependency|
-              {
-                project_name: dependency.name,
-                name: dependency.name,
-                platform: dependency.platform,
-                requirements: dependency.requirements,
-                latest_stable: dependency.latest_stable,
-                latest: dependency.latest,
-                deprecated: dependency.deprecated,
-                outdated: dependency.outdated,
-                filepath: dependency.filepath,
-                kind: dependency.kind,
-                normalized_licenses: dependency.project.normalized_licenses,
-              }
-            end,
-            description: project.description,
-            forks: project.forks,
-            homepage: project.homepage,
-            keywords: project.keywords,
-            language: project.language,
-            latest_download_url: project.latest_download_url,
-            latest_release_number: project.latest_release_number,
-            latest_release_published_at: project.latest_release_published_at,
-            latest_stable_release_number: project.latest_stable_release_number,
-            latest_stable_release_published_at: project.latest_stable_release_published_at,
-            license_normalized: project.license_normalized,
-            licenses: project.licenses,
-            name: project.name,
-            normalized_licenses: project.normalized_licenses,
-            package_manager_url: project.package_manager_url,
-            platform: project.platform,
-            rank: project.rank,
-            repository_license: project.repository_license,
-            repository_url: project.repository_url,
-            stars: project.stars,
-            status: project.status,
-            versions: project.versions.as_json(only: %i[number original_license published_at spdx_expression researched_at repository_sources]),
-          }.to_json
-        )
-      end
-    end
-
-    describe "GET /api/:platform/:name/dependencies?subset=minimum", type: :request do
-      it "renders successfully" do
-        get "/api/#{project.platform}/#{project.name}/#{version.number}/dependencies?subset=minimum&v2=#{v2_value}"
-        expect(response).to have_http_status(:success)
-        expect(response.content_type).to eq("application/json")
-        expect(response.body).to be_json_eql({
-          "name": project.name,
-          "platform": project.platform,
-          "dependencies_for_version": version.number,
-          "dependencies": version.dependencies.map do |dependency|
+  describe "GET /api/:platform/:name/dependencies", type: :request do
+    it "renders successfully" do
+      get "/api/#{project.platform}/#{project.name}/#{version.number}/dependencies"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq("application/json")
+      expect(response.body).to be_json_eql(
+        {
+          dependencies_for_version: version.number,
+          dependent_repos_count: project.dependent_repos_count,
+          dependents_count: project.dependents_count,
+          deprecation_reason: project.deprecation_reason,
+          dependencies: version.dependencies.map do |dependency|
             {
-              "project_name": dependency.name,
-              "name": dependency.name,
-              "platform": dependency.platform,
-              "requirements": dependency.requirements,
-              "latest_stable": dependency.latest_stable,
-              "latest": dependency.latest,
-              "deprecated": dependency.deprecated,
-              "outdated": dependency.outdated,
-              "filepath": dependency.filepath,
-              "kind": dependency.kind,
-              "normalized_licenses": dependency.project.normalized_licenses,
+              project_name: dependency.name,
+              name: dependency.name,
+              platform: dependency.platform,
+              requirements: dependency.requirements,
+              latest_stable: dependency.latest_stable,
+              latest: dependency.latest,
+              deprecated: dependency.deprecated,
+              outdated: dependency.outdated,
+              filepath: dependency.filepath,
+              kind: dependency.kind,
+              normalized_licenses: dependency.project.normalized_licenses,
             }
           end,
-        }.to_json)
-      end
+          description: project.description,
+          forks: project.forks,
+          homepage: project.homepage,
+          keywords: project.keywords,
+          language: project.language,
+          latest_download_url: project.latest_download_url,
+          latest_release_number: project.latest_release_number,
+          latest_release_published_at: project.latest_release_published_at,
+          latest_stable_release_number: project.latest_stable_release_number,
+          latest_stable_release_published_at: project.latest_stable_release_published_at,
+          license_normalized: project.license_normalized,
+          licenses: project.licenses,
+          name: project.name,
+          normalized_licenses: project.normalized_licenses,
+          package_manager_url: project.package_manager_url,
+          platform: project.platform,
+          rank: project.rank,
+          repository_license: project.repository_license,
+          repository_url: project.repository_url,
+          stars: project.stars,
+          status: project.status,
+          versions: project.versions.as_json(only: %i[number original_license published_at spdx_expression researched_at repository_sources]),
+        }.to_json
+      )
+    end
+  end
+
+  describe "GET /api/:platform/:name/dependencies?subset=minimum", type: :request do
+    it "renders successfully" do
+      get "/api/#{project.platform}/#{project.name}/#{version.number}/dependencies?subset=minimum"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq("application/json")
+      expect(response.body).to be_json_eql({
+        "name": project.name,
+        "platform": project.platform,
+        "dependencies_for_version": version.number,
+        "dependencies": version.dependencies.map do |dependency|
+          {
+            "project_name": dependency.name,
+            "name": dependency.name,
+            "platform": dependency.platform,
+            "requirements": dependency.requirements,
+            "latest_stable": dependency.latest_stable,
+            "latest": dependency.latest,
+            "deprecated": dependency.deprecated,
+            "outdated": dependency.outdated,
+            "filepath": dependency.filepath,
+            "kind": dependency.kind,
+            "normalized_licenses": dependency.project.normalized_licenses,
+          }
+        end,
+      }.to_json)
     end
   end
 
