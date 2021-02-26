@@ -125,12 +125,6 @@ module PackageManager
 
       save_dependencies(mapped_project, sync_version: sync_version) if self::HAS_DEPENDENCIES
       finalize_db_project(db_project)
-    rescue StandardError => e
-      if ENV["RACK_ENV"] == "production"
-        Bugsnag.notify(e)
-      else
-        raise
-      end
     end
 
     def self.add_version(db_project, version_hash)
@@ -150,6 +144,10 @@ module PackageManager
 
       existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
       existing.save!
+    rescue ActiveRecord::RecordInvalid => e
+      # Until all package managers support version-specific updates, we'll have this race condition
+      # of 2+ jobs trying to add versions at the same time.
+      raise e unless e.message =~ /Number has already been taken/
     end
 
     def self.deprecate_versions(db_project, version_hash)
