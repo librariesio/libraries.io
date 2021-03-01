@@ -49,7 +49,7 @@ module PackageManager
     end
 
     def self.mapping(project)
-      return false unless project["versions"].present?
+      return nil unless project["versions"].present?
 
       latest_version = project["versions"].to_a.last[1]
 
