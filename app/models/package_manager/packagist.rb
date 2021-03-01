@@ -40,7 +40,7 @@ module PackageManager
     end
 
     def self.mapping(project)
-      return false unless project["versions"].any?
+      return nil unless project["versions"].any?
 
       # for version comparison of php, we want to reject any dev versions unless
       # there are only dev versions of the project
