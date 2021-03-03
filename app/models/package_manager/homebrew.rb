@@ -42,9 +42,12 @@ module PackageManager
     end
 
     def self.versions(project, _name)
+      stable = project.dig("versions", "stable")
+      return [] if stable.blank?
+
       [
         {
-          number: project["version"],
+          number: stable,
         },
       ]
     end
