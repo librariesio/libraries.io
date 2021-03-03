@@ -32,11 +32,11 @@ module PackageManager
 
     def self.mapping(project)
       {
-        name: project["formula"],
-        description: project["description"],
+        name: project["name"],
+        description: project["desc"],
         homepage: project["homepage"],
         repository_url: repo_fallback("", project["homepage"]),
-        version: project["version"],
+        version: project.dig("versions", "stable"),
         dependencies: project["dependencies"],
       }
     end
