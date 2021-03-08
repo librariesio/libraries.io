@@ -79,7 +79,9 @@ Rails.application.configure do
   # disable sql logging in production
   config.active_record.logger = nil
 
-  config.action_mailer.default_url_options = { host: 'libraries.io' }
+  config.host = "libraries.io"
+
+  config.action_mailer.default_url_options = { host: config.host }
 
   config.cache_store = :dalli_store,
                     (ENV["MEMCACHIER_SERVERS"] || "").split(","),
