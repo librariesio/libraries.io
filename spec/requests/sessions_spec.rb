@@ -54,8 +54,16 @@ describe "SessionsController" do
         end
       end
 
-      context "internal" do
+      context "internal (absolute)" do
         let(:return_to) { root_url(foo: "bar") }
+        it "redirects to return_to" do
+          post '/auth/github/callback'
+          expect(response).to redirect_to(return_to)
+        end
+      end
+
+      context "internal (relative)" do
+        let(:return_to) { root_path(foo: "bar") }
         it "redirects to return_to" do
           post '/auth/github/callback'
           expect(response).to redirect_to(return_to)

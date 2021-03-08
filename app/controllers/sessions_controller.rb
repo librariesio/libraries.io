@@ -69,12 +69,13 @@ class SessionsController < ApplicationController
   private
 
   def pre_login_destination
-    destination = session.delete(:pre_login_destination).to_s
+    destination = session.delete(:pre_login_destination)
+    destination_host = URI(destination.to_s).host
 
-    if URI(destination).host != Rails.application.config.host
-      return false
-    else
+    if destination_host.blank? || destination_host == Rails.application.config.host
       return destination
+    else
+      return false
     end
   end
 end
