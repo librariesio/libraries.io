@@ -54,8 +54,8 @@ module PackageManager
       end
     end
 
-    def self.dependencies(_name, version, project)
-      versions = project[:versions]
+    def self.dependencies(_name, version, mapped_project)
+      versions = mapped_project[:versions]
       version_data = versions.find { |v| v["fields"]["version"] == version }
       version_data["fields"]["dependency"].select { |dep| dep["relationship"] == "requires" }.map do |dep|
         {

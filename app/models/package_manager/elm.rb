@@ -39,7 +39,7 @@ module PackageManager
     end
 
     def self.project(name)
-      projects[name]
+      get("http://package.elm-lang.org/packages/#{name}/latest/elm.json")
     end
 
     def self.mapping(project)
@@ -56,25 +56,16 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, project)
-      find_and_map_dependencies(name, version, project)
-    end
-
-    def self.find_dependencies(name, version)
-      url = "https://raw.githubusercontent.com/#{name}/#{version}/elm-package.json"
-
-      begin
-        response = request(url)
-        if response.status == 200
-          contents = response.body
-          dependencies = Bibliothecary.analyse_file("elm-package.json", contents).first.try(:fetch, :dependencies)
-          dependencies
-        else
-          []
+    def self.dependencies(name, version, _mapped_project)
+      get("http://package.elm-lang.org/packages/#{name}/#{version}/elm.json")
+        .fetch("dependencies", {})
+        .map do |name, requirement|
+          {
+            project_name: name,
+            requirements: requirement,
+            kind: "runtime",
+          }
         end
-      rescue StandardError
-        []
-      end
     end
   end
 end

@@ -91,7 +91,7 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, _project)
+    def self.dependencies(name, version, _mapped_project)
       api_response = get("https://pypi.org/pypi/#{name}/#{version}/json")
       deps = api_response.dig("info", "requires_dist")
       source_info = api_response.dig("releases", version)

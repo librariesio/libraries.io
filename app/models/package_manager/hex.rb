@@ -66,7 +66,7 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, _project)
+    def self.dependencies(name, version, _mapped_project)
       deps = get("https://hex.pm/api/packages/#{name}/releases/#{version}")["requirements"]
       return [] if deps.nil?
 

@@ -59,8 +59,8 @@ module PackageManager
       end
     end
 
-    def self.dependencies(_name, version, project)
-      vers = project[:versions].find { |v| v["version"] == version }
+    def self.dependencies(_name, version, mapped_project)
+      vers = mapped_project[:versions].find { |v| v["version"] == version }
       return [] if vers.nil?
 
       map_dependencies(vers["pubspec"].fetch("dependencies", {}), "runtime") +

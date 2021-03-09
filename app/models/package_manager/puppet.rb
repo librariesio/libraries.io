@@ -47,7 +47,7 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, _project)
+    def self.dependencies(name, version, _mapped_project)
       release = get_json("https://forgeapi.puppetlabs.com/v3/releases/#{name}-#{version}")
       metadata = release["metadata"]
       metadata["dependencies"].map do |dependency|

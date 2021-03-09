@@ -53,7 +53,7 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, _project)
+    def self.dependencies(name, version, _mapped_project)
       json = get_json("https://lib.haxe.org/p/#{name}/#{version}/raw-files/haxelib.json")
       return [] unless json["dependencies"]
 
