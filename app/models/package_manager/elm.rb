@@ -62,6 +62,7 @@ module PackageManager
             project_name: name,
             requirements: requirement,
             kind: "runtime",
+            platform: self.name.demodulize,
           }
         end
     end
