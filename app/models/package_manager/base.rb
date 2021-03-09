@@ -230,7 +230,7 @@ module PackageManager
       end
     end
 
-    def self.dependencies(_name, _version, _project)
+    def self.dependencies(_name, _version, _mapped_project)
       []
     end
 
@@ -246,7 +246,7 @@ module PackageManager
       end
     end
 
-    def self.find_and_map_dependencies(name, version, _project)
+    def self.find_and_map_dependencies(name, version, _mapped_project)
       dependencies = find_dependencies(name, version)
       return [] unless dependencies&.any?
 

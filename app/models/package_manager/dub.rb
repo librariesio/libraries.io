@@ -65,8 +65,8 @@ module PackageManager
       Array.wrap(categories).join(".").split(".").map(&:downcase).uniq
     end
 
-    def self.dependencies(_name, version, project)
-      vers = project[:versions].find { |v| v["version"] == version }
+    def self.dependencies(_name, version, mapped_project)
+      vers = mapped_project[:versions].find { |v| v["version"] == version }
       return [] if vers.nil?
 
       deps = vers["dependencies"]

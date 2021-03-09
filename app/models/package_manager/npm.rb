@@ -102,8 +102,8 @@ module PackageManager
       end
     end
 
-    def self.dependencies(_name, version, project)
-      vers = project.fetch(:versions, {})[version]
+    def self.dependencies(_name, version, mapped_project)
+      vers = mapped_project.fetch(:versions, {})[version]
       return [] if vers.nil?
 
       map_dependencies(vers.fetch("dependencies", {}), "runtime") +

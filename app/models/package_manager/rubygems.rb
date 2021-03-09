@@ -72,7 +72,7 @@ module PackageManager
       []
     end
 
-    def self.dependencies(name, version, _project)
+    def self.dependencies(name, version, _mapped_project)
       json = get_json("https://rubygems.org/api/v2/rubygems/#{name}/versions/#{version}.json")
 
       deps = json["dependencies"]

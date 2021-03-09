@@ -91,7 +91,7 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, _project)
+    def self.dependencies(name, version, _mapped_project)
       deps = get("https://crates.io/api/v1/crates/#{name}/#{version}/dependencies")["dependencies"]
       return [] if deps.nil?
 

@@ -56,7 +56,7 @@ module PackageManager
       project["versions"].map { |version| version.deep_symbolize_keys.slice(:number, :original_license, :published_at) }
     end
 
-    def self.dependencies(name, version, _project)
+    def self.dependencies(name, version, _mapped_project)
       version_data = get_json("#{API_URL}/package/#{name}")["versions"]
       deps = version_data.find { |item| item["number"] == version }&.dig("dependencies")&.map { |d| d.split(" ") }
       map_dependencies(deps, "runtime")
