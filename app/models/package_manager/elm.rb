@@ -25,13 +25,7 @@ module PackageManager
     end
 
     def self.projects
-      @projects ||= begin
-        prjs = {}
-        get("http://package.elm-lang.org/all-packages").each do |prj|
-          prjs[prj["name"]] = prj
-        end
-        prjs
-      end
+      @projects ||= get("http://package.elm-lang.org/all-packages")
     end
 
     def self.recent_names
@@ -50,10 +44,14 @@ module PackageManager
       }
     end
 
-    def self.versions(project, _name)
-      project["versions"].map do |v|
-        { number: v }
-      end
+    def self.versions(_project, name)
+      get("https://package.elm-lang.org/packages/#{name}/releases.json")
+        .map do |version, timestamp|
+          {
+            number: version,
+            published_at: Time.at(timestamp),
+          }
+        end
     end
 
     def self.dependencies(name, version, _mapped_project)
