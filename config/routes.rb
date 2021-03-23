@@ -25,6 +25,8 @@ Rails.application.routes.draw do
 
     get "/platforms", to: "platforms#index"
 
+    get "/versions", to: "versions#index"
+
     get "/subscriptions", to: "subscriptions#index"
     get "/subscriptions/:platform/:name", to: "subscriptions#show"
     post "/subscriptions/:platform/:name", to: "subscriptions#create"
