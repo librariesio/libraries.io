@@ -28,8 +28,8 @@ describe "Api::RepositoriesController" do
       get "/api/versions", params: { since: Time.now - 1.day, api_key: user.api_key }
 
       expect(response).to have_http_status(:success)
-      expect(json["coordinate"]).to eq "rubygems/rails1"
-      expect(json.keys).to match_array %w[coordinate number original_license published_at spdx_expression]
+      expect(json.first["coordinate"]).to eq "rubygems/rails1"
+      expect(json.first.keys).to match_array %w[coordinate number original_license published_at spdx_expression]
     end
 
     it "returns versions since a provided date/time" do
