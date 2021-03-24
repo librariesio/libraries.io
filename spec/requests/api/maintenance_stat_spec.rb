@@ -1,13 +1,14 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe "API::MaintenanceStatsController" do
   let(:internal_user) { create(:user) }
   let(:normal_user) { create(:user) }
   let!(:repository) { create(:repository) }
-  let!(:repository_django) { create(:repository, full_name: 'django/django') }
+  let!(:repository_django) { create(:repository, full_name: "django/django") }
   let!(:project) { create(:project, repository: repository) }
-  let!(:project_django) { create(:project, name: 'Django', platform: 'Pypi', repository: repository_django) }
+  let!(:project_django) { create(:project, name: "Django", platform: "Pypi", repository: repository_django) }
 
   before do
     internal_user.current_api_key.update_attribute(:is_internal, true)
@@ -24,8 +25,8 @@ describe "API::MaintenanceStatsController" do
           api_key: internal_user.api_key,
           projects: [
             { name: project_django.name.downcase, platform: project_django.platform },
-            { name: project.name.downcase, platform: project.platform }
-          ]
+            { name: project.name.downcase, platform: project.platform },
+          ],
         }
       )
 
@@ -43,8 +44,8 @@ describe "API::MaintenanceStatsController" do
           api_key: internal_user.api_key,
           projects: [
             { name: project_django.name.downcase, platform: project_django.platform },
-            { name: project.name.downcase, platform: project.platform }
-          ]
+            { name: project.name.downcase, platform: project.platform },
+          ],
         }
       )
 
@@ -59,8 +60,8 @@ describe "API::MaintenanceStatsController" do
             api_key: normal_user.api_key,
             projects: [
               { name: project_django.name.downcase, platform: project_django.platform },
-              { name: project.name.downcase, platform: project.platform }
-            ]
+              { name: project.name.downcase, platform: project.platform },
+            ],
           }
         )
         expect(response).to have_http_status(403)

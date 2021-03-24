@@ -41,6 +41,7 @@ OmniAuth.config.test_mode = true
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.include Capybara::DSL
+  config.include ActiveSupport::Testing::TimeHelpers
 end
 
 def project_json_response(projects)
