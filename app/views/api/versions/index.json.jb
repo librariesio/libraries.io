@@ -2,7 +2,7 @@
 
 version_attrs = %w[published_at original_license spdx_expression status].freeze
 
-results = @versions.map do |version|
+results = @versions.limit(@max_results).map do |version|
   version
     .attributes
     .slice(*version_attrs)

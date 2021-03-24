@@ -11,6 +11,6 @@ class Api::VersionsController < Api::BulkProjectController
     @versions = Version.includes(:project).where(
       "versions.updated_at > ?",
       Time.parse(params.require(:since))
-    )
+    ).order(:updated_at)
   end
 end
