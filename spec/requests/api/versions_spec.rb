@@ -32,7 +32,7 @@ describe "Api::RepositoriesController" do
       get "/api/versions", params: { since: 1.day.ago, api_key: user.api_key }
 
       expect(response).to have_http_status(:success)
-      expect(json["results"].first["coordinate"]).to eq "rubygems/rails1"
+      expect(json["results"].first["coordinate"]).to match(/^rubygems\/rails/)
       expect(json["results"].first.keys).to match_array %w[coordinate number original_license published_at spdx_expression status]
       expect(json["more"]).to eq false
     end
