@@ -21,24 +21,39 @@ describe "Api::RepositoriesController" do
   end
 
   context "with an internal user" do
+    before(:each) do
+      freeze_time
+    end
+
     let(:user) { create(:user, :internal) }
 
     it "returns useful data for a version" do
       make_versions(project, 1)
-      get "/api/versions", params: { since: Time.now - 1.day, api_key: user.api_key }
+      get "/api/versions", params: { since: 1.day.ago, api_key: user.api_key }
 
       expect(response).to have_http_status(:success)
-      expect(json.first["coordinate"]).to eq "rubygems/rails1"
-      expect(json.first.keys).to match_array %w[coordinate number original_license published_at spdx_expression]
+      expect(json["results"].first["coordinate"]).to eq "rubygems/rails1"
+      expect(json["results"].first.keys).to match_array %w[coordinate number original_license published_at spdx_expression status]
+      expect(json["more"]).to eq false
     end
 
     it "returns versions since a provided date/time" do
-      freeze_time
       versions = make_versions(project, 5)
 
       get "/api/versions", params: { since: versions[2].updated_at.iso8601, api_key: user.api_key }
+
       expect(response).to have_http_status(:success)
-      expect(json.pluck("number")).to match_array versions[3..4].pluck(:number)
+      expect(json["results"].pluck("number")).to match_array versions[3..4].pluck(:number)
+      expect(json["more"]).to eq false
+    end
+
+    it "notes if there are more results to retrieve" do
+      make_versions(project, 2)
+
+      get "/api/versions", params: { since: 1.day.ago, api_key: user.api_key, max_results: 1 }
+
+      expect(response).to have_http_status(:success)
+      expect(json["more"]).to eq true
     end
   end
 end
