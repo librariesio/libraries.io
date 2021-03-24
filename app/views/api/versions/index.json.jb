@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
-version_attrs = %w[number published_at original_license spdx_expression status].freeze
+version_attrs = %w[published_at original_license spdx_expression status].freeze
 
 results = @versions.map do |version|
-  version.attributes.slice(*version_attrs).merge({ coordinate: Coordinate.generate(version.project) })
+  version
+    .attributes
+    .slice(*version_attrs)
+    .merge(
+      {
+        coordinate: Coordinate.generate(version.project, version.number),
+      }
+    )
 end
 
 {

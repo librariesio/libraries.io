@@ -28,12 +28,12 @@ describe "Api::RepositoriesController" do
     let(:user) { create(:user, :internal) }
 
     it "returns useful data for a version" do
-      make_versions(project, 1)
+      version = make_versions(project, 1)[0]
       get "/api/versions", params: { since: 1.day.ago, api_key: user.api_key }
 
       expect(response).to have_http_status(:success)
-      expect(json["results"].first["coordinate"]).to match(/^rubygems\/rails/)
-      expect(json["results"].first.keys).to match_array %w[coordinate number original_license published_at spdx_expression status]
+      expect(json["results"].first["coordinate"]).to match("rubygems/#{version.project.name.downcase}/1.0.0")
+      expect(json["results"].first.keys).to match_array %w[coordinate original_license published_at spdx_expression status]
       expect(json["more"]).to eq false
     end
 
@@ -43,7 +43,8 @@ describe "Api::RepositoriesController" do
       get "/api/versions", params: { since: versions[2].updated_at.iso8601, api_key: user.api_key }
 
       expect(response).to have_http_status(:success)
-      expect(json["results"].pluck("number")).to match_array versions[3..4].pluck(:number)
+      expected_coords = versions[3..4].map { |v| Coordinate.generate(v.project, v.number) }
+      expect(json["results"].pluck("coordinate")).to match_array expected_coords
       expect(json["more"]).to eq false
     end
 
