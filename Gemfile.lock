@@ -358,7 +358,8 @@ GEM
     mime-types (3.2.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2019.0331)
-    mimemagic (0.3.5)
+    mimemagic (0.3.8)
+      nokogiri (~> 1)
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
     minitest (5.14.4)
@@ -715,6 +716,7 @@ DEPENDENCIES
   marginalia
   marginalia-sidekiq
   mime-types
+  mimemagic (= 0.3.8)
   nokogiri
   octicons_helper
   octokit
