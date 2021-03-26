@@ -11,8 +11,4 @@ class PackageManager::Conda::Forge < PackageManager::Conda
   def self.install_instructions(project, _version = nil)
     "conda install -c conda-forge #{project.name}"
   end
-
-  def self.project(name)
-    get_json("#{API_URL}/conda-forge/#{name}")
-  end
 end

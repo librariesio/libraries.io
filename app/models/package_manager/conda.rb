@@ -5,6 +5,7 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
+    SUPPORTS_SINGLE_VERSION_UPDATE = true
     URL = "https://anaconda.org"
     API_URL = "https://conda.libraries.io"
 
@@ -21,8 +22,28 @@ module PackageManager
     end
 
     def self.all_projects
-      get_json("#{API_URL}/packages")
+      get_json("#{API_URL}/packges")
     end
+
+    def self.one_version(name, version_string)
+      get_json("#{API_URL}/#{self::REPOSITORY_SOURCE_NAME}/#{name}/#{version_string}")&.first
+    end
+
+    def self.project(name)
+      get_json("#{API_URL}/#{self::REPOSITORY_SOURCE_NAME}/#{name}")
+    end
+
+    def self.recent_names
+      last_update = Version.where(project: Project.where(platform: "Conda")).select(:updated_at).order(updated_at: :desc).limit(1).first&.updated_at
+      packages = get_json("#{API_URL}/#{self::REPOSITORY_SOURCE_NAME}/")
+
+      return packages.keys if last_update.nil?
+
+      packages.keys.filter do |name|
+        packages[name]["versions"].any? { |version| version["published_at"].is_a?(String) && Time.parse(version["published_at"]) > last_update }
+      end
+    end
+
 
     PROVIDER_MAP = {
       "CondaForge" => Forge,
