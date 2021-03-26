@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module PackageManager
-  class Conda < Base
+  class Conda < MultipleSourcesBase
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
@@ -12,12 +12,31 @@ module PackageManager
       "conda"
     end
 
+    def self.db_platform
+      "Conda"
+    end
+
     def self.project_names
       get_json("#{API_URL}/packages").keys
     end
 
     def self.all_projects
       get_json("#{API_URL}/packages")
+    end
+
+    PROVIDER_MAP = {
+      "CondaForge" => Forge,
+      "default" => Main,
+      "CondaMain" => Main,
+    }.freeze
+
+    def self.providers(project)
+      project
+        .versions
+        .flat_map(&:repository_sources)
+        .compact
+        .uniq
+        .map { |source| PROVIDER_MAP[source] } || [PROVIDER_MAP["default"]]
     end
 
     def self.recent_names
@@ -39,16 +58,12 @@ module PackageManager
       "conda install -c anaconda #{project.name}"
     end
 
-    def self.project(name)
-      get_json("#{API_URL}/package/#{name}")
-    end
-
     def self.check_status_url(project)
       "#{API_URL}/package/#{project.name}"
     end
 
     def self.mapping(project)
-      # TODO can we make this more explicit?
+      # TODO: can we make this more explicit?
       project.deep_symbolize_keys
     end
 
