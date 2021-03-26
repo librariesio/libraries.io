@@ -14,6 +14,8 @@ class PackageManagerDownloadWorker
     clojars: PackageManager::Clojars,
     cocoapods: PackageManager::CocoaPods,
     conda: PackageManager::Conda,
+    conda_main: PackageManager::Conda::Main,
+    conda_forge: PackageManager::Conda::Forge,
     cpan: PackageManager::CPAN,
     cran: PackageManager::CRAN,
     dub: PackageManager::Dub,
