@@ -4,6 +4,7 @@ module PackageManager
   class Conda < MultipleSourcesBase
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
+    REPOSITORY_SOURCE_NAME = "Main"
     BIBLIOTHECARY_SUPPORT = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
     URL = "https://anaconda.org"
@@ -44,6 +45,16 @@ module PackageManager
       end
     end
 
+    def self.download_url(name, version = nil)
+      project = Project.find_by(name: name, platform: db_platform)
+      db_version = project.versions.find_by(number: version)
+      repository_source = db_version&.repository_sources&.first.presence || "default"
+      if version.present?
+        get_json("#{API_URL}/#{repository_source}/#{name}/#{version}")&.first&.dig("download_url")
+      else
+        get_json("#{API_URL}/#{repository_source}/#{name}")&.first&.dig("download_url")
+      end
+    end
 
     PROVIDER_MAP = {
       "CondaForge" => Forge,
@@ -58,25 +69,6 @@ module PackageManager
         .compact
         .uniq
         .map { |source| PROVIDER_MAP[source] } || [PROVIDER_MAP["default"]]
-    end
-
-    def self.recent_names
-      last_update = Version.where(project: Project.where(platform: "Conda")).select(:updated_at).order(updated_at: :desc).limit(1).first&.updated_at
-      packages = get_json("#{API_URL}/packages")
-
-      return packages.keys if last_update.nil?
-
-      packages.keys.filter do |name|
-        packages[name]["versions"].any? { |version| version["published_at"].is_a?(String) && Time.parse(version["published_at"]) > last_update }
-      end
-    end
-
-    def self.package_link(project, _version = nil)
-      "https://anaconda.org/anaconda/#{project.name}"
-    end
-
-    def self.install_instructions(project, _version = nil)
-      "conda install -c anaconda #{project.name}"
     end
 
     def self.check_status_url(project)
