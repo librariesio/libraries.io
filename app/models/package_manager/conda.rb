@@ -57,17 +57,15 @@ module PackageManager
     end
 
     def self.package_link(project, _version = nil)
-      project = Project.find_by(name: name, platform: db_platform)
-      db_version = project.versions.find_by(number: version)
+      db_version = project.versions.last
       repository_source = db_version&.repository_sources&.first.presence || "default"
-      PROVIDER_MAP[repository_source].package_link
+      PROVIDER_MAP[repository_source].package_link(project)
     end
 
     def self.install_instructions(project, _version = nil)
-      project = Project.find_by(name: name, platform: db_platform)
-      db_version = project.versions.find_by(number: version)
+      db_version = project.versions.last
       repository_source = db_version&.repository_sources&.first.presence || "default"
-      PROVIDER_MAP[repository_source].install_instructions
+      PROVIDER_MAP[repository_source].install_instructions(project)
     end
 
     PROVIDER_MAP = {
