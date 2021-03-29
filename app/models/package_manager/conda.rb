@@ -56,6 +56,20 @@ module PackageManager
       end
     end
 
+    def self.package_link(project, _version = nil)
+      project = Project.find_by(name: name, platform: db_platform)
+      db_version = project.versions.find_by(number: version)
+      repository_source = db_version&.repository_sources&.first.presence || "default"
+      PROVIDER_MAP[repository_source].package_link
+    end
+
+    def self.install_instructions(project, _version = nil)
+      project = Project.find_by(name: name, platform: db_platform)
+      db_version = project.versions.find_by(number: version)
+      repository_source = db_version&.repository_sources&.first.presence || "default"
+      PROVIDER_MAP[repository_source].install_instructions
+    end
+
     PROVIDER_MAP = {
       "CondaForge" => Forge,
       "default" => Main,
