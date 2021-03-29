@@ -23,7 +23,7 @@ module PackageManager
     end
 
     def self.all_projects
-      get_json("#{API_URL}/packges")
+      get_json("#{API_URL}/packages")
     end
 
     def self.one_version(name, version_string)
