@@ -59,6 +59,7 @@ module PackageManager
     def self.package_link(project, _version = nil)
       db_version = project.versions.last
       repository_source = db_version&.repository_sources&.first.presence || "default"
+      binding.pry
       PROVIDER_MAP[repository_source].package_link(project)
     end
 
@@ -71,6 +72,7 @@ module PackageManager
     PROVIDER_MAP = {
       "CondaForge" => Forge,
       "default" => Main,
+      "Main" => Main,
       "CondaMain" => Main,
     }.freeze
 
