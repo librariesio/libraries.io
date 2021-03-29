@@ -71,6 +71,7 @@ module PackageManager
     PROVIDER_MAP = {
       "CondaForge" => Forge,
       "default" => Main,
+      "Main" => Main,
       "CondaMain" => Main,
     }.freeze
 
