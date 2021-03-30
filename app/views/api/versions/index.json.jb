@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-version_attrs = %w[published_at original_license spdx_expression status].freeze
+version_attrs = %w[published_at updated_at original_license spdx_expression status].freeze
 
 results = @versions.limit(@max_results).map do |version|
   version
@@ -15,5 +15,5 @@ end
 
 {
   results: results,
-  more: @versions.count > @max_results,
+  more: [@versions.count - @max_results, 0].max,
 }
