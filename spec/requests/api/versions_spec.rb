@@ -33,8 +33,8 @@ describe "Api::RepositoriesController" do
 
       expect(response).to have_http_status(:success)
       expect(json["results"].first["coordinate"]).to match("rubygems/#{version.project.name.downcase}/1.0.0")
-      expect(json["results"].first.keys).to match_array %w[coordinate original_license published_at spdx_expression status]
-      expect(json["more"]).to eq false
+      expect(json["results"].first.keys).to match_array %w[coordinate original_license updated_at published_at spdx_expression status]
+      expect(json["more"]).to eq 0
     end
 
     it "returns versions since a provided date/time" do
@@ -45,7 +45,7 @@ describe "Api::RepositoriesController" do
       expect(response).to have_http_status(:success)
       expected_coords = versions[3..4].map { |v| Coordinate.generate(v.project, v.number) }
       expect(json["results"].pluck("coordinate")).to match_array expected_coords
-      expect(json["more"]).to eq false
+      expect(json["more"]).to eq 0
     end
 
     it "notes if there are more results to retrieve" do
@@ -54,7 +54,7 @@ describe "Api::RepositoriesController" do
       get "/api/versions", params: { since: 1.day.ago, api_key: user.api_key, max_results: 1 }
 
       expect(response).to have_http_status(:success)
-      expect(json["more"]).to eq true
+      expect(json["more"]).to eq 1
     end
   end
 end
