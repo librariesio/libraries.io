@@ -14,11 +14,11 @@ brew install rbenv ruby-build
 rbenv install 2.6.5
 ```
 
-Next, you'll need to make sure that you have PostgreSQL, Elasticsearch 2.4, Redis, and shared-mime-info installed. This can be done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or postgres can be installed by using [http://postgresapp.com](http://postgresapp.com). Please also see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
+Next, you'll need to make sure that you have PostgreSQL, Elasticsearch 2.4 and Redis installed. This can be done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or postgres can be installed by using [http://postgresapp.com](http://postgresapp.com). Please also see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
 
 ```bash
 brew cask install phantomjs homebrew/cask-versions/adoptopenjdk8
-brew install postgres elasticsearch@2.4 redis icu4c cmake shared-mime-info
+brew install postgres elasticsearch@2.4 redis icu4c cmake
 ```
 
 Remember to start the services!
@@ -29,10 +29,10 @@ brew services start redis
 brew services start postgresql
 ```
 
-On Debian-based Linux distributions you can use apt-get to install Postgres and shared-mime-info:
+On Debian-based Linux distributions you can use apt-get to install Postgres:
 
 ```bash
-sudo apt-get install postgresql postgresql-contrib libpq-dev libicu-dev shared-mime-info
+sudo apt-get install postgresql postgresql-contrib libpq-dev libicu-dev
 ```
 
 Now, let's install the gems from the `Gemfile` ("Gems" are synonymous with libraries in other

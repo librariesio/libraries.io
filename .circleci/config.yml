@@ -31,7 +31,7 @@ jobs:
             - v1-gem-cache-{{ arch }}-{{ .Branch }}-
             - v1-gem-cache-{{ arch }}-
       - run: sudo apt-get -y -qq update
-      - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev shared-mime-info
+      - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
       - ruby/bundle-install
       - save_cache:
           key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
