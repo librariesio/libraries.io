@@ -11,6 +11,7 @@ production:
   - [tree, 6]
   - [repo_maintenance_stat, 4]
   - [default, 4]
+  - [small, 4]
   - [score, 3]
   - [status, 2]
   - [issues, 2]
