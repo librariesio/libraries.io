@@ -92,7 +92,7 @@ describe PackageManager::Maven do
       it "should return nil" do
         allow(described_class).to receive(:download_pom).and_raise(PackageManager::Maven::POMNotFound.new("https://a-spring-url"))
 
-        expect(described_class.mapping({group_id: "org", artifact_id: "foo", version: "1.0.0"})).to eq(1)
+        expect(described_class.mapping({group_id: "org", artifact_id: "foo", version: "1.0.0"})).to eq(nil)
       end
     end
   end
