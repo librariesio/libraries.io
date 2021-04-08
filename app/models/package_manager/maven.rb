@@ -29,7 +29,7 @@ module PackageManager
       attr_reader :url
       def initialize(url)
         @url = url
-        super("POM not found: #{@url}")
+        super("Missing POM: #{@url}")
       end
     end
 
@@ -64,7 +64,7 @@ module PackageManager
       latest_version_xml = get_pom(project[:group_id], project[:artifact_id], project[:latest_version])
       mapping_from_pom_xml(latest_version_xml, depth).merge({ name: project[:name] })
     rescue POMNotFound => e
-      Rails.logger.info "POM missing: #{e.url}"
+      Rails.logger.info "Missing POM: #{e.url}"
       nil
     end
 
