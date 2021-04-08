@@ -25,6 +25,13 @@ module PackageManager
       "SpringLibs" => SpringLibs,
     }.freeze
 
+    class POMNotFound < StandardError
+      attr_reader :url
+      def initialize(url)
+        @url = url
+        super("POM not found: #{@url}")
+      end
+    end
 
     def self.repository_base
       PROVIDER_MAP["default"].repository_base
@@ -56,6 +63,9 @@ module PackageManager
     def self.mapping(project, depth = 0)
       latest_version_xml = get_pom(project[:group_id], project[:artifact_id], project[:latest_version])
       mapping_from_pom_xml(latest_version_xml, depth).merge({ name: project[:name] })
+    rescue POMNotFound => e
+      Rails.logger.info "POM missing: #{e.url}"
+      nil
     end
 
     def self.mapping_from_pom_xml(version_xml, depth = 0)
@@ -153,7 +163,10 @@ module PackageManager
     end
 
     def self.download_pom(group_id, artifact_id, version)
-      pom_request = request(MavenUrl.new(group_id, artifact_id, repository_base).pom(version))
+      url = MavenUrl.new(group_id, artifact_id, repository_base).pom(version)
+      pom_request = request(url)
+      raise POMNotFound.new(url) if pom_request.status == 404
+
       xml = Ox.parse(pom_request.body)
       published_at = pom_request.headers["Last-Modified"]
       pat = Ox::Element.new("publishedAt")
