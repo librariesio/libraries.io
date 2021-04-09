@@ -128,6 +128,8 @@ module PackageManager
     end
 
     def self.add_version(db_project, version_hash)
+      return if version_hash.blank?
+
       # Protect version against stray data
       version_hash = version_hash.symbolize_keys.slice(
         :number,
