@@ -156,7 +156,7 @@ module PackageManager
             published_at: Time.parse(pom.locate("publishedAt").first.text),
             original_license: license_list,
           }
-      rescue Ox::Error
+      rescue Ox::Error, POMNotFound
         next
         end
         .compact
