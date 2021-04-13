@@ -16,7 +16,9 @@ module PackageManager
     end
 
     def self.project(name)
-      get("https://packagecontrol.io/packages/#{CGI.escape(name)}.json")
+      Faraday.new("https://packagecontrol.io/packages/#{URI.escape(name)}.json")
+        .get
+        .then { |resp| resp.status == 200 ? Oj.load(resp.body) : nil }
     end
 
     def self.mapping(project)
