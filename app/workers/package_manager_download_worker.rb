@@ -34,6 +34,8 @@ class PackageManagerDownloadWorker
     maven_hortonworks: PackageManager::Maven::Hortonworks,
     maven_mavencentral: PackageManager::Maven::MavenCentral,
     maven_springlibs: PackageManager::Maven::SpringLibs,
+    maven_jboss: PackageManager::Maven::Jboss,
+    maven_jbossea: PackageManager::Maven::JbossEa,
     meteor: PackageManager::Meteor,
     nimble: PackageManager::Nimble,
     npm: PackageManager::NPM,

@@ -23,6 +23,8 @@ module PackageManager
       "Hortonworks" => Hortonworks,
       "Maven" => MavenCentral,
       "SpringLibs" => SpringLibs,
+      "Jboss" => Jboss,
+      "JbossEa" => JbossEa,
     }.freeze
 
     class POMNotFound < StandardError
