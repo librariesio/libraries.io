@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class PackageManager::Maven::Jboss < PackageManager::Maven
+class PackageManager::Maven::Jboss < PackageManager::Maven::Common
   REPOSITORY_SOURCE_NAME = "Jboss"
   HIDDEN = true
 
   def self.repository_base
-    "https://repository.jboss.org/nexus/content/repositories/releases/"
+    "https://repository.jboss.org/nexus/content/repositories/releases"
   end
 
   def self.project_names

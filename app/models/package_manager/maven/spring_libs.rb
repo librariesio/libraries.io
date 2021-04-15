@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PackageManager::Maven::SpringLibs < PackageManager::Maven
+class PackageManager::Maven::SpringLibs < PackageManager::Maven::Common
   REPOSITORY_SOURCE_NAME = "SpringLibs"
   HIDDEN = true
 

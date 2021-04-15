@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PackageManager::Maven::Atlassian < PackageManager::Maven
+class PackageManager::Maven::Atlassian < PackageManager::Maven::Common
   REPOSITORY_SOURCE_NAME = "Atlassian"
 
   def self.repository_base

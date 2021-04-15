@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PackageManager::Maven::Hortonworks < PackageManager::Maven
+class PackageManager::Maven::Hortonworks < PackageManager::Maven::Common
   REPOSITORY_SOURCE_NAME = "Hortonworks"
 
   def self.repository_base

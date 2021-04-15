@@ -11,22 +11,22 @@ describe PackageManager::Maven do
     let(:project) { create(:project, name: "com.github.jparkie:pdd", platform: described_class.formatted_name) }
 
     it "returns a link to project website" do
-      expect(described_class.package_link(project)).to eq("http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jparkie%22%20AND%20a%3A%22pdd%22")
+      expect(described_class.package_link(project)).to eq("https://repo1.maven.org/maven2/com/github/jparkie/pdd")
     end
 
     it "handles version" do
-      expect(described_class.package_link(project, "2.0.0")).to eq("http://search.maven.org/#artifactdetails%7Ccom.github.jparkie%7Cpdd%7C2.0.0%7Cjar")
+      expect(described_class.package_link(project, "2.0.0")).to eq("https://repo1.maven.org/maven2/com/github/jparkie/pdd/2.0.0/pdd-2.0.0.jar")
     end
 
     context "with maven central provider" do
       let!(:version) { create(:version, project: project, repository_sources: ["Maven"], number: "2.0.0") }
 
       it "returns a link to project website" do
-        expect(described_class.package_link(project)).to eq("http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jparkie%22%20AND%20a%3A%22pdd%22")
+        expect(described_class.package_link(project)).to eq("https://repo1.maven.org/maven2/com/github/jparkie/pdd")
       end
 
       it "handles version" do
-        expect(described_class.package_link(project, "2.0.0")).to eq("http://search.maven.org/#artifactdetails%7Ccom.github.jparkie%7Cpdd%7C2.0.0%7Cjar")
+        expect(described_class.package_link(project, "2.0.0")).to eq("https://repo1.maven.org/maven2/com/github/jparkie/pdd/2.0.0/pdd-2.0.0.jar")
       end
     end
 
@@ -54,11 +54,27 @@ describe PackageManager::Maven do
       end
     end
 
+    context "with jboss provider" do
+      let!(:version) { create(:version, project: project, repository_sources: [PackageManager::Maven::Jboss::REPOSITORY_SOURCE_NAME], number: "2.0.0") }
+
+      it "handles version" do
+        expect(described_class.package_link(project, "2.0.0")).to eq("https://repository.jboss.org/nexus/content/repositories/releases/com/github/jparkie/pdd/2.0.0/pdd-2.0.0.jar")
+      end
+    end
+
+    context "with jboss_ea" do
+      let!(:version) { create(:version, project: project, repository_sources: [PackageManager::Maven::JbossEa::REPOSITORY_SOURCE_NAME], number: "2.0.0") }
+
+      it "handles version" do
+        expect(described_class.package_link(project, "2.0.0")).to eq("https://repository.jboss.org/nexus/content/repositories/ea/com/github/jparkie/pdd/2.0.0/pdd-2.0.0.jar")
+      end
+    end
+
     context "with multiple providers" do
       let!(:version) { create(:version, project: project, repository_sources: ["Maven", PackageManager::Maven::SpringLibs::REPOSITORY_SOURCE_NAME], number: "2.0.0") }
 
       it "handles version" do
-        expect(described_class.package_link(project, "2.0.0")).to eq("http://search.maven.org/#artifactdetails%7Ccom.github.jparkie%7Cpdd%7C2.0.0%7Cjar")
+        expect(described_class.package_link(project, "2.0.0")).to eq("https://repo1.maven.org/maven2/com/github/jparkie/pdd/2.0.0/pdd-2.0.0.jar")
       end
     end
   end
