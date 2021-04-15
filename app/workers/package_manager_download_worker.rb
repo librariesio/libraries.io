@@ -64,7 +64,7 @@ class PackageManagerDownloadWorker
           end
 
     platform = PLATFORMS[key]
-    name = name.strip
+    name = name.to_s.strip
     version = version.to_s.strip
     raise "Platform '#{platform_name}' not found" unless platform
 
