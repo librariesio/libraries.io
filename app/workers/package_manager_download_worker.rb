@@ -56,14 +56,14 @@ class PackageManagerDownloadWorker
 
   def perform(platform_name, name, version = nil)
     key = begin
-            platform_name
-              .gsub(/PackageManager::/, "")
-              .gsub(/::/, "_")
-              .downcase
-              .to_sym
-          rescue StandardError
-            nil
-          end
+      platform_name
+        .gsub(/PackageManager::/, "")
+        .gsub(/::/, "_")
+        .downcase
+        .to_sym
+    rescue StandardError
+      nil
+    end
 
     platform = PLATFORMS[key]
     name = name.to_s.strip

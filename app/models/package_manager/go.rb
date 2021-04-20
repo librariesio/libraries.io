@@ -6,7 +6,6 @@ module PackageManager
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
-    URL = "https://pkg.go.dev/"
     COLOR = "#375eab"
     KNOWN_HOSTS = [
       "bitbucket.org",
@@ -22,6 +21,7 @@ module PackageManager
       ".svn",
     ].freeze
     PROXY_BASE_URL = "https://proxy.golang.org"
+    DISCOVER_URL = "https://pkg.go.dev"
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)/.freeze
 
@@ -30,11 +30,11 @@ module PackageManager
     end
 
     def self.package_link(project, version = nil)
-      "https://pkg.go.dev/#{project.name}#{"@#{version}" if version}"
+      "#{DISCOVER_URL}/#{project.name}#{"@#{version}" if version}"
     end
 
     def self.documentation_url(name, version = nil)
-      "https://pkg.go.dev/#{name}#{"@#{version}" if version}#section-documentation"
+      "#{DISCOVER_URL}/#{name}#{"@#{version}" if version}#section-documentation"
     end
 
     def self.install_instructions(project, _version = nil)
@@ -55,14 +55,21 @@ module PackageManager
 
     def self.one_version(name, version_string)
       info = get("#{PROXY_BASE_URL}/#{name}/@v/#{version_string}.info")
+
       # Store nil published_at for known Go Modules issue where case-insensitive name collisions break go get
       # e.g. https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
       version_string = info.nil? ? version_string : info["Version"]
       published_at = info && info["Time"].presence && Time.parse(info["Time"])
-      {
+      data = {
         number: version_string,
         published_at: published_at,
       }
+
+      # Supplement with license info from pkg.go.dev
+      doc_html = get_html("#{DISCOVER_URL}/#{name}")
+      data[:original_license] = doc_html.css('*[data-test-id="UnitHeader-license"]').map(&:text).join(",")
+
+      data
     end
 
     def self.update(name, sync_version: :all)
@@ -90,7 +97,7 @@ module PackageManager
     end
 
     def self.project(name)
-      if (doc_html = get_html("https://pkg.go.dev/#{name}"))
+      if (doc_html = get_html("#{DISCOVER_URL}/#{name}"))
         { name: name, html: doc_html, overview_html: doc_html }
       else
         { name: name }
@@ -103,7 +110,7 @@ module PackageManager
 
       known_versions = Project.find_by(platform: "Go", name: project[:name])
         &.versions
-        &.select(:number, :published_at, :created_at)
+        &.select(:number, :published_at, :created_at, :original_license)
         &.index_by(&:number) || {}
 
       # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
@@ -116,24 +123,26 @@ module PackageManager
         &.reject(&:blank?)
         &.map do |v|
           if known_versions.key?(v)
-            known_versions[v].slice(:number, :published_at)
+            known_versions[v].slice(:number, :published_at, :original_license)
           else
             one_version(project[:name], v)
           end
-        rescue Oj::ParseError
-          next
+      rescue Oj::ParseError
+        next
         end
         &.compact
     end
 
     def self.mapping(project)
       if project[:html]
+        url = project[:overview_html]&.css(".UnitMeta-repo a")&.first&.attribute("href")&.value
+
         {
           name: project[:name],
           description: project[:html].css(".Documentation-overview p").map(&:text).join("\n").strip,
           licenses: project[:html].css('*[data-test-id="UnitHeader-license"]').map(&:text).join(","),
-          repository_url: project[:overview_html]&.css(".UnitMeta-repo")&.first&.next_element&.attribute("href")&.value,
-          homepage: project[:overview_html]&.css(".UnitMeta-repo")&.first&.next_element&.attribute("href")&.value,
+          repository_url: url,
+          homepage: url,
         }
       else
         { name: project[:name] }
