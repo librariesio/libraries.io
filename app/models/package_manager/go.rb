@@ -110,7 +110,7 @@ module PackageManager
 
       known_versions = Project.find_by(platform: "Go", name: project[:name])
         &.versions
-        &.select(:number, :published_at, :created_at)
+        &.select(:number, :published_at, :created_at, :original_license)
         &.index_by(&:number) || {}
 
       # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
@@ -123,7 +123,7 @@ module PackageManager
         &.reject(&:blank?)
         &.map do |v|
           if known_versions.key?(v)
-            known_versions[v].slice(:number, :published_at, :original_version)
+            known_versions[v].slice(:number, :published_at, :original_license)
           else
             one_version(project[:name], v)
           end
@@ -135,12 +135,14 @@ module PackageManager
 
     def self.mapping(project)
       if project[:html]
+        url = project[:overview_html]&.css(".UnitMeta-repo a")&.first&.attribute("href")&.value
+
         {
           name: project[:name],
           description: project[:html].css(".Documentation-overview p").map(&:text).join("\n").strip,
           licenses: project[:html].css('*[data-test-id="UnitHeader-license"]').map(&:text).join(","),
-          repository_url: project[:overview_html]&.css(".UnitMeta-repo")&.first&.next_element&.attribute("href")&.value,
-          homepage: project[:overview_html]&.css(".UnitMeta-repo")&.first&.next_element&.attribute("href")&.value,
+          repository_url: url,
+          homepage: url,
         }
       else
         { name: project[:name] }

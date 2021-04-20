@@ -48,7 +48,6 @@ describe PackageManager::Go do
       VCR.use_cassette("pkg_go_dev") do
         project = described_class.project("github.com/urfave/cli")
         mapping = described_class.mapping(project)
-
         expect(mapping[:description].blank?).to be false
         expect(mapping[:repository_url].blank?).to be false
         expect(mapping[:homepage].blank?).to be false
@@ -83,6 +82,17 @@ describe PackageManager::Go do
       matches = name.match(described_class::VERSION_MODULE_REGEX)
 
       expect(matches).to be nil
+    end
+  end
+
+  describe "#one_version" do
+    it "should update an individual version" do
+      VCR.use_cassette("version_update") do
+        version = described_class.one_version("github.com/urfave/cli", "v1.22.1")
+        expect(version[:number]).to eq "v1.22.1"
+        expect(version[:original_license]).to eq "MIT"
+        expect(version[:published_at].strftime("%m/%d/%Y")).to eq "09/12/2019"
+      end
     end
   end
 
