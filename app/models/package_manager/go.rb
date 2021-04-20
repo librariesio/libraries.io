@@ -22,6 +22,7 @@ module PackageManager
     ].freeze
     PROXY_BASE_URL = "https://proxy.golang.org"
     DISCOVER_URL = "https://pkg.go.dev"
+    URL = DISCOVER_URL
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)/.freeze
 
