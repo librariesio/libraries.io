@@ -93,7 +93,7 @@ module PackageManager
       new_base_versions = module_project.versions.where.not(number: base_module_project.versions.pluck(:number))
 
       new_base_versions.each do |vers|
-        base_module_project.versions.create(number: vers.number, published_at: vers.published_at)
+        base_module_project.versions.create(number: vers.number, published_at: vers.published_at, original_license: vers.original_license)
       end
     end
 
