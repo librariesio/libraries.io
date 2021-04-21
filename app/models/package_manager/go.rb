@@ -123,7 +123,7 @@ module PackageManager
           known = known_versions[v]
 
           if known && known[:original_license].present?
-            known.slice(:number, :published_at, :original_license)
+            known.slice(:number, :created_at, :published_at, :original_license)
           else
             one_version(project[:name], v)
           end
