@@ -109,7 +109,7 @@ module PackageManager
       return [] if project.nil?
       return project[:versions] if project[:versions]
 
-      known_versions = Project.find_by(platform: "Go", name: project[:name])&.versions&.select(:number, :published_at, :updated_at, :original_license)&.index_by(&:number) || {}
+      known_versions = Project.find_by(platform: "Go", name: project[:name])&.versions&.select(:number, :created_at, :published_at, :updated_at, :original_license)&.index_by(&:number) || {}
 
       # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
       #   1) Fetch the list of versions: https://proxy.golang.org/#{module_name}/@v/list
