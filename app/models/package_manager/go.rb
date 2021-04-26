@@ -74,10 +74,12 @@ module PackageManager
     end
 
     def self.update(name, sync_version: :all)
-      super(name, sync_version: sync_version)
+      project = super(name, sync_version: sync_version)
       # call update on base module name if the name is appended with major version
       # example: github.com/myexample/modulename/v2
       update_base_module(name) if name.match(VERSION_MODULE_REGEX)
+
+      project
     end
 
     def self.update_base_module(name)
@@ -114,7 +116,6 @@ module PackageManager
       # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
       #   1) Fetch the list of versions: https://proxy.golang.org/#{module_name}/@v/list
       #   2) And for each version, fetch https://proxy.golang.org/#{module_name}/@v/#{v}.info
-
       get_raw("#{PROXY_BASE_URL}/#{project[:name]}/@v/list")
         &.lines
         &.map(&:strip)
