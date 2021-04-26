@@ -55,6 +55,19 @@ class PackageManagerDownloadWorker
   }.freeze
 
   def perform(platform_name, name, version = nil)
+    key, platform = get_platform(platform_name)
+    name = name.to_s.strip
+    version = version.to_s.strip
+    sync_version = (platform::SUPPORTS_SINGLE_VERSION_UPDATE && version.presence) || :all
+
+    logger.info("Package update for platform=#{key} name=#{name} version=#{version}")
+    project = platform.update(name, sync_version: sync_version)
+
+    # Raise exception if version was requested but not found
+    raise("PackageManagerDownloadWorker version update fail platform=#{key} name=#{name} version=#{version}") if version.present? && !Version.exists?(project: project, number: version)
+  end
+
+  def get_platform(platform_name)
     key = begin
       platform_name
         .gsub(/PackageManager::/, "")
@@ -65,18 +78,8 @@ class PackageManagerDownloadWorker
       nil
     end
 
-    platform = PLATFORMS[key]
-    name = name.to_s.strip
-    version = version.to_s.strip
-    raise "Platform '#{platform_name}' not found" unless platform
+    return key, PLATFORMS[key] if PLATFORMS.key?(key)
 
-    # need to maintain compatibility with things that pass in the name of the class under PackageManager module
-    if platform::SUPPORTS_SINGLE_VERSION_UPDATE && version.present?
-      logger.info("Version update for platform=#{key} name=#{name} version=#{version}")
-      platform.update(name, sync_version: version)
-    else
-      logger.info("Package update for platform=#{key} name=#{name}")
-      platform.update(name)
-    end
+    raise("Platform '#{platform_name}' not found")
   end
 end
