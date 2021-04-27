@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Project < ApplicationRecord
+  require "query_counter"
+
   include ProjectSearch
   include SourceRank
   include Status
@@ -509,9 +511,17 @@ class Project < ApplicationRecord
   def update_tags
     return unless repository
 
-    repository.download_tags
+    benchmark = nil
+
+    qcount = QueryCounter.count do
+      benchmark = Benchmark.measure do
+        repository.download_tags
+      end
+    end
+
+    Rails.logger.info("Project#update_tags platform=#{platform.downcase} name=#{name} qcount=#{qcount} benchmark:#{(benchmark.real * 1000).round(2)}ms")
   rescue StandardError => e
-    Rails.logger.error("Version#update_tags #{e.inspect}")
+    Rails.logger.error("Project#update_tags error #{e.inspect}")
     nil
   end
 
