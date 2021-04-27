@@ -27,7 +27,8 @@ module PackageManager
     end
 
     def self.project(name)
-      get("https://packagist.org/packages/#{name}.json")["package"]
+      get("https://packagist.org/packages/#{name}.json")
+        &.fetch("package")
     end
 
     def self.deprecation_info(name)
