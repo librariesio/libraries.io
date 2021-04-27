@@ -36,7 +36,7 @@ module PackageManager
 
       {
         is_deprecated: is_deprecated != "",
-        message: is_deprecated.is_a?(String) && is_deprecated.present? ? "Replacement: #{is_deprecated}"  : "",
+        message: is_deprecated.is_a?(String) && is_deprecated.present? ? "Replacement: #{is_deprecated}" : "",
       }
     end
 
@@ -59,17 +59,21 @@ module PackageManager
       }
     end
 
-    def self.versions(project, _name)
-      acceptable_versions(project).map do |k, v|
+    def self.versions(_project, name)
+      # TODO: Use composer v2 and unminify data https://packagist.org/apidoc
+      versions = get("https://repo.packagist.org/p/#{name}.json").dig("packages", name)
+
+      acceptable_versions(versions).map do |number, version|
         {
-          number: k,
-          published_at: v["time"],
+          number: number,
+          published_at: version["time"],
+          original_license: version["license"],
         }
       end
     end
 
-    def self.acceptable_versions(project)
-      project["versions"].select do |k, _v|
+    def self.acceptable_versions(versions)
+      versions.select do |k, _v|
         # See: https://getcomposer.org/doc/articles/versions.md#branches
         (k =~ /^dev-.*/i).nil? && (k =~ /\.x-dev$/i).nil?
       end
