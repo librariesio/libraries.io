@@ -1,0 +1,42 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://repo.packagist.org/p/synergitech/cronitor.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 27 Apr 2021 18:37:07 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '2046'
+      Last-Modified:
+      - Tue, 27 Apr 2021 16:52:05 GMT
+      Vary:
+      - Accept-Encoding
+    body:
+      encoding: ASCII-8BIT
+      string: '{"packages":{"synergitech/cronitor":{"dev-main":{"name":"synergitech/cronitor","description":"","keywords":[],"homepage":"","version":"dev-main","version_normalized":"dev-main","license":["MIT"],"authors":[{"name":"Josh
+        Grant","email":"josh@synergitech.co.uk"}],"source":{"type":"git","url":"https://github.com/SynergiTech/cronitor-php.git","reference":"529a473e1ad149e3214ceb5dd924b64fafe19232"},"dist":{"type":"zip","url":"https://api.github.com/repos/SynergiTech/cronitor-php/zipball/529a473e1ad149e3214ceb5dd924b64fafe19232","reference":"529a473e1ad149e3214ceb5dd924b64fafe19232","shasum":""},"type":"library","time":"2021-04-27T15:46:06+00:00","autoload":{"psr-4":{"SynergiTech\\Cronitor\\":"src/","SynergiTech\\Cronitor\\Tests\\":"tests/"}},"default-branch":true,"require":{"guzzlehttp/guzzle":"^7.3"},"require-dev":{"symplify/easy-coding-standard":"^9.2","phpunit/phpunit":"^9.5","phpstan/phpstan":"^0.12.84","php-parallel-lint/php-parallel-lint":"^1.3"},"suggest":{"synergitech/cronitor-laravel":"Allows
+        integration with Laravel"},"uid":5145371},"v0.0.1":{"name":"synergitech/cronitor","description":"","keywords":[],"homepage":"","version":"v0.0.1","version_normalized":"0.0.1.0","license":["MIT"],"authors":[{"name":"Josh
+        Grant","email":"josh@synergitech.co.uk"}],"source":{"type":"git","url":"https://github.com/SynergiTech/cronitor-php.git","reference":"529a473e1ad149e3214ceb5dd924b64fafe19232"},"dist":{"type":"zip","url":"https://api.github.com/repos/SynergiTech/cronitor-php/zipball/529a473e1ad149e3214ceb5dd924b64fafe19232","reference":"529a473e1ad149e3214ceb5dd924b64fafe19232","shasum":""},"type":"library","time":"2021-04-27T15:46:06+00:00","autoload":{"psr-4":{"SynergiTech\\Cronitor\\":"src/","SynergiTech\\Cronitor\\Tests\\":"tests/"}},"require":{"guzzlehttp/guzzle":"^7.3"},"require-dev":{"symplify/easy-coding-standard":"^9.2","phpunit/phpunit":"^9.5","phpstan/phpstan":"^0.12.84","php-parallel-lint/php-parallel-lint":"^1.3"},"suggest":{"synergitech/cronitor-laravel":"Allows
+        integration with Laravel"},"uid":5145370}}}}'
+    http_version: 
+  recorded_at: Tue, 27 Apr 2021 18:37:07 GMT
+recorded_with: VCR 4.0.0
