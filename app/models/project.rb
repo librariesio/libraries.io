@@ -506,6 +506,15 @@ class Project < ApplicationRecord
     end
   end
 
+  def update_tags
+    return unless repository
+
+    repository.download_tags
+  rescue StandardError => e
+    Rails.logger.error("Version#update_tags #{e.inspect}")
+    nil
+  end
+
   def subscribed_repos(user)
     subscriptions.with_repository_subscription.where("repository_subscriptions.user_id = ?", user.id).map(&:repository).uniq
   end
