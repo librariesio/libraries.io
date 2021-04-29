@@ -30,9 +30,12 @@ module PackageManager
       projects.map { |project| project["id"] }.sort.uniq
     end
 
-    def self.project(id)
+    def self.project(name)
       sleep 1
-      get("https://api.platformio.org/lib/info/#{id}")
+      # PlatformIO only takes its ids for project lookups, so we have to find it first.
+      if (db_project = Project.find_by(platform: "PlatformIO", name: name))
+        get("https://api.platformio.org/lib/info/#{db_project.pm_id}")
+      end
     end
 
     def self.mapping(project)
