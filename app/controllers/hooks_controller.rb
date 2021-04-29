@@ -15,6 +15,7 @@ class HooksController < ApplicationController
   end
 
   def package
+    Rails.logger.info "HooksController#package platform=#{params['platform']} name=#{params['name']} param_keys=#{params.keys.join(',')}"
     PackageManagerDownloadWorker.perform_async("PackageManager::#{params['platform']}", params["name"])
 
     render json: nil, status: :ok
