@@ -27,12 +27,12 @@ module PackageManager
       projects[name].merge({"name" => name})
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project["name"],
-        description: project["desc"],
-        repository_url: project.fetch("props", {}).try(:fetch, 'url', ''),
-        keywords_array: Array.wrap(project.fetch("props", {}).try(:fetch, 'keywords', []))
+        name: raw_project["name"],
+        description: raw_project["desc"],
+        repository_url: raw_project.fetch("props", {}).try(:fetch, 'url', ''),
+        keywords_array: Array.wrap(raw_project.fetch("props", {}).try(:fetch, 'keywords', []))
       }
     end
   end

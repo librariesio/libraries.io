@@ -40,13 +40,13 @@ module PackageManager
       }
     end
 
-    def self.mapping(project)
-      return nil unless project["versions"].any?
+    def self.mapping(raw_project)
+      return nil unless raw_project["versions"].any?
 
       # for version comparison of php, we want to reject any dev versions unless
       # there are only dev versions of the project
-      versions = project["versions"].values.reject { |v| v["version"].include? "dev" }
-      versions = project["versions"].values if versions.empty?
+      versions = raw_project["versions"].values.reject { |v| v["version"].include? "dev" }
+      versions = raw_project["versions"].values if versions.empty?
       # then we'll use the most recently published as our most recent version
       latest_version = versions.max_by { |v| v["time"] }
       {
@@ -55,11 +55,11 @@ module PackageManager
         homepage: latest_version["home_page"],
         keywords_array: Array.wrap(latest_version["keywords"]),
         licenses: latest_version["license"].join(","),
-        repository_url: repo_fallback(project["repository"], latest_version["home_page"]),
+        repository_url: repo_fallback(raw_project["repository"], latest_version["home_page"]),
       }
     end
 
-    def self.versions(_project, name)
+    def self.versions(_raw_project, name)
       # TODO: Use composer v2 and unminify data https://packagist.org/apidoc
       versions = get("https://repo.packagist.org/p/#{name}.json").dig("packages", name)
 

@@ -38,18 +38,18 @@ module PackageManager
       end
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project["name"],
-        description: project["summary"],
-        homepage: project["homepage"],
-        licenses: parse_license(project["license"]),
-        repository_url: repo_fallback(project.dig("source", "git"), ""),
+        name: raw_project["name"],
+        description: raw_project["summary"],
+        homepage: raw_project["homepage"],
+        licenses: parse_license(raw_project["license"]),
+        repository_url: repo_fallback(raw_project.dig("source", "git"), ""),
       }
     end
 
-    def self.versions(project, _name)
-      project.fetch("versions", {}).keys.map do |v|
+    def self.versions(raw_project, _name)
+      raw_project.fetch("versions", {}).keys.map do |v|
         {
           number: v.to_s,
         }

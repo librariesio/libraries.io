@@ -49,22 +49,22 @@ module PackageManager
       }
     end
 
-    def self.mapping(project)
-      return nil unless project["versions"].present?
+    def self.mapping(raw_project)
+      return nil unless raw_project["versions"].present?
 
-      latest_version = project["versions"].to_a.last[1]
+      latest_version = raw_project["versions"].to_a.last[1]
 
       repo = latest_version.fetch("repository", {})
       repo = repo[0] if repo.is_a?(Array)
       repo_url = repo.try(:fetch, "url", nil)
 
       {
-        name: project["name"],
+        name: raw_project["name"],
         description: latest_version["description"],
-        homepage: project["homepage"],
+        homepage: raw_project["homepage"],
         keywords_array: Array.wrap(latest_version.fetch("keywords", [])),
         licenses: licenses(latest_version),
-        repository_url: repo_fallback(repo_url, project["homepage"]),
+        repository_url: repo_fallback(repo_url, raw_project["homepage"]),
       }
     end
 
@@ -88,16 +88,16 @@ module PackageManager
       end
     end
 
-    def self.versions(project, _name)
+    def self.versions(raw_project, _name)
       # npm license fields are supposed to be SPDX expressions now https://docs.npmjs.com/files/package.json#license
-      return [] if project.nil?
-      project.fetch("versions", {}).map do |k, v|
+      return [] if raw_project.nil?
+      raw_project.fetch("versions", {}).map do |k, v|
         license = v.fetch("license", nil)
         license = licenses(v) unless license.is_a?(String)
         license = "" if license.nil?
         {
           number: k,
-          published_at: project.fetch("time", {}).fetch(k, nil),
+          published_at: raw_project.fetch("time", {}).fetch(k, nil),
           original_license: license,
         }
       end

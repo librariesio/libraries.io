@@ -28,11 +28,11 @@ module PackageManager
       projects[name.downcase]
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project["name"],
-        description: project["description"],
-        repository_url: project['url']
+        name: raw_project["name"],
+        description: raw_project["description"],
+        repository_url: raw_project['url']
       }
     end
   end

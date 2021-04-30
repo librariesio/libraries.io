@@ -36,15 +36,15 @@ module PackageManager
       get("http://package.elm-lang.org/packages/#{name}/latest/elm.json")
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project["name"],
-        description: project["summary"],
-        repository_url: "https://github.com/#{project['name']}",
+        name: raw_project["name"],
+        description: raw_project["summary"],
+        repository_url: "https://github.com/#{raw_project['name']}",
       }
     end
 
-    def self.versions(_project, name)
+    def self.versions(_raw_project, name)
       get("https://package.elm-lang.org/packages/#{name}/releases.json")
         .map do |version, timestamp|
           {

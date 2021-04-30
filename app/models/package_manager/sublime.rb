@@ -21,18 +21,18 @@ module PackageManager
         .then { |resp| resp.status == 200 ? Oj.load(resp.body) : nil }
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project["name"],
-        description: project["description"],
-        homepage: project["homepage"],
-        repository_url: repo_fallback(parse_repo(project["issues"]), project["homepage"]),
-        keywords_array: Array.wrap(project["labels"]),
+        name: raw_project["name"],
+        description: raw_project["description"],
+        homepage: raw_project["homepage"],
+        repository_url: repo_fallback(parse_repo(raw_project["issues"]), raw_project["homepage"]),
+        keywords_array: Array.wrap(raw_project["labels"]),
       }
     end
 
-    def self.versions(project, _name)
-      project["versions"].map do |v|
+    def self.versions(raw_project, _name)
+      raw_project["versions"].map do |v|
         {
           number: v["version"],
         }

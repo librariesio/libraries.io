@@ -24,20 +24,20 @@ module PackageManager
       get("http://code.dlang.org/packages/#{name}.json")
     end
 
-    def self.mapping(project)
-      latest_version = project["versions"].last
+    def self.mapping(raw_project)
+      latest_version = raw_project["versions"].last
       {
-        name: project["name"],
+        name: raw_project["name"],
         description: latest_version["description"],
         homepage: latest_version["homepage"],
-        keywords_array: format_keywords(project["categories"]),
+        keywords_array: format_keywords(raw_project["categories"]),
         licenses: latest_version["license"],
-        repository_url: repo_fallback(repository(project["repository"]), latest_version["homepage"]),
+        repository_url: repo_fallback(repository(raw_project["repository"]), latest_version["homepage"]),
       }
     end
 
-    def self.versions(project, _name)
-      acceptable_versions(project).map do |v|
+    def self.versions(raw_project, _name)
+      acceptable_versions(raw_project).map do |v|
         {
           number: v["version"],
           published_at: v["date"],

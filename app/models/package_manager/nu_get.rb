@@ -91,16 +91,16 @@ module PackageManager
       []
     end
 
-    def self.mapping(project)
-      item = project[:releases].last["catalogEntry"]
+    def self.mapping(raw_project)
+      item = raw_project[:releases].last["catalogEntry"]
 
       {
-        name: project[:name],
+        name: raw_project[:name],
         description: description(item),
         homepage: item["projectUrl"],
         keywords_array: Array(item["tags"]),
         repository_url: repo_fallback("", item["projectUrl"]),
-        releases: project[:releases],
+        releases: raw_project[:releases],
         licenses: item["licenseExpression"],
       }
     end
@@ -109,8 +109,8 @@ module PackageManager
       item["description"].blank? ? item["summary"] : item["description"]
     end
 
-    def self.versions(project, _name)
-      project[:releases].map do |item|
+    def self.versions(raw_project, _name)
+      raw_project[:releases].map do |item|
         license = [
           item.dig("catalogEntry", "licenseExpression"),
           item.dig("catalogEntry", "licenseUrl"),
