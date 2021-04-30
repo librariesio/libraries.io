@@ -55,7 +55,7 @@ module PackageManager
     end
 
     def self.one_version(raw_project, version_string)
-      info = get("#{PROXY_BASE_URL}/#{raw_project["name"]}/@v/#{version_string}.info")
+      info = get("#{PROXY_BASE_URL}/#{raw_project[:name]}/@v/#{version_string}.info")
 
       # Store nil published_at for known Go Modules issue where case-insensitive name collisions break go get
       # e.g. https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
@@ -67,7 +67,7 @@ module PackageManager
       }
 
       # Supplement with license info from pkg.go.dev
-      doc_html = get_html("#{DISCOVER_URL}/#{name}")
+      doc_html = get_html("#{DISCOVER_URL}/#{raw_project[:name]}")
       data[:original_license] = doc_html.css('*[data-test-id="UnitHeader-license"]').map(&:text).join(",")
 
       data
@@ -126,7 +126,7 @@ module PackageManager
           if known && known[:original_license].present?
             known.slice(:number, :created_at, :published_at, :original_license)
           else
-            one_version(project[:name], v)
+            one_version(project, v)
           end
       rescue Oj::ParseError
         next

@@ -88,8 +88,14 @@ describe PackageManager::Go do
 
   describe "#one_version" do
     it "should update an individual version" do
+      raw_project = nil
+
+      VCR.use_cassette("pkg_go_dev") do
+        raw_project = described_class.project(package_name)
+      end
+
       VCR.use_cassette("version_update") do
-        version = described_class.one_version(package_name, "v1.2.0")
+        version = described_class.one_version(raw_project, "v1.2.0")
         expect(version[:number]).to eq "v1.2.0"
         expect(version[:original_license]).to eq "MIT"
         expect(version[:published_at].strftime("%m/%d/%Y")).to eq "05/05/2018"
