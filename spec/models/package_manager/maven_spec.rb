@@ -160,8 +160,9 @@ describe PackageManager::Maven do
       allow(described_class)
         .to receive(:download_pom)
         .and_raise(PackageManager::Maven::POMNotFound.new("https://a-maven-central-url"))
+      raw_project = {name: "org.foo:bar"}
 
-      expect(PackageManager::Maven::MavenCentral.one_version("org.foo:bar", "1.0.0")). to eq(nil)
+      expect(PackageManager::Maven::MavenCentral.one_version(raw_project, "1.0.0")). to eq(nil)
     end
 
   end

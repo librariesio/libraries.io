@@ -14,6 +14,6 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven::Common
   end
 
   def self.one_version(raw_project, version_string)
-    retrieve_versions([version_string], raw_project["name"])&.first
+    retrieve_versions([version_string], raw_project[:name])&.first
   end
 end
