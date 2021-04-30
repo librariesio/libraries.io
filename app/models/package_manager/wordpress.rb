@@ -78,8 +78,8 @@ module PackageManager
       else
         [
           {
-            number: project["version"],
-            published_at: project["last_updated"],
+            number: raw_project["version"],
+            published_at: raw_project["last_updated"],
           }
         ]
       end
