@@ -54,8 +54,8 @@ module PackageManager
         .map { |line| JSON.parse(line)["Path"] }
     end
 
-    def self.one_version(name, version_string)
-      info = get("#{PROXY_BASE_URL}/#{name}/@v/#{version_string}.info")
+    def self.one_version(raw_project, version_string)
+      info = get("#{PROXY_BASE_URL}/#{raw_project["name"]}/@v/#{version_string}.info")
 
       # Store nil published_at for known Go Modules issue where case-insensitive name collisions break go get
       # e.g. https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
