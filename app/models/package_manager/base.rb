@@ -118,7 +118,7 @@ module PackageManager
             .each { |v| add_version(db_project, v) }
             .tap { |vs| deprecate_versions(db_project, vs) }
         else
-          add_version(db_project, one_version(db_project.name, sync_version))
+          add_version(db_project, one_version(raw_project, sync_version))
           # TODO: handle deprecation here too
         end
       end

@@ -13,7 +13,7 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven::Common
     get("https://maven.libraries.io/mavenCentral/recent")
   end
 
-  def self.one_version(name, version_string)
-    retrieve_versions([version_string], name)&.first
+  def self.one_version(raw_project, version_string)
+    retrieve_versions([version_string], raw_project[:name])&.first
   end
 end

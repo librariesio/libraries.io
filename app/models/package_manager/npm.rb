@@ -9,6 +9,7 @@ module PackageManager
     URL = "https://www.npmjs.com"
     COLOR = "#f1e05a"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
+    SUPPORTS_SINGLE_VERSION_UPDATE = true
 
     def self.package_link(project, _version = nil)
       "https://www.npmjs.com/package/#{project.name}"
@@ -100,6 +101,11 @@ module PackageManager
           original_license: license,
         }
       end
+    end
+
+    def self.one_version(raw_project, version_string)
+      versions(raw_project, raw_project["name"])
+        .find { |v| v[:number] == version_string }
     end
 
     def self.dependencies(_name, version, mapped_project)
