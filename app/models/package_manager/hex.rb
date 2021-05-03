@@ -53,7 +53,7 @@ module PackageManager
         homepage: links.except("github").first.try(:last),
         repository_url: links["github"],
         description: raw_project["meta"]["description"],
-        licenses: repo_fallback(project["meta"].fetch("licenses", []).join(","), links.except("github").first.try(:last)),
+        licenses: repo_fallback(raw_project["meta"].fetch("licenses", []).join(","), links.except("github").first.try(:last)),
       }
     end
 
