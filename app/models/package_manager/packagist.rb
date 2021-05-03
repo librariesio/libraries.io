@@ -61,7 +61,7 @@ module PackageManager
 
     def self.versions(_raw_project, name)
       # TODO: Use composer v2 and unminify data https://packagist.org/apidoc
-      versions = get("https://repo.packagist.org/p/#{name}.json").dig("packages", name)
+      versions = get("https://repo.packagist.org/p/#{name}.json")&.dig("packages", name) || []
 
       acceptable_versions(versions).map do |number, version|
         {
