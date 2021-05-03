@@ -20,10 +20,10 @@ module PackageManager
       get("https://crystal-shards-registry.herokuapp.com/api/v1/shards/#{name}")
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project["name"],
-        repository_url: repo_fallback(project["url"], nil)
+        name: raw_project["name"],
+        repository_url: repo_fallback(raw_project["url"], nil)
       }
     end
   end

@@ -47,21 +47,21 @@ module PackageManager
       { name: name, html: html, info: info }
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project[:name],
-        homepage: project[:info].fetch("URL:", "").split(",").first,
-        description: project[:html].css("h2").text.split(":")[1..-1].join(":").strip,
-        licenses: project[:info]["License:"],
-        repository_url: repo_fallback("", (project[:info].fetch("URL:", "").split(",").first.presence || project[:info]["BugReports:"])).to_s[0, 255],
+        name: raw_project[:name],
+        homepage: raw_project[:info].fetch("URL:", "").split(",").first,
+        description: raw_project[:html].css("h2").text.split(":")[1..-1].join(":").strip,
+        licenses: raw_project[:info]["License:"],
+        repository_url: repo_fallback("", (raw_project[:info].fetch("URL:", "").split(",").first.presence || raw_project[:info]["BugReports:"])).to_s[0, 255],
       }
     end
 
-    def self.versions(project, _name)
+    def self.versions(raw_project, _name)
       [{
-        number: project[:info]["Version:"],
-        published_at: project[:info]["Published:"],
-      }] + find_old_versions(project)
+        number: raw_project[:info]["Version:"],
+        published_at: raw_project[:info]["Published:"],
+      }] + find_old_versions(raw_project)
     end
 
     def self.find_old_versions(project)

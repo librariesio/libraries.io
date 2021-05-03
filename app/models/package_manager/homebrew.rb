@@ -30,19 +30,19 @@ module PackageManager
       get("https://formulae.brew.sh/api/formula/#{name}.json")
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project["name"],
-        description: project["desc"],
-        homepage: project["homepage"],
-        repository_url: repo_fallback("", project["homepage"]),
-        version: project.dig("versions", "stable"),
-        dependencies: project["dependencies"],
+        name: raw_project["name"],
+        description: raw_project["desc"],
+        homepage: raw_project["homepage"],
+        repository_url: repo_fallback("", raw_project["homepage"]),
+        version: raw_project.dig("versions", "stable"),
+        dependencies: raw_project["dependencies"],
       }
     end
 
-    def self.versions(project, _name)
-      stable = project.dig("versions", "stable")
+    def self.versions(raw_project, _name)
+      stable = raw_project.dig("versions", "stable")
       return [] if stable.blank?
 
       [

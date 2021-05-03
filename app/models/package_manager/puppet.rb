@@ -26,11 +26,11 @@ module PackageManager
       get_json("https://forgeapi.puppetlabs.com/v3/modules/#{name}")
     end
 
-    def self.mapping(project)
-      current_release = project["current_release"]
+    def self.mapping(raw_project)
+      current_release = raw_project["current_release"]
       metadata = current_release["metadata"]
       {
-        name: project["slug"],
+        name: raw_project["slug"],
         repository_url: metadata["source"],
         description: metadata["description"],
         keywords_array: current_release["tags"],
@@ -38,8 +38,8 @@ module PackageManager
       }
     end
 
-    def self.versions(project, _name)
-      project["releases"].map do |release|
+    def self.versions(raw_project, _name)
+      raw_project["releases"].map do |release|
         {
           number: release["version"],
           published_at: release["created_at"],

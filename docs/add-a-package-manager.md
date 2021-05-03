@@ -98,14 +98,14 @@ After getting the information about a package from the registry, we need to form
 Here's an example from [Cargo](../app/models/package_manager/cargo.rb):
 
 ```ruby
-def self.mapping(project)
+def self.mapping(raw_project)
   {
-    :name => project['crate']['id'],
-    :homepage => project['crate']['homepage'],
-    :description => project['crate']['description'],
-    :keywords_array => Array.wrap(project['crate']['keywords']),
-    :licenses => project['crate']['license'],
-    :repository_url => repo_fallback(project['crate']['repository'], project['crate']['homepage'])
+    :name => raw_project['crate']['id'],
+    :homepage => raw_project['crate']['homepage'],
+    :description => raw_project['crate']['description'],
+    :keywords_array => Array.wrap(raw_project['crate']['keywords']),
+    :licenses => raw_project['crate']['license'],
+    :repository_url => repo_fallback(raw_project['crate']['repository'], raw_project['crate']['homepage'])
   }
 end
 ```
@@ -123,13 +123,31 @@ This method takes the returned data from the `#project` method and should return
 Here's an example from [NuGet](../app/models/package_manager/nu_get.rb):
 
 ```ruby
-def self.versions(project, _name)
-  project[:releases].map do |item|
+def self.versions(raw_project, _name)
+  raw_project[:releases].map do |item|
     {
       number: item['catalogEntry']['version'],
       published_at: item['catalogEntry']['published']
     }
   end
+end
+```
+
+### `#one_version`
+
+For package managers that we can update using a single version instead of all versions.
+
+This method should take the returned data from the `#project` method and should return a single version, with the same data
+that `versions()` returns.
+
+```ruby
+def self.one_version(raw_project, version_string)
+  raw_project["versions"]
+    .find { |v| v["number"] == version_string }
+    .map do |item|
+      number: item["number"],
+      published_at: item["published"]
+    end
 end
 ```
 

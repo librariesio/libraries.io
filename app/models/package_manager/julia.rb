@@ -26,15 +26,15 @@ module PackageManager
       }
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project[:name],
-        repository_url: repo_fallback(project[:repository_url], ""),
+        name: raw_project[:name],
+        repository_url: repo_fallback(raw_project[:repository_url], ""),
       }
     end
 
-    def self.versions(project, _name)
-      project["versions"].map do |v|
+    def self.versions(raw_project, _name)
+      raw_project["versions"].map do |v|
         {
           number: v,
         }

@@ -41,14 +41,14 @@ module PackageManager
       end
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project[:full_name],
-        description: project[:description],
-        homepage: project[:homepage],
-        keywords_array: project[:topics],
-        licenses: (project.fetch(:license, {}) || {})[:key],
-        repository_url: project[:html_url]
+        name: raw_project[:full_name],
+        description: raw_project[:description],
+        homepage: raw_project[:homepage],
+        keywords_array: raw_project[:topics],
+        licenses: (raw_project.fetch(:license, {}) || {})[:key],
+        repository_url: raw_project[:html_url]
       }
     end
   end

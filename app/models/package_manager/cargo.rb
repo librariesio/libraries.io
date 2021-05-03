@@ -69,20 +69,20 @@ module PackageManager
       get("https://crates.io/api/v1/crates/#{name}")
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       latest_version = versions(project, nil).to_a.first
       {
-        name: project["crate"]["id"],
-        homepage: project["crate"]["homepage"],
-        description: project["crate"]["description"],
-        keywords_array: Array.wrap(project["crate"]["keywords"]),
+        name: raw_project["crate"]["id"],
+        homepage: raw_project["crate"]["homepage"],
+        description: raw_project["crate"]["description"],
+        keywords_array: Array.wrap(raw_project["crate"]["keywords"]),
         licenses: latest_version&.fetch(:original_license),
-        repository_url: repo_fallback(project["crate"]["repository"], project["crate"]["homepage"]),
+        repository_url: repo_fallback(raw_project["crate"]["repository"], raw_project["crate"]["homepage"]),
       }
     end
 
-    def self.versions(project, _name)
-      project["versions"].map do |version|
+    def self.versions(raw_project, _name)
+      raw_project["versions"].map do |version|
         {
           number: version["num"],
           published_at: version["created_at"],

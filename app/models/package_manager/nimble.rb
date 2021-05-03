@@ -30,14 +30,14 @@ module PackageManager
       projects[name.downcase]
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project["name"],
-        description: project["description"],
-        repository_url: repo_fallback(project['url'],project['web']),
-        keywords_array: Array.wrap(project["tags"]),
-        licenses: project['license'],
-        homepage: project['web']
+        name: raw_project["name"],
+        description: raw_project["description"],
+        repository_url: repo_fallback(raw_project['url'], raw_project['web']),
+        keywords_array: Array.wrap(raw_project["tags"]),
+        licenses: raw_project['license'],
+        homepage: raw_project['web']
       }
     end
   end

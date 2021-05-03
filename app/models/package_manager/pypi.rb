@@ -65,23 +65,23 @@ module PackageManager
       }
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project["info"]["name"],
-        description: project["info"]["summary"],
-        homepage: project["info"]["home_page"],
-        keywords_array: Array.wrap(project["info"]["keywords"].try(:split, /[\s.,]+/)),
-        licenses: licenses(project),
+        name: raw_project["info"]["name"],
+        description: raw_project["info"]["summary"],
+        homepage: raw_project["info"]["home_page"],
+        keywords_array: Array.wrap(raw_project["info"]["keywords"].try(:split, /[\s.,]+/)),
+        licenses: licenses(raw_project),
         repository_url: repo_fallback(
-          project.dig("info", "project_urls", "Source").presence || project.dig("info", "project_urls", "Source Code"),
-          project["info"]["home_page"].presence || project.dig("info", "project_urls", "Homepage")
+          raw_project.dig("info", "project_urls", "Source").presence || raw_project.dig("info", "project_urls", "Source Code"),
+          raw_project["info"]["home_page"].presence || raw_project.dig("info", "project_urls", "Homepage")
         ),
       }
     end
 
-    def self.versions(project, name)
-      return [] if project.nil?
-      project["releases"].reject { |_k, v| v == [] }.map do |k, v|
+    def self.versions(raw_project, name)
+      return [] if raw_project.nil?
+      raw_project["releases"].reject { |_k, v| v == [] }.map do |k, v|
         release = get("https://pypi.org/pypi/#{name}/#{k}/json")
         {
           number: k,

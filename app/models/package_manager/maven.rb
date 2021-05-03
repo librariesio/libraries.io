@@ -62,9 +62,9 @@ module PackageManager
       {}
     end
 
-    def self.mapping(project, depth = 0)
-      latest_version_xml = get_pom(project[:group_id], project[:artifact_id], project[:latest_version])
-      mapping_from_pom_xml(latest_version_xml, depth).merge({ name: project[:name] })
+    def self.mapping(raw_project, depth = 0)
+      latest_version_xml = get_pom(raw_project[:group_id], raw_project[:artifact_id], raw_project[:latest_version])
+      mapping_from_pom_xml(latest_version_xml, depth).merge({ name: raw_project[:name] })
     rescue POMNotFound => e
       Rails.logger.info "Missing POM: #{e.url}"
       nil
@@ -134,9 +134,9 @@ module PackageManager
       end
     end
 
-    def self.versions(project, name)
-      if project && project[:versions]
-        project[:versions]
+    def self.versions(raw_project, name)
+      if raw_project && raw_project[:versions]
+        raw_project[:versions]
       else
         xml_metadata = maven_metadata(name)
         xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)

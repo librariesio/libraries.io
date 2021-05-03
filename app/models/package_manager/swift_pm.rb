@@ -19,10 +19,10 @@ module PackageManager
       }
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project[:name],
-        repository_url: project[:repository_url]
+        name: raw_project[:name],
+        repository_url: raw_project[:repository_url]
       }
     end
   end

@@ -39,18 +39,18 @@ module PackageManager
       projects[name.downcase]
     end
 
-    def self.mapping(project)
+    def self.mapping(raw_project)
       {
-        name: project["name"],
-        description: project["description"],
-        repository_url: repo_fallback(project["git"], nil),
+        name: raw_project["name"],
+        description: raw_project["description"],
+        repository_url: repo_fallback(raw_project["git"], nil),
       }
     end
 
-    def self.versions(project, _name)
+    def self.versions(raw_project, _name)
       [{
-        number: project["version"],
-        published_at: Time.at(project["published"]["$date"] / 1000.0),
+        number: raw_project["version"],
+        published_at: Time.at(raw_project["published"]["$date"] / 1000.0),
       }]
     end
   end
