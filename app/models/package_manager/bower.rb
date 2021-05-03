@@ -34,7 +34,7 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      bower_json = load_bower_json(project) || raw_project
+      bower_json = load_bower_json(raw_project) || raw_project
       {
         name: raw_project["name"],
         repository_url: raw_project["url"],

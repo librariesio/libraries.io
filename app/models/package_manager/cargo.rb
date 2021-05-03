@@ -70,7 +70,7 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      latest_version = versions(project, nil).to_a.first
+      latest_version = versions(raw_project, nil).to_a.first
       {
         name: raw_project["crate"]["id"],
         homepage: raw_project["crate"]["homepage"],
