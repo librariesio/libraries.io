@@ -27,7 +27,7 @@ module PackageManager
         name: raw_project[:name],
         repository_url: raw_project[:page].at('a:contains("Code")')&.attributes.try(:[], "href")&.text,
         description: raw_project[:page].css('.jumbotron p')&.first&.children&.first&.text,
-        homepage: homepage_link(project[:page]).present? ? homepage_link(raw_project[:page]).attributes['href'].value : '',
+        homepage: homepage_link(raw_project[:page]).present? ? homepage_link(raw_project[:page]).attributes['href'].value : '',
         keywords_array: raw_project[:page].at('th:contains("Tags")').parent.css('a')&.map{|el| el.children.first.try(:text)}
       }
     end
