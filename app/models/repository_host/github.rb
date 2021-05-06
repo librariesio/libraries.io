@@ -197,7 +197,6 @@ module RepositoryHost
         next unless tag && tag.is_a?(Sawyer::Resource) && tag['ref']
         download_tag(token, tag, existing_tag_names)
       end
-      repository.projects.find_each(&:forced_save) if tags.present?
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end

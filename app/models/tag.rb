@@ -22,7 +22,6 @@ class Tag < ApplicationRecord
 
   def send_notifications
     if has_projects?
-      repository.download_tags rescue nil
       notify_subscribers
       notify_firehose
       notify_web_hooks
