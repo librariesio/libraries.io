@@ -12,7 +12,6 @@ describe Repository, type: :model do
   it { should have_many(:forked_repositories) }
   it { should have_many(:repository_subscriptions) }
   it { should have_many(:web_hooks) }
-  it { should have_many(:issues) }
   it { should have_one(:readme) }
   it { should belong_to(:repository_organisation) }
   it { should belong_to(:repository_user) }
