@@ -72,20 +72,6 @@ FactoryBot.define do
     published_at { 1.day.ago }
   end
 
-  factory :issue do
-    repository
-    sequence(:uuid)
-    sequence(:number)
-    state { "open" }
-    title { "I found a bug" }
-    body { "Please fix it" }
-    labels { ['help wanted', 'easy'] }
-    locked { false }
-    repository_user
-    comments_count { 1 }
-    host_type { 'GitHub' }
-  end
-
   factory :contribution do
     repository
     repository_user

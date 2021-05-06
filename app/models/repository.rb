@@ -86,10 +86,10 @@ class Repository < ApplicationRecord
 
   delegate :download_owner, :download_readme, :domain, :watchers_url, :forks_url,
            :download_fork_source, :download_tags, :download_contributions, :url,
-           :create_webhook, :download_issues, :download_forks, :stargazers_url,
+           :create_webhook, :download_forks, :stargazers_url,
            :formatted_host, :get_file_list, :get_file_contents, :issues_url,
            :source_url, :contributors_url, :blob_url, :raw_url, :commits_url,
-           :compare_url, :download_pull_requests, :retrieve_commits, :gather_maintenance_stats, to: :repository_host
+           :compare_url, :retrieve_commits, :gather_maintenance_stats, to: :repository_host
 
   def self.language(language)
     where('lower(repositories.language) = ?', language.try(:downcase))
