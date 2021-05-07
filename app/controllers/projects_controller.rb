@@ -34,14 +34,6 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def bus_factor
-    problem_repos(:bus_factor_search)
-  end
-
-  def unlicensed
-    problem_repos(:unlicensed_search)
-  end
-
   def deprecated
     project_scope(:deprecated)
   end
@@ -149,20 +141,6 @@ class ProjectsController < ApplicationController
       flash[:notice] = "Project has been queued to be resynced"
     end
     redirect_back fallback_location: project_path(@project.to_param)
-  end
-
-  def digital_infrastructure
-    orginal_scope = Project.digital_infrastructure
-    scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
-    @projects = scope.order('projects.dependent_repos_count DESC').paginate(page: page_number)
-    @platforms = orginal_scope.group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
-  end
-
-  def unseen_infrastructure
-    orginal_scope = Project.unsung_heroes
-    scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
-    @projects = scope.order('projects.dependent_repos_count DESC').paginate(page: page_number)
-    @platforms = orginal_scope.group('projects.platform').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(20)
   end
 
   def dependencies

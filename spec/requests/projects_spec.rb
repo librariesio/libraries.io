@@ -13,20 +13,6 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #bus_factor" do
-    it "responds successfully", type: :request do
-      visit bus_factor_path
-      expect(page).to have_content 'Bus Factor'
-    end
-
-    context "filtered by language" do
-      it "responds successfully", type: :request do
-        visit bus_factor_path(language: 'Ruby')
-        expect(page).to have_content 'Bus Factor'
-      end
-    end
-  end
-
   describe "GET #trending" do
     it "responds successfully", type: :request do
       visit trending_path
@@ -38,27 +24,6 @@ RSpec.describe ProjectsController do
         visit trending_path(platform: 'Rubygems')
         expect(page).to have_content 'Trending'
       end
-    end
-  end
-
-  describe "GET #digital_infrastructure" do
-    it "responds successfully", type: :request do
-      visit digital_infrastructure_path
-      expect(page).to have_content 'Digital Infrastructure'
-    end
-
-    context "filtered by platform" do
-      it "responds successfully" do
-        visit digital_infrastructure_path(platform: 'Rubygems')
-        expect(page).to have_content 'Digital Infrastructure'
-      end
-    end
-  end
-
-  describe "GET #unseen_infrastructure" do
-    it "responds successfully", type: :request do
-      visit unseen_infrastructure_path
-      expect(page).to have_content 'Unseen Infrastructure'
     end
   end
 

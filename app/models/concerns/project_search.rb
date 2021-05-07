@@ -82,48 +82,6 @@ module ProjectSearch
       end
     end
 
-    def self.cta_search(filters, options = {})
-      facet_limit = options.fetch(:facet_limit, 36)
-      options[:filters] ||= []
-      search_definition = {
-        query: {
-          filtered: {
-            query: { match_all: {} },
-            filter:{ bool: filters }
-          }
-        },
-        aggs: facets_options(facet_limit, options),
-        filter: { bool: { must: [] } },
-        sort: [{'contributions_count' => 'asc'}, {'rank' => 'desc'}]
-      }
-      search_definition[:filter][:bool][:must] = filter_format(options[:filters])
-      __elasticsearch__.search(search_definition)
-    end
-
-    def self.bus_factor_search(options = {})
-      cta_search({
-        must: [
-          { range: { contributions_count: { lte: 5, gte: 1 } } }
-        ],
-        must_not: [
-          { term: { "status" => "Hidden" } },
-          { term: { "status" => "Removed" } },
-          { term: { "status" => "Unmaintained" } }
-        ]
-      }, options)
-    end
-
-    def self.unlicensed_search(options = {})
-      cta_search({
-        must_not: [
-          { exists: { field: "normalized_licenses" } },
-          { term: { "status" => "Hidden" } },
-          { term: { "status" => "Removed" } },
-          { term: { "status" => "Unmaintained" } }
-        ]
-      }, options)
-    end
-
     def self.facets_options(facet_limit, options)
       {
         language: {
