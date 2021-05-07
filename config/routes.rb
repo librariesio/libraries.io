@@ -204,13 +204,8 @@ Rails.application.routes.draw do
   post "/auth/failure",             to: "sessions#failure"
 
   # experiments
-  get "/experiments", to: "pages#experiments", as: :experiments
-  get "/experiments/bus-factor", to: "projects#bus_factor", as: :bus_factor
-  get "/experiments/unseen-infrastructure", to: "projects#unseen_infrastructure", as: :unseen_infrastructure
-  get "/experiments/digital-infrastructure", to: "projects#digital_infrastructure", as: :digital_infrastructure
-  get "bus-factor", to: redirect("/experiments/bus-factor")
-  get "/unseen-infrastructure", to: redirect("/experiments/unseen-infrastructure")
-  get "/digital-infrastructure", to: redirect("/experiments/digital-infrastructure")
+  get "/experiments", to: redirect("/")
+  get "/experiments/*", to: redirect("/")
 
   # content
   get "/about", to: "pages#about", as: :about

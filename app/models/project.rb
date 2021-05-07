@@ -124,14 +124,6 @@ class Project < ApplicationRecord
                                      .where("projects.dependent_repos_count > ?", 10000)
                                  }
 
-  scope :bus_factor, lambda {
-                       maintained
-                         .joins(:repository)
-                         .where("repositories.contributions_count < 6")
-                         .where("repositories.contributions_count > 0")
-                         .where("repositories.stargazers_count > 0")
-                     }
-
   scope :hacker_news, -> { with_repo.where("repositories.stargazers_count > 0").order(Arel.sql("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC")) }
   scope :recently_created, -> { with_repo.where("repositories.created_at > ?", 2.weeks.ago) }
 
