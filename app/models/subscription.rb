@@ -10,6 +10,8 @@ class Subscription < ApplicationRecord
   scope :with_user, -> { joins(:user) }
   scope :with_repository_subscription, -> { joins(:repository_subscription) }
   scope :include_prereleases, -> { where(include_prerelease: true) }
+  scope :users_present, -> { where.not(user_id: nil) }
+  scope :users_nil, -> { where(user_id: nil) }
 
   def notification_user
     repository_subscription.try(:user) || user

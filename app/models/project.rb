@@ -60,6 +60,7 @@ class Project < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   has_many :project_suggestions, dependent: :delete_all
   has_many :registry_permissions, dependent: :delete_all
+  has_many :project_mutes, dependent: :delete_all
   has_many :registry_users, through: :registry_permissions
   has_one :readme, through: :repository
   has_many :repository_maintenance_stats, through: :repository

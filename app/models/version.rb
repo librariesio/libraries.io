@@ -59,15 +59,21 @@ class Version < ApplicationRecord
     project.try(:platform)
   end
 
-  def notify_subscribers
+  def mailing_list
     subscriptions = project.subscriptions
     subscriptions = subscriptions.include_prereleases if prerelease?
 
-    subscriptions.group_by(&:notification_user).each do |user, _user_subscriptions|
-      next if user.nil?
-      next if user.muted?(project)
-      next unless user.emails_enabled?
+    subs = subscriptions.includes(:user).users_present.where(users: {emails_enabled: true}).map(&:user)
+    subs += subscriptions.includes(repository_subscription: [:user]).users_nil.where(repository_subscriptions: { users: {emails_enabled: true }}).map { | sub| sub.repository_subscription&.user }
+    subs.compact!
 
+    mutes = project.project_mutes.pluck(:user_id).to_set
+    subs.reject { |sub| mutes.include?(sub.id) }
+  end
+
+  def notify_subscribers
+    mailing_list.each do |user|
+      next if user.muted?(project)
       VersionsMailer.new_version(user, project, self).deliver_later
     end
   end
