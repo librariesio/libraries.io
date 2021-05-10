@@ -45,16 +45,8 @@ class Tag < ApplicationRecord
   end
 
   def notify_subscribers
-    repository.projects.without_versions.each do |project|
-      subscriptions = project.subscriptions
-      subscriptions = subscriptions.include_prereleases if prerelease?
-
-      subscriptions.group_by(&:notification_user).each do |user, _user_subscriptions|
-        next if user.nil?
-        next if user.muted?(project)
-        next if !user.emails_enabled?
-        VersionsMailer.new_version(user, project, self).deliver_later
-      end
+    project.mailing_list(include_prereleases: prerelease?).each do |user|
+      VersionsMailer.new_version(user, project, self).deliver_later
     end
   end
 
