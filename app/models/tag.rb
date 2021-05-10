@@ -46,7 +46,6 @@ class Tag < ApplicationRecord
 
   def notify_subscribers
     project.mailing_list(include_prereleases: prerelease?).each do |user|
-      next if user.muted?(project)
       VersionsMailer.new_version(user, project, self).deliver_later
     end
   end
