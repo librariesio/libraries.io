@@ -284,4 +284,39 @@ describe Project, type: :model do
       expect(DeletedProject.count).to eq(0)
     end
   end
+  context "project_mailing_list" do
+    let(:repository) { create(:repository) }
+    let(:project) { create(:project, repository: repository) }
+
+    def create_sub(user)
+      Subscription.create(project: project, user: user)
+    end
+
+    def create_repo_sub(user)
+      repo_sub = RepositorySubscription.create(user: user, repository: repository)
+      Subscription.create(project: project, repository_subscription: repo_sub)
+    end
+
+    it "builds a version mailing list for notifications" do
+      create_sub(create(:user))
+      create_repo_sub(create(:user))
+      expect(project.mailing_list.count).to eq 2
+    end
+
+    it "doesn't email users with disabled emails" do
+      create_sub(create(:user))
+      create_sub(create(:user, emails_enabled: false))
+
+      expect(project.mailing_list.count).to eq 1
+    end
+
+    it "doesn't email users who muted project" do
+      mute_user = create(:user)
+      create_sub(mute_user)
+      create_sub(create(:user))
+      ProjectMute.create(project: project, user: mute_user)
+
+      expect(project.mailing_list.count).to eq 1
+    end
+  end
 end
