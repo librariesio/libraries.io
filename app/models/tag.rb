@@ -45,8 +45,10 @@ class Tag < ApplicationRecord
   end
 
   def notify_subscribers
-    project.mailing_list(include_prereleases: prerelease?).each do |user|
-      VersionsMailer.new_version(user, project, self).deliver_later
+    repository.projects.without_versions.each do |project|
+      project.mailing_list(include_prereleases: prerelease?).each do |user|
+        VersionsMailer.new_version(user, project, self).deliver_later
+      end
     end
   end
 
