@@ -112,10 +112,11 @@ module PackageManager
     end
 
     def self.known_versions(name)
-      Project.find_by(platform: "Pypi", name: name)
+      Project
+        .find_by(platform: "Pypi", name: name)
         &.versions
-        &.select(:number, :published_at, :original_license)
-        &.index_by(&:number) || {}
+        &.map { |v| v.slice(:number, :published_at, :original_license).symbolize_keys }
+        &.index_by { |v| v[:number] } || {}
     end
 
     def self.dependencies(name, version, _mapped_project)
