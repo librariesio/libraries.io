@@ -9,6 +9,7 @@ module PackageManager
     URL = "https://pypi.org/"
     COLOR = "#3572A5"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
+    SUPPORTS_SINGLE_VERSION_UPDATE = true
 
     def self.package_link(project, version = nil)
       "https://pypi.org/project/#{project.name}/#{version}"
@@ -50,14 +51,14 @@ module PackageManager
       last_version = p["releases"].values.last&.first
 
       is_deprecated, message = if last_version && last_version["yanked"] == true
-        # PEP-0423: newer way of deleting specific versions (https://www.python.org/dev/peps/pep-0592/)
-        [true, last_version["yanked_reason"]]
-      elsif p.fetch("info", {}).fetch("classifiers", []).include?("Development Status :: 7 - Inactive")
-        # PEP-0423: older way of renaming/deprecating a project (https://www.python.org/dev/peps/pep-0423/#how-to-rename-a-project)
-        [true, "Development Status :: 7 - Inactive"]
-      else
-        [false, nil]
-      end
+                                 # PEP-0423: newer way of deleting specific versions (https://www.python.org/dev/peps/pep-0592/)
+                                 [true, last_version["yanked_reason"]]
+                               elsif p.fetch("info", {}).fetch("classifiers", []).include?("Development Status :: 7 - Inactive")
+                                 # PEP-0423: older way of renaming/deprecating a project (https://www.python.org/dev/peps/pep-0423/#how-to-rename-a-project)
+                                 [true, "Development Status :: 7 - Inactive"]
+                               else
+                                 [false, nil]
+                               end
 
       {
         is_deprecated: is_deprecated,
@@ -81,14 +82,39 @@ module PackageManager
 
     def self.versions(raw_project, name)
       return [] if raw_project.nil?
+
+      known = known_versions(name)
+
       raw_project["releases"].reject { |_k, v| v == [] }.map do |k, v|
-        release = get("https://pypi.org/pypi/#{name}/#{k}/json")
-        {
-          number: k,
-          published_at: v[0]["upload_time"],
-          original_license: release.dig("info", "license"),
-        }
+        if known.key?(k)
+          known[k]
+        else
+          release = get("https://pypi.org/pypi/#{name}/#{k}/json")
+
+          {
+            number: k,
+            published_at: v[0]["upload_time"],
+            original_license: release.dig("info", "license"),
+          }
+        end
       end
+    end
+
+    def self.one_version(raw_project, version_string)
+      release = get("https://pypi.org/pypi/#{raw_project['info']['name']}/#{version_string}/json")
+
+      {
+        number: version_string,
+        published_at: release.dig("releases", version_string, 0, "upload_time"),
+        original_license: release.dig("info", "license"),
+      }
+    end
+
+    def self.known_versions(name)
+      Project.find_by(platform: "Pypi", name: name)
+        &.versions
+        &.select(:number, :published_at, :original_license)
+        &.index_by(&:number) || {}
     end
 
     def self.dependencies(name, version, _mapped_project)
@@ -101,7 +127,7 @@ module PackageManager
         name, version = dep.split
         {
           project_name: name,
-          requirements: (version.nil? || version == ";") ? "*": version.gsub(/\(|\)/,""),
+          requirements: version.nil? || version == ";" ? "*" : version.gsub(/\(|\)/, ""),
           kind: "runtime",
           optional: false,
           platform: self.name.demodulize,
