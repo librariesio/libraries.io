@@ -120,7 +120,7 @@ module PackageManager
         else
           version = one_version(raw_project, sync_version)
 
-          raise "#{db_platform} version #{sync_version} requested but not found" if version.nil?
+          raise "#{db_platform}/#{db_project.name} version #{sync_version} requested but not found" if version.nil?
 
           add_version(db_project, version)
           # TODO: handle deprecation here too
