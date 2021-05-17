@@ -102,6 +102,7 @@ module PackageManager
 
     def self.one_version(raw_project, version_string)
       release = get("https://pypi.org/pypi/#{raw_project['info']['name']}/#{version_string}/json")
+      return nil unless release.present?
 
       {
         number: version_string,
