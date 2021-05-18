@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 namespace :search do
   desc 'Reindex everything'
-  task reindex_everything: [:reindex_repos, :recreate_repos_index, :reindex_projects]
+  task reindex_everything: [:reindex_repos, :reindex_projects]
 
   desc 'Recreate repo search index'
   task recreate_repos_index: :environment do
