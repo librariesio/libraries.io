@@ -13,16 +13,20 @@ module PackageManager
     end
 
     def self.project_names
-      page = 1
       projects = []
+      size = 5000
+      time = '1m'
+      scroll_start_r = get("https://fastapi.metacpan.org/v1/release/_search?scroll=#{time}&size=#{size}&q=status:latest&fields=distribution")
+      projects += scroll_start_r["hits"]["hits"]
+      scroll_id = scroll_start_r['_scroll_id']
       loop do
-        r = get("https://fastapi.metacpan.org/v1/release/_search?q=status:latest&fields=distribution&sort=date:desc&size=5000&from=#{page * 5000}")["hits"]["hits"]
-        break if r == []
+        r = get("https://fastapi.metacpan.org/v1/_search/scroll?scroll=#{time}&scroll_id=#{scroll_id}")
+        break if r["hits"]["hits"] == []
 
-        projects += r
-        page += 1
+        projects += r["hits"]["hits"]
+        scroll_id = r['_scroll_id']
       end
-      projects.map { |project| project["fields"]["distribution"] }.uniq
+      projects.map { |project| project["fields"]["distribution"] }.flatten.uniq
     end
 
     def self.recent_names
