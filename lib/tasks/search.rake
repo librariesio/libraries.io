@@ -10,6 +10,11 @@ namespace :search do
     Repository.__elasticsearch__.create_index! force: true
   end
 
+  desc 'Reindex repositories'
+  task reindex_repos: [:environment, :recreate_repos_index] do
+    Repository.indexable.import
+  end
+
   desc 'Recreate the search index'
   task recreate_projects_index: :environment do
     # If the index doesn't exists can't be deleted, returns 404, carry on
