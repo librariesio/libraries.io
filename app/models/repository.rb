@@ -29,7 +29,6 @@ class Repository < ApplicationRecord
 
   has_many :repository_subscriptions, dependent: :delete_all
   has_many :web_hooks, dependent: :delete_all
-  has_many :issues, dependent: :delete_all
   has_one :readme, dependent: :delete
   belongs_to :repository_organisation
   belongs_to :repository_user

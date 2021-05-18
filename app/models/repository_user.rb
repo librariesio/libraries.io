@@ -17,8 +17,6 @@ class RepositoryUser < ApplicationRecord
   # eager load this module to avoid clashing with Gitlab gem in development
   RepositoryOwner::Gitlab
 
-  has_many :issues
-
   validate :login_uniqueness_with_case_insensitive_host, if: lambda { self.login_changed? }
   validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
   validates :uuid, presence: true
