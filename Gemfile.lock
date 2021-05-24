@@ -94,7 +94,7 @@ GEM
     ast (2.4.2)
     autoprefixer-rails (9.5.1.1)
       execjs
-    bibliothecary (6.9.7)
+    bibliothecary (6.12.2)
       commander
       deb_control
       librariesio-gem-parser
@@ -131,7 +131,7 @@ GEM
     citrus (3.0.2)
     cliver (0.3.2)
     coderay (1.1.2)
-    commander (4.5.2)
+    commander (4.6.0)
       highline (~> 2.0.0)
     commonmarker (0.20.1)
       ruby-enum (~> 0.5)
@@ -403,7 +403,7 @@ GEM
     org-ruby (0.9.12)
       rubypants (~> 0.2)
     os (1.1.1)
-    ox (2.14.1)
+    ox (2.14.4)
     parallel (1.17.0)
     parser (3.0.0.0)
       ast (~> 2.4.1)
@@ -611,9 +611,9 @@ GEM
       google-cloud-trace (~> 0.33)
     stackdriver-core (1.4.0)
       google-cloud-core (~> 1.2)
-    strings (0.2.0)
+    strings (0.2.1)
       strings-ansi (~> 0.2)
-      unicode-display_width (~> 1.5)
+      unicode-display_width (>= 1.5, < 3.0)
       unicode_utils (~> 1.4)
     strings-ansi (0.2.0)
     terminal-table (1.8.0)
@@ -661,7 +661,7 @@ DEPENDENCIES
   active_model_serializers
   api-pagination
   asciidoctor
-  bibliothecary
+  bibliothecary (~> 6.12.2)
   bitbucket_rest_api!
   bootsnap
   bootstrap-sass
