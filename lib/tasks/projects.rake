@@ -85,7 +85,7 @@ namespace :projects do
   desc 'Download missing packages'
   task download_missing: :environment do
     exit if ENV['READ_ONLY'].present?
-    ['Alcatraz', 'Atom', 'Bower', 'Cargo', 'Clojars', 'CocoaPods', 'CRAN',
+    ['Alcatraz', 'Bower', 'Cargo', 'Clojars', 'CocoaPods', 'CRAN',
       'Dub', 'Elm', 'Emacs', 'Hackage', 'Haxelib', 'Hex', 'Homebrew', 'Inqlude',
       'Julia', 'NPM', 'Packagist', 'Pypi', 'Rubygems'].each do |platform|
       "PackageManager::#{platform}".constantize.import_new_async rescue nil
