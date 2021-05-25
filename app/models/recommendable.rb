@@ -88,7 +88,6 @@ module Recommendable
       'Perl': 'CPAN',
       'Haskell': 'Hackage',
       'Rust': 'Cargo',
-      'Emacs Lisp': 'Emacs',
       'Dart': 'Pub',
       'Elm': 'Elm',
       'R': 'CRAN',

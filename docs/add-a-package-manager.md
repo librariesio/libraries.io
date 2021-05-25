@@ -353,9 +353,9 @@ Depending on the size, popularity and frequency of updates there are different t
 If there's a `#recent_names` method defined on the `PackageManager` class then Libraries.io can check for new updates frequently by calling `#import_recent_async` on the class, add a rake task that looks like this:
 
 ```ruby
-desc 'Download recent Wordpress packages asynchronously'
-task wordpress: :environment do
-  PackageManager::Wordpress.import_recent_async
+desc 'Download recent Rubygems packages asynchronously'
+task rubygems: :environment do
+  PackageManager::Rubygems.import_recent_async
 end
 ```
 
@@ -375,9 +375,9 @@ end
 For the initial import of all packages, add an `foobar_all` task which calls `#import_async`, this will be ran on a daily basis if there's no `#recent_names` method defined:
 
 ```ruby
-desc 'Download all Wordpress packages asynchronously'
-task wordpress_all: :environment do
-  PackageManager::Wordpress.import_async
+desc 'Download all Rubygems packages asynchronously'
+task rubygems_all: :environment do
+  PackageManager::Rubygems.import_async
 end
 ```
 

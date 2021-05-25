@@ -20,7 +20,6 @@ class PackageManagerDownloadWorker
     cran: PackageManager::CRAN,
     dub: PackageManager::Dub,
     elm: PackageManager::Elm,
-    emacs: PackageManager::Emacs,
     go: PackageManager::Go,
     hackage: PackageManager::Hackage,
     haxelib: PackageManager::Haxelib,
@@ -41,7 +40,6 @@ class PackageManagerDownloadWorker
     npm: PackageManager::NPM,
     nuget: PackageManager::NuGet,
     packagist: PackageManager::Packagist,
-    platformio: PackageManager::PlatformIO,
     pub: PackageManager::Pub,
     puppet: PackageManager::Puppet,
     purescript: PackageManager::PureScript,
@@ -51,7 +49,6 @@ class PackageManagerDownloadWorker
     shards: PackageManager::Shards,
     sublime: PackageManager::Sublime,
     swiftpm: PackageManager::SwiftPM,
-    wordpress: PackageManager::Wordpress,
   }.freeze
 
   def perform(platform_name, name, version = nil)
