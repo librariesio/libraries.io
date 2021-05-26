@@ -23,7 +23,7 @@ namespace :projects do
   desc 'Check status of projects'
   task check_status: :environment do
     exit if ENV['READ_ONLY'].present?
-    ['npm', 'rubygems', 'packagist', 'nuget', 'wordpress', 'cpan', 'clojars', 'cocoapods',
+    ['npm', 'rubygems', 'packagist', 'nuget', 'cpan', 'clojars', 'cocoapods',
     'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
       Project.platform(platform).not_removed.where('projects.updated_at < ?', 1.week.ago).select('id').find_each do |project|
         CheckStatusWorker.perform_async(project.id)
@@ -56,7 +56,7 @@ namespace :projects do
   desc 'Check to see if projects have been removed'
   task check_removed_status: :environment do
     exit if ENV['READ_ONLY'].present?
-    ['npm', 'rubygems', 'packagist', 'wordpress', 'cpan', 'clojars', 'cocoapods',
+    ['npm', 'rubygems', 'packagist', 'cpan', 'clojars', 'cocoapods',
     'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
       Project.platform(platform).removed.select('id').find_each do |project|
         CheckStatusWorker.perform_async(project.id, true)
@@ -86,7 +86,7 @@ namespace :projects do
   task download_missing: :environment do
     exit if ENV['READ_ONLY'].present?
     ['Alcatraz', 'Bower', 'Cargo', 'Clojars', 'CocoaPods', 'CRAN',
-      'Dub', 'Elm', 'Emacs', 'Hackage', 'Haxelib', 'Hex', 'Homebrew', 'Inqlude',
+      'Dub', 'Elm', 'Hackage', 'Haxelib', 'Hex', 'Homebrew', 'Inqlude',
       'Julia', 'NPM', 'Packagist', 'Pypi', 'Rubygems'].each do |platform|
       "PackageManager::#{platform}".constantize.import_new_async rescue nil
     end

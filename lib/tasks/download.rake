@@ -8,7 +8,7 @@ namespace :download do
   end
 
   desc "Download small registries all packages"
-  task small_registries: %i[emacs hackage inqlude]
+  task small_registries: %i[hackage inqlude]
 
   desc "Download Alcatraz packages asynchronously"
   task alcatraz: :environment do
@@ -98,11 +98,6 @@ namespace :download do
   desc "Download all Elm packages asynchronously"
   task elm_all: :environment do
     PackageManager::Elm.import_async
-  end
-
-  desc "Download all emacs packages asynchronously"
-  task emacs: :environment do
-    PackageManager::Emacs.import_async
   end
 
   desc "Download recent Hackage packages asynchronously"
@@ -206,11 +201,6 @@ namespace :download do
     PackageManager::Packagist.import_async
   end
 
-  desc "Download packages asynchronously"
-  task platformio: :environment do
-    PackageManager::PlatformIO.import_async
-  end
-
   desc "Download new PureScript packages asynchronously"
   task purescript: :environment do
     PackageManager::PureScript.import_new_async
@@ -256,14 +246,9 @@ namespace :download do
     PackageManager::SwiftPM.import
   end
 
-  desc "Download recent Wordpress packages asynchronously"
-  task wordpress: :environment do
-    PackageManager::Wordpress.import_recent_async
-  end
-
-  desc "Download all Wordpress packages asynchronously"
-  task wordpress_all: :environment do
-    PackageManager::Wordpress.import_async
+  desc "Download all Rubygems packages asynchronously"
+  task rubygems_all: :environment do
+    PackageManager::Rubygems.import_async
   end
 
   desc "Download new Go packages asynchronously"
