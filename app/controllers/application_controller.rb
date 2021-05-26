@@ -90,6 +90,10 @@ class ApplicationController < ActionController::Base
 
   def find_project
     @project = Project.find_best!(params[:platform], params[:name], [:repository, :versions])
+
+    # There could be projects in the db whose package managers have since been removed
+    raise ActiveRecord::RecordNotFound unless @project.platform_class_exists?
+
     @color = @project.color
 
     if @project.name != params[:name]

@@ -194,8 +194,7 @@
       Libraries.io dependencies belong to versions of a project, each version can have different sets of dependencies with different versions. Dependencies point at a specific version or range of versions of other projects, the resolution of that project version change over time as new versions are published and dependent on the specifics of the platform.
     </p>
     <p>
-      Almost all package managers dependencies will be from the same package manager, the only exception is Atom, which pulls its
-      dependencies from the NPM package manager, hence the extra `Dependency Platform` field.
+      Almost all package managers dependencies will be from the same package manager, although the extra `Dependency Platform` field exists otherwise.
     </p>
   </div>
   <ul class='list-group collapse' class='list-group' id='dependenciesFields'>
@@ -229,7 +228,7 @@
     </li>
     <li class='list-group-item'>
         <h5>Dependency Platform <em class='text-muted'>string</em></h5>
-        <p>The name of the package manager that the project that the dependency specifies is available from (only different for Atom).</p>
+        <p>The name of the package manager that the project that the dependency specifies is available from.</p>
     </li>
     <li class='list-group-item'>
         <h5>Dependency Kind <em class='text-muted'>string</em></h5>

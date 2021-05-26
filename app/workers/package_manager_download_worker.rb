@@ -6,7 +6,6 @@ class PackageManagerDownloadWorker
 
   PLATFORMS = {
     alcatraz: PackageManager::Alcatraz,
-    atom: PackageManager::Atom,
     biicode: PackageManager::Biicode,
     bower: PackageManager::Bower,
     cargo: PackageManager::Cargo,
@@ -27,7 +26,6 @@ class PackageManagerDownloadWorker
     hex: PackageManager::Hex,
     homebrew: PackageManager::Homebrew,
     inqlude: PackageManager::Inqlude,
-    jam: PackageManager::Jam,
     julia: PackageManager::Julia,
     maven: PackageManager::Maven,
     maven_atlassian: PackageManager::Maven::Atlassian,
@@ -48,8 +46,6 @@ class PackageManagerDownloadWorker
     pypi: PackageManager::Pypi,
     racket: PackageManager::Racket,
     rubygems: PackageManager::Rubygems,
-    shards: PackageManager::Shards,
-    sublime: PackageManager::Sublime,
     swiftpm: PackageManager::SwiftPM,
     wordpress: PackageManager::Wordpress,
   }.freeze
