@@ -238,6 +238,10 @@ class Project < ApplicationRecord
     "PackageManager::#{platform}".constantize
   end
 
+  def platform_class_exists?
+    Kernel.const_defined?("PackageManager::#{platform}")
+  end
+
   def platform_name
     platform_class.formatted_name
   end

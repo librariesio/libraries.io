@@ -8,21 +8,11 @@ namespace :download do
   end
 
   desc "Download small registries all packages"
-  task small_registries: %i[hackage sublime inqlude shards]
+  task small_registries: %i[hackage inqlude]
 
   desc "Download Alcatraz packages asynchronously"
   task alcatraz: :environment do
     PackageManager::Alcatraz.import_async
-  end
-
-  desc "Download recent Atom packages asynchronously"
-  task atom: :environment do
-    PackageManager::Atom.import_recent_async
-  end
-
-  desc "Download all Atom packages asynchronously"
-  task atom_all: :environment do
-    PackageManager::Atom.import_async
   end
 
   desc "Download new Bower packages asynchronously"
@@ -251,24 +241,9 @@ namespace :download do
     PackageManager::Rubygems.import_async
   end
 
-  desc "Download all Shards packages asynchronously"
-  task shards: :environment do
-    PackageManager::Shards.import_async
-  end
-
   desc "Download all SwiftPM packages"
   task swift: :environment do
     PackageManager::SwiftPM.import
-  end
-
-  desc "Download all Sublime packages asynchronously"
-  task sublime: :environment do
-    PackageManager::Sublime.import_async
-  end
-
-  desc "Download recent Rubygems packages asynchronously"
-  task rubygems: :environment do
-    PackageManager::Rubygems.import_recent_async
   end
 
   desc "Download all Rubygems packages asynchronously"
