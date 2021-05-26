@@ -43,8 +43,6 @@ Rails.application.routes.draw do
     get "/projects/updated", to: "projects#updated"
 
     scope constraints: { host_type: /(github|gitlab|bitbucket)/i }, defaults: { host_type: "github" } do
-      get "/:host_type/search", to: "repositories#search"
-
       get "/:host_type/:login/dependencies", to: "repository_users#dependencies"
       get "/:host_type/:login/project-contributions", to: "repository_users#project_contributions"
       get "/:host_type/:login/repository-contributions", to: "repository_users#repository_contributions"
@@ -156,7 +154,6 @@ Rails.application.routes.draw do
     post "/hooks/:host_type", to: "hooks#github"
 
     get "/:host_type/languages", to: "repositories#languages", as: :github_languages
-    get "/:host_type/search", to: "repositories#search", as: :github_search
     get "/:host_type/trending", to: "repositories#hacker_news", as: :trending
     get "/:host_type/new", to: "repositories#new", as: :new_repos
     get "/:host_type/organisations", to: "repository_organisations#index", as: :repository_organisations
@@ -188,7 +185,6 @@ Rails.application.routes.draw do
     get "/:host_type", to: "repositories#index", as: :hosts
   end
 
-  get "/repos/search", to: "repositories#search", as: :repo_search
   get "/repos", to: "repositories#index", as: :repos
 
   get "/search", to: "search#index"
