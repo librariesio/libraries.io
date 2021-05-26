@@ -1,7 +1,6 @@
 # Libraries.io &#128218;
 
 [![Build Status](https://travis-ci.org/librariesio/libraries.io.svg?branch=main)](https://travis-ci.org/librariesio/libraries.io)
-[![Slack chat](https://slack.libraries.io/badge.svg)](https://slack.libraries.io)
 [![Open Source Helpers](https://www.codetriage.com/librariesio/libraries.io/badges/users.svg)](https://www.codetriage.com/librariesio/libraries.io)
 
 Libraries.io helps developers find new open source libraries, modules and frameworks and keep track of ones they depend upon.
@@ -29,7 +28,7 @@ Many wonderful people have contributed to the project, you can see them all here
 ## Development
 
 Source hosted at [GitHub](https://github.com/librariesio/libraries.io).
-Report issues/feature requests on [GitHub Issues](https://github.com/librariesio/libraries.io/issues). Follow us on Twitter [@librariesio](https://twitter.com/librariesio). We also hangout on [Slack](https://slack.libraries.io).
+Report issues/feature requests on [GitHub Issues](https://github.com/librariesio/libraries.io/issues).
 
 ### Note on Patches/Pull Requests
 

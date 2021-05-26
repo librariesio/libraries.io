@@ -19,11 +19,6 @@ Thanks for considering contributing. These guidelines outline how to contribute 
 * [Your first contribution](#your-first-contribution)
 * [Tackling something meatier](#tackling-something-meatier)
 
-[How can I talk to other contributors?](#how-can-i-talk-to-other-contributors)
-* [Chat](#chat)
-* [Video](#video)
-* [Social media](#twitter)
-
 [Who Are Libraries.io's Users?](#who-are-librariesios-users)
 
 [Our workflow](#workflow)
@@ -109,39 +104,6 @@ To get you started you might want to check out issues concerning [documentation]
 * Our [strategy](/strategy.md) which outlines what our goals are, how we are going to achieve those goals and what we are specifically going to avoid.
 * An [overview](/overview.md) of the components that make up the Libraries.io project and run the [https://libraries.io](https://libraries.io) site.
 
-## How Can I Talk To Other Contributors?
-
-### Chat
-We use [Slack](http://slack.io) for chat. There's an open invitation available to anyone who wishes to join the conversation at [http://slack.libraries.io](http://slack.libraries.io).
-
-We try to use the following channels accordingly:
-
-* `#general` channel is used for general, water cooler-type conversation, contributor updates and issue discussion.
-* `#events` is used to share and discuss events that may be of interest to or attended by members of the community
-* `#activity` contains notifications from the various platforms that we use to keep the Libraries.io project turning. Including notifications from GitHub, Twitter and our servers.
-
-Members are encouraged to openly discuss their work, their lives, share views and ask for help using chat. It should be considered a *safe space* in which there is *no such thing as a stupid question*. Conversely no one contributor should ever be expected to have read something said in a chat. If someone should know something then it should be written down as an issue and/or documented in an obvious place for others to find.
-
-### Video
-[Google Hangouts](http://hangouts.google.com) is our preferred tool for video chat. We operate an [open hangout](http://bit.ly/2kWtYak) for anyone to jump into at any time to discuss issues face to face.
-
-### Regular updates
-Contributors are encouraged to share what they're working on. We do this through daily or weekly updates in the `#general` channel on Slack. Updates should take the format 'currently working on X, expecting to move onto Y, blocked on Z' where x, y and z are issues in our [issue tracker](https://github.com/search?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+org%3Alibrariesio).
-
-Additionally we host an [open hangout](http://bit.ly/2kWtYak) for any contributor to join at *5pm BST/GMT on a Tuesday* to discuss their work, the next week's priorities and to ask questions of other contributors regarding any aspect of the project. Again this is considered a *safe space* in which *there is no such thing as a stupid question*.
-
-### Mail
-The [core team](https://github.com/orgs/librariesio/teams/core) operate a mailing list for project updates. If you'd like to subscribe you'll find a form in the footer on [Libraries.io](http://libraries.io).
-
-### Twitter
-We have an account on Twitter at [@librariesio](http://twitter.com/librariesio). This is predominately used to retweet news, events and musings by contributors rather than as a direct method of communication. Contributors are encouraged to use @librariesio in a tweet when talking about the project, so that we may retweet if appropriate. The account is moderated and protected by the [core team](https://github.com/orgs/librariesio/teams/core).
-
-### Facebook
-We have a Facebook page at [@libraries.io](https://www.facebook.com/libraries.io). Again this is predominantly used to gather and reflect news, events and musings by contributors rather than as a direct method of communication. Contributors are encouraged to reference Libraries.io in a post when talking about the project, so that we may reflect this if appropriate. Again the account is moderated and protected by the [core team](https://github.com/orgs/librariesio/teams/core).
-
-### Medium
-We have a Medium account at [@librariesio](https://medium.com/@librariesio) and once again it is used to reflect news, events and musings by contributors rather than a direct method of communication. Contributors are encouraged to reference @librariesio in a post when talking about the project, so that we may recommend it if appropriate. Again the account is moderated and protected by the [core team](https://github.com/orgs/librariesio/teams/core).
-
 ## Who Are Libraries.io's Users?
 Libraries.io focusses on the following personas:
 
@@ -191,6 +153,3 @@ We appreciate that it may be difficult to offer constructive criticism, but it i
 
 #### Merging
 As we keep the `main` branch in a permanent state of 'deployment ready' once-merged your contribution will be live on the next deployment.
-
-#### Deploying
-Any member of the [deployers](https://github.com/orgs/librariesio/teams/deployers) team are able to redeploy the site. If you require a deployment then you might find one of them in our `#general` [chat channel on Slack](slack.libraries.io).
