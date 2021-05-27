@@ -102,11 +102,7 @@
         <% unless on_homepage? && !logged_in? %>
           <ul class="nav navbar-nav navbar-left">
             <li class=' <%= 'hidden-xs' if on_search_page %>'>
-              <% if current_host.present? || request.original_fullpath =~ /^\/repos/i %>
-                <%= render 'repositories/search_form' %>
-              <% else %>
-                <%= render 'projects/search_form' %>
-              <% end %>
+              <%= render 'projects/search_form' %>
             </li>
           </ul>
         <% end %>
