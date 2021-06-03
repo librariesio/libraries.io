@@ -60,10 +60,8 @@ class PackageManagerDownloadWorker
 
     # Raise/log if version was requested but not found
     if version.present? && !Version.exists?(project: project, number: version)
-      details = "platform=#{key} name=#{name} version=#{version}"
-
-      Rails.logger.info(details)
-      raise VersionUpdateFailure, details
+      Rails.logger.info("[Version Update Failure] platform=#{key} name=#{name} version=#{version}")
+      raise VersionUpdateFailure
     end
   end
 
