@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PackageManagerDownloadWorker
+  class VersionUpdateFailure < StandardError; end
+
   include Sidekiq::Worker
   sidekiq_options queue: :critical
 
@@ -56,8 +58,11 @@ class PackageManagerDownloadWorker
     logger.info("Package update for platform=#{key} name=#{name} version=#{version}")
     project = platform.update(name, sync_version: sync_version)
 
-    # Raise exception if version was requested but not found
-    raise("PackageManagerDownloadWorker version update fail platform=#{key} name=#{name} version=#{version}") if version.present? && !Version.exists?(project: project, number: version)
+    # Raise/log if version was requested but not found
+    if version.present? && !Version.exists?(project: project, number: version)
+      Rails.logger.info("[Version Update Failure] platform=#{key} name=#{name} version=#{version}")
+      raise VersionUpdateFailure
+    end
   end
 
   def get_platform(platform_name)

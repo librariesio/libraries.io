@@ -18,8 +18,8 @@ describe PackageManagerDownloadWorker do
 
   it "should raise an error if version requested didn't get created" do
     expect(PackageManager::Go).to receive(:update).with("github.com/hi/ima.package", sync_version: "1.2.3")
+    expect(Rails.logger).to receive(:info).with("[Version Update Failure] platform=go name=github.com/hi/ima.package version=1.2.3")
 
-    expected_msg = "PackageManagerDownloadWorker version update fail platform=go name=github.com/hi/ima.package version=1.2.3"
-    expect { subject.perform("go", "github.com/hi/ima.package", "1.2.3") }.to raise_exception(StandardError, expected_msg)
+    expect { subject.perform("go", "github.com/hi/ima.package", "1.2.3") }.to raise_exception(PackageManagerDownloadWorker::VersionUpdateFailure)
   end
 end
