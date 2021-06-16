@@ -117,11 +117,7 @@ module PackageManager
           versions(raw_project, db_project.name)
             .each { |v| add_version(db_project, v) }
             .tap { |vs| deprecate_versions(db_project, vs) }
-        else
-          version = one_version(raw_project, sync_version)
-
-          raise "#{db_platform}/#{db_project.name} version #{sync_version} requested but not found" if version.nil?
-
+        elsif (version = one_version(raw_project, sync_version))
           add_version(db_project, version)
           # TODO: handle deprecation here too
         end
