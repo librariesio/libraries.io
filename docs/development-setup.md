@@ -17,22 +17,46 @@ rbenv install 2.6.5
 Next, you'll need to make sure that you have PostgreSQL, Elasticsearch 2.4 and Redis installed. This can be done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or postgres can be installed by using [http://postgresapp.com](http://postgresapp.com). Please also see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
 
 ```bash
-brew cask install phantomjs homebrew/cask-versions/adoptopenjdk8
-brew install postgres elasticsearch@2.4 redis icu4c cmake
+brew install --cask phantomjs homebrew/cask-versions/adoptopenjdk8
+brew install postgres redis icu4c cmake
 ```
+
+Since this repo uses an old version of Elasticsearch, it is no longer supported on Homebrew. You can use the ElasticSearch
+2.4.5 container from Dockerhub, but the image won't work on Apple M1 chipped machines. You can download the
+ElasticSearch 2.4.5 zip file from https://www.elastic.co/downloads/past-releases/elasticsearch-2-4-5, and unpack it
+to your local directory.
 
 Remember to start the services!
 
 ```bash
-brew services start elasticsearch@2.4
 brew services start redis
 brew services start postgresql
 ```
+
+If you obtained ElasticSearch from the zip file, go into the local ElasticSearch directory and run `bin/elasticsearch`
+to start up ElasticSearch. When developing in the repo and you encounter Faraday timeouts on updates, you may need
+to restart your local ElasticSearch cluster.
 
 On Debian-based Linux distributions you can use apt-get to install Postgres:
 
 ```bash
 sudo apt-get install postgresql postgresql-contrib libpq-dev libicu-dev
+```
+
+If you are using a Docker container for Postgres, you'll need to edit the `config/database.yml`
+file with values found from the `docker-compose.yml` file in order for the app to connect to the db container. 
+Something like this in the default section: 
+```yaml
+  username: <%= ENV["PG_USERNAME"] || "<username from the dockerfile>" %>
+  password: <password from the dockerfile>
+  host: localhost
+  port: 5432
+```
+When attempting to connect to the database or run a migration and you get authentication errors,
+you may need to go inside the container, obtain a psql shell, and manually create the superuser specified in the
+config file: 
+```postgresql
+create user <username> with password '<password>' superuser createdb;
 ```
 
 Now, let's install the gems from the `Gemfile` ("Gems" are synonymous with libraries in other
@@ -58,6 +82,7 @@ Go create a [Personal access token on GitHub](https://help.github.com/articles/c
  irb> PackageManager::NPM.update "pictogram"
  irb> PackageManager::Rubygems.update "split"
  irb> PackageManager::Bower.update "sbteclipse"
+ irb> PackageManager::Maven.update "junit:junit"
  irb> Repository.create_from_host("github", "librariesio/bibliothecary")
 ```
 
@@ -77,6 +102,12 @@ It is normal to see:
 
 If you are working on anything related to the email-generation code, you can use [MailCatcher](https://github.com/sj26/mailcatcher).
 Since we use Bundler, please read the [following](https://github.com/sj26/mailcatcher#bundler) before using MailCatcher.
+
+You may also need to install the `thin` gem as a prerequisite to installing Mailcatcher:
+```ruby
+gem install thin -v 1.5.1 -- --with-cflags="-Wno-error=implicit-function-declaration"
+gem install mailcatcher
+```
 
 Almost there! Now all we have to do is start up the Rails server and point
 our browser to <http://localhost:3000>
