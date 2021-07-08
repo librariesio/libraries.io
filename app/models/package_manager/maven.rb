@@ -13,6 +13,7 @@ module PackageManager
     LICENSE_STRINGS = {
       "http://www.apache.org/licenses/LICENSE-2.0" => "Apache-2.0",
       "http://www.eclipse.org/legal/epl-v10" => "Eclipse Public License (EPL), Version 1.0",
+      "http://www.eclipse.org/legal/epl-2.0" => "Eclipse Public License (EPL), Version 2.0",
       "http://www.eclipse.org/org/documents/edl-v10" => "Eclipse Distribution License (EDL), Version 1.0",
     }.freeze
     NAME_DELIMITER = ":"
@@ -29,6 +30,7 @@ module PackageManager
 
     class POMNotFound < StandardError
       attr_reader :url
+
       def initialize(url)
         @url = url
         super("Missing POM: #{@url}")
@@ -145,6 +147,8 @@ module PackageManager
     end
 
     def self.retrieve_versions(versions, name)
+      # TODO: This should also look for the parent POM and if it exists + the child POM
+      # is missing license data, use the data from the parent POM
       versions
         .map do |version|
           pom = get_pom(*name.split(NAME_DELIMITER, 2), version)
@@ -167,7 +171,7 @@ module PackageManager
     def self.download_pom(group_id, artifact_id, version)
       url = MavenUrl.new(group_id, artifact_id, repository_base).pom(version)
       pom_request = request(url)
-      raise POMNotFound.new(url) if pom_request.status == 404
+      raise POMNotFound, url if pom_request.status == 404
 
       xml = Ox.parse(pom_request.body)
       published_at = pom_request.headers["Last-Modified"]
