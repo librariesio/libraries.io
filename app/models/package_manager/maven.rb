@@ -157,6 +157,12 @@ module PackageManager
           rescue StandardError
             license_list = nil
           end
+
+          if license_list.blank? && pom.respond_to?("project") && pom.project.locate("parent").present?
+            parent_version = extract_pom_value(pom.project, "parent/version")
+            Rails.logger.info("[POM has parent no license] name=#{name} parent_version=#{parent_version} child_version=#{version}")
+          end
+
           {
             number: version,
             published_at: Time.parse(pom.locate("publishedAt").first.text),
