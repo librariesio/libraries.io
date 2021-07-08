@@ -202,7 +202,7 @@ describe PackageManager::Maven do
     end
   end
 
-  describe "retrieve_versions" do
+  describe ".retrieve_versions" do
     context "POM has a parent" do
       let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read) }
 
