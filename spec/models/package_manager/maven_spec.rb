@@ -108,7 +108,7 @@ describe PackageManager::Maven do
       it "should return nil" do
         allow(described_class).to receive(:download_pom).and_raise(PackageManager::Maven::POMNotFound.new("https://a-spring-url"))
 
-        expect(described_class.mapping({group_id: "org", artifact_id: "foo", version: "1.0.0"})).to eq(nil)
+        expect(described_class.mapping({ group_id: "org", artifact_id: "foo", version: "1.0.0" })).to eq(nil)
       end
     end
   end
@@ -160,11 +160,10 @@ describe PackageManager::Maven do
       allow(described_class)
         .to receive(:download_pom)
         .and_raise(PackageManager::Maven::POMNotFound.new("https://a-maven-central-url"))
-      raw_project = {name: "org.foo:bar"}
+      raw_project = { name: "org.foo:bar" }
 
-      expect(PackageManager::Maven::MavenCentral.one_version(raw_project, "1.0.0")). to eq(nil)
+      expect(PackageManager::Maven::MavenCentral.one_version(raw_project, "1.0.0")).to eq(nil)
     end
-
   end
 
   describe ".versions" do
@@ -175,31 +174,61 @@ describe PackageManager::Maven do
 
       project = described_class.project("javax.faces:javax.faces-api")
       expect(described_class.versions(project, "javax.faces:javax.faces-api")).to eq([
-        { number: "2.3", published_at: "2019-06-05T10:50:00Z" }
+        { number: "2.3", published_at: "2019-06-05T10:50:00Z" },
       ])
     end
 
     it "skips versions that can't be parsed" do
       expect(described_class)
         .to receive(:get_raw)
-          .with("https://repo1.maven.org/maven2/com/google/api/grpc/proto-google-common-protos/maven-metadata.xml")
-          .and_return(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read)
+        .with("https://repo1.maven.org/maven2/com/google/api/grpc/proto-google-common-protos/maven-metadata.xml")
+        .and_return(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read)
       allow(described_class)
         .to receive(:get_pom)
-          .with("com.google.api.grpc", "proto-google-common-protos", "0.1.9")
-          .and_raise(Ox::ParseError.new(""))
+        .with("com.google.api.grpc", "proto-google-common-protos", "0.1.9")
+        .and_raise(Ox::ParseError.new(""))
 
       # TODO: these are probably bugs... it's using the version 3.2.0/etc of a depdendency and looking that up on itself
       allow(described_class)
         .to receive(:get_pom)
-          .with("com.google.api.grpc", "proto-google-common-protos", "3.2.0")
-          .and_raise(Ox::ParseError.new(""))
+        .with("com.google.api.grpc", "proto-google-common-protos", "3.2.0")
+        .and_raise(Ox::ParseError.new(""))
       allow(described_class)
         .to receive(:get_pom)
-          .with("com.google.api.grpc", "proto-google-common-protos", "${api.version}")
-          .and_raise(Ox::ParseError.new(""))
+        .with("com.google.api.grpc", "proto-google-common-protos", "${api.version}")
+        .and_raise(Ox::ParseError.new(""))
 
       expect(described_class.versions(nil, "com.google.api.grpc:proto-google-common-protos")).to eq([])
+    end
+  end
+
+  describe ".retrieve_versions" do
+    context "POM has a parent" do
+      let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read) }
+
+      before do
+        allow(described_class).to receive(:get_pom).and_return(pom)
+      end
+
+      context "POM has a license" do
+        it "does not log a message" do
+          expect(Rails.logger).to_not receive(:info)
+
+          described_class.retrieve_versions(["0.1.9"], "com.google.api.grpc:proto-google-common-protos")
+        end
+      end
+
+      context "POM has no license" do
+        before do
+          allow(described_class).to receive(:licenses).and_return([])
+        end
+
+        it "does logs a message" do
+          expect(Rails.logger).to receive(:info).with("[POM has parent no license] name=com.google.api.grpc:proto-google-common-protos parent_version=0.1.9 child_version=0.1.9")
+
+          described_class.retrieve_versions(["0.1.9"], "com.google.api.grpc:proto-google-common-protos")
+        end
+      end
     end
   end
 
@@ -361,8 +390,8 @@ describe PackageManager::Maven do
       it "returns the latest version" do
         expect(described_class)
           .to receive(:get_raw)
-            .with("https://repo1.maven.org/maven2/com/tidelift/test/maven-metadata.xml")
-            .and_return(File.open("spec/fixtures/tidelift-maven_metadata.xml").read)
+          .with("https://repo1.maven.org/maven2/com/tidelift/test/maven-metadata.xml")
+          .and_return(File.open("spec/fixtures/tidelift-maven_metadata.xml").read)
 
         expect(described_class.latest_version("com.tidelift:test")).to eq("1.0.5")
       end
