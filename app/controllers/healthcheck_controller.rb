@@ -2,6 +2,6 @@
 
 class HealthcheckController < ApplicationController
   def index
-    render plain: "OK"
+    render plain: "OK\nRevision: #{Rails.application.config.git_revision}"
   end
 end
