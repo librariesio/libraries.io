@@ -166,6 +166,8 @@ class Project < ApplicationRecord
   end
 
   def async_sync
+    return unless platform_class_exists?
+
     sync_classes.each { |sync_class| PackageManagerDownloadWorker.perform_async(sync_class.name, name) }
     CheckStatusWorker.perform_async(id, status == "Removed")
   end
