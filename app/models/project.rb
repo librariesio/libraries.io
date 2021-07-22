@@ -249,7 +249,7 @@ class Project < ApplicationRecord
   end
 
   def color
-    Linguist::Language[language].try(:color) || platform_class.try(:color)
+    Linguist::Language[language].try(:color) || (platform_class_exists? && platform_class.try(:color))
   end
 
   def mlt
