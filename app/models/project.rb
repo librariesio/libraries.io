@@ -672,9 +672,15 @@ class Project < ApplicationRecord
       .sub(/\)$/, "")
       .split("or")
       .flat_map { |l| l.split("and") }
+      .map { |l| manual_license_format(l) }
       .flat_map { |l| l.split(/[,\/]/) }
       .map(&Spdx.method(:find))
       .compact
       .map(&:id)
+  end
+
+  def manual_license_format(license)
+    # fixes "Apache License, Version 2.0" being incorrectly split on the comma
+    license.gsub("apache license, version", "apache license version")
   end
 end

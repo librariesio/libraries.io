@@ -106,6 +106,13 @@ describe Project, type: :model do
       project.normalize_licenses
       expect(project.normalized_licenses).to eq(["Apache-2.0"])
     end
+
+    it "handles special case Apache License, Version 2.0" do
+      project.licenses = "Apache License, Version 2.0"
+      project.normalize_licenses
+      expect(project.normalized_licenses).to eq(["Apache-2.0"])
+      expect(project.license_normalized).to be_truthy
+    end
   end
 
   describe 'maintenance stats' do
