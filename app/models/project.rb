@@ -681,6 +681,8 @@ class Project < ApplicationRecord
 
   def manual_license_format(license)
     # fixes "Apache License, Version 2.0" being incorrectly split on the comma
-    license.gsub("apache license, version", "apache license version")
+    license
+      .gsub("apache license, version", "apache license version")
+      .gsub("apache software license, version", "apache software license version")
   end
 end
