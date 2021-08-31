@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module PackageManager
-  class Packagist < Base
+  class Packagist < MultipleSourcesBase
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
@@ -9,6 +9,14 @@ module PackageManager
     URL = "https://packagist.org"
     COLOR = "#4F5D95"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
+
+    def self.formatted_name
+      "packagist"
+    end
+
+    def self.db_platform
+      "Packagist"
+    end
 
     def self.package_link(project, version = nil)
       "https://packagist.org/packages/#{project.name}##{version}"
