@@ -17,6 +17,16 @@ describe PackageManager::Packagist do
     it "handles version" do
       expect(described_class.package_link(project, "2.0.0")).to eq("https://packagist.org/packages/foo#2.0.0")
     end
+
+    context "with drupal provider" do
+      let(:project) { create(:project, name: "drupal/foo", platform: described_class.formatted_name) }
+
+      let!(:version) { create(:version, project: project, repository_sources: ["Drupal"], number: "8.x-1.1") }
+
+      it "handles version" do
+        expect(described_class.package_link(project, "8.x-1.1")).to eq("https://www.drupal.org/project/foo/releases/8.x-1.1")
+      end
+    end
   end
 
   context "with an unmapped package" do

@@ -23,7 +23,7 @@ module PackageManager
 
     def self.download_url(name, version = nil)
       project = Project.find_by(name: name, platform: db_platform)
-      db_version = project.versions.find_by(number: version)
+      db_version = version.nil? ? project.versions.first : project.versions.find_by(number: version)
       repository_source = db_version&.repository_sources&.first.presence || "default"
       self::PROVIDER_MAP[repository_source].download_url(name, version)
     end
