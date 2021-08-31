@@ -55,6 +55,11 @@ class PackageManager::Packagist::Drupal < PackageManager::Packagist
     versions
   end
 
+  # TODO is there a way to get these from Drupal?
+  def self.dependencies(_name, version, mapped_project)
+    []
+  end
+
   private_class_method def self.strip_drupal_namespace(name)
     name.gsub(/^drupal\//, '')
   end
