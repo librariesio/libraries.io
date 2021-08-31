@@ -5,8 +5,12 @@ class PackageManager::Packagist::Drupal < PackageManager::Packagist
   HIDDEN = true
   DRUPAL_MODULE_LICENSE = "GPL-2.0-or-later" # Drupal plugins all use the same license
 
-  def self.package_link(project, _version = nil)
-    "https://www.drupal.org/project/#{strip_drupal_namespace(project.name)}"
+  def self.package_link(project, version = nil)
+    if version
+      "https://www.drupal.org/project/#{strip_drupal_namespace(project.name)}/releases/#{version}"
+    else
+      "https://www.drupal.org/project/#{strip_drupal_namespace(project.name)}"
+    end
   end
 
   def self.project(name)

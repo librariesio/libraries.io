@@ -10,16 +10,19 @@ module PackageManager
     COLOR = "#4F5D95"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
 
+    # TODO: rename PackageManager::Packagist -> PackageManager::Composer, and then  PackageManager::Packagist::Main => PackageManager::Composer::Packagist
+    PROVIDER_MAP = {
+      "default" => Main,
+      "Drupal" => Drupal,
+      "Packagist" => Main,
+    }.freeze
+
     def self.formatted_name
-      "packagist"
+      "Packagist"
     end
 
     def self.db_platform
       "Packagist"
-    end
-
-    def self.package_link(project, version = nil)
-      "https://packagist.org/packages/#{project.name}##{version}"
     end
 
     def self.project_names
