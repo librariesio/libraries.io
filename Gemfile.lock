@@ -94,7 +94,7 @@ GEM
     ast (2.4.2)
     autoprefixer-rails (9.5.1.1)
       execjs
-    bibliothecary (6.12.2)
+    bibliothecary (7.1.0)
       commander
       deb_control
       librariesio-gem-parser
@@ -102,7 +102,7 @@ GEM
       sdl4r
       strings
       strings-ansi
-      toml-rb (~> 1.0)
+      tomlrb (~> 2.0)
       typhoeus
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
@@ -129,7 +129,6 @@ GEM
     charlock_holmes (0.7.6)
     chartkick (3.4.0)
     chronic (0.10.2)
-    citrus (3.0.2)
     cliver (0.3.2)
     coderay (1.1.2)
     commander (4.6.0)
@@ -199,7 +198,7 @@ GEM
       rake
       rake-compiler
     fast_xs (0.8.0)
-    ffi (1.15.1)
+    ffi (1.15.3)
     fog-aws (3.5.0)
       fog-core (~> 2.1)
       fog-json (~> 1.1)
@@ -404,7 +403,7 @@ GEM
     org-ruby (0.9.12)
       rubypants (~> 0.2)
     os (1.1.1)
-    ox (2.14.4)
+    ox (2.14.5)
     parallel (1.17.0)
     parser (3.0.0.0)
       ast (~> 2.4.1)
@@ -625,8 +624,6 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.9)
-    toml-rb (1.1.2)
-      citrus (~> 3.0, > 3.0)
     tomlrb (2.0.1)
     treetop (1.6.10)
       polyglot (~> 0.3)
