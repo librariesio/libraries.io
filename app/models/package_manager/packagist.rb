@@ -30,6 +30,14 @@ module PackageManager
       nil
     end
 
+    def self.check_status_url(project)
+      nil
+    end
+
+    def self.repository_base
+      nil
+    end
+
     def self.project_names
       get("https://packagist.org/packages/list.json")["packageNames"]
     end
