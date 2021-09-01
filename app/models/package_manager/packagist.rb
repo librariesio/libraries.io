@@ -31,7 +31,7 @@ module PackageManager
     end
 
     def self.check_status_url(project)
-      nil
+      package_link(project)
     end
 
     def self.repository_base
