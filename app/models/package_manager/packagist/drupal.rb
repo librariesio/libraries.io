@@ -3,7 +3,7 @@
 class PackageManager::Packagist::Drupal < PackageManager::Packagist
   REPOSITORY_SOURCE_NAME = "Drupal"
   HIDDEN = true
-  DRUPAL_MODULE_LICENSE = "GPL-2.0-or-later" # Drupal plugins all use the same license
+  DRUPAL_MODULE_LICENSE = "GPL-2.0+" # Drupal plugins all use the same license
 
   def self.package_link(project, version = nil)
     if version
