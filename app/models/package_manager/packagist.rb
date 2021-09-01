@@ -26,6 +26,10 @@ module PackageManager
       "Packagist"
     end
 
+    def self.download_url(_name, _version = nil)
+      nil
+    end
+
     def self.project_names
       get("https://packagist.org/packages/list.json")["packageNames"]
     end
