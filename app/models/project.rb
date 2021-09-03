@@ -555,7 +555,7 @@ class Project < ApplicationRecord
     return if url.blank?
 
     response = Typhoeus.head(url)
-    if platform.downcase == "packagist" && response.response_code == 302
+    if platform.downcase == "packagist" && [302, 404].include?(response.response_code)
       update_attribute(:status, "Removed")
     elsif platform.downcase == "pypi" && response.response_code == 404
       # TODO: remove this stanza once this bug is fixed: https://github.com/pypa/warehouse/issues/3709#issuecomment-754973958
