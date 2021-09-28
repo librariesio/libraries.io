@@ -96,7 +96,10 @@ module PackageManager
       raw_project = project(name)
       return false unless raw_project.present?
 
-      mapped_project = mapping(raw_project).try(&:compact)
+      mapped_project = mapping(raw_project)
+        .try do |p|
+          p.compact.transform_values { |v| v.is_a?(String) ? v.gsub("\u0000", "") : v }
+        end
       return false unless mapped_project.present?
 
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
