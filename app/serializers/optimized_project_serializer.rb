@@ -54,13 +54,13 @@ class OptimizedProjectSerializer
         .slice(*PROJECT_ATTRIBUTES)
         .merge!(
           canonical_name: project.name,
-          name:  project.name,
-          download_url:  project.download_url,
+          name: project.name,
+          download_url: project.download_url,
           forks: project.forks,
-          latest_download_url:  project.latest_download_url,
-          package_manager_url:  project.package_manager_url,
-          repository_license:  project.repository_license,
-          stars:  project.stars,
+          latest_download_url: project.latest_download_url,
+          package_manager_url: project.package_manager_url,
+          repository_license: project.repository_license,
+          stars: project.stars,
           versions: project.versions
         ).tap do |result|
           if @internal_key
