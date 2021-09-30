@@ -25,7 +25,7 @@ module PackageManager
       db_version = if version.nil?
           db_project.versions.first
         elsif db_project.association(:versions).loaded?
-          db_project.versions.select { |v| v.number == version }
+          db_project.versions.find { |v| v.number == version }
         else
           db_project.versions.find_by(number: version)
         end

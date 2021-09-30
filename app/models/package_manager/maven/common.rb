@@ -2,7 +2,7 @@
 
 class PackageManager::Maven::Common < PackageManager::Maven
   def self.package_link(project, version = nil)
-    download_url(project.name, version)
+    download_url(project, version)
   end
 
   def self.download_url(db_project, version = nil)
