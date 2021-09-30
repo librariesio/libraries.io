@@ -54,7 +54,7 @@ class OptimizedProjectSerializer
         .slice(*PROJECT_ATTRIBUTES)
         .merge!(
           canonical_name: project.name,
-          name: project.name,
+          name: @requested_name_map[[project.platform, project.name]],
           download_url: project.download_url,
           forks: project.forks,
           latest_download_url: project.latest_download_url,
