@@ -41,7 +41,7 @@ module PackageManager
     private_class_method def self.get_repository_source(db_project, version = nil)
       db_version = if version.nil?
         db_project.versions.first
-      elsif db_project.association(:versions).loaded?
+      elsif db_project.association(:versions).loaded? && db_project.versions.size > 0
         db_project.versions.find { |v| v.number == version }
       else
         db_project.versions.find_by(number: version)
