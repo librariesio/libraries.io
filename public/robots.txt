@@ -4,7 +4,14 @@ Disallow: /admin/
 Disallow: /github/
 Disallow: /gitlab/
 Disallow: /bitbucket/
+Disallow: /explore/
+Disallow: /search
+Disallow: /login
 Disallow: */usage$
 Disallow: */dependents$
 Disallow: /auth/
 Sitemap: https://libraries.io/sitemaps/sitemap.xml.gz
+
+# stop yandex from crawling usage pages
+User-agent: Yandex
+Clean-param: kind&requirements&page
