@@ -16,8 +16,8 @@ module PackageManager
       "https://crates.io/crates/#{project.name}/#{version}"
     end
 
-    def self.download_url(name, version = nil)
-      "https://crates.io/api/v1/crates/#{name}/#{version}/download"
+    def self.download_url(db_project, version = nil)
+      "https://crates.io/api/v1/crates/#{db_project.name}/#{version}/download"
     end
 
     def self.documentation_url(name, version = nil)

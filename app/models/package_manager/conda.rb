@@ -45,14 +45,13 @@ module PackageManager
       end
     end
 
-    def self.download_url(name, version = nil)
-      project = Project.find_by(name: name, platform: db_platform)
-      db_version = project.versions.find_by(number: version)
+    def self.download_url(db_project, version = nil)
+      db_version = db_project.versions.find_by(number: version)
       repository_source = db_version&.repository_sources&.first.presence || "default"
       if version.present?
-        get_json("#{API_URL}/#{repository_source}/#{name}/#{version}")&.first&.dig("download_url")
+        get_json("#{API_URL}/#{repository_source}/#{db_project.name}/#{version}")&.first&.dig("download_url")
       else
-        get_json("#{API_URL}/#{repository_source}/#{name}")&.first&.dig("download_url")
+        get_json("#{API_URL}/#{repository_source}/#{db_project.name}")&.first&.dig("download_url")
       end
     end
 

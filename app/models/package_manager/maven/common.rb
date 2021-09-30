@@ -5,11 +5,11 @@ class PackageManager::Maven::Common < PackageManager::Maven
     download_url(project.name, version)
   end
 
-  def self.download_url(name, version = nil)
+  def self.download_url(db_project, version = nil)
     if version
-      MavenUrl.from_name(name, repository_base).jar(version)
+      MavenUrl.from_name(db_project.name, repository_base).jar(version)
     else
-      MavenUrl.from_name(name, repository_base).base
+      MavenUrl.from_name(db_project.name, repository_base).base
     end
   end
 

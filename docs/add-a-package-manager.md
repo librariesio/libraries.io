@@ -251,8 +251,8 @@ If the package manager provides predictable urls to the tar ball or zip archive 
 It takes a package `name` and an optional `version` number, for example:
 
 ```ruby
-def self.download_url(name, version = nil)
-  "https://rubygems.org/downloads/#{name}-#{version}.gem"
+def self.download_url(db_project, version = nil)
+  "https://rubygems.org/downloads/#{db_project.name}-#{version}.gem"
 end
 ```
 

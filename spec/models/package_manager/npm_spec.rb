@@ -20,7 +20,7 @@ describe PackageManager::NPM do
 
   describe 'download_url' do
     it 'returns a link to project tarball' do
-      expect(described_class.download_url('foo', '1.0.0')).to eq("https://registry.npmjs.org/foo/-/foo-1.0.0.tgz")
+      expect(described_class.download_url(project '1.0.0')).to eq("https://registry.npmjs.org/foo/-/foo-1.0.0.tgz")
     end
   end
 

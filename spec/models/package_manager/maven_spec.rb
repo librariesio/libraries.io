@@ -117,14 +117,14 @@ describe PackageManager::Maven do
     let(:project) { create(:project, name: "javax.faces:javax.faces-api", platform: described_class.formatted_name.demodulize) }
 
     it "returns link to maven central jar file" do
-      expect(described_class.download_url(project.name, "2.3")).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api/2.3/javax.faces-api-2.3.jar")
+      expect(described_class.download_url(project, "2.3")).to eq("https://repo1.maven.org/maven2/javax/faces/javax.faces-api/2.3/javax.faces-api-2.3.jar")
     end
 
     context "with atlassian provider" do
       let!(:version) { create(:version, project: project, repository_sources: [PackageManager::Maven::Atlassian::REPOSITORY_SOURCE_NAME], number: "2.0.0") }
 
       it "returns link to atlassian folder" do
-        expect(described_class.download_url(project.name, "2.0.0")).to eq("https://packages.atlassian.com/maven-central-local/javax/faces/javax.faces-api/2.0.0/javax.faces-api-2.0.0.jar")
+        expect(described_class.download_url(project, "2.0.0")).to eq("https://packages.atlassian.com/maven-central-local/javax/faces/javax.faces-api/2.0.0/javax.faces-api-2.0.0.jar")
       end
     end
 
@@ -132,7 +132,7 @@ describe PackageManager::Maven do
       let!(:version) { create(:version, project: project, repository_sources: [PackageManager::Maven::Hortonworks::REPOSITORY_SOURCE_NAME], number: "2.0.0") }
 
       it "returns link to atlassian folder" do
-        expect(described_class.download_url(project.name, "2.0.0")).to eq("https://repo.hortonworks.com/content/groups/releases/javax/faces/javax.faces-api/2.0.0/javax.faces-api-2.0.0.jar")
+        expect(described_class.download_url(project, "2.0.0")).to eq("https://repo.hortonworks.com/content/groups/releases/javax/faces/javax.faces-api/2.0.0/javax.faces-api-2.0.0.jar")
       end
     end
   end

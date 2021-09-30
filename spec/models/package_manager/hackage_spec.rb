@@ -20,7 +20,7 @@ describe PackageManager::Hackage do
 
   describe 'download_url' do
     it 'returns a link to project tarball' do
-      expect(described_class.download_url('foo', '1.0.0')).to eq("http://hackage.haskell.org/package/foo-1.0.0/foo-1.0.0.tar.gz")
+      expect(described_class.download_url(project, '1.0.0')).to eq("http://hackage.haskell.org/package/foo-1.0.0/foo-1.0.0.tar.gz")
     end
   end
 

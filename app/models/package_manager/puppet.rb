@@ -72,8 +72,8 @@ module PackageManager
       "https://forge.puppet.com/#{project.name.sub('-', '/')}" + (version ? "/#{version}" : "")
     end
 
-    def self.download_url(name, version = nil)
-      "https://forge.puppet.com/v3/files/#{name}-#{version}.tar.gz"
+    def self.download_url(db_project, version = nil)
+      "https://forge.puppet.com/v3/files/#{db_project.name}-#{version}.tar.gz"
     end
   end
 end

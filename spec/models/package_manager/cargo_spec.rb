@@ -2,6 +2,8 @@
 require 'rails_helper'
 
 describe PackageManager::Cargo do
+  let(:project) { create(:project, name: 'foo', platform: described_class.formatted_name) }
+
   it 'has formatted name of "Cargo"' do
     expect(described_class.formatted_name).to eq('Cargo')
   end
@@ -20,7 +22,7 @@ describe PackageManager::Cargo do
 
   describe '#download_url' do
     it 'returns a link to project tarball' do
-      expect(described_class.download_url('foo', '1.0.0')).to eq("https://crates.io/api/v1/crates/foo/1.0.0/download")
+      expect(described_class.download_url(project, '1.0.0')).to eq("https://crates.io/api/v1/crates/foo/1.0.0/download")
     end
   end
 

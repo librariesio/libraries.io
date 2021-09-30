@@ -20,17 +20,17 @@ describe PackageManager::Rubygems do
 
   describe 'download_url' do
     it 'returns a link to project tarball' do
-      expect(described_class.download_url('foo', '1.0.0')).to eq("https://rubygems.org/downloads/foo-1.0.0.gem")
+      expect(described_class.download_url(project, '1.0.0')).to eq("https://rubygems.org/downloads/foo-1.0.0.gem")
     end
   end
 
   describe '#documentation_url' do
     it 'returns a link to project website' do
-      expect(described_class.documentation_url('foo')).to eq("http://www.rubydoc.info/gems/foo/")
+      expect(described_class.documentation_url(project)).to eq("http://www.rubydoc.info/gems/foo/")
     end
 
     it 'handles version' do
-      expect(described_class.documentation_url('foo', '2.0.0')).to eq("http://www.rubydoc.info/gems/foo/2.0.0")
+      expect(described_class.documentation_url(project, '2.0.0')).to eq("http://www.rubydoc.info/gems/foo/2.0.0")
     end
   end
 

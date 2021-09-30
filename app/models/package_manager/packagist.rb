@@ -26,7 +26,7 @@ module PackageManager
       "Packagist"
     end
 
-    def self.download_url(_name, _version = nil)
+    def self.download_url(_db_project, _version = nil)
       nil
     end
 

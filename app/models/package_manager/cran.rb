@@ -12,8 +12,8 @@ module PackageManager
       "https://cran.r-project.org/package=#{project.name}"
     end
 
-    def self.download_url(name, version = nil)
-      "https://cran.r-project.org/src/contrib/#{name}_#{version}.tar.gz"
+    def self.download_url(db_project, version = nil)
+      "https://cran.r-project.org/src/contrib/#{db_project.name}_#{version}.tar.gz"
     end
 
     def self.documentation_url(name, _version = nil)

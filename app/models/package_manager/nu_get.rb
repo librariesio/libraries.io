@@ -13,8 +13,8 @@ module PackageManager
       "https://www.nuget.org/packages/#{project.name}/#{version}"
     end
 
-    def self.download_url(name, version = nil)
-      "https://www.nuget.org/api/v2/package/#{name}/#{version}"
+    def self.download_url(db_project, version = nil)
+      "https://www.nuget.org/api/v2/package/#{db_project.name}/#{version}"
     end
 
     def self.install_instructions(project, version = nil)

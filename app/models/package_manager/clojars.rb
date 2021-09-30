@@ -26,8 +26,8 @@ module PackageManager
     end
 
     # Clojars download urls require a version
-    def self.download_url(name, version = nil)
-      group_id, artifact_id = name.split("/", 2)
+    def self.download_url(db_project, version = nil)
+      group_id, artifact_id = db_project.name.split("/", 2)
       artifact_id = group_id if artifact_id.nil?
       MavenUrl.new(group_id, artifact_id, repository_base).jar(version)
     end
