@@ -48,19 +48,20 @@ class OptimizedProjectSerializer
 
   def serialize_project(project)
     Google::Cloud::Trace.in_span "optimized_project_serializer#serialize_project" do |_span|
+      name = @requested_name_map[[project.platform, project.name]]
       project
         .attributes
         .slice(*PROJECT_ATTRIBUTES)
         .merge!(
           canonical_name: project.name,
-          name: @requested_name_map[[project.platform, project.name]],
-          download_url: project.download_url,
+          name:  project.name,
+          download_url:  project.download_url,
           forks: project.forks,
-          latest_download_url: project.latest_download_url,
-          package_manager_url: project.package_manager_url,
-          repository_license: project.repository_license,
-          stars: project.stars,
-          versions: versions[project.id]
+          latest_download_url:  project.latest_download_url,
+          package_manager_url:  project.package_manager_url,
+          repository_license:  project.repository_license,
+          stars:  project.stars,
+          versions: project.versions
         ).tap do |result|
           if @internal_key
             result[:updated_at] = project.updated_at
