@@ -26,15 +26,6 @@ class OptimizedProjectSerializer
     status
   ].freeze
 
-  VERSION_ATTRIBUTES = %w[
-    number
-    published_at
-    spdx_expression
-    original_license
-    researched_at
-    repository_sources
-  ].freeze
-
   MAINTENANCE_STAT_ATTRIBUTES = %w[
     category
     value
@@ -75,21 +66,6 @@ class OptimizedProjectSerializer
             result[:updated_at] = project.updated_at
             result[:repository_maintenance_stats] = maintenance_stats[project.repository_id]
           end
-        end
-    end
-  end
-
-  def versions
-    @versions ||= Google::Cloud::Trace.in_span "optimized_project_serializer#versions" do |_span|
-      Version
-        .where(project_id: @projects.map(&:id))
-        .pluck(*VERSION_ATTRIBUTES, :created_at, :project_id)
-        .each_with_object(Hash.new { |h, k| h[k] = [] }) do |row, versions|
-          # Use created_at if no published date
-          version = VERSION_ATTRIBUTES.zip(row).to_h
-          version["published_at"] ||= row[-2]
-
-          versions[row[-1]] << version
         end
     end
   end
