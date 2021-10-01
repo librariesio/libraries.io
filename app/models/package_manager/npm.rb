@@ -15,8 +15,8 @@ module PackageManager
       "https://www.npmjs.com/package/#{project.name}"
     end
 
-    def self.download_url(name, version = nil)
-      "https://registry.npmjs.org/#{name}/-/#{name}-#{version}.tgz"
+    def self.download_url(db_project, version = nil)
+      "https://registry.npmjs.org/#{db_project.name}/-/#{db_project.name}-#{version}.tgz"
     end
 
     def self.install_instructions(project, version = nil)

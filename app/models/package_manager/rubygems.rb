@@ -14,8 +14,8 @@ module PackageManager
       "https://rubygems.org/gems/#{project.name}" + (version ? "/versions/#{version}" : "")
     end
 
-    def self.download_url(name, version = nil)
-      "https://rubygems.org/downloads/#{name}-#{version}.gem"
+    def self.download_url(db_project, version = nil)
+      "https://rubygems.org/downloads/#{db_project.name}-#{version}.gem"
     end
 
     def self.documentation_url(name, version = nil)

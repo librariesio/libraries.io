@@ -13,8 +13,8 @@ module PackageManager
       "https://hex.pm/packages/#{project.name}/#{version}"
     end
 
-    def self.download_url(name, version = nil)
-      "https://repo.hex.pm/tarballs/#{name}-#{version}.tar"
+    def self.download_url(db_project, version = nil)
+      "https://repo.hex.pm/tarballs/#{db_project.name}-#{version}.tar"
     end
 
     def self.documentation_url(name, version = nil)

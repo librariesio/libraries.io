@@ -12,8 +12,8 @@ module PackageManager
       "https://lib.haxe.org/p/#{project.name}/#{version}"
     end
 
-    def self.download_url(name, version = nil)
-      "https://lib.haxe.org/p/#{name}/#{version}/download/"
+    def self.download_url(db_project, version = nil)
+      "https://lib.haxe.org/p/#{db_project.name}/#{version}/download/"
     end
 
     def self.install_instructions(project, version = nil)

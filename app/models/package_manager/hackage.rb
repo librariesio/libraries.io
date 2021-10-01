@@ -12,8 +12,8 @@ module PackageManager
       "http://hackage.haskell.org/package/#{project.name}" + (version ? "-#{version}" : "")
     end
 
-    def self.download_url(name, version = nil)
-      "http://hackage.haskell.org/package/#{name}-#{version}/#{name}-#{version}.tar.gz"
+    def self.download_url(db_project, version = nil)
+      "http://hackage.haskell.org/package/#{db_project.name}-#{version}/#{db_project.name}-#{version}.tar.gz"
     end
 
     def self.install_instructions(project, version = nil)
