@@ -10,8 +10,8 @@ module PackageManager
     URL = "https://rubygems.org"
     COLOR = "#701516"
 
-    def self.package_link(project, version = nil)
-      "https://rubygems.org/gems/#{project.name}" + (version ? "/versions/#{version}" : "")
+    def self.package_link(db_project, version = nil)
+      "https://rubygems.org/gems/#{db_project.name}" + (version ? "/versions/#{version}" : "")
     end
 
     def self.download_url(db_project, version = nil)
@@ -22,12 +22,12 @@ module PackageManager
       "http://www.rubydoc.info/gems/#{name}/#{version}"
     end
 
-    def self.install_instructions(project, version = nil)
-      "gem install #{project.name}" + (version ? " -v #{version}" : "")
+    def self.install_instructions(db_project, version = nil)
+      "gem install #{db_project.name}" + (version ? " -v #{version}" : "")
     end
 
-    def self.check_status_url(project)
-      "https://rubygems.org/api/v1/versions/#{project.name}.json"
+    def self.check_status_url(db_project)
+      "https://rubygems.org/api/v1/versions/#{db_project.name}.json"
     end
 
     def self.project_names

@@ -8,12 +8,12 @@ module PackageManager
     URL = "https://atmospherejs.com"
     COLOR = "#f1e05a"
 
-    def self.package_link(project, _version = nil)
-      "https://atmospherejs.com/#{project.name.tr(':', '/')}"
+    def self.package_link(db_project, _version = nil)
+      "https://atmospherejs.com/#{db_project.name.tr(':', '/')}"
     end
 
-    def self.install_instructions(project, version = nil)
-      "meteor add #{project.name}" + (version ? "@=#{version}" : "")
+    def self.install_instructions(db_project, version = nil)
+      "meteor add #{db_project.name}" + (version ? "@=#{version}" : "")
     end
 
     def self.project_names

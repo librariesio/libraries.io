@@ -11,16 +11,16 @@ module PackageManager
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
 
-    def self.package_link(project, version = nil)
-      "https://pypi.org/project/#{project.name}/#{version}"
+    def self.package_link(db_project, version = nil)
+      "https://pypi.org/project/#{db_project.name}/#{version}"
     end
 
-    def self.check_status_url(project)
-      "https://pypi.org/pypi/#{project.name}/json/"
+    def self.check_status_url(db_project)
+      "https://pypi.org/pypi/#{db_project.name}/json/"
     end
 
-    def self.install_instructions(project, version = nil)
-      "pip install #{project.name}" + (version ? "==#{version}" : "")
+    def self.install_instructions(db_project, version = nil)
+      "pip install #{db_project.name}" + (version ? "==#{version}" : "")
     end
 
     def self.formatted_name

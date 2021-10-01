@@ -8,16 +8,16 @@ module PackageManager
     URL = "http://cocoapods.org/"
     COLOR = "#438eff"
 
-    def self.package_link(project, _version = nil)
-      "http://cocoapods.org/pods/#{project.name}"
+    def self.package_link(db_project, _version = nil)
+      "http://cocoapods.org/pods/#{db_project.name}"
     end
 
     def self.documentation_url(name, version = nil)
       "http://cocoadocs.org/docsets/#{name}/#{version}"
     end
 
-    def self.install_instructions(project, _version = nil)
-      "pod try #{project.name}"
+    def self.install_instructions(db_project, _version = nil)
+      "pod try #{db_project.name}"
     end
 
     def self.project_names

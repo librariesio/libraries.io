@@ -55,7 +55,7 @@ module PackageManager
       to_s.demodulize
     end
 
-    def self.package_link(_project, _version = nil)
+    def self.package_link(_db_project, _version = nil)
       nil
     end
 
@@ -67,7 +67,7 @@ module PackageManager
       nil
     end
 
-    def self.install_instructions(_project, _version = nil)
+    def self.install_instructions(_db_project, _version = nil)
       nil
     end
 
@@ -79,8 +79,8 @@ module PackageManager
       nil
     end
 
-    def self.check_status_url(project)
-      package_link(project)
+    def self.check_status_url(db_project)
+      package_link(db_project)
     end
 
     def self.platform_name(platform)

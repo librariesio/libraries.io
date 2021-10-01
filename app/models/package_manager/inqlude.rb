@@ -7,12 +7,12 @@ module PackageManager
     URL = 'https://inqlude.org/'
     COLOR = '#f34b7d'
 
-    def self.package_link(project, version = nil)
-      "https://inqlude.org/libraries/#{project.name}.html"
+    def self.package_link(db_project, version = nil)
+      "https://inqlude.org/libraries/#{db_project.name}.html"
     end
 
-    def self.install_instructions(project, version = nil)
-      "inqlude install #{project.name}"
+    def self.install_instructions(db_project, version = nil)
+      "inqlude install #{db_project.name}"
     end
 
     def self.project_names

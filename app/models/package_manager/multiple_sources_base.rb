@@ -25,9 +25,9 @@ module PackageManager
       self::PROVIDER_MAP[repository_source].download_url(db_project, version)
     end
 
-    def self.check_status_url(project)
-      source = project.versions.flat_map(&:repository_sources).compact.uniq.first.presence || "default"
-      self::PROVIDER_MAP[source].check_status_url(project)
+    def self.check_status_url(db_project)
+      source = db_project.versions.flat_map(&:repository_sources).compact.uniq.first.presence || "default"
+      self::PROVIDER_MAP[source].check_status_url(db_project)
     end
 
     def self.repository_base

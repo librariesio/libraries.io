@@ -11,16 +11,16 @@ module PackageManager
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
 
-    def self.package_link(project, _version = nil)
-      "https://www.npmjs.com/package/#{project.name}"
+    def self.package_link(db_project, _version = nil)
+      "https://www.npmjs.com/package/#{db_project.name}"
     end
 
     def self.download_url(db_project, version = nil)
       "https://registry.npmjs.org/#{db_project.name}/-/#{db_project.name}-#{version}.tgz"
     end
 
-    def self.install_instructions(project, version = nil)
-      "npm install #{project.name}" + (version ? "@#{version}" : "")
+    def self.install_instructions(db_project, version = nil)
+      "npm install #{db_project.name}" + (version ? "@#{version}" : "")
     end
 
     def self.formatted_name

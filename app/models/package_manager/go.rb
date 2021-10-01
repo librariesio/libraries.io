@@ -26,20 +26,20 @@ module PackageManager
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)/.freeze
 
-    def self.check_status_url(project)
-      "#{PROXY_BASE_URL}/#{project.name}/@v/list"
+    def self.check_status_url(db_project)
+      "#{PROXY_BASE_URL}/#{db_project.name}/@v/list"
     end
 
-    def self.package_link(project, version = nil)
-      "#{DISCOVER_URL}/#{project.name}#{"@#{version}" if version}"
+    def self.package_link(db_project, version = nil)
+      "#{DISCOVER_URL}/#{db_project.name}#{"@#{version}" if version}"
     end
 
     def self.documentation_url(name, version = nil)
       "#{DISCOVER_URL}/#{name}#{"@#{version}" if version}#section-documentation"
     end
 
-    def self.install_instructions(project, _version = nil)
-      "go get #{project.name}"
+    def self.install_instructions(db_project, _version = nil)
+      "go get #{db_project.name}"
     end
 
     def self.recent_names

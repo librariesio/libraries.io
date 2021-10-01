@@ -9,8 +9,8 @@ module PackageManager
     URL = "https://hex.pm"
     COLOR = "#6e4a7e"
 
-    def self.package_link(project, version = nil)
-      "https://hex.pm/packages/#{project.name}/#{version}"
+    def self.package_link(db_project, version = nil)
+      "https://hex.pm/packages/#{db_project.name}/#{version}"
     end
 
     def self.download_url(db_project, version = nil)

@@ -8,8 +8,8 @@ module PackageManager
     URL = "http://pkg.julialang.org/"
     COLOR = "#a270ba"
 
-    def self.package_link(project, _version = nil)
-      "http://pkg.julialang.org/?pkg=#{project.name}&ver=release"
+    def self.package_link(db_project, _version = nil)
+      "http://pkg.julialang.org/?pkg=#{db_project.name}&ver=release"
     end
 
     def self.project_names

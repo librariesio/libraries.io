@@ -64,12 +64,12 @@ module PackageManager
       get_json("https://forgeapi.puppetlabs.com/v3/modules?limit=100&sort_by=latest_release")["results"].map { |result| result["slug"] }
     end
 
-    def self.install_instructions(project, version = nil)
-      "puppet module install #{project.name}" + (version ? " --version #{version}" : "")
+    def self.install_instructions(db_project, version = nil)
+      "puppet module install #{db_project.name}" + (version ? " --version #{version}" : "")
     end
 
-    def self.package_link(project, version = nil)
-      "https://forge.puppet.com/#{project.name.sub('-', '/')}" + (version ? "/#{version}" : "")
+    def self.package_link(db_project, version = nil)
+      "https://forge.puppet.com/#{db_project.name.sub('-', '/')}" + (version ? "/#{version}" : "")
     end
 
     def self.download_url(db_project, version = nil)

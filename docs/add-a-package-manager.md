@@ -206,15 +206,15 @@ This method is passed a `project` object and optionally a version number, here's
 
 - [Rubygems](../app/models/package_manager/rubygems.rb) adds a `-v` flag if a version is passed
 ```ruby
-def self.install_instructions(project, version = nil)
-  "gem install #{project.name}" + (version ? " -v #{version}" : "")
+def self.install_instructions(db_project, version = nil)
+  "gem install #{db_project.name}" + (version ? " -v #{version}" : "")
 end
 ```
 
 - [Go](../app/models/package_manager/go.rb) cli doesn't have support for specifying a version so it's ignored
 ```ruby
-def self.install_instructions(project, version = nil)
-  "go get #{project.name}"
+def self.install_instructions(db_project, version = nil)
+  "go get #{db_project.name}"
 end
 ```
 
@@ -239,8 +239,8 @@ If the package manager registry website has individual pages for each package, a
 It takes a `project` object and an optional `version` number, for example:
 
 ```ruby
-def self.package_link(project, version = nil)
-  "https://rubygems.org/gems/#{project.name}" + (version ? "/versions/#{version}" : "")
+def self.package_link(db_project, version = nil)
+  "https://rubygems.org/gems/#{db_project.name}" + (version ? "/versions/#{version}" : "")
 end
 ```
 
@@ -275,8 +275,8 @@ Libraries will try and ping the `#package_link` url on a regular basis to check 
 It takes a `project` object, for example:
 
 ```ruby
-def self.check_status_url(project)
-  "https://rubygems.org/api/v1/versions/#{project.name}"
+def self.check_status_url(db_project)
+  "https://rubygems.org/api/v1/versions/#{db_project.name}"
 end
 ```
 

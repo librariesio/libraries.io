@@ -61,10 +61,10 @@ module PackageManager
       PROVIDER_MAP[repository_source].package_link(project)
     end
 
-    def self.install_instructions(project, _version = nil)
-      db_version = project.versions.last
+    def self.install_instructions(db_project, _version = nil)
+      db_version = db_project.versions.last
       repository_source = db_version&.repository_sources&.first.presence || "default"
-      PROVIDER_MAP[repository_source].install_instructions(project)
+      PROVIDER_MAP[repository_source].install_instructions(db_project)
     end
 
     PROVIDER_MAP = {
@@ -83,8 +83,8 @@ module PackageManager
         .map { |source| PROVIDER_MAP[source] } || [PROVIDER_MAP["default"]]
     end
 
-    def self.check_status_url(project)
-      "#{API_URL}/package/#{project.name}"
+    def self.check_status_url(db_project)
+      "#{API_URL}/package/#{db_project.name}"
     end
 
     def self.mapping(raw_project)

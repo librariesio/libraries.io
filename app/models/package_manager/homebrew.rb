@@ -9,12 +9,12 @@ module PackageManager
     URL = "http://brew.sh/"
     COLOR = "#555555"
 
-    def self.package_link(project, _version = nil)
-      "http://formulae.brew.sh/formula/#{project.name}"
+    def self.package_link(db_project, _version = nil)
+      "http://formulae.brew.sh/formula/#{db_project.name}"
     end
 
-    def self.install_instructions(project, _version = nil)
-      "brew install #{project.name}"
+    def self.install_instructions(db_project, _version = nil)
+      "brew install #{db_project.name}"
     end
 
     def self.project_names

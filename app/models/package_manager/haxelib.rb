@@ -8,16 +8,16 @@ module PackageManager
     URL = "https://lib.haxe.org"
     COLOR = "#df7900"
 
-    def self.package_link(project, version = nil)
-      "https://lib.haxe.org/p/#{project.name}/#{version}"
+    def self.package_link(db_project, version = nil)
+      "https://lib.haxe.org/p/#{db_project.name}/#{version}"
     end
 
     def self.download_url(db_project, version = nil)
       "https://lib.haxe.org/p/#{db_project.name}/#{version}/download/"
     end
 
-    def self.install_instructions(project, version = nil)
-      "haxelib install #{project.name} #{version}"
+    def self.install_instructions(db_project, version = nil)
+      "haxelib install #{db_project.name} #{version}"
     end
 
     def self.project_names

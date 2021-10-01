@@ -8,8 +8,8 @@ module PackageManager
     URL = "https://metacpan.org"
     COLOR = "#0298c3"
 
-    def self.package_link(project, _version = nil)
-      "https://metacpan.org/release/#{project.name}"
+    def self.package_link(db_project, _version = nil)
+      "https://metacpan.org/release/#{db_project.name}"
     end
 
     def self.project_names

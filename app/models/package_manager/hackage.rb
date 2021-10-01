@@ -8,16 +8,16 @@ module PackageManager
     URL = "http://hackage.haskell.org"
     COLOR = "#29b544"
 
-    def self.package_link(project, version = nil)
-      "http://hackage.haskell.org/package/#{project.name}" + (version ? "-#{version}" : "")
+    def self.package_link(db_project, version = nil)
+      "http://hackage.haskell.org/package/#{db_project.name}" + (version ? "-#{version}" : "")
     end
 
     def self.download_url(db_project, version = nil)
       "http://hackage.haskell.org/package/#{db_project.name}-#{version}/#{db_project.name}-#{version}.tar.gz"
     end
 
-    def self.install_instructions(project, version = nil)
-      "cabal install #{project.name}" + (version ? "-#{version}" : "")
+    def self.install_instructions(db_project, version = nil)
+      "cabal install #{db_project.name}" + (version ? "-#{version}" : "")
     end
 
     def self.project_names

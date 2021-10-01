@@ -7,8 +7,8 @@ module PackageManager
     URL = 'https://github.com/nim-lang/nimble'
     COLOR = '#37775b'
 
-    def self.install_instructions(project, version = nil)
-      "nimble install #{project.name}" + (version ? "@##{version}" : "")
+    def self.install_instructions(db_project, version = nil)
+      "nimble install #{db_project.name}" + (version ? "@##{version}" : "")
     end
 
     def self.project_names

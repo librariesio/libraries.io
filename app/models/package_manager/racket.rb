@@ -7,8 +7,8 @@ module PackageManager
     URL = 'http://pkgs.racket-lang.org/'
     COLOR = '#375eab'
 
-    def self.package_link(project, version = nil)
-      "http://pkgs.racket-lang.org/package/#{project.name}"
+    def self.package_link(db_project, version = nil)
+      "http://pkgs.racket-lang.org/package/#{db_project.name}"
     end
 
     def self.project_names

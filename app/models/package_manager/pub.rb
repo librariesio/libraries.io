@@ -8,8 +8,8 @@ module PackageManager
     URL = "https://pub.dartlang.org"
     COLOR = "#00B4AB"
 
-    def self.package_link(project, _version = nil)
-      "https://pub.dartlang.org/packages/#{project.name}"
+    def self.package_link(db_project, _version = nil)
+      "https://pub.dartlang.org/packages/#{db_project.name}"
     end
 
     def self.download_url(db_project, version = nil)

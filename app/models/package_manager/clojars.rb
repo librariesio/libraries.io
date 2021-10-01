@@ -9,8 +9,8 @@ module PackageManager
     COLOR = "#db5855"
     NAME_DELIMITER = "/"
 
-    def self.package_link(project, version = nil)
-      "https://clojars.org/#{project.name}" + (version ? "/versions/#{version}" : "")
+    def self.package_link(db_project, version = nil)
+      "https://clojars.org/#{db_project.name}" + (version ? "/versions/#{version}" : "")
     end
 
     def self.repository_base
@@ -32,8 +32,8 @@ module PackageManager
       MavenUrl.new(group_id, artifact_id, repository_base).jar(version)
     end
 
-    def self.check_status_url(project)
-      package_link(project)
+    def self.check_status_url(db_project)
+      package_link(db_project)
     end
   end
 end

@@ -4,7 +4,7 @@ class PackageManager::Packagist::Main < PackageManager::Packagist
   REPOSITORY_SOURCE_NAME = "Main"
   HIDDEN = true
 
-  def self.package_link(project, version = nil)
-    "https://packagist.org/packages/#{project.name}##{version}"
+  def self.package_link(db_project, version = nil)
+    "https://packagist.org/packages/#{db_project.name}##{version}"
   end
 end

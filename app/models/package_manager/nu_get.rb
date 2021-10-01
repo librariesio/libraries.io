@@ -9,16 +9,16 @@ module PackageManager
     COLOR = "#178600"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
 
-    def self.package_link(project, version = nil)
-      "https://www.nuget.org/packages/#{project.name}/#{version}"
+    def self.package_link(db_project, version = nil)
+      "https://www.nuget.org/packages/#{db_project.name}/#{version}"
     end
 
     def self.download_url(db_project, version = nil)
       "https://www.nuget.org/api/v2/package/#{db_project.name}/#{version}"
     end
 
-    def self.install_instructions(project, version = nil)
-      "Install-Package #{project.name}" + (version ? " -Version #{version}" : "")
+    def self.install_instructions(db_project, version = nil)
+      "Install-Package #{db_project.name}" + (version ? " -Version #{version}" : "")
     end
 
     def self.deprecation_info(name)

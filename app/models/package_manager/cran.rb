@@ -8,8 +8,8 @@ module PackageManager
     URL = "https://cran.r-project.org/"
     COLOR = "#198CE7"
 
-    def self.package_link(project, _version = nil)
-      "https://cran.r-project.org/package=#{project.name}"
+    def self.package_link(db_project, _version = nil)
+      "https://cran.r-project.org/package=#{db_project.name}"
     end
 
     def self.download_url(db_project, version = nil)
@@ -20,8 +20,8 @@ module PackageManager
       "http://cran.r-project.org/web/packages/#{name}/#{name}.pdf"
     end
 
-    def self.check_status_url(project)
-      "http://cran.r-project.org/web/packages/#{project.name}/index.html"
+    def self.check_status_url(db_project)
+      "http://cran.r-project.org/web/packages/#{db_project.name}/index.html"
     end
 
     def self.project_names

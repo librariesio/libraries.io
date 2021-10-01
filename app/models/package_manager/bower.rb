@@ -8,8 +8,8 @@ module PackageManager
     URL = 'http://bower.io'
     COLOR = '#563d7c'
 
-    def self.install_instructions(project, version = nil)
-      "bower install #{project.name}" + (version ? "##{version}" : "")
+    def self.install_instructions(db_project, version = nil)
+      "bower install #{db_project.name}" + (version ? "##{version}" : "")
     end
 
     def self.project_names

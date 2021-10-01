@@ -8,16 +8,16 @@ module PackageManager
     URL = "http://package.elm-lang.org/"
     COLOR = "#60B5CC"
 
-    def self.package_link(project, version = nil)
-      "http://package.elm-lang.org/packages/#{project.name}/#{version || 'latest'}"
+    def self.package_link(db_project, version = nil)
+      "http://package.elm-lang.org/packages/#{db_project.name}/#{version || 'latest'}"
     end
 
     def self.download_url(db_project, version = "master")
       "https://github.com/#{db_project.name}/archive/#{version}.zip"
     end
 
-    def self.install_instructions(project, version = nil)
-      "elm-package install #{project.name} #{version}"
+    def self.install_instructions(db_project, version = nil)
+      "elm-package install #{db_project.name} #{version}"
     end
 
     def self.project_names

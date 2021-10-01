@@ -12,8 +12,8 @@ module PackageManager
     COLOR = "#dea584"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
 
-    def self.package_link(project, version = nil)
-      "https://crates.io/crates/#{project.name}/#{version}"
+    def self.package_link(db_project, version = nil)
+      "https://crates.io/crates/#{db_project.name}/#{version}"
     end
 
     def self.download_url(db_project, version = nil)
@@ -24,8 +24,8 @@ module PackageManager
       "https://docs.rs/#{name}/#{version}"
     end
 
-    def self.check_status_url(project)
-      "https://crates.io/api/v1/crates/#{project.name}"
+    def self.check_status_url(db_project)
+      "https://crates.io/api/v1/crates/#{db_project.name}"
     end
 
     def self.deprecation_info(name)

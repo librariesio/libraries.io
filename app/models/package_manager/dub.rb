@@ -8,12 +8,12 @@ module PackageManager
     URL = "http://code.dlang.org"
     COLOR = "#ba595e"
 
-    def self.package_link(project, version = nil)
-      "http://code.dlang.org/packages/#{project.name}" + (version ? "/#{version}" : "")
+    def self.package_link(db_project, version = nil)
+      "http://code.dlang.org/packages/#{db_project.name}" + (version ? "/#{version}" : "")
     end
 
-    def self.install_instructions(project, version = nil)
-      "dub fetch #{project.name}" + (version ? " --version #{version}" : "")
+    def self.install_instructions(db_project, version = nil)
+      "dub fetch #{db_project.name}" + (version ? " --version #{version}" : "")
     end
 
     def self.project_names

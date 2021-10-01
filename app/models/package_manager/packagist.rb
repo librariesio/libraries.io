@@ -30,8 +30,8 @@ module PackageManager
       nil
     end
 
-    def self.check_status_url(project)
-      package_link(project)
+    def self.check_status_url(db_project)
+      package_link(db_project)
     end
 
     def self.repository_base

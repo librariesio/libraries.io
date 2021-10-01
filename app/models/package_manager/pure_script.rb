@@ -25,8 +25,8 @@ module PackageManager
       }
     end
 
-    def self.install_instructions(project, version = nil)
-      "psc-package install #{project.name}"
+    def self.install_instructions(db_project, version = nil)
+      "psc-package install #{db_project.name}"
     end
   end
 end
