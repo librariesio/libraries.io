@@ -53,18 +53,19 @@ namespace :projects do
     end
   end
 
-  desc 'Check to see if projects have been removed'
+  desc 'Check to see if projects are still removed/deprecated'
   task check_removed_status: :environment do
     exit if ENV['READ_ONLY'].present?
-    ['npm', 'rubygems', 'packagist', 'cpan', 'clojars', 'cocoapods',
+    # Check if removed/deprecated projects are still deprecated/removed
+    ['pypi', 'npm', 'rubygems', 'packagist', 'cpan', 'clojars', 'cocoapods',
     'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
-      Project.platform(platform).removed.select('id').find_each do |project|
+      Project.platform(platform).removed_or_deprecated.select('id').find_each do |project|
         CheckStatusWorker.perform_async(project.id, true)
       end
     end
 
     ['bower', 'go', 'elm', 'alcatraz', 'julia', 'nimble'].each do |platform|
-      projects = Project.platform(platform).removed.with_repo.limit(500)
+      projects = Project.platform(platform).removed_or_deprecated.with_repo.limit(500)
       repos = projects.map(&:repository)
       repos.each do |repo|
         CheckRepoStatusWorker.perform_async(repo.host_type, repo.full_name)
