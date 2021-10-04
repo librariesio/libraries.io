@@ -109,6 +109,7 @@ class Project < ApplicationRecord
   scope :removed, -> { where('projects."status" = ?', "Removed") }
   scope :unmaintained, -> { where('projects."status" = ?', "Unmaintained") }
   scope :hidden, -> { where('projects."status" = ?', "Hidden") }
+  scope :removed_or_deprecated, -> { where('projects."status" in (?)', %w[Removed Deprecated]) }
 
   scope :indexable, -> { not_removed.includes(:repository) }
 
@@ -169,7 +170,7 @@ class Project < ApplicationRecord
     return unless platform_class_exists?
 
     sync_classes.each { |sync_class| PackageManagerDownloadWorker.perform_async(sync_class.name, name) }
-    CheckStatusWorker.perform_async(id, status == "Removed")
+    CheckStatusWorker.perform_async(id, status == "Removed" || status == "Deprecated")
   end
 
   def sync_classes
@@ -550,7 +551,10 @@ class Project < ApplicationRecord
     ProjectDependentRepository.where(project_id: id).count
   end
 
-  def check_status(removed = false)
+  # NB deprecated_or_removed most likely exists so that we
+  # can explicitly reset the status to nil in certain cases. We probably
+  # don't always want to because Repository#check_status can overwrite Project#status.
+  def check_status(deprecated_or_removed = false)
     url = platform_class.check_status_url(self)
     return if url.blank?
 
@@ -570,7 +574,7 @@ class Project < ApplicationRecord
         update_attribute(:status, "Deprecated")
         update_attribute(:deprecation_reason, result[:message])
       end
-    elsif removed
+    elsif deprecated_or_removed
       update_attribute(:status, nil)
     end
   end
