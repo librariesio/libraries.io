@@ -10,7 +10,7 @@ describe CheckStatusWorker do
     project = create(:project)
     removed = false
     expect(Project).to receive(:find_by_id).with(project.id).and_return(project)
-    expect(project).to receive(:check_status).with(removed)
-    subject.perform(project.id, removed)
+    expect(project).to receive(:check_status)
+    subject.perform(project.id)
   end
 end
