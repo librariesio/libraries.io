@@ -25,7 +25,7 @@ class PackageManager::Packagist::Drupal < PackageManager::Packagist
 
     {
       name: "drupal/#{homepage.split("/project/", 2)[1]}",
-      description: raw_project.css("meta[name=description]").first.attr('content'),
+      description: raw_project.css("meta[name=description]").first&.attr('content'),
       homepage: homepage,
       licenses: DRUPAL_MODULE_LICENSE,
       repository_url: raw_project.css('#block-drupalorg-project-development .links a').find { |l| l.text =~ /code repository/ }.attr('href'),
