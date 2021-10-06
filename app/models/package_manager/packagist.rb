@@ -14,7 +14,7 @@ module PackageManager
     PROVIDER_MAP = {
       "default" => Main,
       "Drupal" => Drupal,
-      "Main" => Drupal,
+      "Main" => Main,
       "Packagist" => Main,
     }.freeze
 
