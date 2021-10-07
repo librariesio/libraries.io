@@ -12,7 +12,7 @@ module PackageManager
         .flat_map(&:repository_sources)
         .compact
         .uniq
-        .map { |source| self::PROVIDER_MAP[source] } || [self::PROVIDER_MAP["default"]]
+        .map { |source| self::PROVIDER_MAP[source] }.presence || [self::PROVIDER_MAP["default"]]
     end
 
     def self.package_link(db_project, version = nil)
