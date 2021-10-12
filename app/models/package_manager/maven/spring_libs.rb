@@ -9,10 +9,10 @@ class PackageManager::Maven::SpringLibs < PackageManager::Maven::Common
   end
 
   def self.project_names
-    get("https://maven.libraries.io/springLibsRelease/all")
+    []
   end
 
   def self.recent_names
-    get("https://maven.libraries.io/springLibsRelease/all")
+    []
   end
 end
