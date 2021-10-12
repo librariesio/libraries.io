@@ -87,9 +87,9 @@ module PackageManager
         properties: {},
       }
       if xml.locate("parent").present? && depth < MAX_DEPTH
-        group_id = extract_pom_value(xml, "parent/groupId")
-        artifact_id = extract_pom_value(xml, "parent/artifactId")
-        version = extract_pom_value(xml, "parent/version")
+        group_id = extract_pom_value(xml, "parent/groupId")&.strip
+        artifact_id = extract_pom_value(xml, "parent/artifactId")&.strip
+        version = extract_pom_value(xml, "parent/version")&.strip
         if group_id && artifact_id && version
           parent = mapping_from_pom_xml(
             get_pom(group_id, artifact_id, version),
@@ -101,10 +101,10 @@ module PackageManager
       # merge with parent data if available and take child values on overlap
       child = {
         description: extract_pom_value(xml, "description", parent[:properties]),
-        homepage: extract_pom_value(xml, "url", parent[:properties]),
+        homepage: extract_pom_value(xml, "url", parent[:properties])&.strip,
         repository_url: repo_fallback(
-          extract_pom_value(xml, "scm/url", parent[:properties]),
-          extract_pom_value(xml, "url", parent[:properties])
+          extract_pom_value(xml, "scm/url", parent[:properties])&.strip,
+          extract_pom_value(xml, "url", parent[:properties])&.strip
         ),
         licenses: licenses(version_xml).join(","),
         properties: parent[:properties].merge(extract_pom_properties(xml)),
@@ -159,7 +159,7 @@ module PackageManager
           end
 
           if license_list.blank? && pom.respond_to?("project") && pom.project.locate("parent").present?
-            parent_version = extract_pom_value(pom.project, "parent/version")
+            parent_version = extract_pom_value(pom.project, "parent/version")&.strip
             Rails.logger.info("[POM has parent no license] name=#{name} parent_version=#{parent_version} child_version=#{version}")
           end
 
