@@ -9,7 +9,7 @@ class PackageManager::Maven::Jboss < PackageManager::Maven::Common
   end
 
   def self.project_names
-    get("https://maven.libraries.io/jBoss/all")
+    []
   end
 
   def self.recent_names

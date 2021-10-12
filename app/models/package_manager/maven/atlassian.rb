@@ -8,7 +8,7 @@ class PackageManager::Maven::Atlassian < PackageManager::Maven::Common
   end
 
   def self.project_names
-    get("https://maven.libraries.io/atlassian/all")
+    []
   end
 
   def self.recent_names

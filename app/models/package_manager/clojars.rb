@@ -18,7 +18,7 @@ module PackageManager
     end
 
     def self.project_names
-      get("https://maven.libraries.io/clojars/all")
+      []
     end
 
     def self.recent_names
