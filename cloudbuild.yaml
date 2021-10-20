@@ -1,5 +1,6 @@
 steps:
-- name: 'gcr.io/kaniko-project/executor:latest'
+# TODO: Switch kaniko back to "latest" after this issue is fixed: https://github.com/GoogleContainerTools/kaniko/issues/1791
+- name: 'gcr.io/kaniko-project/executor@sha256:6ecc43ae139ad8cfa11604b592aaedddcabff8cef469eda303f1fb5afe5e3034'
   env: ['REVISION_ID=$REVISION_ID']
   args:
   - --destination=gcr.io/$PROJECT_ID/libraries.io:$REVISION_ID
