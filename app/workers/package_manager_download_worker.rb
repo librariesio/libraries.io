@@ -39,6 +39,7 @@ class PackageManagerDownloadWorker
     nimble: PackageManager::Nimble,
     npm: PackageManager::NPM,
     nuget: PackageManager::NuGet,
+    packagist: PackageManager::Packagist,
     packagist_drupal: PackageManager::Packagist::Drupal,
     packagist_main: PackageManager::Packagist::Main,
     pub: PackageManager::Pub,
