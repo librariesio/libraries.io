@@ -44,4 +44,3 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 ## Copyright
 
 Copyright (c) Tidelift, Inc. See [LICENSE](https://github.com/librariesio/libraries.io/blob/main/LICENSE.txt) for details.
-
