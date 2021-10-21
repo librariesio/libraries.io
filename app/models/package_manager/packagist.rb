@@ -2,6 +2,7 @@
 
 module PackageManager
   class Packagist < MultipleSourcesBase
+    REPOSITORY_SOURCE_NAME = "Main"
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
