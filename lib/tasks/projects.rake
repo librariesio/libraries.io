@@ -111,7 +111,7 @@ namespace :projects do
       if project
         project.async_sync if project.potentially_outdated? rescue nil
       else
-        PackageManagerDownloadWorker.perform_async("PackageManager::#{platform}", name)
+        PackageManagerDownloadWorker.perform_async("PackageManager::#{platform}", name, nil, "potentially_outdated")
       end
     end
   end
@@ -191,7 +191,7 @@ namespace :projects do
       projects.each do |project|
         matches = PackageManager::Go::VERSION_MODULE_REGEX.match(project.name)
         Project.find_or_create_by(platform: "Go", name: matches[1])
-        PackageManagerDownloadWorker.perform_async("PackageManager::Go", project.name)
+        PackageManagerDownloadWorker.perform_async("PackageManager::Go", project.name, nil, "update_go_base_modules")
         puts "Queued #{project.name} for update"
       end
     end
