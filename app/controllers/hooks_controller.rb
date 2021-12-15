@@ -15,8 +15,12 @@ class HooksController < ApplicationController
   end
 
   def package
-    Rails.logger.info "HooksController#package platform=#{params['platform']} name=#{params['name']} param_keys=#{params.keys.join(',')}"
-    PackageManagerDownloadWorker.perform_async("PackageManager::#{params['platform']}", params["name"])
+    if params['platform'].blank?
+      Rails.logger.info "HooksController#package invalid=true platform=#{params['platform']} name=#{params['name']} param_keys=#{params.keys.join(',')}"
+    else
+      Rails.logger.info "HooksController#package platform=#{params['platform']} name=#{params['name']} param_keys=#{params.keys.join(',')}"
+      PackageManagerDownloadWorker.perform_async("PackageManager::#{params['platform']}", params["name"])
+    end
 
     render json: nil, status: :ok
   end
