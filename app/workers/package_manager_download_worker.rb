@@ -51,13 +51,13 @@ class PackageManagerDownloadWorker
     swiftpm: PackageManager::SwiftPM,
   }.freeze
 
-  def perform(platform_name, name, version = nil)
+  def perform(platform_name, name, version = nil, source = "unknown")
     key, platform = get_platform(platform_name)
     name = name.to_s.strip
     version = version.to_s.strip
     sync_version = (platform::SUPPORTS_SINGLE_VERSION_UPDATE && version.presence) || :all
 
-    logger.info("Package update for platform=#{key} name=#{name} version=#{version}")
+    logger.info("Package update for platform=#{key} name=#{name} version=#{version} source=#{source}")
     project = platform.update(name, sync_version: sync_version)
 
     # Raise/log if version was requested but not found
