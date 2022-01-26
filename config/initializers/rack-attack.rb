@@ -18,3 +18,8 @@ end
 Rack::Attack.throttle('scrapers', limit: 30, period: 5.minutes) do |req|
   req.remote_ip if req.user_agent && req.user_agent.match(/Scrapy.*/)
 end
+
+# throttle /usage pages
+Rack::Attack.throttle('slow_usage', limit: 20, period: 5.minutes) do |req|
+  req.remote_ip if req.path.match(/.*\/usage$/)
+end
