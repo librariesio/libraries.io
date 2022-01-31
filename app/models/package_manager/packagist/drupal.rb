@@ -28,7 +28,10 @@ class PackageManager::Packagist::Drupal < PackageManager::Packagist
       description: raw_project.css("meta[name=description]").first&.attr('content'),
       homepage: homepage,
       licenses: DRUPAL_MODULE_LICENSE,
-      repository_url: raw_project.css('#block-drupalorg-project-development .links a').find { |l| l.text =~ /code repository/ }.attr('href'),
+      repository_url: raw_project
+        .css('#block-drupalorg-project-development .links a')
+        .find { |l| l.text =~ /code repository|source code/i }
+        &.attr('href'),
     }
   end
 
