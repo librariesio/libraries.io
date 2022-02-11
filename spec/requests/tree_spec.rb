@@ -12,7 +12,7 @@ describe "TreeController" do
     end
   end
 
-  describe "GET /:platform/:project/:version/tree", type: :request do
+  describe "GET /:platform/:project/:number/tree", type: :request do
     it "renders successfully when logged out" do
       visit version_tree_path(version.to_param)
       expect(page).to have_content 'Dependency Tree'

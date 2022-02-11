@@ -67,8 +67,8 @@ Rails.application.routes.draw do
     get "/:platform/:name/usage", to: "project_usage#show", as: :project_usage, constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/sourcerank", to: "projects#sourcerank", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/contributors", to: "projects#contributors", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
-    get "/:platform/:name/:version/tree", to: "tree#show", constraints: { platform: /[\w\-]+/, name: PROJECT_CONSTRAINT, version: VERSION_CONSTRAINT }, as: :version_tree
-    get "/:platform/:name/:version/dependencies", to: "projects#dependencies", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT, version: VERSION_CONSTRAINT }
+    get "/:platform/:name/:number/tree", to: "tree#show", constraints: { platform: /[\w\-]+/, name: PROJECT_CONSTRAINT, number: VERSION_CONSTRAINT }, as: :version_tree
+    get "/:platform/:name/:number/dependencies", to: "projects#dependencies", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT, number: VERSION_CONSTRAINT }
     get "/:platform/:name/dependent_repositories", to: "projects#dependent_repositories", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/dependents", to: "projects#dependents", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/tree", to: "tree#show", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }, as: :tree

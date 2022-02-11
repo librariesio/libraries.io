@@ -243,9 +243,10 @@ class ApplicationController < ActionController::Base
 
   def load_tree_resolver
     @date = Date.parse(params[:date]) rescue Date.today
+    number = params[:number].presence
 
-    if params[:number].present?
-      @version = @project.versions.find_by_number(params[:number])
+    if number
+      @version = @project.versions.find_by_number(number)
     else
       @version = @project.versions.where('versions.published_at <= ?', @date).select(&:stable?).sort.first
     end
