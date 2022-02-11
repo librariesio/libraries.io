@@ -243,7 +243,7 @@ class ApplicationController < ActionController::Base
 
   def load_tree_resolver
     @date = Date.parse(params[:date]) rescue Date.today
-    number = params[:number].presence || params[:version].presence # Web route || API route
+    number = params[:number].presence
 
     if number
       @version = @project.versions.find_by_number(number)

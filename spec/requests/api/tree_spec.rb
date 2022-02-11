@@ -15,7 +15,7 @@ describe "Api::TreesController" do
     end
   end
 
-  describe "GET /api/:platform/:name/:version/tree", type: :request do
+  describe "GET /api/:platform/:name/:number/tree", type: :request do
     it "renders successfully" do
       get "/api/#{old_version.project.platform}/#{old_version.project.name}/#{old_version.number}/tree?api_key=#{user.api_key}"
       expect(response).to have_http_status(:success)

@@ -70,7 +70,7 @@ class Api::ProjectsController < Api::ApplicationController
     @subset = params.fetch(:subset, "default")
 
     @project = Project.find_best!(params[:platform], params[:name], [:repository, :versions])
-    @version = @project.find_version!(params[:version])
+    @version = @project.find_version!(params[:number])
     # render app/views/api/projects/dependencies.json.jb
   end
 
