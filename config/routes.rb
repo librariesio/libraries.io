@@ -124,7 +124,7 @@ Rails.application.routes.draw do
   post "/watch/:repository_id", to: "dashboard#watch", as: :watch
   post "/unwatch/:repository_id", to: "dashboard#unwatch", as: :unwatch
 
-  resource :account do
+  resource :account, except: [:edit, :new, :create] do
     member do
       get "delete"
       put "disable_emails"
