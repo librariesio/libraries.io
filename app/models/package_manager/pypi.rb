@@ -10,6 +10,7 @@ module PackageManager
     COLOR = "#3572A5"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
+    PYPI_PRERELEASE = /(a|b|rc|dev)[0-9]+$/.freeze
 
     def self.package_link(db_project, version = nil)
       "https://pypi.org/project/#{db_project.name}/#{version}"
@@ -48,7 +49,7 @@ module PackageManager
 
     def self.deprecation_info(name)
       p = project(name)
-      last_version = p["releases"].values.last&.first
+      last_version = p["releases"].values.reject { |release| release =~ /PYPI_PRERELEASE/ }.last&.first
 
       is_deprecated, message = if last_version && last_version["yanked"] == true
                                  # PEP-0423: newer way of deleting specific versions (https://www.python.org/dev/peps/pep-0592/)

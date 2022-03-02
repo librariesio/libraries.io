@@ -79,9 +79,22 @@ describe PackageManager::Pypi do
             "0.0.2" => [{"yanked" => true, "yanked_reason" => "This package is deprecated"}],
             "0.0.3" => [{"yanked" => true, "yanked_reason" => "This package is deprecated"}]
         }
-      })
+      })    
 
       expect(described_class.deprecation_info('foo')).to eq({is_deprecated: true, message: "This package is deprecated"})
+    end
+
+    it "returns not-deprecated if last version is a pre-release and deprecated" do
+      expect(PackageManager::Pypi).to receive(:project).with('foo').and_return({
+        "releases" => {
+            "0.0.1" => [{}],
+            "0.0.2" => [{}],
+            "0.0.3" => [{}],
+            "0.0.3a" => [{"yanked" => true, "yanked_reason" => "This package is deprecated"}]
+        }
+      })    
+
+      expect(described_class.deprecation_info('foo')).to eq({is_deprecated: false, message: nil})
     end
 
     it "return not-deprecated if 'development status' is not 'inactive'" do
