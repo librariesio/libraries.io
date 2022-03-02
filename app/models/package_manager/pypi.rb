@@ -49,7 +49,7 @@ module PackageManager
 
     def self.deprecation_info(name)
       p = project(name)
-      last_version = p["releases"].values.reject { |release| release =~ /PYPI_PRERELEASE/ }.last&.first
+      last_version = p["releases"].reject { |version, _releases| version =~ PYPI_PRERELEASE }.values.last&.first
 
       is_deprecated, message = if last_version && last_version["yanked"] == true
                                  # PEP-0423: newer way of deleting specific versions (https://www.python.org/dev/peps/pep-0592/)
