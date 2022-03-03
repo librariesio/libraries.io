@@ -42,14 +42,18 @@ tallies = { semver: 0, pep440: 0, maven: 0, calver: 0, unknown: 0, no_versions: 
 
 namespace :version do
   desc 'Tests a sampling of project\'s versions to count occurrences of different versioning schemes'
-  task scheme_counter: :environment do
-    # projects = Project.order(Arel.sql("RANDOM()")).limit(100)
+  task :scheme_counter, [:package_list] => :environment do |t, args|
+    raise "Provide package_list csv file with columns [package_platform, package_name]" unless args[:package_list].present?
 
     global_tallies = tallies.clone.merge({
       unknown_versions: []
     })
 
-    Project.find_each(batch_size: 1000) do |project|
+    packages = CSV.read(args[:package_list])
+
+    package_platforms, package_names = packages[0].zip(*packages)
+
+    Project.where(platform: package_platforms, name: package_names).find_each(batch_size: 1000) do |project|
       local_tallies = tallies.clone
 
       if !project.versions_count?

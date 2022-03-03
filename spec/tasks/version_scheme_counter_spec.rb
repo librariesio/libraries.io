@@ -12,24 +12,16 @@ describe "version:scheme_counter" do
       end
     end
 
-    context "Maven" do
-      versions = %w[3.7 3.8.1 4.11-beta-1 4.13-rc-1 1.2-SNAPSHOT 1.4.2-12]
-      it_behaves_like "Detects valid versions in scheme", :MAVEN, versions
-    end
-
-    context "PEP440" do
-      versions = %w[1.0 1.7.0 3.1.0rc1 5.4.0.dev0]
-      it_behaves_like "Detects valid versions in scheme", :PEP440, versions
-    end
-
-    context "Semver" do
-      versions = %w[1.0.0 1.7.0 3.1.0-rc1 5.4.0-dev0]
-      it_behaves_like "Detects valid versions in scheme", :SEMVER, versions
-    end
-
-    context "Calver" do
-      versions = %w[1000 2012.2.1 16.04 20.12.2]
-      it_behaves_like "Detects valid versions in scheme", :CALVER, versions
+    [
+      ["Maven", %w[3.7 3.8.1 4.11-beta-1 4.13-rc-1 1.2-SNAPSHOT 1.4.2-12]],
+      ["PEP440", %w[1.0 1.7.0 3.1.0rc1 5.4.0.dev0]],
+      ["Semver", %w[1.0.0 1.7.0 3.1.0-rc1 5.4.0-dev0]],
+      ["Calver", %w[1000 2012.2.1 16.04 20.12.2]]
+    ].each do |params|
+      scheme, versions = params
+      context scheme do
+        it_behaves_like "Detects valid versions in scheme", scheme.upcase.to_sym, versions
+      end
     end
   end
 
@@ -43,84 +35,62 @@ describe "version:scheme_counter" do
     end
 
     let(:blank_tallies) {{ semver: 0, pep440: 0, maven: 0, calver: 0, unknown: 0, no_versions: 0, unknown_versions: []}}
-    let(:project1) { create(:project, name: "project1", platform: "pypi") }
-    let(:project2) { create(:project, name: "project2", platform: "maven") }
-    let(:project3) { create(:project, name: "project3") }
-    let(:project4) { create(:project, name: "project4") }
-    let(:project1_versions) {
-      create_versions(
-        %w[1.0 1.7.0 3.1.0rc1 5.4.0.dev0],
-        project1
-      )
-    }
-    let(:project2_versions) {
-      create_versions(
-        %w[3.7 3.8.1 4.11-beta-1 4.13-rc-1 1.2-SNAPSHOT 1.4.2-12],
-        project2
-      )
-    }
-    let(:project3_versions) {
-      create_versions(
-        %w[3.7.1 3.8.1 4.11.2-beta-1 4.13.1 1.2.0-SNAPSHOT 1.4.2-12],
-        project2
-      )
-    }
-    let(:project4_versions) {
-      create_versions(
-        %w[3.7.1.3.5.6 3.8.1ab 4.11.2-beta-1 4 001],
-        project4
-      )
-    }
 
     describe "Tally counting" do
       before(:example) do
         allow(JSON).to receive(:pretty_generate)
       end
 
-      it "Detects PEP440" do
-        project1_versions # prime db with project
-        Rake::Task["version:scheme_counter"].execute
-        expect(JSON).to have_received(:pretty_generate).with({
-                               **blank_tallies,
-                               pep440: 1
-                             })
+      shared_examples "Detects scheme" do |expect|
+        let!(:project_versions) { create_versions( versions, project ) }
+
+        it "Detects scheme" do
+          tempfile = Tempfile.open([project.name, ".csv"]) do |tempfile_handle|
+            csv = CSV.new(tempfile_handle)
+            csv << [project.platform, project.name]
+          end
+
+          Rake::Task["version:scheme_counter"].execute(package_list: tempfile.path)
+          expect(JSON).to have_received(:pretty_generate).with({ **blank_tallies, **expect })
+        end
       end
 
-      it "Detects Maven" do
-        project2_versions # prime db with project
-        Rake::Task["version:scheme_counter"].execute
-        expect(JSON).to have_received(:pretty_generate).with({
-                                                               **blank_tallies,
-                                                               maven: 1
-                                                             })
+      context "PEP440" do
+        let(:project) { create(:project, platform: "pypi") }
+        let(:versions) { %w[1.0 1.7.0 3.1.0rc1 5.4.0.dev0] }
+
+        it_should_behave_like "Detects scheme", { pep440: 1 }
       end
 
-      it "Detects Semver" do
-        project3_versions # prime db with project
-        Rake::Task["version:scheme_counter"].execute
-        expect(JSON).to have_received(:pretty_generate).with({
-                                                               **blank_tallies,
-                                                               semver: 1
-                                                             })
+      context "Maven" do
+        let(:project) { create(:project, platform: "maven") }
+        let(:versions) { %w[3.7 3.8.1 4.11-beta-1 4.13-rc-1 1.2-SNAPSHOT 1.4.2-12] }
+
+        it_should_behave_like "Detects scheme", { maven: 1 }
       end
 
-      it "Detects Unknown" do
-        project4_versions # prime db with project
-        Rake::Task["version:scheme_counter"].execute
-        expect(JSON).to have_received(:pretty_generate).with({
-                                                               **blank_tallies,
-                                                               unknown: 1,
-                                                               unknown_versions: [
-                                                                 [
-                                                                   project4.platform,
-                                                                   project4.name,
-                                                                   project4.reload.versions.pluck(:number)
-                                                                 ]
-                                                               ]
-                                                             })
+      context "Semver" do
+        let(:project) { create(:project) }
+        let(:versions) { %w[3.7.1 3.8.1 4.11.2-beta-1 4.13.1 1.2.0-SNAPSHOT 1.4.2-12] }
+
+        it_should_behave_like "Detects scheme", { semver: 1 }
+      end
+
+      context "Unknown" do
+        let(:project) { create(:project) }
+        let(:versions) {  %w[3.7.1.3.5.6 3.8.1ab 4.11.2-beta-1 4 001] }
+
+        it_should_behave_like "Detects scheme", {
+          unknown: 1,
+          unknown_versions: [
+            [
+              project4.platform,
+              project4.name,
+              project4.reload.versions.pluck(:number)
+            ]
+          ]
+        }
       end
     end
   end
 end
-
-# 3.1.0.rc1
