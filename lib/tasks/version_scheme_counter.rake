@@ -53,7 +53,7 @@ namespace :version do
 
     package_platforms, package_names = packages[0].zip(*packages)
 
-    Project.where(platform: package_platforms, name: package_names).find_each(batch_size: 1000) do |project|
+    Project.includes(:versions).where(platform: package_platforms, name: package_names).find_each(batch_size: 1000) do |project|
       local_tallies = tallies.clone
 
       if !project.versions_count?

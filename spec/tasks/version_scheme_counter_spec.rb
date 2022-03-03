@@ -77,16 +77,17 @@ describe "version:scheme_counter" do
       end
 
       context "Unknown" do
-        let(:project) { create(:project) }
-        let(:versions) {  %w[3.7.1.3.5.6 3.8.1ab 4.11.2-beta-1 4 001] }
+        versions = %w[3.7.1.3.5.6 3.8.1ab 4.11.2-beta-1 4 001]
+        let(:project) { create(:project, name: "unknown_scheme") }
+        let(:versions) { versions }
 
         it_should_behave_like "Detects scheme", {
           unknown: 1,
           unknown_versions: [
             [
-              project4.platform,
-              project4.name,
-              project4.reload.versions.pluck(:number)
+              "Rubygems",
+              "unknown_scheme",
+              versions
             ]
           ]
         }
