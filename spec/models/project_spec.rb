@@ -273,6 +273,21 @@ describe Project, type: :model do
         end
       end
     end
+
+    context 'deprecated project no longer deprecated' do
+      let!(:project) { Project.create(platform: 'NPM', name: 'react', status: 'Deprecated') }
+
+      it 'should mark the project no longer deprecated' do
+        VCR.use_cassette('project/check_status/react') do
+          project.check_status
+
+          project.reload
+
+          expect(project.status).to eq('')
+          expect(project.deprecation_reason).to eq(nil)
+        end
+      end
+    end
   end
 
   describe 'DeletedProject management' do

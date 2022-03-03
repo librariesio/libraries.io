@@ -570,6 +570,9 @@ class Project < ApplicationRecord
       if result[:is_deprecated]
         update_attribute(:status, "Deprecated")
         update_attribute(:deprecation_reason, result[:message])
+      else # in case package was accidentally marked as deprecated (their logic or ours), mark it as not deprecated
+        update_attribute(:status, '')
+        update_attribute(:deprecation_reason, nil)
       end
     elsif deprecated_or_removed
       update_attribute(:status, nil)
