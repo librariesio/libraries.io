@@ -16,7 +16,8 @@ describe "version:scheme_counter" do
       ["Maven", %w[3.7 3.8.1 4.11-beta-1 4.13-rc-1 1.2-SNAPSHOT 1.4.2-12]],
       ["PEP440", %w[1.0 1.7.0 3.1.0rc1 5.4.0.dev0]],
       ["Semver", %w[1.0.0 1.7.0 3.1.0-rc1 5.4.0-dev0]],
-      ["Calver", %w[1000 2012.2.1 16.04 20.12.2]]
+      ["Calver", %w[1000 2012.2.1 16.04 20.12.2]],
+      ["OSGi", %w[1 1.2 1.2.3 1.2.3.a1_2-3]]
     ].each do |params|
       scheme, versions = params
       context scheme do
@@ -34,7 +35,7 @@ describe "version:scheme_counter" do
       end
     end
 
-    let(:blank_tallies) {{ semver: 0, pep440: 0, maven: 0, calver: 0, unknown: 0, no_versions: 0, unknown_versions: []}}
+    let(:blank_tallies) {{ semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0, unknown_schemes: []}}
 
     describe "Tally counting" do
       before(:example) do
@@ -83,7 +84,7 @@ describe "version:scheme_counter" do
 
         it_should_behave_like "Detects scheme", {
           unknown: 1,
-          unknown_versions: [
+          unknown_schemes: [
             [
               "Rubygems",
               "unknown_scheme",

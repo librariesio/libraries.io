@@ -42,4 +42,4 @@ data
 .google_creds.json
 
 # rake task outputs
-lib/tasks/output
+lib/tasks/output/version_scheme_count.json
