@@ -44,6 +44,23 @@ module VersionSchemeDetection
       first_part.length >= 4 || (first_part.length == 2 && first_part.to_i > 0)
     end
   }
+
+  def self.build_project_where_clause(packages)
+    # downcase platform
+    packages.map! { |package| [package[0].downcase, package[1]] }
+
+    project_table = Project.arel_table
+
+    packages.reduce(Arel::Nodes::False.new) do |clause, package|
+      clause.or(
+        project_table.grouping(
+          project_table.lower(project_table[:platform]).eq(package[0]).and(
+            project_table[:name].eq(package[1])
+          )
+        )
+      )
+    end
+  end
 end
 
 tallies = { semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0 }
@@ -59,17 +76,11 @@ namespace :version do
     warnings = []
 
     packages = CSV.read(args[:package_list])
-    # downcase platform
-    packages.map! { |package| [package[0].downcase, package[1]] }
-
-    # The following makes a query like "(x AND y) OR (x AND y)"
-    package_matcher = "(LOWER(platform) = ? AND name = ?)"
-    where_clause = "#{package_matcher} OR " * (packages.length - 1)
-    where_clause = "#{where_clause} #{package_matcher}"
 
     Project
       .includes(:versions)
-      .where([where_clause, *packages.flatten]).find_each(batch_size: 1000) do |project|
+      .where(VersionSchemeDetection.build_project_where_clause(packages))
+      .find_each(batch_size: 1000) do |project|
       project_platform = project.platform
       project_name = project.name
 

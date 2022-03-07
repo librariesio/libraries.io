@@ -26,6 +26,36 @@ describe "version:scheme_counter" do
     end
   end
 
+  describe "Building where clause" do
+    shared_examples "Builds where clause correctly" do
+      it "Builds where clause correctly" do
+        where_clause = VersionSchemeDetection.build_project_where_clause(projects)
+        expect(Project.where(where_clause).count).to eq(Project.count)
+      end
+    end
+
+    context "1 project" do
+      let(:projects) {
+        project = create(:project)
+
+        [[project.platform, project.name]]
+      }
+
+      it_behaves_like "Builds where clause correctly"
+    end
+
+    context ">1 projects" do
+      let(:projects) {
+        project = create(:project)
+        project2 = create(:project)
+
+        [[project.platform, project.name], [project2.platform, project2.name]]
+      }
+
+      it_behaves_like "Builds where clause correctly"
+    end
+  end
+
   describe "Rake task" do
     Rails.application.load_tasks
 
