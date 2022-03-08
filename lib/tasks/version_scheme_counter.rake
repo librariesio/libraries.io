@@ -83,7 +83,7 @@ namespace :version do
 
       local_tallies = tallies.clone
 
-      if !project.versions_count?
+      unless project.versions_count?
         global_tallies[:no_versions] += 1
         next
       end
