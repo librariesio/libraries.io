@@ -138,6 +138,9 @@ namespace :version do
     end if global_tallies[:unknown_schemes].length
     puts warnings
 
-    File.write(File.join(__dir__, "output", "version_scheme_count.json"), JSON.pretty_generate(global_tallies))
+    File.write(File.join(__dir__, "output", "version_scheme_count.json"), JSON.pretty_generate({
+                                                                                                 **global_tallies,
+                                                                                                 warnings: warnings
+                                                                                               }))
   end
 end

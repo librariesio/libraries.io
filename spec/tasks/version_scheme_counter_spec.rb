@@ -65,7 +65,7 @@ describe "version:scheme_counter" do
       end
     end
 
-    let(:blank_tallies) {{ semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0, unknown_schemes: []}}
+    let(:blank_tallies) {{ semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0, unknown_schemes: [], warnings: []}}
 
     describe "Tally counting" do
       before(:example) do
