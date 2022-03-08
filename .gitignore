@@ -40,3 +40,6 @@ data
 
 # google cloud creds using by capistrano
 .google_creds.json
+
+# rake task outputs
+lib/tasks/output/version_scheme_count.json
