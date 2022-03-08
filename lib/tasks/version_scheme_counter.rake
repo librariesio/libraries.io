@@ -46,15 +46,12 @@ module VersionSchemeDetection
   }
 
   def self.build_project_where_clause(packages)
-    # downcase platform
-    packages.map! { |package| [package[0].downcase, package[1]] }
-
     project_table = Project.arel_table
 
     packages.reduce(Arel::Nodes::False.new) do |clause, package|
       clause.or(
         project_table.grouping(
-          project_table.lower(project_table[:platform]).eq(package[0]).and(
+          project_table.lower(project_table[:platform]).eq(package[0].downcase).and(
             project_table[:name].eq(package[1])
           )
         )
