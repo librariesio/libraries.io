@@ -27,7 +27,7 @@ module PackageManager
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)/.freeze
 
     def self.check_status_url(db_project)
-      "#{PROXY_BASE_URL}/#{db_project.name}/@v/list"
+      "#{PROXY_BASE_URL}/#{encode_for_proxy(db_project.name)}/@v/list"
     end
 
     def self.package_link(db_project, version = nil)
@@ -55,7 +55,7 @@ module PackageManager
     end
 
     def self.one_version(raw_project, version_string)
-      info = get("#{PROXY_BASE_URL}/#{raw_project[:name]}/@v/#{version_string}.info")
+      info = get("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@v/#{version_string}.info")
 
       # Store nil published_at for known Go Modules issue where case-insensitive name collisions break go get
       # e.g. https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
@@ -100,11 +100,15 @@ module PackageManager
     end
 
     def self.project(name)
-      if (doc_html = get_html("#{DISCOVER_URL}/#{name}"))
-        { name: name, html: doc_html, overview_html: doc_html }
-      else
-        { name: name }
-      end
+      # get_html will send back an empty string if response is not a 200
+      # a blank response means that the project was not found on pkg.go.dev site
+      # if it is not found on that site it should be considered an invalid project name
+      # although the go proxy may respond with data for this project name
+      doc_html = get_html("#{DISCOVER_URL}/#{name}")
+
+      # send back nil if the response is blank
+      # base package manager handles if the project is not present
+      { name: name, html: doc_html, overview_html: doc_html } unless doc_html.text.blank?
     end
 
     def self.versions(raw_project, _name)
@@ -116,7 +120,7 @@ module PackageManager
       # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
       #   1) Fetch the list of versions: https://proxy.golang.org/#{module_name}/@v/list
       #   2) And for each version, fetch https://proxy.golang.org/#{module_name}/@v/#{v}.info
-      get_raw("#{PROXY_BASE_URL}/#{raw_project[:name]}/@v/list")
+      get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@v/list")
         &.lines
         &.map(&:strip)
         &.reject(&:blank?)
@@ -154,7 +158,7 @@ module PackageManager
       # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
       # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
       # to scrape the webpage or wait for an API for a faster fetch here.
-      resp = request("#{PROXY_BASE_URL}/#{name}/@v/#{version}.mod")
+      resp = request("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{version}.mod")
       if resp.status == 200
         go_mod_file = resp.body
         Bibliothecary::Parsers::Go.parse_go_mod(go_mod_file)
@@ -177,7 +181,7 @@ module PackageManager
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
 
       begin
-        go_import = get_html("https://" + name + "?go-get=1")
+        go_import = get_html("https://#{name}?go-get=1")
           .xpath('//meta[@name="go-import"]')
           .first
           &.attribute("content")
@@ -197,8 +201,15 @@ module PackageManager
     end
 
     def self.valid_project?(name)
-      response = request("#{PROXY_BASE_URL}/#{name}/@v/list")
-      response.status != 410
+      response = request("#{DISCOVER_URL}/#{name}")
+      response.status == 200
+    end
+
+    # will convert a string with capital letters and replace with a "!" prepended to the lowercase letter
+    # this is needed to follow the goproxy protocol and find versions correctly for modules with capital letters in them
+    # https://go.dev/ref/mod#goproxy-protocol
+    def self.encode_for_proxy(str)
+      str.gsub(/[A-Z]/) { |s| "!#{s.downcase}" }
     end
   end
 end
