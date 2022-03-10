@@ -204,7 +204,7 @@ namespace :projects do
     start_id = REDIS.get("go:update:latest_updated_id").presence || 0
     puts "Start id: #{start_id}, limit: #{args[:count]}."
     projects = Project
-      .where(platform: "Go")
+      .where(platform: "Go", repository_url: nil) # no repository_url is a common sign the package does not exist on pkg.go.dev
       .where("id > ?", start_id)
       .order(:id)
       .limit(args[:count])

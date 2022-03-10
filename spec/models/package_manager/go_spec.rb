@@ -215,4 +215,16 @@ describe PackageManager::Go do
       end
     end
   end
+
+  describe "#encode_for_proxy" do
+    [
+      %w[test test],
+      %w[BigTest !big!test],
+      %w[BIGBIGTEST !b!i!g!b!i!g!t!e!s!t],
+    ].each do |(test, expected)|
+      it "should replace capital letters" do
+        expect(PackageManager::Go.encode_for_proxy(test)).to eql(expected)
+      end
+    end
+  end
 end
