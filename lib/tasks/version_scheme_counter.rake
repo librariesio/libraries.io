@@ -74,65 +74,70 @@ namespace :version do
 
     packages = CSV.read(args[:package_list])
 
-    Project
-      .includes(:versions)
-      .where(VersionSchemeDetection.build_project_where_clause(packages))
-      .find_each(batch_size: 1000) do |project|
-      project_platform = project.platform
-      project_name = project.name
+    packages.each_slice(1000) do |packages_slice|
+      puts packages_slice
+      projects = Project.where(VersionSchemeDetection.build_project_where_clause(packages_slice))
+      Project
+        .includes(:versions)
+        .where(VersionSchemeDetection.build_project_where_clause(packages_slice)).each do |project|
+        project_platform = project.platform
+        project_name = project.name
 
-      local_tallies = tallies.clone
+        local_tallies = tallies.clone
 
-      unless project.versions_count?
-        global_tallies[:no_versions] += 1
-        next
-      end
+        unless project.versions_count?
+          global_tallies[:no_versions] += 1
+          next
+        end
 
-      project.versions.each do |version|
-        version_number = version.number
-        matchable = false
-        [
-          :semver,
-          :pep440,
-          :calver,
-          *([:maven, :osgi] if project_platform.downcase == "maven"),
-        ].each do |scheme|
-          if VersionSchemeDetection::VALIDATORS[scheme.upcase].call(version_number)
-            local_tallies[scheme] += 1
-            matchable = true
+        project.versions.each do |version|
+          version_number = version.number
+          matchable = false
+          [
+            :semver,
+            :pep440,
+            :calver,
+            *([:maven, :osgi] if project_platform.downcase == "maven"),
+          ].each do |scheme|
+            if VersionSchemeDetection::VALIDATORS[scheme.upcase].call(version_number)
+              local_tallies[scheme] += 1
+              matchable = true
+            end
+          end
+
+          if !matchable
+            local_tallies[:unknown] += 1
           end
         end
 
-        if !matchable
-          local_tallies[:unknown] += 1
+        max_count = local_tallies.values.max
+        maxes = local_tallies.select{|_, tally| tally == max_count}.keys
+
+        if maxes.length == 1
+          detected_scheme = maxes[0]
+        elsif maxes.include?(:unknown)
+          global_tallies[:unknown_schemes].push([project_platform, project_name, project.versions.map(&:number)])
+          detected_scheme = :unknown
+        elsif maxes.include?(:semver)
+          detected_scheme = :semver
+        elsif maxes.include?(:calver)
+          detected_scheme = :calver
+        elsif (maxes & [:maven, :osgi]).any? && project_platform.downcase == "maven"
+          detected_scheme = :maven
+        elsif maxes.include?(:pep440)
+          detected_scheme = :pep440
+        else
+          warnings.push("#{project_platform}:#{project_name} has #{maxes} but couldn't determine which to choose so picked #{maxes[0]}")
+          detected_scheme = maxes[0]
         end
+
+        global_tallies[detected_scheme] += 1
       end
 
-      max_count = local_tallies.values.max
-      maxes = local_tallies.select{|_, tally| tally == max_count}.keys
-
-      if maxes.length == 1
-        detected_scheme = maxes[0]
-      elsif maxes.include?(:unknown)
-        global_tallies[:unknown_schemes].push([project_platform, project_name, project.versions.map(&:number)])
-        detected_scheme = :unknown
-      elsif maxes.include?(:semver)
-        detected_scheme = :semver
-      elsif maxes.include?(:calver)
-        detected_scheme = :calver
-      elsif (maxes & [:maven, :osgi]).any? && project_platform.downcase == "maven"
-        detected_scheme = :maven
-      elsif maxes.include?(:pep440)
-        detected_scheme = :pep440
-      else
-        warnings.push("#{project_platform}:#{project_name} has #{maxes} but couldn't determine which to choose so picked #{maxes[0]}")
-        detected_scheme = maxes[0]
-      end
-
-      global_tallies[detected_scheme] += 1
+      puts "Running tallies: #{global_tallies}"
     end
 
-    puts global_tallies
+    puts "Final tallies: #{global_tallies}"
     global_tallies[:unknown_schemes].each do |unknown|
       puts "unknown scheme for #{unknown[0]}: #{unknown[1]} #{unknown[2]}"
     end if global_tallies[:unknown_schemes].length
