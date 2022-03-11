@@ -77,7 +77,8 @@ module PackageManager
       project = super(name, sync_version: sync_version)
       # call update on base module name if the name is appended with major version
       # example: github.com/myexample/modulename/v2
-      update_base_module(name) if name.match(VERSION_MODULE_REGEX)
+      # use the returned project name in case it finds a Project via repository_url
+      update_base_module(project.name) if project.name.match(VERSION_MODULE_REGEX)
 
       project
     end
@@ -142,8 +143,26 @@ module PackageManager
       if raw_project[:html]
         url = raw_project[:overview_html]&.css(".UnitMeta-repo a")&.first&.attribute("href")&.value
 
+        # find an existing project with the same repository and replace the name with the existing project
+        # this will avoid creating duplicate Projects with various casing
+
+        # if this is a versioned module, make sure to find the right versioned project
+        regex_matches = raw_project[:name].match(VERSION_MODULE_REGEX)
+        if regex_matches
+          # try and find a versioned name matching this repository_url
+          existing_project_name = Project.where(platform: "Go").where("lower(repository_url) = :repo_url and name like :name", repo_url: url.downcase, name: "%/#{regex_matches[2]}").first&.name
+
+          # if we didn't find one then try and get the base project
+          unless existing_project_name.present?
+            versioned_name = Project.where(platform: "Go").where("lower(repository_url) = ? and name not like '%/v'", url.downcase).first&.name
+            existing_project_name = versioned_name&.concat("/#{regex_matches[2]}")
+          end
+        else
+          existing_project_name = Project.where(platform: "Go").where("lower(repository_url) = ?", url.downcase).first&.name
+        end
+
         {
-          name: raw_project[:name],
+          name: existing_project_name.presence || raw_project[:name],
           description: raw_project[:html].css(".Documentation-overview p").map(&:text).join("\n").strip,
           licenses: raw_project[:html].css('*[data-test-id="UnitHeader-license"]').map(&:text).join(","),
           repository_url: url,
