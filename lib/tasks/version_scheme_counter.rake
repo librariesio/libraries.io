@@ -62,24 +62,31 @@ end
 
 tallies = { semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0 }
 
+def update_output_file(tallies, unknown_schemes, warnings, versionless_packages)
+  File.write(File.join(__dir__, "output", "version_scheme_count.json"), JSON.pretty_generate({
+                                                                                               **tallies,
+                                                                                               unknown_schemes: unknown_schemes,
+                                                                                               warnings: warnings,
+                                                                                               versionless_packages: versionless_packages
+                                                                                             }), mode: "a")
+end
+
 namespace :version do
   desc 'Tests a sampling of project\'s versions to count occurrences of different versioning schemes'
   task :scheme_counter, [:package_list] => :environment do |t, args|
     raise "Provide package_list csv file with columns [package_platform, package_name]" unless args[:package_list].present?
 
-    global_tallies = tallies.clone.merge({
-      unknown_schemes: []
-    })
+    global_tallies = tallies.clone
     warnings = []
+    versionless_packages = []
+    unknown_schemes = []
 
     packages = CSV.read(args[:package_list])
 
     packages.each_slice(1000) do |packages_slice|
-      puts packages_slice
-      projects = Project.where(VersionSchemeDetection.build_project_where_clause(packages_slice))
       Project
         .includes(:versions)
-        .where(VersionSchemeDetection.build_project_where_clause(packages_slice)).each do |project|
+        .where(VersionSchemeDetection.build_project_where_clause(packages_slice)).limit(1000).each do |project|
         project_platform = project.platform
         project_name = project.name
 
@@ -87,6 +94,8 @@ namespace :version do
 
         unless project.versions_count?
           global_tallies[:no_versions] += 1
+          puts "#{project_platform}:#{project_name} has no versions."
+          versionless_packages.push([project_platform, project_name])
           next
         end
 
@@ -116,36 +125,31 @@ namespace :version do
         if maxes.length == 1
           detected_scheme = maxes[0]
         elsif maxes.include?(:unknown)
-          global_tallies[:unknown_schemes].push([project_platform, project_name, project.versions.map(&:number)])
           detected_scheme = :unknown
         elsif maxes.include?(:semver)
           detected_scheme = :semver
         elsif maxes.include?(:calver)
           detected_scheme = :calver
         elsif (maxes & [:maven, :osgi]).any? && project_platform.downcase == "maven"
-          detected_scheme = :maven
+          detected_scheme = maxes.include?(:osgi) ? :osgi : :maven
         elsif maxes.include?(:pep440)
           detected_scheme = :pep440
         else
-          warnings.push("#{project_platform}:#{project_name} has #{maxes} but couldn't determine which to choose so picked #{maxes[0]}")
+          warning = "#{project_platform}:#{project_name} has #{maxes} but couldn't determine which to choose so picked #{maxes[0]}"
+          puts warning
+          warnings.push(warning)
           detected_scheme = maxes[0]
         end
+
+        unknown_schemes.push([project_platform, project_name, project.versions.map(&:number)]) if detected_scheme == :unknown
 
         global_tallies[detected_scheme] += 1
       end
 
       puts "Running tallies: #{global_tallies}"
+      update_output_file(global_tallies, unknown_schemes, warnings, versionless_packages)
     end
 
-    puts "Final tallies: #{global_tallies}"
-    global_tallies[:unknown_schemes].each do |unknown|
-      puts "unknown scheme for #{unknown[0]}: #{unknown[1]} #{unknown[2]}"
-    end if global_tallies[:unknown_schemes].length
-    puts warnings
-
-    File.write(File.join(__dir__, "output", "version_scheme_count.json"), JSON.pretty_generate({
-                                                                                                 **global_tallies,
-                                                                                                 warnings: warnings
-                                                                                               }))
+    update_output_file(global_tallies, unknown_schemes, warnings, versionless_packages)
   end
 end
