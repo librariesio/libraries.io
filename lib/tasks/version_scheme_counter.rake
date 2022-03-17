@@ -37,6 +37,7 @@ module VersionSchemeDetection
     PEP440: ->(version) { version =~ REGEXES[:PEP440] },
     OSGI: ->(version) { version =~ REGEXES[:OSGI] },
     SEMVER: ->(version) { SemanticRange.valid(version).present? },
+    PACKAGIST_SEMVER: ->(version) { version =~ REGEXES[:PACKAGIST_SEMVER] },
     CALVER: lambda do |version|
       first_part = version.split(".")[0]
       # Assume most if not all Calver versions were released after 1000 AD
@@ -68,7 +69,7 @@ def update_output_file(tallies, unknown_schemes, warnings, versionless_packages)
                                                                                                unknown_schemes: unknown_schemes,
                                                                                                warnings: warnings,
                                                                                                versionless_packages: versionless_packages
-                                                                                             }), mode: "a")
+                                                                                             }))
 end
 
 namespace :version do
