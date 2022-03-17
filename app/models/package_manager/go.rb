@@ -250,7 +250,7 @@ module PackageManager
     # if nothing is found, nil is returned
     def self.canonical_module_name(name)
       json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
-      version = json.try("Version")
+      version = json && json["Version"]
 
       return nil unless version.present?
 
