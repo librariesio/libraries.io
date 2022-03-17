@@ -25,6 +25,7 @@ module PackageManager
     URL = DISCOVER_URL
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)/.freeze
+    MODULE_REGEX = /module\s+(.+)/.freeze
 
     def self.check_status_url(db_project)
       "#{PROXY_BASE_URL}/#{encode_for_proxy(db_project.name)}/@v/list"
@@ -146,19 +147,23 @@ module PackageManager
         # find an existing project with the same repository and replace the name with the existing project
         # this will avoid creating duplicate Projects with various casing
 
-        # if this is a versioned module, make sure to find the right versioned project
-        regex_matches = raw_project[:name].match(VERSION_MODULE_REGEX)
-        if regex_matches
-          # try and find a versioned name matching this repository_url
-          existing_project_name = Project.where(platform: "Go").where("lower(repository_url) = :repo_url and name like :name", repo_url: url.downcase, name: "%/#{regex_matches[2]}").first&.name
+        # if this is a verified module name then no need to lookup anything
+        is_module = module?(raw_project[:name], raw_project: raw_project)
+        versioned_module_regex = raw_project[:name].match(VERSION_MODULE_REGEX)
+        unless is_module
+          # if this is a versioned module, make sure to find the right versioned project
+          if versioned_module_regex
+            # try and find a versioned name matching this repository_url
+            existing_project_name = Project.where(platform: "Go").where("lower(repository_url) = :repo_url and name like :name", repo_url: url.downcase, name: "%/#{versioned_module_regex[2]}").first&.name
 
-          # if we didn't find one then try and get the base project
-          unless existing_project_name.present?
-            versioned_name = Project.where(platform: "Go").where("lower(repository_url) = ? and name not like '%/v'", url.downcase).first&.name
-            existing_project_name = versioned_name&.concat("/#{regex_matches[2]}")
+            # if we didn't find one then try and get the base project
+            unless existing_project_name.present?
+              versioned_name = Project.where(platform: "Go").where("lower(repository_url) = ? and name not like '%/v'", url.downcase).first&.name
+              existing_project_name = versioned_name&.concat("/#{versioned_module_regex[2]}")
+            end
+          else
+            existing_project_name = Project.where(platform: "Go").where("lower(repository_url) = ?", url.downcase).first&.name
           end
-        else
-          existing_project_name = Project.where(platform: "Go").where("lower(repository_url) = ?", url.downcase).first&.name
         end
 
         {
@@ -219,9 +224,46 @@ module PackageManager
       request("https://#{project['Package']}").to_hash[:url].to_s
     end
 
+    # checks to see if a page exists for the name on pkg.go.dev
     def self.valid_project?(name)
       response = request("#{DISCOVER_URL}/#{name}")
       response.status == 200
+    end
+
+    # Check to see if this project name has a valid go.mod file according to the information on pkg.go.dev
+    # optional parameter raw_project can be passed in to skip the HTTP call to pkg.go.dev, the object structure
+    # should match the one returned from the project() method
+    def self.module?(name, raw_project: nil)
+      project = if raw_project.present?
+                  raw_project
+                else
+                  project(name)
+                end
+
+      return false unless project.present?
+
+      summary_image = project[:html].css(".UnitMeta-details > li")&.first&.css("details summary img")&.first
+      summary_image&.attribute("alt")&.value == "checked"
+    end
+
+    # looks at the module declaration for the latest version's go.mod file and returns that if found
+    # if nothing is found, nil is returned
+    def self.canonical_module_name(name)
+      json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
+      version = json["Version"]
+
+      return nil unless version.present?
+
+      mod_file = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{version}.mod")
+      module_line = mod_file
+        &.lines
+        &.map(&:strip)
+        &.reject(&:blank?)
+        &.find { |line| line.match(MODULE_REGEX) }
+
+      return false unless module_line.present?
+
+      module_line.match(MODULE_REGEX)[1]
     end
 
     # will convert a string with capital letters and replace with a "!" prepended to the lowercase letter
