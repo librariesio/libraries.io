@@ -79,7 +79,7 @@ module PackageManager
       # call update on base module name if the name is appended with major version
       # example: github.com/myexample/modulename/v2
       # use the returned project name in case it finds a Project via repository_url
-      update_base_module(project.name) if project.name.match(VERSION_MODULE_REGEX)
+      update_base_module(project.name) if project.present? && project.name.match(VERSION_MODULE_REGEX)
 
       project
     end
