@@ -348,4 +348,9 @@ describe Project, type: :model do
       expect(project.mailing_list.count).to eq 1
     end
   end
+
+  describe 'latest_release' do
+    let!(:project) { create(:project) }
+
+  end
 end

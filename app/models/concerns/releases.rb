@@ -9,12 +9,12 @@ module Releases
   end
 
   def latest_stable_version
-    @latest_version ||= stable_releases.sort.first
+    @latest_version ||= stable_releases.sort_by(&:published_at).last
   end
 
   def latest_stable_tag
     return nil if repository.nil?
-    tags.published.select(&:stable?).sort.first
+    tags.published.select(&:stable?).sort_by(&:published_at).last
   end
 
   def latest_stable_release
@@ -22,12 +22,12 @@ module Releases
   end
 
   def latest_version
-    versions.sort.first
+    versions.order(published_at: :desc, created_at: :desc).first
   end
 
   def latest_tag
     return nil if repository.nil?
-    tags.published.order('published_at DESC').first
+    tags.published.order(published_at: :desc, created_at: :desc).first
   end
 
   def latest_release
@@ -35,12 +35,12 @@ module Releases
   end
 
   def first_version
-    @first_version ||= versions.sort.last
+    @first_version ||= versions.order(:published_at, :created_at).first
   end
 
   def first_tag
     return nil if repository.nil?
-    tags.published.order('published_at ASC').first
+    tags.published.order(:published_at, :created_at).first
   end
 
   def first_release
