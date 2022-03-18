@@ -26,7 +26,7 @@ class GoProjectVerificationWorker
       # The goal is to have only one remaining Project for the name passed in here to avoid having multiple projects
       # with different cased names for the same package.
       if name != module_name
-        PackageManager::Go.update(module_name) unless Project.where(platform: "Go", name: module_name).exists?
+        PackageManager::Go.update(module_name) unless module_name.nil? || Project.where(platform: "Go", name: module_name).exists?
         project.destroy
       end
     end
