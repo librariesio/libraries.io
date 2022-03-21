@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_26_141107) do
+ActiveRecord::Schema.define(version: 2021_03_24_133104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -402,6 +402,7 @@ ActiveRecord::Schema.define(version: 2021_01_26_141107) do
     t.jsonb "repository_sources"
     t.string "status"
     t.index ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true
+    t.index ["updated_at"], name: "index_versions_on_updated_at"
   end
 
   create_table "web_hooks", id: :serial, force: :cascade do |t|
