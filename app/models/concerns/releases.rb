@@ -12,7 +12,7 @@ module Releases
   def latest_stable_version
     return @latest_stable_version if @latest_stable_version.present?
 
-    @latest_stable_version = if stable_releases.all? { |r| r.published_at.present? }
+    @latest_stable_version = if stable_releases.any? { |r| r.published_at.present? }
                                stable_releases.max_by(&:published_at)
                              else
                                stable_releases.sort
@@ -26,7 +26,7 @@ module Releases
 
     stable_tags = tags.published.select(&:stable?)
 
-    @latest_stable_tag = if stable_tags.all? { |r| r.published_at.present? }
+    @latest_stable_tag = if stable_tags.any? { |r| r.published_at.present? }
                            stable_tags.max_by(&:published_at)
                          else
                            stable_tags.sort
