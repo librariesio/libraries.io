@@ -252,7 +252,7 @@ ActiveRecord::Schema.define(version: 2022_03_18_153151) do
     t.string "logo_url"
     t.integer "repository_user_id"
     t.string "keywords", default: [], array: true
-    t.index "lower((host_type)::text), lower((full_name)::text)", name: "index_repositories_on_host_type_and_full_name", unique: true
+    t.index "lower((host_type)::text), lower((full_name)::text)", name: "index_repositories_on_lower_host_type_lower_full_name", unique: true
     t.index "lower((language)::text)", name: "github_repositories_lower_language"
     t.index ["fork"], name: "index_repositories_on_fork"
     t.index ["host_type", "uuid"], name: "index_repositories_on_host_type_and_uuid", unique: true
@@ -301,7 +301,7 @@ ActiveRecord::Schema.define(version: 2022_03_18_153151) do
     t.boolean "hidden", default: false
     t.datetime "last_synced_at"
     t.string "host_type"
-    t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_organisations_on_host_type_and_login", unique: true
+    t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_organisations_on_lower_host_type_lower_login", unique: true
     t.index ["created_at"], name: "index_repository_organisations_on_created_at"
     t.index ["hidden"], name: "index_repository_organisations_on_hidden"
     t.index ["host_type", "uuid"], name: "index_repository_organisations_on_host_type_and_uuid", unique: true
@@ -345,7 +345,7 @@ ActiveRecord::Schema.define(version: 2022_03_18_153151) do
     t.integer "followers"
     t.integer "following"
     t.string "host_type"
-    t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_users_on_host_type_and_login", unique: true
+    t.index "lower((host_type)::text), lower((login)::text)", name: "index_repository_users_on_lower_host_type_lower_login", unique: true
     t.index ["created_at"], name: "index_repository_users_on_created_at"
     t.index ["hidden", "last_synced_at"], name: "index_repository_users_on_hidden_and_last_synced_at"
     t.index ["hidden"], name: "index_repository_users_on_hidden"
