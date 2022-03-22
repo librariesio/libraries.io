@@ -85,7 +85,7 @@ namespace :version do
 
     packages = CSV.read(args[:package_list])
 
-    previous_tallies = File.read(output_file)
+    previous_tallies = File.exist?(output_file) && File.read(output_file)
     if previous_tallies.present?
       global_tallies = JSON.parse(previous_tallies, symbolize_names: true)
       packages = packages[global_tallies[:total]..]
