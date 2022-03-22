@@ -65,14 +65,14 @@ describe "version:scheme_counter" do
       end
     end
 
-    let(:blank_tallies) {{ semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0, unknown_schemes: [], warnings: [], versionless_packages: []}}
+    let(:blank_tallies) { VersionSchemeDetection::TALLIES.clone.merge({total: 1, unknown_schemes: [], warnings: [], versionless_packages: []})}
+
+    before(:example) do
+      allow(JSON).to receive(:pretty_generate)
+    end
 
     describe "Tally counting" do
-      before(:example) do
-        allow(JSON).to receive(:pretty_generate)
-      end
-
-      shared_examples "Detects scheme" do |expect|
+      shared_examples "Detects scheme" do |expected|
         let!(:project_versions) { create_versions( versions, project ) }
 
         it "Detects scheme" do
@@ -82,7 +82,7 @@ describe "version:scheme_counter" do
           end
 
           Rake::Task["version:scheme_counter"].execute(package_list: tempfile.path)
-          expect(JSON).to have_received(:pretty_generate).twice.with({ **blank_tallies, **expect })
+          expect(JSON).to have_received(:pretty_generate).twice.with({ **blank_tallies, **expected })
         end
       end
 
@@ -122,6 +122,43 @@ describe "version:scheme_counter" do
             ]
           ]
         }
+      end
+    end
+
+    describe "Task recovery" do
+      let(:project1) { create(:project) }
+      let(:project2) { create(:project) }
+      let(:project3) { create(:project) }
+
+      output_file, tempfile = nil
+      before do
+        output_file = Tempfile.open do |fh|
+          fh << { **VersionSchemeDetection::TALLIES, total: 2 }.to_json
+        end
+
+        tempfile = Tempfile.open do |fh|
+          csv = CSV.new(fh)
+          csv << [project1.platform, project1.name]
+          csv << [project2.platform, project2.name]
+          csv << [project3.platform, project3.name]
+        end
+      end
+
+      after do
+        File.unlink(output_file.path)
+        File.unlink(tempfile.path)
+      end
+
+      it "Picks up where it left off" do
+        Rake::Task["version:scheme_counter"].execute(package_list: tempfile.path, output_file: output_file.path)
+        expect(JSON).to have_received(:pretty_generate).twice.with({
+                                                                     **blank_tallies,
+                                                                     no_versions: 1,
+                                                                     versionless_packages: [
+                                                                       [project3.platform, project3.name],
+                                                                     ],
+                                                                     total: 3
+                                                                   })
       end
     end
   end

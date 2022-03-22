@@ -37,7 +37,6 @@ module VersionSchemeDetection
     PEP440: ->(version) { version =~ REGEXES[:PEP440] },
     OSGI: ->(version) { version =~ REGEXES[:OSGI] },
     SEMVER: ->(version) { SemanticRange.valid(version).present? },
-    PACKAGIST_SEMVER: ->(version) { version =~ REGEXES[:PACKAGIST_SEMVER] },
     CALVER: lambda do |version|
       first_part = version.split(".")[0]
       # Assume most if not all Calver versions were released after 1000 AD
@@ -45,6 +44,8 @@ module VersionSchemeDetection
       first_part.length >= 4 || (first_part.length == 2 && first_part.to_i > 0)
     end
   }
+
+  TALLIES = { semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0, total: 0 }
 
   def self.build_project_where_clause(packages)
     project_table = Project.arel_table
@@ -61,28 +62,34 @@ module VersionSchemeDetection
   end
 end
 
-tallies = { semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0 }
-
-def update_output_file(tallies, unknown_schemes, warnings, versionless_packages)
-  File.write(File.join(__dir__, "output", "version_scheme_count.json"), JSON.pretty_generate({
-                                                                                               **tallies,
-                                                                                               unknown_schemes: unknown_schemes,
-                                                                                               warnings: warnings,
-                                                                                               versionless_packages: versionless_packages
-                                                                                             }))
+def update_output_file(output_file, tallies, unknown_schemes, warnings, versionless_packages)
+  File.write(output_file, JSON.pretty_generate({
+                                                 **tallies,
+                                                 unknown_schemes: unknown_schemes,
+                                                 warnings: warnings,
+                                                 versionless_packages: versionless_packages
+                                               }))
 end
 
 namespace :version do
   desc 'Tests a sampling of project\'s versions to count occurrences of different versioning schemes'
-  task :scheme_counter, [:package_list] => :environment do |t, args|
+  task :scheme_counter, [:package_list, :output_file] => :environment do |t, args|
     raise "Provide package_list csv file with columns [package_platform, package_name]" unless args[:package_list].present?
 
-    global_tallies = tallies.clone
+    output_file = args[:output_file] || File.join(__dir__, "output", "version_scheme_count.json")
+
+    global_tallies = VersionSchemeDetection::TALLIES.clone
     warnings = []
     versionless_packages = []
     unknown_schemes = []
 
     packages = CSV.read(args[:package_list])
+
+    previous_tallies = File.read(output_file)
+    if previous_tallies.present?
+      global_tallies = JSON.parse(previous_tallies, symbolize_names: true)
+      packages = packages[global_tallies[:total]..]
+    end
 
     packages.each_slice(1000) do |packages_slice|
       Project
@@ -91,11 +98,11 @@ namespace :version do
         project_platform = project.platform
         project_name = project.name
 
-        local_tallies = tallies.clone
+        local_tallies = VersionSchemeDetection::TALLIES.clone
 
         unless project.versions_count?
           global_tallies[:no_versions] += 1
-          puts "#{project_platform}:#{project_name} has no versions."
+          global_tallies[:total] += 1
           versionless_packages.push([project_platform, project_name])
           next
         end
@@ -121,7 +128,7 @@ namespace :version do
         end
 
         max_count = local_tallies.values.max
-        maxes = local_tallies.select{|_, tally| tally == max_count}.keys
+        maxes = local_tallies.select { |_, tally| tally == max_count }.keys
 
         if maxes.length == 1
           detected_scheme = maxes[0]
@@ -137,7 +144,6 @@ namespace :version do
           detected_scheme = :pep440
         else
           warning = "#{project_platform}:#{project_name} has #{maxes} but couldn't determine which to choose so picked #{maxes[0]}"
-          puts warning
           warnings.push(warning)
           detected_scheme = maxes[0]
         end
@@ -145,12 +151,12 @@ namespace :version do
         unknown_schemes.push([project_platform, project_name, project.versions.map(&:number)]) if detected_scheme == :unknown
 
         global_tallies[detected_scheme] += 1
+        global_tallies[:total] += 1
       end
 
-      puts "Running tallies: #{global_tallies}"
-      update_output_file(global_tallies, unknown_schemes, warnings, versionless_packages)
+      update_output_file(output_file, global_tallies, unknown_schemes, warnings, versionless_packages)
     end
 
-    update_output_file(global_tallies, unknown_schemes, warnings, versionless_packages)
+    update_output_file(output_file, global_tallies, unknown_schemes, warnings, versionless_packages)
   end
 end
