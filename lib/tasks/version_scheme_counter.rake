@@ -143,8 +143,7 @@ namespace :version do
         elsif maxes.include?(:pep440)
           detected_scheme = :pep440
         else
-          warning = "#{project_platform}:#{project_name} has #{maxes} but couldn't determine which to choose so picked #{maxes[0]}"
-          warnings.push(warning)
+          warnings.push("#{project_platform}:#{project_name} has #{maxes} but couldn't determine which to choose so picked #{maxes[0]}")
           detected_scheme = maxes[0]
         end
 

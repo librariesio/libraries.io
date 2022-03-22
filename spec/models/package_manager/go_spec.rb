@@ -158,6 +158,38 @@ describe PackageManager::Go do
         expect(project.versions.find_by(number: "v1.2.0").published_at.strftime("%m/%d/%Y")).to eq "05/05/2018"
       end
     end
+
+    it "should use the existing name of the project matching the repository" do
+      create(:project, name: package_name.upcase, platform: "Go", repository_url: "https://github.com/robfig/cRoN")
+
+      VCR.use_cassette("pkg_go_dev") do
+        project = described_class.update(package_name)
+
+        expect(Project.where(platform: "Go").where("lower(name) = ?", package_name.downcase).count).to eql 1
+        expect(project.name).to eql(package_name.upcase)
+        expect(project.versions.count).to eql 3
+        expect(project.versions.where("number like ?", "v1%").count).to be > 0
+        expect(project.versions.find_by(number: "v1.2.0").published_at.strftime("%m/%d/%Y")).to eq "05/05/2018"
+      end
+    end
+
+    it "should use existing name of project and versioned project matching repository url" do
+      create(:project, name: package_name.upcase, platform: "Go", repository_url: "https://github.com/robfig/cRoN")
+
+      VCR.use_cassette("pkg_go_dev") do
+        described_class.update("#{package_name}/v3")
+        versioned_module = Project.find_by(platform: "Go", name: "#{package_name.upcase}/v3")
+
+        expect(versioned_module).to be_present
+        expect(versioned_module.versions.count).to eql 3
+        expect(versioned_module.versions.where("number like ?", "v3%").count).to eql 3
+
+        non_versioned_module = Project.find_by(platform: "Go", name: package_name.upcase)
+        expect(non_versioned_module).to be_present
+        expect(non_versioned_module.versions.count).to eql 3
+        expect(non_versioned_module.versions.where("number like ?", "v3%").count).to eql 3
+      end
+    end
   end
 
   describe ".project_find_names(name)" do
