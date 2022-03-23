@@ -45,7 +45,7 @@ module VersionSchemeDetection
     end
   }
 
-  TALLIES = { semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0, total: 0 }
+  TALLIES = { semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0, total: 0 }.freeze
 
   def self.build_project_where_clause(packages)
     project_table = Project.arel_table
