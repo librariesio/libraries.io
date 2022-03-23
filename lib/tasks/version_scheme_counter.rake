@@ -78,7 +78,7 @@ namespace :version do
 
     output_file = args[:output_file] || File.join(__dir__, "output", "version_scheme_count.json")
 
-    global_tallies = VersionSchemeDetection::TALLIES.clone
+    global_tallies = VersionSchemeDetection::TALLIES.clone(freeze: false)
     warnings = []
     versionless_packages = []
     unknown_schemes = []
@@ -98,7 +98,7 @@ namespace :version do
         project_platform = project.platform
         project_name = project.name
 
-        local_tallies = VersionSchemeDetection::TALLIES.clone
+        local_tallies = VersionSchemeDetection::TALLIES.clone(freeze: false)
 
         unless project.versions_count?
           global_tallies[:no_versions] += 1
