@@ -8,11 +8,11 @@
 #
 # Version scheme detection methodology:
 # 1. Test against all schemes and keep a tally of which ones validate.
-# 2. The one with the highest tally is likely the scheme which was being followed.
-# 3. If tied for unknown, mark unknown.
-# 4. Since calver validates as other schemes, prefer calver in the case of a tie since it is unusual and likely calver.
-# 5. In the case of a tie, if Semver is one of the contenders, prefer Semver for its ubiquity.
-# 6. Assume only a Maven project would use the Maven or OSGi versioning schemes.
+# 2. The scheme which tested positive for all versions is the detected scheme.
+# 3. In the case of a tie:
+#     1. Since calver validates as other schemes, prefer calver since it is unusual and likely calver.
+#     2. If Semver is one of the contenders, prefer Semver for its ubiquity.
+#     3. Assume only a Maven project would use the Maven or OSGi versioning schemes.
 #
 # Known issues: many version schemes will match PEP440 and even Maven and yet be Semver. In the case of a tie, we choose
 #   semver, but this may turn out to be the wrong choice later on.
@@ -45,7 +45,7 @@ module VersionSchemeDetection
     end
   }
 
-  TALLIES = { semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0, total: 0 }.freeze
+  TALLIES = { semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0, cursor: 0 }.freeze
 
   def self.build_project_where_clause(packages)
     project_table = Project.arel_table
@@ -88,13 +88,15 @@ namespace :version do
     previous_tallies = File.exist?(output_file) && File.read(output_file)
     if previous_tallies.present?
       global_tallies = JSON.parse(previous_tallies, symbolize_names: true)
-      packages = packages[global_tallies[:total]..]
+      packages = packages[global_tallies[:cursor]..]
     end
 
-    packages.each_slice(1000) do |packages_slice|
+    slice_size = 1000
+
+    packages&.each_slice(slice_size) do |packages_slice|
       Project
         .includes(:versions)
-        .where(VersionSchemeDetection.build_project_where_clause(packages_slice)).limit(1000).each do |project|
+        .where(VersionSchemeDetection.build_project_where_clause(packages_slice)).limit(slice_size).each do |project|
         project_platform = project.platform
         project_name = project.name
 
@@ -102,7 +104,6 @@ namespace :version do
 
         unless project.versions_count?
           global_tallies[:no_versions] += 1
-          global_tallies[:total] += 1
           versionless_packages.push([project_platform, project_name])
           next
         end
@@ -130,14 +131,15 @@ namespace :version do
         max_count = local_tallies.values.max
         maxes = local_tallies.select { |_, tally| tally == max_count }.keys
 
-        if maxes.length == 1
-          detected_scheme = maxes[0]
-        elsif maxes.include?(:unknown)
+        # If there are no schemes which matched all versions, consider the scheme unknown.
+        if max_count != project.versions_count
           detected_scheme = :unknown
-        elsif maxes.include?(:semver)
-          detected_scheme = :semver
+        elsif maxes.length == 1
+          detected_scheme = maxes[0]
         elsif maxes.include?(:calver)
           detected_scheme = :calver
+        elsif maxes.include?(:semver)
+          detected_scheme = :semver
         elsif (maxes & [:maven, :osgi]).any? && project_platform.downcase == "maven"
           detected_scheme = maxes.include?(:osgi) ? :osgi : :maven
         elsif maxes.include?(:pep440)
@@ -150,12 +152,23 @@ namespace :version do
         unknown_schemes.push([project_platform, project_name, project.versions.map(&:number)]) if detected_scheme == :unknown
 
         global_tallies[detected_scheme] += 1
-        global_tallies[:total] += 1
       end
 
-      update_output_file(output_file, global_tallies, unknown_schemes, warnings, versionless_packages)
+      update_output_file(
+        output_file,
+        { **global_tallies, cursor: global_tallies[:cursor] + packages_slice.length - 1},
+        unknown_schemes,
+        warnings,
+        versionless_packages
+      )
     end
 
-    update_output_file(output_file, global_tallies, unknown_schemes, warnings, versionless_packages)
+    update_output_file(
+      output_file,
+      { **global_tallies, cursor: packages.length},
+      unknown_schemes,
+      warnings,
+      versionless_packages
+    )
   end
 end
