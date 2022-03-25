@@ -65,7 +65,7 @@ describe "version:scheme_counter" do
       end
     end
 
-    let(:blank_tallies) { VersionSchemeDetection::TALLIES.clone.merge({total: 1, unknown_schemes: [], warnings: [], versionless_packages: []})}
+    let(:blank_tallies) { VersionSchemeDetection::TALLIES.clone.merge({cursor: 1, unknown_schemes: [], warnings: [], versionless_packages: []})}
 
     before(:example) do
       allow(JSON).to receive(:pretty_generate)
@@ -82,7 +82,7 @@ describe "version:scheme_counter" do
           end
 
           Rake::Task["version:scheme_counter"].execute(package_list: tempfile.path)
-          expect(JSON).to have_received(:pretty_generate).twice.with({ **blank_tallies, **expected })
+          expect(JSON).to have_received(:pretty_generate).with({ **blank_tallies, **expected })
         end
       end
 
@@ -123,6 +123,23 @@ describe "version:scheme_counter" do
           ]
         }
       end
+
+      context "Not unanimous" do
+        versions = %w[3.7.1 3.8.1 4.11.2 001]
+        let(:project) { create(:project, name: "unknown_scheme") }
+        let(:versions) { versions }
+
+        it_should_behave_like "Detects scheme", {
+          unknown: 1,
+          unknown_schemes: [
+            [
+              "Rubygems",
+              "unknown_scheme",
+              versions
+            ]
+          ]
+        }
+      end
     end
 
     describe "Task recovery" do
@@ -133,7 +150,7 @@ describe "version:scheme_counter" do
       output_file, tempfile = nil
       before do
         output_file = Tempfile.open do |fh|
-          fh << { **VersionSchemeDetection::TALLIES, total: 2 }.to_json
+          fh << { **VersionSchemeDetection::TALLIES, cursor: 2 }.to_json
         end
 
         tempfile = Tempfile.open do |fh|
@@ -151,13 +168,13 @@ describe "version:scheme_counter" do
 
       it "Picks up where it left off" do
         Rake::Task["version:scheme_counter"].execute(package_list: tempfile.path, output_file: output_file.path)
-        expect(JSON).to have_received(:pretty_generate).twice.with({
+        expect(JSON).to have_received(:pretty_generate).with({
                                                                      **blank_tallies,
                                                                      no_versions: 1,
                                                                      versionless_packages: [
                                                                        [project3.platform, project3.name],
                                                                      ],
-                                                                     total: 3
+                                                                     cursor: 2
                                                                    })
       end
     end
