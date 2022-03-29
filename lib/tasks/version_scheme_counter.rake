@@ -62,15 +62,6 @@ module VersionSchemeDetection
   end
 end
 
-def update_output_file(output_file, tallies, unknown_schemes, warnings, versionless_packages)
-  File.write(output_file, JSON.pretty_generate({
-                                                 **tallies,
-                                                 unknown_schemes: unknown_schemes,
-                                                 warnings: warnings,
-                                                 versionless_packages: versionless_packages
-                                               }))
-end
-
 namespace :version do
   desc 'Tests a sampling of project\'s versions to count occurrences of different versioning schemes'
   task :scheme_counter, [:package_list, :output_file] => :environment do |t, args|
@@ -154,21 +145,19 @@ namespace :version do
         global_tallies[detected_scheme] += 1
       end
 
-      update_output_file(
+      global_tallies[:cursor] = global_tallies[:cursor] + packages_slice.length
+
+      File.write(
         output_file,
-        { **global_tallies, cursor: global_tallies[:cursor] + packages_slice.length - 1},
-        unknown_schemes,
-        warnings,
-        versionless_packages
+        JSON.pretty_generate(
+          {
+            **global_tallies,
+            unknown_schemes: unknown_schemes,
+            warnings: warnings,
+            versionless_packages: versionless_packages
+          }
+        )
       )
     end
-
-    update_output_file(
-      output_file,
-      { **global_tallies, cursor: packages.length},
-      unknown_schemes,
-      warnings,
-      versionless_packages
-    )
   end
 end
