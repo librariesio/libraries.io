@@ -174,7 +174,7 @@ describe "version:scheme_counter" do
                                                                      versionless_packages: [
                                                                        [project3.platform, project3.name],
                                                                      ],
-                                                                     cursor: 2
+                                                                     cursor: 3
                                                                    })
       end
     end
