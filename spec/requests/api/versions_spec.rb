@@ -56,5 +56,18 @@ describe "Api::RepositoriesController" do
       expect(response).to have_http_status(:success)
       expect(json["more"]).to eq 1
     end
+
+    it "only fetches versions that have a project" do
+      versions_with_project = make_versions(project, 2)
+      version_without_project = create(:version, project: create(:project), number: "1.0.0", updated_at: 1.second.ago)
+      version_without_project.project.destroy!
+
+      get "/api/versions", params: { since: 1.year.ago, api_key: user.api_key }
+
+      expect(response).to have_http_status(:success)
+      expected_coords = versions_with_project.map { |v| Coordinate.generate(v.project, v.number) }
+      expect(json["results"].pluck("coordinate")).to match_array expected_coords
+      expect(json["more"]).to eq 0
+    end
   end
 end

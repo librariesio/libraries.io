@@ -8,9 +8,12 @@ class Api::VersionsController < Api::BulkProjectController
   def index
     @max_results = [Integer(params[:max_results] || MAX_RESULTS), MAX_RESULTS].min
 
-    @versions = Version.includes(:project).where(
-      "versions.updated_at > ?",
-      Time.parse(params.require(:since))
-    ).order(:updated_at)
+    @versions = Version
+      .includes(:project)
+      .where.not(projects: {id: nil})
+      .where(
+        "versions.updated_at > ?",
+        Time.parse(params.require(:since))
+      ).order(:updated_at)
   end
 end
