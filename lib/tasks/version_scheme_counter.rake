@@ -39,6 +39,7 @@ module VersionSchemeDetection
     SEMVER: ->(version) { SemanticRange.valid(version).present? },
     CALVER: lambda do |version|
       first_part = version.split(".")[0]
+      return false if first_part.nil?
       # Assume most if not all Calver versions were released after 1000 AD
       # Also assume if they are using YY as the first part that it is after 2000 AD
       first_part.length >= 4 || (first_part.length == 2 && first_part.to_i > 0)
