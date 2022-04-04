@@ -205,7 +205,8 @@ module PackageManager
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
 
       begin
-        go_import = get_html("https://#{name}?go-get=1")
+        # https://go.dev/ref/mod#serving-from-proxy
+        go_import = get_html("https://#{name}?go-get=1", {request: {timeout: 2}})
           .xpath('//meta[@name="go-import"]')
           .first
           &.attribute("content")
@@ -215,6 +216,11 @@ module PackageManager
           &.sub(/https?:\/\//, "")
 
         go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
+      rescue Faraday::ConnectionFailed => e
+        # We can get here from go modules that don't exist anymore, or having server troubles. Fallback to 
+        # the given name and notify us to be safe.
+        Bugsnag.notify(e)
+        [name]
       rescue StandardError
         [name]
       end
