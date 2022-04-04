@@ -226,7 +226,7 @@ describe PackageManager::Go do
 
           allow(described_class)
             .to receive(:get_html)
-            .with("https://go.uber.org/multierr?go-get=1")
+            .with("https://go.uber.org/multierr?go-get=1", {request: {timeout: 2}})
             .and_return(Nokogiri::HTML(html))
 
           expect(described_class.project_find_names("go.uber.org/multierr"))
@@ -238,7 +238,7 @@ describe PackageManager::Go do
         it "returns the original name" do
           allow(described_class)
             .to receive(:get_html)
-            .with("https://go.example.org/user/foo?go-get=1")
+            .with("https://go.example.org/user/foo?go-get=1", {request: {timeout: 2}})
             .and_return(Nokogiri::HTML("<html><body>Hello, world!</body></html>"))
 
           expect(described_class.project_find_names("go.example.org/user/foo"))
