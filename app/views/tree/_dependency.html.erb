@@ -12,7 +12,7 @@
   <em class='text-muted'>
     <span class="tip" title="Specified version range"><%= requirements %></span>
     <%= '-' if requirements.present? %>
-    <%= project.normalize_licenses.join(', ') %>
+    <%= Array.wrap(project.normalize_licenses).join(', ') %>
   </em>
   <% if dependency %>
     <%= render 'dependencies/flags', dependency: dependency %>
