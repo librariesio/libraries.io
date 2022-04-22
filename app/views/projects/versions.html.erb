@@ -44,7 +44,7 @@
         </tr>
         <% end %>
       </table>
-      <%= will_paginate @versions, page_links: false %>
+      <%= will_paginate @versions, page_links: true %>
       <p>
         <%= link_to project_versions_path(@project.to_param.merge(format: :atom)) do %>
           <%= fa_icon "rss-square" %>
