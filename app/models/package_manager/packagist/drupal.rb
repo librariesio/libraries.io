@@ -45,7 +45,6 @@ class PackageManager::Packagist::Drupal < PackageManager::Packagist
       versions += doc.css('.view-project-release-by-project .node-project-release')
         .map do |node|
           number = node.css("h2 a").text.split(' ').last # e.g. "google_analytics 4.x-dev" => 4.x-dev
-          puts "https://www.drupal.org/project/#{name}/releases/#{number}"
           release_doc = get_html("https://www.drupal.org/project/#{name}/releases/#{number}")
           published_at = release_doc
             .css('.release-info') # e.g. "Created by: user123\n\nCreated on: 1 Jun 2015 at 16:37 UTC\n\nLast updated: 25 May 2022 at 07:11 UTC"
