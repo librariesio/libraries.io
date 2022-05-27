@@ -44,11 +44,21 @@ class PackageManager::Packagist::Drupal < PackageManager::Packagist
     while doc.css('.view-project-release-by-project .node-project-release').size > 0 && page < 50 # reasonable cap of 50
       versions += doc.css('.view-project-release-by-project .node-project-release')
         .map do |node|
+          number = node.css("h2 a").text.split(' ').last # e.g. "google_analytics 4.x-dev" => 4.x-dev
+          release_doc = get_html("https://www.drupal.org/project/#{name}/releases/#{number}")
+          published_at = release_doc
+            .css('.release-info') # e.g. "Created by: user123\n\nCreated on: 1 Jun 2015 at 16:37 UTC\n\nLast updated: 25 May 2022 at 07:11 UTC"
+            .first
+            &.text
+            &.scan(/Created on\: (.*)/) # e.g. [["1 Jun 2015 at 16:37 UTC"]]
+            &.first
+            &.first
+            &.strip # e.g. "12 May 2021 at 15:19 UTC"
+          published_at = Time.parse(published_at) if published_at
           {
-            number: node.css("h2 a").text.split(' ').last, # e.g. "google_analytics 4.x-dev" => 4.x-dev
-            published_at: Time.at(node.css('.submitted time').first.attr('datetime').to_i),
+            number: number,
+            published_at: published_at,
             original_license: DRUPAL_MODULE_LICENSE
-
           }
         end
       page += 1
