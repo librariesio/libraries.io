@@ -71,7 +71,7 @@ module PackageManager
       return nil unless raw_project.any?
 
       latest_version = raw_project
-        .max_by { |v| v["time"] } # then we'll use the most recently published as our most recent version
+        .max_by { |v| v["time"].to_s } # then we'll use the most recently published as our most recent version
 
       return if latest_version.nil?
 
