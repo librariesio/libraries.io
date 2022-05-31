@@ -54,8 +54,8 @@ module PackageManager
     def self.project(name)
       # The main v2 endpoint excludes dev versions, so if that list
       # of versions is empty, fallback to the dev list of versions.
-      get("https://repo.packagist.org/p2/#{name}.json").dig("packages", name).presence || 
-        get("https://repo.packagist.org/p2/#{name}~dev.json").dig("packages", name)
+      get("https://repo.packagist.org/p2/#{name}.json")&.dig("packages", name).presence || 
+        get("https://repo.packagist.org/p2/#{name}~dev.json")&.dig("packages", name)
     end
 
     def self.deprecation_info(name)
