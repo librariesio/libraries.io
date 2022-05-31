@@ -52,8 +52,10 @@ module PackageManager
     end
 
     def self.project(name)
-      get("https://packagist.org/packages/#{name}.json")
-        &.fetch("package")
+      # The main v2 endpoint excludes dev versions, so if that list
+      # of versions is empty, fallback to the dev list of versions.
+      get("https://repo.packagist.org/p2/#{name}.json").dig("packages", name).presence || 
+        get("https://repo.packagist.org/p2/#{name}~dev.json").dig("packages", name)
     end
 
     def self.deprecation_info(name)
@@ -66,31 +68,27 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      return nil unless raw_project["versions"].any?
+      return nil unless raw_project.any?
 
-      # for version comparison of php, we want to reject any dev versions unless
-      # there are only dev versions of the project
-      versions = raw_project["versions"].values.reject { |v| v["version"].include? "dev" }
-      versions = raw_project["versions"].values if versions.empty?
-      # then we'll use the most recently published as our most recent version
-      latest_version = versions.max_by { |v| v["time"] }
+      latest_version = raw_project
+        .max_by { |v| v["time"] } # then we'll use the most recently published as our most recent version
+
+      return if latest_version.nil?
+
       {
         name: latest_version["name"],
         description: latest_version["description"],
-        homepage: latest_version["home_page"],
+        homepage: latest_version["homepage"],
         keywords_array: Array.wrap(latest_version["keywords"]),
         licenses: latest_version["license"].join(","),
-        repository_url: repo_fallback(raw_project["repository"], latest_version["home_page"]),
+        repository_url: repo_fallback(latest_version["source"].first&.fetch("url"), latest_version["homepage"]),
       }
     end
 
-    def self.versions(_raw_project, name)
-      # TODO: Use composer v2 and unminify data https://packagist.org/apidoc
-      versions = get("https://repo.packagist.org/p/#{name}.json")&.dig("packages", name) || []
-
-      acceptable_versions(versions).map do |number, version|
+    def self.versions(raw_project, _name)
+      acceptable_versions(raw_project).map do |version|
         {
-          number: number,
+          number: version["version"],
           published_at: version["time"],
           original_license: version["license"],
         }

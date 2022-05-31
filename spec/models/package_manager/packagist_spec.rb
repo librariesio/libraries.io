@@ -31,19 +31,23 @@ describe PackageManager::Packagist do
 
   context "with an unmapped package" do
     subject do
-      {
-        "name" =>	"librariesio/fakepkg",
-        "description" => "A Libraries package.",
-        "time" =>	"2012-09-18T06:46:25+00:00",
-        "maintainers" => [],
-        "versions" => {
-          "dev-master" => { "version" => "dev-master", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package." },
-          "1.2.3" => { "version" => "1.2.3", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package." },
-          "1.2.x-dev" => { "version" => "1.2.x-dev", "time" => "2020-01-08T08:45:45+00:00", "license" => ["BSD-3-Clause"], "name" =>	"librariesio/fakepkg", "description" => "A Libraries package." },
-        },
-        "type" =>	"library",
-        "repository" => "https://github.com/librariesio/fakepkg",
-      }
+      [
+        {
+          "name" =>	"librariesio/fakepkg",
+          "description" => "A Libraries package.",
+          "keywords" => ["php", "not-real"],
+          "homepage" => "https://fakepkg.libraries.io",
+          "version" => "v1.2.3",
+          "version_normalized" => "1.2.3",
+          "license" => ["BSD-3-Clause"],
+          "authors" => [{"name" => "Fake Author", "email" => "fake.author@libraries.io"}],
+          "source" => [{"url" => "https://github.com/librariesio/fakepkg", "type" => "git", "reference" => "12341234123412341234"}],
+          "dist" => {},
+          "type" => "library",
+          "time" =>	"2012-09-18T06:46:25+00:00",
+          "autoload" => {},
+        }
+      ]
     end
 
     describe ".mapping" do
@@ -51,8 +55,8 @@ describe PackageManager::Packagist do
         expect(described_class.mapping(subject)).to eq({
                                                          name: "librariesio/fakepkg",
                                                          description: "A Libraries package.",
-                                                         homepage: nil,
-                                                         keywords_array: [],
+                                                         homepage: "https://fakepkg.libraries.io",
+                                                         keywords_array: ["php", "not-real"],
                                                          licenses: "BSD-3-Clause",
                                                          repository_url: "https://github.com/librariesio/fakepkg",
                                                        })
@@ -61,9 +65,7 @@ describe PackageManager::Packagist do
 
     describe ".versions" do
       it "rejects dev branches that aren't really releases" do
-        VCR.use_cassette("packagist/testpkg") do
-          expect(described_class.versions(subject, "synergitech/cronitor")).to eq([{ number: "v0.0.1", published_at: "2021-04-27T15:46:06+00:00", original_license: ["MIT"] }])
-        end
+        expect(described_class.versions(subject, "synergitech/cronitor")).to eq([{ number: "v1.2.3", published_at: "2012-09-18T06:46:25+00:00", original_license: ["BSD-3-Clause"] }])
       end
     end
   end
