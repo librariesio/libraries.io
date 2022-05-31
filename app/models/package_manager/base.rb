@@ -272,13 +272,7 @@ module PackageManager
       homepage = "" if homepage.nil?
       repo_url = URLParser.try_all(repo)
       homepage_url = URLParser.try_all(homepage)
-      if repo_url.present?
-        repo_url
-      elsif homepage_url.present?
-        homepage_url
-      else
-        repo
-      end
+      repo_url.presence || homepage_url.presence || repo
     end
 
     def self.project_find_names(project_name)
