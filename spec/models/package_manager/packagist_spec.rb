@@ -41,7 +41,7 @@ describe PackageManager::Packagist do
           "version_normalized" => "1.2.3",
           "license" => ["BSD-3-Clause"],
           "authors" => [{"name" => "Fake Author", "email" => "fake.author@libraries.io"}],
-          "source" => [{"url" => "https://github.com/librariesio/fakepkg", "type" => "git", "reference" => "12341234123412341234"}],
+          "source" => {"url" => "https://github.com/librariesio/fakepkg", "type" => "git", "reference" => "12341234123412341234"},
           "dist" => {},
           "type" => "library",
           "time" =>	"2012-09-18T06:46:25+00:00",
