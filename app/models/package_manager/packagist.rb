@@ -80,7 +80,7 @@ module PackageManager
         description: latest_version["description"],
         homepage: latest_version["homepage"],
         keywords_array: Array.wrap(latest_version["keywords"]),
-        licenses: latest_version["license"].join(","),
+        licenses: latest_version["license"]&.join(","),
         repository_url: repo_fallback(latest_version["source"]&.fetch("url"), latest_version["homepage"]),
       }
     end
