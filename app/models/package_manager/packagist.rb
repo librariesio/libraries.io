@@ -81,7 +81,7 @@ module PackageManager
         homepage: latest_version["homepage"],
         keywords_array: Array.wrap(latest_version["keywords"]),
         licenses: latest_version["license"].join(","),
-        repository_url: repo_fallback(latest_version["source"].fetch("url"), latest_version["homepage"]),
+        repository_url: repo_fallback(latest_version["source"].first&.fetch("url"), latest_version["homepage"]),
       }
     end
 
