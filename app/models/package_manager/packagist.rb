@@ -54,8 +54,8 @@ module PackageManager
     def self.project(name)
       # The main v2 endpoint excludes dev versions, so if that list
       # of versions is empty, fallback to the dev list of versions.
-      get("https://repo.packagist.org/p2/#{name}.json").dig("packages", name).presence || 
-        get("https://repo.packagist.org/p2/#{name}~dev.json").dig("packages", name)
+      get("https://repo.packagist.org/p2/#{name}.json")&.dig("packages", name).presence || 
+        get("https://repo.packagist.org/p2/#{name}~dev.json")&.dig("packages", name)
     end
 
     def self.deprecation_info(name)
@@ -71,7 +71,7 @@ module PackageManager
       return nil unless raw_project.any?
 
       latest_version = raw_project
-        .max_by { |v| v["time"] } # then we'll use the most recently published as our most recent version
+        .max_by { |v| v["time"].to_s } # then we'll use the most recently published as our most recent version
 
       return if latest_version.nil?
 
@@ -80,8 +80,8 @@ module PackageManager
         description: latest_version["description"],
         homepage: latest_version["homepage"],
         keywords_array: Array.wrap(latest_version["keywords"]),
-        licenses: latest_version["license"].join(","),
-        repository_url: repo_fallback(latest_version["source"].first&.fetch("url"), latest_version["homepage"]),
+        licenses: latest_version["license"]&.join(","),
+        repository_url: repo_fallback(latest_version["source"]&.fetch("url"), latest_version["homepage"]),
       }
     end
 
