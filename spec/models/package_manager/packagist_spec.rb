@@ -72,25 +72,25 @@ describe PackageManager::Packagist do
 
   describe "#deprecation_info" do
     it "return not-deprecated if 'abandoned' is false'" do
-      expect(PackageManager::Packagist).to receive(:project).with("foo").and_return({
+      expect(PackageManager::Packagist).to receive(:project).with("foo").and_return([{
                                                                                       "abandoned" => false,
-                                                                                    })
+                                                                                    }])
 
       expect(described_class.deprecation_info("foo")).to eq({ is_deprecated: false, message: "" })
     end
 
     it "return deprecated if 'abandoned' is true'" do
-      expect(PackageManager::Packagist).to receive(:project).with("foo").and_return({
+      expect(PackageManager::Packagist).to receive(:project).with("foo").and_return([{
                                                                                       "abandoned" => true,
-                                                                                    })
+                                                                                    }])
 
       expect(described_class.deprecation_info("foo")).to eq({ is_deprecated: true, message: "" })
     end
 
     it "return deprecated if 'abandoned' is set to a replacement package'" do
-      expect(PackageManager::Packagist).to receive(:project).with("foo").and_return({
+      expect(PackageManager::Packagist).to receive(:project).with("foo").and_return([{
                                                                                       "abandoned" => "use-this/package-instead",
-                                                                                    })
+                                                                                    }])
 
       expect(described_class.deprecation_info("foo")).to eq({ is_deprecated: true, message: "Replacement: use-this/package-instead" })
     end
