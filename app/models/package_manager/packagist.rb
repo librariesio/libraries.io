@@ -70,8 +70,9 @@ module PackageManager
     def self.mapping(raw_project)
       return nil unless raw_project.any?
 
-      latest_version = raw_project
-        .max_by { |v| v["time"].to_s } # then we'll use the most recently published as our most recent version
+      # In V2 API, it looks like the first version is the one with all the metadata (name, etc)
+      # (This might not necessarily be the version with the highest "time" value)
+      latest_version = raw_project.first
 
       return if latest_version.nil?
 
