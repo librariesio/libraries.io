@@ -17,7 +17,7 @@ module PackageManager
     end
 
     def self.check_status_url(db_project)
-      "https://pypi.org/pypi/#{db_project.name}/json/"
+      "https://pypi.org/pypi/#{db_project.name}/json"
     end
 
     def self.install_instructions(db_project, version = nil)
