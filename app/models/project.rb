@@ -565,7 +565,7 @@ class Project < ApplicationRecord
       update_attribute(:status, "Removed")
     elsif platform.downcase == "clojars" && response.response_code == 404
       update_attribute(:status, "Removed")
-    elsif platform.downcase == "pypi" && response.response_code = 404
+    elsif platform.downcase == "pypi" && response.response_code == 404
       update_attribute(:status, "Removed")
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(name)
