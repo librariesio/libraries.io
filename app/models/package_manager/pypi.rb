@@ -13,10 +13,13 @@ module PackageManager
     PYPI_PRERELEASE = /(a|b|rc|dev)[0-9]+$/.freeze
 
     def self.package_link(db_project, version = nil)
-      "https://pypi.org/project/#{db_project.name}/#{version}"
+      # NB PEP 503: "All URLs which respond with an HTML5 page MUST end with a / and the repository SHOULD redirect the URLs without a / to add a / to the end."
+      "https://pypi.org/project/#{db_project.name}/"
+        .then { |url| version.present? ? url + "#{version}/" : url }
     end
 
     def self.check_status_url(db_project)
+      # NB Pypa has maintained the original JSON API behavior of allowing no trailing slash in python/pypi-infra/pull/74
       "https://pypi.org/pypi/#{db_project.name}/json"
     end
 
