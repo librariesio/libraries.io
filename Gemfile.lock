@@ -330,7 +330,6 @@ GEM
     jsonapi-renderer (0.2.0)
     jwt (2.2.2)
     librariesio-gem-parser (1.0.0)
-    librariesio-url-parser (1.0.0)
     license-compatibility (3.1.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -709,7 +708,6 @@ DEPENDENCIES
   jb
   jquery-rails
   json_spec
-  librariesio-url-parser (~> 1)
   license-compatibility
   listen
   lograge
