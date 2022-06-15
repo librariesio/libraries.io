@@ -14,7 +14,7 @@ describe PackageManager::Pypi do
     end
 
     it 'handles version' do
-      expect(described_class.package_link(project, '2.0.0')).to eq("https://pypi.org/project/foo/2.0.0")
+      expect(described_class.package_link(project, '2.0.0')).to eq("https://pypi.org/project/foo/2.0.0/")
     end
   end
 
