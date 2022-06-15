@@ -44,7 +44,7 @@ gem "hiredis"
 gem "indefinite_article"
 gem 'jb'
 gem "jquery-rails"
-# gem "librariesio-url-parser", "~> 1"
+gem "librariesio-url-parser", "~> 1"
 gem "license-compatibility"
 gem "listen"
 gem "mail", require: ["mail", "mail/utilities", "mail/parsers"]
