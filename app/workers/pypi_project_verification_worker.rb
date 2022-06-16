@@ -9,9 +9,9 @@ class PypiProjectVerificationWorker
   def perform(name)
     project = Project.find_by(platform: "Pypi", name: name)
 
-    return unless project.present?
+    return if project.nil? || project&.is_removed?
 
-    # check to see if the module is found on pkg.go.dev and if it isn't then go ahead and delete this name
-    return project.destroy unless PackageManager::Pypi.valid_project?(project.name)
+    # check to see if the module is found on pypi and it is a case sensitive match to the name data on pypi
+    project.destroy unless PackageManager::Pypi.has_canonical_pypi_name?(project.name)
   end
 end

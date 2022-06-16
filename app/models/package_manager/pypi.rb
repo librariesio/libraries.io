@@ -154,7 +154,7 @@ module PackageManager
     end
 
     # checks to see if the package exists on PyPI and the name matches the canonical name
-    def self.valid_project?(name)
+    def self.has_canonical_pypi_name?(name)
       raw_project = project(name)
       mapped_project = mapping(raw_project)
 
