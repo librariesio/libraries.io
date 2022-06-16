@@ -12,6 +12,11 @@ class Project < ApplicationRecord
   include GitlabProject
   include BitbucketProject
 
+  # Whenever a PackageManager::Base platform is removed, it's easier for now to
+  # just add it to this list, until the records/indices are cleared out of that platform.
+  # NB these are the casings from the database, which sometimes don't match the PackageManager::Base
+  # formatted_name casings, e.g. Pypi vs PyPI
+  REMOVED_PLATFORMS = %w(Sublime Wordpress Atom PlatformIO Shards Emacs Jam)
   HAS_DEPENDENCIES = false
   STATUSES = ["Active", "Deprecated", "Unmaintained", "Help Wanted", "Removed", "Hidden"].freeze
   API_FIELDS = %i[
@@ -247,6 +252,12 @@ class Project < ApplicationRecord
 
   def platform_name
     platform_class.formatted_name
+  rescue NameError => e
+    # Some projects still exist from removed platforms (e.g. Sublime),
+    # but we still support those projects and use the platform name 
+    # in some places (e.g. mailers)
+    return platform if platform.in?(REMOVED_PLATFORMS)
+    raise e
   end
 
   def color
