@@ -218,4 +218,30 @@ namespace :projects do
       REDIS.set("go:update:latest_updated_id", projects.last.id)
     end
   end
+
+  desc "Verify Pypi Projects"
+  task :verify_pypi_projects, [:count] => :environment do |_task, args|
+    args.with_defaults(count: 50)
+
+    replace_cmd = "replace(lower(name), '-', '_')"
+    project_ids_and_names = Project
+      .where(platform: "Pypi")
+      .group(replace_cmd) # condense names down to all lower case and replace all hyphens with underscores since those are equal in pypi
+      .having("count(name) > 1")
+      .order("min(id)")# order this query so we can run through chunks of the results if needed
+      .limit(args[:count])
+      .pluck("min(id)", replace_cmd)
+
+    # project_ids_and_names is an array of arrays
+    # [ [project_id, lowercased_name], [123, "name_with_underscores"] ]
+
+    if project_ids_and_names.count.zero?
+      puts "Done!"
+      exit
+    else
+      project_ids_and_names
+        .flat_map { |(_id, name)| Project.where(platform: "Pypi").where("#{replace_cmd} = ?", name) }
+        .each { |project| PypiProjectVerificationWorker.perform_async(project.name) }
+    end
+  end
 end
