@@ -224,6 +224,7 @@ namespace :projects do
     args.with_defaults(count: 50)
 
     replace_cmd = "replace(lower(name), '-', '_')"
+    puts "Querying for names with limit: #{args[:count]}"
     project_ids_and_names = Project
       .where(platform: "Pypi")
       .group(replace_cmd) # condense names down to all lower case and replace all hyphens with underscores since those are equal in pypi
@@ -232,6 +233,7 @@ namespace :projects do
       .limit(args[:count])
       .pluck("min(id)", replace_cmd)
 
+    puts "Found #{project_ids_and_names.count} names to verify"
     # project_ids_and_names is an array of arrays
     # [ [project_id, lowercased_name], [123, "name_with_underscores"] ]
 
@@ -241,7 +243,10 @@ namespace :projects do
     else
       project_ids_and_names
         .flat_map { |(_id, name)| Project.where(platform: "Pypi").where("#{replace_cmd} = ?", name) }
-        .each { |project| PypiProjectVerificationWorker.perform_async(project.name) }
+        .each do |project|
+          puts "Queueing worker for #{project.name}"
+          PypiProjectVerificationWorker.perform_async(project.name)
+        end
     end
   end
 end
