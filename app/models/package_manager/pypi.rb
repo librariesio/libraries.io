@@ -159,10 +159,11 @@ module PackageManager
     # checks to see if the package exists on PyPI and the name matches the canonical name
     def self.has_canonical_pypi_name?(name)
       raw_project = project(name)
-      mapped_project = mapping(raw_project)
+      return false unless raw_project.present?
 
+      mapped_project = mapping(raw_project)
       # did we get a response from PyPI and does the name it respond with match the name passed in
-      raw_project.present? && mapped_project[:name] == name
+      mapped_project[:name] == name
     end
   end
 end
