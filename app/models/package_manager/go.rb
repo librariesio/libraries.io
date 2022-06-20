@@ -203,6 +203,8 @@ module PackageManager
     def self.project_find_names(name)
       return [name] if name.start_with?(*KNOWN_HOSTS)
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
+      host = name.split('/').first
+      return [name] if REDIS.get("unreachable-go-hosts:#{host}")
 
       begin
         # https://go.dev/ref/mod#serving-from-proxy
@@ -217,8 +219,11 @@ module PackageManager
 
         go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
       rescue Faraday::ConnectionFailed => e
-        # We can get here from go modules that don't exist anymore, or having server troubles. Fallback to 
-        # the given name and notify us to be safe.
+        # We can get here from go modules that don't exist anymore, or having server troubles:
+        # Fallback to the given name, cache the host as "bad" for a day,
+        # log it (to analyze later) and notify us to be safe. 
+        Rails.logger.info "[Caching unreacahble go host] name=#{name}"
+        REDIS.set("unreachable-go-hosts:#{host}", true, ex: 1.day)
         Bugsnag.notify(e)
         [name]
       rescue StandardError
