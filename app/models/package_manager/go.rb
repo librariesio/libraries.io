@@ -204,7 +204,7 @@ module PackageManager
       return [name] if name.start_with?(*KNOWN_HOSTS)
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
       host = name.split('/').first
-      return [name] if REDIS.get("unreachable-go-hosts:#{host}")
+      return [name] if Rails.cache.exist?("unreachable-go-hosts:#{host}")
 
       begin
         # https://go.dev/ref/mod#serving-from-proxy
@@ -223,7 +223,7 @@ module PackageManager
         # Fallback to the given name, cache the host as "bad" for a day,
         # log it (to analyze later) and notify us to be safe. 
         Rails.logger.info "[Caching unreacahble go host] name=#{name}"
-        REDIS.set("unreachable-go-hosts:#{host}", true, ex: 1.day)
+        Rails.cache.write("unreachable-go-hosts:#{host}", true, ex: 1.day)
         Bugsnag.notify(e)
         [name]
       rescue StandardError
