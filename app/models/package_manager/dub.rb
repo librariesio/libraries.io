@@ -33,6 +33,7 @@ module PackageManager
         keywords_array: format_keywords(raw_project["categories"]),
         licenses: latest_version["license"],
         repository_url: repo_fallback(repository(raw_project["repository"]), latest_version["homepage"]),
+        versions: raw_project["versions"],
       }
     end
 
