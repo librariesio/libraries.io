@@ -52,14 +52,14 @@ describe PackageManager::Packagist do
 
     describe ".mapping" do
       it "maps correctly" do
-        expect(described_class.mapping(subject)).to eq({
-                                                         name: "librariesio/fakepkg",
-                                                         description: "A Libraries package.",
-                                                         homepage: "https://fakepkg.libraries.io",
-                                                         keywords_array: ["php", "not-real"],
-                                                         licenses: "BSD-3-Clause",
-                                                         repository_url: "https://github.com/librariesio/fakepkg",
-                                                       })
+        expect(described_class.mapping(subject)).to include(
+          name: "librariesio/fakepkg",
+          description: "A Libraries package.",
+          homepage: "https://fakepkg.libraries.io",
+          keywords_array: ["php", "not-real"],
+          licenses: "BSD-3-Clause",
+          repository_url: "https://github.com/librariesio/fakepkg"
+        )
       end
     end
 
