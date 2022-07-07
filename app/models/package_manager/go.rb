@@ -122,22 +122,29 @@ module PackageManager
       # NB fetching versions from the html only gets dates without timestamps, but we could alternatively use the go proxy too:
       #   1) Fetch the list of versions: https://proxy.golang.org/#{module_name}/@v/list
       #   2) And for each version, fetch https://proxy.golang.org/#{module_name}/@v/#{v}.info
-      get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@v/list")
+
+      versions = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@v/list")
         &.lines
         &.map(&:strip)
         &.reject(&:blank?)
-        &.map do |v|
-          known = known_versions[v]
 
-          if known && known[:original_license].present?
-            known.slice(:number, :created_at, :published_at, :original_license)
-          else
-            one_version(raw_project, v)
-          end
+      if versions.blank?
+        json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@latest")
+        versions = [json&.fetch("Version", nil)].compact
+      end
+
+      versions.map do |v|
+        known = known_versions[v]
+
+        if known && known[:original_license].present?
+          known.slice(:number, :created_at, :published_at, :original_license)
+        else
+          one_version(raw_project, v)
+        end
       rescue Oj::ParseError
         next
-        end
-        &.compact
+      end
+      &.compact
     end
 
     def self.mapping(raw_project)
@@ -206,7 +213,7 @@ module PackageManager
 
       begin
         # https://go.dev/ref/mod#serving-from-proxy
-        go_import = get_html("https://#{name}?go-get=1", {request: {timeout: 2}})
+        go_import = get_html("https://#{name}?go-get=1", { request: { timeout: 2 } })
           .xpath('//meta[@name="go-import"]')
           .first
           &.attribute("content")
@@ -217,7 +224,7 @@ module PackageManager
 
         go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
       rescue Faraday::ConnectionFailed => e
-        # We can get here from go modules that don't exist anymore, or having server troubles. Fallback to 
+        # We can get here from go modules that don't exist anymore, or having server troubles. Fallback to
         # the given name and notify us to be safe.
         Bugsnag.notify(e)
         [name]
