@@ -79,7 +79,7 @@ module PackageManager
       # call update on base module name if the name is appended with major version
       # example: github.com/myexample/modulename/v2
       # use the returned project name in case it finds a Project via repository_url
-      update_base_module(project.name) if project.present? && project.name.match(VERSION_MODULE_REGEX)
+      update_base_module(project.name) if project.present? && project.name.match?(VERSION_MODULE_REGEX)
 
       project
     end
@@ -87,7 +87,8 @@ module PackageManager
     def self.update_base_module(name)
       matches = name.match(VERSION_MODULE_REGEX)
 
-      PackageManagerDownloadWorker.perform_async(self.name, matches[1])
+      # run this inline to generate the base module Project if it doesn't already exist
+      PackageManagerDownloadWorker.new.perform(self.name, matches[1])
 
       module_project = Project.find_by(platform: "Go", name: name)
       base_module_project = Project.find_by(platform: "Go", name: matches[1])
@@ -169,7 +170,7 @@ module PackageManager
               existing_project_name = versioned_name&.concat("/#{versioned_module_regex[2]}")
             end
           else
-            existing_project_name = Project.where(platform: "Go").where("lower(repository_url) = ?", url.downcase).first&.name
+            existing_project_name = Project.where(platform: "Go").where("lower(name) = ?", raw_project[:name].downcase).first&.name
           end
         end
 
