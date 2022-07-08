@@ -115,11 +115,11 @@ describe PackageManager::Go do
   end
 
   describe "#update" do
-    it "should queue update for non versioned module" do
+    it "should update the non versioned module" do
       VCR.use_cassette("go/pkg_go_dev") do
-        expect(PackageManagerDownloadWorker).to receive(:perform_async).with(described_class.name, package_name)
-
         described_class.update("#{package_name}/v3")
+
+        expect(Project.where(platform: "Go", name: package_name).exists?).to be true
       end
     end
 
@@ -170,8 +170,8 @@ describe PackageManager::Go do
       end
     end
 
-    it "should use the existing name of the project matching the repository" do
-      create(:project, name: package_name.upcase, platform: "Go", repository_url: "https://github.com/robfig/cRoN")
+    it "should use the existing name of the project matching the lower case name" do
+      create(:project, name: package_name.upcase, platform: "Go")
 
       VCR.use_cassette("go/pkg_go_dev") do
         project = described_class.update(package_name)
@@ -185,19 +185,46 @@ describe PackageManager::Go do
     end
 
     it "should use existing name of project and versioned project matching repository url" do
-      create(:project, name: package_name.upcase, platform: "Go", repository_url: "https://github.com/robfig/cRoN")
+      create(:project, name: package_name, platform: "Go", repository_url: "https://github.com/robfig/cRoN")
 
       VCR.use_cassette("go/pkg_go_dev") do
         described_class.update("#{package_name}/v3")
-        versioned_module = Project.find_by(platform: "Go", name: "#{package_name.upcase}/v3")
+        versioned_module = Project.find_by(platform: "Go", name: "#{package_name}/v3")
 
         expect(versioned_module).to be_present
         expect(versioned_module.versions.count).to eql 3
         expect(versioned_module.versions.where("number like ?", "v3%").count).to eql 3
 
-        non_versioned_module = Project.find_by(platform: "Go", name: package_name.upcase)
+        non_versioned_module = Project.find_by(platform: "Go", name: package_name)
         expect(non_versioned_module).to be_present
-        expect(non_versioned_module.versions.count).to eql 3
+        expect(non_versioned_module.versions.count).to eql 6
+        expect(non_versioned_module.versions.where("number like ?", "v3%").count).to eql 3
+      end
+    end
+
+    it "creates two projects if they share a repository but not a name" do
+      VCR.use_cassette("go/pkg_go_dev") do
+        first_project = described_class.update("github.com/imdario/mergo")
+        expect(first_project).to be_present
+
+        second_project = described_class.update("gopkg.in/imdario/mergo.v0")
+        expect(second_project).to be_present
+      end
+    end
+
+    it "creates base module if versioned module exists first" do
+      versioned_module = create(:project, name: "#{package_name}/v3", platform: "Go", repository_url: "https://github.com/robfig/cron")
+
+      VCR.use_cassette("go/pkg_go_dev") do
+        described_class.update(versioned_module.name)
+
+        expect(versioned_module).to be_present
+        expect(versioned_module.versions.count).to eql 3
+        expect(versioned_module.versions.where("number like ?", "v3%").count).to eql 3
+
+        non_versioned_module = Project.find_by(platform: "Go", name: package_name)
+        expect(non_versioned_module).to be_present
+        expect(non_versioned_module.versions.count).to eql 6
         expect(non_versioned_module.versions.where("number like ?", "v3%").count).to eql 3
       end
     end
