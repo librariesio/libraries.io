@@ -10,7 +10,7 @@ class Admin::ProjectsController < Admin::ApplicationController
     update_params = project_params
     update_params = update_params.merge(normalized_licenses: Array(update_params[:normalized_licenses])) # convert selected license to an array for normalized_licenses
     update_params = update_params.merge(license_set_by_admin: true) if project_params[:normalized_licenses].present? && project_params[:normalized_licenses] != @project.normalized_licenses
-    update_params = update_params.merge(repository_url_set_by_admin: true) if project_params[:repository_url_set_by_admin].present? && project_params[:repository_url] != @project.repository_url
+    update_params = update_params.merge(repository_url_set_by_admin: true) if project_params[:repository_url].present? && project_params[:repository_url] != @project.repository_url
     if @project.update(update_params)
       @project.update_repository_async
       @project.async_sync
