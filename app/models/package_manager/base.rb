@@ -104,7 +104,9 @@ module PackageManager
 
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
       db_project.reformat_repository_url if sync_version == :all && !db_project.new_record?
-      mapped_project[:repository_url] = db_project.repository_url if mapped_project[:repository_url].blank?
+      if mapped_project[:repository_url].blank? || db_project.repository_url_set_by_admin?
+        mapped_project[:repository_url] = db_project.repository_url 
+      end
       db_project.attributes = mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties)
 
       begin

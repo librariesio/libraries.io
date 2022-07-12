@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_133104) do
+ActiveRecord::Schema.define(version: 2022_07_12_203600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_133104) do
     t.boolean "license_set_by_admin", default: false
     t.boolean "license_normalized", default: false
     t.text "deprecation_reason"
+    t.boolean "repository_url_set_by_admin", default: false
     t.index "lower((language)::text)", name: "index_projects_on_lower_language"
     t.index "lower((platform)::text), lower((name)::text)", name: "index_projects_on_platform_and_name_lower"
     t.index ["created_at"], name: "index_projects_on_created_at"
