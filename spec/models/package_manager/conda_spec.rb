@@ -38,7 +38,7 @@ describe PackageManager::Conda do
       expect(project.reload.repository_url).to eq("https://this-is-my-repo-url")
     end
 
-    it 'updating doesnt ovewrite repository_url if previously set by admin' do
+    it 'doesnt update repository_url if previously set by admin' do
       original_repository_url = project.repository_url
       project.update_column(:repository_url_set_by_admin, true)
       allow(described_class)
