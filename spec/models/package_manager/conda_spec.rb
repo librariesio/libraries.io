@@ -34,7 +34,9 @@ describe PackageManager::Conda do
           "versions" => [],
           "repository_url" => "https://this-is-my-repo-url"
         })
+      
       described_class.update(project.name)
+      
       expect(project.reload.repository_url).to eq("https://this-is-my-repo-url")
     end
 
@@ -48,6 +50,7 @@ describe PackageManager::Conda do
           "versions" => [],
           "repository_url" => "https://this-is-the-wrong-url"
         })
+      
       described_class.update(project.name)
       
       expect(project.reload.repository_url).to eq(original_repository_url)
