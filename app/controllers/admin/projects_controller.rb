@@ -45,7 +45,7 @@ class Admin::ProjectsController < Admin::ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:repository_url, :normalized_licenses, :status)
+    params.require(:project).permit(:normalized_licenses, :status)
   end
 
   def search(query)
