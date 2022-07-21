@@ -83,6 +83,7 @@ module PackageManager
         keywords_array: Array.wrap(latest_version["keywords"]),
         licenses: latest_version["license"]&.join(","),
         repository_url: repo_fallback(latest_version["source"]&.fetch("url"), latest_version["homepage"]),
+        versions: raw_project, # packagist has the list of versions as raw_project and this then lets us pull dependencies in self.dependencies
       }
     end
 
