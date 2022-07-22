@@ -19,7 +19,7 @@ class PlatformsController < ApplicationController
     @languages = facets[:languages].language.buckets
     @licenses = facets[:licenses].normalized_licenses.buckets.reject{ |t| t['key'].downcase == 'other' }
     @keywords = facets[:keywords].keywords_array.buckets
-  rescue_from ActiveRecord::RecordNotFound do
-    render status: :not_found
+  rescue ActiveRecord::RecordNotFound
+    head :not_found
   end
 end
