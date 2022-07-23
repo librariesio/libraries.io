@@ -36,7 +36,6 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    RedCloth (4.3.2)
     actioncable (5.2.6.2)
       actionpack (= 5.2.6.2)
       nio4r (~> 2.0)
@@ -659,7 +658,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  RedCloth
   active_model_serializers
   api-pagination
   asciidoctor
