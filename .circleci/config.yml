@@ -24,37 +24,17 @@ jobs:
     executor: libraries
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
-            - v1-gem-cache-{{ arch }}-
       - run: apt-get -y -qq update
       - run: apt-get -y --no-install-recommends install cmake libpq-dev
       - ruby/install-deps
-      - save_cache:
-          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
   test:
     parallelism: 4
     executor: libraries
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
-            - v1-gem-cache-{{ arch }}-
       - run: sudo apt-get -y -qq update
       - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
-      - ruby/bundle-install
-      - save_cache:
-          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
+      - ruby/install-deps
       - ruby/test
 
 workflows:
