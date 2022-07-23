@@ -25,7 +25,7 @@ jobs:
     steps:
       - checkout
       - run: apt-get -y -qq update
-      - run: apt-get -y --no-install-recommends install cmake libpq-dev
+      - run: apt-get -y --no-install-recommends install cmake libpq-dev git-core
       - ruby/install-deps
   test:
     parallelism: 4
@@ -33,7 +33,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get -y -qq update
-      - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
+      - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev git-core
       - ruby/install-deps
       - ruby/rspec-test
 
