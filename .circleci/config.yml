@@ -25,8 +25,8 @@ jobs:
     executor: libraries
     steps:
       - checkout
-      - run: sudo apt-get -y -qq update
-      - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev git-core build-essential libicu-dev
+      - run: apt-get -y -qq update
+      - run: apt-get -y --no-install-recommends install cmake libpq-dev git-core build-essential libicu-dev
       - ruby/install-deps
       - ruby/rspec-test
 
