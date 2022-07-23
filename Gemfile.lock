@@ -126,7 +126,7 @@ GEM
       xpath (>= 2.0, < 4.0)
     case_transform (0.2)
       activesupport
-    charlock_holmes (0.7.6)
+    charlock_holmes (0.7.7)
     chartkick (3.4.0)
     chronic (0.10.2)
     cliver (0.3.2)
