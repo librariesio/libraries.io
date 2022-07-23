@@ -20,13 +20,6 @@ executors:
           - cluster.name: elasticsearch
           - action.auto_create_index: true
 jobs:
-  build:
-    executor: libraries
-    steps:
-      - checkout
-      - run: apt-get -y -qq update
-      - run: apt-get -y --no-install-recommends install cmake libpq-dev git-core build-essential 
-      - ruby/install-deps
   test:
     parallelism: 4
     executor: libraries
@@ -39,9 +32,6 @@ jobs:
 
 workflows:
   version: 2
-  build_and_test:
+  test:
     jobs:
       - build
-      - test:
-          requires:
-            - build
