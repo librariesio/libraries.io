@@ -32,7 +32,7 @@ jobs:
             - v1-gem-cache-{{ arch }}-
       - run: apt-get -y -qq update
       - run: apt-get -y --no-install-recommends install cmake libpq-dev
-      - ruby/bundle-install
+      - ruby/install-deps
       - save_cache:
           key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
