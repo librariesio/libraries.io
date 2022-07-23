@@ -538,7 +538,7 @@ GEM
     ruby-progressbar (1.11.0)
     ruby_dep (1.5.0)
     rubypants (0.7.0)
-    rugged (0.28.1)
+    rugged (1.5.0)
     safe_yaml (1.0.5)
     sanitize-url (0.1.4)
     sassc (2.0.1)
