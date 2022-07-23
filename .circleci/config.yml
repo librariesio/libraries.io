@@ -35,7 +35,7 @@ jobs:
       - run: sudo apt-get -y -qq update
       - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
       - ruby/install-deps
-      - ruby/test
+      - ruby/rspec-test
 
 workflows:
   version: 2
