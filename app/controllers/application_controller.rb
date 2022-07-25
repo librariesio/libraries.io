@@ -155,16 +155,6 @@ class ApplicationController < ActionController::Base
     "#{format_sort} #{format_order}"
   end
 
-  def search_repos(query)
-    es_query(Repository, query, {
-      license: current_license,
-      language: current_language,
-      keywords: current_keywords,
-      platforms: current_platforms,
-      host_type: formatted_host
-    })
-  end
-
   def search_projects(query)
     es_query(Project, query, {
       platform: current_platforms,
