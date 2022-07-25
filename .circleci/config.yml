@@ -1,11 +1,11 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@0.1.2
+  ruby: circleci/ruby@1.8.0
 
 executors:
   libraries:
     docker:
-      - image: circleci/ruby:2.6.5-stretch-node
+      - image: ruby:2.7.6-slim-bullseye
         environment:
           PGHOST: 127.0.0.1
           PGUSER: postgres
@@ -20,48 +20,18 @@ executors:
           - cluster.name: elasticsearch
           - action.auto_create_index: true
 jobs:
-  build:
-    executor: libraries
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
-            - v1-gem-cache-{{ arch }}-
-      - run: sudo apt-get -y -qq update
-      - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
-      - ruby/bundle-install
-      - save_cache:
-          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
   test:
     parallelism: 4
     executor: libraries
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
-            - v1-gem-cache-{{ arch }}-
-      - run: sudo apt-get -y -qq update
-      - run: sudo apt-get -y --no-install-recommends install cmake libpq-dev
-      - ruby/bundle-install
-      - save_cache:
-          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-      - ruby/test
+      - run: apt-get -y -qq update
+      - run: apt-get -y --no-install-recommends install cmake libpq-dev git-core build-essential libicu-dev pkg-config nodejs
+      - ruby/install-deps
+      - ruby/rspec-test
 
 workflows:
   version: 2
-  build_and_test:
+  test:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - test

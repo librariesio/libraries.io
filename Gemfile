@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-ruby "2.6.5"
+ruby "2.7.6"
 
 gem "active_model_serializers"
 gem "api-pagination"
@@ -74,7 +74,6 @@ gem "rails", "5.2.6.2"
 gem "rails-timeago", git: "https://github.com/librariesio/rails-timeago"
 gem "rb-readline"
 gem "rdoc"
-gem "RedCloth"
 gem "redis"
 gem "sanitize-url"
 gem "sassc-rails"
