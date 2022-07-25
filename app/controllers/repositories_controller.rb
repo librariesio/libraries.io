@@ -19,18 +19,18 @@ class RepositoriesController < ApplicationController
     @keywords = facets[:keywords].keywords.buckets
   end
 
-  def search
-    @query = params[:q]
-    @search = search_repos(@query)
-    @suggestion = @search.response.suggest.did_you_mean.first if @query.present?
-    @repositories = @search.results.map{|result| RepositorySearchResult.new(result) }
-    @title = page_title
-    @facets = @search.response.aggregations
-    respond_to do |format|
-      format.html
-      format.atom
-    end
-  end
+  # def search
+  #   @query = params[:q]
+  #   @search = search_repos(@query)
+  #   @suggestion = @search.response.suggest.did_you_mean.first if @query.present?
+  #   @repositories = @search.results.map{|result| RepositorySearchResult.new(result) }
+  #   @title = page_title
+  #   @facets = @search.response.aggregations
+  #   respond_to do |format|
+  #     format.html
+  #     format.atom
+  #   end
+  # end
 
   def languages
     @languages = Repository.search('', facet_limit: 150).response.aggregations[:language].language.buckets
