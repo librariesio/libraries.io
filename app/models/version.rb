@@ -31,6 +31,13 @@ class Version < ApplicationRecord
 
   scope :newest_first, -> { order("versions.published_at DESC") }
 
+  # saving the project can be expensive, so allow the ability to skip it for
+  # bulk operations or when the caller is aware a subsequent save will be
+  # coming anyway
+  attr_accessor :skip_save_project
+
+  skip_callback :commit, :after, :save_project, if: :skip_save_project
+
   def save_project
     project.try(:forced_save)
     project.try(:update_repository_async)

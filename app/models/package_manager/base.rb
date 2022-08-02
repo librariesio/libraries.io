@@ -146,6 +146,7 @@ module PackageManager
       )
 
       existing = db_project.versions.find_or_initialize_by(number: version_hash[:number])
+      existing.skip_save_project = true
       existing.assign_attributes(version_hash)
 
       existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
@@ -170,6 +171,7 @@ module PackageManager
       db_project.reload
       db_project.download_registry_users
       db_project.update!(last_synced_at: Time.now)
+      db_project.try(:update_repository_async)
       db_project
     end
 
