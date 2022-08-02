@@ -144,7 +144,7 @@ describe PackageManager::Go do
 
     it "should use known versions if we have the license" do
       project = create(:project, platform: "Go", name: package_name)
-      publish_date = Time.now
+      publish_date = Time.current
       project.versions.create(number: "v1.2.0", published_at: publish_date, original_license: "MIT")
 
       VCR.use_cassette("go/pkg_go_dev") do

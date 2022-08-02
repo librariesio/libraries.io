@@ -242,7 +242,7 @@ class ApplicationController < ActionController::Base
   end
 
   def load_tree_resolver
-    @date = Date.parse(params[:date]) rescue Date.today
+    @date = Date.parse(params[:date]) rescue Date.current
     number = params[:number].presence
 
     if number
