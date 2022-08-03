@@ -242,14 +242,17 @@ class ApplicationController < ActionController::Base
   end
 
   def load_tree_resolver
-    @date = Date.parse(params[:date]) rescue Date.current
+    @date = Date.parse(params[:date]) rescue nil
     number = params[:number].presence
 
-    if number
-      @version = @project.versions.find_by_number(number)
-    else
-      @version = @project.versions.where('versions.published_at <= ?', @date).select(&:stable?).sort.first
-    end
+    @version =
+      if number
+        @project.versions.find_by_number(number)
+      elsif @date.present?
+        @project.versions.where('versions.published_at <= ?', @date).select(&:stable?).sort.first
+      else
+        @project.versions.select(&:stable?).sort.first
+      end
     raise ActiveRecord::RecordNotFound if @version.nil?
 
     @kind = params[:kind] || 'runtime'
