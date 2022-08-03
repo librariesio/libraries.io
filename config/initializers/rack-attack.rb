@@ -2,9 +2,11 @@
 limit_proc = proc do |req|
   if req.params['api_key'].present?
     key = ApiKey.active.find_by_access_token(req.params['api_key'])
-    key ? key.rate_limit : 30
+    # an invalid key should get rate limited to zero so that those
+    # requests aren't allowed
+    key ? key.rate_limit : 0
   else
-    30 # req/min for anonymous users
+    10 # req/min for anonymous users
   end
 end
 
