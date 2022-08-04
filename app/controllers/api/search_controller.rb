@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Api::SearchController < Api::ApplicationController
-  # this is expensive, so let's restrict to internal api keys to avoid breaking hte site
+  # this is expensive, so let's restrict to internal api keys to avoid breaking the site
   before_action :require_internal_api_key
 
   def index
