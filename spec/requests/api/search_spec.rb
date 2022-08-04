@@ -14,11 +14,7 @@ describe "API::SearchController" do
       end
     end
 
-    context "with internal api key" do
-      before :each do
-        user.current_api_key.update_attribute(:is_internal, true)
-      end
-
+    context "with valid api key" do
       it "renders successfully" do
         get "/api/search?api_key=#{user.api_key}"
 
