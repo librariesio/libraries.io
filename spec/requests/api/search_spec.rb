@@ -6,23 +6,15 @@ describe "API::SearchController" do
   describe "GET /api/search", type: :request do
     let!(:user) { create(:user) }
 
-    context "with normal api key" do
-      before :each do
-        user.current_api_key.update_attribute(:is_internal, false)
-      end
-
-      it "errors if api_key is not internal" do
-        get "/api/search?api_key=#{user.api_key}"
+    context "with missing api key" do
+      it "returns an error" do
+        get "/api/search"
 
         expect(response).to have_http_status(:forbidden)
       end
     end
 
-    context "with internal api key" do
-      before :each do
-        user.current_api_key.update_attribute(:is_internal, true)
-      end
-
+    context "with valid api key" do
       it "renders successfully" do
         get "/api/search?api_key=#{user.api_key}"
 
