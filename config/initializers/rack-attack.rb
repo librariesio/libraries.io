@@ -2,16 +2,16 @@
 
 class Rack::Attack::Request < ::Rack::Request
   def valid_key
-    return unless params["api_key"].present?
-
     @valid_key ||= ApiKey.active.find_by_access_token(params["api_key"])
   end
 end
 
-Rack::Attack.blocklist("invalid key") { |req| !req.valid_key }
+Rack::Attack.blocklist("invalid api key") do |req|
+  !req.valid_key if req.params["api_key"].present?
+end
 
 limit_proc = proc do |req|
-  if req.valid_key
+  if req.params["api_key"].present?
     req.valid_key.rate_limit
   else
     10 # req/min for anonymous users
