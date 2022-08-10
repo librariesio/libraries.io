@@ -7,8 +7,16 @@ describe "API::SearchController" do
     let!(:user) { create(:user) }
 
     context "with missing api key" do
-      it "returns an error" do
+      it "returns forbidden" do
         get "/api/search"
+
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "with an invalid api key" do
+      it "returns forbidden" do
+        get "/api/search?api_key=abc123"
 
         expect(response).to have_http_status(:forbidden)
       end
