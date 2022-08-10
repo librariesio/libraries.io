@@ -2,7 +2,9 @@
 
 class Rack::Attack::Request < ::Rack::Request
   def valid_key
-    @valid_key ||= ApiKey.active.find_by_access_token(params["api_key"])
+    return @valid_key if defined? @valid_key
+
+    @valid_key = ApiKey.active.find_by_access_token(params["api_key"])
   end
 end
 
