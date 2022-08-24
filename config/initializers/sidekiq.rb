@@ -20,4 +20,3 @@ Sidekiq.default_worker_options = {
 SidekiqUniqueJobs.configure do |config|
   config.enabled = !Rails.env.test?
 end
-Marginalia::SidekiqInstrumentation.enable!
