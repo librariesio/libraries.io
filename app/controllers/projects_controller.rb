@@ -168,16 +168,6 @@ class ProjectsController < ApplicationController
 
   private
 
-  def problem_repos(method_name)
-    @search = Project.send(method_name, filters: {
-      platform: current_platform,
-      normalized_licenses: current_license,
-      language: current_language
-    }).paginate(page: page_number)
-    @projects = @search.records.includes(:repository)
-    @facets = @search.response.aggregations
-  end
-
   def incorrect_case?
     params[:platform] != params[:platform].downcase || (@project && params[:name] != @project.name)
   end
