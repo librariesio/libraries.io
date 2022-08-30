@@ -7,13 +7,6 @@ describe "RepositoriesController" do
   let!(:tag) { create(:tag, repository: repository) }
   let!(:contribution) { create(:contribution, repository: repository) }
 
-  describe "GET /github", type: :request do
-    it "renders successfully when logged out" do
-      visit hosts_path(host_type: "github")
-      expect(page).to have_content "Repositories"
-    end
-  end
-
   describe "GET /github/:owner/:name", type: :request do
     it "renders successfully when logged out" do
       visit "/github/#{repository.full_name}"

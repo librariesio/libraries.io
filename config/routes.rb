@@ -170,10 +170,10 @@ Rails.application.routes.draw do
     post "/:host_type/:owner/:name/web_hooks/:id/test", to: "web_hooks#test", as: :test_repository_web_hook, format: false, constraints: { name: /[^\/]+/ }
     post "/:host_type/:owner/:name/web_hooks", to: "web_hooks#create", format: false, constraints: { name: /[^\/]+/ }
 
-    get "/:host_type", to: "repositories#index", as: :hosts
+    get "/:host_type", to: redirect("/")
   end
 
-  get "/repos", to: "repositories#index", as: :repos
+  get "/repos", to: redirect("/")
 
   get "/search", to: "search#index"
 
