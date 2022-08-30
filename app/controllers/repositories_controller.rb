@@ -23,17 +23,6 @@ class RepositoriesController < ApplicationController
     @languages = Repository.search('', facet_limit: 150).response.aggregations[:language].language.buckets
   end
 
-  def new
-    @language = Linguist::Language[params[:language]] if params[:language].present?
-
-    original_scope = Repository.with_stars.open_source.source
-    original_scope = original_scope.host(current_host) if current_host
-    scope = @language.present? ? original_scope.where('lower(language) = ?', @language.name.downcase) : original_scope
-    @repos = scope.recently_created.order('created_at DESC').paginate(page: page_number)
-
-    @languages = original_scope.recently_created.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
-  end
-
   def show
     load_repo
     @contributors = @repository.contributors.order('count DESC').visible.limit(20).select(:host_type, :name, :login, :uuid)

@@ -14,19 +14,6 @@ describe "RepositoriesController" do
     end
   end
 
-  describe "GET /github/languages", type: :request do
-    it "renders successfully when logged out" do
-      visit github_languages_path
-      expect(page).to have_content "Languages"
-    end
-  end
-  describe "GET /github/new", type: :request do
-    it "renders successfully when logged out" do
-      visit new_repos_path
-      expect(page).to have_content "New"
-    end
-  end
-
   describe "GET /github/:owner/:name", type: :request do
     it "renders successfully when logged out" do
       visit "/github/#{repository.full_name}"
