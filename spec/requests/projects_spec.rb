@@ -13,20 +13,6 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #trending" do
-    it "responds successfully", type: :request do
-      visit trending_path
-      expect(page).to have_content 'Trending'
-    end
-
-    context "filtered by platform" do
-      it "responds successfully" do
-        visit trending_path(platform: 'Rubygems')
-        expect(page).to have_content 'Trending'
-      end
-    end
-  end
-
   describe "GET #show" do
     it "responds successfully", type: :request do
       visit project_path(project.to_param)
