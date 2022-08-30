@@ -35,14 +35,6 @@ class Admin::RepositoriesController < Admin::ApplicationController
     @repositories = scope.maintained.without_license.with_projects.order(Arel.sql("COUNT(projects.id) DESC")).group("repositories.id").paginate(page: params[:page])
   end
 
-  def deprecated
-    search('deprecated')
-  end
-
-  def unmaintained
-    search('unmaintained')
-  end
-
   def destroy
     @repository = Repository.find(params[:id])
     @repository.destroy
@@ -53,13 +45,6 @@ class Admin::RepositoriesController < Admin::ApplicationController
 
   def repository_params
     params.require(:repository).permit(:license, :status)
-  end
-
-  def search(query)
-    @search = Repository.search(query, must_not: [
-      terms: { "status" => ["Unmaintained","Active","Deprecated"] }
-    ], sort: 'stargazers_count').paginate(page: params[:page])
-    @repositories = @search.records
   end
 
   def change(method)

@@ -88,10 +88,6 @@ Rails.application.routes.draw do
         put "deprecate"
         put "unmaintain"
       end
-      collection do
-        get "deprecated"
-        get "unmaintained"
-      end
     end
 
     get "/platforms/:id", to: "platforms#show", as: :platform
