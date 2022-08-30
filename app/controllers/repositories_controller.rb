@@ -19,9 +19,6 @@ class RepositoriesController < ApplicationController
     @keywords = facets[:keywords].keywords.buckets
   end
 
-  def languages
-    @languages = Repository.search('', facet_limit: 150).response.aggregations[:language].language.buckets
-  end
 
   def show
     load_repo
