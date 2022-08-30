@@ -23,17 +23,6 @@ class RepositoriesController < ApplicationController
     @languages = Repository.search('', facet_limit: 150).response.aggregations[:language].language.buckets
   end
 
-  def hacker_news
-    @language = Linguist::Language[params[:language]] if params[:language].present?
-
-    original_scope = Repository.trending.open_source
-    original_scope = original_scope.host(current_host) if current_host
-    scope = @language.present? ? original_scope.where('lower(language) = ?', @language.name.downcase) : original_scope
-    @repos = scope.hacker_news.paginate(page: page_number)
-
-    @languages = original_scope.group('lower(language)').count.reject{|k,_v| k.blank? }.sort_by{|_k,v| v }.reverse.first(40)
-  end
-
   def new
     @language = Linguist::Language[params[:language]] if params[:language].present?
 

@@ -20,14 +20,6 @@ describe "RepositoriesController" do
       expect(page).to have_content "Languages"
     end
   end
-
-  describe "GET /github/trending", type: :request do
-    it "renders successfully when logged out" do
-      visit trending_path
-      expect(page).to have_content "Trending"
-    end
-  end
-
   describe "GET /github/new", type: :request do
     it "renders successfully when logged out" do
       visit new_repos_path
