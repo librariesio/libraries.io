@@ -4,8 +4,7 @@
 </h4>
 <div class='pictogram-list'>
   <% @platforms.each do |platform| %>
-    <% next if platform['key'].downcase == 'go' %>
-    <a class="pictogram tip pictogram-<%= platform['key'].downcase %>" href='<%= platform['key'] %>' title='<%= platform['key'] %>'></a>
+    <a class="pictogram tip pictogram-<%= platform.downcase %>" href='<%= platform %>' title='<%= platform %>'></a>
   <% end %>
 </div>
 <p>
@@ -18,30 +17,6 @@
 </h4>
 <div class='pictogram-list'>
   <% @languages.each do |language| %>
-    <a class="pictogram tip pictogram-<%= language['key'].downcase %>" title='<%= language['key'] %>' href='<%= language_path(language['key']) %>'></a>
+    <a class="pictogram tip pictogram-<%= language.downcase %>" title='<%= language %>' href='<%= language_path(language) %>'></a>
   <% end %>
 </div>
-<hr>
-<h4>
-  <%= fa_icon 'gavel' %>
-  <%= link_to 'Popular Licenses', licenses_path %>
-</h4>
-<% @licenses.each do |license| %>
-  <p class='list'>
-    <strong><%= link_to format_license(license['key']), license_path(license['key']) %></strong>
-    <small><%= pluralize number_to_human(license['doc_count']), 'project' %></small>
-  </p>
-<% end %>
-<hr>
-<h4>
-  <%= fa_icon 'tags' %>
-  <%= link_to 'Popular Keywords', keywords_path %>
-</h4>
-<% @keywords.each do |keyword| %>
-  <% if keyword['key'].present? %>
-    <p class='list'>
-      <strong><%= link_to keyword['key'], keyword_path(keyword['key']) %></strong>
-      <small><%= pluralize number_to_human(keyword['doc_count']), 'project' %></small>
-    </p>
-  <% end %>
-<% end %>
