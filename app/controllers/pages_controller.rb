@@ -17,7 +17,7 @@ class PagesController < ApplicationController
   end
 
   def data
-    @platforms = Project.popular_platforms(facet_limit: 40).first(28)
+    @platforms = Project.maintained.group(:platform).order('count_id DESC').count('id').map {|k,v| {'key' => k, 'doc_count' => v}}
   end
 
   def terms
