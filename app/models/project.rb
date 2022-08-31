@@ -358,10 +358,6 @@ class Project < ApplicationRecord
     facets(options)[:languages].language.buckets
   end
 
-  def self.popular_platforms(options = {})
-    facets(options)[:platforms].platform.buckets.reject { |t| %w[biicode jam].include?(t["key"].downcase) }
-  end
-
   def self.keywords_badlist
     %w[bsd3 library]
   end
