@@ -23,12 +23,6 @@ class Admin::StatsController < Admin::ApplicationController
 
   end
 
-  def graphs
-    @platform = params[:platform] || 'Rubygems'
-    @projects = Project.platform(@platform).where('projects.created_at > ?', 3.months.ago).group_by_day(:created_at).count
-    @versions = Version.joins(:project).where('lower(projects.platform) = ?', @platform.downcase).where('versions.created_at > ?', 3.months.ago).group_by_day('versions.created_at').count
-  end
-
   def api
     current_month_key = "api-usage-#{Date.today.strftime("%Y-%m")}"
     @api_key_usage = REDIS.hgetall(current_month_key)
