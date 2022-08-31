@@ -90,13 +90,9 @@ Rails.application.routes.draw do
       end
     end
 
-    get "/platforms/:id", to: "platforms#show", as: :platform
-    get "/platforms", to: "platforms#index", as: :platforms
-
     get "/stats", to: "stats#index", as: :stats
     get "/stats/api", to: "stats#api", as: :api_stats
     get "/stats/repositories", to: "stats#repositories", as: :repositories_stats
-    get "/graphs", to: "stats#graphs", as: :graphs
     get "/:host_type/:login/dependencies", to: "repository_organisations#dependencies", as: :organisation_dependencies
     delete "/:host_type/:login", to: "repository_organisations#destroy"
     patch "/:host_type/:login", to: "repository_organisations#update"
