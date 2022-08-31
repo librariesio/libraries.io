@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "API::SearchController" do
+describe "API::SearchController", elasticsearch: true do
   describe "GET /api/search", type: :request do
     let!(:user) { create(:user) }
 
