@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class PlatformsController < ApplicationController
   def index
-    @platforms = Project.popular_platforms
+    @platforms = Project.maintained.group(:platform).order('count_id DESC').count('id').map {|k,v| {'key' => k, 'doc_count' => v}}
   end
 
   def show
