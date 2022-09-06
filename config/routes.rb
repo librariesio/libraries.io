@@ -104,7 +104,6 @@ Rails.application.routes.draw do
 
   get "/trending", to: "projects#trending", as: :trending_projects
   get "/explore", to: "explore#index"
-  get "/collections", to: "collections#index", as: :collections
   get "/explore/:language-:keyword-libraries", to: "collections#show", as: :collection
 
   get "/recommendations", to: "recommendations#index", as: :recommendations
