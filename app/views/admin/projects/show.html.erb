@@ -24,7 +24,7 @@
       <strong>Subscribers:</strong> <%= @project.subscriptions.count %>
     </p>
 
-    <%= form.input :normalized_licenses, include_blank: true, selected: @project.normalized_licenses, label: 'License', collection: Project.popular_licenses(:facet_limit => 300).map{|l| format_license(l['key']) } %>
+    <%= form.input :normalized_licenses, include_blank: true, selected: @project.normalized_licenses, label: 'License', collection: Spdx.licenses.keys %>
     <%= form.input :status, include_blank: true, collection: Project::STATUSES %>
 
     <%= form.submit class: 'btn btn-primary' %>
