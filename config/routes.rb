@@ -20,8 +20,6 @@ Rails.application.routes.draw do
 
     get "/", to: "docs#index", defaults: { format: :html }
     get "/search", to: "search#index"
-    get "/bower-search", to: "bower_search#index"
-    get "/searchcode", to: "projects#searchcode"
 
     get "/platforms", to: "platforms#index"
 
