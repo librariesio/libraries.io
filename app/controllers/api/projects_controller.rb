@@ -19,10 +19,6 @@ class Api::ProjectsController < Api::ApplicationController
     paginate json: @project.dependent_repositories
   end
 
-  def searchcode
-    render json: Project.visible.where('updated_at > ?', 1.day.ago).order(:repository_url).pluck(:repository_url).compact.reject(&:blank?)
-  end
-
   # we have an arbitrary limit on this to prevent pathology, since there's no pagination.
   # can be pretty high since we're returning only a few fields per row.
   MAX_UPDATED_PROJECTS = 5000

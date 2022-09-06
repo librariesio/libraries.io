@@ -55,15 +55,6 @@ describe "Api::ProjectsController" do
     end
   end
 
-  describe "GET /api/searchcode", type: :request do
-    it "renders successfully" do
-      get "/api/searchcode"
-      expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
-      expect(JSON.parse(response.body)).to contain_exactly(project.repository_url, dependent_project.repository_url)
-    end
-  end
-
   describe "GET /api/projects/updated", type: :request do
     it "renders successfully" do
       get "/api/projects/updated?start_time=#{1.year.ago.utc.iso8601}&api_key=#{internal_user.api_key}"
