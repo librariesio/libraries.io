@@ -150,7 +150,13 @@ GEM
       addressable
     dalli (2.7.10)
     database_cleaner (1.7.0)
+    ddtrace (1.4.0)
+      debase-ruby_core_source (= 0.10.16)
+      libdatadog (~> 0.7.0.1.1)
+      libddwaf (~> 1.3.0.2.0)
+      msgpack
     deb_control (0.0.1)
+    debase-ruby_core_source (0.10.16)
     debug_inspector (0.0.3)
     declarative (0.0.10)
     declarative-option (0.1.0)
@@ -328,6 +334,9 @@ GEM
       rspec (>= 2.0, < 4.0)
     jsonapi-renderer (0.2.0)
     jwt (2.2.2)
+    libdatadog (0.7.0.1.1)
+    libddwaf (1.3.0.2.0-arm64-darwin)
+      ffi (~> 1.0)
     librariesio-gem-parser (1.0.0)
     librariesio-url-parser (1.0.3)
     license-compatibility (3.1.0)
@@ -679,6 +688,7 @@ DEPENDENCIES
   creole
   dalli
   database_cleaner
+  ddtrace (= 1.4.0)
   dotenv-rails
   elasticsearch (~> 2)
   elasticsearch-model (~> 5)
