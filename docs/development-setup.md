@@ -6,7 +6,7 @@ New to Ruby? No worries! You can follow these instructions to install a local se
 
 ### Installing a Local Server
 
-First things first, you'll need to install Ruby 2.6.5. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+First things first, you'll need to install Ruby 2.7.6. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build)
 
 ```bash
@@ -18,7 +18,7 @@ Next, you'll need to make sure that you have PostgreSQL, Elasticsearch 2.4 and R
 
 ```bash
 brew install --cask phantomjs homebrew/cask-versions/adoptopenjdk8
-brew install postgres redis icu4c cmake
+brew install postgresql redis icu4c cmake
 ```
 
 Since this repo uses an old version of Elasticsearch, it is no longer supported on Homebrew. You can use the ElasticSearch
@@ -115,6 +115,12 @@ our browser to <http://localhost:3000>
 ```bash
 bundle exec rails s
 ```
+
+If you get an error like
+```
+objc[94869]: +[__NSCFConstantString initialize] may have been in progress in another thread when fork() was called. We cannot safely call it or ignore it in the fork() child process. Crashing instead. Set a breakpoint on objc_initializeAfterForkError to debug.
+```
+you may need to run `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` first.
 
 You're now ready to go with the basic libraries.io app setup, to grab more data check out the extensive list of rake tasks with the following command:
 
