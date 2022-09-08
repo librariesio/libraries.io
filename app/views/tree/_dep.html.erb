@@ -1,24 +1,22 @@
 <% version = dep[:version] %>
-<% project = version.project %>
+<% dependency = dep[:dependency] %>
 <% requirements = dep[:requirements] %>
+<% version_path_value = version_path({platform: dependency[:platform], name: dependency[:project_name], number: version[:number]}) %>
 <li>
-  <%= link_to project, version_path(version.to_param) %>
+  <%= link_to dependency[:project_name], version_path_value %>
   -
-  <%= link_to version.number, version_path(version.to_param), class: 'tip', title: 'Resolved version' %>
+  <%= link_to version[:number], version_path_value, class: 'tip', title: 'Resolved version' %>
   -
   <em class='text-muted'>
     <span class="tip" title="Specified version range"><%= requirements %></span>
     <%= '-' if requirements.present? %>
-    <%= Array.wrap(project.normalize_licenses).join(', ') %>
+    <%= Array.wrap(dep[:normalized_licenses]).join(', ') %>
   </em>
-  <% if dep[:dependency] %>
-    <%#= render 'dependencies/flags', dependency: dep[:dependency] %>
-  <% end %>
   <% if dep[:dependencies] && dep[:dependencies].any? %>
     <ul>
       <% dep[:dependencies].each do |dependency| %>
         <li>
-          <% if dependency.is_a?(Hash) && dependency[:version].is_a?(Version) %>
+          <% if dependency.is_a?(Hash) %>
             <%= render 'dep', dep: dependency %>
           <% end %>
         </li>
