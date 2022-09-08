@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_133104) do
+ActiveRecord::Schema.define(version: 2022_09_08_024404) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -175,6 +175,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_133104) do
     t.index ["keywords_array"], name: "index_projects_on_keywords_array", using: :gin
     t.index ["normalized_licenses"], name: "index_projects_on_normalized_licenses", using: :gin
     t.index ["platform", "dependents_count"], name: "index_projects_on_platform_and_dependents_count"
+    t.index ["platform", "language", "id"], name: "index_projects_on_maintained", where: "(((status)::text = ANY ((ARRAY['Active'::character varying, 'Help Wanted'::character varying])::text[])) OR (status IS NULL))"
     t.index ["platform", "name"], name: "index_projects_on_platform_and_name", unique: true
     t.index ["repository_id"], name: "index_projects_on_repository_id"
     t.index ["status"], name: "index_projects_on_status"
