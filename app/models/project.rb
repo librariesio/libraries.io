@@ -103,7 +103,7 @@ class Project < ApplicationRecord
   scope :most_dependent_repos, -> { with_dependent_repos.order(Arel.sql("dependent_repos_count DESC")) }
 
   scope :visible, -> { where('projects."status" != ? OR projects."status" IS NULL', "Hidden") }
-  scope :maintained, -> { where('projects."status" not in (?) OR projects."status" IS NULL', %w[Deprecated Removed Unmaintained Hidden]) }
+  scope :maintained, -> { where('projects."status" in (?) OR projects."status" IS NULL', ["Active", "Help Wanted"]) }
   scope :deprecated, -> { where('projects."status" = ?', "Deprecated") }
   scope :not_removed, -> { where('projects."status" not in (?) OR projects."status" IS NULL', %w[Removed Hidden]) }
   scope :removed, -> { where('projects."status" = ?', "Removed") }
