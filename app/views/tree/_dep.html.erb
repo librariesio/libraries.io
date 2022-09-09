@@ -1,11 +1,16 @@
 <% version = dep[:version] %>
 <% dependency = dep[:dependency] %>
 <% requirements = dep[:requirements] %>
-<% version_path_value = version_path({platform: dependency[:platform], name: dependency[:project_name], number: version[:number]}) %>
 <li>
-  <%= link_to dependency[:project_name], version_path_value %>
+  <%= link_to dependency[:project_name],
+    project_path(platform: dependency[:platform], name: dependency[:project_name])
+  %>
   -
-  <%= link_to version[:number], version_path_value, class: 'tip', title: 'Resolved version' %>
+  <%= link_to version[:number],
+    version_path(platform: dependency[:platform], name: dependency[:project_name], number: version[:number]),
+    class: 'tip',
+    title: 'Resolved version'
+  %>
   -
   <em class='text-muted'>
     <span class="tip" title="Specified version range"><%= requirements %></span>
