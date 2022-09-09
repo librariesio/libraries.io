@@ -10,7 +10,7 @@ Datadog.configure do |c|
 
     # turn on Ruby profiler; there's also a require in config.ru
     # that is part of this.
-    c.profiling.enabled = true
+    c.profiling.enabled = false
   else
     # Tracer can be disabled with DD_TRACE_ENABLED="false" too
     c.tracing.transport_options = lambda { |t|
