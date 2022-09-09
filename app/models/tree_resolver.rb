@@ -81,7 +81,7 @@ class TreeResolver
   end
 
   def cache_key
-    ["tree", @version, @kind, @date].compact
+    ["tree", @version, @kind, @date, "v2"].compact
   end
 
   def append_project_name(dependency)
