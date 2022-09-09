@@ -1,10 +1,12 @@
 # frozen_string_literal: true
+
 class TreeController < ApplicationController
   before_action :find_project
   before_action :load_tree_resolver
 
   def show
-    if @tree_resolver.cached?
+    # if cache is disabled (such as in dev), just do this synchronously
+    if cache_disabled? || @tree_resolver.cached?
       @tree = @tree_resolver.tree
       @project_names = @tree_resolver.project_names
       @license_names = @tree_resolver.license_names
@@ -17,5 +19,11 @@ class TreeController < ApplicationController
         @tree_resolver.enqueue_tree_resolution
       end
     end
+  end
+
+  private
+
+  def cache_disabled?
+    Rails.application.config.cache_store == :null_store
   end
 end
