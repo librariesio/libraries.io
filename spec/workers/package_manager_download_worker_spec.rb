@@ -16,10 +16,19 @@ describe PackageManagerDownloadWorker do
     expect { subject.perform("what", "isthis") }.to raise_exception(StandardError, "Platform 'what' not found")
   end
 
-  it "should raise an error if version requested didn't get created" do
+  it "should delay version requested if version didn't get created" do
+    expect(PackageManagerDownloadWorker).to receive(:perform_in).with(2.seconds, "go", "github.com/hi/ima.package", "1.2.3", "unknown", 1)
     expect(PackageManager::Go).to receive(:update).with("github.com/hi/ima.package", sync_version: "1.2.3")
     expect(Rails.logger).to receive(:info).with("[Version Update Failure] platform=go name=github.com/hi/ima.package version=1.2.3")
 
-    expect { subject.perform("go", "github.com/hi/ima.package", "1.2.3") }.to raise_exception(PackageManagerDownloadWorker::VersionUpdateFailure)
+    subject.perform("go", "github.com/hi/ima.package", "1.2.3")
+  end
+
+  it "should raise an error if version didn't get created after 30 attempts" do
+    expect(PackageManagerDownloadWorker).to_not receive(:perforperform_inm_async)
+    expect(PackageManager::Go).to receive(:update).with("github.com/hi/ima.package", sync_version: "1.2.3")
+    expect(Rails.logger).to receive(:info).with("[Version Update Failure] platform=go name=github.com/hi/ima.package version=1.2.3")
+
+    expect { subject.perform("go", "github.com/hi/ima.package", "1.2.3", nil, 21) }.to raise_exception(PackageManagerDownloadWorker::VersionUpdateFailure)
   end
 end
