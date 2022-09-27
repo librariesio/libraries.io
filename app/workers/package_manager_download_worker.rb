@@ -1,10 +1,16 @@
 # frozen_string_literal: true
 
 class PackageManagerDownloadWorker
+  include Sidekiq::Worker
+  
+  # For stale repo pages without fresh versions, we have a manual retry mechanism 
+  # below. All other errors retry 3 times. 
+  sidekiq_options queue: :critical, retry: 3
+
+  # We were unable to fetch version, even after waiting for repo caches to refresh.
   class VersionUpdateFailure < StandardError; end
 
-  include Sidekiq::Worker
-  sidekiq_options queue: :critical
+  MAX_ATTEMPTS_TO_UPDATE_FRESH_VERSION_DATA = 30
 
   PLATFORMS = {
     alcatraz: PackageManager::Alcatraz,
@@ -51,7 +57,7 @@ class PackageManagerDownloadWorker
     swiftpm: PackageManager::SwiftPM,
   }.freeze
 
-  def perform(platform_name, name, version = nil, source = "unknown")
+  def perform(platform_name, name, version = nil, source = "unknown", requeue_count = 0)
     key, platform = get_platform(platform_name)
     name = name.to_s.strip
     version = version.to_s.strip
@@ -63,7 +69,11 @@ class PackageManagerDownloadWorker
     # Raise/log if version was requested but not found
     if version.present? && !Version.exists?(project: project, number: version)
       Rails.logger.info("[Version Update Failure] platform=#{key} name=#{name} version=#{version}")
-      raise VersionUpdateFailure
+      if requeue_count < MAX_ATTEMPTS_TO_UPDATE_FRESH_VERSION_DATA
+        PackageManagerDownloadWorker.perform_in(5.seconds, platform_name, name, version, source, requeue_count + 1)
+      else
+        raise VersionUpdateFailure
+      end
     end
   end
 
