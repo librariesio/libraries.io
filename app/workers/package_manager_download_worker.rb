@@ -67,10 +67,10 @@ class PackageManagerDownloadWorker
     project = platform.update(name, sync_version: sync_version)
 
     # Raise/log if version was requested but not found
-    if version.present? && true # !Version.exists?(project: project, number: version)
+    if version.present? && !Version.exists?(project: project, number: version)
       Rails.logger.info("[Version Update Failure] platform=#{key} name=#{name} version=#{version}")
       if requeue_count < MAX_ATTEMPTS_TO_UPDATE_FRESH_VERSION_DATA
-        PackageManagerDownloadWorker.perform_in(2.seconds, platform_name, name, version, source, requeue_count + 1)
+        PackageManagerDownloadWorker.perform_in(5.seconds, platform_name, name, version, source, requeue_count + 1)
       else
         raise VersionUpdateFailure
       end
