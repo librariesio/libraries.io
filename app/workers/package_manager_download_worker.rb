@@ -10,7 +10,7 @@ class PackageManagerDownloadWorker
   # We were unable to fetch version, even after waiting for repo caches to refresh.
   class VersionUpdateFailure < StandardError; end
 
-  MAX_ATTEMPTS_TO_UPDATE_FRESH_VERSION_DATA = 30
+  MAX_ATTEMPTS_TO_UPDATE_FRESH_VERSION_DATA = 15
 
   PLATFORMS = {
     alcatraz: PackageManager::Alcatraz,
@@ -71,7 +71,9 @@ class PackageManagerDownloadWorker
       Rails.logger.info("[Version Update Failure] platform=#{key} name=#{name} version=#{version}")
       if requeue_count < MAX_ATTEMPTS_TO_UPDATE_FRESH_VERSION_DATA
         PackageManagerDownloadWorker.perform_in(5.seconds, platform_name, name, version, source, requeue_count + 1)
-      else
+      elsif platform != PackageManager::Go
+        # It's common for go modules, e.g. forks, to not exist on pkg.go.dev, so wait until someone
+        # manually requests it from pkg.go.dev before we index it, and only raise this error for non-go packages.
         raise VersionUpdateFailure
       end
     end
