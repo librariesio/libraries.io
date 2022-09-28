@@ -29,6 +29,6 @@ describe PackageManagerDownloadWorker do
     expect(PackageManager::Go).to receive(:update).with("github.com/hi/ima.package", sync_version: "1.2.3")
     expect(Rails.logger).to receive(:info).with("[Version Update Failure] platform=go name=github.com/hi/ima.package version=1.2.3")
 
-    expect { subject.perform("go", "github.com/hi/ima.package", "1.2.3", nil, 31) }.to raise_exception(PackageManagerDownloadWorker::VersionUpdateFailure)
+    expect { subject.perform("go", "github.com/hi/ima.package", "1.2.3", nil, 16) }.to raise_exception(PackageManagerDownloadWorker::VersionUpdateFailure)
   end
 end
