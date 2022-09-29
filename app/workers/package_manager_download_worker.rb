@@ -8,7 +8,11 @@ class PackageManagerDownloadWorker
   sidekiq_options queue: :critical, retry: 3
 
   # We were unable to fetch version, even after waiting for repo caches to refresh.
-  class VersionUpdateFailure < StandardError; end
+  class VersionUpdateFailure < StandardError
+    def initialize(platform, name, version)
+      super("Could not find release platform=#{platform} name=#{name} version=#{version}")
+    end
+  end
 
   MAX_ATTEMPTS_TO_UPDATE_FRESH_VERSION_DATA = 15
 
@@ -74,7 +78,7 @@ class PackageManagerDownloadWorker
       elsif platform != PackageManager::Go
         # It's common for go modules, e.g. forks, to not exist on pkg.go.dev, so wait until someone
         # manually requests it from pkg.go.dev before we index it, and only raise this error for non-go packages.
-        raise VersionUpdateFailure
+        raise VersionUpdateFailure.new(platform.db_platform, name, version)
       end
     end
   end
