@@ -10,7 +10,7 @@
         </div>
         <div class="col-md-4">
           <% if project.description.present? %>
-            <%= link_to "Google", "https://www.google.com/search?q="+URI.escape('site:github.com "' + project.description.to_s + '"'), class: 'btn btn-success', target: :blank %>
+            <%= link_to "Google", "https://www.google.com/search?q="+Addressable::URI.escape('site:github.com "' + project.description.to_s + '"'), class: 'btn btn-success', target: :blank %>
           <% end %>
           <%= link_to 'Edit in Admin', admin_project_path(project.id), class: 'btn btn-primary' %>
         </div>

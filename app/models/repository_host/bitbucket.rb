@@ -23,7 +23,7 @@ module RepositoryHost
 
     def blob_url(sha = nil)
       sha ||= repository.default_branch
-      "#{url}/src/#{URI.escape(sha)}/"
+      "#{url}/src/#{Addressable::URI.escape(sha)}/"
     end
 
     def commits_url(author = nil)
@@ -41,7 +41,7 @@ module RepositoryHost
     end
 
     def get_file_contents(path, token = nil)
-      file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, URI.escape(repository.default_branch), URI.escape(path))
+      file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, Addressable::URI.escape(repository.default_branch), Addressable::URI.escape(path))
       {
         sha: file.node,
         content: file.data
@@ -89,7 +89,7 @@ module RepositoryHost
     end
 
     def download_readme(token = nil)
-      files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, URI.escape(repository.default_branch || 'master'), '/')
+      files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, Addressable::URI.escape(repository.default_branch || 'master'), '/')
       paths =  files.files.map(&:path)
       readme_path = paths.select{|path| path.match(/^readme/i) }.sort{|path| Readme.supported_format?(path) ? 0 : 1 }.first
       return if readme_path.nil?
