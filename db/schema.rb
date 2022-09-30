@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_08_024404) do
+ActiveRecord::Schema.define(version: 2022_09_30_184941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -258,6 +258,7 @@ ActiveRecord::Schema.define(version: 2022_09_08_024404) do
     t.index ["fork"], name: "index_repositories_on_fork"
     t.index ["host_type", "uuid"], name: "index_repositories_on_host_type_and_uuid", unique: true
     t.index ["private"], name: "index_repositories_on_private"
+    t.index ["rank", "stargazers_count", "id"], name: "index_repositories_on_rank_and_stargazers_count_and_id"
     t.index ["repository_organisation_id"], name: "index_repositories_on_repository_organisation_id"
     t.index ["repository_user_id"], name: "index_repositories_on_repository_user_id"
     t.index ["source_name"], name: "index_repositories_on_source_name"
