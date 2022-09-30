@@ -151,10 +151,22 @@ module PackageManager
 
       existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
       existing.save!
+    rescue ActiveRecord::RecordNotUnique => e
+      # Until all package managers support version-specific updates, we'll have this race condition
+      # of 2+ jobs trying to add versions at the same time.
+      if e.message =~ /PG::UniqueViolation/
+        Rails.logger.info "[DUPLICATE VERSION 1] platform=#{db_project.platform} name=#{db_project.name} version=#{version_hash[:number]}"
+      else
+        raise e
+      end
     rescue ActiveRecord::RecordInvalid => e
       # Until all package managers support version-specific updates, we'll have this race condition
       # of 2+ jobs trying to add versions at the same time.
-      raise e unless e.message =~ /Number has already been taken/
+      if e.message =~ /Number has already been taken/
+        Rails.logger.info "[DUPLICATE VERSION 2] platform=#{db_project.platform} name=#{db_project.name} version=#{version_hash[:number]}"
+      else
+        raise e
+      end
     end
 
     def self.deprecate_versions(db_project, version_hash)
