@@ -231,4 +231,5 @@ Rails.application.routes.draw do
   get "/:platform/:name.ABOUT", to: "projects#about", constraints: { name: /.*/ }
   get "/:platform/:name", to: "projects#show", as: :project, constraints: { name: /.*/ }, defaults: { format: "html" }
   get "/:id", to: "platforms#show", as: :platform
+  get "/bench", to: "projects#bench", as: :bench
 end

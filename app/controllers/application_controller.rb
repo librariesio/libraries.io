@@ -14,8 +14,9 @@ class ApplicationController < ActionController::Base
   private
 
   def trace_span(&block)
-    Google::Cloud::Trace
-      .in_span("endpoint##{controller_path}##{action_name}", &block)
+    Datadog::Tracing.trace("endpoint##{controller_path}##{action_name}") do |_span, _trace|
+      block.call
+    end
   end
 
   def log_active_connections
