@@ -13,6 +13,7 @@ gem "bootstrap-sass"
 gem "brotli"
 gem "bundler"
 gem "charlock_holmes", ">= 0.7.5"
+gem "chartkick", "~> 3.4"
 gem "chronic"
 gem "commonmarker"
 gem "concurrent-ruby-ext"
@@ -78,9 +79,10 @@ gem "rdoc"
 gem "redis"
 gem "sanitize-url"
 gem "sassc-rails"
+gem "scenic", "~> 1.4"
 gem "semantic", git: "https://github.com/librariesio/semantic"
 gem "semantic_range"
-gem "sidekiq", "< 6"
+gem "sidekiq", "< 7"
 gem "sidekiq-unique-jobs"
 gem "simple-rss"
 gem "simple_form"
@@ -128,8 +130,3 @@ group :production do
   gem "lograge"
   gem "rails_safe_tasks"
 end
-
-gem "scenic", "~> 1.4"
-
-
-gem "chartkick", "~> 3.4"
