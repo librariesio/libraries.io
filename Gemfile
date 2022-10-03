@@ -80,7 +80,7 @@ gem "sanitize-url"
 gem "sassc-rails"
 gem "semantic", git: "https://github.com/librariesio/semantic"
 gem "semantic_range"
-gem "sidekiq"
+gem 'sidekiq', '< 6'
 gem "sidekiq-unique-jobs"
 gem "simple-rss"
 gem "simple_form"
