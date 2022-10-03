@@ -9,7 +9,6 @@ Elasticsearch::Model.client = Elasticsearch::Client.new hosts: url.split(','),
                                                         randomize_hosts: true,
                                                         transport_options: { request: { timeout: 10 } } do |builder|
   builder.use FaradayMiddleware::Gzip
-  builder.use Google::Cloud::Trace::FaradayMiddleware if Rails.env.production?
   builder.use :instrumentation
   builder.request :retry
   builder.adapter :typhoeus

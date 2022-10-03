@@ -8,7 +8,7 @@ module ASMTrace
       puts "active_model_serializers#serializable_hash##{self.class.name}: #{b.real}ms"
       result
     else
-      Google::Cloud::Trace.in_span "active_model_serializers#serializable_hash##{self.class.name}" do |_span|
+      Datadog::Tracing.trace("active_model_serializers#serializable_hash##{self.class.name}") do |_span, _trace|
         super
       end
     end

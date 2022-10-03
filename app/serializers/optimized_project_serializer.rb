@@ -39,7 +39,7 @@ class OptimizedProjectSerializer
   end
 
   def serialize
-    Google::Cloud::Trace.in_span "optimized_project_serializer#serialize" do |_span|
+    Datadog::Tracing.trace("optimized_project_serializer#serialize") do |_span, _trace|
       @projects.map do |project|
         serialize_project(project)
       end
@@ -47,7 +47,7 @@ class OptimizedProjectSerializer
   end
 
   def serialize_project(project)
-    Google::Cloud::Trace.in_span "optimized_project_serializer#serialize_project" do |_span|
+    Datadog::Tracing.trace("optimized_project_serializer#serialize_project") do |_span, _trace|
       name = @requested_name_map[[project.platform, project.name]]
       project
         .attributes
@@ -72,7 +72,7 @@ class OptimizedProjectSerializer
   end
 
   def maintenance_stats
-    @maintenance_stats ||= Google::Cloud::Trace.in_span "optimized_project_serializer#maintenance_stats" do |_span|
+    @maintenance_stats ||= Datadog::Tracing.trace("optimized_project_serializer#maintenance_stats") do |_span, _trace|
       RepositoryMaintenanceStat
         .where(repository_id: @projects.map { |p| p.repository&.id }.compact)
         .pluck(*MAINTENANCE_STAT_ATTRIBUTES, :repository_id)
