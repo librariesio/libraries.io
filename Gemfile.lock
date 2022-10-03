@@ -135,7 +135,7 @@ GEM
     concurrent-ruby (1.1.5)
     concurrent-ruby-ext (1.1.5)
       concurrent-ruby (= 1.1.5)
-    connection_pool (2.2.2)
+    connection_pool (2.3.0)
     counter_culture (2.2.2)
       activerecord (>= 4.2.0)
       activesupport (>= 4.2.0)
@@ -398,7 +398,7 @@ GEM
     puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
-    rack (2.2.3.1)
+    rack (2.2.4)
     rack-attack (6.0.0)
       rack (>= 1.0, < 3)
     rack-attack-rate-limit (1.1.0)
@@ -408,7 +408,7 @@ GEM
       rack (>= 1.0.0, < 3)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
-    rack-protection (2.0.5)
+    rack-protection (3.0.2)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -446,7 +446,7 @@ GEM
       ffi (~> 1.0)
     rb-readline (0.5.5)
     rdoc (6.1.1)
-    redis (4.1.2)
+    redis (4.5.1)
     regexp_parser (2.0.3)
     representable (3.0.4)
       declarative (< 0.1.0)
@@ -524,11 +524,11 @@ GEM
     shoulda-context (1.2.2)
     shoulda-matchers (3.1.3)
       activesupport (>= 4.0.0)
-    sidekiq (5.2.7)
+    sidekiq (5.2.10)
       connection_pool (~> 2.2, >= 2.2.2)
-      rack (>= 1.5.0)
+      rack (~> 2.0)
       rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 5)
+      redis (~> 4.5, < 4.6.0)
     sidekiq-unique-jobs (6.0.13)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 4.0, < 7.0)
@@ -708,7 +708,7 @@ DEPENDENCIES
   semantic!
   semantic_range
   shoulda
-  sidekiq
+  sidekiq (< 6)
   sidekiq-unique-jobs
   simple-rss
   simple_form

@@ -100,7 +100,7 @@ class ApplicationController < ActionController::Base
     if @project.name != params[:name]
       redirect_to(
         # Unescape since url_for automatically escapes our already-escaped project name
-        URI.unescape(
+        Addressable::URI.unescape(
           url_for(
             params
               .to_unsafe_h
