@@ -22,10 +22,6 @@ class ProjectsController < ApplicationController
     your_dependent_repos
   ]
 
-  def bench
-    CreateRepositoryWorker.new.perform('Github', 'golang/go')
-  end
-
   def index
     if current_user
       muted_ids = params[:include_muted].present? ? [] : current_user.muted_project_ids
