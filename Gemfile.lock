@@ -292,10 +292,6 @@ GEM
     librariesio-gem-parser (1.0.0)
     librariesio-url-parser (1.0.3)
     license-compatibility (3.1.0)
-    listen (3.1.5)
-      rb-fsevent (~> 0.9, >= 0.9.4)
-      rb-inotify (~> 0.9, >= 0.9.7)
-      ruby_dep (~> 1.2)
     lograge (0.11.1)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -441,9 +437,6 @@ GEM
     rake (13.0.6)
     rake-compiler (1.0.7)
       rake
-    rb-fsevent (0.10.3)
-    rb-inotify (0.10.0)
-      ffi (~> 1.0)
     rb-readline (0.5.5)
     rdoc (6.1.1)
     redis (4.5.1)
@@ -496,7 +489,6 @@ GEM
     ruby-enum (0.7.2)
       i18n
     ruby-progressbar (1.11.0)
-    ruby_dep (1.5.0)
     rubypants (0.7.0)
     rugged (1.5.0)
     safe_yaml (1.0.5)
@@ -553,11 +545,6 @@ GEM
     spdx (2.0.11)
       fuzzy_match (~> 2.1)
       treetop (~> 1.6)
-    spring (2.0.2)
-      activesupport (>= 4.2)
-    spring-watcher-listen (2.0.1)
-      listen (>= 2.7, < 4.0)
-      spring (>= 1.2, < 3.0)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -663,7 +650,6 @@ DEPENDENCIES
   json_spec
   librariesio-url-parser (~> 1)
   license-compatibility
-  listen
   lograge
   mail
   marginalia
@@ -715,8 +701,6 @@ DEPENDENCIES
   simplecov
   sitemap_generator
   spdx
-  spring
-  spring-watcher-listen
   sql_queries_count
   tomlrb
   turbolinks

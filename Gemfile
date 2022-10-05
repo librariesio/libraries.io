@@ -47,7 +47,6 @@ gem 'jb'
 gem "jquery-rails"
 gem "librariesio-url-parser", "~> 1"
 gem "license-compatibility"
-gem "listen"
 gem "mail", require: ["mail", "mail/utilities", "mail/parsers"]
 gem "marginalia"
 gem "marginalia-sidekiq"
@@ -96,8 +95,6 @@ gem "yajl-ruby"
 group :development do
   gem "brakeman", require: false
   gem "pry-rails"
-  gem "spring"
-  gem "spring-watcher-listen"
   gem "sql_queries_count"
 end
 
