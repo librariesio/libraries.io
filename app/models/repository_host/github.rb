@@ -108,7 +108,7 @@ module RepositoryHost
       platform = repository.projects.first.try(:platform)
       gh_contributions.each do |c|
         next unless c['id']
-        cont = existing_contributions.find{|cnt| cnt.repository_user.try(:uuid) == c.id }
+        cont = existing_contributions.find{|cnt| cnt.repository_user.try(:uuid) == c.id.to_s }
         unless cont
           user = RepositoryUser.create_from_host('GitHub', c)
           cont = repository.contributions.find_or_create_by(repository_user: user)
