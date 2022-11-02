@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class RepositoryMaintenanceStatWorker
     include Sidekiq::Worker
-    sidekiq_options queue: :repo_maintenance_stat, retry: 3
+    sidekiq_options queue: :repo_maintenance_stat, retry: 3, unique: :until_executed
 
     def perform(repo_id)
         Repository.find(repo_id).gather_maintenance_stats
