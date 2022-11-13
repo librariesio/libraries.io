@@ -410,14 +410,6 @@ class Project < ApplicationRecord
     facets(options)[:languages].language.buckets
   end
 
-  def self.keywords_badlist
-    %w[bsd3 library]
-  end
-
-  def self.popular_keywords(options = {})
-    facets(options)[:keywords].keywords_array.buckets.reject { |t| all_languages.include?(t["key"].downcase) }.reject { |t| keywords_badlist.include?(t["key"].downcase) }
-  end
-
   def self.popular_licenses(options = {})
     facets(options)[:licenses].normalized_licenses.buckets.reject { |t| t["key"].downcase == "other" }
   end
