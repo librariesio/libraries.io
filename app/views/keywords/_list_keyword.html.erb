@@ -1,6 +1,0 @@
-<% if keyword['key'].present? %>
-  <p class='list'>
-    <strong><%= link_to keyword['key'], search_path(platforms: @platform_name, languages: @language, licenses: @license.try(:id), keywords: keyword['key']) %></strong>
-    <small><%= pluralize number_to_human(keyword['doc_count']), 'project' %></small>
-  </p>
-<% end %>
