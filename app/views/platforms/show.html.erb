@@ -75,35 +75,4 @@
 
     </div>
   </div>
-  <div class="col-md-4">
-    <div class='row'>
-      <% if @languages.many? %>
-        <div class='col-md-12 col-sm-4'>
-          <h4>
-            <%= fa_icon 'code' %>
-            Top <%= platform_name(@platform_name) %> Languages
-          </h4>
-          <%= render partial: 'languages/list_language', collection: @languages, as: :language %>
-        </div>
-      <% end %>
-      <% if @licenses.many? %>
-        <div class='col-md-12 col-sm-4'>
-          <h4>
-            <%= fa_icon 'gavel' %>
-            Top <%= platform_name(@platform_name) %> Licenses
-          </h4>
-          <%= render partial: 'licenses/list_license', collection: @licenses, as: :license %>
-        </div>
-      <% end %>
-      <% if @keywords.many? %>
-        <div class='col-md-12 col-sm-4'>
-          <h4>
-            <%= fa_icon 'tags' %>
-            Top <%= platform_name(@platform_name) %> Keywords
-          </h4>
-          <%= render partial: 'keywords/list_keyword', collection: @keywords, as: :keyword %>
-        </div>
-      <% end %>
-    </div>
-  </div>
 </div>

@@ -13,12 +13,6 @@ class PlatformsController < ApplicationController
     @popular = scope.order('projects.rank DESC NULLS LAST').limit(5).includes(:repository)
 
     @color = @platform.color
-
-    facets = Project.facets(filters: {platform: @platform_name}, facet_limit: 10)
-
-    @languages = facets[:languages].language.buckets
-    @licenses = facets[:licenses].normalized_licenses.buckets.reject{ |t| t['key'].downcase == 'other' }
-    @keywords = facets[:keywords].keywords_array.buckets
   rescue ActiveRecord::RecordNotFound
     head :not_found
   end
