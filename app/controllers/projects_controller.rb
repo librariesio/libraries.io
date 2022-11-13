@@ -28,9 +28,7 @@ class ProjectsController < ApplicationController
       @versions = current_user.all_subscribed_versions.where.not(project_id: muted_ids).where.not(published_at: nil).newest_first.includes(project: :versions).paginate(per_page: 20, page: page_number)
       render 'dashboard/home'
     else
-      facets = Project.facets(facet_limit: 40)
-
-      @platforms = facets[:platforms].platform.buckets
+      @platforms = Project.maintained.group(:platform).order('count_id DESC').count('id').map {|k,v| {'key' => k, 'doc_count' => v}}
     end
   end
 
