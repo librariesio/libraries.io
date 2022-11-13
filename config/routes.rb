@@ -130,7 +130,6 @@ Rails.application.routes.draw do
 
   resources :licenses, constraints: { id: /.*/ }, defaults: { format: "html" }
   resources :languages
-  resources :keywords, constraints: { id: /.*/ }, defaults: { format: "html" }
   resources :subscriptions
   resources :repository_subscriptions
   get "/subscribe/:project_id", to: "subscriptions#subscribe", as: :subscribe
