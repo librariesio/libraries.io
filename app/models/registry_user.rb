@@ -1,4 +1,21 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: registry_users
+#
+#  id       :integer          not null, primary key
+#  email    :string
+#  login    :string
+#  name     :string
+#  platform :string
+#  url      :string
+#  uuid     :string
+#
+# Indexes
+#
+#  index_registry_users_on_platform_and_uuid  (platform,uuid) UNIQUE
+#
 class RegistryUser < ApplicationRecord
   has_many :registry_permissions
   has_many :projects, through: :registry_permissions

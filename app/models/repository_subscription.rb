@@ -1,4 +1,21 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: repository_subscriptions
+#
+#  id                 :integer          not null, primary key
+#  include_prerelease :boolean          default(TRUE)
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  hook_id            :integer
+#  repository_id      :integer
+#  user_id            :integer
+#
+# Indexes
+#
+#  index_repository_subscriptions_on_created_at  (created_at)
+#
 class RepositorySubscription < ApplicationRecord
   belongs_to :user
   belongs_to :repository

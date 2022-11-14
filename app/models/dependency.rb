@@ -1,4 +1,25 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: dependencies
+#
+#  id           :integer          not null, primary key
+#  kind         :string
+#  optional     :boolean          default(FALSE)
+#  platform     :string
+#  project_name :string
+#  requirements :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  project_id   :integer
+#  version_id   :integer
+#
+# Indexes
+#
+#  index_dependencies_on_project_id  (project_id)
+#  index_dependencies_on_version_id  (version_id)
+#
 class Dependency < ApplicationRecord
   include DependencyChecks
 

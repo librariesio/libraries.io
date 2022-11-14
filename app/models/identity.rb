@@ -1,4 +1,26 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: identities
+#
+#  id                 :integer          not null, primary key
+#  avatar_url         :string
+#  nickname           :string
+#  provider           :string
+#  token              :string
+#  uid                :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  repository_user_id :integer
+#  user_id            :integer
+#
+# Indexes
+#
+#  index_identities_on_repository_user_id  (repository_user_id)
+#  index_identities_on_uid                 (uid)
+#  index_identities_on_user_id             (user_id)
+#
 class Identity < ApplicationRecord
   belongs_to :user
   belongs_to :repository_user

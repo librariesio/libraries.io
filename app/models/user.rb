@@ -1,4 +1,24 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: users
+#
+#  id                :integer          not null, primary key
+#  currently_syncing :boolean          default(FALSE), not null
+#  email             :string
+#  emails_enabled    :boolean          default(TRUE)
+#  is_admin          :boolean          default(FALSE), not null
+#  last_login_at     :datetime
+#  last_synced_at    :datetime
+#  optin             :boolean          default(FALSE)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_created_at  (created_at)
+#
 class User < ApplicationRecord
   include Recommendable
   include GithubIdentity

@@ -1,4 +1,35 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: repository_users
+#
+#  id             :integer          not null, primary key
+#  bio            :string
+#  blog           :string
+#  company        :string
+#  email          :string
+#  followers      :integer
+#  following      :integer
+#  hidden         :boolean          default(FALSE)
+#  host_type      :string
+#  last_synced_at :datetime
+#  location       :string
+#  login          :string
+#  name           :string
+#  user_type      :string
+#  uuid           :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
+# Indexes
+#
+#  index_repository_users_on_created_at                   (created_at)
+#  index_repository_users_on_hidden                       (hidden)
+#  index_repository_users_on_hidden_and_last_synced_at    (hidden,last_synced_at)
+#  index_repository_users_on_host_type_and_uuid           (host_type,uuid) UNIQUE
+#  index_repository_users_on_lower_host_type_lower_login  (lower((host_type)::text), lower((login)::text)) UNIQUE
+#
 class RepositoryUser < ApplicationRecord
   has_many :contributions, dependent: :delete_all
   has_many :repositories
