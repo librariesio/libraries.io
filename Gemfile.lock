@@ -87,6 +87,9 @@ GEM
     after_commit_action (1.1.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
+    annotate (3.2.0)
+      activerecord (>= 3.2, < 8.0)
+      rake (>= 10.4, < 14.0)
     api-pagination (4.8.2)
     arel (9.0.0)
     asciidoctor (2.0.9)
@@ -599,6 +602,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  annotate
   api-pagination
   asciidoctor
   bibliothecary

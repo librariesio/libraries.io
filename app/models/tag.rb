@@ -1,4 +1,22 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: tags
+#
+#  id            :integer          not null, primary key
+#  kind          :string
+#  name          :string
+#  published_at  :datetime
+#  sha           :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  repository_id :integer
+#
+# Indexes
+#
+#  index_tags_on_repository_id_and_name  (repository_id,name)
+#
 class Tag < ApplicationRecord
   include Releaseable
 

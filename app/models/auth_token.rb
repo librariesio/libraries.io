@@ -1,4 +1,16 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: auth_tokens
+#
+#  id         :integer          not null, primary key
+#  authorized :boolean
+#  login      :string
+#  token      :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 class AuthToken < ApplicationRecord
   validates_presence_of :token
   scope :authorized, -> { where(authorized: [true, nil]) }

@@ -1,5 +1,27 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: versions
+#
+#  id                         :integer          not null, primary key
+#  number                     :string
+#  original_license           :jsonb
+#  published_at               :datetime
+#  repository_sources         :jsonb
+#  researched_at              :datetime
+#  runtime_dependencies_count :integer
+#  spdx_expression            :string
+#  status                     :string
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  project_id                 :integer
+#
+# Indexes
+#
+#  index_versions_on_project_id_and_number  (project_id,number) UNIQUE
+#  index_versions_on_updated_at             (updated_at)
+#
 class Version < ApplicationRecord
   include Releaseable
 

@@ -1,5 +1,57 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: projects
+#
+#  id                                 :integer          not null, primary key
+#  dependent_repos_count              :integer
+#  dependents_count                   :integer          default(0), not null
+#  deprecation_reason                 :text
+#  description                        :text
+#  homepage                           :string
+#  keywords                           :text
+#  keywords_array                     :string           default([]), is an Array
+#  language                           :string
+#  last_synced_at                     :datetime
+#  latest_release_number              :string
+#  latest_release_published_at        :datetime
+#  latest_stable_release_number       :string
+#  latest_stable_release_published_at :datetime
+#  license_normalized                 :boolean          default(FALSE)
+#  license_set_by_admin               :boolean          default(FALSE)
+#  licenses                           :string
+#  name                               :string
+#  normalized_licenses                :string           default([]), is an Array
+#  platform                           :string
+#  rank                               :integer          default(0)
+#  repository_url                     :string
+#  runtime_dependencies_count         :integer
+#  score                              :integer          default(0), not null
+#  score_last_calculated              :datetime
+#  status                             :string
+#  versions_count                     :integer          default(0), not null
+#  created_at                         :datetime         not null
+#  updated_at                         :datetime         not null
+#  pm_id                              :integer
+#  repository_id                      :integer
+#
+# Indexes
+#
+#  index_projects_on_created_at                     (created_at)
+#  index_projects_on_dependents_count               (dependents_count)
+#  index_projects_on_keywords_array                 (keywords_array) USING gin
+#  index_projects_on_lower_language                 (lower((language)::text))
+#  index_projects_on_maintained                     (platform,language,id) WHERE (((status)::text = ANY (ARRAY[('Active'::character varying)::text, ('Help Wanted'::character varying)::text])) OR (status IS NULL))
+#  index_projects_on_normalized_licenses            (normalized_licenses) USING gin
+#  index_projects_on_platform_and_dependents_count  (platform,dependents_count)
+#  index_projects_on_platform_and_name              (platform,name) UNIQUE
+#  index_projects_on_platform_and_name_lower        (lower((platform)::text), lower((name)::text))
+#  index_projects_on_repository_id                  (repository_id)
+#  index_projects_on_status                         (status)
+#  index_projects_on_updated_at                     (updated_at)
+#  index_projects_on_versions_count                 (versions_count)
+#
 class Project < ApplicationRecord
   require "query_counter"
 

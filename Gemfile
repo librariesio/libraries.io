@@ -93,6 +93,7 @@ gem "will_paginate-bootstrap"
 gem "yajl-ruby"
 
 group :development do
+  gem "annotate"
   gem "brakeman", require: false
   gem "pry-rails"
   gem "sql_queries_count"

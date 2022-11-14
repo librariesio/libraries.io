@@ -1,4 +1,22 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: web_hooks
+#
+#  id            :integer          not null, primary key
+#  last_response :string
+#  last_sent_at  :datetime
+#  url           :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  repository_id :integer
+#  user_id       :integer
+#
+# Indexes
+#
+#  index_web_hooks_on_repository_id  (repository_id)
+#
 class WebHook < ApplicationRecord
   belongs_to :repository
   belongs_to :user

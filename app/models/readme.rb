@@ -1,4 +1,19 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: readmes
+#
+#  id            :integer          not null, primary key
+#  html_body     :text
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  repository_id :integer
+#
+# Indexes
+#
+#  index_readmes_on_repository_id  (repository_id) UNIQUE
+#
 class Readme < ApplicationRecord
   VALID_EXTENSION_REGEXES = [
     /md/,
