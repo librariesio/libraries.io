@@ -53,16 +53,6 @@ namespace :one_off do
   task dedupe_repository_maintenance_stats: :environment do
     sql = Arel.sql(
       <<-SQL
-      DELETE FROM repository_maintenance_stats as A
-      USING repository_maintenance_stats as B
-      WHERE A.updated_at < B.updated_at
-      AND A.repository_id = B.repository_id
-      AND A.category = B.category
-    SQL
-    )
-
-    sql2 = Arel.sql(
-      <<-SQL
         DELETE FROM repository_maintenance_stats
         WHERE id IN
         (
@@ -76,6 +66,6 @@ namespace :one_off do
       SQL
     )
 
-    ActiveRecord::Base.connection.execute(sql2)
+    ActiveRecord::Base.connection.execute(sql)
   end
 end
