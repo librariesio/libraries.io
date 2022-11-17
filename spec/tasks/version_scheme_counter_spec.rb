@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-require "rake"
 
 describe "version:scheme_counter" do
   describe "Scheme detection" do
@@ -57,8 +56,6 @@ describe "version:scheme_counter" do
   end
 
   describe "Rake task" do
-    Rails.application.load_tasks
-
     def create_versions(versions, project)
       versions.each do |version|
         create(:version, project: project, number: version)

@@ -48,4 +48,24 @@ namespace :one_off do
         p.destroy!
       end
   end
+
+  desc "remove all duplicate repository_maintenance_stats, preferring the one most recently updated."
+  task dedupe_repository_maintenance_stats: :environment do
+    sql = Arel.sql(
+      <<-SQL
+        DELETE FROM repository_maintenance_stats
+        WHERE id IN
+        (
+            SELECT id
+            FROM(
+                SELECT *, row_number() OVER (PARTITION BY repository_id, category ORDER BY updated_at DESC)
+                FROM repository_maintenance_stats
+            ) as s
+            WHERE row_number > 1
+        )
+      SQL
+    )
+
+    ActiveRecord::Base.connection.execute(sql)
+  end
 end
