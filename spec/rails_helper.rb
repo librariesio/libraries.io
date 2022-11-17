@@ -8,6 +8,8 @@ require "spec_helper"
 require "rspec/rails"
 require "webmock/rspec"
 
+Rails.application.load_tasks
+
 Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!

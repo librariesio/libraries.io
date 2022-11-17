@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "rake"
 
 describe "one_off rake tasks" do
-  Rails.application.load_tasks
-
   describe "dedupe_repository_maintenance_stats" do
     let(:repository) { create(:repository) }
 
