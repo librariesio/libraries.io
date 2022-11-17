@@ -48,4 +48,18 @@ namespace :one_off do
         p.destroy!
       end
   end
+
+  desc "remove all duplicate repository_maintenance_stats, preferring the one most recently updated."
+  task dedupe_repository_maintenance_stats: :environment do
+    Repository.in_batches.each_record do |repository|
+      all_stats = RepositoryMaintenanceStat.where(repository: repository)
+
+      latest_stats = all_stats
+        .select("DISTINCT ON (category) id")
+        .order("category, updated_at DESC")
+        .map(&:id)
+
+      all_stats.where.not(id: latest_stats).destroy_all
+    end
+  end
 end
