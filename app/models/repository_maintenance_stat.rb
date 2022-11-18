@@ -13,7 +13,8 @@
 #
 # Indexes
 #
-#  index_repository_maintenance_stats_on_repository_id  (repository_id)
+#  index_repository_maintenance_stats_on_repository_and_category  (repository_id,category) UNIQUE
+#  index_repository_maintenance_stats_on_repository_id            (repository_id)
 #
 class RepositoryMaintenanceStat < ApplicationRecord
     belongs_to :repository
