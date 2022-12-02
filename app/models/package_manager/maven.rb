@@ -42,7 +42,8 @@ module PackageManager
     end
 
     def self.project_names
-      get("https://maven.libraries.io/mavenCentral/all")
+      # NB this is just the most recent set of incremental updates to maven central, not all releases
+      get("https://maven.libraries.io/mavenCentral/recent")
     end
 
     def self.project(name)
