@@ -48,8 +48,8 @@ class Version < ApplicationRecord
   after_create_commit { ProjectTagsUpdateWorker.perform_async(project_id) }
   after_create_commit :send_notifications_async,
                       :update_repository_async,
-                      :save_project,
-                      :log_version_creation
+                      :log_version_creation,
+                      :save_project
 
   scope :newest_first, -> { order("versions.published_at DESC") }
 
