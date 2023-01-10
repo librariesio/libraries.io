@@ -79,22 +79,29 @@ module PackageManager
       # call update on base module name if the name is appended with major version
       # example: github.com/myexample/modulename/v2
       # use the returned project name in case it finds a Project via repository_url
-      update_base_module(project.name) if project.present? && project.name.match?(VERSION_MODULE_REGEX)
+
+      # pick one version to use for the base module update so that we don't sync every version
+      # when reusing the PackageManagerDownloadWorker to initialize the base name Project
+      base_sync_version = sync_version unless sync_version == :all
+      base_sync_version = base_sync_version.presence || project.versions.first&.number&.presence
+      update_base_module(project.name, base_sync_version) if project.present? && project.name.match?(VERSION_MODULE_REGEX)
 
       project
     end
 
-    def self.update_base_module(name)
+    def self.update_base_module(name, base_sync_version)
       matches = name.match(VERSION_MODULE_REGEX)
 
-      # run this inline to generate the base module Project if it doesn't already exist
-      PackageManagerDownloadWorker.new.perform(self.name, matches[1])
+      unless Project.where(platform: "Go", name: matches[1]).exists?
+        # run this inline to generate the base module Project if it doesn't already exist
+        PackageManagerDownloadWorker.new.perform(self.name, matches[1], base_sync_version)
+      end
 
       module_project = Project.find_by(platform: "Go", name: name)
       base_module_project = Project.find_by(platform: "Go", name: matches[1])
       return if module_project.nil? || base_module_project.nil?
 
-      # find any versions the /vx module knows about that the base module does have already
+      # find any versions the /vx module knows about that the base module doesn't have already
       new_base_versions = module_project.versions.where.not(number: base_module_project.versions.pluck(:number))
 
       new_base_versions.each do |vers|
@@ -211,7 +218,8 @@ module PackageManager
     def self.project_find_names(name)
       return [name] if name.start_with?(*KNOWN_HOSTS)
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
-      host = name.split('/').first
+
+      host = name.split("/").first
       return [name] if Rails.cache.exist?("unreachable-go-hosts:#{host}")
 
       begin
@@ -229,7 +237,7 @@ module PackageManager
       rescue Faraday::ConnectionFailed => e
         # We can get here from go modules that don't exist anymore, or having server troubles:
         # Fallback to the given name, cache the host as "bad" for a day,
-        # log it (to analyze later) and notify us to be safe. 
+        # log it (to analyze later) and notify us to be safe.
         Rails.logger.info "[Caching unreacahble go host] name=#{name}"
         Rails.cache.write("unreachable-go-hosts:#{host}", true, ex: 1.day)
         Bugsnag.notify(e)
