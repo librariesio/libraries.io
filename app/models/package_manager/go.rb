@@ -24,7 +24,7 @@ module PackageManager
     DISCOVER_URL = "https://pkg.go.dev"
     URL = DISCOVER_URL
 
-    VERSION_MODULE_REGEX = /(.+)\/(v\d+)/.freeze
+    VERSION_MODULE_REGEX = /(.+)\/(v\d+)(\/|$)/.freeze
     MODULE_REGEX = /module\s+(.+)/.freeze
 
     def self.check_status_url(db_project)
