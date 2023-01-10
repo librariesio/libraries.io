@@ -251,6 +251,7 @@ describe PackageManager::Go do
 
         VCR.use_cassette("go/pkg_go_dev") do
           described_class.update(versioned_module.name)
+          versioned_module.reload
 
           expect(versioned_module).to be_present
           expect(versioned_module.versions.count).to eql 3
