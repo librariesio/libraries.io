@@ -83,7 +83,7 @@ module PackageManager
       # pick one version to use for the base module update so that we don't sync every version
       # when reusing the PackageManagerDownloadWorker to initialize the base name Project
       base_sync_version = sync_version unless sync_version == :all
-      base_sync_version = base_sync_version.presence || project.versions.limit(1).first.number.presence
+      base_sync_version = base_sync_version.presence || project.versions.first&.number&.presence
       update_base_module(project.name, base_sync_version) if project.present? && project.name.match?(VERSION_MODULE_REGEX)
 
       project

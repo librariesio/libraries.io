@@ -255,7 +255,7 @@ describe PackageManager::Go do
           expect(versioned_module).to be_present
           expect(versioned_module.versions.count).to eql 3
 
-          version = versioned_module.versions.limit(1).first
+          version = versioned_module.versions.first
           expect(stub).to have_received(:perform).with(described_class.name, package_name, version.number)
         end
       end
