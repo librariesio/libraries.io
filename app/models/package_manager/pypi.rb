@@ -127,7 +127,7 @@ module PackageManager
       api_response = get("https://pypi.org/pypi/#{name}/#{version}/json")
       deps = api_response.dig("info", "requires_dist")
       source_info = api_response.dig("releases", version)
-      Rails.logger.warn("Pypi sdist (no deps): #{name}") unless source_info.any? { |rel| rel["packagetype"] == "bdist_wheel" }
+      Rails.logger.warn("Pypi sdist (no deps): #{name}") unless source_info&.any? { |rel| rel["packagetype"] == "bdist_wheel" }
 
       deps.map do |dep|
         name, version = dep.split
