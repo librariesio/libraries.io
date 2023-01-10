@@ -197,7 +197,7 @@ describe PackageManager::Go do
 
         non_versioned_module = Project.find_by(platform: "Go", name: package_name)
         expect(non_versioned_module).to be_present
-        expect(non_versioned_module.versions.count).to eql 6
+        expect(non_versioned_module.versions.count).to eql 3
         expect(non_versioned_module.versions.where("number like ?", "v3%").count).to eql 3
       end
     end
@@ -224,8 +224,40 @@ describe PackageManager::Go do
 
         non_versioned_module = Project.find_by(platform: "Go", name: package_name)
         expect(non_versioned_module).to be_present
-        expect(non_versioned_module.versions.count).to eql 6
+        expect(non_versioned_module.versions.count).to eql 3
         expect(non_versioned_module.versions.where("number like ?", "v3%").count).to eql 3
+      end
+    end
+
+    context "with stubbed PackageManagerDownloadWorker" do
+      let(:stub) { instance_double(PackageManagerDownloadWorker) }
+
+      before do
+        allow(PackageManagerDownloadWorker).to receive(:new).and_return(stub)
+        allow(stub).to receive(:perform)
+      end
+
+      it "should not update an existing base module Project" do
+        VCR.use_cassette("go/pkg_go_dev") do
+          described_class.update(package_name)
+          described_class.update("#{package_name}/v3")
+
+          expect(stub).not_to have_received(:perform)
+        end
+      end
+
+      it "should only update one version of the base module if it doesn't exist" do
+        versioned_module = create(:project, name: "#{package_name}/v3", platform: "Go", repository_url: "https://github.com/robfig/cron")
+
+        VCR.use_cassette("go/pkg_go_dev") do
+          described_class.update(versioned_module.name)
+
+          expect(versioned_module).to be_present
+          expect(versioned_module.versions.count).to eql 3
+
+          version = versioned_module.versions.limit(1).first
+          expect(stub).to have_received(:perform).with(described_class.name, package_name, version.number)
+        end
       end
     end
   end
