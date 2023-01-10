@@ -95,6 +95,13 @@ describe PackageManager::Go do
 
       expect(matches).to be nil
     end
+
+    it "should not match on a module name that is deceivingly similar to a major version" do
+      name = "github.com/example/v2module1"
+      matches = name.match(described_class::VERSION_MODULE_REGEX)
+
+      expect(matches).to be nil
+    end
   end
 
   describe "#one_version" do
