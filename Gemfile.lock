@@ -96,11 +96,12 @@ GEM
     ast (2.4.2)
     autoprefixer-rails (9.5.1.1)
       execjs
-    bibliothecary (7.3.4)
+    bibliothecary (8.5.1)
       commander
       deb_control
       librariesio-gem-parser
       ox (>= 2.8.1)
+      packageurl-ruby
       sdl4r
       strings
       strings-ansi
@@ -181,7 +182,7 @@ GEM
       multi_json
     erubi (1.10.0)
     escape_utils (1.2.1)
-    ethon (0.15.0)
+    ethon (0.16.0)
       ffi (>= 1.15.0)
     excon (0.72.0)
     execjs (2.7.0)
@@ -203,7 +204,7 @@ GEM
       rake
       rake-compiler
     fast_xs (0.8.0)
-    ffi (1.15.4)
+    ffi (1.15.5)
     fog-aws (3.5.0)
       fog-core (~> 2.1)
       fog-json (~> 1.1)
@@ -363,7 +364,8 @@ GEM
     org-ruby (0.9.12)
       rubypants (~> 0.2)
     os (1.1.1)
-    ox (2.14.6)
+    ox (2.14.13)
+    packageurl-ruby (0.1.0)
     parallel (1.17.0)
     parser (3.0.0.0)
       ast (~> 2.4.1)
@@ -567,7 +569,7 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.9)
-    tomlrb (2.0.1)
+    tomlrb (2.0.3)
     treetop (1.6.10)
       polyglot (~> 0.3)
     turbolinks (5.2.0)
