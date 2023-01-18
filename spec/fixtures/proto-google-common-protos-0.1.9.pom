@@ -36,7 +36,7 @@
   </developers>
   <scm>
     <connection>scm:git:https://github.com/googleapis/googleapis</connection>
-    <url>https://github.com/googleapis/googleapis-dummy</url>
+    <url>${scm.url}</url>
   </scm>
   <dependencies>
     <dependency>
