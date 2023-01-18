@@ -120,9 +120,22 @@ module PackageManager
     end
 
     def self.extract_pom_properties(xml)
-      xml.locate("properties/*").each_with_object({}) do |prop_node, all|
+      properties = xml.locate("properties/*").each_with_object({}) do |prop_node, all|
         all[prop_node.value] = prop_node.nodes.first if prop_node.respond_to?(:nodes)
       end
+
+      # <scm><url /></scm> can be found outside of <properties /> but we're only
+      # passing <properties /> to extract_pom_info() for now, even though most
+      # elements in a parent pom are inheritable (except for artifactId, name,
+      # and prerequisites) (see https://maven.apache.org/pom.html#inheritance)
+      # To ensure that the correct "scm.url" can be inherited from parent poms,
+      # we manually set "scm.url" - if it exists in the parent pom - as a 
+      # property for child poms to use during interpolation.
+      if properties["scm.url"].blank? && (node = xml.locate("scm/url").first)
+        properties["scm.url"] = node.nodes.first if node.respond_to?(:nodes)
+      end
+
+      properties
     end
 
     def self.dependencies(name, version, project)

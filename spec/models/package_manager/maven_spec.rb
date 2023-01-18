@@ -234,7 +234,7 @@ describe PackageManager::Maven do
 
   describe "mapping_from_pom_xml" do
     let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read) }
-    let(:parent_pom) { Ox.parse("<project><licenses><license><name>unknown</name></license></licenses><url>https://github.com/googleapis/googleapis</url></project>") }
+    let(:parent_pom) { Ox.parse("<project><scm><url>https://github.com/googleapis/googleapis-dummy</url></scm><licenses><license><name>unknown</name></license></licenses><url>https://github.com/googleapis/googleapis</url></project>") }
     let(:parent_project) { { name: "com.google.api.grpc:proto-google-common-parent", groupId: "com.google.api.grpc", artifactId: "proto-google-common-parent", versions: [{ number: "1.0", published_at: Time.now.to_s }] } }
     let(:parsed) { described_class.mapping_from_pom_xml(pom) }
 
