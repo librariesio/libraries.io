@@ -119,4 +119,31 @@ describe PackageManager::Pypi do
       expect(described_class.deprecation_info('foo')).to eq({is_deprecated: true, message: "Development Status :: 7 - Inactive"})
     end
   end
+
+  describe ".dependencies" do
+    it "returns the dependencies of a particular version" do
+      VCR.use_cassette("pypi_dependencies_requests", record: :once) do
+        expect(
+          described_class.dependencies("requests", "2.28.2")
+        ).to match_array(
+               [
+                 ["charset-normalizer", "<4,>=2"],
+                 ["idna", "<4,>=2.5"],
+                 ["urllib3", "<1.27,>=1.21.1"],
+                 ["certifi", ">=2017.4.17"],
+                 ["PySocks", "!=1.5.7,>=1.5.6 ; extra == 'socks'"],
+                 ["chardet", "<6,>=3.0.2 ; extra == 'use_chardet_on_py3'"]
+               ].map do |name, requirements|
+                 {
+                   project_name: name,
+                   requirements: requirements,
+                   kind: "runtime",
+                   optional: false,
+                   platform: "Pypi"
+                 }
+               end
+             )
+      end
+    end
+  end
 end

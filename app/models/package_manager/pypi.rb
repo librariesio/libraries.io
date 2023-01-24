@@ -123,14 +123,14 @@ module PackageManager
         &.index_by { |v| v[:number] } || {}
     end
 
-    def self.dependencies(name, version, _mapped_project)
+    def self.dependencies(name, version, _mapped_project = nil)
       api_response = get("https://pypi.org/pypi/#{name}/#{version}/json")
       deps = api_response.dig("info", "requires_dist")
-      source_info = api_response.dig("releases", version)
+      source_info = api_response.fetch("urls", [])
       Rails.logger.warn("Pypi sdist (no deps): #{name}") unless source_info.any? { |rel| rel["packagetype"] == "bdist_wheel" }
 
       deps.map do |dep|
-        name, version = dep.split
+        name, version = dep.split(/ /, 2)
         {
           project_name: name,
           requirements: version.nil? || version == ";" ? "*" : version.gsub(/\(|\)/, ""),
