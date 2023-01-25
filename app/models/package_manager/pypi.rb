@@ -12,7 +12,7 @@ module PackageManager
     SUPPORTS_SINGLE_VERSION_UPDATE = true
     PYPI_PRERELEASE = /(a|b|rc|dev)[0-9]+$/.freeze
     # Adapted from https://peps.python.org/pep-0508/#names
-    PYPI_508_NAME_REGEX = /^([A-Z0-9][A-Z0-9._-]*[A-Z0-9])/i
+    PEP_508_NAME_REGEX = /^([A-Z0-9][A-Z0-9._-]*[A-Z0-9])/i
 
     def self.package_link(db_project, version = nil)
       # NB PEP 503: "All URLs which respond with an HTML5 page MUST end with a / and the repository SHOULD redirect the URLs without a / to add a / to the end."
@@ -128,7 +128,7 @@ module PackageManager
     # Simply parses out the name of a PEP 508 Dependency specification: https://peps.python.org/pep-0508/
     # Leaves the rest as-is with any leading semicolons or spaces stripped
     def self.parse_pep_508_dep_spec(dep)
-      name, requirement = dep.split(PYPI_508_NAME_REGEX, 2).last(2).map(&:strip)
+      name, requirement = dep.split(PEP_508_NAME_REGEX, 2).last(2).map(&:strip)
       requirement = requirement&.sub(/^[\s;]*/, "") || ""
       return name, requirement
     end
