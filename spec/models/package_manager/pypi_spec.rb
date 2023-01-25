@@ -127,12 +127,12 @@ describe PackageManager::Pypi do
           described_class.dependencies("requests", "2.28.2")
         ).to match_array(
                [
-                 ["charset-normalizer", "<4,>=2"],
-                 ["idna", "<4,>=2.5"],
-                 ["urllib3", "<1.27,>=1.21.1"],
-                 ["certifi", ">=2017.4.17"],
-                 ["PySocks", "!=1.5.7,>=1.5.6 ; extra == 'socks'"],
-                 ["chardet", "<6,>=3.0.2 ; extra == 'use_chardet_on_py3'"]
+                 ["charset-normalizer", "(<4,>=2)"],
+                 ["idna", "(<4,>=2.5)"],
+                 ["urllib3", "(<1.27,>=1.21.1)"],
+                 ["certifi", "(>=2017.4.17)"],
+                 ["PySocks", "(!=1.5.7,>=1.5.6) ; extra == 'socks'"],
+                 ["chardet", "(<6,>=3.0.2) ; extra == 'use_chardet_on_py3'"]
                ].map do |name, requirements|
                  {
                    project_name: name,
@@ -149,6 +149,7 @@ describe PackageManager::Pypi do
     # Copied from the tests of https://peps.python.org/pep-0508/#complete-grammar
     [
       ["A", "A", ""],
+      ["A>=3", "A", ">=3"],
       ["A.B-C_D", "A.B-C_D", ""],
       ["aa", "aa", ""],
       ["name", "name", ""],
