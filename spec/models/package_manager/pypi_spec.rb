@@ -145,5 +145,58 @@ describe PackageManager::Pypi do
              )
       end
     end
+
+    # Copied from the tests of https://peps.python.org/pep-0508/#complete-grammar
+    [
+      ["A", "A", ""],
+      ["A.B-C_D", "A.B-C_D", ""],
+      ["aa", "aa", ""],
+      ["name", "name", ""],
+      ["name<=1", "name", "<=1"],
+      ["name>=3", "name", ">=3"],
+      ["name>=3,<2", "name", ">=3,<2"],
+      ["name@http://foo.com", "name", "@http://foo.com"],
+      [
+        "name [fred,bar] @ http://foo.com ; python_version=='2.7'",
+        "name",
+        "[fred,bar] @ http://foo.com ; python_version=='2.7'"
+      ],
+      [
+        "name[quux, strange];python_version<'2.7' and platform_version=='2'",
+        "name",
+        "[quux, strange];python_version<'2.7' and platform_version=='2'"
+      ],
+      [
+        "name; os_name=='a' or os_name=='b'",
+        "name",
+        "os_name=='a' or os_name=='b'"
+      ],
+      [
+        "name; os_name=='a' and os_name=='b' or os_name=='c'",
+        "name",
+        "os_name=='a' and os_name=='b' or os_name=='c'"
+      ],
+      [
+        "name; os_name=='a' and (os_name=='b' or os_name=='c')",
+        "name",
+        "os_name=='a' and (os_name=='b' or os_name=='c')"
+      ],
+      [
+        "name; os_name=='a' or os_name=='b' and os_name=='c'",
+        "name",
+        "os_name=='a' or os_name=='b' and os_name=='c'"
+      ],
+      [
+        "name; (os_name=='a' or os_name=='b') and os_name=='c'",
+        "name",
+        "(os_name=='a' or os_name=='b') and os_name=='c'"
+      ],
+    ].each do |test, expected_name, expected_requirement|
+      it "#{test} should be parsed correctly" do
+        expect(
+          PackageManager::Pypi.parse_pep_508_dep_spec(test)
+        ).to eq([expected_name, expected_requirement])
+      end
+    end
   end
 end

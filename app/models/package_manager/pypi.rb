@@ -11,6 +11,8 @@ module PackageManager
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
     PYPI_PRERELEASE = /(a|b|rc|dev)[0-9]+$/.freeze
+    # Adapted from https://peps.python.org/pep-0508/#names
+    PYPI_508_NAME_REGEX = /^([A-Z0-9][A-Z0-9._-]*[A-Z0-9])/i
 
     def self.package_link(db_project, version = nil)
       # NB PEP 503: "All URLs which respond with an HTML5 page MUST end with a / and the repository SHOULD redirect the URLs without a / to add a / to the end."
@@ -123,6 +125,14 @@ module PackageManager
         &.index_by { |v| v[:number] } || {}
     end
 
+    # Simply parses out the name of a PEP 508 Dependency specification: https://peps.python.org/pep-0508/
+    # Leaves the rest as-is with any leading semicolons or spaces stripped
+    def self.parse_pep_508_dep_spec(dep)
+      name, requirement = dep.split(PYPI_508_NAME_REGEX, 2).last(2).map(&:strip)
+      requirement = requirement&.sub(/^[\s;]*/, "") || ""
+      return name, requirement
+    end
+
     def self.dependencies(name, version, _mapped_project = nil)
       api_response = get("https://pypi.org/pypi/#{name}/#{version}/json")
       deps = api_response.dig("info", "requires_dist")
@@ -130,7 +140,7 @@ module PackageManager
       Rails.logger.warn("Pypi sdist (no deps): #{name}") unless source_info.any? { |rel| rel["packagetype"] == "bdist_wheel" }
 
       deps.map do |dep|
-        name, version = dep.split(/ /, 2)
+        name, version = parse_pep_508_dep_spec(dep)
         {
           project_name: name,
           requirements: version.nil? || version == ";" ? "*" : version.gsub(/\(|\)/, ""),
