@@ -129,7 +129,7 @@ module PackageManager
     # Leaves the rest as-is with any leading semicolons or spaces stripped
     def self.parse_pep_508_dep_spec(dep)
       name, requirement = dep.split(PEP_508_NAME_REGEX, 2).last(2).map(&:strip)
-      requirement = requirement&.sub(/^[\s;]*/, "") || ""
+      requirement = requirement.sub(/^[\s;]*/, "")
       return name, requirement
     end
 
