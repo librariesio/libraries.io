@@ -235,7 +235,10 @@ module PackageManager
 
         deps = begin
           dependencies(name, db_version.number, mapped_project)
-        rescue StandardError
+        rescue StandardError => e
+          Rails.logger.error(
+            "Error while trying to get dependencies for #{db_platform}/#{name}@#{db_version.number}: #{e.message}"
+          )
           []
         end
 

@@ -119,4 +119,85 @@ describe PackageManager::Pypi do
       expect(described_class.deprecation_info('foo')).to eq({is_deprecated: true, message: "Development Status :: 7 - Inactive"})
     end
   end
+
+  describe ".dependencies" do
+    it "returns the dependencies of a particular version" do
+      VCR.use_cassette("pypi_dependencies_requests", record: :once) do
+        expect(
+          described_class.dependencies("requests", "2.28.2")
+        ).to match_array(
+               [
+                 ["charset-normalizer", "(<4,>=2)"],
+                 ["idna", "(<4,>=2.5)"],
+                 ["urllib3", "(<1.27,>=1.21.1)"],
+                 ["certifi", "(>=2017.4.17)"],
+                 ["PySocks", "(!=1.5.7,>=1.5.6) ; extra == 'socks'"],
+                 ["chardet", "(<6,>=3.0.2) ; extra == 'use_chardet_on_py3'"]
+               ].map do |name, requirements|
+                 {
+                   project_name: name,
+                   requirements: requirements,
+                   kind: "runtime",
+                   optional: false,
+                   platform: "Pypi"
+                 }
+               end
+             )
+      end
+    end
+
+    # Copied from the tests of https://peps.python.org/pep-0508/#complete-grammar
+    [
+      ["A", "A", ""],
+      ["A>=3", "A", ">=3"],
+      ["A.B-C_D", "A.B-C_D", ""],
+      ["aa", "aa", ""],
+      ["name", "name", ""],
+      ["name<=1", "name", "<=1"],
+      ["name>=3", "name", ">=3"],
+      ["name>=3,<2", "name", ">=3,<2"],
+      ["name@http://foo.com", "name", "@http://foo.com"],
+      [
+        "name [fred,bar] @ http://foo.com ; python_version=='2.7'",
+        "name",
+        "[fred,bar] @ http://foo.com ; python_version=='2.7'"
+      ],
+      [
+        "name[quux, strange];python_version<'2.7' and platform_version=='2'",
+        "name",
+        "[quux, strange];python_version<'2.7' and platform_version=='2'"
+      ],
+      [
+        "name; os_name=='a' or os_name=='b'",
+        "name",
+        "os_name=='a' or os_name=='b'"
+      ],
+      [
+        "name; os_name=='a' and os_name=='b' or os_name=='c'",
+        "name",
+        "os_name=='a' and os_name=='b' or os_name=='c'"
+      ],
+      [
+        "name; os_name=='a' and (os_name=='b' or os_name=='c')",
+        "name",
+        "os_name=='a' and (os_name=='b' or os_name=='c')"
+      ],
+      [
+        "name; os_name=='a' or os_name=='b' and os_name=='c'",
+        "name",
+        "os_name=='a' or os_name=='b' and os_name=='c'"
+      ],
+      [
+        "name; (os_name=='a' or os_name=='b') and os_name=='c'",
+        "name",
+        "(os_name=='a' or os_name=='b') and os_name=='c'"
+      ],
+    ].each do |test, expected_name, expected_requirement|
+      it "#{test} should be parsed correctly" do
+        expect(
+          PackageManager::Pypi.parse_pep_508_dep_spec(test)
+        ).to eq([expected_name, expected_requirement])
+      end
+    end
+  end
 end
