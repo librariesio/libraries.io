@@ -76,9 +76,6 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # disable sql logging in production
-  config.active_record.logger = nil
-
   config.host = "libraries.io"
 
   config.action_mailer.default_url_options = { host: config.host }
@@ -105,9 +102,21 @@ Rails.application.configure do
 
   config.lograge.enabled = true
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger = ActiveSupport::TaggedLogging.new(logger)
+  logger = ActiveSupport::Logger.new($stdout)
+  logger.formatter = config.log_formatter
+  config.logger = ActiveSupport::TaggedLogging.new(logger)
+  config.active_record.logger = nil # disables SQL logging
+  config.lograge.enabled = true
+  config.lograge.ignore_actions = ["HealthcheckController#index"]
+  config.lograge.formatter = Lograge::Formatters::Json.new
+  params_exceptions = %w[controller action format id].freeze
+  config.lograge.custom_options = lambda do |event|
+    {}.tap do |options|
+      options[:params] = event.payload[:params].except(*params_exceptions)
+      # extra keys that we want to log. Add these in the append_info_to_payload() overrided controller methods.
+      %i[rescued_error current_user remote_ip].each do |key|
+        options[key] = event.payload[key] if event.payload[key]
+      end
+    end
   end
 end

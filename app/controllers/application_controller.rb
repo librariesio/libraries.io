@@ -263,4 +263,33 @@ class ApplicationController < ActionController::Base
   def in_read_only_mode?
     ENV['READ_ONLY'].present?
   end
+
+
+  # Overwrite so that we can attach the exception data to the request log via lograge.
+  # This currently does not wrap the handler if it's passed via "with" instead of a block.
+  def rescue_with_handler(exception)
+    begin
+      # Example log line that this parses: /Sites/libraries/app/controllers/application_controller.rb:274:in `do_something'
+      line = exception.backtrace.grep(/app\/controllers\//).first || exception.backtrace.first
+      filepath_and_line_number, method = line.to_s.split(":in ")
+      filepath_and_line_number = filepath_and_line_number.gsub(Regexp.escape(Rails.root.to_s + "/"), "")
+      method = method.gsub(/[`']/, "").strip
+      file, line = filepath_and_line_number.split(":")
+      @rescued_error = { error_class: exception.class&.name, error_message: exception.message, error_method: method, error_file: file, error_line: line }
+      # This information gets logged via append_info_to_payload+lograge in production.
+      Rails.logger.info "Rescued #{exception.class&.name} in #{file}:#{line} (#{method})" if Rails.env.development?
+    rescue StandardError => e
+      # be sure we know if we raise an error from the error handler
+      Bugsnag.notify(e)
+    end
+    super
+  end
+
+  # Attach extra data to process_action.action_controller notification for Lograge to log.
+  def append_info_to_payload(payload)
+    super
+    payload[:rescued_error] = @rescued_error if @rescued_error
+    payload[:current_user] = @current_user.id if @current_user
+    payload[:remote_ip] = request.remote_ip
+  end
 end
