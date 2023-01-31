@@ -264,7 +264,6 @@ class ApplicationController < ActionController::Base
     ENV['READ_ONLY'].present?
   end
 
-
   # Overwrite so that we can attach the exception data to the request log via lograge.
   # This currently does not wrap the handler if it's passed via "with" instead of a block.
   def rescue_with_handler(exception)
