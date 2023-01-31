@@ -290,5 +290,12 @@ class ApplicationController < ActionController::Base
     payload[:rescued_error] = @rescued_error if @rescued_error
     payload[:current_user] = @current_user.id if @current_user
     payload[:remote_ip] = request.remote_ip
+    if @current_api_key
+      payload[:api_key] = {
+        api_key_id: @current_api_key&.id,
+        api_key_user_id: @current_api_key&.user_id,
+        api_key_is_internal: @current_api_key&.is_internal,
+      }
+    end
   end
 end

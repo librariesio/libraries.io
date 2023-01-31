@@ -108,12 +108,13 @@ Rails.application.configure do
   config.lograge.enabled = true
   config.lograge.ignore_actions = ["HealthcheckController#index"]
   config.lograge.formatter = Lograge::Formatters::Json.new
-  params_exceptions = %w[controller action format id].freeze
+  # "api_key" is the one from params, which we might overwrite beneath with our own "api_key" object.
+  params_exceptions = %w[controller action format id api_key].freeze
   config.lograge.custom_options = lambda do |event|
     {}.tap do |options|
       options[:params] = event.payload[:params].except(*params_exceptions)
       # extra keys that we want to log. Add these in the append_info_to_payload() overrided controller methods.
-      %i[rescued_error current_user remote_ip].each do |key|
+      %i[rescued_error current_user remote_ip api_key].each do |key|
         options[key] = event.payload[key] if event.payload[key]
       end
     end
