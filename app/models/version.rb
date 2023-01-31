@@ -137,7 +137,7 @@ class Version < ApplicationRecord
     return if published_at == Time.at(-2_208_988_800) # NuGet sets published_at to 1/1/1900 on yank
 
     lag = (created_at - published_at).round
-    Rails.logger.info("[NEW VERSION] platform=#{platform&.downcase || 'unknown'} name=#{project&.name} version=#{number} lag=#{lag}")
+    Rails.logger.info("[NEW VERSION] platform=\"#{platform&.downcase || 'unknown'}\" name=\"#{project&.name}\" version=\"#{number}\" lag=\"#{lag}\"")
   end
 
   def published_at
