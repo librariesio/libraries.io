@@ -70,25 +70,20 @@ namespace :one_off do
   end
 
   desc "backfill missing pypi version dependencies"
-  task :backfill_pypi_version_dependencies, [:limit] => :environment do |_t, args|
-    Version
-      .joins(:project)
-      .where(projects: {
-        platform: "Pypi"
-      })
-      .where("versions.created_at > ?", Date.new(2022, 7, 6))
-      .where(versions: {
-        runtime_dependencies_count: [0, nil]
-      })
-      .select('versions.number, projects.name')
-      .limit(args[:limit])
-      .each do |v|
-        PackageManager::Pypi.save_dependencies(
-          {
-            name: v.name
-          },
-          sync_version: v.number
-        )
+  task backfill_pypi_version_dependencies: :environment do
+    Project
+      .joins(:versions)
+      .where("versions.created_at > ? AND last_synced_at < ?", Date.new(2022, 7, 6), Date.new(2023, 2, 1))
+      .where(platform: "Pypi")
+      .distinct
+      .select("name")
+      .in_batches(of: 120).each_with_index do |batch, batch_index|
+        batch.in_groups_of(2).each_with_index do |project_group, project_group_index|
+          project_group.each do |project|
+            PackageManagerDownloadWorker.perform_in((batch_index - 1).minute + project_group_index.second, "pypi", project.name, nil, "backfill")
+          end
+        end
       end
+
   end
 end
