@@ -135,7 +135,7 @@ module PackageManager
 
     def self.dependencies(name, version, _mapped_project = nil)
       api_response = get("https://pypi.org/pypi/#{name}/#{version}/json")
-      deps = api_response.dig("info", "requires_dist")
+      deps = api_response.dig("info", "requires_dist") || []
       source_info = api_response.fetch("urls", [])
       Rails.logger.warn("Pypi sdist (no deps): #{name}") unless source_info.any? { |rel| rel["packagetype"] == "bdist_wheel" }
 

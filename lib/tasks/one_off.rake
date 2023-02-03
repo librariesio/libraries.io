@@ -68,4 +68,22 @@ namespace :one_off do
 
     ActiveRecord::Base.connection.execute(sql)
   end
+
+  desc "backfill missing pypi version dependencies"
+  task backfill_pypi_version_dependencies: :environment do
+    Project
+      .joins(:versions)
+      .where("versions.created_at > ? AND last_synced_at < ?", Date.new(2022, 7, 6), Date.new(2023, 2, 1))
+      .where(platform: "Pypi")
+      .distinct
+      .select("name")
+      .in_batches(of: 120).each_with_index do |batch, batch_index|
+        batch.in_groups_of(2).each_with_index do |project_group, project_group_index|
+          project_group.each do |project|
+            PackageManagerDownloadWorker.perform_in((batch_index - 1).minute + project_group_index.second, "pypi", project.name, nil, "backfill")
+          end
+        end
+      end
+
+  end
 end
