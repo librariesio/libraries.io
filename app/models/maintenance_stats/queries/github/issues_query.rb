@@ -3,7 +3,7 @@ module MaintenanceStats
     module Github
       class IssuesQuery < BaseQuery
         ISSUES_QUERY = Rails.application.config.graphql.client.parse <<-GRAPHQL
-          query($owner: String!, $repo_name: String!, $open_pr_query: String!, $closed_pr_query: String!, $one_year: GitTimestamp!){
+          query($owner: String!, $repo_name: String!, $open_pr_query: String!, $closed_pr_query: String!, $one_year: DateTime!){
             openPullRequests: search(query: $open_pr_query, type: ISSUE) {
               issueCount
             }
