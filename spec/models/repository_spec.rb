@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
+
+require "rails_helper"
 
 describe Repository, type: :model do
   it { should have_many(:projects) }
@@ -20,191 +21,191 @@ describe Repository, type: :model do
   it { should validate_uniqueness_of(:full_name).scoped_to(:host_type) }
   it { should validate_uniqueness_of(:uuid).scoped_to(:host_type) }
 
-  describe '#domain' do
-    it 'should be https://github.com for GitHub repos' do
-      expect(Repository.new(host_type: 'GitHub').domain).to eq('https://github.com')
+  describe "#domain" do
+    it "should be https://github.com for GitHub repos" do
+      expect(Repository.new(host_type: "GitHub").domain).to eq("https://github.com")
     end
 
-    it 'should be https://gitlab.com for GitLab repos' do
-      expect(Repository.new(host_type: 'GitLab').domain).to eq('https://gitlab.com')
+    it "should be https://gitlab.com for GitLab repos" do
+      expect(Repository.new(host_type: "GitLab").domain).to eq("https://gitlab.com")
     end
 
-    it 'should be https://bitbucket.org for Bitbucket repos' do
-      expect(Repository.new(host_type: 'Bitbucket').domain).to eq('https://bitbucket.org')
-    end
-  end
-
-  describe '#url' do
-    it 'should be https://github.com/:full_name for GitHub repos' do
-      expect(Repository.new(host_type: 'GitHub', full_name: 'rails/rails').url).to eq('https://github.com/rails/rails')
-    end
-
-    it 'should be https://gitlab.com/:full_name for GitLab repos' do
-      expect(Repository.new(host_type: 'GitLab', full_name: 'rails/rails').url).to eq('https://gitlab.com/rails/rails')
-    end
-
-    it 'should be https://bitbucket.org/:full_name for Bitbucket repos' do
-      expect(Repository.new(host_type: 'Bitbucket', full_name: 'rails/rails').url).to eq('https://bitbucket.org/rails/rails')
+    it "should be https://bitbucket.org for Bitbucket repos" do
+      expect(Repository.new(host_type: "Bitbucket").domain).to eq("https://bitbucket.org")
     end
   end
 
-  describe '#watchers_url' do
-    it 'should be https://github.com/:full_name/watchers for GitHub repos' do
-      expect(Repository.new(host_type: 'GitHub', full_name: 'rails/rails').watchers_url).to eq('https://github.com/rails/rails/watchers')
+  describe "#url" do
+    it "should be https://github.com/:full_name for GitHub repos" do
+      expect(Repository.new(host_type: "GitHub", full_name: "rails/rails").url).to eq("https://github.com/rails/rails")
     end
 
-    it 'should be nil for GitLab repos' do
-      expect(Repository.new(host_type: 'GitLab', full_name: 'rails/rails').watchers_url).to eq(nil)
+    it "should be https://gitlab.com/:full_name for GitLab repos" do
+      expect(Repository.new(host_type: "GitLab", full_name: "rails/rails").url).to eq("https://gitlab.com/rails/rails")
     end
 
-    it 'should be nil for Bitbucket repos' do
-      expect(Repository.new(host_type: 'Bitbucket', full_name: 'rails/rails').watchers_url).to eq(nil)
-    end
-  end
-
-  describe '#stargazers_url' do
-    it 'should be https://github.com/:full_name/stargazers for GitHub repos' do
-      expect(Repository.new(host_type: 'GitHub', full_name: 'rails/rails').stargazers_url).to eq('https://github.com/rails/rails/stargazers')
-    end
-
-    it 'should be nil for GitLab repos' do
-      expect(Repository.new(host_type: 'GitLab', full_name: 'rails/rails').stargazers_url).to eq(nil)
-    end
-
-    it 'should be nil for Bitbucket repos' do
-      expect(Repository.new(host_type: 'Bitbucket', full_name: 'rails/rails').stargazers_url).to eq(nil)
+    it "should be https://bitbucket.org/:full_name for Bitbucket repos" do
+      expect(Repository.new(host_type: "Bitbucket", full_name: "rails/rails").url).to eq("https://bitbucket.org/rails/rails")
     end
   end
 
-  describe '#forks_url' do
-    it 'should be https://github.com/:full_name/network for GitHub repos' do
-      expect(Repository.new(host_type: 'GitHub', full_name: 'rails/rails').forks_url).to eq('https://github.com/rails/rails/network')
+  describe "#watchers_url" do
+    it "should be https://github.com/:full_name/watchers for GitHub repos" do
+      expect(Repository.new(host_type: "GitHub", full_name: "rails/rails").watchers_url).to eq("https://github.com/rails/rails/watchers")
     end
 
-    it 'should be https://gitlab.com/:full_name/forks for GitLab repos' do
-      expect(Repository.new(host_type: 'GitLab', full_name: 'rails/rails').forks_url).to eq('https://gitlab.com/rails/rails/forks')
+    it "should be nil for GitLab repos" do
+      expect(Repository.new(host_type: "GitLab", full_name: "rails/rails").watchers_url).to eq(nil)
     end
 
-    it 'should be nil for Bitbucket repos' do
-      expect(Repository.new(host_type: 'Bitbucket', full_name: 'rails/rails').forks_url).to eq(nil)
-    end
-  end
-
-  describe '#issues_url' do
-    it 'should be https://github.com/:full_name/issues for GitHub repos' do
-      expect(Repository.new(host_type: 'GitHub', full_name: 'rails/rails').issues_url).to eq('https://github.com/rails/rails/issues')
-    end
-
-    it 'should be https://gitlab.com/:full_name/issues for GitLab repos' do
-      expect(Repository.new(host_type: 'GitLab', full_name: 'rails/rails').issues_url).to eq('https://gitlab.com/rails/rails/issues')
-    end
-
-    it 'should be https://bitbucket.org/:full_name/issues for Bitbucket repos' do
-      expect(Repository.new(host_type: 'Bitbucket', full_name: 'rails/rails').issues_url).to eq('https://bitbucket.org/rails/rails/issues')
+    it "should be nil for Bitbucket repos" do
+      expect(Repository.new(host_type: "Bitbucket", full_name: "rails/rails").watchers_url).to eq(nil)
     end
   end
 
-  describe '#contributors_url' do
-    it 'should be https://github.com/:full_name/graphs/contributors for GitHub repos' do
-      expect(build(:repository, host_type: 'GitHub').contributors_url).to eq('https://github.com/rails/rails/graphs/contributors')
+  describe "#stargazers_url" do
+    it "should be https://github.com/:full_name/stargazers for GitHub repos" do
+      expect(Repository.new(host_type: "GitHub", full_name: "rails/rails").stargazers_url).to eq("https://github.com/rails/rails/stargazers")
     end
 
-    it 'should be https://gitlab.com/:full_name/graphs/master for GitLab repos' do
-      expect(build(:repository, host_type: 'GitLab').contributors_url).to eq('https://gitlab.com/rails/rails/graphs/master')
+    it "should be nil for GitLab repos" do
+      expect(Repository.new(host_type: "GitLab", full_name: "rails/rails").stargazers_url).to eq(nil)
     end
 
-    it 'should be nil for Bitbucket repos' do
-      expect(build(:repository, host_type: 'Bitbucket').contributors_url).to eq(nil)
+    it "should be nil for Bitbucket repos" do
+      expect(Repository.new(host_type: "Bitbucket", full_name: "rails/rails").stargazers_url).to eq(nil)
     end
   end
 
-  describe '#blob_url' do
-    context 'with no args' do
-      it 'should be https://github.com/:full_name/blob/master/ for GitHub repos' do
-        expect(build(:repository, host_type: 'GitHub').blob_url).to eq('https://github.com/rails/rails/blob/master/')
+  describe "#forks_url" do
+    it "should be https://github.com/:full_name/network for GitHub repos" do
+      expect(Repository.new(host_type: "GitHub", full_name: "rails/rails").forks_url).to eq("https://github.com/rails/rails/network")
+    end
+
+    it "should be https://gitlab.com/:full_name/forks for GitLab repos" do
+      expect(Repository.new(host_type: "GitLab", full_name: "rails/rails").forks_url).to eq("https://gitlab.com/rails/rails/forks")
+    end
+
+    it "should be nil for Bitbucket repos" do
+      expect(Repository.new(host_type: "Bitbucket", full_name: "rails/rails").forks_url).to eq(nil)
+    end
+  end
+
+  describe "#issues_url" do
+    it "should be https://github.com/:full_name/issues for GitHub repos" do
+      expect(Repository.new(host_type: "GitHub", full_name: "rails/rails").issues_url).to eq("https://github.com/rails/rails/issues")
+    end
+
+    it "should be https://gitlab.com/:full_name/issues for GitLab repos" do
+      expect(Repository.new(host_type: "GitLab", full_name: "rails/rails").issues_url).to eq("https://gitlab.com/rails/rails/issues")
+    end
+
+    it "should be https://bitbucket.org/:full_name/issues for Bitbucket repos" do
+      expect(Repository.new(host_type: "Bitbucket", full_name: "rails/rails").issues_url).to eq("https://bitbucket.org/rails/rails/issues")
+    end
+  end
+
+  describe "#contributors_url" do
+    it "should be https://github.com/:full_name/graphs/contributors for GitHub repos" do
+      expect(build(:repository, host_type: "GitHub").contributors_url).to eq("https://github.com/rails/rails/graphs/contributors")
+    end
+
+    it "should be https://gitlab.com/:full_name/graphs/master for GitLab repos" do
+      expect(build(:repository, host_type: "GitLab").contributors_url).to eq("https://gitlab.com/rails/rails/graphs/master")
+    end
+
+    it "should be nil for Bitbucket repos" do
+      expect(build(:repository, host_type: "Bitbucket").contributors_url).to eq(nil)
+    end
+  end
+
+  describe "#blob_url" do
+    context "with no args" do
+      it "should be https://github.com/:full_name/blob/master/ for GitHub repos" do
+        expect(build(:repository, host_type: "GitHub").blob_url).to eq("https://github.com/rails/rails/blob/master/")
       end
 
-      it 'should be https://gitlab.com/:full_name/blob/master for GitLab repos' do
-        expect(build(:repository, host_type: 'GitLab').blob_url).to eq('https://gitlab.com/rails/rails/blob/master/')
+      it "should be https://gitlab.com/:full_name/blob/master for GitLab repos" do
+        expect(build(:repository, host_type: "GitLab").blob_url).to eq("https://gitlab.com/rails/rails/blob/master/")
       end
 
-      it 'should be https://bitbucket.org/:full_name/src/master/ for Bitbucket repos' do
-        expect(build(:repository, host_type: 'Bitbucket').blob_url).to eq('https://bitbucket.org/rails/rails/src/master/')
-      end
-    end
-  end
-
-  describe '#source_url' do
-    it 'should be https://github.com/:source_name for GitHub repos' do
-      expect(Repository.new(host_type: 'GitHub', source_name: 'fails/fails').source_url).to eq('https://github.com/fails/fails')
-    end
-
-    it 'should be https://gitlab.com/:source_name for GitLab repos' do
-      expect(Repository.new(host_type: 'GitLab', source_name: 'fails/fails').source_url).to eq('https://gitlab.com/fails/fails')
-    end
-
-    it 'should be https://bitbucket.org/:source_name for Bitbucket repos' do
-      expect(Repository.new(host_type: 'Bitbucket', source_name: 'fails/fails').source_url).to eq('https://bitbucket.org/fails/fails')
-    end
-  end
-
-  describe '#raw_url' do
-    context 'with no args' do
-      it 'should be https://github.com/:full_name/raw/master/ for GitHub repos' do
-        expect(build(:repository, host_type: 'GitHub').raw_url).to eq('https://github.com/rails/rails/raw/master/')
-      end
-
-      it 'should be https://gitlab.com/:full_name/raw/master for GitLab repos' do
-        expect(build(:repository, host_type: 'GitLab').raw_url).to eq('https://gitlab.com/rails/rails/raw/master/')
-      end
-
-      it 'should be https://bitbucket.org/:full_name/raw/master/ for Bitbucket repos' do
-        expect(build(:repository, host_type: 'Bitbucket').raw_url).to eq('https://bitbucket.org/rails/rails/raw/master/')
+      it "should be https://bitbucket.org/:full_name/src/master/ for Bitbucket repos" do
+        expect(build(:repository, host_type: "Bitbucket").blob_url).to eq("https://bitbucket.org/rails/rails/src/master/")
       end
     end
   end
 
-  describe '#commits_url' do
-    context 'with no args' do
-      it 'should be https://github.com/:full_name/raw/master/ for GitHub repos' do
-        expect(build(:repository, host_type: 'GitHub').commits_url).to eq('https://github.com/rails/rails/commits')
+  describe "#source_url" do
+    it "should be https://github.com/:source_name for GitHub repos" do
+      expect(Repository.new(host_type: "GitHub", source_name: "fails/fails").source_url).to eq("https://github.com/fails/fails")
+    end
+
+    it "should be https://gitlab.com/:source_name for GitLab repos" do
+      expect(Repository.new(host_type: "GitLab", source_name: "fails/fails").source_url).to eq("https://gitlab.com/fails/fails")
+    end
+
+    it "should be https://bitbucket.org/:source_name for Bitbucket repos" do
+      expect(Repository.new(host_type: "Bitbucket", source_name: "fails/fails").source_url).to eq("https://bitbucket.org/fails/fails")
+    end
+  end
+
+  describe "#raw_url" do
+    context "with no args" do
+      it "should be https://github.com/:full_name/raw/master/ for GitHub repos" do
+        expect(build(:repository, host_type: "GitHub").raw_url).to eq("https://github.com/rails/rails/raw/master/")
       end
 
-      it 'should be https://gitlab.com/:full_name/raw/master for GitLab repos' do
-        expect(build(:repository, host_type: 'GitLab').commits_url).to eq('https://gitlab.com/rails/rails/commits/master')
+      it "should be https://gitlab.com/:full_name/raw/master for GitLab repos" do
+        expect(build(:repository, host_type: "GitLab").raw_url).to eq("https://gitlab.com/rails/rails/raw/master/")
       end
 
-      it 'should be https://bitbucket.org/:full_name/raw/master/ for Bitbucket repos' do
-        expect(build(:repository, host_type: 'Bitbucket').commits_url).to eq('https://bitbucket.org/rails/rails/commits')
+      it "should be https://bitbucket.org/:full_name/raw/master/ for Bitbucket repos" do
+        expect(build(:repository, host_type: "Bitbucket").raw_url).to eq("https://bitbucket.org/rails/rails/raw/master/")
       end
     end
   end
 
-  describe '#avatar_url' do
-    context 'with no args' do
-      it 'should return an avatar url for GitHub repos' do
-        expect(build(:repository, host_type: 'GitHub').avatar_url).to eq('https://github.com/rails.png?size=60')
+  describe "#commits_url" do
+    context "with no args" do
+      it "should be https://github.com/:full_name/raw/master/ for GitHub repos" do
+        expect(build(:repository, host_type: "GitHub").commits_url).to eq("https://github.com/rails/rails/commits")
       end
 
-      it 'should return an avatar url for GitLab repos' do
-        expect(build(:repository, host_type: 'GitLab').avatar_url).to eq('https://www.gravatar.com/avatar/7ae482ea784951c2d4bb56fc642619b7?s=60&f=y&d=retro')
+      it "should be https://gitlab.com/:full_name/raw/master for GitLab repos" do
+        expect(build(:repository, host_type: "GitLab").commits_url).to eq("https://gitlab.com/rails/rails/commits/master")
       end
 
-      it 'should return an avatar url for Bitbucket repos' do
-        expect(build(:repository, host_type: 'Bitbucket').avatar_url).to eq('https://bitbucket.org/rails/rails/avatar/60')
+      it "should be https://bitbucket.org/:full_name/raw/master/ for Bitbucket repos" do
+        expect(build(:repository, host_type: "Bitbucket").commits_url).to eq("https://bitbucket.org/rails/rails/commits")
       end
     end
   end
 
-  describe '#gather_maintenance_stats' do
-    let(:repository) { create(:repository, full_name: 'chalk/chalk') }
+  describe "#avatar_url" do
+    context "with no args" do
+      it "should return an avatar url for GitHub repos" do
+        expect(build(:repository, host_type: "GitHub").avatar_url).to eq("https://github.com/rails.png?size=60")
+      end
+
+      it "should return an avatar url for GitLab repos" do
+        expect(build(:repository, host_type: "GitLab").avatar_url).to eq("https://www.gravatar.com/avatar/7ae482ea784951c2d4bb56fc642619b7?s=60&f=y&d=retro")
+      end
+
+      it "should return an avatar url for Bitbucket repos" do
+        expect(build(:repository, host_type: "Bitbucket").avatar_url).to eq("https://bitbucket.org/rails/rails/avatar/60")
+      end
+    end
+  end
+
+  describe "#gather_maintenance_stats" do
+    let(:repository) { create(:repository, full_name: "chalk/chalk") }
     let!(:auth_token) { create(:auth_token) }
     let!(:project) do
       repository.projects.create!(
-        name: 'test-project',
-        platform: 'Maven',
-        repository_url: 'https://github.com/librariesio/libraries.io',
-        homepage: 'https://libraries.io'
+        name: "test-project",
+        platform: "Maven",
+        repository_url: "https://github.com/librariesio/libraries.io",
+        homepage: "https://libraries.io"
       )
     end
 
@@ -225,7 +226,7 @@ describe Repository, type: :model do
     # GitHub API V4 calls all use the same endpoint, but have unique request bodies with the GraphQL queries. They will need to match on :body.
     context "with a valid repository" do
       before do
-        VCR.use_cassette('github/chalk_api', match_requests_on: [:method, :uri, :body, :query]) do
+        VCR.use_cassette("github/chalk_api", match_requests_on: %i[method uri body query]) do
           repository.gather_maintenance_stats
         end
       end
@@ -244,7 +245,7 @@ describe Repository, type: :model do
         first_updated_at = repository.repository_maintenance_stats.first.updated_at
         category = repository.repository_maintenance_stats.first.category
 
-        VCR.use_cassette('github/chalk_api', match_requests_on: [:method, :uri, :body, :query]) do
+        VCR.use_cassette("github/chalk_api", match_requests_on: %i[method uri body query]) do
           repository.gather_maintenance_stats
         end
 
@@ -255,10 +256,10 @@ describe Repository, type: :model do
     end
 
     context "with invalid repository" do
-      let(:repository) { create(:repository, full_name: 'bad/example-for-testing') }
+      let(:repository) { create(:repository, full_name: "bad/example-for-testing") }
 
       it "should save metrics for repository" do
-        VCR.use_cassette('github/bad_repository', match_requests_on: [:method, :uri, :body, :query]) do
+        VCR.use_cassette("github/bad_repository", match_requests_on: %i[method uri body query]) do
           repository.gather_maintenance_stats
         end
 
@@ -268,10 +269,10 @@ describe Repository, type: :model do
     end
 
     context "with empty repository" do
-      let(:repository) { create(:repository, full_name: 'buddhamagnet/heidigoodchild') }
+      let(:repository) { create(:repository, full_name: "buddhamagnet/heidigoodchild") }
 
       it "should save default values" do
-        VCR.use_cassette('github/empty_repository', match_requests_on: [:method, :uri, :body, :query]) do
+        VCR.use_cassette("github/empty_repository", match_requests_on: %i[method uri body query]) do
           repository.gather_maintenance_stats
         end
 
@@ -295,7 +296,7 @@ describe Repository, type: :model do
       let(:repository) { create(:repository, host_type: "Bitbucket") }
 
       it "should not save any values" do
-        VCR.use_cassette('github/chalk_api', match_requests_on: [:method, :uri, :body, :query]) do
+        VCR.use_cassette("github/chalk_api", match_requests_on: %i[method uri body query]) do
           repository.gather_maintenance_stats
         end
 
@@ -307,10 +308,10 @@ describe Repository, type: :model do
     context "with a GitHub repository but for some reason not a GitHub Project" do
       let!(:project) do
         repository.projects.create!(
-          name: 'test-project',
-          platform: 'Maven',
-          repository_url: 'https://def.not.github.com',
-          homepage: 'https://def.not.github.com'
+          name: "test-project",
+          platform: "Maven",
+          repository_url: "https://def.not.github.com",
+          homepage: "https://def.not.github.com"
         )
       end
 
@@ -323,10 +324,10 @@ describe Repository, type: :model do
 
       it "should delete existing stats" do
         repository.repository_maintenance_stats.create!(
-          category: 'test',
-          value: 'yep'
+          category: "test",
+          value: "yep"
         )
-        
+
         repository.gather_maintenance_stats
 
         maintenance_stats = repository.repository_maintenance_stats
@@ -335,19 +336,19 @@ describe Repository, type: :model do
     end
 
     context "with bitbucket repository" do
-      let(:repository) { create(:repository, full_name:'ecollins/passlib', host_type: 'Bitbucket') }
+      let(:repository) { create(:repository, full_name: "ecollins/passlib", host_type: "Bitbucket") }
       let!(:auth_token) { create(:auth_token) }
       let!(:project) do
         repository.projects.create!(
-          name: 'test-project',
-          platform: 'Pypi',
-          repository_url: 'https://bitbucket.org/ecollins/passlib',
-          homepage: 'https://libraries.io'
+          name: "test-project",
+          platform: "Pypi",
+          repository_url: "https://bitbucket.org/ecollins/passlib",
+          homepage: "https://libraries.io"
         )
       end
 
       before do
-        VCR.use_cassette('bitbucket/passlib') do
+        VCR.use_cassette("bitbucket/passlib") do
           repository.gather_maintenance_stats
         end
       end
@@ -366,7 +367,7 @@ describe Repository, type: :model do
         first_updated_at = repository.repository_maintenance_stats.first.updated_at
         category = repository.repository_maintenance_stats.first.category
 
-        VCR.use_cassette('bitbucket/passlib') do
+        VCR.use_cassette("bitbucket/passlib") do
           repository.gather_maintenance_stats
         end
 
