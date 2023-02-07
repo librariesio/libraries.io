@@ -183,7 +183,7 @@ as it will use it to learn more about the developers and for pull requests.
 
 Various specs for repository statistics and information use VCR to capture
 real network requests for playback. Periodically these cassettes should
-be re-recorded to nesure changes to remote APIs are captured and any fixes
+be re-recorded to ensure changes to remote APIs are captured, and any fixes
 applied to the Libraries codebase.
 
 ### Changing VCR's global recording mode
