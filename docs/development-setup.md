@@ -74,7 +74,7 @@ tables. Rails makes this easy through the use of "Rake" tasks.
 bundle exec rake db:create db:migrate
 ```
 
-Go create a [Personal access token on GitHub](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) (only requires `public_repo` access), then we can download some sample data:
+Create a [Personal access token on GitHub](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) (only requires `public_repo` access), then we can download some sample data:
 
 ```sh
  bundle exec rails c
@@ -85,6 +85,8 @@ Go create a [Personal access token on GitHub](https://help.github.com/articles/c
  irb> PackageManager::Maven.update "junit:junit"
  irb> Repository.create_from_host("github", "librariesio/bibliothecary")
 ```
+
+_(This will not work with the new Fine-granied tokens that GitHub offers)_
 
 You can then index that data into elasticsearch with the following rake task:
 
@@ -176,3 +178,30 @@ for **another** project, you will need to either
  * reset the omniauth environment variables after creating a GitHub (omniauth) application for this project
 
 as it will use it to learn more about the developers and for pull requests.
+
+## Re-recording VCR cassettes
+
+Various specs for repository statistics and information use VCR to capture
+real network requests for playback. Periodically these cassettes should
+be re-recorded to ensure changes to remote APIs are captured, and any fixes
+applied to the Libraries codebase.
+
+### Changing VCR's global recording mode
+
+Unless you have all possible access keys set up (GitHub & BitBucket) in the
+tests, it's better to individually change specific tests to record new
+VCR episodes. Otherwise, you'll be dealing with API errors from the
+unauthenticated endpoints.
+
+### GitHub
+
+To re-record VCR cassettes needed for maintenance stats:
+
+* Add `record: :new_episodes` to each specific `VCR.use_cassette` call
+* Obtain a GitHub Personal Access Token
+* Update the `AuthToken` factory's default value to use your personal access token
+* Re-run the affected tests, making repairs as necessary
+* Remove `record: :new_episodes` from the `VCR.use_cassette` calls and your personal access token from the `AuthToken` factory
+* Re-run affected tests
+* Find and replace any instances of your personal access token in the recorded VCR cassettes with `TEST_TOKEN`
+* Re-run affected tests
