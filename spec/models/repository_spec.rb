@@ -214,14 +214,8 @@ describe Repository, type: :model do
       allow(DateTime).to receive(:current).and_return(DateTime.parse("2018-12-14T17:49:49+00:00"))
     end
 
-    # To re-record these VCR cassettes needed for maintenance stats
-    # I would recommend starting over unless it is a minor change or you are adding an additional call.
-    # If you are starting over, set the VCR record mode to :new_episodes.
-    # Set the AuthToken factory to use a legitimate token so the calls are successfully made during recording.
-    # Verify tests pass with recorded VCR cassettes after they have been created. Easily done by setting VCR record mode back to :none and running specs again.
-    # Use Find/Replace to remove your token from any recorded calls and replace with some obvious test token like TEST_TOKEN. VCR should not be looking for a token to match with.
-    # Verify one last time with replaced token before committing updated VCR cassettes.
-
+    # See docs/development-setup.md for details on re-recording VCR cassettes.
+    #
     # GitHub API V3 calls can be matched with default :method and :uri.
     # GitHub API V4 calls all use the same endpoint, but have unique request bodies with the GraphQL queries. They will need to match on :body.
     context "with a valid repository" do
