@@ -60,7 +60,7 @@ module Libraries
         origins '*'
         resource /^\/api\/.+/,
           headers: :any,
-          methods: [:get, :post, :patch, :put, :delete, :options, :head],
+          methods: [:get, :post, :patch, :put, :delete, :options, :head], expose: ['total', 'per-page'],
           max_age: 86400
       end
     end
