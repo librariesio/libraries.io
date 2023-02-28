@@ -30,13 +30,15 @@ describe PackageManager::Maven do
       end
     end
 
-    context "with multiple providers" do
-      let!(:version) { create(:version, project: project, repository_sources: ["Maven", PackageManager::Maven::SpringLibs::REPOSITORY_SOURCE_NAME], number: "2.0.0") }
+    # re-enable when there's another provider
+    #
+    # context "with multiple providers" do
+    # let!(:version) { create(:version, project: project, repository_sources: ["Maven", PackageManager::Maven::SpringLibs::REPOSITORY_SOURCE_NAME], number: "2.0.0") }
 
-      it "handles version" do
-        expect(described_class.package_link(project, "2.0.0")).to eq("https://repo1.maven.org/maven2/com/github/jparkie/pdd/2.0.0/pdd-2.0.0.jar")
-      end
-    end
+    # it "handles version" do
+    #  expect(described_class.package_link(project, "2.0.0")).to eq("https://repo1.maven.org/maven2/com/github/jparkie/pdd/2.0.0/pdd-2.0.0.jar")
+    # end
+    # end
   end
 
   describe "#check_status_url" do
