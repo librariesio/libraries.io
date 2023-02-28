@@ -19,13 +19,8 @@ module PackageManager
     NAME_DELIMITER = ":"
 
     PROVIDER_MAP = {
-      "Atlassian" => Atlassian,
       "default" => MavenCentral,
-      "Hortonworks" => Hortonworks,
       "Maven" => MavenCentral,
-      "SpringLibs" => SpringLibs,
-      "Jboss" => Jboss,
-      "JbossEa" => JbossEa,
     }.freeze
 
     class POMNotFound < StandardError
@@ -129,10 +124,10 @@ module PackageManager
       # elements in a parent pom are inheritable (except for artifactId, name,
       # and prerequisites) (see https://maven.apache.org/pom.html#inheritance)
       # To ensure that the correct "scm.url" can be inherited from parent poms,
-      # we manually set "scm.url" - if it exists in the parent pom - as a 
+      # we manually set "scm.url" - if it exists in the parent pom - as a
       # property for child poms to use during interpolation.
-      if properties["scm.url"].blank? && (node = xml.locate("scm/url").first)
-        properties["scm.url"] = node.nodes.first if node.respond_to?(:nodes)
+      if properties["scm.url"].blank? && (node = xml.locate("scm/url").first) && node.respond_to?(:nodes)
+        properties["scm.url"] = node.nodes.first
       end
 
       properties
