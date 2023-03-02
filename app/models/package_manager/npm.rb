@@ -41,11 +41,13 @@ module PackageManager
     end
 
     def self.deprecation_info(name)
-      last_version = project(name)["versions"].values.last
+      versions = project(name)["versions"].values
+      is_deprecated = versions.all? { |version| !!version["deprecated"] }
+      message = is_deprecated ? versions.last["deprecated"] : nil
 
       {
-        is_deprecated: !!last_version["deprecated"],
-        message: last_version["deprecated"],
+        is_deprecated: is_deprecated,
+        message: message,
       }
     end
 
