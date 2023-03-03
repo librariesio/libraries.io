@@ -186,6 +186,7 @@ describe "Api::ProjectsController" do
           platform: project.platform,
           rank: project.rank,
           repository_license: project.repository_license,
+          repository_status: project.repository_status,
           repository_url: project.repository_url,
           stars: project.stars,
           status: project.status,
