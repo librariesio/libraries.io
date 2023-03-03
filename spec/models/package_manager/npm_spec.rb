@@ -38,9 +38,9 @@ describe PackageManager::NPM do
     it "returns not-deprecated if any version isn't deprecated" do
       expect(PackageManager::NPM).to receive(:project).with('foo').and_return({
         "versions" => {
-          "0.0.1" => {},
+          "0.0.1" => { "deprecated" => "This package is deprecated" },
           "0.0.2" => { "deprecated" => "This package is deprecated" },
-          "0.0.3" => { "deprecated" => "This package is deprecated" },
+          "0.0.3" => {},
         }
       })
 
