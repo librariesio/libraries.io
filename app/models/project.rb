@@ -42,7 +42,7 @@
 #  index_projects_on_dependents_count               (dependents_count)
 #  index_projects_on_keywords_array                 (keywords_array) USING gin
 #  index_projects_on_lower_language                 (lower((language)::text))
-#  index_projects_on_maintained                     (platform,language,id) WHERE (((status)::text = ANY ((ARRAY['Active'::character varying, 'Help Wanted'::character varying])::text[])) OR (status IS NULL))
+#  index_projects_on_maintained                     (platform,language,id) WHERE (((status)::text = ANY (ARRAY[('Active'::character varying)::text, ('Help Wanted'::character varying)::text])) OR (status IS NULL))
 #  index_projects_on_normalized_licenses            (normalized_licenses) USING gin
 #  index_projects_on_platform_and_dependents_count  (platform,dependents_count)
 #  index_projects_on_platform_and_name              (platform,name) UNIQUE
@@ -88,7 +88,6 @@ class Project < ApplicationRecord
     platform
     rank
     repository_license
-    repository_status
     repository_url
     stars
     status
@@ -266,10 +265,6 @@ class Project < ApplicationRecord
 
   def repository_license
     repository&.license
-  end
-
-  def repository_status
-    repository&.status
   end
 
   def download_url(version = nil)
