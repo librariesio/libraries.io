@@ -60,6 +60,7 @@ class OptimizedProjectSerializer
           latest_download_url: project.latest_download_url,
           package_manager_url: project.package_manager_url,
           repository_license: project.repository_license,
+          repository_status: project.repository_status,
           stars: project.stars,
           versions: project.versions
         ).tap do |result|
