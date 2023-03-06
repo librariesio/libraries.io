@@ -35,24 +35,24 @@ describe PackageManager::NPM do
   end
 
   describe '#deprecation_info' do
-    it "returns not-deprecated if last version isn't deprecated" do
+    it "returns not-deprecated if any version isn't deprecated" do
       expect(PackageManager::NPM).to receive(:project).with('foo').and_return({
         "versions" => {
-            "0.0.1" => {},
-            "0.0.2" => {"deprecated" => "This package is deprecated"},
-            "0.0.3" => {}
+          "0.0.1" => { "deprecated" => "This package is deprecated" },
+          "0.0.2" => { "deprecated" => "This package is deprecated" },
+          "0.0.3" => {},
         }
       })
 
       expect(described_class.deprecation_info('foo')).to eq({is_deprecated: false, message: nil})
     end
 
-    it "returns deprecated if last version is deprecated" do
+    it "returns deprecated if all versions are deprecated" do
       expect(PackageManager::NPM).to receive(:project).with('foo').and_return({
         "versions" => {
-            "0.0.1" => {},
-            "0.0.2" => {"deprecated" => "This package is deprecated"},
-            "0.0.3" => {"deprecated" => "This package is deprecated"}
+          "0.0.1" => { "deprecated" => "This package is deprecated" },
+          "0.0.2" => { "deprecated" => "This package is deprecated" },
+          "0.0.3" => { "deprecated" => "This package is deprecated" },
         }
       })
 
