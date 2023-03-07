@@ -7,6 +7,7 @@ namespace :maintenance_stats do
     data = CSV.read(args.input_file, headers: false)
 
     skipped_no_package_count = 0
+    result_ids = []
     skipped_no_repository_count = 0
     data.each do |package_info|
       # libraries platform casing varies
@@ -26,6 +27,14 @@ namespace :maintenance_stats do
       end
 
       project.repository.gather_maintenance_stats if commit
+      result_ids << project.id
+
+      Rails.logger.info("#{data.count} total rows")
+      Rails.logger.info("#{skipped_no_package_count} rows could not find packages for")
+      Rails.logger.info("#{skipped_no_repository_count} rows could not find repositories for")
+      Rails.logger.info("Enqueud #{result_ids.count} projects for updating. Project IDs:")
+      Rails.logger.info(result_ids.join(", "))
+      Rails.logger.info("\nThese changes have not been committed. Re-run this task with [,yes] to proceed.") unless commit
     end
   end
 end
