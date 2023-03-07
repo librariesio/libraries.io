@@ -205,7 +205,7 @@ class Project < ApplicationRecord
   end
 
   def manual_sync
-    async_sync
+    async_sync(force_sync_dependencies: true)
     update_repository_async
     forced_save
   end
@@ -219,10 +219,10 @@ class Project < ApplicationRecord
     update_attribute(:last_synced_at, Time.zone.now)
   end
 
-  def async_sync
+  def async_sync(force_sync_dependencies: false)
     return unless platform_class_exists?
 
-    sync_classes.each { |sync_class| PackageManagerDownloadWorker.perform_async(sync_class.name, name, nil, "project") }
+    sync_classes.each { |sync_class| PackageManagerDownloadWorker.perform_async(sync_class.name, name, nil, "project", 0, force_sync_dependencies) }
     CheckStatusWorker.perform_async(id, status == "Removed" || status == "Deprecated")
   end
 
