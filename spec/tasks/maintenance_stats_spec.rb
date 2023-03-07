@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe "maintenance stats" do
-  describe "gather_mainttenance_stats" do
+  describe "gather_maintenance_stats" do
     let(:repository) { create(:repository, full_name: "chalk/chalk") }
     let!(:auth_token) { create(:auth_token) }
     let!(:project) do
@@ -22,7 +22,7 @@ describe "maintenance stats" do
 
     let!(:tempfile) do
       Tempfile.new(["temp", ".csv"]).tap do |file|
-        CSV.open(file, "wb") do |csv|
+        CSV.open(file, "wb", col_sep: "\t") do |csv|
           csv << %w[maven test-project]
         end
       end
