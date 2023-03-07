@@ -28,7 +28,7 @@ namespace :maintenance_stats do
 
       project.repository.gather_maintenance_stats if commit
       result_ids << project.id
-
+    end
 
     Rails.logger.info("#{data.count} total rows")
     Rails.logger.info("#{skipped_no_package_count} rows could not find packages for")
