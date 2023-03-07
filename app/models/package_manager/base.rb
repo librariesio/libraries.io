@@ -87,7 +87,7 @@ module PackageManager
       find(platform).try(:formatted_name) || platform
     end
 
-    def self.update(name, sync_version: :all)
+    def self.update(name, sync_version: :all, force_sync_dependencies: false)
       if sync_version != :all && !self::SUPPORTS_SINGLE_VERSION_UPDATE
         Rails.logger.warn("#{db_platform}.update(#{name}, sync_version: #{sync_version}) called but not supported on platform")
         return
@@ -127,7 +127,7 @@ module PackageManager
         end
       end
 
-      save_dependencies(mapped_project, sync_version: sync_version) if self::HAS_DEPENDENCIES
+      save_dependencies(mapped_project, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies) if self::HAS_DEPENDENCIES
       finalize_db_project(db_project)
     end
 
@@ -225,13 +225,13 @@ module PackageManager
       names - existing_names
     end
 
-    def self.save_dependencies(mapped_project, sync_version: :all)
+    def self.save_dependencies(mapped_project, sync_version: :all, force_sync_dependencies: false)
       name = mapped_project[:name]
       db_project = Project.find_by(name: name, platform: db_platform)
       db_versions = db_project.versions.includes(:dependencies)
       db_versions = db_versions.where(number: sync_version) unless sync_version == :all
       db_versions.each do |db_version|
-        next if db_version.dependencies.any?
+        next if db_version.dependencies.any? && !force_sync_dependencies
 
         deps = begin
           dependencies(name, db_version.number, mapped_project)
@@ -241,6 +241,11 @@ module PackageManager
           )
           []
         end
+
+        # if we are forcing a resync of the dependencies in here then wipe out existing ones
+        # so that we have the fresh and correct dependency information from the most recent
+        # call to dependencies() from the platform provider
+        db_version.dependencies.destroy_all if force_sync_dependencies
 
         deps.each do |dep|
           next if dep[:project_name].blank? || dep[:requirements].blank? || db_version.dependencies.any? { |d| d.project_name == dep[:project_name] }

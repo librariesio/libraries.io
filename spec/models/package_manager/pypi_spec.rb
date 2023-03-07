@@ -201,4 +201,41 @@ describe PackageManager::Pypi do
       end
     end
   end
+
+  describe "#save_dependencies" do
+    context "with version dependencies" do
+      let(:project) { create(:project, platform: "Pypi", name: "requests") }
+      let!(:version) { create(:version, project: project, number: version_number) }
+      let!(:dependency) { create(:dependency, version: version, project: project, platform: "Pypi", project_name: "my_bad_dep", requirements: "lol") }
+      let(:version_number) { "2.28.2" }
+
+      let(:mapped_project) do
+        {
+          name: project.name,
+        }
+      end
+
+      it "overwrites dependencies with force flag on" do
+        expect(version.dependencies.count).to be 1
+
+        VCR.use_cassette("pypi_dependencies_requests") do
+          described_class.save_dependencies(mapped_project, sync_version: version_number, force_sync_dependencies: true)
+        end
+
+        expect { dependency.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(version.dependencies.count).to be 6
+      end
+
+      it "leaves dependencies with force flag off" do
+        expect(version.dependencies.count).to be 1
+
+        VCR.use_cassette("pypi_dependencies_requests") do
+          described_class.save_dependencies(mapped_project, sync_version: version_number, force_sync_dependencies: false)
+        end
+
+        expect(version.dependencies.count).to be 1
+        expect(version.dependencies.first).to eql(dependency)
+      end
+    end
+  end
 end

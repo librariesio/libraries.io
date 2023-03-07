@@ -61,20 +61,20 @@ class PackageManagerDownloadWorker
     swiftpm: PackageManager::SwiftPM,
   }.freeze
 
-  def perform(platform_name, name, version = nil, source = "unknown", requeue_count = 0)
+  def perform(platform_name, name, version = nil, source = "unknown", requeue_count = 0, force_sync_dependencies = false)
     key, platform = get_platform(platform_name)
     name = name.to_s.strip
     version = version.to_s.strip
     sync_version = (platform::SUPPORTS_SINGLE_VERSION_UPDATE && version.presence) || :all
 
     logger.info("Package update for platform=#{key} name=#{name} version=#{version} source=#{source}")
-    project = platform.update(name, sync_version: sync_version)
+    project = platform.update(name, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies)
 
     # Raise/log if version was requested but not found
     if version.present? && !Version.exists?(project: project, number: version)
       Rails.logger.info("[Version Update Failure] platform=#{key} name=#{name} version=#{version}")
       if requeue_count < MAX_ATTEMPTS_TO_UPDATE_FRESH_VERSION_DATA
-        PackageManagerDownloadWorker.perform_in(5.seconds, platform_name, name, version, source, requeue_count + 1)
+        PackageManagerDownloadWorker.perform_in(5.seconds, platform_name, name, version, source, requeue_count + 1, force_sync_dependencies)
       elsif platform != PackageManager::Go
         # It's common for go modules, e.g. forks, to not exist on pkg.go.dev, so wait until someone
         # manually requests it from pkg.go.dev before we index it, and only raise this error for non-go packages.

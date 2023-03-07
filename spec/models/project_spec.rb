@@ -391,4 +391,23 @@ describe Project, type: :model do
       end
     end
   end
+
+  describe "manual_sync" do
+    let!(:project) { create(:project, platform: 'Rubygems', name: 'my_gem') }
+
+    before { allow(PackageManagerDownloadWorker).to receive(:perform_async) }
+
+    it "sends option to sync all dependencies to download worker" do
+      project.manual_sync
+
+      expect(PackageManagerDownloadWorker).to have_received(:perform_async).with(
+        'PackageManager::Rubygems',
+        project.name,
+        nil,
+        "project",
+        0,
+        true
+      )
+    end
+  end
 end
