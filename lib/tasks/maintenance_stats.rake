@@ -28,6 +28,7 @@ namespace :maintenance_stats do
 
       project.repository.gather_maintenance_stats if commit
       result_ids << project.id
+      Rails.logger.info("Processed: #{platform}/#{name}")
     end
 
     Rails.logger.info("#{data.count} total rows")
