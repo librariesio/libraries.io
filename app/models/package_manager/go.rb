@@ -74,7 +74,7 @@ module PackageManager
       data
     end
 
-    def self.update(name, sync_version: :all)
+    def self.update(name, sync_version: :all, force_sync_dependencies: false)
       project = super(name, sync_version: sync_version)
       # call update on base module name if the name is appended with major version
       # example: github.com/myexample/modulename/v2
