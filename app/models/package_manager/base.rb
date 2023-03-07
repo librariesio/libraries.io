@@ -245,7 +245,10 @@ module PackageManager
         # if we are forcing a resync of the dependencies in here then wipe out existing ones
         # so that we have the fresh and correct dependency information from the most recent
         # call to dependencies() from the platform provider
-        db_version.dependencies.destroy_all if force_sync_dependencies
+        if force_sync_dependencies
+          Rails.logger.info("[Full Dependency Refresh] platform=#{db_platform} name=#{name} version=#{db_version.number}")
+          db_version.dependencies.destroy_all
+        end
 
         deps.each do |dep|
           next if dep[:project_name].blank? || dep[:requirements].blank? || db_version.dependencies.any? { |d| d.project_name == dep[:project_name] }
