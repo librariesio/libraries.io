@@ -2,9 +2,9 @@
 
 class PackageManagerDownloadWorker
   include Sidekiq::Worker
-  
-  # For stale repo pages without fresh versions, we have a manual retry mechanism 
-  # below. All other errors retry 3 times. 
+
+  # For stale repo pages without fresh versions, we have a manual retry mechanism
+  # below. All other errors retry 3 times.
   sidekiq_options queue: :critical, retry: 3
 
   # We were unable to fetch version, even after waiting for repo caches to refresh.
