@@ -13,7 +13,7 @@ module MaintenanceStats
         def query(params: {})
           validate_params(params)
 
-          @client.contributor_stats(params[:full_name], retry_wait: 0.5, retry_timeout: 10)
+          @client.contributor_stats(params[:full_name], retry_timeout: 10)
         end
       end
     end
