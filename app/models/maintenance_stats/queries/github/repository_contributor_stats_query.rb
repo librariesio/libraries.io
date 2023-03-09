@@ -5,6 +5,7 @@ module MaintenanceStats
       class RepositoryContributorStatsQuery < BaseQuery
         VALID_PARAMS = [:full_name]
         REQUIRED_PARAMS = [:full_name]
+        TIMEOUT_SEC = 10
 
         def self.client_type
           :v3
@@ -13,7 +14,7 @@ module MaintenanceStats
         def query(params: {})
           validate_params(params)
 
-          result = @client.contributor_stats(params[:full_name], retry_timeout: 10)
+          result = @client.contributor_stats(params[:full_name], retry_timeout: TIMEOUT_SEC)
 
           raise Octokit::Error, "Could not fetch contributor stats for #{params[:full_name]}" if result.nil?
 
