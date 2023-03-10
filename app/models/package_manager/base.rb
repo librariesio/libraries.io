@@ -348,7 +348,7 @@ module PackageManager
     private_class_method def self.download_async(names)
       if SYNC_ACTIVE != true
         logger.info("Skipping Package update for inactive platform=#{platform_name} names=#{names.join(',')}")
-        returnß
+        return
       end
 
       names.each_slice(1000).each_with_index do |group, index|
