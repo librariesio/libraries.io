@@ -13,8 +13,9 @@ module MaintenanceStats
 
         def query(params: {})
           validate_params(params)
+          full_name = params[:full_name]
 
-          result = @client.contributor_stats(params[:full_name], retry_timeout: TIMEOUT_SEC)
+          result = @client.contributor_stats(full_name, retry_timeout: TIMEOUT_SEC)
 
           raise Octokit::Error, { body: "Could not fetch contributor stats for #{full_name}" } if result.nil?
 
