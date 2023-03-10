@@ -19,8 +19,13 @@ module PackageManager
     NAME_DELIMITER = ":"
 
     PROVIDER_MAP = {
+      "Atlassian" => Atlassian,
       "default" => MavenCentral,
+      "Hortonworks" => Hortonworks,
       "Maven" => MavenCentral,
+      "SpringLibs" => SpringLibs,
+      "Jboss" => Jboss,
+      "JbossEa" => JbossEa,
     }.freeze
 
     class POMNotFound < StandardError

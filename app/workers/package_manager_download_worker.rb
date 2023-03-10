@@ -67,7 +67,12 @@ class PackageManagerDownloadWorker
     version = version.to_s.strip
     sync_version = (platform::SUPPORTS_SINGLE_VERSION_UPDATE && version.presence) || :all
 
-    logger.info("Package update for platform=#{key} name=#{name} version=#{version} source=#{source}")
+    if platform::SYNC_ACTIVE != true
+      Rails.logger.info("Skipping Package update for inactive platform=#{key} name=#{name} version=#{version} source=#{source}")
+      return
+    end
+
+    Rails.logger.info("Package update for platform=#{key} name=#{name} version=#{version} source=#{source}")
     project = platform.update(name, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies)
 
     # Raise/log if version was requested but not found
