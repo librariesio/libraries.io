@@ -2,6 +2,7 @@
 
 class PackageManager::Maven::Atlassian < PackageManager::Maven::Common
   REPOSITORY_SOURCE_NAME = "Atlassian"
+  SYNC_ACTIVE = false
 
   def self.repository_base
     "https://packages.atlassian.com/maven-central-local"

@@ -8,6 +8,7 @@ module PackageManager
     HAS_MULTIPLE_REPO_SOURCES = false
     SECURITY_PLANNED = false
     HIDDEN = false
+    SYNC_ACTIVE = true
     HAS_OWNERS = false
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = false
     SUPPORTS_SINGLE_VERSION_UPDATE = false
@@ -345,6 +346,11 @@ module PackageManager
     end
 
     private_class_method def self.download_async(names)
+      if SYNC_ACTIVE != true
+        logger.info("Skipping Package update for inactive platform=#{platform_name} names=#{names.join(',')}")
+        returnß
+      end
+
       names.each_slice(1000).each_with_index do |group, index|
         group.each { |name| PackageManagerDownloadWorker.perform_in(index.hours, self.name, name, nil, "download_async") }
       end
