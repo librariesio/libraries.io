@@ -16,7 +16,7 @@ module MaintenanceStats
 
           result = @client.contributor_stats(params[:full_name], retry_timeout: TIMEOUT_SEC)
 
-          raise Octokit::Error, "Could not fetch contributor stats for #{params[:full_name]}" if result.nil?
+          raise Octokit::Error, { body: "Could not fetch contributor stats for #{full_name}" } if result.nil?
 
           result
         end
