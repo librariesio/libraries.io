@@ -45,6 +45,7 @@ class PackageManagerDownloadWorker
     maven_springlibs: PackageManager::Maven::SpringLibs,
     maven_jboss: PackageManager::Maven::Jboss,
     maven_jbossea: PackageManager::Maven::JbossEa,
+    maven_google: PackageManager::Maven::Google,
     meteor: PackageManager::Meteor,
     nimble: PackageManager::Nimble,
     npm: PackageManager::NPM,

@@ -26,6 +26,7 @@ module PackageManager
       "SpringLibs" => SpringLibs,
       "Jboss" => Jboss,
       "JbossEa" => JbossEa,
+      "Google" => Google,
     }.freeze
 
     class POMNotFound < StandardError
@@ -46,11 +47,11 @@ module PackageManager
       get("https://maven.libraries.io/mavenCentral/recent")
     end
 
-    def self.project(name)
+    def self.project(name, latest: nil)
       sections = name.split(NAME_DELIMITER)
       path = sections.join("/")
 
-      latest = latest_version(name)
+      latest = latest_version(name) unless latest.present?
 
       return {} unless latest.present?
 
@@ -160,28 +161,32 @@ module PackageManager
       end
     end
 
+    def self.one_version_for_name(version, name)
+      pom = get_pom(*name.split(NAME_DELIMITER, 2), version)
+      begin
+        license_list = licenses(pom)
+      rescue StandardError
+        license_list = nil
+      end
+
+      if license_list.blank? && pom.respond_to?("project") && pom.project.locate("parent").present?
+        parent_version = extract_pom_value(pom.project, "parent/version")&.strip
+        Rails.logger.info("[POM has parent no license] name=#{name} parent_version=#{parent_version} child_version=#{version}")
+      end
+
+      {
+        number: version,
+        published_at: Time.parse(pom.locate("publishedAt").first.text),
+        original_license: license_list,
+      }
+    end
+
     def self.retrieve_versions(versions, name)
       # TODO: This should also look for the parent POM and if it exists + the child POM
       # is missing license data, use the data from the parent POM
       versions
         .map do |version|
-          pom = get_pom(*name.split(NAME_DELIMITER, 2), version)
-          begin
-            license_list = licenses(pom)
-          rescue StandardError
-            license_list = nil
-          end
-
-          if license_list.blank? && pom.respond_to?("project") && pom.project.locate("parent").present?
-            parent_version = extract_pom_value(pom.project, "parent/version")&.strip
-            Rails.logger.info("[POM has parent no license] name=#{name} parent_version=#{parent_version} child_version=#{version}")
-          end
-
-          {
-            number: version,
-            published_at: Time.parse(pom.locate("publishedAt").first.text),
-            original_license: license_list,
-          }
+          one_version_for_name(version, name)
       rescue Ox::Error, POMNotFound
         next
         end
