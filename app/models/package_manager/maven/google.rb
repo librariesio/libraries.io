@@ -106,12 +106,18 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
           add_version(db_project, version_hash)
 
           pp "added version #{version}"
+        rescue Faraday::ConnectionFailed
+          retry
         end
 
         finalize_db_project(db_project)
+      rescue Faraday::ConnectionFailed
+        retry
       end
 
       sleep 5
+    rescue Faraday::ConnectionFailed
+      retry
     end
   end
 end
