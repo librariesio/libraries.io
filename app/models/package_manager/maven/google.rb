@@ -24,7 +24,7 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
     if version
       "https://maven.google.com/web/index.html##{db_project.name}:#{version}"
     else
-      MavenUrl.from_name(db_project.name, repository_base).base
+      "https://maven.google.com/web/index.html##{db_project.name}"
     end
   end
 
