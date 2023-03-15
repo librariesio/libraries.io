@@ -88,23 +88,15 @@ module PackageManager
       find(platform).try(:formatted_name) || platform
     end
 
-    def self.update(name, sync_version: :all, force_sync_dependencies: false)
-      if sync_version != :all && !self::SUPPORTS_SINGLE_VERSION_UPDATE
-        Rails.logger.warn("#{db_platform}.update(#{name}, sync_version: #{sync_version}) called but not supported on platform")
-        return
+    private_class_method def self.transform_mapping_values(mapping)
+      mapping.try do |p|
+        p.compact.transform_values { |v| v.is_a?(String) ? v.gsub("\u0000", "") : v }
       end
+    end
 
-      raw_project = project(name)
-      return false unless raw_project.present?
-
-      mapped_project = mapping(raw_project)
-        .try do |p|
-          p.compact.transform_values { |v| v.is_a?(String) ? v.gsub("\u0000", "") : v }
-        end
-      return false unless mapped_project.present?
-
+    private_class_method def self.ensure_project(mapped_project, reformat_repository_url: false)
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
-      db_project.reformat_repository_url if sync_version == :all && !db_project.new_record?
+      db_project.reformat_repository_url if reformat_repository_url && !db_project.new_record?
       mapped_project[:repository_url] = db_project.repository_url if mapped_project[:repository_url].blank?
       db_project.attributes = mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties)
 
@@ -116,6 +108,23 @@ module PackageManager
         # Probably a race condition with multiple versions of a new project being updated.
         db_project = Project.find_by(platform: db_platform, name: mapped_project[:name])
       end
+
+      db_project
+    end
+
+    def self.update(name, sync_version: :all, force_sync_dependencies: false)
+      if sync_version != :all && !self::SUPPORTS_SINGLE_VERSION_UPDATE
+        Rails.logger.warn("#{db_platform}.update(#{name}, sync_version: #{sync_version}) called but not supported on platform")
+        return
+      end
+
+      raw_project = project(name)
+      return false unless raw_project.present?
+
+      mapped_project = transform_mapping_values(mapping(raw_project))
+      return false unless mapped_project.present?
+
+      db_project = ensure_project(mapped_project, reformat_repository_url: sync_version == :all)
 
       if self::HAS_VERSIONS
         if sync_version == :all

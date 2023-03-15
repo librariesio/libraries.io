@@ -1,0 +1,350 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://maven.google.com/com/google/android/games/group-index.xml
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '271378513063810383'
+      X-Datadog-Parent-Id:
+      - '1166487086939401214'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 301
+      message: ''
+    headers:
+      Location:
+      - https://dl.google.com/dl/android/maven2/com/google/android/games/group-index.xml
+      Cross-Origin-Resource-Policy:
+      - cross-origin
+      Content-Type:
+      - text/html; charset=UTF-8
+      X-Content-Type-Options:
+      - nosniff
+      Date:
+      - Tue, 14 Mar 2023 17:13:40 GMT
+      Expires:
+      - Tue, 14 Mar 2023 17:43:40 GMT
+      Cache-Control:
+      - public, max-age=1800
+      Server:
+      - sffe
+      Content-Length:
+      - '277'
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: "<HTML><HEAD><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<TITLE>301
+        Moved</TITLE></HEAD><BODY>\n<H1>301 Moved</H1>\nThe document has moved\n<A
+        HREF=\"https://dl.google.com/dl/android/maven2/com/google/android/games/group-index.xml\">here</A>.\r\n</BODY></HTML>\r\n"
+    http_version:
+  recorded_at: Tue, 14 Mar 2023 17:13:40 GMT
+- request:
+    method: get
+    uri: https://dl.google.com/dl/android/maven2/com/google/android/games/group-index.xml
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4247306432024612484'
+      X-Datadog-Parent-Id:
+      - '2929971138458564536'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Cache-Control:
+      - public,max-age=86400
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '221'
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Type:
+      - application/xml
+      Etag:
+      - '"adc662"'
+      Last-Modified:
+      - Fri, 15 Oct 2021 16:16:22 GMT
+      Server:
+      - downloads
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Tue, 14 Mar 2023 17:13:40 GMT
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version='1.0' encoding='UTF-8'?>
+        <com.google.android.games>
+          <memory-advice versions="0.13,0.14,0.15,0.22,0.23,0.24"/>
+          <memory-advice-common versions="0.13,0.14,0.15,0.22,0.23,0.24"/>
+        </com.google.android.games>
+    http_version:
+  recorded_at: Tue, 14 Mar 2023 17:13:40 GMT
+- request:
+    method: get
+    uri: https://dl.google.com/dl/android/maven2/com/google/android/games/memory-advice/0.24/memory-advice-0.24.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4364342007873828035'
+      X-Datadog-Parent-Id:
+      - '4154079452063664978'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Cache-Control:
+      - public,max-age=86400
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '2286'
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Type:
+      - application/octet-stream
+      Etag:
+      - '"adc642"'
+      Last-Modified:
+      - Fri, 15 Oct 2021 16:16:22 GMT
+      Server:
+      - downloads
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Tue, 14 Mar 2023 17:13:40 GMT
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <!-- This module was also published with a richer model, Gradle metadata,  -->
+          <!-- which should be used instead. Do not delete the following line which  -->
+          <!-- is to indicate to Gradle or any Gradle module metadata file consumer  -->
+          <!-- that they should prefer consuming it instead. -->
+          <!-- do_not_remove: published-with-gradle-metadata -->
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.google.android.games</groupId>
+          <artifactId>memory-advice</artifactId>
+          <version>0.24</version>
+          <packaging>aar</packaging>
+          <name>The Android Memory Assistance API</name>
+          <description>An experimental library to help applications avoid exceeding safe limits of memory use on devices.</description>
+          <url>https://android.googlesource.com/platform/frameworks/opt/gamesdk/+/refs/heads/master/test/memoryadvice</url>
+          <licenses>
+            <license>
+              <name>The Apache Software License, Version 2.0</name>
+              <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+              <distribution>repo</distribution>
+            </license>
+          </licenses>
+          <dependencies>
+            <dependency>
+              <groupId>com.google.android.games</groupId>
+              <artifactId>memory-advice-common</artifactId>
+              <version>0.24</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>androidx.lifecycle</groupId>
+              <artifactId>lifecycle-extensions</artifactId>
+              <version>2.2.0</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>androidx.multidex</groupId>
+              <artifactId>multidex</artifactId>
+              <version>2.0.1</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.core</groupId>
+              <artifactId>jackson-databind</artifactId>
+              <version>2.12.2</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.tensorflow</groupId>
+              <artifactId>tensorflow-lite</artifactId>
+              <version>2.4.0</version>
+              <scope>runtime</scope>
+            </dependency>
+          </dependencies>
+        </project>
+    http_version:
+  recorded_at: Tue, 14 Mar 2023 17:13:41 GMT
+- request:
+    method: get
+    uri: https://dl.google.com/dl/android/maven2/com/google/android/games/memory-advice/0.22/memory-advice-0.22.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3321308180289245601'
+      X-Datadog-Parent-Id:
+      - '358848893792142024'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Cache-Control:
+      - public,max-age=86400
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '2286'
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Type:
+      - application/octet-stream
+      Etag:
+      - '"aaf84f"'
+      Last-Modified:
+      - Mon, 06 Sep 2021 15:18:46 GMT
+      Server:
+      - downloads
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Tue, 14 Mar 2023 17:13:41 GMT
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <!-- This module was also published with a richer model, Gradle metadata,  -->
+          <!-- which should be used instead. Do not delete the following line which  -->
+          <!-- is to indicate to Gradle or any Gradle module metadata file consumer  -->
+          <!-- that they should prefer consuming it instead. -->
+          <!-- do_not_remove: published-with-gradle-metadata -->
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.google.android.games</groupId>
+          <artifactId>memory-advice</artifactId>
+          <version>0.22</version>
+          <packaging>aar</packaging>
+          <name>The Android Memory Assistance API</name>
+          <description>An experimental library to help applications avoid exceeding safe limits of memory use on devices.</description>
+          <url>https://android.googlesource.com/platform/frameworks/opt/gamesdk/+/refs/heads/master/test/memoryadvice</url>
+          <licenses>
+            <license>
+              <name>The Apache Software License, Version 2.0</name>
+              <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+              <distribution>repo</distribution>
+            </license>
+          </licenses>
+          <dependencies>
+            <dependency>
+              <groupId>com.google.android.games</groupId>
+              <artifactId>memory-advice-common</artifactId>
+              <version>0.22</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>androidx.lifecycle</groupId>
+              <artifactId>lifecycle-extensions</artifactId>
+              <version>2.2.0</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>androidx.multidex</groupId>
+              <artifactId>multidex</artifactId>
+              <version>2.0.1</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.core</groupId>
+              <artifactId>jackson-databind</artifactId>
+              <version>2.12.2</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.tensorflow</groupId>
+              <artifactId>tensorflow-lite</artifactId>
+              <version>2.4.0</version>
+              <scope>runtime</scope>
+            </dependency>
+          </dependencies>
+        </project>
+    http_version:
+  recorded_at: Tue, 14 Mar 2023 17:13:41 GMT
+recorded_with: VCR 4.0.0
