@@ -238,4 +238,33 @@ describe PackageManager::Pypi do
       end
     end
   end
+
+  describe "#mapping" do
+    let(:result) { described_class.mapping(raw_project) }
+
+    let(:raw_project) do
+      {
+        "info" => {
+          "name" => "name",
+          "summary" => "summary",
+          "home_page" => "home_page",
+          "keywords" => "keywords",
+          "classifiers" => [],
+          "project_urls" => project_urls,
+        },
+      }
+    end
+
+    context "respository url" do
+      context "project_urls.Code" do
+        let(:project_urls) do
+          { "Code" => "wow" }
+        end
+
+        it "uses correct value" do
+          expect(result[:repository_url]).to eq("wow")
+        end
+      end
+    end
+  end
 end

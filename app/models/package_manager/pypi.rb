@@ -80,8 +80,12 @@ module PackageManager
         keywords_array: Array.wrap(raw_project["info"]["keywords"].try(:split, /[\s.,]+/)),
         licenses: licenses(raw_project),
         repository_url: repo_fallback(
-          raw_project.dig("info", "project_urls", "Source").presence || raw_project.dig("info", "project_urls", "Source Code").presence || raw_project.dig("info", "project_urls", "Repository"),
-          raw_project["info"]["home_page"].presence || raw_project.dig("info", "project_urls", "Homepage")
+          raw_project.dig("info", "project_urls", "Source").presence ||
+          raw_project.dig("info", "project_urls", "Source Code").presence ||
+          raw_project.dig("info", "project_urls", "Repository").presence ||
+          raw_project.dig("info", "project_urls", "Code"),
+          raw_project["info"]["home_page"].presence ||
+          raw_project.dig("info", "project_urls", "Homepage")
         ),
       }
     end
