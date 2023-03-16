@@ -99,6 +99,7 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
   config.action_mailer.delivery_method = :smtp
+  config.action_mailer.logger = nil
 
   # Logging options
   logger = ActiveSupport::Logger.new($stdout)
