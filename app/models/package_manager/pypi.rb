@@ -72,6 +72,17 @@ module PackageManager
       }
     end
 
+    def self.select_repository_url(raw_project)
+      ["Source", "Source Code", "Repository", "Code"].filter_map do |field|
+        raw_project.dig("info", "project_urls", field)
+      end.first
+    end
+
+    def self.select_homepage_url(raw_project)
+      raw_project["info"]["home_page"].presence ||
+        raw_project.dig("info", "project_urls", "Homepage")
+    end
+
     def self.mapping(raw_project)
       {
         name: raw_project["info"]["name"],
@@ -80,12 +91,8 @@ module PackageManager
         keywords_array: Array.wrap(raw_project["info"]["keywords"].try(:split, /[\s.,]+/)),
         licenses: licenses(raw_project),
         repository_url: repo_fallback(
-          raw_project.dig("info", "project_urls", "Source").presence ||
-          raw_project.dig("info", "project_urls", "Source Code").presence ||
-          raw_project.dig("info", "project_urls", "Repository").presence ||
-          raw_project.dig("info", "project_urls", "Code"),
-          raw_project["info"]["home_page"].presence ||
-          raw_project.dig("info", "project_urls", "Homepage")
+          select_repository_url(raw_project),
+          select_homepage_url(raw_project)
         ),
       }
     end
