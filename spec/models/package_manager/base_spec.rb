@@ -4,17 +4,16 @@ describe PackageManager::Base do
   describe ".repo_fallback" do
     let(:result) { described_class.repo_fallback(repo, homepage) }
 
-    context "both nil" do
-      let(:repo) { nil }
-      let(:homepage) { nil }
+    let(:repo) { nil }
+    let(:homepage) { nil }
 
+    context "both nil" do
       it "returns blank" do
         expect(result).to eq("")
       end
     end
 
     context "repo nil, homepage not a url" do
-      let(:repo) { nil }
       let(:homepage) { "test" }
 
       it "returns blank" do
@@ -23,7 +22,6 @@ describe PackageManager::Base do
     end
 
     context "repo nil, homepage a non-repo url" do
-      let(:repo) { nil }
       let(:homepage) { "http://homepage" }
 
       it "returns blank" do
@@ -32,7 +30,6 @@ describe PackageManager::Base do
     end
 
     context "repo nil, homepage a repo url" do
-      let(:repo) { nil }
       let(:homepage) { "https://github.com/librariesio/libraries.io" }
 
       it "returns blank" do
