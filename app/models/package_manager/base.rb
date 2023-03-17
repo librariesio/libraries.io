@@ -161,7 +161,6 @@ module PackageManager
 
       existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
       existing.save!
-      existing.log_version_creation
     rescue ActiveRecord::RecordNotUnique => e
       # Until all package managers support version-specific updates, we'll have this race condition
       # of 2+ jobs trying to add versions at the same time.
