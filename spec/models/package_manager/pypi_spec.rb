@@ -238,4 +238,46 @@ describe PackageManager::Pypi do
       end
     end
   end
+
+  describe ".select_repository_url" do
+    let(:result) { described_class.select_repository_url(raw_project) }
+
+    let(:raw_project) do
+      {
+        "info" => {
+          "project_urls" => project_urls,
+        },
+      }
+    end
+
+    context "project_urls.Code" do
+      let(:project_urls) do
+        { "Code" => "wow" }
+      end
+
+      it "uses correct value" do
+        expect(result).to eq("wow")
+      end
+    end
+
+    context "both Source and Code" do
+      let(:project_urls) do
+        { "Source" => "cool", "Code" => "wow" }
+      end
+
+      it "uses correct value" do
+        expect(result).to eq("cool")
+      end
+    end
+
+    context "none" do
+      let(:project_urls) do
+        {}
+      end
+
+      it "returns nil" do
+        expect(result).to eq(nil)
+      end
+    end
+  end
 end
