@@ -28,9 +28,7 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
     end
   end
 
-  def self.update(
-    name, sync_version:
-  )
+  def self.update(name, sync_version:, force_sync_dependencies: false)
     raw_project = project(
       name,
       latest: latest_version(name)
