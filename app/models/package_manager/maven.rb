@@ -11,10 +11,10 @@ module PackageManager
     COLOR = "#b07219"
     MAX_DEPTH = 5
     LICENSE_STRINGS = {
-      "http://www.apache.org/licenses/LICENSE-2.0" => "Apache-2.0",
-      "http://www.eclipse.org/legal/epl-v10" => "Eclipse Public License (EPL), Version 1.0",
-      "http://www.eclipse.org/legal/epl-2.0" => "Eclipse Public License (EPL), Version 2.0",
-      "http://www.eclipse.org/org/documents/edl-v10" => "Eclipse Distribution License (EDL), Version 1.0",
+      "://www.apache.org/licenses/LICENSE-2.0" => "Apache-2.0",
+      "://www.eclipse.org/legal/epl-v10" => "Eclipse Public License (EPL), Version 1.0",
+      "://www.eclipse.org/legal/epl-2.0" => "Eclipse Public License (EPL), Version 2.0",
+      "://www.eclipse.org/org/documents/edl-v10" => "Eclipse Distribution License (EDL), Version 1.0",
     }.freeze
     NAME_DELIMITER = ":"
 
