@@ -3,6 +3,7 @@
 class PackageManager::Maven::Jboss < PackageManager::Maven::Common
   REPOSITORY_SOURCE_NAME = "Jboss"
   HIDDEN = true
+  SYNC_ACTIVE = false
 
   def self.repository_base
     "https://repository.jboss.org/nexus/content/repositories/releases"

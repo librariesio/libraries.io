@@ -8,6 +8,7 @@ module PackageManager
     HAS_MULTIPLE_REPO_SOURCES = false
     SECURITY_PLANNED = false
     HIDDEN = false
+    SYNC_ACTIVE = true
     HAS_OWNERS = false
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = false
     SUPPORTS_SINGLE_VERSION_UPDATE = false
@@ -87,23 +88,15 @@ module PackageManager
       find(platform).try(:formatted_name) || platform
     end
 
-    def self.update(name, sync_version: :all, force_sync_dependencies: false)
-      if sync_version != :all && !self::SUPPORTS_SINGLE_VERSION_UPDATE
-        Rails.logger.warn("#{db_platform}.update(#{name}, sync_version: #{sync_version}) called but not supported on platform")
-        return
+    private_class_method def self.transform_mapping_values(mapping)
+      mapping.try do |p|
+        p.compact.transform_values { |v| v.is_a?(String) ? v.gsub("\u0000", "") : v }
       end
+    end
 
-      raw_project = project(name)
-      return false unless raw_project.present?
-
-      mapped_project = mapping(raw_project)
-        .try do |p|
-          p.compact.transform_values { |v| v.is_a?(String) ? v.gsub("\u0000", "") : v }
-        end
-      return false unless mapped_project.present?
-
+    private_class_method def self.ensure_project(mapped_project, reformat_repository_url: false)
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
-      db_project.reformat_repository_url if sync_version == :all && !db_project.new_record?
+      db_project.reformat_repository_url if reformat_repository_url && !db_project.new_record?
       mapped_project[:repository_url] = db_project.repository_url if mapped_project[:repository_url].blank?
       db_project.attributes = mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties)
 
@@ -115,6 +108,23 @@ module PackageManager
         # Probably a race condition with multiple versions of a new project being updated.
         db_project = Project.find_by(platform: db_platform, name: mapped_project[:name])
       end
+
+      db_project
+    end
+
+    def self.update(name, sync_version: :all, force_sync_dependencies: false)
+      if sync_version != :all && !self::SUPPORTS_SINGLE_VERSION_UPDATE
+        Rails.logger.warn("#{db_platform}.update(#{name}, sync_version: #{sync_version}) called but not supported on platform")
+        return
+      end
+
+      raw_project = project(name)
+      return false unless raw_project.present?
+
+      mapped_project = transform_mapping_values(mapping(raw_project))
+      return false unless mapped_project.present?
+
+      db_project = ensure_project(mapped_project, reformat_repository_url: sync_version == :all)
 
       if self::HAS_VERSIONS
         if sync_version == :all
@@ -151,7 +161,6 @@ module PackageManager
 
       existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
       existing.save!
-      existing.log_version_creation
     rescue ActiveRecord::RecordNotUnique => e
       # Until all package managers support version-specific updates, we'll have this race condition
       # of 2+ jobs trying to add versions at the same time.
@@ -293,6 +302,15 @@ module PackageManager
       end
     end
 
+    # Use librariesio-url-parser to attempt to select one of the provided
+    # URLs as the URL for this repository. This means that if the URL is
+    # not considered a repository URL by that gem, its raw value will be
+    # used. This would allow for a project that self-hosts to still have
+    # a valid repo URL.
+    #
+    # @param repo String A string we think is a project's repository URL
+    # @param homepage String A string we thing is a project's homepage URL
+    # @return String The best URL we can select for the project's repository, or "" if we can't find one
     def self.repo_fallback(repo, homepage)
       repo = "" if repo.nil?
       homepage = "" if homepage.nil?
@@ -345,6 +363,11 @@ module PackageManager
     end
 
     private_class_method def self.download_async(names)
+      if SYNC_ACTIVE != true
+        logger.info("Skipping Package update for inactive platform=#{platform_name} names=#{names.join(',')}")
+        return
+      end
+
       names.each_slice(1000).each_with_index do |group, index|
         group.each { |name| PackageManagerDownloadWorker.perform_in(index.hours, self.name, name, nil, "download_async") }
       end

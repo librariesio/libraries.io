@@ -3,6 +3,7 @@
 class PackageManager::Maven::SpringLibs < PackageManager::Maven::Common
   REPOSITORY_SOURCE_NAME = "SpringLibs"
   HIDDEN = true
+  SYNC_ACTIVE = false
 
   def self.repository_base
     "https://repo.spring.io/libs-release-local"
