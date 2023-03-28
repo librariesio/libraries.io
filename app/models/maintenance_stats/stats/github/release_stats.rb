@@ -10,7 +10,7 @@ module MaintenanceStats
 
         def get_stats
           return {} if @results.nil?
-          
+
           last_week_releases = @results.select {|release| DateTime.parse(release.published_at) > @now - 1.week}.count
           last_month_releases = @results.select {|release| DateTime.parse(release.published_at) > @now - 1.month}.count
           last_two_month_releases = @results.select {|release| DateTime.parse(release.published_at) > @now - 2.months}.count
