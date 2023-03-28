@@ -208,7 +208,7 @@ module RepositoryHost
     end
 
     def gather_maintenance_stats
-      if repository.host_type != "GitHub" || repository.projects.any? { |project| project.github_name_with_owner.blank? }
+      if repository.host_type != "GitHub" || repository.owner_name.blank? || repository.project_name.blank?
         repository.repository_maintenance_stats.destroy_all
         return []
       end
