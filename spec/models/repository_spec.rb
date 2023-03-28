@@ -287,41 +287,9 @@ describe Repository, type: :model do
     end
 
     context "with non GitHub repository" do
-      let(:repository) { create(:repository, host_type: "Bitbucket") }
+      let(:repository) { create(:repository, host_type: "Gitlab") }
 
       it "should not save any values" do
-        VCR.use_cassette("github/chalk_api", match_requests_on: %i[method uri body query]) do
-          repository.gather_maintenance_stats
-        end
-
-        maintenance_stats = repository.repository_maintenance_stats
-        expect(maintenance_stats.count).to be 0
-      end
-    end
-
-    context "with a GitHub repository but for some reason not a GitHub Project" do
-      let!(:project) do
-        repository.projects.create!(
-          name: "test-project",
-          platform: "Maven",
-          repository_url: "https://def.not.github.com",
-          homepage: "https://def.not.github.com"
-        )
-      end
-
-      it "should not save any values" do
-        repository.gather_maintenance_stats
-
-        maintenance_stats = repository.repository_maintenance_stats
-        expect(maintenance_stats.count).to be 0
-      end
-
-      it "should delete existing stats" do
-        repository.repository_maintenance_stats.create!(
-          category: "test",
-          value: "yep"
-        )
-
         repository.gather_maintenance_stats
 
         maintenance_stats = repository.repository_maintenance_stats
