@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 module ProjectSearch
-  # Whenever a PackageManager::Base platform is removed, it's easier for now to
-  # just add it to this list, until the records/indices are cleared out of that platform.
-  # NB these are the casings from the database, which sometimes don't match the PackageManager::Base
-  # formatted_name casings, e.g. Pypi vs PyPI
-  REMOVED_PLATFORMS = %w(Sublime Wordpress Atom PlatformIO Shards Emacs Jam)
-
   extend ActiveSupport::Concern
 
   included do
@@ -138,7 +132,7 @@ module ProjectSearch
                      must_not: [
                        { term: { "status" => "Hidden" } },
                        { term: { "status" => "Removed" } },
-                       { terms: { "platform" => REMOVED_PLATFORMS } }
+                       { terms: { "platform" => Platform::REMOVED_PLATFORMS } } 
                      ]
                   }
                 }
