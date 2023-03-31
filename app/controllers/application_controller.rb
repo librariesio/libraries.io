@@ -297,5 +297,7 @@ class ApplicationController < ActionController::Base
         api_key_is_internal: @current_api_key&.is_internal,
       }
     end
+    # helpful for tracking down github hook logs
+    payload[:github_event] = @github_event if @github_event
   end
 end
