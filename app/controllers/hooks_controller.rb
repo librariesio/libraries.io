@@ -9,7 +9,8 @@ class HooksController < ApplicationController
       payload = params
     end
 
-    handler.run(request.env['HTTP_X_GITHUB_EVENT'], payload)
+    @github_event = request.env['HTTP_X_GITHUB_EVENT']    
+    handler.run(@github_event, payload)
 
     render json: nil, status: :ok
   end
