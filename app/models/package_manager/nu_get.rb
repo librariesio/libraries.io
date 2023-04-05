@@ -92,7 +92,10 @@ module PackageManager
       end
 
       nuspec
-    rescue Zip::Error, Ox::ParseError
+    rescue Zip::Error, Ox::ParseError => e
+      Rails.logger.error(
+        "Unable to download NuGet package for processing: NiGet/#{name}: #{e.message}"
+      )
       nil
     end
 
