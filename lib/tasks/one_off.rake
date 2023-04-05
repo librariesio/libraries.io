@@ -91,13 +91,20 @@ namespace :one_off do
   task backfill_missing_nuget_packages_2023_03: :environment do
     packages = File.readlines("lib/tasks/input/2023-03-nuget_packages_to_check.txt").map(&:strip)
 
+    processed = 0
+
     packages.each do |package_name|
-      puts "Checking #{package_name}..."
-      next if Project.find_by(platform: "NuGet", name: package_name)
+      next if Project.where(platform: "NuGet").find_by("name ilike '#{package_name}'")
 
       puts "#{package_name} not found, updating..."
-      PackageManager::NuGet.update(package_name)
-      sleep 1
+      Project.transaction do
+        PackageManager::NuGet.update(package_name)
+      end
+      processed += 1
+      puts "Done, #{processed} total updated"
+      sleep 0.5
     end
+
+    print "Total examined: #{packages.count}, Total created: #{processed}"
   end
 end
