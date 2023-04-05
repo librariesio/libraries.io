@@ -28,7 +28,7 @@ module PackageManager
     end
 
     def self.deprecation_info(name)
-      info = get("https://api.nuget.org/v3/registration5-gz-semver2/#{name.downcase}/index.json")
+      info = latest_remote_version(name)
       deprecation = info.dig("items")&.first&.dig("items")&.first&.dig("catalogEntry", "deprecation")
 
       # alternate_package is not currently stored in DB but I wanted to record it because it seems useful
@@ -100,7 +100,8 @@ module PackageManager
       get_json("https://api.nuget.org/v3/registration5-gz-semver2/#{name.downcase}/index.json")
     end
 
-    def self.get_releases(name, latest_version: latest_remote_version(name))
+    def self.get_releases(name)
+      latest_version = latest_remote_version(name)
       if latest_version["items"][0]["items"]
         releases = []
         latest_version["items"].each do |items|
