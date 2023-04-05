@@ -92,11 +92,12 @@ namespace :one_off do
     packages = File.readlines("lib/tasks/input/2023-03-nuget_packages_to_check.txt").map(&:strip)
 
     packages.each do |package_name|
-      puts "Checking #{package_name}..."
-      next if Project.find_by(platform: "NuGet", name: package_name)
+      next if Project.where(platform: "NuGet").find_by("name ilike '#{package_name}'")
 
       puts "#{package_name} not found, updating..."
-      PackageManager::NuGet.update(package_name)
+      Project.transaction do
+        PackageManager::NuGet.update(package_name)
+      end
       sleep 1
     end
   end
