@@ -87,14 +87,19 @@ module PackageManager
       Zip::File.open_buffer(package_file(name, version)) do |zip|
         zip.each do |file|
           # the correct nuspec file will be at the root of the tree with the package name in the filename
+          # package identifiers are case-insensitive: https://learn.microsoft.com/en-us/nuget/reference/nuspec#id
           file.get_input_stream { |io| nuspec = Ox.parse(io.read) } if file.name.downcase["#{name}.nuspec".downcase]
         end
       end
 
+      Rails.logger.error(
+        "Malformed NuGet package file: NuGet/#{name}: No matching nuspec file found"
+      )
+
       nuspec
     rescue Zip::Error, Ox::ParseError => e
       Rails.logger.error(
-        "Unable to download NuGet package for processing: NiGet/#{name}: #{e.message}"
+        "Unable to download NuGet package for processing: NuGet/#{name}: #{e.message}"
       )
       nil
     end
