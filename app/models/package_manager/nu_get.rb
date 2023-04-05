@@ -92,9 +92,11 @@ module PackageManager
         end
       end
 
-      Rails.logger.error(
-        "Malformed NuGet package file: NuGet/#{name}: No matching nuspec file found"
-      )
+      unless nuspec
+        Rails.logger.error(
+          "Malformed NuGet package file: NuGet/#{name}: No matching nuspec file found"
+        )
+      end
 
       nuspec
     rescue Zip::Error, Ox::ParseError => e
