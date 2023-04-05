@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "zip"
+
 module PackageManager
   class NuGet < Base
     HAS_VERSIONS = true
@@ -13,8 +15,12 @@ module PackageManager
       "https://www.nuget.org/packages/#{db_project.name}/#{version}"
     end
 
+    def self.download_url_by_name(name, version = nil)
+      "https://www.nuget.org/api/v2/package/#{name}/#{version}"
+    end
+
     def self.download_url(db_project, version = nil)
-      "https://www.nuget.org/api/v2/package/#{db_project.name}/#{version}"
+      download_url_by_name(db_project.name, version)
     end
 
     def self.install_instructions(db_project, version = nil)
@@ -70,8 +76,31 @@ module PackageManager
       h
     end
 
-    def self.get_releases(name)
-      latest_version = get_json("https://api.nuget.org/v3/registration5-gz-semver2/#{name.downcase}/index.json")
+    def self.package_file(name, version)
+      url = download_url_by_name(name, version)
+      StringIO.new(get_raw(url))
+    end
+
+    def self.nuspec(name, version)
+      nuspec = nil
+
+      Zip::File.open_buffer(package_file(name, version)) do |zip|
+        zip.each do |file|
+          # the correct nuspec file will be at the root of the tree with the package name in the filename
+          file.get_input_stream { |io| nuspec = Ox.parse(io.read) } if file.name.downcase["#{name}.nuspec".downcase]
+        end
+      end
+
+      nuspec
+    rescue Zip::Error, Ox::ParseError
+      nil
+    end
+
+    def self.latest_remote_version(name)
+      get_json("https://api.nuget.org/v3/registration5-gz-semver2/#{name.downcase}/index.json")
+    end
+
+    def self.get_releases(name, latest_version: latest_remote_version(name))
       if latest_version["items"][0]["items"]
         releases = []
         latest_version["items"].each do |items|
@@ -93,13 +122,16 @@ module PackageManager
 
     def self.mapping(raw_project)
       item = raw_project[:releases].last["catalogEntry"]
+      raw_nuspec = nuspec(raw_project[:name], item["version"])
+      nuspec_repo = raw_nuspec&.locate("package/metadata/repository")&.first
+      nuspec_repo = nuspec_repo["url"] if nuspec_repo
 
       {
         name: raw_project[:name],
         description: description(item),
         homepage: item["projectUrl"],
         keywords_array: Array(item["tags"]),
-        repository_url: repo_fallback("", item["projectUrl"]),
+        repository_url: repo_fallback(nuspec_repo, item["projectUrl"]),
         releases: raw_project[:releases],
         licenses: item["licenseExpression"],
       }
