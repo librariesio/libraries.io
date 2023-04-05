@@ -84,6 +84,20 @@ namespace :one_off do
           end
         end
       end
+  end
 
+  # this can be run repeatedly until each package has been checked
+  desc "Backfill NuGet packages that might have been missed while using a deprecated API"
+  task backfill_missing_nuget_packages_2023_03: :environment do
+    packages = File.readlines("lib/tasks/input/2023-03-nuget_packages_to_check.txt").map(&:strip)
+
+    packages.each do |package_name|
+      puts "Checking #{package_name}..."
+      next if Project.find_by(platform: "NuGet", name: package_name)
+
+      puts "#{package_name} not found, updating..."
+      PackageManager::NuGet.update(package_name)
+      sleep 1
+    end
   end
 end
