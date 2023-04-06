@@ -94,6 +94,7 @@ namespace :one_off do
     processed = 0
 
     packages.each do |package_name|
+      puts "Checking #{package_name}..."
       next if Project.where(platform: "NuGet").find_by("name ilike '#{package_name}'")
 
       puts "#{package_name} not found, updating..."
