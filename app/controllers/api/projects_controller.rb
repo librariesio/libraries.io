@@ -11,8 +11,14 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def dependents
-    dependents = paginate(@project.dependent_projects).includes(:versions, :repository)
-    render json: dependents
+    dependents = @project.dependent_projects
+
+    if params[:subset] == "name_only"
+      render json: dependents.pluck(:name).map { |n| { name: n } }
+    else
+      dependents = paginate(dependents).includes(:versions, :repository)
+      render json: dependents
+    end
   end
 
   def dependent_repositories
