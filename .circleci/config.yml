@@ -5,7 +5,7 @@ orbs:
 executors:
   libraries:
     docker:
-      - image: ruby:2.7.6-slim-bullseye
+      - image: ruby:2.7.8-slim-bullseye
         environment:
           PGHOST: 127.0.0.1
           PGUSER: postgres
