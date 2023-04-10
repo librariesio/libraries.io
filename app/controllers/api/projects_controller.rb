@@ -14,7 +14,7 @@ class Api::ProjectsController < Api::ApplicationController
     dependents = @project.dependent_projects
 
     if params[:subset] == "name_only"
-      render json: dependents.pluck(:name).map { |n| { name: n } }
+      render json: paginate(dependents).order(name: :asc).pluck(:name).map { |n| { name: n } }
     else
       dependents = paginate(dependents).includes(:versions, :repository)
       render json: dependents
