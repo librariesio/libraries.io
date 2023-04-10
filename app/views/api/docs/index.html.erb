@@ -94,7 +94,10 @@
       Get packages that have at least one version that depends on a given project.
     </p>
 
-
+    <p>
+      The dependents endpoint accepts a <code>subset</code> parameter, one of
+        <code>name_only</code>.
+    </p>
 
     <p>
       <code>GET https://libraries.io/api/:platform/:name/dependents?api_key=<%= @api_key %></code>
