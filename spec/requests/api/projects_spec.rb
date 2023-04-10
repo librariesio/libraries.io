@@ -44,6 +44,13 @@ describe "Api::ProjectsController" do
       expect(response.content_type).to eq("application/json")
       expect(response.body).to be_json_eql [project_json_response(project)].to_json
     end
+
+    it "renders name only" do
+      get "/api/#{dependent_project.platform}/#{dependent_project.name}/dependents?subset=name_only"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to eq("application/json")
+      expect(response.body).to be_json_eql [{ name: project.name }].to_json
+    end
   end
 
   describe "GET /api/:platform/:name/dependent_repositories", type: :request do
