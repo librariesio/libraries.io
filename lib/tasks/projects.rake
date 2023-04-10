@@ -249,4 +249,49 @@ namespace :projects do
         end
     end
   end
+
+  desc "Manual sync projects from list"
+  task :sync_from_list, %i[input_file commit] => :environment do |_t, args|
+    commit = args.commit.present? && args.commit == "yes"
+
+    separator = "\t"
+    batch_size = 50
+    batch_wait = 5
+
+    input_data = CSV.read(args.input_file, col_sep: separator, headers: false, skip_blanks: true)
+    skipped_not_found_count = 0
+    result_ids = []
+
+    input_data.in_groups_of(batch_size, false).each do |platforms_and_names|
+      projects = []
+      platforms_and_names.each do |platform, name|
+        project = Project.where("platform ILIKE ?", platform).find_by(name: name)
+
+        if project
+          projects << project
+        else
+          skipped_not_found_count += 1
+          Rails.logger.warn("Project not found: #{platform}/#{name}")
+        end
+      end
+
+      if commit
+        projects.each(&:manual_sync)
+        sleep batch_wait
+      end
+
+      result_ids.concat(projects.pluck(:id))
+    end
+
+    stats = <<~STATS
+      Totals:
+      Input:     #{input_data.count}
+      Not found: #{skipped_not_found_count}
+      Processed: #{result_ids.count}
+    STATS
+
+    Rails.logger.info(stats)
+    Rails.logger.info("Project IDs: #{result_ids.join(", ")}")
+    Rails.logger.info("\nThese changes have not been committed. Re-run this task with [,yes] to proceed.") unless commit
+  end
 end
