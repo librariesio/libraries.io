@@ -40,8 +40,8 @@ module PackageManager
       get("http://registry.npmjs.org/#{name.gsub('/', '%2F')}")
     end
 
-    def self.deprecation_info(name)
-      versions = project(name)["versions"].values
+    def self.deprecation_info(db_project)
+      versions = project(db_project.name)["versions"].values
       is_deprecated = versions.all? { |version| !!version["deprecated"] }
       message = is_deprecated ? versions.last["deprecated"] : nil
 

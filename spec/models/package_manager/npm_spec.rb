@@ -44,7 +44,7 @@ describe PackageManager::NPM do
         }
       })
 
-      expect(described_class.deprecation_info('foo')).to eq({is_deprecated: false, message: nil})
+      expect(described_class.deprecation_info(project)).to eq({is_deprecated: false, message: nil})
     end
 
     it "returns deprecated if all versions are deprecated" do
@@ -56,7 +56,7 @@ describe PackageManager::NPM do
         }
       })
 
-      expect(described_class.deprecation_info('foo')).to eq({is_deprecated: true, message: "This package is deprecated"})
+      expect(described_class.deprecation_info(project)).to eq({is_deprecated: true, message: "This package is deprecated"})
     end
   end
 end

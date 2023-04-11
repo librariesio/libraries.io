@@ -52,8 +52,8 @@ module PackageManager
       {}
     end
 
-    def self.deprecation_info(name)
-      p = project(name)
+    def self.deprecation_info(db_project)
+      p = project(db_project.name)
       last_version = p["releases"].reject { |version, _releases| version =~ PYPI_PRERELEASE }.values.last&.first
 
       is_deprecated, message = if last_version && last_version["yanked"] == true

@@ -70,7 +70,7 @@ describe PackageManager::Pypi do
                                                                                  },
                                                                                })
 
-      expect(described_class.deprecation_info("foo")).to eq({ is_deprecated: false, message: nil })
+      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: false, message: nil })
     end
 
     it "returns deprecated if last version is deprecated" do
@@ -82,7 +82,7 @@ describe PackageManager::Pypi do
                                                                                  },
                                                                                })
 
-      expect(described_class.deprecation_info("foo")).to eq({ is_deprecated: true, message: "This package is deprecated" })
+      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: true, message: "This package is deprecated" })
     end
 
     it "returns not-deprecated if last version is a pre-release and deprecated" do
@@ -95,7 +95,7 @@ describe PackageManager::Pypi do
                                                                                  },
                                                                                })
 
-      expect(described_class.deprecation_info("foo")).to eq({ is_deprecated: false, message: nil })
+      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: false, message: nil })
     end
 
     it "return not-deprecated if 'development status' is not 'inactive'" do
@@ -106,7 +106,7 @@ describe PackageManager::Pypi do
                                                                                  },
                                                                                })
 
-      expect(described_class.deprecation_info("foo")).to eq({ is_deprecated: false, message: nil })
+      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: false, message: nil })
     end
 
     it "return deprecated if 'development status' is 'inactive'" do
@@ -117,7 +117,7 @@ describe PackageManager::Pypi do
                                                                                  },
                                                                                })
 
-      expect(described_class.deprecation_info("foo")).to eq({ is_deprecated: true, message: "Development Status :: 7 - Inactive" })
+      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: true, message: "Development Status :: 7 - Inactive" })
     end
   end
 
