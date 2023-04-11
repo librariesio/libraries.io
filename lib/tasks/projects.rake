@@ -24,7 +24,7 @@ namespace :projects do
   task check_status: :environment do
     exit if ENV['READ_ONLY'].present?
     ['npm', 'rubygems', 'packagist', 'nuget', 'cpan', 'clojars', 'cocoapods',
-    'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
+    'hackage', 'cran', 'pub', 'elm', 'dub'].each do |platform|
       Project.platform(platform).not_removed.where('projects.updated_at < ?', 1.week.ago).select('id').find_each do |project|
         CheckStatusWorker.perform_async(project.id)
       end
@@ -58,7 +58,7 @@ namespace :projects do
     exit if ENV['READ_ONLY'].present?
     # Check if removed/deprecated projects are still deprecated/removed
     ['pypi', 'npm', 'rubygems', 'packagist', 'cpan', 'clojars', 'cocoapods',
-    'hackage', 'cran', 'atom', 'sublime', 'pub', 'elm', 'dub'].each do |platform|
+    'hackage', 'cran', 'pub', 'elm', 'dub'].each do |platform|
       Project.platform(platform).removed_or_deprecated.select('id').find_each do |project|
         CheckStatusWorker.perform_async(project.id, true)
       end
