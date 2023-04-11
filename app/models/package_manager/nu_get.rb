@@ -29,7 +29,7 @@ module PackageManager
 
     def self.deprecation_info(db_project)
       info = latest_remote_version(db_project.name)
-      deprecation = info.dig("items")&.first&.dig("items")&.first&.dig("catalogEntry", "deprecation")
+      deprecation = info&.dig("items")&.first&.dig("items")&.first&.dig("catalogEntry", "deprecation")
 
       # alternate_package is not currently stored in DB but I wanted to record it because it seems useful
       {
