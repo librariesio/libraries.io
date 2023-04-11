@@ -58,8 +58,8 @@ module PackageManager
         get("https://repo.packagist.org/p2/#{name}~dev.json")&.dig("packages", name)
     end
 
-    def self.deprecation_info(name)
-      is_deprecated = project(name)&.first&.dig("abandoned") || ""
+    def self.deprecation_info(db_project)
+      is_deprecated = project(db_project.name)&.first&.dig("abandoned") || ""
 
       {
         is_deprecated: is_deprecated != "",

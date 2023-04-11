@@ -28,10 +28,10 @@ module PackageManager
       "https://crates.io/api/v1/crates/#{db_project.name}"
     end
 
-    def self.deprecation_info(name)
-      item = project(name)
-      version = item.dig("crate", "newest_version")
-      url = download_url(name, version)
+    def self.deprecation_info(db_project)
+      raw_project = project(db_project.name)
+      version = raw_project.dig("crate", "newest_version")
+      url = download_url(db_project, version)
       body = get_raw(url)
       tar_extract = Gem::Package::TarReader.new(Zlib::GzipReader.new(StringIO.new(body)))
       tar_extract.rewind

@@ -323,7 +323,7 @@ module PackageManager
       [project_name]
     end
 
-    def self.deprecation_info(_name)
+    def self.deprecation_info(_db_project)
       { is_deprecated: false, message: nil }
     end
 

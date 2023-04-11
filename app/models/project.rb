@@ -621,7 +621,7 @@ class Project < ApplicationRecord
     elsif platform.downcase == "pypi" && response.response_code == 404
       update_attribute(:status, "Removed")
     elsif can_have_entire_package_deprecated?
-      result = platform_class.deprecation_info(name)
+      result = platform_class.deprecation_info(self)
       if result[:is_deprecated]
         update_attribute(:status, "Deprecated")
         update_attribute(:deprecation_reason, result[:message])
