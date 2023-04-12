@@ -14,7 +14,7 @@ class GithubHookHandler
     when "issue_comment", "issues", "pull_request"
       return nil # noop
     when "push"
-      GithubHookWorker.perform_async(payload["repository"]["id"], payload["sender"]["id"])
+      GithubHookWorker.perform_async(payload["repository"]["id"], payload.dig("sender", "id"))
     when "public", "release", "repository"
       CreateRepositoryWorker.perform_async("GitHub", payload["repository"]["full_name"], nil)
     when "watch"
