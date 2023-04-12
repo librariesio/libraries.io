@@ -12,4 +12,11 @@ describe GithubHookWorker do
     expect(Repository).to receive(:update_from_hook).with(github_id, sender_id)
     subject.perform(github_id, sender_id)
   end
+
+  it "should not update from hook if sender is missing" do
+    github_id = 1
+    sender_id = nil
+    expect(Repository).to_not receive(:update_from_hook)
+    subject.perform(github_id, sender_id)
+  end
 end
