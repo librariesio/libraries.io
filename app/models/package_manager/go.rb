@@ -238,7 +238,7 @@ module PackageManager
         # We can get here from go modules that don't exist anymore, or having server troubles:
         # Fallback to the given name, cache the host as "bad" for a day,
         # log it (to analyze later) and notify us to be safe.
-        Rails.logger.info "[Caching unreacahble go host] name=#{name}"
+        Rails.logger.info "[Caching unreachable go host] name=#{name}"
         Rails.cache.write("unreachable-go-hosts:#{host}", true, ex: 1.day)
         Bugsnag.notify(e)
         [name]
