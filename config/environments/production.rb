@@ -119,4 +119,6 @@ Rails.application.configure do
       end
     end
   end
+  # Skip the noisy exception stack traces that DebugExceptions outputs, and check Bugsnag instead.
+  config.middleware.delete(ActionDispatch::DebugExceptions)
 end
