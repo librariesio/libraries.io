@@ -289,21 +289,6 @@ describe Project, type: :model do
         end
       end
     end
-
-    context "NuGet" do
-      let!(:project) { Project.create(platform: "NuGet", name: "Steeltoe.Common") }
-
-      it "should mark the project no longer deprecated" do
-        VCR.use_cassette("project/check_status/Steeltoe.Common") do
-          project.check_status
-
-          project.reload
-
-          expect(project.status).to eq("")
-          expect(project.deprecation_reason).to eq(nil)
-        end
-      end
-    end
   end
 
   describe "DeletedProject management" do

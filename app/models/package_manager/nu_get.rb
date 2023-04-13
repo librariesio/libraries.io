@@ -29,14 +29,27 @@ module PackageManager
 
     def self.deprecation_info(db_project)
       info = latest_remote_version(db_project.name)
-      deprecation = info&.dig("items")&.first&.dig("items")&.first&.dig("catalogEntry", "deprecation")
+      catalog_entry = info&.dig("items")&.first&.dig("items")&.first&.dig("catalogEntry")
 
-      # alternate_package is not currently stored in DB but I wanted to record it because it seems useful
-      {
-        is_deprecated: deprecation.present?,
-        message: deprecation.present? ? deprecation["message"] : "",
-        alternate_package: deprecation.present? ? deprecation.dig("alternatePackage", "id") : nil,
-      }
+      is_deprecated = catalog_entry["deprecation"].present? || catalog_entry["listed"] == false
+
+      if is_deprecated
+        message = catalog_entry.dig("deprecation", "message") || "unlisted"
+        # alternate_package is not currently stored in DB but I wanted to record it because it seems useful
+        alternate_package = catalog_entry.dig("deprecation", "alternatePackage", "id")
+
+        {
+          is_deprecated: true,
+          message: message,
+          alternate_package: alternate_package,
+        }
+      else
+        {
+          is_deprecated: false,
+          message: "",
+          alternate_package: nil,
+        }
+      end
     end
 
     def self.load_names(limit = nil)

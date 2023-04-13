@@ -108,6 +108,45 @@ describe PackageManager::NuGet do
     end
   end
 
+  describe "deprecation_info" do
+    let(:project) { Project.create(platform: "NuGet", name: name) }
+    subject(:deprecation_info) do
+      VCR.use_cassette(cassette) do
+        described_class.deprecation_info(project)
+      end
+    end
+
+    context "not deprecated upstream" do
+      let(:name) { "Steeltoe.Common" }
+      let(:cassette) { "nu_get/package" }
+
+      it "is not deprecated" do
+        expect(deprecation_info[:is_deprecated]).to eq(false)
+        expect(deprecation_info[:message]).to be_blank
+      end
+    end
+
+    context "deprecated upstream" do
+      let(:name) { "Microsoft.DotNet.InternalAbstractions" }
+      let(:cassette) { "nu_get/package_deprecated" }
+
+      it "is deprecated" do
+        expect(deprecation_info[:is_deprecated]).to eq(true)
+        expect(deprecation_info[:message]).to be_present
+      end
+    end
+
+    context "unlisted upstream" do
+      let(:name) { "reactiveui-blend" }
+      let(:cassette) { "nu_get/package_unlisted" }
+
+      it "is deprecated" do
+        expect(deprecation_info[:is_deprecated]).to eq(true)
+        expect(deprecation_info[:message]).to include("unlisted")
+      end
+    end
+  end
+
   describe ".nuspec" do
     let(:zip_file) { nil }
     let(:nuspec) { "" }
