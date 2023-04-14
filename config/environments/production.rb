@@ -114,11 +114,14 @@ Rails.application.configure do
     {}.tap do |options|
       options[:params] = event.payload[:params].except(*params_exceptions)
       # extra keys that we want to log. Add these in the append_info_to_payload() overrided controller methods.
-      %i[rescued_error current_user remote_ip api_key github_event].each do |key|
+      %i[rescued_error current_user remote_ip ip api_key github_event].each do |key|
         options[key] = event.payload[key] if event.payload[key]
       end
     end
   end
   # Skip the noisy exception stack traces that DebugExceptions outputs, and check Bugsnag instead.
   config.middleware.delete(ActionDispatch::DebugExceptions)
+
+  # GCP sends proxy IP as last value of X-Forwarded-For, so we need to ensure it gets filtered out for remote_ip() method
+  config.action_dispatch.trusted_proxies = ActionDispatch::RemoteIp::TRUSTED_PROXIES + ["35.244.128.241"]
 end
