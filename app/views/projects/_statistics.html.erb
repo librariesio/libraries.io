@@ -21,7 +21,8 @@
       Dependent packages
     </dt>
     <dd class='col-xs-4'>
-      <%= link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %>
+      <% #link_to number_to_human(@project.dependents_count), project_dependents_path(@project.to_param) %>
+      <%= number_to_human(@project.dependents_count) %>
     </dd>
   <% end %>
     <dt class='col-xs-8'>

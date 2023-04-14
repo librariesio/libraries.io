@@ -4,23 +4,5 @@
   <div class="pictogram pictogram-<%= @project.platform.downcase %>"></div>
   <%= link_to @project, project_path(@project.to_param) %>
 </h1>
-<hr>
-<% if @dependents.any? %>
-  <p class="lead"><strong><%= @dependents.total_entries %></strong> <%= 'packages'.pluralize(@dependents.total_entries) %> depend on <%= link_to @project, project_path(@project.to_param) %>:</p>
-<% end %>
 
-<div class="row">
-  <div class="col-sm-8">
-    <% if @dependents.any? %>
-      <%= render @dependents %>
-      <%= will_paginate @dependents, page_links: false %>
-    <% else %>
-      <p>
-        No packages found, go back to <%= link_to @project, project_path(@project.to_param) %>.
-      </p>
-    <% end %>
-  </div>
-  <div class="col-sm-4">
-
-  </div>
-</div>
+<h2>This view is currently disabled for performance reasons.</h2>

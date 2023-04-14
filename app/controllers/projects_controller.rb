@@ -55,21 +55,19 @@ class ProjectsController < ApplicationController
       end
     end
     find_version
-    @contributors = @project.contributors.order('count DESC').visible.limit(24).select(:host_type, :name, :login, :uuid)
+    @contributors = @project.contributors.order("count DESC").visible.limit(24).select(:host_type, :name, :login, :uuid)
     @owners = @project.registry_users.limit(24)
   end
 
-  def sourcerank
-
-  end
+  def sourcerank; end
 
   def about
     find_version
-    send_data render_to_string(:about, layout: false), filename: "#{@project.platform.downcase}-#{@project}.ABOUT", type: 'application/text', disposition: 'attachment'
+    send_data render_to_string(:about, layout: false), filename: "#{@project.platform.downcase}-#{@project}.ABOUT", type: "application/text", disposition: "attachment"
   end
 
   def dependents
-    @dependents = @project.dependent_projects.visible.paginate(page: page_number)
+    # @dependents = @project.dependent_projects.visible.paginate(page: page_number)
   end
 
   def dependent_repos
