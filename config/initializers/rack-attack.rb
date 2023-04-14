@@ -32,3 +32,5 @@ class Rack::Attack
     req.ip if req.user_agent && req.user_agent.match(/Scrapy.*/)
   end
 end
+
+require "subscribers/rack-attack"
