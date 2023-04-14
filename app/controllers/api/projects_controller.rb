@@ -11,14 +11,16 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def dependents
-    dependents = @project.dependent_projects
+    render json: { message: "Disabled for performance reasons" }
 
-    if params[:subset] == "name_only"
-      render json: paginate(dependents).order(name: :asc).pluck(:name).map { |n| { name: n } }
-    else
-      dependents = paginate(dependents).includes(:versions, :repository)
-      render json: dependents
-    end
+    #    dependents = @project.dependent_projects
+    #
+    #    if params[:subset] == "name_only"
+    #      render json: paginate(dependents).order(name: :asc).pluck(:name).map { |n| { name: n } }
+    #    else
+    #      dependents = paginate(dependents).includes(:versions, :repository)
+    #      render json: dependents
+    #    end
   end
 
   def dependent_repositories

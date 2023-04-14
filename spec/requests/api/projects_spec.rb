@@ -37,7 +37,8 @@ describe "Api::ProjectsController" do
     end
   end
 
-  describe "GET /api/:platform/:name/dependents", type: :request do
+  # Disabled for performance reasons
+  xdescribe "GET /api/:platform/:name/dependents", type: :request do
     it "renders successfully" do
       get "/api/#{dependent_project.platform}/#{dependent_project.name}/dependents"
       expect(response).to have_http_status(:success)
