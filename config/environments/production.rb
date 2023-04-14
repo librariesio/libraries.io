@@ -121,4 +121,7 @@ Rails.application.configure do
   end
   # Skip the noisy exception stack traces that DebugExceptions outputs, and check Bugsnag instead.
   config.middleware.delete(ActionDispatch::DebugExceptions)
+
+  # GCP sends proxy IP as last value of X-Forwarded-For, so we need to ensure it gets filtered out for remote_ip() method
+  config.action_dispatch.trusted_proxies = ActionDispatch::RemoteIp::TRUSTED_PROXIES + ["35.244.128.241"]
 end
