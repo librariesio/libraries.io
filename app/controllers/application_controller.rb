@@ -281,8 +281,9 @@ class ApplicationController < ActionController::Base
     super
     payload[:rescued_error] = @rescued_error if @rescued_error
     payload[:current_user] = @current_user.id if @current_user
-    payload[:remote_ip] = request.remote_ip
-    payload[:ip] = request.ip # TODO: remove this if these are always the same
+    # Ae've added the load balancer ip to ActionDispatch trusted_proxies, but not Rack::Request.ip_filter, 
+    # so use ActionDispatch's remote_ip instead of Rack's ip.
+    payload[:remote_ip] = request.remote_ip 
     if @current_api_key
       payload[:api_key] = {
         api_key_id: @current_api_key&.id,
