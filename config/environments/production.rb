@@ -114,7 +114,7 @@ Rails.application.configure do
     {}.tap do |options|
       options[:params] = event.payload[:params].except(*params_exceptions)
       # extra keys that we want to log. Add these in the append_info_to_payload() overrided controller methods.
-      %i[rescued_error current_user remote_ip api_key github_event].each do |key|
+      %i[rescued_error current_user remote_ip ip api_key github_event].each do |key|
         options[key] = event.payload[key] if event.payload[key]
       end
     end

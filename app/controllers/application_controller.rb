@@ -282,6 +282,7 @@ class ApplicationController < ActionController::Base
     payload[:rescued_error] = @rescued_error if @rescued_error
     payload[:current_user] = @current_user.id if @current_user
     payload[:remote_ip] = request.remote_ip
+    payload[:ip] = request.ip # TODO: remove this if these are always the same
     if @current_api_key
       payload[:api_key] = {
         api_key_id: @current_api_key&.id,
