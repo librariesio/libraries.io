@@ -132,7 +132,7 @@ describe PackageManager::NuGet do
 
       it "is deprecated" do
         expect(deprecation_info[:is_deprecated]).to eq(true)
-        expect(deprecation_info[:message]).to include("legacy")
+        expect(deprecation_info[:message]).to include("Legacy")
         expect(deprecation_info[:alternate_package]).to eq("NuGet.Protocol")
       end
     end
