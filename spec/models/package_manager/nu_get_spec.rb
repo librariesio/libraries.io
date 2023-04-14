@@ -126,13 +126,24 @@ describe PackageManager::NuGet do
       end
     end
 
-    context "deprecated upstream" do
-      let(:name) { "Microsoft.DotNet.InternalAbstractions" }
-      let(:cassette) { "nu_get/package_deprecated" }
+    context "deprecated upstream with alternative" do
+      let(:name) { "NuGet.Protocol.Core.v3" }
+      let(:cassette) { "nu_get/package_deprecated_with_alternative" }
 
       it "is deprecated" do
         expect(deprecation_info[:is_deprecated]).to eq(true)
-        expect(deprecation_info[:message]).to be_present
+        expect(deprecation_info[:message]).to include("legacy")
+        expect(deprecation_info[:alternate_package]).to eq("NuGet.Protocol")
+      end
+    end
+
+    context "deprecated upstream with message" do
+      let(:name) { "Microsoft.DotNet.InternalAbstractions" }
+      let(:cassette) { "nu_get/package_deprecated_with_message" }
+
+      it "is deprecated" do
+        expect(deprecation_info[:is_deprecated]).to eq(true)
+        expect(deprecation_info[:message]).to include(".NET Package Deprecation effort")
       end
     end
 

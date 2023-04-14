@@ -31,17 +31,17 @@ module PackageManager
       info = latest_remote_version(db_project.name)
       catalog_entry = info&.dig("items")&.first&.dig("items")&.first&.dig("catalogEntry")
 
-      is_deprecated = catalog_entry["deprecation"].present? || catalog_entry["listed"] == false
-
-      if is_deprecated
-        message = catalog_entry.dig("deprecation", "message") || "unlisted"
-        # alternate_package is not currently stored in DB but I wanted to record it because it seems useful
-        alternate_package = catalog_entry.dig("deprecation", "alternatePackage", "id")
-
+      if catalog_entry["deprecation"].present?
         {
           is_deprecated: true,
-          message: message,
-          alternate_package: alternate_package,
+          message: catalog_entry.dig("deprecation", "message") || catalog_entry.dig("deprecation", "reasons")&.join(", "),
+          alternate_package: catalog_entry.dig("deprecation", "alternatePackage", "id"),
+        }
+      elsif catalog_entry["listed"] == false
+        {
+          is_deprecated: true,
+          message: "unlisted",
+          alternate_package: nil,
         }
       else
         {
