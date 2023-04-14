@@ -10,7 +10,12 @@ class Rack::Attack
   end
 
   blocklist("invalid api key") do |req|
-    !req.valid_key if req.params["api_key"].present?
+    begin
+      api_key = req.params["api_key"] 
+    rescue EOFError # req.params can blow up with bad data
+      req.GET["api_key"]
+    end
+    !req.valid_key if api_key.present?
   end
 
   limit_proc = proc do |req|
