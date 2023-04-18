@@ -374,7 +374,7 @@ class Project < ApplicationRecord
   def set_dependents_count
     return if destroyed?
 
-    new_dependents_count = ActiveRecord::Base.connection.with_statement_timeout(10.minutes.to_i) do
+    new_dependents_count = ActiveRecord::Base.connection.with_statement_timeout(20.minutes.to_i) do
       dependents.joins(:version).pluck(Arel.sql("DISTINCT versions.project_id")).count
     end
     new_dependent_repos_count = dependent_repos_fast_count
