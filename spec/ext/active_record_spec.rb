@@ -15,4 +15,20 @@ describe ActiveRecord do
       expect(temporary_timeout).to eq("1234s")
     end
   end
+
+  it "should not affect the timeouts of other connections" do
+    current_conn = ActiveRecord::Base.connection
+    other_conn = ActiveRecord::Base.connection_pool.checkout
+
+    begin
+      current_conn.with_statement_timeout(123_456) do |conn|
+        expect(conn.get_statement_timeout).to eq("123456s")
+        expect(other_conn.get_statement_timeout).to eq("5min")
+      end
+      expect(current_conn.get_statement_timeout).to eq("5min")
+      expect(other_conn.get_statement_timeout).to eq("5min")
+    ensure
+      ActiveRecord::Base.connection_pool.checkin(other_conn)
+    end
+  end
 end
