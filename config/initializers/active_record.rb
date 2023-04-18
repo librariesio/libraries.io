@@ -6,11 +6,9 @@ module ActiveRecord
     # the current connection, so the rest of the connection pool connections will remain the default.
     # Example: ActiveRecord::Base.connection.with_statement_timeout(500_000) { |conn| puts conn.get_statement_timeout }
     def with_statement_timeout(seconds)
-      transaction do
-        raise "Must pass an integer (in seconds) of timeout" unless seconds.is_a?(Integer)
-        execute("SET statement_timeout = '#{seconds * 1000}';")
-        yield(self)
-      end
+      raise "Must pass an integer (in seconds) of timeout" unless seconds.is_a?(Integer)
+      execute("SET statement_timeout = '#{seconds * 1000}';")
+      yield(self)
     ensure
       execute("SET statement_timeout = '#{ActiveRecord::Base.configurations.dig(Rails.env, "variables", "statement_timeout")}';")
     end
