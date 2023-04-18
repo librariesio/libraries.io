@@ -2,13 +2,21 @@
 
 module ActiveRecord
   module WithStatementTimeout
-    # Use this for egregious query plans that sometimes exceed our default db statement timeout
+    # Use this for egregious query plans that sometimes exceed our default db statement timeout. It will only affect
+    # the current connection, so the rest of the connection pool connections will remain the default.
+    # Example: ActiveRecord::Base.connection.with_statement_timeout(500_000) { |conn| puts conn.get_statement_timeout }
     def with_statement_timeout(seconds)
-      raise "Must pass an integer (in seconds) of timeout" unless seconds.is_a?(Integer)
-      ActiveRecord::Base.connection.execute("SET statement_timeout = '#{seconds * 1000}';")
-      yield
+      transaction do
+        raise "Must pass an integer (in seconds) of timeout" unless seconds.is_a?(Integer)
+        execute("SET statement_timeout = '#{seconds * 1000}';")
+        yield(self)
+      end
     ensure
-      ActiveRecord::Base.connection.execute("SET statement_timeout = '#{ActiveRecord::Base.configurations.dig(Rails.env, "variables", "statement_timeout")}';")
+      execute("SET statement_timeout = '#{ActiveRecord::Base.configurations.dig(Rails.env, "variables", "statement_timeout")}';")
+    end
+
+    def get_statement_timeout
+      execute("SHOW statement_timeout;").first["statement_timeout"]
     end
   end
 end
