@@ -29,19 +29,13 @@ module PackageManager
 
     def self.deprecation_info(db_project)
       info = latest_remote_version(db_project.name)
-      catalog_entry = info&.dig("items")&.first&.dig("items")&.first&.dig("catalogEntry")
+      deprecation = info&.dig("items")&.first&.dig("items")&.first&.dig("catalogEntry", "deprecation")
 
-      if catalog_entry["deprecation"].present?
+      if deprecation.present?
         {
           is_deprecated: true,
-          message: catalog_entry.dig("deprecation", "message") || catalog_entry.dig("deprecation", "reasons")&.join(", "),
-          alternate_package: catalog_entry.dig("deprecation", "alternatePackage", "id"),
-        }
-      elsif catalog_entry["listed"] == false
-        {
-          is_deprecated: true,
-          message: "unlisted",
-          alternate_package: nil,
+          message: deprecation["message"] || deprecation["reasons"]&.join(", "),
+          alternate_package: deprecation.dig("alternatePackage", "id"),
         }
       else
         {

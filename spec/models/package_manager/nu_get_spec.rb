@@ -152,8 +152,8 @@ describe PackageManager::NuGet do
       let(:cassette) { "nu_get/package_unlisted" }
 
       it "is deprecated" do
-        expect(deprecation_info[:is_deprecated]).to eq(true)
-        expect(deprecation_info[:message]).to include("unlisted")
+        expect(deprecation_info[:is_deprecated]).to eq(false)
+        expect(deprecation_info[:message]).to be_blank
       end
     end
   end
