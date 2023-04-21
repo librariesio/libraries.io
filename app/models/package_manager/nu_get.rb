@@ -31,12 +31,19 @@ module PackageManager
       info = latest_remote_version(db_project.name)
       deprecation = info&.dig("items")&.first&.dig("items")&.first&.dig("catalogEntry", "deprecation")
 
-      # alternate_package is not currently stored in DB but I wanted to record it because it seems useful
-      {
-        is_deprecated: deprecation.present?,
-        message: deprecation.present? ? deprecation["message"] : "",
-        alternate_package: deprecation.present? ? deprecation.dig("alternatePackage", "id") : nil,
-      }
+      if deprecation.present?
+        {
+          is_deprecated: true,
+          message: deprecation["message"] || deprecation["reasons"]&.join(", "),
+          alternate_package: deprecation.dig("alternatePackage", "id"),
+        }
+      else
+        {
+          is_deprecated: false,
+          message: "",
+          alternate_package: nil,
+        }
+      end
     end
 
     def self.load_names(limit = nil)
