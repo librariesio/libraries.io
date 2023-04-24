@@ -28,7 +28,7 @@ Datadog.configure do |c|
   git_revision = if Rails.env.development?
                    `git rev-parse HEAD`
                  else
-                   ENV["GIT_COMMIT"].presence
+                   ENV["REVISION_ID"].presence
                  end
   c.version = git_revision&.rstrip
 
