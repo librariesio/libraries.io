@@ -9,8 +9,8 @@ if Rails.env.production?
 
     if File.exist?("#{Rails.root}/REVISION")
       config.app_version = File.read("#{Rails.root}/REVISION").strip
-    elsif ENV["GIT_COMMIT"]
-      config.app_version = ENV["GIT_COMMIT"]
+    elsif ENV["REVISION_ID"]
+      config.app_version = ENV["REVISION_ID"]
     end
   end
 end
