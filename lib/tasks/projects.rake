@@ -23,7 +23,7 @@ namespace :projects do
   desc 'Check status of projects'
   task check_status: :environment do
     exit if ENV['READ_ONLY'].present?
-    ['npm', 'rubygems', 'packagist', 'nuget', 'cpan', 'clojars', 'cocoapods',
+    ['pypi', 'npm', 'rubygems', 'packagist', 'cpan', 'clojars', 'cocoapods',
     'hackage', 'cran', 'pub', 'elm', 'dub'].each do |platform|
       Project.platform(platform).not_removed.where('projects.updated_at < ?', 1.week.ago).select('id').find_each do |project|
         CheckStatusWorker.perform_async(project.id)
