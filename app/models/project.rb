@@ -618,20 +618,16 @@ class Project < ApplicationRecord
       update_attribute(:status, "Removed")
     elsif platform.downcase != "packagist" && [400, 404, 410].include?(response.response_code)
       update_attribute(:status, "Removed")
-    elsif platform.downcase == "clojars" && response.response_code == 404
-      update_attribute(:status, "Removed")
-    elsif platform.downcase == "pypi" && response.response_code == 404
-      update_attribute(:status, "Removed")
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(self)
       if result[:is_deprecated]
         update_attribute(:status, "Deprecated")
         update_attribute(:deprecation_reason, result[:message])
       else # in case package was accidentally marked as deprecated (their logic or ours), mark it as not deprecated
-        update_attribute(:status, '')
+        update_attribute(:status, nil)
         update_attribute(:deprecation_reason, nil)
       end
-    elsif deprecated_or_removed
+    elsif deprecated_or_removed # if package is already deprecated or removed and isn't anymore, remove status
       update_attribute(:status, nil)
     end
   end

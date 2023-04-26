@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+
+PLATFORMS_FOR_STATUS_CHECKS = ['pypi', 'npm', 'rubygems', 'packagist', 'cpan', 'clojars', 'cocoapods', 'hackage', 'cran', 'pub', 'elm', 'dub']
+
 namespace :projects do
   desc 'Sync projects'
   task sync: :environment do
@@ -23,8 +26,7 @@ namespace :projects do
   desc 'Check status of projects'
   task check_status: :environment do
     exit if ENV['READ_ONLY'].present?
-    ['npm', 'rubygems', 'packagist', 'nuget', 'cpan', 'clojars', 'cocoapods',
-    'hackage', 'cran', 'pub', 'elm', 'dub'].each do |platform|
+    PLATFORMS_FOR_STATUS_CHECKS.each do |platform|
       Project.platform(platform).not_removed.where('projects.updated_at < ?', 1.week.ago).select('id').find_each do |project|
         CheckStatusWorker.perform_async(project.id)
       end
@@ -57,8 +59,7 @@ namespace :projects do
   task check_removed_status: :environment do
     exit if ENV['READ_ONLY'].present?
     # Check if removed/deprecated projects are still deprecated/removed
-    ['pypi', 'npm', 'rubygems', 'packagist', 'cpan', 'clojars', 'cocoapods',
-    'hackage', 'cran', 'pub', 'elm', 'dub'].each do |platform|
+    PLATFORMS_FOR_STATUS_CHECKS.each do |platform|
       Project.platform(platform).removed_or_deprecated.select('id').find_each do |project|
         CheckStatusWorker.perform_async(project.id, true)
       end
