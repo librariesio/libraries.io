@@ -34,29 +34,46 @@ describe PackageManager::NPM do
     end
   end
 
-  describe '#deprecation_info' do
-    it "returns not-deprecated if any version isn't deprecated" do
-      expect(PackageManager::NPM).to receive(:project).with('foo').and_return({
-        "versions" => {
+  describe "#deprecation_info" do
+    subject(:deprecation_info) { described_class.deprecation_info(project) }
+    before do
+      expect(PackageManager::NPM).to receive(:project).with("foo").and_return({ "versions" => version_data })
+    end
+
+    context "any version isn't deprecated" do
+      let(:version_data) do
+        {
           "0.0.1" => { "deprecated" => "This package is deprecated" },
           "0.0.2" => { "deprecated" => "This package is deprecated" },
           "0.0.3" => {},
         }
-      })
+      end
 
-      expect(described_class.deprecation_info(project)).to eq({is_deprecated: false, message: nil})
+      it "project not considered deprecated" do
+        expect(deprecation_info).to eq({ is_deprecated: false, message: nil })
+      end
     end
 
-    it "returns deprecated if all versions are deprecated" do
-      expect(PackageManager::NPM).to receive(:project).with('foo').and_return({
-        "versions" => {
+    context "all versions deprecated" do
+      let(:version_data) do
+        {
           "0.0.1" => { "deprecated" => "This package is deprecated" },
           "0.0.2" => { "deprecated" => "This package is deprecated" },
           "0.0.3" => { "deprecated" => "This package is deprecated" },
         }
-      })
+      end
 
-      expect(described_class.deprecation_info(project)).to eq({is_deprecated: true, message: "This package is deprecated"})
+      it "project considered deprecated" do
+        expect(deprecation_info).to eq({ is_deprecated: true, message: "This package is deprecated" })
+      end
+    end
+
+    context "no published versions" do
+      let(:version_data) { {} }
+
+      it "project not considered deprecated" do
+        expect(deprecation_info).to eq({ is_deprecated: false, message: nil })
+      end
     end
   end
 end
