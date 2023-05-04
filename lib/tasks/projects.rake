@@ -23,12 +23,28 @@ namespace :projects do
     RepositoryDependency.where('created_at > ?', 1.day.ago).without_project_id.with_project_name.find_each(&:update_project_id)
   end
 
+  # rake projects:check_status[100,5]
   desc 'Check status of projects'
-  task check_status: :environment do
+  task :check_status, [:max_num_of_projects_to_check, :batch_size] => :environment do |_task, args|
     exit if ENV['READ_ONLY'].present?
+
+    # default should spread out around 50k package jobs per platform over ~ 83 minutes
+    max_num_of_projects_to_check = args.max_num_of_projects_to_check.nil? ? 50000 : args.max_num_of_projects_to_check.to_i
+    batch_size = args.batch_size.nil? ? 5000 : args.batch_size.to_i
+
     PLATFORMS_FOR_STATUS_CHECKS.each do |platform|
-      Project.platform(platform).not_removed.where('projects.updated_at < ?', 1.week.ago).select('id').find_each do |project|
-        CheckStatusWorker.perform_async(project.id)
+      project_ids_to_check = Project.platform(platform).not_removed.where('projects.updated_at < ?', 1.week.ago).order(updated_at: :desc).select('id')
+      enqueued_projects_sum = 0
+      project_ids_to_check.limit(max_num_of_projects_to_check).in_batches(of: batch_size) do |project_ids_batch|
+        project_ids_batch.pluck(:id).each_with_index do |project_id, i|
+          CheckStatusWorker.perform_in(i, project_id)
+        end
+
+        enqueued_projects_sum += project_ids_batch.count
+        log_string = "#{enqueued_projects_sum} of up to #{max_num_of_projects_to_check} #{platform} jobs were enqueued"
+
+        Rails.logger.info("logger: " + log_string)
+        puts "puts: " + log_string
       end
     end
   end
