@@ -1,2 +1,4 @@
 # Autocorrect rubocop errors with "safe" flag
 27743816ceabe58165ae2068a26b626d9d06827b
+# Autocorrect rubocop errors with "all" flag
+fd283e2a0cb1570c6140f73e48cc12fdfaa685d0
