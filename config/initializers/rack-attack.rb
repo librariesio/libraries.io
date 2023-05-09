@@ -40,7 +40,7 @@ class Rack::Attack
 
   # throttle scraping
   throttle("scrapers", limit: 30, period: 5.minutes) do |req|
-    req.remote_ip if req.user_agent && req.user_agent.match(/Scrapy.*/)
+    req.remote_ip if req.user_agent&.match(/Scrapy.*/)
   end
 end
 

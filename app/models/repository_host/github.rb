@@ -13,7 +13,7 @@ module RepositoryHost
       Octokit::BadGateway,
       Octokit::ClientError,
       Octokit::UnavailableForLegalReasons,
-    ]
+    ].freeze
 
     def self.api_missing_error_class
       Octokit::NotFound
@@ -67,7 +67,7 @@ module RepositoryHost
 
     def get_file_list(token = nil)
       tree = api_client(token).tree(repository.full_name, repository.default_branch, recursive: true).tree
-      tree.select { |item| item.type == "blob" }.map { |file| file.path }
+      tree.select { |item| item.type == "blob" }.map(&:path)
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
@@ -182,7 +182,7 @@ module RepositoryHost
       existing_tag_names = repository.tags.pluck(:name)
       tags = api_client(token).refs(repository.full_name, "tags")
       Array(tags).each do |tag|
-        next unless tag && tag.is_a?(Sawyer::Resource) && tag["ref"]
+        next unless tag.is_a?(Sawyer::Resource) && tag["ref"]
 
         download_tag(token, tag, existing_tag_names)
       end

@@ -83,7 +83,7 @@ class AuthToken < ApplicationRecord
   private
 
   def self.find_token(api_version)
-    return @auth_token if @auth_token && @auth_token.high_rate_limit?(api_version)
+    return @auth_token if @auth_token&.high_rate_limit?(api_version)
 
     auth_token = authorized.order(Arel.sql("RANDOM()")).limit(100).sample
     @auth_token = auth_token if auth_token.high_rate_limit?(api_version)

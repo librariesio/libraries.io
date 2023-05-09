@@ -24,8 +24,8 @@ module MaintenanceStats
           }
         GRAPHQL
 
-        VALID_PARAMS = %i[owner repo_name end_date]
-        REQUIRED_PARAMS = %i[owner repo_name]
+        VALID_PARAMS = %i[owner repo_name end_date].freeze
+        REQUIRED_PARAMS = %i[owner repo_name].freeze
 
         def self.client_type
           :v4

@@ -196,6 +196,10 @@ class Project < ApplicationRecord
     end
   end
 
+  def test
+    puts "hello"
+  end
+
   def to_param
     { name: name, platform: platform.downcase }
   end

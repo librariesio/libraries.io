@@ -35,7 +35,7 @@ module MaintenanceStats
         def issue_closure_rate
           return 1.0 if count_issues(issues) == 0
 
-          closed_issues_count.to_f / count_issues(issues).to_f
+          closed_issues_count.to_f / count_issues(issues)
         end
 
         def closed_pull_request_count
@@ -49,7 +49,7 @@ module MaintenanceStats
         def pull_request_closure_rate
           return 1.0 if count_issues(pull_requests) == 0
 
-          closed_pull_request_count.to_f / count_issues(pull_requests).to_f
+          closed_pull_request_count.to_f / count_issues(pull_requests)
         end
 
         def pull_requests

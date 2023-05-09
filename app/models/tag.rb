@@ -60,7 +60,7 @@ class Tag < ApplicationRecord
   end
 
   def has_projects?
-    repository && repository.projects.without_versions.length > 0
+    repository && !repository.projects.without_versions.empty?
   end
 
   def notify_subscribers

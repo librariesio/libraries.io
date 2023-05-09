@@ -29,7 +29,7 @@ class Readme < ApplicationRecord
     /re?st(\.txt)?/,
     /pod/,
     /rdoc/,
-  ]
+  ].freeze
 
   belongs_to :repository
   validates_presence_of :html_body, :repository

@@ -27,7 +27,7 @@ class ProjectUsageController < ApplicationController
       .sort_by do |k, _v|
       k.gsub(/~|>|<|\^|=|\*|\s/, "")
         .gsub("-", ".")
-        .split(".").map { |i| i.to_i }
+        .split(".").map(&:to_i)
     end
   end
 end

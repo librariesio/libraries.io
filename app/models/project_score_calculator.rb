@@ -132,13 +132,13 @@ class ProjectScoreCalculator
   end
 
   def recent_releases_score
-    return 0 unless published_releases.length > 0
+    return 0 if published_releases.empty?
 
     published_releases.any? { |v| v.published_at && v.published_at > 6.months.ago } ? 100 : 0
   end
 
   def brand_new_score
-    return 0 unless published_releases.length > 0
+    return 0 if published_releases.empty?
 
     published_releases.any? { |v| v.published_at && v.published_at < 6.months.ago } ? 100 : 0
   end
@@ -176,8 +176,8 @@ class ProjectScoreCalculator
 
   def outdated_dependencies_score
     return nil unless platform_class::HAS_DEPENDENCIES
-    return nil if direct_dependencies.length.zero?
-    return nil if direct_dependencies.length.zero?
+    return nil if direct_dependencies.empty?
+    return nil if direct_dependencies.empty?
 
     (direct_dependencies.length - outdated_dependencies.length) / direct_dependencies.length.to_f * 100
   end

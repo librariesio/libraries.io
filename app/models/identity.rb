@@ -26,7 +26,7 @@ class Identity < ApplicationRecord
   belongs_to :repository_user
   validates_presence_of :uid, :provider
 
-  VIEWABLE_PROVIDERS = %w[github gitlab bitbucket]
+  VIEWABLE_PROVIDERS = %w[github gitlab bitbucket].freeze
 
   scope :viewable, -> { where(provider: VIEWABLE_PROVIDERS) }
 

@@ -30,7 +30,7 @@ module VersionSchemeDetection
     OSGI: /^\d+(\.\d+)?{1,2}(\.[a-zA-Z0-9_-]+)?$/,
     # PEP440 Regex copied from https://www.python.org/dev/peps/pep-0440/#appendix-b-parsing-version-strings-with-regular-expressions
     PEP440: /^([1-9][0-9]*!)?(0|[1-9][0-9]*)(\.(0|[1-9][0-9]*))*((a|b|rc)(0|[1-9][0-9]*))?(\.post(0|[1-9][0-9]*))?(\.dev(0|[1-9][0-9]*))?$/,
-  }
+  }.freeze
 
   # validators return truthy/falsy
   VALIDATORS = {
@@ -46,7 +46,7 @@ module VersionSchemeDetection
       # Also assume if they are using YY as the first part that it is after 2000 AD
       first_part.length >= 4 || (first_part.length == 2 && first_part.to_i > 0)
     end,
-  }
+  }.freeze
 
   TALLIES = { semver: 0, pep440: 0, maven: 0, osgi: 0, calver: 0, unknown: 0, no_versions: 0, cursor: 0 }.freeze
 

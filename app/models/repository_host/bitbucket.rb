@@ -9,7 +9,7 @@ module RepositoryHost
       BitBucket::Error::InternalServerError,
       BitBucket::Error::ServiceUnavailable,
       BitBucket::Error::Unauthorized,
-]
+].freeze
 
     def self.api_missing_error_class
       BitBucket::Error::NotFound
@@ -94,7 +94,7 @@ module RepositoryHost
     def download_readme(token = nil)
       files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, Addressable::URI.escape(repository.default_branch || "master"), "/")
       paths = files.files.map(&:path)
-      readme_path = paths.select { |path| path.match(/^readme/i) }.sort { |path| Readme.supported_format?(path) ? 0 : 1 }.first
+      readme_path = paths.select { |path| path.match(/^readme/i) }.min { |path| Readme.supported_format?(path) ? 0 : 1 }
       return if readme_path.nil?
 
       file = get_file_contents(readme_path, token)

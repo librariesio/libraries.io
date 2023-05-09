@@ -35,8 +35,8 @@ module MaintenanceStats
           }
         GRAPHQL
 
-        VALID_PARAMS = %i[owner repo_name start_date]
-        REQUIRED_PARAMS = %i[owner repo_name start_date]
+        VALID_PARAMS = %i[owner repo_name start_date].freeze
+        REQUIRED_PARAMS = %i[owner repo_name start_date].freeze
 
         def self.client_type
           :v4
@@ -62,8 +62,8 @@ module MaintenanceStats
       end
 
       class CommitCountQueryV3 < BaseQuery
-        VALID_PARAMS = [:full_name]
-        REQUIRED_PARAMS = [:full_name]
+        VALID_PARAMS = [:full_name].freeze
+        REQUIRED_PARAMS = [:full_name].freeze
 
         def self.client_type
           :v3

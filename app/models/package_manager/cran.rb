@@ -26,7 +26,7 @@ module PackageManager
 
     def self.project_names
       html = get_html("https://cran.r-project.org/web/packages/available_packages_by_date.html")
-      html.css("tr")[1..-1].map { |tr| tr.css("td")[1].text.strip }
+      html.css("tr")[1..].map { |tr| tr.css("td")[1].text.strip }
     end
 
     def self.recent_names
@@ -51,7 +51,7 @@ module PackageManager
       {
         name: raw_project[:name],
         homepage: raw_project[:info].fetch("URL:", "").split(",").first,
-        description: raw_project[:html].css("h2").text.split(":")[1..-1].join(":").strip,
+        description: raw_project[:html].css("h2").text.split(":")[1..].join(":").strip,
         licenses: raw_project[:info]["License:"],
         repository_url: repo_fallback("", (raw_project[:info].fetch("URL:", "").split(",").first.presence || raw_project[:info]["BugReports:"])).to_s[0, 255],
       }

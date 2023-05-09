@@ -7,15 +7,16 @@ class Array
     result = "#{omit_quotes ? '' : "'"}{"
 
     result << collect do |value|
-      if value.is_a?(Array)
+      case value
+      when Array
         value.to_postgres_array(true)
-      elsif value.is_a?(String)
+      when String
         value = value.gsub(/\\/, '\&\&')
         value = value.gsub(/'/, "''")
         value = value.gsub(/"/, '\"')
         value = "\"#{value}\""
         value
-      elsif value.is_a?(NilClass)
+      when NilClass
         value = "NULL"
       else
         value

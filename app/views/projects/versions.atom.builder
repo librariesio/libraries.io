@@ -2,7 +2,7 @@
 
 atom_feed do |feed|
   feed.title("#{@project} versions - Libraries.io")
-  feed.updated(@versions[0].published_at) if @versions.length > 0
+  feed.updated(@versions[0].published_at) unless @versions.empty?
 
   @versions.each do |version|
     feed.entry(version, url: version_url(version.to_param)) do |entry|

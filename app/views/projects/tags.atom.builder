@@ -2,7 +2,7 @@
 
 atom_feed do |feed|
   feed.title("#{@project} tags - Libraries.io")
-  feed.updated(@tags[0].published_at) if @tags.length > 0
+  feed.updated(@tags[0].published_at) unless @tags.empty?
 
   @tags.each do |tag|
     feed.entry(tag, url: version_url(@project.to_param.merge(number: tag.name))) do |entry|

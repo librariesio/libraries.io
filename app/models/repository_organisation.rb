@@ -26,7 +26,7 @@
 #  index_repository_organisations_on_lower_host_type_lower_login  (lower((host_type)::text), lower((login)::text)) UNIQUE
 #
 class RepositoryOrganisation < ApplicationRecord
-  API_FIELDS = %i[name login blog email location bio]
+  API_FIELDS = %i[name login blog email location bio].freeze
 
   has_many :repositories
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository

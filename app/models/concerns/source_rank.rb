@@ -83,7 +83,7 @@ module SourceRank
   end
 
   def any_versions?
-    published_releases.length > 0
+    !published_releases.empty?
   end
 
   def recent_release?

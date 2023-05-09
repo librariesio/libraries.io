@@ -12,7 +12,7 @@ module PackageManager
     SUPPORTS_SINGLE_VERSION_UPDATE = true
     PYPI_PRERELEASE = /(a|b|rc|dev)[0-9]+$/.freeze
     # Adapted from https://peps.python.org/pep-0508/#names
-    PEP_508_NAME_REGEX = /^([A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9])/i
+    PEP_508_NAME_REGEX = /^([A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9])/i.freeze
 
     def self.package_link(db_project, version = nil)
       # NB PEP 503: "All URLs which respond with an HTML5 page MUST end with a / and the repository SHOULD redirect the URLs without a / to add a / to the end."

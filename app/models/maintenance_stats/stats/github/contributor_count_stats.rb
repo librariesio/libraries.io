@@ -24,7 +24,7 @@ module MaintenanceStats
           # count up the weeks counting backwards from the end of the array
           # return true if there is a commit in any of those weeks
           num_weeks = [weeks_ago, contributor.weeks.count].min
-          contributor.weeks[-1 * num_weeks..-1].sum(&:c) > 0
+          contributor.weeks[-1 * num_weeks..].sum(&:c) > 0
         end
       end
     end

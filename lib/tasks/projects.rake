@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-PLATFORMS_FOR_STATUS_CHECKS = %w[pypi npm rubygems packagist cpan clojars cocoapods hackage cran pub elm dub]
+PLATFORMS_FOR_STATUS_CHECKS = %w[pypi npm rubygems packagist cpan clojars cocoapods hackage cran pub elm dub].freeze
 
 namespace :projects do
   desc "Sync projects"
@@ -43,8 +43,8 @@ namespace :projects do
         enqueued_projects_sum += project_ids_batch.count
         log_string = "#{enqueued_projects_sum} of up to #{max_num_of_projects_to_check} #{platform} jobs were enqueued"
 
-        Rails.logger.info("logger: " + log_string)
-        puts "puts: " + log_string
+        Rails.logger.info("logger: #{log_string}")
+        puts "puts: #{log_string}"
       end
     end
   end
@@ -191,7 +191,7 @@ namespace :projects do
   desc "Batch backfill conda"
   task backfill_conda: :environment do
     projects = PackageManager::Conda.all_projects
-    projects.keys.each do |project_name|
+    projects.each_key do |project_name|
       project = Project.find_by(platform: "Conda", name: project_name)
       if project.nil?
         PackageManager::Conda.update(project_name)

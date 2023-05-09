@@ -86,15 +86,13 @@ module RepositoryOwner
       user_by_id = RepositoryUser.where(host_type: "Bitbucket").find_by_uuid(user_hash[:id])
       user_by_login = RepositoryUser.host("Bitbucket").login(user_hash[:login]).first
       if user_by_id # its fine
-        if user_by_id.login.try(:downcase) == user_hash[:login].downcase && user_by_id.user_type == user_hash[:type]
-          user = user_by_id
-        else
+        unless user_by_id.login.try(:downcase) == user_hash[:login].downcase && user_by_id.user_type == user_hash[:type]
           user_by_login.destroy if user_by_login && !user_by_login.download_user_from_host
           user_by_id.login = user_hash[:login]
           user_by_id.user_type = user_hash[:type]
           user_by_id.save!
-          user = user_by_id
         end
+        user = user_by_id
       elsif user_by_login # conflict
         user = user_by_login if fetch_user(user_by_login.login) && (user_by_login.uuid == user_hash[:id])
         user_by_login.destroy if user.nil?
@@ -122,14 +120,12 @@ module RepositoryOwner
       org_by_id = RepositoryOrganisation.where(host_type: "Bitbucket").find_by_uuid(org_hash[:id])
       org_by_login = RepositoryOrganisation.host("Bitbucket").login(org_hash[:login]).first
       if org_by_id # its fine
-        if org_by_id.login.try(:downcase) == org_hash[:login].downcase
-          org = org_by_id
-        else
+        unless org_by_id.login.try(:downcase) == org_hash[:login].downcase
           org_by_login.destroy if org_by_login && !org_by_login.download_org_from_host
           org_by_id.login = org_hash[:login]
           org_by_id.save!
-          org = org_by_id
         end
+        org = org_by_id
       elsif org_by_login # conflict
         org = org_by_login if fetch_org(org_by_login.login) && (org_by_login.uuid == org_hash[:id])
         org_by_login.destroy if org.nil?

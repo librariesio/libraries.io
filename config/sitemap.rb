@@ -46,9 +46,7 @@ SitemapGenerator::Sitemap.create(create_index: true) do
     group.sitemap.write unless group.sitemap.written?
   }
 
-  Parallel.each([projects, misc]) do |group|
-    group.call
-  end
+  Parallel.each([projects, misc], &:call)
 end
 
 SitemapGenerator::Sitemap.create(create_index: true) do

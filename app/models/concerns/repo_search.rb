@@ -8,7 +8,7 @@ module RepoSearch
 
     index_name "repositories-#{Rails.env}"
 
-    FIELDS = ["full_name^2", "exact_name^2", "description", "homepage", "language", "license"]
+    FIELDS = ["full_name^2", "exact_name^2", "description", "homepage", "language", "license"].freeze
 
     settings index: { number_of_shards: 3, number_of_replicas: 1 } do
       mapping do

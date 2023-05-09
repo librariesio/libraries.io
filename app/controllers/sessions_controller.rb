@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
   def new
     if params[:host_type].present?
       session[:pre_login_destination] = params[:return_to] if params[:return_to].present?
-      redirect_to "/auth/" + params[:host_type]
+      redirect_to "/auth/#{params[:host_type]}"
     end
   end
 

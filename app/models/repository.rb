@@ -71,12 +71,12 @@ class Repository < ApplicationRecord
   # eager load this module to avoid clashing with Gitlab gem in development
   RepositoryHost::Gitlab
 
-  STATUSES = ["Active", "Deprecated", "Unmaintained", "Help Wanted", "Removed"]
+  STATUSES = ["Active", "Deprecated", "Unmaintained", "Help Wanted", "Removed"].freeze
 
   API_FIELDS = %i[full_name description fork created_at updated_at pushed_at homepage
                   size stargazers_count language has_issues has_wiki has_pages
                   forks_count mirror_url open_issues_count default_branch
-                  subscribers_count private logo_url pull_requests_enabled scm keywords status]
+                  subscribers_count private logo_url pull_requests_enabled scm keywords status].freeze
 
   has_many :projects
   has_many :contributions, dependent: :delete_all

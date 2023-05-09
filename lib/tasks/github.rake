@@ -50,7 +50,7 @@ namespace :github do
     exit if ENV["READ_ONLY"].present?
     since = REDIS.get("githubuserid").to_i
 
-    while true
+    loop do
       users = AuthToken.client(auto_paginate: false).all_users(since: since)
       users.each do |o|
         if o.type == "Organization"

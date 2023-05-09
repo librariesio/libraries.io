@@ -235,7 +235,7 @@ class ApplicationController < ActionController::Base
 
   def authorized?
     if @repository.private?
-      current_user && current_user.can_read?(@repository)
+      current_user&.can_read?(@repository)
     else
       true
     end
@@ -268,9 +268,9 @@ class ApplicationController < ActionController::Base
       if number
         @project.versions.find_by_number(number)
       elsif @date.present?
-        @project.versions.where("versions.published_at <= ?", @date).select(&:stable?).sort.first
+        @project.versions.where("versions.published_at <= ?", @date).select(&:stable?).min
       else
-        @project.versions.select(&:stable?).sort.first
+        @project.versions.select(&:stable?).min
       end
     raise ActiveRecord::RecordNotFound if @version.nil?
 
@@ -289,7 +289,7 @@ class ApplicationController < ActionController::Base
       # Example log line that this parses: /Sites/libraries/app/controllers/application_controller.rb:274:in `do_something'
       line = exception.backtrace.grep(/app\/controllers\//).first || exception.backtrace.first
       filepath_and_line_number, method = line.to_s.split(":in ")
-      filepath_and_line_number = filepath_and_line_number.gsub(Regexp.escape(Rails.root.to_s + "/"), "")
+      filepath_and_line_number = filepath_and_line_number.gsub(Regexp.escape("#{Rails.root}/"), "")
       method = method.gsub(/[`']/, "").strip
       file, line = filepath_and_line_number.split(":")
       @rescued_error = { error_class: exception.class&.name, error_message: exception.message, error_method: method, error_file: file, error_line: line }

@@ -6,7 +6,7 @@ module RepositoryHost
                             ::Gitlab::Error::Forbidden,
                             ::Gitlab::Error::Unauthorized,
                             ::Gitlab::Error::InternalServerError,
-                            ::Gitlab::Error::Parsing]
+                            ::Gitlab::Error::Parsing].freeze
 
     def self.api_missing_error_class
       ::Gitlab::Error::NotFound
@@ -55,7 +55,8 @@ module RepositoryHost
       namespace = api_client.project(repository.full_name).try(:namespace)
       return unless namespace
 
-      if namespace.kind == "group"
+      case namespace.kind
+      when "group"
         o = RepositoryOwner::Gitlab.api_client.group(namespace.path)
         org = RepositoryOrganisation.create_from_host("GitLab", o)
         if org
@@ -63,7 +64,7 @@ module RepositoryHost
           repository.repository_user_id = nil
           repository.save
         end
-      elsif namespace.kind == "user"
+      when "user"
         o = RepositoryOwner::Gitlab.fetch_user(namespace.path)
         u = RepositoryUser.create_from_host("GitLab", o)
         if u
@@ -82,7 +83,7 @@ module RepositoryHost
 
     def get_file_list(token = nil)
       tree = api_client(token).tree(repository.full_name, recursive: true)
-      tree.select { |item| item.type == "blob" }.map { |file| file.path }
+      tree.select { |item| item.type == "blob" }.map(&:path)
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
@@ -100,7 +101,7 @@ module RepositoryHost
     def download_readme(token = nil)
       files = api_client(token).tree(repository.full_name)
       paths = files.map(&:path)
-      readme_path = paths.select { |path| path.match(/^readme/i) }.sort { |path| Readme.supported_format?(path) ? 0 : 1 }.first
+      readme_path = paths.select { |path| path.match(/^readme/i) }.min { |path| Readme.supported_format?(path) ? 0 : 1 }
       return if readme_path.nil?
 
       file = get_file_contents(readme_path, token)
@@ -144,7 +145,7 @@ module RepositoryHost
         recursive_gitlab_repos(page_number.to_i + 1, limit, order)
       else
         page = Nokogiri::HTML(r.body)
-        names = page.css("a.project").map { |project| project.attributes["href"].value[1..-1] }
+        names = page.css("a.project").map { |project| project.attributes["href"].value[1..] }
         names.each do |name|
           if (r = Repository.host("GitLab").find_by_full_name(name))
             RepositoryDownloadWorker.perform_async(r.id)

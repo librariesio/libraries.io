@@ -41,7 +41,7 @@ class PackageManager::Packagist::Drupal < PackageManager::Packagist
     page = 0
     doc = get_html("https://www.drupal.org/project/#{name}/releases?page=#{page}")
 
-    while doc.css(".view-project-release-by-project .node-project-release").size > 0 && page < 50 # reasonable cap of 50
+    while !doc.css(".view-project-release-by-project .node-project-release").empty? && page < 50 # reasonable cap of 50
       versions += doc.css(".view-project-release-by-project .node-project-release")
         .map do |node|
           number = node.css("h2 a").text.split(" ").last # e.g. "google_analytics 4.x-dev" => 4.x-dev

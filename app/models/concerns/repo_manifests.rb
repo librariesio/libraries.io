@@ -26,7 +26,7 @@ module RepoManifests
 
       begin
         manifest = Bibliothecary.analyse_file(manifest_path, file[:content]).first
-        manifest.merge!(sha: file[:sha]) if manifest
+        manifest&.merge!(sha: file[:sha])
         manifest
       rescue StandardError
         nil

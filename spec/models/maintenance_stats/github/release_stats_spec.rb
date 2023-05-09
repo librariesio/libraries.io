@@ -43,7 +43,7 @@ describe MaintenanceStats::Stats::Github::ReleaseStats do
     it "should ignore releases older than one year ago" do
       release_dates = query_results.map { |node| DateTime.parse(node.published_at) }
 
-      last_date = release_dates.sort.first
+      last_date = release_dates.min
 
       expect(last_date > start_date - 1.year).to be true
     end

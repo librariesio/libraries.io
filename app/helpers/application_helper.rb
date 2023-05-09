@@ -88,9 +88,9 @@ module ApplicationHelper
   end
 
   def rss_url(project)
-    if project.versions.size > 0
+    if !project.versions.empty?
       project_versions_url({ format: "atom" }.merge(project.to_param))
-    elsif project.repository && project.repository.tags.length > 0
+    elsif project.repository && !project.repository.tags.empty?
       project_tags_url({ format: "atom" }.merge(project.to_param))
     end
   end
@@ -262,11 +262,11 @@ module ApplicationHelper
   end
 
   def tree_path(options = {})
-    project_path(options.except(:kind)) + "/tree#{options[:kind].present? ? '?kind=' + options[:kind] : ''}"
+    project_path(options.except(:kind)) + "/tree#{options[:kind].present? ? "?kind=#{options[:kind]}" : ''}"
   end
 
   def version_tree_path(options = {})
-    version_path(options.except(:kind)) + "/tree#{options[:kind].present? ? '?kind=' + options[:kind] : ''}"
+    version_path(options.except(:kind)) + "/tree#{options[:kind].present? ? "?kind=#{options[:kind]}" : ''}"
   end
 
   def usage_cache_length(total)

@@ -7,8 +7,8 @@ module MaintenanceStats
       # store the graphql queries in that class
       # query method that takes in hash for parameters and returns resultset
 
-      VALID_PARAMS = []
-      REQUIRED_PARAMS = []
+      VALID_PARAMS = [].freeze
+      REQUIRED_PARAMS = [].freeze
 
       def initialize(client)
         @client = client

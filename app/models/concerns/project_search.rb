@@ -5,7 +5,7 @@ module ProjectSearch
   # just add it to this list, until the records/indices are cleared out of that platform.
   # NB these are the casings from the database, which sometimes don't match the PackageManager::Base
   # formatted_name casings, e.g. Pypi vs PyPI
-  REMOVED_PLATFORMS = %w[Sublime Wordpress Atom PlatformIO Shards Emacs Jam]
+  REMOVED_PLATFORMS = %w[Sublime Wordpress Atom PlatformIO Shards Emacs Jam].freeze
 
   extend ActiveSupport::Concern
 
@@ -14,7 +14,7 @@ module ProjectSearch
 
     index_name "projects-#{Rails.env}"
 
-    FIELDS = ["name^2", "exact_name^2", "extra_searchable_names^2", "repo_name", "description", "homepage", "language", "keywords_array", "normalized_licenses", "platform"]
+    FIELDS = ["name^2", "exact_name^2", "extra_searchable_names^2", "repo_name", "description", "homepage", "language", "keywords_array", "normalized_licenses", "platform"].freeze
 
     settings index: { number_of_shards: 3, number_of_replicas: 1 } do
       mapping do
@@ -67,9 +67,10 @@ module ProjectSearch
     end
 
     def extra_searchable_names
-      if platform == "Maven"
+      case platform
+      when "Maven"
         name.split(":")
-      elsif platform == "Clojars"
+      when "Clojars"
         name.split("/")
       else
         []
@@ -77,7 +78,7 @@ module ProjectSearch
     end
 
     def marshal_dump
-      instance_variables.reject { |m| :__elasticsearch__ == m }.each_with_object({}) do |attr, vars|
+      instance_variables.reject { |m| m == :__elasticsearch__ }.each_with_object({}) do |attr, vars|
         vars[attr] = instance_variable_get(attr)
       end
     end

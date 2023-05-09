@@ -8,7 +8,7 @@ class Api::DocsController < ApplicationController
     @api_key = logged_in? ? current_user.api_key : "YOUR_API_KEY"
     @project = Project.platform("npm").visible.includes(:versions, :repository).find_by_name("base62") || Project.platform("rubygems").visible.first
 
-    @version = @project.versions.sort.first
+    @version = @project.versions.min
 
     @dependencies = @project.as_json
     @dependencies[:dependencies] = map_dependencies(@version.dependencies || [])
