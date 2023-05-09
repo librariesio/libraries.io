@@ -64,3 +64,5 @@ Style/ClassAndModuleChildren:
   Enabled: false
 Style/NumericLiterals:
   MinDigits: 6
+Style/RedundantParentheses:
+  Enabled: false
