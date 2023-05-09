@@ -13,6 +13,6 @@ class Api::SearchController < Api::ApplicationController
   private
 
   def allowed_sorts
-    ['rank', 'stars', 'dependents_count', 'dependent_repos_count', 'latest_release_published_at', 'created_at', 'contributions_count']
+    %w[rank stars dependents_count dependent_repos_count latest_release_published_at created_at contributions_count]
   end
 end

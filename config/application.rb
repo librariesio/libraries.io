@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require_relative 'boot'
+
+require_relative "boot"
 
 require "rails"
 require "active_model/railtie"
@@ -48,20 +49,20 @@ module Libraries
 
     config.exceptions_app = routes
 
-    Rails::Timeago.default_options limit: proc { 60.days.ago }, nojs: true, format: proc { |time, options| time.strftime('%b %e, %Y') }
+    Rails::Timeago.default_options limit: proc { 60.days.ago }, nojs: true, format: proc { |time, _options| time.strftime("%b %e, %Y") }
 
     # GC::Profiler.enable
 
     config.middleware.use Rack::Attack
-    config.middleware.use Rack::Attack::RateLimit, throttle: ['api']
+    config.middleware.use Rack::Attack::RateLimit, throttle: ["api"]
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins '*'
-        resource /^\/api\/.+/,
-          headers: :any,
-          methods: [:get, :post, :patch, :put, :delete, :options, :head], expose: ['total', 'per-page'],
-          max_age: 86400
+        origins "*"
+        resource(/^\/api\/.+/,
+                 headers: :any,
+                 methods: %i[get post patch put delete options head], expose: %w[total per-page],
+                 max_age: 86400)
       end
     end
   end

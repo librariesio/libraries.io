@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
+
+require "rails_helper"
 
 describe RepositoryMaintenanceStatWorker do
   let!(:repository) { create(:repository) }
@@ -39,7 +40,7 @@ describe RepositoryMaintenanceStatWorker do
   end
 
   context "with unsupported repository host_type" do
-    let!(:repository) { create(:repository, host_type: 'gitlab') }
+    let!(:repository) { create(:repository, host_type: "gitlab") }
 
     it "should gracefully not gather stats" do
       # call directly

@@ -29,10 +29,10 @@ class RepositoryDependency < ApplicationRecord
   belongs_to :project
   belongs_to :repository
 
-  scope :with_project, -> { joins(:project).where('projects.id IS NOT NULL') }
+  scope :with_project, -> { joins(:project).where("projects.id IS NOT NULL") }
   scope :without_project_id, -> { where(project_id: nil) }
   scope :with_project_name, -> { where("repository_dependencies.project_name <> ''") }
-  scope :platform, ->(platform) { where('lower(repository_dependencies.platform) = ?', platform.try(:downcase)) }
+  scope :platform, ->(platform) { where("lower(repository_dependencies.platform) = ?", platform.try(:downcase)) }
   scope :kind, ->(kind) { where(kind: kind) }
 
   before_create :set_project_id
@@ -41,7 +41,7 @@ class RepositoryDependency < ApplicationRecord
   alias_attribute :latest_stable, :latest_stable_release_number
   alias_attribute :latest, :latest_release_number
   alias_attribute :deprecated, :is_deprecated?
-  alias_method :outdated, :outdated?
+  alias outdated outdated?
 
   delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :project, allow_nil: true
   delegate :filepath, to: :manifest
@@ -54,12 +54,11 @@ class RepositoryDependency < ApplicationRecord
     return nil unless project
     return nil if project.normalized_licenses.empty?
     return nil if repository.license.blank?
+
     project.normalized_licenses.any? do |license|
-      begin
-        License::Compatibility.forward_compatibility(license, repository.license)
-      rescue
-        true
-      end
+      License::Compatibility.forward_compatibility(license, repository.license)
+    rescue StandardError
+      true
     end
   end
 
@@ -73,6 +72,6 @@ class RepositoryDependency < ApplicationRecord
   end
 
   def project_name
-    read_attribute(:project_name).try(:tr, " \n\t\r", '')
+    read_attribute(:project_name).try(:tr, " \n\t\r", "")
   end
 end

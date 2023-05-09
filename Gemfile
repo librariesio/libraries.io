@@ -43,7 +43,7 @@ gem "graphql-client", "~> 0.16.0"
 gem "groupdate"
 gem "hiredis"
 gem "indefinite_article"
-gem 'jb'
+gem "jb"
 gem "jquery-rails"
 gem "librariesio-url-parser", "~> 1"
 gem "license-compatibility"
@@ -61,8 +61,8 @@ gem "omniauth-gitlab"
 gem "org-ruby"
 gem "parallel", require: nil
 gem "pg"
-gem "pg_query"
 gem "pghero"
+gem "pg_query"
 gem "pictogram"
 gem "premailer-rails", "1.9.7"
 gem "puma"
@@ -82,8 +82,8 @@ gem "semantic", git: "https://github.com/librariesio/semantic"
 gem "semantic_range"
 gem "sidekiq", "< 6"
 gem "sidekiq-unique-jobs"
-gem "simple-rss"
 gem "simple_form"
+gem "simple-rss"
 gem "sitemap_generator"
 gem "spdx"
 gem "tomlrb"
@@ -101,9 +101,9 @@ group :development do
 end
 
 group :development, :test do
-  gem 'byebug'
+  gem "byebug"
   gem "pry"
-  gem 'pry-byebug'
+  gem "pry-byebug"
   gem "rspec-rails"
   gem "rubocop", require: false
 end
@@ -114,8 +114,8 @@ group :test do
   gem "faker"
   gem "json_spec"
   gem "poltergeist", "1.17.0"
-  gem "rspec-sidekiq"
   gem "rspec_junit_formatter"
+  gem "rspec-sidekiq"
   gem "shoulda"
   gem "simplecov", require: false
   gem "vcr", "~> 4.0"
@@ -129,6 +129,5 @@ group :production do
 end
 
 gem "scenic", "~> 1.4"
-
 
 gem "chartkick", "~> 3.4"

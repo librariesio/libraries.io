@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
+
+require "rails_helper"
 
 describe TagNotificationsWorker do
   it "should use the critical priority queue" do

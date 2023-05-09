@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Puma can serve each request in a thread from an internal thread pool.
 # The `threads` method setting takes two numbers a minimum and maximum.
 # Any libraries that use thread pools should be configured to match
@@ -43,7 +44,7 @@ preload_app!
 on_worker_boot do
   ActiveRecord::Base.establish_connection
 
-  uri = ENV['REDISCLOUD_URL'] || 'redis://localhost:6379/'
+  uri = ENV["REDISCLOUD_URL"] || "redis://localhost:6379/"
   REDIS = Redis.new(url: uri, driver: :hiredis)
 end
 

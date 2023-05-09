@@ -1,11 +1,13 @@
 # frozen_string_literal: true
+
 module RepositorySourceRank
   extend ActiveSupport::Concern
 
   def update_source_rank(force = false)
     return if !force && rank_recently_updated?
+
     self.rank = source_rank
-    self.save if self.changed?
+    save if changed?
   end
 
   def rank_recently_updated?
@@ -13,7 +15,7 @@ module RepositorySourceRank
   end
 
   def update_source_rank_async
-    UpdateRepositorySourceRankWorker.perform_async(self.id) unless rank_recently_updated?
+    UpdateRepositorySourceRankWorker.perform_async(id) unless rank_recently_updated?
   end
 
   def set_source_rank
@@ -26,19 +28,19 @@ module RepositorySourceRank
 
   def source_rank_breakdown
     @source_rank_breakdown ||= {
-      basic_info_present:         basic_info_present? ? 1 : 0,
-      readme_present:             readme_present? ? 1 : 0,
-      license_present:            license_present? ? 1 : 0,
-      recently_pushed:            recently_pushed? ? 1 : 0,
-      not_brand_new:              not_brand_new? ? 1 : 0,
-      dependent_projects:         log_scale(dependent_projects_count) * 2,
-      dependent_repositories:     log_scale(dependent_repos_count),
-      stars:                      log_scale(stars),
-      contributors:               (log_scale(contributions_count) / 2.0).ceil,
-      any_outdated_dependencies:  any_outdated_dependencies? ? -1 : 0,
-      is_deprecated:              is_deprecated? ? -5 : 0,
-      is_unmaintained:            is_unmaintained? ? -5 : 0,
-      is_removed:                 is_removed? ? -5 : 0
+      basic_info_present: basic_info_present? ? 1 : 0,
+      readme_present: readme_present? ? 1 : 0,
+      license_present: license_present? ? 1 : 0,
+      recently_pushed: recently_pushed? ? 1 : 0,
+      not_brand_new: not_brand_new? ? 1 : 0,
+      dependent_projects: log_scale(dependent_projects_count) * 2,
+      dependent_repositories: log_scale(dependent_repos_count),
+      stars: log_scale(stars),
+      contributors: (log_scale(contributions_count) / 2.0).ceil,
+      any_outdated_dependencies: any_outdated_dependencies? ? -1 : 0,
+      is_deprecated: is_deprecated? ? -5 : 0,
+      is_unmaintained: is_unmaintained? ? -5 : 0,
+      is_removed: is_removed? ? -5 : 0,
     }
   end
 
@@ -76,6 +78,7 @@ module RepositorySourceRank
 
   def log_scale(number)
     return 0 if number <= 0
+
     Math.log10(number).round
   end
 end

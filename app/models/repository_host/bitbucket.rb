@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module RepositoryHost
   class Bitbucket < Base
     IGNORABLE_EXCEPTIONS = [
@@ -7,7 +8,8 @@ module RepositoryHost
       BitBucket::Error::ServiceError,
       BitBucket::Error::InternalServerError,
       BitBucket::Error::ServiceUnavailable,
-      BitBucket::Error::Unauthorized]
+      BitBucket::Error::Unauthorized,
+]
 
     def self.api_missing_error_class
       BitBucket::Error::NotFound
@@ -18,7 +20,7 @@ module RepositoryHost
     end
 
     def domain
-      'https://bitbucket.org'
+      "https://bitbucket.org"
     end
 
     def blob_url(sha = nil)
@@ -26,7 +28,7 @@ module RepositoryHost
       "#{url}/src/#{Addressable::URI.escape(sha)}/"
     end
 
-    def commits_url(author = nil)
+    def commits_url(_author = nil)
       "#{url}/commits"
     end
 
@@ -44,7 +46,7 @@ module RepositoryHost
       file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, Addressable::URI.escape(repository.default_branch), Addressable::URI.escape(path))
       {
         sha: file.node,
-        content: file.data
+        content: file.data,
       }
     rescue *IGNORABLE_EXCEPTIONS
       nil
@@ -55,7 +57,7 @@ module RepositoryHost
     end
 
     def retrieve_commits(token = nil)
-      api_client(token).repos.commits.list(repository.owner_name, repository.project_name)['values']
+      api_client(token).repos.commits.list(repository.owner_name, repository.project_name)["values"]
     end
 
     def download_forks(token = nil)
@@ -64,16 +66,17 @@ module RepositoryHost
 
     def download_owner
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
+
       o = RepositoryOwner::Bitbucket.fetch_user(repository.owner_name)
       if o.type == "team"
-        org = RepositoryOrganisation.create_from_host('Bitbucket', o)
+        org = RepositoryOrganisation.create_from_host("Bitbucket", o)
         if org
           repository.repository_organisation_id = org.id
           repository.repository_user_id = nil
           repository.save
         end
       else
-        u = RepositoryUser.create_from_host('Bitbucket', o)
+        u = RepositoryUser.create_from_host("Bitbucket", o)
         if u
           repository.repository_user_id = u.id
           repository.repository_organisation_id = nil
@@ -89,12 +92,14 @@ module RepositoryHost
     end
 
     def download_readme(token = nil)
-      files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, Addressable::URI.escape(repository.default_branch || 'master'), '/')
-      paths =  files.files.map(&:path)
-      readme_path = paths.select{|path| path.match(/^readme/i) }.sort{|path| Readme.supported_format?(path) ? 0 : 1 }.first
+      files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, Addressable::URI.escape(repository.default_branch || "master"), "/")
+      paths = files.files.map(&:path)
+      readme_path = paths.select { |path| path.match(/^readme/i) }.sort { |path| Readme.supported_format?(path) ? 0 : 1 }.first
       return if readme_path.nil?
+
       file = get_file_contents(readme_path, token)
       return unless file.present?
+
       content = Readme.format_markup(readme_path, file[:content])
       return unless content.present?
 
@@ -112,12 +117,13 @@ module RepositoryHost
       existing_tag_names = repository.tags.pluck(:name)
       remote_tags.each do |name, data|
         next if existing_tag_names.include?(name)
+
         repository.tags.create({
-          name: name,
-          kind: "tag",
-          sha: data.raw_node,
-          published_at: data.utctimestamp
-        })
+                                 name: name,
+                                 kind: "tag",
+                                 sha: data.raw_node,
+                                 published_at: data.utctimestamp,
+                               })
       end
       repository.projects.find_each(&:forced_save) if remote_tags.present?
     rescue *IGNORABLE_EXCEPTIONS
@@ -126,20 +132,21 @@ module RepositoryHost
 
     def self.recursive_bitbucket_repos(url, limit = 5)
       return if limit.zero?
+
       r = Typhoeus::Request.new(url,
-        method: :get,
-        headers: { 'Accept' => 'application/json' }).run
+                                method: :get,
+                                headers: { "Accept" => "application/json" }).run
 
       json = Oj.load(r.body)
 
-      json['values'].each do |repo|
-        CreateRepositoryWorker.perform_async('Bitbucket', repo['full_name'])
+      json["values"].each do |repo|
+        CreateRepositoryWorker.perform_async("Bitbucket", repo["full_name"])
       end
 
-      if json['values'].any? && json['next']
-        limit = limit - 1
-        REDIS.set 'bitbucket-after', Addressable::URI.parse(json['next']).query_values['after']
-        recursive_bitbucket_repos(json['next'], limit)
+      if json["values"].any? && json["next"]
+        limit -= 1
+        REDIS.set "bitbucket-after", Addressable::URI.parse(json["next"]).query_values["after"]
+        recursive_bitbucket_repos(json["next"], limit)
       end
     end
 
@@ -160,7 +167,7 @@ module RepositoryHost
     private
 
     def self.api_client(token = nil)
-      BitBucket.new oauth_token: token || ENV['BITBUCKET_KEY']
+      BitBucket.new oauth_token: token || ENV["BITBUCKET_KEY"]
     end
 
     def api_client(token = nil)
@@ -169,28 +176,28 @@ module RepositoryHost
 
     def self.fetch_repo(full_name, token = nil)
       client = api_client(token)
-      user_name, repo_name = full_name.split('/')
+      user_name, repo_name = full_name.split("/")
       project = client.repos.get(user_name, repo_name)
-      v1_project = client.repos.get(user_name, repo_name, api_version: '1.0')
+      v1_project = client.repos.get(user_name, repo_name, api_version: "1.0")
       repo_hash = project.to_hash.with_indifferent_access.slice(:description, :language, :full_name, :name, :has_wiki, :has_issues, :scm)
 
       repo_hash.merge!({
-        id: project.uuid,
-        host_type: 'Bitbucket',
-        owner: {},
-        homepage: project.website,
-        fork: project.parent.present?,
-        created_at: project.created_on,
-        updated_at: project.updated_on,
-        subscribers_count: v1_project.followers_count,
-        forks_count: v1_project.forks_count,
-        default_branch: project.fetch('mainbranch', {}).try(:fetch, 'name', nil),
-        private: project.is_private,
-        size: project[:size].to_f/1000,
-        parent: {
-          full_name: project.fetch('parent', {}).fetch('full_name', nil)
-        }
-      })
+                         id: project.uuid,
+                         host_type: "Bitbucket",
+                         owner: {},
+                         homepage: project.website,
+                         fork: project.parent.present?,
+                         created_at: project.created_on,
+                         updated_at: project.updated_on,
+                         subscribers_count: v1_project.followers_count,
+                         forks_count: v1_project.forks_count,
+                         default_branch: project.fetch("mainbranch", {}).try(:fetch, "name", nil),
+                         private: project.is_private,
+                         size: project[:size].to_f / 1000,
+                         parent: {
+                           full_name: project.fetch("parent", {}).fetch("full_name", nil),
+                         },
+                       })
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end

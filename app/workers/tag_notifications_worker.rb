@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TagNotificationsWorker
   include Sidekiq::Worker
   sidekiq_options queue: :critical, unique: :until_executed

@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 class ProjectSuggestionsController < ApplicationController
   before_action :ensure_logged_in
-  before_action :find_project, only: [:new, :create]
+  before_action :find_project, only: %i[new create]
 
   def new
     @project_suggestions = @project.project_suggestions.build(user: current_user)

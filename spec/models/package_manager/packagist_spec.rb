@@ -35,18 +35,18 @@ describe PackageManager::Packagist do
         {
           "name" =>	"librariesio/fakepkg",
           "description" => "A Libraries package.",
-          "keywords" => ["php", "not-real"],
+          "keywords" => %w[php not-real],
           "homepage" => "https://fakepkg.libraries.io",
           "version" => "v1.2.3",
           "version_normalized" => "1.2.3",
           "license" => ["BSD-3-Clause"],
-          "authors" => [{"name" => "Fake Author", "email" => "fake.author@libraries.io"}],
-          "source" => {"url" => "https://github.com/librariesio/fakepkg", "type" => "git", "reference" => "12341234123412341234"},
+          "authors" => [{ "name" => "Fake Author", "email" => "fake.author@libraries.io" }],
+          "source" => { "url" => "https://github.com/librariesio/fakepkg", "type" => "git", "reference" => "12341234123412341234" },
           "dist" => {},
           "type" => "library",
           "time" =>	"2012-09-18T06:46:25+00:00",
           "autoload" => {},
-        }
+        },
       ]
     end
 
@@ -56,7 +56,7 @@ describe PackageManager::Packagist do
           name: "librariesio/fakepkg",
           description: "A Libraries package.",
           homepage: "https://fakepkg.libraries.io",
-          keywords_array: ["php", "not-real"],
+          keywords_array: %w[php not-real],
           licenses: "BSD-3-Clause",
           repository_url: "https://github.com/librariesio/fakepkg"
         )

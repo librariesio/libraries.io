@@ -26,33 +26,33 @@
 #  index_repository_organisations_on_lower_host_type_lower_login  (lower((host_type)::text), lower((login)::text)) UNIQUE
 #
 class RepositoryOrganisation < ApplicationRecord
-  API_FIELDS = [:name, :login, :blog, :email, :location, :bio]
+  API_FIELDS = %i[name login blog email location bio]
 
   has_many :repositories
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository
   has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository
   has_many :dependencies, through: :open_source_repositories
-  has_many :favourite_projects, -> { group('projects.id').order(Arel.sql("COUNT(projects.id) DESC, projects.rank DESC")) }, through: :dependencies, source: :project
-  has_many :all_dependent_repos, -> { group('repositories.id') }, through: :favourite_projects, source: :repository
-  has_many :contributors, -> { group('repository_users.id').order(Arel.sql("sum(contributions.count) DESC")) }, through: :open_source_repositories, source: :contributors
+  has_many :favourite_projects, -> { group("projects.id").order(Arel.sql("COUNT(projects.id) DESC, projects.rank DESC")) }, through: :dependencies, source: :project
+  has_many :all_dependent_repos, -> { group("repositories.id") }, through: :favourite_projects, source: :repository
+  has_many :contributors, -> { group("repository_users.id").order(Arel.sql("sum(contributions.count) DESC")) }, through: :open_source_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
   # eager load this module to avoid clashing with Gitlab gem in development
   RepositoryOwner::Gitlab
 
   validates :uuid, presence: true
-  validate :login_uniqueness_with_case_insensitive_host, if: lambda { self.login_changed? }
-  validates :uuid, uniqueness: {scope: :host_type}, if: lambda { self.uuid_changed? }
+  validate :login_uniqueness_with_case_insensitive_host, if: -> { login_changed? }
+  validates :uuid, uniqueness: { scope: :host_type }, if: -> { uuid_changed? }
 
   after_commit :async_sync, on: :create
 
-  scope :most_repos, -> { joins(:open_source_repositories).select('repository_organisations.*, count(repositories.id) AS repo_count').group('repository_organisations.id').order(Arel.sql('repo_count DESC')) }
-  scope :most_stars, -> { joins(:open_source_repositories).select('repository_organisations.*, sum(repositories.stargazers_count) AS star_count, count(repositories.id) AS repo_count').group('repository_organisations.id').order(Arel.sql('star_count DESC')) }
-  scope :newest, -> { joins(:open_source_repositories).select('repository_organisations.*, count(repositories.id) AS repo_count').group('repository_organisations.id').order(Arel.sql('created_at DESC')).having('count(repositories.id) > 0') }
+  scope :most_repos, -> { joins(:open_source_repositories).select("repository_organisations.*, count(repositories.id) AS repo_count").group("repository_organisations.id").order(Arel.sql("repo_count DESC")) }
+  scope :most_stars, -> { joins(:open_source_repositories).select("repository_organisations.*, sum(repositories.stargazers_count) AS star_count, count(repositories.id) AS repo_count").group("repository_organisations.id").order(Arel.sql("star_count DESC")) }
+  scope :newest, -> { joins(:open_source_repositories).select("repository_organisations.*, count(repositories.id) AS repo_count").group("repository_organisations.id").order(Arel.sql("created_at DESC")).having("count(repositories.id) > 0") }
   scope :visible, -> { where(hidden: false) }
   scope :with_login, -> { where("repository_organisations.login <> ''") }
-  scope :host, lambda{ |host_type| where('lower(repository_organisations.host_type) = ?', host_type.try(:downcase)) }
-  scope :login, lambda{ |login| where('lower(repository_organisations.login) = ?', login.try(:downcase)) }
+  scope :host, ->(host_type) { where("lower(repository_organisations.host_type) = ?", host_type.try(:downcase)) }
+  scope :login, ->(login) { where("lower(repository_organisations.login) = ?", login.try(:downcase)) }
 
   delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
            :to_s, :to_param, :github_id, :download_org_from_host, :download_orgs,
@@ -60,9 +60,7 @@ class RepositoryOrganisation < ApplicationRecord
            :check_status, to: :repository_owner
 
   def login_uniqueness_with_case_insensitive_host
-    if RepositoryOrganisation.host(host_type).login(login).exists?
-      errors.add(:login, "must be unique")
-    end
+    errors.add(:login, "must be unique") if RepositoryOrganisation.host(host_type).login(login).exists?
   end
 
   def repository_owner
@@ -73,7 +71,7 @@ class RepositoryOrganisation < ApplicationRecord
     {
       title: "#{self} on #{host_type}",
       description: "#{host_type} repositories created by #{self}",
-      image: avatar_url(200)
+      image: avatar_url(200),
     }
   end
 
@@ -90,7 +88,7 @@ class RepositoryOrganisation < ApplicationRecord
   end
 
   def user_type
-    'Organisation'
+    "Organisation"
   end
 
   def followers
@@ -106,12 +104,13 @@ class RepositoryOrganisation < ApplicationRecord
   end
 
   def async_sync
-    RepositoryUpdateOrgWorker.perform_async(self.host_type, self.login)
+    RepositoryUpdateOrgWorker.perform_async(host_type, login)
   end
 
   def sync
     check_status
     return unless persisted?
+
     download_org_from_host
     download_repos
     download_members
@@ -129,6 +128,6 @@ class RepositoryOrganisation < ApplicationRecord
   end
 
   def find_repositories
-    Repository.host(host_type).where('full_name ILIKE ?', "#{login}/%").update_all(repository_user_id: nil, repository_organisation_id: self.id)
+    Repository.host(host_type).where("full_name ILIKE ?", "#{login}/%").update_all(repository_user_id: nil, repository_organisation_id: id)
   end
 end

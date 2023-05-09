@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Releaseable
   def to_s
     number
@@ -14,9 +15,10 @@ module Releaseable
 
   def greater_than_1?
     return nil unless follows_semver?
+
     begin
-      SemanticRange.gte(clean_number, '1.0.0')
-    rescue
+      SemanticRange.gte(clean_number, "1.0.0")
+    rescue StandardError
       false
     end
   end

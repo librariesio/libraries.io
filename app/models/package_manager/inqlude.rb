@@ -1,17 +1,18 @@
 # frozen_string_literal: true
+
 module PackageManager
   class Inqlude < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
     BIBLIOTHECARY_PLANNED = true
-    URL = 'https://inqlude.org/'
-    COLOR = '#f34b7d'
+    URL = "https://inqlude.org/"
+    COLOR = "#f34b7d"
 
-    def self.package_link(db_project, version = nil)
+    def self.package_link(db_project, _version = nil)
       "https://inqlude.org/libraries/#{db_project.name}.html"
     end
 
-    def self.install_instructions(db_project, version = nil)
+    def self.install_instructions(db_project, _version = nil)
       "inqlude install #{db_project.name}"
     end
 
@@ -27,11 +28,11 @@ module PackageManager
 
     def self.mapping(raw_project)
       {
-        name: raw_project['name'],
+        name: raw_project["name"],
         description: raw_project["summary"],
         homepage: raw_project["urls"]["homepage"],
-        licenses: raw_project['licenses'].join(','),
-        repository_url: repo_fallback(raw_project["urls"]["vcs"], '')
+        licenses: raw_project["licenses"].join(","),
+        repository_url: repo_fallback(raw_project["urls"]["vcs"], ""),
       }
     end
   end

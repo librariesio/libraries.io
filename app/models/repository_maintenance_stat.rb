@@ -17,5 +17,5 @@
 #  index_repository_maintenance_stats_on_repository_id            (repository_id)
 #
 class RepositoryMaintenanceStat < ApplicationRecord
-    belongs_to :repository
+  belongs_to :repository
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 atom_feed do |feed|
   feed.title("#{@project} tags - Libraries.io")
   feed.updated(@tags[0].published_at) if @tags.length > 0
@@ -9,7 +10,7 @@ atom_feed do |feed|
       entry.published Time.at(tag.published_at).rfc822
       entry.content "", type: "html"
       entry.author do |author|
-        author.name('Libraries.io')
+        author.name("Libraries.io")
       end
     end
   end

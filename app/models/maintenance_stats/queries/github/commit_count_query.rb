@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module MaintenanceStats
   module Queries
     module Github
@@ -34,8 +35,8 @@ module MaintenanceStats
           }
         GRAPHQL
 
-        VALID_PARAMS = [:owner, :repo_name, :start_date]
-        REQUIRED_PARAMS = [:owner, :repo_name, :start_date]
+        VALID_PARAMS = %i[owner repo_name start_date]
+        REQUIRED_PARAMS = %i[owner repo_name start_date]
 
         def self.client_type
           :v4

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe "Admin::StatsController", elasticsearch: true do
@@ -19,7 +20,7 @@ describe "Admin::StatsController", elasticsearch: true do
       mock_is_admin
       login(user)
       visit admin_stats_path
-      expect(page).to have_content 'Recent Signups'
+      expect(page).to have_content "Recent Signups"
     end
   end
 
@@ -38,7 +39,7 @@ describe "Admin::StatsController", elasticsearch: true do
       mock_is_admin
       login(user)
       visit admin_repositories_stats_path
-      expect(page).to have_content 'Repo Stats'
+      expect(page).to have_content "Repo Stats"
     end
   end
 end

@@ -15,7 +15,7 @@
 #  index_deleted_projects_on_updated_at  (updated_at)
 #
 class DeletedProject < ApplicationRecord
-  scope :updated_within, ->(start, stop) { where('updated_at >= ? and updated_at <= ? ', start, stop).order(updated_at: :asc) }
+  scope :updated_within, ->(start, stop) { where("updated_at >= ? and updated_at <= ? ", start, stop).order(updated_at: :asc) }
 
   def self.digest_from_platform_and_name(platform, name)
     sha1 = Digest::SHA256.new
@@ -29,5 +29,4 @@ class DeletedProject < ApplicationRecord
   def self.create_from_platform_and_name!(platform, name)
     DeletedProject.create!(digest: digest_from_platform_and_name(platform, name))
   end
-
 end

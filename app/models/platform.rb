@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Platform
   include ActiveModel::Model
   include ActiveModel::Serialization
@@ -9,8 +10,8 @@ class Platform
       .maintained
       .where.not(platform: ProjectSearch::REMOVED_PLATFORMS)
       .group(:platform)
-      .order('count_id DESC')
-      .count('id')
+      .order("count_id DESC")
+      .count("id")
       .map do |key, count|
         Platform.new(name: key, project_count: count)
       end

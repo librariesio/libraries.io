@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
+
+require "rails_helper"
 
 describe UpdateRepositorySourceRankWorker do
   it "should use the low priority queue" do

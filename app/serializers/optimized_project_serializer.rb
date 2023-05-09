@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Note: This is _not_ an active model serializer. To use, instantiate and
+# NOTE: This is _not_ an active model serializer. To use, instantiate and
 # call #serialize
 class OptimizedProjectSerializer
   PROJECT_ATTRIBUTES = %w[

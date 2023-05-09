@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
+
+require "rails_helper"
 
 describe ProjectSuggestion, type: :model do
   it { should belong_to(:user) }

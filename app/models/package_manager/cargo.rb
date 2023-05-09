@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rubygems/package'
+require "rubygems/package"
 
 module PackageManager
   class Cargo < Base
@@ -41,7 +41,7 @@ module PackageManager
       is_deprecated = status == "deprecated"
       {
         is_deprecated: is_deprecated,
-        message: is_deprecated ? "Marked as deprecated in Cargo.toml": nil
+        message: is_deprecated ? "Marked as deprecated in Cargo.toml" : nil,
       }
     end
 

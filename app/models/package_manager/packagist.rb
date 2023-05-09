@@ -54,7 +54,7 @@ module PackageManager
     def self.project(name)
       # The main v2 endpoint only returns a list of versions (no single source-of-truth for the project)
       # and excludes dev versions, so if that list of versions is empty, fallback to the dev list of versions.
-      get("https://repo.packagist.org/p2/#{name}.json")&.dig("packages", name).presence || 
+      get("https://repo.packagist.org/p2/#{name}.json")&.dig("packages", name).presence ||
         get("https://repo.packagist.org/p2/#{name}~dev.json")&.dig("packages", name)
     end
 
