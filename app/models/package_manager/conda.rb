@@ -27,7 +27,7 @@ module PackageManager
     end
 
     def self.one_version(raw_project, version_string)
-      get_json("#{API_URL}/#{self::REPOSITORY_SOURCE_NAME}/#{raw_project["name"]}/#{version_string}")&.first
+      get_json("#{API_URL}/#{self::REPOSITORY_SOURCE_NAME}/#{raw_project['name']}/#{version_string}")&.first
     end
 
     def self.project(name)

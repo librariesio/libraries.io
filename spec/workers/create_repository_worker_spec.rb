@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
+
+require "rails_helper"
 
 describe CreateRepositoryWorker do
   it "should use the low priority queue" do
@@ -7,8 +8,8 @@ describe CreateRepositoryWorker do
   end
 
   it "should create from github" do
-    repo_name = 'rails/rails'
-    expect(Repository).to receive(:create_from_host).with('GitHub', repo_name, nil)
-    subject.perform('GitHub', repo_name)
+    repo_name = "rails/rails"
+    expect(Repository).to receive(:create_from_host).with("GitHub", repo_name, nil)
+    subject.perform("GitHub", repo_name)
   end
 end

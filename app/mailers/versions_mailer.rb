@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class VersionsMailer < ApplicationMailer
   def new_version(user, project, version)
     @user = user

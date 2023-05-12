@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Recommendable
   extend ActiveSupport::Concern
 
@@ -9,7 +10,7 @@ module Recommendable
   end
 
   def recommended_project_ids
-    Rails.cache.fetch "recommendations:#{self.id}", expires_in: 1.day do
+    Rails.cache.fetch "recommendations:#{id}", expires_in: 1.day do
       ids = favourite_recommendation_ids + most_depended_on_recommendation_ids + most_watched_recommendation_ids
       sort_array_by_frequency(ids)
     end
@@ -21,13 +22,14 @@ module Recommendable
 
   def recommendation_filter(scope)
     filtered = scope.maintained.where.not(id: already_watching_ids)
-    filtered = filtered.where('lower(projects.platform) IN (?)', favourite_platforms.map(&:downcase)) if favourite_platforms.any?
-    filtered = filtered.where('lower(projects.language) IN (?)', favourite_languages.map(&:downcase)) if favourite_languages.any?
+    filtered = filtered.where("lower(projects.platform) IN (?)", favourite_platforms.map(&:downcase)) if favourite_platforms.any?
+    filtered = filtered.where("lower(projects.language) IN (?)", favourite_languages.map(&:downcase)) if favourite_languages.any?
     filtered.pluck(:id)
   end
 
   def favourite_recommendation_ids
     return [] if repository_user.nil?
+
     recommendation_filter repository_user.favourite_projects.limit(100)
   end
 
@@ -41,14 +43,14 @@ module Recommendable
 
   def unfiltered_recommendations
     ids = Project.maintained.most_dependents.limit(50).pluck(:id) + Project.maintained.most_watched.limit(50).pluck(:id)
-    Project.where(id: sort_array_by_frequency(ids)).order(Arel.sql('projects.rank DESC NULLS LAST')).maintained
+    Project.where(id: sort_array_by_frequency(ids)).order(Arel.sql("projects.rank DESC NULLS LAST")).maintained
   end
 
   def favourite_platforms
-    favourite_languages.map{|lang| platform_language_mapping[lang.to_sym] }.compact.uniq
+    favourite_languages.map { |lang| platform_language_mapping[lang.to_sym] }.compact.uniq
   end
 
-  def favourite_languages(limit = 3)
+  def favourite_languages(_limit = 3)
     @favourite_languages ||= begin
       # your github Repositories
       languages = all_repositories.pluck(:language).compact
@@ -64,38 +66,40 @@ module Recommendable
   end
 
   def sort_array_by_frequency(arr)
-    arr.inject(Hash.new(0)) { |h,v| h[v] += 1; h }.sort_by{|_k,v| -v}.map(&:first)
+    arr.each_with_object(Hash.new(0)) do |v, h|
+      h[v] += 1
+    end.sort_by { |_k, v| -v }.map(&:first)
   end
 
   def platform_language_mapping
     {
-      'Go': 'Go',
-      'JavaScript': 'NPM',
-      'Objective-C': 'CocoaPods',
-      'Swift': 'SwiftPM',
-      'HTML': 'Bower',
-      'CSS': 'Bower',
-      'CoffeeScript': 'NPM',
-      'TypeScript': 'NPM',
-      'LiveScript': 'NPM',
-      'Ruby': 'Rubygems',
-      'PHP': 'Packagist',
-      'Java': 'Maven',
-      'Python': 'Pypi',
-      'Scala': 'Maven',
-      'C#': 'Nuget',
-      'Clojure': 'Clojars',
-      'Perl': 'CPAN',
-      'Haskell': 'Hackage',
-      'Rust': 'Cargo',
-      'Dart': 'Pub',
-      'Elm': 'Elm',
-      'R': 'CRAN',
-      'Elixir': 'Hex',
-      'Erlang': 'Hex',
-      'Julia': 'Julia',
-      'D': 'Dub',
-      'Nimrod': 'Nimble'
+      'Go': "Go",
+      'JavaScript': "NPM",
+      'Objective-C': "CocoaPods",
+      'Swift': "SwiftPM",
+      'HTML': "Bower",
+      'CSS': "Bower",
+      'CoffeeScript': "NPM",
+      'TypeScript': "NPM",
+      'LiveScript': "NPM",
+      'Ruby': "Rubygems",
+      'PHP': "Packagist",
+      'Java': "Maven",
+      'Python': "Pypi",
+      'Scala': "Maven",
+      'C#': "Nuget",
+      'Clojure': "Clojars",
+      'Perl': "CPAN",
+      'Haskell': "Hackage",
+      'Rust': "Cargo",
+      'Dart': "Pub",
+      'Elm': "Elm",
+      'R': "CRAN",
+      'Elixir': "Hex",
+      'Erlang': "Hex",
+      'Julia': "Julia",
+      'D': "Dub",
+      'Nimrod': "Nimble",
     }
   end
 end

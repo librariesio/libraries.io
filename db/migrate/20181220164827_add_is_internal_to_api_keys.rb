@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddIsInternalToApiKeys < ActiveRecord::Migration[5.1]
   def up
     add_column :api_keys, :is_internal, :boolean

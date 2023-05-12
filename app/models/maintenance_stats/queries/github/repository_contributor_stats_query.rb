@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 module MaintenanceStats
   module Queries
     module Github
       class RepositoryContributorStatsQuery < BaseQuery
-        VALID_PARAMS = [:full_name]
-        REQUIRED_PARAMS = [:full_name]
+        VALID_PARAMS = [:full_name].freeze
+        REQUIRED_PARAMS = [:full_name].freeze
         TIMEOUT_SEC = 10
 
         def self.client_type

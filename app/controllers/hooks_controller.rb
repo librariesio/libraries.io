@@ -1,22 +1,23 @@
 # frozen_string_literal: true
+
 class HooksController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def github
-    if params[:payload]
-      payload = JSON.parse(params[:payload])
-    else
-      payload = params
-    end
+    payload = if params[:payload]
+                JSON.parse(params[:payload])
+              else
+                params
+              end
 
-    @github_event = request.env['HTTP_X_GITHUB_EVENT']    
+    @github_event = request.env["HTTP_X_GITHUB_EVENT"]
     handler.run(@github_event, payload)
 
     render json: nil, status: :ok
   end
 
   def package
-    if params['platform'].blank?
+    if params["platform"].blank?
       Rails.logger.info "HooksController#package invalid=true platform=#{params['platform']} name=#{params['name']} param_keys=#{params.keys.join(',')}"
     else
       Rails.logger.info "HooksController#package platform=#{params['platform']} name=#{params['name']} param_keys=#{params.keys.join(',')}"

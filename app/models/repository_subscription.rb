@@ -29,7 +29,7 @@ class RepositorySubscription < ApplicationRecord
       if dep.project.present?
         project = dep.project.try(:id)
       elsif dep.project_name.present?
-        project = Project.platform(dep.platform).where('lower(name) = ?', dep.project_name).first.try(:id)
+        project = Project.platform(dep.platform).where("lower(name) = ?", dep.project_name).first.try(:id)
       end
       projects << project
     end

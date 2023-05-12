@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe "ProjectSuggestionsController" do
@@ -16,7 +17,7 @@ describe "ProjectSuggestionsController" do
     it "renders successfully when logged in" do
       login(user)
       visit project_suggestions_path(project.to_param)
-      expect(page).to have_content 'Add/Update data for'
+      expect(page).to have_content "Add/Update data for"
     end
   end
 
@@ -24,7 +25,7 @@ describe "ProjectSuggestionsController" do
     it "redirects to /:platform/:name" do
       login(user)
       rack_test_session_wrapper = Capybara.current_session.driver
-      rack_test_session_wrapper.submit :post, project_suggestions_path(project.to_param), {project_suggestion: {license: 'MIT', notes: 'From LICENSE file'}}
+      rack_test_session_wrapper.submit :post, project_suggestions_path(project.to_param), { project_suggestion: { license: "MIT", notes: "From LICENSE file" } }
 
       expect(page.current_path).to eq project_path(project.to_param)
     end

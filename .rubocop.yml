@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.7
   Exclude:
   - db/schema.rb
   - db/unmodified_schema.rb
@@ -64,3 +64,5 @@ Style/ClassAndModuleChildren:
   Enabled: false
 Style/NumericLiterals:
   MinDigits: 6
+Style/RedundantParentheses:
+  Enabled: false

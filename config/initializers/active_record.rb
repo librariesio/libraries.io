@@ -7,10 +7,11 @@ module ActiveRecord
     # Example: ActiveRecord::Base.connection.with_statement_timeout(500_000) { |conn| puts conn.get_statement_timeout }
     def with_statement_timeout(seconds)
       raise "Must pass an integer (in seconds) of timeout" unless seconds.is_a?(Integer)
+
       execute("SET statement_timeout = '#{seconds * 1000}';")
       yield(self)
     ensure
-      execute("SET statement_timeout = '#{ActiveRecord::Base.configurations.dig(Rails.env, "variables", "statement_timeout")}';")
+      execute("SET statement_timeout = '#{ActiveRecord::Base.configurations.dig(Rails.env, 'variables', 'statement_timeout')}';")
     end
 
     def get_statement_timeout

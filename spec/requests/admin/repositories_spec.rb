@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe "Admin::RepositoriesController", elasticsearch: true do
@@ -20,10 +21,9 @@ describe "Admin::RepositoriesController", elasticsearch: true do
       mock_is_admin
       login(user)
       visit admin_repositories_path
-      expect(page).to have_content 'Unlicensed Repositories'
+      expect(page).to have_content "Unlicensed Repositories"
     end
   end
-
 
   describe "GET /admin/repositories/:id", type: :request do
     let(:repository) { create(:repository) }

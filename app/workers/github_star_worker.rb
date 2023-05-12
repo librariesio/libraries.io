@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class GithubStarWorker
   include Sidekiq::Worker
   sidekiq_options queue: :small, unique: :until_executed

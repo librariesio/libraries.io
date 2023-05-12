@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -14,8 +15,8 @@ Rails.application.configure do
   config.eager_load = true
 
   # Configure static file server for tests with Cache-Control for performance.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
-  config.public_file_server.headers = { 'Cache-Control' => 'public, max-age=2592000' }
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+  config.public_file_server.headers = { "Cache-Control" => "public, max-age=2592000" }
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
@@ -47,5 +48,5 @@ Rails.application.configure do
 
   config.host = "www.example.com"
 
-  config.action_mailer.default_url_options = { host:  config.host, port: 3000 }
+  config.action_mailer.default_url_options = { host: config.host, port: 3000 }
 end

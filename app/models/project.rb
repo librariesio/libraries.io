@@ -196,6 +196,10 @@ class Project < ApplicationRecord
     end
   end
 
+  def test
+    puts "hello"
+  end
+
   def to_param
     { name: name, platform: platform.downcase }
   end
@@ -704,8 +708,8 @@ class Project < ApplicationRecord
     subscribed = subscriptions
     subscribed = subscribed.include_prereleases if include_prereleases
 
-    subs = subscribed.includes(:user).users_present.where(users: {emails_enabled: true}).map(&:user)
-    subs += subscribed.includes(repository_subscription: [:user]).users_nil.where(repository_subscriptions: { users: {emails_enabled: true }}).map { | sub| sub.repository_subscription&.user }
+    subs = subscribed.includes(:user).users_present.where(users: { emails_enabled: true }).map(&:user)
+    subs += subscribed.includes(repository_subscription: [:user]).users_nil.where(repository_subscriptions: { users: { emails_enabled: true } }).map { |sub| sub.repository_subscription&.user }
     subs.compact!
     subs.uniq!
     mutes = project_mutes.pluck(:user_id).to_set

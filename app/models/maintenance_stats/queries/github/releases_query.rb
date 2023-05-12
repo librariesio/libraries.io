@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module MaintenanceStats
   module Queries
     module Github
@@ -23,8 +24,8 @@ module MaintenanceStats
           }
         GRAPHQL
 
-        VALID_PARAMS = [:owner, :repo_name, :end_date]
-        REQUIRED_PARAMS = [:owner, :repo_name]
+        VALID_PARAMS = %i[owner repo_name end_date].freeze
+        REQUIRED_PARAMS = %i[owner repo_name].freeze
 
         def self.client_type
           :v4
@@ -39,7 +40,7 @@ module MaintenanceStats
 
           has_next_page = true
           cursor = nil
-          while(has_next_page)
+          while has_next_page
             params[:cursor] = cursor if cursor.present?
             result = @client.query(RELEASES_QUERY, variables: params)
 
@@ -51,7 +52,7 @@ module MaintenanceStats
 
             # initialize releases if we have not started gathering data
             releases ||= []
-            
+
             result.data.repository&.releases&.nodes&.each do |release|
               # if release is within our search window or we don't have a specific date window then add it to the list
               publish_date = DateTime.parse(release.published_at)

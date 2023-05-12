@@ -14,10 +14,8 @@ class TreeController < ApplicationController
 
     if request.xhr?
       render :_tree, layout: false, tree: @tree
-    else
-      if !@tree_resolver.cached?
-        @tree_resolver.enqueue_tree_resolution
-      end
+    elsif !@tree_resolver.cached?
+      @tree_resolver.enqueue_tree_resolution
     end
   end
 

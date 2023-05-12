@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreatePayolaSubscriptions < ActiveRecord::Migration[5.0]
   def change
     create_table :payola_subscriptions do |t|

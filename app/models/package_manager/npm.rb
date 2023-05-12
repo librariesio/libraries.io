@@ -42,7 +42,7 @@ module PackageManager
 
     def self.deprecation_info(db_project)
       versions = project(db_project.name)&.dig("versions")&.values || []
-      is_deprecated = versions.any? && versions.all? { |version| !!version["deprecated"] }
+      is_deprecated = versions.any? && versions.all? { |version| !version["deprecated"].nil? }
       message = is_deprecated ? versions.last["deprecated"] : nil
 
       {
@@ -67,7 +67,7 @@ module PackageManager
         keywords_array: Array.wrap(latest_version.fetch("keywords", [])),
         licenses: licenses(latest_version),
         repository_url: repo_fallback(repo_url, raw_project["homepage"]),
-        versions: raw_project["versions"]
+        versions: raw_project["versions"],
       }
     end
 
@@ -94,6 +94,7 @@ module PackageManager
     def self.versions(raw_project, _name)
       # npm license fields are supposed to be SPDX expressions now https://docs.npmjs.com/files/package.json#license
       return [] if raw_project.nil?
+
       raw_project.fetch("versions", {}).map do |k, v|
         license = v.fetch("license", nil)
         license = licenses(v) unless license.is_a?(String)

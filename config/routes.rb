@@ -54,9 +54,9 @@ Rails.application.routes.draw do
       get "/:host_type/:login", to: "repository_users#show"
     end
 
-    PLATFORM_CONSTRAINT = /[\w\-]+/.freeze
+    PLATFORM_CONSTRAINT = /[\w-]+/.freeze
     PROJECT_CONSTRAINT = /[^\/]+/.freeze
-    VERSION_CONSTRAINT = /[\w.\-]+/.freeze
+    VERSION_CONSTRAINT = /[\w.-]+/.freeze
 
     put "/maintenance/stats/enqueue/:platform/:name", as: :maintenance_stat_enqueue, to: "maintenance_stats#enqueue", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     post "/maintenance/stats/begin/bulk", to: "maintenance_stats#begin_watching_bulk"
@@ -65,7 +65,7 @@ Rails.application.routes.draw do
     get "/:platform/:name/usage", to: "project_usage#show", as: :project_usage, constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/sourcerank", to: "projects#sourcerank", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/contributors", to: "projects#contributors", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
-    get "/:platform/:name/:number/tree", to: "tree#show", constraints: { platform: /[\w\-]+/, name: PROJECT_CONSTRAINT, number: VERSION_CONSTRAINT }, as: :version_tree
+    get "/:platform/:name/:number/tree", to: "tree#show", constraints: { platform: /[\w-]+/, name: PROJECT_CONSTRAINT, number: VERSION_CONSTRAINT }, as: :version_tree
     get "/:platform/:name/:number/dependencies", to: "projects#dependencies", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT, number: VERSION_CONSTRAINT }
     get "/:platform/:name/dependent_repositories", to: "projects#dependent_repositories", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/dependents", to: "projects#dependents", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
@@ -113,7 +113,7 @@ Rails.application.routes.draw do
   post "/watch/:repository_id", to: "dashboard#watch", as: :watch
   post "/unwatch/:repository_id", to: "dashboard#unwatch", as: :unwatch
 
-  resource :account, except: [:edit, :new, :create] do
+  resource :account, except: %i[edit new create] do
     member do
       get "delete"
       put "disable_emails"

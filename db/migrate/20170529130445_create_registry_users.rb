@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateRegistryUsers < ActiveRecord::Migration[5.0]
   def change
     create_table :registry_users do |t|

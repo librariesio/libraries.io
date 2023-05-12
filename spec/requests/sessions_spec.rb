@@ -1,25 +1,26 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe "SessionsController" do
   describe "GET /login", type: :request do
     it "redirects to github" do
       visit login_path
-      expect(page).to have_content 'Login to Libraries.io'
+      expect(page).to have_content "Login to Libraries.io"
     end
   end
 
   describe "GET /enable_public", type: :request do
     it "redirects to github" do
       get enable_public_path
-      expect(response).to redirect_to('/auth/github_public')
+      expect(response).to redirect_to("/auth/github_public")
     end
   end
 
   describe "GET /enable_private", type: :request do
     it "redirects to github" do
       get enable_private_path
-      expect(response).to redirect_to('/auth/github_private')
+      expect(response).to redirect_to("/auth/github_private")
     end
   end
 
@@ -32,7 +33,7 @@ describe "SessionsController" do
 
   describe "GET /auth/failure", type: :request do
     it "redirects to root" do
-      post '/auth/failure'
+      post "/auth/failure"
       expect(response).to redirect_to(root_path)
     end
   end
@@ -49,7 +50,7 @@ describe "SessionsController" do
       context "external" do
         let(:return_to) { "https://an.external.url/bad" }
         it "redirects to root" do
-          post '/auth/github/callback'
+          post "/auth/github/callback"
           expect(response).to redirect_to(root_path)
         end
       end
@@ -57,7 +58,7 @@ describe "SessionsController" do
       context "internal (absolute)" do
         let(:return_to) { root_url(foo: "bar") }
         it "redirects to return_to" do
-          post '/auth/github/callback'
+          post "/auth/github/callback"
           expect(response).to redirect_to(return_to)
         end
       end
@@ -65,7 +66,7 @@ describe "SessionsController" do
       context "internal (relative)" do
         let(:return_to) { root_path(foo: "bar") }
         it "redirects to return_to" do
-          post '/auth/github/callback'
+          post "/auth/github/callback"
           expect(response).to redirect_to(return_to)
         end
       end

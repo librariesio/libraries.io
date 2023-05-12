@@ -8,7 +8,7 @@ class Rack::Attack
       @valid_key = ApiKey.active.find_by_access_token(params["api_key"])
     end
 
-    # Rack::Request doesn't have a trusted_proxies list like ActionDispatch does, so 
+    # Rack::Request doesn't have a trusted_proxies list like ActionDispatch does, so
     # instead of trying to modify Rack::Request's ip_filter, let's just use the same ActionDispatch algorithm.
     # (see https://github.com/rack/rack-attack/issues/145)
     def remote_ip
@@ -19,7 +19,7 @@ class Rack::Attack
 
   blocklist("invalid api key") do |req|
     begin
-      api_key = req.params["api_key"] 
+      api_key = req.params["api_key"]
     rescue EOFError # req.params can blow up with bad data
       req.GET["api_key"]
     end
@@ -34,15 +34,13 @@ class Rack::Attack
     end
   end
 
-  throttle('api', limit: limit_proc, period: 1.minute) do |req|
-    if req.path.match(/^\/api\/.+/) && !req.path.match(/^\/api\/bower-search/)
-      req.params['api_key'] || req.remote_ip
-    end
+  throttle("api", limit: limit_proc, period: 1.minute) do |req|
+    req.params["api_key"] || req.remote_ip if req.path.match(/^\/api\/.+/) && !req.path.match(/^\/api\/bower-search/)
   end
 
   # throttle scraping
-  throttle('scrapers', limit: 30, period: 5.minutes) do |req|
-    req.remote_ip if req.user_agent && req.user_agent.match(/Scrapy.*/)
+  throttle("scrapers", limit: 30, period: 5.minutes) do |req|
+    req.remote_ip if req.user_agent&.match(/Scrapy.*/)
   end
 end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddProjectReposIndices < ActiveRecord::Migration[5.2]
   disable_ddl_transaction!
 

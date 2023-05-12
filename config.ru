@@ -1,7 +1,8 @@
 # frozen_string_literal: true
-require ::File.expand_path('../config/environment',  __FILE__)
+
+require ::File.expand_path("config/environment", __dir__)
 
 # use Rack::Deflater
-use Rack::CanonicalHost, ENV['CANONICAL_HOST'], ignore: 'localhost' if ENV['CANONICAL_HOST']
+use Rack::CanonicalHost, ENV["CANONICAL_HOST"], ignore: "localhost" if ENV["CANONICAL_HOST"]
 
 run Rails.application

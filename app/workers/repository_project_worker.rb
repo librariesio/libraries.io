@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RepositoryProjectWorker
   include Sidekiq::Worker
   sidekiq_options queue: :repo, unique: :until_executed

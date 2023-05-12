@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe "RepositorySubscriptionsController" do
@@ -15,7 +16,7 @@ describe "RepositorySubscriptionsController" do
     it "renders successfully if logged in" do
       login(user)
       visit edit_repository_subscription_path(repository_subscription)
-      expect(page).to have_content 'Monitoring settings'
+      expect(page).to have_content "Monitoring settings"
     end
   end
 end

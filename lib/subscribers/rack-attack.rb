@@ -1,4 +1,6 @@
-ActiveSupport::Notifications.subscribe(/rack_attack/) do |name, start, finish, request_id, payload|
+# frozen_string_literal: true
+
+ActiveSupport::Notifications.subscribe(/rack_attack/) do |_name, _start, _finish, request_id, payload|
   req = payload[:request]
   match = req.env["rack.attack.matched"]
   match_type = req.env["rack.attack.match_type"]

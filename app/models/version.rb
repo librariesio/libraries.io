@@ -66,9 +66,10 @@ class Version < ApplicationRecord
   end
 
   def update_spdx_expression
-    if original_license.is_a?(String)
+    case original_license
+    when String
       self.spdx_expression = handle_string_spdx_expression(original_license)
-    elsif original_license.is_a?(Array)
+    when Array
       possible_license = original_license.join(" AND ")
       self.spdx_expression = handle_string_spdx_expression(possible_license)
     end
@@ -91,6 +92,7 @@ class Version < ApplicationRecord
   def notify_subscribers
     project.mailing_list(include_prereleases: prerelease?).each do |user|
       next if user.muted?(project)
+
       VersionsMailer.new_version(user, project, self).deliver_later
     end
   end

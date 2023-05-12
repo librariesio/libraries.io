@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 class Api::ProjectsController < Api::ApplicationController
-  before_action :find_project, except: [:searchcode, :dependencies, :dependencies_bulk, :updated]
+  before_action :find_project, except: %i[searchcode dependencies dependencies_bulk updated]
 
   def show
     render(json: @project, show_updated_at: internal_api_key?)
@@ -48,7 +49,7 @@ class Api::ProjectsController < Api::ApplicationController
     deleted_results = DeletedProject.updated_within(start, stop).limit(MAX_UPDATED_PROJECTS + 1).pluck(:digest, :updated_at)
 
     # seems better to be loud than to just truncate?
-    raise ActionController::BadRequest.new("query matches too many records") if results.length > MAX_UPDATED_PROJECTS || deleted_results.length > MAX_UPDATED_PROJECTS
+    raise ActionController::BadRequest, "query matches too many records" if results.length > MAX_UPDATED_PROJECTS || deleted_results.length > MAX_UPDATED_PROJECTS
 
     reply = {}
 
@@ -56,14 +57,14 @@ class Api::ProjectsController < Api::ApplicationController
       {
         platform: platform,
         name: name,
-        updated_at: updated_at
+        updated_at: updated_at,
       }
     end
 
     reply[:deleted] = deleted_results.map do |digest, updated_at|
       {
         digest: digest,
-        updated_at: updated_at
+        updated_at: updated_at,
       }
     end
 
@@ -73,7 +74,7 @@ class Api::ProjectsController < Api::ApplicationController
   def dependencies
     @subset = params.fetch(:subset, "default")
 
-    @project = Project.find_best!(params[:platform], params[:name], [:repository, :versions])
+    @project = Project.find_best!(params[:platform], params[:name], %i[repository versions])
     @version = @project.find_version!(params[:number])
     # render app/views/api/projects/dependencies.json.jb
   end
@@ -86,7 +87,7 @@ class Api::ProjectsController < Api::ApplicationController
       params[:projects].each do |project_param|
         platform = project_param[:platform]
         name = project_param[:name]
-        version_string = project_param.fetch(:version, 'latest')
+        version_string = project_param.fetch(:version, "latest")
         begin
           body = find_project_as_json_with_dependencies!(platform, name, version_string, subset)
           results.push({ status: 200,
@@ -97,9 +98,8 @@ class Api::ProjectsController < Api::ApplicationController
                            error: "Error 404, project or project version not found.",
                            platform: platform,
                            name: name,
-                           dependencies_for_version: version_string
-                         }
-                       })
+                           dependencies_for_version: version_string,
+                         } })
         end
       end
     end
@@ -108,20 +108,20 @@ class Api::ProjectsController < Api::ApplicationController
   end
 
   def contributors
-    paginate json: @project.contributors.order('count DESC')
+    paginate json: @project.contributors.order("count DESC")
   end
 
   private
 
   def find_project_as_json_with_dependencies!(platform, name, version_name, subset)
     serializer, includes = case subset
-              when "default"
-                [ProjectSerializer, [:repository, :versions]]
-              when "minimum"
-                [MinimumProjectSerializer, []]
-              else
-                raise ActionController::BadRequest.new("Unsupported subset")
-              end
+                           when "default"
+                             [ProjectSerializer, %i[repository versions]]
+                           when "minimum"
+                             [MinimumProjectSerializer, []]
+                           else
+                             raise ActionController::BadRequest, "Unsupported subset"
+                           end
 
     project = Project.find_best!(platform, name, includes)
     version = project.find_version!(version_name)
@@ -132,5 +132,4 @@ class Api::ProjectsController < Api::ApplicationController
 
     project_json
   end
-
 end

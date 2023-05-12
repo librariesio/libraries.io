@@ -73,15 +73,15 @@ describe "Api::ProjectsController" do
           {
             platform: project.platform,
             name: project.name,
-            updated_at: project.updated_at.utc.iso8601(3)
+            updated_at: project.updated_at.utc.iso8601(3),
           },
           {
             platform: dependent_project.platform,
             name: dependent_project.name,
-            updated_at: dependent_project.updated_at.utc.iso8601(3)
-          }
+            updated_at: dependent_project.updated_at.utc.iso8601(3),
+          },
         ],
-        deleted: []
+        deleted: [],
       }).to_json
     end
 
@@ -91,7 +91,7 @@ describe "Api::ProjectsController" do
       expect(response.content_type).to eq("application/json")
       expect(response.body).to be_json_eql ({
         updated: [],
-        deleted: []
+        deleted: [],
       }).to_json
     end
 
@@ -102,7 +102,7 @@ describe "Api::ProjectsController" do
       expect(response.content_type).to eq("application/json")
       expect(response.body).to be_json_eql ({
         updated: [],
-        deleted: []
+        deleted: [],
       }).to_json
     end
 
@@ -137,15 +137,15 @@ describe "Api::ProjectsController" do
           {
             platform: dependent_project.platform,
             name: dependent_project.name,
-            updated_at: dependent_project.updated_at.utc.iso8601(3)
-          }
+            updated_at: dependent_project.updated_at.utc.iso8601(3),
+          },
         ],
         deleted: [
           {
             digest: deleted_digest,
-            updated_at: DeletedProject.first.updated_at.utc.iso8601(3)
-          }
-        ]
+            updated_at: DeletedProject.first.updated_at.utc.iso8601(3),
+          },
+        ],
       }).to_json
     end
   end

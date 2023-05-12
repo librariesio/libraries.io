@@ -15,10 +15,10 @@
 #  index_project_dependent_repos_on_rank                 (project_id,rank DESC NULLS LAST,stargazers_count DESC)
 #
 class ProjectDependentRepository < ApplicationRecord
-
   def readonly?
     true
   end
+
   def self.refresh
     Scenic.database.refresh_materialized_view(table_name, concurrently: true, cascade: false)
   end

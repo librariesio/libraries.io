@@ -1,9 +1,10 @@
 # frozen_string_literal: true
-require 'rails_helper'
+
+require "rails_helper"
 
 describe ProjectSerializer do
-
-  let (:default_attribute_names) { %i[
+  let(:default_attribute_names) do
+    %i[
       dependent_repos_count
       dependents_count
       deprecation_reason
@@ -30,12 +31,12 @@ describe ProjectSerializer do
       stars
       status
     ]
-  }
+  end
 
   context "without updated_at" do
     subject { described_class.new(build(:project)) }
 
-    it 'should have expected attribute names' do
+    it "should have expected attribute names" do
       expect(subject.attributes.keys).to eq(default_attribute_names)
     end
   end
@@ -43,7 +44,7 @@ describe ProjectSerializer do
   context "with updated_at" do
     subject { described_class.new(build(:project), show_updated_at: true) }
 
-    it 'should have expected attribute names' do
+    it "should have expected attribute names" do
       expect(subject.attributes.keys).to eq(default_attribute_names + %i[updated_at])
     end
   end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module MaintenanceStats
   module Stats
     module Bitbucket
@@ -14,7 +15,7 @@ module MaintenanceStats
             last_month_commits: count_up_commits(@results, @now - 30),
             last_two_month_commits: count_up_commits(@results, @now - 60),
             last_year_commits: count_up_commits(@results, @now - 365),
-            latest_commit: latest_commit(@results)
+            latest_commit: latest_commit(@results),
           }
         end
 
@@ -22,11 +23,12 @@ module MaintenanceStats
 
         def count_up_commits(dataset, since)
           return unless dataset.present?
-          dataset.select {|commit| Date.parse(commit["date"]) >= since}.size
+
+          dataset.select { |commit| Date.parse(commit["date"]) >= since }.size
         end
 
         def latest_commit(dataset)
-          latest = dataset&.sort_by{|commit| commit["date"]}&.last
+          latest = dataset&.sort_by { |commit| commit["date"] }&.last
           Date.parse(latest["date"]) if latest.present? && latest["date"].present?
         end
       end

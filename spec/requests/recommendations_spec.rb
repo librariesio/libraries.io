@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe "RecommendationsController" do
@@ -13,7 +14,7 @@ describe "RecommendationsController" do
     it "renders successfully when logged in" do
       login(user)
       visit recommendations_path
-      expect(page).to have_content 'Recommended Packages'
+      expect(page).to have_content "Recommended Packages"
     end
   end
 end

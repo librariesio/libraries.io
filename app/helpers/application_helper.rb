@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'uri'
+
+require "uri"
 
 module ApplicationHelper
   include SanitizeUrl
@@ -13,7 +14,8 @@ module ApplicationHelper
   end
 
   def format_facet_name(facet_name)
-    return 'Host' if facet_name == 'host_type'
+    return "Host" if facet_name == "host_type"
+
     facet_name.humanize.singularize
   end
 
@@ -26,70 +28,70 @@ module ApplicationHelper
   end
 
   def on_search_page
-    (action_name == 'search' && controller_name == 'repositories') || (action_name == 'index' && controller_name == 'search')
+    (action_name == "search" && controller_name == "repositories") || (action_name == "index" && controller_name == "search")
   end
 
   def on_homepage?
-    (action_name == 'index' && controller_name == 'projects')
+    (action_name == "index" && controller_name == "projects")
   end
 
   def search_page_entries_info(collection, options = {})
-    entry_name = options[:model] || (collection.empty?? 'item' :
-        collection.first.class.name.split('::').last.titleize)
+    entry_name = options[:model] || (if collection.empty?
+                                       "item"
+                                     else
+                                       collection.first.class.name.split("::").last.titleize
+                                     end)
     if collection.total_pages < 2
       case collection.size
-      when 0; "No #{entry_name.pluralize} found"
+      when 0 then "No #{entry_name.pluralize} found"
       else; "#{collection.total_entries} #{entry_name.pluralize}"
       end
     else
-      %{%d - %d of #{number_to_human(collection.total_entries)} #{entry_name.pluralize}} % [
-        collection.offset + 1,
-        collection.offset + collection.length
-      ]
+      format(%(%d - %d of #{number_to_human(collection.total_entries)} #{entry_name.pluralize}), collection.offset + 1, collection.offset + collection.length)
     end
   end
 
   def sort_options
     [
-      ['Relevance', nil],
-      ['SourceRank', 'rank'],
-      ['Stars', 'stars'],
-      ['Dependents', 'dependents_count'],
-      ['Most Used', 'dependent_repos_count'],
-      ['Latest Release', 'latest_release_published_at'],
-      ['Contributors', 'contributions_count'],
-      ['Newest', 'created_at']
+      ["Relevance", nil],
+      ["SourceRank", "rank"],
+      ["Stars", "stars"],
+      ["Dependents", "dependents_count"],
+      ["Most Used", "dependent_repos_count"],
+      ["Latest Release", "latest_release_published_at"],
+      ["Contributors", "contributions_count"],
+      ["Newest", "created_at"],
     ]
   end
 
   def current_sort
-    sort_options.find{|name, param| param == params[:sort] } || sort_options.first
+    sort_options.find { |_name, param| param == params[:sort] } || sort_options.first
   end
 
   def current_repo_sort
-    repo_sort_options.find{|name, param| param == params[:sort] } || repo_sort_options.first
+    repo_sort_options.find { |_name, param| param == params[:sort] } || repo_sort_options.first
   end
 
   def repo_sort_options
     [
-      ['Relevance', nil],
-      ['SourceRank', 'rank'],
-      ['Stars', 'stargazers_count'],
-      ['Forks', 'forks_count'],
-      ['Watchers', 'subscribers_count'],
-      ['Open issues', 'open_issues_count'],
-      ['Contributors', 'contributions_count'],
-      ['Repo size', 'size'],
-      ['Newest', 'created_at'],
-      ['Recently pushed', 'pushed_at']
+      ["Relevance", nil],
+      ["SourceRank", "rank"],
+      ["Stars", "stargazers_count"],
+      ["Forks", "forks_count"],
+      ["Watchers", "subscribers_count"],
+      ["Open issues", "open_issues_count"],
+      ["Contributors", "contributions_count"],
+      ["Repo size", "size"],
+      ["Newest", "created_at"],
+      ["Recently pushed", "pushed_at"],
     ]
   end
 
   def rss_url(project)
-    if project.versions.size > 0
-      project_versions_url({format: "atom"}.merge(project.to_param))
-    elsif project.repository && project.repository.tags.length > 0
-      project_tags_url({format: "atom"}.merge(project.to_param))
+    if !project.versions.empty?
+      project_versions_url({ format: "atom" }.merge(project.to_param))
+    elsif project.repository && !project.repository.tags.empty?
+      project_tags_url({ format: "atom" }.merge(project.to_param))
     end
   end
 
@@ -103,58 +105,64 @@ module ApplicationHelper
   end
 
   def linked_licenses(licenses)
-    return 'Unknown' if licenses.compact.empty?
-    licenses.compact.delete_if(&:empty?).map{|l| link_to format_license(l), license_path(l) }.join('/').html_safe
+    return "Unknown" if licenses.compact.empty?
+
+    licenses.compact.delete_if(&:empty?).map { |l| link_to format_license(l), license_path(l) }.join("/").html_safe
   end
 
   def about_licenses(licenses)
-    licenses.compact.delete_if(&:empty?).map{|l| format_license(l) }.join(' or ')
+    licenses.compact.delete_if(&:empty?).map { |l| format_license(l) }.join(" or ")
   end
 
   def linked_keywords(keywords)
-    keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/search?keywords=#{k}" }.join(', ').html_safe
+    keywords.compact.delete_if(&:empty?).map { |k| link_to k, "/search?keywords=#{k}" }.join(", ").html_safe
   end
 
   def linked_repo_keywords(keywords)
-    keywords.compact.delete_if(&:empty?).map{|k| link_to k, "/#{current_host}/search?keywords=#{k}" }.join(', ').html_safe
+    keywords.compact.delete_if(&:empty?).map { |k| link_to k, "/#{current_host}/search?keywords=#{k}" }.join(", ").html_safe
   end
 
   def format_license(license)
-    return 'Unknown' if license.blank?
+    return "Unknown" if license.blank?
+
     Project.format_license(license)
   end
 
   def format_language(language)
     return nil if language.blank?
+
     Linguist::Language[language].to_s
   end
 
   def stats_for(title, records)
-    render 'table', title: title, records: records
+    render "table", title: title, records: records
   end
 
   def emojify(content)
-    h(content).to_str.gsub(/:([\w+-]+):/) do |match|
-      emoji = Emoji.find_by_alias($1)
-      if emoji
-        %(<img alt="#$1" src="#{image_path("emoji/#{emoji.image_filename}")}" style="vertical-align:middle" width="20" height="20" />)
-      else
-        match
-      end
-    end.html_safe if content.present?
-  rescue
+    if content.present?
+      h(content).to_str.gsub(/:([\w+-]+):/) do |match|
+        emoji = Emoji.find_by_alias(::Regexp.last_match(1))
+        if emoji
+          %(<img alt="#{::Regexp.last_match(1)}" src="#{image_path("emoji/#{emoji.image_filename}")}" style="vertical-align:middle" width="20" height="20" />)
+        else
+          match
+        end
+      end.html_safe
+    end
+  rescue StandardError
     content
   end
 
   def feature_flag(bool, negative = nil)
-    icon_class = bool ? 'check' : 'times'
-    color = bool ? 'green' : 'red'
-    tag = content_tag :i, '', class: "fa fa-#{icon_class}", style: "color:#{color}"
+    icon_class = bool ? "check" : "times"
+    color = bool ? "green" : "red"
+    tag = content_tag :i, "", class: "fa fa-#{icon_class}", style: "color:#{color}"
     !bool && negative ? content_tag(:i, negative) : tag
   end
 
   def source_path(repository)
     return nil unless repository.fork?
+
     if repository.source.present?
       repository_path(repository.source.to_param)
     else
@@ -173,13 +181,13 @@ module ApplicationHelper
   def project_description(project, version)
     text = project.description || project.name
     text += " - #{version}" if version
-    library_text = [project.language, "package"].compact.join(' ').with_indefinite_article
+    library_text = [project.language, "package"].compact.join(" ").with_indefinite_article
     text + " - #{library_text} on #{project.platform_name} - Libraries.io"
   end
 
   def truncate_with_tip(text, length)
     if text && text.length > length
-      content_tag(:span, truncate(text, length: length), class: 'tip', title: text)
+      content_tag(:span, truncate(text, length: length), class: "tip", title: text)
     else
       text
     end
@@ -187,11 +195,10 @@ module ApplicationHelper
 
   def will_paginate(collection_or_options = nil, options = {})
     if collection_or_options.is_a? Hash
-      options, collection_or_options = collection_or_options, nil
+      options = collection_or_options
+      collection_or_options = nil
     end
-    unless options[:renderer]
-      options = options.merge renderer: BootstrapPagination::Rails
-    end
+    options = options.merge renderer: BootstrapPagination::Rails unless options[:renderer]
     super(*[collection_or_options, options].compact)
   end
 
@@ -204,9 +211,9 @@ module ApplicationHelper
   end
 
   def render_meta(record = nil)
-    render(partial: 'meta/facebook', locals: { meta: meta_tags_for(record) }) +
-    render(partial: 'meta/twitter', locals: { meta: meta_tags_for(record) }) +
-    render(partial: 'meta/seo', locals: { seo: meta_seo_tags_for(record) })
+    render(partial: "meta/facebook", locals: { meta: meta_tags_for(record) }) +
+      render(partial: "meta/twitter", locals: { meta: meta_tags_for(record) }) +
+      render(partial: "meta/seo", locals: { seo: meta_seo_tags_for(record) })
   end
 
   def default_meta_tags
@@ -216,56 +223,59 @@ module ApplicationHelper
       description: "Discover open source libraries, modules and frameworks you can use in your code",
       image: "https://libraries.io/apple-touch-icon-152x152.png",
       site_name: "Libraries.io",
-      site_twitter: "@librariesio"
+      site_twitter: "@librariesio",
     }
   end
 
   def meta_tags_for(record)
     return default_meta_tags if record.nil?
-    case record.class.name
-    when 'Project'
-      hash = record.meta_tags.merge({
-        url: project_url(record.to_param),
-        image: shareable_image_url(record.platform)
-      })
-    when 'Repository'
-      hash = record.meta_tags.merge({
-        url: repository_url(record.to_param)
-      })
-    when 'RepositoryUser', 'RepositoryOrganisation'
-      hash = record.meta_tags.merge({
-        url: user_url(record.to_param)
-      })
-    else
-      hash = {}
-    end
+
+    hash = case record.class.name
+           when "Project"
+             record.meta_tags.merge({
+                                      url: project_url(record.to_param),
+                                      image: shareable_image_url(record.platform),
+                                    })
+           when "Repository"
+             record.meta_tags.merge({
+                                      url: repository_url(record.to_param),
+                                    })
+           when "RepositoryUser", "RepositoryOrganisation"
+             record.meta_tags.merge({
+                                      url: user_url(record.to_param),
+                                    })
+           else
+             {}
+           end
     default_meta_tags.merge(hash)
   end
 
   def meta_seo_tags_for(record)
-    return {noindex: false} if record.nil?
-    case record.class.name
-    when 'Project', 'Repository'
-      hash = {noindex: record.is_removed?}
-    else
-      hash = {noindex: false}
-    end
+    return { noindex: false } if record.nil?
+
+    hash = case record.class.name
+           when "Project", "Repository"
+             { noindex: record.is_removed? }
+           else
+             { noindex: false }
+           end
   end
 
-  def tree_path(options={})
-    project_path(options.except(:kind)) + "/tree#{options[:kind].present? ? '?kind='+options[:kind] : '' }"
+  def tree_path(options = {})
+    project_path(options.except(:kind)) + "/tree#{options[:kind].present? ? "?kind=#{options[:kind]}" : ''}"
   end
 
-  def version_tree_path(options={})
-    version_path(options.except(:kind)) + "/tree#{options[:kind].present? ? '?kind='+options[:kind] : '' }"
+  def version_tree_path(options = {})
+    version_path(options.except(:kind)) + "/tree#{options[:kind].present? ? "?kind=#{options[:kind]}" : ''}"
   end
 
   def usage_cache_length(total)
     return 1 if total <= 0
-    (Math.log10(total).round+1)*2
+
+    (Math.log10(total).round + 1) * 2
   end
 
   def current_host_icon
-    current_host || 'code-fork'
+    current_host || "code-fork"
   end
 end
