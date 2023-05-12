@@ -605,7 +605,7 @@ class Project < ApplicationRecord
   # NB deprecated_or_removed most likely exists so that we
   # can explicitly reset the status to nil in certain cases. We probably
   # don't always want to because Repository#check_status can overwrite Project#status.
-  def check_status(deprecated_or_removed = false)
+  def check_status
     url = platform_class.check_status_url(self)
     return if url.blank?
 
@@ -623,8 +623,6 @@ class Project < ApplicationRecord
         update_attribute(:status, nil)
         update_attribute(:deprecation_reason, nil)
       end
-    elsif deprecated_or_removed # if package is already deprecated or removed and isn't anymore, remove status
-      update_attribute(:status, nil)
     end
   end
 

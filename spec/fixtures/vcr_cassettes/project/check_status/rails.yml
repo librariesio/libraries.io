@@ -1,0 +1,78 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://rubygems.org/api/v1/versions/rails197.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Typhoeus - https://github.com/typhoeus/typhoeus
+      Expect:
+      - ''
+  response:
+    status:
+      code: 404
+      message: ''
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Cache-Control:
+      - no-cache
+      Content-Security-Policy:
+      - default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src 'self'
+        https://secure.gaug.es https://gravatar.com https://www.gravatar.com https://secure.gravatar.com
+        https://*.fastly-insights.com https://avatars.githubusercontent.com; object-src
+        'none'; script-src 'self' https://secure.gaug.es https://www.fastly-insights.com
+        'nonce-'; style-src 'self' https://fonts.googleapis.com; connect-src 'self'
+        https://s3-us-west-2.amazonaws.com/rubygems-dumps/ https://*.fastly-insights.com
+        https://fastly-insights.com https://api.github.com http://localhost:*; form-action
+        'self' https://github.com/login/oauth/authorize; frame-ancestors 'self'; report-uri
+        https://csp-report.browser-intake-datadoghq.com/api/v2/logs?dd-api-key=pub852fa3e2312391fafa5640b60784e660&dd-evp-origin=content-security-policy&ddsource=csp-report&ddtags=service%3Arubygems.org%2Cversion%3A4d14d0ea76b245de7e23151d118aa43c7e889110%2Cenv%3Aproduction%2Ctrace_id%3A2085787286933023463
+      X-Request-Id:
+      - 527f621d-60dd-4b2c-a961-11db6ddc1681
+      X-Runtime:
+      - '0.006733'
+      Strict-Transport-Security:
+      - max-age=31536000
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 12 May 2023 18:45:18 GMT
+      Via:
+      - 1.1 varnish
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-bos4637-BOS
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Timer:
+      - S1683917118.813915,VS0,VE340
+      Vary:
+      - Accept-Encoding
+      Server:
+      - RubyGems.org
+      Content-Length:
+      - '32'
+    body:
+      encoding: ASCII-8BIT
+      string: This rubygem could not be found.
+    http_version:
+  recorded_at: Fri, 12 May 2023 18:45:18 GMT
+recorded_with: VCR 4.0.0
