@@ -602,9 +602,6 @@ class Project < ApplicationRecord
     ProjectDependentRepository.where(project_id: id).count
   end
 
-  # NB deprecated_or_removed most likely exists so that we
-  # can explicitly reset the status to nil in certain cases. We probably
-  # don't always want to because Repository#check_status can overwrite Project#status.
   def check_status
     url = platform_class.check_status_url(self)
     return if url.blank?
