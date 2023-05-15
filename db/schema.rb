@@ -421,11 +421,6 @@ ActiveRecord::Schema.define(version: 2023_05_12_124828) do
   end
 
 
-  create_view "pg_stat_statements_info", sql_definition: <<-SQL
-      SELECT pg_stat_statements_info.dealloc,
-      pg_stat_statements_info.stats_reset
-     FROM pg_stat_statements_info() pg_stat_statements_info(dealloc, stats_reset);
-  SQL
   create_view "project_dependent_repositories", materialized: true, sql_definition: <<-SQL
       SELECT t1.project_id,
       t1.id AS repository_id,
