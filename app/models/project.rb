@@ -30,6 +30,7 @@
 #  score                              :integer          default(0), not null
 #  score_last_calculated              :datetime
 #  status                             :string
+#  status_checked_at                  :datetime
 #  versions_count                     :integer          default(0), not null
 #  created_at                         :datetime         not null
 #  updated_at                         :datetime         not null
@@ -607,6 +608,7 @@ class Project < ApplicationRecord
   # don't always want to because Repository#check_status can overwrite Project#status.
   def check_status(deprecated_or_removed = false)
     url = platform_class.check_status_url(self)
+    update_column(:status_checked_at, DateTime.current)
     return if url.blank?
 
     response = Typhoeus.get(url)

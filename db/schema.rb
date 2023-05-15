@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_02_182027) do
+ActiveRecord::Schema.define(version: 2023_05_12_124828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 2023_05_02_182027) do
     t.boolean "license_set_by_admin", default: false
     t.boolean "license_normalized", default: false
     t.text "deprecation_reason"
+    t.datetime "status_checked_at"
     t.index "lower((language)::text)", name: "index_projects_on_lower_language"
     t.index "lower((platform)::text), lower((name)::text)", name: "index_projects_on_platform_and_name_lower"
     t.index ["created_at"], name: "index_projects_on_created_at"
@@ -420,6 +421,11 @@ ActiveRecord::Schema.define(version: 2023_05_02_182027) do
   end
 
 
+  create_view "pg_stat_statements_info", sql_definition: <<-SQL
+      SELECT pg_stat_statements_info.dealloc,
+      pg_stat_statements_info.stats_reset
+     FROM pg_stat_statements_info() pg_stat_statements_info(dealloc, stats_reset);
+  SQL
   create_view "project_dependent_repositories", materialized: true, sql_definition: <<-SQL
       SELECT t1.project_id,
       t1.id AS repository_id,
