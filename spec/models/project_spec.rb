@@ -247,7 +247,7 @@ describe Project, type: :model do
 
   describe "#check_status" do
 
-    before { travel_to Time.current }
+    before { travel_to DateTime.current }
 
     context "entire project deprecated with message" do
       let!(:project) { Project.create(platform: "NPM", name: "jade", status: "", updated_at: 1.week.ago) }
@@ -260,8 +260,8 @@ describe Project, type: :model do
 
           expect(project.status).to eq("Deprecated")
           expect(project.deprecation_reason).not_to eq(nil)
-          expect(project.status_checked_at).to eq(Time.current)
-          expect(project.updated_at).to eq(Time.current)
+          expect(project.status_checked_at).to eq(DateTime.current)
+          expect(project.updated_at).to eq(DateTime.current)
         end
       end
     end
@@ -277,7 +277,7 @@ describe Project, type: :model do
 
           expect(project.status).to eq(nil)
           # Since there was no change, update status_checked_at but do not update updated_at
-          expect(project.status_checked_at).to eq(Time.current)
+          expect(project.status_checked_at).to eq(DateTime.current)
           expect(project.updated_at).to eq(1.week.ago)
         end
       end
@@ -294,8 +294,8 @@ describe Project, type: :model do
 
           expect(project.status).to eq(nil)
           expect(project.deprecation_reason).to eq(nil)
-          expect(project.status_checked_at).to eq(Time.current)
-          expect(project.updated_at).to eq(Time.current)
+          expect(project.status_checked_at).to eq(DateTime.current)
+          expect(project.updated_at).to eq(DateTime.current)
         end
       end
     end

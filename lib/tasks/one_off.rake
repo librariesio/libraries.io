@@ -109,4 +109,18 @@ namespace :one_off do
 
     print "Total examined: #{packages.count}, Total created: #{processed}"
   end
+
+  desc "Backfill Project.status_checked_at with Project.updated_at value"
+  task backfill_project_status_checked_at: :environment do
+    projects = Project
+      .where(status_checked_at: nil)
+
+    puts "Updating #{projects.count} projects..."
+
+    projects.in_batches(of: 10000).each do |batch|
+      batch.update_all('status_checked_at = updated_at')
+    end
+
+    print "Finished updating projects"
+  end
 end
