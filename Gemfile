@@ -128,6 +128,6 @@ group :production do
   gem "rails_safe_tasks"
 end
 
-gem "scenic", "~> 1.4"
+gem "scenic", "~> 1.7"
 
 gem "chartkick", "~> 3.4"
