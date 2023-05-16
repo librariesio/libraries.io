@@ -620,7 +620,7 @@ class Project < ApplicationRecord
         update_attribute(:status, nil)
         update_attribute(:deprecation_reason, nil)
       end
-    elsif status == "Removed"
+    else
       update_attribute(:status, nil)
     end
   end
