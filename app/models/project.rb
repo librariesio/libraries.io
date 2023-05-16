@@ -30,6 +30,7 @@
 #  score                              :integer          default(0), not null
 #  score_last_calculated              :datetime
 #  status                             :string
+#  status_checked_at                  :datetime
 #  versions_count                     :integer          default(0), not null
 #  created_at                         :datetime         not null
 #  updated_at                         :datetime         not null
@@ -49,6 +50,7 @@
 #  index_projects_on_platform_and_name_lower        (lower((platform)::text), lower((name)::text))
 #  index_projects_on_repository_id                  (repository_id)
 #  index_projects_on_status                         (status)
+#  index_projects_on_status_checked_at              (status_checked_at)
 #  index_projects_on_updated_at                     (updated_at)
 #  index_projects_on_versions_count                 (versions_count)
 #
@@ -607,6 +609,7 @@ class Project < ApplicationRecord
   # don't always want to because Repository#check_status can overwrite Project#status.
   def check_status(deprecated_or_removed = false)
     url = platform_class.check_status_url(self)
+    update_column(:status_checked_at, DateTime.current)
     return if url.blank?
 
     response = Typhoeus.get(url)

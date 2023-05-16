@@ -246,8 +246,11 @@ describe Project, type: :model do
   end
 
   describe "#check_status" do
+
+    before { travel_to DateTime.current }
+
     context "entire project deprecated with message" do
-      let!(:project) { Project.create(platform: "NPM", name: "jade", status: "") }
+      let!(:project) { Project.create(platform: "NPM", name: "jade", status: "", updated_at: 1.week.ago) }
 
       it "should use the result of entire_package_deprecation_info" do
         VCR.use_cassette("project/check_status/jade") do
@@ -257,12 +260,14 @@ describe Project, type: :model do
 
           expect(project.status).to eq("Deprecated")
           expect(project.deprecation_reason).not_to eq(nil)
+          expect(project.status_checked_at).to eq(DateTime.current)
+          expect(project.updated_at).to eq(DateTime.current)
         end
       end
     end
 
     context "some of project deprecated" do
-      let!(:project) { Project.create(platform: "NPM", name: "react", status: nil) }
+      let!(:project) { Project.create(platform: "NPM", name: "react", status: nil, updated_at: 1.week.ago) }
 
       it "should use the result of entire_package_deprecation_info" do
         VCR.use_cassette("project/check_status/react") do
@@ -271,12 +276,15 @@ describe Project, type: :model do
           project.reload
 
           expect(project.status).to eq(nil)
+          # Since there was no change, update status_checked_at but do not update updated_at
+          expect(project.status_checked_at).to eq(DateTime.current)
+          expect(project.updated_at).to eq(1.week.ago)
         end
       end
     end
 
     context "deprecated project no longer deprecated" do
-      let!(:project) { Project.create(platform: "NPM", name: "react", status: "Deprecated") }
+      let!(:project) { Project.create(platform: "NPM", name: "react", status: "Deprecated", updated_at: 1.week.ago) }
 
       it "should mark the project no longer deprecated" do
         VCR.use_cassette("project/check_status/react") do
@@ -286,6 +294,8 @@ describe Project, type: :model do
 
           expect(project.status).to eq(nil)
           expect(project.deprecation_reason).to eq(nil)
+          expect(project.status_checked_at).to eq(DateTime.current)
+          expect(project.updated_at).to eq(DateTime.current)
         end
       end
     end
