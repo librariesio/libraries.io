@@ -299,6 +299,36 @@ describe Project, type: :model do
         end
       end
     end
+
+    context "removed project no longer removed" do
+      context "when package manager can have entire package deprecated" do
+        let!(:project) { Project.create(platform: "NPM", name: "react", status: "Removed") }
+
+        it "should mark the project no longer removed" do
+          VCR.use_cassette("project/check_status/react") do
+            project.check_status
+
+            project.reload
+
+            expect(project.status).to eq(nil)
+          end
+        end
+      end
+
+      context "when package manager cannot have entire package deprecated" do
+        let!(:project) { Project.create(platform: "Rubygems", name: "rails", status: "Removed") }
+
+        it "should mark the project no longer removed" do
+          VCR.use_cassette("project/check_status/rails") do
+            project.check_status
+
+            project.reload
+
+            expect(project.status).to eq(nil)
+          end
+        end
+      end
+    end
   end
 
   describe "DeletedProject management" do
