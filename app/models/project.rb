@@ -50,6 +50,7 @@
 #  index_projects_on_platform_and_name_lower        (lower((platform)::text), lower((name)::text))
 #  index_projects_on_repository_id                  (repository_id)
 #  index_projects_on_status                         (status)
+#  index_projects_on_status_checked_at              (status_checked_at)
 #  index_projects_on_updated_at                     (updated_at)
 #  index_projects_on_versions_count                 (versions_count)
 #
