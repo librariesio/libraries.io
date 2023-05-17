@@ -229,7 +229,7 @@ class Project < ApplicationRecord
     return unless platform_class_exists?
 
     sync_classes.each { |sync_class| PackageManagerDownloadWorker.perform_async(sync_class.name, name, nil, "project", 0, force_sync_dependencies) }
-    CheckStatusWorker.perform_async(id, status == "Removed" || status == "Deprecated")
+    CheckStatusWorker.perform_async(id)
   end
 
   def sync_classes
