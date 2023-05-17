@@ -77,7 +77,7 @@ namespace :projects do
     # Check if removed/deprecated projects are still deprecated/removed
     PLATFORMS_FOR_STATUS_CHECKS.each do |platform|
       Project.platform(platform).removed_or_deprecated.select("id").find_each do |project|
-        CheckStatusWorker.perform_async(project.id, true)
+        CheckStatusWorker.perform_async(project.id)
       end
     end
 
