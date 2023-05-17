@@ -339,4 +339,46 @@ describe Repository, type: :model do
       end
     end
   end
+
+  describe "#sync_manifests" do
+    let(:repository) { create(:repository) }
+    before do
+      es_double = instance_double(
+        "Elasticsearch::Model::Indexing::InstanceMethods",
+        index_document: ->() { true }
+      )
+      expect_any_instance_of(Repository)
+        .to receive(:__elasticsearch__)
+        .at_least(1)
+        .and_return(es_double)
+    end
+
+    it "should create a manifest with deps if it doesn't exist" do
+      expect do
+        repository.sync_manifest({
+          platform: "cargo",
+          path: "Cargo.lock",
+          dependencies: [{name: "Inflector", requirement: "0.11.4", type: "runtime"}],
+          sha: "abcd1234",
+        })
+      end.to change { repository.manifests.count }.by(1)
+
+      manifest = repository.manifests.first
+      expect(manifest.filepath).to eq("Cargo.lock")
+      expect(manifest.repository_dependencies.pluck(:project_name)).to eq(["Inflector"])
+      expect(manifest.repository_dependencies.pluck(:requirements)).to eq(["0.11.4"])
+    end
+
+    it "should not raise an exception when the manifest had an error" do
+      expect do
+        repository.sync_manifest({
+          platform: "cargo",
+          path: "Cargo.lock",
+          dependencies: nil,
+          sha: "abcd1234",
+          error_message: "Cargo.lock: key not found: \"dev-dependencies\"\nDid you mean? \"dependencies\""
+        })
+      end.to change { repository.manifests.count }.by(0)
+    end
+  end
 end
