@@ -50,8 +50,14 @@ module RepoManifests
   def sync_manifest(m)
     args = { platform: m[:platform], kind: m[:kind], filepath: m[:path], sha: m[:sha] }
 
-    unless manifests.find_by(args)
+    unless manifests.where(args).exists?
+      if m[:dependencies].nil?
+        Rails.logger.info "RepoManifests#sync_manifest error from parsed manifest: repository_id=#{id} path=#{m[:platform]} kind=#{m[:kind]} manifest=#{m[:path]} sha=#{m[:sha]} error=#{m[:error_message]}" 
+        return
+      end
+
       manifest = manifests.create(args)
+      
       dependencies = m[:dependencies].map(&:with_indifferent_access).uniq { |dep| [dep[:name].try(:strip), dep[:requirement], dep[:type]] }
       dependencies.each do |dep|
         platform = manifest.platform
