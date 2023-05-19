@@ -33,6 +33,7 @@ namespace :projects do
 
     project_ids_to_check = Project
       .where(platform: PLATFORMS_FOR_STATUS_CHECKS)
+      .where("status_checked_at IS NULL OR status_checked_at < ?", 1.week.ago)
       .order("status_checked_at ASC NULLS FIRST")
       .limit(max_num_of_projects_to_check)
       .select("id")
@@ -46,8 +47,7 @@ namespace :projects do
       enqueued_projects_sum += project_ids_batch.count
       log_string = "#{enqueued_projects_sum} of up to #{max_num_of_projects_to_check} jobs were enqueued"
 
-      Rails.logger.info("logger: #{log_string}")
-      puts "puts: #{log_string}"
+      Rails.logger.info(log_string)
     end
   end
 
