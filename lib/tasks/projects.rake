@@ -34,7 +34,6 @@ namespace :projects do
     # we want all nil status_checked_at first, and this ordering should achieve that
     project_ids_to_check = Project
       .where(platform: PLATFORMS_FOR_STATUS_CHECKS)
-      .where("projects.status_checked_at < ?", 1.week.ago)
       .order(status_checked_at: :desc)
       .limit(max_num_of_projects_to_check)
       .select("id")
