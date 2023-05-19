@@ -31,10 +31,9 @@ namespace :projects do
     max_num_of_projects_to_check = args.max_num_of_projects_to_check.nil? ? 150000 : args.max_num_of_projects_to_check.to_i
     batch_size = args.batch_size.nil? ? 10000 : args.batch_size.to_i
 
-    # we want all nil status_checked_at first, and this ordering should achieve that
     project_ids_to_check = Project
       .where(platform: PLATFORMS_FOR_STATUS_CHECKS)
-      .order(status_checked_at: :desc)
+      .order("status_checked_at ASC NULLS FIRST")
       .limit(max_num_of_projects_to_check)
       .select("id")
 
