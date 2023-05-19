@@ -28,24 +28,26 @@ namespace :projects do
   task :check_status, %i[max_num_of_projects_to_check batch_size] => :environment do |_task, args|
     exit if ENV["READ_ONLY"].present?
 
-    # default should spread out around 50k package jobs per platform over ~ 83 minutes
-    max_num_of_projects_to_check = args.max_num_of_projects_to_check.nil? ? 50000 : args.max_num_of_projects_to_check.to_i
-    batch_size = args.batch_size.nil? ? 5000 : args.batch_size.to_i
+    max_num_of_projects_to_check = args.max_num_of_projects_to_check.nil? ? 150000 : args.max_num_of_projects_to_check.to_i
+    batch_size = args.batch_size.nil? ? 10000 : args.batch_size.to_i
 
-    PLATFORMS_FOR_STATUS_CHECKS.each do |platform|
-      project_ids_to_check = Project.platform(platform).not_removed.where("projects.updated_at < ?", 1.week.ago).order(updated_at: :desc).select("id")
-      enqueued_projects_sum = 0
-      project_ids_to_check.limit(max_num_of_projects_to_check).in_batches(of: batch_size) do |project_ids_batch|
-        project_ids_batch.pluck(:id).each_with_index do |project_id, i|
-          CheckStatusWorker.perform_in(i, project_id)
-        end
+    project_ids_to_check = Project
+      .where(platform: PLATFORMS_FOR_STATUS_CHECKS)
+      .where("status_checked_at IS NULL OR status_checked_at < ?", 1.week.ago)
+      .order("status_checked_at ASC NULLS FIRST")
+      .limit(max_num_of_projects_to_check)
+      .select("id")
 
-        enqueued_projects_sum += project_ids_batch.count
-        log_string = "#{enqueued_projects_sum} of up to #{max_num_of_projects_to_check} #{platform} jobs were enqueued"
-
-        Rails.logger.info("logger: #{log_string}")
-        puts "puts: #{log_string}"
+    enqueued_projects_sum = 0
+    project_ids_to_check.in_batches(of: batch_size) do |project_ids_batch|
+      project_ids_batch.pluck(:id).each_with_index do |project_id, i|
+        CheckStatusWorker.perform_in(i, project_id)
       end
+
+      enqueued_projects_sum += project_ids_batch.count
+      log_string = "#{enqueued_projects_sum} of up to #{max_num_of_projects_to_check} jobs were enqueued"
+
+      Rails.logger.info(log_string)
     end
   end
 
@@ -64,25 +66,6 @@ namespace :projects do
     exit if ENV["READ_ONLY"].present?
     %w[bower go elm alcatraz julia nimble].each do |platform|
       projects = Project.platform(platform).maintained.where("projects.updated_at < ?", 1.week.ago).order("projects.updated_at ASC").with_repo.limit(500)
-      repos = projects.map(&:repository)
-      repos.each do |repo|
-        CheckRepoStatusWorker.perform_async(repo.host_type, repo.full_name)
-      end
-    end
-  end
-
-  desc "Check to see if projects are still removed/deprecated"
-  task check_removed_status: :environment do
-    exit if ENV["READ_ONLY"].present?
-    # Check if removed/deprecated projects are still deprecated/removed
-    PLATFORMS_FOR_STATUS_CHECKS.each do |platform|
-      Project.platform(platform).removed_or_deprecated.select("id").find_each do |project|
-        CheckStatusWorker.perform_async(project.id)
-      end
-    end
-
-    %w[bower go elm alcatraz julia nimble].each do |platform|
-      projects = Project.platform(platform).removed_or_deprecated.with_repo.limit(500)
       repos = projects.map(&:repository)
       repos.each do |repo|
         CheckRepoStatusWorker.perform_async(repo.host_type, repo.full_name)
