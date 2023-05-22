@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-PLATFORMS_FOR_STATUS_CHECKS = %w[pypi npm rubygems packagist cpan clojars cocoapods hackage cran pub elm dub].freeze
+PLATFORMS_FOR_STATUS_CHECKS = %w[pypi npm rubygems packagist cpan clojars cocoapods hackage cran pub elm dub]
+  .map { |platform| PackageManager::Base.format_name(platform) }
+  .freeze
 
 namespace :projects do
   desc "Sync projects"
@@ -31,6 +33,8 @@ namespace :projects do
     max_num_of_projects_to_check = args.max_num_of_projects_to_check.nil? ? 150000 : args.max_num_of_projects_to_check.to_i
     batch_size = args.batch_size.nil? ? 10000 : args.batch_size.to_i
 
+    pp args.max_num_of_projects_to_check
+    pp args.batch_size
     project_ids_to_check = Project
       .where(platform: PLATFORMS_FOR_STATUS_CHECKS)
       .where("status_checked_at IS NULL OR status_checked_at < ?", 1.week.ago)
@@ -40,14 +44,16 @@ namespace :projects do
 
     enqueued_projects_sum = 0
     project_ids_to_check.in_batches(of: batch_size) do |project_ids_batch|
+      enqueued_projects_sum += project_ids_batch.count
+
       project_ids_batch.pluck(:id).each_with_index do |project_id, i|
         CheckStatusWorker.perform_in(i, project_id)
       end
 
-      enqueued_projects_sum += project_ids_batch.count
       log_string = "#{enqueued_projects_sum} of up to #{max_num_of_projects_to_check} jobs were enqueued"
 
-      Rails.logger.info(log_string)
+      Rails.logger.info("logger: #{log_string}")
+      puts("puts: #{log_string}")
     end
   end
 
