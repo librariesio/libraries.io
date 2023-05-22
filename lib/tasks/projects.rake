@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-PLATFORMS_FOR_STATUS_CHECKS = %w[pypi npm rubygems packagist cpan clojars cocoapods hackage cran pub elm dub]
-  .map { |platform| PackageManager::Base.format_name(platform) }
-  .freeze
-
 namespace :projects do
   desc "Sync projects"
   task sync: :environment do
@@ -29,6 +25,10 @@ namespace :projects do
   desc "Check status of projects"
   task :check_status, %i[max_num_of_projects_to_check batch_size] => :environment do |_task, args|
     exit if ENV["READ_ONLY"].present?
+
+    PLATFORMS_FOR_STATUS_CHECKS = %w[pypi npm rubygems packagist cpan clojars cocoapods hackage cran pub elm dub]
+      .map { |platform| PackageManager::Base.format_name(platform) }
+      .freeze
 
     max_num_of_projects_to_check = args.max_num_of_projects_to_check.nil? ? 150000 : args.max_num_of_projects_to_check.to_i
     batch_size = args.batch_size.nil? ? 10000 : args.batch_size.to_i
