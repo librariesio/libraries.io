@@ -33,8 +33,6 @@ namespace :projects do
     max_num_of_projects_to_check = args.max_num_of_projects_to_check.nil? ? 150000 : args.max_num_of_projects_to_check.to_i
     batch_size = args.batch_size.nil? ? 10000 : args.batch_size.to_i
 
-    pp args.max_num_of_projects_to_check
-    pp args.batch_size
     project_ids_to_check = Project
       .where(platform: PLATFORMS_FOR_STATUS_CHECKS)
       .where("status_checked_at IS NULL OR status_checked_at < ?", 1.week.ago)

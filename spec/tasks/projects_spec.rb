@@ -21,6 +21,10 @@ describe "projects" do
         end
       end
 
+      after(:each) do
+        Rake::Task["projects:check_status"].reenable
+      end
+
       it "checks status of correct projects" do
         Sidekiq::Testing.inline! do
           Rake::Task["projects:check_status"].invoke
