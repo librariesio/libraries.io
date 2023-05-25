@@ -132,13 +132,39 @@ describe PackageManager::Pypi do
             ["idna", "(<4,>=2.5)"],
             ["urllib3", "(<1.27,>=1.21.1)"],
             ["certifi", "(>=2017.4.17)"],
-            ["PySocks", "(!=1.5.7,>=1.5.6) ; extra == 'socks'"],
-            ["chardet", "(<6,>=3.0.2) ; extra == 'use_chardet_on_py3'"],
-          ].map do |name, requirements|
+            ["PySocks", "(!=1.5.7,>=1.5.6)", "socks"],
+            ["chardet", "(<6,>=3.0.2)", "use_chardet_on_py3"],
+          ].map do |name, requirements, kind = "runtime"|
             {
               project_name: name,
               requirements: requirements,
-              kind: "runtime",
+              kind: kind,
+              optional: false,
+              platform: "Pypi",
+            }
+          end
+        )
+      end
+    end
+
+    it "handles dependencies with multiple extra scopes" do
+      VCR.use_cassette("pypi_dependencies_isort") do
+        expect(
+          described_class.dependencies("isort", "5.12.0")
+        ).to match_array(
+          [
+            ["colorama", "(>=0.4.3)", "colors"],
+            ["pip-api", "*", "requirements-deprecated-finder"],
+            ["pip-shims", "(>=0.5.2)", "pipfile-deprecated-finder"],
+            ["pipreqs", "*", "requirements-deprecated-finder"],
+            ["pipreqs", "*", "pipfile-deprecated-finder"],
+            ["requirementslib", "*", "pipfile-deprecated-finder"],
+            ["setuptools", "*", "plugins"],
+          ].map do |name, requirements, kind = "runtime"|
+            {
+              project_name: name,
+              requirements: requirements,
+              kind: kind,
               optional: false,
               platform: "Pypi",
             }
@@ -277,6 +303,57 @@ describe PackageManager::Pypi do
 
       it "returns nil" do
         expect(result).to eq(nil)
+      end
+    end
+  end
+
+  describe ".parse_requirement_extras" do
+    [
+      [
+        # no extras
+        "(<4,>=2)",
+        [
+          "(<4,>=2)",
+          [],
+        ],
+      ],
+      [
+        # extra wrapped in single quotes
+        "(<6,>=3.0.2) ; extra == 'use_chardet_on_py3'",
+        [
+          "(<6,>=3.0.2)",
+          ["use_chardet_on_py3"],
+        ],
+      ],
+      [
+        # multiple extras, 1 wrapped in single quotes, 1 in escaped double quotes
+        "(>=3.2,<4.0) ; extra == \"django\" or extra == 'channels'",
+        [
+          "(>=3.2,<4.0)",
+          %w[django channels],
+        ],
+      ],
+      [
+        # no version range
+        "extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\"",
+        [
+          "",
+          %w[pipfile-deprecated-finder requirements-deprecated-finder],
+        ],
+      ],
+      [
+        # 3 extras
+        "(>=12.0.0) ; extra == \"debug\" or extra == \"debug-server\" or extra == \"cli\"",
+        [
+          "(>=12.0.0)",
+          %w[debug debug-server cli],
+        ],
+      ],
+    ].each do |requirement, expected|
+      it "parses the extras out of #{requirement} correctly" do
+        expect(
+          described_class.parse_requirement_extras(requirement)
+        ).to eq(expected)
       end
     end
   end

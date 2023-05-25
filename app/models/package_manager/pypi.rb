@@ -144,21 +144,40 @@ module PackageManager
       [name, requirement]
     end
 
+    def self.parse_requirement_extras(requirements)
+      parsed = requirements
+                 .split(/(?:or )?extra\s*==/)
+                 .map { |part| part.delete("'\"\\ ;") }
+
+      (requirement, *extras) = parsed
+
+      [requirement, extras]
+    end
+
     def self.dependencies(name, version, _mapped_project = nil)
       api_response = get("https://pypi.org/pypi/#{name}/#{version}/json")
       deps = api_response.dig("info", "requires_dist") || []
       source_info = api_response.fetch("urls", [])
       Rails.logger.warn("Pypi sdist (no deps): #{name}") unless source_info.any? { |rel| rel["packagetype"] == "bdist_wheel" }
 
-      deps.map do |dep|
+      deps.flat_map do |dep|
         dep_name, requirements = parse_pep_508_dep_spec(dep)
-        {
+        requirement, extras = parse_requirement_extras(requirements)
+
+        mapped_dep = {
           project_name: dep_name,
-          requirements: requirements.blank? ? "*" : requirements,
-          kind: "runtime",
+          requirements: requirement.blank? ? "*" : requirement,
           optional: false,
           platform: self.name.demodulize,
         }
+
+        if extras.present?
+          extras.map do |extra|
+            mapped_dep.merge(kind: extra)
+          end
+        else
+          mapped_dep.merge(kind: "runtime")
+        end
       end
     end
 
