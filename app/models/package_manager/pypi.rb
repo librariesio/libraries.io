@@ -144,14 +144,18 @@ module PackageManager
       [name, requirement]
     end
 
-    def self.parse_requirement_extras(requirements)
-      parsed = requirements
-                 .split(/(?:or )?extra\s*==/)
-                 .map { |part| part.delete("'\"\\ ;") }
+    def self.parse_environment_markers(requirement)
+      environment_marker_name = "python_version|python_full_version|" +
+        "os_name|sys_platform|platform_release|" +
+        "platform_system|platform_version|" +
+        "platform_machine|platform_python_implementation|" +
+        "implementation_name|implementation_version|extra"
+      version_regex = "(?<version>[^;]+)"
+      environment_markers_regex = "(?<environment_markers>#{environment_marker_name}\s*==.+)"
 
-      (requirement, *extras) = parsed
+      parsed = requirement.match(/#{environment_markers_regex}|#{version_regex}(?:;\s*)?#{environment_markers_regex}?/)
 
-      [requirement, extras]
+      [parsed[:version]&.strip, parsed[:environment_markers]]
     end
 
     def self.dependencies(name, version, _mapped_project = nil)
@@ -161,23 +165,16 @@ module PackageManager
       Rails.logger.warn("Pypi sdist (no deps): #{name}") unless source_info.any? { |rel| rel["packagetype"] == "bdist_wheel" }
 
       deps.flat_map do |dep|
-        dep_name, requirements = parse_pep_508_dep_spec(dep)
-        requirement, extras = parse_requirement_extras(requirements)
+        dep_name, requirement = parse_pep_508_dep_spec(dep)
+        version, environment_markers = parse_environment_markers(requirement)
 
         mapped_dep = {
           project_name: dep_name,
-          requirements: requirement.blank? ? "*" : requirement,
+          requirements: version || "*",
+          kind: environment_markers || "runtime",
           optional: false,
           platform: self.name.demodulize,
         }
-
-        if extras.present?
-          extras.map do |extra|
-            mapped_dep.merge(kind: extra)
-          end
-        else
-          mapped_dep.merge(kind: "runtime")
-        end
       end
     end
 

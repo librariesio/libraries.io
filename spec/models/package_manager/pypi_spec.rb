@@ -62,60 +62,70 @@ describe PackageManager::Pypi do
 
   describe "#deprecation_info" do
     it "returns not-deprecated if last version isn't deprecated" do
-      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return({
-                                                                                 "releases" => {
-                                                                                   "0.0.1" => [{}],
-                                                                                   "0.0.2" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
-                                                                                   "0.0.3" => [{}],
-                                                                                 },
-                                                                               })
+      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return(
+        {
+          "releases" => {
+            "0.0.1" => [{}],
+            "0.0.2" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
+            "0.0.3" => [{}],
+          },
+        }
+      )
 
       expect(described_class.deprecation_info(project)).to eq({ is_deprecated: false, message: nil })
     end
 
     it "returns deprecated if last version is deprecated" do
-      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return({
-                                                                                 "releases" => {
-                                                                                   "0.0.1" => [{}],
-                                                                                   "0.0.2" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
-                                                                                   "0.0.3" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
-                                                                                 },
-                                                                               })
+      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return(
+        {
+          "releases" => {
+            "0.0.1" => [{}],
+            "0.0.2" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
+            "0.0.3" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
+          },
+        }
+      )
 
       expect(described_class.deprecation_info(project)).to eq({ is_deprecated: true, message: "This package is deprecated" })
     end
 
     it "returns not-deprecated if last version is a pre-release and deprecated" do
-      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return({
-                                                                                 "releases" => {
-                                                                                   "0.0.1" => [{}],
-                                                                                   "0.0.2" => [{}],
-                                                                                   "0.0.3" => [{}],
-                                                                                   "0.0.3a1" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
-                                                                                 },
-                                                                               })
+      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return(
+        {
+          "releases" => {
+            "0.0.1" => [{}],
+            "0.0.2" => [{}],
+            "0.0.3" => [{}],
+            "0.0.3a1" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
+          },
+        }
+      )
 
       expect(described_class.deprecation_info(project)).to eq({ is_deprecated: false, message: nil })
     end
 
     it "return not-deprecated if 'development status' is not 'inactive'" do
-      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return({
-                                                                                 "releases" => {},
-                                                                                 "info" => {
-                                                                                   "classifiers" => ["Development Status :: 5 - Production/Stable"],
-                                                                                 },
-                                                                               })
+      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return(
+        {
+          "releases" => {},
+          "info" => {
+            "classifiers" => ["Development Status :: 5 - Production/Stable"],
+          },
+        }
+      )
 
       expect(described_class.deprecation_info(project)).to eq({ is_deprecated: false, message: nil })
     end
 
     it "return deprecated if 'development status' is 'inactive'" do
-      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return({
-                                                                                 "releases" => {},
-                                                                                 "info" => {
-                                                                                   "classifiers" => ["Development Status :: 7 - Inactive"],
-                                                                                 },
-                                                                               })
+      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return(
+        {
+          "releases" => {},
+          "info" => {
+            "classifiers" => ["Development Status :: 7 - Inactive"],
+          },
+        }
+      )
 
       expect(described_class.deprecation_info(project)).to eq({ is_deprecated: true, message: "Development Status :: 7 - Inactive" })
     end
@@ -132,8 +142,8 @@ describe PackageManager::Pypi do
             ["idna", "(<4,>=2.5)"],
             ["urllib3", "(<1.27,>=1.21.1)"],
             ["certifi", "(>=2017.4.17)"],
-            ["PySocks", "(!=1.5.7,>=1.5.6)", "socks"],
-            ["chardet", "(<6,>=3.0.2)", "use_chardet_on_py3"],
+            ["PySocks", "(!=1.5.7,>=1.5.6)", "extra == 'socks'"],
+            ["chardet", "(<6,>=3.0.2)", "extra == 'use_chardet_on_py3'"],
           ].map do |name, requirements, kind = "runtime"|
             {
               project_name: name,
@@ -153,13 +163,12 @@ describe PackageManager::Pypi do
           described_class.dependencies("isort", "5.12.0")
         ).to match_array(
           [
-            ["colorama", "(>=0.4.3)", "colors"],
-            ["pip-api", "*", "requirements-deprecated-finder"],
-            ["pip-shims", "(>=0.5.2)", "pipfile-deprecated-finder"],
-            ["pipreqs", "*", "requirements-deprecated-finder"],
-            ["pipreqs", "*", "pipfile-deprecated-finder"],
-            ["requirementslib", "*", "pipfile-deprecated-finder"],
-            ["setuptools", "*", "plugins"],
+            ["colorama", "(>=0.4.3)", "extra == \"colors\""],
+            ["pip-api", "*", "extra == \"requirements-deprecated-finder\""],
+            ["pip-shims", "(>=0.5.2)", "extra == \"pipfile-deprecated-finder\""],
+            ["pipreqs", "*", "extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\""],
+            ["requirementslib", "*", "extra == \"pipfile-deprecated-finder\""],
+            ["setuptools", "*", "extra == \"plugins\""],
           ].map do |name, requirements, kind = "runtime"|
             {
               project_name: name,
@@ -307,22 +316,22 @@ describe PackageManager::Pypi do
     end
   end
 
-  describe ".parse_requirement_extras" do
+  describe ".parse_environment_markers" do
     [
       [
         # no extras
         "(<4,>=2)",
         [
           "(<4,>=2)",
-          [],
+          nil,
         ],
       ],
       [
         # extra wrapped in single quotes
-        "(<6,>=3.0.2) ; extra == 'use_chardet_on_py3'",
+        "(<6,>=3.0.2); extra == 'use_chardet_on_py3'",
         [
           "(<6,>=3.0.2)",
-          ["use_chardet_on_py3"],
+          "extra == 'use_chardet_on_py3'",
         ],
       ],
       [
@@ -330,29 +339,29 @@ describe PackageManager::Pypi do
         "(>=3.2,<4.0) ; extra == \"django\" or extra == 'channels'",
         [
           "(>=3.2,<4.0)",
-          %w[django channels],
+          "extra == \"django\" or extra == 'channels'",
         ],
       ],
       [
         # no version range
         "extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\"",
         [
-          "",
-          %w[pipfile-deprecated-finder requirements-deprecated-finder],
+          nil,
+          "extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\"",
         ],
       ],
       [
-        # 3 extras
-        "(>=12.0.0) ; extra == \"debug\" or extra == \"debug-server\" or extra == \"cli\"",
+        # 2 extras and 1 other environment marker
+        "(>=12.0.0) ; extra == \"debug\" or extra == \"debug-server\" and os_name == \"nt\"",
         [
           "(>=12.0.0)",
-          %w[debug debug-server cli],
+          "extra == \"debug\" or extra == \"debug-server\" and os_name == \"nt\"",
         ],
       ],
     ].each do |requirement, expected|
       it "parses the extras out of #{requirement} correctly" do
         expect(
-          described_class.parse_requirement_extras(requirement)
+          described_class.parse_environment_markers(requirement)
         ).to eq(expected)
       end
     end
