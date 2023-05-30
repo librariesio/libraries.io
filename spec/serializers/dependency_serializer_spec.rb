@@ -9,6 +9,7 @@ describe DependencySerializer do
     expect(subject.attributes.keys).to eql(%i[project_name name platform
                                               requirements latest_stable
                                               latest deprecated outdated
-                                              filepath kind normalized_licenses])
+                                              filepath kind optional
+                                              normalized_licenses])
   end
 end
