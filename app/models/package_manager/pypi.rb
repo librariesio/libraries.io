@@ -144,18 +144,34 @@ module PackageManager
       [name, requirement]
     end
 
+    def self.parse_environment_markers(requirement)
+      environment_marker_name = "python_version|python_full_version|" +
+        "os_name|sys_platform|platform_release|" +
+        "platform_system|platform_version|" +
+        "platform_machine|platform_python_implementation|" +
+        "implementation_name|implementation_version|extra"
+      version_regex = "(?<version>[^;]+)"
+      environment_markers_regex = "(?<environment_markers>#{environment_marker_name}\s*==.+)"
+
+      parsed = requirement.match(/#{environment_markers_regex}|#{version_regex}(?:;\s*)?#{environment_markers_regex}?/)
+
+      [parsed[:version]&.strip, parsed[:environment_markers]]
+    end
+
     def self.dependencies(name, version, _mapped_project = nil)
       api_response = get("https://pypi.org/pypi/#{name}/#{version}/json")
       deps = api_response.dig("info", "requires_dist") || []
       source_info = api_response.fetch("urls", [])
       Rails.logger.warn("Pypi sdist (no deps): #{name}") unless source_info.any? { |rel| rel["packagetype"] == "bdist_wheel" }
 
-      deps.map do |dep|
-        dep_name, requirements = parse_pep_508_dep_spec(dep)
-        {
+      deps.flat_map do |dep|
+        dep_name, requirement = parse_pep_508_dep_spec(dep)
+        version, environment_markers = parse_environment_markers(requirement)
+
+        mapped_dep = {
           project_name: dep_name,
-          requirements: requirements.blank? ? "*" : requirements,
-          kind: "runtime",
+          requirements: version || "*",
+          kind: environment_markers || "runtime",
           optional: false,
           platform: self.name.demodulize,
         }
