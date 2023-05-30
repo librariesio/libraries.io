@@ -96,7 +96,7 @@ GEM
     ast (2.4.2)
     autoprefixer-rails (9.5.1.1)
       execjs
-    bibliothecary (8.6.0)
+    bibliothecary (8.6.2)
       commander
       deb_control
       librariesio-gem-parser
@@ -364,7 +364,7 @@ GEM
     org-ruby (0.9.12)
       rubypants (~> 0.2)
     os (1.1.1)
-    ox (2.14.14)
+    ox (2.14.16)
     packageurl-ruby (0.1.0)
     parallel (1.23.0)
     parser (3.2.2.1)
@@ -609,7 +609,7 @@ DEPENDENCIES
   annotate
   api-pagination
   asciidoctor
-  bibliothecary
+  bibliothecary (>= 8.6.2)
   bitbucket_rest_api!
   bootsnap
   bootstrap-sass

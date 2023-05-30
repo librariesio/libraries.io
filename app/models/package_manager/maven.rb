@@ -146,6 +146,7 @@ module PackageManager
           project_name: dep[:name],
           requirements: dep[:requirement],
           kind: dep[:type],
+          optional: dep.key?(:optional) ? dep[:optional] : false,
           platform: formatted_name,
         }
       end

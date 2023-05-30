@@ -173,6 +173,7 @@ describe "Api::ProjectsController" do
               outdated: dependency.outdated,
               filepath: dependency.filepath,
               kind: dependency.kind,
+              optional: dependency.optional,
               normalized_licenses: dependency.project.normalized_licenses,
             }
           end,
@@ -225,6 +226,7 @@ describe "Api::ProjectsController" do
             "outdated": dependency.outdated,
             "filepath": dependency.filepath,
             "kind": dependency.kind,
+            "optional": dependency.optional,
             "normalized_licenses": dependency.project.normalized_licenses,
           }
         end,
@@ -273,6 +275,7 @@ describe "Api::ProjectsController" do
                 "outdated": dependency.outdated,
                 "filepath": dependency.filepath,
                 "kind": dependency.kind,
+                "optional": dependency.optional,
                 "normalized_licenses": dependency.project.normalized_licenses,
               }
             end,
@@ -294,6 +297,7 @@ describe "Api::ProjectsController" do
                 "outdated": dependency.outdated,
                 "filepath": dependency.filepath,
                 "kind": dependency.kind,
+                "optional": dependency.optional,
                 "normalized_licenses": dependency.project.normalized_licenses,
               }
             end,
