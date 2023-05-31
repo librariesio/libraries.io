@@ -118,9 +118,57 @@ namespace :one_off do
     puts "Updating #{projects.count} projects..."
 
     projects.in_batches(of: 10000).each do |batch|
-      batch.update_all('status_checked_at = updated_at')
+      batch.update_all("status_checked_at = updated_at")
     end
 
     print "Finished updating projects"
+  end
+
+  desc "Backfill Pypi project dependencies kind with environment markers"
+  task :backfill_pypi_dependencies_kind, %i[start] => :environment do |_t, args|
+    # There's ~5 million Pypi versions
+    # Based on a sampling of 5000 Pypi versions, ~1/10 contain environment markers
+    # 2 Pypi API calls per second = 120/min
+    # leaving a buffer of 20 for any batches which contain more, 100/min is conservative.
+    # 100/min = 6000/hour = 144k/day
+    # At that rate it will take ~3.5 days
+
+    pypi_versions = Version.where(
+      project_id: Project.where(platform: "Pypi")
+    )
+
+    # works out to ~100 affected versions, 2 per second, with room for overflow so api-calls don't get too stacked
+    # on each other if they overflow into the next minute.
+    batch_size = 1000
+
+    num_batches = pypi_versions.count / batch_size
+
+    environment_markers = PackageManager::Pypi::PEP_508_ENVIRONMENT_MARKERS
+      .split("|")
+      .map { |em| "%#{em}%" }
+      .join(", ")
+
+    pypi_versions.in_batches(of: batch_size).each_with_index do |batch_versions, batch_versions_index|
+      affected_versions = Dependency
+        .where(version: batch_versions)
+        .joins(version: :project)
+        .where("dependencies.requirements LIKE any (array[#{environment_markers}])")
+        .select("versions.number as project_version, projects.name as project_name")
+
+      puts "queuing batch #{batch_versions_index} of #{num_batches}"
+      puts "#{affected_versions.count} versions in this batch affected"
+
+      affected_versions.in_batches(of: 2).each_with_index do |batch_affected_versions, batch_affected_versions_index|
+        batch_affected_versions.each do |affected_version|
+          PackageManagerDownloadWorker.perform_in(
+            (batch_versions_index - 1).minute + batch_affected_versions_index.second,
+            "pypi",
+            affected_version.project_name,
+            affected_version.project_version,
+            "pypi-kind-backfill"
+          )
+        end
+      end
+    end
   end
 end
