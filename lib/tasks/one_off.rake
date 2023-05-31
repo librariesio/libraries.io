@@ -125,7 +125,7 @@ namespace :one_off do
   end
 
   desc "Backfill Pypi project dependencies kind with environment markers"
-  task :backfill_pypi_dependencies_kind, %i[start] => :environment do |_t, args|
+  task :backfill_pypi_dependencies_kind, %i[batch_size] => :environment do |_t, args|
     # There's ~5 million Pypi versions
     # Based on a sampling of 5000 Pypi versions, ~1/10 contain environment markers
     # 4 Pypi API calls per second = 240/min
@@ -139,7 +139,7 @@ namespace :one_off do
 
     # works out to ~200 affected versions, 4 per second, with room for overflow so api-calls don't get too stacked
     # on each other if they overflow into the next minute.
-    batch_size = 2000
+    batch_size = args[:batch_size] || 2000
 
     num_batches = pypi_versions.count / batch_size
 
