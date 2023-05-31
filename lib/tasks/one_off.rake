@@ -137,7 +137,7 @@ namespace :one_off do
       project_id: Project.where(platform: "Pypi")
     )
 
-    # works out to ~100 affected versions, 2 per second, with room for overflow so api-calls don't get too stacked
+    # works out to ~200 affected versions, 4 per second, with room for overflow so api-calls don't get too stacked
     # on each other if they overflow into the next minute.
     batch_size = 2000
 
