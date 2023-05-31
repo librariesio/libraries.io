@@ -2,6 +2,7 @@
 
 class ProjectSerializer < ActiveModel::Serializer
   attributes %i[
+    contributions_count
     dependent_repos_count
     dependents_count
     deprecation_reason
