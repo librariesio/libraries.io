@@ -165,7 +165,9 @@ namespace :one_off do
             "pypi",
             affected_version.project_name,
             affected_version.project_version,
-            "pypi-kind-backfill"
+            "pypi-kind-backfill",
+            0,
+            true
           )
         end
       end
