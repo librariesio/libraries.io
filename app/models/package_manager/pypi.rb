@@ -13,6 +13,14 @@ module PackageManager
     PYPI_PRERELEASE = /(a|b|rc|dev)[0-9]+$/.freeze
     # Adapted from https://peps.python.org/pep-0508/#names
     PEP_508_NAME_REGEX = /^([A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9])/i.freeze
+    PEP_508_ENVIRONMENT_MARKERS = %w[
+      python_version python_full_version os_name
+      sys_platform platform_release platform_system
+      platform_version platform_machine platform_python_implementation
+      implementation_name implementation_version extra
+    ].freeze
+    
+    PEP_508_ENVIRONMENT_MARKER_REGEX = PEP_508_ENVIRONMENT_MARKERS.join("|")
 
     def self.package_link(db_project, version = nil)
       # NB PEP 503: "All URLs which respond with an HTML5 page MUST end with a / and the repository SHOULD redirect the URLs without a / to add a / to the end."
@@ -145,13 +153,8 @@ module PackageManager
     end
 
     def self.parse_environment_markers(requirement)
-      environment_marker_name = "python_version|python_full_version|" +
-        "os_name|sys_platform|platform_release|" +
-        "platform_system|platform_version|" +
-        "platform_machine|platform_python_implementation|" +
-        "implementation_name|implementation_version|extra"
       version_regex = "(?<version>[^;]+)"
-      environment_markers_regex = "(?<environment_markers>#{environment_marker_name}\s*==.+)"
+      environment_markers_regex = "(?<environment_markers>#{PEP_508_ENVIRONMENT_MARKER_REGEX}\s*==.+)"
 
       parsed = requirement.match(/#{environment_markers_regex}|#{version_regex}(?:;\s*)?#{environment_markers_regex}?/)
 
@@ -168,11 +171,11 @@ module PackageManager
         dep_name, requirement = parse_pep_508_dep_spec(dep)
         version, environment_markers = parse_environment_markers(requirement)
 
-        mapped_dep = {
+        {
           project_name: dep_name,
           requirements: version || "*",
           kind: environment_markers || "runtime",
-          optional: false,
+          optional: environment_markers.present?,
           platform: self.name.demodulize,
         }
       end

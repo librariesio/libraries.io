@@ -118,9 +118,56 @@ namespace :one_off do
     puts "Updating #{projects.count} projects..."
 
     projects.in_batches(of: 10000).each do |batch|
-      batch.update_all('status_checked_at = updated_at')
+      batch.update_all("status_checked_at = updated_at")
     end
 
     print "Finished updating projects"
+  end
+
+  desc "Backfill Pypi project dependencies kind with environment markers"
+  task :backfill_pypi_dependencies_kind, %i[batch_size, start] => :environment do |_t, args|
+    # There's ~5 million Pypi versions
+    # Based on a sampling of 50k Pypi versions, ~50 (1/1000) contain environment markers
+    # So in total there is an estimated 5k affected versions
+
+    pypi_versions = Version.where(
+      project_id: Project.where(platform: "Pypi")
+    )
+
+    # this batch size seems to keep the query below within a reasonable time limit
+    batch_size = args[:batch_size] || 2000
+
+    num_batches = pypi_versions.count / batch_size
+
+    environment_markers = PackageManager::Pypi::PEP_508_ENVIRONMENT_MARKERS
+      .split("|")
+      .map { |em| "%#{em}%" }
+      .join(", ")
+
+    pypi_versions.in_batches(of: batch_size, order: :asc, start: args[:start]).each_with_index do |batch_versions, batch_versions_index|
+      affected_versions = batch_versions
+        .joins(:dependencies)
+        .joins(:project)
+        .where("dependencies.requirements LIKE any (array[#{environment_markers}])")
+        .distinct
+        .select("versions.number as project_version, projects.name as project_name")
+
+      puts "queuing batch #{batch_versions_index} of #{num_batches}"
+      puts "#{affected_versions.count} versions in this batch affected"
+
+      affected_versions.in_batches(of: 2).each_with_index do |batch_affected_versions, batch_affected_versions_index|
+        batch_affected_versions.each do |affected_version|
+          PackageManagerDownloadWorker.perform_in(
+            (batch_versions_index - 1).minute + batch_affected_versions_index.second,
+            "pypi",
+            affected_version.project_name,
+            affected_version.project_version,
+            "pypi-kind-backfill",
+            0,
+            true
+          )
+        end
+      end
+    end
   end
 end
