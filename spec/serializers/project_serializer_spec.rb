@@ -5,6 +5,7 @@ require "rails_helper"
 describe ProjectSerializer do
   let(:default_attribute_names) do
     %i[
+      contributions_count
       dependent_repos_count
       dependents_count
       deprecation_reason
