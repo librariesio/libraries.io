@@ -125,7 +125,7 @@ namespace :one_off do
   end
 
   desc "Backfill Pypi project dependencies kind with environment markers"
-  task :backfill_pypi_dependencies_kind, %i[batch_size, start] => :environment do |_t, args|
+  task :backfill_pypi_dependencies_kind, %i[batch_size start] => :environment do |_t, args|
     # There's ~5 million Pypi versions
     # Based on a sampling of 50k Pypi versions, ~50 (1/1000) contain environment markers
     # So in total there is an estimated 5k affected versions
@@ -135,7 +135,7 @@ namespace :one_off do
     )
 
     # this batch size seems to keep the query below within a reasonable time limit
-    batch_size = args[:batch_size] || 2000
+    batch_size = (args[:batch_size] && args[:batch_size].to_i) || 2000
 
     num_batches = pypi_versions.count / batch_size
 
@@ -144,19 +144,20 @@ namespace :one_off do
       .map { |em| "%#{em}%" }
       .join(", ")
 
-    pypi_versions.in_batches(of: batch_size, order: :asc, start: args[:start]).each_with_index do |batch_versions, batch_versions_index|
+    pypi_versions.in_batches(of: batch_size, start: args[:start].to_i).each_with_index do |batch_versions, batch_versions_index|
       affected_versions = batch_versions
         .joins(:dependencies)
         .joins(:project)
         .where("dependencies.requirements LIKE any (array[#{environment_markers}])")
         .distinct
-        .select("versions.number as project_version, projects.name as project_name")
 
       puts "queuing batch #{batch_versions_index} of #{num_batches}"
       puts "#{affected_versions.count} versions in this batch affected"
 
       affected_versions.in_batches(of: 2).each_with_index do |batch_affected_versions, batch_affected_versions_index|
-        batch_affected_versions.each do |affected_version|
+        batch_affected_versions
+          .select("versions.number as project_version, projects.name as project_name")
+          .each do |affected_version|
           PackageManagerDownloadWorker.perform_in(
             (batch_versions_index - 1).minute + batch_affected_versions_index.second,
             "pypi",
