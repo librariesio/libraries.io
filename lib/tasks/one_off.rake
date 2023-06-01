@@ -149,10 +149,11 @@ namespace :one_off do
       .join(", ")
 
     pypi_versions.in_batches(of: batch_size).each_with_index do |batch_versions, batch_versions_index|
-      affected_versions = Dependency
-        .where(version: batch_versions)
-        .joins(version: :project)
+      affected_versions = batch_versions
+        .joins(:dependencies)
+        .joins(:project)
         .where("dependencies.requirements LIKE any (array[#{environment_markers}])")
+        .distinct
         .select("versions.number as project_version, projects.name as project_name")
 
       puts "queuing batch #{batch_versions_index} of #{num_batches}"
