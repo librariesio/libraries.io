@@ -125,20 +125,16 @@ namespace :one_off do
   end
 
   desc "Backfill Pypi project dependencies kind with environment markers"
-  task :backfill_pypi_dependencies_kind, %i[batch_size] => :environment do |_t, args|
+  task :backfill_pypi_dependencies_kind, %i[batch_size, start] => :environment do |_t, args|
     # There's ~5 million Pypi versions
-    # Based on a sampling of 5000 Pypi versions, ~1/10 contain environment markers
-    # 4 Pypi API calls per second = 240/min
-    # leaving a buffer of 40 for any batches which contain more, 200/min is conservative.
-    # 200/min = 12000/hour = 288k/day
-    # At that rate it will take ~1.75 days
+    # Based on a sampling of 50k Pypi versions, ~50 (1/1000) contain environment markers
+    # So in total there is an estimated 5k affected versions
 
     pypi_versions = Version.where(
       project_id: Project.where(platform: "Pypi")
     )
 
-    # works out to ~200 affected versions, 4 per second, with room for overflow so api-calls don't get too stacked
-    # on each other if they overflow into the next minute.
+    # this batch size seems to keep the query below within a reasonable time limit
     batch_size = args[:batch_size] || 2000
 
     num_batches = pypi_versions.count / batch_size
@@ -148,7 +144,7 @@ namespace :one_off do
       .map { |em| "%#{em}%" }
       .join(", ")
 
-    pypi_versions.in_batches(of: batch_size).each_with_index do |batch_versions, batch_versions_index|
+    pypi_versions.in_batches(of: batch_size, order: :asc, start: args[:start]).each_with_index do |batch_versions, batch_versions_index|
       affected_versions = batch_versions
         .joins(:dependencies)
         .joins(:project)

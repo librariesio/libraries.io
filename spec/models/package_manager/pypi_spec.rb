@@ -142,14 +142,14 @@ describe PackageManager::Pypi do
             ["idna", "(<4,>=2.5)"],
             ["urllib3", "(<1.27,>=1.21.1)"],
             ["certifi", "(>=2017.4.17)"],
-            ["PySocks", "(!=1.5.7,>=1.5.6)", "extra == 'socks'"],
-            ["chardet", "(<6,>=3.0.2)", "extra == 'use_chardet_on_py3'"],
-          ].map do |name, requirements, kind = "runtime"|
+            ["PySocks", "(!=1.5.7,>=1.5.6)", "extra == 'socks'", true],
+            ["chardet", "(<6,>=3.0.2)", "extra == 'use_chardet_on_py3'", true],
+          ].map do |name, requirements, kind = "runtime", optional = false|
             {
               project_name: name,
               requirements: requirements,
               kind: kind,
-              optional: false,
+              optional: optional,
               platform: "Pypi",
             }
           end
@@ -169,12 +169,12 @@ describe PackageManager::Pypi do
             ["pipreqs", "*", "extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\""],
             ["requirementslib", "*", "extra == \"pipfile-deprecated-finder\""],
             ["setuptools", "*", "extra == \"plugins\""],
-          ].map do |name, requirements, kind = "runtime"|
+          ].map do |name, requirements, kind|
             {
               project_name: name,
               requirements: requirements,
               kind: kind,
-              optional: false,
+              optional: true,
               platform: "Pypi",
             }
           end

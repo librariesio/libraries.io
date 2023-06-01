@@ -154,7 +154,7 @@ module PackageManager
 
     def self.parse_environment_markers(requirement)
       version_regex = "(?<version>[^;]+)"
-      environment_markers_regex = "(?<environment_markers>#{PEP_508_ENVIRONMENT_MARKERS}\s*==.+)"
+      environment_markers_regex = "(?<environment_markers>#{PEP_508_ENVIRONMENT_MARKER_REGEX}\s*==.+)"
 
       parsed = requirement.match(/#{environment_markers_regex}|#{version_regex}(?:;\s*)?#{environment_markers_regex}?/)
 
@@ -171,11 +171,11 @@ module PackageManager
         dep_name, requirement = parse_pep_508_dep_spec(dep)
         version, environment_markers = parse_environment_markers(requirement)
 
-        mapped_dep = {
+        {
           project_name: dep_name,
           requirements: version || "*",
           kind: environment_markers || "runtime",
-          optional: false,
+          optional: environment_markers.present?,
           platform: self.name.demodulize,
         }
       end
