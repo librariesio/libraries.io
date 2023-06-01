@@ -157,6 +157,7 @@ describe "Api::ProjectsController" do
       expect(response.content_type).to eq("application/json")
       expect(response.body).to be_json_eql(
         {
+          contributions_count: 0,
           dependencies_for_version: version.number,
           dependent_repos_count: project.dependent_repos_count,
           dependents_count: project.dependents_count,

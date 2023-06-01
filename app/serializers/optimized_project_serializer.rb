@@ -62,7 +62,8 @@ class OptimizedProjectSerializer
           repository_license: project.repository_license,
           repository_status: project.repository_status,
           stars: project.stars,
-          versions: project.versions
+          versions: project.versions,
+          contributions_count: project.contributions_count
         ).tap do |result|
           if @internal_key
             result[:updated_at] = project.updated_at

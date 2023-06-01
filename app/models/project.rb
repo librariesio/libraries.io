@@ -69,6 +69,7 @@ class Project < ApplicationRecord
   HAS_DEPENDENCIES = false
   STATUSES = ["Active", "Deprecated", "Unmaintained", "Help Wanted", "Removed", "Hidden"].freeze
   API_FIELDS = %i[
+    contributions_count
     dependent_repos_count
     dependents_count
     deprecation_reason
