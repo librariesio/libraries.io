@@ -140,8 +140,7 @@ namespace :one_off do
     num_batches = pypi_versions.count / batch_size
 
     environment_markers = PackageManager::Pypi::PEP_508_ENVIRONMENT_MARKERS
-      .split("|")
-      .map { |em| "%#{em}%" }
+      .map { |em| "'%#{em}%'" }
       .join(", ")
 
     pypi_versions.in_batches(of: batch_size, start: args[:start].to_i).each_with_index do |batch_versions, batch_versions_index|
@@ -159,7 +158,7 @@ namespace :one_off do
           .select("versions.number as project_version, projects.name as project_name")
           .each do |affected_version|
           PackageManagerDownloadWorker.perform_in(
-            (batch_versions_index - 1).minute + batch_affected_versions_index.second,
+            batch_versions_index.minute + batch_affected_versions_index.second,
             "pypi",
             affected_version.project_name,
             affected_version.project_version,
