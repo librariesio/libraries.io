@@ -206,27 +206,27 @@ describe PackageManager::Pypi do
       [
         "name; os_name=='a' or os_name=='b'",
         "name",
-        "os_name=='a' or os_name=='b'",
+        "; os_name=='a' or os_name=='b'",
       ],
       [
         "name; os_name=='a' and os_name=='b' or os_name=='c'",
         "name",
-        "os_name=='a' and os_name=='b' or os_name=='c'",
+        "; os_name=='a' and os_name=='b' or os_name=='c'",
       ],
       [
         "name; os_name=='a' and (os_name=='b' or os_name=='c')",
         "name",
-        "os_name=='a' and (os_name=='b' or os_name=='c')",
+        "; os_name=='a' and (os_name=='b' or os_name=='c')",
       ],
       [
         "name; os_name=='a' or os_name=='b' and os_name=='c'",
         "name",
-        "os_name=='a' or os_name=='b' and os_name=='c'",
+        "; os_name=='a' or os_name=='b' and os_name=='c'",
       ],
       [
         "name; (os_name=='a' or os_name=='b') and os_name=='c'",
         "name",
-        "(os_name=='a' or os_name=='b') and os_name=='c'",
+        "; (os_name=='a' or os_name=='b') and os_name=='c'",
       ],
     ].each do |test, expected_name, expected_requirement|
       it "#{test} should be parsed correctly" do
@@ -323,7 +323,6 @@ describe PackageManager::Pypi do
         "(<4,>=2)",
         [
           "(<4,>=2)",
-          nil,
         ],
       ],
       [
@@ -344,9 +343,9 @@ describe PackageManager::Pypi do
       ],
       [
         # no version range
-        "extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\"",
+        "; extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\"",
         [
-          nil,
+          "",
           "extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\"",
         ],
       ],
@@ -359,9 +358,9 @@ describe PackageManager::Pypi do
         ],
       ],
       [
-        "python_version < \"3.10\" or extra == 'socks'",
+        "; python_version < \"3.10\" or extra == 'socks'",
         [
-          nil,
+          "",
           "python_version < \"3.10\" or extra == 'socks'"
         ]
       ]

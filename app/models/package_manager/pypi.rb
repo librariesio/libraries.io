@@ -13,14 +13,14 @@ module PackageManager
     PYPI_PRERELEASE = /(a|b|rc|dev)[0-9]+$/.freeze
     # Adapted from https://peps.python.org/pep-0508/#names
     PEP_508_NAME_REGEX = /^([A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9])/i.freeze
+    # This is unused but left here for possible future use and so we can quickly reference the set of valid
+    # environment markers.
     PEP_508_ENVIRONMENT_MARKERS = %w[
       python_version python_full_version os_name
       sys_platform platform_release platform_system
       platform_version platform_machine platform_python_implementation
       implementation_name implementation_version extra
     ].freeze
-    
-    PEP_508_ENVIRONMENT_MARKER_REGEX = PEP_508_ENVIRONMENT_MARKERS.join("|")
 
     def self.package_link(db_project, version = nil)
       # NB PEP 503: "All URLs which respond with an HTML5 page MUST end with a / and the repository SHOULD redirect the URLs without a / to add a / to the end."
@@ -145,20 +145,16 @@ module PackageManager
     end
 
     # Simply parses out the name of a PEP 508 Dependency specification: https://peps.python.org/pep-0508/
-    # Leaves the rest as-is with any leading semicolons or spaces stripped
+    # Leaves the rest as-is with any leading or trailing spaces stripped.
+    # Note: will leave leading semicolons by design.
     def self.parse_pep_508_dep_spec(dep)
       name, requirement = dep.split(PEP_508_NAME_REGEX, 2).last(2).map(&:strip)
-      requirement = requirement.sub(/^[\s;]*/, "")
+      requirement = requirement.strip
       [name, requirement]
     end
 
     def self.parse_environment_markers(requirement)
-      version_regex = "(?<version>[^;]+)"
-      environment_markers_regex = "(?<environment_markers>(?:#{PEP_508_ENVIRONMENT_MARKER_REGEX}).+)"
-
-      parsed = requirement.match(/#{environment_markers_regex}|#{version_regex}(?:;\s*)?#{environment_markers_regex}?/)
-
-      [parsed[:version]&.strip, parsed[:environment_markers]]
+      return requirement.split(";").map(&:strip)
     end
 
     def self.dependencies(name, version, _mapped_project = nil)
@@ -173,7 +169,7 @@ module PackageManager
 
         {
           project_name: dep_name,
-          requirements: version || "*",
+          requirements: version.presence || "*",
           kind: environment_markers || "runtime",
           optional: environment_markers.present?,
           platform: self.name.demodulize,
