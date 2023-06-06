@@ -135,11 +135,11 @@ namespace :one_off do
     )
 
     # this batch size seems to keep the query below within a reasonable time limit
-    batch_size = (args[:batch_size] && args[:batch_size].to_i) || 2000
+    batch_size = (args[:batch_size] && args[:batch_size].to_i) || 3000
 
     num_batches = pypi_versions.count / batch_size
 
-    environment_markers = PackageManager::Pypi::PEP_508_ENVIRONMENT_MARKERS
+    environment_markers = (PackageManager::Pypi::PEP_508_ENVIRONMENT_MARKERS - ["extra"])
       .map { |em| "'%#{em}%'" }
       .join(", ")
 

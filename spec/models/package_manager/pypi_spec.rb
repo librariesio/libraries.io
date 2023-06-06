@@ -359,10 +359,10 @@ describe PackageManager::Pypi do
         ],
       ],
       [
-        "python_version < \"3.10\"",
+        "python_version < \"3.10\" or extra == 'socks'",
         [
           nil,
-          "python_version < \"3.10\""
+          "python_version < \"3.10\" or extra == 'socks'"
         ]
       ]
     ].each do |requirement, expected|
