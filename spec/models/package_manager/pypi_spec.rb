@@ -358,6 +358,13 @@ describe PackageManager::Pypi do
           "extra == \"debug\" or extra == \"debug-server\" and os_name == \"nt\"",
         ],
       ],
+      [
+        "python_version < \"3.10\"",
+        [
+          nil,
+          "python_version < \"3.10\""
+        ]
+      ]
     ].each do |requirement, expected|
       it "parses the extras out of #{requirement} correctly" do
         expect(

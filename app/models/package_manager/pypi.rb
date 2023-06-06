@@ -154,7 +154,7 @@ module PackageManager
 
     def self.parse_environment_markers(requirement)
       version_regex = "(?<version>[^;]+)"
-      environment_markers_regex = "(?<environment_markers>#{PEP_508_ENVIRONMENT_MARKER_REGEX}\s*==.+)"
+      environment_markers_regex = "(?<environment_markers>(?:#{PEP_508_ENVIRONMENT_MARKER_REGEX}).+)"
 
       parsed = requirement.match(/#{environment_markers_regex}|#{version_regex}(?:;\s*)?#{environment_markers_regex}?/)
 
