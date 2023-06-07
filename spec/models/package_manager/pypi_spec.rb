@@ -184,55 +184,94 @@ describe PackageManager::Pypi do
 
     # Copied from the tests of https://peps.python.org/pep-0508/#complete-grammar
     [
-      ["A", "A", ""],
-      ["A>=3", "A", ">=3"],
-      ["A.B-C_D", "A.B-C_D", ""],
-      ["aa", "aa", ""],
-      ["name", "name", ""],
-      ["name<=1", "name", "<=1"],
-      ["name>=3", "name", ">=3"],
-      ["name>=3,<2", "name", ">=3,<2"],
-      ["name@http://foo.com", "name", "@http://foo.com"],
-      [
-        "name [fred,bar] @ http://foo.com ; python_version=='2.7'",
-        "name",
-        "[fred,bar] @ http://foo.com ; python_version=='2.7'",
-      ],
+      ["A", "A", "", ""],
+      ["A>=3", "A", ">=3", ""],
+      ["A.B-C_D", "A.B-C_D", "", ""],
+      ["aa", "aa", "", ""],
+      ["name", "name", "", ""],
+      ["name<=1", "name", "<=1", ""],
+      ["name>=3", "name", ">=3", ""],
+      ["name>=3,<2", "name", ">=3,<2", ""],
       [
         "name[quux, strange];python_version<'2.7' and platform_version=='2'",
-        "name",
-        "[quux, strange];python_version<'2.7' and platform_version=='2'",
+        "name[quux,strange]",
+        "",
+        "python_version<'2.7' and platform_version=='2'",
       ],
       [
         "name; os_name=='a' or os_name=='b'",
         "name",
+        "",
         "os_name=='a' or os_name=='b'",
       ],
       [
         "name; os_name=='a' and os_name=='b' or os_name=='c'",
         "name",
+        "",
         "os_name=='a' and os_name=='b' or os_name=='c'",
       ],
       [
         "name; os_name=='a' and (os_name=='b' or os_name=='c')",
         "name",
+        "",
         "os_name=='a' and (os_name=='b' or os_name=='c')",
       ],
       [
         "name; os_name=='a' or os_name=='b' and os_name=='c'",
         "name",
+        "",
         "os_name=='a' or os_name=='b' and os_name=='c'",
       ],
       [
         "name; (os_name=='a' or os_name=='b') and os_name=='c'",
         "name",
+        "",
         "(os_name=='a' or os_name=='b') and os_name=='c'",
       ],
-    ].each do |test, expected_name, expected_requirement|
+      [
+        "foo (<6,>=3.0.2); extra == 'use_chardet_on_py3'",
+        "foo",
+        "(<6,>=3.0.2)",
+        "extra == 'use_chardet_on_py3'",
+      ],
+      [
+        "bar (>=3.2,<4.0) ; extra == \"django\" or extra == 'channels'",
+        "bar",
+        "(>=3.2,<4.0)",
+        "extra == \"django\" or extra == 'channels'",
+      ],
+      [
+        "foo; extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\"",
+        "foo",
+        "",
+        "extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\"",
+      ],
+      [
+        "foo(>=12.0.0) ; extra == \"debug\" or extra == \"debug-server\" and os_name == \"nt\"",
+        "foo",
+        "(>=12.0.0)",
+        "extra == \"debug\" or extra == \"debug-server\" and os_name == \"nt\"",
+      ],
+      [
+        "bar; python_version < \"3.10\" or extra == 'socks'",
+        "bar",
+        "",
+        "python_version < \"3.10\" or extra == 'socks'"
+      ],
+      # URL dependency specifications are not supported by our current code so results in requirements which are not
+      # usable.
+      ["name@http://foo.com", "name", "@http://foo.com", ""],
+      [
+        "name [fred,bar] @ http://foo.com ; python_version=='2.7'",
+        "name[fred,bar]",
+        "@ http://foo.com",
+        "python_version=='2.7'",
+      ]
+    ].each do |test, expected_name, expected_version, expected_environment_markers|
       it "#{test} should be parsed correctly" do
         expect(
           PackageManager::Pypi.parse_pep_508_dep_spec(test)
-        ).to eq([expected_name, expected_requirement])
+        ).to eq([expected_name, expected_version, expected_environment_markers])
       end
     end
   end
@@ -312,57 +351,6 @@ describe PackageManager::Pypi do
 
       it "returns nil" do
         expect(result).to eq(nil)
-      end
-    end
-  end
-
-  describe ".parse_environment_markers" do
-    [
-      [
-        # no extras
-        "(<4,>=2)",
-        [
-          "(<4,>=2)",
-          nil,
-        ],
-      ],
-      [
-        # extra wrapped in single quotes
-        "(<6,>=3.0.2); extra == 'use_chardet_on_py3'",
-        [
-          "(<6,>=3.0.2)",
-          "extra == 'use_chardet_on_py3'",
-        ],
-      ],
-      [
-        # multiple extras, 1 wrapped in single quotes, 1 in escaped double quotes
-        "(>=3.2,<4.0) ; extra == \"django\" or extra == 'channels'",
-        [
-          "(>=3.2,<4.0)",
-          "extra == \"django\" or extra == 'channels'",
-        ],
-      ],
-      [
-        # no version range
-        "extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\"",
-        [
-          nil,
-          "extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\"",
-        ],
-      ],
-      [
-        # 2 extras and 1 other environment marker
-        "(>=12.0.0) ; extra == \"debug\" or extra == \"debug-server\" and os_name == \"nt\"",
-        [
-          "(>=12.0.0)",
-          "extra == \"debug\" or extra == \"debug-server\" and os_name == \"nt\"",
-        ],
-      ],
-    ].each do |requirement, expected|
-      it "parses the extras out of #{requirement} correctly" do
-        expect(
-          described_class.parse_environment_markers(requirement)
-        ).to eq(expected)
       end
     end
   end

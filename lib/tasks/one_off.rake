@@ -124,41 +124,30 @@ namespace :one_off do
     print "Finished updating projects"
   end
 
-  desc "Backfill Pypi project dependencies kind with environment markers"
-  task :backfill_pypi_dependencies_kind, %i[batch_size start] => :environment do |_t, args|
-    # There's ~5 million Pypi versions
-    # Based on a sampling of 50k Pypi versions, ~50 (1/1000) contain environment markers
-    # So in total there is an estimated 5k affected versions
+  desc "Correct Pypi dependency names with extras and kind"
+  task :correct_pypi_dependencies_name_and_kind, %i[batch_size start] => :environment do |_t, args|
+    pypi_versions = Version.where(project_id: Project.where(platform: "Pypi"))
 
-    pypi_versions = Version.where(
-      project_id: Project.where(platform: "Pypi")
-    )
-
-    # this batch size seems to keep the query below within a reasonable time limit
-    batch_size = (args[:batch_size] && args[:batch_size].to_i) || 2000
+    batch_size = (args[:batch_size] && args[:batch_size].to_i) || 10000
 
     num_batches = pypi_versions.count / batch_size
-
-    environment_markers = PackageManager::Pypi::PEP_508_ENVIRONMENT_MARKERS
-      .map { |em| "'%#{em}%'" }
-      .join(", ")
 
     pypi_versions.in_batches(of: batch_size, start: args[:start].to_i).each_with_index do |batch_versions, batch_versions_index|
       affected_versions = batch_versions
         .joins(:dependencies)
-        .joins(:project)
-        .where("dependencies.requirements LIKE any (array[#{environment_markers}])")
         .distinct
+        .where("dependencies.requirements LIKE '[%' OR dependencies.optional IS TRUE")
 
       puts "queuing batch #{batch_versions_index} of #{num_batches}"
       puts "#{affected_versions.count} versions in this batch affected"
 
-      affected_versions.in_batches(of: 2).each_with_index do |batch_affected_versions, batch_affected_versions_index|
+      affected_versions.in_batches(of: 4).each_with_index do |batch_affected_versions, batch_affected_versions_index|
         batch_affected_versions
+          .joins(:project)
           .select("versions.number as project_version, projects.name as project_name")
           .each do |affected_version|
           PackageManagerDownloadWorker.perform_in(
-            batch_versions_index.minute + batch_affected_versions_index.second,
+            batch_versions_index.minute + batch_affected_versions_index.seconds,
             "pypi",
             affected_version.project_name,
             affected_version.project_version,

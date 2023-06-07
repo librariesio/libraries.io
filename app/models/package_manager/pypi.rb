@@ -11,16 +11,17 @@ module PackageManager
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
     PYPI_PRERELEASE = /(a|b|rc|dev)[0-9]+$/.freeze
-    # Adapted from https://peps.python.org/pep-0508/#names
-    PEP_508_NAME_REGEX = /^([A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9])/i.freeze
+    # Adapted from https://peps.python.org/pep-0508/#names to include extras
+    PEP_508_NAME_REGEX = /[A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9]/i.freeze
+    PEP_508_NAME_WITH_EXTRAS_REGEX = /(^#{PEP_508_NAME_REGEX}\s*(?:\[#{PEP_508_NAME_REGEX}(?:,\s*#{PEP_508_NAME_REGEX})*\])?)/i.freeze
+    # This is unused but left here for possible future use and so we can quickly reference the set of valid
+    # environment markers.
     PEP_508_ENVIRONMENT_MARKERS = %w[
       python_version python_full_version os_name
       sys_platform platform_release platform_system
       platform_version platform_machine platform_python_implementation
       implementation_name implementation_version extra
     ].freeze
-    
-    PEP_508_ENVIRONMENT_MARKER_REGEX = PEP_508_ENVIRONMENT_MARKERS.join("|")
 
     def self.package_link(db_project, version = nil)
       # NB PEP 503: "All URLs which respond with an HTML5 page MUST end with a / and the repository SHOULD redirect the URLs without a / to add a / to the end."
@@ -144,21 +145,13 @@ module PackageManager
         &.index_by { |v| v[:number] } || {}
     end
 
-    # Simply parses out the name of a PEP 508 Dependency specification: https://peps.python.org/pep-0508/
-    # Leaves the rest as-is with any leading semicolons or spaces stripped
+    # Parses out the name, version requirement, and environment markers from a PEP508 dependency specification
+    # https://peps.python.org/pep-0508/
     def self.parse_pep_508_dep_spec(dep)
-      name, requirement = dep.split(PEP_508_NAME_REGEX, 2).last(2).map(&:strip)
-      requirement = requirement.sub(/^[\s;]*/, "")
-      [name, requirement]
-    end
+      name, requirement = dep.split(PEP_508_NAME_WITH_EXTRAS_REGEX, 2).last(2)
+      version, environment_markers = requirement.split(";").map(&:strip)
 
-    def self.parse_environment_markers(requirement)
-      version_regex = "(?<version>[^;]+)"
-      environment_markers_regex = "(?<environment_markers>#{PEP_508_ENVIRONMENT_MARKER_REGEX}\s*==.+)"
-
-      parsed = requirement.match(/#{environment_markers_regex}|#{version_regex}(?:;\s*)?#{environment_markers_regex}?/)
-
-      [parsed[:version]&.strip, parsed[:environment_markers]]
+      [name.remove(/\s/), version || "", environment_markers || ""]
     end
 
     def self.dependencies(name, version, _mapped_project = nil)
@@ -168,13 +161,12 @@ module PackageManager
       Rails.logger.warn("Pypi sdist (no deps): #{name}") unless source_info.any? { |rel| rel["packagetype"] == "bdist_wheel" }
 
       deps.flat_map do |dep|
-        dep_name, requirement = parse_pep_508_dep_spec(dep)
-        version, environment_markers = parse_environment_markers(requirement)
+        name, version, environment_markers = parse_pep_508_dep_spec(dep)
 
         {
-          project_name: dep_name,
-          requirements: version || "*",
-          kind: environment_markers || "runtime",
+          project_name: name,
+          requirements: version.presence || "*",
+          kind: environment_markers.presence || "runtime",
           optional: environment_markers.present?,
           platform: self.name.demodulize,
         }
