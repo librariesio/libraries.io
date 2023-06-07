@@ -11,8 +11,9 @@ module PackageManager
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
     PYPI_PRERELEASE = /(a|b|rc|dev)[0-9]+$/.freeze
-    # Adapted from https://peps.python.org/pep-0508/#names
-    PEP_508_NAME_REGEX = /^([A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9])/i.freeze
+    # Adapted from https://peps.python.org/pep-0508/#names to include extras
+    PEP_508_NAME_REGEX = /[A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9]/i.freeze
+    PEP_508_NAME_WITH_EXTRAS_REGEX = /(^#{PEP_508_NAME_REGEX}\s*(?:\[#{PEP_508_NAME_REGEX}(?:,\s*#{PEP_508_NAME_REGEX})*\])?)/i.freeze
     # This is unused but left here for possible future use and so we can quickly reference the set of valid
     # environment markers.
     PEP_508_ENVIRONMENT_MARKERS = %w[
@@ -148,13 +149,10 @@ module PackageManager
     # Leaves the rest as-is with any leading or trailing spaces stripped.
     # Note: will leave leading semicolons by design.
     def self.parse_pep_508_dep_spec(dep)
-      name, requirement = dep.split(PEP_508_NAME_REGEX, 2).last(2).map(&:strip)
-      requirement = requirement.strip
-      [name, requirement]
-    end
+      name, requirement = dep.split(PEP_508_NAME_WITH_EXTRAS_REGEX, 2).last(2)
+      version, environment_markers = requirement.split(";").map(&:strip)
 
-    def self.parse_environment_markers(requirement)
-      return requirement.split(";").map(&:strip)
+      [name.remove(/\s/), version || "", environment_markers || ""]
     end
 
     def self.dependencies(name, version, _mapped_project = nil)
@@ -164,13 +162,12 @@ module PackageManager
       Rails.logger.warn("Pypi sdist (no deps): #{name}") unless source_info.any? { |rel| rel["packagetype"] == "bdist_wheel" }
 
       deps.flat_map do |dep|
-        dep_name, requirement = parse_pep_508_dep_spec(dep)
-        version, environment_markers = parse_environment_markers(requirement)
+        name, version, environment_markers = parse_pep_508_dep_spec(dep)
 
         {
-          project_name: dep_name,
+          project_name: name,
           requirements: version.presence || "*",
-          kind: environment_markers || "runtime",
+          kind: environment_markers.presence || "runtime",
           optional: environment_markers.present?,
           platform: self.name.demodulize,
         }
