@@ -145,9 +145,8 @@ module PackageManager
         &.index_by { |v| v[:number] } || {}
     end
 
-    # Simply parses out the name of a PEP 508 Dependency specification: https://peps.python.org/pep-0508/
-    # Leaves the rest as-is with any leading or trailing spaces stripped.
-    # Note: will leave leading semicolons by design.
+    # Parses out the name, version requirement, and environment markers from a PEP508 dependency specification
+    # https://peps.python.org/pep-0508/
     def self.parse_pep_508_dep_spec(dep)
       name, requirement = dep.split(PEP_508_NAME_WITH_EXTRAS_REGEX, 2).last(2)
       version, environment_markers = requirement.split(";").map(&:strip)
