@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_model_serializers'
+
 module ASMTrace
   def serializable_hash(*)
     if ENV["ASM_TRACING"]
@@ -18,3 +20,6 @@ end
 # We're prepending our tracing module to hook into the serializer_hash(render) method of ASM for tracing
 ActiveModel::Serializer.prepend(ASMTrace)
 ActiveModel::Serializer::ArraySerializer.prepend(ASMTrace)
+
+# Disable logging the "Rendered * with' messages
+ActiveSupport::Notifications.unsubscribe(ActiveModelSerializers::Logging::RENDER_EVENT)
