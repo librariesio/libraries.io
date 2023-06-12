@@ -23,4 +23,28 @@ describe PackageManager::Maven::Google do
       expect(project.versions.first.number).to eq("0.22")
     end
   end
+
+  describe ".dependencies" do
+    before do
+      allow(described_class).to receive(:parse_pom_manifest).and_return(
+        [{ name: "bibliothecary", requirement: "*", type: "runtime" }]
+      )
+    end
+
+    it "formats a dependency correctly" do
+      result = described_class.dependencies(
+        "name",
+        "version",
+        {}
+      )
+
+      expect(result).to eq([
+        project_name: "bibliothecary",
+        requirements: "*",
+        kind: "runtime",
+        optional: false,
+        platform: "Maven",
+      ])
+    end
+  end
 end
