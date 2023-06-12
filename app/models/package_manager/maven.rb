@@ -139,15 +139,19 @@ module PackageManager
       properties
     end
 
-    def self.dependencies(name, version, project)
+    def self.parse_pom_manifest(name, version, project)
       pom_file = get_raw(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).pom(version))
-      Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file, project[:properties]).map do |dep|
+      Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file, project[:properties])
+    end
+
+    def self.dependencies(name, version, project)
+      parse_pom_manifest(name, version, project).map do |dep|
         {
           project_name: dep[:name],
           requirements: dep[:requirement],
           kind: dep[:type],
           optional: dep.key?(:optional) ? dep[:optional] : false,
-          platform: formatted_name,
+          platform: db_platform,
         }
       end
     end

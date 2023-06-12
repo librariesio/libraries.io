@@ -159,4 +159,29 @@ namespace :one_off do
       end
     end
   end
+
+  # Maven dependencies were being incorrectly added using the internal name of
+  # the repository source from which we found the dependency.
+  desc "Correct Maven dependencies platforms"
+  task :correct_maven_dependencies_platforms, %i[batch_size start] => :environment do |_t, args|
+    maven_versions = Version.where(project_id: Project.where(platform: "Maven"))
+
+    batch_size = (args[:batch_size] && args[:batch_size].to_i) || 10000
+
+    num_batches = maven_versions.count / batch_size
+
+    maven_versions.in_batches(of: batch_size, start: args[:start].to_i).each_with_index do |batch_versions, batch_versions_index|
+      affected_versions = batch_versions
+        .joins(:dependencies)
+        .distinct
+        .where.not(dependencies: { platform: "Maven" })
+
+      puts "queuing batch #{batch_versions_index} of #{num_batches}"
+      puts "#{affected_versions.count} versions in this batch affected"
+
+      affected_versions.in_batches(of: 4).each_with_index do |batch_affected_versions, _batch_affected_versions_index|
+        Dependency.where(version: batch_affected_versions).update(platform: "Maven")
+      end
+    end
+  end
 end
