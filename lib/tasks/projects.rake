@@ -235,6 +235,7 @@ namespace :projects do
     puts "Querying for names with limit: #{args[:count]}"
     project_ids_and_names = Project
       .where(platform: "Pypi")
+      .where.not(status: "Removed")
       .group(replace_cmd) # condense names down to all lower case and replace all hyphens with underscores since those are equal in pypi
       .having("count(name) > 1")
       .order("min(id)") # order this query so we can run through chunks of the results if needed

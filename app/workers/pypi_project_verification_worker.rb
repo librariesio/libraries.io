@@ -12,6 +12,6 @@ class PypiProjectVerificationWorker
     return if project.nil? || project&.is_removed?
 
     # check to see if the module is found on pypi and it is a case sensitive match to the name data on pypi
-    project.destroy unless PackageManager::Pypi.has_canonical_pypi_name?(project.name)
+    project.destroy! unless PackageManager::Pypi.has_canonical_pypi_name?(project.name)
   end
 end
