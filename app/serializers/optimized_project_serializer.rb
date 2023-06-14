@@ -26,12 +26,6 @@ class OptimizedProjectSerializer
     status
   ].freeze
 
-  MAINTENANCE_STAT_ATTRIBUTES = %w[
-    category
-    value
-    updated_at
-  ].freeze
-
   def initialize(projects, requested_name_map, internal_key = false)
     @projects = projects
     @requested_name_map = requested_name_map
@@ -77,9 +71,9 @@ class OptimizedProjectSerializer
     @maintenance_stats ||= Datadog::Tracing.trace("optimized_project_serializer#maintenance_stats") do |_span, _trace|
       RepositoryMaintenanceStat
         .where(repository_id: @projects.map { |p| p.repository&.id }.compact)
-        .pluck(*MAINTENANCE_STAT_ATTRIBUTES, :repository_id)
+        .pluck(*RepositoryMaintenanceStat::API_FIELDS, :repository_id)
         .each_with_object(Hash.new { |h, k| h[k] = [] }) do |row, stats|
-          stats[row[-1]] << MAINTENANCE_STAT_ATTRIBUTES.zip(row).to_h
+          stats[row[-1]] << RepositoryMaintenanceStat::API_FIELDS.zip(row).to_h
         end
     end
   end
