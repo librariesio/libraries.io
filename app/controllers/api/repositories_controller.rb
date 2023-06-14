@@ -4,7 +4,9 @@ class Api::RepositoriesController < Api::ApplicationController
   before_action :find_repo, except: :search
 
   def show
-    render json: @repository
+    repo_json = RepositorySerializer.new(@repository).as_json
+    repo_json[:maintenance_stats] = maintenance_stats(@repository) if internal_api_key?
+    render json: repo_json
   end
 
   def projects
@@ -36,5 +38,14 @@ class Api::RepositoriesController < Api::ApplicationController
 
   def allowed_sorts
     %w[rank stargazers_count contributions_count created_at pushed_at subscribers_count open_issues_count forks_count size]
+  end
+
+  def maintenance_stats(repository)
+    Datadog::Tracing.trace("repositories_controller#maintenance_stats") do |_span, _trace|
+      RepositoryMaintenanceStat
+        .where(repository: repository)
+        .pluck(*RepositoryMaintenanceStat::API_FIELDS, :repository_id)
+        .map { |stat| RepositoryMaintenanceStat::API_FIELDS.zip(stat).to_h }
+    end
   end
 end

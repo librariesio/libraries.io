@@ -18,4 +18,6 @@
 #
 class RepositoryMaintenanceStat < ApplicationRecord
   belongs_to :repository
+
+  API_FIELDS = %i[category value updated_at].freeze
 end
