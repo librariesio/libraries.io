@@ -10,7 +10,7 @@ module PackageManager
     COLOR = "#3572A5"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
-    PYPI_PRERELEASE = /(a|b|rc|dev)[0-9]+$/.freeze
+    PYPI_PRERELEASE = /(a|b|rc|dev)[0-9]*$/.freeze
     # Adapted from https://peps.python.org/pep-0508/#names to include extras
     PEP_508_NAME_REGEX = /[A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9]/i.freeze
     PEP_508_NAME_WITH_EXTRAS_REGEX = /(^#{PEP_508_NAME_REGEX}\s*(?:\[#{PEP_508_NAME_REGEX}(?:,\s*#{PEP_508_NAME_REGEX})*\])?)/i.freeze

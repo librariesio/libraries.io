@@ -96,6 +96,7 @@ describe PackageManager::Pypi do
             "0.0.1" => [{}],
             "0.0.2" => [{}],
             "0.0.3" => [{}],
+            "0.0.3a" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
             "0.0.3a1" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
           },
         }
