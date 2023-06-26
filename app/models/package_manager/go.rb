@@ -56,7 +56,7 @@ module PackageManager
     end
 
     def self.one_version(raw_project, version_string)
-      info = get("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@v/#{version_string}.info")
+      info = get("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@v/#{encode_for_proxy(version_string)}.info")
 
       # Store nil published_at for known Go Modules issue where case-insensitive name collisions break go get
       # e.g. https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
@@ -197,7 +197,7 @@ module PackageManager
       # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
       # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
       # to scrape the webpage or wait for an API for a faster fetch here.
-      resp = request("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{version}.mod")
+      resp = request("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
       if resp.status == 200
         go_mod_file = resp.body
         Bibliothecary::Parsers::Go.parse_go_mod(go_mod_file)
@@ -281,7 +281,7 @@ module PackageManager
 
       return nil unless version.present?
 
-      mod_file = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{version}.mod")
+      mod_file = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
       module_line = mod_file
         &.lines
         &.map(&:strip)
