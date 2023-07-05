@@ -97,6 +97,47 @@ RSpec.describe TreeResolver do
     end
   end
 
+  context "with pypi dependencies" do
+    it "produces a tree with pypi filtered characters" do
+      platform = "Pypi"
+      root_project.update!(platform: platform)
+
+      one = create(:project, name: "one", platform: platform)
+      two = create(:project, name: "two", platform: platform)
+      one_version = create(:version, project: one, number: "1.0.0")
+      two_version = create(:version, project: two, number: "1.2.0")
+      one_dependency = create(:dependency, version: root_version, project: one, project_name: one.name, platform: platform, requirements: "(> 0)")
+      two_dependency = create(:dependency, version: root_version, project: two, project_name: two.name, platform: platform, requirements: "(> 0, >= 1.1)")
+
+      expected_tree = {
+        version: { "number": root_version.number },
+        dependency: { "platform": root_project.platform, "project_name": root_project.name, "kind": nil },
+        requirements: nil,
+        normalized_licenses: ["MIT"],
+        dependencies: [
+          {
+            version: { "number": one_version.number },
+            dependency: { "platform": one_dependency.platform, "project_name": one_dependency.project_name, "kind": "runtime" },
+            requirements: "(> 0)",
+            normalized_licenses: ["MIT"],
+            dependencies: [],
+          },
+          {
+            version: { "number": two_version.number },
+            dependency: { "platform": two_dependency.platform, "project_name": two_dependency.project_name, "kind": "runtime" },
+            requirements: "(> 0, >= 1.1)",
+            normalized_licenses: ["MIT"],
+            dependencies: [],
+          },
+        ],
+      }
+
+      expect(JSON.parse(subject.tree.to_json)).to eq(JSON.parse(expected_tree.to_json))
+      expect(subject.project_names).to match_array(%w[root one two])
+      expect(subject.license_names).to eq(["MIT"])
+    end
+  end
+
   context "with a max-depth tree" do
     it "produces the truncated tree" do
       #    root
