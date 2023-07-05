@@ -139,12 +139,12 @@ describe PackageManager::Pypi do
           described_class.dependencies("requests", "2.28.2")
         ).to match_array(
           [
-            ["charset-normalizer", "(<4,>=2)"],
-            ["idna", "(<4,>=2.5)"],
-            ["urllib3", "(<1.27,>=1.21.1)"],
-            ["certifi", "(>=2017.4.17)"],
-            ["PySocks", "(!=1.5.7,>=1.5.6)", "extra == 'socks'", true],
-            ["chardet", "(<6,>=3.0.2)", "extra == 'use_chardet_on_py3'", true],
+            ["charset-normalizer", "<4,>=2"],
+            ["idna", "<4,>=2.5"],
+            ["urllib3", "<1.27,>=1.21.1"],
+            ["certifi", ">=2017.4.17"],
+            ["PySocks", "!=1.5.7,>=1.5.6", "extra == 'socks'", true],
+            ["chardet", "<6,>=3.0.2", "extra == 'use_chardet_on_py3'", true],
           ].map do |name, requirements, kind = "runtime", optional = false|
             {
               project_name: name,
@@ -164,9 +164,9 @@ describe PackageManager::Pypi do
           described_class.dependencies("isort", "5.12.0")
         ).to match_array(
           [
-            ["colorama", "(>=0.4.3)", "extra == \"colors\""],
+            ["colorama", ">=0.4.3", "extra == \"colors\""],
             ["pip-api", "*", "extra == \"requirements-deprecated-finder\""],
-            ["pip-shims", "(>=0.5.2)", "extra == \"pipfile-deprecated-finder\""],
+            ["pip-shims", ">=0.5.2", "extra == \"pipfile-deprecated-finder\""],
             ["pipreqs", "*", "extra == \"pipfile-deprecated-finder\" or extra == \"requirements-deprecated-finder\""],
             ["requirementslib", "*", "extra == \"pipfile-deprecated-finder\""],
             ["setuptools", "*", "extra == \"plugins\""],
@@ -232,13 +232,13 @@ describe PackageManager::Pypi do
       [
         "foo (<6,>=3.0.2); extra == 'use_chardet_on_py3'",
         "foo",
-        "(<6,>=3.0.2)",
+        "<6,>=3.0.2",
         "extra == 'use_chardet_on_py3'",
       ],
       [
         "bar (>=3.2,<4.0) ; extra == \"django\" or extra == 'channels'",
         "bar",
-        "(>=3.2,<4.0)",
+        ">=3.2,<4.0",
         "extra == \"django\" or extra == 'channels'",
       ],
       [
@@ -250,7 +250,7 @@ describe PackageManager::Pypi do
       [
         "foo(>=12.0.0) ; extra == \"debug\" or extra == \"debug-server\" and os_name == \"nt\"",
         "foo",
-        "(>=12.0.0)",
+        ">=12.0.0",
         "extra == \"debug\" or extra == \"debug-server\" and os_name == \"nt\"",
       ],
       [
