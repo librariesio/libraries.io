@@ -450,4 +450,44 @@ describe Project, type: :model do
       )
     end
   end
+
+  describe "::platform" do
+    subject(:scoped_collection) { described_class.platform(given_platforms) }
+
+    let!(:ruby1) { create(:project, :rubygems) }
+    let!(:ruby2) { create(:project, :rubygems) }
+    let!(:npm1) { create(:project, :npm) }
+
+    context "mismatched case" do
+      let(:given_platforms) { "RubyGems" }
+
+      it "includes all matches" do
+        expect(scoped_collection).to match_array([ruby1, ruby2])
+      end
+    end
+
+    context "exact case" do
+      let(:given_platforms) { "Rubygems" }
+
+      it "includes all matches" do
+        expect(scoped_collection).to match_array([ruby1, ruby2])
+      end
+    end
+
+    context "other" do
+      let(:given_platforms) { "foo" }
+
+      it "is empty" do
+        expect(scoped_collection).to be_empty
+      end
+    end
+
+    context "multiple" do
+      let(:given_platforms) { %w[RubyGems NPm] }
+
+      it "can match any" do
+        expect(scoped_collection).to match_array([ruby1, ruby2, npm1])
+      end
+    end
+  end
 end

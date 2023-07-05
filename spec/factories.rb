@@ -29,6 +29,21 @@ FactoryBot.define do
     keywords_array  { ["web"] }
     repository_url
     repository { nil }
+
+    trait :rubygems do
+      platform { "Rubygems" }
+      language { "Ruby" }
+    end
+
+    trait :npm do
+      platform { "NPM" }
+      language { "JavaScript" }
+    end
+
+    trait :maven do
+      platform { "Maven" }
+      language { "Java" }
+    end
   end
 
   factory :platform do
