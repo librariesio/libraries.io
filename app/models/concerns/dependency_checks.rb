@@ -22,6 +22,8 @@ module DependencyChecks
     when "elm"
       numbers = requirements.split("<= v")
       ">=#{numbers[0].strip} #{numbers[1].strip}"
+    when "pypi"
+      requirements&.remove(/[()]/)
     else
       requirements
     end
