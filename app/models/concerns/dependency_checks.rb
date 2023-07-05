@@ -23,7 +23,7 @@ module DependencyChecks
       numbers = requirements.split("<= v")
       ">=#{numbers[0].strip} #{numbers[1].strip}"
     when "pypi"
-      requirements&.remove(/[()]/)
+      requirements&.remove(/[()]/) # remove parentheses surrounding version requirement
     else
       requirements
     end
