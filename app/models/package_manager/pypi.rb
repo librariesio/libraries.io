@@ -151,7 +151,9 @@ module PackageManager
       name, requirement = dep.split(PEP_508_NAME_WITH_EXTRAS_REGEX, 2).last(2)
       version, environment_markers = requirement.split(";").map(&:strip)
 
-      [name.remove(/\s/), version || "", environment_markers || ""]
+      # remove whitespace from name
+      # remove parentheses surrounding version requirement
+      [name.remove(/\s/), version&.remove(/[()]/) || "", environment_markers || ""]
     end
 
     def self.dependencies(name, version, _mapped_project = nil)
