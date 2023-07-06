@@ -27,14 +27,12 @@ namespace :projects do
     exit if ENV["READ_ONLY"].present?
 
     PLATFORMS_FOR_STATUS_CHECKS = %w[pypi npm rubygems packagist cpan clojars cocoapods hackage cran pub elm dub]
-      .map { |platform| PackageManager::Base.format_name(platform) }
-      .freeze
 
     max_num_of_projects_to_check = args.max_num_of_projects_to_check.nil? ? 150000 : args.max_num_of_projects_to_check.to_i
     batch_size = args.batch_size.nil? ? 10000 : args.batch_size.to_i
 
     project_ids_to_check = Project
-      .where(platform: PLATFORMS_FOR_STATUS_CHECKS)
+      .platform(PLATFORMS_FOR_STATUS_CHECKS)
       .where("status_checked_at IS NULL OR status_checked_at < ?", 1.week.ago)
       .order("status_checked_at ASC NULLS FIRST")
       .limit(max_num_of_projects_to_check)
@@ -136,20 +134,20 @@ namespace :projects do
   task :create_maintenance_stats, [:number_to_sync] => :environment do |_task, args|
     exit if ENV["READ_ONLY"].present?
     number_to_sync = args.number_to_sync || 2000
-    Project.no_existing_stats.where(platform: supported_platforms).limit(number_to_sync).each(&:update_maintenance_stats_async)
+    Project.no_existing_stats.platform(supported_platforms).limit(number_to_sync).each(&:update_maintenance_stats_async)
   end
 
   desc "Update maintenance stats for projects"
   task :update_maintenance_stats, [:number_to_sync] => :environment do |_task, args|
     exit if ENV["READ_ONLY"].present?
     number_to_sync = args.number_to_sync || 2000
-    Project.least_recently_updated_stats.where(platform: supported_platforms).limit(number_to_sync).each { |project| project.update_maintenance_stats_async(priority: :low) }
+    Project.least_recently_updated_stats.platform(supported_platforms).limit(number_to_sync).each { |project| project.update_maintenance_stats_async(priority: :low) }
   end
 
   desc "Set license_normalized flag"
   task set_license_normalized: :environment do
     supported_platforms = %w[Maven NPM Pypi Rubygems NuGet Packagist]
-    Project.where(platform: supported_platforms, license_normalized: false).find_in_batches do |group|
+    Project.platform(supported_platforms).where(license_normalized: false).find_in_batches do |group|
       group.each do |project|
         project.normalize_licenses
         # check if we set a new value
@@ -169,7 +167,8 @@ namespace :projects do
 
   desc "Batch backfill old licenses"
   task :batch_backfill_old_version_licenses, [:platform] => :environment do |_task, args|
-    projects = Project.where(platform: args.platform).joins(:versions).where("versions.original_license IS NULL").limit(15000).uniq
+    platform = args.platform
+    projects = Project.platform(platform).joins(:versions).where("versions.original_license IS NULL").limit(15000).distinct
     projects.each do |project|
       LicenseBackfillWorker.perform_async(project.platform, project.name)
     end

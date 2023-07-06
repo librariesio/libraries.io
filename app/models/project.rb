@@ -125,7 +125,7 @@ class Project < ApplicationRecord
   scope :least_recently_updated_stats, -> { joins(:repository_maintenance_stats).group("projects.id").where.not(repository: nil).order(Arel.sql("max(repository_maintenance_stats.updated_at) ASC")) }
   scope :no_existing_stats, -> { includes(:repository_maintenance_stats).where(repository_maintenance_stats: { id: nil }).where.not(repository: nil) }
 
-  scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
+  scope :platform, ->(platforms) { where(platform: Array.wrap(platforms).map { |platform| PackageManager::Base.format_name(platform) }) }
   scope :lower_platform, ->(platform) { where("lower(projects.platform) = ?", platform.try(:downcase)) }
   scope :lower_name, ->(name) { where("lower(projects.name) = ?", name.try(:downcase)) }
 
