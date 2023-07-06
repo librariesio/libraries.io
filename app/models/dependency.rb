@@ -17,8 +17,9 @@
 #
 # Indexes
 #
-#  index_dependencies_on_project_id  (project_id)
-#  index_dependencies_on_version_id  (version_id)
+#  index_dependencies_on_created_at_date  (((created_at)::date))
+#  index_dependencies_on_project_id       (project_id)
+#  index_dependencies_on_version_id       (version_id)
 #
 class Dependency < ApplicationRecord
   include DependencyChecks
