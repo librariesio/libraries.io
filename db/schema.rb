@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 2023_07_05_195409) do
     t.string "requirements"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index "((created_at)::date)", name: "index_dependencies_on_created_at_date"
+    t.index "project_id, ((created_at)::date)", name: "index_dependencies_on_project_created_at_date"
     t.index ["project_id"], name: "index_dependencies_on_project_id"
     t.index ["version_id"], name: "index_dependencies_on_version_id"
   end
@@ -279,7 +279,7 @@ ActiveRecord::Schema.define(version: 2023_07_05_195409) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "repository_id"
-    t.index "((created_at)::date)", name: "index_repository_dependencies_on_created_at_date"
+    t.index "project_id, ((created_at)::date)", name: "index_repository_dependencies_on_project_created_at_date"
     t.index ["manifest_id"], name: "index_repository_dependencies_on_manifest_id"
     t.index ["project_id"], name: "index_repository_dependencies_on_project_id"
     t.index ["repository_id"], name: "index_repository_dependencies_on_repository_id"
