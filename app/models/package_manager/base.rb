@@ -149,7 +149,6 @@ module PackageManager
         :number,
         :published_at,
         :runtime_dependencies_count,
-        :spdx_expression,
         :original_license,
         :repository_sources,
         :status
