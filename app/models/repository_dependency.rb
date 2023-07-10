@@ -18,9 +18,10 @@
 #
 # Indexes
 #
-#  index_repository_dependencies_on_manifest_id    (manifest_id)
-#  index_repository_dependencies_on_project_id     (project_id)
-#  index_repository_dependencies_on_repository_id  (repository_id)
+#  index_repository_dependencies_on_manifest_id              (manifest_id)
+#  index_repository_dependencies_on_project_created_at_date  (project_id, ((created_at)::date))
+#  index_repository_dependencies_on_project_id               (project_id)
+#  index_repository_dependencies_on_repository_id            (repository_id)
 #
 class RepositoryDependency < ApplicationRecord
   include DependencyChecks
