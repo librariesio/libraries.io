@@ -26,9 +26,9 @@ namespace :projects do
   task :check_status, %i[max_num_of_projects_to_check batch_size] => :environment do |_task, args|
     exit if ENV["READ_ONLY"].present?
 
-    PLATFORMS_FOR_STATUS_CHECKS = %w[pypi npm rubygems packagist cpan clojars cocoapods hackage cran pub elm dub]
+    PLATFORMS_FOR_STATUS_CHECKS = %w[cargo cocoapods conda go maven npm nuget packagist pypi rubygems].freeze
 
-    max_num_of_projects_to_check = args.max_num_of_projects_to_check.nil? ? 150000 : args.max_num_of_projects_to_check.to_i
+    max_num_of_projects_to_check = args.max_num_of_projects_to_check.nil? ? 150_000 : args.max_num_of_projects_to_check.to_i
     batch_size = args.batch_size.nil? ? 10000 : args.batch_size.to_i
 
     project_ids_to_check = Project
