@@ -420,7 +420,9 @@ ActiveRecord::Schema.define(version: 2023_07_12_195318) do
     t.datetime "last_sent_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "all_project_updates", default: false, null: false
     t.string "shared_secret"
+    t.index ["all_project_updates"], name: "index_web_hooks_on_all_project_updates"
     t.index ["repository_id"], name: "index_web_hooks_on_repository_id"
   end
 

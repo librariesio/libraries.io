@@ -45,6 +45,24 @@ describe WebHook, type: :model do
                                                                       }.stringify_keys))
       end
 
+      it "does not raise an error if the receiver returns 500" do
+        WebMock.stub_request(:post, url)
+          .to_return(status: 500)
+
+        expect do
+          web_hook.send_new_version(version.project, version.project.platform, version, [])
+        end.not_to raise_error
+      end
+
+      it "does not raise an error if the receiver times out" do
+        WebMock.stub_request(:post, url)
+          .to_timeout
+
+        expect do
+          web_hook.send_new_version(version.project, version.project.platform, version, [])
+        end.not_to raise_error
+      end
+
       context "with non-nil secret" do
         let(:shared_secret) { "abcdefg" }
 
@@ -63,6 +81,44 @@ describe WebHook, type: :model do
           assert_requested :post, url,
                            headers: { 'X-Libraries-Signature' => expected_signature }
         end
+      end
+    end
+
+    describe "#send_project_updated" do
+      it "sends the project_updated event" do
+        WebMock.stub_request(:post, url)
+          .to_return(status: 200)
+        web_hook.send_project_updated(project)
+
+        assert_requested :post, url,
+                         body: be_json_string_matching({
+                                                         event: "project_updated",
+                                                         project: {
+                                                           name: project.name,
+                                                           platform: project.platform,
+                                                           # this seems a little awkward but not sure what else to do to match
+                                                           # exactly how the serializer serializes this timestamp
+                                                           updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(project.updated_at)
+                                                         }.stringify_keys
+                                                       }.stringify_keys)
+      end
+
+      it "raises an error if the receiver returns 500" do
+        WebMock.stub_request(:post, url)
+          .to_return(status: 500)
+
+        expect do
+          web_hook.send_project_updated(project)
+        end.to raise_error(/webhook #{web_hook.id} failed; timed_out=false code=500/)
+      end
+
+      it "raises an error if the receiver times out" do
+        WebMock.stub_request(:post, url)
+          .to_timeout
+
+        expect do
+          web_hook.send_project_updated(project)
+        end.to raise_error(/webhook #{web_hook.id} failed; timed_out=true code=0/)
       end
     end
   end

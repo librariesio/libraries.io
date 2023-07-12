@@ -188,6 +188,7 @@ class Project < ApplicationRecord
   after_commit :update_repository_async, on: :create
   after_commit :set_dependents_count, on: %i[create update]
   after_commit :update_source_rank_async, on: %i[create update]
+  after_commit :send_project_updated, on: %i[create update]
   before_save  :update_details
   before_destroy :destroy_versions
   before_destroy :create_deleted_project
@@ -390,6 +391,16 @@ class Project < ApplicationRecord
     updates[:dependents_count] = new_dependents_count if read_attribute(:dependents_count) != new_dependents_count
     updates[:dependent_repos_count] = new_dependent_repos_count if read_attribute(:dependent_repos_count) != new_dependent_repos_count
     update_columns(updates) if updates.present?
+  end
+
+  def send_project_updated
+    # this should be a cheap no-op if we remove all the
+    # receives_all_project_updates WebHook, so that's an emergency off switch if
+    # required. Each webhook must be its own sidekiq job so it can be
+    # independently retried if failing.
+    WebHook.receives_all_project_updates.pluck(:id).each do |web_hook_id|
+      ProjectUpdatedWorker.perform_async(id, web_hook_id)
+    end
   end
 
   def needs_suggestions?

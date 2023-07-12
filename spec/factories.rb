@@ -194,6 +194,7 @@ FactoryBot.define do
     repository
     user
     url { "http://google.com" }
+    all_project_updates { false }
   end
 
   factory :api_key do
