@@ -78,7 +78,7 @@ describe PackageManager::NPM do
     end
   end
 
-  describe "#deprecate_versions" do   
+  describe "#deprecate_versions" do
     before do
       project.versions.create!(number: "1.0.0")
       project.versions.create!(number: "1.0.1")
