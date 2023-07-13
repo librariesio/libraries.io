@@ -180,7 +180,7 @@ module PackageManager
 
     def self.deprecate_versions(db_project, version_hash)
       case db_project.platform.downcase
-      when "rubygems" # yanked gems will be omitted from project JSON versions
+      when "rubygems", "npm" # yanked gems will be omitted from project JSON versions
         db_project
           .versions
           .where.not(number: version_hash.pluck(:number))
