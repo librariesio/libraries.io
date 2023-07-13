@@ -15,7 +15,7 @@ describe WebHook, type: :model do
     let(:web_hook) { create(:web_hook, url: url, repository: project.repository, shared_secret: shared_secret) }
 
     def compute_signature(body, shared_secret)
-      OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha1"),
+      OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha512"),
                               shared_secret,
                               body)
     end

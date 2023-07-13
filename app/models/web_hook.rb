@@ -56,7 +56,7 @@ class WebHook < ApplicationRecord
   def request(data)
     body = JSON.dump(data)
 
-    signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha1"),
+    signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha512"),
                                         # if there's no secret we send a (pointless) signature anyway
                                         shared_secret || "",
                                         body)
