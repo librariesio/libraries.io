@@ -99,10 +99,15 @@ module PackageManager
         license = v.fetch("license", nil)
         license = licenses(v) unless license.is_a?(String)
         license = "" if license.nil?
+
+        # if deprecated field is present and is not false, it can be an arbitrary string, so convert to boolean
+        is_deprecated = !!v.fetch("deprecated", false)
+
         {
           number: k,
           published_at: raw_project.fetch("time", {}).fetch(k, nil),
           original_license: license,
+          is_deprecated: is_deprecated,
         }
       end
     end
