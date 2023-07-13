@@ -7,6 +7,7 @@
 #  id            :integer          not null, primary key
 #  last_response :string
 #  last_sent_at  :datetime
+#  shared_secret :string
 #  url           :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
@@ -40,11 +41,11 @@ class WebHook < ApplicationRecord
   def send_new_version(project, platform, version_or_tag, requirements = [])
     send_payload({
                    event: "new_version",
-                   repository: repository.full_name,
+                   repository: repository&.full_name,
                    platform: platform,
                    name: project.name,
                    version: version_or_tag.number,
-                   default_branch: repository.default_branch,
+                   default_branch: repository&.default_branch,
                    package_manager_url: project.package_manager_url(version_or_tag.number),
                    published_at: version_or_tag.published_at,
                    requirements: requirements,
@@ -53,11 +54,22 @@ class WebHook < ApplicationRecord
   end
 
   def request(data)
+    body = JSON.dump(data)
+
+    signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha512"),
+                                        # if there's no secret we send a (pointless) signature anyway
+                                        shared_secret || "",
+                                        body)
+
     Typhoeus::Request.new(url,
                           method: :post,
                           timeout_ms: 1500,
-                          body: JSON.dump(data),
-                          headers: { "Content-Type" => "application/json", "Accept-Encoding" => "application/json" })
+                          body: body,
+                          headers: {
+                            "Content-Type" => "application/json",
+                            "Accept-Encoding" => "application/json",
+                            "X-Libraries-Signature" => signature
+                          })
   end
 
   def send_payload(data)

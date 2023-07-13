@@ -2,6 +2,7 @@
 
 require "pry"
 require "simplecov"
+require "custom_matchers"
 SimpleCov.start "rails"
 
 RSpec.configure do |config|
@@ -30,4 +31,6 @@ RSpec.configure do |config|
 
   config.filter_run :focus
   config.run_all_when_everything_filtered = true
+
+  config.include(CustomMatchers)
 end
