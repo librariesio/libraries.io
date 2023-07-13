@@ -2,6 +2,8 @@
 
 module PackageManager
   class Base
+    extend CanRequest
+
     COLOR = "#fff"
     BIBLIOTHECARY_SUPPORT = false
     BIBLIOTHECARY_PLANNED = false
@@ -21,7 +23,8 @@ module PackageManager
         PackageManager.constants
           .reject { |platform| platform == :Base }
           .map { |sym| "PackageManager::#{sym}".constantize }
-          .reject { |platform| platform::HIDDEN }
+          # Only platform managers will have the HIDDEN constant set
+          .find_all { |platform| platform.const_defined?(:HIDDEN) && platform.const_get(:HIDDEN) == false }
           .sort_by(&:name)
       end
     end
@@ -324,41 +327,6 @@ module PackageManager
 
     def self.deprecation_info(_db_project)
       { is_deprecated: false, message: nil }
-    end
-
-    private_class_method def self.get(url, options = {})
-      Oj.load(get_raw(url, options))
-    end
-
-    private_class_method def self.get_raw(url, options = {})
-      rsp = request(url, options)
-      return "" unless rsp.status == 200
-
-      rsp.body
-    end
-
-    private_class_method def self.request(url, options = {})
-      connection = Faraday.new url.strip, options do |builder|
-        builder.use FaradayMiddleware::Gzip
-        builder.use FaradayMiddleware::FollowRedirects, limit: 3
-        builder.request :retry, { max: 2, interval: 0.05, interval_randomness: 0.5, backoff_factor: 2 }
-
-        builder.use :instrumentation
-        builder.adapter :typhoeus
-      end
-      connection.get
-    end
-
-    private_class_method def self.get_html(url, options = {})
-      Nokogiri::HTML(get_raw(url, options))
-    end
-
-    private_class_method def self.get_xml(url, options = {})
-      Ox.parse(get_raw(url, options))
-    end
-
-    private_class_method def self.get_json(url)
-      get(url, headers: { "Accept" => "application/json" })
     end
 
     private_class_method def self.download_async(names)

@@ -355,4 +355,22 @@ describe PackageManager::Pypi do
       end
     end
   end
+
+  describe ".versions" do
+    it "retrieves data for a package that uses both the JSON and RSS APIs" do
+      VCR.use_cassette("pypi/versions/ply") do
+        raw_project = described_class.project("ply")
+
+        # This will be empty, which is why we need to use the RSS feed to get the
+        # publish date.
+        expect(raw_project["releases"]["1.6"]).to eq([])
+
+        versions = described_class.versions(raw_project, "ply")
+
+        # We will get the published date from the RSS feed
+        version16 = versions.find { |v| v[:number] == "1.6" }
+        expect(version16[:published_at]).not_to be_nil
+      end
+    end
+  end
 end

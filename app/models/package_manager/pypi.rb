@@ -109,21 +109,11 @@ module PackageManager
     def self.versions(raw_project, name)
       return [] if raw_project.nil?
 
-      known = known_versions(name)
-
-      raw_project["releases"].reject { |_k, v| v == [] }.map do |k, v|
-        if known.key?(k)
-          known[k]
-        else
-          release = get("https://pypi.org/pypi/#{name}/#{k}/json")
-
-          {
-            number: k,
-            published_at: v[0]["upload_time"],
-            original_license: release.dig("info", "license"),
-          }
-        end
-      end
+      self::Version.process_raw_data(
+        raw_releases: raw_project["releases"],
+        name: name,
+        known_versions: known_versions(name)
+      )
     end
 
     def self.one_version(raw_project, version_string)
