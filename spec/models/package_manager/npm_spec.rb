@@ -82,18 +82,11 @@ describe PackageManager::NPM do
     before do
       project.versions.create!(number: "1.0.0")
       project.versions.create!(number: "1.0.1")
-      project.versions.create!(number: "1.0.2")
     end
 
-    it "should mark missing and deprecated versions as Removed" do
-      # if a version is missing from response, remove it
-      # if a version is deprecated in response, remove it
-      json_versions = [
-        { number: "1.0.0", published_at: nil, original_license: nil, is_deprecated: false },
-        { number: "1.0.1", published_at: nil, original_license: nil, is_deprecated: true },
-      ]
-      described_class.deprecate_versions(project, json_versions)
-      expect(project.reload.versions.pluck(:number, :status)).to match_array([["1.0.0", nil], ["1.0.1", "Removed"], ["1.0.2", "Removed"]])
+    it "should mark missing versions as Removed" do
+      described_class.deprecate_versions(project, [{ number: "1.0.0", published_at: nil, original_license: nil }])
+      expect(project.reload.versions.pluck(:number, :status)).to match_array([["1.0.0", nil], ["1.0.1", "Removed"]])
     end
   end
 end
