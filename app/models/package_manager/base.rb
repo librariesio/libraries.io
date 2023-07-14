@@ -186,7 +186,7 @@ module PackageManager
           .where.not(number: version_hashes.pluck(:number))
           .update_all(status: "Removed")
       when "npm"
-        not_deprecated_version_hashes = version_hashes.select { |v| !v[:is_deprecated] }
+        not_deprecated_version_hashes = version_hashes.select { |v| v[:is_deprecated] == false }
         db_project
           .versions
           .where.not(number: not_deprecated_version_hashes.pluck(:number))
