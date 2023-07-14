@@ -43,7 +43,7 @@ module PackageManager
       end
 
       def licenses
-        license || license_classifiers
+        license.presence || license_classifiers
       end
 
       def repository_url

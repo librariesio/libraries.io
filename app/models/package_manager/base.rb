@@ -335,7 +335,7 @@ module PackageManager
     end
 
     private_class_method def self.get_json(url)
-      ApiService.get_json(url, options)
+      ApiService.get_json(url)
     end
 
     private_class_method def self.download_async(names)

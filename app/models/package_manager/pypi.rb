@@ -95,15 +95,11 @@ module PackageManager
     end
 
     def self.versions(json_api_project, name)
-      project_releases = json_api_project.releases
-
       VersionProcessor.new(
-        project_releases: project_releases,
+        project_releases: json_api_project.releases,
         name: name,
         known_versions: known_versions(name)
-      ).execute.tap { |o| pp o }
-
-      []
+      ).execute
     end
 
     def self.one_version(raw_project, version_string)
