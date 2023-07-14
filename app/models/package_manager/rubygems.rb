@@ -58,6 +58,23 @@ module PackageManager
     end
 
     def self.versions(raw_project, _name)
+      html = get_html("https://rubygems.org/gems/#{raw_project['name']}/versions")
+      yanked_versions = html.xpath("//li").map do |gem_version_wrap|
+        gem_details = gem_version_wrap.element_children
+        gem_version = gem_details[0]&.attributes&.[]("href")&.value&.split("/")&.last
+        version_date = gem_details[1]&.children&.text&.to_time&.iso8601
+        is_yanked = gem_details[3]&.children&.text.present? && gem_details[3].children.text == "yanked"
+
+        next unless is_yanked
+
+        {
+          number: gem_version,
+          published_at: version_date,
+          original_license: "",
+        }
+      end
+        .compact
+
       json = get_json("https://rubygems.org/api/v1/versions/#{raw_project['name']}.json")
       json.map do |v|
         license = v.fetch("licenses", "")
