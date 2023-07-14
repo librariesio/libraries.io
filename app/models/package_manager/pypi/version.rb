@@ -7,8 +7,6 @@ module PackageManager
     # All of the version-specific requests are done in this class
     # with the data never traveling more than one method away.
     class Version
-      extend CanRequest
-
       attr_reader :number, :published_at, :original_license
 
       InvalidReleasesFeedStructure = Class.new(ArgumentError)

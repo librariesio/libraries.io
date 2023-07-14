@@ -56,9 +56,7 @@ module PackageManager
     end
 
     def self.project(name)
-      get("https://pypi.org/pypi/#{name}/json")
-    rescue StandardError
-      {}
+      JsonApiProject.request(name: name)
     end
 
     def self.deprecation_info(db_project)
@@ -92,28 +90,20 @@ module PackageManager
         raw_project.dig("info", "project_urls", "Homepage")
     end
 
-    def self.mapping(raw_project)
-      {
-        name: raw_project["info"]["name"],
-        description: raw_project["info"]["summary"],
-        homepage: raw_project["info"]["home_page"],
-        keywords_array: Array.wrap(raw_project["info"]["keywords"].try(:split, /[\s.,]+/)),
-        licenses: licenses(raw_project),
-        repository_url: repo_fallback(
-          select_repository_url(raw_project),
-          select_homepage_url(raw_project)
-        ),
-      }
+    def self.mapping(json_api_project)
+      json_api_project.to_mapping
     end
 
-    def self.versions(raw_project, name)
-      return [] if raw_project.nil?
+    def self.versions(json_api_project, name)
+      project_releases = json_api_project.releases
 
-      self::Version.process_raw_data(
-        raw_releases: raw_project["releases"],
+      VersionProcessor.new(
+        project_releases: project_releases,
         name: name,
         known_versions: known_versions(name)
-      )
+      ).execute.tap { |o| pp o }
+
+      []
     end
 
     def self.one_version(raw_project, version_string)
@@ -163,13 +153,6 @@ module PackageManager
           platform: self.name.demodulize,
         }
       end
-    end
-
-    def self.licenses(project)
-      return project["info"]["license"] if project["info"]["license"].present?
-
-      license_classifiers = project["info"]["classifiers"].select { |c| c.start_with?("License :: ") }
-      license_classifiers.map { |l| l.split(":: ").last }.join(",")
     end
 
     def self.project_find_names(project_name)

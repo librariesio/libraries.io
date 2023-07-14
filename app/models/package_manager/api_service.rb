@@ -1,6 +1,6 @@
 module PackageManager
-  module CanRequest
-    def request(url, options = {})
+  class ApiService
+    def self.request(url, options = {})
       connection = Faraday.new url.strip, options do |builder|
         builder.use FaradayMiddleware::Gzip
         builder.use FaradayMiddleware::FollowRedirects, limit: 3
@@ -12,26 +12,26 @@ module PackageManager
       connection.get
     end
 
-    def get(url, options = {})
+    def self.get(url, options = {})
       Oj.load(get_raw(url, options))
     end
 
-    def get_raw(url, options = {})
+    def self.get_raw(url, options = {})
       rsp = request(url, options)
       return "" unless rsp.status == 200
 
       rsp.body
     end
 
-    def get_html(url, options = {})
+    def self.get_html(url, options = {})
       Nokogiri::HTML(get_raw(url, options))
     end
 
-    def get_xml(url, options = {})
+    def self.get_xml(url, options = {})
       Ox.parse(get_raw(url, options))
     end
 
-    def get_json(url)
+    def self.get_json(url)
       get(url, headers: { "Accept" => "application/json" })
     end
   end

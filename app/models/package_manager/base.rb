@@ -2,8 +2,6 @@
 
 module PackageManager
   class Base
-    extend CanRequest
-
     COLOR = "#fff"
     BIBLIOTHECARY_SUPPORT = false
     BIBLIOTHECARY_PLANNED = false
@@ -304,21 +302,8 @@ module PackageManager
       end
     end
 
-    # Use librariesio-url-parser to attempt to select one of the provided
-    # URLs as the URL for this repository. This means that if the URL is
-    # not considered a repository URL by that gem, its raw value will be
-    # used. This would allow for a project that self-hosts to still have
-    # a valid repo URL.
-    #
-    # @param repo String A string we think is a project's repository URL
-    # @param homepage String A string we thing is a project's homepage URL
-    # @return String The best URL we can select for the project's repository, or "" if we can't find one
     def self.repo_fallback(repo, homepage)
-      repo = "" if repo.nil?
-      homepage = "" if homepage.nil?
-      repo_url = URLParser.try_all(repo)
-      homepage_url = URLParser.try_all(homepage)
-      repo_url.presence || homepage_url.presence || repo
+      RepositoryService.repo_fallback(repo, homepage)
     end
 
     def self.project_find_names(project_name)
@@ -327,6 +312,30 @@ module PackageManager
 
     def self.deprecation_info(_db_project)
       { is_deprecated: false, message: nil }
+    end
+
+    private_class_method def self.get(url, options = {})
+      ApiService.get(url, options)
+    end
+
+    private_class_method def self.get_raw(url, options = {})
+      ApiService.get_raw(url, options)
+    end
+
+    private_class_method def self.request(url, options = {})
+      ApiService.request(url, options)
+    end
+
+    private_class_method def self.get_html(url, options = {})
+      ApiService.get_html(url, options)
+    end
+
+    private_class_method def self.get_xml(url, options = {})
+      ApiService.get_xml(url, options)
+    end
+
+    private_class_method def self.get_json(url)
+      ApiService.get_json(url, options)
     end
 
     private_class_method def self.download_async(names)
