@@ -1,16 +1,33 @@
 module PackageManager
   class Pypi
     class JsonApiProject
-      def self.request(name:)
+      def self.request(project_name:)
         data = begin
-          ApiService.get("https://pypi.org/pypi/#{name}/json")
-        # TODO: handle this condition better. this is how the code
-        # originally dealt with API errors
-        rescue StandardError
+          ApiService.request_json_with_headers("https://pypi.org/pypi/#{project_name}/json")
+        rescue StandardError => e
+          Rails.logger.error("Invalid PyPI JSON API Project: #{project_name}: #{e.message}")
+
           {}
         end
 
         new(data)
+      end
+
+      def self.release_data_published_at(details)
+        return nil if details == []
+
+        upload_time = details.dig(0, "upload_time")
+        raise ArgumentError, "does not contain upload_time" unless upload_time
+
+        return nil unless upload_time
+
+        begin
+          Time.parse(upload_time)
+        rescue ArgumentError => e
+          Rails.logger.error("Unable to parse PyPI JSON API Project upload_time: #{project_name} (#{upload_time}): #{e.message}")
+
+          nil
+        end
       end
 
       def initialize(data)
@@ -64,20 +81,10 @@ module PackageManager
         )
       end
 
-      def self.release_data_published_at(details)
-        return nil if details == []
-
-        upload_time = details.dig(0, "upload_time")
-        raise ArgumentError, "does not contain upload_time" unless upload_time
-
-        upload_time ? Time.parse(upload_time) : nil
-      end
-
       def releases
-        @data["releases"].map do |number, details|
+        @data["releases"].map do |version_number, details|
           JsonApiProjectRelease.new(
-            project: self,
-            number: number,
+            version_number: version_number,
             published_at: self.class.release_data_published_at(details)
           )
         end

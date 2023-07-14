@@ -3,15 +3,15 @@ module PackageManager
     class RssApiReleases
       InvalidReleasesFeedStructure = Class.new(ArgumentError)
 
-      def self.request(name:)
-        data = ApiService.get_xml("https://pypi.org/rss/project/#{name}/releases.xml")
+      def self.request(project_name:)
+        data = ApiService.request_and_parse_xml("https://pypi.org/rss/project/#{project_name}/releases.xml")
         raise InvalidReleasesFeedStructure unless data.locate("rss/channel").first
 
-        new(name: name, data: data)
+        new(project_name: project_name, data: data)
       end
 
-      def initialize(name:, data:)
-        @name = name
+      def initialize(project_name:, data:)
+        @project_name = project_name
         @data = data
       end
 
@@ -29,8 +29,7 @@ module PackageManager
           parsed_release_data = self.class.parse_release_data_from_rss_item(item)
 
           RssApiRelease.new(
-            request: self,
-            number: parsed_release_data[:number],
+            version_number: parsed_release_data[:number],
             published_at: parsed_release_data[:published_at]
           )
         end

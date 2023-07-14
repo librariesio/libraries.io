@@ -9,12 +9,14 @@ http_interactions:
     headers:
       User-Agent:
       - Faraday v0.15.4
+      Accept:
+      - application/json
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '230273650400538107'
+      - '337865554615897845'
       X-Datadog-Parent-Id:
-      - '3086815905530169268'
+      - '2907350151432085387'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -66,15 +68,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273998.062535,VS0,VE1
+      - S1689366251.223002,VS0,VE1
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -104,7 +106,110 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/1.6/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3578842975168780249'
+      X-Datadog-Parent-Id:
+      - '4179630632584453649'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - X-PyPI-Last-Serial
+      Access-Control-Max-Age:
+      - '86400'
+      Cache-Control:
+      - max-age=900, public
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY=';
+        worker-src *.fastly-insights.com
+      Content-Type:
+      - application/json
+      Etag:
+      - '"yDvj8Re3adHOpGik4LhHOg"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      X-Pypi-Last-Serial:
+      - '3585324'
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '1'
+      X-Timer:
+      - S1689366251.278638,VS0,VE1
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '1064'
+    body:
+      encoding: ASCII-8BIT
+      string: '{"info":{"author":"David Beazley","author_email":"dave@dabeaz.com","bugtrack_url":null,"classifiers":["Development
+        Status :: 5 - Production/Stable"],"description":"PLY is a Python implementation
+        of the lex and yacc parsing tools.   PLY supports SLR and LALR(1) \r\nparsing.  It
+        also provides extensive error checking and diagnostics.","description_content_type":null,"docs_url":null,"download_url":"","downloads":{"last_day":-1,"last_month":-1,"last_week":-1},"home_page":"http://www.dabeaz.com/ply/","keywords":"Parsing,
+        compilers, lex, yacc","license":"LGPL","maintainer":"David Beazley","maintainer_email":"dave@dabeaz.com","name":"ply","package_url":"https://pypi.org/project/ply/","platform":"All","project_url":"https://pypi.org/project/ply/","project_urls":{"Homepage":"http://www.dabeaz.com/ply/"},"release_url":"https://pypi.org/project/ply/1.6/","requires_dist":null,"requires_python":null,"summary":"A
+        pure-Python implementation of lex and yacc","version":"1.6","yanked":false,"yanked_reason":null},"last_serial":3585324,"urls":[],"vulnerabilities":[]}
+
+        '
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
     uri: https://pypi.org/rss/project/ply/releases.xml
@@ -117,9 +222,9 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '3898702895515230605'
+      - '1581457515853411147'
       X-Datadog-Parent-Id:
-      - '573292198746483348'
+      - '3036451834815237845'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -157,15 +262,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273998.094241,VS0,VE1
+      - S1689366251.302747,VS0,VE1
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -298,108 +403,7 @@ http_interactions:
           </channel>
         </rss>
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
-- request:
-    method: get
-    uri: https://pypi.org/pypi/ply/1.6/json
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.15.4
-      Accept-Encoding:
-      - gzip,deflate,br
-      X-Datadog-Trace-Id:
-      - '2136064182527925583'
-      X-Datadog-Parent-Id:
-      - '814309512277651370'
-      X-Datadog-Sampling-Priority:
-      - '1'
-      Expect:
-      - ''
-  response:
-    status:
-      code: 200
-      message: ''
-    headers:
-      Access-Control-Allow-Headers:
-      - Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since
-      Access-Control-Allow-Methods:
-      - GET
-      Access-Control-Allow-Origin:
-      - "*"
-      Access-Control-Expose-Headers:
-      - X-PyPI-Last-Serial
-      Access-Control-Max-Age:
-      - '86400'
-      Cache-Control:
-      - max-age=900, public
-      Content-Security-Policy:
-      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
-        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
-        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
-        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
-        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
-        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
-        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
-        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
-        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
-        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
-        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
-        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
-        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
-        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
-        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY=';
-        worker-src *.fastly-insights.com
-      Content-Type:
-      - application/json
-      Etag:
-      - '"yDvj8Re3adHOpGik4LhHOg"'
-      Referrer-Policy:
-      - origin-when-cross-origin
-      Server:
-      - nginx/1.13.9
-      X-Pypi-Last-Serial:
-      - '3585324'
-      Accept-Ranges:
-      - bytes
-      Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
-      X-Served-By:
-      - cache-iad-kjyo7100132-IAD
-      X-Cache:
-      - HIT
-      X-Cache-Hits:
-      - '1'
-      X-Timer:
-      - S1689273998.130221,VS0,VE2
-      Vary:
-      - Accept-Encoding
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubDomains; preload
-      X-Frame-Options:
-      - deny
-      X-Xss-Protection:
-      - 1; mode=block
-      X-Content-Type-Options:
-      - nosniff
-      X-Permitted-Cross-Domain-Policies:
-      - none
-      Content-Length:
-      - '1064'
-    body:
-      encoding: ASCII-8BIT
-      string: '{"info":{"author":"David Beazley","author_email":"dave@dabeaz.com","bugtrack_url":null,"classifiers":["Development
-        Status :: 5 - Production/Stable"],"description":"PLY is a Python implementation
-        of the lex and yacc parsing tools.   PLY supports SLR and LALR(1) \r\nparsing.  It
-        also provides extensive error checking and diagnostics.","description_content_type":null,"docs_url":null,"download_url":"","downloads":{"last_day":-1,"last_month":-1,"last_week":-1},"home_page":"http://www.dabeaz.com/ply/","keywords":"Parsing,
-        compilers, lex, yacc","license":"LGPL","maintainer":"David Beazley","maintainer_email":"dave@dabeaz.com","name":"ply","package_url":"https://pypi.org/project/ply/","platform":"All","project_url":"https://pypi.org/project/ply/","project_urls":{"Homepage":"http://www.dabeaz.com/ply/"},"release_url":"https://pypi.org/project/ply/1.6/","requires_dist":null,"requires_python":null,"summary":"A
-        pure-Python implementation of lex and yacc","version":"1.6","yanked":false,"yanked_reason":null},"last_serial":3585324,"urls":[],"vulnerabilities":[]}
-
-        '
-    http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
     uri: https://pypi.org/pypi/ply/1.8/json
@@ -409,12 +413,14 @@ http_interactions:
     headers:
       User-Agent:
       - Faraday v0.15.4
+      Accept:
+      - application/json
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '666956529384188167'
+      - '1443603869620125201'
       X-Datadog-Parent-Id:
-      - '3081711730185770960'
+      - '3473807016070001380'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -466,15 +472,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273998.158494,VS0,VE1
+      - S1689366251.335796,VS0,VE1
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -500,10 +506,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/2.0/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -513,9 +519,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '1513219969209400977'
+      - '3350100615627098497'
       X-Datadog-Parent-Id:
-      - '4597656873856845508'
+      - '3044641084708819267'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '2'
+      X-Timer:
+      - S1689366251.362584,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/2.0/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1401410274230848803'
+      X-Datadog-Parent-Id:
+      - '4597038713431225301'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -567,15 +769,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273998.182229,VS0,VE1
+      - S1689366251.386684,VS0,VE3
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -601,10 +803,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/2.1/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -614,9 +816,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '495289607426642186'
+      - '3319046074820222707'
       X-Datadog-Parent-Id:
-      - '35292421075373743'
+      - '1120153360054443649'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '3'
+      X-Timer:
+      - S1689366251.414965,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/2.1/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2122676304000084834'
+      X-Datadog-Parent-Id:
+      - '1552459463997215536'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -668,15 +1066,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273998.207108,VS0,VE1
+      - S1689366251.438388,VS0,VE2
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -702,10 +1100,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/2.2/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -715,9 +1113,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '1096665521477112580'
+      - '2590985342010267590'
       X-Datadog-Parent-Id:
-      - '3127554862781154016'
+      - '69230250199343695'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '4'
+      X-Timer:
+      - S1689366251.462438,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/2.2/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1123887769806711152'
+      X-Datadog-Parent-Id:
+      - '1471593688747130720'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -769,15 +1363,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273998.238116,VS0,VE26
+      - S1689366251.490444,VS0,VE1
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -803,10 +1397,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/2.4/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -816,9 +1410,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '739571111556772911'
+      - '2430682082384243743'
       X-Datadog-Parent-Id:
-      - '2214508804674660630'
+      - '2653719488746667509'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '5'
+      X-Timer:
+      - S1689366252.514662,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/2.4/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1234925635388526482'
+      X-Datadog-Parent-Id:
+      - '419134330413579968'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -870,15 +1660,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273998.300451,VS0,VE1
+      - S1689366252.538594,VS0,VE1
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -905,10 +1695,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/2.5/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -918,9 +1708,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '3464104099808784986'
+      - '3149123976389157598'
       X-Datadog-Parent-Id:
-      - '2606090586353510756'
+      - '4247617424309957446'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '6'
+      X-Timer:
+      - S1689366252.562783,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/2.5/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2938703930521933162'
+      X-Datadog-Parent-Id:
+      - '1718786375422031252'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -972,15 +1958,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273998.343224,VS0,VE2
+      - S1689366252.586884,VS0,VE2
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -1012,10 +1998,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/3.1/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -1025,9 +2011,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '4341625274760723842'
+      - '61581942812521179'
       X-Datadog-Parent-Id:
-      - '1090041514924297499'
+      - '4255805495467058892'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '7'
+      X-Timer:
+      - S1689366252.610433,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/3.1/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3648073261754623321'
+      X-Datadog-Parent-Id:
+      - '2489719985027286191'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -1079,15 +2261,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
-      - '58'
+      - '1'
       X-Timer:
-      - S1689273998.375542,VS0,VE0
+      - S1689366252.638715,VS0,VE1
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -1118,10 +2300,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/3.10/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -1131,9 +2313,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '3002457463684382484'
+      - '3377905632311240821'
       X-Datadog-Parent-Id:
-      - '1516487235195267416'
+      - '2029030629332540672'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '8'
+      X-Timer:
+      - S1689366252.662363,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/3.10/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '213359926549755171'
+      X-Datadog-Parent-Id:
+      - '1908223121937686337'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -1185,15 +2563,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273998.410303,VS0,VE2
+      - S1689366252.687283,VS0,VE1
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -1223,10 +2601,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/3.11/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -1236,9 +2614,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '640783424692519917'
+      - '538713760901068150'
       X-Datadog-Parent-Id:
-      - '1959168001042995796'
+      - '1933253938019245264'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '9'
+      X-Timer:
+      - S1689366252.762427,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/3.11/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3677593129735023353'
+      X-Datadog-Parent-Id:
+      - '283501343650838844'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -1290,15 +2864,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273998.454373,VS0,VE2
+      - S1689366252.786453,VS0,VE1
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -1328,10 +2902,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/3.3/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -1341,9 +2915,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '3698289035836551381'
+      - '1825770980240987741'
       X-Datadog-Parent-Id:
-      - '2586041319363570358'
+      - '4269162760717370597'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '10'
+      X-Timer:
+      - S1689366252.810389,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/3.3/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2619238408057211474'
+      X-Datadog-Parent-Id:
+      - '1870686552331946404'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -1395,15 +3165,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273998.486366,VS0,VE2
+      - S1689366252.834567,VS0,VE2
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -1431,10 +3201,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/3.4/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -1444,9 +3214,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '1176327655452936149'
+      - '2885344139785299850'
       X-Datadog-Parent-Id:
-      - '3910682083299347978'
+      - '90997952374320773'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '11'
+      X-Timer:
+      - S1689366252.858508,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/3.4/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3207565235104534888'
+      X-Datadog-Parent-Id:
+      - '3538094405575940793'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -1498,15 +3464,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273999.519309,VS0,VE2
+      - S1689366252.882424,VS0,VE1
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -1537,10 +3503,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/3.6/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -1550,9 +3516,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '22537098173020847'
+      - '2315984164940824163'
       X-Datadog-Parent-Id:
-      - '551426103134935311'
+      - '1943929649524785677'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '12'
+      X-Timer:
+      - S1689366252.910794,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/3.6/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2850855425678977947'
+      X-Datadog-Parent-Id:
+      - '3023740524233745087'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -1604,15 +3766,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273999.550551,VS0,VE2
+      - S1689366252.938443,VS0,VE2
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -1642,10 +3804,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/3.8/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -1655,9 +3817,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '3782684497665964214'
+      - '183169493790183024'
       X-Datadog-Parent-Id:
-      - '3907672070343333850'
+      - '3879028502339014735'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:11 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '13'
+      X-Timer:
+      - S1689366252.962768,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/3.8/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3661783057182183070'
+      X-Datadog-Parent-Id:
+      - '336715939570565341'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -1709,15 +4067,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:11 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273999.582336,VS0,VE3
+      - S1689366252.986546,VS0,VE1
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -1747,10 +4105,10 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:11 GMT
 - request:
     method: get
-    uri: https://pypi.org/pypi/ply/3.9/json
+    uri: https://pypi.org/rss/project/ply/releases.xml
     body:
       encoding: US-ASCII
       string: ''
@@ -1760,9 +4118,205 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '397081942270112223'
+      - '1821687675429067533'
       X-Datadog-Parent-Id:
-      - '2011307813383523443'
+      - '19877666684029217'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:12 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '14'
+      X-Timer:
+      - S1689366252.011101,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:12 GMT
+- request:
+    method: get
+    uri: https://pypi.org/pypi/ply/3.9/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4462092148494801707'
+      X-Datadog-Parent-Id:
+      - '3212430019052890944'
       X-Datadog-Sampling-Priority:
       - '1'
       Expect:
@@ -1814,15 +4368,15 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 13 Jul 2023 18:46:38 GMT
+      - Fri, 14 Jul 2023 20:24:12 GMT
       X-Served-By:
-      - cache-iad-kjyo7100132-IAD
+      - cache-iad-kjyo7100127-IAD
       X-Cache:
       - HIT
       X-Cache-Hits:
       - '1'
       X-Timer:
-      - S1689273999.618258,VS0,VE1
+      - S1689366252.034485,VS0,VE2
       Vary:
       - Accept-Encoding
       Strict-Transport-Security:
@@ -1852,5 +4406,199 @@ http_interactions:
 
         '
     http_version:
-  recorded_at: Thu, 13 Jul 2023 18:46:38 GMT
+  recorded_at: Fri, 14 Jul 2023 20:24:12 GMT
+- request:
+    method: get
+    uri: https://pypi.org/rss/project/ply/releases.xml
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '330090769853164968'
+      X-Datadog-Parent-Id:
+      - '3493653660271067148'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://api.github.com/search/issues https://*.google-analytics.com https://*.analytics.google.com
+        https://*.googletagmanager.com fastly-insights.com *.fastly-insights.com *.ethicalads.io
+        https://api.pwnedpasswords.com https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/
+        https://2p66nmmycsj3.statuspage.io; default-src 'none'; font-src 'self' fonts.gstatic.com;
+        form-action 'self' https://checkout.stripe.com; frame-ancestors 'none'; frame-src
+        'none'; img-src 'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/
+        https://*.google-analytics.com https://*.googletagmanager.com *.fastly-insights.com
+        *.ethicalads.io; script-src 'self' https://*.googletagmanager.com https://www.google-analytics.com
+        https://ssl.google-analytics.com *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY='
+        'unsafe-inline'; worker-src *.fastly-insights.com
+      Content-Type:
+      - text/xml; charset=UTF-8
+      Etag:
+      - '"96kfGz/zFOzK+t+Ee9LK/A"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 14 Jul 2023 20:24:12 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100127-IAD
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '15'
+      X-Timer:
+      - S1689366252.062980,VS0,VE0
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '4163'
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>PyPI recent updates for ply</title>
+            <link>https://pypi.org/project/ply/</link>
+            <description>Recent updates to the Python Package Index for ply</description>
+            <language>en</language>
+            <item>
+              <title>3.11</title>
+              <link>https://pypi.org/project/ply/3.11/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 15 Feb 2018 19:01:27 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.10</title>
+              <link>https://pypi.org/project/ply/3.10/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 31 Jan 2017 18:38:34 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.9</title>
+              <link>https://pypi.org/project/ply/3.9/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 31 Aug 2016 14:12:50 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.8</title>
+              <link>https://pypi.org/project/ply/3.8/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 02 Oct 2015 18:15:10 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.6</title>
+              <link>https://pypi.org/project/ply/3.6/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Apr 2015 21:50:53 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.4</title>
+              <link>https://pypi.org/project/ply/3.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 18 Feb 2011 04:14:18 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.3</title>
+              <link>https://pypi.org/project/ply/3.3/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 11 Oct 2009 18:54:08 GMT</pubDate>
+            </item>
+            <item>
+              <title>3.1</title>
+              <link>https://pypi.org/project/ply/3.1/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sat, 28 Feb 2009 17:05:33 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.5</title>
+              <link>https://pypi.org/project/ply/2.5/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 28 May 2008 21:47:49 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.4</title>
+              <link>https://pypi.org/project/ply/2.4/</link>
+              <description>Python Lex &amp; Yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Tue, 27 May 2008 22:56:47 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.2</title>
+              <link>https://pypi.org/project/ply/2.2/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 02 Nov 2006 00:27:35 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.1</title>
+              <link>https://pypi.org/project/ply/2.1/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Wed, 04 Oct 2006 16:01:11 GMT</pubDate>
+            </item>
+            <item>
+              <title>2.0</title>
+              <link>https://pypi.org/project/ply/2.0/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Fri, 08 Sep 2006 20:29:24 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.8</title>
+              <link>https://pypi.org/project/ply/1.8/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Thu, 03 Aug 2006 03:53:19 GMT</pubDate>
+            </item>
+            <item>
+              <title>1.6</title>
+              <link>https://pypi.org/project/ply/1.6/</link>
+              <description>A pure-Python implementation of lex and yacc</description>
+              <author>dave@dabeaz.com</author>
+              <pubDate>Sun, 26 Feb 2006 16:36:49 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+    http_version:
+  recorded_at: Fri, 14 Jul 2023 20:24:12 GMT
 recorded_with: VCR 4.0.0

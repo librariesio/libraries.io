@@ -302,7 +302,7 @@ describe PackageManager::Pypi do
 
         # This will be empty, which is why we need to use the RSS feed to get the
         # publish date.
-        expect(raw_project.releases.find { |r| r.number == "1.6" }.published_at).to eq(nil)
+        expect(raw_project.releases.find { |r| r.version_number == "1.6" }.published_at).to eq(nil)
 
         versions = described_class.versions(raw_project, "ply")
 

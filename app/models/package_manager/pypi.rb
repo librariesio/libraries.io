@@ -56,7 +56,7 @@ module PackageManager
     end
 
     def self.project(name)
-      JsonApiProject.request(name: name)
+      JsonApiProject.request(project_name: name)
     end
 
     def self.deprecation_info(db_project)
@@ -79,26 +79,19 @@ module PackageManager
       }
     end
 
-    def self.select_repository_url(raw_project)
-      ["Source", "Source Code", "Repository", "Code"].filter_map do |field|
-        raw_project.dig("info", "project_urls", field)
-      end.first
-    end
-
-    def self.select_homepage_url(raw_project)
-      raw_project["info"]["home_page"].presence ||
-        raw_project.dig("info", "project_urls", "Homepage")
-    end
-
+    # mapping eventually receives the return value of the project method.
+    # This happens in PackageManager:Base.
     def self.mapping(json_api_project)
       json_api_project.to_mapping
     end
 
-    def self.versions(json_api_project, name)
+    # versions eventually receives the return value of the project method.
+    # This happens in PackageManager::Base.
+    def self.versions(json_api_project, _)
       VersionProcessor.new(
         project_releases: json_api_project.releases,
-        name: name,
-        known_versions: known_versions(name)
+        project_name: json_api_project.name,
+        known_versions: known_versions(json_api_project.name)
       ).execute
     end
 

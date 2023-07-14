@@ -315,27 +315,27 @@ module PackageManager
     end
 
     private_class_method def self.get(url, options = {})
-      ApiService.get(url, options)
+      ApiService.request_and_parse_json(url, options)
     end
 
     private_class_method def self.get_raw(url, options = {})
-      ApiService.get_raw(url, options)
+      ApiService.request_raw_data(url, options)
     end
 
     private_class_method def self.request(url, options = {})
-      ApiService.request(url, options)
+      ApiService.make_retriable_request(url, options)
     end
 
     private_class_method def self.get_html(url, options = {})
-      ApiService.get_html(url, options)
+      ApiService.request_and_parse_html(url, options)
     end
 
     private_class_method def self.get_xml(url, options = {})
-      ApiService.get_xml(url, options)
+      ApiService.request_and_parse_xml(url, options)
     end
 
     private_class_method def self.get_json(url)
-      ApiService.get_json(url)
+      ApiService.request_json_with_headers(url)
     end
 
     private_class_method def self.download_async(names)

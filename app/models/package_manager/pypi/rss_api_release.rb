@@ -1,11 +1,10 @@
 module PackageManager
   class Pypi
     class RssApiRelease
-      attr_reader :number, :published_at
+      attr_reader :version_number, :published_at
 
-      def initialize(request:, number:, published_at:)
-        @request = request
-        @number = number
+      def initialize(version_number:, published_at:)
+        @version_number = version_number
         @published_at = published_at
       end
     end

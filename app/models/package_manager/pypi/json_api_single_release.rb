@@ -1,15 +1,15 @@
 module PackageManager
   class Pypi
     class JsonApiSingleRelease
-      def self.request(name:, number:)
-        data = ApiService.get("https://pypi.org/pypi/#{name}/#{number}/json")
+      def self.request(project_name:, version_number:)
+        data = ApiService.request_json_with_headers("https://pypi.org/pypi/#{project_name}/#{version_number}/json")
 
-        new(name: name, number: number, data: data)
+        new(project_name: project_name, version_number: version_number, data: data)
       end
 
-      def initialize(name:, number:, data:)
-        @name = name
-        @number = number
+      def initialize(project_name:, version_number:, data:)
+        @project_name = project_name
+        @version_number = version_number
         @data = data
       end
 
