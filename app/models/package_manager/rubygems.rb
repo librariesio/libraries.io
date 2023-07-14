@@ -63,7 +63,7 @@ module PackageManager
         gem_details = gem_version_wrap.element_children
         gem_version = gem_details[0]&.attributes&.[]("href")&.value&.split("/")&.last
         version_date = gem_details[1]&.children&.text&.to_time&.iso8601
-        is_yanked = gem_details[3]&.children&.text.present? && gem_details[3].children.text == "yanked"
+        is_yanked = gem_details[3]&.children&.text == "yanked"
 
         next unless is_yanked
 
@@ -71,6 +71,7 @@ module PackageManager
           number: gem_version,
           published_at: version_date,
           original_license: "",
+          yanked: true,
         }
       end
         .compact
