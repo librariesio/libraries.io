@@ -45,6 +45,14 @@ describe PackageManager::Rubygems do
     end
   end
 
+  describe ".versions" do
+    it "returns yanked versions" do
+      VCR.use_cassette("package_manager/versions/flowbyte-yanked") do
+        expect(PackageManager::Rubygems.versions({ "name" => "flowbyte-yanked" }, "flowbyte-yanked")).to eq([{ number: "1.0.0", published_at: "2019-05-24T14:36:49.910Z", original_license: ["MIT"] }, { number: "1.0.1", published_at: "2019-05-24T00:00:00-04:00", original_license: "", yanked: true }])
+      end
+    end
+  end
+
   describe "#deprecate_versions" do
     before do
       project.versions.create!(number: "1.0.0")
