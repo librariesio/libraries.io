@@ -76,7 +76,7 @@ module PackageManager
         .compact
 
       json = get_json("https://rubygems.org/api/v1/versions/#{raw_project['name']}.json")
-      json.map do |v|
+      json_versions = json.map do |v|
         license = v.fetch("licenses", "")
         license = "" if license.nil?
         {
@@ -85,6 +85,8 @@ module PackageManager
           original_license: license,
         }
       end
+
+      (json_versions + yanked_versions).uniq { |version| version[:number] }
     rescue StandardError
       []
     end
