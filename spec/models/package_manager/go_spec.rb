@@ -77,6 +77,18 @@ describe PackageManager::Go do
         expect(versions.find { |v| v[:number] == "v0.0.0-20190907113008-ad855c713046" }).to_not be nil
       end
     end
+
+    it "omits retracted versions" do
+      VCR.use_cassette("go/pkg_with_retracted_versions", record: :new_episodes) do
+        raw_project = { name: "github.com/go-gorp/gorp/v3" }
+
+        versions = described_class.versions(raw_project, raw_project[:name])
+
+        expect(versions.find { |v| v[:number] == "v3.1.0" }).not_to be nil
+        expect(versions.find { |v| v[:number] == "v3.0.0" }).to be nil
+        expect(versions.find { |v| v[:number] == "v3.0.3" }).to be nil
+      end
+    end
   end
 
   describe "VERSION_MODULE_REGEX" do
