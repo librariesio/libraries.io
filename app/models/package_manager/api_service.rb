@@ -40,6 +40,7 @@ module PackageManager
       Nokogiri::HTML(request_raw_data(url, options))
     end
 
+    # @return [Ox::Document] The parsed XML data
     def self.request_and_parse_xml(url, options = {})
       Ox.parse(request_raw_data(url, options))
     end

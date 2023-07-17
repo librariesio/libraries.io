@@ -4,12 +4,10 @@ module PackageManager
       def self.request(project_name:, version_number:)
         data = ApiService.request_json_with_headers("https://pypi.org/pypi/#{project_name}/#{version_number}/json")
 
-        new(project_name: project_name, version_number: version_number, data: data)
+        new(data: data)
       end
 
-      def initialize(project_name:, version_number:, data:)
-        @project_name = project_name
-        @version_number = version_number
+      def initialize(data:)
         @data = data
       end
 

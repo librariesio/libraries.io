@@ -11,8 +11,9 @@ module PackageManager
         @project_releases.map do |project_release|
           next @known_versions[project_release.version_number] if @known_versions.key?(project_release.version_number)
 
-          original_license = JsonApiSingleRelease.request(project_name: @project_name, version_number: project_release.version_number).license
-          rss_api_release = rss_api_releases_hash[project_release.version_number]
+          version_number = project_release.version_number
+          original_license = json_api_single_release_for_version(version_number).license
+          rss_api_release = rss_api_releases_hash[version_number]
           published_at = project_release.published_at || rss_api_release&.published_at
 
           {
@@ -23,19 +24,28 @@ module PackageManager
         end
       end
 
-      def should_retrieve_rss_feed?
-        !@project_releases.all?(&:published_at?)
+      private
+
+      def rss_api_releases
+        RssApiReleases.request(project_name: @project_name).releases
+      end
+
+      def json_api_single_release_for_version(version_number)
+        JsonApiSingleRelease.request(
+          project_name: @project_name,
+          version_number: version_number
+        )
       end
 
       def rss_api_releases_hash
         return @rss_api_releases_hash if @rss_api_releases_hash
 
-        @rss_api_releases_hash = if should_retrieve_rss_feed?
-                                   RssApiReleases.request(project_name: @project_name).releases.each_with_object({}) do |release, obj|
+        @rss_api_releases_hash = if @project_releases.all_releases_have_published_at?
+                                   {}
+                                 else
+                                   rss_api_releases.each_with_object({}) do |release, obj|
                                      obj[release.version_number] = release
                                    end
-                                 else
-                                   {}
                                  end
       end
     end

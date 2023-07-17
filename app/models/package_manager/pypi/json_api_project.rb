@@ -82,12 +82,14 @@ module PackageManager
       end
 
       def releases
-        @data["releases"].map do |version_number, details|
-          JsonApiProjectRelease.new(
-            version_number: version_number,
-            published_at: self.class.release_data_published_at(details)
-          )
-        end
+        JsonApiProjectReleases.new(
+          @data["releases"].map do |version_number, details|
+            JsonApiProjectRelease.new(
+              version_number: version_number,
+              published_at: self.class.release_data_published_at(details)
+            )
+          end
+        )
       end
 
       # Various parts of this process still want raw hashes for a type
