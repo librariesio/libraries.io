@@ -17,7 +17,7 @@ module PackageManager
           published_at = project_release.published_at || rss_api_release&.published_at
 
           {
-            number: project_release.version_number,
+            number: version_number,
             published_at: published_at,
             original_license: original_license,
           }

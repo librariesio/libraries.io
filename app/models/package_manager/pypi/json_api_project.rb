@@ -13,23 +13,6 @@ module PackageManager
         new(data)
       end
 
-      def self.release_data_published_at(details)
-        return nil if details == []
-
-        upload_time = details.dig(0, "upload_time")
-        raise ArgumentError, "does not contain upload_time" unless upload_time
-
-        return nil unless upload_time
-
-        begin
-          Time.parse(upload_time)
-        rescue ArgumentError => e
-          Rails.logger.error("Unable to parse PyPI JSON API Project upload_time: #{project_name} (#{upload_time}): #{e.message}")
-
-          nil
-        end
-      end
-
       def initialize(data)
         @data = data
       end
@@ -86,7 +69,7 @@ module PackageManager
           @data["releases"].map do |version_number, details|
             JsonApiProjectRelease.new(
               version_number: version_number,
-              published_at: self.class.release_data_published_at(details)
+              published_at: release_data_published_at(details)
             )
           end
         )
@@ -103,6 +86,26 @@ module PackageManager
           licenses: licenses,
           repository_url: preferred_repository_url,
         }
+      end
+
+      private
+
+      def release_data_published_at(details)
+        return nil if details == []
+
+        upload_time = details.dig(0, "upload_time")
+        unless upload_time
+          Rails.logger.error("PyPI JSON API Project details does not contain upload_time: #{name} (#{upload_time})")
+          return nil
+        end
+
+        begin
+          Time.parse(upload_time)
+        rescue ArgumentError => e
+          Rails.logger.error("Unable to parse PyPI JSON API Project upload_time: #{name} (#{upload_time}): #{e.message}")
+
+          nil
+        end
       end
     end
   end

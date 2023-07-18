@@ -76,4 +76,77 @@ describe PackageManager::Pypi::JsonApiProject do
       end
     end
   end
+
+  describe "#releases" do
+    let(:project) { described_class.new(raw_project) }
+    let(:raw_project) do
+      {
+        "releases" => raw_releases,
+      }
+    end
+    let(:raw_releases) { {} }
+
+    context "with no releases" do
+      it "returns nothing" do
+        expect(project.releases).to be_empty
+      end
+    end
+
+    context "with one release" do
+      let(:raw_releases) { { "1.0.0" => raw_release } }
+      let(:time) { Time.zone.now }
+      let(:raw_release) { [{ "upload_time" => time.iso8601 }] }
+
+      context "with empty release" do
+        let(:raw_release) { [] }
+
+        it "returns a nil published_at" do
+          expect(project.releases.count).to eq(1)
+
+          release = project.releases.first
+
+          expect(release.version_number).to eq("1.0.0")
+          expect(release.published_at).to eq(nil)
+        end
+      end
+
+      context "without upload time" do
+        let(:raw_release) { [{}] }
+
+        it "returns a nil published_at" do
+          expect(project.releases.count).to eq(1)
+
+          release = project.releases.first
+
+          expect(release.version_number).to eq("1.0.0")
+          expect(release.published_at).to eq(nil)
+        end
+      end
+
+      context "with invalid upload time" do
+        let(:raw_release) { [{ "upload_time" => "{]" }] }
+
+        it "returns a nil published_at" do
+          expect(project.releases.count).to eq(1)
+
+          release = project.releases.first
+
+          expect(release.version_number).to eq("1.0.0")
+          expect(release.published_at).to eq(nil)
+        end
+      end
+
+      context "with valid upload time" do
+        it "returns the correct published_at" do
+          expect(project.releases.count).to eq(1)
+
+          release = project.releases.first
+
+          expect(release.version_number).to eq("1.0.0")
+          # deal with microtime
+          expect(release.published_at).to be_within(1.second).of(time)
+        end
+      end
+    end
+  end
 end
