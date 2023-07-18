@@ -65,6 +65,14 @@ describe PackageManager::Rubygems do
         end
       end
     end
+
+    context "with a non-existent gem" do
+      it "returns an empty array" do
+        VCR.use_cassette("package_manager/versions/non_existent_gem") do
+          expect(PackageManager::Rubygems.versions({ "name" => "gem_that_does_not_exist" }, "gem_that_does_not_exist")).to be_empty
+        end
+      end
+    end
   end
 
   describe "#deprecate_versions" do

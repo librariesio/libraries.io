@@ -64,7 +64,7 @@ module PackageManager
       until all_pages_parsed
         html = get_html("https://rubygems.org/gems/#{raw_project['name']}/versions?page=#{page_number}")
 
-        if html.text.include?("This gem is not currently hosted on RubyGems.org.")
+        if html.text.include?("This gem is not currently hosted on RubyGems.org.") || html.text.empty?
           all_pages_parsed = true
           break
         end

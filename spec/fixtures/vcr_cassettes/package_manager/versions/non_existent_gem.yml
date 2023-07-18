@@ -1,0 +1,172 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://rubygems.org/gems/gem_that_does_not_exist/versions?page=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1418246815979467229'
+      X-Datadog-Parent-Id:
+      - '3829457259293413351'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 404
+      message: ''
+    headers:
+      Content-Type:
+      - text/html; charset=utf-8
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Cache-Control:
+      - no-cache
+      Content-Security-Policy:
+      - default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src 'self'
+        https://secure.gaug.es https://gravatar.com https://www.gravatar.com https://secure.gravatar.com
+        https://*.fastly-insights.com https://avatars.githubusercontent.com; object-src
+        'none'; script-src 'self' https://secure.gaug.es https://www.fastly-insights.com
+        'nonce-'; style-src 'self' https://fonts.googleapis.com; connect-src 'self'
+        https://s3-us-west-2.amazonaws.com/rubygems-dumps/ https://*.fastly-insights.com
+        https://fastly-insights.com https://api.github.com http://localhost:*; form-action
+        'self' https://github.com/login/oauth/authorize; frame-ancestors 'self'; report-uri
+        https://csp-report.browser-intake-datadoghq.com/api/v2/logs?dd-api-key=pub852fa3e2312391fafa5640b60784e660&dd-evp-origin=content-security-policy&ddsource=csp-report&ddtags=service%3Arubygems.org%2Cversion%3A475c77413a7ad016bd16f4130a8898b9653dacd3%2Cenv%3Aproduction%2Ctrace_id%3A1418246815979467229
+      X-Request-Id:
+      - 30674bbf-1b89-4324-9e74-6e55a4019098
+      X-Runtime:
+      - '0.006736'
+      Strict-Transport-Security:
+      - max-age=31536000
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 18 Jul 2023 16:01:58 GMT
+      Via:
+      - 1.1 varnish
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-bos4658-BOS
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Timer:
+      - S1689696118.901177,VS0,VE342
+      Vary:
+      - Accept-Encoding
+      Server:
+      - RubyGems.org
+      Content-Length:
+      - '794'
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KICA8aGVhZD4KICAgIDxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIgY29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4KICAgIDxsaW5rIHJlbD0ic2hvcnRjdXQgaWNvbiIgaHJlZj0iL2Zhdmljb24uaWNvIiB0eXBlPSJpbWFnZS94LWljb24iPgogICAgPGxpbmsgaHJlZj0iL3N0eWxlc2hlZXRzL3N0YXRpYy5jc3MiIHJlbD0nc3R5bGVzaGVldCcgdHlwZT0ndGV4dC9jc3MnPgogICAgPHRpdGxlPlBhZ2Ugbm90IGZvdW5kIHwgUnVieUdlbXMub3JnPC90aXRsZT4KICA8L2hlYWQ+CiAgPGJvZHk+CiAgICA8ZGl2IGNsYXNzPSJ3cmFwcGVyIj4KICAgICAgPGRpdiBjbGFzcz0iaW1hZ2VfX3dyYXBwZXIiPgogICAgICAgIDxpbWcgY2xhc3M9ImVycm9yX19pbGx1c3RyYXRpb25fX2J1YmJsZSIgYWx0PSJHZW0gbWlzc2luZyBmcm9tIHRyZWFzdXJlIGNoZXN0IiBzcmM9Ii9pbWFnZXMvY3Jvc3MucG5nIj4KICAgICAgICA8aW1nIGhlaWdodD0iNTMwIiBhbHQ9IjQwNCBlcnJvciIgc3JjPSIvaW1hZ2VzL3NlYV9mbG9vci5zdmciPgogICAgICA8L2Rpdj4KICAgICAgPGRpdiBjbGFzcz0iY29udGVudCI+CiAgICAgICAgPGgxPlBhZ2Ugbm90IGZvdW5kLjwvaDE+CiAgICAgICAgPHA+SXQgd2lsbCBiZSBtaW5lLiBPaCB5ZXMuIEl0IHdpbGwgYmUgbWluZS48L3A+CiAgICAgICAgPGEgaHJlZj0iLyI+QmFjayB0byBSdWJ5R2Vtcy5vcmcg4oaSPC9hPgogICAgICA8L2Rpdj4KICAgIDwvZGl2PgogIDwvYm9keT4KPC9odG1sPgo=
+    http_version:
+  recorded_at: Tue, 18 Jul 2023 16:01:58 GMT
+- request:
+    method: get
+    uri: https://rubygems.org/api/v1/versions/gem_that_does_not_exist.json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2810685258008122219'
+      X-Datadog-Parent-Id:
+      - '3362011978201739169'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 404
+      message: ''
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Cache-Control:
+      - no-cache
+      Content-Security-Policy:
+      - default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src 'self'
+        https://secure.gaug.es https://gravatar.com https://www.gravatar.com https://secure.gravatar.com
+        https://*.fastly-insights.com https://avatars.githubusercontent.com; object-src
+        'none'; script-src 'self' https://secure.gaug.es https://www.fastly-insights.com
+        'nonce-'; style-src 'self' https://fonts.googleapis.com; connect-src 'self'
+        https://s3-us-west-2.amazonaws.com/rubygems-dumps/ https://*.fastly-insights.com
+        https://fastly-insights.com https://api.github.com http://localhost:*; form-action
+        'self' https://github.com/login/oauth/authorize; frame-ancestors 'self'; report-uri
+        https://csp-report.browser-intake-datadoghq.com/api/v2/logs?dd-api-key=pub852fa3e2312391fafa5640b60784e660&dd-evp-origin=content-security-policy&ddsource=csp-report&ddtags=service%3Arubygems.org%2Cversion%3A475c77413a7ad016bd16f4130a8898b9653dacd3%2Cenv%3Aproduction%2Ctrace_id%3A2810685258008122219
+      X-Request-Id:
+      - 18e8a176-ef97-4c0d-8c4d-cad95e819d05
+      X-Runtime:
+      - '0.008251'
+      Strict-Transport-Security:
+      - max-age=31536000
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 18 Jul 2023 16:01:58 GMT
+      Via:
+      - 1.1 varnish
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-bos4658-BOS
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Timer:
+      - S1689696118.273157,VS0,VE343
+      Vary:
+      - Accept-Encoding
+      Server:
+      - RubyGems.org
+      Content-Length:
+      - '32'
+    body:
+      encoding: ASCII-8BIT
+      string: This rubygem could not be found.
+    http_version:
+  recorded_at: Tue, 18 Jul 2023 16:01:58 GMT
+recorded_with: VCR 4.0.0
