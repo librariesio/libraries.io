@@ -63,10 +63,10 @@ module RepoManifests
         platform = manifest.platform
         next unless dep.is_a?(Hash)
 
-        project = Project.platform(platform).find_by_name(dep[:name])
+        project_id = Project.find_best(platform, dep[:name])&.id
 
         manifest.repository_dependencies.create({
-                                                  project_id: project.try(:id),
+                                                  project_id: project_id,
                                                   project_name: dep[:name].try(:strip),
                                                   platform: platform,
                                                   requirements: dep[:requirement],

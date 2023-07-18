@@ -489,6 +489,7 @@ class Project < ApplicationRecord
 
     names = platform_class
       .project_find_names(name)
+      .compact
       .map(&:downcase)
 
     visible
