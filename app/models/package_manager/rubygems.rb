@@ -58,50 +58,8 @@ module PackageManager
     end
 
     def self.versions(raw_project, _name, parse_html = false)
-      if parse_html
-        html_versions = []
-        page_number = 1
-        all_pages_parsed = false
-        until all_pages_parsed
-          html = get_html("https://rubygems.org/gems/#{raw_project['name']}/versions?page=#{page_number}")
-
-          if html.text.include?("This gem is not currently hosted on RubyGems.org.") || html.text.empty?
-            all_pages_parsed = true
-            break
-          end
-
-          yanked_versions = html.xpath("//li").map do |gem_version_wrap|
-            gem_details = gem_version_wrap.element_children
-            gem_version = gem_details[0]&.attributes&.[]("href")&.value&.split("/")&.last
-            version_date = gem_details[1]&.children&.text&.to_time&.iso8601
-            is_yanked = gem_details[3]&.children&.text == "yanked"
-
-            next unless is_yanked
-
-            {
-              number: gem_version,
-              published_at: version_date,
-              original_license: "",
-              yanked: true,
-            }
-          end
-            .compact
-
-          page_number += 1
-          html_versions << yanked_versions
-        end
-      end
-
-      json = get_json("https://rubygems.org/api/v1/versions/#{raw_project['name']}.json")
-      json_versions = json.map do |v|
-        license = v.fetch("licenses", "")
-        license = "" if license.nil?
-        {
-          number: v["number"],
-          published_at: v["created_at"],
-          original_license: license,
-        }
-      end
+      html_versions = parse_html_versions(raw_project) if parse_html
+      json_versions = parse_json_versions(raw_project)
 
       versions = if parse_html
                    (json_versions + html_versions.flatten.compact)
@@ -148,6 +106,55 @@ module PackageManager
 
     def self.registry_user_url(login)
       "https://rubygems.org/profiles/#{login}"
+    end
+
+    def self.parse_html_versions(raw_project)
+      html_versions = []
+      page_number = 1
+      all_pages_parsed = false
+      until all_pages_parsed
+        html = get_html("https://rubygems.org/gems/#{raw_project['name']}/versions?page=#{page_number}")
+
+        if html.text.include?("This gem is not currently hosted on RubyGems.org.") || html.text.empty?
+          all_pages_parsed = true
+          break
+        end
+
+        yanked_versions = html.xpath("//li").map do |gem_version_wrap|
+          gem_details = gem_version_wrap.element_children
+          gem_version = gem_details[0]&.attributes&.[]("href")&.value&.split("/")&.last
+          version_date = gem_details[1]&.children&.text&.to_time&.iso8601
+          is_yanked = gem_details[3]&.children&.text == "yanked"
+
+          next unless is_yanked
+
+          {
+            number: gem_version,
+            published_at: version_date,
+            original_license: "",
+            yanked: true,
+          }
+        end
+          .compact
+
+        page_number += 1
+        html_versions << yanked_versions
+      end
+
+      html_versions
+    end
+
+    def self.parse_json_versions(raw_project)
+      json = get_json("https://rubygems.org/api/v1/versions/#{raw_project['name']}.json")
+      json.map do |v|
+        license = v.fetch("licenses", "")
+        license = "" if license.nil?
+        {
+          number: v["number"],
+          published_at: v["created_at"],
+          original_license: license,
+        }
+      end
     end
   end
 end
