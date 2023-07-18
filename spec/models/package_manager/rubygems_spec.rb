@@ -54,6 +54,17 @@ describe PackageManager::Rubygems do
         )
       end
     end
+
+    context "with a gem with paginated versions" do
+      it "returns versions across pages" do
+        VCR.use_cassette("package_manager/versions/rails") do
+          expect(PackageManager::Rubygems.versions({ "name" => "rails" }, "rails")).to include(
+            hash_including(number: "3.1.0.rc7"),
+            hash_including(number: "2.3.7")
+          )
+        end
+      end
+    end
   end
 
   describe "#deprecate_versions" do
