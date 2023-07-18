@@ -29,25 +29,6 @@ describe PackageManager::Pypi do
     end
   end
 
-  describe "finds repository urls" do
-    it "from the rarely-populated repository url" do
-      requests = JSON.parse(File.open("spec/fixtures/pypi-with-repository.json").read)
-      expect(described_class.mapping(requests)[:repository_url]).to eq("https://github.com/python-attrs/attrs")
-    end
-  end
-
-  describe "handles licenses" do
-    it "from classifiers" do
-      requests = JSON.parse(File.open("spec/fixtures/pypi-specified-license.json").read)
-      expect(described_class.mapping(requests)[:licenses]).to eq("Apache 2.0")
-    end
-
-    it "from classifiers" do
-      bandit = JSON.parse(File.open("spec/fixtures/pypi-classified-license-only.json").read)
-      expect(described_class.mapping(bandit)[:licenses]).to eq("Apache Software License")
-    end
-  end
-
   describe "project_find_names" do
     it "suggests underscore version of name" do
       suggested_find_names = described_class.project_find_names("test-hyphen")
@@ -314,44 +295,20 @@ describe PackageManager::Pypi do
     end
   end
 
-  describe ".select_repository_url" do
-    let(:result) { described_class.select_repository_url(raw_project) }
+  describe ".versions" do
+    it "retrieves data for a package that uses both the JSON and RSS APIs" do
+      VCR.use_cassette("pypi/versions/ply") do
+        raw_project = described_class.project("ply")
 
-    let(:raw_project) do
-      {
-        "info" => {
-          "project_urls" => project_urls,
-        },
-      }
-    end
+        # This will be empty, which is why we need to use the RSS feed to get the
+        # publish date.
+        expect(raw_project.releases.find { |r| r.version_number == "1.6" }.published_at).to eq(nil)
 
-    context "project_urls.Code" do
-      let(:project_urls) do
-        { "Code" => "wow" }
-      end
+        versions = described_class.versions(raw_project, "ply")
 
-      it "uses correct value" do
-        expect(result).to eq("wow")
-      end
-    end
-
-    context "both Source and Code" do
-      let(:project_urls) do
-        { "Source" => "cool", "Code" => "wow" }
-      end
-
-      it "uses correct value" do
-        expect(result).to eq("cool")
-      end
-    end
-
-    context "none" do
-      let(:project_urls) do
-        {}
-      end
-
-      it "returns nil" do
-        expect(result).to eq(nil)
+        # We will get the published date from the RSS feed
+        version16 = versions.find { |v| v[:number] == "1.6" }
+        expect(version16[:published_at]).not_to be_nil
       end
     end
   end

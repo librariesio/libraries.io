@@ -21,7 +21,8 @@ module PackageManager
         PackageManager.constants
           .reject { |platform| platform == :Base }
           .map { |sym| "PackageManager::#{sym}".constantize }
-          .reject { |platform| platform::HIDDEN }
+          # Only platform managers will have the HIDDEN constant set
+          .find_all { |platform| platform.const_defined?(:HIDDEN) && platform.const_get(:HIDDEN) == false }
           .sort_by(&:name)
       end
     end
@@ -302,21 +303,8 @@ module PackageManager
       end
     end
 
-    # Use librariesio-url-parser to attempt to select one of the provided
-    # URLs as the URL for this repository. This means that if the URL is
-    # not considered a repository URL by that gem, its raw value will be
-    # used. This would allow for a project that self-hosts to still have
-    # a valid repo URL.
-    #
-    # @param repo String A string we think is a project's repository URL
-    # @param homepage String A string we thing is a project's homepage URL
-    # @return String The best URL we can select for the project's repository, or "" if we can't find one
     def self.repo_fallback(repo, homepage)
-      repo = "" if repo.nil?
-      homepage = "" if homepage.nil?
-      repo_url = URLParser.try_all(repo)
-      homepage_url = URLParser.try_all(homepage)
-      repo_url.presence || homepage_url.presence || repo
+      RepositoryService.repo_fallback(repo, homepage)
     end
 
     def self.project_find_names(project_name)
@@ -328,38 +316,27 @@ module PackageManager
     end
 
     private_class_method def self.get(url, options = {})
-      Oj.load(get_raw(url, options))
+      ApiService.request_and_parse_json(url, options)
     end
 
     private_class_method def self.get_raw(url, options = {})
-      rsp = request(url, options)
-      return "" unless rsp.status == 200
-
-      rsp.body
+      ApiService.request_raw_data(url, options)
     end
 
     private_class_method def self.request(url, options = {})
-      connection = Faraday.new url.strip, options do |builder|
-        builder.use FaradayMiddleware::Gzip
-        builder.use FaradayMiddleware::FollowRedirects, limit: 3
-        builder.request :retry, { max: 2, interval: 0.05, interval_randomness: 0.5, backoff_factor: 2 }
-
-        builder.use :instrumentation
-        builder.adapter :typhoeus
-      end
-      connection.get
+      ApiService.make_retriable_request(url, options)
     end
 
     private_class_method def self.get_html(url, options = {})
-      Nokogiri::HTML(get_raw(url, options))
+      ApiService.request_and_parse_html(url, options)
     end
 
     private_class_method def self.get_xml(url, options = {})
-      Ox.parse(get_raw(url, options))
+      ApiService.request_and_parse_xml(url, options)
     end
 
     private_class_method def self.get_json(url)
-      get(url, headers: { "Accept" => "application/json" })
+      ApiService.request_json_with_headers(url)
     end
 
     private_class_method def self.download_async(names)

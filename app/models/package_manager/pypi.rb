@@ -56,9 +56,7 @@ module PackageManager
     end
 
     def self.project(name)
-      get("https://pypi.org/pypi/#{name}/json")
-    rescue StandardError
-      {}
+      JsonApiProject.request(project_name: name)
     end
 
     def self.deprecation_info(db_project)
@@ -81,49 +79,20 @@ module PackageManager
       }
     end
 
-    def self.select_repository_url(raw_project)
-      ["Source", "Source Code", "Repository", "Code"].filter_map do |field|
-        raw_project.dig("info", "project_urls", field)
-      end.first
+    # mapping eventually receives the return value of the project method.
+    # This happens in PackageManager:Base.
+    def self.mapping(json_api_project)
+      json_api_project.to_mapping
     end
 
-    def self.select_homepage_url(raw_project)
-      raw_project["info"]["home_page"].presence ||
-        raw_project.dig("info", "project_urls", "Homepage")
-    end
-
-    def self.mapping(raw_project)
-      {
-        name: raw_project["info"]["name"],
-        description: raw_project["info"]["summary"],
-        homepage: raw_project["info"]["home_page"],
-        keywords_array: Array.wrap(raw_project["info"]["keywords"].try(:split, /[\s.,]+/)),
-        licenses: licenses(raw_project),
-        repository_url: repo_fallback(
-          select_repository_url(raw_project),
-          select_homepage_url(raw_project)
-        ),
-      }
-    end
-
-    def self.versions(raw_project, name)
-      return [] if raw_project.nil?
-
-      known = known_versions(name)
-
-      raw_project["releases"].reject { |_k, v| v == [] }.map do |k, v|
-        if known.key?(k)
-          known[k]
-        else
-          release = get("https://pypi.org/pypi/#{name}/#{k}/json")
-
-          {
-            number: k,
-            published_at: v[0]["upload_time"],
-            original_license: release.dig("info", "license"),
-          }
-        end
-      end
+    # versions eventually receives the return value of the project method.
+    # This happens in PackageManager::Base.
+    def self.versions(json_api_project, _)
+      VersionProcessor.new(
+        project_releases: json_api_project.releases,
+        project_name: json_api_project.name,
+        known_versions: known_versions(json_api_project.name)
+      ).execute
     end
 
     def self.one_version(raw_project, version_string)
@@ -173,13 +142,6 @@ module PackageManager
           platform: self.name.demodulize,
         }
       end
-    end
-
-    def self.licenses(project)
-      return project["info"]["license"] if project["info"]["license"].present?
-
-      license_classifiers = project["info"]["classifiers"].select { |c| c.start_with?("License :: ") }
-      license_classifiers.map { |l| l.split(":: ").last }.join(",")
     end
 
     def self.project_find_names(project_name)
