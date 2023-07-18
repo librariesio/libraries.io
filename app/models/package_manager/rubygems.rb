@@ -57,37 +57,39 @@ module PackageManager
       }
     end
 
-    def self.versions(raw_project, _name)
-      html_versions = []
-      page_number = 1
-      all_pages_parsed = false
-      until all_pages_parsed
-        html = get_html("https://rubygems.org/gems/#{raw_project['name']}/versions?page=#{page_number}")
+    def self.versions(raw_project, _name, parse_html = false)
+      if parse_html
+        html_versions = []
+        page_number = 1
+        all_pages_parsed = false
+        until all_pages_parsed
+          html = get_html("https://rubygems.org/gems/#{raw_project['name']}/versions?page=#{page_number}")
 
-        if html.text.include?("This gem is not currently hosted on RubyGems.org.") || html.text.empty?
-          all_pages_parsed = true
-          break
+          if html.text.include?("This gem is not currently hosted on RubyGems.org.") || html.text.empty?
+            all_pages_parsed = true
+            break
+          end
+
+          yanked_versions = html.xpath("//li").map do |gem_version_wrap|
+            gem_details = gem_version_wrap.element_children
+            gem_version = gem_details[0]&.attributes&.[]("href")&.value&.split("/")&.last
+            version_date = gem_details[1]&.children&.text&.to_time&.iso8601
+            is_yanked = gem_details[3]&.children&.text == "yanked"
+
+            next unless is_yanked
+
+            {
+              number: gem_version,
+              published_at: version_date,
+              original_license: "",
+              yanked: true,
+            }
+          end
+            .compact
+
+          page_number += 1
+          html_versions << yanked_versions
         end
-
-        yanked_versions = html.xpath("//li").map do |gem_version_wrap|
-          gem_details = gem_version_wrap.element_children
-          gem_version = gem_details[0]&.attributes&.[]("href")&.value&.split("/")&.last
-          version_date = gem_details[1]&.children&.text&.to_time&.iso8601
-          is_yanked = gem_details[3]&.children&.text == "yanked"
-
-          next unless is_yanked
-
-          {
-            number: gem_version,
-            published_at: version_date,
-            original_license: "",
-            yanked: true,
-          }
-        end
-          .compact
-
-        page_number += 1
-        html_versions << yanked_versions
       end
 
       json = get_json("https://rubygems.org/api/v1/versions/#{raw_project['name']}.json")
@@ -101,7 +103,12 @@ module PackageManager
         }
       end
 
-      (json_versions + html_versions.flatten.compact).uniq { |version| version[:number] }
+      versions = if parse_html
+                   (json_versions + html_versions.flatten.compact)
+                 else
+                   json_versions
+                 end
+      versions.uniq { |version| version[:number] }
     rescue StandardError
       []
     end
