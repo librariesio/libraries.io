@@ -62,7 +62,7 @@ module PackageManager
       json_versions = parse_json_versions(raw_project)
 
       versions = if parse_html
-                   (json_versions + html_versions.flatten.compact)
+                   json_versions + html_versions.flatten.compact
                  else
                    json_versions
                  end
