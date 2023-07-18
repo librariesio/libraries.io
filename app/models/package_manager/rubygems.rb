@@ -135,7 +135,6 @@ module PackageManager
             yanked: true,
           }
         end
-          .compact
 
         page_number += 1
         html_versions << yanked_versions
