@@ -313,17 +313,14 @@ namespace :projects do
     end
 
     batch_size = 500
-    batch_wait = 5
 
     result_count = 0
 
     Project.platform(platform).find_in_batches(batch_size: batch_size).each do |projects|
-      if commit
-        projects.each(&:manual_sync)
-        sleep batch_wait
-      end
+      projects.each(&:manual_sync) if commit
 
       result_count += projects.size
+      Rails.logger.info("#{result_count} projects queued to resync so far.")
     end
 
     stats = <<~STATS
