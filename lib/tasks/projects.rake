@@ -277,8 +277,14 @@ namespace :projects do
         if project
           projects << project
         else
+          matching_project = Project.where("platform ILIKE ?", platform).where("name ILIKE ?", name).first
+
+          message = ["Project not found: #{platform}/#{name}"]
+
+          message << "Potential matching project found #{matching_project.platform}/#{matching_project.name}" if matching_project
+
           skipped_not_found_count += 1
-          Rails.logger.warn("Project not found: #{platform}/#{name}")
+          Rails.logger.warn(message.join(", "))
         end
       end
 
