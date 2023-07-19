@@ -141,7 +141,11 @@ module PackageManager
         versions = [json&.fetch("Version", nil)].compact
       end
 
+      go_mod = GoMod.new(fetch_mod_file(raw_project[:name]))
+
       versions.map do |v|
+        next if go_mod.retracted?(v)
+
         known = known_versions[v]
 
         if known && known[:original_license].present?
@@ -298,6 +302,15 @@ module PackageManager
     # https://go.dev/ref/mod#goproxy-protocol
     def self.encode_for_proxy(str)
       str.gsub(/[A-Z]/) { |s| "!#{s.downcase}" }
+    end
+
+    private_class_method def self.fetch_mod_file(name, version: "@latest")
+      json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
+      version = json && json["Version"]
+
+      return nil unless version.present?
+
+      get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
     end
   end
 end

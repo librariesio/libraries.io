@@ -79,7 +79,7 @@ describe PackageManager::Go do
     end
 
     it "omits retracted versions" do
-      VCR.use_cassette("go/pkg_with_retracted_versions", record: :new_episodes) do
+      VCR.use_cassette("go/pkg_with_retracted_versions") do
         raw_project = { name: "github.com/go-gorp/gorp/v3" }
 
         versions = described_class.versions(raw_project, raw_project[:name])

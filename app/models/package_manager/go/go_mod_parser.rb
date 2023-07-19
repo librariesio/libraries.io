@@ -1,0 +1,58 @@
+# frozen_string_literal: true
+
+class PackageManager::Go
+  class GoModParser
+    attr_reader :mod_contents
+
+    RETRACT_WITH_PARENS = /^\w*retract\s+\((.*?)\)/m.freeze
+    RETRACT_WITHOUT_PARENS = /^\w*retract\s+([^(]+)$/.freeze
+
+    def initialize(mod_contents)
+      @mod_contents = mod_contents
+    end
+
+    def retracted_version_ranges
+      return @retracted_version_ranges if @retracted_version_ranges
+
+      retract_specs = []
+      retract_specs.concat stripped_contents.scan(RETRACT_WITHOUT_PARENS)&.first || []
+      retract_specs.concat stripped_contents.scan(RETRACT_WITH_PARENS)&.first || []
+
+      @retracted_version_ranges = retract_specs.flat_map do |retract_spec|
+        parse_retract(retract_spec)
+      end
+    end
+
+    # Best attempt to remove comments and extraneous whitespace
+    def stripped_contents
+      @stripped_contents ||= mod_contents
+        .to_s
+        .lines
+        .map { |line| line.gsub(/\/\/.*/, "").strip }
+        .reject(&:blank?)
+        .join("\n")
+    end
+
+    def parse_version(substring)
+      substring.scan(/(v(\.|\w)+)/).dig(0, 0)
+    end
+
+    def parse_retract(retract_spec)
+      # retract directives can specify a single version or range
+      # or be a line separated list of versions and ranges
+      # https://go.dev/ref/mod#go-mod-file-retract
+      retract_spec.lines.each_with_object([]) do |line, results|
+        if line.match?(/\[.+\]/)
+          left, _comma, right = line.partition(",")
+          start_range = parse_version(left)
+          end_range = parse_version(right)
+
+          results << [start_range, end_range] if start_range && end_range
+        else
+          single_version = parse_version(line)
+          results << single_version if single_version
+        end
+      end
+    end
+  end
+end
