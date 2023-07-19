@@ -111,7 +111,11 @@ module PackageManager
       private
 
       def classifiers
-        @data.dig("info", "classifiers")
+        classifiers = @data.dig("info", "classifiers")
+
+        Rails.logger.error("PyPI JSON API classifiers missing: #{name}") unless classifiers
+
+        classifiers || []
       end
 
       def deprecation_status

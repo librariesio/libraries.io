@@ -76,6 +76,18 @@ describe PackageManager::Pypi::JsonApiProject do
         expect(project.licenses).to eq("Apache Software License")
       end
     end
+
+    context "with nil classifiers" do
+      let(:data) do
+        {
+          "info" => {},
+        }
+      end
+
+      it "returns an empty string" do
+        expect(project.licenses).to eq("")
+      end
+    end
   end
 
   describe "#repository_url" do
