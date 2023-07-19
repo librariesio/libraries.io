@@ -6,8 +6,8 @@ describe PackageManager::Pypi::JsonApiProjectReleases do
       described_class.new([release1, release2])
     end
 
-    let(:release1) { PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0", published_at: Time.now) }
-    let(:release2) { PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "2.0.0", published_at: release2_published_at) }
+    let(:release1) { PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0", published_at: Time.now, is_yanked: false, yanked_reason: nil) }
+    let(:release2) { PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "2.0.0", published_at: release2_published_at, is_yanked: false, yanked_reason: nil) }
 
     let(:release2_published_at) { Time.now }
 

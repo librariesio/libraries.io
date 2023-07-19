@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe PackageManager::Pypi::JsonApiProjectRelease do
   describe "#published_at?" do
-    let(:release) { described_class.new(version_number: "1.0.0", published_at: published_at) }
+    let(:release) { described_class.new(version_number: "1.0.0", published_at: published_at, is_yanked: false, yanked_reason: nil) }
     let(:published_at) { nil }
 
     context "with nil published_at" do

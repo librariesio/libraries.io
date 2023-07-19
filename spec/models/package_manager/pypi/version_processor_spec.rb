@@ -11,10 +11,10 @@ describe PackageManager::Pypi::VersionProcessor do
 
     let(:project_releases) do
       PackageManager::Pypi::JsonApiProjectReleases.new([
-        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0", published_at: version1_time),
-        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "2.0.0", published_at: version2_time),
-        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "3.0.0", published_at: version3_time),
-        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "4.0.0", published_at: nil),
+        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0", published_at: version1_time, is_yanked: false, yanked_reason: nil),
+        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "2.0.0", published_at: version2_time, is_yanked: false, yanked_reason: nil),
+        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "3.0.0", published_at: version3_time, is_yanked: false, yanked_reason: nil),
+        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "4.0.0", published_at: nil, is_yanked: false, yanked_reason: nil),
       ])
     end
 

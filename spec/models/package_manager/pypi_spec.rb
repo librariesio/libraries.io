@@ -42,74 +42,20 @@ describe PackageManager::Pypi do
   end
 
   describe "#deprecation_info" do
-    it "returns not-deprecated if last version isn't deprecated" do
-      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return(
-        {
-          "releases" => {
-            "0.0.1" => [{}],
-            "0.0.2" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
-            "0.0.3" => [{}],
-          },
-        }
+    let(:json_api_project) do
+      instance_double(
+        PackageManager::Pypi::JsonApiProject,
+        deprecated?: true,
+        deprecation_message: "wow"
       )
-
-      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: false, message: nil })
     end
 
-    it "returns deprecated if last version is deprecated" do
-      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return(
-        {
-          "releases" => {
-            "0.0.1" => [{}],
-            "0.0.2" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
-            "0.0.3" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
-          },
-        }
-      )
-
-      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: true, message: "This package is deprecated" })
+    before do
+      allow(described_class).to receive(:project).with(project.name).and_return(json_api_project)
     end
 
-    it "returns not-deprecated if last version is a pre-release and deprecated" do
-      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return(
-        {
-          "releases" => {
-            "0.0.1" => [{}],
-            "0.0.2" => [{}],
-            "0.0.3" => [{}],
-            "0.0.3a" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
-            "0.0.3a1" => [{ "yanked" => true, "yanked_reason" => "This package is deprecated" }],
-          },
-        }
-      )
-
-      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: false, message: nil })
-    end
-
-    it "return not-deprecated if 'development status' is not 'inactive'" do
-      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return(
-        {
-          "releases" => {},
-          "info" => {
-            "classifiers" => ["Development Status :: 5 - Production/Stable"],
-          },
-        }
-      )
-
-      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: false, message: nil })
-    end
-
-    it "return deprecated if 'development status' is 'inactive'" do
-      expect(PackageManager::Pypi).to receive(:project).with("foo").and_return(
-        {
-          "releases" => {},
-          "info" => {
-            "classifiers" => ["Development Status :: 7 - Inactive"],
-          },
-        }
-      )
-
-      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: true, message: "Development Status :: 7 - Inactive" })
+    it "calls through to the json api project" do
+      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: true, message: "wow" })
     end
   end
 

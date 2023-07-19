@@ -10,7 +10,6 @@ module PackageManager
     COLOR = "#3572A5"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
-    PYPI_PRERELEASE = /(a|b|rc|dev)[-_.]?[0-9]*$/.freeze
     # Adapted from https://peps.python.org/pep-0508/#names to include extras
     PEP_508_NAME_REGEX = /[A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9]/i.freeze
     PEP_508_NAME_WITH_EXTRAS_REGEX = /(^#{PEP_508_NAME_REGEX}\s*(?:\[#{PEP_508_NAME_REGEX}(?:,\s*#{PEP_508_NAME_REGEX})*\])?)/i.freeze
@@ -60,22 +59,11 @@ module PackageManager
     end
 
     def self.deprecation_info(db_project)
-      p = project(db_project.name)
-      last_version = p["releases"].reject { |version, _releases| version =~ PYPI_PRERELEASE }.values.last&.first
-
-      is_deprecated, message = if last_version && last_version["yanked"] == true
-                                 # PEP-0423: newer way of deleting specific versions (https://www.python.org/dev/peps/pep-0592/)
-                                 [true, last_version["yanked_reason"]]
-                               elsif p.fetch("info", {}).fetch("classifiers", []).include?("Development Status :: 7 - Inactive")
-                                 # PEP-0423: older way of renaming/deprecating a project (https://www.python.org/dev/peps/pep-0423/#how-to-rename-a-project)
-                                 [true, "Development Status :: 7 - Inactive"]
-                               else
-                                 [false, nil]
-                               end
+      json_api_project = project(db_project.name)
 
       {
-        is_deprecated: is_deprecated,
-        message: message,
+        is_deprecated: json_api_project.deprecated?,
+        message: json_api_project.deprecation_message,
       }
     end
 

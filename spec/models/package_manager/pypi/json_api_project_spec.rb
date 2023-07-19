@@ -120,6 +120,64 @@ describe PackageManager::Pypi::JsonApiProject do
     end
   end
 
+  shared_context "deprecation releases" do
+    let(:releases) do
+      [
+        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0-dev", is_yanked: false, yanked_reason: nil, published_at: nil),
+        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0", is_yanked: false, yanked_reason: nil, published_at: nil),
+        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "2.0.0", is_yanked: latest_stable_yanked, yanked_reason: "because", published_at: nil),
+      ]
+    end
+    let(:latest_stable_yanked) { false }
+  end
+
+  describe "#deprecated? and #deprecation_message" do
+    include_context "deprecation releases"
+
+    let(:classifiers) { [] }
+
+    let(:project) { described_class.new(data: nil) }
+
+    before do
+      allow(project).to receive(:releases).and_return(releases)
+      allow(project).to receive(:classifiers).and_return(classifiers)
+    end
+
+    context "with latest stable yanked" do
+      let(:latest_stable_yanked) { true }
+
+      it "#deprecated? returns true" do
+        expect(project.deprecated?).to eq(true)
+      end
+
+      it "#deprecation_message returns value" do
+        expect(project.deprecation_message).to eq("because")
+      end
+    end
+
+    context "with inactive classifier" do
+      let(:classifiers) { [described_class::CLASSIFIER_INACTIVE] }
+
+      it "#deprecated? returns true" do
+        expect(project.deprecated?).to eq(true)
+      end
+
+      it "#deprecation_message returns classifier" do
+        expect(project.deprecation_message).to eq(described_class::CLASSIFIER_INACTIVE)
+      end
+    end
+
+    context "with no indicators" do
+      it "#deprecated? returns false" do
+        expect(project.deprecated?).to eq(false)
+      end
+
+      it "#deprecation_message returns nil" do
+        expect(project.deprecation_message).to eq(nil)
+      end
+    end
+  end
+
   describe "#releases" do
     let(:project) { described_class.new(raw_project) }
     let(:raw_project) do
@@ -138,7 +196,39 @@ describe PackageManager::Pypi::JsonApiProject do
     context "with one release" do
       let(:raw_releases) { { "1.0.0" => raw_release } }
       let(:time) { Time.zone.now }
-      let(:raw_release) { [{ "upload_time" => time.iso8601 }] }
+      let(:raw_release) do
+        [{
+          "upload_time" => time.iso8601,
+          "yanked" => true,
+          "yanked_reason" => "bad version",
+        }]
+      end
+
+      it "parsed yanked" do
+        expect(project.releases.first.yanked?).to eq(true)
+      end
+
+      it "parses yanked reason" do
+        expect(project.releases.first.yanked_reason).to eq("bad version")
+      end
+
+      context "with empty yanked data" do
+        let(:raw_release) do
+          [{
+            "upload_time" => time.iso8601,
+            "yanked" => nil,
+            "yanked_reason" => nil,
+          }]
+        end
+
+        it "parsed yanked" do
+          expect(project.releases.first.yanked?).to eq(false)
+        end
+
+        it "parses yanked reason" do
+          expect(project.releases.first.yanked_reason).to eq(nil)
+        end
+      end
 
       context "with empty release" do
         let(:raw_release) { [] }
