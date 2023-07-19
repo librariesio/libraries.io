@@ -58,7 +58,7 @@ module PackageManager
     end
 
     def self.versions(raw_project, _name, parse_html = false)
-      html_versions = parse_html_versions(raw_project) if parse_html
+      html_versions = parse_html_yanked_versions(raw_project) if parse_html
       json_versions = parse_json_versions(raw_project)
 
       versions = if parse_html
@@ -108,7 +108,7 @@ module PackageManager
       "https://rubygems.org/profiles/#{login}"
     end
 
-    def self.parse_html_versions(raw_project)
+    def self.parse_html_yanked_versions(raw_project)
       html_versions = []
       page_number = 1
       all_pages_parsed = false
