@@ -83,14 +83,14 @@ module PackageManager
       ).execute
     end
 
-    def self.one_version(raw_project, version_string)
-      release = get("https://pypi.org/pypi/#{raw_project['info']['name']}/#{version_string}/json")
+    def self.one_version(json_api_project, version_number)
+      release = json_api_project.releases.find { |r| r.version_number == version_number }
       return nil unless release.present?
 
       {
-        number: version_string,
-        published_at: release.dig("releases", version_string, 0, "upload_time"),
-        original_license: release.dig("info", "license"),
+        number: version_number,
+        published_at: release.published_at,
+        original_license: json_api_project.license,
       }
     end
 
@@ -142,12 +142,9 @@ module PackageManager
 
     # checks to see if the package exists on PyPI and the name matches the canonical name
     def self.has_canonical_pypi_name?(name)
-      raw_project = project(name)
-      return false unless raw_project.present?
+      json_api_project = project(name)
 
-      mapped_project = mapping(raw_project)
-      # did we get a response from PyPI and does the name it respond with match the name passed in
-      mapped_project[:name] == name
+      json_api_project.present? && json_api_project.name == name
     end
   end
 end

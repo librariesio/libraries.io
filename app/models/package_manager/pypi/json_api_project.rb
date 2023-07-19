@@ -25,6 +25,10 @@ module PackageManager
         @data = data
       end
 
+      def present?
+        !@data.empty?
+      end
+
       def license
         @data.dig("info", "license")
       end

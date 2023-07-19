@@ -294,4 +294,23 @@ describe PackageManager::Pypi::JsonApiProject do
       end
     end
   end
+
+  describe "#present?" do
+    let(:json_api_project) { described_class.new(data) }
+    let(:data) { { "info" => {} } }
+
+    context "without data" do
+      let(:data) { {} }
+
+      it "returns false" do
+        expect(json_api_project.present?).to eq(false)
+      end
+    end
+
+    context "with data" do
+      it "returns true" do
+        expect(json_api_project.present?).to eq(true)
+      end
+    end
+  end
 end

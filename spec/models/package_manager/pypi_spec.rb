@@ -258,4 +258,103 @@ describe PackageManager::Pypi do
       end
     end
   end
+
+  describe ".one_version" do
+    let(:json_api_project) do
+      instance_double(
+        PackageManager::Pypi::JsonApiProject,
+        releases: releases,
+        license: license
+      )
+    end
+
+    let(:published_at) { Time.zone.now }
+    let(:license) { "MIT" }
+    let(:version_number) { "1.0.0" }
+
+    let(:releases) do
+      [
+        instance_double(
+          PackageManager::Pypi::JsonApiProjectRelease,
+          version_number: version_number,
+          published_at: published_at
+        ),
+      ]
+    end
+
+    context "with existing version" do
+      it "retrieves version information" do
+        expect(described_class.one_version(json_api_project, version_number)).to eq({
+                                                                                      number: version_number,
+                                                                                      published_at: published_at,
+                                                                                      original_license: license,
+                                                                                    })
+      end
+    end
+
+    context "without existing version" do
+      let(:releases) do
+        [
+          instance_double(
+            PackageManager::Pypi::JsonApiProjectRelease,
+            version_number: version_number + ".1",
+            published_at: published_at
+          ),
+        ]
+      end
+
+      it "does not retrieve information" do
+        expect(described_class.one_version(json_api_project, version_number)).to eq(nil)
+      end
+    end
+
+    context "with no releases" do
+      let(:releases) do
+        []
+      end
+
+      it "does not retrieve information" do
+        expect(described_class.one_version(json_api_project, version_number)).to eq(nil)
+      end
+    end
+  end
+
+  describe ".has_canonical_pypi_name?" do
+    let(:json_api_project) do
+      instance_double(
+        PackageManager::Pypi::JsonApiProject,
+        present?: present,
+        name: api_project_name
+      )
+    end
+    let(:present) { true }
+    let(:api_project_name) { "project" }
+    let(:name) { "project" }
+
+    before do
+      allow(described_class).to receive(:project).with(name).and_return(json_api_project)
+    end
+
+    context "with remote data and matching name" do
+      it "returns true" do
+        expect(described_class.has_canonical_pypi_name?(name)).to eq(true)
+      end
+    end
+
+    context "with not present" do
+      let(:present) { false }
+
+      it "returns false" do
+        expect(described_class.has_canonical_pypi_name?(name)).to eq(false)
+      end
+    end
+
+    context "with non-matching name" do
+      let(:api_project_name) { "PROJECT" }
+
+      it "returns false" do
+        expect(described_class.has_canonical_pypi_name?(name)).to eq(false)
+      end
+    end
+  end
 end
