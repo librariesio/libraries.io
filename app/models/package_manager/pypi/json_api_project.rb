@@ -10,6 +10,12 @@ module PackageManager
           {}
         end
 
+        if data.nil?
+          Rails.logger.error("Data is nil for JSON API Project: #{project_name}")
+
+          data = {}
+        end
+
         new(data)
       end
 

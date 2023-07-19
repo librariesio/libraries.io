@@ -1,6 +1,49 @@
 require "rails_helper"
 
 describe PackageManager::Pypi::JsonApiProject do
+  describe ".request" do
+    let(:project_name) { "project" }
+    let(:project_url) { "https://pypi.org/pypi/#{project_name}/json" }
+
+    context "with error on retrieval" do
+      before do
+        allow(PackageManager::ApiService).to receive(:request_json_with_headers).with(project_url).and_raise(StandardError, "fail")
+      end
+
+      it "creates a new JsonApiProject with empty data" do
+        response = described_class.request(project_name: project_name)
+
+        expect(response.license).to eq(nil)
+      end
+    end
+
+    context "with nil data" do
+      before do
+        allow(PackageManager::ApiService).to receive(:request_json_with_headers).with(project_url).and_return(nil)
+      end
+
+      it "creates a new JsonApiProject with empty data" do
+        response = described_class.request(project_name: project_name)
+
+        expect(response.license).to eq(nil)
+      end
+    end
+
+    context "with data" do
+      before do
+        allow(PackageManager::ApiService).to receive(:request_json_with_headers).with(project_url).and_return({
+                                                                                                                "info" => { "license" => "MIT" },
+                                                                                                              })
+      end
+
+      it "creates a new JsonApiProject with data" do
+        response = described_class.request(project_name: project_name)
+
+        expect(response.license).to eq("MIT")
+      end
+    end
+  end
+
   # These tests were migrated over from spec/models/package_manager/pypi_spec.rb
   # I'm keeping them as-is until we have a reason to update them.
   describe "#preferred_repository_url" do
