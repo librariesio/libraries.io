@@ -17,8 +17,15 @@ namespace :projects do
   desc "Link dependencies to projects"
   task link_dependencies: :environment do
     exit if ENV["READ_ONLY"].present?
-    Dependency.where("created_at::date > date(?)", 1.day.ago).without_project_id.find_each(&:update_project_id)
-    RepositoryDependency.where("created_at::date > date(?)", 1.day.ago).without_project_id.find_each(&:update_project_id)
+    ids = Dependency.where("created_at::date > date(?)", 1.day.ago).without_project_id.pluck(:id)
+    ids.in_groups_of(1000) do |group|
+      Dependency.where(id: group).each(&:update_project_id)
+    end
+
+    ids = RepositoryDependency.where("created_at::date > date(?)", 1.day.ago).without_project_id.pluck(:id)
+    ids.in_groups_of(1000) do |group|
+      RepositoryDependency.where(id: group).each(&:update_project_id)
+    end
   end
 
   # rake projects:check_status[100,5]
