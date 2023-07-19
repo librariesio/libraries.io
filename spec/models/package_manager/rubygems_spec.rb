@@ -45,6 +45,46 @@ describe PackageManager::Rubygems do
     end
   end
 
+  describe ".versions" do
+    it "returns versions" do
+      VCR.use_cassette("package_manager/versions/flowbyte-yanked") do
+        expect(PackageManager::Rubygems.versions({ "name" => "flowbyte-yanked" }, "flowbyte-yanked")).to contain_exactly(
+          hash_including(number: "1.0.0")
+        )
+      end
+    end
+
+    context "with flag to parse HTML" do
+      it "returns yanked versions" do
+        VCR.use_cassette("package_manager/versions/flowbyte-yanked") do
+          expect(PackageManager::Rubygems.versions({ "name" => "flowbyte-yanked" }, "flowbyte-yanked", parse_html: true)).to contain_exactly(
+            hash_including(number: "1.0.0"),
+            hash_including(number: "1.0.1")
+          )
+        end
+      end
+    end
+
+    context "with a gem with paginated versions" do
+      it "returns versions across pages" do
+        VCR.use_cassette("package_manager/versions/rails") do
+          expect(PackageManager::Rubygems.versions({ "name" => "rails" }, "rails", parse_html: true)).to include(
+            hash_including(number: "3.1.0.rc7"),
+            hash_including(number: "2.3.7")
+          )
+        end
+      end
+    end
+
+    context "with a non-existent gem" do
+      it "returns an empty array" do
+        VCR.use_cassette("package_manager/versions/non_existent_gem") do
+          expect(PackageManager::Rubygems.versions({ "name" => "gem_that_does_not_exist" }, "gem_that_does_not_exist", parse_html: true)).to be_empty
+        end
+      end
+    end
+  end
+
   describe "#deprecate_versions" do
     before do
       project.versions.create!(number: "1.0.0")
