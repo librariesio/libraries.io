@@ -56,7 +56,7 @@ RSpec.describe PackageManager::Go::GoMod do
         <<~MODFILE
           // The following versions were removed for good reason
           retract (
-            v1.0.2
+            v1.0.2-dev0
             // Versions prior to 3.0.4 had a vulnerability in the dependency graph.  While we don't
             // directly use yaml, I'm not comfortable encouraging people to use versions with a
             // CVE - so prior versions are retracted.
@@ -68,7 +68,7 @@ RSpec.describe PackageManager::Go::GoMod do
       end
 
       it "detects retracted versions and ranges ranges" do
-        expect(go_mod.retracted_version_ranges).to match_array(["v1.0.2", ["v3.0.0", "v3.0.3"]])
+        expect(go_mod.retracted_version_ranges).to match_array(["v1.0.2-dev0", ["v3.0.0", "v3.0.3"]])
       end
     end
 

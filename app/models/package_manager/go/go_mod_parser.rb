@@ -53,7 +53,7 @@ class PackageManager::Go
     end
 
     def parse_version(substring)
-      substring.scan(/(v(\.|\w)+)/).dig(0, 0)
+      substring.scan(/(v(\.|-|\w)+)/).dig(0, 0)
     end
 
     def parse_retract(retract_spec)
