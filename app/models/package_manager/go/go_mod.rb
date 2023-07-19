@@ -12,6 +12,10 @@ class PackageManager::Go
       parser.retracted_version_ranges
     end
 
+    def canonical_module_name
+      parser.canonical_module_name
+    end
+
     def retracted?(given_version)
       retracted_version_ranges.any? do |version_or_range|
         if version_or_range.is_a?(Array)

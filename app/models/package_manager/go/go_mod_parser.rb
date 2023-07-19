@@ -6,6 +6,7 @@ class PackageManager::Go
 
     RETRACT_WITH_PARENS = /^\w*retract\s+\((.*?)\)/m.freeze
     RETRACT_WITHOUT_PARENS = /^\w*retract\s+([^(]+)$/.freeze
+    MODULE_REGEX = /module\s+(.+)/.freeze
 
     def initialize(mod_contents)
       @mod_contents = mod_contents
@@ -21,6 +22,12 @@ class PackageManager::Go
       @retracted_version_ranges = retract_specs.flat_map do |retract_spec|
         parse_retract(retract_spec)
       end
+    end
+
+    def canonical_module_name
+      module_line = stripped_contents.lines.find { |line| line.match(MODULE_REGEX) }
+
+      module_line.match(MODULE_REGEX)[1]
     end
 
     # Best attempt to remove comments and extraneous whitespace

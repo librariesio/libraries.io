@@ -100,6 +100,5 @@ RSpec.describe PackageManager::Go::GoMod do
         expect(go_mod.retracted_version_ranges).to match_array(["v1.0.0"])
       end
     end
-
   end
 end

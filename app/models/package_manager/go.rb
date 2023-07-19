@@ -25,7 +25,6 @@ module PackageManager
     URL = DISCOVER_URL
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)(\/|$)/.freeze
-    MODULE_REGEX = /module\s+(.+)/.freeze
 
     def self.check_status_url(db_project)
       "#{PROXY_BASE_URL}/#{encode_for_proxy(db_project.name)}/@v/list"
@@ -280,21 +279,10 @@ module PackageManager
     # looks at the module declaration for the latest version's go.mod file and returns that if found
     # if nothing is found, nil is returned
     def self.canonical_module_name(name)
-      json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
-      version = json && json["Version"]
+      mod_contents = fetch_mod_file(name)
+      return unless mod_contents
 
-      return nil unless version.present?
-
-      mod_file = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
-      module_line = mod_file
-        &.lines
-        &.map(&:strip)
-        &.reject(&:blank?)
-        &.find { |line| line.match(MODULE_REGEX) }
-
-      return false unless module_line.present?
-
-      module_line.match(MODULE_REGEX)[1]
+      GoMod.new(mod_contents).canonical_module_name
     end
 
     # will convert a string with capital letters and replace with a "!" prepended to the lowercase letter
@@ -304,7 +292,7 @@ module PackageManager
       str.gsub(/[A-Z]/) { |s| "!#{s.downcase}" }
     end
 
-    private_class_method def self.fetch_mod_file(name, version: "@latest")
+    private_class_method def self.fetch_mod_file(name)
       json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
       version = json && json["Version"]
 

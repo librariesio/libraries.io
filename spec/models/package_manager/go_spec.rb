@@ -361,4 +361,13 @@ describe PackageManager::Go do
       expect(project.reload.versions.pluck(:number, :status)).to match_array([["1.0.0", nil], ["1.0.1", "Removed"]])
     end
   end
+
+  describe "canonical_module_name" do
+    it "maps only major revision versions to module" do
+      VCR.use_cassette("go/pkg_go_dev") do
+        result = described_class.canonical_module_name(package_name)
+        expect(result).to eq(package_name)
+      end
+    end
+  end
 end
