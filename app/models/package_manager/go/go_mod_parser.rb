@@ -30,6 +30,18 @@ class PackageManager::Go
       module_line.match(MODULE_REGEX)[1]
     end
 
+    def dependencies
+      Bibliothecary::Parsers::Go.parse_go_mod(mod_contents)
+        .map do |dep|
+        {
+          project_name: dep[:name],
+          requirements: dep[:requirement],
+          kind: dep[:type],
+          platform: "Go",
+        }
+      end
+    end
+
     # Best attempt to remove comments and extraneous whitespace
     def stripped_contents
       @stripped_contents ||= mod_contents

@@ -8,25 +8,7 @@ class PackageManager::Go
       @parser = GoModParser.new(mod_contents)
     end
 
-    def retracted_version_ranges
-      parser.retracted_version_ranges
-    end
-
-    def canonical_module_name
-      parser.canonical_module_name
-    end
-
-    def dependencies
-      Bibliothecary::Parsers::Go.parse_go_mod(mod_contents)
-        .map do |dep|
-        {
-          project_name: dep[:name],
-          requirements: dep[:requirement],
-          kind: dep[:type],
-          platform: "Go",
-        }
-      end
-    end
+    delegate :retracted_version_ranges, :canonical_module_name, :dependencies, to: :parser
 
     def retracted?(given_version)
       retracted_version_ranges.any? do |version_or_range|

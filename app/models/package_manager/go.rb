@@ -135,15 +135,11 @@ module PackageManager
         &.map(&:strip)
         &.reject(&:blank?)
 
-      if versions.blank?
-        json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@latest")
-        versions = [json&.fetch("Version", nil)].compact
-      end
+      versions = [latest_version_number(raw_project[:name])] if versions.blank?
 
-      go_mod = GoMod.new(fetch_mod_file(raw_project[:name]))
-
+      go_mod = fetch_mod(raw_project[:name])
       versions.map do |v|
-        next if go_mod.retracted?(v)
+        next if go_mod&.retracted?(v)
 
         known = known_versions[v]
 
@@ -197,12 +193,7 @@ module PackageManager
     end
 
     def self.dependencies(name, version, _mapped_project)
-      mod_contents = fetch_mod_file(name, version: version)
-      if mod_contents
-        GoMod.new(mod_contents).dependencies
-      else
-        []
-      end
+      fetch_mod(name)&.dependencies || []
     end
 
     # https://golang.org/cmd/go/#hdr-Import_path_syntax
@@ -267,10 +258,7 @@ module PackageManager
     # looks at the module declaration for the latest version's go.mod file and returns that if found
     # if nothing is found, nil is returned
     def self.canonical_module_name(name)
-      mod_contents = fetch_mod_file(name)
-      return unless mod_contents
-
-      GoMod.new(mod_contents).canonical_module_name
+      fetch_mod(name)&.canonical_module_name
     end
 
     # will convert a string with capital letters and replace with a "!" prepended to the lowercase letter
@@ -280,19 +268,34 @@ module PackageManager
       str.gsub(/[A-Z]/) { |s| "!#{s.downcase}" }
     end
 
-    private_class_method def self.fetch_mod_file(name, version: nil)
+    private_class_method def self.latest_version_number(name)
+      json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
+      number = json&.dig("Version")
+
+      Rails.logger.info "Unable to fetch latest version number name=#{name}" if number.blank?
+
+      number
+    end
+
+    private_class_method def self.fetch_mod(name, version: nil)
+      mod_contents = fetch_mod_contents(name, version: version)
+      return unless mod_contents
+
+      GoMod.new(mod_contents)
+    end
+
+    private_class_method def self.fetch_mod_contents(name, version: nil)
       # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
       # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
       # to scrape the webpage or wait for an API for a faster fetch here.
 
-      if version.nil?
-        json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
-        version = json && json["Version"]
+      version = latest_version_number(name) if version.nil?
+
+      if version
+        get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
+      else
+        Rails.logger.info "Unable to fetch go.mod contents name=#{name}"
       end
-
-      return nil unless version.present?
-
-      get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
     end
   end
 end

@@ -370,4 +370,28 @@ describe PackageManager::Go do
       end
     end
   end
+
+  describe "dependencies" do
+    let(:package_name) { "github.com/PuerkitoBio/goquery" }
+    let(:version) { "v1.5.1" }
+
+    it "maps only major revision versions to module" do
+      VCR.use_cassette("go/pkg_with_deps") do
+        result = described_class.dependencies(package_name, version, nil)
+        expect(result).to match_array(
+          [
+            ["github.com/andybalholm/cascadia", "v1.3.1"],
+            ["golang.org/x/net", "v0.7.0"],
+          ].map do |name, requirements, kind = "runtime"|
+            {
+              project_name: name,
+              requirements: requirements,
+              kind: kind,
+              platform: "Go",
+            }
+          end
+        )
+      end
+    end
+  end
 end

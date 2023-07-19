@@ -1,0 +1,114 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/!puerkito!bio/goquery/@latest
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3354607589711471094'
+      X-Datadog-Parent-Id:
+      - '322324809003661365'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=60
+      Content-Length:
+      - '195'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 19 Jul 2023 22:33:10 GMT
+      Expires:
+      - Wed, 19 Jul 2023 22:34:10 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: '{"Version":"v1.8.1","Time":"2023-02-18T15:29:26Z","Origin":{"VCS":"git","URL":"https://github.com/PuerkitoBio/goquery","Ref":"refs/tags/v1.8.1","Hash":"39fb6d4dc47a07e5782494b6defc89a194b1f906"}}'
+    http_version:
+  recorded_at: Wed, 19 Jul 2023 22:33:10 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/!puerkito!bio/goquery/@v/v1.8.1.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '170708817251373426'
+      X-Datadog-Parent-Id:
+      - '4315368723939545151'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '125'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Wed, 19 Jul 2023 22:26:29 GMT
+      Expires:
+      - Thu, 20 Jul 2023 01:26:29 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Last-Modified:
+      - Sat, 18 Feb 2023 15:34:26 GMT
+      Etag:
+      - '"3dd26b5a854ae6a8e67b884618c66a8146d278b57ddfbe95b1b583595e6521fa"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Age:
+      - '401'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: "module github.com/PuerkitoBio/goquery\n\nrequire (\n\tgithub.com/andybalholm/cascadia
+        v1.3.1\n\tgolang.org/x/net v0.7.0\n)\n\ngo 1.13\n"
+    http_version:
+  recorded_at: Wed, 19 Jul 2023 22:33:10 GMT
+recorded_with: VCR 4.0.0
