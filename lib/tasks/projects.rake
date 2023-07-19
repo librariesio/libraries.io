@@ -272,12 +272,12 @@ namespace :projects do
     input_data.in_groups_of(batch_size, false).each do |platforms_and_names|
       projects = []
       platforms_and_names.each do |platform, name|
-        project = Project.where("platform ILIKE ?", platform).find_by(name: name)
+        project = Project.platform(platform).find_by(name: name)
 
         if project
           projects << project
         else
-          matching_project = Project.where("platform ILIKE ?", platform).where("name ILIKE ?", name).first
+          matching_project = Project.platform(platform).where("name ILIKE ?", name).first
 
           message = ["Project not found: #{platform}/#{name}"]
 
