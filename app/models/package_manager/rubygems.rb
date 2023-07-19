@@ -57,7 +57,7 @@ module PackageManager
       }
     end
 
-    def self.versions(raw_project, _name, parse_html = false)
+    def self.versions(raw_project, _name, parse_html: false)
       html_versions = parse_html_yanked_versions(raw_project) if parse_html
       json_versions = parse_json_versions(raw_project)
 

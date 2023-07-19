@@ -54,6 +54,16 @@ describe PackageManager::Rubygems do
       end
     end
 
+    context "with flag to not parse HTML " do
+      it "does not return yanked versions" do
+        VCR.use_cassette("package_manager/versions/flowbyte-yanked") do
+          expect(PackageManager::Rubygems.versions({ "name" => "flowbyte-yanked" }, "flowbyte-yanked", parse_html: false)).to contain_exactly(
+            hash_including(number: "1.0.0")
+          )
+        end
+      end
+    end
+
     context "with flag to parse HTML" do
       it "returns yanked versions" do
         VCR.use_cassette("package_manager/versions/flowbyte-yanked") do
