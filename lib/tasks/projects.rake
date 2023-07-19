@@ -18,12 +18,20 @@ namespace :projects do
   task link_dependencies: :environment do
     exit if ENV["READ_ONLY"].present?
     ids = Dependency.where("created_at::date >= date(?)", 1.day.ago).without_project_id.pluck(:id)
-    ids.in_groups_of(1000, false) do |group|
+    Rails.logger.info("Found #{ids.count} Dependency IDs")
+
+    total_slices = (ids.count / 1000.to_f).ceil
+    ids.each_slice(1000).with_index do |group, index|
+      Rails.logger.info("Updating slice #{index + 1} of #{total_slices}")
       Dependency.where(id: group).each(&:update_project_id)
     end
 
     ids = RepositoryDependency.where("created_at::date >= date(?)", 1.day.ago).without_project_id.pluck(:id)
-    ids.in_groups_of(1000, false) do |group|
+    Rails.logger.info("Found #{ids.count} RepositoryDependency IDs")
+
+    total_slices = (ids.count / 1000.to_f).ceil
+    ids.each_slice(1000).with_index do |group, index|
+      Rails.logger.info("Updating slice #{index + 1} of #{total_slices}")
       RepositoryDependency.where(id: group).each(&:update_project_id)
     end
   end
