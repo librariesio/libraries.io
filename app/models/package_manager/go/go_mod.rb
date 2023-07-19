@@ -16,6 +16,18 @@ class PackageManager::Go
       parser.canonical_module_name
     end
 
+    def dependencies
+      Bibliothecary::Parsers::Go.parse_go_mod(mod_contents)
+        .map do |dep|
+        {
+          project_name: dep[:name],
+          requirements: dep[:requirement],
+          kind: dep[:type],
+          platform: "Go",
+        }
+      end
+    end
+
     def retracted?(given_version)
       retracted_version_ranges.any? do |version_or_range|
         if version_or_range.is_a?(Array)

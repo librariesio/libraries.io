@@ -197,21 +197,9 @@ module PackageManager
     end
 
     def self.dependencies(name, version, _mapped_project)
-      # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
-      # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
-      # to scrape the webpage or wait for an API for a faster fetch here.
-      resp = request("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
-      if resp.status == 200
-        go_mod_file = resp.body
-        Bibliothecary::Parsers::Go.parse_go_mod(go_mod_file)
-          .map do |dep|
-            {
-              project_name: dep[:name],
-              requirements: dep[:requirement],
-              kind: dep[:type],
-              platform: "Go",
-            }
-          end
+      mod_contents = fetch_mod_file(name, version: version)
+      if mod_contents
+        GoMod.new(mod_contents).dependencies
       else
         []
       end
@@ -292,9 +280,15 @@ module PackageManager
       str.gsub(/[A-Z]/) { |s| "!#{s.downcase}" }
     end
 
-    private_class_method def self.fetch_mod_file(name)
-      json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
-      version = json && json["Version"]
+    private_class_method def self.fetch_mod_file(name, version: nil)
+      # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
+      # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
+      # to scrape the webpage or wait for an API for a faster fetch here.
+
+      if version.nil?
+        json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
+        version = json && json["Version"]
+      end
 
       return nil unless version.present?
 
