@@ -272,13 +272,19 @@ namespace :projects do
     input_data.in_groups_of(batch_size, false).each do |platforms_and_names|
       projects = []
       platforms_and_names.each do |platform, name|
-        project = Project.where("platform ILIKE ?", platform).find_by(name: name)
+        project = Project.platform(platform).find_by(name: name)
 
         if project
           projects << project
         else
+          matching_project = Project.platform(platform).where("name ILIKE ?", name).first
+
+          message = ["Project not found: #{platform}/#{name}"]
+
+          message << "Potential matching project found #{matching_project.platform}/#{matching_project.name}" if matching_project
+
           skipped_not_found_count += 1
-          Rails.logger.warn("Project not found: #{platform}/#{name}")
+          Rails.logger.warn(message.join(", "))
         end
       end
 
