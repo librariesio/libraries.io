@@ -4,8 +4,8 @@ class PackageManager::Go
   class GoModParser
     attr_reader :mod_contents
 
-    RETRACT_WITH_PARENS = /^\w*retract\s+\((.*?)\)/m.freeze
-    RETRACT_WITHOUT_PARENS = /^\w*retract\s+([^(]+)$/.freeze
+    RETRACT_WITH_PARENS = /^\s*retract\s\((.*?)\)/m.freeze
+    RETRACT_WITHOUT_PARENS = /retract\s(.+)/.freeze
     MODULE_REGEX = /module\s+(.+)/.freeze
 
     def initialize(mod_contents)
@@ -16,8 +16,8 @@ class PackageManager::Go
       return @retracted_version_ranges if @retracted_version_ranges
 
       retract_specs = []
-      retract_specs.concat stripped_contents.scan(RETRACT_WITHOUT_PARENS)&.first || []
-      retract_specs.concat stripped_contents.scan(RETRACT_WITH_PARENS)&.first || []
+      retract_specs.concat stripped_contents.scan(RETRACT_WITH_PARENS).flatten
+      retract_specs.concat stripped_contents.scan(RETRACT_WITHOUT_PARENS).flatten
 
       @retracted_version_ranges = retract_specs.flat_map do |retract_spec|
         parse_retract(retract_spec)
@@ -49,7 +49,7 @@ class PackageManager::Go
         .lines
         .map { |line| line.gsub(/\/\/.*/, "").strip }
         .reject(&:blank?)
-        .join("\n")
+        .join("\r\n")
     end
 
     def parse_version(substring)

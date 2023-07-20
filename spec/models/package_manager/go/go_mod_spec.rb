@@ -22,7 +22,7 @@ RSpec.describe PackageManager::Go::GoMod do
         MODFILE
       end
 
-      it "ignores empty/unparseable retract directives" do
+      it "ignores commented out retract directives" do
         expect(go_mod.retracted_version_ranges).to be_empty
       end
     end
@@ -67,7 +67,7 @@ RSpec.describe PackageManager::Go::GoMod do
         MODFILE
       end
 
-      it "detects retracted versions and ranges ranges" do
+      it "detects retracted versions and ranges" do
         expect(go_mod.retracted_version_ranges).to match_array(["v1.0.2-dev0", ["v3.0.0", "v3.0.3"]])
       end
     end
@@ -91,12 +91,13 @@ RSpec.describe PackageManager::Go::GoMod do
       let(:mod_contents) do
         <<~MODFILE
           retract // v0.9.4
+          retrac v0.9.6
           retract v1.0.0
           retract asdfghjk
         MODFILE
       end
 
-      it "ignores empty/unparseable retract directives" do
+      it "ignores unparseable retract directives" do
         expect(go_mod.retracted_version_ranges).to match_array(["v1.0.0"])
       end
     end
