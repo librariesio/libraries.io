@@ -272,7 +272,7 @@ module PackageManager
       json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
       number = json&.dig("Version")
 
-      Rails.logger.info "Unable to fetch latest version number name=#{name}" if number.blank?
+      Rails.logger.info "[Unable to fetch latest version number] name=#{name}" if number.blank?
 
       number
     end
@@ -290,12 +290,13 @@ module PackageManager
       # to scrape the webpage or wait for an API for a faster fetch here.
 
       version = latest_version_number(name) if version.nil?
+      return if version.nil?
 
-      if version
-        get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
-      else
-        Rails.logger.info "Unable to fetch go.mod contents name=#{name}"
-      end
+      contents = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
+
+      Rails.logger.info "[Unable to fetch go.mod contents] name=#{name}" if contents.blank?
+
+      contents
     end
   end
 end
