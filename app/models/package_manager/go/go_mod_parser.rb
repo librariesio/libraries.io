@@ -27,7 +27,7 @@ class PackageManager::Go
     def canonical_module_name
       module_line = stripped_contents.lines.find { |line| line.match(MODULE_REGEX) }
 
-      module_line.match(MODULE_REGEX)[1]
+      module_line&.scan(MODULE_REGEX)&.dig(0, 0)
     end
 
     def dependencies

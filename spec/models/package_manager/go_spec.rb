@@ -362,7 +362,7 @@ describe PackageManager::Go do
     end
   end
 
-  describe "canonical_module_name" do
+  describe "::canonical_module_name" do
     it "maps only major revision versions to module" do
       VCR.use_cassette("go/pkg_go_dev") do
         result = described_class.canonical_module_name(package_name)
@@ -371,7 +371,7 @@ describe PackageManager::Go do
     end
   end
 
-  describe "dependencies" do
+  describe "::dependencies" do
     let(:package_name) { "github.com/PuerkitoBio/goquery" }
     let(:version) { "v1.5.1" }
 

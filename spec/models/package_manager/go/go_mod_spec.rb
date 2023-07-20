@@ -102,4 +102,29 @@ RSpec.describe PackageManager::Go::GoMod do
       end
     end
   end
+
+  describe "#canonical_module_name" do
+    let(:mod_contents) do
+      <<~MODFILE
+        module my_cool_package
+      MODFILE
+    end
+
+    it "reads module name from go.mod" do
+      expect(go_mod.canonical_module_name).to eq("my_cool_package")
+    end
+
+    context "when malformed" do
+      let(:mod_contents) do
+        <<~MODFILE
+          module // my_broke_package
+          mod ule my_broke_package
+        MODFILE
+      end
+
+      it "returns nil" do
+        expect(go_mod.canonical_module_name).to be nil
+      end
+    end
+  end
 end
