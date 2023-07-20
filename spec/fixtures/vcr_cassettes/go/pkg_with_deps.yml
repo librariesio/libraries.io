@@ -111,4 +111,60 @@ http_interactions:
         v1.3.1\n\tgolang.org/x/net v0.7.0\n)\n\ngo 1.13\n"
     http_version:
   recorded_at: Wed, 19 Jul 2023 22:33:10 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/!puerkito!bio/goquery/@v/v1.5.1.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1768327252392875942'
+      X-Datadog-Parent-Id:
+      - '3526671732765196371'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=10800
+      Content-Length:
+      - '153'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Thu, 20 Jul 2023 18:51:20 GMT
+      Etag:
+      - '"de2deaf267659bcc91aa185fcbc30bad0783a15e647ae3ef99c7a8ad5cbb2970"'
+      Expires:
+      - Thu, 20 Jul 2023 21:51:20 GMT
+      Last-Modified:
+      - Tue, 04 Feb 2020 23:18:22 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: "module github.com/PuerkitoBio/goquery\n\nrequire (\n\tgithub.com/andybalholm/cascadia
+        v1.1.0\n\tgolang.org/x/net v0.0.0-20200202094626-16171245cfb2\n)\n\ngo 1.13\n"
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:20 GMT
 recorded_with: VCR 4.0.0

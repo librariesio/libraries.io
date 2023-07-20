@@ -8072,4 +8072,1828 @@ http_interactions:
         '
     http_version:
   recorded_at: Wed, 19 Jul 2023 22:33:09 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/robfig/cron/v3/@v/v3.0.0-rc1.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2113551630485558275'
+      X-Datadog-Parent-Id:
+      - '3418065264249775283'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=10800
+      Content-Length:
+      - '42'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Thu, 20 Jul 2023 18:50:05 GMT
+      Etag:
+      - '"f895601ed42554966d2979f56420f655966b079254d92205b53828422298244f"'
+      Expires:
+      - Thu, 20 Jul 2023 21:50:05 GMT
+      Last-Modified:
+      - Mon, 17 Jun 2019 12:48:28 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        module github.com/robfig/cron/v3
+
+        go 1.12
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:50:05 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/robfig/cron/v3/@v/v3.0.0.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3158066277479107692'
+      X-Datadog-Parent-Id:
+      - '1657788044118762161'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '42'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 17:46:58 GMT
+      Expires:
+      - Thu, 20 Jul 2023 20:46:58 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '3787'
+      Last-Modified:
+      - Thu, 11 Jul 2019 19:10:18 GMT
+      Etag:
+      - '"f895601ed42554966d2979f56420f655966b079254d92205b53828422298244f"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        module github.com/robfig/cron/v3
+
+        go 1.12
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:50:05 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/robfig/cron/@v/v3.0.0-rc1.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3549959377209316754'
+      X-Datadog-Parent-Id:
+      - '1615659229231258589'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 404
+      message: ''
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=1797
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Thu, 20 Jul 2023 18:50:08 GMT
+      Expires:
+      - Thu, 20 Jul 2023 19:20:05 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Content-Length:
+      - '144'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'not found: github.com/robfig/cron@v3.0.0-rc1: invalid version: go.mod
+        has post-v3 module path "github.com/robfig/cron/v3" at revision v3.0.0-rc1'
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:50:08 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/robfig/cron/@v/v1.0.0.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2427875521604696370'
+      X-Datadog-Parent-Id:
+      - '867165015529333088'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=10800
+      Content-Length:
+      - '30'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Thu, 20 Jul 2023 18:50:42 GMT
+      Etag:
+      - '"38c3512f0207856125c29e96d7919ed25e0c2c5aa18f09208e5bc227e580f584"'
+      Expires:
+      - Thu, 20 Jul 2023 21:50:42 GMT
+      Last-Modified:
+      - Tue, 04 Jun 2019 11:05:10 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module github.com/robfig/cron
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:50:42 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/robfig/cron/@v/v1.1.0.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '833640688614663403'
+      X-Datadog-Parent-Id:
+      - '4063563045494645215'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '30'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 17:23:33 GMT
+      Expires:
+      - Thu, 20 Jul 2023 20:23:33 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '5229'
+      Last-Modified:
+      - Sun, 05 May 2019 12:19:27 GMT
+      Etag:
+      - '"38c3512f0207856125c29e96d7919ed25e0c2c5aa18f09208e5bc227e580f584"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module github.com/robfig/cron
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:50:42 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.9.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1058072855752782877'
+      X-Datadog-Parent-Id:
+      - '3397573137486943042'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '32'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 17:25:58 GMT
+      Expires:
+      - Thu, 20 Jul 2023 20:25:58 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '5117'
+      Last-Modified:
+      - Tue, 24 Mar 2020 21:33:08 GMT
+      Etag:
+      - '"b5bce6ab66c097f3454be93c3d25b7daddf49183f5d5bac776c81c456bbdcb00"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module github.com/imdario/mergo
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:15 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.11.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4350873820086294808'
+      X-Datadog-Parent-Id:
+      - '978202524441258517'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '74'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 17:34:53 GMT
+      Expires:
+      - Thu, 20 Jul 2023 20:34:53 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '4582'
+      Last-Modified:
+      - Tue, 11 Aug 2020 19:51:41 GMT
+      Etag:
+      - '"31bbd3c9d8b390093bf1f10994207cbf5c158797283911af5dad728a344e3af9"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        module github.com/imdario/mergo
+
+        go 1.13
+
+        require gopkg.in/yaml.v2 v2.3.0
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:15 GMT
+- request:
+    method: get
+    uri: https://gopkg.in/yaml.v2?go-get=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '886497995991611823'
+      X-Datadog-Parent-Id:
+      - '4539746469678557667'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 20 Jul 2023 18:51:16 GMT
+      Server:
+      - Apache/2.4.41 (Ubuntu)
+      Content-Type:
+      - text/html
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '318'
+    body:
+      encoding: ASCII-8BIT
+      string: |2
+
+        <html>
+        <head>
+        <meta name="go-import" content="gopkg.in/yaml.v2 git https://gopkg.in/yaml.v2">
+        <meta name="go-source" content="gopkg.in/yaml.v2 _ https://github.com/go-yaml/yaml/tree/v2.4.0{/dir} https://github.com/go-yaml/yaml/blob/v2.4.0{/dir}/{file}#L{line}">
+        </head>
+        <body>
+        go get gopkg.in/yaml.v2
+        </body>
+        </html>
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:16 GMT
+- request:
+    method: get
+    uri: https://gopkg.in/yaml.v2?go-get=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2459372966420288278'
+      X-Datadog-Parent-Id:
+      - '4152358375996797470'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 20 Jul 2023 18:51:16 GMT
+      Server:
+      - Apache/2.4.41 (Ubuntu)
+      Content-Type:
+      - text/html
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '318'
+    body:
+      encoding: ASCII-8BIT
+      string: |2
+
+        <html>
+        <head>
+        <meta name="go-import" content="gopkg.in/yaml.v2 git https://gopkg.in/yaml.v2">
+        <meta name="go-source" content="gopkg.in/yaml.v2 _ https://github.com/go-yaml/yaml/tree/v2.4.0{/dir} https://github.com/go-yaml/yaml/blob/v2.4.0{/dir}/{file}#L{line}">
+        </head>
+        <body>
+        go get gopkg.in/yaml.v2
+        </body>
+        </html>
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:16 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.8.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2436536943669157230'
+      X-Datadog-Parent-Id:
+      - '1222657162509394174'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '32'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 16:30:01 GMT
+      Expires:
+      - Thu, 20 Jul 2023 19:30:01 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '8475'
+      Last-Modified:
+      - Thu, 03 Oct 2019 11:24:54 GMT
+      Etag:
+      - '"b5bce6ab66c097f3454be93c3d25b7daddf49183f5d5bac776c81c456bbdcb00"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module github.com/imdario/mergo
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:16 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.6.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '914258219069045068'
+      X-Datadog-Parent-Id:
+      - '3982915119912269344'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '32'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 16:54:38 GMT
+      Expires:
+      - Thu, 20 Jul 2023 19:54:38 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '6998'
+      Last-Modified:
+      - Thu, 11 Apr 2019 14:57:29 GMT
+      Etag:
+      - '"b5bce6ab66c097f3454be93c3d25b7daddf49183f5d5bac776c81c456bbdcb00"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module github.com/imdario/mergo
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:16 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.4.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2364706387307947469'
+      X-Datadog-Parent-Id:
+      - '3200782742951264807'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '32'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 17:15:19 GMT
+      Expires:
+      - Thu, 20 Jul 2023 20:15:19 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '5757'
+      Last-Modified:
+      - Thu, 11 Apr 2019 15:08:21 GMT
+      Etag:
+      - '"b5bce6ab66c097f3454be93c3d25b7daddf49183f5d5bac776c81c456bbdcb00"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module github.com/imdario/mergo
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:16 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.7.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '308623599372650992'
+      X-Datadog-Parent-Id:
+      - '3881604664234477882'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '32'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 16:46:41 GMT
+      Expires:
+      - Thu, 20 Jul 2023 19:46:41 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '7475'
+      Last-Modified:
+      - Thu, 11 Apr 2019 18:51:53 GMT
+      Etag:
+      - '"b5bce6ab66c097f3454be93c3d25b7daddf49183f5d5bac776c81c456bbdcb00"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module github.com/imdario/mergo
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:16 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.5.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2670644310961257710'
+      X-Datadog-Parent-Id:
+      - '1388980770519249621'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '32'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 17:53:57 GMT
+      Expires:
+      - Thu, 20 Jul 2023 20:53:57 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '3439'
+      Last-Modified:
+      - Tue, 23 Apr 2019 21:16:57 GMT
+      Etag:
+      - '"b5bce6ab66c097f3454be93c3d25b7daddf49183f5d5bac776c81c456bbdcb00"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module github.com/imdario/mergo
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:16 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.13.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3327841570290926172'
+      X-Datadog-Parent-Id:
+      - '202230531017078660'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '74'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 18:22:40 GMT
+      Expires:
+      - Thu, 20 Jul 2023 21:22:40 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '1716'
+      Last-Modified:
+      - Wed, 25 May 2022 20:16:41 GMT
+      Etag:
+      - '"ca5731139deb241ecd04a991864e74e16cc922493ee217b59ae6c5ae309a07ac"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        module github.com/imdario/mergo
+
+        go 1.13
+
+        require gopkg.in/yaml.v3 v3.0.0
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:16 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.12.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3538492031461827548'
+      X-Datadog-Parent-Id:
+      - '1346586368379878000'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '74'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 18:20:00 GMT
+      Expires:
+      - Thu, 20 Jul 2023 21:20:00 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '1876'
+      Last-Modified:
+      - Tue, 09 Mar 2021 21:44:30 GMT
+      Etag:
+      - '"31bbd3c9d8b390093bf1f10994207cbf5c158797283911af5dad728a344e3af9"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        module github.com/imdario/mergo
+
+        go 1.13
+
+        require gopkg.in/yaml.v2 v2.3.0
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:16 GMT
+- request:
+    method: get
+    uri: https://gopkg.in/yaml.v2?go-get=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4505622816185477376'
+      X-Datadog-Parent-Id:
+      - '2545516039630203531'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 20 Jul 2023 18:51:17 GMT
+      Server:
+      - Apache/2.4.41 (Ubuntu)
+      Content-Type:
+      - text/html
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '318'
+    body:
+      encoding: ASCII-8BIT
+      string: |2
+
+        <html>
+        <head>
+        <meta name="go-import" content="gopkg.in/yaml.v2 git https://gopkg.in/yaml.v2">
+        <meta name="go-source" content="gopkg.in/yaml.v2 _ https://github.com/go-yaml/yaml/tree/v2.4.0{/dir} https://github.com/go-yaml/yaml/blob/v2.4.0{/dir}/{file}#L{line}">
+        </head>
+        <body>
+        go get gopkg.in/yaml.v2
+        </body>
+        </html>
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:17 GMT
+- request:
+    method: get
+    uri: https://gopkg.in/yaml.v2?go-get=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1333145646659667210'
+      X-Datadog-Parent-Id:
+      - '777517126011878620'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 20 Jul 2023 18:51:17 GMT
+      Server:
+      - Apache/2.4.41 (Ubuntu)
+      Content-Type:
+      - text/html
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '318'
+    body:
+      encoding: ASCII-8BIT
+      string: |2
+
+        <html>
+        <head>
+        <meta name="go-import" content="gopkg.in/yaml.v2 git https://gopkg.in/yaml.v2">
+        <meta name="go-source" content="gopkg.in/yaml.v2 _ https://github.com/go-yaml/yaml/tree/v2.4.0{/dir} https://github.com/go-yaml/yaml/blob/v2.4.0{/dir}/{file}#L{line}">
+        </head>
+        <body>
+        go get gopkg.in/yaml.v2
+        </body>
+        </html>
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:17 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.16.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1034607045942667127'
+      X-Datadog-Parent-Id:
+      - '2450601800835500925'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '74'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 17:48:24 GMT
+      Expires:
+      - Thu, 20 Jul 2023 20:48:24 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '3773'
+      Last-Modified:
+      - Sat, 27 May 2023 08:01:31 GMT
+      Etag:
+      - '"a002f9d36d613da1f750a66a37de22ab8f6ffe8865f30423913930c67428a7dc"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        module github.com/imdario/mergo
+
+        go 1.13
+
+        require gopkg.in/yaml.v3 v3.0.1
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:17 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.3.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3127585155553038067'
+      X-Datadog-Parent-Id:
+      - '278637795776322242'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=10800
+      Content-Length:
+      - '32'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Thu, 20 Jul 2023 18:51:17 GMT
+      Etag:
+      - '"b5bce6ab66c097f3454be93c3d25b7daddf49183f5d5bac776c81c456bbdcb00"'
+      Expires:
+      - Thu, 20 Jul 2023 21:51:17 GMT
+      Last-Modified:
+      - Fri, 10 May 2019 10:34:51 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module github.com/imdario/mergo
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:17 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.15.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '707678679849230656'
+      X-Datadog-Parent-Id:
+      - '2423020591950156920'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '74'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 16:37:07 GMT
+      Expires:
+      - Thu, 20 Jul 2023 19:37:07 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '8050'
+      Last-Modified:
+      - Fri, 24 Mar 2023 09:58:12 GMT
+      Etag:
+      - '"a002f9d36d613da1f750a66a37de22ab8f6ffe8865f30423913930c67428a7dc"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        module github.com/imdario/mergo
+
+        go 1.13
+
+        require gopkg.in/yaml.v3 v3.0.1
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:17 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.14.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '617490929471010985'
+      X-Datadog-Parent-Id:
+      - '2347863766985079525'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '74'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 16:29:10 GMT
+      Expires:
+      - Thu, 20 Jul 2023 19:29:10 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '8528'
+      Last-Modified:
+      - Wed, 15 Mar 2023 23:01:31 GMT
+      Etag:
+      - '"a002f9d36d613da1f750a66a37de22ab8f6ffe8865f30423913930c67428a7dc"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        module github.com/imdario/mergo
+
+        go 1.13
+
+        require gopkg.in/yaml.v3 v3.0.1
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:18 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/imdario/mergo/@v/v0.3.10.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2007030996376903598'
+      X-Datadog-Parent-Id:
+      - '2853989625735983849'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '74'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 18:36:59 GMT
+      Expires:
+      - Thu, 20 Jul 2023 21:36:59 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '859'
+      Last-Modified:
+      - Sat, 18 Jul 2020 14:59:43 GMT
+      Etag:
+      - '"31bbd3c9d8b390093bf1f10994207cbf5c158797283911af5dad728a344e3af9"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        module github.com/imdario/mergo
+
+        go 1.13
+
+        require gopkg.in/yaml.v2 v2.3.0
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:18 GMT
+- request:
+    method: get
+    uri: https://gopkg.in/yaml.v2?go-get=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1390214438877428728'
+      X-Datadog-Parent-Id:
+      - '2138061067145609410'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 20 Jul 2023 18:51:18 GMT
+      Server:
+      - Apache/2.4.41 (Ubuntu)
+      Content-Type:
+      - text/html
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '318'
+    body:
+      encoding: ASCII-8BIT
+      string: |2
+
+        <html>
+        <head>
+        <meta name="go-import" content="gopkg.in/yaml.v2 git https://gopkg.in/yaml.v2">
+        <meta name="go-source" content="gopkg.in/yaml.v2 _ https://github.com/go-yaml/yaml/tree/v2.4.0{/dir} https://github.com/go-yaml/yaml/blob/v2.4.0{/dir}/{file}#L{line}">
+        </head>
+        <body>
+        go get gopkg.in/yaml.v2
+        </body>
+        </html>
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:18 GMT
+- request:
+    method: get
+    uri: https://gopkg.in/yaml.v2?go-get=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4220861230447323685'
+      X-Datadog-Parent-Id:
+      - '35487466460320465'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 20 Jul 2023 18:51:18 GMT
+      Server:
+      - Apache/2.4.41 (Ubuntu)
+      Content-Type:
+      - text/html
+      Vary:
+      - Accept-Encoding
+      Content-Length:
+      - '318'
+    body:
+      encoding: ASCII-8BIT
+      string: |2
+
+        <html>
+        <head>
+        <meta name="go-import" content="gopkg.in/yaml.v2 git https://gopkg.in/yaml.v2">
+        <meta name="go-source" content="gopkg.in/yaml.v2 _ https://github.com/go-yaml/yaml/tree/v2.4.0{/dir} https://github.com/go-yaml/yaml/blob/v2.4.0{/dir}/{file}#L{line}">
+        </head>
+        <body>
+        go get gopkg.in/yaml.v2
+        </body>
+        </html>
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:18 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/gopkg.in/imdario/mergo.v0/@v/v0.3.9.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1386024476393125678'
+      X-Datadog-Parent-Id:
+      - '2989102683154394344'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=10800
+      Content-Length:
+      - '33'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Thu, 20 Jul 2023 18:51:18 GMT
+      Etag:
+      - '"645c56907f624983308f7021187e6900761ef1403d446df5b47ecb60f17f6aca"'
+      Expires:
+      - Thu, 20 Jul 2023 21:51:18 GMT
+      Last-Modified:
+      - Tue, 24 Mar 2020 22:10:52 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module gopkg.in/imdario/mergo.v0
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:18 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/gopkg.in/imdario/mergo.v0/@v/v0.3.8.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4314519752491394927'
+      X-Datadog-Parent-Id:
+      - '1469306075798959272'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=10800
+      Content-Length:
+      - '33'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Thu, 20 Jul 2023 18:51:18 GMT
+      Etag:
+      - '"645c56907f624983308f7021187e6900761ef1403d446df5b47ecb60f17f6aca"'
+      Expires:
+      - Thu, 20 Jul 2023 21:51:18 GMT
+      Last-Modified:
+      - Thu, 03 Oct 2019 16:43:24 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module gopkg.in/imdario/mergo.v0
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:18 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/gopkg.in/imdario/mergo.v0/@v/v0.3.6.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3609427515859336287'
+      X-Datadog-Parent-Id:
+      - '733073031638748952'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=10800
+      Content-Length:
+      - '33'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Thu, 20 Jul 2023 18:51:19 GMT
+      Etag:
+      - '"645c56907f624983308f7021187e6900761ef1403d446df5b47ecb60f17f6aca"'
+      Expires:
+      - Thu, 20 Jul 2023 21:51:19 GMT
+      Last-Modified:
+      - Sat, 20 Jul 2019 04:59:55 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module gopkg.in/imdario/mergo.v0
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:19 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/gopkg.in/imdario/mergo.v0/@v/v0.3.4.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '181395303899336658'
+      X-Datadog-Parent-Id:
+      - '1638633656551063527'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=10800
+      Content-Length:
+      - '33'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Thu, 20 Jul 2023 18:51:19 GMT
+      Etag:
+      - '"645c56907f624983308f7021187e6900761ef1403d446df5b47ecb60f17f6aca"'
+      Expires:
+      - Thu, 20 Jul 2023 21:51:19 GMT
+      Last-Modified:
+      - Sat, 20 Jul 2019 04:59:44 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module gopkg.in/imdario/mergo.v0
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:19 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/gopkg.in/imdario/mergo.v0/@v/v0.3.7.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3016501896950389787'
+      X-Datadog-Parent-Id:
+      - '3285367018462255135'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '33'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 20 Jul 2023 18:39:30 GMT
+      Expires:
+      - Thu, 20 Jul 2023 21:39:30 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Age:
+      - '709'
+      Last-Modified:
+      - Tue, 16 Jul 2019 13:43:42 GMT
+      Etag:
+      - '"645c56907f624983308f7021187e6900761ef1403d446df5b47ecb60f17f6aca"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module gopkg.in/imdario/mergo.v0
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:19 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/gopkg.in/imdario/mergo.v0/@v/v0.3.5.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3648895691516335534'
+      X-Datadog-Parent-Id:
+      - '3264445697985926883'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=10800
+      Content-Length:
+      - '33'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Thu, 20 Jul 2023 18:51:19 GMT
+      Etag:
+      - '"645c56907f624983308f7021187e6900761ef1403d446df5b47ecb60f17f6aca"'
+      Expires:
+      - Thu, 20 Jul 2023 21:51:19 GMT
+      Last-Modified:
+      - Sat, 20 Jul 2019 04:59:50 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module gopkg.in/imdario/mergo.v0
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:19 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/gopkg.in/imdario/mergo.v0/@v/v0.3.3.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2447027063783248132'
+      X-Datadog-Parent-Id:
+      - '912949568066455421'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=10800
+      Content-Length:
+      - '33'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Thu, 20 Jul 2023 18:51:19 GMT
+      Etag:
+      - '"645c56907f624983308f7021187e6900761ef1403d446df5b47ecb60f17f6aca"'
+      Expires:
+      - Thu, 20 Jul 2023 21:51:19 GMT
+      Last-Modified:
+      - Sat, 20 Jul 2019 04:59:39 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: 'module gopkg.in/imdario/mergo.v0
+
+        '
+    http_version:
+  recorded_at: Thu, 20 Jul 2023 18:51:19 GMT
 recorded_with: VCR 4.0.0

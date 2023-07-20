@@ -375,13 +375,13 @@ describe PackageManager::Go do
     let(:package_name) { "github.com/PuerkitoBio/goquery" }
     let(:version) { "v1.5.1" }
 
-    it "maps only major revision versions to module" do
+    it "parses dependencies from go.mod" do
       VCR.use_cassette("go/pkg_with_deps") do
         result = described_class.dependencies(package_name, version, nil)
         expect(result).to match_array(
           [
-            ["github.com/andybalholm/cascadia", "v1.3.1"],
-            ["golang.org/x/net", "v0.7.0"],
+            ["github.com/andybalholm/cascadia", "v1.1.0"],
+            ["golang.org/x/net", "v0.0.0-20200202094626-16171245cfb2"],
           ].map do |name, requirements, kind = "runtime"|
             {
               project_name: name,

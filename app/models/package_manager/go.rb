@@ -193,7 +193,7 @@ module PackageManager
     end
 
     def self.dependencies(name, version, _mapped_project)
-      fetch_mod(name)&.dependencies || []
+      fetch_mod(name, version: version)&.dependencies || []
     end
 
     # https://golang.org/cmd/go/#hdr-Import_path_syntax
