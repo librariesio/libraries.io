@@ -12,6 +12,11 @@ class PackageManager::Go
       @mod_contents = mod_contents
     end
 
+    # Scans contents for retract directives parses their contents
+    #
+    # @return [Array<String, Array<String, String>>] an array consisting of:
+    #   a version number (String) or
+    #   a range represented by a two element array: [range_start_number, range_end_number]
     def retracted_version_ranges
       return @retracted_version_ranges if @retracted_version_ranges
 
