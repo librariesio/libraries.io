@@ -88,7 +88,7 @@ describe PackageManager::Base::VersionUpdater do
           allow(db_project_version_stub).to receive(:errors).and_return(errors)
         end
 
-        context "with already taken" do
+        context "when the version_number is already in the database" do
           it "logs a message" do
             version_updater.upsert_version_for_project!
             expect(logger).to have_received(:info).with(/DUPLICATE VERSION 2/)
