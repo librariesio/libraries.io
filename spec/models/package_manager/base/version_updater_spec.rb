@@ -55,9 +55,8 @@ describe PackageManager::Base::VersionUpdater do
       context "with activerecord not unique error" do
         context "with postgresql violation" do
           it "logs a message" do
-            expect(logger).to receive(:info).with(/DUPLICATE VERSION 1/)
-
             version_updater.upsert_version_for_project!
+            expect(logger).to have_received(:info).with(/DUPLICATE VERSION 1/)
           end
         end
 
