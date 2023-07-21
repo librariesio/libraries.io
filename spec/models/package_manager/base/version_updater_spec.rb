@@ -52,7 +52,7 @@ describe PackageManager::Base::VersionUpdater do
       let(:error_class) { ActiveRecord::RecordNotUnique }
       let(:exception_details) { "PG::UniqueViolation" }
 
-      context "with activerecord not unique error" do
+      context "when the version record already exists in the database" do
         context "with postgresql violation" do
           it "logs a message" do
             version_updater.upsert_version_for_project!
