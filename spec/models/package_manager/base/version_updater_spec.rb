@@ -90,9 +90,8 @@ describe PackageManager::Base::VersionUpdater do
 
         context "with already taken" do
           it "logs a message" do
-            expect(logger).to receive(:info).with(/DUPLICATE VERSION 2/)
-
             version_updater.upsert_version_for_project!
+            expect(logger).to have_received(:info).with(/DUPLICATE VERSION 2/)
           end
         end
 
