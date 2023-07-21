@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "./input_tsv_file"
+
 namespace :projects do
   desc "Sync projects"
   task sync: :environment do
@@ -261,15 +263,13 @@ namespace :projects do
   task :sync_from_list, %i[input_file commit] => :environment do |_t, args|
     commit = args.commit.present? && args.commit == "yes"
 
-    separator = "\t"
-    batch_size = 50
     batch_wait = 5
-
-    input_data = CSV.read(args.input_file, col_sep: separator, headers: false, skip_blanks: true)
     skipped_not_found_count = 0
     result_ids = []
 
-    input_data.in_groups_of(batch_size, false).each do |platforms_and_names|
+    input_tsv_file = InputTsvFile.new(args.input_file)
+
+    input_tsv_file.in_batches do |platforms_and_names|
       projects = []
       platforms_and_names.each do |platform, name|
         project = Project.platform(platform).find_by(name: name)
@@ -298,7 +298,7 @@ namespace :projects do
 
     stats = <<~STATS
       Totals:
-      Input:     #{input_data.count}
+      Input:     #{input_tsv_file.count}
       Not found: #{skipped_not_found_count}
       Processed: #{result_ids.count}
     STATS

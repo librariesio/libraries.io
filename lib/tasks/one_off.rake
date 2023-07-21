@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "./input_tsv_file"
+
 namespace :one_off do
   # put your one off tasks here and delete them once they've been ran
   desc "set stable flag on all versions"
@@ -183,5 +185,70 @@ namespace :one_off do
         Dependency.where(version: batch_affected_versions).update(platform: "Maven")
       end
     end
+  end
+
+  # This find and fixes PyPI packages provided in the CSV file which have
+  # incorrect published_at dates due to the main project API missing version
+  # details.
+  desc "Correct PyPI versions for packages in CSV file"
+  task :correct_pypi_versions_for_packages_in_csv_file, %i[input_file commit] => :environment do |_t, args|
+    commit = args.commit.present? && args.commit == "yes"
+    input_tsv_file = InputTsvFile.new(args.input_file)
+
+    corrected_count = 0
+
+    input_tsv_file.in_batches do |platforms_and_names|
+      platforms_and_names.each do |_platform, name|
+        db_project = Project.platform("Pypi").find_by(name: name)
+
+        unless db_project
+          puts "Can't find db project #{name}"
+          next
+        end
+
+        puts "Checking #{name}..."
+        json_api_project = PackageManager::Pypi::JsonApiProject.request(project_name: name)
+        releases = json_api_project.releases
+
+        unless releases.all_releases_have_published_at?
+          puts "Project #{name} is missing published_at details"
+          rss_api_project = PackageManager::Pypi::RssApiReleases.request(project_name: name)
+          rss_api_releases = rss_api_project.releases
+
+          matching_rss_releases = releases.reject(&:published_at?).map do |release|
+            rss_api_releases.find { |rss_release| rss_release.version_number == release.version_number }
+          end.compact
+
+          matching_rss_releases.each do |rss_release|
+            db_version = db_project.versions.find_by(number: rss_release.version_number)
+
+            next unless db_version
+
+            if db_version.published_at && ((db_version.published_at - rss_release.published_at).abs < 10)
+              # if the times are within 10 seconds of each other, don't update the record
+              next
+            end
+
+            corrected_count += 1
+
+            if commit
+              db_version.update(published_at: rss_release.published_at)
+              puts "Updated #{name} version #{rss_release.version_number} published_at to #{rss_release.published_at}"
+            else
+              puts "Would update published_at on this version to #{rss_release.published_at}"
+              pp db_version
+            end
+          end
+        end
+
+        sleep 0.25
+      end
+
+      sleep 1
+    end
+
+    puts "Results:"
+    puts "Total packages checked: #{input_tsv_file.count}"
+    puts "Versions corrected: #{corrected_count}"
   end
 end
