@@ -145,38 +145,24 @@ module PackageManager
     def self.add_version(db_project, version_hash)
       return if version_hash.blank?
 
-      # Protect version against stray data
-      version_hash = version_hash.symbolize_keys.slice(
-        :number,
-        :published_at,
-        :runtime_dependencies_count,
-        :original_license,
-        :repository_sources,
-        :status
+      symbolized_version_hash = version_hash.symbolize_keys
+
+      incoming_version = IncomingVersion.new(
+        number: symbolized_version_hash[:number],
+        published_at: symbolized_version_hash[:published_at],
+        runtime_dependencies_count: symbolized_version_hash[:runtime_dependencies_count],
+        original_license: symbolized_version_hash[:original_license],
+        repository_sources: symbolized_version_hash[:repository_sources],
+        status: symbolized_version_hash[:status]
       )
 
-      existing = db_project.versions.find_or_initialize_by(number: version_hash[:number])
-      existing.skip_save_project = true
-      existing.assign_attributes(version_hash)
+      repository_source = self::HAS_MULTIPLE_REPO_SOURCES ? self::REPOSITORY_SOURCE_NAME : nil
 
-      existing.repository_sources = Set.new(existing.repository_sources).add(self::REPOSITORY_SOURCE_NAME).to_a if self::HAS_MULTIPLE_REPO_SOURCES
-      existing.save!
-    rescue ActiveRecord::RecordNotUnique => e
-      # Until all package managers support version-specific updates, we'll have this race condition
-      # of 2+ jobs trying to add versions at the same time.
-      if e.message =~ /PG::UniqueViolation/
-        Rails.logger.info "[DUPLICATE VERSION 1] platform=#{db_project.platform} name=#{db_project.name} version=#{version_hash[:number]}"
-      else
-        raise e
-      end
-    rescue ActiveRecord::RecordInvalid => e
-      # Until all package managers support version-specific updates, we'll have this race condition
-      # of 2+ jobs trying to add versions at the same time.
-      if e.message =~ /Number has already been taken/
-        Rails.logger.info "[DUPLICATE VERSION 2] platform=#{db_project.platform} name=#{db_project.name} version=#{version_hash[:number]}"
-      else
-        raise e
-      end
+      VersionUpdater.new(
+        project: db_project,
+        incoming_version: incoming_version,
+        repository_source: repository_source
+      ).execute
     end
 
     def self.deprecate_versions(db_project, version_hashes)
