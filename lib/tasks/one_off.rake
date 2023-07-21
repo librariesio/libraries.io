@@ -208,6 +208,12 @@ namespace :one_off do
 
         puts "Checking #{name}..."
         json_api_project = PackageManager::Pypi::JsonApiProject.request(project_name: name)
+
+        unless json_api_project.present?
+          puts "PyPI returned a nil API response: #{name}"
+          next
+        end
+
         releases = json_api_project.releases
 
         unless releases.all_releases_have_published_at?
