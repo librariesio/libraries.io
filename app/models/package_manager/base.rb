@@ -147,8 +147,8 @@ module PackageManager
 
       symbolized_version_hash = version_hash.symbolize_keys
 
-      incoming_version = IncomingVersion.new(
-        number: symbolized_version_hash[:number],
+      api_version_to_upsert = ApiVersionToUpsert.new(
+        version_number: symbolized_version_hash[:number],
         published_at: symbolized_version_hash[:published_at],
         runtime_dependencies_count: symbolized_version_hash[:runtime_dependencies_count],
         original_license: symbolized_version_hash[:original_license],
@@ -156,13 +156,13 @@ module PackageManager
         status: symbolized_version_hash[:status]
       )
 
-      repository_source = self::HAS_MULTIPLE_REPO_SOURCES ? self::REPOSITORY_SOURCE_NAME : nil
+      new_repository_source = self::HAS_MULTIPLE_REPO_SOURCES ? self::REPOSITORY_SOURCE_NAME : nil
 
       VersionUpdater.new(
         project: db_project,
-        incoming_version: incoming_version,
-        repository_source: repository_source
-      ).execute
+        api_version_to_upsert: api_version_to_upsert,
+        new_repository_source: new_repository_source
+      ).upsert_version_for_project!
     end
 
     def self.deprecate_versions(db_project, version_hashes)

@@ -1,10 +1,10 @@
 require "rails_helper"
 
-describe PackageManager::Base::IncomingVersion do
-  describe "#to_h" do
-    let(:incoming_version) do
+describe PackageManager::Base::ApiVersionToUpsert do
+  describe "#to_version_model_attributes" do
+    let(:api_version_to_upsert) do
       described_class.new(
-        number: "1.0.0",
+        version_number: "1.0.0",
         published_at: nil,
         runtime_dependencies_count: nil,
         original_license: nil,
@@ -14,7 +14,7 @@ describe PackageManager::Base::IncomingVersion do
     end
 
     it "removes keys it doesn't have a value for" do
-      expect(incoming_version.to_h).to eq({ number: "1.0.0" })
+      expect(api_version_to_upsert.to_version_model_attributes).to eq({ number: "1.0.0" })
     end
   end
 end

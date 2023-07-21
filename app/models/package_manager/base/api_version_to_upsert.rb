@@ -1,17 +1,17 @@
 module PackageManager
   class Base
-    class IncomingVersion
-      attr_reader :number
+    class ApiVersionToUpsert
+      attr_reader :version_number
 
       def initialize(
-        number:,
+        version_number:,
         published_at:,
         runtime_dependencies_count:,
         original_license:,
         repository_sources:,
         status:
       )
-        @number = number
+        @version_number = version_number
         @published_at = published_at
         @runtime_dependencies_count = runtime_dependencies_count
         @original_license = original_license
@@ -19,15 +19,15 @@ module PackageManager
         @status = status
       end
 
-      def to_h
+      def to_version_model_attributes
         {
-          number: @number,
+          number: @version_number,
           published_at: @published_at,
           runtime_dependencies_count: @runtime_dependencies_count,
           original_license: @original_license,
           repository_sources: @repository_sources,
           status: @status,
-        }.reject { |_k, v| v.nil? }
+        }.compact
       end
     end
   end
