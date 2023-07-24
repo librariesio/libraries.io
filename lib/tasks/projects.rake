@@ -278,7 +278,6 @@ namespace :projects do
   task :sync_from_list, %i[input_file commit] => :environment do |_t, args|
     commit = args.commit.present? && args.commit == "yes"
 
-    batch_wait = 5
     skipped_not_found_count = 0
     result_ids = []
 
@@ -303,10 +302,7 @@ namespace :projects do
         end
       end
 
-      if commit
-        projects.each(&:manual_sync)
-        sleep batch_wait
-      end
+      projects.each(&:manual_sync) if commit
 
       result_ids.concat(projects.pluck(:id))
     end
@@ -320,36 +316,6 @@ namespace :projects do
 
     Rails.logger.info(stats)
     Rails.logger.info("Project IDs: #{result_ids.join(', ')}")
-    Rails.logger.info("\nThese changes have not been committed. Re-run this task with [,yes] to proceed.") unless commit
-  end
-
-  desc "Manual sync projects by platform"
-  task :sync_by_platform, %i[platform commit] => :environment do |_t, args|
-    platform = args.platform
-    commit = args.commit.present? && args.commit == "yes"
-
-    if platform.blank?
-      puts "No platform given"
-      exit 1
-    end
-
-    batch_size = 500
-
-    result_count = 0
-
-    Project.platform(platform).find_in_batches(batch_size: batch_size).each do |projects|
-      projects.each(&:manual_sync) if commit
-
-      result_count += projects.size
-      Rails.logger.info("#{result_count} projects queued to resync so far.")
-    end
-
-    stats = <<~STATS
-      Totals:
-      Processed: #{result_count}
-    STATS
-
-    Rails.logger.info(stats)
     Rails.logger.info("\nThese changes have not been committed. Re-run this task with [,yes] to proceed.") unless commit
   end
 end
