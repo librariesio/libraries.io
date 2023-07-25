@@ -8,8 +8,6 @@ RSpec.describe PackageManager::Go::GoMod do
 
   describe "#retracted_version_ranges" do
     context "when empty" do
-      let(:mod_contents) { "" }
-
       it "has no retracted versions" do
         expect(go_mod.retracted_version_ranges).to be_empty
       end

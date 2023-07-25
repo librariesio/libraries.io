@@ -278,13 +278,6 @@ module PackageManager
     end
 
     private_class_method def self.fetch_mod(name, version: nil)
-      mod_contents = fetch_mod_contents(name, version: version)
-      return unless mod_contents
-
-      GoMod.new(mod_contents)
-    end
-
-    private_class_method def self.fetch_mod_contents(name, version: nil)
       # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
       # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
       # to scrape the webpage or wait for an API for a faster fetch here.
@@ -292,11 +285,14 @@ module PackageManager
       version = latest_version_number(name) if version.nil?
       return if version.nil?
 
-      contents = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
+      mod_contents = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
 
-      Rails.logger.info "[Unable to fetch go.mod contents] name=#{name}" if contents.blank?
+      if mod_contents.blank?
+        Rails.logger.info "[Unable to fetch go.mod contents] name=#{name}"
+        return
+      end
 
-      contents
+      GoMod.new(mod_contents)
     end
   end
 end
