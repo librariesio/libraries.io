@@ -77,6 +77,18 @@ describe PackageManager::Go do
         expect(versions.find { |v| v[:number] == "v0.0.0-20190907113008-ad855c713046" }).to_not be nil
       end
     end
+
+    it "omits retracted versions" do
+      VCR.use_cassette("go/pkg_with_retracted_versions") do
+        raw_project = { name: "github.com/go-gorp/gorp/v3" }
+
+        versions = described_class.versions(raw_project, raw_project[:name])
+
+        expect(versions.find { |v| v[:number] == "v3.1.0" }).not_to be nil
+        expect(versions.find { |v| v[:number] == "v3.0.0" }).to be nil
+        expect(versions.find { |v| v[:number] == "v3.0.3" }).to be nil
+      end
+    end
   end
 
   describe "VERSION_MODULE_REGEX" do
@@ -334,6 +346,51 @@ describe PackageManager::Go do
     ].each do |(test, expected)|
       it "should replace capital letters" do
         expect(PackageManager::Go.encode_for_proxy(test)).to eql(expected)
+      end
+    end
+  end
+
+  describe ".deprecate_versions" do
+    before do
+      project.versions.create!(number: "1.0.0")
+      project.versions.create!(number: "1.0.1")
+    end
+
+    it "should mark missing versions as Removed" do
+      described_class.deprecate_versions(project, [{ number: "1.0.0", published_at: nil, original_license: nil }])
+      expect(project.reload.versions.pluck(:number, :status)).to match_array([["1.0.0", nil], ["1.0.1", "Removed"]])
+    end
+  end
+
+  describe ".canonical_module_name" do
+    it "maps only major revision versions to module" do
+      VCR.use_cassette("go/pkg_go_dev") do
+        result = described_class.canonical_module_name(package_name)
+        expect(result).to eq(package_name)
+      end
+    end
+  end
+
+  describe ".dependencies" do
+    let(:package_name) { "github.com/PuerkitoBio/goquery" }
+    let(:version) { "v1.5.1" }
+
+    it "parses dependencies from go.mod" do
+      VCR.use_cassette("go/pkg_with_deps") do
+        result = described_class.dependencies(package_name, version, nil)
+        expect(result).to match_array(
+          [
+            ["github.com/andybalholm/cascadia", "v1.1.0"],
+            ["golang.org/x/net", "v0.0.0-20200202094626-16171245cfb2"],
+          ].map do |name, requirements, kind = "runtime"|
+            {
+              project_name: name,
+              requirements: requirements,
+              kind: kind,
+              platform: "Go",
+            }
+          end
+        )
       end
     end
   end

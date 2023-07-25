@@ -25,7 +25,6 @@ module PackageManager
     URL = DISCOVER_URL
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)(\/|$)/.freeze
-    MODULE_REGEX = /module\s+(.+)/.freeze
 
     def self.check_status_url(db_project)
       "#{PROXY_BASE_URL}/#{encode_for_proxy(db_project.name)}/@v/list"
@@ -136,12 +135,12 @@ module PackageManager
         &.map(&:strip)
         &.reject(&:blank?)
 
-      if versions.blank?
-        json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@latest")
-        versions = [json&.fetch("Version", nil)].compact
-      end
+      versions = [latest_version_number(raw_project[:name])] if versions.blank?
 
+      go_mod = fetch_mod(raw_project[:name])
       versions.map do |v|
+        next if go_mod&.retracted?(v)
+
         known = known_versions[v]
 
         if known && known[:original_license].present?
@@ -194,24 +193,7 @@ module PackageManager
     end
 
     def self.dependencies(name, version, _mapped_project)
-      # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
-      # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
-      # to scrape the webpage or wait for an API for a faster fetch here.
-      resp = request("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
-      if resp.status == 200
-        go_mod_file = resp.body
-        Bibliothecary::Parsers::Go.parse_go_mod(go_mod_file)
-          .map do |dep|
-            {
-              project_name: dep[:name],
-              requirements: dep[:requirement],
-              kind: dep[:type],
-              platform: "Go",
-            }
-          end
-      else
-        []
-      end
+      fetch_mod(name, version: version)&.dependencies || []
     end
 
     # https://golang.org/cmd/go/#hdr-Import_path_syntax
@@ -276,21 +258,7 @@ module PackageManager
     # looks at the module declaration for the latest version's go.mod file and returns that if found
     # if nothing is found, nil is returned
     def self.canonical_module_name(name)
-      json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
-      version = json && json["Version"]
-
-      return nil unless version.present?
-
-      mod_file = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
-      module_line = mod_file
-        &.lines
-        &.map(&:strip)
-        &.reject(&:blank?)
-        &.find { |line| line.match(MODULE_REGEX) }
-
-      return false unless module_line.present?
-
-      module_line.match(MODULE_REGEX)[1]
+      fetch_mod(name)&.canonical_module_name
     end
 
     # will convert a string with capital letters and replace with a "!" prepended to the lowercase letter
@@ -298,6 +266,33 @@ module PackageManager
     # https://go.dev/ref/mod#goproxy-protocol
     def self.encode_for_proxy(str)
       str.gsub(/[A-Z]/) { |s| "!#{s.downcase}" }
+    end
+
+    private_class_method def self.latest_version_number(name)
+      json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
+      number = json&.dig("Version")
+
+      Rails.logger.info "[Unable to fetch latest version number] name=#{name}" if number.blank?
+
+      number
+    end
+
+    private_class_method def self.fetch_mod(name, version: nil)
+      # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
+      # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
+      # to scrape the webpage or wait for an API for a faster fetch here.
+
+      version = latest_version_number(name) if version.nil?
+      return if version.nil?
+
+      mod_contents = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
+
+      if mod_contents.blank?
+        Rails.logger.info "[Unable to fetch go.mod contents] name=#{name}"
+        return
+      end
+
+      GoMod.new(mod_contents)
     end
   end
 end
