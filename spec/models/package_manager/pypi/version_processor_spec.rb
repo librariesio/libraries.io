@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe PackageManager::Pypi::VersionProcessor do
@@ -13,7 +15,7 @@ describe PackageManager::Pypi::VersionProcessor do
       PackageManager::Pypi::JsonApiProjectReleases.new([
         PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0", published_at: version1_time, is_yanked: false, yanked_reason: nil),
         PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "2.0.0", published_at: version2_time, is_yanked: false, yanked_reason: nil),
-        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "3.0.0", published_at: version3_time, is_yanked: false, yanked_reason: nil),
+        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "3.0.0", published_at: version3_time, is_yanked: true, yanked_reason: "accidentally published"),
         PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "4.0.0", published_at: nil, is_yanked: false, yanked_reason: nil),
       ])
     end
@@ -60,10 +62,10 @@ describe PackageManager::Pypi::VersionProcessor do
       results = version_processor.execute
 
       expect(results).to eq([
-      { number: "1.0.0", published_at: version1_time, original_license: "one" },
-      { number: "2.0.0", published_at: version2_time, original_license: "two" },
-      { number: "3.0.0", published_at: version3_time, original_license: "three" },
-      { number: "4.0.0", published_at: version4_time, original_license: "four" },
+      { number: "1.0.0", published_at: version1_time, original_license: "one", yanked: false },
+      { number: "2.0.0", published_at: version2_time, original_license: "two", yanked: false },
+      { number: "3.0.0", published_at: version3_time, original_license: "three", yanked: true },
+      { number: "4.0.0", published_at: version4_time, original_license: "four", yanked: false },
       ])
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Pypi
     class VersionProcessor
@@ -15,11 +17,13 @@ module PackageManager
           original_license = json_api_single_release_for_version(version_number).license
           rss_api_release = rss_api_releases_hash[version_number]
           published_at = project_release.published_at || rss_api_release&.published_at
+          yanked = project_release&.yanked? || false
 
           {
             number: version_number,
             published_at: published_at,
             original_license: original_license,
+            yanked: yanked,
           }
         end
       end
