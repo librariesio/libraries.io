@@ -184,7 +184,7 @@ describe PackageManager::Pypi do
         "bar; python_version < \"3.10\" or extra == 'socks'",
         "bar",
         "",
-        "python_version < \"3.10\" or extra == 'socks'"
+        "python_version < \"3.10\" or extra == 'socks'",
       ],
       # URL dependency specifications are not supported by our current code so results in requirements which are not
       # usable.
@@ -194,7 +194,7 @@ describe PackageManager::Pypi do
         "name[fred,bar]",
         "@ http://foo.com",
         "python_version=='2.7'",
-      ]
+      ],
     ].each do |test, expected_name, expected_version, expected_environment_markers|
       it "#{test} should be parsed correctly" do
         expect(
@@ -297,7 +297,7 @@ describe PackageManager::Pypi do
         [
           instance_double(
             PackageManager::Pypi::JsonApiProjectRelease,
-            version_number: version_number + ".1",
+            version_number: "#{version_number}.1",
             published_at: published_at
           ),
         ]
@@ -354,6 +354,121 @@ describe PackageManager::Pypi do
 
       it "returns false" do
         expect(described_class.has_canonical_pypi_name?(name)).to eq(false)
+      end
+    end
+  end
+
+  describe ".update" do
+    let(:project_name) { "package_name" }
+    let(:project_license) { "MIT" }
+    let(:project_summary) { "package summary" }
+    let(:project_source_repository_url) { "https://www.libraries.io/package_name/source" }
+    let(:removed_version) { "1.0.0" }
+    let(:removed_version_published_at) { 1.year.ago.round }
+    let(:not_removed_version) { "2.0.0" }
+    let(:not_removed_version_published_at) { 1.week.ago.round }
+
+    let(:project) do
+      PackageManager::Pypi::JsonApiProject.new(
+        {
+          "info" => {
+            "name" => project_name,
+            "license" => project_license,
+            "summary" => project_summary,
+            "homepage" => "https://www.libraries.io/package_name/home",
+            "project_urls" => { "Source" => project_source_repository_url },
+          },
+          "releases" =>
+            {
+              removed_version => [{
+                "upload_time" => removed_version_published_at.iso8601,
+                "yanked" => true,
+                "yanked_reason" => "some reason",
+              }],
+              not_removed_version => [{
+                "upload_time" => not_removed_version_published_at.iso8601,
+                "yanked" => false,
+              }],
+            },
+        }
+      )
+    end
+
+    before do
+      allow(PackageManager::Pypi).to receive(:project).and_return(project)
+      allow(PackageManager::ApiService).to receive(:request_json_with_headers).and_return({})
+      allow(PackageManager::Pypi::RssApiReleases).to receive(:request).and_return(
+        instance_double(
+          PackageManager::Pypi::RssApiReleases,
+          releases: []
+        )
+      )
+    end
+
+    it "adds the project" do
+      expect { described_class.update(project_name) }.to change(Project, :count).from(0).to(1)
+
+      actual_project = Project.first
+      expect(actual_project.name).to eq(project_name)
+      expect(actual_project.platform).to eq("Pypi")
+      expect(actual_project.description).to eq(project_summary)
+      expect(actual_project.repository_url).to eq(project_source_repository_url)
+      expect(actual_project.licenses).to eq(project_license)
+    end
+
+    it "adds the versions with correct statuses" do
+      expect { described_class.update(project_name) }.to change(Version, :count).from(0).to(2)
+
+      actual_versions = Project.first.versions
+      expect(actual_versions.count).to eq(2)
+
+      actual_removed_version = actual_versions.find_by(number: removed_version)
+      expect(actual_removed_version.status).to eq("Removed")
+      expect(actual_removed_version.published_at).to eq(removed_version_published_at)
+
+      actual_not_removed_version = actual_versions.find_by(number: not_removed_version)
+      expect(actual_not_removed_version.status).to be nil
+      expect(actual_not_removed_version.published_at).to eq(not_removed_version_published_at)
+    end
+  end
+
+  describe ".deprecate_versions" do
+    let(:version_to_remove) { "1.0.0" }
+    let(:version_to_not_remove) { "2.0.0" }
+    let(:removed_release) { { number: version_to_remove, published_at: 2.days.ago.round, original_license: nil, yanked: true } }
+    let(:not_removed_release) { { number: version_to_not_remove, published_at: 1.day.ago.round, original_license: nil, yanked: false } }
+
+    let(:db_project) { create(:project, :pypi) }
+    let!(:version_to_be_removed) { create(:version, project: db_project, number: version_to_remove, status: nil) }
+
+    before do
+      create(:version, project: db_project, number: version_to_not_remove, status: nil)
+    end
+
+    it "only sets the status of the yanked version to 'Removed'" do
+      described_class.deprecate_versions(db_project, [removed_release, not_removed_release])
+
+      expect(db_project.versions.find_by(number: version_to_remove).status).to eq("Removed")
+      expect(db_project.versions.find_by(number: version_to_not_remove).status).to be nil
+    end
+
+    context "when no versions are removed" do
+      it "doesn't do anything" do
+        described_class.deprecate_versions(db_project, [not_removed_release])
+
+        expect(db_project.versions.find_by(number: version_to_remove).status).to be nil
+        expect(db_project.versions.find_by(number: version_to_not_remove).status).to be nil
+      end
+    end
+
+    context "when the existing version record is already 'Removed'" do
+      let!(:version_to_be_removed) { create(:version, project: db_project, number: version_to_remove, status: "Removed") }
+
+      it "keeps the version in the same 'Removed' status" do
+        described_class.deprecate_versions(db_project, [removed_release, not_removed_release])
+
+        expect(db_project.versions.find_by(number: version_to_remove).status).to eq("Removed")
+        expect(db_project.versions.find_by(number: version_to_not_remove).status).to be nil
       end
     end
   end
