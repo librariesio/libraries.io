@@ -21,6 +21,7 @@
 #  license_normalized                 :boolean          default(FALSE)
 #  license_set_by_admin               :boolean          default(FALSE)
 #  licenses                           :string
+#  lifted                             :boolean          default(FALSE)
 #  name                               :string
 #  normalized_licenses                :string           default([]), is an Array
 #  platform                           :string
