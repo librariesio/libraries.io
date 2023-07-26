@@ -44,6 +44,11 @@ FactoryBot.define do
       platform { "Maven" }
       language { "Java" }
     end
+
+    trait :pypi do
+      platform { "Pypi" }
+      language { "Python" }
+    end
   end
 
   factory :platform do
