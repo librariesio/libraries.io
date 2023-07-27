@@ -372,12 +372,12 @@ describe Repository, type: :model do
     it "should not raise an exception when the manifest had an error" do
       expect do
         repository.sync_manifest({
-          platform: "cargo",
-          path: "Cargo.lock",
-          dependencies: nil,
-          sha: "abcd1234",
-          error_message: "Cargo.lock: key not found: \"dev-dependencies\"\nDid you mean? \"dependencies\""
-        })
+                                   platform: "cargo",
+                                   path: "Cargo.lock",
+                                   dependencies: nil,
+                                   sha: "abcd1234",
+                                   error_message: "Cargo.lock: key not found: \"dev-dependencies\"\nDid you mean? \"dependencies\"",
+                                 })
       end.to change { repository.manifests.count }.by(0)
     end
   end

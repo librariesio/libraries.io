@@ -66,7 +66,7 @@ class WebHook < ApplicationRecord
     serialized = ProjectUpdatedSerializer.new(project).as_json
     send_payload({
                    event: "project_updated",
-                   project: serialized
+                   project: serialized,
                  })
   end
 
@@ -85,7 +85,7 @@ class WebHook < ApplicationRecord
                           headers: {
                             "Content-Type" => "application/json",
                             "Accept-Encoding" => "application/json",
-                            "X-Libraries-Signature" => signature
+                            "X-Libraries-Signature" => signature,
                           })
   end
 
