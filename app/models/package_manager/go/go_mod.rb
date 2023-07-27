@@ -23,7 +23,7 @@ class PackageManager::Go
         end
       end
     end
-    
+
     # Scans contents for retract directives parses their contents
     #
     # @return [Array<String, Array<String, String>>] an array consisting of:
