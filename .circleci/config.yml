@@ -79,8 +79,6 @@ jobs:
           command: |
             pwd
             bundle exec rubocop -L | circleci tests split > /tmp/lint-split
-            echo "Debugging lint files:"
-            cat /tmp/lint-split
             bundle exec rubocop $(cat /tmp/lint-split)
 
 workflows:

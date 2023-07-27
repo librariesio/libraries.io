@@ -25,9 +25,9 @@ describe WebHook, type: :model do
         saved_body = nil
         WebMock.stub_request(:post, url)
           .to_return do |request|
-          saved_body = request.body
-          { status: 200 }
-        end
+            saved_body = request.body
+            { status: 200 }
+          end
 
         web_hook.send_new_version(version.project, version.project.platform, version, [])
 
@@ -73,9 +73,9 @@ describe WebHook, type: :model do
           saved_body = nil
           WebMock.stub_request(:post, url)
             .to_return do |request|
-            saved_body = request.body
-            { status: 200 }
-          end
+              saved_body = request.body
+              { status: 200 }
+            end
 
           web_hook.send_new_version(version.project, version.project.platform, version, [])
 

@@ -170,17 +170,17 @@ class Project < ApplicationRecord
   scope :indexable, -> { not_removed.includes(:repository) }
 
   scope :unsung_heroes, lambda {
-                          maintained
-                            .with_repo
-                            .where("repositories.stargazers_count < 100")
-                            .where("projects.dependent_repos_count > 1000")
-                        }
+    maintained
+      .with_repo
+      .where("repositories.stargazers_count < 100")
+      .where("projects.dependent_repos_count > 1000")
+  }
 
   scope :digital_infrastructure, lambda {
-                                   not_removed
-                                     .with_repo
-                                     .where("projects.dependent_repos_count > ?", 10000)
-                                 }
+    not_removed
+      .with_repo
+      .where("projects.dependent_repos_count > ?", 10000)
+  }
 
   scope :hacker_news, -> { with_repo.where("repositories.stargazers_count > 0").order(Arel.sql("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC")) }
   scope :recently_created, -> { with_repo.where("repositories.created_at > ?", 2.weeks.ago) }

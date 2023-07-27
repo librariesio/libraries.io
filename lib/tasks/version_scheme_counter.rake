@@ -91,60 +91,60 @@ namespace :version do
       Project
         .includes(:versions)
         .where(VersionSchemeDetection.build_project_where_clause(packages_slice)).limit(slice_size).each do |project|
-        project_platform = project.platform
-        project_name = project.name
+          project_platform = project.platform
+          project_name = project.name
 
-        local_tallies = VersionSchemeDetection::TALLIES.clone(freeze: false)
+          local_tallies = VersionSchemeDetection::TALLIES.clone(freeze: false)
 
-        unless project.versions_count?
-          global_tallies[:no_versions] += 1
-          versionless_packages.push([project_platform, project_name])
-          next
-        end
-
-        project.versions.each do |version|
-          version_number = version.number
-          matchable = false
-          [
-            :semver,
-            :pep440,
-            :calver,
-            *(%i[maven osgi] if project_platform.downcase == "maven"),
-          ].each do |scheme|
-            if VersionSchemeDetection::VALIDATORS[scheme.upcase].call(version_number)
-              local_tallies[scheme] += 1
-              matchable = true
-            end
+          unless project.versions_count?
+            global_tallies[:no_versions] += 1
+            versionless_packages.push([project_platform, project_name])
+            next
           end
 
-          local_tallies[:unknown] += 1 unless matchable
+          project.versions.each do |version|
+            version_number = version.number
+            matchable = false
+            [
+              :semver,
+              :pep440,
+              :calver,
+              *(%i[maven osgi] if project_platform.downcase == "maven"),
+            ].each do |scheme|
+              if VersionSchemeDetection::VALIDATORS[scheme.upcase].call(version_number)
+                local_tallies[scheme] += 1
+                matchable = true
+              end
+            end
+
+            local_tallies[:unknown] += 1 unless matchable
+          end
+
+          max_count = local_tallies.values.max
+          maxes = local_tallies.select { |_, tally| tally == max_count }.keys
+
+          # If there are no schemes which matched all versions, consider the scheme unknown.
+          if max_count != project.versions_count
+            detected_scheme = :unknown
+          elsif maxes.length == 1
+            detected_scheme = maxes[0]
+          elsif maxes.include?(:calver)
+            detected_scheme = :calver
+          elsif maxes.include?(:semver)
+            detected_scheme = :semver
+          elsif (maxes & %i[maven osgi]).any? && project_platform.downcase == "maven"
+            detected_scheme = maxes.include?(:osgi) ? :osgi : :maven
+          elsif maxes.include?(:pep440)
+            detected_scheme = :pep440
+          else
+            warnings.push("#{project_platform}:#{project_name} has #{maxes} but couldn't determine which to choose so picked #{maxes[0]}")
+            detected_scheme = maxes[0]
+          end
+
+          unknown_schemes.push([project_platform, project_name, project.versions.map(&:number)]) if detected_scheme == :unknown
+
+          global_tallies[detected_scheme] += 1
         end
-
-        max_count = local_tallies.values.max
-        maxes = local_tallies.select { |_, tally| tally == max_count }.keys
-
-        # If there are no schemes which matched all versions, consider the scheme unknown.
-        if max_count != project.versions_count
-          detected_scheme = :unknown
-        elsif maxes.length == 1
-          detected_scheme = maxes[0]
-        elsif maxes.include?(:calver)
-          detected_scheme = :calver
-        elsif maxes.include?(:semver)
-          detected_scheme = :semver
-        elsif (maxes & %i[maven osgi]).any? && project_platform.downcase == "maven"
-          detected_scheme = maxes.include?(:osgi) ? :osgi : :maven
-        elsif maxes.include?(:pep440)
-          detected_scheme = :pep440
-        else
-          warnings.push("#{project_platform}:#{project_name} has #{maxes} but couldn't determine which to choose so picked #{maxes[0]}")
-          detected_scheme = maxes[0]
-        end
-
-        unknown_schemes.push([project_platform, project_name, project.versions.map(&:number)]) if detected_scheme == :unknown
-
-        global_tallies[detected_scheme] += 1
-      end
 
       global_tallies[:cursor] = global_tallies[:cursor] + packages_slice.length
 

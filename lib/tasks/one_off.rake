@@ -32,12 +32,12 @@ namespace :one_off do
       .where(platform: "Clojars")
       .where("name LIKE '%:%'")
       .find_each do |p|
-      good_name = p.name.gsub(/:/, "/")
-      bad_name = p.name
-      puts "Updating #{good_name}, deleting #{bad_name}"
-      PackageManager::Clojars.update(good_name)
-      p.destroy!
-    end
+        good_name = p.name.gsub(/:/, "/")
+        bad_name = p.name
+        puts "Updating #{good_name}, deleting #{bad_name}"
+        PackageManager::Clojars.update(good_name)
+        p.destroy!
+      end
   end
 
   desc "delete all hidden maven projects missing a group id"
@@ -148,16 +148,16 @@ namespace :one_off do
           .joins(:project)
           .select("versions.number as project_version, projects.name as project_name")
           .each do |affected_version|
-          PackageManagerDownloadWorker.perform_in(
-            batch_versions_index.minute + batch_affected_versions_index.seconds,
-            "pypi",
-            affected_version.project_name,
-            affected_version.project_version,
-            "pypi-kind-backfill",
-            0,
-            true
-          )
-        end
+            PackageManagerDownloadWorker.perform_in(
+              batch_versions_index.minute + batch_affected_versions_index.seconds,
+              "pypi",
+              affected_version.project_name,
+              affected_version.project_version,
+              "pypi-kind-backfill",
+              0,
+              true
+            )
+          end
       end
     end
   end

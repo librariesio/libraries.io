@@ -42,12 +42,12 @@ module RepoSearch
 
     after_commit -> { __elasticsearch__.index_document if previous_changes.any? }, on: %i[create update], prepend: true
     after_commit lambda {
-                   begin
-                     __elasticsearch__.delete_document
-                   rescue StandardError
-                     nil
-                   end
-                 }, on: :destroy
+      begin
+        __elasticsearch__.delete_document
+      rescue StandardError
+        nil
+      end
+    }, on: :destroy
 
     def self.facets(options = {})
       Rails.cache.fetch "repo_facet:#{options.to_s.gsub(/\W/, '')}", expires_in: 1.hour, race_condition_ttl: 2.minutes do

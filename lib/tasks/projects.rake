@@ -106,10 +106,10 @@ namespace :projects do
     %w[Alcatraz Bower Cargo Clojars CocoaPods CRAN
        Dub Elm Hackage Haxelib Hex Homebrew Inqlude
        Julia NPM Packagist Pypi Rubygems].each do |platform|
-      "PackageManager::#{platform}".constantize.import_new_async
+         "PackageManager::#{platform}".constantize.import_new_async
     rescue StandardError
       nil
-    end
+       end
   end
 
   desc "Slowly sync all pypi dependencies"

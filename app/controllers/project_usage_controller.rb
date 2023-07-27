@@ -25,9 +25,9 @@ class ProjectUsageController < ApplicationController
     @all_counts.sort_by { |_k, v| -v }
       .first(limit)
       .sort_by do |k, _v|
-      k.gsub(/~|>|<|\^|=|\*|\s/, "")
-        .gsub("-", ".")
-        .split(".").map(&:to_i)
-    end
+        k.gsub(/~|>|<|\^|=|\*|\s/, "")
+          .gsub("-", ".")
+          .split(".").map(&:to_i)
+      end
   end
 end

@@ -56,6 +56,14 @@ Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 Style/NumericPredicate:
   Enabled: false
+Style/FormatStringToken:
+  Enabled: false
+Style/MultilineBlockChain:
+  Enabled: false
+Style/IfUnlessModifier:
+  Enabled: false
+Layout/BlockAlignment:
+  EnforcedStyleAlignWith: start_of_block
 
 # things we need to have discussions about
 Style/GuardClause:
