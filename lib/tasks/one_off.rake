@@ -130,7 +130,7 @@ namespace :one_off do
   task :correct_pypi_dependencies_name_and_kind, %i[batch_size start] => :environment do |_t, args|
     pypi_versions = Version.where(project_id: Project.where(platform: "Pypi"))
 
-    batch_size = (args[:batch_size] && args[:batch_size].to_i) || 10000
+    batch_size = (args[:batch_size]&.to_i) || 10000
 
     num_batches = pypi_versions.count / batch_size
 
@@ -168,7 +168,7 @@ namespace :one_off do
   task :correct_maven_dependencies_platforms, %i[batch_size start] => :environment do |_t, args|
     maven_versions = Version.where(project_id: Project.where(platform: "Maven"))
 
-    batch_size = (args[:batch_size] && args[:batch_size].to_i) || 10000
+    batch_size = (args[:batch_size]&.to_i) || 10000
 
     num_batches = maven_versions.count / batch_size
 

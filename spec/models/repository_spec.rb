@@ -345,7 +345,7 @@ describe Repository, type: :model do
     before do
       es_double = instance_double(
         "Elasticsearch::Model::Indexing::InstanceMethods",
-        index_document: ->() { true }
+        index_document: -> { true }
       )
       expect_any_instance_of(Repository)
         .to receive(:__elasticsearch__)
@@ -356,11 +356,11 @@ describe Repository, type: :model do
     it "should create a manifest with deps if it doesn't exist" do
       expect do
         repository.sync_manifest({
-          platform: "cargo",
-          path: "Cargo.lock",
-          dependencies: [{name: "Inflector", requirement: "0.11.4", type: "runtime"}],
-          sha: "abcd1234",
-        })
+                                   platform: "cargo",
+                                   path: "Cargo.lock",
+                                   dependencies: [{ name: "Inflector", requirement: "0.11.4", type: "runtime" }],
+                                   sha: "abcd1234",
+                                 })
       end.to change { repository.manifests.count }.by(1)
 
       manifest = repository.manifests.first

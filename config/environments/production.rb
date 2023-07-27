@@ -99,7 +99,7 @@ Rails.application.configure do
 
   # Logging options
   logger = ActiveSupport::Logger.new($stdout)
-  logger.formatter = proc do |severity, datetime, progname, msg|
+  logger.formatter = proc do |severity, datetime, _progname, msg|
     date_format = datetime.strftime("%Y-%m-%dT%H:%M:%S.%L")
     "#{date_format} #{severity} #{msg}\n"
   end
