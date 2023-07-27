@@ -167,6 +167,7 @@ module PackageManager
 
     def self.deprecate_versions(db_project, version_hashes)
       removed_status = "Removed"
+      current_time = Time.zone.now
 
       case db_project.platform.downcase
       # retracted go, unpublished npm, and yanked rubygems versions will be omitted from project JSON versions
@@ -174,7 +175,8 @@ module PackageManager
         db_project
           .versions
           .where.not(number: version_hashes.pluck(:number))
-          .update_all(status: removed_status)
+          .where("status != ? or status is null", removed_status)
+          .update_all(status: removed_status, updated_at: current_time)
       when "pypi"
         removed_versions = version_hashes.filter { |x| x[:yanked] == true }
 
@@ -182,7 +184,8 @@ module PackageManager
           db_project
             .versions
             .where(number: removed_versions.pluck(:number).compact)
-            .update_all(status: removed_status, updated_at: Time.zone.now)
+            .where("status != ? or status is null", removed_status)
+            .update_all(status: removed_status, updated_at: current_time)
         end
       end
     end

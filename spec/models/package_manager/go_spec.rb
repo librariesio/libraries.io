@@ -351,14 +351,42 @@ describe PackageManager::Go do
   end
 
   describe ".deprecate_versions" do
+    let(:version_number_to_not_remove) { "1.0.0" }
+    let(:version_number_to_remove) { "1.0.1" }
+    let(:old_updated_at) { 5.years.ago.round }
+    let(:version_to_remove_status) { nil }
+    let!(:version_to_remove) { create(:version, project: project, number: version_number_to_remove, updated_at: old_updated_at, status: version_to_remove_status) }
+
     before do
-      project.versions.create!(number: "1.0.0")
-      project.versions.create!(number: "1.0.1")
+      project.versions.create!(number: version_number_to_not_remove, updated_at: old_updated_at)
     end
 
     it "should mark missing versions as Removed" do
-      described_class.deprecate_versions(project, [{ number: "1.0.0", published_at: nil, original_license: nil }])
-      expect(project.reload.versions.pluck(:number, :status)).to match_array([["1.0.0", nil], ["1.0.1", "Removed"]])
+      described_class.deprecate_versions(project, [{ number: version_number_to_not_remove, published_at: nil, original_license: nil }])
+
+      actual_version_to_not_remove = project.versions.find_by(number: version_number_to_not_remove)
+      expect(actual_version_to_not_remove.status).to be nil
+      expect(actual_version_to_not_remove.updated_at).to eq(old_updated_at)
+
+      actual_version_to_remove = project.versions.find_by(number: version_number_to_remove)
+      expect(actual_version_to_remove.status).to eq("Removed")
+      expect(actual_version_to_remove.updated_at).to be_within(1.minute).of(Time.zone.now)
+    end
+
+    context "when the removed version is already removed" do
+      let(:version_to_remove_status) { "Removed" }
+
+      it "should not change anything" do
+        described_class.deprecate_versions(project, [{ number: version_number_to_not_remove, published_at: nil, original_license: nil }])
+
+        actual_version_to_not_remove = project.versions.find_by(number: version_number_to_not_remove)
+        expect(actual_version_to_not_remove.status).to be nil
+        expect(actual_version_to_not_remove.updated_at).to eq(old_updated_at)
+
+        actual_version_to_remove = project.versions.find_by(number: version_number_to_remove)
+        expect(actual_version_to_remove.status).to eq("Removed")
+        expect(actual_version_to_remove.updated_at).to eq(old_updated_at)
+      end
     end
   end
 
