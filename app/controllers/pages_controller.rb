@@ -14,6 +14,4 @@ class PagesController < ApplicationController
   end
 
   def terms; end
-
-  def terms; end
 end

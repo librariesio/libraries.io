@@ -340,7 +340,7 @@ describe Repository, type: :model do
     end
   end
 
-  describe "#sync_manifests" do
+  describe "#sync_manifest" do
     let(:repository) { create(:repository) }
     before do
       es_double = instance_double(

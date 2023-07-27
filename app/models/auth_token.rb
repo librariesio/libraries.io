@@ -67,20 +67,20 @@ class AuthToken < ApplicationRecord
   def self.new_v4_client(token)
     token ||= AuthToken.token
     http_adapter = GraphQL::Client::HTTP.new("https://api.github.com/graphql") do
-      @@token = token
+      @token = token
 
+      # rubocop: disable Lint/NestedMethodDefinition:
       def headers(_context)
         {
-          "Authorization" => "Bearer #{@@token}",
+          "Authorization" => "Bearer #{@token}",
         }
       end
+      # rubocop: enable Lint/NestedMethodDefinition:
     end
 
     # create new client with HTTP adapter set to use token and the loaded GraphQL schema
     GraphQL::Client.new(schema: Rails.application.config.graphql.schema, execute: http_adapter)
   end
-
-  private
 
   def self.find_token(api_version)
     return @auth_token if @auth_token&.high_rate_limit?(api_version)
@@ -89,6 +89,8 @@ class AuthToken < ApplicationRecord
     @auth_token = auth_token if auth_token.high_rate_limit?(api_version)
     find_token(api_version)
   end
+
+  private
 
   def v4_remaining_rate
     query_result = v4_github_client.query(V4RateLimitQuery)

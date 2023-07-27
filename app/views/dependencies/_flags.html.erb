@@ -1,8 +1,8 @@
-<% if dependency.project.is_removed? %>
+<% if dependency.project.removed? %>
   <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: "This package is no longer available on #{dependency.project.platform}" %>
-<% elsif dependency.project.is_deprecated? %>
+<% elsif dependency.project.deprecated? %>
   <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This package has been marked as deprecated' %>
-<% elsif dependency.project.is_unmaintained? %>
+<% elsif dependency.project.unmaintained? %>
   <%= fa_icon 'exclamation-triangle', class: 'text-danger tip', title: 'This package is no longer maintained' %>
 <% elsif dependency.outdated? %>
   <%= fa_icon 'exclamation-triangle', class: 'text-warning tip', title: 'Out of date version' %>

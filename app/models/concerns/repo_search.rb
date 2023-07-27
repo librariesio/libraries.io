@@ -3,12 +3,12 @@
 module RepoSearch
   extend ActiveSupport::Concern
 
-  included do
+  included do # rubocop: disable Metrics/BlockLength
     include Elasticsearch::Model
 
     index_name "repositories-#{Rails.env}"
 
-    FIELDS = ["full_name^2", "exact_name^2", "description", "homepage", "language", "license"].freeze
+    FIELDS = ["full_name^2", "exact_name^2", "description", "homepage", "language", "license"].freeze # rubocop: disable Lint/ConstantDefinitionInBlock
 
     settings index: { number_of_shards: 3, number_of_replicas: 1 } do
       mapping do

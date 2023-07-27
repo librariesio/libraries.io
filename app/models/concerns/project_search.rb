@@ -9,12 +9,12 @@ module ProjectSearch
 
   extend ActiveSupport::Concern
 
-  included do
+  included do # rubocop: disable Metrics/BlockLength
     include Elasticsearch::Model
 
     index_name "projects-#{Rails.env}"
 
-    FIELDS = ["name^2", "exact_name^2", "extra_searchable_names^2", "repo_name", "description", "homepage", "language", "keywords_array", "normalized_licenses", "platform"].freeze
+    FIELDS = ["name^2", "exact_name^2", "extra_searchable_names^2", "repo_name", "description", "homepage", "language", "keywords_array", "normalized_licenses", "platform"].freeze # rubocop: disable Lint/ConstantDefinitionInBlock
 
     settings index: { number_of_shards: 3, number_of_replicas: 1 } do
       mapping do

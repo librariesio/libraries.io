@@ -38,6 +38,7 @@ Metrics/PerceivedComplexity:
   Enabled: false
 Metrics/ParameterLists:
   Max: 7
+  CountKeywordArgs: false
 Style/Documentation:
   Enabled: false
 

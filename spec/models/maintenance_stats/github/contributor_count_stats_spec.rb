@@ -19,7 +19,7 @@ describe MaintenanceStats::Stats::Github::V3ContributorCountStats do
     end
 
     it "should get timed contributor counts for the last year from the request" do
-      results = stat.get_stats
+      results = stat.fetch_stats
 
       expected_keys = %i[v3_last_week_contributors v3_last_4_weeks_contributors v3_last_8_weeks_contributors v3_last_52_weeks_contributors]
 
@@ -42,7 +42,7 @@ describe MaintenanceStats::Stats::Github::V3ContributorCountStats do
     end
 
     it "should handle no data from query" do
-      results = stat.get_stats
+      results = stat.fetch_stats
 
       expected_keys = %i[v3_last_week_contributors v3_last_4_weeks_contributors v3_last_8_weeks_contributors v3_last_52_weeks_contributors]
 

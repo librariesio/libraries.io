@@ -57,10 +57,10 @@ module PackageManager
     def self.dependencies(name, version, _mapped_project)
       get("http://package.elm-lang.org/packages/#{name}/#{version}/elm.json")
         .fetch("dependencies", {})
-        .map do |name, requirement|
+        .map do |response_name, response_requirement|
           {
-            project_name: name,
-            requirements: requirement,
+            project_name: response_name,
+            requirements: response_requirement,
             kind: "runtime",
             platform: self.name.demodulize,
           }

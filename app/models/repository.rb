@@ -69,7 +69,7 @@ class Repository < ApplicationRecord
   include RepositorySourceRank
 
   # eager load this module to avoid clashing with Gitlab gem in development
-  RepositoryHost::Gitlab
+  RepositoryHost::Gitlab # rubocop: disable Lint/Void
 
   STATUSES = ["Active", "Deprecated", "Unmaintained", "Help Wanted", "Removed"].freeze
 
@@ -289,7 +289,7 @@ class Repository < ApplicationRecord
       download_tags(token)
       download_contributions(token)
       download_manifests(token)
-      update_source_rank(true)
+      update_source_rank(force: true)
     end
     update(last_synced_at: Time.now)
   end

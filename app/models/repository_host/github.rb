@@ -229,20 +229,20 @@ module RepositoryHost
       metrics = []
 
       result = MaintenanceStats::Queries::Github::RepoReleasesQuery.new(v4_client).query(params: { owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 1.year })
-      metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).get_stats
+      metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).fetch_stats
 
       result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: { owner: repository.owner_name, repo_name: repository.project_name, start_date: now })
-      metrics << MaintenanceStats::Stats::Github::CommitsStat.new(result).get_stats unless check_for_v4_error_response(result)
+      metrics << MaintenanceStats::Stats::Github::CommitsStat.new(result).fetch_stats unless check_for_v4_error_response(result)
 
       begin
         result = MaintenanceStats::Queries::Github::RepositoryContributorStatsQuery.new(v3_client).query(params: { full_name: repository.full_name })
-        metrics << MaintenanceStats::Stats::Github::V3ContributorCountStats.new(result).get_stats
+        metrics << MaintenanceStats::Stats::Github::V3ContributorCountStats.new(result).fetch_stats
       rescue Octokit::Error => e
         Rails.logger.warn(e.message)
       end
 
       result = MaintenanceStats::Queries::Github::IssuesQuery.new(v4_client).query(params: { owner: repository.owner_name, repo_name: repository.project_name, start_date: now })
-      metrics << MaintenanceStats::Stats::Github::IssueStats.new(result).get_stats unless check_for_v4_error_response(result)
+      metrics << MaintenanceStats::Stats::Github::IssueStats.new(result).fetch_stats unless check_for_v4_error_response(result)
 
       add_metrics_to_repo(metrics)
 

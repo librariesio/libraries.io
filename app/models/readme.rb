@@ -52,7 +52,7 @@ class Readme < ApplicationRecord
   end
 
   def to_s
-    @body ||= Nokogiri::HTML(html_body).css("body").try(:inner_html)
+    @to_s ||= Nokogiri::HTML(html_body).css("body").try(:inner_html)
   end
 
   def plain_text
@@ -78,7 +78,7 @@ class Readme < ApplicationRecord
       rel_url = d.get_attribute("href")
       begin
         d.set_attribute("href", URI.join(repository.blob_url, rel_url)) if rel_url.present? && !rel_url.match(/^#/) && URI.parse(rel_url)
-      rescue NoMethodError, URI::InvalidURIError, URI::InvalidComponentError
+      rescue NoMethodError, URI::InvalidURIError, URI::InvalidComponentError # rubocop: disable Lint/SuppressedException
       end
     end
     doc.xpath("//img").each do |d|
@@ -86,7 +86,7 @@ class Readme < ApplicationRecord
 
       begin
         d.set_attribute("src", URI.join(repository.raw_url, rel_url)) if rel_url.present? && URI.parse(rel_url)
-      rescue NoMethodError, URI::InvalidURIError, URI::InvalidComponentError
+      rescue NoMethodError, URI::InvalidURIError, URI::InvalidComponentError # rubocop: disable Lint/SuppressedException
       end
     end
     self.html_body = doc.to_s

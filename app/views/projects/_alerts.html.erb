@@ -4,15 +4,15 @@
   </div>
 <% end %>
 
-<% if @project.is_removed? %>
+<% if @project.removed? %>
   <div class="alert alert-danger" role="alert">
     <strong>This package has been removed from <%= @project.platform %></strong> and cannot be used anymore.
   </div>
-<% elsif @project.is_deprecated? %>
+<% elsif @project.deprecated? %>
   <div class="alert alert-danger" role="alert">
     <strong>This package has been marked as deprecated</strong> you can use it but you might want to use an alternative.
   </div>
-<% elsif @project.is_unmaintained? %>
+<% elsif @project.unmaintained? %>
   <div class="alert alert-danger" role="alert">
     <strong>This package has been marked as unmaintained</strong> you can use it but it is no longer being updated.
   </div>

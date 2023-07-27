@@ -45,7 +45,7 @@ on_worker_boot do
   ActiveRecord::Base.establish_connection
 
   uri = ENV["REDISCLOUD_URL"] || "redis://localhost:6379/"
-  REDIS = Redis.new(url: uri, driver: :hiredis)
+  REDIS = Redis.new(url: uri, driver: :hiredis) # rubocop: disable Lint/ConstantDefinitionInBlock
 end
 
 # Allow puma to be restarted by `rails restart` command.

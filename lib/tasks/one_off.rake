@@ -91,7 +91,7 @@ namespace :one_off do
 
   # this can be run repeatedly until each package has been checked
   desc "Backfill NuGet packages that might have been missed while using a deprecated API"
-  task backfill_missing_nuget_packages_2023_03: :environment do
+  task backfill_missing_nuget_packages_2023_03: :environment do # rubocop: disable Naming/VariableNumber
     packages = File.readlines("lib/tasks/input/2023-03-nuget_packages_to_check.txt").map(&:strip)
 
     processed = 0

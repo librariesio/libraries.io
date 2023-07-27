@@ -9,7 +9,7 @@ module MaintenanceStats
           @now = DateTime.current
         end
 
-        def get_stats
+        def fetch_stats
           {
             last_week_commits: count_up_commits(@results, @now - 7),
             last_month_commits: count_up_commits(@results, @now - 30),

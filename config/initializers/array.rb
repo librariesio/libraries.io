@@ -3,13 +3,13 @@
 class Array
   # Generates a single quoted postgres array string format. This is the format used
   # to insert or update stuff in the database.
-  def to_postgres_array(omit_quotes = false)
+  def to_postgres_array(omit_quotes: false)
     result = "#{omit_quotes ? '' : "'"}{"
 
     result << collect do |value|
       case value
       when Array
-        value.to_postgres_array(true)
+        value.to_postgres_array(omit_quotes: true)
       when String
         value = value.gsub(/\\/, '\&\&')
         value = value.gsub(/'/, "''")
@@ -17,7 +17,7 @@ class Array
         value = "\"#{value}\""
         value
       when NilClass
-        value = "NULL"
+        "NULL"
       else
         value
       end

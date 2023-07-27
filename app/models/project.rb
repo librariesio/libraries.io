@@ -412,15 +412,15 @@ class Project < ApplicationRecord
   end
 
   def self.license(license)
-    where("projects.normalized_licenses @> ?", Array(license).to_postgres_array(true))
+    where("projects.normalized_licenses @> ?", Array(license).to_postgres_array(omit_quotes: true))
   end
 
   def self.keyword(keyword)
-    where("projects.keywords_array @> ?", Array(keyword).to_postgres_array(true))
+    where("projects.keywords_array @> ?", Array(keyword).to_postgres_array(omit_quotes: true))
   end
 
   def self.keywords(keywords)
-    where("projects.keywords_array && ?", Array(keywords).to_postgres_array(true))
+    where("projects.keywords_array && ?", Array(keywords).to_postgres_array(omit_quotes: true))
   end
 
   def self.language(language)

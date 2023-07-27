@@ -66,7 +66,7 @@ module RepositoryHost
     end
 
     def self.format(host_type)
-      case host_type.try(:downcase)
+      case host_type.try(:downcase) # rubocop: disable Style/HashLikeCase
       when "github"
         "GitHub"
       when "gitlab"

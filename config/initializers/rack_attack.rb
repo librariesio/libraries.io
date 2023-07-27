@@ -44,4 +44,4 @@ class Rack::Attack
   end
 end
 
-require "subscribers/rack-attack"
+require "subscribers/rack_attack"

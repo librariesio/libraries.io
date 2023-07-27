@@ -3,7 +3,7 @@
 module RepositorySourceRank
   extend ActiveSupport::Concern
 
-  def update_source_rank(force = false)
+  def update_source_rank(force: false)
     return if !force && rank_recently_updated?
 
     self.rank = source_rank
@@ -38,9 +38,9 @@ module RepositorySourceRank
       stars: log_scale(stars),
       contributors: (log_scale(contributions_count) / 2.0).ceil,
       any_outdated_dependencies: any_outdated_dependencies? ? -1 : 0,
-      is_deprecated: is_deprecated? ? -5 : 0,
-      is_unmaintained: is_unmaintained? ? -5 : 0,
-      is_removed: is_removed? ? -5 : 0,
+      is_deprecated: deprecated? ? -5 : 0,
+      is_unmaintained: unmaintained? ? -5 : 0,
+      is_removed: removed? ? -5 : 0,
     }
   end
 

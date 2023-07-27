@@ -87,14 +87,14 @@ describe ProjectScoreCalculator do
   describe "#dependencies_count_score" do
     context "if project doesn't have any versions" do
       it "should be 100" do
-        allow(calculator).to receive(:has_versions?) { false }
+        allow(calculator).to receive(:versions?) { false }
         expect(calculator.dependencies_count_score).to eq(100)
       end
     end
 
     context "if project has over 100 dependencies" do
       it "should be 0" do
-        allow(calculator).to receive(:has_versions?) { true }
+        allow(calculator).to receive(:versions?) { true }
         allow(calculator).to receive(:direct_dependencies) { (1..101).to_a }
         expect(calculator.dependencies_count_score).to eq(0)
       end
@@ -102,7 +102,7 @@ describe ProjectScoreCalculator do
 
     context "if project has less than 100 dependencies" do
       it "should be one lower for every dep" do
-        allow(calculator).to receive(:has_versions?) { true }
+        allow(calculator).to receive(:versions?) { true }
         allow(calculator).to receive(:direct_dependencies) { (1..10).to_a }
         expect(calculator.dependencies_count_score).to eq(90)
       end
@@ -424,19 +424,19 @@ describe ProjectScoreCalculator do
       let(:project) { build(:project, platform: "Rubygems") }
 
       it "should return nil for projects with no versions" do
-        allow(calculator).to receive(:has_versions?) { false }
+        allow(calculator).to receive(:versions?) { false }
         expect(calculator.outdated_dependencies_score).to eq(nil)
       end
 
       it "should return 100 for projects no outdated dependencies" do
-        allow(calculator).to receive(:has_versions?) { true }
+        allow(calculator).to receive(:versions?) { true }
         allow(calculator).to receive(:outdated_dependencies) { [] }
         allow(calculator).to receive(:direct_dependencies) { [build(:dependency)] }
         expect(calculator.outdated_dependencies_score).to eq(100)
       end
 
       it "should return 50 for projects where half of dependencies are outdated" do
-        allow(calculator).to receive(:has_versions?) { true }
+        allow(calculator).to receive(:versions?) { true }
         allow(calculator).to receive(:outdated_dependencies) { [build(:dependency)] }
         allow(calculator).to receive(:direct_dependencies) { [build(:dependency), build(:dependency)] }
         expect(calculator.outdated_dependencies_score).to eq(50)

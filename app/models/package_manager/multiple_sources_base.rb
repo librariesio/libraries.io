@@ -46,7 +46,7 @@ module PackageManager
                    else
                      db_project.versions.find_by(number: version)
                    end
-      repository_source = db_version&.repository_sources&.first.presence || "default"
+      db_version&.repository_sources&.first.presence || "default"
     end
   end
 end

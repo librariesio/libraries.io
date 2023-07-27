@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class GithubHookHandler
-  VALID_ISSUE_ACTIONS = ["opened", "closed", "reopened", "labeled" "unlabeled", "edited"].freeze
+  VALID_ISSUE_ACTIONS = %w[opened closed reopened labeled unlabeled edited].freeze
 
   def run(event, payload)
     case event

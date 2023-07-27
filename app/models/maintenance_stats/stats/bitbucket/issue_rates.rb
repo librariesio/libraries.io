@@ -4,7 +4,7 @@ module MaintenanceStats
   module Stats
     module Bitbucket
       class IssueRates < MaintenanceStats::Stats::BaseStat
-        def get_stats
+        def fetch_stats
           {
             one_year_open_issues: open_issues_count,
             one_year_closed_issues: closed_issues_count,

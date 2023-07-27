@@ -118,7 +118,7 @@ module PackageManager
 
       map_dependencies(vers.fetch("dependencies", {}), "runtime") +
         map_dependencies(vers.fetch("devDependencies", {}), "Development") +
-        map_dependencies(vers.fetch("optionalDependencies", {}), "Optional", true)
+        map_dependencies(vers.fetch("optionalDependencies", {}), "Optional", optional: true)
     end
   end
 end

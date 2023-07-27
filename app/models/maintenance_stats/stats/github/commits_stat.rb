@@ -4,7 +4,7 @@ module MaintenanceStats
   module Stats
     module Github
       class CommitsStat < BaseStat
-        def get_stats
+        def fetch_stats
           {
             last_week_commits: pull_out_commit_count(@results, "lastWeek"),
             last_month_commits: pull_out_commit_count(@results, "lastMonth"),
@@ -27,7 +27,7 @@ module MaintenanceStats
       end
 
       class V3CommitsStat < BaseStat
-        def get_stats
+        def fetch_stats
           {
             v3_last_week_commits: count_up_commits(0, 0),
             v3_last_4_weeks_commits: count_up_commits(0, 3),

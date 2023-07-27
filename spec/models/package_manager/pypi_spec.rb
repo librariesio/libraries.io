@@ -319,7 +319,7 @@ describe PackageManager::Pypi do
     end
   end
 
-  describe ".has_canonical_pypi_name?" do
+  describe ".canonical_pypi_name?" do
     let(:json_api_project) do
       instance_double(
         PackageManager::Pypi::JsonApiProject,
@@ -337,7 +337,7 @@ describe PackageManager::Pypi do
 
     context "with remote data and matching name" do
       it "returns true" do
-        expect(described_class.has_canonical_pypi_name?(name)).to eq(true)
+        expect(described_class.canonical_pypi_name?(name)).to eq(true)
       end
     end
 
@@ -345,7 +345,7 @@ describe PackageManager::Pypi do
       let(:present) { false }
 
       it "returns false" do
-        expect(described_class.has_canonical_pypi_name?(name)).to eq(false)
+        expect(described_class.canonical_pypi_name?(name)).to eq(false)
       end
     end
 
@@ -353,7 +353,7 @@ describe PackageManager::Pypi do
       let(:api_project_name) { "PROJECT" }
 
       it "returns false" do
-        expect(described_class.has_canonical_pypi_name?(name)).to eq(false)
+        expect(described_class.canonical_pypi_name?(name)).to eq(false)
       end
     end
   end

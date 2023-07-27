@@ -249,7 +249,7 @@ module PackageManager
 
     def self.latest_version(name)
       xml_metadata = maven_metadata(name)
-      latest = Nokogiri::XML(xml_metadata)
+      Nokogiri::XML(xml_metadata)
         .css("versioning > latest, versioning > release, metadata > version")
         .map(&:text)
         .first

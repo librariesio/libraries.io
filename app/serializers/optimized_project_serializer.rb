@@ -26,7 +26,7 @@ class OptimizedProjectSerializer
     status
   ].freeze
 
-  def initialize(projects, requested_name_map, internal_key = false)
+  def initialize(projects, requested_name_map, internal_key: false)
     @projects = projects
     @requested_name_map = requested_name_map
     @internal_key = internal_key
@@ -42,7 +42,6 @@ class OptimizedProjectSerializer
 
   def serialize_project(project)
     Datadog::Tracing.trace("optimized_project_serializer#serialize_project") do |_span, _trace|
-      name = @requested_name_map[[project.platform, project.name]]
       project
         .attributes
         .slice(*PROJECT_ATTRIBUTES)

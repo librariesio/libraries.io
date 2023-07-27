@@ -28,6 +28,7 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
     end
   end
 
+  # rubocop: disable Lint/UnusedMethodArgument
   def self.update(name, sync_version:, force_sync_dependencies: false)
     raw_project = project(
       name,
@@ -45,6 +46,7 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
 
     finalize_db_project(db_project)
   end
+  # rubocop: enable Lint/UnusedMethodArgument
 
   def self.latest_version(name)
     group_name, artifact = name.split(NAME_DELIMITER)

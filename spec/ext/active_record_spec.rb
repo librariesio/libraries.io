@@ -22,11 +22,11 @@ describe ActiveRecord do
 
     begin
       current_conn.with_statement_timeout(123_456) do |conn|
-        expect(conn.get_statement_timeout).to eq("123456s")
-        expect(other_conn.get_statement_timeout).to eq("5min")
+        expect(conn.fetch_statement_timeout).to eq("123456s")
+        expect(other_conn.fetch_statement_timeout).to eq("5min")
       end
-      expect(current_conn.get_statement_timeout).to eq("5min")
-      expect(other_conn.get_statement_timeout).to eq("5min")
+      expect(current_conn.fetch_statement_timeout).to eq("5min")
+      expect(other_conn.fetch_statement_timeout).to eq("5min")
     ensure
       ActiveRecord::Base.connection_pool.checkin(other_conn)
     end

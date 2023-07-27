@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 module Status
-  def is_deprecated?
+  def deprecated?
     status == "Deprecated"
   end
 
-  def is_removed?
+  def removed?
     status == "Removed"
   end
 
-  def is_unmaintained?
+  def unmaintained?
     status == "Unmaintained"
   end
 
   def maintained?
-    !is_deprecated? && !is_removed? && !is_unmaintained?
+    !deprecated? && !removed? && !unmaintained?
   end
 end

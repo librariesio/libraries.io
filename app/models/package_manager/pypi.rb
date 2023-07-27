@@ -141,7 +141,7 @@ module PackageManager
     end
 
     # checks to see if the package exists on PyPI and the name matches the canonical name
-    def self.has_canonical_pypi_name?(name)
+    def self.canonical_pypi_name?(name)
       json_api_project = project(name)
 
       json_api_project.present? && json_api_project.name == name
