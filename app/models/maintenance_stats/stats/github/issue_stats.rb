@@ -9,7 +9,7 @@ module MaintenanceStats
           @now = DateTime.current
         end
 
-        def get_stats
+        def fetch_stats
           return {} if @results.nil?
 
           {

@@ -3,17 +3,17 @@
 <%= content_for :meta, render_meta(@repository) %>
 <% repo = @repository %>
 
-<% if !repo.private? && repo.is_removed? %>
+<% if !repo.private? && repo.removed? %>
 <div class="alert alert-danger" role="alert">
   <%= fa_icon 'exclamation-triangle' %>
   This repository has been removed and cannot be used anymore.
 </div>
-<% elsif !repo.private? && repo.is_deprecated? %>
+<% elsif !repo.private? && repo.deprecated? %>
 <div class="alert alert-danger" role="alert">
   <%= fa_icon 'exclamation-triangle' %>
   This repository has been marked as deprecated and is not recommended for use anymore.
 </div>
-<% elsif !repo.private? && repo.is_unmaintained? %>
+<% elsif !repo.private? && repo.unmaintained? %>
 <div class="alert alert-danger" role="alert">
   <%= fa_icon 'exclamation-triangle' %>
   This repository has been marked as unmaintained and is no longer being updated.

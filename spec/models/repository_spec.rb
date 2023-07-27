@@ -340,12 +340,12 @@ describe Repository, type: :model do
     end
   end
 
-  describe "#sync_manifests" do
+  describe "#sync_manifest" do
     let(:repository) { create(:repository) }
     before do
       es_double = instance_double(
         "Elasticsearch::Model::Indexing::InstanceMethods",
-        index_document: ->() { true }
+        index_document: -> { true }
       )
       expect_any_instance_of(Repository)
         .to receive(:__elasticsearch__)
@@ -356,11 +356,11 @@ describe Repository, type: :model do
     it "should create a manifest with deps if it doesn't exist" do
       expect do
         repository.sync_manifest({
-          platform: "cargo",
-          path: "Cargo.lock",
-          dependencies: [{name: "Inflector", requirement: "0.11.4", type: "runtime"}],
-          sha: "abcd1234",
-        })
+                                   platform: "cargo",
+                                   path: "Cargo.lock",
+                                   dependencies: [{ name: "Inflector", requirement: "0.11.4", type: "runtime" }],
+                                   sha: "abcd1234",
+                                 })
       end.to change { repository.manifests.count }.by(1)
 
       manifest = repository.manifests.first
@@ -372,12 +372,12 @@ describe Repository, type: :model do
     it "should not raise an exception when the manifest had an error" do
       expect do
         repository.sync_manifest({
-          platform: "cargo",
-          path: "Cargo.lock",
-          dependencies: nil,
-          sha: "abcd1234",
-          error_message: "Cargo.lock: key not found: \"dev-dependencies\"\nDid you mean? \"dependencies\""
-        })
+                                   platform: "cargo",
+                                   path: "Cargo.lock",
+                                   dependencies: nil,
+                                   sha: "abcd1234",
+                                   error_message: "Cargo.lock: key not found: \"dev-dependencies\"\nDid you mean? \"dependencies\"",
+                                 })
       end.to change { repository.manifests.count }.by(0)
     end
   end

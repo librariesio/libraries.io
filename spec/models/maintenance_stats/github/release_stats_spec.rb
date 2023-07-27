@@ -25,7 +25,7 @@ describe MaintenanceStats::Stats::Github::ReleaseStats do
     end
 
     it "should have repository release stats" do
-      results = stat.get_stats
+      results = stat.fetch_stats
 
       expected_keys = %i[last_release_date last_week_releases last_month_releases last_two_month_releases last_year_releases]
 
@@ -58,7 +58,7 @@ describe MaintenanceStats::Stats::Github::ReleaseStats do
     end
 
     it "should handle no data from query" do
-      results = stat.get_stats
+      results = stat.fetch_stats
 
       expect(results).to be {}
     end

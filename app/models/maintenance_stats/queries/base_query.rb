@@ -16,9 +16,11 @@ module MaintenanceStats
         raise Error("Client type is not set or invalid") unless valid_client_type?
       end
 
+      # rubocop: disable Lint/UnusedMethodArgument
       def query(params: {})
         raise NoMethodError("This should be overwritten")
       end
+      # rubocop: enable Lint/UnusedMethodArgument
 
       def self.client_type
         raise NoMethodError("This should be overwritten with :v3 or :v4")

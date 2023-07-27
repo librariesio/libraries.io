@@ -256,13 +256,13 @@ describe PackageManager::Maven do
     context "with an infinite relocation loop" do
       it "terminates" do
         redirect_pom = Ox.parse("<project><distributionManagement><relocation><groupId>group_id_2</groupId></relocation></distributionManagement></project>")
-        redirect_pom_2 = Ox.parse("<project><distributionManagement><relocation><groupId>group_id</groupId></relocation></distributionManagement></project>")
+        redirect_pom2 = Ox.parse("<project><distributionManagement><relocation><groupId>group_id</groupId></relocation></distributionManagement></project>")
 
         allow(described_class).to receive(:download_pom)
-          .and_return(redirect_pom, redirect_pom_2)
+          .and_return(redirect_pom, redirect_pom2)
 
         expect(described_class.get_pom("group_id", "artifact_id", "version"))
-          .to eq(redirect_pom_2)
+          .to eq(redirect_pom2)
       end
     end
   end
@@ -280,7 +280,7 @@ describe PackageManager::Maven do
       context "with http URL" do
         it "returns those licenses" do
           pom = Ox.parse(
-            <<-EOF
+            <<-XML
               <?xml version="1.0"?>
               <!--
                  Licensed to the Apache Software Foundation (ASF) under one or more
@@ -299,7 +299,7 @@ describe PackageManager::Maven do
                  limitations under the License.
               -->
               <project></project>
-            EOF
+            XML
           )
 
           expect(described_class.licenses(pom)).to eq(["Apache-2.0"])
@@ -309,7 +309,7 @@ describe PackageManager::Maven do
       context "with https URL" do
         it "returns those licenses" do
           pom = Ox.parse(
-            <<-EOF
+            <<-XML
               <?xml version="1.0"?>
               <!--
                  Licensed to the Apache Software Foundation (ASF) under one or more
@@ -328,7 +328,7 @@ describe PackageManager::Maven do
                  limitations under the License.
               -->
               <project></project>
-            EOF
+            XML
           )
 
           expect(described_class.licenses(pom)).to eq(["Apache-2.0"])

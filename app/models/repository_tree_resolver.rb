@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RepositoryTreeResolver
-  attr_accessor :project_names, :license_names, :tree
+  attr_accessor :project_names, :license_names
 
   def initialize(repository, date = nil)
     @repository = repository

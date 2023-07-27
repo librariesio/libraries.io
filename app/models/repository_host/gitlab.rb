@@ -161,16 +161,6 @@ module RepositoryHost
       end
     end
 
-    private
-
-    def self.api_client(token = nil)
-      ::Gitlab.client(endpoint: "https://gitlab.com/api/v4", private_token: token || ENV["GITLAB_KEY"])
-    end
-
-    def api_client(_token = nil)
-      self.class.api_client
-    end
-
     def self.fetch_repo(full_name, token = nil)
       project = api_client(token).project(full_name)
       repo_hash = project.to_hash.with_indifferent_access.slice(:id, :description, :created_at, :name, :open_issues_count, :forks_count, :default_branch)
@@ -195,6 +185,16 @@ module RepositoryHost
                        })
     rescue *IGNORABLE_EXCEPTIONS
       nil
+    end
+
+    def self.api_client(token = nil)
+      ::Gitlab.client(endpoint: "https://gitlab.com/api/v4", private_token: token || ENV["GITLAB_KEY"])
+    end
+
+    private
+
+    def api_client(_token = nil)
+      self.class.api_client
     end
   end
 end

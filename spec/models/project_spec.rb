@@ -246,7 +246,6 @@ describe Project, type: :model do
   end
 
   describe "#check_status" do
-
     before { travel_to DateTime.current }
 
     context "entire project deprecated with message" do

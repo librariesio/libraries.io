@@ -184,14 +184,14 @@ class ProjectScoreCalculator
 
   def dependencies_count_score
     return nil unless platform_class::HAS_DEPENDENCIES
-    return 100 unless has_versions?
+    return 100 unless versions?
     return 0 if direct_dependencies.length > 100
 
     100 - direct_dependencies.length
   end
 
   def direct_dependencies_score
-    return 100 unless has_versions?
+    return 100 unless versions?
 
     dep_scores = direct_dependencies.map(&:score).compact
     return 100 if dep_scores.empty?
@@ -262,7 +262,7 @@ class ProjectScoreCalculator
     @project.platform_class
   end
 
-  def has_versions?
+  def versions?
     @project.versions_count > 0
   end
 
@@ -271,14 +271,14 @@ class ProjectScoreCalculator
   end
 
   def direct_dependencies
-    return [] unless has_versions?
+    return [] unless versions?
     return [] if latest_version.nil?
 
     latest_version.runtime_dependencies
   end
 
   def published_releases
-    @published_releases ||= has_versions? ? @project.versions : @project.published_tags
+    @published_releases ||= versions? ? @project.versions : @project.published_tags
   end
 
   def inactive_statuses

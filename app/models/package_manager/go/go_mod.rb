@@ -23,7 +23,7 @@ class PackageManager::Go
         end
       end
     end
-    
+
     # Scans contents for retract directives parses their contents
     #
     # @return [Array<String, Array<String, String>>] an array consisting of:
@@ -52,13 +52,13 @@ class PackageManager::Go
     def dependencies
       Bibliothecary::Parsers::Go.parse_go_mod(mod_contents)
         .map do |dep|
-        {
-          project_name: dep[:name],
-          requirements: dep[:requirement],
-          kind: dep[:type],
-          platform: "Go",
-        }
-      end
+          {
+            project_name: dep[:name],
+            requirements: dep[:requirement],
+            kind: dep[:type],
+            platform: "Go",
+          }
+        end
     end
 
     # Best attempt to remove comments and extraneous whitespace

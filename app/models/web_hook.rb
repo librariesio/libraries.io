@@ -66,7 +66,7 @@ class WebHook < ApplicationRecord
     serialized = ProjectUpdatedSerializer.new(project).as_json
     send_payload({
                    event: "project_updated",
-                   project: serialized
+                   project: serialized,
                  })
   end
 
@@ -85,15 +85,13 @@ class WebHook < ApplicationRecord
                           headers: {
                             "Content-Type" => "application/json",
                             "Accept-Encoding" => "application/json",
-                            "X-Libraries-Signature" => signature
+                            "X-Libraries-Signature" => signature,
                           })
   end
 
   def send_payload(data, ignore_errors: false)
     response = request(data).run
     update(last_sent_at: Time.now.utc, last_response: response.response_code)
-    unless response.success? || ignore_errors
-      raise StandardError, "webhook #{id} failed; timed_out=#{response.timed_out?} code=#{response.code}"
-    end
+    raise StandardError, "webhook #{id} failed; timed_out=#{response.timed_out?} code=#{response.code}" unless response.success? || ignore_errors
   end
 end

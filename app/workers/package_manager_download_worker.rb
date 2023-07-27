@@ -62,6 +62,8 @@ class PackageManagerDownloadWorker
     swiftpm: PackageManager::SwiftPM,
   }.freeze
 
+  # rubocop: disable Style/OptionalBooleanParameter
+  # rubocop: disable Metrics/ParameterLists
   def perform(platform_name, name, version = nil, source = "unknown", requeue_count = 0, force_sync_dependencies = false)
     key, platform = get_platform(platform_name)
     name = name.to_s.strip
@@ -88,6 +90,8 @@ class PackageManagerDownloadWorker
       end
     end
   end
+  # rubocop: enable Style/OptionalBooleanParameter
+  # rubocop: enable Metrics/ParameterLists
 
   def get_platform(platform_name)
     key = begin

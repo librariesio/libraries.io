@@ -20,7 +20,7 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
     end
 
     it "should get timed commit count stats from the results" do
-      results = stat.get_stats
+      results = stat.fetch_stats
 
       expected_keys = %i[last_week_commits last_month_commits last_two_month_commits last_year_commits latest_commit]
 
@@ -32,7 +32,7 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
     end
 
     it "should get the latest commit date" do
-      results = stat.get_stats
+      results = stat.fetch_stats
 
       expected_keys = %i[last_week_commits last_month_commits last_two_month_commits last_year_commits latest_commit]
 
@@ -52,7 +52,7 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
     end
 
     it "should handle no data from query" do
-      results = stat.get_stats
+      results = stat.fetch_stats
 
       expected_keys = %i[last_week_commits last_month_commits last_two_month_commits last_year_commits latest_commit]
 
@@ -81,7 +81,7 @@ describe MaintenanceStats::Stats::Github::V3CommitsStat do
     end
 
     it "should get timed commit counts for the last year from the request" do
-      results = stat.get_stats
+      results = stat.fetch_stats
 
       expected_keys = %i[v3_last_week_commits v3_last_4_weeks_commits v3_last_8_weeks_commits v3_last_52_weeks_commits]
 
@@ -104,7 +104,7 @@ describe MaintenanceStats::Stats::Github::V3CommitsStat do
     end
 
     it "should handle no data from query" do
-      results = stat.get_stats
+      results = stat.fetch_stats
 
       expected_keys = %i[v3_last_week_commits v3_last_4_weeks_commits v3_last_8_weeks_commits v3_last_52_weeks_commits]
 

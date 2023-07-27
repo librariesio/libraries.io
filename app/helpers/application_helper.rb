@@ -253,12 +253,12 @@ module ApplicationHelper
   def meta_seo_tags_for(record)
     return { noindex: false } if record.nil?
 
-    hash = case record.class.name
-           when "Project", "Repository"
-             { noindex: record.is_removed? }
-           else
-             { noindex: false }
-           end
+    case record.class.name
+    when "Project", "Repository"
+      { noindex: record.removed? }
+    else
+      { noindex: false }
+    end
   end
 
   def tree_path(options = {})

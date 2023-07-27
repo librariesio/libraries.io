@@ -3,12 +3,12 @@
 module RepoSearch
   extend ActiveSupport::Concern
 
-  included do
+  included do # rubocop: disable Metrics/BlockLength
     include Elasticsearch::Model
 
     index_name "repositories-#{Rails.env}"
 
-    FIELDS = ["full_name^2", "exact_name^2", "description", "homepage", "language", "license"].freeze
+    FIELDS = ["full_name^2", "exact_name^2", "description", "homepage", "language", "license"].freeze # rubocop: disable Lint/ConstantDefinitionInBlock
 
     settings index: { number_of_shards: 3, number_of_replicas: 1 } do
       mapping do
@@ -42,12 +42,12 @@ module RepoSearch
 
     after_commit -> { __elasticsearch__.index_document if previous_changes.any? }, on: %i[create update], prepend: true
     after_commit lambda {
-                   begin
-                     __elasticsearch__.delete_document
-                   rescue StandardError
-                     nil
-                   end
-                 }, on: :destroy
+      begin
+        __elasticsearch__.delete_document
+      rescue StandardError
+        nil
+      end
+    }, on: :destroy
 
     def self.facets(options = {})
       Rails.cache.fetch "repo_facet:#{options.to_s.gsub(/\W/, '')}", expires_in: 1.hour, race_condition_ttl: 2.minutes do

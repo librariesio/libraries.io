@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PackageManager
   class RepositoryService
     # Use librariesio-url-parser to attempt to select one of the provided

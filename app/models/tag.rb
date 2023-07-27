@@ -36,11 +36,11 @@ class Tag < ApplicationRecord
   def send_notifications_async
     return if published_at && published_at < 1.week.ago
 
-    TagNotificationsWorker.perform_async(id) if has_projects?
+    TagNotificationsWorker.perform_async(id) if projects?
   end
 
   def send_notifications
-    if has_projects?
+    if projects?
       notify_subscribers
       notify_firehose
       notify_web_hooks
@@ -59,7 +59,7 @@ class Tag < ApplicationRecord
     end
   end
 
-  def has_projects?
+  def projects?
     repository && !repository.projects.without_versions.empty?
   end
 

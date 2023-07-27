@@ -24,25 +24,28 @@ describe WebHook, type: :model do
       it "sends the new_version event" do
         saved_body = nil
         WebMock.stub_request(:post, url)
-          .to_return { |request| saved_body = request.body; { status: 200 } }
+          .to_return do |request|
+            saved_body = request.body
+            { status: 200 }
+          end
 
         web_hook.send_new_version(version.project, version.project.platform, version, [])
 
         expect(saved_body).not_to be_nil
 
         assert_requested :post, url,
-                         headers: { 'X-Libraries-Signature' => compute_signature(saved_body, "") },
+                         headers: { "X-Libraries-Signature" => compute_signature(saved_body, "") },
                          body: be_json_string_matching(hash_including({
-                                                                        event: "new_version",
-                                                                        name: project.name,
-                                                                        platform: project.platform,
-                                                                        # is it silly to duplicate fields at toplevel and in
-                                                                        # this nested project hash? yes it is
-                                                                        project: hash_including({
-                                                                                                  name: project.name,
-                                                                                                  platform: project.platform,
-                                                                                                }.stringify_keys)
-                                                                      }.stringify_keys))
+                           event: "new_version",
+                           name: project.name,
+                           platform: project.platform,
+                           # is it silly to duplicate fields at toplevel and in
+                           # this nested project hash? yes it is
+                           project: hash_including({
+                             name: project.name,
+                             platform: project.platform,
+                           }.stringify_keys),
+                         }.stringify_keys))
       end
 
       it "does not raise an error if the receiver returns 500" do
@@ -69,7 +72,10 @@ describe WebHook, type: :model do
         it "sends the new_version event with a signature using the secret" do
           saved_body = nil
           WebMock.stub_request(:post, url)
-            .to_return { |request| saved_body = request.body; { status: 200 } }
+            .to_return do |request|
+              saved_body = request.body
+              { status: 200 }
+            end
 
           web_hook.send_new_version(version.project, version.project.platform, version, [])
 
@@ -79,7 +85,7 @@ describe WebHook, type: :model do
           expect(expected_signature).not_to eq(compute_signature(saved_body, ""))
 
           assert_requested :post, url,
-                           headers: { 'X-Libraries-Signature' => expected_signature }
+                           headers: { "X-Libraries-Signature" => expected_signature }
         end
       end
     end
@@ -92,15 +98,15 @@ describe WebHook, type: :model do
 
         assert_requested :post, url,
                          body: be_json_string_matching({
-                                                         event: "project_updated",
-                                                         project: {
-                                                           name: project.name,
-                                                           platform: project.platform,
-                                                           # this seems a little awkward but not sure what else to do to match
-                                                           # exactly how the serializer serializes this timestamp
-                                                           updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(project.updated_at)
-                                                         }.stringify_keys
-                                                       }.stringify_keys)
+                           event: "project_updated",
+                           project: {
+                             name: project.name,
+                             platform: project.platform,
+                             # this seems a little awkward but not sure what else to do to match
+                             # exactly how the serializer serializes this timestamp
+                             updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(project.updated_at),
+                           }.stringify_keys,
+                         }.stringify_keys)
       end
 
       it "raises an error if the receiver returns 500" do

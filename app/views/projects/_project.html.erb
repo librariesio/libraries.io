@@ -8,13 +8,13 @@
   </div>
 
   <small>
-    <% if project.is_removed? %>
+    <% if project.removed? %>
       <%= fa_icon('exclamation-triangle') %> This package is no longer available on <%= project.platform %>
-    <% elsif project.is_deprecated? %>
+    <% elsif project.deprecated? %>
       <%= fa_icon('exclamation-triangle') %> This package is deprecated -
       <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
       <%= timeago_tag project.latest_release_published_at %>
-    <% elsif project.is_unmaintained? %>
+    <% elsif project.unmaintained? %>
       <%= fa_icon('exclamation-triangle') %> This package is no longer maintained -
       <%= project.versions_count > 1 ? 'Updated' : 'Published' %>
       <%= timeago_tag project.latest_release_published_at %>

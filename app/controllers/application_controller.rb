@@ -203,7 +203,7 @@ class ApplicationController < ActionController::Base
         @tags = @repository.tags.published.order("published_at DESC").limit(10).to_a.sort
         if params[:number].present?
           @version = @repository.tags.published.find_by_name(params[:number])
-          raise ActiveRecord::RecordNotFound if @version.nil?
+          raise ActiveRecord::RecordNotFound if @version.nil? # rubocop: disable Metrics/BlockNesting
         end
       else
         @tags = []

@@ -18,7 +18,7 @@ when "default"
                  Version::API_FIELDS
                    .zip(v)
                    .to_h
-                   .tap { |v| v[:repository_sources] = [@project.platform] unless v[:repository_sources].present? }
+                   .tap { |vv| vv[:repository_sources] = [@project.platform] unless vv[:repository_sources].present? }
                end,
            })
     .merge(dependencies_fields)

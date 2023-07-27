@@ -19,7 +19,7 @@ describe MaintenanceStats::Stats::Bitbucket::CommitsStat do
       VCR.use_cassette("bitbucket/passlib") do
         commits = repository.retrieve_commits
 
-        stats = described_class.new(commits).get_stats
+        stats = described_class.new(commits).fetch_stats
 
         expected_keys = %i[last_week_commits last_month_commits last_two_month_commits last_year_commits latest_commit]
 

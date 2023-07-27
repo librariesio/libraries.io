@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'active_model_serializers'
+require "active_model_serializers"
 
 module ASMTrace
   def serializable_hash(*)

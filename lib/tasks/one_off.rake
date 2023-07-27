@@ -32,12 +32,12 @@ namespace :one_off do
       .where(platform: "Clojars")
       .where("name LIKE '%:%'")
       .find_each do |p|
-      good_name = p.name.gsub(/:/, "/")
-      bad_name = p.name
-      puts "Updating #{good_name}, deleting #{bad_name}"
-      PackageManager::Clojars.update(good_name)
-      p.destroy!
-    end
+        good_name = p.name.gsub(/:/, "/")
+        bad_name = p.name
+        puts "Updating #{good_name}, deleting #{bad_name}"
+        PackageManager::Clojars.update(good_name)
+        p.destroy!
+      end
   end
 
   desc "delete all hidden maven projects missing a group id"
@@ -91,7 +91,7 @@ namespace :one_off do
 
   # this can be run repeatedly until each package has been checked
   desc "Backfill NuGet packages that might have been missed while using a deprecated API"
-  task backfill_missing_nuget_packages_2023_03: :environment do
+  task backfill_missing_nuget_packages_2023_03: :environment do # rubocop: disable Naming/VariableNumber
     packages = File.readlines("lib/tasks/input/2023-03-nuget_packages_to_check.txt").map(&:strip)
 
     processed = 0
@@ -130,7 +130,7 @@ namespace :one_off do
   task :correct_pypi_dependencies_name_and_kind, %i[batch_size start] => :environment do |_t, args|
     pypi_versions = Version.where(project_id: Project.where(platform: "Pypi"))
 
-    batch_size = (args[:batch_size] && args[:batch_size].to_i) || 10000
+    batch_size = (args[:batch_size]&.to_i) || 10000
 
     num_batches = pypi_versions.count / batch_size
 
@@ -148,16 +148,16 @@ namespace :one_off do
           .joins(:project)
           .select("versions.number as project_version, projects.name as project_name")
           .each do |affected_version|
-          PackageManagerDownloadWorker.perform_in(
-            batch_versions_index.minute + batch_affected_versions_index.seconds,
-            "pypi",
-            affected_version.project_name,
-            affected_version.project_version,
-            "pypi-kind-backfill",
-            0,
-            true
-          )
-        end
+            PackageManagerDownloadWorker.perform_in(
+              batch_versions_index.minute + batch_affected_versions_index.seconds,
+              "pypi",
+              affected_version.project_name,
+              affected_version.project_version,
+              "pypi-kind-backfill",
+              0,
+              true
+            )
+          end
       end
     end
   end
@@ -168,7 +168,7 @@ namespace :one_off do
   task :correct_maven_dependencies_platforms, %i[batch_size start] => :environment do |_t, args|
     maven_versions = Version.where(project_id: Project.where(platform: "Maven"))
 
-    batch_size = (args[:batch_size] && args[:batch_size].to_i) || 10000
+    batch_size = (args[:batch_size]&.to_i) || 10000
 
     num_batches = maven_versions.count / batch_size
 

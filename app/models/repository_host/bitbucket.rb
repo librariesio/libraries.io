@@ -158,20 +158,10 @@ module RepositoryHost
 
       metrics = []
 
-      metrics << MaintenanceStats::Stats::Bitbucket::CommitsStat.new(repository.retrieve_commits).get_stats
+      metrics << MaintenanceStats::Stats::Bitbucket::CommitsStat.new(repository.retrieve_commits).fetch_stats
 
       add_metrics_to_repo(metrics)
       metrics
-    end
-
-    private
-
-    def self.api_client(token = nil)
-      BitBucket.new oauth_token: token || ENV["BITBUCKET_KEY"]
-    end
-
-    def api_client(token = nil)
-      self.class.api_client(token)
     end
 
     def self.fetch_repo(full_name, token = nil)
@@ -200,6 +190,16 @@ module RepositoryHost
                        })
     rescue *IGNORABLE_EXCEPTIONS
       nil
+    end
+
+    def self.api_client(token = nil)
+      BitBucket.new oauth_token: token || ENV["BITBUCKET_KEY"]
+    end
+
+    private
+
+    def api_client(token = nil)
+      self.class.api_client(token)
     end
   end
 end

@@ -43,13 +43,13 @@ namespace :projects do
   task :check_status, %i[max_num_of_projects_to_check batch_size] => :environment do |_task, args|
     exit if ENV["READ_ONLY"].present?
 
-    PLATFORMS_FOR_STATUS_CHECKS = %w[cargo cocoapods conda go maven npm nuget packagist pypi rubygems].freeze
+    platforms_for_status_checks = %w[cargo cocoapods conda go maven npm nuget packagist pypi rubygems].freeze
 
     max_num_of_projects_to_check = args.max_num_of_projects_to_check.nil? ? 150_000 : args.max_num_of_projects_to_check.to_i
     batch_size = args.batch_size.nil? ? 10000 : args.batch_size.to_i
 
     project_ids_to_check = Project
-      .platform(PLATFORMS_FOR_STATUS_CHECKS)
+      .platform(platforms_for_status_checks)
       .where("status_checked_at IS NULL OR status_checked_at < ?", 1.week.ago)
       .order("status_checked_at ASC NULLS FIRST")
       .limit(max_num_of_projects_to_check)
@@ -106,10 +106,10 @@ namespace :projects do
     %w[Alcatraz Bower Cargo Clojars CocoaPods CRAN
        Dub Elm Hackage Haxelib Hex Homebrew Inqlude
        Julia NPM Packagist Pypi Rubygems].each do |platform|
-      "PackageManager::#{platform}".constantize.import_new_async
+         "PackageManager::#{platform}".constantize.import_new_async
     rescue StandardError
       nil
-    end
+       end
   end
 
   desc "Slowly sync all pypi dependencies"

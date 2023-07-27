@@ -276,7 +276,7 @@ module PackageManager
       []
     end
 
-    def self.map_dependencies(deps, kind, optional = false, platform = db_platform)
+    def self.map_dependencies(deps, kind, optional: false, platform: db_platform)
       deps.map do |k, v|
         {
           project_name: k,

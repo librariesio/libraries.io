@@ -5,11 +5,11 @@ require "rails_helper"
 describe "projects" do
   describe "check_status" do
     context "with projects" do
-      let(:never_checked) { create(:project, name: "never_checked", platform: "Rubygems", status_checked_at: nil ) }
-      let(:checked_a_year_ago) { create(:project, name: "checked_a_year_ago", platform: "Rubygems", status_checked_at: 1.year.ago ) }
-      let(:checked_a_year_ago_invalid_platform) { create(:project, name: "checked_a_year_ago_invalid_platform", platform: "InvalidPlatform", status_checked_at: 1.year.ago ) }
-      let(:checked_a_month_ago) { create(:project, name: "checked_a_month_ago", platform: "Rubygems", status_checked_at: 1.month.ago ) }
-      let(:checked_a_day_ago) { create(:project, name: "checked_a_day_ago", platform: "Rubygems", status_checked_at: 1.day.ago ) }
+      let(:never_checked) { create(:project, name: "never_checked", platform: "Rubygems", status_checked_at: nil) }
+      let(:checked_a_year_ago) { create(:project, name: "checked_a_year_ago", platform: "Rubygems", status_checked_at: 1.year.ago) }
+      let(:checked_a_year_ago_invalid_platform) { create(:project, name: "checked_a_year_ago_invalid_platform", platform: "InvalidPlatform", status_checked_at: 1.year.ago) }
+      let(:checked_a_month_ago) { create(:project, name: "checked_a_month_ago", platform: "Rubygems", status_checked_at: 1.month.ago) }
+      let(:checked_a_day_ago) { create(:project, name: "checked_a_day_ago", platform: "Rubygems", status_checked_at: 1.day.ago) }
 
       before do
         travel_to DateTime.current

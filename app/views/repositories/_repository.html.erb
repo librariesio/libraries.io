@@ -13,11 +13,11 @@
 
   <small>
     <%= fa_icon repository.host_type.downcase %>
-    <% if repository.is_removed? %>
+    <% if repository.removed? %>
       <%= fa_icon('exclamation-triangle') %> This repository is no longer available
-    <% elsif repository.is_deprecated? %>
+    <% elsif repository.deprecated? %>
       <%= fa_icon('exclamation-triangle') %> This repository is deprecated -
-    <% elsif repository.is_unmaintained? %>
+    <% elsif repository.unmaintained? %>
       <%= fa_icon('exclamation-triangle') %> This repository is no longer maintained -
     <% else %>
       <% if repository.language.present? %>
@@ -27,7 +27,7 @@
         <%= linked_licenses [repository.license] %> -
       <% end %>
     <% end %>
-    <% unless repository.is_removed? %>
+    <% unless repository.removed? %>
       <% if repository.pushed_at && repository.pushed_at > repository.created_at + 1.minute %>
         Last pushed <%= timeago_tag repository.pushed_at %>
       <% elsif repository.updated_at && repository.updated_at > repository.created_at + 1.minute %>
@@ -36,7 +36,7 @@
         Published <%= timeago_tag repository.created_at %>
       <% end %>
     <% end %>
-    <% unless repository.is_deprecated? || repository.is_unmaintained? %>
+    <% unless repository.deprecated? || repository.unmaintained? %>
       <% if repository.stargazers_count %>
       - <%= number_to_human repository.stars %> stars
       <% end %>

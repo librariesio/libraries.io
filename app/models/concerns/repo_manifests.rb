@@ -47,18 +47,18 @@ module RepoManifests
     save if changed?
   end
 
-  def sync_manifest(m)
-    args = { platform: m[:platform], kind: m[:kind], filepath: m[:path], sha: m[:sha] }
+  def sync_manifest(manifest_info)
+    args = { platform: manifest_info[:platform], kind: manifest_info[:kind], filepath: manifest_info[:path], sha: manifest_info[:sha] }
 
     unless manifests.where(args).exists?
-      if m[:dependencies].nil?
-        Rails.logger.info "RepoManifests#sync_manifest error from parsed manifest: repository_id=#{id} path=#{m[:platform]} kind=#{m[:kind]} manifest=#{m[:path]} sha=#{m[:sha]} error=#{m[:error_message]}" 
+      if manifest_info[:dependencies].nil?
+        Rails.logger.info "RepoManifests#sync_manifest error from parsed manifest: repository_id=#{id} path=#{manifest_info[:platform]} kind=#{manifest_info[:kind]} manifest=#{manifest_info[:path]} sha=#{manifest_info[:sha]} error=#{manifest_info[:error_message]}"
         return
       end
 
       manifest = manifests.create(args)
-      
-      dependencies = m[:dependencies].map(&:with_indifferent_access).uniq { |dep| [dep[:name].try(:strip), dep[:requirement], dep[:type]] }
+
+      dependencies = manifest_info[:dependencies].map(&:with_indifferent_access).uniq { |dep| [dep[:name].try(:strip), dep[:requirement], dep[:type]] }
       dependencies.each do |dep|
         platform = manifest.platform
         next unless dep.is_a?(Hash)

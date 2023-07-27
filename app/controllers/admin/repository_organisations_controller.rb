@@ -16,8 +16,8 @@ class Admin::RepositoryOrganisationsController < Admin::ApplicationController
     scope = params[:platforms].present? ? orginal_scope.platform(params[:platforms]) : orginal_scope
     @projects = scope.paginate(page: params[:page], per_page: per_page_number)
     @platforms = orginal_scope.pluck(:platform).each_with_object(Hash.new(0)) do |v, h|
-                   h[v] += 1
-                 end.sort_by { |_k, v| v }.reverse.first(20)
+      h[v] += 1
+    end.sort_by { |_k, v| v }.reverse.first(20)
   end
 
   def edit; end

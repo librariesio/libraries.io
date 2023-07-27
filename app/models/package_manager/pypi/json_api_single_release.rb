@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PackageManager
   class Pypi
     class JsonApiSingleRelease

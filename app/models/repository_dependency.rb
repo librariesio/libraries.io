@@ -41,10 +41,10 @@ class RepositoryDependency < ApplicationRecord
   alias_attribute :name, :project_name
   alias_attribute :latest_stable, :latest_stable_release_number
   alias_attribute :latest, :latest_release_number
-  alias_attribute :deprecated, :is_deprecated?
+  alias_attribute :deprecated, :deprecated?
   alias outdated outdated?
 
-  delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :project, allow_nil: true
+  delegate :latest_stable_release_number, :latest_release_number, :deprecated?, to: :project, allow_nil: true
   delegate :filepath, to: :manifest
 
   def find_project_id

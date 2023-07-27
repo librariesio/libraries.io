@@ -4,7 +4,7 @@ module MaintenanceStats
   module Stats
     module Github
       class V3ContributorCountStats < BaseStat
-        def get_stats
+        def fetch_stats
           {
             v3_last_week_contributors: count_up_contributors(1),
             v3_last_4_weeks_contributors: count_up_contributors(4),

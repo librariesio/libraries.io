@@ -46,7 +46,7 @@ class RepositoryUser < ApplicationRecord
   has_many :identities
 
   # eager load this module to avoid clashing with Gitlab gem in development
-  RepositoryOwner::Gitlab
+  RepositoryOwner::Gitlab # rubocop: disable Lint/Void
 
   validate :login_uniqueness_with_case_insensitive_host, if: -> { login_changed? }
   validates :uuid, uniqueness: { scope: :host_type }, if: -> { uuid_changed? }

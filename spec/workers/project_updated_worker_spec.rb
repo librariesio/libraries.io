@@ -25,13 +25,13 @@ describe ProjectUpdatedWorker do
       expect(web_hook.reload.last_sent_at).not_to be_nil
       assert_requested :post, url,
                        body: be_json_string_matching({
-                                                       event: "project_updated",
-                                                       project: {
-                                                         name: project.name,
-                                                         platform: project.platform,
-                                                         updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(first_updated_at)
-                                                       }.stringify_keys
-                                                     }.stringify_keys)
+                         event: "project_updated",
+                         project: {
+                           name: project.name,
+                           platform: project.platform,
+                           updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(first_updated_at),
+                         }.stringify_keys,
+                       }.stringify_keys)
 
       project.touch(time: first_updated_at + 10.seconds)
       second_updated_at = project.updated_at
@@ -41,13 +41,13 @@ describe ProjectUpdatedWorker do
 
       assert_requested :post, url,
                        body: be_json_string_matching({
-                                                       event: "project_updated",
-                                                       project: {
-                                                         name: project.name,
-                                                         platform: project.platform,
-                                                         updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(second_updated_at)
-                                                       }.stringify_keys
-                                                     }.stringify_keys)
+                         event: "project_updated",
+                         project: {
+                           name: project.name,
+                           platform: project.platform,
+                           updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(second_updated_at),
+                         }.stringify_keys,
+                       }.stringify_keys)
     end
   end
 end

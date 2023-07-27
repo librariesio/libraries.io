@@ -73,6 +73,7 @@ module PackageManager
       data
     end
 
+    # rubocop: disable Lint/UnusedMethodArgument
     def self.update(name, sync_version: :all, force_sync_dependencies: false)
       project = super(name, sync_version: sync_version)
       # call update on base module name if the name is appended with major version
@@ -87,6 +88,7 @@ module PackageManager
 
       project
     end
+    # rubocop: enable Lint/UnusedMethodArgument
 
     def self.update_base_module(name, base_sync_version)
       matches = name.match(VERSION_MODULE_REGEX)
@@ -171,7 +173,7 @@ module PackageManager
             existing_project_name = Project.where(platform: "Go").where("lower(repository_url) = :repo_url and name like :name", repo_url: url.downcase, name: "%/#{versioned_module_regex[2]}").first&.name
 
             # if we didn't find one then try and get the base project
-            unless existing_project_name.present?
+            unless existing_project_name.present? # rubocop: disable Metrics/BlockNesting
               versioned_name = Project.where(platform: "Go").where("lower(repository_url) = ? and name not like '%/v'", url.downcase).first&.name
               existing_project_name = versioned_name&.concat("/#{versioned_module_regex[2]}")
             end

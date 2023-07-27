@@ -25,7 +25,7 @@ describe MaintenanceStats::Stats::Github::IssueStats do
     end
 
     it "should have repository maintenance stats" do
-      results = stat.get_stats
+      results = stat.fetch_stats
 
       expected_keys = %i[one_year_open_issues
                          one_year_closed_issues
@@ -54,7 +54,7 @@ describe MaintenanceStats::Stats::Github::IssueStats do
     end
 
     it "should handle no data from query" do
-      results = stat.get_stats
+      results = stat.fetch_stats
 
       expect(results).to be {}
     end

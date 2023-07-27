@@ -38,7 +38,7 @@ class RepositoryOrganisation < ApplicationRecord
   has_many :projects, through: :open_source_repositories
 
   # eager load this module to avoid clashing with Gitlab gem in development
-  RepositoryOwner::Gitlab
+  RepositoryOwner::Gitlab # rubocop: disable Lint/Void
 
   validates :uuid, presence: true
   validate :login_uniqueness_with_case_insensitive_host, if: -> { login_changed? }
