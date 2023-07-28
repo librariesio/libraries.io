@@ -254,7 +254,7 @@ describe "Api::ProjectsController" do
                # 404 on name
                { name: "noooooo",
                  platform: "rubygems" },
-],
+        ],
       }
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq("application/json")
@@ -327,6 +327,50 @@ describe "Api::ProjectsController" do
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq("application/json")
       expect(response.body).to be_json_eql([].to_json)
+    end
+  end
+
+  describe "PUT /api/:platform/:name", type: :request do
+    let(:project) { create(:project) }
+
+    context "with a disallowed api key" do
+      let(:api_key) { create(:api_key, id: Api::ProjectsController::ALLOWED_UPDATE_API_KEY_IDS.first + rand(10000)) }
+
+      it "returns unauthorized" do
+        expect do
+          put "/api/#{project.platform}/#{project.name}?api_key=#{api_key.access_token}",
+              params: { project: { lifted: "true" } }
+        end.to_not change { project.reload.lifted? }
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "with an allowed api key" do
+      let(:api_key) { create(:api_key, id: Api::ProjectsController::ALLOWED_UPDATE_API_KEY_IDS.first) }
+
+      it "updates lifted to true" do
+        expect do
+          put "/api/#{project.platform}/#{project.name}?api_key=#{api_key.access_token}",
+              params: { project: { lifted: "true" } }
+        end.to change { project.reload.lifted? }.to(true)
+        expect(response).to have_http_status(:success)
+      end
+
+      it "updates lifted to false" do
+        project.update_column(:lifted, true)
+        expect do
+          put "/api/#{project.platform}/#{project.name}?api_key=#{api_key.access_token}",
+              params: { project: { lifted: "false" } }
+        end.to change { project.reload.lifted? }.to(false)
+        expect(response).to have_http_status(:success)
+      end
+
+      it "with an unknown package" do
+        expect do
+          put "/api/rubygems/doesnt-exist?api_key=#{api_key.access_token}",
+              params: { project: { lifted: "false" } }
+        end.to raise_exception ActiveRecord::RecordNotFound
+      end
     end
   end
 
