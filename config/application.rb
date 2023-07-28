@@ -65,5 +65,22 @@ module Libraries
                  max_age: 86400)
       end
     end
+
+    # Env-based config
+    config.github_public_key = ENV["GITHUB_PUBLIC_KEY"]
+    config.github_public_secret = ENV["GITHUB_PUBLIC_SECRET"]
+    config.github_private_key = ENV["GITHUB_PRIVATE_KEY"]
+    config.github_private_secret = ENV["GITHUB_PRIVATE_SECRET"]
+    config.github_key = ENV["GITHUB_KEY"]
+    config.github_secret = ENV["GITHUB_SECRET"]
+    config.bitbucket_key = ENV["BITBUCKET_KEY"]
+    config.gitlab_key = ENV["GITLAB_KEY"]
+    config.gitlab_application_id = ENV["GITLAB_APPLICATION_ID"]
+    config.gitlab_secret = ENV["GITLAB_SECRET"]
+    config.bugsnag_api_key = ENV["BUGSNAG_API_KEY"]
+    config.bitbucket_application_id = ENV["BITBUCKET_APPLICATION_ID"]
+    config.bitbucket_secret = ENV["BITBUCKET_SECRET"]
+    config.ga_analytics_id = ENV["GA_ANALYTICS_ID"]
+    config.gtm_id = ENV["GTM_ID"]
   end
 end

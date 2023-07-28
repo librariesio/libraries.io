@@ -23,11 +23,11 @@ module GithubIdentity
 
   def github_settings_url
     if private_repo_token.present?
-      key = ENV["GITHUB_PRIVATE_KEY"]
+      Rails.configuration.github_private_key
     elsif public_repo_token.present?
-      key = ENV["GITHUB_PUBLIC_KEY"]
+      Rails.configuration.github_public_key
     elsif github_token.present?
-      key = ENV["GITHUB_KEY"]
+      Rails.configuration.github_key
     else
       return nil
     end

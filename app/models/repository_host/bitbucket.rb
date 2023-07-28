@@ -193,7 +193,7 @@ module RepositoryHost
     end
 
     def self.api_client(token = nil)
-      BitBucket.new oauth_token: token || ENV["BITBUCKET_KEY"]
+      BitBucket.new oauth_token: token || Rails.configuration.bitbucket_key
     end
 
     private
