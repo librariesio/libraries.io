@@ -27,7 +27,7 @@ module RepositoryOwner
     end
 
     def self.api_client(token = nil)
-      ::Gitlab.client(endpoint: "https://gitlab.com/api/v4", private_token: token || ENV["GITLAB_KEY"])
+      ::Gitlab.client(endpoint: "https://gitlab.com/api/v4", private_token: token || Rails.configuration.gitlab_key)
     end
 
     def api_client(token = nil)

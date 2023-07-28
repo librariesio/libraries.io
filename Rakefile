@@ -8,3 +8,13 @@ require File.expand_path("config/application", __dir__)
 Rails.application.load_tasks
 
 require "elasticsearch/rails/tasks/import"
+
+desc "Run the linter"
+task :lint do
+  sh "bundle exec rubocop -P"
+end
+
+desc "Run the linter with autofix"
+task :fix do
+  sh "bundle exec rubocop -A"
+end

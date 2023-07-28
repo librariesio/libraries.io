@@ -2,7 +2,7 @@
 
 if Rails.env.production?
   Bugsnag.configure do |config|
-    config.api_key = ENV["BUGSNAG_API_KEY"]
+    config.api_key = Rails.configuration.bugsnag_api_key
     config.ignore_classes << ActiveRecord::RecordNotFound
     # Temprarily uncomment this is we get a huge spike of these errors and need to investigate:
     config.ignore_classes << PackageManagerDownloadWorker::VersionUpdateFailure
