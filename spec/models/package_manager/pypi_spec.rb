@@ -489,7 +489,9 @@ describe PackageManager::Pypi do
       end
     end
   end
+end
 
+describe PackageManager::Pypi::JsonApiProject do
   describe "#homepage_url" do
     context "when the homepage URL is returned in a different format" do
       let(:project_home_url) { "https://www.libraries.io/package_name/home" }
