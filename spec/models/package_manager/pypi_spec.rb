@@ -489,4 +489,23 @@ describe PackageManager::Pypi do
       end
     end
   end
+
+  describe "#homepage_url" do
+    context "when the homepage URL is returned in a different format" do
+      let(:project_home_url) { "https://www.libraries.io/package_name/home" }
+      let(:project) do
+        PackageManager::Pypi::JsonApiProject.new(
+          {
+            "info" => {
+              "project_urls" => { "Home" => project_home_url },
+            },
+          }
+        )
+      end
+
+      it "returns the homepage URL" do
+        expect(project.homepage_url).to be_present
+      end
+    end
+  end
 end
