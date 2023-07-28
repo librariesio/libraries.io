@@ -120,7 +120,7 @@ class Version < ApplicationRecord
   end
 
   def send_notifications
-    ns = nf = nw = nil
+    ns = nw = nil
 
     overall = Benchmark.measure do
       ns = Benchmark.measure { notify_subscribers }
