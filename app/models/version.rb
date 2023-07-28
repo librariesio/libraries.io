@@ -97,10 +97,6 @@ class Version < ApplicationRecord
     end
   end
 
-  def notify_firehose
-    Firehose.new_version(project, project.platform, self)
-  end
-
   def notify_web_hooks
     repos = project.subscriptions.map(&:repository).compact.uniq
     repos.each do |repo|
@@ -124,15 +120,14 @@ class Version < ApplicationRecord
   end
 
   def send_notifications
-    ns = nf = nw = nil
+    ns = nw = nil
 
     overall = Benchmark.measure do
       ns = Benchmark.measure { notify_subscribers }
-      nf = Benchmark.measure { notify_firehose }
       nw = Benchmark.measure { notify_web_hooks }
     end
 
-    Rails.logger.info("Version#send_notifications benchmark overall: #{overall.real * 1000}ms ns:#{ns.real * 1000}ms nf:#{nf.real * 1000}ms nw:#{nw.real * 1000}ms v_id:#{id}")
+    Rails.logger.info("Version#send_notifications benchmark overall: #{overall.real * 1000}ms ns:#{ns.real * 1000}ms nw:#{nw.real * 1000}ms v_id:#{id}")
   end
 
   def log_version_creation

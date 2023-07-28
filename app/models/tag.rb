@@ -42,7 +42,6 @@ class Tag < ApplicationRecord
   def send_notifications
     if projects?
       notify_subscribers
-      notify_firehose
       notify_web_hooks
     end
   end
@@ -68,12 +67,6 @@ class Tag < ApplicationRecord
       project.mailing_list(include_prereleases: prerelease?).each do |user|
         VersionsMailer.new_version(user, project, self).deliver_later
       end
-    end
-  end
-
-  def notify_firehose
-    repository.projects.without_versions.each do |project|
-      Firehose.new_version(project, project.platform, self)
     end
   end
 
