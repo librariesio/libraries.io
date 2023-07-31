@@ -14,7 +14,7 @@ class Api::ProjectsController < Api::ApplicationController
   def update
     # currently this endpoint only updates the "lifted" attribute. No need for callbacks/validations yet.
     project_params = params.require(:project).permit(:lifted)
-    @project.update_columns(lifted: project_params[:lifted] == "true")
+    @project.update_columns(lifted: project_params[:lifted])
 
     head :ok
   rescue ActiveRecord::RecordNotFound
