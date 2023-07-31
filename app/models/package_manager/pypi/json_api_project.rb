@@ -68,7 +68,10 @@ module PackageManager
 
       def homepage_url
         @data.dig("info", "home_page").presence ||
-          @data.dig("info", "project_urls", "Homepage")
+          @data.dig("info", "project_urls", "Homepage") ||
+          @data.dig("info", "project_urls", "Home") ||
+          @data.dig("info", "project_urls", "homepage") ||
+          @data.dig("info", "project_urls", "HomePage")
       end
 
       def preferred_repository_url
