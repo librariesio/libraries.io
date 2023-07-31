@@ -30,6 +30,15 @@ module PackageManager
 
     def self.deprecation_info(db_project)
       raw_project = project(db_project.name)
+      keywords = Array.wrap(raw_project["crate"]["keywords"])
+
+      if keywords.map(&:downcase).include?("deprecated")
+        return {
+          is_deprecated: true,
+          message: "Marked as deprecated in project keywords",
+        }
+      end
+
       version = raw_project.dig("crate", "newest_version")
       url = download_url(db_project, version)
       body = get_raw(url)
