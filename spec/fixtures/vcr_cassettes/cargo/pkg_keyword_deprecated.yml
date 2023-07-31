@@ -1,0 +1,218 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://crates.io/api/v1/crates/substrate-subxt
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4184423553163075474'
+      X-Datadog-Parent-Id:
+      - '577899074250060458'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Type:
+      - application/json
+      Server:
+      - nginx
+      Date:
+      - Mon, 31 Jul 2023 16:14:39 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Content-Security-Policy:
+      - default-src 'self'; connect-src 'self' *.ingest.sentry.io https://docs.rs
+        https://play.rust-lang.org https://static.crates.io; script-src 'self' 'unsafe-eval'
+        'sha256-n1+BB7Ckjcal1Pr7QNBh/dKRTtBQsIytFodRiIosXdE='; style-src 'self' 'unsafe-inline'
+        https://code.cdn.mozilla.net; font-src https://code.cdn.mozilla.net; img-src
+        *; object-src 'none'
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Via:
+      - 1.1 vegur, 1.1 77a626e3ea8d4b2aae01de87c12da04e.cloudfront.net (CloudFront)
+      Vary:
+      - Accept,Accept-Encoding,Cookie
+      X-Cache:
+      - Miss from cloudfront
+      X-Amz-Cf-Pop:
+      - ORD51-C4
+      X-Amz-Cf-Id:
+      - g1HXmUCWUlc59eljBAmpp7b8Ur4htnj04hqozcugkfyVEAe_A_Z1Yg==
+    body:
+      encoding: ASCII-8BIT
+      string: '{"categories":[],"crate":{"badges":[],"categories":[],"created_at":"2020-03-25T14:24:25.999061+00:00","description":"Deprecated:
+        crate renamed to subxt.","documentation":"https://docs.rs/substrate-subxt","downloads":25301,"exact_match":false,"homepage":"https://www.parity.io/","id":"substrate-subxt","keywords":["blockchain","substrate","parity","deprecated"],"links":{"owner_team":"/api/v1/crates/substrate-subxt/owner_team","owner_user":"/api/v1/crates/substrate-subxt/owner_user","owners":"/api/v1/crates/substrate-subxt/owners","reverse_dependencies":"/api/v1/crates/substrate-subxt/reverse_dependencies","version_downloads":"/api/v1/crates/substrate-subxt/downloads","versions":null},"max_stable_version":"0.16.0","max_version":"0.16.0","name":"substrate-subxt","newest_version":"0.16.0","recent_downloads":950,"repository":"https://github.com/paritytech/substrate-subxt","updated_at":"2022-02-01T18:29:57.634148+00:00","versions":[493471,355292,336953,290457,278913,268159,257165,257153,255802,245647,240918,231549,224545]},"keywords":[{"crates_cnt":881,"created_at":"2016-01-29T16:56:22.312491+00:00","id":"blockchain","keyword":"blockchain"},{"crates_cnt":87,"created_at":"2019-09-29T02:44:55.811900+00:00","id":"substrate","keyword":"substrate"},{"crates_cnt":59,"created_at":"2017-11-21T13:35:23.370661+00:00","id":"parity","keyword":"parity"},{"crates_cnt":25,"created_at":"2015-08-11T21:23:16.840330+00:00","id":"deprecated","keyword":"deprecated"}],"versions":[{"audit_actions":[{"action":"publish","time":"2022-02-01T18:29:57.634148+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/3799193?v=4","id":111217,"login":"jsdw","name":"James
+        Wilson","url":"https://github.com/jsdw"}}],"checksum":"2213b0bf9f6260677af2c2c8ef199f7308e6865974fc4a9d91d6c6497f800ee5","crate":"substrate-subxt","crate_size":13215,"created_at":"2022-02-01T18:29:57.634148+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.16.0/download","downloads":233,"features":{},"id":493471,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.16.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.16.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.16.0/downloads"},"num":"0.16.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/3799193?v=4","id":111217,"login":"jsdw","name":"James
+        Wilson","url":"https://github.com/jsdw"},"readme_path":"/api/v1/crates/substrate-subxt/0.16.0/readme","rust_version":null,"updated_at":"2022-02-01T18:29:57.634148+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2021-03-22T17:16:38.336339+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"}}],"checksum":"feb057a856b185f95a2b4dff834604a05c224e44fefa2d98a0a51ce9b2d666d0","crate":"substrate-subxt","crate_size":94940,"created_at":"2021-03-22T17:16:38.336339+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.15.0/download","downloads":11227,"features":{"client":["substrate-subxt-client"],"default":[]},"id":355292,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.15.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.15.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.15.0/downloads"},"num":"0.15.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"},"readme_path":"/api/v1/crates/substrate-subxt/0.15.0/readme","rust_version":null,"updated_at":"2021-03-22T17:16:38.336339+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2021-02-08T10:27:10.804872+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"}}],"checksum":"7745e786bcfe0223008d20a3a9d61c7b80b9651d19180e835a377a19c007845e","crate":"substrate-subxt","crate_size":83674,"created_at":"2021-02-08T10:27:10.804872+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.14.0/download","downloads":4191,"features":{"client":["substrate-subxt-client"],"default":[],"integration-tests":[]},"id":336953,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.14.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.14.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.14.0/downloads"},"num":"0.14.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"},"readme_path":"/api/v1/crates/substrate-subxt/0.14.0/readme","rust_version":null,"updated_at":"2021-02-08T10:27:10.804872+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2020-10-05T09:08:21.406039+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/18515?v=4","id":11797,"login":"dvdplm","name":"David","url":"https://github.com/dvdplm"}}],"checksum":"ed693047c3c907a660aa97a71a30af33cec878316d75df60967d73b673ff4fd3","crate":"substrate-subxt","crate_size":79848,"created_at":"2020-10-05T09:08:21.406039+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.13.0/download","downloads":3166,"features":{"client":["substrate-subxt-client"],"default":[],"integration-tests":[]},"id":290457,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.13.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.13.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.13.0/downloads"},"num":"0.13.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/18515?v=4","id":11797,"login":"dvdplm","name":"David","url":"https://github.com/dvdplm"},"readme_path":"/api/v1/crates/substrate-subxt/0.13.0/readme","rust_version":null,"updated_at":"2020-10-05T09:08:21.406039+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2020-09-01T14:41:48.332029+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"}}],"checksum":"31fb7e8027a8445851f2a45fa82c30d2b005b9e6eb3be9db8669904d6d8ed5ab","crate":"substrate-subxt","crate_size":73174,"created_at":"2020-09-01T14:41:48.332029+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.12.0/download","downloads":804,"features":{"client":["substrate-subxt-client"]},"id":278913,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.12.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.12.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.12.0/downloads"},"num":"0.12.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"},"readme_path":"/api/v1/crates/substrate-subxt/0.12.0/readme","rust_version":null,"updated_at":"2020-09-01T14:41:48.332029+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2020-07-31T10:01:49.779311+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"}}],"checksum":"94cc064acf915e8411b74261e6cd6d28b56709a5bbbb7f5fdf5dd55c650210d1","crate":"substrate-subxt","crate_size":72099,"created_at":"2020-07-31T10:01:49.779311+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.11.0/download","downloads":456,"features":{"client":["substrate-subxt-client"]},"id":268159,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.11.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.11.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.11.0/downloads"},"num":"0.11.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"},"readme_path":"/api/v1/crates/substrate-subxt/0.11.0/readme","rust_version":null,"updated_at":"2020-07-31T10:01:49.779311+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2020-06-29T09:06:38.965021+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"}}],"checksum":"a725c18649a16df5eb566b6217216d8dd8f2737b7b181fdac2649b252d6af720","crate":"substrate-subxt","crate_size":70222,"created_at":"2020-06-29T09:06:38.965021+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.10.1/download","downloads":2539,"features":{"client":["substrate-subxt-client"]},"id":257165,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.10.1/authors","dependencies":"/api/v1/crates/substrate-subxt/0.10.1/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.10.1/downloads"},"num":"0.10.1","published_by":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"},"readme_path":"/api/v1/crates/substrate-subxt/0.10.1/readme","rust_version":null,"updated_at":"2020-06-29T09:06:38.965021+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2020-06-29T08:29:52.606772+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"}}],"checksum":"606afd84faee994a3b5048c5714d09cf603ba58b0cb04a202bd31eb0b204bb86","crate":"substrate-subxt","crate_size":70232,"created_at":"2020-06-29T08:29:52.606772+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.10.0/download","downloads":196,"features":{"client":["substrate-subxt-client"]},"id":257153,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.10.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.10.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.10.0/downloads"},"num":"0.10.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"},"readme_path":"/api/v1/crates/substrate-subxt/0.10.0/readme","rust_version":null,"updated_at":"2020-06-29T08:29:52.606772+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2020-06-25T08:03:18.283086+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"}}],"checksum":"1c26c2f596f7bf0a1d7ab1d43bcf9b03c5d8595cda175b032b58435755bb54d2","crate":"substrate-subxt","crate_size":68071,"created_at":"2020-06-25T08:03:18.283086+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.9.0/download","downloads":193,"features":{"client":["substrate-subxt-client"]},"id":255802,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.9.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.9.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.9.0/downloads"},"num":"0.9.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"},"readme_path":"/api/v1/crates/substrate-subxt/0.9.0/readme","rust_version":null,"updated_at":"2020-06-25T08:03:18.283086+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2020-05-26T13:39:06.691438+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"}}],"checksum":"e04cf049fd3fdc721047a9b0e691d0a4f0725c24bc14de2925626134dc22dc63","crate":"substrate-subxt","crate_size":53938,"created_at":"2020-05-26T13:39:06.691438+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.8.0/download","downloads":716,"features":{},"id":245647,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.8.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.8.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.8.0/downloads"},"num":"0.8.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"},"readme_path":"/api/v1/crates/substrate-subxt/0.8.0/readme","rust_version":null,"updated_at":"2020-05-26T13:39:06.691438+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2020-05-13T09:04:56.073026+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"}}],"checksum":"3536f9a71476d53d824008f9c546d9bdbc6eae89abdababa201f0f309d435261","crate":"substrate-subxt","crate_size":54064,"created_at":"2020-05-13T09:04:56.073026+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.7.0/download","downloads":261,"features":{},"id":240918,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.7.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.7.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.7.0/downloads"},"num":"0.7.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"},"readme_path":"/api/v1/crates/substrate-subxt/0.7.0/readme","rust_version":null,"updated_at":"2020-05-13T09:04:56.073026+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2020-04-15T08:45:56.644507+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"}}],"checksum":"61410b2a4fa3f6c05c2d1c9544c65a9a432eccb8aa921037406252e873159c49","crate":"substrate-subxt","crate_size":52652,"created_at":"2020-04-15T08:45:56.644507+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.6.0/download","downloads":680,"features":{},"id":231549,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.6.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.6.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.6.0/downloads"},"num":"0.6.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"},"readme_path":"/api/v1/crates/substrate-subxt/0.6.0/readme","rust_version":null,"updated_at":"2020-04-15T08:45:56.644507+00:00","yanked":false},{"audit_actions":[{"action":"publish","time":"2020-03-25T14:24:25.999061+00:00","user":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"}}],"checksum":"f78ce510e65aec79e5b08452c228714718298d07bb2c7f6672bbef6cb7e818fc","crate":"substrate-subxt","crate_size":51454,"created_at":"2020-03-25T14:24:25.999061+00:00","dl_path":"/api/v1/crates/substrate-subxt/0.5.0/download","downloads":639,"features":{},"id":224545,"license":"GPL-3.0","links":{"authors":"/api/v1/crates/substrate-subxt/0.5.0/authors","dependencies":"/api/v1/crates/substrate-subxt/0.5.0/dependencies","version_downloads":"/api/v1/crates/substrate-subxt/0.5.0/downloads"},"num":"0.5.0","published_by":{"avatar":"https://avatars.githubusercontent.com/u/75586?v=4","id":22071,"login":"ascjones","name":"Andrew
+        Jones","url":"https://github.com/ascjones"},"readme_path":"/api/v1/crates/substrate-subxt/0.5.0/readme","rust_version":null,"updated_at":"2020-03-25T14:24:25.999061+00:00","yanked":false}]}'
+    http_version:
+  recorded_at: Mon, 31 Jul 2023 16:14:39 GMT
+- request:
+    method: get
+    uri: https://crates.io/api/v1/crates/substrate-subxt/0.16.0/download
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '947545490296247238'
+      X-Datadog-Parent-Id:
+      - '3206035244740804939'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 302
+      message: ''
+    headers:
+      Content-Length:
+      - '0'
+      Location:
+      - https://static.crates.io/crates/substrate-subxt/substrate-subxt-0.16.0.crate
+      Server:
+      - nginx
+      Date:
+      - Mon, 31 Jul 2023 16:14:39 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Content-Security-Policy:
+      - default-src 'self'; connect-src 'self' *.ingest.sentry.io https://docs.rs
+        https://play.rust-lang.org https://static.crates.io; script-src 'self' 'unsafe-eval'
+        'sha256-n1+BB7Ckjcal1Pr7QNBh/dKRTtBQsIytFodRiIosXdE='; style-src 'self' 'unsafe-inline'
+        https://code.cdn.mozilla.net; font-src https://code.cdn.mozilla.net; img-src
+        *; object-src 'none'
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Via:
+      - 1.1 vegur, 1.1 77a626e3ea8d4b2aae01de87c12da04e.cloudfront.net (CloudFront)
+      Vary:
+      - Accept,Accept-Encoding,Cookie
+      X-Cache:
+      - Miss from cloudfront
+      X-Amz-Cf-Pop:
+      - ORD51-C4
+      X-Amz-Cf-Id:
+      - Xnjgg34z3ojKWSjuYHAljb9Clms2RL7OvlurtnwzCljC2AF_SBtkKQ==
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    http_version:
+  recorded_at: Mon, 31 Jul 2023 16:14:39 GMT
+- request:
+    method: get
+    uri: https://static.crates.io/crates/substrate-subxt/substrate-subxt-0.16.0.crate
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1594221535490974110'
+      X-Datadog-Parent-Id:
+      - '4061489571355351600'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      X-Amz-Id-2:
+      - 8MyZzGaxu2oRner4DmtyMSfVukKJr8ai3ws/FjVikHamzYfQrZZ5TLQnUK414YxMiTy1NBtlJjo=
+      X-Amz-Request-Id:
+      - 9NH261405RZMNZ6M
+      X-Amz-Replication-Status:
+      - COMPLETED
+      Last-Modified:
+      - Tue, 01 Feb 2022 18:29:59 GMT
+      Etag:
+      - '"df456b1cb1bb9556bb8f8bc6e3eae9e9"'
+      Cache-Control:
+      - public,max-age=31536000,immutable
+      X-Amz-Version-Id:
+      - RK.XOsiv1LYaHvkK6wDRCCotk0kUBB76
+      Content-Type:
+      - application/x-tar
+      Server:
+      - AmazonS3
+      X-Timer:
+      - S1690820079.479968,VS0,VE1
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Mon, 31 Jul 2023 16:14:39 GMT
+      Via:
+      - 1.1 varnish
+      Age:
+      - '255794'
+      X-Served-By:
+      - cache-chi-kigq8000083-CHI
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '1'
+      Content-Length:
+      - '13215'
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        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
+    http_version:
+  recorded_at: Mon, 31 Jul 2023 16:14:39 GMT
+recorded_with: VCR 4.0.0
