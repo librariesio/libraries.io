@@ -191,39 +191,6 @@ describe Project, type: :model do
     end
   end
 
-  describe ".fetch_lifted_projects" do
-    let(:base_url) { "https://api.tidelift.com/external-api/packages?lifted=true" }
-    let(:projects) { create_list(:project, 101) }
-
-    it "without a Tidelift api key" do
-      expect { Project.fetch_lifted_projects }.to raise_error("Tidelift API key not set.")
-    end
-
-    it "fetches and paginates over list of lifted packages" do
-      allow(Rails.configuration).to receive(:tidelift_api_key).and_return("asdfasdf")
-      WebMock.stub_request(:get, "https://api.tidelift.com/external-api/packages?lifted=true&page=1&per_page=100")
-        .to_return(body: JSON.dump({
-                                     "current_page" => 1,
-                                     "next_page" => 2,
-                                     "prev_page" => nil,
-                                     "total_pages" => 2,
-                                     "total_count" => 101,
-                                     "results" => projects[0, 100].map { |p| { "platform" => p.platform.downcase, "name" => p.name } },
-                                   }))
-      WebMock.stub_request(:get, "https://api.tidelift.com/external-api/packages?lifted=true&page=2&per_page=100")
-        .to_return(body: JSON.dump({
-                                     "current_page" => 2,
-                                     "next_page" => nil,
-                                     "prev_page" => 1,
-                                     "total_pages" => 2,
-                                     "total_count" => 101,
-                                     "results" => projects[100, 1].map { |p| { "platform" => p.platform.downcase, "name" => p.name } },
-                                   }))
-
-      expect(Project.fetch_lifted_projects).to match_array(projects)
-    end
-  end
-
   describe ".find_best!(platform, name, includes=[])" do
     context "with an exact match" do
       it "returns the record" do
