@@ -71,7 +71,6 @@ Rails.application.routes.draw do
     get "/:platform/:name/dependents", to: "projects#dependents", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/tree", to: "tree#show", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }, as: :tree
     get "/:platform/:name", to: "projects#show", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
-    put "/:platform/:name", to: "projects#update", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
   end
 
   namespace :admin do

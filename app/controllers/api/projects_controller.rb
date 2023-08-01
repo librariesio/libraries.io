@@ -2,23 +2,9 @@
 
 class Api::ProjectsController < Api::ApplicationController
   before_action :find_project, except: %i[searchcode dependencies dependencies_bulk updated]
-  before_action :require_api_key, only: %i[update]
-  before_action :require_api_key_for_update, only: %i[update]
-
-  ALLOWED_UPDATE_API_KEY_IDS = [1].freeze
 
   def show
     render(json: @project, show_updated_at: internal_api_key?)
-  end
-
-  def update
-    # currently this endpoint only updates the "lifted" attribute. No need for callbacks/validations yet.
-    project_params = params.require(:project).permit(:lifted)
-    @project.update_columns(lifted: project_params[:lifted])
-
-    head :ok
-  rescue ActiveRecord::RecordNotFound
-    head :not_found
   end
 
   def sourcerank
@@ -145,9 +131,5 @@ class Api::ProjectsController < Api::ApplicationController
     project_json[:dependencies] = map_dependencies(version.dependencies.includes(:project) || [])
 
     project_json
-  end
-
-  def require_api_key_for_update
-    render json: { error: "Error 403, you don't have permissions for this operation." }, status: :forbidden unless current_api_key.id.in?(ALLOWED_UPDATE_API_KEY_IDS)
   end
 end
