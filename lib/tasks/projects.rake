@@ -14,7 +14,7 @@ namespace :projects do
   task update_lifting_statuses: :environment do
     exit if ENV["READ_ONLY"].present?
 
-    lifted_project_ids = Project.fetch_lifted_projects.map(&:id)
+    lifted_project_ids = FetchLiftedProjects.new.run.map(&:id)
 
     newly_unlifted_projects = Project.where(lifted: true).where.not(id: lifted_project_ids)
     newly_lifted_projects = Project.where(lifted: false).where(id: lifted_project_ids)
