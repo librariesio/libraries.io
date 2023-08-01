@@ -11,20 +11,31 @@ module PackageManager
 
       def execute
         @project_releases.map do |project_release|
-          next @known_versions[project_release.version_number] if @known_versions.key?(project_release.version_number)
+          if @known_versions.key?(project_release.version_number)
+            known_attributes = @known_versions[project_release.version_number]
+            status = if project_release&.yanked?
+                       "Removed"
+                     elsif known_attributes[:status] == "Removed"
+                       nil
+                     else
+                       known_attributes[:status]
+                     end
+            known_attributes[:status] = status
+            known_attributes
+          else
+            version_number = project_release.version_number
+            original_license = json_api_single_release_for_version(version_number).license
+            rss_api_release = rss_api_releases_hash[version_number]
+            published_at = project_release.published_at || rss_api_release&.published_at
+            status = project_release&.yanked? ? "Removed" : nil
 
-          version_number = project_release.version_number
-          original_license = json_api_single_release_for_version(version_number).license
-          rss_api_release = rss_api_releases_hash[version_number]
-          published_at = project_release.published_at || rss_api_release&.published_at
-          yanked = project_release&.yanked? || false
-
-          {
-            number: version_number,
-            published_at: published_at,
-            original_license: original_license,
-            yanked: yanked,
-          }
+            {
+              number: version_number,
+              published_at: published_at,
+              original_license: original_license,
+              status: status,
+            }
+          end
         end
       end
 

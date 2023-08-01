@@ -430,62 +430,83 @@ describe PackageManager::Pypi do
       expect(actual_not_removed_version.status).to be nil
       expect(actual_not_removed_version.published_at).to eq(not_removed_version_published_at)
     end
-  end
 
-  describe ".deprecate_versions" do
-    let(:version_to_remove) { "1.0.0" }
-    let(:version_to_not_remove) { "2.0.0" }
-    let(:removed_release) { { number: version_to_remove, published_at: 2.days.ago.round, original_license: nil, yanked: true } }
-    let(:not_removed_release) { { number: version_to_not_remove, published_at: 1.day.ago.round, original_license: nil, yanked: false } }
+    context "when the project and version already exist" do
+      let(:release_status) { nil }
+      let(:removed_version_old_status) { nil }
+      let(:not_removed_version_old_status) { nil }
+      let(:old_time) { 5.years.ago }
 
-    let(:old_time) { 5.years.ago.round }
-    let(:db_project) { create(:project, :pypi, created_at: old_time, updated_at: old_time) }
-    let(:version_to_be_removed_status) { nil }
-    let!(:version_to_be_removed) { create(:version, project: db_project, number: version_to_remove, status: version_to_be_removed_status, created_at: old_time, updated_at: old_time) }
-
-    before do
-      create(:version, project: db_project, number: version_to_not_remove, status: nil, created_at: old_time, updated_at: old_time)
-    end
-
-    it "only updates the yanked version" do
-      described_class.deprecate_versions(db_project, [removed_release, not_removed_release])
-
-      actual_version_to_remove = db_project.versions.find_by(number: version_to_remove)
-      expect(actual_version_to_remove.status).to eq("Removed")
-      expect(actual_version_to_remove.updated_at).to be_within(1.minute).of(Time.zone.now)
-
-      actual_version_to_not_remove = db_project.versions.find_by(number: version_to_not_remove)
-      expect(actual_version_to_not_remove.status).to be nil
-      expect(actual_version_to_not_remove.updated_at).to eq(old_time)
-    end
-
-    context "when no versions are removed" do
-      it "doesn't change anything" do
-        described_class.deprecate_versions(db_project, [not_removed_release])
-
-        actual_version_to_remove = db_project.versions.find_by(number: version_to_remove)
-        expect(actual_version_to_remove.status).to be nil
-        expect(actual_version_to_remove.updated_at).to eq(old_time)
-
-        actual_version_to_not_remove = db_project.versions.find_by(number: version_to_not_remove)
-        expect(actual_version_to_not_remove.status).to be nil
-        expect(actual_version_to_not_remove.updated_at).to eq(old_time)
+      before do
+        p = create(:project, :pypi, name: project_name)
+        create(:version, project: p, number: removed_version, status: removed_version_old_status, created_at: old_time, updated_at: old_time)
+        create(:version, project: p, number: not_removed_version, status: not_removed_version_old_status, created_at: old_time, updated_at: old_time)
       end
-    end
 
-    context "when the existing version record is already 'Removed'" do
-      let(:version_to_be_removed_status) { "Removed" }
+      context "when the existing statuses are nil" do
+        it "does not create extra versions" do
+          expect { described_class.update(project_name) }.to_not change(Version, :count)
 
-      it "doesn't change anything" do
-        described_class.deprecate_versions(db_project, [removed_release, not_removed_release])
+          expect(Project.first.versions.count).to eq(2)
+        end
 
-        actual_version_to_remove = db_project.versions.find_by(number: version_to_remove)
-        expect(actual_version_to_remove.status).to eq("Removed")
-        expect(actual_version_to_remove.updated_at).to eq(old_time)
+        it "updates the version to be yanked with the new status" do
+          described_class.update(project_name)
 
-        actual_version_to_not_remove = db_project.versions.find_by(number: version_to_not_remove)
-        expect(actual_version_to_not_remove.status).to be nil
-        expect(actual_version_to_not_remove.updated_at).to eq(old_time)
+          actual_removed_version = Project.first.versions.find_by(number: removed_version)
+          expect(actual_removed_version.status).to eq("Removed")
+          expect(actual_removed_version.updated_at).to be_within(1.minute).of(Time.zone.now)
+        end
+
+        it "does not do anything to the version that is not yanked" do
+          described_class.update(project_name)
+
+          actual_not_removed_version = Project.first.versions.find_by(number: not_removed_version)
+          expect(actual_not_removed_version.status).to be nil
+          expect(actual_not_removed_version.updated_at).to eq(old_time)
+        end
+      end
+
+      context "when the existing statuses are 'Removed'" do
+        let(:removed_version_old_status) { "Removed" }
+        let(:not_removed_version_old_status) { "Removed" }
+
+        it "does not do anything to the version that is still yanked" do
+          described_class.update(project_name)
+
+          actual_removed_version = Project.first.versions.find_by(number: removed_version)
+          expect(actual_removed_version.status).to eq("Removed")
+          expect(actual_removed_version.updated_at).to eq(old_time)
+        end
+
+        it "updates the formerly yanked version to not 'Removed'" do
+          described_class.update(project_name)
+
+          actual_not_removed_version = Project.first.versions.find_by(number: not_removed_version)
+          expect(actual_not_removed_version.status).to be nil
+          expect(actual_not_removed_version.updated_at).to be_within(1.minute).of(Time.zone.now)
+        end
+      end
+
+      context "when the existing status are something else" do
+        let(:removed_version_old_status) { "Deprecated" }
+        let(:not_removed_version_old_status) { "Deprecated" }
+
+        it "updates the 'Deprecated' version to 'Removed'" do
+          described_class.update(project_name)
+
+          actual_removed_version = Project.first.versions.find_by(number: removed_version)
+          expect(actual_removed_version.status).to eq("Removed")
+          expect(actual_removed_version.updated_at).to be_within(1.minute).of(Time.zone.now)
+        end
+
+        it "does not do anything to the version that is not yanked" do
+          described_class.update(project_name)
+
+          actual_not_removed_version = Project.first.versions.find_by(number: not_removed_version)
+          expect(actual_not_removed_version.status).to eq("Deprecated")
+          expect(actual_not_removed_version.updated_at).to eq(old_time)
+        end
       end
     end
   end

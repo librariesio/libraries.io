@@ -22,14 +22,17 @@ module PackageManager
       end
 
       def to_version_model_attributes
-        {
+        non_nillable_attributes = {
           number: @version_number,
           published_at: @published_at,
           runtime_dependencies_count: @runtime_dependencies_count,
           original_license: @original_license,
           repository_sources: @repository_sources,
-          status: @status,
         }.compact
+
+        # If the status is currently "Removed" and a change comes in to update that status to nil/"Active",
+        # Update the version's status
+        non_nillable_attributes.merge({ status: @status })
       end
     end
   end
