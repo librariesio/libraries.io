@@ -201,8 +201,23 @@ class Project < ApplicationRecord
     end
   end
 
-  def test
-    puts "hello"
+  def self.fetch_lifted_projects
+    raise "Tidelift API key not set." if Rails.configuration.tidelift_api_key.blank?
+
+    current_page = 1
+    results = []
+    while !current_page.nil? && current_page < 1000 # failsafe
+      resp = Typhoeus.get("https://api.tidelift.com/external-api/packages?lifted=true&page=#{current_page}&per_page=100", headers: { "Authorization" => "Bearer #{Rails.configuration.tidelift_api_key}" })
+      break if resp.response_code != 200
+
+      json = JSON.parse(resp.body)
+      current_page = json["next_page"]
+      results += json["results"]
+    end
+
+    results
+      .map { |result| find_best(result["platform"], result["name"]) }
+      .compact
   end
 
   def to_param

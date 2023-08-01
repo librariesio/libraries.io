@@ -82,5 +82,6 @@ module Libraries
     config.bitbucket_secret = ENV["BITBUCKET_SECRET"]
     config.ga_analytics_id = ENV["GA_ANALYTICS_ID"]
     config.gtm_id = ENV["GTM_ID"]
+    config.tidelift_api_key = ENV["TIDELIFT_API_KEY"]
   end
 end
