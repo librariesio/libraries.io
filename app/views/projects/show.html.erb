@@ -40,6 +40,21 @@
     <%= render 'projects/details' %>
   </div>
   <div class='col-md-4 sidebar'>
+    <% if @project.lifted? %>
+        <div class='row'>
+          <div class='col-xs-4'>
+            <%= image_tag("lifted-badge-small.png", width: 110) %>
+          </div>
+          <div class='col-xs-8'>
+            <p>
+              The maintainers of this project get paid by Tidelift to make sure it meets pre-defined standards around security, maintenance and licensing.
+            </p>
+            <p>
+              Want to learn more? <%= link_to "Chat with an expert", "https://www.tidelift.com/about/contact?utm_source=librariesio&utm_medium=referral&utm_campaign=lifterbadge", target: :blank %> at Tidelift.
+            </p>
+          </div>
+        </div>
+    <% end %>
     <%= render 'projects/statistics' %>
   </div>
 </div>

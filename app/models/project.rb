@@ -21,6 +21,7 @@
 #  license_normalized                 :boolean          default(FALSE)
 #  license_set_by_admin               :boolean          default(FALSE)
 #  licenses                           :string
+#  lifted                             :boolean          default(FALSE)
 #  name                               :string
 #  normalized_licenses                :string           default([]), is an Array
 #  platform                           :string
@@ -198,10 +199,6 @@ class Project < ApplicationRecord
     Rails.cache.fetch "projects:total", expires_in: 1.day, race_condition_ttl: 2.minutes do
       all.count
     end
-  end
-
-  def test
-    puts "hello"
   end
 
   def to_param

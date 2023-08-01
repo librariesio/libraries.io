@@ -10,6 +10,27 @@ namespace :projects do
     Project.not_removed.where(last_synced_at: nil).order("updated_at ASC").limit(500).each(&:async_sync)
   end
 
+  desc "Update lifting statuses of projects"
+  task update_lifting_statuses: :environment do
+    exit if ENV["READ_ONLY"].present?
+
+    lifted_project_ids = FetchLiftedProjects.new.run.map(&:id)
+
+    newly_unlifted_projects = Project.where(lifted: true).where.not(id: lifted_project_ids)
+    newly_lifted_projects = Project.where(lifted: false).where(id: lifted_project_ids)
+
+    newly_unlifted_projects.each do |p|
+      puts "[UNLIFTED] platform=#{p.platform} name=#{p.name}"
+    end
+
+    newly_lifted_projects.each do |p|
+      puts "[LIFTED] platform=#{p.platform} name=#{p.name}"
+    end
+
+    newly_unlifted_projects.update_all(lifted: false)
+    newly_lifted_projects.update_all(lifted: true)
+  end
+
   desc "Update sourcerank of projects"
   task update_source_ranks: :environment do
     exit if ENV["READ_ONLY"].present?

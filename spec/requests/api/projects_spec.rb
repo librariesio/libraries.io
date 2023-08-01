@@ -254,7 +254,7 @@ describe "Api::ProjectsController" do
                # 404 on name
                { name: "noooooo",
                  platform: "rubygems" },
-],
+        ],
       }
       expect(response).to have_http_status(:success)
       expect(response.content_type).to eq("application/json")
