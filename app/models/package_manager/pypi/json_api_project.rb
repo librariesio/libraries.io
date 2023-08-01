@@ -49,7 +49,11 @@ module PackageManager
       end
 
       def homepage
-        @data.dig("info", "home_page")
+        @data.dig("info", "home_page").presence ||
+          @data.dig("info", "project_urls", "Homepage") ||
+          @data.dig("info", "project_urls", "Home") ||
+          @data.dig("info", "project_urls", "homepage") ||
+          @data.dig("info", "project_urls", "HomePage")
       end
 
       def keywords_array
@@ -66,18 +70,10 @@ module PackageManager
         end.first
       end
 
-      def homepage_url
-        @data.dig("info", "home_page").presence ||
-          @data.dig("info", "project_urls", "Homepage") ||
-          @data.dig("info", "project_urls", "Home") ||
-          @data.dig("info", "project_urls", "homepage") ||
-          @data.dig("info", "project_urls", "HomePage")
-      end
-
       def preferred_repository_url
         RepositoryService.repo_fallback(
           repository_url,
-          homepage_url
+          homepage
         )
       end
 
