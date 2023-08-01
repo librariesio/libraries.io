@@ -62,10 +62,10 @@ describe PackageManager::Pypi::VersionProcessor do
       results = version_processor.execute
 
       expect(results).to eq([
-      { number: "1.0.0", published_at: version1_time, original_license: "one", yanked: false },
-      { number: "2.0.0", published_at: version2_time, original_license: "two", yanked: false },
-      { number: "3.0.0", published_at: version3_time, original_license: "three", yanked: true },
-      { number: "4.0.0", published_at: version4_time, original_license: "four", yanked: false },
+      { number: "1.0.0", published_at: version1_time, original_license: "one", status: nil },
+      { number: "2.0.0", published_at: version2_time, original_license: "two", status: nil },
+      { number: "3.0.0", published_at: version3_time, original_license: "three", status: "Removed" },
+      { number: "4.0.0", published_at: version4_time, original_license: "four", status: nil },
       ])
     end
   end

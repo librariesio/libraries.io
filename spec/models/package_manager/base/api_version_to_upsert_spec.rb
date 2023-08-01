@@ -15,8 +15,11 @@ describe PackageManager::Base::ApiVersionToUpsert do
       )
     end
 
-    it "removes keys it doesn't have a value for" do
-      expect(api_version_to_upsert.to_version_model_attributes).to eq({ number: "1.0.0" })
+    it "removes keys it doesn't have a value for except for status" do
+      expect(api_version_to_upsert.to_version_model_attributes).to eq({
+                                                                        number: "1.0.0",
+                                                                        status: nil,
+                                                                      })
     end
   end
 end

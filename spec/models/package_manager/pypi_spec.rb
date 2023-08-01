@@ -435,7 +435,7 @@ describe PackageManager::Pypi do
       let(:release_status) { nil }
       let(:removed_version_old_status) { nil }
       let(:not_removed_version_old_status) { nil }
-      let(:old_time) { 5.years.ago }
+      let(:old_time) { 5.years.ago.round }
 
       before do
         p = create(:project, :pypi, name: project_name)
