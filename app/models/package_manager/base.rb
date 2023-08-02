@@ -177,16 +177,8 @@ module PackageManager
           .where.not(number: version_hashes.pluck(:number))
           .where("status != ? or status is null", removed_status)
           .update_all(status: removed_status, updated_at: current_time)
-      when "pypi"
-        removed_versions = version_hashes.filter { |x| x[:yanked] == true }
-
-        if removed_versions.any?
-          db_project
-            .versions
-            .where(number: removed_versions.pluck(:number).compact)
-            .where("status != ? or status is null", removed_status)
-            .update_all(status: removed_status, updated_at: current_time)
-        end
+        # yanked pypi versions are marked as such in the api, and the majority of them are handled upstream of here
+        # TODO: if libraries knows about the version but pypi does not, also mark the version differences as removed
       end
     end
 

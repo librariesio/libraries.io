@@ -98,7 +98,7 @@ module PackageManager
       Project
         .find_by(platform: "Pypi", name: name)
         &.versions
-        &.map { |v| v.slice(:number, :published_at, :original_license).symbolize_keys }
+        &.map { |v| v.slice(:number, :published_at, :original_license, :status).symbolize_keys }
         &.index_by { |v| v[:number] } || {}
     end
 
