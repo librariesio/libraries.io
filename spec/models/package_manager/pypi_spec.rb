@@ -506,7 +506,7 @@ describe PackageManager::Pypi::JsonApiProject do
       end
 
       it "returns the homepage URL" do
-        expect(project.homepage_url).to be_present
+        expect(project.homepage).to be_present
       end
     end
   end
