@@ -480,3 +480,66 @@ h4.panel-title{
 .octicon {
   fill: currentColor;
 }
+
+.has-margin-top {
+  margin-top: 16px;
+}
+
+.has-margin-left {
+  margin-left: 8px;
+}
+
+.detail-card {
+  border: 1px solid #F0F1F4;
+  border-top: 3px solid #1ABC9C;
+  padding-left: 1rem;
+  padding-bottom: 2rem;
+
+  h2 {
+    margin-bottom: 24px;
+  }
+}
+
+.dev-practices {
+  border-top: 3px solid #F6914D;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, #F6F0E9 100%);
+
+  // add gradient blur
+  dd:nth-last-of-type(2),
+  dt:nth-last-of-type(2) {
+    color: rgba(47, 51, 66, 0.65);
+  }
+  dd:last-of-type,
+  dt:last-of-type {
+    margin-bottom: 8px;
+    background: linear-gradient(180deg, rgba(47, 51, 66, 0.50) 0%, rgba(47, 51, 66, 0.00) 100%);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+.btn-orange {
+  background-color: #F6914D;
+  color: #FFF;
+  padding: 1rem 2rem;
+  font-size: 17px;
+  letter-spacing: 0.68px;
+
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    color: #FFF;
+    background-color: darken(#F6914D, 5%)
+  }
+}
+
+.tidelift-text {
+  line-height: 180%;
+}
+
+.blurry {
+  filter: blur(4px);
+  -webkit-user-select: none;
+  user-select: none;
+}
