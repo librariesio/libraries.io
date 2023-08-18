@@ -97,6 +97,7 @@ gem "yajl-ruby"
 group :development do
   gem "annotate"
   gem "brakeman", require: false
+  gem "listen"
   gem "pry-rails"
   gem "sql_queries_count"
 end
