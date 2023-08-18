@@ -1,15 +1,5 @@
-<dl class='row'>
-    <h2>
-    <dt class='col-xs-8'>
-      SourceRank
-    </dt>
-    <dd class='col-xs-4'>
-      <%= link_to @project.rank, project_sourcerank_path(@project.to_param) %>
-    </dd>
-  </h2>
-</dl>
-<hr>
-<dl class='row'>
+<dl class='row detail-card'>
+  <h2 class='col-xs-12'>Stats</h2>
   <% if @project.can_have_dependencies? && @project.latest_version %>
     <dt class='col-xs-8'>
       Dependencies
@@ -91,4 +81,10 @@
         </dd>
       <% end %>
     <% end %>
+    <dt class='col-xs-8'>
+      SourceRank
+    </dt>
+    <dd class='col-xs-4'>
+      <%= link_to @project.rank, project_sourcerank_path(@project.to_param) %>
+    </dd>
   </dl>
