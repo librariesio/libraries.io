@@ -7,4 +7,5 @@ require_relative "config/environment"
 # use Rack::Deflater
 use Rack::CanonicalHost, ENV["CANONICAL_HOST"], ignore: "localhost" if ENV["CANONICAL_HOST"]
 
+run Rails.application
 Rails.application.load_server

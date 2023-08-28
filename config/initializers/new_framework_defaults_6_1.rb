@@ -24,13 +24,13 @@
 # Specify cookies SameSite protection level: either :none, :lax, or :strict.
 #
 # This change is not backwards compatible with earlier Rails versions.
-# It"s best enabled when your entire app is migrated and stable on 6.1.
+# It's best enabled when your entire app is migrated and stable on 6.1.
 # Rails.application.config.action_dispatch.cookies_same_site_protection = :lax
 
 # Generate CSRF tokens that are encoded in URL-safe Base64.
 #
 # This change is not backwards compatible with earlier Rails versions.
-# It"s best enabled when your entire app is migrated and stable on 6.1.
+# It's best enabled when your entire app is migrated and stable on 6.1.
 # Rails.application.config.action_controller.urlsafe_csrf_tokens = true
 
 # Specify whether `ActiveSupport::TimeZone.utc_to_local` returns a time with an
@@ -41,7 +41,7 @@
 # requests to HTTPS in `ActionDispatch::SSL` middleware.
 # Rails.application.config.action_dispatch.ssl_default_redirect_status = 308
 
-# Use new connection handling API. For most applications this won"t have any
+# Use new connection handling API. For most applications this won't have any
 # effect. For applications using multiple databases, this new API provides
 # support for granular connection swapping.
 # Rails.application.config.active_record.legacy_connection_handling = false
