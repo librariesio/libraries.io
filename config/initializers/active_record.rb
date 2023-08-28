@@ -11,7 +11,8 @@ module ActiveRecord
       execute("SET statement_timeout = '#{seconds * 1000}';")
       yield(self)
     ensure
-      execute("SET statement_timeout = '#{ActiveRecord::Base.configurations.dig(Rails.env, 'variables', 'statement_timeout')}';")
+      default_timeout = ActiveRecord::Base.configurations.find_db_config(Rails.env).config.dig("variables", "statement_timeout")
+      execute("SET statement_timeout = '#{default_timeout}';")
     end
 
     def fetch_statement_timeout
