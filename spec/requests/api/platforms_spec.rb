@@ -9,7 +9,7 @@ describe "Api::PlatformsController", elasticsearch: true do
       Project.__elasticsearch__.refresh_index!
       get "/api/platforms"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(json).to eq [{
         "name" => "Rubygems",
         "project_count" => 1,

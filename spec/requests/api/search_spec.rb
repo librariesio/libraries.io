@@ -27,7 +27,7 @@ describe "API::SearchController", elasticsearch: true do
         get "/api/search?api_key=#{user.api_key}"
 
         expect(response).to have_http_status(:success)
-        expect(response.content_type).to eq("application/json")
+        expect(response.content_type).to start_with("application/json")
         expect(response.body).to be_json_eql []
       end
     end

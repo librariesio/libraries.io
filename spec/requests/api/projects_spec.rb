@@ -21,14 +21,14 @@ describe "Api::ProjectsController" do
     it "renders successfully" do
       get "/api/#{project.platform}/#{project.name}"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql project_json_response(project).to_json
     end
 
     it "renders successfully with internal API key" do
       get "/api/#{project.platform}/#{project.name}?api_key=#{internal_user.api_key}"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
 
       # with internal API key we add updated_at field
       expected_response = project_json_response(project)
@@ -42,14 +42,14 @@ describe "Api::ProjectsController" do
     it "renders successfully" do
       get "/api/#{dependent_project.platform}/#{dependent_project.name}/dependents"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql [project_json_response(project)].to_json
     end
 
     it "renders name only" do
       get "/api/#{dependent_project.platform}/#{dependent_project.name}/dependents?subset=name_only"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql [{ name: project.name }].to_json
     end
   end
@@ -58,7 +58,7 @@ describe "Api::ProjectsController" do
     it "renders successfully" do
       get "/api/#{project.platform}/#{project.name}/dependent_repositories"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql []
     end
   end
@@ -67,7 +67,7 @@ describe "Api::ProjectsController" do
     it "renders successfully" do
       get "/api/projects/updated?start_time=#{1.year.ago.utc.iso8601}&api_key=#{internal_user.api_key}"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql ({
         updated: [
           {
@@ -88,7 +88,7 @@ describe "Api::ProjectsController" do
     it "ignores stuff after end_time" do
       get "/api/projects/updated?start_time=#{1.year.ago.utc.iso8601}&end_time=#{1.month.ago.utc.iso8601}&api_key=#{internal_user.api_key}"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql ({
         updated: [],
         deleted: [],
@@ -99,7 +99,7 @@ describe "Api::ProjectsController" do
       after_everything = [project.updated_at, dependent_project.updated_at].max + 1
       get "/api/projects/updated?start_time=#{after_everything.utc.iso8601}&api_key=#{internal_user.api_key}"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql ({
         updated: [],
         deleted: [],
@@ -131,7 +131,7 @@ describe "Api::ProjectsController" do
       project.destroy!
       get "/api/projects/updated?start_time=#{1.year.ago.utc.iso8601}&api_key=#{internal_user.api_key}"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql ({
         updated: [
           {
@@ -154,7 +154,7 @@ describe "Api::ProjectsController" do
     it "renders successfully" do
       get "/api/#{project.platform}/#{project.name}/#{version.number}/dependencies"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql(
         {
           contributions_count: 0,
@@ -210,7 +210,7 @@ describe "Api::ProjectsController" do
     it "renders successfully" do
       get "/api/#{project.platform}/#{project.name}/#{version.number}/dependencies?subset=minimum"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql({
         "name": project.name,
         "platform": project.platform,
@@ -257,7 +257,7 @@ describe "Api::ProjectsController" do
         ],
       }
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql([
         { status: 200,
           body: {
@@ -325,7 +325,7 @@ describe "Api::ProjectsController" do
     it "renders successfully" do
       get "/api/#{project.platform}/#{project.name}/contributors"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql([].to_json)
     end
   end
@@ -334,7 +334,7 @@ describe "Api::ProjectsController" do
     it "renders successfully" do
       get "/api/#{project.platform}/#{project.name}/sourcerank"
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql({
         "all_prereleases": 0,
         "any_outdated_dependencies": 0,
