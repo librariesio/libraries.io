@@ -165,14 +165,14 @@ module RepositoryHost
     end
 
     def download_readme(token = nil)
-      contents = {
-        html_body: api_client(token).readme(repository.full_name, accept: "application/vnd.github.V3.html"),
-      }
+      contents = api_client(token)
+        .readme(repository.full_name, accept: "application/vnd.github.V3.html")
+        .force_encoding(Encoding::UTF_8)
 
       if repository.readme.nil?
-        repository.create_readme(contents)
+        repository.create_readme(html_body: contents)
       else
-        repository.readme.update(contents)
+        repository.readme.update(html_body: contents)
       end
     rescue *IGNORABLE_EXCEPTIONS
       nil
