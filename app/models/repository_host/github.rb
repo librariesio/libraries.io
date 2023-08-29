@@ -169,7 +169,7 @@ module RepositoryHost
         .readme(repository.full_name, accept: "application/vnd.github.V3.html")
         .force_encoding(Encoding::UTF_8)
 
-      if repository.readme.nil?
+      if repository.reload_readme.nil?
         repository.create_readme(html_body: contents)
       else
         repository.readme.update(html_body: contents)
