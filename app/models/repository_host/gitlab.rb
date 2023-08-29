@@ -110,7 +110,7 @@ module RepositoryHost
       content = Readme.format_markup(readme_path, file[:content])
       return unless content.present?
 
-      if repository.readme.nil?
+      if repository.reload_readme.nil?
         repository.create_readme(html_body: content)
       else
         repository.readme.update(html_body: content)
