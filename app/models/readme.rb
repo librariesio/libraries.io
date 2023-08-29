@@ -40,7 +40,7 @@ class Readme < ApplicationRecord
     return unless content.present?
     return unless supported_format?(path)
 
-    GitHub::Markup.render(path, content.force_encoding("UTF-8"))
+    GitHub::Markup.render(path, content.force_encoding(Encoding::UTF_8))
   rescue GitHub::Markup::CommandError
     nil
   end
@@ -89,6 +89,6 @@ class Readme < ApplicationRecord
       rescue NoMethodError, URI::InvalidURIError, URI::InvalidComponentError # rubocop: disable Lint/SuppressedException
       end
     end
-    self.html_body = doc.to_s
+    self.html_body = doc.to_html(encoding: Encoding::UTF_8)
   end
 end
