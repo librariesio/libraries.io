@@ -79,27 +79,28 @@ Style/RedundantParentheses:
 
 
 # NewCops to work on / decide against
-Style/RedundantSelfAssignmentBranch:
-  Enabled: false
-Style/MinMaxComparison:
-  Enabled: false
-Lint/SymbolConversion:
-  Enabled: false
-Style/FileRead:
-  Enabled: false
-Style/QuotedSymbols:
+Lint/AmbiguousRange:
   Enabled: false
 Lint/DuplicateBranch:
   Enabled: false
-Style/ReturnNilInPredicateMethodDefinition:
+Lint/LambdaWithoutLiteralBlock:
   Enabled: false
-Style/RedundantRegexpArgument:
-  Enabled: false
-Style/HashConversion:
+Lint/SymbolConversion:
   Enabled: false
 Lint/UnexpectedBlockArity:
   Enabled: false
-Lint/AmbiguousRange:
+
+Style/FileRead:
   Enabled: false
-Lint/LambdaWithoutLiteralBlock:
+Style/HashConversion:
+  Enabled: false
+Style/MinMaxComparison:
+  Enabled: false
+Style/QuotedSymbols:
+  Enabled: false
+Style/RedundantRegexpArgument:
+  Enabled: false
+Style/RedundantSelfAssignmentBranch:
+  Enabled: false
+Style/ReturnNilInPredicateMethodDefinition:
   Enabled: false
