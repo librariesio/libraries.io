@@ -59,8 +59,8 @@ Rails.application.configure do
   # Use a different cache store in production.
   config.cache_store = :mem_cache_store,
                        (ENV["MEMCACHIER_SERVERS"] || "").split(","),
-                       { username: ENV["MEMCACHIER_USERNAME"],
-                         password: ENV["MEMCACHIER_PASSWORD"],
+                       { username: ENV.fetch("MEMCACHIER_USERNAME", nil),
+                         password: ENV.fetch("MEMCACHIER_PASSWORD", nil),
                          failover: true,
                          compress: true,
                          socket_timeout: 0.5,
@@ -96,8 +96,8 @@ Rails.application.configure do
     address: "smtp.sendgrid.net",
     port: "2525",
     authentication: :plain,
-    user_name: ENV["SENDGRID_USERNAME"],
-    password: ENV["SENDGRID_PASSWORD"],
+    user_name: ENV.fetch("SENDGRID_USERNAME", nil),
+    password: ENV.fetch("SENDGRID_PASSWORD", nil),
     domain: "heroku.com",
     enable_starttls_auto: true,
   }

@@ -56,7 +56,19 @@ describe MaintenanceStats::Stats::Github::IssueStats do
     it "should handle no data from query" do
       results = stat.fetch_stats
 
-      expect(results).to be {}
+      expect(results).to eq(
+        {
+          issues_stats_truncated: false,
+          one_year_closed_issues: 0,
+          one_year_closed_pull_requests: 0,
+          one_year_issue_closure_rate: 1.0,
+          one_year_open_issues: 0,
+          one_year_open_pull_requests: 0,
+          one_year_pull_request_closure_rate: 1.0,
+          one_year_total_issues: 0,
+          one_year_total_pull_requests: 0,
+        }
+      )
     end
   end
 end

@@ -98,7 +98,7 @@ module PackageManager
 
     def self.dependencies(name, version, _mapped_project)
       version_data = get_json("#{API_URL}/package/#{name}")["versions"]
-      deps = version_data.find { |item| item["number"] == version }&.dig("dependencies")&.map { |d| d.split(" ") }
+      deps = version_data.find { |item| item["number"] == version }&.dig("dependencies")&.map(&:split)
       map_dependencies(deps, "runtime")
     end
   end

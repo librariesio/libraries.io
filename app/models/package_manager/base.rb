@@ -337,7 +337,7 @@ module PackageManager
         return
       end
 
-      names.each_slice(1000).each_with_index do |group, index|
+      names.each_slice(1000).with_index do |group, index|
         group.each { |name| PackageManagerDownloadWorker.perform_in(index.hours, self.name, name, nil, "download_async") }
       end
     end

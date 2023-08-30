@@ -1,4 +1,5 @@
 AllCops:
+  NewCops: enable
   TargetRubyVersion: 2.7
   Exclude:
   - db/schema.rb
@@ -74,4 +75,31 @@ Style/ClassAndModuleChildren:
 Style/NumericLiterals:
   MinDigits: 6
 Style/RedundantParentheses:
+  Enabled: false
+
+
+# NewCops to work on / decide against
+Style/RedundantSelfAssignmentBranch:
+  Enabled: false
+Style/MinMaxComparison:
+  Enabled: false
+Lint/SymbolConversion:
+  Enabled: false
+Style/FileRead:
+  Enabled: false
+Style/QuotedSymbols:
+  Enabled: false
+Lint/DuplicateBranch:
+  Enabled: false
+Style/ReturnNilInPredicateMethodDefinition:
+  Enabled: false
+Style/RedundantRegexpArgument:
+  Enabled: false
+Style/HashConversion:
+  Enabled: false
+Lint/UnexpectedBlockArity:
+  Enabled: false
+Lint/AmbiguousRange:
+  Enabled: false
+Lint/LambdaWithoutLiteralBlock:
   Enabled: false

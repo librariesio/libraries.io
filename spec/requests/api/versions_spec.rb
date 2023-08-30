@@ -10,7 +10,7 @@ describe "Api::RepositoriesController" do
   def make_versions(proj, count)
     count.times.map do |i|
       offset = i + 1
-      updated_at = Time.now - (count - offset) * 5.minutes
+      updated_at = Time.now - ((count - offset) * 5.minutes)
       create(:version, project: proj, number: "#{offset}.0.0", updated_at: updated_at)
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "./input_tsv_file"
+require_relative "input_tsv_file"
 
 namespace :one_off do
   # put your one off tasks here and delete them once they've been ran
@@ -32,7 +32,7 @@ namespace :one_off do
       .where(platform: "Clojars")
       .where("name LIKE '%:%'")
       .find_each do |p|
-        good_name = p.name.gsub(/:/, "/")
+        good_name = p.name.gsub(":", "/")
         bad_name = p.name
         puts "Updating #{good_name}, deleting #{bad_name}"
         PackageManager::Clojars.update(good_name)

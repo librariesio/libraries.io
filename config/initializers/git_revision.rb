@@ -3,5 +3,5 @@
 Rails.application.config.git_revision = if Rails.env.development?
                                           `git rev-parse HEAD`.strip
                                         else
-                                          ENV["REVISION_ID"]
+                                          ENV.fetch("REVISION_ID", "REVISION_ID_NOT_SET")
                                         end

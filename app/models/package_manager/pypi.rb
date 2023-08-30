@@ -51,7 +51,7 @@ module PackageManager
       updated = SimpleRSS.parse(get_raw(u)).items.map(&:title)
       u = "https://pypi.org/rss/packages.xml"
       new_packages = SimpleRSS.parse(get_raw(u)).items.map(&:title)
-      (updated.map { |t| t.split(" ").first } + new_packages.map { |t| t.split(" ").first }).uniq
+      (updated.map { |t| t.split.first } + new_packages.map { |t| t.split.first }).uniq
     end
 
     def self.project(name)

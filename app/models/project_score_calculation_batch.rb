@@ -46,10 +46,10 @@ class ProjectScoreCalculationBatch
   end
 
   def self.queue_status
-    PackageManager::Base.platforms.map do |platform|
+    PackageManager::Base.platforms.to_h do |platform|
       name = platform.formatted_name.downcase
       [name, queue_length(name)]
-    end.to_h
+    end
   end
 
   def initialize(platform, project_ids)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "./input_tsv_file"
+require_relative "input_tsv_file"
 
 namespace :projects do
   desc "Sync projects"

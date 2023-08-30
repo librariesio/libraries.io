@@ -535,6 +535,8 @@ class Project < ApplicationRecord
     return "GitHub" if github_name_with_owner.present?
     return "Bitbucket" if bitbucket_name_with_owner
     return "GitLab" if gitlab_name_with_owner
+
+    nil
   end
 
   def can_have_dependencies?
