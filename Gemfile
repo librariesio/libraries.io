@@ -99,6 +99,7 @@ group :development do
   gem "brakeman", require: false
   gem "listen"
   gem "pry-rails"
+  gem "rubocop"
   gem "sql_queries_count"
 end
 
@@ -107,7 +108,6 @@ group :development, :test do
   gem "pry"
   gem "pry-byebug"
   gem "rspec-rails"
-  gem "rubocop", require: false
 end
 
 group :test do
