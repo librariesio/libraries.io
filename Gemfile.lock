@@ -167,7 +167,7 @@ GEM
     creole (0.5.0)
     css_parser (1.14.0)
       addressable
-    dalli (2.7.10)
+    dalli (2.7.11)
     database_cleaner (1.7.0)
     date (3.3.3)
     ddtrace (1.4.0)
@@ -668,7 +668,7 @@ DEPENDENCIES
   concurrent-ruby-ext
   counter_culture
   creole
-  dalli
+  dalli (< 3)
   database_cleaner
   ddtrace (= 1.4.0)
   dotenv-rails
