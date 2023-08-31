@@ -4,7 +4,7 @@
     <% records.each do |date,count| %>
       <tr>
         <td>
-          <%= date.to_s(:long) %>
+          <%= date.to_fs(:long) %>
         </td>
         <td>
           <%= number_with_delimiter count %>

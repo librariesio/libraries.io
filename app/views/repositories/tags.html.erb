@@ -14,7 +14,7 @@
         <% if tag.published_at.present? %>
           <td>
             <small class='text-muted'>
-              <%= tag.published_at.to_s(:long_ordinal) %>
+              <%= tag.published_at.to_fs(:long_ordinal) %>
             </small>
           </td>
         <% end %>
