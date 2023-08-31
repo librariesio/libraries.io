@@ -3,7 +3,7 @@
 namespace :export do
   task platform: :environment do
     require "csv"
-    platform = ENV["PLATFORM"]
+    platform = ENV.fetch("PLATFORM")
 
     versions_file = File.open("#{platform}-versions.csv", "w")
     versions_csv = CSV.new(versions_file)

@@ -27,7 +27,7 @@ module PackageManager
     def self.recent_names
       u = "http://cocoapods.libraries.io/feed.rss"
       titles = SimpleRSS.parse(get_raw(u)).items.map(&:title)
-      titles.map { |t| t.split(" ")[1] }.uniq
+      titles.map { |t| t.split[1] }.uniq
     end
 
     def self.project(name)

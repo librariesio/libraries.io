@@ -102,7 +102,7 @@ class AuthToken < ApplicationRecord
     end
   end
 
-  V4RateLimitQuery = Rails.application.config.graphql.client.parse <<-'GRAPHQL'
+  V4RateLimitQuery = Rails.application.config.graphql.client.parse <<-GRAPHQL
     query {
       viewer {
         login

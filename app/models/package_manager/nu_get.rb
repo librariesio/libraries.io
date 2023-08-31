@@ -48,7 +48,7 @@ module PackageManager
 
     def self.load_names(limit = nil)
       endpoints = name_endpoints
-      segment_count = limit || endpoints.length - 1
+      segment_count = limit || (endpoints.length - 1)
 
       endpoints.reverse[0..segment_count].each do |endpoint|
         package_ids = get_names(endpoint)

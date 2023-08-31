@@ -67,21 +67,21 @@ module Libraries
     end
 
     # Env-based config
-    config.github_public_key = ENV["GITHUB_PUBLIC_KEY"]
-    config.github_public_secret = ENV["GITHUB_PUBLIC_SECRET"]
-    config.github_private_key = ENV["GITHUB_PRIVATE_KEY"]
-    config.github_private_secret = ENV["GITHUB_PRIVATE_SECRET"]
-    config.github_key = ENV["GITHUB_KEY"]
-    config.github_secret = ENV["GITHUB_SECRET"]
-    config.bitbucket_key = ENV["BITBUCKET_KEY"]
-    config.gitlab_key = ENV["GITLAB_KEY"]
-    config.gitlab_application_id = ENV["GITLAB_APPLICATION_ID"]
-    config.gitlab_secret = ENV["GITLAB_SECRET"]
-    config.bugsnag_api_key = ENV["BUGSNAG_API_KEY"]
-    config.bitbucket_application_id = ENV["BITBUCKET_APPLICATION_ID"]
-    config.bitbucket_secret = ENV["BITBUCKET_SECRET"]
-    config.ga_analytics_id = ENV["GA_ANALYTICS_ID"]
-    config.gtm_id = ENV["GTM_ID"]
-    config.tidelift_api_key = ENV["TIDELIFT_API_KEY"]
+    config.github_public_key = ENV.fetch("GITHUB_PUBLIC_KEY", nil)
+    config.github_public_secret = ENV.fetch("GITHUB_PUBLIC_SECRET", nil)
+    config.github_private_key = ENV.fetch("GITHUB_PRIVATE_KEY", nil)
+    config.github_private_secret = ENV.fetch("GITHUB_PRIVATE_SECRET", nil)
+    config.github_key = ENV.fetch("GITHUB_KEY", nil)
+    config.github_secret = ENV.fetch("GITHUB_SECRET", nil)
+    config.bitbucket_key = ENV.fetch("BITBUCKET_KEY", nil)
+    config.gitlab_key = ENV.fetch("GITLAB_KEY", nil)
+    config.gitlab_application_id = ENV.fetch("GITLAB_APPLICATION_ID", nil)
+    config.gitlab_secret = ENV.fetch("GITLAB_SECRET", nil)
+    config.bugsnag_api_key = ENV.fetch("BUGSNAG_API_KEY", nil)
+    config.bitbucket_application_id = ENV.fetch("BITBUCKET_APPLICATION_ID", nil)
+    config.bitbucket_secret = ENV.fetch("BITBUCKET_SECRET", nil)
+    config.ga_analytics_id = ENV.fetch("GA_ANALYTICS_ID", nil)
+    config.gtm_id = ENV.fetch("GTM_ID", nil)
+    config.tidelift_api_key = ENV.fetch("TIDELIFT_API_KEY", nil)
   end
 end

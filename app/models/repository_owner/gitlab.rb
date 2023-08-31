@@ -11,10 +11,10 @@ module RepositoryOwner
     end
 
     def self.fetch_user(id_or_login)
-      if id_or_login.to_i.to_s != id_or_login.to_s
-        api_client.get("/users?username=#{id_or_login}").first
-      else
+      if id_or_login.to_i.to_s == id_or_login.to_s
         api_client.user(id_or_login)
+      else
+        api_client.get("/users?username=#{id_or_login}").first
       end
     rescue *RepositoryHost::Gitlab::IGNORABLE_EXCEPTIONS
       nil

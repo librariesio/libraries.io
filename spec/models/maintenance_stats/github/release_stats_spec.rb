@@ -60,7 +60,15 @@ describe MaintenanceStats::Stats::Github::ReleaseStats do
     it "should handle no data from query" do
       results = stat.fetch_stats
 
-      expect(results).to be {}
+      expect(results).to eq(
+        {
+          last_month_releases: 0,
+          last_release_date: nil,
+          last_two_month_releases: 0,
+          last_week_releases: 0,
+          last_year_releases: 0,
+        }
+      )
     end
   end
 end
