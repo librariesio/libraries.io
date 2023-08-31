@@ -111,8 +111,8 @@ group :development, :test do
 end
 
 group :test do
-  gem "database_cleaner"
-  gem "factory_bot_rails", "~>5.2.0"
+  gem "database_cleaner", "~> 1.7.0"
+  gem "factory_bot_rails", "~> 6.2.0"
   gem "faker"
   gem "json_spec"
   gem "poltergeist", "1.17.0"
@@ -120,8 +120,8 @@ group :test do
   gem "rspec-sidekiq"
   gem "shoulda"
   gem "simplecov", require: false
-  gem "vcr", "~> 4.0"
-  gem "webmock", "~> 3.4"
+  gem "vcr"
+  gem "webmock"
 end
 
 group :production do
