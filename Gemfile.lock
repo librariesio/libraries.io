@@ -138,7 +138,7 @@ GEM
       sassc (>= 2.0.0)
     brakeman (4.5.1)
     brotli (0.2.3)
-    bugsnag (6.24.2)
+    bugsnag (6.26.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     byebug (11.1.3)
