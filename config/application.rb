@@ -48,6 +48,7 @@ module Libraries
     Application.config.graphql.schema = Schema
 
     config.active_job.queue_adapter = :sidekiq
+    config.active_record.belongs_to_required_by_default = false
 
     config.exceptions_app = routes
 
