@@ -8,7 +8,7 @@ Click here to read and accept the new terms of service and privacy policy: <%= a
 -----
 <% end %>
 
-I detected a new release (<%= @version.number %>) of <%= @project %> (<%= project_url(@project.to_param) %>) <%= "at #{@version.published_at.to_s(:long)}" if @version.published_at.present? %>
+I detected a new release (<%= @version.number %>) of <%= @project %> (<%= project_url(@project.to_param) %>) <%= "at #{@version.published_at.to_fs(:long)}" if @version.published_at.present? %>
 
 <% if @repos.any? %>
 You depend on <%= @project %> in the following repos: <%= @repos.map{|repo| repository_url(repo.to_param) }.to_sentence %>

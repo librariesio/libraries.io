@@ -18,7 +18,7 @@
   of <%= link_to @project, project_url(@project.to_param) %> was released
   on <%= @project.platform_name %>
   <% if @version.published_at.present? %>
-  at <%= @version.published_at.to_s(:long) %>
+  at <%= @version.published_at.to_fs(:long) %>
   <% end %>
 </p>
 

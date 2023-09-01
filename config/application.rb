@@ -24,7 +24,6 @@ Bundler.require(*Rails.groups)
 module Libraries
   class Application < Rails::Application
     config.load_defaults 6.1
-    config.autoloader = :zeitwerk
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -33,6 +32,9 @@ module Libraries
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Don't generate system test files.
+    config.generators.system_tests = nil
 
     # Initialize GraphQL client for Github API v4
     # Load schema from previous Github API schema dump
@@ -46,6 +48,7 @@ module Libraries
     Application.config.graphql.schema = Schema
 
     config.active_job.queue_adapter = :sidekiq
+    config.active_record.belongs_to_required_by_default = false
 
     config.exceptions_app = routes
 
