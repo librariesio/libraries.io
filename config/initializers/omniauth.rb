@@ -23,4 +23,4 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 
 Rails.application.config.default_provider = :github
-OmniAuth.config.allowed_request_methods = [:get, :post]
+OmniAuth.config.allowed_request_methods = %i[get post]
