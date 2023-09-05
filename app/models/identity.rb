@@ -56,8 +56,8 @@ class Identity < ApplicationRecord
       self.nickname   = auth_hash.fetch("info", {}).fetch("username")
       self.avatar_url = auth_hash.fetch("info", {}).fetch("image")
     when "bitbucket"
-      self.nickname   = uid
-      self.avatar_url = auth_hash.fetch("info", {}).fetch("avatar")
+      self.nickname   = auth_hash.fetch("info", {}).fetch("username")
+      self.avatar_url = auth_hash.dig("extra", "links", "avatar", "href")
     end
 
     save
