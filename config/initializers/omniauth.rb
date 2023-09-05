@@ -23,4 +23,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 
 Rails.application.config.default_provider = :github
+
+# TODO: Remove this when we don't have to accept oauth requests by GET
+# https://github.com/omniauth/omniauth/wiki/Resolving-CVE-2015-9284
 OmniAuth.config.allowed_request_methods = %i[get post]
