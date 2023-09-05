@@ -20,7 +20,7 @@ describe "ErrorsController" do
   describe "GET /500", type: :request do
     it "renders successfully when logged out" do
       visit "/500"
-      expect(page).to have_content "Oh no!  We've had a problem at our end."
+      expect(page).to have_content "Oh no! We've had a problem at our end."
     end
   end
 end

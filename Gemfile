@@ -111,11 +111,11 @@ group :development, :test do
 end
 
 group :test do
+  gem "capybara"
   gem "database_cleaner", "~> 1.7.0"
   gem "factory_bot_rails", "~> 6.2.0"
   gem "faker"
   gem "json_spec"
-  gem "poltergeist", "1.17.0"
   gem "rspec_junit_formatter"
   gem "rspec-sidekiq"
   gem "shoulda"
