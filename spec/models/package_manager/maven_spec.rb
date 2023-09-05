@@ -245,7 +245,9 @@ describe PackageManager::Maven do
         call_count = 0
         allow(described_class).to receive(:download_pom) do
           call_count += 1
-          call_count > 1 ? raise(Faraday::Error) : redirect_pom
+          raise Faraday::Error, "broken redirect" if call_count > 1
+
+          redirect_pom
         end
 
         expect(described_class.get_pom("group_id", "artifact_id", "version"))
