@@ -270,17 +270,18 @@ namespace :one_off do
     puts "Count of no-source Maven versions to retrieve: #{no_source_maven_versions.count}"
 
     output_file = args[:output_file] || File.join(__dir__, "output", "ignored_maven_versions.csv")
+    FileUtils.mkdir_p(File.dirname(output_file))
 
     puts "Outputting data to #{output_file}"
 
     output_csv = CSV.new(File.open(output_file, "w"))
-    output_csv << %w[platform name version]
+    output_csv << %w[platform name version repository_sources]
 
     puts "Outputting data for ignored-source Maven versions"
     ignored_maven_versions.in_batches do |batch|
       puts "Processing batch"
       batch.each do |version|
-        output_csv << [version.project.platform, version.project.name, version.number]
+        output_csv << [version.project.platform, version.project.name, version.number, version.repository_sources]
       end
       sleep 0.1
     end
@@ -289,7 +290,7 @@ namespace :one_off do
     no_source_maven_versions.in_batches do |batch|
       puts "Processing batch"
       batch.each do |version|
-        output_csv << [version.project.platform, version.project.name, version.number]
+        output_csv << [version.project.platform, version.project.name, version.number, version.repository_sources]
       end
       sleep 0.1
     end

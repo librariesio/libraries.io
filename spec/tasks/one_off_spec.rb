@@ -84,10 +84,10 @@ describe "one_off" do
 
       csv = CSV.open(tempfile.path)
 
-      expect(csv.shift).to eq(%w[platform name version])
+      expect(csv.shift).to eq(%w[platform name version repository_sources])
       expect(csv.readlines).to match_array([
-        [maven_project1.platform, maven_project1.name, maven1_version_no_source.number],
-        [maven_project2.platform, maven_project2.name, maven2_version_ignored_source.number],
+        [maven_project1.platform, maven_project1.name, maven1_version_no_source.number, nil],
+        [maven_project2.platform, maven_project2.name, maven2_version_ignored_source.number, maven2_version_ignored_source.repository_sources.to_json],
       ])
     end
 
