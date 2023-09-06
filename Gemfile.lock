@@ -24,15 +24,6 @@ GIT
   specs:
     semantic (1.6.1)
 
-GIT
-  remote: https://github.com/omniauth/omniauth-github.git
-  revision: 967d76979b6bf9bb0b71b255ad204f8931f65be6
-  ref: 967d769
-  specs:
-    omniauth-github (1.3.0)
-      omniauth (~> 1.5)
-      omniauth-oauth2 (>= 1.4.0, < 2.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -218,7 +209,7 @@ GEM
       railties (>= 5.0.0)
     faker (3.2.1)
       i18n (>= 1.8.11, < 2)
-    faraday (0.15.4)
+    faraday (0.17.6)
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (2.0.0)
       faraday (~> 0.8)
@@ -290,7 +281,7 @@ GEM
     groupdate (6.1.0)
       activesupport (>= 5.2)
     hashdiff (1.0.1)
-    hashie (3.6.0)
+    hashie (5.0.0)
     highline (2.0.3)
     hiredis (0.6.3)
     htmlentities (4.3.4)
@@ -313,7 +304,7 @@ GEM
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
     jsonapi-renderer (0.2.2)
-    jwt (2.2.2)
+    jwt (2.7.1)
     language_server-protocol (3.17.0.3)
     libdatadog (0.7.0.1.1)
     libddwaf (1.3.0.2.0)
@@ -356,7 +347,7 @@ GEM
     msgpack (1.5.3)
     multi_json (1.15.0)
     multi_xml (0.6.0)
-    multipart-post (2.1.1)
+    multipart-post (2.3.0)
     net-imap (0.3.7)
       date
       net-protocol
@@ -370,13 +361,13 @@ GEM
     nokogiri (1.15.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    oauth (0.5.4)
-    oauth2 (1.4.1)
-      faraday (>= 0.8, < 0.16.0)
+    oauth2 (2.0.9)
+      faraday (>= 0.17.3, < 3.0)
       jwt (>= 1.0, < 3.0)
-      multi_json (~> 1.3)
       multi_xml (~> 0.5)
-      rack (>= 1.2, < 3)
+      rack (>= 1.2, < 4)
+      snaky_hash (~> 2.0)
+      version_gem (~> 1.1)
     octicons (8.5.0)
       nokogiri (>= 1.6.3.1)
     octicons_helper (8.5.0)
@@ -386,22 +377,24 @@ GEM
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.13.8)
-    omniauth (1.9.0)
-      hashie (>= 3.4.6, < 3.7.0)
-      rack (>= 1.6.2, < 3)
-    omniauth-bitbucket (0.0.2)
-      multi_json (~> 1.7)
-      omniauth (~> 1.1)
-      omniauth-oauth (~> 1.0)
-    omniauth-gitlab (2.0.0)
-      omniauth (~> 1.0)
-      omniauth-oauth2 (~> 1.0)
-    omniauth-oauth (1.1.0)
-      oauth
-      omniauth (~> 1.0)
-    omniauth-oauth2 (1.6.0)
-      oauth2 (~> 1.1)
-      omniauth (~> 1.9)
+    omniauth (2.1.1)
+      hashie (>= 3.4.6)
+      rack (>= 2.2.3)
+      rack-protection
+    omniauth-atlassian-bitbucket (0.1.0)
+      omniauth-oauth2
+    omniauth-github (2.0.1)
+      omniauth (~> 2.0)
+      omniauth-oauth2 (~> 1.8)
+    omniauth-gitlab (4.1.0)
+      omniauth (~> 2.0)
+      omniauth-oauth2 (~> 1.8.0)
+    omniauth-oauth2 (1.8.0)
+      oauth2 (>= 1.4, < 3)
+      omniauth (~> 2.0)
+    omniauth-rails_csrf_protection (1.0.1)
+      actionpack (>= 4.2)
+      omniauth (~> 2.0)
     org-ruby (0.9.12)
       rubypants (~> 0.2)
     os (1.1.1)
@@ -599,6 +592,9 @@ GEM
     simplecov_json_formatter (0.1.4)
     sitemap_generator (6.0.2)
       builder (~> 3.0)
+    snaky_hash (2.0.1)
+      hashie
+      version_gem (~> 1.1, >= 1.1.1)
     spdx (2.0.11)
       fuzzy_match (~> 2.1)
       treetop (~> 1.6)
@@ -640,6 +636,7 @@ GEM
     unicode-display_width (2.4.2)
     unicode_utils (1.4.0)
     vcr (6.2.0)
+    version_gem (1.1.3)
     webmock (3.19.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -723,9 +720,11 @@ DEPENDENCIES
   octicons_helper
   octokit
   oj
-  omniauth-bitbucket
-  omniauth-github!
+  omniauth
+  omniauth-atlassian-bitbucket
+  omniauth-github
   omniauth-gitlab
+  omniauth-rails_csrf_protection
   org-ruby
   parallel
   pg
