@@ -210,10 +210,6 @@ Create a workspace (or use an existing). From that workspace's settings, select 
 |Permissions|Account: ✅ Read
 |Environment Vars|`BITBUCKET_APPLICATION_ID`, `BITBUCKET_SECRET`
 
-
-
-
-
 ## Background workers
 
 Many syncing tasks are added to a sidekiq queue to be ran asynchronously later, including tasks such as syncing repository data, contributors, tags and permissions.
