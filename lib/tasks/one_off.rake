@@ -283,7 +283,6 @@ namespace :one_off do
       batch.each do |version|
         output_csv << [version.project.platform, version.project.name, version.number, version.repository_sources]
       end
-      sleep 0.1
     end
 
     puts "Outputting data for no-source Maven versions"
@@ -292,7 +291,6 @@ namespace :one_off do
       batch.each do |version|
         output_csv << [version.project.platform, version.project.name, version.number, version.repository_sources]
       end
-      sleep 0.1
     end
 
     output_csv.close
