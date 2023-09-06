@@ -44,8 +44,8 @@ sudo apt-get install postgresql postgresql-contrib libpq-dev libicu-dev
 ```
 
 If you are using a Docker container for Postgres, you'll need to edit the `config/database.yml`
-file with values found from the `docker-compose.yml` file in order for the app to connect to the db container. 
-Something like this in the default section: 
+file with values found from the `docker-compose.yml` file in order for the app to connect to the db container.
+Something like this in the default section:
 ```yaml
   username: <%= ENV["PG_USERNAME"] || "<username from the dockerfile>" %>
   password: <password from the dockerfile>
@@ -54,7 +54,7 @@ Something like this in the default section:
 ```
 When attempting to connect to the database or run a migration and you get authentication errors,
 you may need to go inside the container, obtain a psql shell, and manually create the superuser specified in the
-config file: 
+config file:
 ```postgresql
 create user <username> with password '<password>' superuser createdb;
 ```
@@ -132,24 +132,87 @@ rake -T
 
 ## Github authentication and connection
 
+To enable logins, you'll need to register your own OAuth applications on each service to connect your local application. Github, Gitlab, and Bitbucket are available to configure. Github public and private project sync also requires an OAuth application each. You only need to set up the integrations you're working on, but you will likely need at least one authentication service.
+
 To enable Github authentication go and register a new [GitHub OAuth Application](https://github.com/settings/applications/new). Your development configuration should look something like this:
 
 <img width="561" alt="screen shot 2016-12-18 at 21 54 35" src="https://cloud.githubusercontent.com/assets/564113/21299762/a7bfaace-c56c-11e6-834c-ff893f79cec3.png">
 
 If you're deploying this to production, just replace `http://localhost:3000` with your application's URL.
 
-You'll need to register an additional application to enable each of public and private projects, using `http://localhost:3000/auth/github_public/callback` and `http://localhost:3000/auth/github_private/callback` as the callbacks respectively. You do not need to do private projects unless you require that functionality.
-
-Once you've created your application you can then then add the following to your `.env`:
+Once registered, you'll be given a client ID and a secret key, add them in your `.env` and restart your Rails server.
 
 ```bash
+# .env
+
+# Github login
 GITHUB_KEY=yourclientidhere
 GITHUB_SECRET=yourclientsecrethere
-GITHUB_PUBLIC_KEY=yourpublicclientidhere
-GITHUB_PUBLIC_SECRET=yourpublicclientsecrethere
-GITHUB_PRIVATE_KEY=yourprivateclientidhere
-GITHUB_PRIVATE_SECRET=yourprivateclientsecrethere
+# Gitlab login
+GITLAB_APPLICATION_ID=yourgitlabappid
+GITLAB_SECRET=yourgitlabsecret
+# Bitbucket login
+BITBUCKET_APPLICATION_ID=yourbitbucketappid
+BITBUCKET_SECRET=yourbitbucketsecret
+# Github public project sync
+GITHUB_PUBLIC_KEY=yourpublicappclientid
+GITHUB_PUBLIC_SECRET=yourpublicappsecret
+# Github private project sync
+GITHUB_PRIVATE_KEY=yourprivateappclientid
+GITHUB_PRIVATE_SECRET=yourprivateappsecret
 ```
+
+### Github login
+
+From Settings > Developer Settings, [Register a new OAuth application](https://github.com/settings/applications/new)
+
+|Settings||
+|-|-|
+|Homepage|`http://localhost:3000`
+|Authorization callback URL|`http://localhost:3000/auth/github/callback`
+|Environment Vars|`GITHUB_KEY`, `GITHUB_SECRET`
+
+#### Public project sync
+
+|Settings||
+|-|-|
+|Homepage|`http://localhost:3000`
+|Authorization callback URL|`http://localhost:3000/auth/github_public/callback`
+|Environment Vars|`GITHUB_PUBLIC_KEY`, `GITHUB_PUBLIC_SECRET`
+
+
+#### Private project sync
+
+|Settings||
+|-|-|
+|Homepage|`http://localhost:3000`
+|Authorization callback URL|`http://localhost:3000/auth/github_private/callback`
+|Environment Vars|`GITHUB_PRIVATE_KEY`, `GITHUB_PRIVATE_SECRET`
+
+### Gitlab login
+
+[Create an OAuth Application](https://gitlab.com/-/profile/applications).
+
+|Settings||
+|-|-|
+|Redirect URI|`http://localhost:3000/auth/gitlab/callback`
+|Scopes|`read_user`
+|Environment Vars|`GITLAB_APPLICATION_ID`, `GITLAB_SECRET`
+
+
+### Bitbucket login
+
+Create a workspace (or use an existing). From that workspace's settings, select Add OAuth Consumer.
+
+|Settings||
+|-|-|
+|Callback URL|`http://localhost:3000/auth/bitbucket/callback`
+|Permissions|Account: ✅ Read
+|Environment Vars|`BITBUCKET_APPLICATION_ID`, `BITBUCKET_SECRET`
+
+
+
+
 
 ## Background workers
 
