@@ -257,4 +257,43 @@ namespace :one_off do
     puts "Total packages checked: #{input_tsv_file.count}"
     puts "Versions corrected: #{corrected_count}"
   end
+
+  desc "Retrieve Maven versions from ignored sources"
+  task :retrieve_maven_versions_from_ignored_sources, %i[output_file] => :environment do |_t, args|
+    maven_versions = Version.where(project_id: Project.where(platform: "Maven"))
+    # We want to retrieve the versions where the repository_sources are not solely ["Maven"] or ["Google"]
+    ignored_maven_versions = maven_versions.where.not("repository_sources = ?", ["Maven"].to_json).where.not("repository_sources = ?", ["Google"].to_json)
+    # We also want to retrieve the versions where repository_sources is nil, which aren't caught by the above
+    no_source_maven_versions = maven_versions.where("repository_sources IS NULL")
+
+    puts "Count of ignored-source Maven versions to retrieve: #{ignored_maven_versions.count}"
+    puts "Count of no-source Maven versions to retrieve: #{no_source_maven_versions.count}"
+
+    output_file = args[:output_file] || File.join(__dir__, "output", "ignored_maven_versions.csv")
+
+    puts "Outputting data to #{output_file}"
+
+    output_csv = CSV.new(File.open(output_file, "w"))
+    output_csv << %w[platform name version]
+
+    puts "Outputting data for ignored-source Maven versions"
+    ignored_maven_versions.in_batches do |batch|
+      puts "Processing batch"
+      batch.each do |version|
+        output_csv << [version.project.platform, version.project.name, version.number]
+      end
+      sleep 0.1
+    end
+
+    puts "Outputting data for no-source Maven versions"
+    no_source_maven_versions.in_batches do |batch|
+      puts "Processing batch"
+      batch.each do |version|
+        output_csv << [version.project.platform, version.project.name, version.number]
+      end
+      sleep 0.1
+    end
+
+    output_csv.close
+  end
 end
