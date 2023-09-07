@@ -63,36 +63,4 @@ describe "one_off" do
       expect(maven2_version_dependency.platform).to eq("Maven")
     end
   end
-
-  describe "retrieve_maven_versions_from_ignored_sources" do
-    let(:non_maven_project) { create(:project, platform: "Pypi", name: "non-maven") }
-    let!(:non_maven_version) { create(:version, project: non_maven_project, number: "1.0.0", repository_sources: nil) }
-
-    let(:maven_project1) { create(:project, platform: "Maven", name: "maven1") }
-    let!(:maven1_version_maven_source) { create(:version, project: maven_project1, number: "1.0.0", repository_sources: ["Maven"]) }
-    let!(:maven1_version_google_source) { create(:version, project: maven_project1, number: "2.0.0", repository_sources: ["Google"]) }
-    let!(:maven1_version_no_source) { create(:version, project: maven_project1, number: "3.0.0", repository_sources: nil) }
-
-    let(:maven_project2) { create(:project, platform: "Maven", name: "maven2") }
-    let!(:maven2_version_maven_source) { create(:version, project: maven_project2, number: "1.0.0", repository_sources: ["Maven"]) }
-    let!(:maven2_version_ignored_source) { create(:version, project: maven_project2, number: "2.0.0", repository_sources: ["Other"]) }
-
-    let!(:tempfile) { Tempfile.new }
-
-    it "retrieves the ignored maven versions" do
-      Rake::Task["one_off:retrieve_maven_versions_from_ignored_sources"].invoke(tempfile.path)
-
-      csv = CSV.open(tempfile.path)
-
-      expect(csv.shift).to eq(%w[platform name version repository_sources])
-      expect(csv.readlines).to match_array([
-        [maven_project1.platform, maven_project1.name, maven1_version_no_source.number, nil],
-        [maven_project2.platform, maven_project2.name, maven2_version_ignored_source.number, maven2_version_ignored_source.repository_sources.to_json],
-      ])
-    end
-
-    after do
-      tempfile.unlink
-    end
-  end
 end
