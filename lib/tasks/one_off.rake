@@ -295,4 +295,61 @@ namespace :one_off do
 
     output_csv.close
   end
+
+  desc "Cross reference canonical names against a given list" # NuGet only for now
+  task :check_canonical_names, %i[input_path] => :environment do |_t, args|
+    input = CSV.read(args.input_path, skip_blanks: true, headers: true, col_sep: "\t")
+    name_col = "name"
+
+    CSV.open(
+      "tmp/check_canonical_names-results-#{Time.current}.tsv", "w",
+      col_sep: "\t",
+      write_headers: true,
+      headers: %w[given_name name_from_meta_title name_from_canonical_link name_from_search
+                  name_from_meta_title_differs name_from_canonical_link_differs name_from_search_differs]
+    ) do |output|
+      input.each_slice(50) do |input_batch|
+        input_batch.each do |input_row|
+          given_name = input_row[name_col]
+          doc = PackageManager::ApiService.request_and_parse_html("https://www.nuget.org/packages/#{given_name}")
+          og_title_element = doc.css("meta[property='og:title']").first
+          canonical_link_element = doc.css("link[rel='canonical']").first
+
+          name_from_meta_title = if og_title_element
+                                   og_title_element.attributes["content"].text.split.first
+                                 elsif doc.text.empty?
+                                   puts "FETCH_ERROR", given_name, doc.body
+                                   "FETCH_ERROR"
+                                 else
+                                   puts "NO_OPENGRAPH_TITLE_FOUND", given_name, doc
+                                   "NO_OPENGRAPH_TITLE_FOUND"
+                                 end
+
+          name_from_canonical_link = if canonical_link_element
+                                       canonical_link_element.attributes["href"].text.sub("https://www.nuget.org/packages/", "")
+                                     elsif doc.text.empty?
+                                       "FETCH_ERROR"
+                                     else
+                                       puts "NO_CANONICAL_LINK_FOUND", given_name, doc
+                                       "NO_CANONICAL_LINK_FOUND"
+                                     end
+
+          name_from_search = PackageManager::NuGet.canonical_name_from_search(given_name)
+
+          output << [
+            given_name,
+            name_from_meta_title,
+            name_from_canonical_link,
+            name_from_search,
+            given_name == name_from_meta_title ? nil : "Y",
+            given_name == name_from_canonical_link ? nil : "Y",
+            given_name == name_from_search ? nil : "Y",
+          ]
+          sleep 0.1
+        end
+
+        sleep 10
+      end
+    end
+  end
 end
