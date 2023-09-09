@@ -302,7 +302,7 @@ namespace :one_off do
     name_col = "name"
 
     CSV.open(
-      "tmp/check_canonical_names-results-#{Time.current}.tsv", "w",
+      "tmp/check_canonical_names-results-#{Time.current.to_fs(:iso8601).parameterize}.tsv", "w",
       col_sep: "\t",
       write_headers: true,
       headers: %w[given_name name_from_meta_title name_from_canonical_link name_from_search
@@ -355,9 +355,10 @@ namespace :one_off do
           ]
           sleep 0.8
         end
-
         sleep 10
       end
     end
+
+    puts "DONE"
   end
 end
