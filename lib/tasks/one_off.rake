@@ -305,8 +305,8 @@ namespace :one_off do
       "tmp/check_canonical_names-results-#{Time.current.to_fs(:iso8601).parameterize}.tsv", "w",
       col_sep: "\t",
       write_headers: true,
-      headers: %w[given_name name_from_meta_title name_from_canonical_link name_from_search
-                  name_from_meta_title_differs name_from_canonical_link_differs name_from_search_differs
+      headers: %w[given_name name_from_og_title name_from_og_url name_from_rss_link name_from_search
+                  name_from_og_title_differs name_from_og_url_differs name_from_rss_link_differs name_from_search_differs
                   nuget_href]
     ) do |output|
       input.each_slice(40) do |input_batch|
@@ -315,26 +315,37 @@ namespace :one_off do
           nuget_href = "https://www.nuget.org/packages/#{given_name}"
           doc = PackageManager::ApiService.request_and_parse_html(nuget_href)
           og_title_element = doc.css("meta[property='og:title']").first
-          canonical_link_element = doc.css("link[rel='canonical']").first
+          og_url_element = doc.css("meta[property='og:url']").first
+          rss_link_element = doc.css("link[type='application/atom+xml']").first
 
-          name_from_meta_title = if og_title_element
-                                   og_title_element.attributes["content"].text.split.first
-                                 elsif doc.text.empty?
-                                   puts "FETCH_ERROR: #{given_name}"
-                                   "FETCH_ERROR"
-                                 else
-                                   puts "NO_OPENGRAPH_TITLE_FOUND: #{given_name}", doc
-                                   "NO_OPENGRAPH_TITLE_FOUND"
-                                 end
+          name_from_og_title = if og_title_element
+                                 og_title_element.attributes["content"].text.split.first
+                               elsif doc.text.empty?
+                                 puts "FETCH_ERROR: #{given_name}"
+                                 "FETCH_ERROR"
+                               else
+                                 puts "NO_OPENGRAPH_TITLE_FOUND: #{given_name}", doc
+                                 "NO_OPENGRAPH_TITLE_FOUND"
+                               end
 
-          name_from_canonical_link = if canonical_link_element
-                                       canonical_link_element.attributes["href"].text.sub("https://www.nuget.org/packages/", "")
-                                     elsif doc.text.empty?
-                                       "FETCH_ERROR"
-                                     else
-                                       puts "NO_CANONICAL_LINK_FOUND #{given_name}", doc
-                                       "NO_CANONICAL_LINK_FOUND"
-                                     end
+          name_from_og_url = if og_url_element
+                               og_url_element.attributes["content"].text.sub("https://nuget.org/packages/", "").sub(/\/$/, "")
+                             elsif doc.text.empty?
+                               "FETCH_ERROR"
+                             else
+                               puts "NO_OPENGRAPH_URL_FOUND #{given_name}", doc
+                               "NO_OPENGRAPH_URL_FOUND"
+                             end
+
+          name_from_rss_link = if rss_link_element
+                                 rss_link_element.attributes["href"].text.sub("/packages/", "").sub(/\/atom\.xml$/, "")
+                               elsif doc.text.empty?
+                                 "FETCH_ERROR"
+                               else
+                                 puts "NO_RSS_LINK_FOUND #{given_name}", doc
+                                 "NO_RSS_LINK_FOUND"
+                               end
+
           search_json = PackageManager::ApiService.request_and_parse_json("https://azuresearch-ussc.nuget.org/query?q=#{given_name}")
           results = search_json["data"]
           name_from_search = if results
@@ -345,11 +356,13 @@ namespace :one_off do
 
           output << [
             given_name,
-            name_from_meta_title,
-            name_from_canonical_link,
+            name_from_og_title,
+            name_from_og_url,
+            name_from_rss_link,
             name_from_search,
-            given_name == name_from_meta_title ? nil : "Y",
-            given_name == name_from_canonical_link ? nil : "Y",
+            given_name == name_from_og_title ? nil : "Y",
+            given_name == name_from_og_url ? nil : "Y",
+            given_name == name_from_rss_link ? nil : "Y",
             given_name == name_from_search ? nil : "Y",
             nuget_href,
           ]
