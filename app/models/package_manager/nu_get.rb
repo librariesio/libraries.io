@@ -226,5 +226,21 @@ module PackageManager
       requirements << ">= 0" if requirements.empty?
       requirements.join(" ")
     end
+
+    # checks to see if the package exists on NuGet and the name matches the canonical name
+    def self.canonical_nuget_name?(name)
+      nuget_href = "https://www.nuget.org/packages/#{name}"
+      page = get_html(nuget_href)
+      og_url_element = page.css("meta[property='og:url']").first
+
+      unless og_url_element
+        Rails.logger.info("Could not fetch canonical name for nuget/#{name}")
+        return false
+      end
+
+      canonical_name = og_url_element.attributes.fetch("content").text.sub("https://nuget.org/packages/", "").sub(/\/$/, "")
+
+      canonical_name == name
+    end
   end
 end

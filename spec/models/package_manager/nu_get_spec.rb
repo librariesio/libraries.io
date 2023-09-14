@@ -221,4 +221,28 @@ describe PackageManager::NuGet do
       end
     end
   end
+
+  describe "::canonical_nuget_name?" do
+    subject(:result) do
+      VCR.use_cassette(cassette) { described_class.canonical_nuget_name?(name) }
+    end
+
+    context "when name matches" do
+      let(:name) { "Newtonsoft.Json" }
+      let(:cassette) { "nu_get/canonical_name_match" }
+
+      it "is true" do
+        expect(result).to eq(true)
+      end
+    end
+
+    context "when name doesn't match" do
+      let(:name) { "NewtonSoft.JSON" }
+      let(:cassette) { "nu_get/canonical_name_nonmatch" }
+
+      it "is false" do
+        expect(result).to eq(false)
+      end
+    end
+  end
 end
