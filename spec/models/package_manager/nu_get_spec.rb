@@ -262,7 +262,7 @@ describe PackageManager::NuGet do
         let(:name) { canonical_name }
         let(:cassette) { "nu_get/canonical_name_match" }
 
-        it do
+        it "updates the canonically named project" do
           expect(StructuredLog).to_not receive(:capture).with("CANONICAL_NAME_DIFFERS", any_args)
 
           expect(result).to eq(project)
