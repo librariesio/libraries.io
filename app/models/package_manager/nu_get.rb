@@ -74,7 +74,7 @@ module PackageManager
 
     def self.project(name)
       h = {
-        name: name,
+        name: fetch_canonical_nuget_name(name),
       }
       h[:releases] = get_releases(name)
       h[:versions] = versions(h, name)
@@ -227,8 +227,8 @@ module PackageManager
       requirements.join(" ")
     end
 
-    # checks to see if the package exists on NuGet and the name matches the canonical name
-    def self.canonical_nuget_name?(name)
+    # Returns canonical casing for case-insensitive NuGet package names
+    def self.fetch_canonical_nuget_name(name)
       nuget_href = "https://www.nuget.org/packages/#{name}"
       page = get_html(nuget_href)
       og_url_element = page.css("meta[property='og:url']").first
@@ -238,9 +238,11 @@ module PackageManager
         return false
       end
 
-      canonical_name = og_url_element.attributes.fetch("content").text.sub("https://nuget.org/packages/", "").sub(/\/$/, "")
+      og_url_element.attributes.fetch("content").text.sub("https://nuget.org/packages/", "").sub(/\/$/, "")
+    end
 
-      canonical_name == name
+    def self.canonical_nuget_name?(name)
+      fetch_canonical_nuget_name(name) == name
     end
   end
 end

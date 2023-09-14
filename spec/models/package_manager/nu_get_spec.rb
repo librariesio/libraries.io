@@ -44,6 +44,7 @@ describe PackageManager::NuGet do
 
     before do
       allow(described_class).to receive(:nuspec).and_return(nil)
+      allow(described_class).to receive(:fetch_canonical_nuget_name).with("foo").and_return("foo")
     end
 
     # TODO: license urls are deprecated, but for now we'll fallback and include them as the license
@@ -222,17 +223,17 @@ describe PackageManager::NuGet do
     end
   end
 
-  describe "::canonical_nuget_name?" do
+  describe "::fetch_canonical_nuget_name" do
     subject(:result) do
-      VCR.use_cassette(cassette) { described_class.canonical_nuget_name?(name) }
+      VCR.use_cassette(cassette) { described_class.fetch_canonical_nuget_name(name) }
     end
 
     context "when name matches" do
       let(:name) { "Newtonsoft.Json" }
       let(:cassette) { "nu_get/canonical_name_match" }
 
-      it "is true" do
-        expect(result).to eq(true)
+      it "matches given" do
+        expect(result).to eq(name)
       end
     end
 
@@ -240,8 +241,9 @@ describe PackageManager::NuGet do
       let(:name) { "NewtonSoft.JSON" }
       let(:cassette) { "nu_get/canonical_name_nonmatch" }
 
-      it "is false" do
-        expect(result).to eq(false)
+      it "returns the one answer we can treat as canonical" do
+        expect(result).not_to eq(name)
+        expect(result).to eq("Newtonsoft.Json")
       end
     end
   end
