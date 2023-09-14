@@ -227,12 +227,13 @@ describe PackageManager::NuGet do
     subject(:result) do
       VCR.use_cassette(cassette) { described_class.fetch_canonical_nuget_name(name) }
     end
+    let(:canonical_name) { "Newtonsoft.Json" }
 
-    context "when name matches" do
-      let(:name) { "Newtonsoft.Json" }
+    context "when input matches canonical" do
+      let(:name) { canonical_name }
       let(:cassette) { "nu_get/canonical_name_match" }
 
-      it "matches given" do
+      it "returns same name" do
         expect(result).to eq(name)
       end
     end
@@ -244,6 +245,67 @@ describe PackageManager::NuGet do
       it "returns the one answer we can treat as canonical" do
         expect(result).not_to eq(name)
         expect(result).to eq("Newtonsoft.Json")
+      end
+    end
+  end
+
+  describe "::update" do
+    subject(:result) do
+      VCR.use_cassette(cassette) { described_class.update(name) }
+    end
+    let(:canonical_name) { "Newtonsoft.Json" }
+
+    context "when project with canonical name exists" do
+      let!(:project) { create(:project, :nuget, name: canonical_name) }
+
+      context "when name matches canonical" do
+        let(:name) { canonical_name }
+        let(:cassette) { "nu_get/canonical_name_match" }
+
+        it do
+          expect(StructuredLog).to_not receive(:capture).with("CANONICAL_NAME_DIFFERS", any_args)
+
+          expect(result).to eq(project)
+          expect(result.name).to eq(canonical_name)
+        end
+      end
+
+      context "when name does not match canonical" do
+        let(:name) { "NewtonSoft.JSON" }
+        let(:cassette) { "nu_get/canonical_name_nonmatch" }
+
+        it "logs occurrence and updates the canonically named project" do
+          expect(StructuredLog).to receive(:capture).with("CANONICAL_NAME_DIFFERS", { platform: "nuget", name: name, canonical_name: canonical_name })
+
+          expect(result).to eq(project)
+          expect(result.name).to eq(canonical_name)
+        end
+      end
+    end
+
+    context "when no project with canonical name exists" do
+      context "when name matches canonical" do
+        let(:name) { canonical_name }
+        let(:cassette) { "nu_get/canonical_name_match" }
+
+        it "uses the canonical name to create project" do
+          expect(StructuredLog).to_not receive(:capture).with("CANONICAL_NAME_DIFFERS", any_args)
+
+          expect(result).to be_a(Project)
+          expect(result.name).to eq(canonical_name)
+        end
+      end
+
+      context "when name does not match canonical" do
+        let(:name) { "NewtonSoft.JSON" }
+        let(:cassette) { "nu_get/canonical_name_nonmatch" }
+
+        it "logs occurrence and uses the canonical name to create project" do
+          expect(StructuredLog).to receive(:capture).with("CANONICAL_NAME_DIFFERS", { platform: "nuget", name: name, canonical_name: canonical_name })
+
+          expect(result).to be_a(Project)
+          expect(result.name).to eq(canonical_name)
+        end
       end
     end
   end

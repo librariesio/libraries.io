@@ -73,11 +73,17 @@ module PackageManager
     end
 
     def self.project(name)
+      canonical_name = fetch_canonical_nuget_name(name)
+
+      if name != canonical_name
+        StructuredLog.capture("CANONICAL_NAME_DIFFERS", { platform: "nuget", name: name, canonical_name: canonical_name })
+      end
+
       h = {
-        name: fetch_canonical_nuget_name(name),
+        name: canonical_name,
       }
-      h[:releases] = get_releases(name)
-      h[:versions] = versions(h, name)
+      h[:releases] = get_releases(canonical_name)
+      h[:versions] = versions(h, canonical_name)
       return {} unless h[:versions].any?
 
       h
@@ -234,15 +240,11 @@ module PackageManager
       og_url_element = page.css("meta[property='og:url']").first
 
       unless og_url_element
-        Rails.logger.info("Could not fetch canonical name for nuget/#{name}")
+        StructuredLog.capture("FETCH_CANONICAL_NAME_FAILED", { platform: "nuget", name: name })
         return false
       end
 
       og_url_element.attributes.fetch("content").text.sub("https://nuget.org/packages/", "").sub(/\/$/, "")
-    end
-
-    def self.canonical_nuget_name?(name)
-      fetch_canonical_nuget_name(name) == name
     end
   end
 end
