@@ -4,12 +4,12 @@ require "rails_helper"
 
 RSpec.describe StructuredLog do
   it "logs structured data" do
-    expect(Rails.logger).to receive(:info).with("[COOL] env=test this=is helpful=maybe") # rubocop:todo RSpec/MessageSpies
+    expect(Rails.logger).to receive(:info).with("[COOL] env=test this=is helpful=maybe")
     described_class.capture("COOL", { this: "is", helpful: "maybe" })
   end
 
   it "doesn't explode if used poorly" do
-    expect(Rails.logger).to receive(:error).with(/Error capturing structured log for/) # rubocop:todo RSpec/MessageSpies
+    expect(Rails.logger).to receive(:error).with(/Error capturing structured log for/)
     described_class.capture("COOL", 1234)
   end
 
@@ -18,7 +18,7 @@ RSpec.describe StructuredLog do
   end
 
   it "renders nil as nil" do
-    expect(Rails.logger).to receive(:info).with("[NILCHECK] env=test nilvalue=nil") # rubocop:todo RSpec/MessageSpies
+    expect(Rails.logger).to receive(:info).with("[NILCHECK] env=test nilvalue=nil")
     described_class.capture("NILCHECK", { env: "test", nilvalue: nil })
   end
 
