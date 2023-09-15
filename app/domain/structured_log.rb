@@ -6,7 +6,7 @@ module StructuredLog
   # Timing example:
   #
   #  StructuredLog.capture(
-  #    "Some timing metric",
+  #    "SOME_TIMING_METRIC",
   #    {
   #      class_name: "User",
   #      method: "a_slow_method",
@@ -18,7 +18,7 @@ module StructuredLog
   # Error occurrence example:
   #
   #  StructuredLog.capture(
-  #    "Some error metric",
+  #    "SOME_ERROR_METRIC",
   #    {
   #      class_name: "Team",
   #      method: "some_erroring_method",
