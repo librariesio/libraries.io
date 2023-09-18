@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module StructuredLog
-  # See https://github.com/tidelift/design-docs/blob/main/2022-02-backend-logging-conventions.md for conventions
-  #
   # Timing example:
   #
   #  StructuredLog.capture(
@@ -28,7 +26,7 @@ module StructuredLog
   #  )
   #
   def self.capture(name, data_hash)
-    rails_logger(name, data_hash)
+    log_info(name, data_hash)
   rescue ArgumentError => e
     Rails.logger.error(e.message)
     raise e
@@ -36,7 +34,7 @@ module StructuredLog
     Rails.logger.error("Error capturing structured log for metric=#{name} - #{e.message}")
   end
 
-  def self.rails_logger(name, data_hash)
+  def self.log_info(name, data_hash)
     if name != name.parameterize(separator: "_").upcase
       raise ArgumentError, "log name should be formatted in UPPERCASE_AND_UNDERSCORES"
     end
