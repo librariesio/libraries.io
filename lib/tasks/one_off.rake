@@ -280,16 +280,15 @@ namespace :one_off do
             projects_hash[project_key] = project
           else
             puts "Couldn't find project for #{project_key}"
+            next
           end
         end
 
-        if project.present?
-          version_record = Version.find_by(project: project, number: version)
-          if version_record.present?
-            version_record.destroy! if commit
-          else
-            puts "Couldn't find version for #{project_key}:#{version}"
-          end
+        version_record = Version.find_by(project: project, number: version)
+        if version_record.present?
+          version_record.destroy! if commit
+        else
+          puts "Couldn't find version for #{project_key}:#{version}"
         end
       end
 
