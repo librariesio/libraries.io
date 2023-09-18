@@ -257,4 +257,47 @@ namespace :one_off do
     puts "Total packages checked: #{input_tsv_file.count}"
     puts "Versions corrected: #{corrected_count}"
   end
+
+  desc "Delete Maven versions and resync packages from list"
+  task :delete_maven_versions_and_resync_packages_from_list, %i[input_file commit] => :environment do |_t, args|
+    commit = args.commit.present? && args.commit == "yes"
+    input_tsv_file = InputTsvFile.new(args.input_file, ",")
+
+    projects_hash = {}
+
+    processed_count = 0
+    batch_size = 50
+
+    input_tsv_file.in_batches(batch_size: batch_size) do |row|
+      row.each do |platform, name, version|
+        project_key = "#{platform}/#{name}".to_sym
+
+        if projects_hash.key?(project_key)
+          project = projects_hash[project_key]
+        else
+          project = Project.platform(platform).find_by(name: name)
+          if project.present?
+            projects_hash[project_key] = project
+          else
+            puts "Couldn't find project for #{project_key}"
+          end
+        end
+
+        if project.present?
+          version_record = Version.find_by(project: project, number: version)
+          if version_record.present?
+            version_record.destroy! if commit
+          else
+            puts "Couldn't find version for #{project_key}:#{version}"
+          end
+        end
+      end
+
+      projects_hash.each_value(&:manual_sync) if commit
+
+      processed_count += batch_size
+      puts "Processed #{processed_count} of #{input_tsv_file.count}"
+      sleep 0.1
+    end
+  end
 end

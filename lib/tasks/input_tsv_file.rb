@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class InputTsvFile
-  def initialize(file)
+  def initialize(file, col_sep = "\t")
     @file = file
+    @col_sep = col_sep
   end
 
   def in_batches(batch_size: 50, &block)
@@ -18,7 +19,7 @@ class InputTsvFile
   def data
     @data ||= CSV.read(
       @file,
-      col_sep: "\t",
+      col_sep: @col_sep,
       headers: false,
       skip_blanks: true
     )
