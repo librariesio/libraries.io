@@ -254,29 +254,67 @@ describe PackageManager::NuGet do
       end
       let(:name) { "NewtonSoft.JSON" }
 
-      def stub_nuget_page(canonical_name)
-        Nokogiri::HTML(
-          <<~HTML
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-              <meta charset="utf-8" />
-              <meta property="og:url" content="https://nuget.org/packages/#{canonical_name}/" />
-            <head>
-            </html>
-          HTML
-        )
-      end
-
       before do
         allow(described_class).to receive(:get_html)
-          .with("https://www.nuget.org/packages/#{name}")
-          .and_return(stub_nuget_page(canonical_name))
+          .with("https://nuget.org/packages/#{name}")
+          .and_return(stub_page)
       end
 
-      it "returns the one answer we can treat as canonical" do
-        expect(result).not_to eq(name)
-        expect(result).to eq("Newtonsoft.Json")
+      context "when expected response" do
+        let(:stub_page) do
+          Nokogiri::HTML(
+            <<~HTML
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                <meta charset="utf-8" />
+                <meta property="og:url" content="https://nuget.org/packages/#{canonical_name}/" />
+              <head>
+              </html>
+            HTML
+          )
+        end
+      end
+
+      context "when possibly removed" do
+        let(:stub_page) do
+          Nokogiri::HTML(
+            <<~HTML
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                <title>Whoops</title>
+              <head>
+              </html>
+            HTML
+          )
+        end
+
+        it "logs fetch error and returns false" do
+          expect(StructuredLog).to receive(:capture).with("FETCH_CANONICAL_NAME_FAILED", { platform: "nuget", name: name })
+
+          expect(result).to be(false)
+        end
+      end
+
+      context "when unexpected format" do
+        let(:stub_page) do
+          Nokogiri::HTML(
+            <<~HTML
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                <meta charset="utf-8" />
+                <meta property="og:url" content="https://coolpackages.nuget.org/packages/#{canonical_name}/" />
+              <head>
+              </html>
+            HTML
+          )
+        end
+
+        it "raises error" do
+          expect { result }.to raise_error(described_class::ParseCanonicalNameFailedError)
+        end
       end
     end
   end
