@@ -247,6 +247,38 @@ describe PackageManager::NuGet do
         expect(result).to eq("Newtonsoft.Json")
       end
     end
+
+    context "without cassette" do
+      subject(:result) do
+        described_class.fetch_canonical_nuget_name(name)
+      end
+      let(:name) { "NewtonSoft.JSON" }
+
+      def stub_nuget_page(canonical_name)
+        Nokogiri::HTML(
+          <<~HTML
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="utf-8" />
+              <meta property="og:url" content="https://nuget.org/packages/#{canonical_name}/" />
+            <head>
+            </html>
+          HTML
+        )
+      end
+
+      before do
+        allow(described_class).to receive(:get_html)
+          .with("https://www.nuget.org/packages/#{name}")
+          .and_return(stub_nuget_page(canonical_name))
+      end
+
+      it "returns the one answer we can treat as canonical" do
+        expect(result).not_to eq(name)
+        expect(result).to eq("Newtonsoft.Json")
+      end
+    end
   end
 
   describe "::update" do
