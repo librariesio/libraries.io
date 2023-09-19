@@ -73,6 +73,13 @@ module PackageManager
     end
 
     def self.project(name)
+      canonical_name = fetch_canonical_nuget_name(name)
+
+      if name != canonical_name
+        StructuredLog.capture("CANONICAL_NAME_DIFFERS", { platform: "nuget", name: name, canonical_name: canonical_name })
+        name = canonical_name if canonical_name
+      end
+
       h = {
         name: name,
       }
@@ -225,6 +232,33 @@ module PackageManager
       end
       requirements << ">= 0" if requirements.empty?
       requirements.join(" ")
+    end
+
+    class ParseCanonicalNameFailedError < StandardError; end
+
+    # Returns canonical casing for case-insensitive NuGet package names
+    def self.fetch_canonical_nuget_name(name)
+      base_url = "https://nuget.org/packages/"
+      page = get_html("#{base_url}#{name}")
+      og_url_element = page.css("meta[property='og:url']").first
+
+      # This is likely to be a transient error or a sign the package was removed.
+      # A spike could indicate something systemic, however.
+      unless og_url_element
+        StructuredLog.capture("FETCH_CANONICAL_NAME_FAILED", { platform: "nuget", name: name })
+        return false
+      end
+
+      og_url = og_url_element.attributes["content"]&.text || ""
+      canonical_name = og_url.sub(base_url, "").sub(/\/$/, "")
+
+      # If we got as far as to grab values but they don't meet our assumptions, this should be
+      # exceptional. It could mean we need to change our strategy here.
+      if !og_url.start_with?(base_url) || canonical_name.blank?
+        raise ParseCanonicalNameFailedError, "Could not parse a canonical name for `#{name}`. Did upstream change their markup structure?"
+      end
+
+      canonical_name
     end
   end
 end

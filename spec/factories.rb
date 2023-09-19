@@ -49,6 +49,11 @@ FactoryBot.define do
       platform { "Pypi" }
       language { "Python" }
     end
+
+    trait :nuget do
+      platform { "NuGet" }
+      language { "C#" }
+    end
   end
 
   factory :platform do
