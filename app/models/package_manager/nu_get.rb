@@ -255,7 +255,7 @@ module PackageManager
       # If we got as far as to grab values but they don't meet our assumptions, this should be
       # exceptional. It could mean we need to change our strategy here.
       if !og_url.start_with?(base_url) || canonical_name.blank?
-        raise ParseCanonicalNameFailedError, "Did upstream change their markup structure?"
+        raise ParseCanonicalNameFailedError, "Could not parse a canonical name for `#{name}`. Did upstream change their markup structure?"
       end
 
       canonical_name
