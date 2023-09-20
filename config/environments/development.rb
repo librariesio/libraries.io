@@ -74,4 +74,27 @@ Rails.application.configure do
 
   config.host = "localhost"
   config.action_mailer.default_url_options = { host: config.host, port: 3000 }
+
+  # Logging options
+  logger = ActiveSupport::Logger.new($stdout)
+  logger.formatter = proc do |severity, datetime, _progname, msg|
+    date_format = datetime.strftime("%Y-%m-%dT%H:%M:%S.%L")
+    "#{date_format} #{severity} #{msg}\n"
+  end
+  config.logger = ActiveSupport::TaggedLogging.new(logger)
+  config.active_record.logger = nil # disables SQL logging
+  config.lograge.enabled = true
+  config.lograge.ignore_actions = ["HealthcheckController#index"]
+  config.lograge.formatter = Lograge::Formatters::Json.new
+  # "api_key" is the one from params, which we might overwrite beneath with our own "api_key" object.
+  params_exceptions = %w[controller action format id api_key].freeze
+  config.lograge.custom_options = lambda do |event|
+    {}.tap do |options|
+      options[:params] = event.payload[:params].except(*params_exceptions)
+      # extra keys that we want to log. Add these in the append_info_to_payload() overrided controller methods.
+      %i[rescued_error current_user remote_ip ip api_key github_event user_agent referer].each do |key|
+        options[key] = event.payload[key] if event.payload[key]
+      end
+    end
+  end
 end
