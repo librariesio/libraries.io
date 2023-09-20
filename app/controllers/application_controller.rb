@@ -319,5 +319,8 @@ class ApplicationController < ActionController::Base
     end
     # helpful for tracking down github hook logs
     payload[:github_event] = @github_event if @github_event
+
+    payload[:user_agent] = request.user_agent
+    payload[:referer] = request.referer
   end
 end

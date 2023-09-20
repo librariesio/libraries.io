@@ -47,6 +47,7 @@ gem "jb"
 gem "jquery-rails"
 gem "librariesio-url-parser", "~> 1"
 gem "license-compatibility"
+gem "lograge"
 gem "mail", require: ["mail", "mail/utilities", "mail/parsers"]
 gem "marginalia"
 gem "marginalia-sidekiq"
@@ -128,7 +129,6 @@ end
 
 group :production do
   gem "bugsnag"
-  gem "lograge"
   gem "rails_safe_tasks"
 end
 
