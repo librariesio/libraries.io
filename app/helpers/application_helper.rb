@@ -41,11 +41,10 @@ module ApplicationHelper
                                      else
                                        collection.first.class.name.split("::").last.titleize
                                      end)
-    if collection.total_pages < 2
-      case collection.size
-      when 0 then "No #{entry_name.pluralize} found"
-      else; "#{collection.total_entries} #{entry_name.pluralize}"
-      end
+    if collection.empty?
+      "No #{entry_name.pluralize} found"
+    elsif collection.total_pages < 2
+      "#{collection.total_entries} #{entry_name.pluralize}"
     else
       format(%(%d - %d of #{number_to_human(collection.total_entries)} #{entry_name.pluralize}), collection.offset + 1, collection.offset + collection.length)
     end
