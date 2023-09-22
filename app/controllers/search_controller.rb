@@ -3,18 +3,11 @@
 class SearchController < ApplicationController
   def index
     @query = params[:q]
-    @search = []
-    @projects = []
-    @facets = []
+    @search = search_projects(@query)
+    @suggestion = @search.response.suggest.did_you_mean.first if @query.present?
+    @projects = @search.results.map { |result| ProjectSearchResult.new(result) }
+    @facets = @search.response.aggregations
     @title = page_title
-
-    if @query.present?
-      @search = search_projects(@query)
-      @suggestion = @search.response.suggest.did_you_mean.first
-      @projects = @search.results.map { |result| ProjectSearchResult.new(result) }
-      @facets = @search.response.aggregations
-    end
-
     respond_to do |format|
       format.html
       format.atom

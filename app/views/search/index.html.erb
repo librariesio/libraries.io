@@ -10,9 +10,6 @@
       <div class="row">
         <div class="col-xs-6">
           <h5><%= search_page_entries_info @search, model: 'package' %></h5>
-          <% unless @query.present? %>
-            <p>Please provide a search term and try again</p>
-          <% end %>
         </div>
         <div class="col-xs-6">
           <div class="btn-group pull-right">
