@@ -295,6 +295,20 @@ namespace :projects do
     end
   end
 
+  desc "Verify NuGet Projects"
+  task :verify_nuget_projects, [:count] => :environment do |_task, args|
+    args.with_defaults(count: 100)
+
+    Project
+      .platform("NuGet")
+      .visible
+      .find_in_batches(batch_size: count) do |project_batch|
+        project_batch.each do |project|
+          NugetProjectVerificationWorker.perform_async(project.id)
+        end
+      end
+  end
+
   desc "Manual sync projects from list"
   task :sync_from_list, %i[input_file commit] => :environment do |_t, args|
     commit = args.commit.present? && args.commit == "yes"
