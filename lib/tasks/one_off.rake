@@ -292,9 +292,21 @@ namespace :one_off do
         end
       end
 
-      projects_hash.each_value(&:manual_sync) if commit
+      if commit
+        projects_hash.each_value do |project_record|
+          # Get versions count manually because it might be unsafe to trust
+          # cached project.versions_count value immediately after doing deletions
+          versions_count = Version.where(project: project_record).count
+          if versions_count > 0
+            project_record.try(:manual_sync)
+          else
+            project_record.destroy!
+          end
+        end
+      end
 
       processed_count += batch_size
+
       puts "Processed #{processed_count} of #{input_tsv_file.count}"
       sleep 0.1
     end
