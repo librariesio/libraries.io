@@ -6,10 +6,13 @@ class NugetProjectVerificationWorker
   include Sidekiq::Worker
   sidekiq_options queue: :small
 
-  def perform(name)
-    project = Project.platform("NuGet").find_by(name: name)
+  def perform(id)
+    project = Project
+      .platform("NuGet")
+      .visible # Skip projects that are already out of circulation
+      .find_by(id: id)
 
-    return if project.nil? || project&.removed? || project&.hidden?
+    return if project.nil?
 
     canonical_name = PackageManager::NuGet.fetch_canonical_nuget_name(project.name)
     return unless canonical_name

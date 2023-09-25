@@ -3,8 +3,8 @@
 require "rails_helper"
 
 describe NugetProjectVerificationWorker do
-  let(:project) { create(:project, :nuget, name: name) }
   let(:canonical_name) { "Newtonsoft.Json" }
+  let(:project) { create(:project, :nuget, name: name) }
 
   before do
     allow(PackageManager::NuGet).to receive(:fetch_canonical_nuget_name)
@@ -18,7 +18,7 @@ describe NugetProjectVerificationWorker do
   context "name matches canonical" do
     let(:name) { canonical_name }
     it "doesn't touch project status" do
-      expect { subject.perform(name) }.to not_change { project.reload.status }.from(nil)
+      expect { subject.perform(project.id) }.to not_change { project.reload.status }.from(nil)
     end
   end
 
@@ -26,7 +26,7 @@ describe NugetProjectVerificationWorker do
     let(:name) { canonical_name.upcase }
 
     it "marks project hidden" do
-      expect { subject.perform(name) }.to change { project.reload.status }.from(nil).to("Hidden")
+      expect { subject.perform(project.id) }.to change { project.reload.status }.from(nil).to("Hidden")
     end
 
     it "logs action performed" do
@@ -35,7 +35,7 @@ describe NugetProjectVerificationWorker do
         { platform: "NuGet", name: name, canonical_name: canonical_name, project_id: project.id }
       )
 
-      subject.perform(name)
+      subject.perform(project.id)
     end
   end
 end
