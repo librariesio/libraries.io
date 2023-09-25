@@ -15,21 +15,33 @@ class NugetProjectVerificationWorker
     return if project.nil?
 
     canonical_name = PackageManager::NuGet.fetch_canonical_nuget_name(project.name)
-    return unless canonical_name
+
+    logging_info = {
+      platform: project.platform.downcase,
+      name: project.name,
+      project_id: project.id,
+      canonical_name: canonical_name,
+    }
+
+    if canonical_name.nil?
+      # Retry if the fetch failed
+      raise "FETCH_CANONICAL_NAME_FAILED"
+    elsif canonical_name == false
+      if project.removed?
+        StructuredLog.capture("CANONICAL_NAME_ELEMENT_MISSING_PROJECT_REMOVED", logging_info)
+      else
+        StructuredLog.capture("CANONICAL_NAME_ELEMENT_MISSING_PROJECT_NOT_REMOVED", logging_info)
+        CheckStatusWorker.perform_async(project.id)
+      end
+
+      return false
+    end
 
     if project.name != canonical_name
       # Soft-delete erroneous projects until we're sure it's safe to remove them
       project.update!(status: "Hidden")
 
-      StructuredLog.capture(
-        "PROJECT_MARKED_NONCANONICAL",
-        {
-          platform: project.platform,
-          name: project.name,
-          project_id: project.id,
-          canonical_name: canonical_name,
-        }
-      )
+      StructuredLog.capture("PROJECT_MARKED_NONCANONICAL", logging_info)
     end
   end
 end

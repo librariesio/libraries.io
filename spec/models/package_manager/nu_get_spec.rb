@@ -276,7 +276,17 @@ describe PackageManager::NuGet do
         end
       end
 
-      context "when possibly removed" do
+      context "when request failed" do
+        let(:stub_page) { Nokogiri::HTML("") }
+
+        it "logs instance and returns nil" do
+          expect(StructuredLog).to receive(:capture).with("FETCH_CANONICAL_NAME_FAILED", { platform: "nuget", name: name })
+
+          expect(result).to eq(nil)
+        end
+      end
+
+      context "when element missing" do
         let(:stub_page) do
           Nokogiri::HTML(
             <<~HTML
@@ -290,10 +300,10 @@ describe PackageManager::NuGet do
           )
         end
 
-        it "logs fetch error and returns false" do
-          expect(StructuredLog).to receive(:capture).with("FETCH_CANONICAL_NAME_FAILED", { platform: "nuget", name: name })
+        it "logs instance and returns false" do
+          expect(StructuredLog).to receive(:capture).with("CANONICAL_NAME_ELEMENT_MISSING", { platform: "nuget", name: name })
 
-          expect(result).to be(false)
+          expect(result).to eq(false)
         end
       end
 
