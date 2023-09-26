@@ -4,7 +4,7 @@
 # keep one canonically named record for each project.
 class NugetProjectVerificationWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :small
+  sidekiq_options queue: :small, retry: 3, unique: :until_executed
 
   def perform(id)
     project = Project
