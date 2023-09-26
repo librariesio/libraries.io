@@ -237,7 +237,10 @@ module PackageManager
     class ParseCanonicalNameFailedError < StandardError; end
 
     # Returns canonical casing for case-insensitive NuGet package names
-    # @return String, false, nil
+    # @param name [String] A given project name to check
+    # @return [String] If successfully found, the canonical form of the given name
+    # @return [nil] The scrape request was unsuccessful
+    # @return [false] The scrape succeeded, but we didn't detect a name
     def self.fetch_canonical_nuget_name(name)
       base_url = "https://nuget.org/packages/"
       page = get_html("#{base_url}#{name}")
