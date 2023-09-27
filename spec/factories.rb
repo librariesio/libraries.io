@@ -19,6 +19,10 @@ FactoryBot.define do
     "https://github.com/rails/rails#{n}"
   end
 
+  trait :removed do
+    status { "Removed" }
+  end
+
   factory :project do
     name
     platform        { "Rubygems" }

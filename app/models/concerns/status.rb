@@ -16,4 +16,8 @@ module Status
   def maintained?
     !deprecated? && !removed? && !unmaintained?
   end
+
+  def hidden?
+    status == "Hidden"
+  end
 end

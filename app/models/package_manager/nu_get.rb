@@ -237,15 +237,22 @@ module PackageManager
     class ParseCanonicalNameFailedError < StandardError; end
 
     # Returns canonical casing for case-insensitive NuGet package names
+    # @param name [String] A given project name to check
+    # @return [String] If successfully found, the canonical form of the given name
+    # @return [nil] The scrape request was unsuccessful
+    # @return [false] The scrape succeeded, but we didn't detect a name
     def self.fetch_canonical_nuget_name(name)
       base_url = "https://nuget.org/packages/"
       page = get_html("#{base_url}#{name}")
       og_url_element = page.css("meta[property='og:url']").first
 
-      # This is likely to be a transient error or a sign the package was removed.
-      # A spike could indicate something systemic, however.
-      unless og_url_element
+      if page.text.empty? # Request failed, likely temporarily
         StructuredLog.capture("FETCH_CANONICAL_NAME_FAILED", { platform: "nuget", name: name })
+        return nil
+      elsif og_url_element.nil?
+        # If we got a response, but don't find this element, it most likely means
+        # the project was removed upstream.
+        StructuredLog.capture("CANONICAL_NAME_ELEMENT_MISSING", { platform: "nuget", name: name })
         return false
       end
 
@@ -253,7 +260,7 @@ module PackageManager
       canonical_name = og_url.sub(base_url, "").sub(/\/$/, "")
 
       # If we got as far as to grab values but they don't meet our assumptions, this should be
-      # exceptional. It could mean we need to change our strategy here.
+      # exceptional. It likely means we need to update this method.
       if !og_url.start_with?(base_url) || canonical_name.blank?
         raise ParseCanonicalNameFailedError, "Could not parse a canonical name for `#{name}`. Did upstream change their markup structure?"
       end
