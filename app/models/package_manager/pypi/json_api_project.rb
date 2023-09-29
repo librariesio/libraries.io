@@ -89,7 +89,7 @@ module PackageManager
               is_yanked: first_details["yanked"] == true,
               yanked_reason: first_details["yanked_reason"]
             )
-          end
+          end.sort
         )
       end
 

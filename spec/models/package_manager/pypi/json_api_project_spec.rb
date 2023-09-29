@@ -295,6 +295,35 @@ describe PackageManager::Pypi::JsonApiProject do
         end
       end
     end
+
+    context "with three releases" do
+      context "with point release older than highest stable release" do
+        let(:raw_releases) do
+          {
+            "1.0.0" => [{
+              "upload_time" => 1.day.ago.iso8601,
+              "yanked" => false,
+              "yanked_reason" => "",
+            }],
+            "1.0.1" => [{
+              "upload_time" => 1.minute.ago.iso8601,
+              "yanked" => false,
+              "yanked_reason" => "",
+            }],
+            "2.0.0" => [{
+              "upload_time" => 1.hour.ago.iso8601,
+              "yanked" => true,
+              "yanked_reason" => "use 1.0.1",
+            }],
+          }
+        end
+
+        it "orders releases chronologically" do
+          expect(project.releases.count).to eq(3)
+          expect(project.releases.map(&:version_number)).to eq(["1.0.0", "2.0.0", "1.0.1"])
+        end
+      end
+    end
   end
 
   describe "#present?" do
