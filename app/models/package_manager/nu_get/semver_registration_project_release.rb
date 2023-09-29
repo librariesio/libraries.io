@@ -40,6 +40,12 @@ module PackageManager
       end
 
       def <=>(other)
+        # this helps deal with nuget versions that are unlisted, which will all
+        # have the same publishing date of 1900-01-01
+        # those versions are likely old or beta, so we don't need to worry too
+        # much about using them properly.
+        return @version_number <=> other.version_number if @published_at == other.published_at
+
         @published_at <=> other.published_at
       end
     end

@@ -92,10 +92,27 @@ describe PackageManager::NuGet::SemverRegistrationProjectRelease do
   end
 
   describe "#<=>" do
-    let(:project_release_one_year) do
+    let(:one_year_ago) { 1.year.ago }
+
+    let(:project_release_one_year_earlier_version) do
       described_class.new(
-        published_at: 1.year.ago,
-        version_number: "version",
+        published_at: one_year_ago,
+        version_number: "version1",
+        project_url: "project_url",
+        deprecation: nil,
+        description: "",
+        summary: "",
+        tags: [],
+        licenses: "",
+        license_url: "",
+        dependencies: []
+      )
+    end
+
+    let(:project_release_one_year_later_version) do
+      described_class.new(
+        published_at: one_year_ago,
+        version_number: "version2",
         project_url: "project_url",
         deprecation: nil,
         description: "",
@@ -139,9 +156,15 @@ describe PackageManager::NuGet::SemverRegistrationProjectRelease do
 
     it "sorts correctly" do
       expect([
-        project_release_one_month, project_release_one_day, project_release_one_year
+        project_release_one_month,
+        project_release_one_year_earlier_version,
+        project_release_one_day,
+        project_release_one_year_later_version,
       ].sort).to eq([
-          project_release_one_year, project_release_one_month, project_release_one_day
+          project_release_one_year_earlier_version,
+          project_release_one_year_later_version,
+          project_release_one_month,
+          project_release_one_day,
       ])
     end
   end

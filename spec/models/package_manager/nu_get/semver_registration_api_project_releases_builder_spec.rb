@@ -15,7 +15,8 @@ describe PackageManager::NuGet::SemverRegistrationApiProjectReleasesBuilder do
           described_class.build(project_name: project_name).releases
         end
 
-        expect(releases.first.version_number).to eq("3.5.8")
+        # an unlisted beta that sorts first by version
+        expect(releases.first.version_number).to eq("10.0.1-beta1")
         expect(releases.last.version_number).to eq("13.0.3")
       end
     end
