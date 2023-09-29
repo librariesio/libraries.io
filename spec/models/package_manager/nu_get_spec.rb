@@ -35,37 +35,6 @@ describe PackageManager::NuGet do
     end
   end
 
-  describe "with release data" do
-    def stub_releases(releases_data = {})
-      allow(described_class)
-        .to receive(:get_releases)
-        .and_return(releases_data)
-    end
-
-    before do
-      allow(described_class).to receive(:nuspec).and_return(nil)
-      allow(described_class).to receive(:fetch_canonical_nuget_name).with("foo").and_return("foo")
-    end
-
-    # TODO: license urls are deprecated, but for now we'll fallback and include them as the license
-    # if no other info is available. In the future, it probably makes sense to add a license url value
-    # to a version so it's easier to work with by the consumer
-    it "falls back to license url if license unavailable" do
-      # Extremely abridged data
-      stub_releases([
-        "catalogEntry" => {
-          "version" => "1.2.3",
-          "licenseExpression" => "",
-          "licenseUrl" => "http://some.url",
-        },
-      ])
-
-      described_class.update(project.name)
-
-      expect(Version.first.original_license).to eq "http://some.url"
-    end
-  end
-
   describe "with repo in nuspec data" do
     let(:repository_url) { "https://github.com/librariesio/libraries.io" }
 
@@ -89,11 +58,18 @@ describe PackageManager::NuGet do
       {
         name: name,
         releases: [
-          {
-            "catalogEntry" => {
-              "version" => version,
-            },
-          },
+          PackageManager::NuGet::SemverRegistrationProjectRelease.new(
+            published_at: Time.now,
+            version: version,
+            project_url: "project_url",
+            deprecation: nil,
+            description: "description",
+            summary: "summary",
+            tags: [],
+            licenses: "licenses",
+            license_url: "license_url",
+            dependencies: []
+          ),
         ],
       }
     end
@@ -153,6 +129,16 @@ describe PackageManager::NuGet do
       let(:cassette) { "nu_get/package_unlisted" }
 
       it "is deprecated" do
+        expect(deprecation_info[:is_deprecated]).to eq(false)
+        expect(deprecation_info[:message]).to be_blank
+      end
+    end
+
+    context "first release deprecated, last not deprecated" do
+      let(:name) { "NLog.Extensions.Logging" }
+      let(:cassette) { "nu_get/deprecation_info/nlog_extensions_logging" }
+
+      it "is not deprecated" do
         expect(deprecation_info[:is_deprecated]).to eq(false)
         expect(deprecation_info[:message]).to be_blank
       end
@@ -231,7 +217,7 @@ describe PackageManager::NuGet do
 
     context "when input matches canonical" do
       let(:name) { canonical_name }
-      let(:cassette) { "nu_get/canonical_name_match" }
+      let(:cassette) { "nu_get/canonical_name/canonical_name_match" }
 
       it "returns same name" do
         expect(result).to eq(name)
@@ -240,7 +226,7 @@ describe PackageManager::NuGet do
 
     context "when name doesn't match" do
       let(:name) { "NewtonSoft.JSON" }
-      let(:cassette) { "nu_get/canonical_name_nonmatch" }
+      let(:cassette) { "nu_get/canonical_name/canonical_name_nonmatch" }
 
       it "returns the one answer we can treat as canonical" do
         expect(result).not_to eq(name)
@@ -340,7 +326,7 @@ describe PackageManager::NuGet do
 
       context "when name matches canonical" do
         let(:name) { canonical_name }
-        let(:cassette) { "nu_get/canonical_name_match" }
+        let(:cassette) { "nu_get/update/canonical_name_match" }
 
         it "updates the canonically named project" do
           expect(StructuredLog).to_not receive(:capture).with("CANONICAL_NAME_DIFFERS", any_args)
@@ -352,7 +338,7 @@ describe PackageManager::NuGet do
 
       context "when name does not match canonical" do
         let(:name) { "NewtonSoft.JSON" }
-        let(:cassette) { "nu_get/canonical_name_nonmatch" }
+        let(:cassette) { "nu_get/update/canonical_name_nonmatch" }
 
         it "logs occurrence and updates the canonically named project" do
           expect(StructuredLog).to receive(:capture).with("CANONICAL_NAME_DIFFERS", { platform: "nuget", name: name, canonical_name: canonical_name })
@@ -366,7 +352,7 @@ describe PackageManager::NuGet do
     context "when no project with canonical name exists" do
       context "when name matches canonical" do
         let(:name) { canonical_name }
-        let(:cassette) { "nu_get/canonical_name_match" }
+        let(:cassette) { "nu_get/update/canonical_name_match" }
 
         it "uses the canonical name to create project" do
           expect(StructuredLog).to_not receive(:capture).with("CANONICAL_NAME_DIFFERS", any_args)
@@ -378,7 +364,7 @@ describe PackageManager::NuGet do
 
       context "when name does not match canonical" do
         let(:name) { "NewtonSoft.JSON" }
-        let(:cassette) { "nu_get/canonical_name_nonmatch" }
+        let(:cassette) { "nu_get/update/canonical_name_nonmatch" }
 
         it "logs occurrence and uses the canonical name to create project" do
           expect(StructuredLog).to receive(:capture).with("CANONICAL_NAME_DIFFERS", { platform: "nuget", name: name, canonical_name: canonical_name })
