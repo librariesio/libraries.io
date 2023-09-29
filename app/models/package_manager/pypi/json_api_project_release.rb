@@ -30,6 +30,13 @@ module PackageManager
       def yanked?
         @is_yanked
       end
+
+      def <=>(other)
+        return -1 unless published_at?
+        return 1 unless other.published_at?
+
+        @published_at <=> other.published_at
+      end
     end
   end
 end

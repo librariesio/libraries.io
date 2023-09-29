@@ -21,4 +21,34 @@ describe PackageManager::Pypi::JsonApiProjectRelease do
       end
     end
   end
+
+  describe "#<=>" do
+    let(:left_release) { described_class.new(version_number: "1.0.0", published_at: published_at_left, is_yanked: false, yanked_reason: nil) }
+    let(:right_release) { described_class.new(version_number: "1.0.1", published_at: published_at_right, is_yanked: false, yanked_reason: nil) }
+
+    let(:published_at_left) { 1.month.ago }
+    let(:published_at_right) { 1.day.ago }
+
+    context "with both releases having published at dates" do
+      it "sorts correctly" do
+        expect([left_release, right_release].sort).to eq([left_release, right_release])
+      end
+    end
+
+    context "with left release not having published at date" do
+      let(:published_at_left) { nil }
+
+      it "sorts the empty item first" do
+        expect([left_release, right_release].sort).to eq([left_release, right_release])
+      end
+    end
+
+    context "with right release not having published at date" do
+      let(:published_at_right) { nil }
+
+      it "sorts the empty item first" do
+        expect([left_release, right_release].sort).to eq([right_release, left_release])
+      end
+    end
+  end
 end
