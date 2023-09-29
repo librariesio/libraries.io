@@ -44,7 +44,7 @@ module PackageManager
             license_url: catalog_entry["licenseUrl"],
             dependencies: dependencies
           )
-        end
+        end.sort
       end
 
       private

@@ -4,6 +4,29 @@ require "rails_helper"
 
 describe PackageManager::NuGet::SemverRegistrationApiProject do
   describe ".request" do
+    context "with non-chronological releases" do
+      before do
+        WebMock.stub_request(:get, "https://api.nuget.org/v3/registration5-gz-semver2/entityframework.mappingapi/index.json")
+          .to_return(body: JSON.dump({
+                                       "items" => [
+                                         { "items" => [
+                                           { "catalogEntry" => { "version" => "1.0.0", "published" => 1.month.ago.iso8601 } },
+                                           { "catalogEntry" => { "version" => "1.0.1", "published" => 1.day.ago.iso8601 } },
+                                           { "catalogEntry" => { "version" => "2.0.0", "published" => 1.week.ago.iso8601 } },
+                                         ] },
+                                       ],
+                                     }))
+      end
+
+      let(:project) do
+        described_class.request(project_name: "EntityFramework.MappingAPI")
+      end
+
+      it "sorts releases in the correct order" do
+        expect(project.releases.map(&:version_number)).to eq(["1.0.0", "2.0.0", "1.0.1"])
+      end
+    end
+
     context "with a deprecated release" do
       let(:project) do
         VCR.use_cassette("nu_get/api_project/entityframework_mappingapi") do
