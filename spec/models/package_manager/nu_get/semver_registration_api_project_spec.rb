@@ -39,7 +39,7 @@ describe PackageManager::NuGet::SemverRegistrationApiProject do
         end
 
         it "has a version" do
-          expect(last_release.version).to eq("5.3.4")
+          expect(last_release.version_number).to eq("5.3.4")
         end
 
         it "has a project url" do

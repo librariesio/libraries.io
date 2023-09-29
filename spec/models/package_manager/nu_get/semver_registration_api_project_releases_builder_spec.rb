@@ -15,8 +15,8 @@ describe PackageManager::NuGet::SemverRegistrationApiProjectReleasesBuilder do
           described_class.build(project_name: project_name).releases
         end
 
-        expect(releases.first.version).to eq("3.5.8")
-        expect(releases.last.version).to eq("13.0.3")
+        expect(releases.first.version_number).to eq("3.5.8")
+        expect(releases.last.version_number).to eq("13.0.3")
       end
     end
 
@@ -28,8 +28,8 @@ describe PackageManager::NuGet::SemverRegistrationApiProjectReleasesBuilder do
           described_class.build(project_name: project_name).releases
         end
 
-        expect(releases.first.version).to eq("0.0.1-alpha")
-        expect(releases.last.version).to eq("8.0.0-rc.1.23419.6")
+        expect(releases.first.version_number).to eq("0.0.1-alpha")
+        expect(releases.last.version_number).to eq("8.0.0-rc.1.23419.6")
       end
     end
   end

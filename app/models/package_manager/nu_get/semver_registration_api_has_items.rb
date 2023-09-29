@@ -34,7 +34,7 @@ module PackageManager
 
           SemverRegistrationProjectRelease.new(
             published_at: Time.parse(catalog_entry["published"]),
-            version: catalog_entry["version"],
+            version_number: catalog_entry["version"],
             project_url: catalog_entry["projectUrl"],
             deprecation: deprecation,
             description: catalog_entry["description"],

@@ -131,7 +131,7 @@ module PackageManager
 
     def self.mapping(raw_project)
       item = raw_project[:releases].last
-      raw_nuspec = nuspec(raw_project[:name], item.version)
+      raw_nuspec = nuspec(raw_project[:name], item.version_number)
       nuspec_repo = raw_nuspec&.locate("package/metadata/repository")&.first
       nuspec_repo = nuspec_repo["url"] if nuspec_repo
 
@@ -149,7 +149,7 @@ module PackageManager
     def self.versions(raw_project, _name)
       raw_project[:releases].map do |item|
         {
-          number: item.version,
+          number: item.version_number,
           published_at: item.published_at,
           original_license: item.original_license,
         }
@@ -157,7 +157,7 @@ module PackageManager
     end
 
     def self.dependencies(_name, version, mapped_project)
-      current_version = mapped_project[:releases].find { |v| v.version == version }
+      current_version = mapped_project[:releases].find { |v| v.version_number == version }
 
       current_version.dependencies.map do |dep|
         {

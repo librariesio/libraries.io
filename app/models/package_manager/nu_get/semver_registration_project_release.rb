@@ -3,11 +3,11 @@
 module PackageManager
   class NuGet
     class SemverRegistrationProjectRelease
-      attr_reader :published_at, :version, :project_url, :tags, :licenses, :dependencies, :deprecation
+      attr_reader :published_at, :version_number, :project_url, :tags, :licenses, :dependencies, :deprecation
 
       def initialize(
         published_at:,
-        version:,
+        version_number:,
         project_url:,
         deprecation:,
         description:,
@@ -18,7 +18,7 @@ module PackageManager
         dependencies:
       )
         @published_at = published_at
-        @version = version
+        @version_number = version_number
         @project_url = project_url
         @deprecation = deprecation
         @description = description

@@ -7,7 +7,7 @@ describe PackageManager::NuGet::SemverRegistrationProjectRelease do
     let(:project_release) do
       described_class.new(
         published_at: Time.now,
-        version: "version",
+        version_number: "version",
         project_url: "project_url",
         deprecation: nil,
         description: "description",
@@ -53,7 +53,7 @@ describe PackageManager::NuGet::SemverRegistrationProjectRelease do
     let(:project_release) do
       described_class.new(
         published_at: Time.now,
-        version: "version",
+        version_number: "version",
         project_url: "project_url",
         deprecation: nil,
         description: description,
@@ -95,7 +95,7 @@ describe PackageManager::NuGet::SemverRegistrationProjectRelease do
     let(:project_release_one_year) do
       described_class.new(
         published_at: 1.year.ago,
-        version: "version",
+        version_number: "version",
         project_url: "project_url",
         deprecation: nil,
         description: "",
@@ -110,7 +110,7 @@ describe PackageManager::NuGet::SemverRegistrationProjectRelease do
     let(:project_release_one_month) do
       described_class.new(
         published_at: 1.month.ago,
-        version: "version",
+        version_number: "version",
         project_url: "project_url",
         deprecation: nil,
         description: "",
@@ -125,7 +125,7 @@ describe PackageManager::NuGet::SemverRegistrationProjectRelease do
     let(:project_release_one_day) do
       described_class.new(
         published_at: 1.day.ago,
-        version: "version",
+        version_number: "version",
         project_url: "project_url",
         deprecation: nil,
         description: "",

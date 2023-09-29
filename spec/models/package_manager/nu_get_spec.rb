@@ -60,7 +60,7 @@ describe PackageManager::NuGet do
         releases: [
           PackageManager::NuGet::SemverRegistrationProjectRelease.new(
             published_at: Time.now,
-            version: version,
+            version_number: version,
             project_url: "project_url",
             deprecation: nil,
             description: "description",
