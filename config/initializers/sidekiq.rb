@@ -15,7 +15,11 @@ Sidekiq.configure_server do |config|
   # it's in config.ru, but sidekiq doesn't load that.
   require "datadog/profiling/preload"
 
-  config.logger.formatter = TideliftSidekiqLogFormatter.new
+  config.logger.formatter = StructuredLogSidekiqFormatter.new
+
+  # disable id so that sidekiq will work with google cloud memorystore redis
+  # https://github.com/mperham/sidekiq/issues/3518#issuecomment-390896088
+  config.redis = { url: ENV.fetch("REDISCLOUD_URL", nil), id: nil }
 
   config.server_middleware do |chain|
     chain.add SidekiqUniqueJobs::Middleware::Server
@@ -26,10 +30,6 @@ Sidekiq.configure_server do |config|
     chain.add SidekiqUniqueJobs::Middleware::Client
     chain.add SidekiqEnqueueLogger::Middleware::Client unless Rails.env.test?
   end
-
-  # disable id so that sidekiq will work with google cloud memorystore redis
-  # https://github.com/mperham/sidekiq/issues/3518#issuecomment-390896088
-  config.redis = { url: ENV.fetch("REDISCLOUD_URL", nil), id: nil }
 
   SidekiqUniqueJobs::Server.configure(config)
 end
@@ -54,6 +54,17 @@ Sidekiq.default_job_options = {
 Sidekiq.default_worker_options = {
   backtrace: true,
 }
+
+SidekiqUniqueJobs.reflect do |on|
+  on.lock_failed do |job_hash|
+    message = {
+      message: "Skipping duplicate job",
+      worker: job_hash["class"],
+      args: job_hash["args"],
+    }
+    Sidekiq.logger.debug(message)
+  end
+end
 
 SidekiqUniqueJobs.configure do |config|
   config.enabled = true # !Rails.env.test?
