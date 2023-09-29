@@ -28,14 +28,15 @@ module PackageManager
     end
 
     def self.deprecation_info(db_project)
-      info = latest_remote_version(db_project.name)
-      deprecation = info&.dig("items")&.first&.dig("items")&.first&.dig("catalogEntry", "deprecation")
+      releases = get_releases(db_project.name)
+
+      deprecation = releases.last.deprecation
 
       if deprecation.present?
         {
           is_deprecated: true,
-          message: deprecation["message"] || deprecation["reasons"]&.join(", "),
-          alternate_package: deprecation.dig("alternatePackage", "id"),
+          message: deprecation.message,
+          alternate_package: deprecation.alternate_package,
         }
       else
         {
@@ -120,118 +121,53 @@ module PackageManager
       nil
     end
 
-    def self.latest_remote_version(name)
-      get_json("https://api.nuget.org/v3/registration5-gz-semver2/#{name.downcase}/index.json")
-    end
-
     def self.get_releases(name)
-      latest_version = latest_remote_version(name)
-      if latest_version["items"][0]["items"]
-        releases = []
-        latest_version["items"].each do |items|
-          releases << items["items"]
-        end
-        releases.flatten!
-      elsif releases.nil?
-        releases = []
-        latest_version["items"].each do |page|
-          json = get_json(page["@id"])
-          releases << json["items"]
-        end
-        releases.flatten!
-      end
-      releases
-    rescue StandardError
+      SemverRegistrationApiProjectReleasesBuilder.build(project_name: name).releases
+    rescue StandardError => e
+      Rails.logger.error("Unable to retrieve releases for NuGet project #{name}: #{e.message}")
+
       []
     end
 
     def self.mapping(raw_project)
-      item = raw_project[:releases].last["catalogEntry"]
-      raw_nuspec = nuspec(raw_project[:name], item["version"])
+      item = raw_project[:releases].last
+      raw_nuspec = nuspec(raw_project[:name], item.version_number)
       nuspec_repo = raw_nuspec&.locate("package/metadata/repository")&.first
       nuspec_repo = nuspec_repo["url"] if nuspec_repo
 
       {
         name: raw_project[:name],
-        description: description(item),
-        homepage: item["projectUrl"],
-        keywords_array: Array(item["tags"]),
-        repository_url: repo_fallback(nuspec_repo, item["projectUrl"]),
+        description: item.description,
+        homepage: item.project_url,
+        keywords_array: item.tags,
+        repository_url: repo_fallback(nuspec_repo, item.project_url),
         releases: raw_project[:releases],
-        licenses: item["licenseExpression"],
+        licenses: item.licenses,
       }
-    end
-
-    def self.description(item)
-      item["description"].blank? ? item["summary"] : item["description"]
     end
 
     def self.versions(raw_project, _name)
       raw_project[:releases].map do |item|
-        license = [
-          item.dig("catalogEntry", "licenseExpression"),
-          item.dig("catalogEntry", "licenseUrl"),
-        ].detect(&:present?)
-
         {
-          number: item["catalogEntry"]["version"],
-          published_at: item["catalogEntry"]["published"],
-          original_license: license,
+          number: item.version_number,
+          published_at: item.published_at,
+          original_license: item.original_license,
         }
       end
     end
 
     def self.dependencies(_name, version, mapped_project)
-      current_version = mapped_project[:releases].find { |v| v["catalogEntry"]["version"] == version }
-      dep_groups = current_version.fetch("catalogEntry", {})["dependencyGroups"] || []
+      current_version = mapped_project[:releases].find { |v| v.version_number == version }
 
-      deps = dep_groups.map do |dep_group|
-        next unless dep_group["dependencies"]
-
-        dep_group["dependencies"].map do |dependency|
-          {
-            name: dependency["id"],
-            requirements: parse_requirements(dependency["range"]),
-          }
-        end
-      end.flatten.compact
-
-      deps.map do |dep|
+      current_version.dependencies.map do |dep|
         {
-          project_name: dep[:name],
-          requirements: dep[:requirements],
+          project_name: dep.name,
+          requirements: dep.requirements,
           kind: "runtime",
           optional: false,
           platform: name.demodulize,
         }
       end
-    end
-
-    def self.parse_requirements(range)
-      return unless range.present?
-
-      parts = range[1..-2].split(",")
-      requirements = []
-      low_bound = range[0]
-      high_bound = range[-1]
-      low_number = parts[0].strip
-      high_number = parts[1].try(:strip)
-
-      # lowest
-      low_sign = low_bound == "[" ? ">=" : ">"
-      high_sign = high_bound == "]" ? "<=" : "<"
-
-      # highest
-      if high_number != low_number
-        requirements << "#{low_sign} #{low_number}" if low_number.present?
-        requirements << "#{high_sign} #{high_number}" if high_number.present?
-      elsif high_number == low_number
-        requirements << "= #{high_number}"
-      elsif low_number.present?
-        requirements << "#{low_sign} #{low_number}"
-      end
-      requirements << ">= 0" if requirements.empty?
-      requirements.join(" ")
     end
 
     class ParseCanonicalNameFailedError < StandardError; end
