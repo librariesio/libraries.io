@@ -143,6 +143,18 @@ describe PackageManager::NuGet do
         expect(deprecation_info[:message]).to be_blank
       end
     end
+
+    context "no releases" do
+      let(:name) { "Steeltoe.Common" }
+      let(:cassette) { "nu_get/package" }
+
+      before { allow(described_class).to receive(:get_releases).and_return([]) }
+
+      it "is not deprecated" do
+        expect(deprecation_info[:is_deprecated]).to eq(false)
+        expect(deprecation_info[:message]).to be_blank
+      end
+    end
   end
 
   describe ".nuspec" do
