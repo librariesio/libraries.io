@@ -30,7 +30,7 @@ module PackageManager
     def self.deprecation_info(db_project)
       releases = get_releases(db_project.name)
 
-      deprecation = releases.last.deprecation
+      deprecation = releases.last&.deprecation
 
       if deprecation.present?
         {
