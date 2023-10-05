@@ -82,12 +82,15 @@ class AuthToken < ApplicationRecord
     GraphQL::Client.new(schema: Rails.application.config.graphql.schema, execute: http_adapter)
   end
 
-  def self.find_token(api_version)
+  def self.find_token(api_version, retries: 0)
     return @auth_token if @auth_token&.high_rate_limit?(api_version)
+    retries += 1
 
-    auth_token = authorized.order(Arel.sql("RANDOM()")).limit(100).sample
+    raise "No Authorized AuthToken Could Be Found!" if retries >= 10
+
+    auth_token = authorized.order(Arel.sql("RANDOM()")).limit(1).first
     @auth_token = auth_token if auth_token.high_rate_limit?(api_version)
-    find_token(api_version)
+    find_token(api_version, retries: retries)
   end
 
   private
