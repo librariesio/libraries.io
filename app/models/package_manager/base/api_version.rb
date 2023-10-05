@@ -2,7 +2,7 @@
 
 module PackageManager
   class Base
-    class ApiVersionToUpsert
+    class ApiVersion
       attr_reader :version_number
 
       def initialize(

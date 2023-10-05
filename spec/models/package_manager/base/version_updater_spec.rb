@@ -6,7 +6,7 @@ describe PackageManager::Base::VersionUpdater do
   describe "#upsert_version_for_project!" do
     let(:db_project) { Project.create(platform: "Pypi", name: project_name) }
     let(:api_version_to_upsert) do
-      PackageManager::Base::ApiVersionToUpsert.new(
+      PackageManager::Base::ApiVersion.new(
         version_number: version_number,
         published_at: published_at,
         runtime_dependencies_count: nil,
