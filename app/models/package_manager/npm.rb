@@ -11,6 +11,10 @@ module PackageManager
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
 
+    def self.version_deprecator
+      PackageManager::Base::VersionDeprecator
+    end
+
     def self.package_link(db_project, _version = nil)
       "https://www.npmjs.com/package/#{db_project.name}"
     end

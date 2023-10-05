@@ -26,6 +26,10 @@ module PackageManager
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)(\/|$)/.freeze
 
+    def self.version_deprecator
+      PackageManager::Base::VersionDeprecator
+    end
+
     def self.check_status_url(db_project)
       "#{PROXY_BASE_URL}/#{encode_for_proxy(db_project.name)}/@v/list"
     end

@@ -190,22 +190,22 @@ module PackageManager
       ).upsert_version_for_project!
     end
 
-    def self.deprecate_versions(db_project, api_versions)
-      removed_status = "Removed"
-      current_time = Time.zone.now
+    def self.version_deprecator
+      nil
+    end
 
-      case db_project.platform.downcase
-      # retracted go, unpublished npm, and yanked rubygems versions will be omitted from project JSON versions
-      when "go", "npm", "rubygems"
-        VersionDeprecator.new(
-          project: db_project,
-          version_numbers_to_deprecate: api_versions.map(&:version_number),
-          target_status: removed_status,
-          deprecation_time: current_time
-        ).deprecate_versions_of_project!
-        # yanked pypi versions are marked as such in the api, and the majority of them are handled upstream of here
-        # TODO: if libraries knows about the version but pypi does not, also mark the version differences as removed
-      end
+    def self.deprecate_versions(db_project, api_versions)
+      return unless version_deprecator
+
+      # yanked pypi versions are marked as such in the api, and the majority of them are handled upstream of here
+      # TODO: if libraries knows about the version but pypi does not, also mark the version differences as removed
+
+      version_deprecator.new(
+        project: db_project,
+        version_numbers_to_deprecate: api_versions.map(&:version_number),
+        target_status: "Removed",
+        deprecation_time: Time.zone.now
+      ).deprecate_versions_of_project!
     end
 
     def self.finalize_db_project(db_project)
