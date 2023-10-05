@@ -5,7 +5,11 @@ class RepositoryMaintenanceStatWorker
   sidekiq_options queue: :repo_maintenance_stat, retry: 3, unique: :until_executed
 
   def perform(repo_id)
-    Repository.find(repo_id).gather_maintenance_stats
+    # Oct 5 2023
+    # temporarily disabling this worker while we figure out what is going on with
+    # auth tokens all being marked as unauthorized
+
+    # Repository.find(repo_id).gather_maintenance_stats
   end
 
   def self.enqueue(repo_id, priority: :medium)
