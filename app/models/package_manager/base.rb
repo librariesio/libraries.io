@@ -197,11 +197,12 @@ module PackageManager
       case db_project.platform.downcase
       # retracted go, unpublished npm, and yanked rubygems versions will be omitted from project JSON versions
       when "go", "npm", "rubygems"
-        db_project
-          .versions
-          .where.not(number: api_versions.map(&:version_number))
-          .where("status != ? or status is null", removed_status)
-          .update_all(status: removed_status, updated_at: current_time)
+        VersionDeprecator.new(
+          project: db_project,
+          version_numbers_to_deprecate: api_versions.map(&:version_number),
+          target_status: removed_status,
+          deprecation_time: current_time
+        ).deprecate_versions_of_project!
         # yanked pypi versions are marked as such in the api, and the majority of them are handled upstream of here
         # TODO: if libraries knows about the version but pypi does not, also mark the version differences as removed
       end
