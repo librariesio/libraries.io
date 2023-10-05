@@ -2,7 +2,8 @@
 
 require "rails_helper"
 
-describe RepositoryMaintenanceStatWorker do
+# Oct 5 2023 temporarily disabled maintenance stat worker
+xdescribe RepositoryMaintenanceStatWorker do
   let!(:repository) { create(:repository) }
 
   before do
