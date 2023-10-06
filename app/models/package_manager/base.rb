@@ -129,10 +129,10 @@ module PackageManager
 
       if self::HAS_VERSIONS
         if sync_version == :all
-          versions(raw_project, db_project.name)
+          versions_as_version_objects(raw_project, db_project.name)
             .each { |v| add_version(db_project, v) }
-            .tap { |vs| deprecate_versions(db_project, vs) }
-        elsif (version = one_version(raw_project, sync_version))
+            .tap { |vs| remove_missing_versions(db_project, vs) }
+        elsif (version = one_version_as_version_object(raw_project, sync_version))
           add_version(db_project, version)
           # TODO: handle deprecation here too
         end
@@ -142,44 +142,70 @@ module PackageManager
       finalize_db_project(db_project)
     end
 
-    def self.add_version(db_project, version_hash)
-      return if version_hash.blank?
+    def self.versions_as_version_objects(raw_project, name)
+      raw_versions = versions(raw_project, name)
 
-      symbolized_version_hash = version_hash.symbolize_keys
+      raw_versions.each_with_object([]) do |version_hash, obj|
+        # preserve blanks to fit behavior of add_version
+        # TODO: change this behavior
+        if version_hash.blank?
+          obj << version
+          next
+        end
 
-      api_version_to_upsert = ApiVersionToUpsert.new(
-        version_number: symbolized_version_hash[:number],
-        published_at: symbolized_version_hash[:published_at],
-        runtime_dependencies_count: symbolized_version_hash[:runtime_dependencies_count],
-        original_license: symbolized_version_hash[:original_license],
-        repository_sources: symbolized_version_hash[:repository_sources],
-        status: symbolized_version_hash[:status]
+        obj << version_hash_to_version_object(version_hash)
+      end
+    end
+
+    def self.one_version_as_version_object(raw_project, sync_version)
+      version_hash = one_version(raw_project, sync_version)
+
+      return version_hash if version_hash.blank?
+
+      version_hash_to_version_object(version_hash)
+    end
+
+    def self.version_hash_to_version_object(version_hash)
+      version_hash = version_hash.symbolize_keys
+
+      ApiVersion.new(
+        version_number: version_hash[:number],
+        published_at: version_hash[:published_at],
+        runtime_dependencies_count: version_hash[:runtime_dependencies_count],
+        original_license: version_hash[:original_license],
+        repository_sources: version_hash[:repository_sources],
+        status: version_hash[:status]
       )
+    end
+
+    def self.add_version(db_project, api_version)
+      return if api_version.blank?
 
       new_repository_source = self::HAS_MULTIPLE_REPO_SOURCES ? self::REPOSITORY_SOURCE_NAME : nil
 
       VersionUpdater.new(
         project: db_project,
-        api_version_to_upsert: api_version_to_upsert,
+        api_version_to_upsert: api_version,
         new_repository_source: new_repository_source
       ).upsert_version_for_project!
     end
 
-    def self.deprecate_versions(db_project, version_hashes)
-      removed_status = "Removed"
-      current_time = Time.zone.now
+    def self.missing_version_remover
+      nil
+    end
 
-      case db_project.platform.downcase
-      # retracted go, unpublished npm, and yanked rubygems versions will be omitted from project JSON versions
-      when "go", "npm", "rubygems"
-        db_project
-          .versions
-          .where.not(number: version_hashes.pluck(:number))
-          .where("status != ? or status is null", removed_status)
-          .update_all(status: removed_status, updated_at: current_time)
-        # yanked pypi versions are marked as such in the api, and the majority of them are handled upstream of here
-        # TODO: if libraries knows about the version but pypi does not, also mark the version differences as removed
-      end
+    def self.remove_missing_versions(db_project, api_versions)
+      return unless missing_version_remover
+
+      # yanked pypi versions are marked as such in the api, and the majority of them are handled upstream of here
+      # TODO: if libraries knows about the version but pypi does not, also mark the version differences as removed
+
+      missing_version_remover.new(
+        project: db_project,
+        version_numbers_to_keep: api_versions.map(&:version_number),
+        target_status: "Removed",
+        removal_time: Time.zone.now
+      ).remove_missing_versions_of_project!
     end
 
     def self.finalize_db_project(db_project)

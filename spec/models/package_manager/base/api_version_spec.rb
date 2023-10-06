@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe PackageManager::Base::ApiVersionToUpsert do
+describe PackageManager::Base::ApiVersion do
   describe "#to_version_model_attributes" do
     let(:api_version_to_upsert) do
       described_class.new(

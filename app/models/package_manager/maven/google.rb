@@ -42,7 +42,7 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
 
     version_hash = one_version_for_name(sync_version, name)
 
-    add_version(db_project, version_hash)
+    add_version(db_project, version_hash_to_version_object(version_hash))
 
     finalize_db_project(db_project)
   end
