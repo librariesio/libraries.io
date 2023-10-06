@@ -52,7 +52,7 @@ describe NugetProjectVerificationWorker do
     end
 
     it "raises to retry" do
-      expect { subject.perform(project.id) }.to raise_error(RuntimeError, "FETCH_CANONICAL_NAME_FAILED")
+      expect { subject.perform(project.id) }.to raise_error(SidekiqQuietRetryError, "FETCH_CANONICAL_NAME_FAILED")
     end
   end
 

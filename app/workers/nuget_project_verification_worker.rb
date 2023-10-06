@@ -25,7 +25,7 @@ class NugetProjectVerificationWorker
 
     if canonical_name.nil?
       # Retry if the fetch failed
-      raise "FETCH_CANONICAL_NAME_FAILED"
+      raise SidekiqQuietRetryError, "FETCH_CANONICAL_NAME_FAILED"
     elsif canonical_name == false
       if project.removed?
         StructuredLog.capture("CANONICAL_NAME_ELEMENT_MISSING_PROJECT_REMOVED", logging_info)
