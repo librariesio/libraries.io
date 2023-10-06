@@ -6,6 +6,7 @@ if Rails.env.production?
     config.discard_classes << "ActiveRecord::RecordNotFound"
     # Temprarily uncomment this is we get a huge spike of these errors and need to investigate:
     config.discard_classes << "PackageManagerDownloadWorker::VersionUpdateFailure"
+    config.discard_classes << "SidekiqQuietRetryError"
 
     if File.exist?("#{Rails.root}/REVISION")
       config.app_version = File.read("#{Rails.root}/REVISION").strip
