@@ -16,4 +16,8 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven::Common
   def self.one_version(raw_project, version_string)
     retrieve_versions([version_string], raw_project[:name])&.first
   end
+
+  def self.missing_version_remover
+    PackageManager::Base::MissingVersionRemover
+  end
 end
