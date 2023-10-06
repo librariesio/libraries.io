@@ -22,12 +22,12 @@ describe PackageManager::Base::MissingVersionRemover do
     let(:original_time) { Time.zone.parse("2010-01-01 10:00:00") }
     let(:removal_time) { Time.zone.parse("2020-01-01 10:00:00") }
 
-    let(:versions_to_remove) { ["1.0.0"] }
+    let(:versions_to_keep) { ["1.0.0"] }
 
     let(:remover) do
       described_class.new(
         project: db_project,
-        version_numbers_to_keep: versions_to_remove,
+        version_numbers_to_keep: versions_to_keep,
         target_status: "Removed",
         removal_time: removal_time
       )
@@ -55,7 +55,7 @@ describe PackageManager::Base::MissingVersionRemover do
     end
 
     context "with no versions to remove" do
-      let(:versions_to_remove) { ["1.0.0", "2.0.0", "3.0.0", "4.0.0"] }
+      let(:versions_to_keep) { ["1.0.0", "2.0.0", "3.0.0", "4.0.0"] }
 
       it "changes nothing" do
         remover.remove_missing_versions_of_project!
