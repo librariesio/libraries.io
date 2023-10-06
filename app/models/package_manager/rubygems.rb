@@ -10,8 +10,8 @@ module PackageManager
     URL = "https://rubygems.org"
     COLOR = "#701516"
 
-    def self.version_deprecator
-      PackageManager::Base::VersionDeprecator
+    def self.missing_version_remover
+      PackageManager::Base::MissingVersionRemover
     end
 
     def self.package_link(db_project, version = nil)

@@ -131,7 +131,7 @@ module PackageManager
         if sync_version == :all
           versions_as_version_objects(raw_project, db_project.name)
             .each { |v| add_version(db_project, v) }
-            .tap { |vs| deprecate_versions(db_project, vs) }
+            .tap { |vs| remove_missing_versions(db_project, vs) }
         elsif (version = one_version_as_version_object(raw_project, sync_version))
           add_version(db_project, version)
           # TODO: handle deprecation here too
@@ -190,22 +190,22 @@ module PackageManager
       ).upsert_version_for_project!
     end
 
-    def self.version_deprecator
+    def self.missing_version_remover
       nil
     end
 
-    def self.deprecate_versions(db_project, api_versions)
-      return unless version_deprecator
+    def self.remove_missing_versions(db_project, api_versions)
+      return unless missing_version_remover
 
       # yanked pypi versions are marked as such in the api, and the majority of them are handled upstream of here
       # TODO: if libraries knows about the version but pypi does not, also mark the version differences as removed
 
-      version_deprecator.new(
+      missing_version_remover.new(
         project: db_project,
-        version_numbers_to_deprecate: api_versions.map(&:version_number),
+        version_numbers_to_keep: api_versions.map(&:version_number),
         target_status: "Removed",
-        deprecation_time: Time.zone.now
-      ).deprecate_versions_of_project!
+        removal_time: Time.zone.now
+      ).remove_missing_versions_of_project!
     end
 
     def self.finalize_db_project(db_project)

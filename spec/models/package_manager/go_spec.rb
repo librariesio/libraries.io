@@ -350,7 +350,7 @@ describe PackageManager::Go do
     end
   end
 
-  describe ".deprecate_versions" do
+  describe ".remove_missing_versions" do
     let(:version_number_to_not_remove) { "1.0.0" }
     let(:version_number_to_remove) { "1.0.1" }
     let(:old_updated_at) { 5.years.ago.round }
@@ -362,7 +362,7 @@ describe PackageManager::Go do
     end
 
     it "should mark missing versions as Removed" do
-      described_class.deprecate_versions(project, [PackageManager::Base::ApiVersion.new(
+      described_class.remove_missing_versions(project, [PackageManager::Base::ApiVersion.new(
         version_number: version_number_to_not_remove,
         published_at: nil,
         original_license: nil,
@@ -384,7 +384,7 @@ describe PackageManager::Go do
       let(:version_to_remove_status) { "Removed" }
 
       it "should not change anything" do
-        described_class.deprecate_versions(project, [PackageManager::Base::ApiVersion.new(
+        described_class.remove_missing_versions(project, [PackageManager::Base::ApiVersion.new(
           version_number: version_number_to_not_remove,
           published_at: nil,
           original_license: nil,

@@ -26,8 +26,8 @@ module PackageManager
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)(\/|$)/.freeze
 
-    def self.version_deprecator
-      PackageManager::Base::VersionDeprecator
+    def self.missing_version_remover
+      PackageManager::Base::MissingVersionRemover
     end
 
     def self.check_status_url(db_project)
