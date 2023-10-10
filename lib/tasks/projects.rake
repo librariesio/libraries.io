@@ -307,7 +307,7 @@ namespace :projects do
       .select("id")
       .in_batches(of: args.count)
       .each_with_index do |project_batch, batch_index|
-        project_batch.pluck(:id) do |project_id|
+        project_batch.pluck(:id).each do |project_id|
           NugetProjectVerificationWorker.perform_in(batch_index * batch_interval, project_id)
         end
       end
