@@ -297,18 +297,28 @@ namespace :projects do
 
   desc "Verify NuGet Projects"
   task :verify_nuget_projects, [:count] => :environment do |_task, args|
-    args.with_defaults(count: 100)
+    args.with_defaults(count: 100, start: nil)
 
-    batch_interval = (60.seconds / 100.0) * args.count
+    batch_interval = (3.minutes / 100.0) * args.count
+    last_project_id = "none"
 
-    Project
-      .platform("NuGet")
-      .visible
-      .find_in_batches(batch_size: args.count) do |project_batch|
-        project_batch.each do |project|
-          NugetProjectVerificationWorker.perform_in(batch_interval, project.id)
+    begin
+      Project
+        .platform("NuGet")
+        .visible
+        .in_batches(of: args.count, start: args.start)
+        .each_with_index do |project_batch, batch_index|
+          batch_start_in = batch_index * batch_interval
+
+          project_batch.pluck(:id).each do |project_id|
+            NugetProjectVerificationWorker.perform_in(batch_start_in, project_id)
+            last_project_id = project_id
+          end
         end
-      end
+    rescue StandardError, Interrupt => e
+      puts "\n\n### Last project id queued: #{last_project_id} \n\n\n"
+      raise e
+    end
   end
 
   desc "Manual sync projects from list"
