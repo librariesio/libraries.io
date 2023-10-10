@@ -299,14 +299,16 @@ namespace :projects do
   task :verify_nuget_projects, [:count] => :environment do |_task, args|
     args.with_defaults(count: 100)
 
-    batch_interval = (60.seconds / 100.0) * args.count
+    batch_interval = (3.minutes / 100.0) * args.count
 
     Project
       .platform("NuGet")
       .visible
-      .find_in_batches(batch_size: args.count) do |project_batch|
-        project_batch.each do |project|
-          NugetProjectVerificationWorker.perform_in(batch_interval, project.id)
+      .select("id")
+      .in_batches(of: args.count)
+      .each_with_index do |project_batch, batch_index|
+        project_batch.pluck(:id) do |project_id|
+          NugetProjectVerificationWorker.perform_in(batch_index * batch_interval, project_id)
         end
       end
   end
