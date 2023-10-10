@@ -83,7 +83,7 @@ class AuthToken < ApplicationRecord
   end
 
   def self.find_token(api_version, retries: 0)
-    auth_token = authorized.order(Arel.sql("RANDOM()")).limit(1).first
+    auth_token = authorized.order(Arel.sql("RANDOM()")).first
     return auth_token if auth_token.high_rate_limit?(api_version)
 
     retries += 1
