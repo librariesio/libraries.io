@@ -19,7 +19,7 @@ gem "concurrent-ruby-ext"
 gem "counter_culture"
 gem "creole"
 gem "dalli"
-gem "ddtrace", "1.4.0", require: "ddtrace/auto_instrument"
+gem "ddtrace", "1.15.0", require: "ddtrace/auto_instrument"
 gem "dotenv-rails", require: "dotenv/rails-now"
 gem "elasticsearch", "~> 2"
 gem "elasticsearch-model", "~> 5"
@@ -115,7 +115,8 @@ end
 
 group :test do
   gem "capybara"
-  gem "database_cleaner", "~> 1.7.0"
+  gem "database_cleaner", "~> 1.99.0"
+  gem "database_cleaner-active_record"
   gem "factory_bot_rails", "~> 6.2.0"
   gem "faker"
   gem "json_spec"
