@@ -80,6 +80,10 @@ module PackageManager
     # rubocop: disable Lint/UnusedMethodArgument
     def self.update(name, sync_version: :all, force_sync_dependencies: false)
       project = super(name, sync_version: sync_version)
+
+      # if Base.update returns something false-y, pass that along
+      return project unless project
+
       # call update on base module name if the name is appended with major version
       # example: github.com/myexample/modulename/v2
       # use the returned project name in case it finds a Project via repository_url
@@ -123,7 +127,9 @@ module PackageManager
 
       # send back nil if the response is blank
       # base package manager handles if the project is not present
-      { name: name, html: doc_html, overview_html: doc_html } unless doc_html.text.blank?
+      return nil if doc_html.text.blank?
+
+      { name: name, html: doc_html, overview_html: doc_html }
     end
 
     def self.versions(raw_project, _name)
@@ -141,7 +147,8 @@ module PackageManager
         &.map(&:strip)
         &.reject(&:blank?)
 
-      versions = [latest_version_number(raw_project[:name])] if versions.blank?
+      project_latest_version_number = latest_version_number(raw_project[:name])
+      versions = [project_latest_version_number] if versions.blank? && project_latest_version_number
 
       go_mod = fetch_mod(raw_project[:name])
       versions.map do |v|

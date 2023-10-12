@@ -133,7 +133,7 @@ describe PackageManager::Go do
     end
   end
 
-  describe "#update" do
+  describe ".update" do
     it "should update the non versioned module" do
       VCR.use_cassette("go/pkg_go_dev") do
         described_class.update("#{package_name}/v3")
@@ -245,6 +245,30 @@ describe PackageManager::Go do
         expect(non_versioned_module).to be_present
         expect(non_versioned_module.versions.count).to eql 3
         expect(non_versioned_module.versions.where("number like ?", "v3%").count).to eql 3
+      end
+    end
+
+    context "with a package that doesn't exist on pkg.go.dev" do
+      it "fails correctly" do
+        VCR.use_cassette("go/update/postbox") do
+          expect do
+            described_class.update("github.com/8legd/postbox")
+          end.not_to change(Project, :count).from(0)
+        end
+      end
+    end
+
+    context "with a package that has incompatible versions only" do
+      it "loads the package and it has no versions" do
+        package = nil
+
+        VCR.use_cassette("go/update/noaa") do
+          expect do
+            package = described_class.update("github.com/cloudfoundry/noaa/errors")
+          end.to change(Project, :count).from(0).to(1)
+        end
+
+        expect(package.versions.count).to eq(0)
       end
     end
 
