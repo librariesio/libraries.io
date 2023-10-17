@@ -14,11 +14,10 @@ namespace :auth_tokens do
     begin
       AuthToken
         .authorized
-        .in_batches(of: args.batch_size, start: args.start)
-        .each do |token_batch|
+        .find_in_batches(of: args.batch_size, start: args.start).each |token_batch|
           token_batch.each do |token|
             result = token.still_authorized?
-            fresh_login = token.github_client.user[:login]
+            fresh_login = token.github_client.user[:login] if result
 
             token.update(
               login: (fresh_login || token.login),
