@@ -21,7 +21,7 @@ namespace :auth_tokens do
               authorized: result
             )
 
-            if result.false?
+            unless result
               StructuredLog.capture(
                 "AUTH_TOKEN_MARKED_EXPIRED",
                 {
