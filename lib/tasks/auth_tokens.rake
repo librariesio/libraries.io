@@ -26,7 +26,6 @@ namespace :auth_tokens do
                 "AUTH_TOKEN_MARKED_EXPIRED",
                 {
                   token_id: token.id,
-                  github_login: token.login,
                   authorized: result,
                   created_at: token.created_at,
                 }
