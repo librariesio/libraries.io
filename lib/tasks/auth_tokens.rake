@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 
 namespace :auth_tokens do
-  desc "Verify each authorized AuthToken that it's still authorized"
-  task :reverify_authorized, %i[count start] => :environment do |_task, args|
-    exit if ENV["READ_ONLY"].present?
-    args.with_defaults(count: 500, start: nil)
+  desc <<~DESC
+    Verify each authorized AuthToken that it's still authorized
+
+      batch_size [Integer, nil]: How many AuthTokens to process per batch (default: 500)
+      start [String, nil] The AuthToken id to start from: The AuthToken id to start from (default: nil)
+  DESC
+  task :reverify_authorized, %i[batch_size start] => :environment do |_task, args|
+    args.with_defaults(batch_size: 500, start: nil)
     last_id = "none"
 
     begin
       AuthToken
         .authorized
-        .in_batches(of: args.count, start: args.start)
+        .in_batches(of: args.batch_size, start: args.start)
         .each do |token_batch|
           token_batch.each do |token|
             result = token.still_authorized?
