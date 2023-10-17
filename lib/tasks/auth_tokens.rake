@@ -13,10 +13,25 @@ namespace :auth_tokens do
         .in_batches(of: args.count, start: args.start)
         .each do |token_batch|
           token_batch.each do |token|
-            token.update_attributes(
-              login: token.github_client.user[:login],
-              authorized: token.still_authorized?
+            result = token.still_authorized?
+            fresh_login = token.github_client.user[:login]
+
+            token.update(
+              login: (fresh_login || token.login),
+              authorized: result
             )
+
+            if result.false?
+              StructuredLog.capture(
+                "AUTH_TOKEN_MARKED_EXPIRED",
+                {
+                  token_id: token.id,
+                  github_login: token.login,
+                  authorized: result,
+                  created_at: token.created_at,
+                }
+              )
+            end
 
             last_id = token.id
           end
