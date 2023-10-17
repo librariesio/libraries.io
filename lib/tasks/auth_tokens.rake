@@ -25,7 +25,7 @@ namespace :auth_tokens do
               StructuredLog.capture(
                 "AUTH_TOKEN_MARKED_EXPIRED",
                 {
-                  token_id: token.id,
+                  auth_token_id: token.id,
                   authorized: result,
                   created_at: token.created_at,
                 }
