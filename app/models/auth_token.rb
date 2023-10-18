@@ -67,16 +67,16 @@ class AuthToken < ApplicationRecord
   def self.new_v4_client(token)
     token ||= AuthToken.token
     http_adapter = GraphQL::Client::HTTP.new("https://api.github.com/graphql") do
-      @token = token
+      attr_accessor :token
 
       # rubocop: disable Lint/NestedMethodDefinition:
       def headers(_context)
-        {
-          "Authorization" => "Bearer #{@token}",
-        }
+        { "Authorization" => "bearer #{token}" }
       end
       # rubocop: enable Lint/NestedMethodDefinition:
     end
+
+    http_adapter.token = token
 
     # create new client with HTTP adapter set to use token and the loaded GraphQL schema
     GraphQL::Client.new(schema: Rails.application.config.graphql.schema, execute: http_adapter)
