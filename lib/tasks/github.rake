@@ -78,7 +78,7 @@ namespace :github do
     raise ArgumentError, "Github token not found! Pass one into this rake task or define an environment variable GITHUB_TOKEN" if token.nil?
 
     http = GraphQL::Client::HTTP.new("https://api.github.com/graphql") do
-      @@token = token
+      @@token = token # rubocop: disable Style/ClassVars
       def headers(_context)
         # Send Github Token
         { "Authorization": "bearer #{@@token}" }
