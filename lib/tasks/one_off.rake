@@ -268,7 +268,7 @@ namespace :one_off do
     affected_projects = Project
       .joins(:versions)
       .where(platform: "Maven")
-      .where(%(versions.repository_sources != '["Maven"]' AND versions.repository_sources != '["Google"]' OR repository_sources IS NULL))
+      .where(%((versions.repository_sources != '["Maven"]' AND versions.repository_sources != '["Google"]') OR repository_sources IS NULL))
       .distinct
 
     puts "Count of projects with versions to re-process: #{affected_projects.count}"
@@ -279,7 +279,7 @@ namespace :one_off do
     puts "Processing...."
     affected_projects.in_batches(of: batch_size).each do |batch|
       batch.each do |project|
-        affected_versions = project.versions.where(%(repository_sources != '["Maven"]' AND repository_sources != '["Google"]' OR repository_sources IS NULL))
+        affected_versions = project.versions.where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]') OR repository_sources IS NULL))
 
         puts "Destroying #{affected_versions.count} versions for #{project.platform}/#{project.name}."
         affected_versions.destroy_all if commit
