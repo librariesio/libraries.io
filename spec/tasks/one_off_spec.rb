@@ -113,8 +113,8 @@ describe "one_off" do
       end
 
       context "with only ignored versions" do
-        let!(:no_source_version) { create(:version, project: project, number: "1.0.0", repository_sources: nil) }
-        let!(:ignored_source_version) { create(:version, project: project, number: "2.0.0", repository_sources: ["Other"]) }
+        let(:no_source_version) { create(:version, project: project, number: "1.0.0", repository_sources: nil) }
+        let(:ignored_source_version) { create(:version, project: project, number: "2.0.0", repository_sources: ["Other"]) }
 
         it "deletes ignored versions and the project" do
           expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("yes") }
