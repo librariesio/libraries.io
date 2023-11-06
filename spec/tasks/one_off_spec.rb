@@ -63,4 +63,57 @@ describe "one_off" do
       expect(maven2_version_dependency.platform).to eq("Maven")
     end
   end
+
+  describe "delete_ignored_maven_versions_and_resync_packages" do
+    let(:project) { create(:project, platform: "Maven", name: "project") }
+
+    context "with non-Maven project" do
+      let(:version) { create(:version, project: project, number: "1.0.0", repository_sources: nil) }
+
+      it "does not delete project or its version" do
+        Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("yes")
+
+        expect(Project.all).to match_array([project])
+        expect(Version.all).to match_array([version])
+      end
+    end
+
+    context "with Maven project with no ignored versions" do
+      let(:maven_source_version) { create(:version, project: project, number: "1.0.0", repository_sources: ["Maven"]) }
+      let(:google_source_version) { create(:version, project: project, number: "2.0.0", repository_sources: ["Google"]) }
+
+      it "does not delete project or its versions" do
+        Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("yes")
+
+        expect(Project.all).to match_array([project])
+        expect(Version.all).to match_array([maven_source_version, google_source_version])
+      end
+    end
+
+    context "with Maven project with some ignored versions" do
+      let(:maven_source_version) { create(:version, project: project, number: "1.0.0", repository_sources: ["Maven"]) }
+      let(:google_source_version) { create(:version, project: project, number: "2.0.0", repository_sources: ["Google"]) }
+      let(:no_source_version) { create(:version, project: project, number: "3.0.0", repository_sources: nil) }
+      let(:ignored_source_version) { create(:version, project: project, number: "4.0.0", repository_sources: ["Other"]) }
+
+      it "deletes ignored versions but not the project or its other versions" do
+        Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("yes")
+
+        expect(Project.all).to match_array([project])
+        expect(Version.all).to match_array([maven_source_version, google_source_version])
+      end
+    end
+
+    context "with Maven project with only ignored versions" do
+      let(:no_source_version) { create(:version, project: project, number: "1.0.0", repository_sources: nil) }
+      let(:ignored_source_version) { create(:version, project: project, number: "2.0.0", repository_sources: ["Other"]) }
+
+      it "deletes ignored versions and the project" do
+        Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("yes")
+
+        expect(Project.count).to eq(0)
+        expect(Version.count).to eq(0)
+      end
+    end
+  end
 end
