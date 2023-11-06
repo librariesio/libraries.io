@@ -12,7 +12,6 @@ module GithubGraphql
   class AuthorizationError < RequestError; end
 
   GRAPHQL_ENDPOINT = "https://api.github.com/graphql"
-  LOW_RATE_REMAINING_THRESHOLD = 500
 
   HttpAdapter = ::GraphQL::Client::HTTP.new(GRAPHQL_ENDPOINT) do
     def headers(context)
