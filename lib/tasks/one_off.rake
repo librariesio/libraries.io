@@ -283,20 +283,19 @@ namespace :one_off do
 
         puts "Destroying #{affected_versions.count} versions for #{project.platform}/#{project.name}."
         affected_versions.destroy_all if commit
+        puts "Trying manual sync for #{project.platform}/#{project.name}."
+        project.try(:manual_sync) if commit
 
         # Use versions count manually because it might be unsafe to trust
         # cached project.versions_count value immediately after doing deletions
-        if project.versions.count > 0
-          puts "Versions remaining for #{project.platform}/#{project.name}: Trying manual sync."
-          project.try(:manual_sync) if commit
-        else
+        if project.versions.count == 0
           puts "No versions remaining for #{project.platform}/#{project.name}: Destroying project."
           project.destroy! if commit
         end
       end
 
       processed_count += [batch_size, batch.size].min
-      puts "Processed #{processed_count} projects"
+      puts "Processed #{processed_count} projects."
     end
   end
 end
