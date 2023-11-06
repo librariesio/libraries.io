@@ -15,6 +15,8 @@ class AuthToken < ApplicationRecord
   validates_presence_of :token
   scope :authorized, -> { where(authorized: [true, nil]) }
 
+  LOW_RATE_LIMIT_REMAINING_THRESHOLD = 500
+
   def self.client(options = {})
     find_token(:v3).github_client(options)
   end
@@ -33,11 +35,31 @@ class AuthToken < ApplicationRecord
     end
   end
 
-  def high_rate_limit?(api_version)
-    return v4_remaining_rate > 500 if api_version == :v4
+  def fetch_resource_limits
+    client = github_client
 
-    github_client.rate_limit.remaining > 500
+    v3_stat = client.rate_limit!.remaining
+    v4_stat = client.last_response.data.resources.graphql.remaining
+
+    {
+      v3: v3_stat,
+      v4: v4_stat,
+    }
+  end
+
+  def safe_to_use?(api_version)
+    resource_limits = fetch_resource_limits
+    remaining = resource_limits.fetch(api_version)
+
+    remaining > LOW_RATE_LIMIT_REMAINING_THRESHOLD
   rescue Octokit::Unauthorized, Octokit::AccountSuspended
+    false
+  rescue StandardError => e
+    StructuredLog.capture(
+      "FAILED_READING_GITHUB_RATE_LIMITS",
+      { api_version: api_version, auth_token_id: id, remaining: remaining, error_class: e, error_message: e.message }
+    )
+
     false
   end
 
@@ -84,34 +106,11 @@ class AuthToken < ApplicationRecord
 
   def self.find_token(api_version, retries: 0)
     auth_token = authorized.order(Arel.sql("RANDOM()")).first
-    return auth_token if auth_token.high_rate_limit?(api_version)
+    return auth_token if auth_token.safe_to_use?(api_version)
 
     retries += 1
     raise "No Authorized AuthToken Could Be Found!" if retries >= 10
 
     find_token(api_version, retries: retries)
   end
-
-  private
-
-  def v4_remaining_rate
-    query_result = v4_github_client.query(V4RateLimitQuery)
-    if query_result.data.nil?
-      0
-    else
-      # check the return
-      query_result.data.rate_limit.remaining
-    end
-  end
-
-  V4RateLimitQuery = Rails.application.config.graphql.client.parse <<-GRAPHQL
-    query {
-      viewer {
-        login
-      }
-      rateLimit {
-        remaining
-      }
-    }
-  GRAPHQL
 end
