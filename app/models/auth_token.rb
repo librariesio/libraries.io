@@ -54,8 +54,12 @@ class AuthToken < ApplicationRecord
     remaining > LOW_RATE_LIMIT_REMAINING_THRESHOLD
   rescue Octokit::Unauthorized, Octokit::AccountSuspended
     false
-  rescue StandardError
-    StructuredLog.capture("FAILED_READING_GITHUB_RATE_LIMITS", { api_version: api_version, auth_token_id: id, remaining: remaining })
+  rescue StandardError => e
+    StructuredLog.capture(
+      "FAILED_READING_GITHUB_RATE_LIMITS",
+      { api_version: api_version, auth_token_id: id, remaining: remaining, error_class: e, error_message: e.message }
+    )
+
     false
   end
 
