@@ -23,7 +23,7 @@ module GithubGraphql
 
     # Try extracting a nested value from the data
     # @param keys [*String] list of keys to dig through
-    def dig(*keys)
+    def dig_data(*keys)
       data.to_h.dig(*keys)
     end
 

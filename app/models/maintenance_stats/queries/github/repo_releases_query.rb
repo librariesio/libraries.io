@@ -4,7 +4,7 @@ module MaintenanceStats
   module Queries
     module Github
       class RepoReleasesQuery < BaseQuery
-        RELEASES_QUERY = Rails.application.config.graphql.client.parse <<-GRAPHQL
+        RELEASES_QUERY = GithubGraphql.parse_query <<-GRAPHQL
           query($owner: String!, $repo_name: String!, $cursor: String){
             repository(owner: $owner, name: $repo_name){
               releases(first: 100, after: $cursor, orderBy: {field: CREATED_AT, direction: DESC}){

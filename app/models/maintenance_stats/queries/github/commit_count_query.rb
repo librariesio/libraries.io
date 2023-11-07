@@ -4,7 +4,7 @@ module MaintenanceStats
   module Queries
     module Github
       class CommitCountQuery < BaseQuery
-        COMMIT_COUNTS_QUERY = Rails.application.config.graphql.client.parse <<-GRAPHQL
+        COMMIT_COUNTS_QUERY = GithubGraphql.parse_query <<-GRAPHQL
           query ($owner: String!, $repo_name: String!, $one_week: GitTimestamp!, $one_month: GitTimestamp!, $two_months: GitTimestamp!, $one_year: GitTimestamp!) {
             repository(owner: $owner, name: $repo_name) {
               defaultBranchRef {
