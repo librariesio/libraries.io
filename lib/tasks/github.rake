@@ -77,16 +77,18 @@ namespace :github do
     token = args.github_token || ENV.fetch("GITHUB_TOKEN", nil)
     raise ArgumentError, "Github token not found! Pass one into this rake task or define an environment variable GITHUB_TOKEN" if token.nil?
 
-    http = GraphQL::Client::HTTP.new("https://api.github.com/graphql") do
-      attr_accessor :token
+    # http = GraphQL::Client::HTTP.new("https://api.github.com/graphql") do
+    #   attr_accessor :token
 
-      def headers(_context)
-        # Send Github Token
-        { "Authorization": "bearer #{token}" }
-      end
-    end
-    http.token = token
+    #   def headers(_context)
+    #     # Send Github Token
+    #     { "Authorization": "bearer #{token}" }
+    #   end
+    # end
+    # http.token = token
 
-    GraphQL::Client.dump_schema(http, "config/github_graphql_schema.json")
+    # GraphQL::Client.dump_schema(GithubGraphql::HTTP, "config/github_graphql_schema.json", context: { access_token: token })
+
+    GithubGraphql.refresh_dump!(token)
   end
 end

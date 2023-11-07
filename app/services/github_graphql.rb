@@ -12,8 +12,9 @@ module GithubGraphql
   class AuthorizationError < RequestError; end
 
   GRAPHQL_ENDPOINT = "https://api.github.com/graphql"
+  SCHEMA_DUMP_PATH = "config/github_graphql_schema.json"
 
-  HttpAdapter = ::GraphQL::Client::HTTP.new(GRAPHQL_ENDPOINT) do
+  HTTP = ::GraphQL::Client::HTTP.new(GRAPHQL_ENDPOINT) do
     def headers(context)
       token = context[:access_token]
       raise "Missing Github access token" unless token.present?
@@ -22,9 +23,11 @@ module GithubGraphql
     end
   end
 
+  Schema = ::GraphQL::Client.load_schema(SCHEMA_DUMP_PATH)
+
   ApiClient = ::GraphQL::Client.new(
-    schema: Rails.application.config.graphql.schema,
-    execute: HttpAdapter
+    schema: Schema,
+    execute: HTTP
   )
 
   # Prepare a static query from given string
@@ -37,30 +40,7 @@ module GithubGraphql
     Client.new(token)
   end
 
-  # Returns true if the user has more than our minimum threshold of credit
-  def self.not_low_rate_remaining?(token)
-    rate_limit_remaining(token) < LOW_RATE_REMAINING_THRESHOLD
+  def self.refresh_dump!(token)
+    GraphQL::Client.dump_schema(HTTP, SCHEMA_DUMP_PATH, context: { access_token: token })
   end
-
-  # @param token [String] A Github API token
-  # @raise [AuthorizationError]
-  # @return [Integer] The user's remaining rate limit credit
-  def self.rate_limit_remaining(token)
-    response = new_client(token).query!(REMAINING_RATE_LIMIT_QUERY)
-
-    response.data.rate_limit.remaining
-  rescue RateLimitError
-    0
-  end
-
-  REMAINING_RATE_LIMIT_QUERY = parse_query <<-GRAPHQL
-    query {
-      viewer {
-        login
-      }
-      rateLimit {
-        remaining
-      }
-    }
-  GRAPHQL
 end
