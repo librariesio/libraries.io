@@ -29,19 +29,19 @@ module GithubGraphql
     #  Token is already included.
     # @return [Response]
     def query(parsed_query, variables: {}, context: {})
-      result = ApiClient.query(
+      graphql_response = ApiClient.query(
         parsed_query,
         context: context.with_defaults(access_token: @token),
         variables: variables
       )
 
-      response = Response.new(result)
+      response = Response.new(graphql_response)
 
       StructuredLog.capture(
         "UPSTREAM_QUERY_SENT",
         {
           upstream_service: "github_graphql",
-          query_name: parsed_query.name.camelize,
+          query_name: parsed_query.try(:name).try(:camelize),
           success: response.errors.empty?,
           unauthorized: response.unauthorized?,
           rate_limited: response.rate_limited?,

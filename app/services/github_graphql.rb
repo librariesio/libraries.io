@@ -23,6 +23,8 @@ module GithubGraphql
     end
 
     def execute(document:, operation_name: nil, variables: {}, context: {})
+      # Build request like upstream
+      # https://github.com/github/graphql-client/blob/master/lib/graphql/client/http.rb#L58
       request = Net::HTTP::Post.new(uri.request_uri)
 
       request.basic_auth(uri.user, uri.password) if uri.user || uri.password
@@ -39,7 +41,7 @@ module GithubGraphql
 
       response = connection.request(request)
 
-      # Add status code and headers to result
+      # Capture headers and status code from http response to better detect error states
       response_meta = {
         "headers" => response.each_header.to_h,
         "status_code" => response.code,
@@ -47,6 +49,7 @@ module GithubGraphql
 
       case response
       when Net::HTTPOK, Net::HTTPBadRequest
+        # Return metadata with results data
         response_meta.merge(
           JSON.parse(response.body)
         )
@@ -75,6 +78,8 @@ module GithubGraphql
     Client.new(token)
   end
 
+  # Update local cache of Github GraphQL API Schema
+  # @param token [String] A Github API token
   def self.refresh_dump!(token)
     GraphQL::Client.dump_schema(HTTP, SCHEMA_DUMP_PATH, context: { access_token: token })
   end

@@ -4,15 +4,7 @@ module GithubGraphql
   class Response
     attr_reader :data, :status_code, :headers, :errors
 
-    # def initialize(query_response, status_code: 200, headers: {})
-    #   @response = query_response
-
-    #   @data = query_response.data
-    #   @errors = query_response.errors
-    #   @status_code = status_code
-    #   @headers = headers
-    # end
-
+    # @param graphql_response [GraphQL::Client::Response] Response object from query
     def initialize(graphql_response)
       @headers = graphql_response.original_hash.fetch("headers")
       @status_code = graphql_response.original_hash.fetch("status_code")
