@@ -73,12 +73,10 @@ describe "one_off" do
       let(:project) { create(:project, platform: "PyPi", name: "project") }
       let(:version) { create(:version, project: project, number: "1.0.0", repository_sources: nil) }
 
-      it "does not delete project or its version" do
+      it "does not delete versions" do
         expect(Version.all).to match_array([version])
-        expect(Project.all).to match_array([project])
-        expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("yes") }
+        expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "yes") }
           .to not_change(Version, :count)
-          .and not_change(Project, :count)
       end
     end
 
@@ -89,12 +87,10 @@ describe "one_off" do
         let(:maven_source_version) { create(:version, project: project, number: "1.0.0", repository_sources: ["Maven"]) }
         let(:google_source_version) { create(:version, project: project, number: "2.0.0", repository_sources: ["Google"]) }
 
-        it "does not delete project or its versions" do
+        it "does not delete versions" do
           expect(Version.all).to match_array([maven_source_version, google_source_version])
-          expect(Project.all).to match_array([project])
-          expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("yes") }
+          expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "yes") }
             .to not_change(Version, :count)
-            .and not_change(Project, :count)
         end
       end
 
@@ -104,11 +100,9 @@ describe "one_off" do
         let(:no_source_version) { create(:version, project: project, number: "3.0.0", repository_sources: nil) }
         let(:ignored_source_version) { create(:version, project: project, number: "4.0.0", repository_sources: ["Other"]) }
 
-        it "deletes ignored versions but not the project or its other versions" do
-          expect(Project.all).to match_array([project])
-          expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("yes") }
+        it "deletes ignored versions but not other versions" do
+          expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "yes") }
             .to change(Version, :all).from([maven_source_version, google_source_version, no_source_version, ignored_source_version]).to([maven_source_version, google_source_version])
-            .and not_change(Project, :count)
         end
       end
 
@@ -116,10 +110,59 @@ describe "one_off" do
         let(:no_source_version) { create(:version, project: project, number: "1.0.0", repository_sources: nil) }
         let(:ignored_source_version) { create(:version, project: project, number: "2.0.0", repository_sources: ["Other"]) }
 
-        it "deletes ignored versions and the project" do
-          expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("yes") }
+        it "deletes ignored versions" do
+          expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "yes") }
             .to change(Version, :all).from([no_source_version, ignored_source_version]).to([])
-            .and change(Project, :all).from([project]).to([])
+        end
+      end
+    end
+  end
+
+  describe "delete_maven_packages_without_versions" do
+    after(:each) do
+      Rake::Task["one_off:delete_maven_packages_without_versions"].reenable
+    end
+
+    context "with non-Maven project" do
+      let(:project) { create(:project, platform: "PyPi", name: "project") }
+
+      context "without versions" do
+        it "does not delete project" do
+          expect(Project.all).to match_array([project])
+          expect { Rake::Task["one_off:delete_maven_packages_without_versions"].invoke("yes") }
+            .to not_change(Project, :count)
+        end
+      end
+
+      context "with a version" do
+        let!(:version) { create(:version, project: project, number: "1.0.0") }
+
+        it "does not delete project" do
+          expect(Project.all).to match_array([project])
+          expect { Rake::Task["one_off:delete_maven_packages_without_versions"].invoke("yes") }
+            .to not_change(Project, :count)
+        end
+      end
+    end
+
+    context "with Maven project" do
+      let(:project) { create(:project, platform: "Maven", name: "project") }
+
+      context "without versions" do
+        it "deletes project" do
+          expect(Project.all).to match_array([project])
+          expect { Rake::Task["one_off:delete_maven_packages_without_versions"].invoke("yes") }
+            .to change(Project, :all).from([project]).to([])
+        end
+      end
+
+      context "with a version" do
+        let!(:version) { create(:version, project: project, number: "1.0.0") }
+
+        it "does not delete project" do
+          expect(Project.all).to match_array([project])
+          expect { Rake::Task["one_off:delete_maven_packages_without_versions"].invoke("yes") }
+            .to not_change(Project, :count)
         end
       end
     end
