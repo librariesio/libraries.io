@@ -2,35 +2,37 @@
 
 module GithubGraphql
   class Response
-    def initialize(graphql_response)
-      @graphql_response = graphql_response
-    end
+    attr_reader :data, :status_code, :headers, :errors
 
-    delegate :data, :errors, to: :@graphql_response
+    # def initialize(query_response, status_code: 200, headers: {})
+    #   @response = query_response
+
+    #   @data = query_response.data
+    #   @errors = query_response.errors
+    #   @status_code = status_code
+    #   @headers = headers
+    # end
+
+    def initialize(graphql_response)
+      @headers = graphql_response.original_hash.fetch("headers")
+      @status_code = graphql_response.original_hash.fetch("status_code")
+
+      @data = graphql_response.data
+      @errors = graphql_response.errors
+    end
 
     # Try extracting a nested value from the data
     # @param keys [*String] list of keys to dig through
     def dig(*keys)
-      data.to_h[keys]
+      data.to_h.dig(*keys)
     end
 
-    # @return [Array<String>] Collection of returned error messages, if any
-    def error_messages
-      Array.wrap(errors&.messages&.values)
-    end
-
-    def errors?
-      errors.any? || data.errors.any?
-    end
-
-    # Checks if the response contains an authorization error
     def unauthorized?
-      error_messages.any? { |msg| msg.start_with?("401") }
+      status_code == "401"
     end
 
-    # Checks if the response contains a rate limit exhausted error
     def rate_limited?
-      error_messages.any? { |msg| msg.start_with?("idkyet") }
+      headers["x-ratelimit-remaining"].to_s == "0"
     end
   end
 end

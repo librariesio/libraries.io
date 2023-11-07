@@ -21,6 +21,41 @@ module GithubGraphql
 
       { "Authorization" => "Bearer #{token}" }
     end
+
+    def execute(document:, operation_name: nil, variables: {}, context: {})
+      request = Net::HTTP::Post.new(uri.request_uri)
+
+      request.basic_auth(uri.user, uri.password) if uri.user || uri.password
+
+      request["Accept"] = "application/json"
+      request["Content-Type"] = "application/json"
+      headers(context).each { |name, value| request[name] = value }
+
+      body = {}
+      body["query"] = document.to_query_string
+      body["variables"] = variables if variables.any?
+      body["operationName"] = operation_name if operation_name
+      request.body = JSON.generate(body)
+
+      response = connection.request(request)
+
+      # Add status code and headers to result
+      response_meta = {
+        "headers" => response.each_header.to_h,
+        "status_code" => response.code,
+      }
+
+      case response
+      when Net::HTTPOK, Net::HTTPBadRequest
+        response_meta.merge(
+          JSON.parse(response.body)
+        )
+      else
+        response_meta.merge(
+          { "errors" => [{ "message" => "#{response.code} #{response.message}" }] }
+        )
+      end
+    end
   end
 
   Schema = ::GraphQL::Client.load_schema(SCHEMA_DUMP_PATH)

@@ -13,11 +13,11 @@ module GithubGraphql
       response = query(args)
 
       if response.unauthorized?
-        raise AuthorizationError, response.error_messages
+        raise AuthorizationError
       elsif response.rate_limited?
-        raise RateLimitError, response.error_messages
+        raise RateLimitError
       elsif response.errors?
-        raise RequestError, response.error_messages
+        raise RequestError
       end
 
       response
@@ -42,10 +42,9 @@ module GithubGraphql
         {
           upstream_service: "github_graphql",
           query_name: parsed_query.name.camelize,
-          success: !response.errors?,
+          success: response.errors.empty?,
           unauthorized: response.unauthorized?,
           rate_limited: response.rate_limited?,
-          error_message: response.error_messages.join,
         }
       )
 
