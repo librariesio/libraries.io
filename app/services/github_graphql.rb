@@ -15,6 +15,8 @@ module GithubGraphql
   SCHEMA_DUMP_PATH = "config/github_graphql_schema.json"
 
   HTTP = ::GraphQL::Client::HTTP.new(GRAPHQL_ENDPOINT) do
+    # @param context [Hash] Values needed to build headers for all requests
+    # @option context [String] :access_token Github access token
     def headers(context)
       token = context[:access_token]
       raise "Missing Github access token" unless token.present?
@@ -22,6 +24,7 @@ module GithubGraphql
       { "Authorization" => "Bearer #{token}" }
     end
 
+    # Override upstream implementation to include needed response metadata
     def execute(document:, operation_name: nil, variables: {}, context: {})
       # Build request like upstream
       # https://github.com/github/graphql-client/blob/master/lib/graphql/client/http.rb#L58
@@ -81,6 +84,6 @@ module GithubGraphql
   # Update local cache of Github GraphQL API Schema
   # @param token [String] A Github API token
   def self.refresh_dump!(token)
-    GraphQL::Client.dump_schema(HTTP, SCHEMA_DUMP_PATH, context: { access_token: token })
+    ::GraphQL::Client.dump_schema(HTTP, SCHEMA_DUMP_PATH, context: { access_token: token })
   end
 end
