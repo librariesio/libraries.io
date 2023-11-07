@@ -257,4 +257,45 @@ namespace :one_off do
     puts "Total packages checked: #{input_tsv_file.count}"
     puts "Versions corrected: #{corrected_count}"
   end
+
+  desc "Delete ignored Maven versions and resync packages"
+  task :delete_ignored_maven_versions_and_resync_packages, %i[commit] => :environment do |_t, args|
+    commit = args.commit.present? && args.commit == "yes"
+
+    puts "DRY RUN" unless commit
+
+    # Retrieve the projects where at least one version's repository_sources is not solely ["Maven"] or ["Google"]
+    affected_projects = Project
+      .joins(:versions)
+      .where(platform: "Maven")
+      .where(%((versions.repository_sources != '["Maven"]' AND versions.repository_sources != '["Google"]') OR repository_sources IS NULL))
+      .distinct
+
+    puts "Count of projects with versions to re-process: #{affected_projects.count}"
+
+    batch_size = 50
+    processed_count = 0
+
+    puts "Processing...."
+    affected_projects.in_batches(of: batch_size).each do |batch|
+      batch.each do |project|
+        affected_versions = project.versions.where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]') OR repository_sources IS NULL))
+
+        puts "Destroying #{affected_versions.count} versions for #{project.platform}/#{project.name}."
+        affected_versions.destroy_all if commit
+        puts "Trying manual sync for #{project.platform}/#{project.name}."
+        project.try(:manual_sync) if commit
+
+        # Use versions count manually because it might be unsafe to trust
+        # cached project.versions_count value immediately after doing deletions
+        if project.versions.count == 0
+          puts "No versions remaining for #{project.platform}/#{project.name}: Destroying project."
+          project.destroy! if commit
+        end
+      end
+
+      processed_count += [batch_size, batch.size].min
+      puts "Processed #{processed_count} projects."
+    end
+  end
 end
