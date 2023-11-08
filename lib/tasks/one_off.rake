@@ -305,12 +305,17 @@ namespace :one_off do
     processed_count = 0
 
     affected_projects = Project.where(platform: "Maven").without_versions
-    puts "Count of projects without versions to destroy: #{affected_projects.count}"
+    affected_projects_count = affected_projects.count
+    puts "Count of projects without versions to destroy: #{affected_projects_count}"
     puts "Processing...."
     affected_projects.in_batches(of: batch_size).each do |batch|
-      batch.destroy_all if commit
       processed_count += batch.size
-      puts "Destroyed #{processed_count} of #{affected_projects.count} projects."
+      if commit
+        batch.destroy_all
+      else
+        puts batch
+      end
+      puts "Destroyed #{processed_count} of #{affected_projects_count} projects."
     end
   end
 end
