@@ -289,7 +289,7 @@ namespace :one_off do
         project.try(:manual_sync) if commit
       end
 
-      processed_count += [batch_size, batch.size].min
+      processed_count += batch.size
       puts "Processed #{processed_count} projects."
     end
   end
@@ -309,7 +309,7 @@ namespace :one_off do
     puts "Processing...."
     affected_projects.in_batches(of: batch_size).each do |batch|
       batch.destroy_all if commit
-      processed_count += [batch_size, batch.size].min
+      processed_count += batch.size
       puts "Destroyed #{processed_count} of #{affected_projects.count} projects."
     end
   end
