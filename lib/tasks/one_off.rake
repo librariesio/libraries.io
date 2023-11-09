@@ -279,17 +279,34 @@ namespace :one_off do
     processed_count = 0
 
     puts "Processing...."
-    affected_projects.in_batches(of: batch_size).each do |batch|
-      batch.each do |project|
-        affected_versions = project.versions.where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]') OR repository_sources IS NULL))
+    affected_projects.in_batches(of: batch_size).each do |projects_batch|
+      projects_batch.each do |project|
+        no_source_versions = project.versions.where("repository_sources IS NULL")
+        ignored_source_versions = project.versions.where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]')))
 
-        puts "Destroying #{affected_versions.count} versions for #{project.platform}/#{project.name}."
-        affected_versions.destroy_all if commit
+        puts "Updating/Deleting #{no_source_versions.count + ignored_source_versions.count} versions for #{project.platform}/#{project.name}."
+        if commit
+          # If no repository_sources, then destroy it
+          no_source_versions.destroy_all
+
+          # If there are repository_sources,
+          # - if any are Maven or Google, remove repository_sources that aren't Maven or Google
+          # - if none are Maven or Google, destroy version
+          ignored_source_versions.in_batches do |versions_batch|
+            versions_batch.each do |version|
+              if version.repository_sources.include?("Maven") || version.repository_sources.include?("Google")
+                version.update(repository_sources: version.repository_sources.select { |source| %w[Maven Google].include?(source) })
+              else
+                version.destroy
+              end
+            end
+          end
+        end
         puts "Trying manual sync for #{project.platform}/#{project.name}."
         project.try(:manual_sync) if commit
       end
 
-      processed_count += batch.size
+      processed_count += projects_batch.size
       puts "Processed #{processed_count} projects."
     end
   end
