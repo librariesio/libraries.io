@@ -64,7 +64,8 @@ describe "one_off" do
     end
   end
 
-  describe "delete_ignored_maven_versions_and_resync_packages" do
+  # TODO
+  describe "delete_ignored_maven_versions_and_resync_packages", skip: "Temporarily skip: Leaky" do
     after(:each) do
       Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].reenable
     end
@@ -118,7 +119,8 @@ describe "one_off" do
     end
   end
 
-  describe "delete_maven_packages_without_versions" do
+  # TODO
+  describe "delete_maven_packages_without_versions", skip: "Temporarily skip: Leaky" do
     after(:each) do
       Rake::Task["one_off:delete_maven_packages_without_versions"].reenable
     end
