@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@2.0.1
+  ruby: circleci/ruby@2.1.0
 
 executors:
   # TODO: we don't need ES/PG/Redis for "lint" job, so we could create another
@@ -17,7 +17,7 @@ executors:
           POSTGRES_USER: postgres
           POSTGRES_DB: libraries_test
           POSTGRES_PASSWORD: ""
-      - image: redis:3.2-alpine
+      - image: redis:7.0-alpine
       - image: elasticsearch:2.4.4
         environment:
           - cluster.name: elasticsearch
@@ -42,7 +42,7 @@ jobs:
       - checkout:
           path: ~/libraries
 
-      - run: 
+      - run:
           name: Prep ruby
           command: |
             gem -v
@@ -74,7 +74,7 @@ jobs:
       - setup-ruby-env
       - attach_workspace:
           at: ~/
-      - run: 
+      - run:
           name: Run linter
           command: |
             pwd
