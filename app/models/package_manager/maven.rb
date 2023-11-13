@@ -160,6 +160,8 @@ module PackageManager
       if raw_project && raw_project[:versions]
         raw_project[:versions]
       else
+        # TODO: Use the commented below instead when specs are fixed
+        # retrieve_versions(versions_from_html(name), name)
         xml_metadata = maven_metadata(name)
         xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
         retrieve_versions(xml_versions.filter { |item| !item.ends_with?("-SNAPSHOT") }, name)
@@ -253,6 +255,12 @@ module PackageManager
         .css("versioning > latest, versioning > release, metadata > version")
         .map(&:text)
         .first
+    end
+
+    def self.versions_from_html(name)
+      get_html(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).base).css("a").filter_map do |a|
+        a.text.chomp("/") if a.text.ends_with?("/") && a.text != "../"
+      end
     end
 
     def self.db_platform
