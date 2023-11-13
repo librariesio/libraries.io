@@ -392,7 +392,7 @@ class Project < ApplicationRecord
 
   def send_project_updated
     # monitor how often this happens, temporarily, to see how often we might be sending useless webhooks.
-    StructuredLog.capture("PROJECT_UPDATED_WITHOUT_CHANGES", { platform: platform, name: name, id: id, has_changes: changes.present?})
+    StructuredLog.capture("PROJECT_SAVED", { platform: platform, name: name, id: id, has_changes: changes.present?})
 
     # this should be a cheap no-op if we remove all the
     # receives_all_project_updates WebHook, so that's an emergency off switch if
