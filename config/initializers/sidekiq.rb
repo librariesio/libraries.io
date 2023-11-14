@@ -63,4 +63,33 @@ SidekiqUniqueJobs.configure do |config|
   config.lock_info = true
 end
 
+SidekiqUniqueJobs.reflect do |on|
+  # Some useful logs via https://github.com/mhenrixon/sidekiq-unique-jobs/blob/main/UPGRADING.md
+
+  # This job is skipped because it is a duplicate
+  on.duplicate do |job_hash|
+    logger.warn(job_hash.merge(message: "SidekiqUniqueJobs: Duplicate Job"))
+  end
+
+  # Failed to acquire lock in a timely fashion
+  on.lock_failed do |job_hash|
+    logger.warn(job_hash.merge(message: "SidekiqUniqueJobs: Lock failed"))
+  end
+
+  # When your conflict strategy is to reschedule and it failed
+  on.reschedule_failed do |job_hash|
+    logger.debug(job_hash.merge(message: "SidekiqUniqueJobs: Reschedule failed"))
+  end
+
+  # You asked to wait for a lock to be achieved but we timed out waiting
+  on.timeout do |job_hash|
+    logger.warn(job_hash.merge(message: "SidekiqUniqueJobs: Lock timeout"))
+  end
+
+  # Unlock failed! Not good
+  on.unlock_failed do |job_hash|
+    logger.warn(job_hash.merge(message: "SidekiqUniqueJobs: Unlock failed"))
+  end
+end
+
 Marginalia::SidekiqInstrumentation.enable!
