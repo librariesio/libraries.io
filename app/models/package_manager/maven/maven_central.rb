@@ -21,6 +21,8 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven::Common
     PackageManager::Base::MissingVersionRemover
   end
 
+  # maven-metadata.xml for Maven Central does not appear to be guaranteed to contain all relevant versions for a package
+  # So instead, if needed, we will retrieve the versions from the raw HTML index page
   def self.versions(raw_project, name)
     if raw_project && raw_project[:versions]
       raw_project[:versions]
