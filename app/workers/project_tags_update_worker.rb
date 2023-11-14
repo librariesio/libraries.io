@@ -2,7 +2,7 @@
 
 class ProjectTagsUpdateWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :small, unique: :until_executed
+  sidekiq_options queue: :small, lock: :until_executed
 
   def perform(project_id)
     Project.find(project_id).update_tags
