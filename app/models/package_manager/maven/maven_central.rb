@@ -20,4 +20,18 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven::Common
   def self.missing_version_remover
     PackageManager::Base::MissingVersionRemover
   end
+
+  def self.versions(raw_project, name)
+    if raw_project && raw_project[:versions]
+      raw_project[:versions]
+    else
+      retrieve_versions(versions_from_html(name), name)
+    end
+  end
+
+  def self.versions_from_html(name)
+    get_html(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).base).css("a").filter_map do |a|
+      a.text.chomp("/") if a.text.ends_with?("/") && a.text != "../"
+    end
+  end
 end
