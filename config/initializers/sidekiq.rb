@@ -59,7 +59,7 @@ Sidekiq.default_worker_options = {
 }
 
 SidekiqUniqueJobs.configure do |config|
-  config.enabled = true # !Rails.env.test?
+  config.enabled = !Rails.env.test?
   config.lock_info = true
 end
 
