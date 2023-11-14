@@ -80,7 +80,8 @@ module PackageManager
 
       deps = json["dependencies"]
       map_dependencies(deps["development"], "Development") + map_dependencies(deps["runtime"], "runtime")
-    rescue StandardError
+    rescue StandardError => e
+      StructuredLog.capture("DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: version, error_klass: e.class.to_s, error: e.message })
       []
     end
 

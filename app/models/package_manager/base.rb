@@ -258,6 +258,11 @@ module PackageManager
       db_project = Project.find_by(name: name, platform: db_platform)
       db_versions = db_project.versions.includes(:dependencies)
       db_versions = db_versions.where(number: sync_version) unless sync_version == :all
+
+      if db_versions.empty?
+        StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: sync_version, message: "no versions found" })
+      end
+
       db_versions.each do |db_version|
         next if db_version.dependencies.any? && !force_sync_dependencies
 
