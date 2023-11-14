@@ -81,7 +81,7 @@ module PackageManager
       deps = json["dependencies"]
       map_dependencies(deps["development"], "Development") + map_dependencies(deps["runtime"], "runtime")
     rescue StandardError => e
-      StructuredLog.capture("DEBUGGING_MISSING_DEPENDENCIES", { platform: db_platform, name: name, version: version, error_klass: e.class.to_s, error: e.message})
+      StructuredLog.capture("DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: version, error_klass: e.class.to_s, error: e.message })
       []
     end
 

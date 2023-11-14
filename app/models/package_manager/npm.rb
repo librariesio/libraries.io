@@ -119,7 +119,7 @@ module PackageManager
     def self.dependencies(_name, version, mapped_project)
       vers = mapped_project.fetch(:versions, {})[version]
       if vers.nil?
-        StructuredLog.capture("DEBUGGING_MISSING_DEPENDENCIES", { platform: db_platform, name: name, version: version, message: "version not found in upstream"})
+        StructuredLog.capture("DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: version, message: "version not found in upstream" })
         return []
       end
 

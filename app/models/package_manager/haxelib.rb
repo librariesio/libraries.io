@@ -66,7 +66,7 @@ module PackageManager
         }
       end
     rescue StandardError => e
-      StructuredLog.capture("DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: version, error_klass: e.class.to_s, error: e.message})
+      StructuredLog.capture("DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: version, error_klass: e.class.to_s, error: e.message })
       []
     end
   end
