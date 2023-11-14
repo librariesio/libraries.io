@@ -24,8 +24,6 @@ Sidekiq.configure_server do |config|
     chain.add SidekiqUniqueJobs::Middleware::Server
   end
 
-  SidekiqUniqueJobs::Server.configure(config)
-
   # ensure that jobs-that-enqueue-jobs get the client middleware too
   config.client_middleware do |chain|
     chain.add SidekiqUniqueJobs::Middleware::Client
