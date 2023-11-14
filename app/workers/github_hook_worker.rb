@@ -2,7 +2,7 @@
 
 class GithubHookWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :critical, unique: :until_executed
+  sidekiq_options queue: :critical, lock: :until_executed
 
   def perform(github_id, sender_id)
     # some events like "push" may not always have the "sender" field, e.g. PR merge commits
