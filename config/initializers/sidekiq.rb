@@ -54,7 +54,7 @@ Sidekiq.default_job_options = {
   backtrace: true,
 }
 
-Sidekiq.default_worker_options = {
+Sidekiq.default_job_options = {
   backtrace: true,
 }
 
