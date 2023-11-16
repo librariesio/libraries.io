@@ -339,7 +339,7 @@ describe "Api::ProjectsController" do
             "name": project_with_unknown_deps.name,
             "platform": project_with_unknown_deps.platform,
             "dependencies_for_version": version_with_unknown_deps.number,
-            "dependencies": [],
+            "dependencies": nil,
           } },
         ].to_json)
     end
