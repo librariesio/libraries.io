@@ -8,15 +8,17 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.15.4
+      - Faraday v0.17.6
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '271378513063810383'
+      - '3299909264348543043'
       X-Datadog-Parent-Id:
-      - '1166487086939401214'
+      - '3897989116006837867'
       X-Datadog-Sampling-Priority:
       - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
       Expect:
       - ''
   response:
@@ -28,22 +30,24 @@ http_interactions:
       - https://dl.google.com/dl/android/maven2/com/google/android/games/group-index.xml
       Cross-Origin-Resource-Policy:
       - cross-origin
-      Content-Type:
-      - text/html; charset=UTF-8
       X-Content-Type-Options:
       - nosniff
-      Date:
-      - Tue, 14 Mar 2023 17:13:40 GMT
-      Expires:
-      - Tue, 14 Mar 2023 17:43:40 GMT
-      Cache-Control:
-      - public, max-age=1800
       Server:
       - sffe
       Content-Length:
       - '277'
       X-Xss-Protection:
       - '0'
+      Date:
+      - Tue, 14 Nov 2023 20:23:09 GMT
+      Expires:
+      - Tue, 14 Nov 2023 20:53:09 GMT
+      Cache-Control:
+      - public, max-age=1800
+      Content-Type:
+      - text/html; charset=UTF-8
+      Age:
+      - '222'
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
     body:
@@ -51,8 +55,7 @@ http_interactions:
       string: "<HTML><HEAD><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<TITLE>301
         Moved</TITLE></HEAD><BODY>\n<H1>301 Moved</H1>\nThe document has moved\n<A
         HREF=\"https://dl.google.com/dl/android/maven2/com/google/android/games/group-index.xml\">here</A>.\r\n</BODY></HTML>\r\n"
-    http_version:
-  recorded_at: Tue, 14 Mar 2023 17:13:40 GMT
+  recorded_at: Tue, 14 Nov 2023 20:26:51 GMT
 - request:
     method: get
     uri: https://dl.google.com/dl/android/maven2/com/google/android/games/group-index.xml
@@ -61,15 +64,17 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.15.4
+      - Faraday v0.17.6
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '4247306432024612484'
+      - '3798022735727065520'
       X-Datadog-Parent-Id:
-      - '2929971138458564536'
+      - '1167652035270471276'
       X-Datadog-Sampling-Priority:
       - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
       Expect:
       - ''
   response:
@@ -79,24 +84,14 @@ http_interactions:
     headers:
       Accept-Ranges:
       - bytes
-      Cache-Control:
-      - public,max-age=86400
       Content-Disposition:
       - attachment
       Content-Length:
       - '221'
       Content-Security-Policy:
       - default-src 'none'
-      Content-Type:
-      - application/xml
-      Etag:
-      - '"adc662"'
-      Last-Modified:
-      - Fri, 15 Oct 2021 16:16:22 GMT
       Server:
       - downloads
-      Vary:
-      - Origin
       X-Content-Type-Options:
       - nosniff
       X-Frame-Options:
@@ -104,7 +99,19 @@ http_interactions:
       X-Xss-Protection:
       - '0'
       Date:
-      - Tue, 14 Mar 2023 17:13:40 GMT
+      - Tue, 14 Nov 2023 20:26:51 GMT
+      Cache-Control:
+      - public,max-age=86400
+      Last-Modified:
+      - Fri, 15 Oct 2021 16:16:22 GMT
+      Etag:
+      - '"adc662"'
+      Content-Type:
+      - application/xml
+      Vary:
+      - Origin
+      Age:
+      - '0'
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
     body:
@@ -115,8 +122,7 @@ http_interactions:
           <memory-advice versions="0.13,0.14,0.15,0.22,0.23,0.24"/>
           <memory-advice-common versions="0.13,0.14,0.15,0.22,0.23,0.24"/>
         </com.google.android.games>
-    http_version:
-  recorded_at: Tue, 14 Mar 2023 17:13:40 GMT
+  recorded_at: Tue, 14 Nov 2023 20:26:51 GMT
 - request:
     method: get
     uri: https://dl.google.com/dl/android/maven2/com/google/android/games/memory-advice/0.24/memory-advice-0.24.pom
@@ -125,15 +131,17 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.15.4
+      - Faraday v0.17.6
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '4364342007873828035'
+      - '3940907107568498289'
       X-Datadog-Parent-Id:
-      - '4154079452063664978'
+      - '3191105367168775837'
       X-Datadog-Sampling-Priority:
       - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
       Expect:
       - ''
   response:
@@ -168,7 +176,7 @@ http_interactions:
       X-Xss-Protection:
       - '0'
       Date:
-      - Tue, 14 Mar 2023 17:13:40 GMT
+      - Tue, 14 Nov 2023 20:26:52 GMT
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
     body:
@@ -230,8 +238,7 @@ http_interactions:
             </dependency>
           </dependencies>
         </project>
-    http_version:
-  recorded_at: Tue, 14 Mar 2023 17:13:41 GMT
+  recorded_at: Tue, 14 Nov 2023 20:26:52 GMT
 - request:
     method: get
     uri: https://dl.google.com/dl/android/maven2/com/google/android/games/memory-advice/0.22/memory-advice-0.22.pom
@@ -240,15 +247,17 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.15.4
+      - Faraday v0.17.6
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '3321308180289245601'
+      - '1091719623440894595'
       X-Datadog-Parent-Id:
-      - '358848893792142024'
+      - '4170468601176143246'
       X-Datadog-Sampling-Priority:
       - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
       Expect:
       - ''
   response:
@@ -283,7 +292,7 @@ http_interactions:
       X-Xss-Protection:
       - '0'
       Date:
-      - Tue, 14 Mar 2023 17:13:41 GMT
+      - Tue, 14 Nov 2023 20:26:52 GMT
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
     body:
@@ -345,6 +354,5 @@ http_interactions:
             </dependency>
           </dependencies>
         </project>
-    http_version:
-  recorded_at: Tue, 14 Mar 2023 17:13:41 GMT
-recorded_with: VCR 4.0.0
+  recorded_at: Tue, 14 Nov 2023 20:26:52 GMT
+recorded_with: VCR 6.2.0

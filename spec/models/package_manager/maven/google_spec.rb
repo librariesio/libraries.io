@@ -47,4 +47,13 @@ describe PackageManager::Maven::Google do
       ])
     end
   end
+
+  describe ".latest_version" do
+    it "retrieves latest version from Google maven-metadata.xml" do
+      VCR.use_cassette("google-maven/memory-advice") do
+        # Matching latest version as of November 2023
+        expect(described_class.latest_version("com.google.android.games:memory-advice")).to eq("0.24")
+      end
+    end
+  end
 end

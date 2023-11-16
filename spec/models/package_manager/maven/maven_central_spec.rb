@@ -13,7 +13,7 @@ describe PackageManager::Maven::MavenCentral do
       # a version that was removed on Maven Central that we still know about
       let!(:remotely_removed_version) { project.versions.create(number: "1.0.2-1361", status: nil) }
 
-      # a version that, as of October 2023, was still available on Maven Central
+      # a version that, as of November 2023, was still available on Maven Central
       let!(:existing_version) { project.versions.create(number: "1.1.1363", status: nil) }
 
       it "marks the remotely removed version as Removed" do
@@ -26,6 +26,15 @@ describe PackageManager::Maven::MavenCentral do
 
         expect(remotely_removed_version.status).to eq("Removed")
         expect(existing_version.status).to eq(nil)
+      end
+    end
+  end
+
+  describe ".versions_from_html" do
+    it "retrieves versions from Maven Central index HTML" do
+      VCR.use_cassette("maven-central/lambda-tracer") do
+        # Matching versions as of November 2023
+        expect(described_class.versions_from_html("com.appdynamics:lambda-tracer")).to match_array(%w[1.1.1363 1.2.1390 20.03.1391 20.11.1400])
       end
     end
   end

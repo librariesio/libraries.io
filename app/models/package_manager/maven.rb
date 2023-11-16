@@ -192,8 +192,9 @@ module PackageManager
       versions
         .map do |version|
           one_version_for_name(version, name)
-      rescue Ox::Error, POMNotFound
-        next
+        rescue Ox::Error, POMNotFound
+          StructuredLog.capture("MAVEN_RETRIEVE_VERSION_FAILURE", { version: version, name: name, message: "Version POM not found or valid" })
+          next
         end
         .compact
     end
