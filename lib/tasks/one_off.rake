@@ -112,6 +112,21 @@ namespace :one_off do
     print "Total examined: #{packages.count}, Total created: #{processed}"
   end
 
+  desc "Backfill Version.dependencies_count"
+  task backfill_version_dependencies_count: :environment do
+    versions = Version.where(dependencies_count: nil).where.associated(:dependencies).group("versions.id")
+
+    puts "Updating #{versions.count.size} versions..."
+
+    versions.in_batches(of: 100).each_with_index{ |batch, idx|  
+      batch.update_all("dependencies_count = (SELECT count(*) FROM dependencies WHERE dependencies.version_id = versions.id)")
+      if idx % 10 == 0
+        puts "#{versions.count.size} versions remaining...."
+      end
+    }
+    puts "Finished updating versions"
+  end
+
   desc "Backfill Project.status_checked_at with Project.updated_at value"
   task backfill_project_status_checked_at: :environment do
     projects = Project
