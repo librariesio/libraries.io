@@ -128,7 +128,8 @@ class Api::ProjectsController < Api::ApplicationController
 
     project_json = serializer.new(project).as_json
     project_json[:dependencies_for_version] = version.number
-    project_json[:dependencies] = map_dependencies(version.dependencies.includes(:project) || [])
+    # nil means that we haven't fetched the deps yet, so check back later.
+    project_json[:dependencies] = version.dependencies_count.nil? ? nil : map_dependencies(version.dependencies.includes(:project))
 
     project_json
   end

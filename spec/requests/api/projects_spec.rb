@@ -18,6 +18,7 @@ describe "Api::ProjectsController" do
     internal_user.current_api_key.update_attribute(:is_internal, true)
     project.reload
     dependent_project.reload
+    version.set_dependencies_count
   end
 
   describe "GET /api/:platform/:name", type: :request do
@@ -339,7 +340,7 @@ describe "Api::ProjectsController" do
             "name": project_with_unknown_deps.name,
             "platform": project_with_unknown_deps.platform,
             "dependencies_for_version": version_with_unknown_deps.number,
-            "dependencies": [],
+            "dependencies": nil,
           } },
         ].to_json)
     end

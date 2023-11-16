@@ -217,6 +217,8 @@ describe PackageManager::Pypi do
         }
       end
 
+      before { version.set_dependencies_count }
+
       it "overwrites dependencies with force flag on" do
         expect(version.dependencies.count).to be 1
 
