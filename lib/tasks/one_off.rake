@@ -112,7 +112,7 @@ namespace :one_off do
     print "Total examined: #{packages.count}, Total created: #{processed}"
   end
 
-  desc "Backfill Version.dependencies_count"
+  desc "Backfill Version#dependencies_count"
   task backfill_version_dependencies_count: :environment do
     versions = Version.where(dependencies_count: nil).where.associated(:dependencies).group("versions.id")
 
