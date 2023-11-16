@@ -409,6 +409,7 @@ ActiveRecord::Schema[6.1].define(version: 2023_07_31_220834) do
     t.datetime "researched_at"
     t.jsonb "repository_sources"
     t.string "status"
+    t.integer "dependencies_count"
     t.index ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true
     t.index ["updated_at"], name: "index_versions_on_updated_at"
   end

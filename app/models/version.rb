@@ -5,6 +5,7 @@
 # Table name: versions
 #
 #  id                         :integer          not null, primary key
+#  dependencies_count         :integer
 #  number                     :string
 #  original_license           :jsonb
 #  published_at               :datetime
