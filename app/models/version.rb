@@ -5,6 +5,7 @@
 # Table name: versions
 #
 #  id                         :integer          not null, primary key
+#  dependencies_count         :integer
 #  number                     :string
 #  original_license           :jsonb
 #  published_at               :datetime
@@ -209,5 +210,9 @@ class Version < ApplicationRecord
 
   def set_runtime_dependencies_count
     update_column(:runtime_dependencies_count, runtime_dependencies.count)
+  end
+
+  def set_dependencies_count
+    update_column(:dependencies_count, dependencies.count)
   end
 end
