@@ -240,6 +240,15 @@ describe PackageManager::Pypi do
           .and change { version.runtime_dependencies_count }.to(4)
       end
 
+      it "updates the dependencies counters when there are zero deps" do
+        expect(PackageManager::Pypi).to receive(:dependencies).and_return([])
+        expect do
+          described_class.save_dependencies(mapped_project, sync_version: version_number, force_sync_dependencies: true)
+        end
+          .to change { version.reload.dependencies_count }.to(0)
+          .and change { version.runtime_dependencies_count }.to(0)
+      end
+
       it "leaves dependencies with force flag off" do
         expect(version.dependencies.count).to be 1
 

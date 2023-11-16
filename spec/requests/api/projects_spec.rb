@@ -11,6 +11,9 @@ describe "Api::ProjectsController" do
   let!(:dependency) { create(:dependency, version: version, project: dependent_project) }
   let!(:internal_user) { create(:user) }
 
+  let!(:project_with_unknown_deps) { create(:project, name: "a-freshly-ingested-project") }
+  let!(:version_with_unknown_deps) { create(:version, project: project_with_unknown_deps, repository_sources: ["Rubygems"]) }
+
   before :each do
     internal_user.current_api_key.update_attribute(:is_internal, true)
     project.reload
@@ -79,6 +82,11 @@ describe "Api::ProjectsController" do
             platform: dependent_project.platform,
             name: dependent_project.name,
             updated_at: dependent_project.updated_at.utc.iso8601(3),
+          },
+          {
+            platform: project_with_unknown_deps.platform,
+            name: project_with_unknown_deps.name,
+            updated_at: project_with_unknown_deps.updated_at.utc.iso8601(3),
           },
         ],
         deleted: [],
@@ -254,6 +262,10 @@ describe "Api::ProjectsController" do
                # 404 on name
                { name: "noooooo",
                  platform: "rubygems" },
+               # deps haven't been saved yet
+               { name: project_with_unknown_deps.name,
+                 platform: project_with_unknown_deps.platform },
+
         ],
       }
       expect(response).to have_http_status(:success)
@@ -316,6 +328,13 @@ describe "Api::ProjectsController" do
             "name": "noooooo",
             "platform": "rubygems",
             "dependencies_for_version": "latest",
+          } },
+        { status: 200,
+          body: {
+            "name": project_with_unknown_deps.name,
+            "platform": project_with_unknown_deps.platform,
+            "dependencies_for_version": version_with_unknown_deps.number,
+            "dependencies": nil,
           } },
         ].to_json)
     end
