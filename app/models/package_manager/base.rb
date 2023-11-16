@@ -264,7 +264,7 @@ module PackageManager
       end
 
       db_versions.each do |db_version|
-        next if db_version.dependencies.any? && !force_sync_dependencies
+        next if !db_version.dependencies_count.nil? && !force_sync_dependencies
 
         deps = begin
           dependencies(name, db_version.number, mapped_project)
