@@ -147,6 +147,11 @@ describe "Api::ProjectsController" do
             name: dependent_project.name,
             updated_at: dependent_project.updated_at.utc.iso8601(3),
           },
+          {
+            platform: project_with_unknown_deps.platform,
+            name: project_with_unknown_deps.name,
+            updated_at: project_with_unknown_deps.updated_at.utc.iso8601(3),
+          },
         ],
         deleted: [
           {
@@ -334,7 +339,7 @@ describe "Api::ProjectsController" do
             "name": project_with_unknown_deps.name,
             "platform": project_with_unknown_deps.platform,
             "dependencies_for_version": version_with_unknown_deps.number,
-            "dependencies": nil,
+            "dependencies": [],
           } },
         ].to_json)
     end
