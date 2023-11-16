@@ -30,4 +30,21 @@ describe Version, type: :model do
       expect(version.spdx_expression).to eq "NOASSERTION"
     end
   end
+
+  context "with dependencies" do
+    let(:version) { create(:version) }
+    
+    before do
+      create(:dependency, version: version, requirements: "> 0", kind: "runtime")
+      create(:dependency, version: version, requirements: "> 0", kind: "test")
+    end
+
+    it "can update its dependencies_count" do
+      expect { version.set_dependencies_count }.to change { version.dependencies_count }.to(2)
+    end
+
+    it "can update its runtime_dependencies_count" do
+      expect { version.set_runtime_dependencies_count }.to change { version.runtime_dependencies_count }.to(1)
+    end
+  end
 end

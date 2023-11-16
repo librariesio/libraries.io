@@ -292,6 +292,7 @@ module PackageManager
           db_version.dependencies.create!(dep.merge(project_id: named_project_id.try(:strip)))
         end
         db_version.set_runtime_dependencies_count if deps.any?
+        db_version.set_dependencies_count # this serves as a marker that we have saved Version#dependencies or not, even if there are zero (other)
       end
     end
 
