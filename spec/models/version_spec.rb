@@ -33,7 +33,7 @@ describe Version, type: :model do
 
   context "with dependencies" do
     let(:version) { create(:version) }
-    
+
     before do
       create(:dependency, version: version, requirements: "> 0", kind: "runtime")
       create(:dependency, version: version, requirements: "> 0", kind: "test")

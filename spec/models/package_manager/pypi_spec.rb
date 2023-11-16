@@ -228,7 +228,6 @@ describe PackageManager::Pypi do
         expect(version.dependencies.count).to be 6
       end
 
-
       it "updates the dependencies counters" do
         expect(version.dependencies.count).to be 1
 
@@ -238,7 +237,7 @@ describe PackageManager::Pypi do
           end
         end
           .to change { version.reload.dependencies_count }.to(6)
-          .and change { version.runtime_dependencies_count}.to(4)
+          .and change { version.runtime_dependencies_count }.to(4)
       end
 
       it "leaves dependencies with force flag off" do

@@ -118,12 +118,12 @@ namespace :one_off do
 
     puts "Updating #{versions.count.size} versions..."
 
-    versions.in_batches(of: 100).each_with_index{ |batch, idx|  
+    versions.in_batches(of: 100).each_with_index do |batch, idx|
       batch.update_all("dependencies_count = (SELECT count(*) FROM dependencies WHERE dependencies.version_id = versions.id)")
       if idx % 10 == 0
         puts "#{versions.count.size} versions remaining...."
       end
-    }
+    end
     puts "Finished updating versions"
   end
 
