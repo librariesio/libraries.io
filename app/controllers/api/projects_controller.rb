@@ -128,8 +128,15 @@ class Api::ProjectsController < Api::ApplicationController
 
     project_json = serializer.new(project).as_json
     project_json[:dependencies_for_version] = version.number
+    deps = version.dependencies.includes(:project)
+
+    # TODO: we may eventually be able to remove this, once all old Versions with depenencies have valid "dependencies_count" values instead of nil.
+    if version.dependencies_count.nil? && !deps.empty?
+      version.update_column(:dependencies_count, deps.size)
+    end
+
     # nil means that we haven't fetched the deps yet, so check back later.
-    project_json[:dependencies] = version.dependencies_count.nil? ? nil : map_dependencies(version.dependencies.includes(:project))
+    project_json[:dependencies] = version.dependencies_count.nil? ? nil : map_dependencies(deps)
 
     project_json
   end
