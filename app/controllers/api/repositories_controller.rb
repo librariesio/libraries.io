@@ -20,13 +20,6 @@ class Api::RepositoriesController < Api::ApplicationController
     render json: repo_json
   end
 
-  def search
-    @search = paginate(search_repos(params[:q]))
-    @repositories = @search.records
-
-    render json: @repositories
-  end
-
   private
 
   def find_repo
