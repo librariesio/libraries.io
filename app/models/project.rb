@@ -187,7 +187,7 @@ class Project < ApplicationRecord
   scope :recently_created, -> { with_repo.where("repositories.created_at > ?", 2.weeks.ago) }
 
   after_commit :update_repository_async, on: :create
-  after_commit :set_dependents_count, on: %i[create update]
+  after_commit :set_dependents_count_async, on: %i[create update]
   after_commit :update_source_rank_async, on: %i[create update]
   after_commit :send_project_updated, on: %i[create update]
   before_save  :update_details
@@ -376,9 +376,16 @@ class Project < ApplicationRecord
     read_attribute(:homepage).presence || repository.try(:homepage)
   end
 
+  def set_dependents_count_async
+    return if destroyed?
+
+    SetProjectDependentsCountWorker.perform_async(id)
+  end
+
   def set_dependents_count
     return if destroyed?
 
+    # TODO: more performant way to do this?
     new_dependents_count = ActiveRecord::Base.connection.with_statement_timeout(60.minutes.to_i) do
       dependents.joins(:version).pluck(Arel.sql("DISTINCT versions.project_id")).count
     end
