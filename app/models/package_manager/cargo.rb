@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rubygems/package'
+require "rubygems/package"
 
 module PackageManager
   class Cargo < Base
@@ -28,10 +28,19 @@ module PackageManager
       "https://crates.io/api/v1/crates/#{db_project.name}"
     end
 
-    def self.deprecation_info(name)
-      item = project(name)
-      version = item.dig("crate", "newest_version")
-      url = download_url(name, version)
+    def self.deprecation_info(db_project)
+      raw_project = project(db_project.name)
+      keywords = Array.wrap(raw_project["crate"]["keywords"])
+
+      if keywords.map(&:downcase).include?("deprecated")
+        return {
+          is_deprecated: true,
+          message: "Marked as deprecated in project keywords",
+        }
+      end
+
+      version = raw_project.dig("crate", "newest_version")
+      url = download_url(db_project, version)
       body = get_raw(url)
       tar_extract = Gem::Package::TarReader.new(Zlib::GzipReader.new(StringIO.new(body)))
       tar_extract.rewind
@@ -41,7 +50,7 @@ module PackageManager
       is_deprecated = status == "deprecated"
       {
         is_deprecated: is_deprecated,
-        message: is_deprecated ? "Marked as deprecated in Cargo.toml": nil
+        message: is_deprecated ? "Marked as deprecated in Cargo.toml" : nil,
       }
     end
 

@@ -15,7 +15,7 @@
       <% if tag.published_at.present? %>
         <td>
           <small class='text-muted'>
-            <%= tag.published_at.to_date.to_s(:long) %>
+            <%= tag.published_at.to_date.to_fs(:long) %>
           </small>
         </td>
       <% end %>

@@ -1,0 +1,226 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://pypi.org/pypi/isort/5.12.0/json
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2150697890752061960'
+      X-Datadog-Parent-Id:
+      - '2314641094871830248'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Access-Control-Allow-Headers:
+      - Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - X-PyPI-Last-Serial
+      Access-Control-Max-Age:
+      - '86400'
+      Cache-Control:
+      - max-age=900, public
+      Content-Security-Policy:
+      - base-uri 'self'; block-all-mixed-content; connect-src 'self' https://api.github.com/repos/
+        https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com
+        fastly-insights.com *.fastly-insights.com *.ethicalads.io https://api.pwnedpasswords.com
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/sre/mathmaps/ https://2p66nmmycsj3.statuspage.io;
+        default-src 'none'; font-src 'self' fonts.gstatic.com; form-action 'self'
+        https://checkout.stripe.com; frame-ancestors 'none'; frame-src 'none'; img-src
+        'self' https://warehouse-camo.ingress.cmh1.psfhosted.org/ https://*.google-analytics.com
+        https://*.googletagmanager.com *.fastly-insights.com *.ethicalads.io; script-src
+        'self' https://*.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com
+        *.fastly-insights.com *.ethicalads.io 'sha256-U3hKDidudIaxBDEzwGJApJgPEf2mWk6cfMWghrAa6i0='
+        https://cdn.jsdelivr.net/npm/mathjax@3.2.2/ 'sha256-1CldwzdEg2k1wTmf7s5RWVd7NMXI/7nxxjJM2C4DqII='
+        'sha256-0POaN8stWYQxhzjKS+/eOfbbJ/u4YHO5ZagJvLpMypo='; style-src 'self' fonts.googleapis.com
+        *.ethicalads.io 'sha256-2YHqZokjiizkHi1Zt+6ar0XJ0OeEy/egBnlm+MDMtrM=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='
+        'sha256-JLEjeN9e5dGsz5475WyRaoA4eQOdNPxDIeUhclnJDCE=' 'sha256-mQyxHEuwZJqpxCw3SLmc4YOySNKXunyu2Oiz1r3/wAE='
+        'sha256-OCf+kv5Asiwp++8PIevKBYSgnNLNUZvxAp4a7wMLuKA=' 'sha256-h5LOiLhk6wiJrGsG5ItM0KimwzWQH/yAcmoJDJL//bY=';
+        worker-src *.fastly-insights.com
+      Content-Type:
+      - application/json
+      Etag:
+      - '"nmcKS0E/+UJhapGl7W6++w"'
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - nginx/1.13.9
+      X-Pypi-Last-Serial:
+      - '16616989'
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Thu, 25 May 2023 23:01:42 GMT
+      X-Served-By:
+      - cache-iad-kiad7000126-IAD, cache-den8239-DEN
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 128405, 1
+      X-Timer:
+      - S1685055702.323931,VS0,VE1
+      Vary:
+      - Accept-Encoding
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Content-Length:
+      - '14662'
+    body:
+      encoding: ASCII-8BIT
+      string: '{"info":{"author":"Timothy Crosley","author_email":"timothy.crosley@gmail.com","bugtrack_url":null,"classifiers":["Development
+        Status :: 6 - Mature","Environment :: Console","Intended Audience :: Developers","License
+        :: OSI Approved :: MIT License","Natural Language :: English","Programming
+        Language :: Python","Programming Language :: Python :: 3","Programming Language
+        :: Python :: 3 :: Only","Programming Language :: Python :: 3.10","Programming
+        Language :: Python :: 3.11","Programming Language :: Python :: 3.8","Programming
+        Language :: Python :: 3.9","Programming Language :: Python :: Implementation
+        :: CPython","Programming Language :: Python :: Implementation :: PyPy","Topic
+        :: Software Development :: Libraries","Topic :: Utilities"],"description":"[![isort
+        - isort your imports, so you don''t have to.](https://raw.githubusercontent.com/pycqa/isort/main/art/logo_large.png)](https://pycqa.github.io/isort/)\n\n------------------------------------------------------------------------\n\n[![PyPI
+        version](https://badge.fury.io/py/isort.svg)](https://badge.fury.io/py/isort)\n[![Test
+        Status](https://github.com/pycqa/isort/workflows/Test/badge.svg?branch=develop)](https://github.com/pycqa/isort/actions?query=workflow%3ATest)\n[![Lint
+        Status](https://github.com/pycqa/isort/workflows/Lint/badge.svg?branch=develop)](https://github.com/pycqa/isort/actions?query=workflow%3ALint)\n[![Code
+        coverage Status](https://codecov.io/gh/pycqa/isort/branch/main/graph/badge.svg)](https://codecov.io/gh/pycqa/isort)\n[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://pypi.org/project/isort/)\n[![Join
+        the chat at https://gitter.im/timothycrosley/isort](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/timothycrosley/isort?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)\n[![Downloads](https://pepy.tech/badge/isort)](https://pepy.tech/project/isort)\n[![Code
+        style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)\n[![Imports:
+        isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)\n[![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/pycqa/isort/?ref=repository-badge)\n_________________\n\n[Read
+        Latest Documentation](https://pycqa.github.io/isort/) - [Browse GitHub Code
+        Repository](https://github.com/pycqa/isort/)\n_________________\n\nisort your
+        imports, so you don''t have to.\n\nisort is a Python utility / library to
+        sort imports alphabetically, and\nautomatically separated into sections and
+        by type. It provides a command line\nutility, Python library and [plugins
+        for various\neditors](https://github.com/pycqa/isort/wiki/isort-Plugins) to\nquickly
+        sort all your imports. It requires Python 3.8+ to run but\nsupports formatting
+        Python 2 code too.\n\n- [Try isort now from your browser!](https://pycqa.github.io/isort/docs/quick_start/0.-try.html)\n-
+        [Using black? See the isort and black compatibility guide.](https://pycqa.github.io/isort/docs/configuration/black_compatibility.html)\n-
+        [isort has official support for pre-commit!](https://pycqa.github.io/isort/docs/configuration/pre-commit.html)\n\n![Example
+        Usage](https://raw.github.com/pycqa/isort/main/example.gif)\n\nBefore isort:\n\n```python\nfrom
+        my_lib import Object\n\nimport os\n\nfrom my_lib import Object3\n\nfrom my_lib
+        import Object2\n\nimport sys\n\nfrom third_party import lib15, lib1, lib2,
+        lib3, lib4, lib5, lib6, lib7, lib8, lib9, lib10, lib11, lib12, lib13, lib14\n\nimport
+        sys\n\nfrom __future__ import absolute_import\n\nfrom third_party import lib3\n\nprint(\"Hey\")\nprint(\"yo\")\n```\n\nAfter
+        isort:\n\n```python\nfrom __future__ import absolute_import\n\nimport os\nimport
+        sys\n\nfrom third_party import (lib1, lib2, lib3, lib4, lib5, lib6, lib7,
+        lib8,\n                         lib9, lib10, lib11, lib12, lib13, lib14, lib15)\n\nfrom
+        my_lib import Object, Object2, Object3\n\nprint(\"Hey\")\nprint(\"yo\")\n```\n\n##
+        Installing isort\n\nInstalling isort is as simple as:\n\n```bash\npip install
+        isort\n```\n\nInstall isort with requirements.txt support:\n\n```bash\npip
+        install isort[requirements_deprecated_finder]\n```\n\nInstall isort with Pipfile
+        support:\n\n```bash\npip install isort[pipfile_deprecated_finder]\n```\n\nInstall
+        isort with both formats support:\n\n```bash\npip install isort[requirements_deprecated_finder,pipfile_deprecated_finder]\n```\n\n##
+        Using isort\n\n**From the command line**:\n\nTo run on specific files:\n\n```bash\nisort
+        mypythonfile.py mypythonfile2.py\n```\n\nTo apply recursively:\n\n```bash\nisort
+        .\n```\n\nIf [globstar](https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html)\nis
+        enabled, `isort .` is equivalent to:\n\n```bash\nisort **/*.py\n```\n\nTo
+        view proposed changes without applying them:\n\n```bash\nisort mypythonfile.py
+        --diff\n```\n\nFinally, to atomically run isort against a project, only applying\nchanges
+        if they don''t introduce syntax errors:\n\n```bash\nisort --atomic .\n```\n\n(Note:
+        this is disabled by default, as it prevents isort from\nrunning against code
+        written using a different version of Python.)\n\n**From within Python**:\n\n```python\nimport
+        isort\n\nisort.file(\"pythonfile.py\")\n```\n\nor:\n\n```python\nimport isort\n\nsorted_code
+        = isort.code(\"import b\\nimport a\\n\")\n```\n\n## Installing isort''s for
+        your preferred text editor\n\nSeveral plugins have been written that enable
+        to use isort from within a\nvariety of text-editors. You can find a full list
+        of them [on the isort\nwiki](https://github.com/pycqa/isort/wiki/isort-Plugins).\nAdditionally,
+        I will enthusiastically accept pull requests that include\nplugins for other
+        text editors and add documentation for them as I am\nnotified.\n\n## Multi
+        line output modes\n\nYou will notice above the \\\"multi\\_line\\_output\\\"
+        setting. This setting\ndefines how from imports wrap when they extend past
+        the line\\_length\nlimit and has [12 possible settings](https://pycqa.github.io/isort/docs/configuration/multi_line_output_modes.html).\n\n##
+        Indentation\n\nTo change the how constant indents appear - simply change the\nindent
+        property with the following accepted formats:\n\n-   Number of spaces you
+        would like. For example: 4 would cause standard\n    4 space indentation.\n-   Tab\n-   A
+        verbatim string with quotes around it.\n\nFor example:\n\n```python\n\"    \"\n```\n\nis
+        equivalent to 4.\n\nFor the import styles that use parentheses, you can control
+        whether or\nnot to include a trailing comma after the last import with the\n`include_trailing_comma`
+        option (defaults to `False`).\n\n## Intelligently Balanced Multi-line Imports\n\nAs
+        of isort 3.1.0 support for balanced multi-line imports has been\nadded. With
+        this enabled isort will dynamically change the import length\nto the one that
+        produces the most balanced grid, while staying below the\nmaximum import length
+        defined.\n\nExample:\n\n```python\nfrom __future__ import (absolute_import,
+        division,\n                        print_function, unicode_literals)\n```\n\nWill
+        be produced instead of:\n\n```python\nfrom __future__ import (absolute_import,
+        division, print_function,\n                        unicode_literals)\n```\n\nTo
+        enable this set `balanced_wrapping` to `True` in your config or pass\nthe
+        `-e` option into the command line utility.\n\n## Custom Sections and Ordering\n\nisort
+        provides configuration options to change almost every aspect of how\nimports
+        are organized, ordered, or grouped together in sections.\n\n[Click here](https://pycqa.github.io/isort/docs/configuration/custom_sections_and_ordering.html)
+        for an overview of all these options.\n\n## Skip processing of imports (outside
+        of configuration)\n\nTo make isort ignore a single import simply add a comment
+        at the end of\nthe import line containing the text `isort:skip`:\n\n```python\nimport
+        module  # isort:skip\n```\n\nor:\n\n```python\nfrom xyz import (abc,  # isort:skip\n                 yo,\n                 hey)\n```\n\nTo
+        make isort skip an entire file simply add `isort:skip_file` to the\nmodule''s
+        doc string:\n\n```python\n\"\"\" my_module.py\n    Best module ever\n\n   isort:skip_file\n\"\"\"\n\nimport
+        b\nimport a\n```\n\n## Adding or removing an import from multiple files\n\nisort
+        can be ran or configured to add / remove imports automatically.\n\n[See a
+        complete guide here.](https://pycqa.github.io/isort/docs/configuration/add_or_remove_imports.html)\n\n##
+        Using isort to verify code\n\nThe `--check-only` option\n-------------------------\n\nisort
+        can also be used to verify that code is correctly formatted\nby running it
+        with `-c`. Any files that contain incorrectly sorted\nand/or formatted imports
+        will be outputted to `stderr`.\n\n```bash\nisort **/*.py -c -v\n\nSUCCESS:
+        /home/timothy/Projects/Open_Source/isort/isort_kate_plugin.py Everything Looks
+        Good!\nERROR: /home/timothy/Projects/Open_Source/isort/isort/isort.py Imports
+        are incorrectly sorted.\n```\n\nOne great place this can be used is with a
+        pre-commit git hook, such as\nthis one by \\@acdha:\n\n<https://gist.github.com/acdha/8717683>\n\nThis
+        can help to ensure a certain level of code quality throughout a\nproject.\n\n##
+        Git hook\n\nisort provides a hook function that can be integrated into your
+        Git\npre-commit script to check Python code before committing.\n\n[More info
+        here.](https://pycqa.github.io/isort/docs/configuration/git_hook.html)\n\n##
+        Setuptools integration\n\nUpon installation, isort enables a `setuptools`
+        command that checks\nPython files declared by your project.\n\n[More info
+        here.](https://pycqa.github.io/isort/docs/configuration/setuptools_integration.html)\n\n##
+        Spread the word\n\n[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)\n\nPlace
+        this badge at the top of your repository to let others know your project uses
+        isort.\n\nFor README.md:\n\n```markdown\n[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)\n```\n\nOr
+        README.rst:\n\n```rst\n.. image:: https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336\n    :target:
+        https://pycqa.github.io/isort/\n```\n\n## Security contact information\n\nTo
+        report a security vulnerability, please use the [Tidelift security\ncontact](https://tidelift.com/security).
+        Tidelift will coordinate the\nfix and disclosure.\n\n## Why isort?\n\nisort
+        simply stands for import sort. It was originally called\n\"sortImports\" however
+        I got tired of typing the extra characters and\ncame to the realization camelCase
+        is not pythonic.\n\nI wrote isort because in an organization I used to work
+        in the manager\ncame in one day and decided all code must have alphabetically
+        sorted\nimports. The code base was huge - and he meant for us to do it by
+        hand.\nHowever, being a programmer - I\\''m too lazy to spend 8 hours mindlessly\nperforming
+        a function, but not too lazy to spend 16 hours automating it.\nI was given
+        permission to open source sortImports and here we are :)\n\n------------------------------------------------------------------------\n\n[Get
+        professionally supported isort with the Tidelift\nSubscription](https://tidelift.com/subscription/pkg/pypi-isort?utm_source=pypi-isort&utm_medium=referral&utm_campaign=readme)\n\nProfessional
+        support for isort is available as part of the [Tidelift\nSubscription](https://tidelift.com/subscription/pkg/pypi-isort?utm_source=pypi-isort&utm_medium=referral&utm_campaign=readme).\nTidelift
+        gives software development teams a single source for purchasing\nand maintaining
+        their software, with professional grade assurances from\nthe experts who know
+        it best, while seamlessly integrating with existing\ntools.\n\n------------------------------------------------------------------------\n\nThanks
+        and I hope you find isort useful!\n\n~Timothy Crosley\n\n","description_content_type":"text/markdown","docs_url":null,"download_url":"","downloads":{"last_day":-1,"last_month":-1,"last_week":-1},"home_page":"https://pycqa.github.io/isort/","keywords":"Refactor,Lint,Imports,Sort,Clean","license":"MIT","maintainer":"","maintainer_email":"","name":"isort","package_url":"https://pypi.org/project/isort/","platform":null,"project_url":"https://pypi.org/project/isort/","project_urls":{"Changelog":"https://github.com/pycqa/isort/blob/main/CHANGELOG.md","Documentation":"https://pycqa.github.io/isort/","Homepage":"https://pycqa.github.io/isort/","Repository":"https://github.com/pycqa/isort"},"release_url":"https://pypi.org/project/isort/5.12.0/","requires_dist":["colorama
+        (>=0.4.3) ; extra == \"colors\"","pip-api ; extra == \"requirements-deprecated-finder\"","pip-shims
+        (>=0.5.2) ; extra == \"pipfile-deprecated-finder\"","pipreqs ; extra == \"pipfile-deprecated-finder\"
+        or extra == \"requirements-deprecated-finder\"","requirementslib ; extra ==
+        \"pipfile-deprecated-finder\"","setuptools ; extra == \"plugins\""],"requires_python":">=3.8.0","summary":"A
+        Python utility / library to sort Python imports.","version":"5.12.0","yanked":false,"yanked_reason":null},"last_serial":16616989,"urls":[{"comment_text":"","digests":{"blake2b_256":"0a634036ae70eea279c63e2304b91ee0ac182f467f24f86394ecfe726092340b","md5":"4705ea8a295dd3f22671feed40968d1d","sha256":"f84c2818376e66cf843d497486ea8fed8700b340f308f076c6fb1229dff318b6"},"downloads":-1,"filename":"isort-5.12.0-py3-none-any.whl","has_sig":false,"md5_digest":"4705ea8a295dd3f22671feed40968d1d","packagetype":"bdist_wheel","python_version":"py3","requires_python":">=3.8.0","size":91198,"upload_time":"2023-01-28T17:10:21","upload_time_iso_8601":"2023-01-28T17:10:21.149615Z","url":"https://files.pythonhosted.org/packages/0a/63/4036ae70eea279c63e2304b91ee0ac182f467f24f86394ecfe726092340b/isort-5.12.0-py3-none-any.whl","yanked":false,"yanked_reason":null},{"comment_text":"","digests":{"blake2b_256":"a9c4dc00e42c158fc4dda2afebe57d2e948805c06d5169007f1724f0683010a9","md5":"20e61189a45d13f28c2dd25362e9a826","sha256":"8bef7dde241278824a6d83f44a544709b065191b95b6e50894bdc722fcba0504"},"downloads":-1,"filename":"isort-5.12.0.tar.gz","has_sig":false,"md5_digest":"20e61189a45d13f28c2dd25362e9a826","packagetype":"sdist","python_version":"source","requires_python":">=3.8.0","size":174643,"upload_time":"2023-01-28T17:10:22","upload_time_iso_8601":"2023-01-28T17:10:22.636826Z","url":"https://files.pythonhosted.org/packages/a9/c4/dc00e42c158fc4dda2afebe57d2e948805c06d5169007f1724f0683010a9/isort-5.12.0.tar.gz","yanked":false,"yanked_reason":null}],"vulnerabilities":[]}
+
+        '
+    http_version:
+  recorded_at: Thu, 25 May 2023 23:01:42 GMT
+recorded_with: VCR 4.0.0

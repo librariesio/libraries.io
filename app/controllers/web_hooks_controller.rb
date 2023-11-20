@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 class WebHooksController < ApplicationController
   before_action :ensure_logged_in
   before_action :load_repo
-  before_action :find_web_hook, only: [:test, :edit, :update, :destroy]
+  before_action :find_web_hook, only: %i[test edit update destroy]
 
   def index
     @web_hooks = @repository.web_hooks.paginate(page: params[:page])
@@ -15,7 +16,7 @@ class WebHooksController < ApplicationController
   def create
     @web_hook = @repository.web_hooks.build(web_hook_params)
     if @web_hook.save
-      redirect_to repository_web_hooks_path(@repository.to_param), notice: 'Web hook created'
+      redirect_to repository_web_hooks_path(@repository.to_param), notice: "Web hook created"
     else
       render :new
     end
@@ -23,12 +24,12 @@ class WebHooksController < ApplicationController
 
   def test
     @web_hook.send_test_payload
-    redirect_to repository_web_hooks_path(@repository.to_param), notice: 'Web hook test sent'
+    redirect_to repository_web_hooks_path(@repository.to_param), notice: "Web hook test sent"
   end
 
   def update
     if @web_hook.update(web_hook_params)
-      redirect_to repository_web_hooks_path(@repository.to_param), notice: 'Web hook updated'
+      redirect_to repository_web_hooks_path(@repository.to_param), notice: "Web hook updated"
     else
       render :edit
     end
@@ -36,7 +37,7 @@ class WebHooksController < ApplicationController
 
   def destroy
     @web_hook.destroy
-    redirect_to repository_web_hooks_path(@repository.to_param), notice: 'Web hook deleted'
+    redirect_to repository_web_hooks_path(@repository.to_param), notice: "Web hook deleted"
   end
 
   private

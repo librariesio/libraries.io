@@ -1,5 +1,60 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: projects
+#
+#  id                                 :integer          not null, primary key
+#  dependent_repos_count              :integer
+#  dependents_count                   :integer          default(0), not null
+#  deprecation_reason                 :text
+#  description                        :text
+#  homepage                           :string
+#  keywords                           :text
+#  keywords_array                     :string           default([]), is an Array
+#  language                           :string
+#  last_synced_at                     :datetime
+#  latest_release_number              :string
+#  latest_release_published_at        :datetime
+#  latest_stable_release_number       :string
+#  latest_stable_release_published_at :datetime
+#  license_normalized                 :boolean          default(FALSE)
+#  license_set_by_admin               :boolean          default(FALSE)
+#  licenses                           :string
+#  lifted                             :boolean          default(FALSE)
+#  name                               :string
+#  normalized_licenses                :string           default([]), is an Array
+#  platform                           :string
+#  rank                               :integer          default(0)
+#  repository_url                     :string
+#  runtime_dependencies_count         :integer
+#  score                              :integer          default(0), not null
+#  score_last_calculated              :datetime
+#  status                             :string
+#  status_checked_at                  :datetime
+#  versions_count                     :integer          default(0), not null
+#  created_at                         :datetime         not null
+#  updated_at                         :datetime         not null
+#  pm_id                              :integer
+#  repository_id                      :integer
+#
+# Indexes
+#
+#  index_projects_on_created_at                     (created_at)
+#  index_projects_on_dependents_count               (dependents_count)
+#  index_projects_on_keywords_array                 (keywords_array) USING gin
+#  index_projects_on_lower_language                 (lower((language)::text))
+#  index_projects_on_maintained                     (platform,language,id) WHERE (((status)::text = ANY ((ARRAY['Active'::character varying, 'Help Wanted'::character varying])::text[])) OR (status IS NULL))
+#  index_projects_on_normalized_licenses            (normalized_licenses) USING gin
+#  index_projects_on_platform_and_dependents_count  (platform,dependents_count)
+#  index_projects_on_platform_and_name              (platform,name) UNIQUE
+#  index_projects_on_platform_and_name_lower        (lower((platform)::text), lower((name)::text))
+#  index_projects_on_repository_id                  (repository_id)
+#  index_projects_on_status                         (status)
+#  index_projects_on_status_checked_at              (status_checked_at)
+#  index_projects_on_updated_at                     (updated_at)
+#  index_projects_on_versions_count                 (versions_count)
+#
 class Project < ApplicationRecord
   require "query_counter"
 
@@ -15,6 +70,7 @@ class Project < ApplicationRecord
   HAS_DEPENDENCIES = false
   STATUSES = ["Active", "Deprecated", "Unmaintained", "Help Wanted", "Removed", "Hidden"].freeze
   API_FIELDS = %i[
+    contributions_count
     dependent_repos_count
     dependents_count
     deprecation_reason
@@ -36,6 +92,7 @@ class Project < ApplicationRecord
     platform
     rank
     repository_license
+    repository_status
     repository_url
     stars
     status
@@ -69,7 +126,7 @@ class Project < ApplicationRecord
   scope :least_recently_updated_stats, -> { joins(:repository_maintenance_stats).group("projects.id").where.not(repository: nil).order(Arel.sql("max(repository_maintenance_stats.updated_at) ASC")) }
   scope :no_existing_stats, -> { includes(:repository_maintenance_stats).where(repository_maintenance_stats: { id: nil }).where.not(repository: nil) }
 
-  scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
+  scope :platform, ->(platforms) { where(platform: Array.wrap(platforms).map { |platform| PackageManager::Base.format_name(platform) }) }
   scope :lower_platform, ->(platform) { where("lower(projects.platform) = ?", platform.try(:downcase)) }
   scope :lower_name, ->(name) { where("lower(projects.name) = ?", name.try(:downcase)) }
 
@@ -103,7 +160,7 @@ class Project < ApplicationRecord
   scope :most_dependent_repos, -> { with_dependent_repos.order(Arel.sql("dependent_repos_count DESC")) }
 
   scope :visible, -> { where('projects."status" != ? OR projects."status" IS NULL', "Hidden") }
-  scope :maintained, -> { where('projects."status" not in (?) OR projects."status" IS NULL', %w[Deprecated Removed Unmaintained Hidden]) }
+  scope :maintained, -> { where('projects."status" in (?) OR projects."status" IS NULL', ["Active", "Help Wanted"]) }
   scope :deprecated, -> { where('projects."status" = ?', "Deprecated") }
   scope :not_removed, -> { where('projects."status" not in (?) OR projects."status" IS NULL', %w[Removed Hidden]) }
   scope :removed, -> { where('projects."status" = ?', "Removed") }
@@ -114,17 +171,17 @@ class Project < ApplicationRecord
   scope :indexable, -> { not_removed.includes(:repository) }
 
   scope :unsung_heroes, lambda {
-                          maintained
-                            .with_repo
-                            .where("repositories.stargazers_count < 100")
-                            .where("projects.dependent_repos_count > 1000")
-                        }
+    maintained
+      .with_repo
+      .where("repositories.stargazers_count < 100")
+      .where("projects.dependent_repos_count > 1000")
+  }
 
   scope :digital_infrastructure, lambda {
-                                   not_removed
-                                     .with_repo
-                                     .where("projects.dependent_repos_count > ?", 10000)
-                                 }
+    not_removed
+      .with_repo
+      .where("projects.dependent_repos_count > ?", 10000)
+  }
 
   scope :hacker_news, -> { with_repo.where("repositories.stargazers_count > 0").order(Arel.sql("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC")) }
   scope :recently_created, -> { with_repo.where("repositories.created_at > ?", 2.weeks.ago) }
@@ -132,6 +189,7 @@ class Project < ApplicationRecord
   after_commit :update_repository_async, on: :create
   after_commit :set_dependents_count, on: %i[create update]
   after_commit :update_source_rank_async, on: %i[create update]
+  after_commit :send_project_updated, on: %i[create update]
   before_save  :update_details
   before_destroy :destroy_versions
   before_destroy :create_deleted_project
@@ -152,7 +210,7 @@ class Project < ApplicationRecord
   end
 
   def manual_sync
-    async_sync
+    async_sync(force_sync_dependencies: true)
     update_repository_async
     forced_save
   end
@@ -166,11 +224,11 @@ class Project < ApplicationRecord
     update_attribute(:last_synced_at, Time.zone.now)
   end
 
-  def async_sync
+  def async_sync(force_sync_dependencies: false)
     return unless platform_class_exists?
 
-    sync_classes.each { |sync_class| PackageManagerDownloadWorker.perform_async(sync_class.name, name, nil, "project") }
-    CheckStatusWorker.perform_async(id, status == "Removed" || status == "Deprecated")
+    sync_classes.each { |sync_class| PackageManagerDownloadWorker.perform_async(sync_class.name, name, nil, "project", 0, force_sync_dependencies) }
+    CheckStatusWorker.perform_async(id)
   end
 
   def sync_classes
@@ -213,6 +271,10 @@ class Project < ApplicationRecord
 
   def repository_license
     repository&.license
+  end
+
+  def repository_status
+    repository&.status
   end
 
   def download_url(version = nil)
@@ -317,13 +379,25 @@ class Project < ApplicationRecord
   def set_dependents_count
     return if destroyed?
 
-    new_dependents_count = dependents.joins(:version).pluck(Arel.sql("DISTINCT versions.project_id")).count
+    new_dependents_count = ActiveRecord::Base.connection.with_statement_timeout(60.minutes.to_i) do
+      dependents.joins(:version).pluck(Arel.sql("DISTINCT versions.project_id")).count
+    end
     new_dependent_repos_count = dependent_repos_fast_count
 
     updates = {}
     updates[:dependents_count] = new_dependents_count if read_attribute(:dependents_count) != new_dependents_count
     updates[:dependent_repos_count] = new_dependent_repos_count if read_attribute(:dependent_repos_count) != new_dependent_repos_count
     update_columns(updates) if updates.present?
+  end
+
+  def send_project_updated
+    # this should be a cheap no-op if we remove all the
+    # receives_all_project_updates WebHook, so that's an emergency off switch if
+    # required. Each webhook must be its own sidekiq job so it can be
+    # independently retried if failing.
+    WebHook.receives_all_project_updates.pluck(:id).each do |web_hook_id|
+      ProjectUpdatedWorker.perform_async(id, web_hook_id)
+    end
   end
 
   def needs_suggestions?
@@ -335,15 +409,15 @@ class Project < ApplicationRecord
   end
 
   def self.license(license)
-    where("projects.normalized_licenses @> ?", Array(license).to_postgres_array(true))
+    where("projects.normalized_licenses @> ?", Array(license).to_postgres_array(omit_quotes: true))
   end
 
   def self.keyword(keyword)
-    where("projects.keywords_array @> ?", Array(keyword).to_postgres_array(true))
+    where("projects.keywords_array @> ?", Array(keyword).to_postgres_array(omit_quotes: true))
   end
 
   def self.keywords(keywords)
-    where("projects.keywords_array && ?", Array(keywords).to_postgres_array(true))
+    where("projects.keywords_array && ?", Array(keywords).to_postgres_array(omit_quotes: true))
   end
 
   def self.language(language)
@@ -356,18 +430,6 @@ class Project < ApplicationRecord
 
   def self.popular_languages(options = {})
     facets(options)[:languages].language.buckets
-  end
-
-  def self.popular_platforms(options = {})
-    facets(options)[:platforms].platform.buckets.reject { |t| %w[biicode jam].include?(t["key"].downcase) }
-  end
-
-  def self.keywords_badlist
-    %w[bsd3 library]
-  end
-
-  def self.popular_keywords(options = {})
-    facets(options)[:keywords].keywords_array.buckets.reject { |t| all_languages.include?(t["key"].downcase) }.reject { |t| keywords_badlist.include?(t["key"].downcase) }
   end
 
   def self.popular_licenses(options = {})
@@ -424,6 +486,7 @@ class Project < ApplicationRecord
 
     names = platform_class
       .project_find_names(name)
+      .compact
       .map(&:downcase)
 
     visible
@@ -472,6 +535,8 @@ class Project < ApplicationRecord
     return "GitHub" if github_name_with_owner.present?
     return "Bitbucket" if bitbucket_name_with_owner
     return "GitLab" if gitlab_name_with_owner
+
+    nil
   end
 
   def can_have_dependencies?
@@ -551,32 +616,26 @@ class Project < ApplicationRecord
     ProjectDependentRepository.where(project_id: id).count
   end
 
-  # NB deprecated_or_removed most likely exists so that we
-  # can explicitly reset the status to nil in certain cases. We probably
-  # don't always want to because Repository#check_status can overwrite Project#status.
-  def check_status(deprecated_or_removed = false)
+  def check_status
     url = platform_class.check_status_url(self)
+    update_column(:status_checked_at, DateTime.current)
     return if url.blank?
 
-    response = Typhoeus.head(url)
+    response = Typhoeus.get(url)
     if platform.downcase == "packagist" && [302, 404].include?(response.response_code)
       update_attribute(:status, "Removed")
     elsif platform.downcase != "packagist" && [400, 404, 410].include?(response.response_code)
       update_attribute(:status, "Removed")
-    elsif platform.downcase == "clojars" && response.response_code == 404
-      update_attribute(:status, "Removed")
-    elsif platform.downcase == "pypi" && response.response_code == 404
-      update_attribute(:status, "Removed")
     elsif can_have_entire_package_deprecated?
-      result = platform_class.deprecation_info(name)
+      result = platform_class.deprecation_info(self)
       if result[:is_deprecated]
         update_attribute(:status, "Deprecated")
         update_attribute(:deprecation_reason, result[:message])
       else # in case package was accidentally marked as deprecated (their logic or ours), mark it as not deprecated
-        update_attribute(:status, '')
+        update_attribute(:status, nil)
         update_attribute(:deprecation_reason, nil)
       end
-    elsif deprecated_or_removed
+    else
       update_attribute(:status, nil)
     end
   end
@@ -661,8 +720,8 @@ class Project < ApplicationRecord
     subscribed = subscriptions
     subscribed = subscribed.include_prereleases if include_prereleases
 
-    subs = subscribed.includes(:user).users_present.where(users: {emails_enabled: true}).map(&:user)
-    subs += subscribed.includes(repository_subscription: [:user]).users_nil.where(repository_subscriptions: { users: {emails_enabled: true }}).map { | sub| sub.repository_subscription&.user }
+    subs = subscribed.includes(:user).users_present.where(users: { emails_enabled: true }).map(&:user)
+    subs += subscribed.includes(repository_subscription: [:user]).users_nil.where(repository_subscriptions: { users: { emails_enabled: true } }).map { |sub| sub.repository_subscription&.user }
     subs.compact!
     subs.uniq!
     mutes = project_mutes.pluck(:user_id).to_set

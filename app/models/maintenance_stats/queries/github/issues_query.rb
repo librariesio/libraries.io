@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module MaintenanceStats
   module Queries
     module Github
       class IssuesQuery < BaseQuery
         ISSUES_QUERY = Rails.application.config.graphql.client.parse <<-GRAPHQL
-          query($owner: String!, $repo_name: String!, $open_pr_query: String!, $closed_pr_query: String!, $one_year: GitTimestamp!){
+          query($owner: String!, $repo_name: String!, $open_pr_query: String!, $closed_pr_query: String!, $one_year: DateTime!){
             openPullRequests: search(query: $open_pr_query, type: ISSUE) {
               issueCount
             }
@@ -21,9 +23,8 @@ module MaintenanceStats
           }
         GRAPHQL
 
-
-        VALID_PARAMS = [:owner, :repo_name, :start_date]
-        REQUIRED_PARAMS = [:owner, :repo_name, :start_date]
+        VALID_PARAMS = %i[owner repo_name start_date].freeze
+        REQUIRED_PARAMS = %i[owner repo_name start_date].freeze
 
         def self.client_type
           :v4

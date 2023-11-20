@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'securerandom'
+
+require "securerandom"
 
 FactoryBot.define do
   sequence :email do |n|
@@ -18,26 +19,55 @@ FactoryBot.define do
     "https://github.com/rails/rails#{n}"
   end
 
+  trait :removed do
+    status { "Removed" }
+  end
+
   factory :project do
     name
-    platform        { 'Rubygems' }
-    description     { 'Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.' }
-    homepage        { 'http://rubyonrails.org/' }
-    language        { 'Ruby' }
-    licenses        { 'MIT' }
-    keywords_array  { ['web'] }
+    platform        { "Rubygems" }
+    description     { "Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration." }
+    homepage        { "http://rubyonrails.org/" }
+    language        { "Ruby" }
+    licenses        { "MIT" }
+    keywords_array  { ["web"] }
     repository_url
     repository { nil }
+
+    trait :rubygems do
+      platform { "Rubygems" }
+      language { "Ruby" }
+    end
+
+    trait :npm do
+      platform { "NPM" }
+      language { "JavaScript" }
+    end
+
+    trait :maven do
+      platform { "Maven" }
+      language { "Java" }
+    end
+
+    trait :pypi do
+      platform { "Pypi" }
+      language { "Python" }
+    end
+
+    trait :nuget do
+      platform { "NuGet" }
+      language { "C#" }
+    end
   end
 
   factory :platform do
-    name { 'Rubygems' }
+    name { "Rubygems" }
     project_count { 100_000 }
   end
 
   factory :version do
     project
-    number { '1.0.0' }
+    number { "1.0.0" }
     published_at { 1.day.ago }
     repository_sources { nil }
   end
@@ -45,29 +75,29 @@ FactoryBot.define do
   factory :dependency do
     version
     project
-    kind { 'runtime' }
-    platform { 'Rubygems' }
-    project_name { 'rails' }
-    requirements { '~> 4.2' }
+    kind { "runtime" }
+    platform { "Rubygems" }
+    project_name { "rails" }
+    requirements { "~> 4.2" }
   end
 
   factory :repository_dependency do
     manifest
     project
-    platform { 'Rubygems' }
-    project_name { 'rails' }
-    requirements { '~> 4.2' }
+    platform { "Rubygems" }
+    project_name { "rails" }
+    requirements { "~> 4.2" }
   end
 
   factory :manifest do
     repository
-    filepath { 'Gemfile' }
-    platform { 'Rubygems' }
+    filepath { "Gemfile" }
+    platform { "Rubygems" }
   end
 
   factory :tag do
     repository
-    name { '1.0.0' }
+    name { "1.0.0" }
     sha  { SecureRandom.hex }
     published_at { 1.day.ago }
   end
@@ -91,28 +121,28 @@ FactoryBot.define do
 
   factory :repository_user do
     login
-    name { 'Andrew Nesbitt' }
-    user_type { 'User' }
-    company { 'Libraries.io' }
-    blog { 'http://nesbitt.io' }
-    location { 'Somerset, UK' }
-    email { 'andrew@libraries.io' }
-    bio { 'Developer of things' }
+    name { "Andrew Nesbitt" }
+    user_type { "User" }
+    company { "Libraries.io" }
+    blog { "http://nesbitt.io" }
+    location { "Somerset, UK" }
+    email { "andrew@libraries.io" }
+    bio { "Developer of things" }
     followers { 1 }
     following { 2 }
     sequence(:uuid)
-    host_type { 'GitHub' }
+    host_type { "GitHub" }
   end
 
   factory :repository_organisation do
     login
     sequence(:uuid)
-    host_type { 'GitHub' }
-    name { 'Libraries.io' }
-    blog { 'https://libraries.io' }
-    email { 'support@libraries.io' }
-    location { 'Bath, UK' }
-    bio { 'Open source things' }
+    host_type { "GitHub" }
+    name { "Libraries.io" }
+    blog { "https://libraries.io" }
+    email { "support@libraries.io" }
+    location { "Bath, UK" }
+    bio { "Open source things" }
   end
 
   factory :subscription do
@@ -126,17 +156,17 @@ FactoryBot.define do
   end
 
   factory :repository do
-    host_type   { 'GitHub' }
-    full_name   { 'rails/rails' }
-    description { 'Ruby on Rails' }
-    language    { 'Ruby' }
+    host_type   { "GitHub" }
+    full_name   { "rails/rails" }
+    description { "Ruby on Rails" }
+    language    { "Ruby" }
     fork        { false }
-    homepage    { 'http://rubyonrails.org' }
+    homepage    { "http://rubyonrails.org" }
     repository_organisation
     private { false }
     stargazers_count { 10_000 }
     size { 1000 }
-    default_branch { 'master' }
+    default_branch { "master" }
     forks_count { 1 }
   end
 
@@ -162,7 +192,7 @@ FactoryBot.define do
     user
     repository_user
     sequence(:uid)
-    provider { 'github' }
+    provider { "github" }
     nickname { Faker::Name.name.parameterize }
     token { SecureRandom.hex }
     avatar_url { "http://github.com/#{Faker::Name.name.parameterize}.png" }
@@ -177,7 +207,8 @@ FactoryBot.define do
   factory :web_hook do
     repository
     user
-    url { 'http://google.com' }
+    url { "http://google.com" }
+    all_project_updates { false }
   end
 
   factory :api_key do
@@ -193,6 +224,6 @@ FactoryBot.define do
 
   factory :readme do
     repository
-    html_body { 'Welcome to the jungle' }
+    html_body { "Welcome to the jungle" }
   end
 end

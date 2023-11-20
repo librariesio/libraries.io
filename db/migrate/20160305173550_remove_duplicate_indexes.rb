@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RemoveDuplicateIndexes < ActiveRecord::Migration[5.0]
   def change
     remove_index :github_contributions, column: :github_repository_id

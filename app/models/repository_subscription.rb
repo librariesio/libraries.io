@@ -1,4 +1,21 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: repository_subscriptions
+#
+#  id                 :integer          not null, primary key
+#  include_prerelease :boolean          default(TRUE)
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  hook_id            :integer
+#  repository_id      :integer
+#  user_id            :integer
+#
+# Indexes
+#
+#  index_repository_subscriptions_on_created_at  (created_at)
+#
 class RepositorySubscription < ApplicationRecord
   belongs_to :user
   belongs_to :repository
@@ -12,7 +29,7 @@ class RepositorySubscription < ApplicationRecord
       if dep.project.present?
         project = dep.project.try(:id)
       elsif dep.project_name.present?
-        project = Project.platform(dep.platform).where('lower(name) = ?', dep.project_name).first.try(:id)
+        project = Project.platform(dep.platform).where("lower(name) = ?", dep.project_name).first.try(:id)
       end
       projects << project
     end

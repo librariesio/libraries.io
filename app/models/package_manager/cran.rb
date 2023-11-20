@@ -25,8 +25,8 @@ module PackageManager
     end
 
     def self.project_names
-      html = get_html("https://cran.r-project.org/web/packages/available_packages_by_date.html")
-      html.css("tr")[1..-1].map { |tr| tr.css("td")[1].text.strip }
+      html = get_html("https://cran.r-project.org/web/packages/available_packages_by_date.html", request: { timeout: 5 })
+      html.css("tr")[1..].map { |tr| tr.css("td")[1].text.strip }
     end
 
     def self.recent_names
@@ -34,7 +34,7 @@ module PackageManager
     end
 
     def self.project(name)
-      html = get_html("https://cran.r-project.org/web/packages/#{name}/index.html")
+      html = get_html("https://cran.r-project.org/web/packages/#{name}/index.html", request: { timeout: 5 })
       info = {}
       table = html.css("table")[0]
       return nil if table.nil?
@@ -51,7 +51,7 @@ module PackageManager
       {
         name: raw_project[:name],
         homepage: raw_project[:info].fetch("URL:", "").split(",").first,
-        description: raw_project[:html].css("h2").text.split(":")[1..-1].join(":").strip,
+        description: raw_project[:html].css("h2").text.split(":")[1..].join(":").strip,
         licenses: raw_project[:info]["License:"],
         repository_url: repo_fallback("", (raw_project[:info].fetch("URL:", "").split(",").first.presence || raw_project[:info]["BugReports:"])).to_s[0, 255],
       }
@@ -65,7 +65,7 @@ module PackageManager
     end
 
     def self.find_old_versions(project)
-      archive_page = get_html("https://cran.r-project.org/src/contrib/Archive/#{project[:name]}/")
+      archive_page = get_html("https://cran.r-project.org/src/contrib/Archive/#{project[:name]}/", request: { timeout: 5 })
       trs = archive_page.css("table").css("tr").select do |tr|
         tds = tr.css("td")
         tds[1]&.text&.match(/tar\.gz$/)

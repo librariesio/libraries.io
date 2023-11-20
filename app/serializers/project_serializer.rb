@@ -1,6 +1,8 @@
 # frozen_string_literal: true
+
 class ProjectSerializer < ActiveModel::Serializer
   attributes %i[
+    contributions_count
     dependent_repos_count
     dependents_count
     deprecation_reason
@@ -22,6 +24,7 @@ class ProjectSerializer < ActiveModel::Serializer
     platform
     rank
     repository_license
+    repository_status
     repository_url
     stars
     status

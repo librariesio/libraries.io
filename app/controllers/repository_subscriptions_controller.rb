@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RepositorySubscriptionsController < ApplicationController
   before_action :ensure_logged_in
 

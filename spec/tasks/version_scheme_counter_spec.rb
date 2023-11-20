@@ -1,6 +1,6 @@
 # frozen_string_literal: true
+
 require "rails_helper"
-require "rake"
 
 describe "version:scheme_counter" do
   describe "Scheme detection" do
@@ -17,7 +17,7 @@ describe "version:scheme_counter" do
       ["PEP440", %w[1.0 1.7.0 3.1.0rc1 5.4.0.dev0]],
       ["Semver", %w[1.0.0 1.7.0 3.1.0-rc1 5.4.0-dev0]],
       ["Calver", %w[1000 2012.2.1 16.04 20.12.2]],
-      ["OSGi", %w[1 1.2 1.2.3 1.2.3.a1_2-3]]
+      ["OSGi", %w[1 1.2 1.2.3 1.2.3.a1_2-3]],
     ].each do |params|
       scheme, versions = params
       context scheme do
@@ -35,37 +35,35 @@ describe "version:scheme_counter" do
     end
 
     context "1 project" do
-      let(:projects) {
+      let(:projects) do
         project = create(:project)
 
         [[project.platform, project.name]]
-      }
+      end
 
       it_behaves_like "Builds where clause correctly"
     end
 
     context ">1 projects" do
-      let(:projects) {
+      let(:projects) do
         project = create(:project)
         project2 = create(:project)
 
         [[project.platform, project.name], [project2.platform, project2.name]]
-      }
+      end
 
       it_behaves_like "Builds where clause correctly"
     end
   end
 
   describe "Rake task" do
-    Rails.application.load_tasks
-
     def create_versions(versions, project)
       versions.each do |version|
         create(:version, project: project, number: version)
       end
     end
 
-    let(:blank_tallies) { VersionSchemeDetection::TALLIES.clone.merge({cursor: 1, unknown_schemes: [], warnings: [], versionless_packages: []})}
+    let(:blank_tallies) { VersionSchemeDetection::TALLIES.clone.merge({ cursor: 1, unknown_schemes: [], warnings: [], versionless_packages: [] }) }
 
     before(:example) do
       allow(JSON).to receive(:pretty_generate)
@@ -73,7 +71,7 @@ describe "version:scheme_counter" do
 
     describe "Tally counting" do
       shared_examples "Detects scheme" do |expected|
-        let!(:project_versions) { create_versions( versions, project ) }
+        let!(:project_versions) { create_versions(versions, project) }
 
         it "Detects scheme" do
           tempfile = Tempfile.open([project.name, ".csv"]) do |tempfile_handle|
@@ -108,7 +106,7 @@ describe "version:scheme_counter" do
       end
 
       context "Unknown" do
-        versions = %w[3.7.1.3.5.6 3.8.1ab 4.11.2-beta-1 4 001]
+        versions = %w[3.7.1.3.5.6 3.8.1ab 4.11.2-beta-1 4 001].sort
         let(:project) { create(:project, name: "unknown_scheme") }
         let(:versions) { versions }
 
@@ -118,14 +116,14 @@ describe "version:scheme_counter" do
             [
               "Rubygems",
               "unknown_scheme",
-              versions
-            ]
-          ]
+              versions,
+            ],
+          ],
         }
       end
 
       context "Not unanimous" do
-        versions = %w[3.7.1 3.8.1 4.11.2 001]
+        versions = %w[3.7.1 3.8.1 4.11.2 001].sort
         let(:project) { create(:project, name: "unknown_scheme") }
         let(:versions) { versions }
 
@@ -135,9 +133,9 @@ describe "version:scheme_counter" do
             [
               "Rubygems",
               "unknown_scheme",
-              versions
-            ]
-          ]
+              versions,
+            ],
+          ],
         }
       end
     end
@@ -169,13 +167,13 @@ describe "version:scheme_counter" do
       it "Picks up where it left off" do
         Rake::Task["version:scheme_counter"].execute(package_list: tempfile.path, output_file: output_file.path)
         expect(JSON).to have_received(:pretty_generate).with({
-                                                                     **blank_tallies,
-                                                                     no_versions: 1,
-                                                                     versionless_packages: [
+                                                               **blank_tallies,
+                                                               no_versions: 1,
+                                                               versionless_packages: [
                                                                        [project3.platform, project3.name],
                                                                      ],
-                                                                     cursor: 3
-                                                                   })
+                                                               cursor: 3,
+                                                             })
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MaintenanceStats
   module Stats
     module Github
@@ -7,7 +9,7 @@ module MaintenanceStats
           @now = DateTime.current
         end
 
-        def get_stats
+        def fetch_stats
           return {} if @results.nil?
 
           {
@@ -39,11 +41,12 @@ module MaintenanceStats
 
         def issue_closure_rate
           return 1.0 if total_issues_count == 0
-          closed_issues_count.to_f / total_issues_count.to_f
+
+          closed_issues_count.to_f / total_issues_count
         end
 
         def total_pull_request_count
-          return open_pull_request_count + closed_pull_request_count
+          open_pull_request_count + closed_pull_request_count
         end
 
         def closed_pull_request_count
@@ -56,7 +59,8 @@ module MaintenanceStats
 
         def pull_request_closure_rate
           return 1.0 if total_pull_request_count == 0
-          closed_pull_request_count.to_f / total_pull_request_count.to_f
+
+          closed_pull_request_count.to_f / total_pull_request_count
         end
       end
     end

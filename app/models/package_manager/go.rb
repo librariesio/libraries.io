@@ -24,8 +24,11 @@ module PackageManager
     DISCOVER_URL = "https://pkg.go.dev"
     URL = DISCOVER_URL
 
-    VERSION_MODULE_REGEX = /(.+)\/(v\d+)/.freeze
-    MODULE_REGEX = /module\s+(.+)/.freeze
+    VERSION_MODULE_REGEX = /(.+)\/(v\d+)(\/|$)/.freeze
+
+    def self.missing_version_remover
+      PackageManager::Base::MissingVersionRemover
+    end
 
     def self.check_status_url(db_project)
       "#{PROXY_BASE_URL}/#{encode_for_proxy(db_project.name)}/@v/list"
@@ -56,7 +59,7 @@ module PackageManager
     end
 
     def self.one_version(raw_project, version_string)
-      info = get("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@v/#{version_string}.info")
+      info = get("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@v/#{encode_for_proxy(version_string)}.info")
 
       # Store nil published_at for known Go Modules issue where case-insensitive name collisions break go get
       # e.g. https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
@@ -74,27 +77,40 @@ module PackageManager
       data
     end
 
-    def self.update(name, sync_version: :all)
+    # rubocop: disable Lint/UnusedMethodArgument
+    def self.update(name, sync_version: :all, force_sync_dependencies: false)
       project = super(name, sync_version: sync_version)
+
+      # if Base.update returns something false-y, pass that along
+      return project unless project
+
       # call update on base module name if the name is appended with major version
       # example: github.com/myexample/modulename/v2
       # use the returned project name in case it finds a Project via repository_url
-      update_base_module(project.name) if project.present? && project.name.match?(VERSION_MODULE_REGEX)
+
+      # pick one version to use for the base module update so that we don't sync every version
+      # when reusing the PackageManagerDownloadWorker to initialize the base name Project
+      base_sync_version = sync_version unless sync_version == :all
+      base_sync_version = base_sync_version.presence || project.versions.first&.number&.presence
+      update_base_module(project.name, base_sync_version) if project.present? && project.name.match?(VERSION_MODULE_REGEX)
 
       project
     end
+    # rubocop: enable Lint/UnusedMethodArgument
 
-    def self.update_base_module(name)
+    def self.update_base_module(name, base_sync_version)
       matches = name.match(VERSION_MODULE_REGEX)
 
-      # run this inline to generate the base module Project if it doesn't already exist
-      PackageManagerDownloadWorker.new.perform(self.name, matches[1])
+      unless Project.where(platform: "Go", name: matches[1]).exists?
+        # run this inline to generate the base module Project if it doesn't already exist
+        PackageManagerDownloadWorker.new.perform(self.name, matches[1], base_sync_version)
+      end
 
       module_project = Project.find_by(platform: "Go", name: name)
       base_module_project = Project.find_by(platform: "Go", name: matches[1])
       return if module_project.nil? || base_module_project.nil?
 
-      # find any versions the /vx module knows about that the base module does have already
+      # find any versions the /vx module knows about that the base module doesn't have already
       new_base_versions = module_project.versions.where.not(number: base_module_project.versions.pluck(:number))
 
       new_base_versions.each do |vers|
@@ -111,7 +127,9 @@ module PackageManager
 
       # send back nil if the response is blank
       # base package manager handles if the project is not present
-      { name: name, html: doc_html, overview_html: doc_html } unless doc_html.text.blank?
+      return nil if doc_html.text.blank?
+
+      { name: name, html: doc_html, overview_html: doc_html }
     end
 
     def self.versions(raw_project, _name)
@@ -129,12 +147,13 @@ module PackageManager
         &.map(&:strip)
         &.reject(&:blank?)
 
-      if versions.blank?
-        json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(raw_project[:name])}/@latest")
-        versions = [json&.fetch("Version", nil)].compact
-      end
+      project_latest_version_number = latest_version_number(raw_project[:name])
+      versions = [project_latest_version_number] if versions.blank? && project_latest_version_number
 
+      go_mod = fetch_mod(raw_project[:name])
       versions.map do |v|
+        next if go_mod&.retracted?(v)
+
         known = known_versions[v]
 
         if known && known[:original_license].present?
@@ -165,7 +184,7 @@ module PackageManager
             existing_project_name = Project.where(platform: "Go").where("lower(repository_url) = :repo_url and name like :name", repo_url: url.downcase, name: "%/#{versioned_module_regex[2]}").first&.name
 
             # if we didn't find one then try and get the base project
-            unless existing_project_name.present?
+            unless existing_project_name.present? # rubocop: disable Metrics/BlockNesting
               versioned_name = Project.where(platform: "Go").where("lower(repository_url) = ? and name not like '%/v'", url.downcase).first&.name
               existing_project_name = versioned_name&.concat("/#{versioned_module_regex[2]}")
             end
@@ -187,31 +206,15 @@ module PackageManager
     end
 
     def self.dependencies(name, version, _mapped_project)
-      # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
-      # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
-      # to scrape the webpage or wait for an API for a faster fetch here.
-      resp = request("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{version}.mod")
-      if resp.status == 200
-        go_mod_file = resp.body
-        Bibliothecary::Parsers::Go.parse_go_mod(go_mod_file)
-          .map do |dep|
-            {
-              project_name: dep[:name],
-              requirements: dep[:requirement],
-              kind: dep[:type],
-              platform: "Go",
-            }
-          end
-      else
-        []
-      end
+      fetch_mod(name, version: version)&.dependencies || []
     end
 
     # https://golang.org/cmd/go/#hdr-Import_path_syntax
     def self.project_find_names(name)
       return [name] if name.start_with?(*KNOWN_HOSTS)
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
-      host = name.split('/').first
+
+      host = name.split("/").first
       return [name] if Rails.cache.exist?("unreachable-go-hosts:#{host}")
 
       begin
@@ -229,8 +232,8 @@ module PackageManager
       rescue Faraday::ConnectionFailed => e
         # We can get here from go modules that don't exist anymore, or having server troubles:
         # Fallback to the given name, cache the host as "bad" for a day,
-        # log it (to analyze later) and notify us to be safe. 
-        Rails.logger.info "[Caching unreacahble go host] name=#{name}"
+        # log it (to analyze later) and notify us to be safe.
+        Rails.logger.info "[Caching unreachable go host] name=#{name}"
         Rails.cache.write("unreachable-go-hosts:#{host}", true, ex: 1.day)
         Bugsnag.notify(e)
         [name]
@@ -268,21 +271,7 @@ module PackageManager
     # looks at the module declaration for the latest version's go.mod file and returns that if found
     # if nothing is found, nil is returned
     def self.canonical_module_name(name)
-      json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
-      version = json && json["Version"]
-
-      return nil unless version.present?
-
-      mod_file = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{version}.mod")
-      module_line = mod_file
-        &.lines
-        &.map(&:strip)
-        &.reject(&:blank?)
-        &.find { |line| line.match(MODULE_REGEX) }
-
-      return false unless module_line.present?
-
-      module_line.match(MODULE_REGEX)[1]
+      fetch_mod(name)&.canonical_module_name
     end
 
     # will convert a string with capital letters and replace with a "!" prepended to the lowercase letter
@@ -290,6 +279,33 @@ module PackageManager
     # https://go.dev/ref/mod#goproxy-protocol
     def self.encode_for_proxy(str)
       str.gsub(/[A-Z]/) { |s| "!#{s.downcase}" }
+    end
+
+    private_class_method def self.latest_version_number(name)
+      json = get_json("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@latest")
+      number = json&.dig("Version")
+
+      Rails.logger.info "[Unable to fetch latest version number] name=#{name}" if number.blank?
+
+      number
+    end
+
+    private_class_method def self.fetch_mod(name, version: nil)
+      # Go proxy spec: https://golang.org/cmd/go/#hdr-Module_proxy_protocol
+      # TODO: this can take up to 2sec if it's a cache miss on the proxy. Might be able
+      # to scrape the webpage or wait for an API for a faster fetch here.
+
+      version = latest_version_number(name) if version.nil?
+      return if version.nil?
+
+      mod_contents = get_raw("#{PROXY_BASE_URL}/#{encode_for_proxy(name)}/@v/#{encode_for_proxy(version)}.mod")
+
+      if mod_contents.blank?
+        Rails.logger.info "[Unable to fetch go.mod contents] name=#{name}"
+        return
+      end
+
+      GoMod.new(mod_contents)
     end
   end
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RepositorySerializer < ActiveModel::Serializer
   attributes :full_name, :description, :fork, :created_at, :updated_at,
              :pushed_at, :homepage, :size, :stargazers_count, :language,

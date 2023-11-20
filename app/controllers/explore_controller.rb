@@ -1,13 +1,12 @@
 # frozen_string_literal: true
+
 class ExploreController < ApplicationController
   def index
-    @platforms = Project.popular_platforms(facet_limit: 40).first(28)
-    @keywords = Project.popular_keywords(facet_limit: 40).first(15)
-    @languages = Project.popular_languages(facet_limit: 40).first(21)
-    @licenses = Project.popular_licenses(facet_limit: 40).first(10)
+    @platforms = Project.maintained.group(:platform).order("count_id DESC").limit(28).count("id").keys
+    @languages = Project.maintained.where.not(language: nil).group(:language).order("count_id DESC").limit(21).count("id").keys
 
     project_scope = Project.includes(:repository).maintained.with_description
 
-    @new_projects = project_scope.order('projects.created_at desc').limit(10)
+    @new_projects = project_scope.order("projects.created_at desc").limit(10)
   end
 end

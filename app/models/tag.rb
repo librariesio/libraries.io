@@ -1,4 +1,22 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: tags
+#
+#  id            :integer          not null, primary key
+#  kind          :string
+#  name          :string
+#  published_at  :datetime
+#  sha           :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  repository_id :integer
+#
+# Indexes
+#
+#  index_tags_on_repository_id_and_name  (repository_id,name)
+#
 class Tag < ApplicationRecord
   include Releaseable
 
@@ -6,7 +24,7 @@ class Tag < ApplicationRecord
   validates_presence_of :name, :sha, :repository
   validates_uniqueness_of :name, scope: :repository_id
 
-  scope :published, -> { where('published_at IS NOT NULL') }
+  scope :published, -> { where("published_at IS NOT NULL") }
 
   after_commit :send_notifications_async, on: :create
   after_commit :save_projects
@@ -17,13 +35,13 @@ class Tag < ApplicationRecord
 
   def send_notifications_async
     return if published_at && published_at < 1.week.ago
-    TagNotificationsWorker.perform_async(self.id) if has_projects?
+
+    TagNotificationsWorker.perform_async(id) if projects?
   end
 
   def send_notifications
-    if has_projects?
+    if projects?
       notify_subscribers
-      notify_firehose
       notify_web_hooks
     end
   end
@@ -32,7 +50,7 @@ class Tag < ApplicationRecord
     repository.projects.without_versions.each do |project|
       repos = project.subscriptions.map(&:repository).compact.uniq
       repos.each do |repo|
-        requirements = repo.repository_dependencies.select{|rd| rd.project == project }.map(&:requirements)
+        requirements = repo.repository_dependencies.select { |rd| rd.project == project }.map(&:requirements)
         repo.web_hooks.each do |web_hook|
           web_hook.send_new_version(project, project.platform, self, requirements)
         end
@@ -40,8 +58,8 @@ class Tag < ApplicationRecord
     end
   end
 
-  def has_projects?
-    repository && repository.projects.without_versions.length > 0
+  def projects?
+    repository && !repository.projects.without_versions.empty?
   end
 
   def notify_subscribers
@@ -49,12 +67,6 @@ class Tag < ApplicationRecord
       project.mailing_list(include_prereleases: prerelease?).each do |user|
         VersionsMailer.new_version(user, project, self).deliver_later
       end
-    end
-  end
-
-  def notify_firehose
-    repository.projects.without_versions.each do |project|
-      Firehose.new_version(project, project.platform, self)
     end
   end
 
@@ -76,11 +88,11 @@ class Tag < ApplicationRecord
 
   def repository_url
     case repository.host_type
-    when 'GitHub'
+    when "GitHub"
       "#{repository.url}/releases/tag/#{name}"
-    when 'GitLab'
+    when "GitLab"
       "#{repository.url}/tags/#{name}"
-    when 'Bitbucket'
+    when "Bitbucket"
       "#{repository.url}/commits/tag/#{name}"
     end
   end
@@ -101,7 +113,7 @@ class Tag < ApplicationRecord
     related_tags[tag_index + 1]
   end
 
-  alias_method :previous_version, :previous_tag
+  alias previous_version previous_tag
 
   def related_tag
     true
@@ -109,6 +121,7 @@ class Tag < ApplicationRecord
 
   def diff_url
     return nil unless repository && previous_tag && previous_tag
+
     repository.compare_url(previous_tag.number, number)
   end
 

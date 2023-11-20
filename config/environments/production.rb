@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+
+require "active_support/core_ext/integer/time"
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -15,24 +18,27 @@ Rails.application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  # Enable Rack::Cache to put a simple HTTP cache in front of your application
-  # Add `rack-cache` to your Gemfile before enabling this.
-  # For large-scale production use, consider using a caching reverse proxy like
-  # NGINX, varnish or squid.
-  # config.action_dispatch.rack_cache = true
+  # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
+  # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
+  # config.require_master_key = true
 
-  # Compress JavaScripts and CSS.
+  # Disable serving static files from the `/public` folder by default since
+  # Apache or NGINX already handles this.
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+
+  # Compress CSS using a preprocessor.
   config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
 
+  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+  # config.asset_host = 'http://assets.example.com'
+
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
   # yet still be able to expire them through the digest params.
   config.assets.digest = true
-
-  # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
@@ -43,21 +49,28 @@ Rails.application.configure do
   # opt /healthcheck out of SSL for load balancer healthchecks to work
   config.ssl_options = { redirect: { exclude: ->(request) { request.path =~ /healthcheck/ } } }
 
-  # Use the lowest log level to ensure availability of diagnostic information
-  # when problems arise.
-  config.log_level = :debug
+  # Include generic and useful information about system operation, but avoid logging too much
+  # information to avoid inadvertent exposure of personally identifiable information (PII).
+  config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  # config.log_tags = [ :subdomain, :uuid ]
-
-  # Use a different logger for distributed setups.
-  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
+  config.log_tags = [:request_id]
 
   # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  config.cache_store = :mem_cache_store,
+                       (ENV["MEMCACHIER_SERVERS"] || "").split(","),
+                       { username: ENV.fetch("MEMCACHIER_USERNAME", nil),
+                         password: ENV.fetch("MEMCACHIER_PASSWORD", nil),
+                         failover: true,
+                         compress: true,
+                         socket_timeout: 0.5,
+                         socket_failure_delay: 0.1 }
 
-  # default mail links to https
-  config.action_mailer.default_url_options = { protocol: 'https' }
+  # Use a real queuing backend for Active Job (and separate queues per environment).
+  # config.active_job.queue_adapter     = :resque
+  # config.active_job.queue_name_prefix = "libraries_production"
+
+  config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -67,47 +80,79 @@ Rails.application.configure do
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = [I18n.default_locale]
 
-  # Send deprecation notices to registered listeners.
-  config.active_support.deprecation = :notify
+  # Don't log any deprecations.
+  config.active_support.report_deprecations = false
 
-  # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  # Log disallowed deprecations.
+  config.active_support.disallowed_deprecation = :log
+
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # disable sql logging in production
-  config.active_record.logger = nil
-
-  config.host = "libraries.io"
-
-  config.action_mailer.default_url_options = { host: config.host }
-
-  config.cache_store = :dalli_store,
-                    (ENV["MEMCACHIER_SERVERS"] || "").split(","),
-                    {username: ENV["MEMCACHIER_USERNAME"],
-                     password: ENV["MEMCACHIER_PASSWORD"],
-                     failover: true,
-                     compress: true,
-                     socket_timeout: 0.5,
-                     socket_failure_delay: 0.1
-                    }
   config.action_mailer.smtp_settings = {
-    address:              'smtp.sendgrid.net',
-    port:                 '2525',
-    authentication:       :plain,
-    user_name:            ENV['SENDGRID_USERNAME'],
-    password:             ENV['SENDGRID_PASSWORD'],
-    domain:               'heroku.com',
-    enable_starttls_auto: true
+    address: "smtp.sendgrid.net",
+    port: "2525",
+    authentication: :plain,
+    user_name: ENV.fetch("SENDGRID_USERNAME", nil),
+    password: ENV.fetch("SENDGRID_PASSWORD", nil),
+    domain: "heroku.com",
+    enable_starttls_auto: true,
   }
   config.action_mailer.delivery_method = :smtp
 
-  config.lograge.enabled = true
+  # Inserts middleware to perform automatic connection switching.
+  # The `database_selector` hash is used to pass options to the DatabaseSelector
+  # middleware. The `delay` is used to determine how long to wait after a write
+  # to send a subsequent read to the primary.
+  #
+  # The `database_resolver` class is used by the middleware to determine which
+  # database is appropriate to use based on the time delay.
+  #
+  # The `database_resolver_context` class is used by the middleware to set
+  # timestamps for the last write to the primary. The resolver uses the context
+  # class timestamps to determine how long to wait before reading from the
+  # replica.
+  #
+  # By default Rails will store a last write timestamp in the session. The
+  # DatabaseSelector middleware is designed as such you can define your own
+  # strategy for connection switching and pass that into the middleware through
+  # these configuration options.
+  # config.active_record.database_selector = { delay: 2.seconds }
+  # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
+  # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger = ActiveSupport::TaggedLogging.new(logger)
+  config.host = "libraries.io"
+  # default mail links to https
+  config.action_mailer.default_url_options = { protocol: "https", host: config.host }
+
+  # Logging options
+  logger = ActiveSupport::Logger.new($stdout)
+  logger.formatter = proc do |severity, datetime, _progname, msg|
+    date_format = datetime.strftime("%Y-%m-%dT%H:%M:%S.%L")
+    "#{date_format} #{severity} #{msg}\n"
   end
+  config.logger = ActiveSupport::TaggedLogging.new(logger)
+  config.active_record.logger = nil # disables SQL logging
+  config.lograge.enabled = true
+  config.lograge.ignore_actions = ["HealthcheckController#index"]
+  config.lograge.formatter = Lograge::Formatters::Json.new
+  # "api_key" is the one from params, which we might overwrite beneath with our own "api_key" object.
+  params_exceptions = %w[controller action format id api_key].freeze
+  config.lograge.custom_options = lambda do |event|
+    {}.tap do |options|
+      options[:params] = event.payload[:params].except(*params_exceptions)
+      # extra keys that we want to log. Add these in the append_info_to_payload() overrided controller methods.
+      %i[rescued_error current_user remote_ip ip api_key github_event user_agent referer].each do |key|
+        options[key] = event.payload[key] if event.payload[key]
+      end
+    end
+  end
+  # Skip the noisy exception stack traces that DebugExceptions outputs, and check Bugsnag instead.
+  config.middleware.delete(ActionDispatch::DebugExceptions)
+
+  # GCP sends proxy IP as last value of X-Forwarded-For, so we need to ensure it gets filtered out for remote_ip() method
+  config.action_dispatch.trusted_proxies = ActionDispatch::RemoteIp::TRUSTED_PROXIES + ["35.244.128.241"]
 end

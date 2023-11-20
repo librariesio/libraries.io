@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
+
+require "rails_helper"
 
 describe CheckStatusWorker do
   it "should use the low priority queue" do
@@ -7,10 +8,10 @@ describe CheckStatusWorker do
   end
 
   it "should check repo status" do
-    project = create(:project)
-    removed = false
-    expect(Project).to receive(:find_by_id).with(project.id).and_return(project)
-    expect(project).to receive(:check_status).with(removed)
-    subject.perform(project.id, removed)
+    VCR.use_cassette("project/check_status/rails") do
+      project = create(:project, name: "rails")
+      expect(Project).to receive(:find_by_id).with(project.id).and_return(project)
+      subject.perform(project.id)
+    end
   end
 end

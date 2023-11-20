@@ -6,19 +6,19 @@ New to Ruby? No worries! You can follow these instructions to install a local se
 
 ### Installing a Local Server
 
-First things first, you'll need to install Ruby 2.6.5. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+First things first, you'll need to install Ruby 2.7.8. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build)
 
 ```bash
 brew install rbenv ruby-build
-rbenv install 2.7.6
+rbenv install 2.7.8
 ```
 
 Next, you'll need to make sure that you have PostgreSQL, Elasticsearch 2.4 and Redis installed. This can be done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or postgres can be installed by using [http://postgresapp.com](http://postgresapp.com). Please also see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
 
 ```bash
 brew install --cask phantomjs homebrew/cask-versions/adoptopenjdk8
-brew install postgres redis icu4c cmake
+brew install postgresql redis icu4c cmake
 ```
 
 Since this repo uses an old version of Elasticsearch, it is no longer supported on Homebrew. You can use the ElasticSearch
@@ -44,8 +44,8 @@ sudo apt-get install postgresql postgresql-contrib libpq-dev libicu-dev
 ```
 
 If you are using a Docker container for Postgres, you'll need to edit the `config/database.yml`
-file with values found from the `docker-compose.yml` file in order for the app to connect to the db container. 
-Something like this in the default section: 
+file with values found from the `docker-compose.yml` file in order for the app to connect to the db container.
+Something like this in the default section:
 ```yaml
   username: <%= ENV["PG_USERNAME"] || "<username from the dockerfile>" %>
   password: <password from the dockerfile>
@@ -54,7 +54,7 @@ Something like this in the default section:
 ```
 When attempting to connect to the database or run a migration and you get authentication errors,
 you may need to go inside the container, obtain a psql shell, and manually create the superuser specified in the
-config file: 
+config file:
 ```postgresql
 create user <username> with password '<password>' superuser createdb;
 ```
@@ -74,17 +74,19 @@ tables. Rails makes this easy through the use of "Rake" tasks.
 bundle exec rake db:create db:migrate
 ```
 
-Go create a [Personal access token on GitHub](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) (only requires `public_repo` access), then we can download some sample data:
+Create a [Personal access token on GitHub](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) (only requires `public_repo` access), then we can download some sample data:
 
 ```sh
  bundle exec rails c
  irb> AuthToken.create(token: "<secure github token here>")
- irb> PackageManager::NPM.update "pictogram"
+ irb> PackageManager::NPM.update "base62" # this is needed to make the API page work
  irb> PackageManager::Rubygems.update "split"
  irb> PackageManager::Bower.update "sbteclipse"
  irb> PackageManager::Maven.update "junit:junit"
  irb> Repository.create_from_host("github", "librariesio/bibliothecary")
 ```
+
+_(This will not work with the new Fine-granied tokens that GitHub offers)_
 
 You can then index that data into elasticsearch with the following rake task:
 
@@ -116,6 +118,12 @@ our browser to <http://localhost:3000>
 bundle exec rails s
 ```
 
+If you get an error like
+```
+objc[94869]: +[__NSCFConstantString initialize] may have been in progress in another thread when fork() was called. We cannot safely call it or ignore it in the fork() child process. Crashing instead. Set a breakpoint on objc_initializeAfterForkError to debug.
+```
+you may need to run `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` first.
+
 You're now ready to go with the basic libraries.io app setup, to grab more data check out the extensive list of rake tasks with the following command:
 
 ```bash
@@ -124,24 +132,83 @@ rake -T
 
 ## Github authentication and connection
 
+To enable logins, you'll need to register your own OAuth applications on each service to connect your local application. Github, Gitlab, and Bitbucket are available to configure. Github public and private project sync also requires an OAuth application each. You only need to set up the integrations you're working on, but you will likely need at least one authentication service.
+
 To enable Github authentication go and register a new [GitHub OAuth Application](https://github.com/settings/applications/new). Your development configuration should look something like this:
 
 <img width="561" alt="screen shot 2016-12-18 at 21 54 35" src="https://cloud.githubusercontent.com/assets/564113/21299762/a7bfaace-c56c-11e6-834c-ff893f79cec3.png">
 
 If you're deploying this to production, just replace `http://localhost:3000` with your application's URL.
 
-You'll need to register an additional application to enable each of public and private projects, using `http://localhost:3000/auth/github_public/callback` and `http://localhost:3000/auth/github_private/callback` as the callbacks respectively. You do not need to do private projects unless you require that functionality.
-
-Once you've created your application you can then then add the following to your `.env`:
+Once registered, you'll be given a client ID and a secret key, add them in your `.env` and restart your Rails server.
 
 ```bash
+# .env
+
+# Github login
 GITHUB_KEY=yourclientidhere
 GITHUB_SECRET=yourclientsecrethere
-GITHUB_PUBLIC_KEY=yourpublicclientidhere
-GITHUB_PUBLIC_SECRET=yourpublicclientsecrethere
-GITHUB_PRIVATE_KEY=yourprivateclientidhere
-GITHUB_PRIVATE_SECRET=yourprivateclientsecrethere
+# Gitlab login
+GITLAB_APPLICATION_ID=yourgitlabappid
+GITLAB_SECRET=yourgitlabsecret
+# Bitbucket login
+BITBUCKET_APPLICATION_ID=yourbitbucketappid
+BITBUCKET_SECRET=yourbitbucketsecret
+# Github public project sync
+GITHUB_PUBLIC_KEY=yourpublicappclientid
+GITHUB_PUBLIC_SECRET=yourpublicappsecret
+# Github private project sync
+GITHUB_PRIVATE_KEY=yourprivateappclientid
+GITHUB_PRIVATE_SECRET=yourprivateappsecret
 ```
+
+### Github login
+
+From Settings > Developer Settings, [Register a new OAuth application](https://github.com/settings/applications/new)
+
+|Settings||
+|-|-|
+|Homepage|`http://localhost:3000`
+|Authorization callback URL|`http://localhost:3000/auth/github/callback`
+|Environment Vars|`GITHUB_KEY`, `GITHUB_SECRET`
+
+#### Public project sync
+
+|Settings||
+|-|-|
+|Homepage|`http://localhost:3000`
+|Authorization callback URL|`http://localhost:3000/auth/github_public/callback`
+|Environment Vars|`GITHUB_PUBLIC_KEY`, `GITHUB_PUBLIC_SECRET`
+
+
+#### Private project sync
+
+|Settings||
+|-|-|
+|Homepage|`http://localhost:3000`
+|Authorization callback URL|`http://localhost:3000/auth/github_private/callback`
+|Environment Vars|`GITHUB_PRIVATE_KEY`, `GITHUB_PRIVATE_SECRET`
+
+### Gitlab login
+
+[Create an OAuth Application](https://gitlab.com/-/profile/applications).
+
+|Settings||
+|-|-|
+|Redirect URI|`http://localhost:3000/auth/gitlab/callback`
+|Scopes|`read_user`
+|Environment Vars|`GITLAB_APPLICATION_ID`, `GITLAB_SECRET`
+
+
+### Bitbucket login
+
+Create a workspace (or use an existing). From that workspace's settings, select Add OAuth Consumer.
+
+|Settings||
+|-|-|
+|Callback URL|`http://localhost:3000/auth/bitbucket/callback`
+|Permissions|Account: ✅ Read
+|Environment Vars|`BITBUCKET_APPLICATION_ID`, `BITBUCKET_SECRET`
 
 ## Background workers
 
@@ -170,3 +237,30 @@ for **another** project, you will need to either
  * reset the omniauth environment variables after creating a GitHub (omniauth) application for this project
 
 as it will use it to learn more about the developers and for pull requests.
+
+## Re-recording VCR cassettes
+
+Various specs for repository statistics and information use VCR to capture
+real network requests for playback. Periodically these cassettes should
+be re-recorded to ensure changes to remote APIs are captured, and any fixes
+applied to the Libraries codebase.
+
+### Changing VCR's global recording mode
+
+Unless you have all possible access keys set up (GitHub & BitBucket) in the
+tests, it's better to individually change specific tests to record new
+VCR episodes. Otherwise, you'll be dealing with API errors from the
+unauthenticated endpoints.
+
+### GitHub
+
+To re-record VCR cassettes needed for maintenance stats:
+
+* Add `record: :new_episodes` to each specific `VCR.use_cassette` call
+* Obtain a GitHub Personal Access Token
+* Update the `AuthToken` factory's default value to use your personal access token
+* Re-run the affected tests, making repairs as necessary
+* Remove `record: :new_episodes` from the `VCR.use_cassette` calls and your personal access token from the `AuthToken` factory
+* Re-run affected tests
+* Find and replace any instances of your personal access token in the recorded VCR cassettes with `TEST_TOKEN`
+* Re-run affected tests

@@ -1,18 +1,9 @@
 # frozen_string_literal: true
+
 class ProjectSearchResult
   include Status
 
-  attr_reader :language
-  attr_reader :platform
-  attr_reader :name
-  attr_reader :description
-  attr_reader :status
-  attr_reader :latest_release_number
-  attr_reader :versions_count
-  attr_reader :latest_release_published_at
-  attr_reader :stars
-  attr_reader :created_at
-  attr_reader :id
+  attr_reader :language, :platform, :name, :description, :status, :latest_release_number, :versions_count, :latest_release_published_at, :stars, :created_at, :id
 
   def initialize(search_result)
     @language = search_result.language
@@ -30,7 +21,12 @@ class ProjectSearchResult
 
   def parse_timestamp(timestamp)
     return nil unless timestamp.present?
-    DateTime.parse(timestamp) rescue nil
+
+    begin
+      DateTime.parse(timestamp)
+    rescue StandardError
+      nil
+    end
   end
 
   def color
@@ -46,6 +42,6 @@ class ProjectSearchResult
   end
 
   def to_partial_path
-    'projects/project'
+    "projects/project"
   end
 end

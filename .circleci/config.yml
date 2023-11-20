@@ -1,11 +1,14 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@1.8.0
+  ruby: circleci/ruby@2.1.0
 
 executors:
+  # TODO: we don't need ES/PG/Redis for "lint" job, so we could create another
+  # stripped-down executor if we want?
   libraries:
+    working_directory: ~/libraries
     docker:
-      - image: ruby:2.7.6-slim-bullseye
+      - image: ruby:2.7.8-slim-bullseye
         environment:
           PGHOST: 127.0.0.1
           PGUSER: postgres
@@ -14,24 +17,78 @@ executors:
           POSTGRES_USER: postgres
           POSTGRES_DB: libraries_test
           POSTGRES_PASSWORD: ""
-      - image: redis:3.2-alpine
+      - image: redis:7.0-alpine
       - image: elasticsearch:2.4.4
         environment:
           - cluster.name: elasticsearch
           - action.auto_create_index: true
+
+commands:
+  setup-ruby-env:
+    description: "Required steps to setup environmnt for doing ruby stuff"
+    steps:
+      - run:
+          name: Update system libraries
+          command: |
+            apt-get -y -qq update
+            apt-get -y --no-install-recommends install cmake libpq-dev git-core build-essential libicu-dev pkg-config nodejs curl
+
 jobs:
+  install:
+    executor: libraries
+    steps:
+      - setup-ruby-env
+
+      - checkout:
+          path: ~/libraries
+
+      - run:
+          name: Prep ruby
+          command: |
+            gem -v
+            bundle -v
+            bundle config path vendor/bundle
+
+      - ruby/install-deps # NB this command does save and restore of caching by default ("with-cache: false" to disable)
+
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - libraries
+            - .bundle
+
   test:
     parallelism: 4
     executor: libraries
     steps:
-      - checkout
-      - run: apt-get -y -qq update
-      - run: apt-get -y --no-install-recommends install cmake libpq-dev git-core build-essential libicu-dev pkg-config nodejs
-      - ruby/install-deps
+      - setup-ruby-env
+      - attach_workspace:
+          at: ~/
       - ruby/rspec-test
+
+  lint:
+    parallelism: 1
+    executor: libraries
+    working_directory: ~/libraries
+    steps:
+      - setup-ruby-env
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Run linter
+          command: |
+            pwd
+            bundle exec rubocop -L | circleci tests split > /tmp/lint-split
+            bundle exec rubocop $(cat /tmp/lint-split)
 
 workflows:
   version: 2
-  test:
+  circleci_build:
     jobs:
-      - test
+      - install
+      - test:
+          requires:
+            - install
+      - lint:
+          requires:
+            - install

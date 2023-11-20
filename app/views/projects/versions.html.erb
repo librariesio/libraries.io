@@ -17,7 +17,7 @@
           <% if version.published_at.present? %>
             <td>
               <small class='text-muted'>
-                <%= version.published_at.to_s(:long_ordinal) %>
+                <%= version.published_at.to_fs(:long_ordinal) %>
               </small>
             </td>
           <% end %>

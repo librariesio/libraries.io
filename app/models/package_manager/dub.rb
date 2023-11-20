@@ -53,9 +53,10 @@ module PackageManager
     end
 
     def self.repository(hash)
-      if hash["kind"] == "github"
+      case hash["kind"]
+      when "github"
         "https://github.com/#{hash['owner']}/#{hash['project']}"
-      elsif hash["kind"] == "bitbucket"
+      when "bitbucket"
         "https://bitbucket.org/#{hash['owner']}/#{hash['project']}"
       else
         ""

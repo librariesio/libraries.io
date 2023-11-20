@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
+
+require "rails_helper"
 
 describe GithubHookWorker do
   it "should use the critical priority queue" do
@@ -10,6 +11,13 @@ describe GithubHookWorker do
     github_id = 1
     sender_id = 2
     expect(Repository).to receive(:update_from_hook).with(github_id, sender_id)
+    subject.perform(github_id, sender_id)
+  end
+
+  it "should not update from hook if sender is missing" do
+    github_id = 1
+    sender_id = nil
+    expect(Repository).to_not receive(:update_from_hook)
     subject.perform(github_id, sender_id)
   end
 end

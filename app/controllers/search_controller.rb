@@ -1,12 +1,23 @@
 # frozen_string_literal: true
+
 class SearchController < ApplicationController
   def index
     @query = params[:q]
-    @search = search_projects(@query)
-    @suggestion = @search.response.suggest.did_you_mean.first if @query.present?
-    @projects = @search.results.map{|result| ProjectSearchResult.new(result) }
-    @facets = @search.response.aggregations
+    @any_criteria = params
+      .values_at(:q, :platforms, :languages, :licenses, :keywords)
+      .any?(&:present?)
+    @search = []
+    @projects = []
+    @facets = []
     @title = page_title
+
+    if @any_criteria
+      @search = search_projects(@query)
+      @suggestion = @search.response.suggest.did_you_mean.first if @query.present?
+      @projects = @search.results.map { |result| ProjectSearchResult.new(result) }
+      @facets = @search.response.aggregations
+    end
+
     respond_to do |format|
       format.html
       format.atom
@@ -21,7 +32,7 @@ class SearchController < ApplicationController
   end
 
   def allowed_sorts
-    ['rank', 'stars', 'dependents_count', 'dependent_repos_count', 'latest_release_published_at', 'created_at', 'contributions_count']
+    %w[rank stars dependents_count dependent_repos_count latest_release_published_at created_at contributions_count]
   end
 
   def page_title
@@ -36,11 +47,11 @@ class SearchController < ApplicationController
     modifier = " #{modifiers.compact.join(' ')} "
 
     case params[:sort]
-    when 'created_at'
+    when "created_at"
       "New#{modifier}Projects - Libraries.io"
-    when 'updated_at'
+    when "updated_at"
       "Updated#{modifier}Projects - Libraries.io"
-    when 'latest_release_published_at'
+    when "latest_release_published_at"
       "Updated#{modifier}Projects - Libraries.io"
     else
       "Popular#{modifier}Projects - Libraries.io"

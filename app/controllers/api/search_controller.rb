@@ -1,5 +1,8 @@
 # frozen_string_literal: true
+
 class Api::SearchController < Api::ApplicationController
+  before_action :require_api_key
+
   def index
     @search = paginate search_projects(params[:q])
     @projects = @search.records.includes(:repository, :versions)
@@ -10,6 +13,6 @@ class Api::SearchController < Api::ApplicationController
   private
 
   def allowed_sorts
-    ['rank', 'stars', 'dependents_count', 'dependent_repos_count', 'latest_release_published_at', 'created_at', 'contributions_count']
+    %w[rank stars dependents_count dependent_repos_count latest_release_published_at created_at contributions_count]
   end
 end

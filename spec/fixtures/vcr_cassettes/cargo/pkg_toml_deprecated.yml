@@ -1,0 +1,190 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://crates.io/api/v1/crates/cld2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3196127058524734985'
+      X-Datadog-Parent-Id:
+      - '569974368379097488'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Type:
+      - application/json
+      Server:
+      - nginx
+      Date:
+      - Mon, 31 Jul 2023 16:14:38 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Content-Security-Policy:
+      - default-src 'self'; connect-src 'self' *.ingest.sentry.io https://docs.rs
+        https://play.rust-lang.org https://static.crates.io; script-src 'self' 'unsafe-eval'
+        'sha256-n1+BB7Ckjcal1Pr7QNBh/dKRTtBQsIytFodRiIosXdE='; style-src 'self' 'unsafe-inline'
+        https://code.cdn.mozilla.net; font-src https://code.cdn.mozilla.net; img-src
+        *; object-src 'none'
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Via:
+      - 1.1 vegur, 1.1 77a626e3ea8d4b2aae01de87c12da04e.cloudfront.net (CloudFront)
+      Vary:
+      - Accept,Accept-Encoding,Cookie
+      X-Cache:
+      - Miss from cloudfront
+      X-Amz-Cf-Pop:
+      - ORD51-C4
+      X-Amz-Cf-Id:
+      - OpzxeZDGy4drGdQex4UcJWGewHHo21h77npmZsP45onryBGH-HjdVw==
+    body:
+      encoding: ASCII-8BIT
+      string: '{"categories":[],"crate":{"badges":[],"categories":[],"created_at":"2014-11-20T22:13:37.097538+00:00","description":"Detect
+        natural language used in text using the cld2 library","documentation":"https://docs.rs/cld2","downloads":19591,"exact_match":false,"homepage":null,"id":"cld2","keywords":["text"],"links":{"owner_team":"/api/v1/crates/cld2/owner_team","owner_user":"/api/v1/crates/cld2/owner_user","owners":"/api/v1/crates/cld2/owners","reverse_dependencies":"/api/v1/crates/cld2/reverse_dependencies","version_downloads":"/api/v1/crates/cld2/downloads","versions":null},"max_stable_version":"1.0.2","max_version":"1.0.2","name":"cld2","newest_version":"1.0.2","recent_downloads":269,"repository":"https://github.com/emk/rust-cld2","updated_at":"2017-11-28T15:31:02.893865+00:00","versions":[72567,48100,37388,18284,10134,3985,3041,1692,1076,458,231]},"keywords":[{"crates_cnt":521,"created_at":"2014-11-14T08:25:07.725999+00:00","id":"text","keyword":"text"}],"versions":[{"audit_actions":[],"checksum":"80918b622b5301998079b2ee8e1d58caa37afe5e733f8b5894793bef88e55fed","crate":"cld2","crate_size":null,"created_at":"2017-11-28T15:31:02.893865+00:00","dl_path":"/api/v1/crates/cld2/1.0.2/download","downloads":5114,"features":{"unstable":[]},"id":72567,"license":"Unlicense","links":{"authors":"/api/v1/crates/cld2/1.0.2/authors","dependencies":"/api/v1/crates/cld2/1.0.2/dependencies","version_downloads":"/api/v1/crates/cld2/1.0.2/downloads"},"num":"1.0.2","published_by":null,"readme_path":"/api/v1/crates/cld2/1.0.2/readme","rust_version":null,"updated_at":"2017-11-30T02:22:10.049326+00:00","yanked":false},{"audit_actions":[],"checksum":"5820703dfcb79253d9ccce414db29d34fff0a85d62a1914921f7468026567ee5","crate":"cld2","crate_size":null,"created_at":"2017-03-18T11:44:57.677255+00:00","dl_path":"/api/v1/crates/cld2/1.0.1/download","downloads":3315,"features":{"unstable":[]},"id":48100,"license":"Unlicense","links":{"authors":"/api/v1/crates/cld2/1.0.1/authors","dependencies":"/api/v1/crates/cld2/1.0.1/dependencies","version_downloads":"/api/v1/crates/cld2/1.0.1/downloads"},"num":"1.0.1","published_by":null,"readme_path":"/api/v1/crates/cld2/1.0.1/readme","rust_version":null,"updated_at":"2017-11-30T03:31:35.078235+00:00","yanked":false},{"audit_actions":[],"checksum":"16064d397101a445a6ffe9d542fd3c1ae0f643062975dbc2a3b15b4f0e6d2a47","crate":"cld2","crate_size":null,"created_at":"2016-11-06T14:22:02.393011+00:00","dl_path":"/api/v1/crates/cld2/1.0.0/download","downloads":3244,"features":{"unstable":[]},"id":37388,"license":"Unlicense","links":{"authors":"/api/v1/crates/cld2/1.0.0/authors","dependencies":"/api/v1/crates/cld2/1.0.0/dependencies","version_downloads":"/api/v1/crates/cld2/1.0.0/downloads"},"num":"1.0.0","published_by":null,"readme_path":"/api/v1/crates/cld2/1.0.0/readme","rust_version":null,"updated_at":"2017-11-30T03:01:43.160370+00:00","yanked":false},{"audit_actions":[],"checksum":"5806cea09f3d476fb9ac79afaccac1850bcda8a52a397ea9dc49dd9ec044323a","crate":"cld2","crate_size":null,"created_at":"2015-11-19T18:27:10.346189+00:00","dl_path":"/api/v1/crates/cld2/0.1.0/download","downloads":4220,"features":{"unstable":[]},"id":18284,"license":"Unlicense","links":{"authors":"/api/v1/crates/cld2/0.1.0/authors","dependencies":"/api/v1/crates/cld2/0.1.0/dependencies","version_downloads":"/api/v1/crates/cld2/0.1.0/downloads"},"num":"0.1.0","published_by":null,"readme_path":"/api/v1/crates/cld2/0.1.0/readme","rust_version":null,"updated_at":"2017-11-30T02:37:47.366152+00:00","yanked":false},{"audit_actions":[],"checksum":"bc2066f57d97c60d0184f90d439b432252a1937ec6207a2dab3c8fec5daf7d5f","crate":"cld2","crate_size":null,"created_at":"2015-05-10T13:21:33.583184+00:00","dl_path":"/api/v1/crates/cld2/0.0.9/download","downloads":700,"features":{},"id":10134,"license":"Unlicense","links":{"authors":"/api/v1/crates/cld2/0.0.9/authors","dependencies":"/api/v1/crates/cld2/0.0.9/dependencies","version_downloads":"/api/v1/crates/cld2/0.0.9/downloads"},"num":"0.0.9","published_by":null,"readme_path":"/api/v1/crates/cld2/0.0.9/readme","rust_version":null,"updated_at":"2017-11-30T02:30:00.624162+00:00","yanked":false},{"audit_actions":[],"checksum":"8f70590989d9f747b00f27f9f0de6e47bfb76a32bad8c84dd55d47a23d00ff82","crate":"cld2","crate_size":null,"created_at":"2015-01-28T11:36:27.700954+00:00","dl_path":"/api/v1/crates/cld2/0.0.6/download","downloads":519,"features":{},"id":3985,"license":"Unlicense","links":{"authors":"/api/v1/crates/cld2/0.0.6/authors","dependencies":"/api/v1/crates/cld2/0.0.6/dependencies","version_downloads":"/api/v1/crates/cld2/0.0.6/downloads"},"num":"0.0.6","published_by":null,"readme_path":"/api/v1/crates/cld2/0.0.6/readme","rust_version":null,"updated_at":"2017-11-30T04:06:55.782617+00:00","yanked":false},{"audit_actions":[],"checksum":"bcd583ad69172ea8a5378a4adb53a65be52dd23a9dc82651bff6d8b5f25b4296","crate":"cld2","crate_size":null,"created_at":"2015-01-17T05:33:07.410689+00:00","dl_path":"/api/v1/crates/cld2/0.0.5/download","downloads":521,"features":{},"id":3041,"license":"Unlicense","links":{"authors":"/api/v1/crates/cld2/0.0.5/authors","dependencies":"/api/v1/crates/cld2/0.0.5/dependencies","version_downloads":"/api/v1/crates/cld2/0.0.5/downloads"},"num":"0.0.5","published_by":null,"readme_path":"/api/v1/crates/cld2/0.0.5/readme","rust_version":null,"updated_at":"2017-11-30T04:06:55.776830+00:00","yanked":false},{"audit_actions":[],"checksum":"06ce3de9dfd8439c8305b3e53ac7af9d753b2a47621a00c4bffb95425d68203e","crate":"cld2","crate_size":null,"created_at":"2014-12-26T18:59:42.629048+00:00","dl_path":"/api/v1/crates/cld2/0.0.4/download","downloads":509,"features":{},"id":1692,"license":"Unlicense","links":{"authors":"/api/v1/crates/cld2/0.0.4/authors","dependencies":"/api/v1/crates/cld2/0.0.4/dependencies","version_downloads":"/api/v1/crates/cld2/0.0.4/downloads"},"num":"0.0.4","published_by":null,"readme_path":"/api/v1/crates/cld2/0.0.4/readme","rust_version":null,"updated_at":"2017-11-30T04:06:55.774802+00:00","yanked":false},{"audit_actions":[],"checksum":"695d99ef62a7c5cd0729d16c5a742bc71399396f25a46bdb0495273f02ac5e2a","crate":"cld2","crate_size":null,"created_at":"2014-12-13T11:19:09.432223+00:00","dl_path":"/api/v1/crates/cld2/0.0.3/download","downloads":506,"features":{},"id":1076,"license":"Unlicense","links":{"authors":"/api/v1/crates/cld2/0.0.3/authors","dependencies":"/api/v1/crates/cld2/0.0.3/dependencies","version_downloads":"/api/v1/crates/cld2/0.0.3/downloads"},"num":"0.0.3","published_by":null,"readme_path":"/api/v1/crates/cld2/0.0.3/readme","rust_version":null,"updated_at":"2017-11-30T04:06:55.772282+00:00","yanked":false},{"audit_actions":[],"checksum":"108c04f8c040ade24991a991aee43c4f8e757ab81efbdff3ace8e8279259adb0","crate":"cld2","crate_size":null,"created_at":"2014-11-22T02:03:26.053890+00:00","dl_path":"/api/v1/crates/cld2/0.0.2/download","downloads":501,"features":{},"id":458,"license":"Unlicense","links":{"authors":"/api/v1/crates/cld2/0.0.2/authors","dependencies":"/api/v1/crates/cld2/0.0.2/dependencies","version_downloads":"/api/v1/crates/cld2/0.0.2/downloads"},"num":"0.0.2","published_by":null,"readme_path":"/api/v1/crates/cld2/0.0.2/readme","rust_version":null,"updated_at":"2017-11-30T02:27:13.004464+00:00","yanked":false},{"audit_actions":[],"checksum":"3a636138d8dccf5b1ab15d2906299641ee2fe119084a48fb665efc71cbc2018e","crate":"cld2","crate_size":null,"created_at":"2014-11-20T22:13:37.125300+00:00","dl_path":"/api/v1/crates/cld2/0.0.0/download","downloads":442,"features":{},"id":231,"license":null,"links":{"authors":"/api/v1/crates/cld2/0.0.0/authors","dependencies":"/api/v1/crates/cld2/0.0.0/dependencies","version_downloads":"/api/v1/crates/cld2/0.0.0/downloads"},"num":"0.0.0","published_by":null,"readme_path":"/api/v1/crates/cld2/0.0.0/readme","rust_version":null,"updated_at":"2017-11-30T02:27:20.195228+00:00","yanked":true}]}'
+    http_version:
+  recorded_at: Mon, 31 Jul 2023 16:14:38 GMT
+- request:
+    method: get
+    uri: https://crates.io/api/v1/crates/cld2/1.0.2/download
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1997119118514463431'
+      X-Datadog-Parent-Id:
+      - '1413119450350407918'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 302
+      message: ''
+    headers:
+      Content-Length:
+      - '0'
+      Location:
+      - https://static.crates.io/crates/cld2/cld2-1.0.2.crate
+      Server:
+      - nginx
+      Date:
+      - Mon, 31 Jul 2023 16:14:38 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Content-Security-Policy:
+      - default-src 'self'; connect-src 'self' *.ingest.sentry.io https://docs.rs
+        https://play.rust-lang.org https://static.crates.io; script-src 'self' 'unsafe-eval'
+        'sha256-n1+BB7Ckjcal1Pr7QNBh/dKRTtBQsIytFodRiIosXdE='; style-src 'self' 'unsafe-inline'
+        https://code.cdn.mozilla.net; font-src https://code.cdn.mozilla.net; img-src
+        *; object-src 'none'
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Via:
+      - 1.1 vegur, 1.1 77a626e3ea8d4b2aae01de87c12da04e.cloudfront.net (CloudFront)
+      Vary:
+      - Accept,Accept-Encoding,Cookie
+      X-Cache:
+      - Miss from cloudfront
+      X-Amz-Cf-Pop:
+      - ORD51-C4
+      X-Amz-Cf-Id:
+      - x57UoAXur_IkIDSoQcw_UfaYRaWtoh9o2Z4Aap1W_GE1BVZNVyM87w==
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    http_version:
+  recorded_at: Mon, 31 Jul 2023 16:14:38 GMT
+- request:
+    method: get
+    uri: https://static.crates.io/crates/cld2/cld2-1.0.2.crate
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3413353050675019752'
+      X-Datadog-Parent-Id:
+      - '3299869673961903316'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      X-Amz-Id-2:
+      - ohlH/Gz6uf0Fv6hxwuvEWjk7mMGH3rMEuj0vCQgH4QWaaWkQNMRFhhxGEoY3m5tns4PlYR5P0U4=
+      X-Amz-Request-Id:
+      - A1E536MTM9VYBBMN
+      Last-Modified:
+      - Tue, 28 Nov 2017 15:31:04 GMT
+      Etag:
+      - '"500980422fb37b89f406e9f6a5d77138"'
+      X-Amz-Version-Id:
+      - gtMzDvcB9OgxST1Aht3bK_XW3vdDToki
+      Content-Type:
+      - application/x-tar
+      Server:
+      - AmazonS3
+      X-Timer:
+      - S1690820079.929957,VS0,VE247
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Mon, 31 Jul 2023 16:14:39 GMT
+      Via:
+      - 1.1 varnish
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-chi-kigq8000083-CHI
+      X-Cache:
+      - HIT
+      X-Cache-Hits:
+      - '1'
+      Content-Length:
+      - '12036'
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        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
+    http_version:
+  recorded_at: Mon, 31 Jul 2023 16:14:39 GMT
+recorded_with: VCR 4.0.0

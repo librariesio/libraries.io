@@ -77,6 +77,18 @@ describe PackageManager::Go do
         expect(versions.find { |v| v[:number] == "v0.0.0-20190907113008-ad855c713046" }).to_not be nil
       end
     end
+
+    it "omits retracted versions" do
+      VCR.use_cassette("go/pkg_with_retracted_versions") do
+        raw_project = { name: "github.com/go-gorp/gorp/v3" }
+
+        versions = described_class.versions(raw_project, raw_project[:name])
+
+        expect(versions.find { |v| v[:number] == "v3.1.0" }).not_to be nil
+        expect(versions.find { |v| v[:number] == "v3.0.0" }).to be nil
+        expect(versions.find { |v| v[:number] == "v3.0.3" }).to be nil
+      end
+    end
   end
 
   describe "VERSION_MODULE_REGEX" do
@@ -91,6 +103,13 @@ describe PackageManager::Go do
 
     it "should not match on a module name without major revision" do
       name = "github.com/example/module"
+      matches = name.match(described_class::VERSION_MODULE_REGEX)
+
+      expect(matches).to be nil
+    end
+
+    it "should not match on a module name that is deceivingly similar to a major version" do
+      name = "github.com/example/v2module1"
       matches = name.match(described_class::VERSION_MODULE_REGEX)
 
       expect(matches).to be nil
@@ -114,7 +133,7 @@ describe PackageManager::Go do
     end
   end
 
-  describe "#update" do
+  describe ".update" do
     it "should update the non versioned module" do
       VCR.use_cassette("go/pkg_go_dev") do
         described_class.update("#{package_name}/v3")
@@ -144,7 +163,7 @@ describe PackageManager::Go do
 
     it "should use known versions if we have the license" do
       project = create(:project, platform: "Go", name: package_name)
-      publish_date = Time.now
+      publish_date = Time.current
       project.versions.create(number: "v1.2.0", published_at: publish_date, original_license: "MIT")
 
       VCR.use_cassette("go/pkg_go_dev") do
@@ -197,7 +216,7 @@ describe PackageManager::Go do
 
         non_versioned_module = Project.find_by(platform: "Go", name: package_name)
         expect(non_versioned_module).to be_present
-        expect(non_versioned_module.versions.count).to eql 6
+        expect(non_versioned_module.versions.count).to eql 3
         expect(non_versioned_module.versions.where("number like ?", "v3%").count).to eql 3
       end
     end
@@ -224,8 +243,65 @@ describe PackageManager::Go do
 
         non_versioned_module = Project.find_by(platform: "Go", name: package_name)
         expect(non_versioned_module).to be_present
-        expect(non_versioned_module.versions.count).to eql 6
+        expect(non_versioned_module.versions.count).to eql 3
         expect(non_versioned_module.versions.where("number like ?", "v3%").count).to eql 3
+      end
+    end
+
+    context "with a package that doesn't exist on pkg.go.dev" do
+      it "fails correctly" do
+        VCR.use_cassette("go/update/postbox") do
+          expect do
+            described_class.update("github.com/8legd/postbox")
+          end.not_to change(Project, :count).from(0)
+        end
+      end
+    end
+
+    context "with a package that has incompatible versions only" do
+      it "loads the package and it has no versions" do
+        package = nil
+
+        VCR.use_cassette("go/update/noaa") do
+          expect do
+            package = described_class.update("github.com/cloudfoundry/noaa/errors")
+          end.to change(Project, :count).from(0).to(1)
+        end
+
+        expect(package.versions.count).to eq(0)
+      end
+    end
+
+    context "with stubbed PackageManagerDownloadWorker" do
+      let(:stub) { instance_double(PackageManagerDownloadWorker) }
+
+      before do
+        allow(PackageManagerDownloadWorker).to receive(:new).and_return(stub)
+        allow(stub).to receive(:perform)
+      end
+
+      it "should not update an existing base module Project" do
+        VCR.use_cassette("go/pkg_go_dev") do
+          described_class.update(package_name)
+          described_class.update("#{package_name}/v3")
+
+          expect(stub).not_to have_received(:perform)
+        end
+      end
+
+      it "should only update one version of the base module if it doesn't exist" do
+        versioned_module = create(:project, name: "#{package_name}/v3", platform: "Go", repository_url: "https://github.com/robfig/cron")
+
+        VCR.use_cassette("go/pkg_go_dev") do
+          described_class.update(versioned_module.name)
+          versioned_module.reload
+
+          expect(versioned_module).to be_present
+          expect(versioned_module.versions.count).to eql 3
+
+          version = versioned_module.versions.first
+          expect(stub).to have_received(:perform).with(described_class.name, package_name, version.number)
+        end
       end
     end
   end
@@ -294,6 +370,93 @@ describe PackageManager::Go do
     ].each do |(test, expected)|
       it "should replace capital letters" do
         expect(PackageManager::Go.encode_for_proxy(test)).to eql(expected)
+      end
+    end
+  end
+
+  describe ".remove_missing_versions" do
+    let(:version_number_to_not_remove) { "1.0.0" }
+    let(:version_number_to_remove) { "1.0.1" }
+    let(:old_updated_at) { 5.years.ago.round }
+    let(:version_to_remove_status) { nil }
+    let!(:version_to_remove) { create(:version, project: project, number: version_number_to_remove, updated_at: old_updated_at, status: version_to_remove_status) }
+
+    before do
+      project.versions.create!(number: version_number_to_not_remove, updated_at: old_updated_at)
+    end
+
+    it "should mark missing versions as Removed" do
+      described_class.remove_missing_versions(project, [PackageManager::Base::ApiVersion.new(
+        version_number: version_number_to_not_remove,
+        published_at: nil,
+        original_license: nil,
+        runtime_dependencies_count: nil,
+        repository_sources: nil,
+        status: nil
+      )])
+
+      actual_version_to_not_remove = project.versions.find_by(number: version_number_to_not_remove)
+      expect(actual_version_to_not_remove.status).to be nil
+      expect(actual_version_to_not_remove.updated_at).to eq(old_updated_at)
+
+      actual_version_to_remove = project.versions.find_by(number: version_number_to_remove)
+      expect(actual_version_to_remove.status).to eq("Removed")
+      expect(actual_version_to_remove.updated_at).to be_within(1.minute).of(Time.zone.now)
+    end
+
+    context "when the removed version is already removed" do
+      let(:version_to_remove_status) { "Removed" }
+
+      it "should not change anything" do
+        described_class.remove_missing_versions(project, [PackageManager::Base::ApiVersion.new(
+          version_number: version_number_to_not_remove,
+          published_at: nil,
+          original_license: nil,
+          runtime_dependencies_count: nil,
+          repository_sources: nil,
+          status: nil
+        )])
+
+        actual_version_to_not_remove = project.versions.find_by(number: version_number_to_not_remove)
+        expect(actual_version_to_not_remove.status).to be nil
+        expect(actual_version_to_not_remove.updated_at).to eq(old_updated_at)
+
+        actual_version_to_remove = project.versions.find_by(number: version_number_to_remove)
+        expect(actual_version_to_remove.status).to eq("Removed")
+        expect(actual_version_to_remove.updated_at).to eq(old_updated_at)
+      end
+    end
+  end
+
+  describe ".canonical_module_name" do
+    it "maps only major revision versions to module" do
+      VCR.use_cassette("go/pkg_go_dev") do
+        result = described_class.canonical_module_name(package_name)
+        expect(result).to eq(package_name)
+      end
+    end
+  end
+
+  describe ".dependencies" do
+    let(:package_name) { "github.com/PuerkitoBio/goquery" }
+    let(:version) { "v1.5.1" }
+
+    it "parses dependencies from go.mod" do
+      VCR.use_cassette("go/pkg_with_deps") do
+        result = described_class.dependencies(package_name, version, nil)
+        expect(result).to match_array(
+          [
+            ["github.com/andybalholm/cascadia", "v1.1.0"],
+            ["golang.org/x/net", "v0.0.0-20200202094626-16171245cfb2"],
+          ].map do |name, requirements, kind = "runtime"|
+            {
+              project_name: name,
+              requirements: requirements,
+              kind: kind,
+              platform: "Go",
+            }
+          end
+        )
       end
     end
   end

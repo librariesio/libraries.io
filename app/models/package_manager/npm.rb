@@ -11,6 +11,10 @@ module PackageManager
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
     SUPPORTS_SINGLE_VERSION_UPDATE = true
 
+    def self.missing_version_remover
+      PackageManager::Base::MissingVersionRemover
+    end
+
     def self.package_link(db_project, _version = nil)
       "https://www.npmjs.com/package/#{db_project.name}"
     end
@@ -40,12 +44,14 @@ module PackageManager
       get("http://registry.npmjs.org/#{name.gsub('/', '%2F')}")
     end
 
-    def self.deprecation_info(name)
-      last_version = project(name)["versions"].values.last
+    def self.deprecation_info(db_project)
+      versions = project(db_project.name)&.dig("versions")&.values || []
+      is_deprecated = versions.any? && versions.all? { |version| !version["deprecated"].nil? }
+      message = is_deprecated ? versions.last["deprecated"] : nil
 
       {
-        is_deprecated: !!last_version["deprecated"],
-        message: last_version["deprecated"],
+        is_deprecated: is_deprecated,
+        message: message,
       }
     end
 
@@ -65,7 +71,7 @@ module PackageManager
         keywords_array: Array.wrap(latest_version.fetch("keywords", [])),
         licenses: licenses(latest_version),
         repository_url: repo_fallback(repo_url, raw_project["homepage"]),
-        versions: raw_project["versions"]
+        versions: raw_project["versions"],
       }
     end
 
@@ -92,6 +98,7 @@ module PackageManager
     def self.versions(raw_project, _name)
       # npm license fields are supposed to be SPDX expressions now https://docs.npmjs.com/files/package.json#license
       return [] if raw_project.nil?
+
       raw_project.fetch("versions", {}).map do |k, v|
         license = v.fetch("license", nil)
         license = licenses(v) unless license.is_a?(String)
@@ -111,11 +118,14 @@ module PackageManager
 
     def self.dependencies(_name, version, mapped_project)
       vers = mapped_project.fetch(:versions, {})[version]
-      return [] if vers.nil?
+      if vers.nil?
+        StructuredLog.capture("DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: version, message: "version not found in upstream" })
+        return []
+      end
 
       map_dependencies(vers.fetch("dependencies", {}), "runtime") +
         map_dependencies(vers.fetch("devDependencies", {}), "Development") +
-        map_dependencies(vers.fetch("optionalDependencies", {}), "Optional", true)
+        map_dependencies(vers.fetch("optionalDependencies", {}), "Optional", optional: true)
     end
   end
 end

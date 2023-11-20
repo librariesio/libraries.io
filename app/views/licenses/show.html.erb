@@ -100,16 +100,6 @@
         <%= render partial: 'platforms/list_platform', collection: @platforms, as: :platform %>
       </div>
       <% end %>
-
-      <% if @keywords.many? %>
-        <div class='col-md-12 col-sm-4'>
-          <h4>
-            <%= fa_icon 'gavel' %>
-            Top <%= @license.id %> Keywords
-          </h4>
-          <%= render partial: 'keywords/list_keyword', collection: @keywords, as: :keyword %>
-        </div>
-      <% end %>
     </div>
   </div>
 </div>

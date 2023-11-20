@@ -5,7 +5,7 @@
     </h2>
 
     <%= form.input :repository_url, input_html: {value: @project.repository_url} %>
-    <%= form.input :licenses, include_blank: true, selected: @project.licenses, label: 'License', collection: Project.popular_licenses(:facet_limit => 60).map{|l| format_license(l['key']) } %>
+    <%= form.input :licenses, include_blank: true, selected: @project.licenses, label: 'License', collection: Spdx.licenses.keys %>
     <%= form.input :status, include_blank: @project.status.blank?, selected: @project.status, collection: Project::STATUSES - ['Hidden'] %>
     <%= form.input :notes, hint: 'Leave us some information about where you found this data so we can double check it.' %>
 

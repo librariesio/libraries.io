@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddUserIdToApiKeys < ActiveRecord::Migration[5.0]
   def change
     add_column :api_keys, :user_id, :integer

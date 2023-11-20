@@ -45,9 +45,7 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      links = raw_project["meta"].fetch("links", {}).each_with_object({}) do |(k, v), h|
-        h[k.downcase] = v
-      end
+      links = raw_project["meta"].fetch("links", {}).transform_keys(&:downcase)
       {
         name: raw_project["name"],
         homepage: links.except("github").first.try(:last),
@@ -85,7 +83,7 @@ module PackageManager
       json = get_json("https://hex.pm/api/packages/#{name}")
       json["owners"].map do |user|
         {
-          uuid: "hex-" + user["username"],
+          uuid: "hex-#{user['username']}",
           email: user["email"],
           login: user["username"],
         }

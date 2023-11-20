@@ -11,10 +11,10 @@ module PackageManager
     COLOR = "#b07219"
     MAX_DEPTH = 5
     LICENSE_STRINGS = {
-      "http://www.apache.org/licenses/LICENSE-2.0" => "Apache-2.0",
-      "http://www.eclipse.org/legal/epl-v10" => "Eclipse Public License (EPL), Version 1.0",
-      "http://www.eclipse.org/legal/epl-2.0" => "Eclipse Public License (EPL), Version 2.0",
-      "http://www.eclipse.org/org/documents/edl-v10" => "Eclipse Distribution License (EDL), Version 1.0",
+      "://www.apache.org/licenses/LICENSE-2.0" => "Apache-2.0",
+      "://www.eclipse.org/legal/epl-v10" => "Eclipse Public License (EPL), Version 1.0",
+      "://www.eclipse.org/legal/epl-2.0" => "Eclipse Public License (EPL), Version 2.0",
+      "://www.eclipse.org/org/documents/edl-v10" => "Eclipse Distribution License (EDL), Version 1.0",
     }.freeze
     NAME_DELIMITER = ":"
 
@@ -26,6 +26,7 @@ module PackageManager
       "SpringLibs" => SpringLibs,
       "Jboss" => Jboss,
       "JbossEa" => JbossEa,
+      "Google" => Google,
     }.freeze
 
     class POMNotFound < StandardError
@@ -42,14 +43,15 @@ module PackageManager
     end
 
     def self.project_names
-      get("https://maven.libraries.io/mavenCentral/all")
+      # NB this is just the most recent set of incremental updates to maven central, not all releases
+      get("https://maven.libraries.io/mavenCentral/recent")
     end
 
-    def self.project(name)
+    def self.project(name, latest: nil)
       sections = name.split(NAME_DELIMITER)
       path = sections.join("/")
 
-      latest = latest_version(name)
+      latest = latest_version(name) unless latest.present?
 
       return {} unless latest.present?
 
@@ -119,19 +121,37 @@ module PackageManager
     end
 
     def self.extract_pom_properties(xml)
-      xml.locate("properties/*").each_with_object({}) do |prop_node, all|
+      properties = xml.locate("properties/*").each_with_object({}) do |prop_node, all|
         all[prop_node.value] = prop_node.nodes.first if prop_node.respond_to?(:nodes)
       end
+
+      # <scm><url /></scm> can be found outside of <properties /> but we're only
+      # passing <properties /> to extract_pom_info() for now, even though most
+      # elements in a parent pom are inheritable (except for artifactId, name,
+      # and prerequisites) (see https://maven.apache.org/pom.html#inheritance)
+      # To ensure that the correct "scm.url" can be inherited from parent poms,
+      # we manually set "scm.url" - if it exists in the parent pom - as a
+      # property for child poms to use during interpolation.
+      if properties["scm.url"].blank? && (node = xml.locate("scm/url").first) && node.respond_to?(:nodes)
+        properties["scm.url"] = node.nodes.first
+      end
+
+      properties
+    end
+
+    def self.parse_pom_manifest(name, version, project)
+      pom_file = get_raw(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).pom(version))
+      Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file, project[:properties])
     end
 
     def self.dependencies(name, version, project)
-      pom_file = get_raw(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).pom(version))
-      Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file, project[:properties]).map do |dep|
+      parse_pom_manifest(name, version, project).map do |dep|
         {
           project_name: dep[:name],
           requirements: dep[:requirement],
           kind: dep[:type],
-          platform: formatted_name,
+          optional: dep.key?(:optional) ? dep[:optional] : false,
+          platform: db_platform,
         }
       end
     end
@@ -146,30 +166,35 @@ module PackageManager
       end
     end
 
+    def self.one_version_for_name(version, name)
+      pom = get_pom(*name.split(NAME_DELIMITER, 2), version)
+      begin
+        license_list = licenses(pom)
+      rescue StandardError
+        license_list = nil
+      end
+
+      if license_list.blank? && pom.respond_to?("project") && pom.project.locate("parent").present?
+        parent_version = extract_pom_value(pom.project, "parent/version")&.strip
+        Rails.logger.info("[POM has parent no license] name=#{name} parent_version=#{parent_version} child_version=#{version}")
+      end
+
+      {
+        number: version,
+        published_at: Time.parse(pom.locate("publishedAt").first.text),
+        original_license: license_list,
+      }
+    end
+
     def self.retrieve_versions(versions, name)
       # TODO: This should also look for the parent POM and if it exists + the child POM
       # is missing license data, use the data from the parent POM
       versions
         .map do |version|
-          pom = get_pom(*name.split(NAME_DELIMITER, 2), version)
-          begin
-            license_list = licenses(pom)
-          rescue StandardError
-            license_list = nil
-          end
-
-          if license_list.blank? && pom.respond_to?("project") && pom.project.locate("parent").present?
-            parent_version = extract_pom_value(pom.project, "parent/version")&.strip
-            Rails.logger.info("[POM has parent no license] name=#{name} parent_version=#{parent_version} child_version=#{version}")
-          end
-
-          {
-            number: version,
-            published_at: Time.parse(pom.locate("publishedAt").first.text),
-            original_license: license_list,
-          }
-      rescue Ox::Error, POMNotFound
-        next
+          one_version_for_name(version, name)
+        rescue Ox::Error, POMNotFound
+          StructuredLog.capture("MAVEN_RETRIEVE_VERSION_FAILURE", { version: version, name: name, message: "Version POM not found or valid" })
+          next
         end
         .compact
     end
@@ -225,7 +250,7 @@ module PackageManager
 
     def self.latest_version(name)
       xml_metadata = maven_metadata(name)
-      latest = Nokogiri::XML(xml_metadata)
+      Nokogiri::XML(xml_metadata)
         .css("versioning > latest, versioning > release, metadata > version")
         .map(&:text)
         .first
@@ -233,58 +258,6 @@ module PackageManager
 
     def self.db_platform
       "Maven"
-    end
-
-    class MavenUrl
-      def self.from_name(name, repo_base, delimiter = ":")
-        group_id, artifact_id = *name.split(delimiter, 2)
-
-        # Clojars names, when missing a group id, are implied to have the same group and artifact ids.
-        artifact_id = group_id if artifact_id.nil? && delimiter == PackageManager::Clojars::NAME_DELIMITER
-
-        new(group_id, artifact_id, repo_base)
-      end
-
-      def self.legal_name?(name, delimiter = ":")
-        name.present? && name.split(delimiter).size == 2
-      end
-
-      def initialize(group_id, artifact_id, repo_base)
-        @group_id = group_id
-        @artifact_id = artifact_id
-        @repo_base = repo_base
-      end
-
-      def base
-        "#{@repo_base}/#{group_path}/#{@artifact_id}"
-      end
-
-      def jar(version)
-        "#{base}/#{version}/#{@artifact_id}-#{version}.jar"
-      end
-
-      def pom(version)
-        "#{base}/#{version}/#{@artifact_id}-#{version}.pom"
-      end
-
-      # this is very specific to Maven Central
-      def search(version = nil)
-        if version
-          "http://search.maven.org/#artifactdetails%7C#{@group_id}%7C#{@artifact_id}%7C#{version}%7Cjar"
-        else
-          "http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22#{@group_id}%22%20AND%20a%3A%22#{@artifact_id}%22"
-        end
-      end
-
-      def maven_metadata
-        "#{@repo_base}/#{group_path}/#{@artifact_id}/maven-metadata.xml"
-      end
-
-      private
-
-      def group_path
-        @group_id.gsub(".", "/")
-      end
     end
   end
 end

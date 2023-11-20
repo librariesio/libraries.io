@@ -20,7 +20,7 @@ describe "API::StatusController" do
     it "renders successfully with one" do
       post url, params: { api_key: internal_user.api_key, projects: [{ name: project.name, platform: project.platform }] }
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body.include?(project.name)).to be == true
 
       # check for maintenance stats being returned
@@ -38,14 +38,14 @@ describe "API::StatusController" do
     it "renders empty json list if cannot find Project" do
       post url, params: { api_key: internal_user.api_key, projects: [{ name: "rails", platform: "rubygems" }] }
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql []
     end
 
     it "renders successfully" do
       post url, params: { api_key: internal_user.api_key, projects: [{ name: project.name, platform: "rubygems" }, { name: "django", platform: "Pypi" }] }
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body.include?(project.name)).to be == true
       expect(response.body.include?("Django")).to be == true
     end
@@ -53,7 +53,7 @@ describe "API::StatusController" do
     it "renders empty maintenance stats if they don't exist" do
       post url, params: { api_key: internal_user.api_key, projects: [{ name: project_django.name, platform: project_django.platform }] }
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
       expect(response.body.include?(project_django.name)).to be == true
 
       json_response = JSON.parse(response.body)
@@ -98,7 +98,7 @@ describe "API::StatusController" do
         }
       )
       expect(response).to have_http_status(:success)
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to start_with("application/json")
 
       project = JSON.parse(response.body).first
       expected_fields.each do |field|
@@ -152,7 +152,7 @@ describe "API::StatusController" do
       it "returns no maintenance stats or updated_at" do
         post url, params: { api_key: normal_user.api_key, projects: [{ name: project_django.name, platform: project_django.platform }] }
         expect(response).to have_http_status(:success)
-        expect(response.content_type).to eq("application/json")
+        expect(response.content_type).to start_with("application/json")
         expect(response.body.include?(project_django.name)).to be == true
 
         json_response = JSON.parse(response.body)

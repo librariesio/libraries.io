@@ -4,7 +4,7 @@
   <%= @kind if @kind != 'runtime' %>
   Dependency Tree for <%= link_to "#{@project} #{@version}", version_path(@version.to_param) %> on <%= link_to @project.platform, platform_path(@project.platform) %>
 </h1>
-<% if @date != Date.today %>
+<% if @date != nil %>
 <p>
   <small>
       As if it was resolved on <%= @date.to_formatted_s(:long_ordinal)  %>

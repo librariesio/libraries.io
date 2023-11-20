@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RenameGithubIdOnRepositoryUsers < ActiveRecord::Migration[5.0]
   def change
     rename_column :repository_users, :github_id, :uuid

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe PlatformsController do
@@ -7,7 +8,7 @@ RSpec.describe PlatformsController do
   describe "GET #index" do
     it "responds successfully", type: :request do
       visit platforms_path
-      expect(page).to have_content 'Platforms'
+      expect(page).to have_content "Platforms"
     end
   end
 

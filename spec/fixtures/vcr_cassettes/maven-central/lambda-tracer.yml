@@ -1,0 +1,1160 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/maven-metadata.xml
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4235928741519309556'
+      X-Datadog-Parent-Id:
+      - '1319147838806452338'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"a7b4a205a5b860caf023e57189a3d219"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Mon, 02 Nov 2020 22:53:44 GMT
+      X-Checksum-Md5:
+      - a7b4a205a5b860caf023e57189a3d219
+      X-Checksum-Sha1:
+      - f0109412f2b4f8fa2e5ee96dced5ad7ec183611c
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:52 GMT
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-iad-kiad7000048-IAD, cache-bos4684-BOS
+      X-Cache:
+      - HIT, MISS
+      X-Cache-Hits:
+      - 133, 0
+      X-Timer:
+      - S1699986833.928412,VS0,VE13
+      Content-Length:
+      - '526'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <metadata>
+          <groupId>com.appdynamics</groupId>
+          <artifactId>lambda-tracer</artifactId>
+          <versioning>
+            <latest>20.11.1400</latest>
+            <release>20.11.1400</release>
+            <versions>
+              <version>1.0.2-1357</version>
+              <version>1.0.2-1361</version>
+              <version>1.1.1363</version>
+              <version>1.2.1390</version>
+              <version>20.03.1391</version>
+              <version>20.11.1400</version>
+            </versions>
+            <lastUpdated>20201102225343</lastUpdated>
+          </versioning>
+        </metadata>
+  recorded_at: Tue, 14 Nov 2023 18:33:52 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/20.11.1400/lambda-tracer-20.11.1400.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '725293561509775665'
+      X-Datadog-Parent-Id:
+      - '2005814853203144126'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"6621e5453c92c317fd6526cff482435b"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Mon, 02 Nov 2020 22:43:25 GMT
+      X-Checksum-Md5:
+      - 6621e5453c92c317fd6526cff482435b
+      X-Checksum-Sha1:
+      - 30c714c122483ef6d127d64b82b991b35c8e2a32
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:52 GMT
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-iad-kiad7000076-IAD, cache-bos4684-BOS
+      X-Cache:
+      - HIT, MISS
+      X-Cache-Hits:
+      - 10, 0
+      X-Timer:
+      - S1699986833.964902,VS0,VE19
+      Content-Length:
+      - '1315'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.appdynamics</groupId>
+          <artifactId>lambda-tracer</artifactId>
+          <version>20.11.1400</version>
+          <name>AppDynamics Lambda Tracer</name>
+          <description>AppDynamics Monitoring for AWS Lambda</description>
+          <url>http://appdynamics.com</url>
+          <licenses>
+            <license>
+              <url>https://legal.appdynamics.com/AppDynamics_EULA_(Americas).pdf</url>
+            </license>
+          </licenses>
+          <developers>
+            <developer>
+              <id>ad</id>
+              <name>AppDynamics Inc.</name>
+              <email>info@appdynamics.com</email>
+            </developer>
+          </developers>
+          <scm>
+            <connection>scm:git:git@github.com:Appdynamics/lambda-tracer.git</connection>
+            <url>git:git@github.com:Appdynamics/lambda-tracer.git</url>
+          </scm>
+          <dependencyManagement>
+            <dependencies>
+              <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.228</version>
+                <scope>import</scope>
+                <type>pom</type>
+              </dependency>
+            </dependencies>
+          </dependencyManagement>
+        </project>
+  recorded_at: Tue, 14 Nov 2023 18:33:52 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2819566557079577265'
+      X-Datadog-Parent-Id:
+      - '1963954543615842183'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 302
+      message: ''
+    headers:
+      X-Amz-Error-Code:
+      - Found
+      X-Amz-Error-Message:
+      - Resource Found
+      Location:
+      - "/maven2/com/appdynamics/lambda-tracer/"
+      Content-Type:
+      - text/html; charset=utf-8
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:53 GMT
+      Age:
+      - '246'
+      X-Served-By:
+      - cache-iad-kcgs7200059-IAD, cache-bos4684-BOS
+      X-Cache:
+      - MISS, HIT
+      X-Cache-Hits:
+      - 0, 1
+      X-Timer:
+      - S1699986833.118977,VS0,VE1
+      Vary:
+      - Fastly-SSL,
+      Content-Length:
+      - '313'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <html>
+        <head><title>302 Moved Temporarily</title></head>
+        <body>
+        <h1>302 Moved Temporarily</h1>
+        <ul>
+        <li>Code: Found</li>
+        <li>Message: Resource Found</li>
+        <li>RequestId: JKTQ635VFD5SB929</li>
+        <li>HostId: kc4SnLrb4bwjNzR0s8fHcd6PO+DjStMkggag5sTzt2ayYdQ4mzhW9kDOSSmOS/v9ZKwMbve87L4=</li>
+        </ul>
+        <hr/>
+        </body>
+        </html>
+  recorded_at: Tue, 14 Nov 2023 18:33:53 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1192687131530459947'
+      X-Datadog-Parent-Id:
+      - '2745761063158960858'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Last-Modified:
+      - Mon, 02 Nov 2020 23:49:53 GMT
+      Etag:
+      - '"631ce5b06336580ab92c577c170495a9"'
+      Content-Type:
+      - text/html
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:53 GMT
+      Age:
+      - '246'
+      X-Served-By:
+      - cache-iad-kcgs7200123-IAD, cache-bos4684-BOS
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 121, 1
+      X-Timer:
+      - S1699986833.134883,VS0,VE1
+      Content-Length:
+      - '1663'
+    body:
+      encoding: ASCII-8BIT
+      string: "<!DOCTYPE html>\n<html>\n\n<head>\n\t<title>Central Repository: com/appdynamics/lambda-tracer</title>\n\t<meta
+        name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n\t<style>\nbody
+        {\n\tbackground: #fff;\n}\n\t</style>\n</head>\n\n<body>\n\t<header>\n\t\t<h1>com/appdynamics/lambda-tracer</h1>\n\t</header>\n\t<hr/>\n\t<main>\n\t\t<pre
+        id=\"contents\">\n<a href=\"../\">../</a>\n<a href=\"1.1.1363/\" title=\"1.1.1363/\">1.1.1363/</a>
+        \                                        2019-06-26 21:58         -      \n<a
+        href=\"1.2.1390/\" title=\"1.2.1390/\">1.2.1390/</a>                                         2020-02-20
+        21:00         -      \n<a href=\"20.03.1391/\" title=\"20.03.1391/\">20.03.1391/</a>
+        \                                      2020-03-17 16:06         -      \n<a
+        href=\"20.11.1400/\" title=\"20.11.1400/\">20.11.1400/</a>                                       2020-11-02
+        22:43         -      \n<a href=\"maven-metadata.xml\" title=\"maven-metadata.xml\">maven-metadata.xml</a>
+        \                               2020-11-02 22:53       526      \n<a href=\"maven-metadata.xml.md5\"
+        title=\"maven-metadata.xml.md5\">maven-metadata.xml.md5</a>                            2020-11-02
+        22:53        32      \n<a href=\"maven-metadata.xml.sha1\" title=\"maven-metadata.xml.sha1\">maven-metadata.xml.sha1</a>
+        \                          2020-11-02 22:53        40      \n<a href=\"maven-metadata.xml.sha256\"
+        title=\"maven-metadata.xml.sha256\">maven-metadata.xml.sha256</a>                         2020-11-02
+        22:53        64      \n<a href=\"maven-metadata.xml.sha512\" title=\"maven-metadata.xml.sha512\">maven-metadata.xml.sha512</a>
+        \                        2020-11-02 22:53       128      \n\t\t</pre>\n\t</main>\n\t<hr/>\n</body>\n\n</html>"
+  recorded_at: Tue, 14 Nov 2023 18:33:53 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/1.1.1363/lambda-tracer-1.1.1363.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2821793639989170820'
+      X-Datadog-Parent-Id:
+      - '3969972856700017117'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"0a8559bd12731ce41c36965f6e1e1894"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Wed, 26 Jun 2019 21:58:10 GMT
+      X-Checksum-Md5:
+      - 0a8559bd12731ce41c36965f6e1e1894
+      X-Checksum-Sha1:
+      - a356dba2b712f8e879bb888a18cc1bb8eaf8ab2e
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:53 GMT
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-iad-kjyo7100170-IAD, cache-bos4684-BOS
+      X-Cache:
+      - HIT, MISS
+      X-Cache-Hits:
+      - 35, 0
+      X-Timer:
+      - S1699986833.151111,VS0,VE13
+      Content-Length:
+      - '1313'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.appdynamics</groupId>
+          <artifactId>lambda-tracer</artifactId>
+          <version>1.1.1363</version>
+          <name>AppDynamics Lambda Tracer</name>
+          <description>AppDynamics Monitoring for AWS Lambda</description>
+          <url>http://appdynamics.com</url>
+          <licenses>
+            <license>
+              <url>https://legal.appdynamics.com/AppDynamics_EULA_(Americas).pdf</url>
+            </license>
+          </licenses>
+          <developers>
+            <developer>
+              <id>ad</id>
+              <name>AppDynamics Inc.</name>
+              <email>info@appdynamics.com</email>
+            </developer>
+          </developers>
+          <scm>
+            <connection>scm:git:git@github.com:Appdynamics/lambda-tracer.git</connection>
+            <url>git:git@github.com:Appdynamics/lambda-tracer.git</url>
+          </scm>
+          <dependencyManagement>
+            <dependencies>
+              <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.228</version>
+                <scope>import</scope>
+                <type>pom</type>
+              </dependency>
+            </dependencies>
+          </dependencyManagement>
+        </project>
+  recorded_at: Tue, 14 Nov 2023 18:33:53 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/1.2.1390/lambda-tracer-1.2.1390.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2564397983334011195'
+      X-Datadog-Parent-Id:
+      - '3670720560715608415'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"940f720a9b5970071befe5f9e1ff11a3"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Thu, 20 Feb 2020 21:00:44 GMT
+      X-Checksum-Md5:
+      - 940f720a9b5970071befe5f9e1ff11a3
+      X-Checksum-Sha1:
+      - 5ec381f4a0fff6dd6be3ed561282971c4c89722b
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:53 GMT
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-iad-kiad7000120-IAD, cache-bos4684-BOS
+      X-Cache:
+      - HIT, MISS
+      X-Cache-Hits:
+      - 25, 0
+      X-Timer:
+      - S1699986833.181021,VS0,VE24
+      Content-Length:
+      - '1313'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.appdynamics</groupId>
+          <artifactId>lambda-tracer</artifactId>
+          <version>1.2.1390</version>
+          <name>AppDynamics Lambda Tracer</name>
+          <description>AppDynamics Monitoring for AWS Lambda</description>
+          <url>http://appdynamics.com</url>
+          <licenses>
+            <license>
+              <url>https://legal.appdynamics.com/AppDynamics_EULA_(Americas).pdf</url>
+            </license>
+          </licenses>
+          <developers>
+            <developer>
+              <id>ad</id>
+              <name>AppDynamics Inc.</name>
+              <email>info@appdynamics.com</email>
+            </developer>
+          </developers>
+          <scm>
+            <connection>scm:git:git@github.com:Appdynamics/lambda-tracer.git</connection>
+            <url>git:git@github.com:Appdynamics/lambda-tracer.git</url>
+          </scm>
+          <dependencyManagement>
+            <dependencies>
+              <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.228</version>
+                <scope>import</scope>
+                <type>pom</type>
+              </dependency>
+            </dependencies>
+          </dependencyManagement>
+        </project>
+  recorded_at: Tue, 14 Nov 2023 18:33:53 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/20.03.1391/lambda-tracer-20.03.1391.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2520756335764367846'
+      X-Datadog-Parent-Id:
+      - '3130251109357192676'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"f82b0c5755a1877e30d019ac860c30a8"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Tue, 17 Mar 2020 16:06:17 GMT
+      X-Checksum-Md5:
+      - f82b0c5755a1877e30d019ac860c30a8
+      X-Checksum-Sha1:
+      - d89abc7fa315841387016898ebb8a8965c5fc3c3
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:53 GMT
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-iad-kcgs7200116-IAD, cache-bos4684-BOS
+      X-Cache:
+      - HIT, MISS
+      X-Cache-Hits:
+      - 24, 0
+      X-Timer:
+      - S1699986833.227294,VS0,VE14
+      Content-Length:
+      - '1315'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.appdynamics</groupId>
+          <artifactId>lambda-tracer</artifactId>
+          <version>20.03.1391</version>
+          <name>AppDynamics Lambda Tracer</name>
+          <description>AppDynamics Monitoring for AWS Lambda</description>
+          <url>http://appdynamics.com</url>
+          <licenses>
+            <license>
+              <url>https://legal.appdynamics.com/AppDynamics_EULA_(Americas).pdf</url>
+            </license>
+          </licenses>
+          <developers>
+            <developer>
+              <id>ad</id>
+              <name>AppDynamics Inc.</name>
+              <email>info@appdynamics.com</email>
+            </developer>
+          </developers>
+          <scm>
+            <connection>scm:git:git@github.com:Appdynamics/lambda-tracer.git</connection>
+            <url>git:git@github.com:Appdynamics/lambda-tracer.git</url>
+          </scm>
+          <dependencyManagement>
+            <dependencies>
+              <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.228</version>
+                <scope>import</scope>
+                <type>pom</type>
+              </dependency>
+            </dependencies>
+          </dependencyManagement>
+        </project>
+  recorded_at: Tue, 14 Nov 2023 18:33:53 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/20.11.1400/lambda-tracer-20.11.1400.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3513296333894628666'
+      X-Datadog-Parent-Id:
+      - '2948478668425562620'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"6621e5453c92c317fd6526cff482435b"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Mon, 02 Nov 2020 22:43:25 GMT
+      X-Checksum-Md5:
+      - 6621e5453c92c317fd6526cff482435b
+      X-Checksum-Sha1:
+      - 30c714c122483ef6d127d64b82b991b35c8e2a32
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:53 GMT
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-iad-kiad7000076-IAD, cache-bos4684-BOS
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 10, 1
+      X-Timer:
+      - S1699986833.257606,VS0,VE0
+      Content-Length:
+      - '1315'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.appdynamics</groupId>
+          <artifactId>lambda-tracer</artifactId>
+          <version>20.11.1400</version>
+          <name>AppDynamics Lambda Tracer</name>
+          <description>AppDynamics Monitoring for AWS Lambda</description>
+          <url>http://appdynamics.com</url>
+          <licenses>
+            <license>
+              <url>https://legal.appdynamics.com/AppDynamics_EULA_(Americas).pdf</url>
+            </license>
+          </licenses>
+          <developers>
+            <developer>
+              <id>ad</id>
+              <name>AppDynamics Inc.</name>
+              <email>info@appdynamics.com</email>
+            </developer>
+          </developers>
+          <scm>
+            <connection>scm:git:git@github.com:Appdynamics/lambda-tracer.git</connection>
+            <url>git:git@github.com:Appdynamics/lambda-tracer.git</url>
+          </scm>
+          <dependencyManagement>
+            <dependencies>
+              <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.228</version>
+                <scope>import</scope>
+                <type>pom</type>
+              </dependency>
+            </dependencies>
+          </dependencyManagement>
+        </project>
+  recorded_at: Tue, 14 Nov 2023 18:33:53 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/1.1.1363/lambda-tracer-1.1.1363.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3466144632753936703'
+      X-Datadog-Parent-Id:
+      - '2955380507480321190'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"0a8559bd12731ce41c36965f6e1e1894"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Wed, 26 Jun 2019 21:58:10 GMT
+      X-Checksum-Md5:
+      - 0a8559bd12731ce41c36965f6e1e1894
+      X-Checksum-Sha1:
+      - a356dba2b712f8e879bb888a18cc1bb8eaf8ab2e
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:53 GMT
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-iad-kjyo7100170-IAD, cache-bos4684-BOS
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 35, 1
+      X-Timer:
+      - S1699986833.307208,VS0,VE0
+      Content-Length:
+      - '1313'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.appdynamics</groupId>
+          <artifactId>lambda-tracer</artifactId>
+          <version>1.1.1363</version>
+          <name>AppDynamics Lambda Tracer</name>
+          <description>AppDynamics Monitoring for AWS Lambda</description>
+          <url>http://appdynamics.com</url>
+          <licenses>
+            <license>
+              <url>https://legal.appdynamics.com/AppDynamics_EULA_(Americas).pdf</url>
+            </license>
+          </licenses>
+          <developers>
+            <developer>
+              <id>ad</id>
+              <name>AppDynamics Inc.</name>
+              <email>info@appdynamics.com</email>
+            </developer>
+          </developers>
+          <scm>
+            <connection>scm:git:git@github.com:Appdynamics/lambda-tracer.git</connection>
+            <url>git:git@github.com:Appdynamics/lambda-tracer.git</url>
+          </scm>
+          <dependencyManagement>
+            <dependencies>
+              <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.228</version>
+                <scope>import</scope>
+                <type>pom</type>
+              </dependency>
+            </dependencies>
+          </dependencyManagement>
+        </project>
+  recorded_at: Tue, 14 Nov 2023 18:33:53 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/1.2.1390/lambda-tracer-1.2.1390.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1182779076227606475'
+      X-Datadog-Parent-Id:
+      - '4486714259580522009'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"940f720a9b5970071befe5f9e1ff11a3"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Thu, 20 Feb 2020 21:00:44 GMT
+      X-Checksum-Md5:
+      - 940f720a9b5970071befe5f9e1ff11a3
+      X-Checksum-Sha1:
+      - 5ec381f4a0fff6dd6be3ed561282971c4c89722b
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:53 GMT
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-iad-kiad7000120-IAD, cache-bos4684-BOS
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 25, 1
+      X-Timer:
+      - S1699986833.369255,VS0,VE0
+      Content-Length:
+      - '1313'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.appdynamics</groupId>
+          <artifactId>lambda-tracer</artifactId>
+          <version>1.2.1390</version>
+          <name>AppDynamics Lambda Tracer</name>
+          <description>AppDynamics Monitoring for AWS Lambda</description>
+          <url>http://appdynamics.com</url>
+          <licenses>
+            <license>
+              <url>https://legal.appdynamics.com/AppDynamics_EULA_(Americas).pdf</url>
+            </license>
+          </licenses>
+          <developers>
+            <developer>
+              <id>ad</id>
+              <name>AppDynamics Inc.</name>
+              <email>info@appdynamics.com</email>
+            </developer>
+          </developers>
+          <scm>
+            <connection>scm:git:git@github.com:Appdynamics/lambda-tracer.git</connection>
+            <url>git:git@github.com:Appdynamics/lambda-tracer.git</url>
+          </scm>
+          <dependencyManagement>
+            <dependencies>
+              <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.228</version>
+                <scope>import</scope>
+                <type>pom</type>
+              </dependency>
+            </dependencies>
+          </dependencyManagement>
+        </project>
+  recorded_at: Tue, 14 Nov 2023 18:33:53 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/20.03.1391/lambda-tracer-20.03.1391.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '389998858112681443'
+      X-Datadog-Parent-Id:
+      - '3998382217038005796'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"f82b0c5755a1877e30d019ac860c30a8"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Tue, 17 Mar 2020 16:06:17 GMT
+      X-Checksum-Md5:
+      - f82b0c5755a1877e30d019ac860c30a8
+      X-Checksum-Sha1:
+      - d89abc7fa315841387016898ebb8a8965c5fc3c3
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:53 GMT
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-iad-kcgs7200116-IAD, cache-bos4684-BOS
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 24, 1
+      X-Timer:
+      - S1699986833.406996,VS0,VE0
+      Content-Length:
+      - '1315'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.appdynamics</groupId>
+          <artifactId>lambda-tracer</artifactId>
+          <version>20.03.1391</version>
+          <name>AppDynamics Lambda Tracer</name>
+          <description>AppDynamics Monitoring for AWS Lambda</description>
+          <url>http://appdynamics.com</url>
+          <licenses>
+            <license>
+              <url>https://legal.appdynamics.com/AppDynamics_EULA_(Americas).pdf</url>
+            </license>
+          </licenses>
+          <developers>
+            <developer>
+              <id>ad</id>
+              <name>AppDynamics Inc.</name>
+              <email>info@appdynamics.com</email>
+            </developer>
+          </developers>
+          <scm>
+            <connection>scm:git:git@github.com:Appdynamics/lambda-tracer.git</connection>
+            <url>git:git@github.com:Appdynamics/lambda-tracer.git</url>
+          </scm>
+          <dependencyManagement>
+            <dependencies>
+              <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.228</version>
+                <scope>import</scope>
+                <type>pom</type>
+              </dependency>
+            </dependencies>
+          </dependencyManagement>
+        </project>
+  recorded_at: Tue, 14 Nov 2023 18:33:53 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/20.11.1400/lambda-tracer-20.11.1400.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2127390582545979276'
+      X-Datadog-Parent-Id:
+      - '2615287101019223361'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"6621e5453c92c317fd6526cff482435b"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Mon, 02 Nov 2020 22:43:25 GMT
+      X-Checksum-Md5:
+      - 6621e5453c92c317fd6526cff482435b
+      X-Checksum-Sha1:
+      - 30c714c122483ef6d127d64b82b991b35c8e2a32
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:53 GMT
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-iad-kiad7000076-IAD, cache-bos4684-BOS
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 10, 2
+      X-Timer:
+      - S1699986833.433395,VS0,VE0
+      Content-Length:
+      - '1315'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.appdynamics</groupId>
+          <artifactId>lambda-tracer</artifactId>
+          <version>20.11.1400</version>
+          <name>AppDynamics Lambda Tracer</name>
+          <description>AppDynamics Monitoring for AWS Lambda</description>
+          <url>http://appdynamics.com</url>
+          <licenses>
+            <license>
+              <url>https://legal.appdynamics.com/AppDynamics_EULA_(Americas).pdf</url>
+            </license>
+          </licenses>
+          <developers>
+            <developer>
+              <id>ad</id>
+              <name>AppDynamics Inc.</name>
+              <email>info@appdynamics.com</email>
+            </developer>
+          </developers>
+          <scm>
+            <connection>scm:git:git@github.com:Appdynamics/lambda-tracer.git</connection>
+            <url>git:git@github.com:Appdynamics/lambda-tracer.git</url>
+          </scm>
+          <dependencyManagement>
+            <dependencies>
+              <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.228</version>
+                <scope>import</scope>
+                <type>pom</type>
+              </dependency>
+            </dependencies>
+          </dependencyManagement>
+        </project>
+  recorded_at: Tue, 14 Nov 2023 18:33:53 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/com/appdynamics/lambda-tracer/1.0.2-1361/lambda-tracer-1.0.2-1361.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4310615569623405557'
+      X-Datadog-Parent-Id:
+      - '2061021909246129839'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 404
+      message: ''
+    headers:
+      Last-Modified:
+      - Wed, 10 Aug 2016 15:08:35 GMT
+      X-Amz-Version-Id:
+      - 'null'
+      Etag:
+      - '"1fb066da6a67c7c02962f59b4b8cd1ee"'
+      X-Amz-Error-Code:
+      - NoSuchKey
+      X-Amz-Error-Message:
+      - The specified key does not exist.
+      X-Amz-Error-Detail-Key:
+      - maven2/com/appdynamics/lambda-tracer/1.0.2-1361/lambda-tracer-1.0.2-1361.pom
+      X-Amz-Request-Id:
+      - C2GA8QVJD8QS9R71
+      X-Amz-Id-2:
+      - ueO14jspgtdDWBqQ2O3UoWgKc63Vy6QnP+6UWJhD8v5X0SmwnBwyRcHqX9usOzhyNnHGb3aPVEI=
+      Content-Type:
+      - text/html
+      Server:
+      - AmazonS3
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 14 Nov 2023 18:33:53 GMT
+      Age:
+      - '0'
+      X-Served-By:
+      - cache-iad-kcgs7200059-IAD, cache-bos4684-BOS
+      X-Cache:
+      - MISS, MISS
+      X-Cache-Hits:
+      - 0, 0
+      X-Timer:
+      - S1699986833.466671,VS0,VE61
+      Content-Length:
+      - '554'
+    body:
+      encoding: ASCII-8BIT
+      string: |+
+        <html>
+        <head><title>404 Not Found</title></head>
+        <body bgcolor="white">
+        <center><h1>404 Not Found</h1></center>
+        <hr><center>nginx</center>
+        </body>
+        </html>
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+        <!-- a padding to disable MSIE and Chrome friendly error page -->
+
+
+
+  recorded_at: Tue, 14 Nov 2023 18:33:53 GMT
+recorded_with: VCR 6.2.0
+...

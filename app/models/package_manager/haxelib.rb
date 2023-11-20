@@ -27,7 +27,7 @@ module PackageManager
     def self.recent_names
       u = "https://lib.haxe.org/rss/"
       titles = SimpleRSS.parse(get_raw(u)).items.map(&:title)
-      titles.map { |t| t.split(" ").first }.uniq
+      titles.map { |t| t.split.first }.uniq
     end
 
     def self.project(name)
@@ -65,7 +65,8 @@ module PackageManager
           platform: self.name.demodulize,
         }
       end
-    rescue StandardError
+    rescue StandardError => e
+      StructuredLog.capture("DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: version, error_klass: e.class.to_s, error: e.message })
       []
     end
   end

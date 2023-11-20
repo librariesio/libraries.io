@@ -10,7 +10,7 @@ class Api::VersionsController < Api::BulkProjectController
 
     @versions = Version
       .includes(:project)
-      .where.not(projects: {id: nil})
+      .where.not(projects: { id: nil })
       .where(
         "versions.updated_at > ?",
         Time.parse(params.require(:since))

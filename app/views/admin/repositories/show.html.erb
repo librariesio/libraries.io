@@ -13,7 +13,7 @@
       <%= @repository.description %>
     </p>
 
-    <%= form.input :license, include_blank: true, selected: @repository.license, label: 'License', collection: Project.popular_licenses(:facet_limit => 100).map{|l| format_license(l['key']) } %>
+    <%= form.input :license, include_blank: true, selected: @repository.license, label: 'License', collection: Spdx.licenses.keys %>
     <%= form.input :status, include_blank: true, collection: Repository::STATUSES %>
 
     <%= form.submit class: 'btn btn-primary' %>

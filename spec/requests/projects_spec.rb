@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ProjectsController do
@@ -9,21 +10,7 @@ RSpec.describe ProjectsController do
   describe "GET #index" do
     it "responds successfully", type: :request do
       visit root_path
-      expect(page).to have_content 'Libraries.io'
-    end
-  end
-
-  describe "GET #trending" do
-    it "responds successfully", type: :request do
-      visit trending_path
-      expect(page).to have_content 'Trending'
-    end
-
-    context "filtered by platform" do
-      it "responds successfully" do
-        visit trending_path(platform: 'Rubygems')
-        expect(page).to have_content 'Trending'
-      end
+      expect(page).to have_content "Libraries.io"
     end
   end
 
@@ -50,7 +37,7 @@ RSpec.describe ProjectsController do
 
   describe "GET #about" do
     it "responds successfully", type: :request do
-      visit project_path(project.to_param.merge(format: 'about'))
+      visit project_path(project.to_param.merge(format: "about"))
       expect(page).to have_content project.name
     end
   end

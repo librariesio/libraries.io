@@ -246,8 +246,10 @@ describe Project, type: :model do
   end
 
   describe "#check_status" do
+    before { travel_to DateTime.current }
+
     context "entire project deprecated with message" do
-      let!(:project) { Project.create(platform: "NPM", name: "jade", status: "") }
+      let!(:project) { Project.create(platform: "NPM", name: "jade", status: "", updated_at: 1.week.ago) }
 
       it "should use the result of entire_package_deprecation_info" do
         VCR.use_cassette("project/check_status/jade") do
@@ -257,12 +259,14 @@ describe Project, type: :model do
 
           expect(project.status).to eq("Deprecated")
           expect(project.deprecation_reason).not_to eq(nil)
+          expect(project.status_checked_at).to eq(DateTime.current)
+          expect(project.updated_at).to eq(DateTime.current)
         end
       end
     end
 
     context "some of project deprecated" do
-      let!(:project) { Project.create(platform: "NPM", name: "react", status: "") }
+      let!(:project) { Project.create(platform: "NPM", name: "react", status: nil, updated_at: 1.week.ago) }
 
       it "should use the result of entire_package_deprecation_info" do
         VCR.use_cassette("project/check_status/react") do
@@ -270,13 +274,16 @@ describe Project, type: :model do
 
           project.reload
 
-          expect(project.status).to eq("")
+          expect(project.status).to eq(nil)
+          # Since there was no change, update status_checked_at but do not update updated_at
+          expect(project.status_checked_at).to eq(DateTime.current)
+          expect(project.updated_at).to eq(1.week.ago)
         end
       end
     end
 
     context "deprecated project no longer deprecated" do
-      let!(:project) { Project.create(platform: "NPM", name: "react", status: "Deprecated") }
+      let!(:project) { Project.create(platform: "NPM", name: "react", status: "Deprecated", updated_at: 1.week.ago) }
 
       it "should mark the project no longer deprecated" do
         VCR.use_cassette("project/check_status/react") do
@@ -284,8 +291,40 @@ describe Project, type: :model do
 
           project.reload
 
-          expect(project.status).to eq("")
+          expect(project.status).to eq(nil)
           expect(project.deprecation_reason).to eq(nil)
+          expect(project.status_checked_at).to eq(DateTime.current)
+          expect(project.updated_at).to eq(DateTime.current)
+        end
+      end
+    end
+
+    context "removed project no longer removed" do
+      context "when package manager can have entire package deprecated" do
+        let!(:project) { Project.create(platform: "NPM", name: "react", status: "Removed") }
+
+        it "should mark the project no longer removed" do
+          VCR.use_cassette("project/check_status/react") do
+            project.check_status
+
+            project.reload
+
+            expect(project.status).to eq(nil)
+          end
+        end
+      end
+
+      context "when package manager cannot have entire package deprecated" do
+        let!(:project) { Project.create(platform: "Rubygems", name: "rails", status: "Removed") }
+
+        it "should mark the project no longer removed" do
+          VCR.use_cassette("project/check_status/rails") do
+            project.check_status
+
+            project.reload
+
+            expect(project.status).to eq(nil)
+          end
         end
       end
     end
@@ -388,6 +427,65 @@ describe Project, type: :model do
 
       it "returns the latest created release" do
         expect(project.latest_release).to eql(older_release)
+      end
+    end
+  end
+
+  describe "manual_sync" do
+    let!(:project) { create(:project, platform: "Rubygems", name: "my_gem") }
+
+    before { allow(PackageManagerDownloadWorker).to receive(:perform_async) }
+
+    it "sends option to sync all dependencies to download worker" do
+      project.manual_sync
+
+      expect(PackageManagerDownloadWorker).to have_received(:perform_async).with(
+        "PackageManager::Rubygems",
+        project.name,
+        nil,
+        "project",
+        0,
+        true
+      )
+    end
+  end
+
+  describe "::platform" do
+    subject(:scoped_collection) { described_class.platform(given_platforms) }
+
+    let!(:ruby1) { create(:project, :rubygems) }
+    let!(:ruby2) { create(:project, :rubygems) }
+    let!(:npm1) { create(:project, :npm) }
+
+    context "mismatched case" do
+      let(:given_platforms) { "RubyGems" }
+
+      it "includes all matches" do
+        expect(scoped_collection).to match_array([ruby1, ruby2])
+      end
+    end
+
+    context "exact case" do
+      let(:given_platforms) { "Rubygems" }
+
+      it "includes all matches" do
+        expect(scoped_collection).to match_array([ruby1, ruby2])
+      end
+    end
+
+    context "other" do
+      let(:given_platforms) { "foo" }
+
+      it "is empty" do
+        expect(scoped_collection).to be_empty
+      end
+    end
+
+    context "multiple" do
+      let(:given_platforms) { %w[RubyGems NPm] }
+
+      it "can match any" do
+        expect(scoped_collection).to match_array([ruby1, ruby2, npm1])
       end
     end
   end

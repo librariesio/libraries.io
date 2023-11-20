@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class DropEvenMoreUnusedIndexes < ActiveRecord::Migration[5.0]
   def change
     remove_index :versions, column: :created_at

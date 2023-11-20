@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_133104) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_11_16_161641) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -65,6 +64,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_133104) do
     t.string "requirements"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index "project_id, ((created_at)::date)", name: "index_dependencies_on_project_created_at_date"
     t.index ["project_id"], name: "index_dependencies_on_project_id"
     t.index ["version_id"], name: "index_dependencies_on_version_id"
   end
@@ -168,6 +168,8 @@ ActiveRecord::Schema.define(version: 2021_03_24_133104) do
     t.boolean "license_set_by_admin", default: false
     t.boolean "license_normalized", default: false
     t.text "deprecation_reason"
+    t.datetime "status_checked_at"
+    t.boolean "lifted", default: false
     t.index "lower((language)::text)", name: "index_projects_on_lower_language"
     t.index "lower((platform)::text), lower((name)::text)", name: "index_projects_on_platform_and_name_lower"
     t.index ["created_at"], name: "index_projects_on_created_at"
@@ -175,9 +177,11 @@ ActiveRecord::Schema.define(version: 2021_03_24_133104) do
     t.index ["keywords_array"], name: "index_projects_on_keywords_array", using: :gin
     t.index ["normalized_licenses"], name: "index_projects_on_normalized_licenses", using: :gin
     t.index ["platform", "dependents_count"], name: "index_projects_on_platform_and_dependents_count"
+    t.index ["platform", "language", "id"], name: "index_projects_on_maintained", where: "(((status)::text = ANY ((ARRAY['Active'::character varying, 'Help Wanted'::character varying])::text[])) OR (status IS NULL))"
     t.index ["platform", "name"], name: "index_projects_on_platform_and_name", unique: true
     t.index ["repository_id"], name: "index_projects_on_repository_id"
     t.index ["status"], name: "index_projects_on_status"
+    t.index ["status_checked_at"], name: "index_projects_on_status_checked_at"
     t.index ["updated_at"], name: "index_projects_on_updated_at"
     t.index ["versions_count"], name: "index_projects_on_versions_count"
   end
@@ -257,6 +261,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_133104) do
     t.index ["fork"], name: "index_repositories_on_fork"
     t.index ["host_type", "uuid"], name: "index_repositories_on_host_type_and_uuid", unique: true
     t.index ["private"], name: "index_repositories_on_private"
+    t.index ["rank", "stargazers_count", "id"], name: "index_repositories_on_rank_and_stargazers_count_and_id"
     t.index ["repository_organisation_id"], name: "index_repositories_on_repository_organisation_id"
     t.index ["repository_user_id"], name: "index_repositories_on_repository_user_id"
     t.index ["source_name"], name: "index_repositories_on_source_name"
@@ -274,6 +279,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_133104) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "repository_id"
+    t.index "project_id, ((created_at)::date)", name: "index_repository_dependencies_on_project_created_at_date"
     t.index ["manifest_id"], name: "index_repository_dependencies_on_manifest_id"
     t.index ["project_id"], name: "index_repository_dependencies_on_project_id"
     t.index ["repository_id"], name: "index_repository_dependencies_on_repository_id"
@@ -285,6 +291,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_133104) do
     t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["repository_id", "category"], name: "index_repository_maintenance_stats_on_repository_and_category", unique: true
     t.index ["repository_id"], name: "index_repository_maintenance_stats_on_repository_id"
   end
 
@@ -401,6 +408,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_133104) do
     t.datetime "researched_at"
     t.jsonb "repository_sources"
     t.string "status"
+    t.integer "dependencies_count"
     t.index ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true
     t.index ["updated_at"], name: "index_versions_on_updated_at"
   end
@@ -413,6 +421,9 @@ ActiveRecord::Schema.define(version: 2021_03_24_133104) do
     t.datetime "last_sent_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "all_project_updates", default: false, null: false
+    t.string "shared_secret"
+    t.index ["all_project_updates"], name: "index_web_hooks_on_all_project_updates"
     t.index ["repository_id"], name: "index_web_hooks_on_repository_id"
   end
 

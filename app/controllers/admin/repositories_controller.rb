@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Admin::RepositoriesController < Admin::ApplicationController
   def show
     @repository = Repository.find(params[:id])
@@ -26,40 +27,26 @@ class Admin::RepositoriesController < Admin::ApplicationController
     if params[:language].present?
       @language = Linguist::Language[params[:language]].try(:to_s)
       raise ActiveRecord::RecordNotFound if @language.nil?
+
       scope = Repository.language(@language)
     else
       scope = Repository
     end
 
-    @languages = Repository.maintained.without_license.with_projects.group('repositories.language').count.sort_by(&:last).reverse.first(20)
+    @languages = Repository.maintained.without_license.with_projects.group("repositories.language").count.sort_by(&:last).reverse.first(20)
     @repositories = scope.maintained.without_license.with_projects.order(Arel.sql("COUNT(projects.id) DESC")).group("repositories.id").paginate(page: params[:page])
-  end
-
-  def deprecated
-    search('deprecated')
-  end
-
-  def unmaintained
-    search('unmaintained')
   end
 
   def destroy
     @repository = Repository.find(params[:id])
     @repository.destroy
-    redirect_to admin_stats_path, notice: 'Repository deleted'
+    redirect_to admin_stats_path, notice: "Repository deleted"
   end
 
   private
 
   def repository_params
     params.require(:repository).permit(:license, :status)
-  end
-
-  def search(query)
-    @search = Repository.search(query, must_not: [
-      terms: { "status" => ["Unmaintained","Active","Deprecated"] }
-    ], sort: 'stargazers_count').paginate(page: params[:page])
-    @repositories = @search.records
   end
 
   def change(method)

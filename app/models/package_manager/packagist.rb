@@ -48,18 +48,18 @@ module PackageManager
       updated = SimpleRSS.parse(get_raw(u)).items.map(&:title)
       u = "https://packagist.org/feeds/packages.rss"
       new_packages = SimpleRSS.parse(get_raw(u)).items.map(&:title)
-      (updated.map { |t| t.split(" ").first } + new_packages).uniq
+      (updated.map { |t| t.split.first } + new_packages).uniq
     end
 
     def self.project(name)
       # The main v2 endpoint only returns a list of versions (no single source-of-truth for the project)
       # and excludes dev versions, so if that list of versions is empty, fallback to the dev list of versions.
-      get("https://repo.packagist.org/p2/#{name}.json")&.dig("packages", name).presence || 
+      get("https://repo.packagist.org/p2/#{name}.json")&.dig("packages", name).presence ||
         get("https://repo.packagist.org/p2/#{name}~dev.json")&.dig("packages", name)
     end
 
-    def self.deprecation_info(name)
-      is_deprecated = project(name)&.first&.dig("abandoned") || ""
+    def self.deprecation_info(db_project)
+      is_deprecated = project(db_project.name)&.first&.dig("abandoned") || ""
 
       {
         is_deprecated: is_deprecated != "",
@@ -105,7 +105,7 @@ module PackageManager
     end
 
     def self.dependencies(_name, version, mapped_project)
-      vers = mapped_project[:versions][version]
+      vers = mapped_project[:versions].find { |v| v["version"] == version }
       return [] if vers.nil?
 
       map_dependencies(vers.fetch("require", {}).reject { |k, _v| k == "php" }, "runtime") +

@@ -1,5 +1,28 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: versions
+#
+#  id                         :integer          not null, primary key
+#  dependencies_count         :integer
+#  number                     :string
+#  original_license           :jsonb
+#  published_at               :datetime
+#  repository_sources         :jsonb
+#  researched_at              :datetime
+#  runtime_dependencies_count :integer
+#  spdx_expression            :string
+#  status                     :string
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  project_id                 :integer
+#
+# Indexes
+#
+#  index_versions_on_project_id_and_number  (project_id,number) UNIQUE
+#  index_versions_on_updated_at             (updated_at)
+#
 class Version < ApplicationRecord
   include Releaseable
 
@@ -26,10 +49,17 @@ class Version < ApplicationRecord
   after_create_commit { ProjectTagsUpdateWorker.perform_async(project_id) }
   after_create_commit :send_notifications_async,
                       :update_repository_async,
-                      :save_project,
-                      :log_version_creation
+                      :log_version_creation,
+                      :save_project
 
   scope :newest_first, -> { order("versions.published_at DESC") }
+
+  # saving the project can be expensive, so allow the ability to skip it for
+  # bulk operations or when the caller is aware a subsequent save will be
+  # coming anyway
+  attr_accessor :skip_save_project
+
+  skip_callback :commit, :after, :save_project, if: :skip_save_project
 
   def save_project
     project.try(:forced_save)
@@ -37,9 +67,10 @@ class Version < ApplicationRecord
   end
 
   def update_spdx_expression
-    if original_license.is_a?(String)
+    case original_license
+    when String
       self.spdx_expression = handle_string_spdx_expression(original_license)
-    elsif original_license.is_a?(Array)
+    when Array
       possible_license = original_license.join(" AND ")
       self.spdx_expression = handle_string_spdx_expression(possible_license)
     end
@@ -62,12 +93,9 @@ class Version < ApplicationRecord
   def notify_subscribers
     project.mailing_list(include_prereleases: prerelease?).each do |user|
       next if user.muted?(project)
+
       VersionsMailer.new_version(user, project, self).deliver_later
     end
-  end
-
-  def notify_firehose
-    Firehose.new_version(project, project.platform, self)
   end
 
   def notify_web_hooks
@@ -93,22 +121,21 @@ class Version < ApplicationRecord
   end
 
   def send_notifications
-    ns = nf = nw = nil
+    ns = nw = nil
 
     overall = Benchmark.measure do
       ns = Benchmark.measure { notify_subscribers }
-      nf = Benchmark.measure { notify_firehose }
       nw = Benchmark.measure { notify_web_hooks }
     end
 
-    Rails.logger.info("Version#send_notifications benchmark overall: #{overall.real * 1000}ms ns:#{ns.real * 1000}ms nf:#{nf.real * 1000}ms nw:#{nw.real * 1000}ms v_id:#{id}")
+    Rails.logger.info("Version#send_notifications benchmark overall: #{overall.real * 1000}ms ns:#{ns.real * 1000}ms nw:#{nw.real * 1000}ms v_id:#{id}")
   end
 
   def log_version_creation
     return if published_at == Time.at(-2_208_988_800) # NuGet sets published_at to 1/1/1900 on yank
 
     lag = (created_at - published_at).round
-    Rails.logger.info("[NEW VERSION] platform=#{platform&.downcase || 'unknown'} name=#{project&.name} version=#{number} lag=#{lag}")
+    Rails.logger.info("[NEW VERSION] platform=\"#{platform&.downcase || 'unknown'}\" name=\"#{project&.name}\" version=\"#{number}\" lag=\"#{lag}\"")
   end
 
   def published_at
@@ -183,5 +210,9 @@ class Version < ApplicationRecord
 
   def set_runtime_dependencies_count
     update_column(:runtime_dependencies_count, runtime_dependencies.count)
+  end
+
+  def set_dependencies_count
+    update_column(:dependencies_count, dependencies.count)
   end
 end

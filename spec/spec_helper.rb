@@ -1,7 +1,9 @@
 # frozen_string_literal: true
-require 'pry'
-require 'simplecov'
-SimpleCov.start 'rails'
+
+require "pry"
+require "simplecov"
+require "custom_matchers"
+SimpleCov.start "rails"
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -13,7 +15,7 @@ RSpec.configure do |config|
   end
 
   config.before :all do
-    Scenic.database.refresh_materialized_view('project_dependent_repositories', concurrently: false, cascade: false)
+    Scenic.database.refresh_materialized_view("project_dependent_repositories", concurrently: false, cascade: false)
   end
 
   config.around :each, elasticsearch: true do |example|
@@ -29,4 +31,6 @@ RSpec.configure do |config|
 
   config.filter_run :focus
   config.run_all_when_everything_filtered = true
+
+  config.include(CustomMatchers)
 end

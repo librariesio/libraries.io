@@ -3,13 +3,13 @@
 require "rails_helper"
 
 describe PackageManager::Packagist do
+  let(:project) { create(:project, name: "foo", platform: described_class.formatted_name) }
+
   it 'has formatted name of "Packagist"' do
     expect(described_class.formatted_name).to eq("Packagist")
   end
 
   describe "#package_link" do
-    let(:project) { create(:project, name: "foo", platform: described_class.formatted_name) }
-
     it "returns a link to project website" do
       expect(described_class.package_link(project)).to eq("https://packagist.org/packages/foo#")
     end
@@ -35,18 +35,18 @@ describe PackageManager::Packagist do
         {
           "name" =>	"librariesio/fakepkg",
           "description" => "A Libraries package.",
-          "keywords" => ["php", "not-real"],
+          "keywords" => %w[php not-real],
           "homepage" => "https://fakepkg.libraries.io",
           "version" => "v1.2.3",
           "version_normalized" => "1.2.3",
           "license" => ["BSD-3-Clause"],
-          "authors" => [{"name" => "Fake Author", "email" => "fake.author@libraries.io"}],
-          "source" => {"url" => "https://github.com/librariesio/fakepkg", "type" => "git", "reference" => "12341234123412341234"},
+          "authors" => [{ "name" => "Fake Author", "email" => "fake.author@libraries.io" }],
+          "source" => { "url" => "https://github.com/librariesio/fakepkg", "type" => "git", "reference" => "12341234123412341234" },
           "dist" => {},
           "type" => "library",
           "time" =>	"2012-09-18T06:46:25+00:00",
           "autoload" => {},
-        }
+        },
       ]
     end
 
@@ -56,7 +56,7 @@ describe PackageManager::Packagist do
           name: "librariesio/fakepkg",
           description: "A Libraries package.",
           homepage: "https://fakepkg.libraries.io",
-          keywords_array: ["php", "not-real"],
+          keywords_array: %w[php not-real],
           licenses: "BSD-3-Clause",
           repository_url: "https://github.com/librariesio/fakepkg"
         )
@@ -76,7 +76,7 @@ describe PackageManager::Packagist do
                                                                                       "abandoned" => false,
                                                                                     }])
 
-      expect(described_class.deprecation_info("foo")).to eq({ is_deprecated: false, message: "" })
+      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: false, message: "" })
     end
 
     it "return deprecated if 'abandoned' is true'" do
@@ -84,7 +84,7 @@ describe PackageManager::Packagist do
                                                                                       "abandoned" => true,
                                                                                     }])
 
-      expect(described_class.deprecation_info("foo")).to eq({ is_deprecated: true, message: "" })
+      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: true, message: "" })
     end
 
     it "return deprecated if 'abandoned' is set to a replacement package'" do
@@ -92,7 +92,7 @@ describe PackageManager::Packagist do
                                                                                       "abandoned" => "use-this/package-instead",
                                                                                     }])
 
-      expect(described_class.deprecation_info("foo")).to eq({ is_deprecated: true, message: "Replacement: use-this/package-instead" })
+      expect(described_class.deprecation_info(project)).to eq({ is_deprecated: true, message: "Replacement: use-this/package-instead" })
     end
   end
 end

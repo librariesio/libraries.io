@@ -2,6 +2,7 @@
 
 class PackageManager::Maven::Hortonworks < PackageManager::Maven::Common
   REPOSITORY_SOURCE_NAME = "Hortonworks"
+  SYNC_ACTIVE = false
 
   def self.repository_base
     "https://repo.hortonworks.com/content/groups/releases"

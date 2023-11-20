@@ -20,7 +20,9 @@
     <h3 id='rate-limit'>Rate limit</h3>
 
     <p>
-      All requests are subject to a 60/request/minute rate limit based on your api_key, any further requests within that timeframe will result in a <code>429</code> response.
+      All requests are subject to a 60 request/minute rate limit based on your API key, any further requests within that timeframe will result in a <code>429</code> response.
+      <br>
+      Larger scale access to data is available from <a href="https://tidelift.com/solutions/open-source-data?utm_source=librariesio&utm_medium=referral&utm_campaign=api">Tidelift</a>.
     </p>
 
     <h3 id='pagination'>Pagination</h3>
@@ -94,7 +96,10 @@
       Get packages that have at least one version that depends on a given project.
     </p>
 
-
+    <p>
+      The dependents endpoint accepts a <code>subset</code> parameter, one of
+        <code>name_only</code>.
+    </p>
 
     <p>
       <code>GET https://libraries.io/api/:platform/:name/dependents?api_key=<%= @api_key %></code>

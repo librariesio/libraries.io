@@ -1,13 +1,15 @@
 # frozen_string_literal: true
+
 module JsonHelper
   def json
-    (reparse_and_never_memoize_as_response_may_change = -> do
+    # reparse and never memoize as response may chaneg
+    (lambda do
       JSON.parse(response.body)
     end).call
   end
 
   def json_request_headers
-    { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
+    { "Content-Type" => "application/json", "Accept" => "application/json" }
   end
 end
 

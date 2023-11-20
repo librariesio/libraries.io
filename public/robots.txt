@@ -10,6 +10,7 @@ Disallow: /login
 Disallow: */usage$
 Disallow: */dependents$
 Disallow: /auth/
+Disallow: */suggestions$
 Sitemap: https://libraries.io/sitemaps/sitemap.xml.gz
 
 # stop yandex from crawling usage pages

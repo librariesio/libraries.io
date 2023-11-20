@@ -27,7 +27,7 @@ module PackageManager
     def self.recent_names
       u = "http://hackage.haskell.org/packages/recent.rss"
       titles = SimpleRSS.parse(get_raw(u)).items.map(&:title)
-      titles.map { |t| t.split(" ").first }.uniq
+      titles.map { |t| t.split.first }.uniq
     end
 
     def self.project(name)
@@ -40,7 +40,7 @@ module PackageManager
     def self.mapping(raw_project)
       {
         name: raw_project[:name],
-        keywords_array: Array(raw_project[:page].css("#content div:first a")[1..-1].map(&:text)),
+        keywords_array: Array(raw_project[:page].css("#content div:first a")[1..].map(&:text)),
         description: description(raw_project[:page]),
         licenses: find_attribute(raw_project[:page], "License"),
         homepage: find_attribute(raw_project[:page], "Home page"),
