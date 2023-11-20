@@ -37,7 +37,6 @@ class Version < ApplicationRecord
   ].freeze
 
   validates :project_id, :number, presence: true
-  validates :number, uniqueness: { scope: :project_id }
   validates :status, inclusion: { in: STATUSES, allow_blank: true }
 
   belongs_to :project
