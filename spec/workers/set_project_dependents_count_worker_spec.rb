@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe SetProjectDependentsCountWorker do
-  it "should use the snakk priority queue" do
+  it "should use the small priority queue" do
     is_expected.to be_processed_in :small
   end
 

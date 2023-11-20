@@ -385,6 +385,7 @@ class Project < ApplicationRecord
   def set_dependents_count
     return if destroyed?
 
+    # TODO: more performant way to do this?
     new_dependents_count = ActiveRecord::Base.connection.with_statement_timeout(60.minutes.to_i) do
       dependents.joins(:version).pluck(Arel.sql("DISTINCT versions.project_id")).count
     end
