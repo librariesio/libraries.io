@@ -7,6 +7,8 @@
 </div>
 <div class="row">
   <div class="col-sm-8">
+    <%= render partial: "login_prompt" unless logged_in? %>
+
     <h3 id='authentication'>Authentication</h3>
 
     <p>
