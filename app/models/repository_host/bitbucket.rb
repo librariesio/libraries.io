@@ -240,7 +240,7 @@ module RepositoryHost
       if error
         log_info.merge!(
           error_class: error.class,
-          error_message: error.message.to_s.gsub(/[\W]/, " ").squish[0..500]
+          error_message: error.message.to_s.gsub(/\W/, " ").squish[0..500]
         )
       end
 
