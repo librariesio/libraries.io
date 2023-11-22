@@ -236,7 +236,7 @@ module RepositoryHost
         request_label: request,
         repository_full_name: repo_name,
       }
-      log_info.merge!(error_message: error.message, error_name: error.name) if error
+      log_info.merge!(error_message: error.message, error_class: error.class) if error
 
       StructuredLog.capture("EXTERNAL_REQUEST_FAILED", log_info)
     end
