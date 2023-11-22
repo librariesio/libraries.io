@@ -2,6 +2,7 @@
 
 module RepositoryHost
   class Bitbucket < Base
+    class EmptyResponseError < RuntimeError; end
     IGNORABLE_EXCEPTIONS = [
       BitBucket::Error::NotFound,
       BitBucket::Error::Forbidden,
@@ -9,6 +10,7 @@ module RepositoryHost
       BitBucket::Error::InternalServerError,
       BitBucket::Error::ServiceUnavailable,
       BitBucket::Error::Unauthorized,
+      EmptyResponseError,
 ].freeze
 
     def self.api_missing_error_class
@@ -37,18 +39,27 @@ module RepositoryHost
     end
 
     def get_file_list(token = nil)
-      api_client(token).get_request("1.0/repositories/#{repository.full_name}/directory/")[:values]
-    rescue *IGNORABLE_EXCEPTIONS
+      list = api_client(token).get_request("1.0/repositories/#{repository.full_name}/directory/")[:values]
+
+      raise EmptyResponseError if list.nil?
+
+      list
+    rescue *IGNORABLE_EXCEPTIONS => e
+      log_error(repo_name: repository.full_name, request: "repository_get_file_list", error: e)
       nil
     end
 
     def get_file_contents(path, token = nil)
       file = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, Addressable::URI.escape(repository.default_branch), Addressable::URI.escape(path))
+
+      raise EmptyResponseError if file.nil?
+
       {
         sha: file.node,
         content: file.data,
       }
-    rescue *IGNORABLE_EXCEPTIONS
+    rescue *IGNORABLE_EXCEPTIONS => e
+      log_error(repo_name: repository.full_name, request: "repository_get_file_contents", error: e)
       nil
     end
 
@@ -57,7 +68,13 @@ module RepositoryHost
     end
 
     def retrieve_commits(token = nil)
-      api_client(token).repos.commits.list(repository.owner_name, repository.project_name)["values"]
+      response = api_client(token).repos.commits.list(repository.owner_name, repository.project_name)
+      raise EmptyResponseError if response.nil?
+
+      response["values"]
+    rescue *IGNORABLE_EXCEPTIONS => e
+      log_error(repo_name: repository.full_name, request: "repository_retrieve_commits", error: e)
+      nil
     end
 
     def download_forks(token = nil)
@@ -68,6 +85,8 @@ module RepositoryHost
       return if repository.owner && repository.repository_user_id && repository.owner.login == repository.owner_name
 
       o = RepositoryOwner::Bitbucket.fetch_user(repository.owner_name)
+      raise EmptyResponseError if o.nil?
+
       if o.type == "team"
         org = RepositoryOrganisation.create_from_host("Bitbucket", o)
         if org
@@ -83,7 +102,8 @@ module RepositoryHost
           repository.save
         end
       end
-    rescue *IGNORABLE_EXCEPTIONS
+    rescue *IGNORABLE_EXCEPTIONS => e
+      log_error(repo_name: repository&.full_name, request: "repository_list_files", error: e)
       nil
     end
 
@@ -93,6 +113,9 @@ module RepositoryHost
 
     def download_readme(token = nil)
       files = api_client(token).repos.sources.list(repository.owner_name, repository.project_name, Addressable::URI.escape(repository.default_branch || "master"), "/")
+
+      raise EmptyResponseError if files.nil?
+
       paths = files.files.map(&:path)
       readme_path = paths.select { |path| path.match(/^readme/i) }.min { |path| Readme.supported_format?(path) ? 0 : 1 }
       return if readme_path.nil?
@@ -108,12 +131,16 @@ module RepositoryHost
       else
         repository.readme.update(html_body: content)
       end
-    rescue *IGNORABLE_EXCEPTIONS
+    rescue *IGNORABLE_EXCEPTIONS => e
+      log_error(repo_name: repository.full_name, request: "repository_download_readme", error: e)
       nil
     end
 
     def download_tags(token = nil)
       remote_tags = api_client(token).repos.tags(repository.owner_name, repository.project_name)
+
+      raise EmptyResponseError if remote_tags.nil?
+
       existing_tag_names = repository.tags.pluck(:name)
       remote_tags.each do |name, data|
         next if existing_tag_names.include?(name)
@@ -126,7 +153,8 @@ module RepositoryHost
                                })
       end
       repository.projects.find_each(&:forced_save) if remote_tags.present?
-    rescue *IGNORABLE_EXCEPTIONS
+    rescue *IGNORABLE_EXCEPTIONS => e
+      log_error(repo_name: repository.full_name, request: "repository_download_tags", error: e)
       nil
     end
 
@@ -200,6 +228,17 @@ module RepositoryHost
 
     def api_client(token = nil)
       self.class.api_client(token)
+    end
+
+    def log_error(repo_name:, request:, error: nil)
+      log_info = {
+        external_service: "bitbucket",
+        request_label: request,
+        repository_full_name: repo_name,
+      }
+      log_info.merge!(error_message: error.message, error_name: error.name) if error
+
+      StructuredLog.capture("EXTERNAL_REQUEST_FAILED", log_info)
     end
   end
 end
