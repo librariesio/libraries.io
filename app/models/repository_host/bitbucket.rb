@@ -45,7 +45,7 @@ module RepositoryHost
 
       list
     rescue *IGNORABLE_EXCEPTIONS => e
-      log_error(repo_name: repository.full_name, request: "repository_get_file_list", error: e)
+      log_request_failed(repo_name: repository.full_name, request: "repository_get_file_list", error: e)
       nil
     end
 
@@ -59,7 +59,7 @@ module RepositoryHost
         content: file.data,
       }
     rescue *IGNORABLE_EXCEPTIONS => e
-      log_error(repo_name: repository.full_name, request: "repository_get_file_contents", error: e)
+      log_request_failed(repo_name: repository.full_name, request: "repository_get_file_contents", error: e)
       nil
     end
 
@@ -73,7 +73,7 @@ module RepositoryHost
 
       response["values"]
     rescue *IGNORABLE_EXCEPTIONS => e
-      log_error(repo_name: repository.full_name, request: "repository_retrieve_commits", error: e)
+      log_request_failed(repo_name: repository.full_name, request: "repository_retrieve_commits", error: e)
       nil
     end
 
@@ -103,7 +103,7 @@ module RepositoryHost
         end
       end
     rescue *IGNORABLE_EXCEPTIONS => e
-      log_error(repo_name: repository&.full_name, request: "repository_list_files", error: e)
+      log_request_failed(repo_name: repository&.full_name, request: "repository_list_files", error: e)
       nil
     end
 
@@ -132,7 +132,7 @@ module RepositoryHost
         repository.readme.update(html_body: content)
       end
     rescue *IGNORABLE_EXCEPTIONS => e
-      log_error(repo_name: repository.full_name, request: "repository_download_readme", error: e)
+      log_request_failed(repo_name: repository.full_name, request: "repository_download_readme", error: e)
       nil
     end
 
@@ -154,7 +154,7 @@ module RepositoryHost
       end
       repository.projects.find_each(&:forced_save) if remote_tags.present?
     rescue *IGNORABLE_EXCEPTIONS => e
-      log_error(repo_name: repository.full_name, request: "repository_download_tags", error: e)
+      log_request_failed(repo_name: repository.full_name, request: "repository_download_tags", error: e)
       nil
     end
 
@@ -230,7 +230,7 @@ module RepositoryHost
       self.class.api_client(token)
     end
 
-    def log_error(repo_name:, request:, error: nil)
+    def log_request_failed(repo_name:, request:, error: nil)
       log_info = {
         external_service: "bitbucket",
         request_label: request,
