@@ -4,13 +4,12 @@ PLATFORM_CONSTRAINT = /[\w-]+/.freeze
 PROJECT_CONSTRAINT = /[^\/]+/.freeze
 VERSION_CONSTRAINT = /[\w.-]+/.freeze
 
-
 class IsAdminConstraint
   def matches?(request)
     User.find_by_id(request.session[:user_id])&.admin? || false
   end
 end
-  
+
 Rails.application.routes.draw do
   require "sidekiq/web"
   require "sidekiq_unique_jobs/web"
