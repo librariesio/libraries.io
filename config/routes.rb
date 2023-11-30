@@ -4,17 +4,18 @@ PLATFORM_CONSTRAINT = /[\w-]+/.freeze
 PROJECT_CONSTRAINT = /[^\/]+/.freeze
 VERSION_CONSTRAINT = /[\w.-]+/.freeze
 
+
+class IsAdminConstraint
+  def matches?(request)
+    User.find_by_id(request.session[:user_id])&.admin? || false
+  end
+end
+  
 Rails.application.routes.draw do
   require "sidekiq/web"
   require "sidekiq_unique_jobs/web"
-  if Rails.env.production?
-    Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-      username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
-    end
-  end
-  mount Sidekiq::Web => "/sidekiq"
-
-  mount PgHero::Engine, at: "pghero"
+  mount Sidekiq::Web => "/sidekiq", constraints: Rails.env.production? ? IsAdminConstraint.new : nil
+  mount PgHero::Engine, at: "pghero", constraints: Rails.env.production? ? IsAdminConstraint.new : nil
 
   get "/healthcheck", to: "healthcheck#index", as: :healthcheck
   get "/home", to: "dashboard#home"
