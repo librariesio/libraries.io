@@ -44,6 +44,7 @@ module GithubGraphql
 
       response = connection.request(request)
 
+      # Customization begins here
       # Capture headers and status code from http response to better detect error states
       response_meta = {
         "headers" => response.each_header.to_h,
@@ -52,7 +53,7 @@ module GithubGraphql
 
       case response
       when Net::HTTPOK, Net::HTTPBadRequest
-        # Return metadata with results data
+        # Return response details & results body
         response_meta.merge(
           JSON.parse(response.body)
         )
