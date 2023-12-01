@@ -259,6 +259,9 @@ module PackageManager
       db_versions = db_project.versions.includes(:dependencies)
       db_versions = db_versions.where(number: sync_version) unless sync_version == :all
 
+      # cached lookup of dependency platform/names => project ids, so we avoid repetitive project lookups in find_best! below.
+      platform_and_names_to_project_ids = {}
+
       if db_versions.empty?
         StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: sync_version, message: "no versions found" })
       end
@@ -288,8 +291,14 @@ module PackageManager
         new_dep_attributes = deps
           .reject { |dep| dep[:project_name].blank? || dep[:requirements].blank? || existing_dep_names.include?(dep[:project_name]) }
           .map do |dep|
-            named_project_id = Project.find_best(db_platform, dep[:project_name].strip)&.id
-            dep.merge(version_id: db_version.id, project_id: named_project_id.try(:strip))
+            dep_platform_and_name = [db_platform, dep[:project_name].strip]
+            named_project_id = if platform_and_names_to_project_ids.key?(dep_platform_and_name)
+                                 platform_and_names_to_project_ids[dep_platform_and_name]
+                               else
+                                 platform_and_names_to_project_ids[dep_platform_and_name] = Project.find_best(db_platform, dep[:project_name].strip)&.id
+                               end
+
+            dep.merge(version_id: db_version.id, project_id: named_project_id)
               .tap { |attrs| Dependency.new(attrs).validate! } # upsert_all doesn't validate, so run validation manually but don't save
           end
 

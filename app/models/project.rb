@@ -58,7 +58,7 @@
 class Project < ApplicationRecord
   require "query_counter"
 
-  # include ProjectSearch
+  include ProjectSearch
   include SourceRank
   include Status
   include Releases
@@ -458,8 +458,6 @@ class Project < ApplicationRecord
 
     Spdx.find(license).try(:id) || license
   end
-
-  def self.find_best_in_bulk!(platform_and_names, includes = []); end
 
   def self.find_best(*args)
     find_best!(*args)
