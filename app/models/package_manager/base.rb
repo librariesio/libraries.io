@@ -146,14 +146,38 @@ module PackageManager
       db_project = ensure_project(mapped_project, reformat_repository_url: sync_version == :all)
 
       if self::HAS_VERSIONS
-        if sync_version == :all
-          versions_as_version_objects(raw_project, db_project.name)
-            .each { |v| add_version(db_project, v) }
-            .tap { |vs| remove_missing_versions(db_project, vs) }
-        elsif (version = one_version_as_version_object(raw_project, sync_version))
-          add_version(db_project, version)
-          # TODO: handle deprecation here too
+        versions_to_upsert_attrs = if sync_version == :all
+          versions_as_version_objects(raw_project, db_project.name).map(&:to_version_model_attributes)
+        else
+          one_version_as_version_object(raw_project, sync_version).map(&:to_version_model_attributes)
         end
+        .each { |attrs| attrs[:repository_sources] = self::HAS_MULTIPLE_REPO_SOURCES ? [self::REPOSITORY_SOURCE_NAME] : nil  }
+        .each { |attrs| attrs[:project_id] = db_project.id  }
+        .each { |attrs| Version.new(attrs).validate! } # upsert_all doesn't do validation, so ensure they're valid here.
+
+        Version.upsert_all(
+          versions_to_upsert_attrs, 
+          # handles merging any existing repository_sources with new repository_source:
+          #   Prev       New       Result
+          #   ["Main"]  ["Maven"]  ["Main", "Maven"]
+          #   [nil]     ["Maven"]  ["Maven"]
+          #   ["Main"]  [nil]      ["Main"]
+          #   [nil]     [nil]      nil
+          on_duplicate: Arel.sql(%Q!
+            repository_sources = (CASE 
+            WHEN (versions.repository_sources IS NULL AND EXCLUDED.repository_sources IS NULL)
+              THEN NULL
+            WHEN (versions.repository_sources @> EXCLUDED.repository_sources)
+              THEN versions.repository_sources 
+            ELSE 
+              (COALESCE(versions.repository_sources, '[]'::jsonb) || COALESCE(EXCLUDED.repository_sources, '[]'::jsonb))
+            END)
+          !), 
+          unique_by: [:project_id, :number]
+        )
+
+        remove_missing_versions(db_project, versions_to_upsert_attrs.pluck(:number)) if sync_version == :all
+        # TODO: handle deprecation here too
       end
 
       save_dependencies(mapped_project, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies) if self::HAS_DEPENDENCIES
@@ -206,23 +230,11 @@ module PackageManager
       )
     end
 
-    def self.add_version(db_project, api_version)
-      return if api_version.blank?
-
-      new_repository_source = self::HAS_MULTIPLE_REPO_SOURCES ? self::REPOSITORY_SOURCE_NAME : nil
-
-      VersionUpdater.new(
-        project: db_project,
-        api_version_to_upsert: api_version,
-        new_repository_source: new_repository_source
-      ).upsert_version_for_project!
-    end
-
     def self.missing_version_remover
       nil
     end
 
-    def self.remove_missing_versions(db_project, api_versions)
+    def self.remove_missing_versions(db_project, version_numbers_to_keep)
       return unless missing_version_remover
 
       # yanked pypi versions are marked as such in the api, and the majority of them are handled upstream of here
@@ -230,7 +242,7 @@ module PackageManager
 
       missing_version_remover.new(
         project: db_project,
-        version_numbers_to_keep: api_versions.map(&:version_number),
+        version_numbers_to_keep: version_numbers_to_keep,
         target_status: "Removed",
         removal_time: Time.zone.now
       ).remove_missing_versions_of_project!
