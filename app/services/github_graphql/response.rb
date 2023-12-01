@@ -6,8 +6,8 @@ module GithubGraphql
 
     # @param graphql_response [GraphQL::Client::Response] Response object from query
     def initialize(graphql_response)
-      @headers = graphql_response.original_hash.fetch("headers")
-      @status_code = graphql_response.original_hash.fetch("status_code")
+      @headers = graphql_response.original_hash.fetch("headers", {}).transform_keys { |key| key.to_s.downcase }
+      @status_code = graphql_response.original_hash.fetch("status_code", "MISSING")
 
       @data = graphql_response.data
       @errors = graphql_response.errors
