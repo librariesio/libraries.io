@@ -302,9 +302,9 @@ module PackageManager
               .tap { |attrs| Dependency.new(attrs).validate! } # upsert_all doesn't validate, so run validation manually but don't save
           end
 
-        # Note that as of writing there are no unique indices on Dependency, so any de-duping we have done in the reject above. Hence,
-        # this will never fallback to an update, and should only insert.
-        Dependency.upsert_all(new_dep_attributes) unless new_dep_attributes.empty?
+        # bulk insert all the Dependencies for the Version: note that as of writing there are no unique indices on Dependency, so any de-duping
+        # was done in the reject() above. So doing an upsert here would be pointless which is why we only do a bulk insert.
+        Dependency.insert_all(new_dep_attributes) unless new_dep_attributes.empty?
 
         # this serves as a marker that we have saved Version#dependencies or not, even if there are zero (other)
         db_version.set_runtime_dependencies_count
