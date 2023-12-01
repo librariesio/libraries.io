@@ -31,4 +31,52 @@ describe ActiveRecord do
       ActiveRecord::Base.connection_pool.checkin(other_conn)
     end
   end
+
+  describe "where_with_tuples" do
+    let(:projects) { create_list(:project, 3) }
+
+    it "queries against one column" do
+      result = Project.where_with_tuples([:name], projects.map { |p| [p.name] })
+      expect(result).to match_array(projects)
+    end
+  
+    it "queries against two columns" do
+      result = Project.where_with_tuples(%i[platform name], projects.pluck(:platform, :name))
+      expect(result).to match_array(projects)
+    end
+  
+    it "queries against three columns" do
+      result = Project.where_with_tuples(%i[platform name id], projects.pluck(:platform, :name, :id))
+      expect(result).to match_array(projects)
+    end
+  
+    it "queries using the given tuples" do
+      result = Project.where_with_tuples(%i[platform name], projects[0, 1].pluck(:platform, :name))
+      expect(result).to match_array(projects[0, 1])
+    end
+  
+    context "with a hidden project" do
+      let!(:invisible_project) { create(:project, status: "Hidden") }
+  
+      it "queries with the given scope" do
+        result = Project.visible.where_with_tuples(%i[platform name], projects.pluck(:platform, :name))
+        expect(result).to match_array(projects)
+        expect(result).not_to include(invisible_project)
+      end
+    end
+  
+    it "disallows mismatched columns and tuples" do
+      expect do
+        Project.where_with_tuples(%i[platform name id], projects.pluck(:platform, :name))
+      end.to raise_error("Column count must equal tuple count")
+    end
+  
+    it "sanitizes tuples" do
+      # ActiveRecord has great sanitization already, this is just a regression check to make sure we're always sanitizing input.
+      query = Project.select("name").where_with_tuples([:name], [["a,b)' ; --"]])
+      sql = query.to_sql
+      expect(sql).to eq(%!SELECT "projects"."name" FROM "projects" WHERE ((name) IN (('a,b)'' ; --')))!)
+      expect(query.load).to eq([])
+    end
+  end
 end
