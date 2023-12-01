@@ -8,7 +8,7 @@ RSpec.describe "GithubGraphql::Response", type: :service do
       "GraphQL::Client::Response", {
         original_hash: { "headers" => headers.stringify_keys, "status_code" => status_code },
         data: data.stringify_keys,
-        errors: errors,
+        errors: instance_double("GraphQL::Client::Errors", messages: errors),
       }
     )
   end
@@ -22,11 +22,11 @@ RSpec.describe "GithubGraphql::Response", type: :service do
   let(:status_code) { "200" }
   let(:headers) { {} }
   let(:data) { {} }
-  let(:errors) { [] }
+  let(:errors) { {} }
 
   describe "#errors?" do
     context "when response has root level errors" do
-      let(:errors) { ["Oopsie"] }
+      let(:errors) { { data: "Oopsie" } }
 
       it "returns true" do
         expect(response.errors?).to eq(true)
@@ -34,7 +34,7 @@ RSpec.describe "GithubGraphql::Response", type: :service do
     end
 
     context "when response has errors on data" do
-      let(:data) { { errors: ["Oopsie"] } }
+      let(:data) { { errors: "Oopsie" } }
 
       it "returns true" do
         expect(response.errors?).to eq(true)
@@ -58,7 +58,7 @@ RSpec.describe "GithubGraphql::Response", type: :service do
     end
 
     context "when response contains 401 error" do
-      let(:errors) { ["401 Unauthorized"] }
+      let(:errors) { { data: "401 Unauthorized" } }
 
       it "returns true" do
         expect(response.unauthorized?).to eq(true)
@@ -67,7 +67,6 @@ RSpec.describe "GithubGraphql::Response", type: :service do
 
     context "when response contains no errors" do
       let(:status_code) { "200" }
-      let(:errors) { [] }
 
       it "returns false" do
         expect(response.unauthorized?).to eq(false)

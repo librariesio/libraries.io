@@ -10,7 +10,7 @@ module GithubGraphql
       @status_code = graphql_response.original_hash.fetch("status_code", "MISSING")
 
       @data = graphql_response.data
-      @errors = graphql_response.errors
+      @errors = graphql_response.errors&.messages || {}
     end
 
     # Try extracting a nested value from the data
@@ -24,7 +24,7 @@ module GithubGraphql
     end
 
     def unauthorized?
-      status_code == "401" || errors.any? { |str| str.starts_with?("401") }
+      status_code == "401" || errors.values.flatten.any? { |str| str.starts_with?("401") }
     end
 
     def rate_limited?
