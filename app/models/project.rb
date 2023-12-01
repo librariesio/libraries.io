@@ -466,23 +466,15 @@ class Project < ApplicationRecord
   end
 
   def self.find_best!(platform, name, includes = [])
-    find_exact(platform, name, includes) ||
-      find_lower(platform, name, includes) ||
+    find_exact_or_lower(platform, name, includes) ||
       find_with_package_manager!(platform, name, includes)
   end
 
-  private_class_method def self.find_exact(platform, name, includes = [])
+  private_class_method def self.find_exact_or_lower(platform, name, includes = [])
     visible
-      .platform(platform)
-      .where(name: name)
-      .includes(includes.present? ? includes : nil)
-      .first
-  end
-
-  private_class_method def self.find_lower(platform, name, includes = [])
-    visible
-      .lower_platform(platform)
-      .lower_name(name)
+      .merge(
+        Project.platform(platform).where(name: name).or(Project.lower_platform(platform).lower_name(name))
+      )
       .includes(includes.present? ? includes : nil)
       .first
   end
