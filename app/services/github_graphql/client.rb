@@ -35,20 +35,7 @@ module GithubGraphql
         variables: variables
       )
 
-      response = Response.new(graphql_response)
-
-      StructuredLog.capture(
-        "UPSTREAM_QUERY_SENT",
-        {
-          upstream_service: "github_graphql",
-          query_name: parsed_query.try(:name).try(:camelize),
-          success: response.errors.empty?,
-          unauthorized: response.unauthorized?,
-          rate_limited: response.rate_limited?,
-        }
-      )
-
-      response
+      Response.new(graphql_response)
     end
   end
 end

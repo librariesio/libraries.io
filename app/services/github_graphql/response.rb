@@ -19,8 +19,12 @@ module GithubGraphql
       data.to_h.dig(*keys)
     end
 
+    def errors?
+      @errors.any? || dig_data("errors").present?
+    end
+
     def unauthorized?
-      status_code == "401"
+      status_code == "401" || errors.any? { |str| str.starts_with?("401") }
     end
 
     def rate_limited?
