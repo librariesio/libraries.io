@@ -295,7 +295,7 @@ module PackageManager
 
         # Note that as of writing there are no unique indices on Dependency, so any de-duping we have done in the reject above. Hence,
         # this will never fallback to an update, and should only insert.
-        Dependency.upsert_all(new_dep_attributes)
+        Dependency.upsert_all(new_dep_attributes) unless new_dep_attributes.empty?
 
         # this serves as a marker that we have saved Version#dependencies or not, even if there are zero (other)
         db_version.set_runtime_dependencies_count
