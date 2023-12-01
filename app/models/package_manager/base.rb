@@ -259,6 +259,9 @@ module PackageManager
       db_versions = db_project.versions.includes(:dependencies)
       db_versions = db_versions.where(number: sync_version) unless sync_version == :all
 
+      # cached lookup of dependency platform/names => project ids, so we avoid repetitive project lookups in find_best! below.
+      platform_and_names_to_project_ids = {}
+
       if db_versions.empty?
         StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: sync_version, message: "no versions found" })
       end
@@ -283,14 +286,26 @@ module PackageManager
           db_version.dependencies.destroy_all
         end
 
-        deps.each do |dep|
-          next if dep[:project_name].blank? || dep[:requirements].blank? || db_version.dependencies.any? { |d| d.project_name == dep[:project_name] }
+        existing_dep_names = db_version.dependencies.map(&:project_name)
 
-          named_project_id = Project
-            .find_best(db_platform, dep[:project_name].strip)
-            &.id
-          db_version.dependencies.create!(dep.merge(project_id: named_project_id.try(:strip)))
-        end
+        new_dep_attributes = deps
+          .reject { |dep| dep[:project_name].blank? || dep[:requirements].blank? || existing_dep_names.include?(dep[:project_name]) }
+          .map do |dep|
+            dep_platform_and_name = [db_platform, dep[:project_name].strip]
+            named_project_id = if platform_and_names_to_project_ids.key?(dep_platform_and_name)
+                                 platform_and_names_to_project_ids[dep_platform_and_name]
+                               else
+                                 platform_and_names_to_project_ids[dep_platform_and_name] = Project.find_best(db_platform, dep[:project_name].strip)&.id
+                               end
+
+            dep.merge(version_id: db_version.id, project_id: named_project_id)
+              .tap { |attrs| Dependency.new(attrs).validate! } # upsert_all doesn't validate, so run validation manually but don't save
+          end
+
+        # bulk insert all the Dependencies for the Version: note that as of writing there are no unique indices on Dependency, so any de-duping
+        # was done in the reject() above. So doing an upsert here would be pointless which is why we only do a bulk insert.
+        Dependency.insert_all(new_dep_attributes) unless new_dep_attributes.empty?
+
         # this serves as a marker that we have saved Version#dependencies or not, even if there are zero (other)
         db_version.set_runtime_dependencies_count
         db_version.set_dependencies_count
