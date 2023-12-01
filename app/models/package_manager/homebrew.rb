@@ -53,7 +53,7 @@ module PackageManager
     end
 
     def self.dependencies(_name, version, mapped_project)
-      return nil unless version == mapped_project[:version]
+      return [] unless version == mapped_project[:version]
 
       mapped_project[:dependencies].map do |dependency|
         {
