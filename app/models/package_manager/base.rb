@@ -283,14 +283,20 @@ module PackageManager
           db_version.dependencies.destroy_all
         end
 
-        deps.each do |dep|
-          next if dep[:project_name].blank? || dep[:requirements].blank? || db_version.dependencies.any? { |d| d.project_name == dep[:project_name] }
+        existing_dep_names = db_version.dependencies.pluck(:project_name)
 
-          named_project_id = Project
-            .find_best(db_platform, dep[:project_name].strip)
-            &.id
-          db_version.dependencies.create!(dep.merge(project_id: named_project_id.try(:strip)))
-        end
+        new_dep_attributes = deps
+          .reject { |dep| dep[:project_name].blank? || dep[:requirements].blank? || existing_dep_names.include?(dep[:project_name]) }
+          .map do |dep|
+            named_project_id = Project.find_best(db_platform, dep[:project_name].strip)&.id
+            dep.merge(version_id: db_version.id, project_id: named_project_id.try(:strip))
+              .tap { |attrs| Dependency.new(attrs).validate! } # upsert_all doesn't validate, so run validation manually but don't save
+          end
+
+        # Note that as of writing there are no unique indices on Dependency, so any de-duping we have done in the reject above. Hence,
+        # this will never fallback to an update, and should only insert.
+        Dependency.upsert_all(new_dep_attributes)
+
         # this serves as a marker that we have saved Version#dependencies or not, even if there are zero (other)
         db_version.set_runtime_dependencies_count
         db_version.set_dependencies_count
