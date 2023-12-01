@@ -2,7 +2,7 @@
 
 class ProjectScoreWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :score, unique: :until_executed
+  sidekiq_options queue: :score, lock: :until_executed
 
   def perform(platform)
     ProjectScoreCalculationBatch.run(platform)

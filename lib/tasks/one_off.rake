@@ -112,6 +112,21 @@ namespace :one_off do
     print "Total examined: #{packages.count}, Total created: #{processed}"
   end
 
+  desc "Backfill Version#dependencies_count"
+  task backfill_version_dependencies_count: :environment do
+    versions = Version.where(dependencies_count: nil).where.associated(:dependencies).group("versions.id")
+
+    puts "Updating #{versions.count.size} versions..."
+
+    versions.in_batches(of: 1000).each_with_index do |batch, idx|
+      batch.update_all("dependencies_count = (SELECT count(*) FROM dependencies WHERE dependencies.version_id = versions.id)")
+      if idx % 100 == 0
+        puts "#{versions.count.size} versions remaining...."
+      end
+    end
+    puts "Finished updating versions"
+  end
+
   desc "Backfill Project.status_checked_at with Project.updated_at value"
   task backfill_project_status_checked_at: :environment do
     projects = Project
@@ -256,5 +271,83 @@ namespace :one_off do
     puts "Results:"
     puts "Total packages checked: #{input_tsv_file.count}"
     puts "Versions corrected: #{corrected_count}"
+  end
+
+  desc "Delete ignored Maven versions and resync packages"
+  task :delete_ignored_maven_versions_and_resync_packages, %i[max commit] => :environment do |_t, args|
+    max = args[:max].presence.to_i == 0 ? nil : args[:max].to_i
+    commit = args[:commit].present? && args[:commit] == "yes"
+
+    puts "DRY RUN" unless commit
+
+    # Retrieve the projects where at least one version's repository_sources is not solely ["Maven"] or ["Google"]
+    affected_projects = Project
+      .joins(:versions)
+      .where(platform: "Maven")
+      .where(%((versions.repository_sources != '["Maven"]' AND versions.repository_sources != '["Google"]') OR repository_sources IS NULL))
+      .distinct
+    affected_projects = affected_projects.limit(max) if max.present?
+
+    puts "Count of projects with versions to re-process: #{affected_projects.count}"
+
+    batch_size = 50
+    processed_count = 0
+
+    puts "Processing...."
+    affected_projects.in_batches(of: batch_size).each do |projects_batch|
+      projects_batch.each do |project|
+        no_source_versions = project.versions.where("repository_sources IS NULL")
+        ignored_source_versions = project.versions.where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]')))
+
+        puts "Updating/Deleting #{no_source_versions.count + ignored_source_versions.count} versions for #{project.platform}/#{project.name}."
+        if commit
+          # If no repository_sources, then destroy it
+          no_source_versions.destroy_all
+
+          # If there are repository_sources,
+          # - if any are Maven or Google, remove repository_sources that aren't Maven or Google
+          # - if none are Maven or Google, destroy version
+          ignored_source_versions.in_batches do |versions_batch|
+            versions_batch.each do |version|
+              if version.repository_sources.include?("Maven") || version.repository_sources.include?("Google")
+                version.update(repository_sources: version.repository_sources.select { |source| %w[Maven Google].include?(source) })
+              else
+                version.destroy
+              end
+            end
+          end
+        end
+        puts "Trying manual sync for #{project.platform}/#{project.name}."
+        project.try(:manual_sync) if commit
+      end
+
+      processed_count += projects_batch.size
+      puts "Processed #{processed_count} projects."
+    end
+  end
+
+  # This should be run after the manual_syncs in delete_ignored_maven_versions_and_resync_packages are done
+  desc "Delete Maven packages without versions"
+  task :delete_maven_packages_without_versions, %i[commit] => :environment do |_t, args|
+    commit = args.commit.present? && args.commit == "yes"
+
+    puts "DRY RUN" unless commit
+
+    batch_size = 10000
+    processed_count = 0
+
+    affected_projects = Project.where(platform: "Maven").without_versions
+    affected_projects_count = affected_projects.count
+    puts "Count of projects without versions to destroy: #{affected_projects_count}"
+    puts "Processing...."
+    affected_projects.in_batches(of: batch_size).each do |batch|
+      processed_count += batch.size
+      if commit
+        batch.destroy_all
+      else
+        puts batch
+      end
+      puts "Destroyed #{processed_count} of #{affected_projects_count} projects."
+    end
   end
 end

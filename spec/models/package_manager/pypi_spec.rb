@@ -217,6 +217,8 @@ describe PackageManager::Pypi do
         }
       end
 
+      before { version.set_dependencies_count }
+
       it "overwrites dependencies with force flag on" do
         expect(version.dependencies.count).to be 1
 
@@ -226,6 +228,27 @@ describe PackageManager::Pypi do
 
         expect { dependency.reload }.to raise_error(ActiveRecord::RecordNotFound)
         expect(version.dependencies.count).to be 6
+      end
+
+      it "updates the dependencies counters" do
+        expect(version.dependencies.count).to be 1
+
+        expect do
+          VCR.use_cassette("pypi_dependencies_requests") do
+            described_class.save_dependencies(mapped_project, sync_version: version_number, force_sync_dependencies: true)
+          end
+        end
+          .to change { version.reload.dependencies_count }.to(6)
+          .and change { version.runtime_dependencies_count }.to(4)
+      end
+
+      it "updates the dependencies counters when there are zero deps" do
+        expect(PackageManager::Pypi).to receive(:dependencies).and_return([])
+        expect do
+          described_class.save_dependencies(mapped_project, sync_version: version_number, force_sync_dependencies: true)
+        end
+          .to change { version.reload.dependencies_count }.to(0)
+          .and change { version.runtime_dependencies_count }.to(0)
       end
 
       it "leaves dependencies with force flag off" do

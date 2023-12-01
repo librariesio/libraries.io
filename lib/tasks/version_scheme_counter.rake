@@ -141,7 +141,7 @@ namespace :version do
             detected_scheme = maxes[0]
           end
 
-          unknown_schemes.push([project_platform, project_name, project.versions.map(&:number)]) if detected_scheme == :unknown
+          unknown_schemes.push([project_platform, project_name, project.versions.map(&:number).sort]) if detected_scheme == :unknown
 
           global_tallies[detected_scheme] += 1
         end

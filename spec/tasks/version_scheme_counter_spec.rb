@@ -106,7 +106,7 @@ describe "version:scheme_counter" do
       end
 
       context "Unknown" do
-        versions = %w[3.7.1.3.5.6 3.8.1ab 4.11.2-beta-1 4 001]
+        versions = %w[3.7.1.3.5.6 3.8.1ab 4.11.2-beta-1 4 001].sort
         let(:project) { create(:project, name: "unknown_scheme") }
         let(:versions) { versions }
 
@@ -123,7 +123,7 @@ describe "version:scheme_counter" do
       end
 
       context "Not unanimous" do
-        versions = %w[3.7.1 3.8.1 4.11.2 001]
+        versions = %w[3.7.1 3.8.1 4.11.2 001].sort
         let(:project) { create(:project, name: "unknown_scheme") }
         let(:versions) { versions }
 
