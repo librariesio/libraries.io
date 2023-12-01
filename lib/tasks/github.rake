@@ -77,6 +77,6 @@ namespace :github do
     token = args.github_token || ENV.fetch("GITHUB_TOKEN", nil)
     raise ArgumentError, "Github token not found! Pass one into this rake task or define an environment variable GITHUB_TOKEN" if token.nil?
 
-    GithubGraphql.refresh_dump!(token)
+    GithubGraphql.refresh_dump!(token: token)
   end
 end

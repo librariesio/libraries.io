@@ -83,7 +83,8 @@ module GithubGraphql
 
   # Update local cache of Github GraphQL API Schema
   # @param token [String] A Github API token
-  def self.refresh_dump!(token)
-    ::GraphQL::Client.dump_schema(HTTP, SCHEMA_DUMP_PATH, context: { access_token: token })
+  # @param destination [String] Relative file path for output
+  def self.refresh_dump!(token:, destination: SCHEMA_DUMP_PATH)
+    ::GraphQL::Client.dump_schema(HTTP, destination, context: { access_token: token })
   end
 end
