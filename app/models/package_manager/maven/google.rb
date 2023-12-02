@@ -65,13 +65,13 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
       packages.each do |package|
         package_name = package.name
 
-        versions = package["versions"].split(",")
+        version_numbers = package["versions"].split(",")
 
         name = [group_name, package_name].join(PackageManager::Maven::NAME_DELIMITER)
 
         raw_project = project(
           name,
-          latest: versions.last # not totally accurate but it's all we have at this point
+          latest: version_numbers.last # not totally accurate but it's all we have at this point
         )
 
         mapped_project = transform_mapping_values(mapping(raw_project))
@@ -88,7 +88,14 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
 
           pp "added version #{version}"
         rescue Faraday::ConnectionFailed
-          retry
+          retry unless retried
+          StructuredLog.capture(
+            "GOOGLE_MAVEN_VERSION_UPSERT_FAILURE",
+            {
+              project_id: db_project.id,
+              versions: api_versions.map(&:version_number),
+            }
+          )
         end
 
         finalize_db_project(db_project)

@@ -45,7 +45,7 @@ class Version < ApplicationRecord
   has_many :dependencies, dependent: :delete_all
   has_many :runtime_dependencies, -> { where kind: %w[runtime normal] }, class_name: "Dependency"
 
-
+  # NB: these are simulated in BulkVersionUpdater, so update that class if these change
   before_save :update_spdx_expression
   after_create_commit :send_notifications_async,
                       :update_repository_async,
