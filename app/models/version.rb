@@ -45,13 +45,38 @@ class Version < ApplicationRecord
   has_many :dependencies, dependent: :delete_all
   has_many :runtime_dependencies, -> { where kind: %w[runtime normal] }, class_name: "Dependency"
 
-  # NB: these are simulated in BulkVersionUpdater, so update that class if these change
+  ##############################################################################################
+  # NB: callbacks are run manually in bulk_after_create_commit, so keep that method in sync with these.
+  ##############################################################################################
   before_save :update_spdx_expression
   after_create_commit :send_notifications_async,
                       :update_repository_async,
                       :update_project_tags_async,
                       :log_version_creation,
                       :save_project
+
+  # This method is utlized by BulkVersionUpdater because it does a bulk import with upsert_all() without running callbacks,
+  # so we have to run them manually. This assumes all Version records are attached to the same Project.
+  def self.bulk_after_create_commit(versions, project)
+    return if versions.empty?
+
+    versions
+      .each do |newly_inserted_version|
+        raise "All records must be from the same project with id #{project.id}" unless newly_inserted_version.project == project
+
+        # from Version#after_create_commit
+        newly_inserted_version.send_notifications_async
+        newly_inserted_version.log_version_creation
+      end
+
+    # these Version#after_create_commits are project-scoped, so only need to run them on the first version
+    first_version = versions.first
+    first_version.update_repository_async
+    first_version.update_project_tags_async
+
+    # normally counter_culture does this
+    project.update_column(:versions_count, project.versions.count)
+  end
 
   scope :newest_first, -> { order("versions.published_at DESC") }
 

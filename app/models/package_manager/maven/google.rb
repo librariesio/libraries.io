@@ -88,6 +88,10 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
 
           pp "added version #{version}"
         rescue Faraday::ConnectionFailed
+          unless retried
+            retried = true
+            retry
+          end
           retry unless retried
           StructuredLog.capture(
             "GOOGLE_MAVEN_VERSION_UPSERT_FAILURE",
