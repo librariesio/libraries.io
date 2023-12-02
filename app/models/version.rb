@@ -45,10 +45,11 @@ class Version < ApplicationRecord
   has_many :dependencies, dependent: :delete_all
   has_many :runtime_dependencies, -> { where kind: %w[runtime normal] }, class_name: "Dependency"
 
+
   before_save :update_spdx_expression
-  after_create_commit { ProjectTagsUpdateWorker.perform_async(project_id) }
   after_create_commit :send_notifications_async,
                       :update_repository_async,
+                      :update_project_tags_async,
                       :log_version_creation,
                       :save_project
 
@@ -118,6 +119,10 @@ class Version < ApplicationRecord
     return unless project.repository_id.present?
 
     RepositoryDownloadWorker.perform_async(project.repository_id)
+  end
+
+  def update_project_tags_async
+    ProjectTagsUpdateWorker.perform_async(project_id)
   end
 
   def send_notifications
