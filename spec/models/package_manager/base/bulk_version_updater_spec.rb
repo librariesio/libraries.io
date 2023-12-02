@@ -11,7 +11,7 @@ describe PackageManager::Base::BulkVersionUpdater do
         PackageManager::Base::ApiVersion.new(
           version_number: v,
           published_at: idx.days.ago,
-          runtime_dependencies_count: nil,
+          runtime_dependencies_count: 18,
           original_license: "MIT",
           repository_sources: nil,
           status: nil
@@ -21,6 +21,16 @@ describe PackageManager::Base::BulkVersionUpdater do
 
     let(:repository_source_name) { nil }
     let(:bulk_version_updater) { described_class.new(db_project: project, api_versions: api_versions_to_update, repository_source_name: repository_source_name) }
+
+    context "with no version data" do
+      let(:api_versions_to_update) { [] }
+
+      it "no-ops" do
+        expect { bulk_version_updater.run! }
+          .to not_change { project.versions.count }
+          .and not_change(project, :versions_count)
+      end
+    end
 
     context "with a single version" do
       let(:api_versions_to_update) { raw_versions[0, 1] }
@@ -69,9 +79,39 @@ describe PackageManager::Base::BulkVersionUpdater do
 
     let(:repository_source_name) { nil }
 
-    context "updating an existing repository_source" do
+    context "updating existing columns" do
       let(:api_versions_to_update) { raw_versions[0, 1] }
-      let(:version) { create(:version, project: project, number: api_versions_to_update[0].version_number) }
+      let!(:version) { create(:version, project: project, number: api_versions_to_update[0].version_number) }
+
+      it "should update published_at" do
+        version.update_column(:published_at, 42.days.ago)
+        bulk_version_updater.run!
+        expect(version.reload.published_at).to be_within(1.second).of(1.day.ago)
+      end
+
+      it "should update updated_at" do
+        version.update_column(:updated_at, 42.days.ago)
+        bulk_version_updater.run!
+        expect(version.reload.updated_at).to be_within(1.second).of(Time.now)
+      end
+
+      it "should update runtime_dependencies_count" do
+        version.update_column(:runtime_dependencies_count, 3)
+        bulk_version_updater.run!
+        expect(version.reload.runtime_dependencies_count).to eq(18)
+      end
+
+      it "should update original_license" do
+        version.update_column(:original_license, "FOO")
+        bulk_version_updater.run!
+        expect(version.reload.original_license).to eq("MIT")
+      end
+
+      it "should update status" do
+        version.update_column(:status, "REMOVED")
+        bulk_version_updater.run!
+        expect(version.reload.status).to eq(nil)
+      end
 
       {
         [["Main"], ["Main"]] => ["Main"],
@@ -80,7 +120,7 @@ describe PackageManager::Base::BulkVersionUpdater do
         ["Main", nil] => ["Main"],
         [nil, nil] => nil,
       }.each_pair do |(original, new_value), expected|
-        context "combining #{original.inspect} with #{new_value.inspect}" do
+        context "combining source_repositories of #{original.inspect} with #{new_value.inspect}" do
           let(:repository_source_name) { new_value }
           before { version.update_column(:repository_sources, original) }
 
