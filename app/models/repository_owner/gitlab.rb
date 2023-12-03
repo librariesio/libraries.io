@@ -163,7 +163,7 @@ module RepositoryOwner
     def get_json(url)
       r = Typhoeus::Request.new(url,
                                 method: :get,
-                                followlocation: true,                                
+                                followlocation: true,
                                 headers: { "Accept" => "application/json" }).run
       Oj.load(r.body)
     end
