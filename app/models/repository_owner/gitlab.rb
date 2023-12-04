@@ -161,11 +161,7 @@ module RepositoryOwner
     private
 
     def get_json(url)
-      r = Typhoeus::Request.new(url,
-                                method: :get,
-                                followlocation: true,
-                                headers: { "Accept" => "application/json" }).run
-      Oj.load(r.body)
+      PackageManager::ApiService.request_json_with_headers(url)
     end
   end
 end
