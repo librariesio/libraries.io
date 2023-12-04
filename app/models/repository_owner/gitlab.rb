@@ -108,6 +108,8 @@ module RepositoryOwner
       user_by_login = RepositoryUser.host("GitLab").login(user_hash[:login]).first
       if user_by_id # its fine
         if user_by_id.login.try(:downcase) != user_hash[:login].downcase || user_by_id.user_type != user_hash[:type]
+          # If the login has changed, and the new login is taken, destroy the existing record (bc the accounts might have swapped). 
+          # If the user that used to have this login really exists, it should get re-synced in Repsitory#download_owner eventually.
           user_by_login.destroy if user_by_login && user_by_login != user_by_id
           user_by_id.login = user_hash[:login]
           user_by_id.user_type = user_hash[:type]
