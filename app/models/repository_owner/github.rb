@@ -102,8 +102,8 @@ module RepositoryOwner
       user_by_id = RepositoryUser.where(host_type: "GitHub").find_by_uuid(user_hash[:id])
       user_by_login = RepositoryUser.host("GitHub").login(user_hash[:login]).first
       if user_by_id # its fine
-        unless user_by_id.login.try(:downcase) == user_hash[:login].downcase && user_by_id.user_type == user_hash[:type]
-          user_by_login.destroy if user_by_login && !user_by_login.download_user_from_host
+        if user_by_id.login.try(:downcase) != user_hash[:login].downcase || user_by_id.user_type != user_hash[:type]
+          user_by_login.destroy if user_by_login && user_by_login != user_by_id
           user_by_id.login = user_hash[:login]
           user_by_id.user_type = user_hash[:type]
           user_by_id.save!
