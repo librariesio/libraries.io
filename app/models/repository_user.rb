@@ -48,8 +48,6 @@ class RepositoryUser < ApplicationRecord
   # eager load this module to avoid clashing with Gitlab gem in development
   RepositoryOwner::Gitlab # rubocop: disable Lint/Void
 
-  validate :login_uniqueness_with_case_insensitive_host, if: -> { login_changed? }
-  validates :uuid, uniqueness: { scope: :host_type }, if: -> { uuid_changed? }
   validates :uuid, presence: true
 
   after_commit :async_sync, on: :create
@@ -62,10 +60,6 @@ class RepositoryUser < ApplicationRecord
   delegate :avatar_url, :repository_url, :top_favourite_projects, :top_contributors,
            :to_s, :to_param, :github_id, :download_user_from_host, :download_orgs,
            :download_user_from_host_by_login, :download_repos, :check_status, to: :repository_owner
-
-  def login_uniqueness_with_case_insensitive_host
-    errors.add(:login, "must be unique") if RepositoryUser.host(host_type).login(login).exists?
-  end
 
   def repository_owner
     @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
