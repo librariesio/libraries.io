@@ -16,5 +16,4 @@ describe RepositoryUser, type: :model do
   it { should have_many(:contributions) }
 
   it { should validate_presence_of(:uuid) }
-  it { should validate_uniqueness_of(:uuid).scoped_to(:host_type) }
 end

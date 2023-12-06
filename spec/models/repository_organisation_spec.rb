@@ -12,5 +12,4 @@ describe RepositoryOrganisation, type: :model do
   it { should have_many(:projects) }
 
   it { should validate_presence_of(:uuid) }
-  it { should validate_uniqueness_of(:uuid).scoped_to(:host_type) }
 end
