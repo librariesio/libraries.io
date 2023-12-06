@@ -16,5 +16,10 @@ describe RepositoryUser, type: :model do
   it { should have_many(:contributions) }
 
   it { should validate_presence_of(:uuid) }
-  it { should validate_uniqueness_of(:uuid).scoped_to(:host_type) }
+  it "should validate uniqueness of uuid/host_type through index" do
+    create(:repository_user, uuid: "1", host_type: "GitHub")
+
+    expect { create(:repository_user, uuid: "1", host_type: "GitHub") }
+      .to raise_error(ActiveRecord::RecordNotUnique)
+  end
 end

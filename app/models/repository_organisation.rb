@@ -41,8 +41,6 @@ class RepositoryOrganisation < ApplicationRecord
   RepositoryOwner::Gitlab # rubocop: disable Lint/Void
 
   validates :uuid, presence: true
-  validate :login_uniqueness_with_case_insensitive_host, if: -> { login_changed? }
-  validates :uuid, uniqueness: { scope: :host_type }, if: -> { uuid_changed? }
 
   after_commit :async_sync, on: :create
 
@@ -58,10 +56,6 @@ class RepositoryOrganisation < ApplicationRecord
            :to_s, :to_param, :github_id, :download_org_from_host, :download_orgs,
            :download_org_from_host_by_login, :download_repos, :download_members,
            :check_status, to: :repository_owner
-
-  def login_uniqueness_with_case_insensitive_host
-    errors.add(:login, "must be unique") if RepositoryOrganisation.host(host_type).login(login).exists?
-  end
 
   def repository_owner
     @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)
