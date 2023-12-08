@@ -9,9 +9,5 @@ class PagesController < ApplicationController
 
   def compatibility; end
 
-  def data
-    @platforms = Project.maintained.group(:platform).order("count_id DESC").count("id").map { |k, v| { "key" => k, "doc_count" => v } }
-  end
-
   def terms; end
 end

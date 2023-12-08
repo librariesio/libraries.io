@@ -194,8 +194,8 @@ Rails.application.routes.draw do
   get "/privacy", to: "pages#privacy", as: :privacy
   get "/terms", to: "pages#terms", as: :terms
   get "/compatibility", to: "pages#compatibility", as: :compatibility
-  get "/data", to: "pages#data", as: :data
-  get "/open-data", to: redirect("/data")
+  get "/data", to: redirect("/")
+  get "/open-data", to: redirect("/")
 
   post "/hooks/package", to: "hooks#package"
 
