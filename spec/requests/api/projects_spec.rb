@@ -353,6 +353,46 @@ describe "Api::ProjectsController" do
       expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql([].to_json)
     end
+
+    context "for a Go project that is not in the DB" do
+      let!(:project) { create(:project, platform: "Go", name: "known/project") }
+
+      context "that redirects to a known project" do
+        it "redirects" do
+          allow(PackageManager::Go)
+            .to receive(:project_find_names)
+            .with("unknown/project")
+            .and_return([project.name])
+
+          get "/api/go/unknown%2Fproject/contributors"
+          expect(response).to redirect_to("/api/go/known%2Fproject/contributors")
+        end
+      end
+
+      context "that redirects to an unknown project" do
+        it "returns not found" do
+          allow(PackageManager::Go)
+            .to receive(:project_find_names)
+            .with("unknown/project")
+            .and_return(["other/unknown/project"])
+
+          expect { get "/api/go/unknown%2Fproject/contributors" }
+            .to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      context "that does not redirect" do
+        it "returns not found" do
+          allow(PackageManager::Go)
+            .to receive(:project_find_names)
+            .with("unknown/project")
+            .and_return(["unknown/project"])
+
+          expect { get "/api/go/unknown%2Fproject/contributors" }
+            .to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
   end
 
   describe "GET /api/:platform/:name/sourcerank", type: :request do
@@ -384,42 +424,36 @@ describe "Api::ProjectsController" do
     end
   end
 
-  context "for a Go project that is not in the DB" do
-    let!(:project) { create(:project, platform: "Go", name: "known/project") }
+  describe "GET /api/:platform/:name/sync", type: :request do
+    context "without internal api key" do
+      it "forbids action" do
+        get "/api/#{project.platform}/#{project.name}/sync", params: { api_key: user.api_key }
 
-    context "that redirects to a known project" do
-      it "redirects" do
-        allow(PackageManager::Go)
-          .to receive(:project_find_names)
-          .with("unknown/project")
-          .and_return([project.name])
-
-        get "/api/go/unknown%2Fproject/contributors"
-        expect(response).to redirect_to("/api/go/known%2Fproject/contributors")
+        expect(response).to have_http_status(:forbidden)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to include("403")
       end
     end
 
-    context "that redirects to an unknown project" do
-      it "redirects" do
-        allow(PackageManager::Go)
-          .to receive(:project_find_names)
-          .with("unknown/project")
-          .and_return(["other/unknown/project"])
+    context "already recently synced" do
+      before { project.update!(last_synced_at: 1.hour.ago) }
 
-        expect { get "/api/go/unknown%2Fproject/contributors" }
-          .to raise_exception(ActiveRecord::RecordNotFound)
+      it "notifies already recently synced" do
+        get "/api/#{project.platform}/#{project.name}/sync", params: { api_key: internal_user.api_key }
+
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to include("Project has already been synced recently")
       end
     end
 
-    context "that does not redirect" do
-      it "returns not found" do
-        allow(PackageManager::Go)
-          .to receive(:project_find_names)
-          .with("unknown/project")
-          .and_return(["unknown/project"])
+    context "success" do
+      it "notifies the sync is queued" do
+        get "/api/#{project.platform}/#{project.name}/sync", params: { api_key: internal_user.api_key }
 
-        expect { get "/api/go/unknown%2Fproject/contributors" }
-          .to raise_exception(ActiveRecord::RecordNotFound)
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to include("Project queued for re-sync")
       end
     end
   end

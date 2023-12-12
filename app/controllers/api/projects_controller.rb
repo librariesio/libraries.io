@@ -2,6 +2,7 @@
 
 class Api::ProjectsController < Api::ApplicationController
   before_action :find_project, except: %i[searchcode dependencies dependencies_bulk updated]
+  before_action :require_internal_api_key, only: :sync
 
   def show
     render(json: @project, show_updated_at: internal_api_key?)
@@ -109,6 +110,22 @@ class Api::ProjectsController < Api::ApplicationController
 
   def contributors
     paginate json: @project.contributors.order("count DESC")
+  end
+
+  def sync
+    if @project.recently_synced?
+      StructuredLog.capture(
+        "PROJECT_SYNC_REQUEST_SKIPPED", {
+          name: @project.name,
+          platform: @project.platform,
+          project_last_synced_at: @project.last_synced_at,
+        }
+      )
+      render json: { error: "Project has already been synced recently" }
+    else
+      @project.manual_sync
+      render json: { message: "Project queued for re-sync" }
+    end
   end
 
   private

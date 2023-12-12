@@ -70,6 +70,7 @@ Rails.application.routes.draw do
     get "/:platform/:name/dependent_repositories", to: "projects#dependent_repositories", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/dependents", to: "projects#dependents", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/tree", to: "tree#show", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }, as: :tree
+    get "/:platform/:name/sync", to: "projects#sync", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }, as: :sync
     get "/:platform/:name", to: "projects#show", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
   end
 
