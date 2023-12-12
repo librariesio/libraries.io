@@ -370,7 +370,7 @@ describe "Api::ProjectsController" do
       end
 
       context "that redirects to an unknown project" do
-        it "redirects" do
+        it "returns not found" do
           allow(PackageManager::Go)
             .to receive(:project_find_names)
             .with("unknown/project")
