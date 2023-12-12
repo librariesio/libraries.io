@@ -31,7 +31,7 @@
             </small>
           </td>
           <td>
-            <% if version.previous_version %>
+            <% if @versions.count < 1000 && version.previous_version %>
               <small class='text-muted'>
                 <%= link_to version.diff_url do %>
                   <%= fa_icon('random') %>
