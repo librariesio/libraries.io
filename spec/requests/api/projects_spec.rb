@@ -353,6 +353,46 @@ describe "Api::ProjectsController" do
       expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql([].to_json)
     end
+
+    context "for a Go project that is not in the DB" do
+      let!(:project) { create(:project, platform: "Go", name: "known/project") }
+
+      context "that redirects to a known project" do
+        it "redirects" do
+          allow(PackageManager::Go)
+            .to receive(:project_find_names)
+            .with("unknown/project")
+            .and_return([project.name])
+
+          get "/api/go/unknown%2Fproject/contributors"
+          expect(response).to redirect_to("/api/go/known%2Fproject/contributors")
+        end
+      end
+
+      context "that redirects to an unknown project" do
+        it "redirects" do
+          allow(PackageManager::Go)
+            .to receive(:project_find_names)
+            .with("unknown/project")
+            .and_return(["other/unknown/project"])
+
+          expect { get "/api/go/unknown%2Fproject/contributors" }
+            .to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      context "that does not redirect" do
+        it "returns not found" do
+          allow(PackageManager::Go)
+            .to receive(:project_find_names)
+            .with("unknown/project")
+            .and_return(["unknown/project"])
+
+          expect { get "/api/go/unknown%2Fproject/contributors" }
+            .to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
   end
 
   describe "GET /api/:platform/:name/sourcerank", type: :request do
@@ -381,46 +421,6 @@ describe "Api::ProjectsController" do
         "subscribers": 0,
         "versions_present": 0,
       }.to_json)
-    end
-  end
-
-  context "for a Go project that is not in the DB" do
-    let!(:project) { create(:project, platform: "Go", name: "known/project") }
-
-    context "that redirects to a known project" do
-      it "redirects" do
-        allow(PackageManager::Go)
-          .to receive(:project_find_names)
-          .with("unknown/project")
-          .and_return([project.name])
-
-        get "/api/go/unknown%2Fproject/contributors"
-        expect(response).to redirect_to("/api/go/known%2Fproject/contributors")
-      end
-    end
-
-    context "that redirects to an unknown project" do
-      it "redirects" do
-        allow(PackageManager::Go)
-          .to receive(:project_find_names)
-          .with("unknown/project")
-          .and_return(["other/unknown/project"])
-
-        expect { get "/api/go/unknown%2Fproject/contributors" }
-          .to raise_exception(ActiveRecord::RecordNotFound)
-      end
-    end
-
-    context "that does not redirect" do
-      it "returns not found" do
-        allow(PackageManager::Go)
-          .to receive(:project_find_names)
-          .with("unknown/project")
-          .and_return(["unknown/project"])
-
-        expect { get "/api/go/unknown%2Fproject/contributors" }
-          .to raise_exception(ActiveRecord::RecordNotFound)
-      end
     end
   end
 end
