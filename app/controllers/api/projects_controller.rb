@@ -114,6 +114,13 @@ class Api::ProjectsController < Api::ApplicationController
 
   def sync
     if @project.recently_synced?
+      StructuredLog.capture(
+        "PROJECT_SYNC_REQUEST_SKIPPED", {
+          name: @project.name,
+          platform: @project.platform,
+          project_last_synced_at: @project.last_synced_at,
+        }
+      )
       render json: { error: "Project has already been synced recently" }
     else
       @project.manual_sync
