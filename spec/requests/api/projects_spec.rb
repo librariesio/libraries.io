@@ -423,4 +423,38 @@ describe "Api::ProjectsController" do
       }.to_json)
     end
   end
+
+  describe "GET /api/:platform/:name/sync", type: :request do
+    context "without internal api key" do
+      it "forbids action" do
+        get "/api/#{project.platform}/#{project.name}/sync", params: { api_key: user.api_key }
+
+        expect(response).to have_http_status(:forbidden)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to include("403")
+      end
+    end
+
+    context "already recently synced" do
+      before { project.update!(last_synced_at: 1.hour.ago) }
+
+      it "notifies already recently synced" do
+        get "/api/#{project.platform}/#{project.name}/sync", params: { api_key: internal_user.api_key }
+
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to include("Project has already been synced recently")
+      end
+    end
+
+    context "success" do
+      it "notifies the sync is queued" do
+        get "/api/#{project.platform}/#{project.name}/sync", params: { api_key: internal_user.api_key }
+
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to include("Project queued for re-sync")
+      end
+    end
+  end
 end
