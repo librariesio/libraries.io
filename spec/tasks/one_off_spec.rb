@@ -101,8 +101,11 @@ describe "one_off" do
         let(:ignored_source_version) { create(:version, project: project, number: "4.0.0", repository_sources: ["Other"]) }
 
         it "deletes ignored versions but not other versions" do
-          expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "yes") }
-            .to change(Version, :all).from([maven_source_version, google_source_version, no_source_version, ignored_source_version]).to([maven_source_version, google_source_version])
+          expect(Version.all).to match_array([maven_source_version, google_source_version, no_source_version, ignored_source_version])
+
+          Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "yes")
+
+          expect(Version.all).to match_array([maven_source_version, google_source_version])
         end
       end
 

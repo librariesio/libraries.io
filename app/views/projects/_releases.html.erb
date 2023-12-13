@@ -16,7 +16,7 @@
               <%= fa_icon('tag') %>
             <% end %>
           </small>
-          <% if version.previous_version %>
+          <% if @version_count < 1000 && version.previous_version %>
             <small class='text-muted'>
               <%= link_to version.diff_url, class: 'tip', title: "View diff between #{version} and #{version.previous_version}" do %>
                 <span><%= fa_icon('random') %></span>
