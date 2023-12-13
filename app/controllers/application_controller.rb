@@ -200,7 +200,7 @@ class ApplicationController < ActionController::Base
       end
       raise ActiveRecord::RecordNotFound if @tags.empty? && params[:number].present?
     else
-      @versions = @project.versions.order(number: :desc).limit(10)
+      @versions = @project.versions.order(published_at: :desc).limit(10)
       if params[:number].present?
         @version = @project.versions.find_by_number(params[:number])
         raise ActiveRecord::RecordNotFound if @version.nil?

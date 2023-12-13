@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_16_161641) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_13_145217) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -410,6 +410,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_161641) do
     t.string "status"
     t.integer "dependencies_count"
     t.index ["project_id", "number"], name: "index_versions_on_project_id_and_number", unique: true
+    t.index ["published_at"], name: "index_versions_on_published_at"
     t.index ["updated_at"], name: "index_versions_on_updated_at"
   end
 
