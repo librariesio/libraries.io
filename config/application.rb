@@ -57,7 +57,6 @@ module Libraries
     # GC::Profiler.enable
 
     config.middleware.use Rack::Attack
-    config.middleware.use Rack::Attack::RateLimit, throttle: ["api"]
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do

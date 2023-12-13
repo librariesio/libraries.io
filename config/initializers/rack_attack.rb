@@ -42,6 +42,20 @@ class Rack::Attack
   throttle("scrapers", limit: 30, period: 5.minutes) do |req|
     req.remote_ip if req.user_agent&.match(/Scrapy.*/)
   end
+
+  # Adds RateLimit-X headers to throttled responses
+  self.throttled_responder = lambda do |request|
+    match_data = request.env["rack.attack.match_data"]
+    now = match_data[:epoch_time]
+
+    headers = {
+      "RateLimit-Limit" => match_data[:limit].to_s,
+      "RateLimit-Remaining" => "0",
+      "RateLimit-Reset" => (now + (match_data[:period] - (now % match_data[:period]))).to_s,
+    }
+
+    [429, headers, ["Retry later\n"]]
+  end
 end
 
 require "subscribers/rack_attack"

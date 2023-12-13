@@ -443,8 +443,6 @@ GEM
     rack (2.2.8)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
-    rack-attack-rate-limit (1.1.0)
-      rack
     rack-canonical-host (0.2.3)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
@@ -746,7 +744,6 @@ DEPENDENCIES
   pry-rails
   puma
   rack-attack
-  rack-attack-rate-limit
   rack-canonical-host
   rack-cors
   rails (= 7.0.7.2)
