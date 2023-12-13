@@ -21,6 +21,7 @@
 # Indexes
 #
 #  index_versions_on_project_id_and_number  (project_id,number) UNIQUE
+#  index_versions_on_published_at           (published_at)
 #  index_versions_on_updated_at             (updated_at)
 #
 class Version < ApplicationRecord
