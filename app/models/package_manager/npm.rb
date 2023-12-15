@@ -9,7 +9,7 @@ module PackageManager
     URL = "https://www.npmjs.com"
     COLOR = "#f1e05a"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
-    SUPPORTS_SINGLE_VERSION_UPDATE = true
+    SUPPORTS_SINGLE_VERSION_UPDATE = false
 
     def self.missing_version_remover
       PackageManager::Base::MissingVersionRemover
