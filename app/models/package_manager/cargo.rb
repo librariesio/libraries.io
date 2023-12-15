@@ -42,6 +42,13 @@ module PackageManager
       version = raw_project.dig("crate", "newest_version")
       url = download_url(db_project, version)
       body = get_raw(url)
+      if body.empty? # if we can't fetch it, we can't say if it is deprecated or not but default false
+        return {
+          is_deprecated: false,
+          message: nil,
+        }
+      end
+
       tar_extract = Gem::Package::TarReader.new(Zlib::GzipReader.new(StringIO.new(body)))
       tar_extract.rewind
       toml = tar_extract.find { |entry| entry.full_name.end_with?("/Cargo.toml") }.read
