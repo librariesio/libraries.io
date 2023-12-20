@@ -60,7 +60,6 @@ FactoryBot.define do
     end
 
     trait :go do
-      name { "asdasdasffasfafas" }
       platform { "Go" }
       language { "Go" }
     end
