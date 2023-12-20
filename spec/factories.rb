@@ -58,6 +58,20 @@ FactoryBot.define do
       platform { "NuGet" }
       language { "C#" }
     end
+
+    trait :go do
+      name { "asdasdasffasfafas" }
+      platform { "Go" }
+      language { "Go" }
+    end
+
+    trait :watched do
+      after :build do |project|
+        project.repository = build(:repository, :with_stats)
+        project.repository.full_name = [Faker::Name.unique.name.parameterize, project.name].join("/")
+        project.repository.language = project.language
+      end
+    end
   end
 
   factory :platform do
@@ -168,10 +182,16 @@ FactoryBot.define do
     size { 1000 }
     default_branch { "master" }
     forks_count { 1 }
+
+    trait :with_stats do
+      after :build do |repo|
+        repo.repository_maintenance_stats = build_list(:repository_maintenance_stat, 3)
+      end
+    end
   end
 
   factory :repository_maintenance_stat do
-    category { "test_category" }
+    category { Faker::Company.unique.bs.underscore }
     value { "test value" }
     repository
   end

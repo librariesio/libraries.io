@@ -15,10 +15,16 @@ class ProactiveProjectSyncWorker
 
   def projects_query(limit: DEFAULT_LIMIT)
     Project
+      .distinct
       .visible
-      .platforms(PLATFORMS)
+      .platform(PLATFORMS)
       .where.associated(:repository_maintenance_stats)
-      .order("last_synced_at ASC NULLS FIRST")
+      .where("projects.last_synced_at IS NULL OR projects.last_synced_at < ?", last_synced_at_cutoff)
+      .order("projects.last_synced_at ASC NULLS FIRST")
       .limit(limit)
+  end
+
+  def last_synced_at_cutoff
+    7.days.ago
   end
 end
