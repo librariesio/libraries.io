@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ProactiveProjectSyncWorker do
-  it "should use the ___ priority queue" do
+  it "should use the small priority queue" do
     is_expected.to be_processed_in :small
   end
 

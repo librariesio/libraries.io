@@ -2,7 +2,6 @@
 
 class ProactiveProjectSyncWorker
   include Sidekiq::Worker
-  # TODO: confirm vvv
   sidekiq_options queue: :small, lock: :until_executed
 
   PLATFORMS = %w[NPM Maven].freeze
