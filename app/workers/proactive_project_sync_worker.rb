@@ -6,6 +6,7 @@ class ProactiveProjectSyncWorker
 
   PLATFORMS = %w[NPM Maven].freeze
   DEFAULT_LIMIT = 1000
+  LAST_SYNCED_AT_CUTOFF = -> { 7.days.ago }
 
   def perform(limit = DEFAULT_LIMIT)
     projects_query
@@ -19,11 +20,7 @@ class ProactiveProjectSyncWorker
       .visible
       .platform(PLATFORMS)
       .where.associated(:repository_maintenance_stats)
-      .where("projects.last_synced_at IS NULL OR projects.last_synced_at < ?", last_synced_at_cutoff)
+      .where("projects.last_synced_at IS NULL OR projects.last_synced_at < ?", LAST_SYNCED_AT_CUTOFF.call)
       .order("projects.last_synced_at ASC NULLS FIRST")
-  end
-
-  def last_synced_at_cutoff
-    7.days.ago
   end
 end
