@@ -178,20 +178,6 @@ module RepositoryHost
       end
     end
 
-    def gather_maintenance_stats
-      if repository.host_type != "Bitbucket" || repository.owner_name.blank? || repository.project_name.blank?
-        repository.repository_maintenance_stats.destroy_all
-        return []
-      end
-
-      metrics = []
-
-      metrics << MaintenanceStats::Stats::Bitbucket::CommitsStat.new(repository.retrieve_commits).fetch_stats
-
-      add_metrics_to_repo(metrics)
-      metrics
-    end
-
     def self.fetch_repo(full_name, token = nil)
       client = api_client(token)
       user_name, repo_name = full_name.split("/")
