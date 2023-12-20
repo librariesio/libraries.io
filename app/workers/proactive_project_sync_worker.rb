@@ -14,6 +14,8 @@ class ProactiveProjectSyncWorker
       .each(&:async_sync)
   end
 
+  private
+
   def projects_query
     Project
       .distinct
