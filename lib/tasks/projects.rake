@@ -365,4 +365,9 @@ namespace :projects do
     Rails.logger.info("Project IDs: #{result_ids.join(', ')}")
     Rails.logger.info("\nThese changes have not been committed. Re-run this task with [,yes] to proceed.") unless commit
   end
+
+  desc "Proactively sync watched projects"
+  task :proactive_sync, %i[limit] => :environment do |_t, args|
+    ProactiveProjectSyncWorker.new.perform(args.limit)
+  end
 end
