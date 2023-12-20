@@ -33,12 +33,12 @@ RSpec.describe ProactiveProjectSyncWorker do
 
   describe "#perform" do
     let!(:watched_project1) { create(:project, :npm, :watched) }
-    let!(:watched_project2) { create(:project, :go, :watched) }
+    let!(:watched_project2) { create(:project, :maven, :watched) }
     let!(:unwatched_project) { create(:project, :npm) }
 
     it "queues targeted projects for resync" do
       expect(PackageManagerDownloadWorker).to receive(:perform_async).once.with("PackageManager::NPM", watched_project1.name, any_args)
-      expect(PackageManagerDownloadWorker).to receive(:perform_async).once.with("PackageManager::Go", watched_project2.name, any_args)
+      expect(PackageManagerDownloadWorker).to receive(:perform_async).once.with("PackageManager::Maven::MavenCentral", watched_project2.name, any_args)
       expect(PackageManagerDownloadWorker).not_to receive(:perform_async).with(String, unwatched_project.name, any_args)
 
       expect(CheckStatusWorker).to receive(:perform_async).once.with(watched_project1.id)

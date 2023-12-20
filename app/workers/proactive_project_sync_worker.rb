@@ -5,7 +5,7 @@ class ProactiveProjectSyncWorker
   # TODO: confirm vvv
   sidekiq_options queue: :small, lock: :until_executed
 
-  PLATFORMS = %w[NPM Go].freeze
+  PLATFORMS = %w[NPM Maven].freeze
   DEFAULT_LIMIT = 1000
 
   def perform(limit = nil)
