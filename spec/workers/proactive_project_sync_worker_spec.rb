@@ -36,7 +36,7 @@ RSpec.describe ProactiveProjectSyncWorker do
       described_class.new.perform
     end
 
-    context "when no limit provided"
+    context "when no limit provided" do
       it "operates on least recently synced projects first, within default limit" do
         stub_const("ProactiveProjectSyncWorker::DEFAULT_LIMIT", 1)
 
