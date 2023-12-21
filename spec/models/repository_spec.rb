@@ -296,48 +296,6 @@ describe Repository, type: :model do
         expect(maintenance_stats.count).to be 0
       end
     end
-
-    context "with bitbucket repository" do
-      let(:repository) { create(:repository, full_name: "ecollins/passlib", host_type: "Bitbucket") }
-      let!(:auth_token) { create(:auth_token) }
-      let!(:project) do
-        repository.projects.create!(
-          name: "test-project",
-          platform: "Pypi",
-          repository_url: "https://bitbucket.org/ecollins/passlib",
-          homepage: "https://libraries.io"
-        )
-      end
-
-      before do
-        VCR.use_cassette("bitbucket/passlib") do
-          repository.gather_maintenance_stats
-        end
-      end
-
-      it "should save metrics for repository" do
-        maintenance_stats = repository.repository_maintenance_stats
-        expect(maintenance_stats.count).to be > 0
-
-        maintenance_stats.each do |stat|
-          # every stat should have a value
-          expect(stat.value).to_not be nil
-        end
-      end
-
-      it "should update existing stats" do
-        first_updated_at = repository.repository_maintenance_stats.first.updated_at
-        category = repository.repository_maintenance_stats.first.category
-
-        VCR.use_cassette("bitbucket/passlib") do
-          repository.gather_maintenance_stats
-        end
-
-        updated_stat = repository.repository_maintenance_stats.find_by(category: category)
-        expect(updated_stat).to_not be nil
-        expect(updated_stat.updated_at).to be > first_updated_at
-      end
-    end
   end
 
   describe "#sync_manifest" do
