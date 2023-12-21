@@ -115,7 +115,7 @@ describe "one_off" do
 
         it "deletes ignored versions" do
           expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "yes") }
-            .to change(Version, :all).from(match_array([no_source_version, ignored_source_version])).to([])
+            .to change(Version, :all).from(an_array_matching([no_source_version, ignored_source_version])).to([])
         end
       end
 
