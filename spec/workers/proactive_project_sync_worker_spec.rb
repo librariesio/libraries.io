@@ -22,8 +22,8 @@ RSpec.describe ProactiveProjectSyncWorker do
   end
 
   describe "#perform" do
-    let!(:watched_project1) { create(:project, :npm, :watched) }
-    let!(:watched_project2) { create(:project, :maven, :watched) }
+    let!(:watched_project1) { create(:project, :npm, :watched, last_synced_at: 2.months.ago) }
+    let!(:watched_project2) { create(:project, :maven, :watched, last_synced_at: 1.month.ago) }
     let!(:unwatched_project) { create(:project, :npm) }
     let!(:other_platform_project) { create(:project, :pypi) }
 
@@ -34,6 +34,13 @@ RSpec.describe ProactiveProjectSyncWorker do
       expect(other_platform_project).to have_not_been_queued_for_project_sync
 
       described_class.new.perform
+    end
+
+    it "operates on least recently synced projects first, within limit" do
+      expect(watched_project1).to have_been_queued_for_project_sync
+      expect(watched_project2).to have_not_been_queued_for_project_sync
+
+      described_class.new.perform(1)
     end
 
     context "with recently synced project" do
