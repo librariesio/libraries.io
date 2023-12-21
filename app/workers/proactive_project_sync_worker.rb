@@ -16,7 +16,9 @@ class ProactiveProjectSyncWorker
 
   private
 
-  def target_project_ids(limit: DEFAULT_LIMIT)
+  def target_project_ids(limit:)
+    limit = DEFAULT_LIMIT unless limit.is_a?(Integer)
+
     Project
       .distinct
       .visible

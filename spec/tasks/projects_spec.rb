@@ -3,6 +3,17 @@
 require "rails_helper"
 
 describe "projects" do
+
+  describe "proactive_sync" do
+    subject(:task) { Rake::Task["projects:proactive_sync"] }
+
+    it do
+      expect(Proactive)
+      Sidekiq::Testing.inline! { task.invoke }
+
+    end
+  end
+
   describe "check_status" do
     context "with projects" do
       let(:never_checked) { create(:project, name: "never_checked", platform: "Rubygems", status_checked_at: nil) }
