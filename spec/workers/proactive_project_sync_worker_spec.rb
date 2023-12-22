@@ -36,11 +36,24 @@ RSpec.describe ProactiveProjectSyncWorker do
       described_class.new.perform
     end
 
-    it "operates on least recently synced projects first, within limit" do
-      expect(watched_project1).to have_been_queued_for_project_sync
-      expect(watched_project2).to have_not_been_queued_for_project_sync
+    context "when no limit provided" do
+      it "operates on least recently synced projects first, within default limit" do
+        stub_const("ProactiveProjectSyncWorker::DEFAULT_LIMIT", 1)
 
-      described_class.new.perform(1)
+        expect(watched_project1).to have_been_queued_for_project_sync
+        expect(watched_project2).to have_not_been_queued_for_project_sync
+
+        described_class.new.perform(nil)
+      end
+    end
+
+    context "with limit provided" do
+      it "operates on least recently synced projects first, within limit" do
+        expect(watched_project1).to have_been_queued_for_project_sync
+        expect(watched_project2).to have_not_been_queued_for_project_sync
+
+        described_class.new.perform(1)
+      end
     end
 
     context "with recently synced project" do
