@@ -123,8 +123,8 @@ class Project < ApplicationRecord
   has_many :repository_maintenance_stats, through: :repository
 
   scope :updated_within, ->(start, stop) { where("updated_at >= ? and updated_at <= ? ", start, stop).order(updated_at: :asc) }
-  scope :least_recently_updated_stats, -> { joins(:repository_maintenance_stats).group("projects.id").where.not(repository: nil).order(Arel.sql("max(repository_maintenance_stats.updated_at) ASC")) }
-  scope :no_existing_stats, -> { includes(:repository_maintenance_stats).where(repository_maintenance_stats: { id: nil }).where.not(repository: nil) }
+  scope :least_recently_updated_stats, -> { joins(repository: :repository_maintenance_stats).where(repositories: { host_type: "GitHub" }).group("projects.id").order(Arel.sql("max(repository_maintenance_stats.updated_at) ASC")) }
+  scope :no_existing_stats, -> { where.missing(:repository_maintenance_stats).where(repositories: { host_type: "GitHub" }) }
 
   scope :platform, ->(platforms) { where(platform: Array.wrap(platforms).map { |platform| PackageManager::Base.format_name(platform) }) }
   scope :lower_platform, ->(platform) { where("lower(projects.platform) = ?", platform.try(:downcase)) }
