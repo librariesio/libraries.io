@@ -37,9 +37,10 @@ module MaintenanceStats
           # workaround lack of things in the main apis by using searches for PRs
           params[:open_pr_query] = "repo:#{params[:owner]}/#{params[:repo_name]} is:pr is:open created:>#{params[:one_year].to_date}"
           params[:closed_pr_query] = "repo:#{params[:owner]}/#{params[:repo_name]} is:pr is:closed created:>#{params[:one_year].to_date}"
+          full_name = "#{params[:owner]}/#{params[:repo_name]}"
 
           results = @client.query(ISSUES_QUERY, variables: params)
-          QueryUtils.check_for_graphql_errors(results)
+          QueryUtils.check_for_graphql_errors(results, full_name)
 
           results
         end
