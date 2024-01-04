@@ -413,6 +413,9 @@ GEM
       racc
     pg (1.5.4)
     pg_query (1.3.0)
+    pg_search (2.3.6)
+      activerecord (>= 5.2)
+      activesupport (>= 5.2)
     pghero (3.3.3)
       activerecord (>= 6)
     pictogram (2.0.12)
@@ -736,6 +739,7 @@ DEPENDENCIES
   parallel
   pg
   pg_query
+  pg_search (~> 2.3.6)
   pghero
   pictogram
   premailer-rails (= 1.12.0)

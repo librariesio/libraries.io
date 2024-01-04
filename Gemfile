@@ -66,6 +66,7 @@ gem "parallel", require: nil
 gem "pg"
 gem "pghero"
 gem "pg_query"
+gem "pg_search", "~> 2.3.6"
 gem "pictogram"
 gem "premailer-rails", "1.12.0"
 gem "puma"

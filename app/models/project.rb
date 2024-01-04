@@ -195,6 +195,22 @@ class Project < ApplicationRecord
   before_destroy :create_deleted_project
   after_create :destroy_deleted_project
 
+  include PgSearch::Model
+  pg_search_scope :pg_proj_search,
+                  order_within_rank: "latest_release_published_at DESC",
+                  against: {
+                    name: "A",
+                    platform: "B",
+                    description: "B",
+                    homepage: "C",
+                    language: "C",
+                    keywords: "C",
+                    normalized_licenses: "D",
+                  },
+                  using: {
+                    tsearch: { prefix: true },
+                  }
+
   def self.total
     Rails.cache.fetch "projects:total", expires_in: 1.day, race_condition_ttl: 2.minutes do
       all.count
