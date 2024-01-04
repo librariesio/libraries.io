@@ -1,0 +1,25 @@
+# frozen_string_literal: true
+
+module MaintenanceStats
+  module Queries
+    class QueryError < StandardError; end
+
+    class QueryUtils
+      def self.check_for_graphql_errors(result)
+        if result.data.nil?
+          raise QueryError, "No data found in result"
+        end
+
+        if result.errors.any?
+          error_messages = result.errors.values.flatten
+          raise QueryError, "Error exists in query: #{error_messages}"
+        end
+
+        if result.data.errors.any?
+          error_messages = result.data.errors.values.flatten
+          raise QueryError, "Error exists in result: #{error_messages}"
+        end
+      end
+    end
+  end
+end

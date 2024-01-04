@@ -252,9 +252,9 @@ describe Repository, type: :model do
     context "with invalid repository" do
       let(:repository) { create(:repository, full_name: "bad/example-for-testing") }
 
-      it "should save metrics for repository" do
+      it "should not save metrics for repository" do
         VCR.use_cassette("github/bad_repository", match_requests_on: %i[method uri body query]) do
-          repository.gather_maintenance_stats
+          expect { repository.gather_maintenance_stats }.to raise_error(MaintenanceStats::Queries::QueryError)
         end
 
         maintenance_stats = repository.repository_maintenance_stats

@@ -44,8 +44,7 @@ module MaintenanceStats
             params[:cursor] = cursor if cursor.present?
             result = @client.query(RELEASES_QUERY, variables: params)
 
-            # send back the releases we have so far if we encounter an error
-            return releases if check_for_errors(result)
+            QueryUtils.check_for_graphql_errors(result)
 
             has_next_page = result.data.repository.releases.page_info.has_next_page
             cursor = result.data.repository.releases.page_info.end_cursor
@@ -65,12 +64,6 @@ module MaintenanceStats
           end
 
           releases
-        end
-
-        private
-
-        def check_for_errors(result)
-          result.data.nil? || result.errors.any? || result.data.errors.any?
         end
       end
     end

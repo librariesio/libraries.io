@@ -232,17 +232,13 @@ module RepositoryHost
       metrics << MaintenanceStats::Stats::Github::ReleaseStats.new(result).fetch_stats
 
       result = MaintenanceStats::Queries::Github::CommitCountQuery.new(v4_client).query(params: { owner: repository.owner_name, repo_name: repository.project_name, start_date: now })
-      metrics << MaintenanceStats::Stats::Github::CommitsStat.new(result).fetch_stats unless check_for_v4_error_response(result)
+      metrics << MaintenanceStats::Stats::Github::CommitsStat.new(result).fetch_stats
 
-      begin
-        result = MaintenanceStats::Queries::Github::RepositoryContributorStatsQuery.new(v3_client).query(params: { full_name: repository.full_name })
-        metrics << MaintenanceStats::Stats::Github::V3ContributorCountStats.new(result).fetch_stats
-      rescue Octokit::Error => e
-        Rails.logger.warn(e.message)
-      end
+      result = MaintenanceStats::Queries::Github::RepositoryContributorStatsQuery.new(v3_client).query(params: { full_name: repository.full_name })
+      metrics << MaintenanceStats::Stats::Github::V3ContributorCountStats.new(result).fetch_stats
 
       result = MaintenanceStats::Queries::Github::IssuesQuery.new(v4_client).query(params: { owner: repository.owner_name, repo_name: repository.project_name, start_date: now })
-      metrics << MaintenanceStats::Stats::Github::IssueStats.new(result).fetch_stats unless check_for_v4_error_response(result)
+      metrics << MaintenanceStats::Stats::Github::IssueStats.new(result).fetch_stats
 
       add_metrics_to_repo(metrics)
 
@@ -253,14 +249,6 @@ module RepositoryHost
 
     def api_client(token = nil)
       AuthToken.fallback_client(token)
-    end
-
-    def check_for_v4_error_response(response)
-      # errors can be stored in the response from Github or can be stored in the response object from HTTP errors
-      response.errors.messages.each(&Rails.logger.method(:warn)) if response.errors.present?
-      response.data.errors.messages.each(&Rails.logger.method(:warn)) if response.data&.errors.present?
-      # if we have either type of error or there is no data return true
-      response.data.nil? || response.errors.any? || response.data.errors.any?
     end
   end
 end
