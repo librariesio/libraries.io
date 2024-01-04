@@ -350,4 +350,42 @@ namespace :one_off do
       puts "Destroyed #{processed_count} of #{affected_projects_count} projects."
     end
   end
+
+  desc "Set maintenance_stats_refreshed_at on Repositories"
+  task :set_maintenance_stats_refreshed_at_date, %i[commit] => :environment do |_t, args|
+    puts "Preparing to set maintenance stats refresh date on GitHub repositories"
+    batch_size = args.batch_size || 1000
+
+    query = Repository.where.associated(:repository_maintenance_stats).where(host_type: "GitHub", maintenance_stats_refreshed_at: nil).select(:id).distinct
+    total_left = query.count
+    total_pages = (total_left / batch_size.to_f).ceil
+    puts "#{total_left} repositories left to update"
+
+    query.in_batches(of: batch_size).each_with_index do |batch, index|
+      puts "Query batch #{index + 1} of #{total_pages}"
+
+      repo_id_to_date = RepositoryMaintenanceStat
+        .where(repository_id: batch.ids)
+        .group("repository_id")
+        .pluck("repository_id, max(updated_at)")
+        .to_h
+
+      puts "Finished gathering dates for batch #{index + 1}"
+
+      upsert_hashes = batch.map do |repository|
+        {
+          id: repository.id,
+          maintenance_stats_refreshed_at: repo_id_to_date.fetch(repository.id)
+        }
+      end
+
+      Repository.upsert_all(
+        upsert_hashes
+      )
+
+      puts "Updated all records in batch #{index + 1}"
+    end
+
+    puts "fin."
+  end
 end

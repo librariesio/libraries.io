@@ -226,6 +226,11 @@ module RepositoryHost
       v3_client = AuthToken.client({ auto_paginate: false })
       now = DateTime.current
 
+      # We have a valid token to run the queries so
+      # set refreshed_at time so we don't try and refresh
+      # this repository again if the information is bad
+      repository.update!(maintenance_stats_refreshed_at: now)
+
       metrics = []
 
       result = MaintenanceStats::Queries::Github::RepoReleasesQuery.new(v4_client).query(params: { owner: repository.owner_name, repo_name: repository.project_name, end_date: now - 1.year })

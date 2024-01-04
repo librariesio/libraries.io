@@ -227,6 +227,7 @@ describe Repository, type: :model do
 
       it "should save metrics for repository" do
         maintenance_stats = repository.repository_maintenance_stats
+        expect(repository.maintenance_stats_refreshed_at).to_not be_nil
         expect(maintenance_stats.count).to be > 0
 
         maintenance_stats.each do |stat|
@@ -259,6 +260,8 @@ describe Repository, type: :model do
 
         maintenance_stats = repository.repository_maintenance_stats
         expect(maintenance_stats.count).to be 0
+        # we should update the refreshed_at time even with a query error
+        expect(repository.maintenance_stats_refreshed_at).not_to be_nil
       end
     end
 
@@ -294,6 +297,7 @@ describe Repository, type: :model do
 
         maintenance_stats = repository.repository_maintenance_stats
         expect(maintenance_stats.count).to be 0
+        expect(repository.maintenance_stats_refreshed_at).to be_nil
       end
     end
   end

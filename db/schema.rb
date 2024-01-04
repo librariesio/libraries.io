@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_13_145217) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_04_185219) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -257,9 +257,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_145217) do
     t.integer "repository_user_id"
     t.string "keywords", default: [], array: true
     t.index "lower((host_type)::text), lower((full_name)::text)", name: "index_repositories_on_lower_host_type_lower_full_name", unique: true
+    t.datetime "maintenance_stats_refreshed_at"
     t.index "lower((language)::text)", name: "github_repositories_lower_language"
     t.index ["fork"], name: "index_repositories_on_fork"
     t.index ["host_type", "uuid"], name: "index_repositories_on_host_type_and_uuid", unique: true
+    t.index ["maintenance_stats_refreshed_at"], name: "index_repositories_on_maintenance_stats_refreshed_at"
     t.index ["private"], name: "index_repositories_on_private"
     t.index ["rank", "stargazers_count", "id"], name: "index_repositories_on_rank_and_stargazers_count_and_id"
     t.index ["repository_organisation_id"], name: "index_repositories_on_repository_organisation_id"
