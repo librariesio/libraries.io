@@ -375,7 +375,7 @@ namespace :one_off do
       upsert_hashes = batch.map do |repository|
         {
           id: repository.id,
-          maintenance_stats_refreshed_at: repo_id_to_date.fetch(repository.id)
+          maintenance_stats_refreshed_at: repo_id_to_date.fetch(repository.id),
         }
       end
 
