@@ -6,17 +6,6 @@ module MaintenanceStats
       class QueryError < StandardError; end
 
       def self.check_for_graphql_errors(result, repository_name)
-        if result.data.nil?
-          StructuredLog.capture(
-            "GITHUB_STAT_QUERY_ERROR",
-            {
-              repository_name: repository_name,
-              error_messages: ["no data found in result"],
-            }
-          )
-          raise QueryError, "No data found in result"
-        end
-
         if result.errors.any?
           error_messages = result.errors.values.flatten
           StructuredLog.capture(
@@ -27,6 +16,17 @@ module MaintenanceStats
             }
           )
           raise QueryError, "Error exists in query: #{error_messages}"
+        end
+
+        if result.data.nil?
+          StructuredLog.capture(
+            "GITHUB_STAT_QUERY_ERROR",
+            {
+              repository_name: repository_name,
+              error_messages: ["no data found in result"],
+            }
+          )
+          raise QueryError, "No data found in result"
         end
 
         if result.data.errors.any?
