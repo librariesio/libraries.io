@@ -257,7 +257,7 @@ describe Repository, type: :model do
         allow(StructuredLog).to receive(:capture).and_call_original
 
         VCR.use_cassette("github/bad_repository", match_requests_on: %i[method uri body query]) do
-          expect { repository.gather_maintenance_stats }.to raise_error(MaintenanceStats::Queries::QueryError)
+          expect { repository.gather_maintenance_stats }.to raise_error(MaintenanceStats::Queries::QueryUtils::QueryError)
         end
 
         maintenance_stats = repository.repository_maintenance_stats

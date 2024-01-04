@@ -2,9 +2,9 @@
 
 module MaintenanceStats
   module Queries
-    class QueryError < StandardError; end
-
     class QueryUtils
+      class QueryError < StandardError; end
+
       def self.check_for_graphql_errors(result, repository_name)
         if result.data.nil?
           StructuredLog.capture(
