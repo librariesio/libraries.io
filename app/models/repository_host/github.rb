@@ -2,18 +2,21 @@
 
 module RepositoryHost
   class Github < Base
-    IGNORABLE_EXCEPTIONS = [
-      Octokit::Unauthorized,
+    NOT_FOUND_EXCEPTIONS = [
       Octokit::InvalidRepository,
       Octokit::RepositoryUnavailable,
       Octokit::NotFound,
+      Octokit::UnavailableForLegalReasons,
+    ].freeze
+
+    IGNORABLE_EXCEPTIONS = ([
+      Octokit::Unauthorized,
       Octokit::Conflict,
       Octokit::Forbidden,
       Octokit::InternalServerError,
       Octokit::BadGateway,
       Octokit::ClientError,
-      Octokit::UnavailableForLegalReasons,
-    ].freeze
+    ] + NOT_FOUND_EXCEPTIONS).freeze
 
     def self.api_missing_error_class
       Octokit::NotFound
@@ -230,6 +233,27 @@ module RepositoryHost
       # set refreshed_at time so we don't try and refresh
       # this repository again if the information is bad
       repository.update!(maintenance_stats_refreshed_at: now)
+
+      # check to see if this is still a valid GitHub repository
+      # if it returns a nil value then delete the existing
+      # stats since they are no longer valid and skip trying to query them
+      begin
+        v3_client.repo(repository.full_name)
+      rescue *NOT_FOUND_EXCEPTIONS => e
+        # check for one of the not found errors from Octokit
+        # but ignore any other communication errors to GitHub
+
+        StructuredLog.capture(
+          "GITHUB_STAT_REPO_NOT_FOUND",
+          {
+            repository_name: repository.full_name,
+            error_message: e.message,
+          }
+        )
+
+        repository.repository_maintenance_stats.destroy_all
+        return []
+      end
 
       metrics = []
 
