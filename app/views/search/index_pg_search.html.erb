@@ -9,7 +9,7 @@
     </div>
       <div class="row">
         <div class="col-xs-6">
-          <h5><%# search_page_entries_info @search, model: 'package' %></h5>
+          <h5><%= search_page_entries_info @projects, model: 'package' %></h5>
           <% unless @any_criteria %>
             <p>Please provide search criteria and try again</p>
           <% end %>
