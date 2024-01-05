@@ -196,7 +196,7 @@ class Project < ApplicationRecord
   after_create :destroy_deleted_project
 
   include PgSearch::Model
-  pg_search_scope :pg_proj_search,
+  pg_search_scope :db_search,
                   order_within_rank: "latest_release_published_at DESC",
                   against: {
                     name: "A",
@@ -208,7 +208,10 @@ class Project < ApplicationRecord
                     normalized_licenses: "D",
                   },
                   using: {
-                    tsearch: { prefix: true },
+                    tsearch: {
+                      prefix: true,
+                      dictionary: "english",
+                    },
                   }
 
   def self.total

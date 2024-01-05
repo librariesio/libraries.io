@@ -18,7 +18,7 @@ class ProjectSearchQuery
       .then { |query| filter_languages(query) }
       .then { |query| filter_licenses(query) }
       .then { |query| filter_keywords(query) }
-      .pg_proj_search(term)
+      .db_search(term)
   end
 
   private
