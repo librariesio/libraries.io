@@ -196,7 +196,7 @@ class ApplicationController < ActionController::Base
   end
 
   def pg_search_projects_enabled?
-    Rails.application.config.pg_search_projects_enabled
+    params.key?("force_pg") || Rails.application.config.pg_search_projects_enabled
   end
 
   def find_version
