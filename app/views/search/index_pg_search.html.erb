@@ -1,0 +1,83 @@
+<% title @title %>
+<% content_for :atom, auto_discovery_link_tag(:atom, url_for(search_params.merge({format: "atom"}))) %>
+  <div class="row">
+  <div class='col-sm-8'>
+    <div class="row hidden-sm  hidden-md hidden-lg">
+      <div class="col-md-12">
+        <%= render 'projects/search_form' %>
+      </div>
+    </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <h5><%# search_page_entries_info @search, model: 'package' %></h5>
+          <% unless @any_criteria %>
+            <p>Please provide search criteria and try again</p>
+          <% end %>
+        </div>
+        <div class="col-xs-6">
+          <div class="btn-group pull-right">
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Sort: <strong><%= current_sort.first %></strong> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <% sort_options.each do |sort_option| %>
+                <li>
+                  <%= link_to url_for(params.except(:host).merge(sort: sort_option[1]).permit!) do %>
+                    <% if params[:sort] == sort_option[1] %>
+                      <%= fa_icon 'check' %>
+                    <% else %>
+                      <span class='fa-blank'></span>
+                    <% end %>
+                    <%= sort_option[0] %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+      <hr>
+      <% if @suggestion && @suggestion.options.any? %>
+        <p>
+          Did you mean
+          <strong><%= link_to "#{@suggestion.options.first.text}?", search_path(q: @suggestion.options.first.text) %></strong>
+        </p>
+      <% end %>
+
+    <% if @projects.length > 0 %>
+      <%= render @projects %>
+      <%= will_paginate @projects, page_links: false %>
+    <% else %>
+      <p>
+        <b>No packages found. </b>
+      </p>
+      <% if params[:platforms].present? || params[:licenses].present? ||  params[:languages].present? ||  params[:keywords].present? %>
+        <p>
+          <%= link_to 'Try removing some filters.', search_path(q: params[:q]) %>
+        </p>
+      <% else %>
+        <h3>Something Missing?</h3>
+        <p>
+          If a package from one of these package managers is missing please <%= link_to 'report it as a bug', "https://github.com/librariesio/libraries.io/issues/new?title=No results for search '#{params[:q]}'" %>.
+        </p>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class='col-sm-4 facets'>
+    <%# @facets.each do |name, facet| %>
+      <%# facet = facet[facet.keys.last] %>
+      <%# next if facet.buckets.nil? || facet.buckets.empty? %>
+      <%# render 'search/facet', name: name, facet: facet %>
+    <%# end %>
+    <p>
+      <small>
+        <%= link_to url_for(params.except(:host).merge(format: :atom, sort: 'created_at', order: 'desc').permit!), class: 'rss' do %>
+          <%= fa_icon "rss-square" %>
+          Subscribe to an RSS feed of this search
+        <% end %>
+      </small>
+    </p>
+  </div>
+</div>
