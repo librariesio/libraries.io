@@ -51,12 +51,12 @@ describe "SearchController", elasticsearch: true do
       allow_any_instance_of(ApplicationController).to receive(:es_query).and_raise
     end
 
-    it "renders successfully when logged out" do
+    it "renders results page successfully" do
       visit search_path(params: { q: search_criteria })
       expect(page).to have_content project.name
     end
 
-    it "renders successfully when logged out" do
+    it "renders atom feed of results successfully" do
       visit search_path(params: { q: search_criteria }, format: :atom)
       expect(page).to have_content project.name
     end
