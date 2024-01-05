@@ -637,7 +637,7 @@ class Project < ApplicationRecord
       # pkg.go.dev can be 404 on first-hit for a new package (or alias for the package), so ensure that the package existed in the past
       # by ensuring its age is old enough to not be just uncached by pkg.go.dev yet.
       update_attribute(:status, "Removed") if created_at < 1.week.ago
-    elsif platform.downcase != "packagist" && [400, 404, 410].include?(response.response_code)
+    elsif !platform.downcase.in?(%w[packagist go]) && [400, 404, 410].include?(response.response_code)
       update_attribute(:status, "Removed")
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(self)
