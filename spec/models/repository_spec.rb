@@ -331,6 +331,70 @@ describe Repository, type: :model do
     end
   end
 
+  describe "maintenance stats" do
+    let!(:repository) { create(:repository) }
+
+    context "without existing stats" do
+      it "should be included in no_existing_stats query" do
+        results = Repository.no_existing_stats.where(id: repository.id)
+        expect(results.count).to eql 1
+      end
+
+      context "with refreshed at date" do
+        let!(:repository) { create(:repository, maintenance_stats_refreshed_at: Time.current) }
+
+        it "should not be included in no_existing_stats query" do
+          # if the repository has a refreshed_at date but no stats that means
+          # there was a problem getting stats and should not be considered for
+          # the no_existing_stats query
+          results = Repository.no_existing_stats.where(id: repository.id)
+          expect(results.count).to eql 0
+        end
+      end
+    end
+
+    context "with stats" do
+      let!(:stat1) { create(:repository_maintenance_stat, repository: repository) }
+
+      context "with refreshed at date" do
+        let!(:repository) { create(:repository, maintenance_stats_refreshed_at: Time.current) }
+
+        it "should show up in least_recently_updated_stats query" do
+          results = Repository.least_recently_updated_stats.where(id: repository.id)
+
+          expect(results.count).to eql 1
+        end
+      end
+
+      it "should not be in no_existing_stats query" do
+        results = Repository.no_existing_stats.where(id: repository.id)
+        expect(results.count).to eql 0
+      end
+    end
+
+    context "two repositories with stats" do
+      let!(:repository) { create(:repository, maintenance_stats_refreshed_at: 1.day.ago) }
+      let!(:stat1) { create(:repository_maintenance_stat, repository: repository) }
+      let!(:repository2) { create(:repository, full_name: "octokit/octokit", maintenance_stats_refreshed_at: 1.year.ago) }
+      let!(:stat2) { create(:repository_maintenance_stat, repository: repository2) }
+
+      it "should return project with oldest refreshed at date first" do
+        results = Repository.least_recently_updated_stats
+        expect(results.first.id).to eql repository2.id
+      end
+
+      it "should return both projects" do
+        results = Repository.least_recently_updated_stats
+        expect(results.length).to eql 2
+      end
+
+      it "no_existing_stats query should be empty" do
+        results = Repository.no_existing_stats
+        expect(results.length).to eql 0
+      end
+    end
+  end
+
   describe "#sync_manifest" do
     let(:repository) { create(:repository) }
     before do

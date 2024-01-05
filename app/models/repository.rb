@@ -148,6 +148,9 @@ class Repository < ApplicationRecord
 
   scope :indexable, -> { open_source.source.not_removed }
 
+  scope :least_recently_updated_stats, -> { where.not(maintenance_stats_refreshed_at: nil).order(maintenance_stats_refreshed_at: :asc) }
+  scope :no_existing_stats, -> { where.missing(:repository_maintenance_stats).where(maintenance_stats_refreshed_at: nil) }
+
   delegate :download_owner, :download_readme, :domain, :watchers_url, :forks_url,
            :download_fork_source, :download_tags, :download_contributions, :url,
            :create_webhook, :download_forks, :stargazers_url,
@@ -398,7 +401,7 @@ class Repository < ApplicationRecord
     update!(status: "Hidden")
   end
 
-  def gather_maintenance_stats_async
-    RepositoryMaintenanceStatWorker.enqueue(id, priority: :medium)
+  def gather_maintenance_stats_async(priority: :medium)
+    RepositoryMaintenanceStatWorker.enqueue(id, priority: priority)
   end
 end

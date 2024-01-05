@@ -123,10 +123,6 @@ class Project < ApplicationRecord
   has_many :repository_maintenance_stats, through: :repository
 
   scope :updated_within, ->(start, stop) { where("updated_at >= ? and updated_at <= ? ", start, stop).order(updated_at: :asc) }
-  # restrict to only GitHub repositories where we have attempted to refresh the stats previously
-  scope :least_recently_updated_stats, -> { joins(:repository).where(repositories: { host_type: "GitHub" }).where.not(repositories: { maintenance_stats_refreshed_at: nil }).merge(Repository.order(maintenance_stats_refreshed_at: :asc)) }
-  # restrict to only GitHub repositories that have no existing stats and have never attempted to be refreshed
-  scope :no_existing_stats, -> { where.missing(:repository_maintenance_stats).where(repositories: { host_type: "GitHub", maintenance_stats_refreshed_at: nil }) }
 
   scope :platform, ->(platforms) { where(platform: Array.wrap(platforms).map { |platform| PackageManager::Base.format_name(platform) }) }
   scope :lower_platform, ->(platform) { where("lower(projects.platform) = ?", platform.try(:downcase)) }
