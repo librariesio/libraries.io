@@ -275,6 +275,34 @@ describe Project, type: :model do
       end
     end
 
+    context "a go project missing from upstream" do
+      context "recently created" do
+        let!(:project) { Project.create(platform: "Go", name: "github.com/some-nonexistent-fake/pkg", status: nil, created_at: 1.hour.ago) }
+
+        it "should not mark it as Removed" do
+          VCR.use_cassette("project/check_status/go") do
+            project.check_status
+            project.reload
+            expect(project.status).to eq(nil)
+            expect(project.status_checked_at).to eq(DateTime.current)
+          end
+        end
+      end
+
+      context "not recently created" do
+        let!(:project) { Project.create(platform: "Go", name: "github.com/some-nonexistent-fake/pkg", status: nil, created_at: 1.month.ago) }
+
+        it "should mark it as Removed" do
+          VCR.use_cassette("project/check_status/go") do
+            project.check_status
+            project.reload
+            expect(project.status).to eq("Removed")
+            expect(project.status_checked_at).to eq(DateTime.current)
+          end
+        end
+      end
+    end
+
     context "some of project deprecated" do
       let!(:project) { Project.create(platform: "NPM", name: "react", status: nil, updated_at: 1.week.ago) }
 
