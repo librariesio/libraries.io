@@ -190,7 +190,8 @@ class ApplicationController < ActionController::Base
       platforms: current_platforms,
       languages: current_languages,
       keywords: current_keywords,
-      licenses: current_licenses
+      licenses: current_licenses,
+      sort: format_sort
     ).results
   end
 
