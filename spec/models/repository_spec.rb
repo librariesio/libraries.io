@@ -254,23 +254,43 @@ describe Repository, type: :model do
       let(:repository) { create(:repository, full_name: "bad/example-for-testing") }
 
       it "should not save metrics for repository" do
-        allow(StructuredLog).to receive(:capture).and_call_original
+        VCR.use_cassette("github/bad_repository", match_requests_on: %i[method uri body query]) do
+          repository.gather_maintenance_stats
+
+          maintenance_stats = repository.repository_maintenance_stats
+          expect(maintenance_stats.count).to be 0
+          # we should update the refreshed_at time even with an invalid repo
+          expect(repository.maintenance_stats_refreshed_at).not_to be_nil
+        end
+      end
+
+      it "should not query for metrics" do
+        allow(MaintenanceStats::Queries::Github::RepoReleasesQuery).to receive(:new).and_call_original
 
         VCR.use_cassette("github/bad_repository", match_requests_on: %i[method uri body query]) do
-          expect { repository.gather_maintenance_stats }.to raise_error(MaintenanceStats::Queries::QueryUtils::QueryError)
-        end
+          repository.gather_maintenance_stats
 
-        maintenance_stats = repository.repository_maintenance_stats
-        expect(maintenance_stats.count).to be 0
-        # we should update the refreshed_at time even with a query error
-        expect(repository.maintenance_stats_refreshed_at).not_to be_nil
-        expect(StructuredLog).to have_received(:capture).with(
-          "GITHUB_STAT_QUERY_ERROR",
-          hash_including(
-            repository_name: repository.full_name,
-            error_messages: array_including("Could not resolve to a Repository with the name '#{repository.full_name}'.")
+          # we should have exited before trying to run any queries
+          expect(MaintenanceStats::Queries::Github::RepoReleasesQuery).not_to have_received(:new)
+          # we should update the refreshed_at time even with an invalid repo
+          expect(repository.maintenance_stats_refreshed_at).not_to be_nil
+        end
+      end
+
+      it "should log that the repository was not found" do
+        allow(StructuredLog).to receive(:capture)
+
+        VCR.use_cassette("github/bad_repository", match_requests_on: %i[method uri body query]) do
+          repository.gather_maintenance_stats
+
+          expect(StructuredLog).to have_received(:capture).with(
+            "GITHUB_STAT_REPO_NOT_FOUND",
+            hash_including(
+              repository_name: repository.full_name,
+              error_message: /.*404 - Not Found.*/ # message should contain the 404 error but ignore all the extra details in the string
+            )
           )
-        )
+        end
       end
     end
 
