@@ -148,6 +148,9 @@ class Repository < ApplicationRecord
 
   scope :indexable, -> { open_source.source.not_removed }
 
+  scope :least_recently_updated_stats, -> { where.not(maintenance_stats_refreshed_at: nil).order(maintenance_stats_refreshed_at: :asc) }
+  scope :no_existing_stats, -> { where.missing(:repository_maintenance_stats).where(maintenance_stats_refreshed_at: nil) }
+
   delegate :download_owner, :download_readme, :domain, :watchers_url, :forks_url,
            :download_fork_source, :download_tags, :download_contributions, :url,
            :create_webhook, :download_forks, :stargazers_url,
@@ -308,6 +311,7 @@ class Repository < ApplicationRecord
     return unless repo_hash
 
     repo_hash = repo_hash.to_hash.with_indifferent_access
+
     ActiveRecord::Base.transaction do
       g = Repository.where(host_type: (repo_hash[:host_type] || "GitHub")).find_by(uuid: repo_hash[:id])
       g = Repository.host(repo_hash[:host_type] || "GitHub").find_by("lower(full_name) = ?", repo_hash[:full_name].downcase) if g.nil?
@@ -321,9 +325,9 @@ class Repository < ApplicationRecord
       g.assign_attributes repo_hash.slice(*Repository::API_FIELDS)
 
       if g.changed?
-        return g.save ? g : nil
+        g.save ? g : nil
       else
-        return g
+        g
       end
     end
   rescue ActiveRecord::RecordNotUnique
@@ -398,7 +402,7 @@ class Repository < ApplicationRecord
     update!(status: "Hidden")
   end
 
-  def gather_maintenance_stats_async
-    RepositoryMaintenanceStatWorker.enqueue(id, priority: :medium)
+  def gather_maintenance_stats_async(priority: :medium)
+    RepositoryMaintenanceStatWorker.enqueue(id, priority: priority)
   end
 end

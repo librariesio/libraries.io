@@ -60,6 +60,7 @@ Rails.application.routes.draw do
 
     put "/maintenance/stats/enqueue/:platform/:name", as: :maintenance_stat_enqueue, to: "maintenance_stats#enqueue", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     post "/maintenance/stats/begin/bulk", to: "maintenance_stats#begin_watching_bulk"
+    post "/maintenance/stats/begin/repositories", to: "maintenance_stats#begin_watching_repositories"
     get "/maintenance/stats/begin/:platform/:name", to: "maintenance_stats#begin_watching", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
 
     get "/:platform/:name/usage", to: "project_usage#show", as: :project_usage, constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
