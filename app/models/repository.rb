@@ -311,6 +311,7 @@ class Repository < ApplicationRecord
     return unless repo_hash
 
     repo_hash = repo_hash.to_hash.with_indifferent_access
+
     ActiveRecord::Base.transaction do
       g = Repository.where(host_type: (repo_hash[:host_type] || "GitHub")).find_by(uuid: repo_hash[:id])
       g = Repository.host(repo_hash[:host_type] || "GitHub").find_by("lower(full_name) = ?", repo_hash[:full_name].downcase) if g.nil?
@@ -324,9 +325,9 @@ class Repository < ApplicationRecord
       g.assign_attributes repo_hash.slice(*Repository::API_FIELDS)
 
       if g.changed?
-        return g.save ? g : nil
+        g.save ? g : nil
       else
-        return g
+        g
       end
     end
   rescue ActiveRecord::RecordNotUnique
