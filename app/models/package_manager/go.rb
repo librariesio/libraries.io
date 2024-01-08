@@ -31,7 +31,7 @@ module PackageManager
     end
 
     def self.check_status_url(db_project)
-      "#{PROXY_BASE_URL}/#{encode_for_proxy(db_project.name)}/@v/list"
+      "#{DISCOVER_URL}/#{db_project.name}"
     end
 
     def self.package_link(db_project, version = nil)
