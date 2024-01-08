@@ -119,13 +119,14 @@ describe "API::MaintenanceStatsController" do
         expect(response).to have_http_status(:accepted)
       end
 
-      it "does not update stats for unsupported repository host" do
+      it "does not update stats with unsupported repository host" do
         VCR.use_cassette("github/chalk_api", match_requests_on: %i[method uri body query]) do
           post(
             "/api/maintenance/stats/begin/repositories",
             params: {
               api_key: internal_user.api_key,
               repositories: [
+                { host_type: repository_github.host_type, full_name: repository_github.full_name },
                 { host_type: repository_gitlab.host_type, full_name: repository_gitlab.full_name },
               ],
             }
