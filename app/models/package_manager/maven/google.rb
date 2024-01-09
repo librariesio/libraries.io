@@ -2,7 +2,6 @@
 
 class PackageManager::Maven::Google < PackageManager::Maven::Common
   REPOSITORY_SOURCE_NAME = "Google"
-  SUPPORTS_SINGLE_VERSION_UPDATE = true
   HIDDEN = true
 
   def self.repository_base
