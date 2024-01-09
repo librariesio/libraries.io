@@ -2,7 +2,6 @@
 
 class PackageManager::Maven::MavenCentral < PackageManager::Maven::Common
   REPOSITORY_SOURCE_NAME = "Maven"
-  SUPPORTS_SINGLE_VERSION_UPDATE = true
   HIDDEN = true
 
   def self.repository_base

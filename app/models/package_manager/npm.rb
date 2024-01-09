@@ -9,7 +9,6 @@ module PackageManager
     URL = "https://www.npmjs.com"
     COLOR = "#f1e05a"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
-    SUPPORTS_SINGLE_VERSION_UPDATE = false
 
     def self.missing_version_remover
       PackageManager::Base::MissingVersionRemover
@@ -109,6 +108,13 @@ module PackageManager
           original_license: license,
         }
       end
+    end
+
+    # NPM is currently unreliable in its update publishing.
+    # The updates are coming in out of order, which is throwing off single version updates.
+    # See https://github.com/librariesio/libraries.io/pull/3278 for more details.
+    def self.supports_single_version_update?
+      false
     end
 
     def self.one_version(raw_project, version_string)

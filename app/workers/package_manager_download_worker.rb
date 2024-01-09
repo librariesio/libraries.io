@@ -68,7 +68,7 @@ class PackageManagerDownloadWorker
     key, platform = get_platform(platform_name)
     name = name.to_s.strip
     version = version.to_s.strip
-    sync_version = (platform::SUPPORTS_SINGLE_VERSION_UPDATE && version.presence) || :all
+    sync_version = (platform.supports_single_version_update? && version.presence) || :all
 
     if platform::SYNC_ACTIVE != true
       Rails.logger.info("Skipping Package update for inactive platform=#{key} name=#{name} version=#{version} source=#{source}")

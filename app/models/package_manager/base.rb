@@ -11,7 +11,6 @@ module PackageManager
     SYNC_ACTIVE = true
     HAS_OWNERS = false
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = false
-    SUPPORTS_SINGLE_VERSION_UPDATE = false
 
     def self.platforms
       @platforms ||= begin
@@ -113,8 +112,24 @@ module PackageManager
       db_project
     end
 
+    # Override this in a subclass if you need to temporarily disable single version
+    # updates on a class that supports them.
+    def self.supports_single_version_update?
+      respond_to?(:one_version)
+    end
+
+    # Single version updates, when supported, reduce database and Sidekiq
+    # utilization. To support single version update in a package manager,
+    # add a class method to the package manager called `one_version`.
+    # It should return a Hash of:
+    #
+    # {
+    #   number: <version number>,
+    #   published_at: <Time version was published>,
+    #   original_license: <License string from upstream>
+    # }
     def self.update(name, sync_version: :all, force_sync_dependencies: false)
-      if sync_version != :all && !self::SUPPORTS_SINGLE_VERSION_UPDATE
+      if sync_version != :all && !supports_single_version_update?
         Rails.logger.warn("#{db_platform}.update(#{name}, sync_version: #{sync_version}) called but not supported on platform")
         return
       end

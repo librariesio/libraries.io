@@ -5,7 +5,6 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
-    SUPPORTS_SINGLE_VERSION_UPDATE = true
     COLOR = "#375eab"
     KNOWN_HOSTS = [
       "bitbucket.org",
