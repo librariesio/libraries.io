@@ -44,7 +44,7 @@
 #  index_projects_on_dependents_count               (dependents_count)
 #  index_projects_on_keywords_array                 (keywords_array) USING gin
 #  index_projects_on_lower_language                 (lower((language)::text))
-#  index_projects_on_maintained                     (platform,language,id) WHERE (((status)::text = ANY ((ARRAY['Active'::character varying, 'Help Wanted'::character varying])::text[])) OR (status IS NULL))
+#  index_projects_on_maintained                     (platform,language,id) WHERE (((status)::text = ANY (ARRAY[('Active'::character varying)::text, ('Help Wanted'::character varying)::text])) OR (status IS NULL))
 #  index_projects_on_normalized_licenses            (normalized_licenses) USING gin
 #  index_projects_on_platform_and_dependents_count  (platform,dependents_count)
 #  index_projects_on_platform_and_name              (platform,name) UNIQUE
@@ -54,6 +54,8 @@
 #  index_projects_on_status_checked_at              (status_checked_at)
 #  index_projects_on_updated_at                     (updated_at)
 #  index_projects_on_versions_count                 (versions_count)
+#  index_projects_search_on_description             (to_tsvector('simple'::regconfig, COALESCE(description, ''::text))) USING gist
+#  index_projects_search_on_name                    (COALESCE((name)::text, ''::text) gist_trgm_ops (siglen='512')) USING gist
 #
 class Project < ApplicationRecord
   require "query_counter"
@@ -196,23 +198,20 @@ class Project < ApplicationRecord
   after_create :destroy_deleted_project
 
   include PgSearch::Model
-  pg_search_scope :db_search,
-                  order_within_rank: "latest_release_published_at DESC",
-                  against: {
-                    name: "A",
-                    platform: "B",
-                    description: "B",
-                    homepage: "C",
-                    language: "C",
-                    keywords: "C",
-                    normalized_licenses: "D",
-                  },
-                  using: {
-                    tsearch: {
-                      prefix: true,
-                      dictionary: "english",
-                    },
-                  }
+  DB_SEARCH_OPTIONS = {
+    order_within_rank: "latest_release_published_at DESC",
+    ranked_by: "(:trigram * 3.0) + :tsearch",
+    against: %i[name description],
+    using: {
+      trigram: {
+        only: [:name],
+      },
+      tsearch: {
+        only: [:description],
+      },
+    },
+  }.freeze
+  pg_search_scope :db_search, DB_SEARCH_OPTIONS
 
   def self.total
     Rails.cache.fetch "projects:total", expires_in: 1.day, race_condition_ttl: 2.minutes do
