@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSearchExtensions < ActiveRecord::Migration[7.0]
   def up
     safety_assured do
