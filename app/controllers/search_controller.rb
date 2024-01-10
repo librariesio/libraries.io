@@ -9,7 +9,7 @@ class SearchController < ApplicationController
       .any?(&:present?)
 
     if pg_search_projects_enabled?
-      @projects = paginate pg_search_projects(@query)
+      @projects = pg_search_projects(@query).paginate(page: params[:page])
 
       respond_to do |format|
         format.html { render :index_pg_search }

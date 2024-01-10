@@ -5,7 +5,7 @@ class Api::SearchController < Api::ApplicationController
 
   def index
     if pg_search_projects_enabled?
-      @projects = paginate pg_search_projects(params[:q]).includes(:repository, :versions)
+      @projects = pg_search_projects(params[:q]).includes(:repository, :versions).paginate(page: params[:page])
     else
       search = paginate search_projects(params[:q])
       @projects = search.records.includes(:repository, :versions)
