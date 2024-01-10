@@ -44,7 +44,7 @@ module ApplicationHelper
     if collection.empty?
       "No #{entry_name.pluralize} found"
     elsif collection.total_pages < 2
-      pluralize(collection.total_pages, entry_name)
+      pluralize(collection.total_entries, entry_name)
     else
       format(%(%d - %d of #{number_to_human(collection.total_entries)} #{entry_name.pluralize}), collection.offset + 1, collection.offset + collection.length)
     end
