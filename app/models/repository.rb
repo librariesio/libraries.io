@@ -4,50 +4,51 @@
 #
 # Table name: repositories
 #
-#  id                         :integer          not null, primary key
-#  contributions_count        :integer          default(0), not null
-#  default_branch             :string
-#  description                :string
-#  fork                       :boolean
-#  fork_policy                :string
-#  forks_count                :integer
-#  full_name                  :string
-#  has_audit                  :string
-#  has_changelog              :string
-#  has_coc                    :string
-#  has_contributing           :string
-#  has_issues                 :boolean
-#  has_license                :string
-#  has_pages                  :boolean
-#  has_readme                 :string
-#  has_threat_model           :string
-#  has_wiki                   :boolean
-#  homepage                   :string
-#  host_domain                :string
-#  host_type                  :string
-#  keywords                   :string           default([]), is an Array
-#  language                   :string
-#  last_synced_at             :datetime
-#  license                    :string
-#  logo_url                   :string
-#  mirror_url                 :string
-#  name                       :string
-#  open_issues_count          :integer
-#  private                    :boolean
-#  pull_requests_enabled      :string
-#  pushed_at                  :datetime
-#  rank                       :integer
-#  scm                        :string
-#  size                       :integer
-#  source_name                :string
-#  stargazers_count           :integer
-#  status                     :string
-#  subscribers_count          :integer
-#  uuid                       :string
-#  created_at                 :datetime         not null
-#  updated_at                 :datetime         not null
-#  repository_organisation_id :integer
-#  repository_user_id         :integer
+#  id                             :integer          not null, primary key
+#  contributions_count            :integer          default(0), not null
+#  default_branch                 :string
+#  description                    :string
+#  fork                           :boolean
+#  fork_policy                    :string
+#  forks_count                    :integer
+#  full_name                      :string
+#  has_audit                      :string
+#  has_changelog                  :string
+#  has_coc                        :string
+#  has_contributing               :string
+#  has_issues                     :boolean
+#  has_license                    :string
+#  has_pages                      :boolean
+#  has_readme                     :string
+#  has_threat_model               :string
+#  has_wiki                       :boolean
+#  homepage                       :string
+#  host_domain                    :string
+#  host_type                      :string
+#  keywords                       :string           default([]), is an Array
+#  language                       :string
+#  last_synced_at                 :datetime
+#  license                        :string
+#  logo_url                       :string
+#  maintenance_stats_refreshed_at :datetime
+#  mirror_url                     :string
+#  name                           :string
+#  open_issues_count              :integer
+#  private                        :boolean
+#  pull_requests_enabled          :string
+#  pushed_at                      :datetime
+#  rank                           :integer
+#  scm                            :string
+#  size                           :integer
+#  source_name                    :string
+#  stargazers_count               :integer
+#  status                         :string
+#  subscribers_count              :integer
+#  uuid                           :string
+#  created_at                     :datetime         not null
+#  updated_at                     :datetime         not null
+#  repository_organisation_id     :integer
+#  repository_user_id             :integer
 #
 # Indexes
 #
@@ -55,6 +56,7 @@
 #  index_repositories_on_fork                              (fork)
 #  index_repositories_on_host_type_and_uuid                (host_type,uuid) UNIQUE
 #  index_repositories_on_lower_host_type_lower_full_name   (lower((host_type)::text), lower((full_name)::text)) UNIQUE
+#  index_repositories_on_maintenance_stats_refreshed_at    (maintenance_stats_refreshed_at)
 #  index_repositories_on_private                           (private)
 #  index_repositories_on_rank_and_stargazers_count_and_id  (rank,stargazers_count,id)
 #  index_repositories_on_repository_organisation_id        (repository_organisation_id)
@@ -145,6 +147,9 @@ class Repository < ApplicationRecord
   scope :hidden, -> { where('repositories."status" = ?', "Hidden") }
 
   scope :indexable, -> { open_source.source.not_removed }
+
+  scope :least_recently_updated_stats, -> { where.not(maintenance_stats_refreshed_at: nil).order(maintenance_stats_refreshed_at: :asc) }
+  scope :no_existing_stats, -> { where.missing(:repository_maintenance_stats).where(maintenance_stats_refreshed_at: nil) }
 
   delegate :download_owner, :download_readme, :domain, :watchers_url, :forks_url,
            :download_fork_source, :download_tags, :download_contributions, :url,
@@ -306,6 +311,7 @@ class Repository < ApplicationRecord
     return unless repo_hash
 
     repo_hash = repo_hash.to_hash.with_indifferent_access
+
     ActiveRecord::Base.transaction do
       g = Repository.where(host_type: (repo_hash[:host_type] || "GitHub")).find_by(uuid: repo_hash[:id])
       g = Repository.host(repo_hash[:host_type] || "GitHub").find_by("lower(full_name) = ?", repo_hash[:full_name].downcase) if g.nil?
@@ -319,9 +325,9 @@ class Repository < ApplicationRecord
       g.assign_attributes repo_hash.slice(*Repository::API_FIELDS)
 
       if g.changed?
-        return g.save ? g : nil
+        g.save ? g : nil
       else
-        return g
+        g
       end
     end
   rescue ActiveRecord::RecordNotUnique
@@ -396,7 +402,7 @@ class Repository < ApplicationRecord
     update!(status: "Hidden")
   end
 
-  def gather_maintenance_stats_async
-    RepositoryMaintenanceStatWorker.enqueue(id, priority: :medium)
+  def gather_maintenance_stats_async(priority: :medium)
+    RepositoryMaintenanceStatWorker.enqueue(id, priority: priority)
   end
 end

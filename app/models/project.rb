@@ -125,8 +125,6 @@ class Project < ApplicationRecord
   has_many :repository_maintenance_stats, through: :repository
 
   scope :updated_within, ->(start, stop) { where("updated_at >= ? and updated_at <= ? ", start, stop).order(updated_at: :asc) }
-  scope :least_recently_updated_stats, -> { joins(repository: :repository_maintenance_stats).where(repositories: { host_type: "GitHub" }).group("projects.id").order(Arel.sql("max(repository_maintenance_stats.updated_at) ASC")) }
-  scope :no_existing_stats, -> { where.missing(:repository_maintenance_stats).where(repositories: { host_type: "GitHub" }) }
 
   scope :platform, ->(platforms) { where(platform: Array.wrap(platforms).map { |platform| PackageManager::Base.format_name(platform) }) }
   scope :lower_platform, ->(platform) { where("lower(projects.platform) = ?", platform.try(:downcase)) }
@@ -649,7 +647,11 @@ class Project < ApplicationRecord
     response = Typhoeus.get(url)
     if platform.downcase == "packagist" && [302, 404].include?(response.response_code)
       update_attribute(:status, "Removed")
-    elsif platform.downcase != "packagist" && [400, 404, 410].include?(response.response_code)
+    elsif platform.downcase == "go" && [400, 404].include?(response.response_code)
+      # pkg.go.dev can be 404 on first-hit for a new package (or alias for the package), so ensure that the package existed in the past
+      # by ensuring its age is old enough to not be just uncached by pkg.go.dev yet.
+      update_attribute(:status, "Removed") if created_at < 1.week.ago
+    elsif !platform.downcase.in?(%w[packagist go]) && [400, 404, 410].include?(response.response_code)
       update_attribute(:status, "Removed")
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(self)

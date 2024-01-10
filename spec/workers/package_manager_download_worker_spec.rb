@@ -36,18 +36,13 @@ describe PackageManagerDownloadWorker do
   end
 
   context "when the package manager supports single versions updates" do
-    # remove the stub once the NPM::SUPPORTS_SINGLE_VERSION_UPDATE gets sets back to true
-    before do
-      stub_const("PackageManager::NPM::SUPPORTS_SINGLE_VERSION_UPDATE", true)
-    end
-
     it "should raise an error if version didn't get created after 15 attempts" do
       expect(PackageManagerDownloadWorker).to_not receive(:perform_in)
-      expect(PackageManager::NPM).to receive(:update).with("a-package", sync_version: "1.2.3", force_sync_dependencies: false)
+      expect(PackageManager::Pypi).to receive(:update).with("a-package", sync_version: "1.2.3", force_sync_dependencies: false)
       expect(Rails.logger).to receive(:info).with(a_string_matching("Package update"))
-      expect(Rails.logger).to receive(:info).with("[Version Update Failure] platform=npm name=a-package version=1.2.3")
+      expect(Rails.logger).to receive(:info).with("[Version Update Failure] platform=pypi name=a-package version=1.2.3")
 
-      expect { subject.perform("npm", "a-package", "1.2.3", nil, 16) }.to raise_exception(PackageManagerDownloadWorker::VersionUpdateFailure)
+      expect { subject.perform("pypi", "a-package", "1.2.3", nil, 16) }.to raise_exception(PackageManagerDownloadWorker::VersionUpdateFailure)
     end
   end
 

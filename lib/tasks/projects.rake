@@ -166,22 +166,6 @@ namespace :projects do
     ProjectDependentRepository.refresh
   end
 
-  supported_platforms = %w[Cargo CocoaPods Conda Go Maven NPM NuGet Packagist Pypi Rubygems]
-
-  desc "Create maintenance stats for projects"
-  task :create_maintenance_stats, [:number_to_sync] => :environment do |_task, args|
-    exit if ENV["READ_ONLY"].present?
-    number_to_sync = args.number_to_sync || 2000
-    Project.no_existing_stats.where(platform: supported_platforms).limit(number_to_sync).each(&:update_maintenance_stats_async)
-  end
-
-  desc "Update maintenance stats for projects"
-  task :update_maintenance_stats, [:number_to_sync] => :environment do |_task, args|
-    exit if ENV["READ_ONLY"].present?
-    number_to_sync = args.number_to_sync || 2000
-    Project.least_recently_updated_stats.where(platform: supported_platforms).limit(number_to_sync).each { |project| project.update_maintenance_stats_async(priority: :low) }
-  end
-
   desc "Set license_normalized flag"
   task set_license_normalized: :environment do
     supported_platforms = %w[Maven NPM Pypi Rubygems NuGet Packagist]

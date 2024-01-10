@@ -227,6 +227,7 @@ describe Repository, type: :model do
 
       it "should save metrics for repository" do
         maintenance_stats = repository.repository_maintenance_stats
+        expect(repository.maintenance_stats_refreshed_at).to_not be_nil
         expect(maintenance_stats.count).to be > 0
 
         maintenance_stats.each do |stat|
@@ -252,13 +253,44 @@ describe Repository, type: :model do
     context "with invalid repository" do
       let(:repository) { create(:repository, full_name: "bad/example-for-testing") }
 
-      it "should save metrics for repository" do
+      it "should not save metrics for repository" do
         VCR.use_cassette("github/bad_repository", match_requests_on: %i[method uri body query]) do
           repository.gather_maintenance_stats
-        end
 
-        maintenance_stats = repository.repository_maintenance_stats
-        expect(maintenance_stats.count).to be 0
+          maintenance_stats = repository.repository_maintenance_stats
+          expect(maintenance_stats.count).to be 0
+          # we should update the refreshed_at time even with an invalid repo
+          expect(repository.maintenance_stats_refreshed_at).not_to be_nil
+        end
+      end
+
+      it "should not query for metrics" do
+        allow(MaintenanceStats::Queries::Github::RepoReleasesQuery).to receive(:new).and_call_original
+
+        VCR.use_cassette("github/bad_repository", match_requests_on: %i[method uri body query]) do
+          repository.gather_maintenance_stats
+
+          # we should have exited before trying to run any queries
+          expect(MaintenanceStats::Queries::Github::RepoReleasesQuery).not_to have_received(:new)
+          # we should update the refreshed_at time even with an invalid repo
+          expect(repository.maintenance_stats_refreshed_at).not_to be_nil
+        end
+      end
+
+      it "should log that the repository was not found" do
+        allow(StructuredLog).to receive(:capture)
+
+        VCR.use_cassette("github/bad_repository", match_requests_on: %i[method uri body query]) do
+          repository.gather_maintenance_stats
+
+          expect(StructuredLog).to have_received(:capture).with(
+            "GITHUB_STAT_REPO_NOT_FOUND",
+            hash_including(
+              repository_name: repository.full_name,
+              error_message: /.*404 - Not Found.*/ # message should contain the 404 error but ignore all the extra details in the string
+            )
+          )
+        end
       end
     end
 
@@ -294,6 +326,71 @@ describe Repository, type: :model do
 
         maintenance_stats = repository.repository_maintenance_stats
         expect(maintenance_stats.count).to be 0
+        expect(repository.maintenance_stats_refreshed_at).to be_nil
+      end
+    end
+  end
+
+  describe "maintenance stats" do
+    let!(:repository) { create(:repository) }
+
+    context "without existing stats" do
+      it "should be included in no_existing_stats query" do
+        results = Repository.no_existing_stats.where(id: repository.id)
+        expect(results.count).to eql 1
+      end
+
+      context "with refreshed at date" do
+        let!(:repository) { create(:repository, maintenance_stats_refreshed_at: Time.current) }
+
+        it "should not be included in no_existing_stats query" do
+          # if the repository has a refreshed_at date but no stats that means
+          # there was a problem getting stats and should not be considered for
+          # the no_existing_stats query
+          results = Repository.no_existing_stats.where(id: repository.id)
+          expect(results.count).to eql 0
+        end
+      end
+    end
+
+    context "with stats" do
+      let!(:stat1) { create(:repository_maintenance_stat, repository: repository) }
+
+      context "with refreshed at date" do
+        let!(:repository) { create(:repository, maintenance_stats_refreshed_at: Time.current) }
+
+        it "should show up in least_recently_updated_stats query" do
+          results = Repository.least_recently_updated_stats.where(id: repository.id)
+
+          expect(results.count).to eql 1
+        end
+      end
+
+      it "should not be in no_existing_stats query" do
+        results = Repository.no_existing_stats.where(id: repository.id)
+        expect(results.count).to eql 0
+      end
+    end
+
+    context "two repositories with stats" do
+      let!(:repository) { create(:repository, maintenance_stats_refreshed_at: 1.day.ago) }
+      let!(:stat1) { create(:repository_maintenance_stat, repository: repository) }
+      let!(:repository2) { create(:repository, full_name: "octokit/octokit", maintenance_stats_refreshed_at: 1.year.ago) }
+      let!(:stat2) { create(:repository_maintenance_stat, repository: repository2) }
+
+      it "should return project with oldest refreshed at date first" do
+        results = Repository.least_recently_updated_stats
+        expect(results.first.id).to eql repository2.id
+      end
+
+      it "should return both projects" do
+        results = Repository.least_recently_updated_stats
+        expect(results.length).to eql 2
+      end
+
+      it "no_existing_stats query should be empty" do
+        results = Repository.no_existing_stats
+        expect(results.length).to eql 0
       end
     end
   end

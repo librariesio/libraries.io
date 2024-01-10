@@ -56,8 +56,12 @@ module MaintenanceStats
 
           # merge params for query
           date_params.merge!(params.slice(:owner, :repo_name))
+          full_name = "#{params[:owner]}/#{params[:repo_name]}"
 
-          @client.query(COMMIT_COUNTS_QUERY, variables: date_params)
+          results = @client.query(COMMIT_COUNTS_QUERY, variables: date_params)
+          QueryUtils.check_for_graphql_errors(results, full_name)
+
+          results
         end
       end
 
