@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module PackageManager
+  # Package Managers retrieve information about an entire package, or a
+  # specific release of a pacakge. This retrieval can be triggered via
+  # asynchronous jobs, or directly by API endpoints or the console.
   class Base
     COLOR = "#fff"
     BIBLIOTHECARY_SUPPORT = false
@@ -157,6 +160,14 @@ module PackageManager
       finalize_db_project(db_project)
     end
 
+    # Returns the versions found within the raw project data for the package.
+    # Depending on the package manager, additional work may need to be done to
+    # retrieve all the information to pass into
+    # version_hash_to_version_object.
+    def self.versions(_raw_project, _name)
+      nil
+    end
+
     def self.versions_as_version_objects(raw_project, name)
       raw_versions = versions(raw_project, name)
 
@@ -180,6 +191,8 @@ module PackageManager
       version_hash_to_version_object(version_hash)
     end
 
+    # Data coming from versions or one_version need to conform to the
+    # hash structure within.
     def self.version_hash_to_version_object(version_hash)
       version_hash = version_hash.symbolize_keys
 
