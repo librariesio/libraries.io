@@ -44,6 +44,22 @@ describe PackageManager::Go do
     end
   end
 
+  describe "#project" do
+    it "returns raw project data from pkg.go.dev" do
+      VCR.use_cassette("go/pkg_go_dev") do
+        project = described_class.project(package_name)
+        expect(project[:name]).to eq(package_name)
+      end
+    end
+
+    it "returns nil for packages that aren't go modules froom pkg.go.dev" do
+      VCR.use_cassette("go/pkg_go_dev_not_a_module") do
+        project = described_class.project("google.golang.org/grpc/examples/route_guide/routeguide")
+        expect(project).to be nil
+      end
+    end
+  end
+
   describe "#mapping" do
     it "maps data correctly from pkg.go.dev" do
       VCR.use_cassette("go/pkg_go_dev") do

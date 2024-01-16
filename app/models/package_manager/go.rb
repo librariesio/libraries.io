@@ -25,6 +25,8 @@ module PackageManager
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)(\/|$)/.freeze
 
+    class UnknownGoType < StandardError; end
+
     def self.missing_version_remover
       PackageManager::Base::MissingVersionRemover
     end
@@ -127,6 +129,17 @@ module PackageManager
       # send back nil if the response is blank
       # base package manager handles if the project is not present
       return nil if doc_html.text.blank?
+
+      # pages on pkg.go.dev can be listed as 'package', 'module', or both. Only scrape Go Modules.
+      page_type = doc_html.css(".go-Main-headerTitle .go-Chip").text
+      is_package = page_type.include?("package")
+      is_module = page_type.include?("module")
+      if !is_package && !is_module
+        raise UnknownGoType, "Unknown Go type for #{name}: #{page_type}"
+        return nil
+      elsif !is_module
+        return nil
+      end
 
       { name: name, html: doc_html, overview_html: doc_html }
     end
