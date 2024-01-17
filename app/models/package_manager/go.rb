@@ -133,10 +133,11 @@ module PackageManager
       raw_project = { name: name, html: doc_html, overview_html: doc_html }
 
       # pages on pkg.go.dev can be categorized as 'package', 'module', 'command', or 'directory'. We only scrape Go Modules.
-      unless module_type?(raw_project: raw_project)
-        unless (project_type?(raw_project: raw_project) || command_type?(raw_project: raw_project) || directory_type?(raw_project: raw_project)) || !defined?(Bugsnag)
-          # this is more for our record-keeping so we know what possible types there are.
-          Bugsnag.notify(UnknownGoType.new("Unknown Go project type (it is neither a package, a directory, a command or a module) for #{name}: #{page_type}"))
+      page_types = page_types(raw_project: raw_project)
+      unless page_types.include?("module")
+        # this is more for our record-keeping so we know what possible types there are.
+        if %w[package command directory].none? { |t| page_types.include?(t) } && defined?(Bugsnag)
+          Bugsnag.notify(UnknownGoType.new("Unknown Go page type (it is neither a package, a directory, a command or a module) for #{name}: #{page_type}"))
         end
         return nil
       end
@@ -273,37 +274,17 @@ module PackageManager
       return false unless raw_project.present?
 
       # The "module" pill icon at the top.
-      is_a_module = module_type?(raw_project: raw_project)
+      is_a_module = page_types(raw_project: raw_project).include?("module")
 
       # The "Valid go.mod file" section at the top.
       has_valid_go_mod = raw_project[:html].css(".UnitMeta-details > li details summary img")&.first&.attribute("alt")&.value == "checked"
 
-      # Note about why these are two different checks and they're both needed here. There exist:
-      # * "packages" with valid go.mod: https://pkg.go.dev/k8s.io/kubernetes/pkg/kubelet/qos
-      # * "packages" with invalid go.mod: https://pkg.go.dev/github.com/cloudfoundry/noaa/errors
-      # * "modules" with valid go.mod: https://pkg.go.dev/github.com/robfig/cron/v3
-      # * "modules" with invalid go.mod: https://pkg.go.dev/github.com/robfig/cron
+      # NOTE: these combinations of page types can exist, so we must check that both are true
+      #   * "packages" with valid go.mod: https://pkg.go.dev/k8s.io/kubernetes/pkg/kubelet/qos
+      #   * "packages" with invalid go.mod: https://pkg.go.dev/github.com/cloudfoundry/noaa/errors
+      #   * "modules" with valid go.mod: https://pkg.go.dev/github.com/robfig/cron/v3
+      #   * "modules" with invalid go.mod: https://pkg.go.dev/github.com/robfig/cron
       is_a_module && has_valid_go_mod
-    end
-
-    # Check if this is a Go Module.
-    def self.module_type?(raw_project: nil)
-      raw_project[:html].css(".go-Main-headerTitle .go-Chip").text.include?("module")
-    end
-
-    # Check if this is a Go Package.
-    def self.project_type?(raw_project: nil)
-      raw_project[:html].css(".go-Main-headerTitle .go-Chip").text.include?("package")
-    end
-
-    # Check if this is a Go Command. (e.g. https://pkg.go.dev/github.com/mre-fog/etcd2)
-    def self.command_type?(raw_project: nil)
-      raw_project[:html].css(".go-Main-headerTitle .go-Chip").text.include?("command")
-    end
-
-    # Check if this is a Go Directory. (e.g. https://pkg.go.dev/google.golang.org/grpc/examples/route_guide)
-    def self.directory_type?(raw_project: nil)
-      raw_project[:html].css(".go-Main-headerTitle .go-Chip").text.include?("directory")
     end
 
     # looks at the module declaration for the latest version's go.mod file and returns that if found
@@ -317,6 +298,11 @@ module PackageManager
     # https://go.dev/ref/mod#goproxy-protocol
     def self.encode_for_proxy(str)
       str.gsub(/[A-Z]/) { |s| "!#{s.downcase}" }
+    end
+
+    # Returns the types listed at the top of pkg.go.dev pages. Known values are: module, package, directory, command.
+    private_class_method def self.page_types(raw_project: nil)
+      raw_project[:html].css(".go-Main-headerTitle .go-Chip").map(&:text).map(&:strip)
     end
 
     private_class_method def self.latest_version_number(name)
