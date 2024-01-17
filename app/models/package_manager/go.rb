@@ -134,9 +134,9 @@ module PackageManager
 
       # pages on pkg.go.dev can be listed as 'package', 'module', or both. We only scrape Go Modules.
       unless is_a_module?(raw_project: raw_project)
-        if !is_a_project?(raw_project: raw_project) && !is_a_command?(raw_project: raw_project)
+        if !is_a_project?(raw_project: raw_project) && !is_a_command?(raw_project: raw_project) && !is_a_directory?(raw_project: raw_project) && defined?(Bugsnag)
           # this is more for our record-keeping so we know what possible types there are.
-          Bugsnag.notify(UnknownGoType.new("Unknown Go project type (it is neither a package, a command or a module) for #{name}: #{page_type}")) if defined?(Bugsnag)
+          Bugsnag.notify(UnknownGoType.new("Unknown Go project type (it is neither a package, a command or a module) for #{name}: #{page_type}"))
         end
         return nil
       end
@@ -299,6 +299,11 @@ module PackageManager
     # Check if this is a Go Command. (e.g. https://pkg.go.dev/github.com/mre-fog/etcd2)
     def self.is_a_command?(raw_project: nil)
       raw_project[:html].css(".go-Main-headerTitle .go-Chip").text.include?("command")
+    end
+
+    # Check if this is a Go Directory. (e.g. https://pkg.go.dev/google.golang.org/grpc/examples/route_guide)
+    def self.is_a_directory?(raw_project: nil)
+      raw_project[:html].css(".go-Main-headerTitle .go-Chip").text.include?("directory")
     end
 
     # looks at the module declaration for the latest version's go.mod file and returns that if found
