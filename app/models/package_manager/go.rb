@@ -134,7 +134,7 @@ module PackageManager
 
       # pages on pkg.go.dev can be categorized as 'package', 'module', 'command', or 'directory'. We only scrape Go Modules.
       unless module_type?(raw_project: raw_project)
-        if !project_type?(raw_project: raw_project) && !command_type?(raw_project: raw_project) && !directory_type?(raw_project: raw_project) && defined?(Bugsnag)
+        unless (project_type?(raw_project: raw_project) || command_type?(raw_project: raw_project) || directory_type?(raw_project: raw_project)) || !defined?(Bugsnag)
           # this is more for our record-keeping so we know what possible types there are.
           Bugsnag.notify(UnknownGoType.new("Unknown Go project type (it is neither a package, a directory, a command or a module) for #{name}: #{page_type}"))
         end
