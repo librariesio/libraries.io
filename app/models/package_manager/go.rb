@@ -134,10 +134,11 @@ module PackageManager
       page_type = doc_html.css(".go-Main-headerTitle .go-Chip").text
       is_package = page_type.include?("package")
       is_module = page_type.include?("module")
-      if !is_module
-        if !is_package
+      unless is_module
+        unless is_package
           raise UnknownGoType, "Unknown Go type (it is neither a package nor module) for #{name}: #{page_type}"
         end
+
         return nil
       end
 

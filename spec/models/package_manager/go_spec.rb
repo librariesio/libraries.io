@@ -46,9 +46,9 @@ describe PackageManager::Go do
 
   describe "#project" do
     it "returns raw project data from pkg.go.dev" do
-      VCR.use_cassette("go/pkg_go_dev") do
-        project = described_class.project(package_name)
-        expect(project[:name]).to eq(package_name)
+      VCR.use_cassette("go/pkg_go_dev_is_a_module") do
+        project = described_class.project("google.golang.org/grpc")
+        expect(project[:name]).to eq("google.golang.org/grpc")
       end
     end
 
@@ -151,7 +151,7 @@ describe PackageManager::Go do
 
   describe ".update" do
     it "should update the non versioned module" do
-      VCR.use_cassette("go/pkg_go_dev") do
+      VCR.use_cassette("go/pkg_go_dev_v3") do
         described_class.update("#{package_name}/v3")
 
         expect(Project.where(platform: "Go", name: package_name).exists?).to be true
@@ -238,7 +238,7 @@ describe PackageManager::Go do
     end
 
     it "creates two projects if they share a repository but not a name" do
-      VCR.use_cassette("go/pkg_go_dev") do
+      VCR.use_cassette("go/pkg_go_dev_mergo") do
         first_project = described_class.update("github.com/imdario/mergo")
         expect(first_project).to be_present
 
@@ -250,7 +250,7 @@ describe PackageManager::Go do
     it "creates base module if versioned module exists first" do
       versioned_module = create(:project, name: "#{package_name}/v3", platform: "Go", repository_url: "https://github.com/robfig/cron")
 
-      VCR.use_cassette("go/pkg_go_dev") do
+      VCR.use_cassette("go/pkg_go_dev_v3") do
         described_class.update(versioned_module.name)
 
         expect(versioned_module).to be_present
@@ -275,16 +275,17 @@ describe PackageManager::Go do
     end
 
     context "with a package that has incompatible versions only" do
-      it "loads the package and it has no versions" do
+      it "loads the package and ingests versions" do
         package = nil
 
-        VCR.use_cassette("go/update/noaa") do
+        VCR.use_cassette("go/update/docker-distribution") do
           expect do
-            package = described_class.update("github.com/cloudfoundry/noaa/errors")
+            # this example doesn't have a valid go.mod, is a "module", and has only incompatible versions
+            package = described_class.update("github.com/docker/distribution")
           end.to change(Project, :count).from(0).to(1)
         end
 
-        expect(package.versions.count).to eq(0)
+        expect(package.versions.count).to eq(53)
       end
     end
 
@@ -308,7 +309,7 @@ describe PackageManager::Go do
       it "should only update one version of the base module if it doesn't exist" do
         versioned_module = create(:project, name: "#{package_name}/v3", platform: "Go", repository_url: "https://github.com/robfig/cron")
 
-        VCR.use_cassette("go/pkg_go_dev") do
+        VCR.use_cassette("go/pkg_go_dev_v3") do
           described_class.update(versioned_module.name)
           versioned_module.reload
 
