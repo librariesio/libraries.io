@@ -136,7 +136,7 @@ module PackageManager
       unless is_a_module?(raw_project: raw_project)
         if !is_a_project?(raw_project: raw_project) && !is_a_command?(raw_project: raw_project)
           # this is more for our record-keeping so we know what possible types there are.
-          Bugsnag.notify(UnknownGoType.new("Unknown Go project type (it is neither a package, a command or a module) for #{name}: #{page_type}"))
+          Bugsnag.notify(UnknownGoType.new("Unknown Go project type (it is neither a package, a command or a module) for #{name}: #{page_type}")) if defined?(Bugsnag)
         end
         return nil
       end
