@@ -132,11 +132,11 @@ module PackageManager
 
       raw_project = { name: name, html: doc_html, overview_html: doc_html }
 
-      # pages on pkg.go.dev can be listed as 'package', 'module', or both. We only scrape Go Modules.
-      unless is_a_module?(raw_project: raw_project)
-        if !is_a_project?(raw_project: raw_project) && !is_a_command?(raw_project: raw_project) && !is_a_directory?(raw_project: raw_project) && defined?(Bugsnag)
+      # pages on pkg.go.dev can be categorized as 'package', 'module', 'command', or 'directory'. We only scrape Go Modules.
+      unless module_type?(raw_project: raw_project)
+        if !project_type?(raw_project: raw_project) && !command_type?(raw_project: raw_project) && !directory_type?(raw_project: raw_project) && defined?(Bugsnag)
           # this is more for our record-keeping so we know what possible types there are.
-          Bugsnag.notify(UnknownGoType.new("Unknown Go project type (it is neither a package, a command or a module) for #{name}: #{page_type}"))
+          Bugsnag.notify(UnknownGoType.new("Unknown Go project type (it is neither a package, a directory, a command or a module) for #{name}: #{page_type}"))
         end
         return nil
       end
@@ -273,7 +273,7 @@ module PackageManager
       return false unless raw_project.present?
 
       # The "module" pill icon at the top.
-      is_a_module = is_a_module?(raw_project: raw_project)
+      is_a_module = module_type?(raw_project: raw_project)
 
       # The "Valid go.mod file" section at the top.
       has_valid_go_mod = raw_project[:html].css(".UnitMeta-details > li details summary img")&.first&.attribute("alt")&.value == "checked"
@@ -287,22 +287,22 @@ module PackageManager
     end
 
     # Check if this is a Go Module.
-    def self.is_a_module?(raw_project: nil)
+    def self.module_type?(raw_project: nil)
       raw_project[:html].css(".go-Main-headerTitle .go-Chip").text.include?("module")
     end
 
     # Check if this is a Go Package.
-    def self.is_a_project?(raw_project: nil)
+    def self.project_type?(raw_project: nil)
       raw_project[:html].css(".go-Main-headerTitle .go-Chip").text.include?("package")
     end
 
     # Check if this is a Go Command. (e.g. https://pkg.go.dev/github.com/mre-fog/etcd2)
-    def self.is_a_command?(raw_project: nil)
+    def self.command_type?(raw_project: nil)
       raw_project[:html].css(".go-Main-headerTitle .go-Chip").text.include?("command")
     end
 
     # Check if this is a Go Directory. (e.g. https://pkg.go.dev/google.golang.org/grpc/examples/route_guide)
-    def self.is_a_directory?(raw_project: nil)
+    def self.directory_type?(raw_project: nil)
       raw_project[:html].css(".go-Main-headerTitle .go-Chip").text.include?("directory")
     end
 
