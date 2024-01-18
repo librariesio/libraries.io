@@ -2,7 +2,7 @@
 
 class RepositoryMaintenanceStatWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :repo_maintenance_stat, retry: 3, lock: :until_executed
+  sidekiq_options queue: :repo_maintenance_stat, retry: 3, lock: :until_executed, lock_ttl: 1.hours.to_i, lock_prefix: "maintstatjobs"
 
   def perform(repo_id)
     Repository.find(repo_id).gather_maintenance_stats

@@ -61,6 +61,7 @@ Sidekiq.default_job_options = {
 SidekiqUniqueJobs.configure do |config|
   config.enabled = !Rails.env.test?
   config.lock_info = true
+  config.lock_ttl = 1.day.to_i
 end
 
 Marginalia::SidekiqInstrumentation.enable!
