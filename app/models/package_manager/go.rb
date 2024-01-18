@@ -279,11 +279,12 @@ module PackageManager
       # The "Valid go.mod file" section at the top.
       has_valid_go_mod = raw_project[:html].css(".UnitMeta-details > li details summary img")&.first&.attribute("alt")&.value == "checked"
 
-      # NOTE: these combinations of page types can exist, so we must check that both are true
-      #   * "packages" with valid go.mod: https://pkg.go.dev/k8s.io/kubernetes/pkg/kubelet/qos
-      #   * "packages" with invalid go.mod: https://pkg.go.dev/github.com/cloudfoundry/noaa/errors
-      #   * "modules" with valid go.mod: https://pkg.go.dev/github.com/robfig/cron/v3
-      #   * "modules" with invalid go.mod: https://pkg.go.dev/github.com/robfig/cron
+      # NOTE: these combinations can exist on pkg.go.dev, so we must check that it is both a "module" and has a valid go.mod.
+      #   * "modules" with valid go.mod: https://pkg.go.dev/github.com/robfig/cron/v3 (INGEST)
+      #   * "modules" with invalid go.mod: https://pkg.go.dev/github.com/robfig/cron (IGNORE)
+      #   * "packages"/etc with valid go.mod: https://pkg.go.dev/k8s.io/kubernetes/pkg/kubelet/qos (IGNORE)
+      #   * "packages"/etc with invalid go.mod: https://pkg.go.dev/github.com/cloudfoundry/noaa/errors (IGNORE)
+
       is_a_module && has_valid_go_mod
     end
 
