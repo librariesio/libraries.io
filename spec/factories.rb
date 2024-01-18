@@ -32,6 +32,7 @@ FactoryBot.define do
     licenses        { "MIT" }
     keywords_array  { ["web"] }
     repository_url
+    dependent_repos_count { 0 }
     repository { nil }
 
     trait :rubygems do

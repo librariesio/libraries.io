@@ -25,6 +25,12 @@ module PackageManager
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)(\/|$)/.freeze
 
+    class UnknownGoType < StandardError
+      def initialize(name, page_types)
+        super("Unknown Go page type (it is neither a package, a directory, a command or a module) for #{name}: #{page_types.join(',')}")
+      end
+    end
+
     def self.missing_version_remover
       PackageManager::Base::MissingVersionRemover
     end
@@ -128,7 +134,19 @@ module PackageManager
       # base package manager handles if the project is not present
       return nil if doc_html.text.blank?
 
-      { name: name, html: doc_html, overview_html: doc_html }
+      raw_project = { name: name, html: doc_html, overview_html: doc_html }
+
+      # pages on pkg.go.dev can be categorized as 'package', 'module', 'command', or 'directory'. We only scrape Go Modules.
+      page_types = page_types(raw_project: raw_project)
+      unless page_types.include?("module")
+        # this is more for our record-keeping so we know what possible types there are.
+        if %w[package command directory].none? { |t| page_types.include?(t) } && defined?(Bugsnag)
+          Bugsnag.notify(UnknownGoType.new(name, page_types))
+        end
+        return nil
+      end
+
+      raw_project
     end
 
     def self.versions(raw_project, _name)
@@ -255,16 +273,23 @@ module PackageManager
     # optional parameter raw_project can be passed in to skip the HTTP call to pkg.go.dev, the object structure
     # should match the one returned from the project() method
     def self.module?(name, raw_project: nil)
-      project = if raw_project.present?
-                  raw_project
-                else
-                  project(name)
-                end
+      raw_project = raw_project.presence || project(name)
 
-      return false unless project.present?
+      return false unless raw_project.present?
 
-      summary_image = project[:html].css(".UnitMeta-details > li")&.first&.css("details summary img")&.first
-      summary_image&.attribute("alt")&.value == "checked"
+      # The "module" pill icon at the top.
+      is_a_module = page_types(raw_project: raw_project).include?("module")
+
+      # The "Valid go.mod file" section at the top.
+      has_valid_go_mod = raw_project[:html].css(".UnitMeta-details > li details summary img")&.first&.attribute("alt")&.value == "checked"
+
+      # NOTE: these combinations can exist on pkg.go.dev, so we must check that it is both a "module" and has a valid go.mod.
+      #   * "modules" with valid go.mod: https://pkg.go.dev/github.com/robfig/cron/v3 (INGEST)
+      #   * "modules" with invalid go.mod: https://pkg.go.dev/github.com/robfig/cron (IGNORE)
+      #   * "packages"/etc with valid go.mod: https://pkg.go.dev/k8s.io/kubernetes/pkg/kubelet/qos (IGNORE)
+      #   * "packages"/etc with invalid go.mod: https://pkg.go.dev/github.com/cloudfoundry/noaa/errors (IGNORE)
+
+      is_a_module && has_valid_go_mod
     end
 
     # looks at the module declaration for the latest version's go.mod file and returns that if found
@@ -278,6 +303,11 @@ module PackageManager
     # https://go.dev/ref/mod#goproxy-protocol
     def self.encode_for_proxy(str)
       str.gsub(/[A-Z]/) { |s| "!#{s.downcase}" }
+    end
+
+    # Returns the types listed at the top of pkg.go.dev pages. Known values are: module, package, directory, command.
+    private_class_method def self.page_types(raw_project:)
+      raw_project[:html].css(".go-Main-headerTitle .go-Chip").map(&:text).map(&:strip)
     end
 
     private_class_method def self.latest_version_number(name)
