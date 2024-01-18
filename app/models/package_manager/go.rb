@@ -25,7 +25,11 @@ module PackageManager
 
     VERSION_MODULE_REGEX = /(.+)\/(v\d+)(\/|$)/.freeze
 
-    class UnknownGoType < StandardError; end
+    class UnknownGoType < StandardError
+      def initialize(name, page_types)
+        super("Unknown Go page type (it is neither a package, a directory, a command or a module) for #{name}: #{page_types.join(",")}")
+      end
+    end
 
     def self.missing_version_remover
       PackageManager::Base::MissingVersionRemover
@@ -137,7 +141,7 @@ module PackageManager
       unless page_types.include?("module")
         # this is more for our record-keeping so we know what possible types there are.
         if %w[package command directory].none? { |t| page_types.include?(t) } && defined?(Bugsnag)
-          Bugsnag.notify(UnknownGoType.new("Unknown Go page type (it is neither a package, a directory, a command or a module) for #{name}: #{page_type}"))
+          Bugsnag.notify(UnknownGoType.new(name, page_types)
         end
         return nil
       end
