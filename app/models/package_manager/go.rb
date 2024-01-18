@@ -27,7 +27,7 @@ module PackageManager
 
     class UnknownGoType < StandardError
       def initialize(name, page_types)
-        super("Unknown Go page type (it is neither a package, a directory, a command or a module) for #{name}: #{page_types.join(",")}")
+        super("Unknown Go page type (it is neither a package, a directory, a command or a module) for #{name}: #{page_types.join(',')}")
       end
     end
 
@@ -141,7 +141,7 @@ module PackageManager
       unless page_types.include?("module")
         # this is more for our record-keeping so we know what possible types there are.
         if %w[package command directory].none? { |t| page_types.include?(t) } && defined?(Bugsnag)
-          Bugsnag.notify(UnknownGoType.new(name, page_types)
+          Bugsnag.notify(UnknownGoType.new(name, page_types))
         end
         return nil
       end
@@ -306,7 +306,7 @@ module PackageManager
     end
 
     # Returns the types listed at the top of pkg.go.dev pages. Known values are: module, package, directory, command.
-    private_class_method def self.page_types(raw_project: nil)
+    private_class_method def self.page_types(raw_project:)
       raw_project[:html].css(".go-Main-headerTitle .go-Chip").map(&:text).map(&:strip)
     end
 
