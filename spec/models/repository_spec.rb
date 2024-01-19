@@ -248,6 +248,14 @@ describe Repository, type: :model do
         expect(updated_stat).to_not be nil
         expect(updated_stat.updated_at).to be > first_updated_at
       end
+
+      it "should not trigger callbacks" do
+        VCR.use_cassette("github/chalk_api", match_requests_on: %i[method uri body query]) do
+          repository.gather_maintenance_stats
+        end
+
+        expect(UpdateRepositorySourceRankWorker.jobs.size).to eql(0)
+      end
     end
 
     context "with invalid repository" do

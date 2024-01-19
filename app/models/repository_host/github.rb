@@ -231,8 +231,10 @@ module RepositoryHost
 
       # We have a valid token to run the queries so
       # set refreshed_at time so we don't try and refresh
-      # this repository again if the information is bad
-      repository.update!(maintenance_stats_refreshed_at: now)
+      # this repository again if the information is bad.
+      # Use update_column to avoid triggering callbacks that reassess
+      # the repository since we are only setting this date.
+      repository.update_column("maintenance_stats_refreshed_at", now)
 
       # check to see if this is still a valid GitHub repository
       # if it returns a nil value then delete the existing
