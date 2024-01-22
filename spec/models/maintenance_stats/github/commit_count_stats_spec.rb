@@ -28,7 +28,7 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
 
       # check values against the VCR cassette data
 
-      expect(results[:last_year_commits]).to eql 131
+      expect(results[:last_year_commits]).to eql 139
     end
 
     it "should get the latest commit date" do
@@ -39,7 +39,7 @@ describe MaintenanceStats::Stats::Github::CommitsStat do
       expect(results.keys).to eql expected_keys
 
       # check values against the VCR cassette data
-      expect(results[:latest_commit]).to eql Date.new(2022, 12, 8)
+      expect(results[:latest_commit]).to eql Date.new(2024, 1, 19)
     end
   end
 

@@ -22,7 +22,10 @@ module MaintenanceStats
 
         def pull_out_latest_commit(dataset)
           nodes = dataset.dig_data("repository", "defaultBranchRef", "target", "latestCommit", "nodes")
-          Date.parse(nodes.first["committedDate"]) if nodes.present?
+          if nodes.present?
+            dates = nodes.map { |node| Date.parse(node["committedDate"]) }
+            dates.compact.max
+          end
         end
       end
 
