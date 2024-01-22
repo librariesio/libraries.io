@@ -10,7 +10,7 @@ module MaintenanceStats
               defaultBranchRef {
                 target {
                   ... on Commit {
-                    latestCommit: history(first: 1){
+                    latestCommit: history(first: 10){
                       nodes {
                         committedDate
                       }
