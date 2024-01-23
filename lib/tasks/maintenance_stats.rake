@@ -48,10 +48,28 @@ namespace :maintenance_stats do
     Project.joins(:repository).where(platform: supported_platforms).merge(Repository.no_existing_stats).limit(number_to_sync).each(&:update_maintenance_stats_async)
   end
 
-  desc "Update maintenance stats for repositories"
-  task :update_maintenance_stats, [:number_to_sync] => :environment do |_task, args|
+  desc <<~DESC
+    Update maintenance stats for repositories
+
+      number_to_sync [Integer, nil]: How many Repositories to update (default: 2000)
+      before [String, nil] Only update stats older than this date. Date is inclusive and will include Repositories last updated on this date (default: 1 week ago)
+
+    Usage:
+      rake maintenance_stats:update_maintenance_stats[100,01-31-2024]
+  DESC
+  task :update_maintenance_stats, %i[number_to_sync before] => :environment do |_task, args|
     exit if ENV["READ_ONLY"].present?
     number_to_sync = args.number_to_sync || 2000
-    Repository.least_recently_updated_stats.where(host_type: "GitHub").limit(number_to_sync).each { |repository| repository.gather_maintenance_stats_async(priority: :low) }
+    # set to end of day to include anything updated on the target date
+    not_updated_since = (Date.parse(args.before) || 1.week.ago).at_end_of_day
+
+    Repository
+      .least_recently_updated_stats
+      .where(host_type: "GitHub")
+      .where("maintenance_stats_refreshed_at <= ?", not_updated_since)
+      .limit(number_to_sync)
+      .each do |repository|
+        repository.gather_maintenance_stats_async(priority: :low)
+      end
   end
 end
