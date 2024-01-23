@@ -69,7 +69,6 @@ namespace :maintenance_stats do
                           Date.parse(args.before_date)
                         end
 
-
     Repository
       .least_recently_updated_stats
       .where(host_type: "GitHub")
