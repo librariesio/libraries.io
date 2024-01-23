@@ -52,18 +52,18 @@ namespace :maintenance_stats do
     Update maintenance stats for repositories
 
       number_to_sync [Integer]: How many Repositories to update. (default: 2000)
-      before [String] Only update stats older than this date. String should be parseable by Date.parse().
+      before_date [String] Only update stats older than this date. String should be parseable by Date.parse().
         This date is inclusive and will include Repositories last updated on this date. (default: 1 week ago)
 
     Usage:
       rake maintenance_stats:update_maintenance_stats[100,01-31-2024]
       rake maintenance_stats:update_maintenance_stats defaults to 2000 repos last updated more than 1 week ago
   DESC
-  task :update_maintenance_stats, %i[number_to_sync before] => :environment do |_task, args|
+  task :update_maintenance_stats, %i[number_to_sync before_date] => :environment do |_task, args|
     exit if ENV["READ_ONLY"].present?
     number_to_sync = args.number_to_sync || 2000
     # set to end of day to include anything updated on the target date
-    not_updated_since = (Date.parse(args.before) || 1.week.ago).at_end_of_day
+    not_updated_since = (Date.parse(args.before_date) || 1.week.ago).at_end_of_day
 
     Repository
       .least_recently_updated_stats
