@@ -63,12 +63,17 @@ namespace :maintenance_stats do
     exit if ENV["READ_ONLY"].present?
     number_to_sync = args.number_to_sync || 2000
     # set to end of day to include anything updated on the target date
-    not_updated_since = (Date.parse(args.before_date) || 1.week.ago).at_end_of_day
+    not_updated_since = if args.before_date.nil?
+                          1.week.ago
+                        else
+                          Date.parse(args.before_date)
+                        end
+
 
     Repository
       .least_recently_updated_stats
       .where(host_type: "GitHub")
-      .where("maintenance_stats_refreshed_at <= ?", not_updated_since)
+      .where("maintenance_stats_refreshed_at <= ?", not_updated_since.end_of_day)
       .limit(number_to_sync)
       .each do |repository|
         repository.gather_maintenance_stats_async(priority: :low)
