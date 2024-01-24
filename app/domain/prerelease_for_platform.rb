@@ -11,9 +11,9 @@ class PrereleaseForPlatform
   def self.prerelease?(version_number:, platform:)
     case platform
     when "rubygems"
-      version_number.count("a-zA-Z") > 0
+      !!version_number[/[a-zA-Z]/]
     when "pypi"
-      version_number =~ PYPI_PRERELEASE
+      !!(version_number =~ PYPI_PRERELEASE)
     end
   end
 end
