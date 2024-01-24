@@ -320,7 +320,7 @@ GEM
     libddwaf (1.14.0.0.0)
       ffi (~> 1.0)
     librariesio-gem-parser (1.0.0)
-    librariesio-url-parser (1.0.3)
+    librariesio-url-parser (1.0.9)
     license-compatibility (3.1.0)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
