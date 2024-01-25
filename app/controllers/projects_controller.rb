@@ -132,6 +132,7 @@ class ProjectsController < ApplicationController
     if @project.recently_synced?
       flash[:error] = "Project has already been synced recently"
     else
+      # @see {Project#manual_sync}
       @project.manual_sync
       flash[:notice] = "Project has been queued to be resynced"
     end
