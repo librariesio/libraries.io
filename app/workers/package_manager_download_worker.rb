@@ -65,35 +65,38 @@ class PackageManagerDownloadWorker
   # rubocop: disable Style/OptionalBooleanParameter
   # rubocop: disable Metrics/ParameterLists
   def perform(platform_name, name, version = nil, source = "unknown", requeue_count = 0, force_sync_dependencies = false)
-    key, platform = get_platform(platform_name)
+    key, package_manager = package_manager_for_platform(platform_name)
     name = name.to_s.strip
     version = version.to_s.strip
-    sync_version = (platform.supports_single_version_update? && version.presence) || :all
+    sync_version = (package_manager.supports_single_version_update? && version.presence) || :all
 
-    if platform::SYNC_ACTIVE != true
+    if package_manager::SYNC_ACTIVE != true
       Rails.logger.info("Skipping Package update for inactive platform=#{key} name=#{name} version=#{version} source=#{source}")
       return
     end
 
     Rails.logger.info("Package update for platform=#{key} name=#{name} version=#{version} source=#{source}")
-    project = platform.update(name, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies)
+    project = package_manager.update(name, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies)
 
     # Raise/log if version was requested but not found
-    if version.present? && !Version.exists?(project: project, number: version)
+    if version.present? && !project&.versions&.exists?(number: version)
       Rails.logger.info("[Version Update Failure] platform=#{key} name=#{name} version=#{version}")
+
       if requeue_count < MAX_ATTEMPTS_TO_UPDATE_FRESH_VERSION_DATA
         PackageManagerDownloadWorker.perform_in(5.seconds, platform_name, name, version, source, requeue_count + 1, force_sync_dependencies)
-      elsif platform != PackageManager::Go
+      elsif package_manager != PackageManager::Go
         # It's common for go modules, e.g. forks, to not exist on pkg.go.dev, so wait until someone
         # manually requests it from pkg.go.dev before we index it, and only raise this error for non-go packages.
-        raise VersionUpdateFailure.new(platform.db_platform, name, version)
+        raise VersionUpdateFailure.new(package_manager.db_platform, name, version)
       end
     end
   end
   # rubocop: enable Style/OptionalBooleanParameter
   # rubocop: enable Metrics/ParameterLists
 
-  def get_platform(platform_name)
+  private
+
+  def package_manager_for_platform(platform_name)
     key = begin
       platform_name
         .gsub(/PackageManager::/, "")
