@@ -17,8 +17,9 @@ describe PackageManagerDownloadWorker do
   end
 
   it "should delay version requested if version didn't get created" do
+    project = create(:project, platform: "Go", name: "github.com/hi/ima.package")
     expect(PackageManagerDownloadWorker).to receive(:perform_in).with(5.seconds, "go", "github.com/hi/ima.package", "1.2.3", "unknown", 1, false)
-    expect(PackageManager::Go).to receive(:update).with("github.com/hi/ima.package", sync_version: "1.2.3", force_sync_dependencies: false)
+    expect(PackageManager::Go).to receive(:update).with("github.com/hi/ima.package", sync_version: "1.2.3", force_sync_dependencies: false).and_return(project)
     expect(Rails.logger).to receive(:info).with(a_string_matching("Package update"))
     expect(Rails.logger).to receive(:info).with("[Version Update Failure] platform=go name=github.com/hi/ima.package version=1.2.3")
 
@@ -37,8 +38,9 @@ describe PackageManagerDownloadWorker do
 
   context "when the package manager supports single versions updates" do
     it "should raise an error if version didn't get created after 15 attempts" do
+      project = create(:project, platform: "Pypi", name: "a-package")
       expect(PackageManagerDownloadWorker).to_not receive(:perform_in)
-      expect(PackageManager::Pypi).to receive(:update).with("a-package", sync_version: "1.2.3", force_sync_dependencies: false)
+      expect(PackageManager::Pypi).to receive(:update).with("a-package", sync_version: "1.2.3", force_sync_dependencies: false).and_return(project)
       expect(Rails.logger).to receive(:info).with(a_string_matching("Package update"))
       expect(Rails.logger).to receive(:info).with("[Version Update Failure] platform=pypi name=a-package version=1.2.3")
 
@@ -47,8 +49,9 @@ describe PackageManagerDownloadWorker do
   end
 
   it "should not raise an error if version didn't get created after 15 attempts and is golang" do
+    project = create(:project, platform: "Go", name: "github.com/hi/ima.package")
     expect(PackageManagerDownloadWorker).to_not receive(:perform_in)
-    expect(PackageManager::Go).to receive(:update).with("github.com/hi/ima.package", sync_version: "1.2.3", force_sync_dependencies: false)
+    expect(PackageManager::Go).to receive(:update).with("github.com/hi/ima.package", sync_version: "1.2.3", force_sync_dependencies: false).and_return(project)
     expect(Rails.logger).to receive(:info).with(a_string_matching("Package update"))
     expect(Rails.logger).to receive(:info).with("[Version Update Failure] platform=go name=github.com/hi/ima.package version=1.2.3")
 
