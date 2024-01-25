@@ -152,6 +152,11 @@ class Api::ProjectsController < Api::ApplicationController
       version.update_column(:dependencies_count, deps.size)
     end
 
+    if version.dependencies_count.nil? && deps.empty? && version.updated_at < 1.day.ago
+      version.touch
+      PackageManagerDownloadWorker.perform_async(platform, name, version.number)
+    end
+
     # nil means that we haven't fetched the deps yet, so check back later.
     project_json[:dependencies] = version.dependencies_count.nil? ? nil : map_dependencies(deps)
 
