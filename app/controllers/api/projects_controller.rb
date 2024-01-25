@@ -147,14 +147,14 @@ class Api::ProjectsController < Api::ApplicationController
     project_json[:dependencies_for_version] = version.number
     deps = version.dependencies.includes(:project)
 
-    # TODO: we may eventually be able to remove this, once all old Versions with depenencies have valid "dependencies_count" values instead of nil.
-    if version.dependencies_count.nil? && !deps.empty?
-      version.update_column(:dependencies_count, deps.size)
-    end
-
-    if version.dependencies_count.nil? && deps.empty? && version.updated_at < 1.day.ago
-      version.touch
-      PackageManagerDownloadWorker.perform_async(platform, name, version.number)
+    if version.dependencies_count.nil?
+      if !deps.empty?
+        # TODO: we may eventually be able to remove this, once all old Versions with depenencies have valid "dependencies_count" values instead of nil.
+        version.update_column(:dependencies_count, deps.size)
+      elsif deps.empty? && version.updated_at < 1.day.ago
+        version.touch
+        PackageManagerDownloadWorker.perform_async(platform, name, version.number)
+      end
     end
 
     # nil means that we haven't fetched the deps yet, so check back later.
