@@ -12,7 +12,7 @@ describe "Api::ProjectsController" do
   let!(:internal_user) { create(:user) }
 
   let!(:project_with_unknown_deps) { create(:project, name: "a-freshly-ingested-project") }
-  let!(:version_with_unknown_deps) { create(:version, project: project_with_unknown_deps, repository_sources: ["Rubygems"]) }
+  let!(:version_with_unknown_deps) { create(:version, project: project_with_unknown_deps, repository_sources: ["Rubygems"], updated_at: 2.days.ago) }
 
   before :each do
     internal_user.current_api_key.update_attribute(:is_internal, true)
@@ -250,6 +250,10 @@ describe "Api::ProjectsController" do
   end
 
   describe "POST /api/projects/dependencies", type: :request do
+    before do
+      allow(PackageManagerDownloadWorker).to receive(:perform_async)
+    end
+
     it "renders successfully" do
       post "/api/projects/dependencies", params: {
         api_key: user.api_key,
@@ -343,6 +347,13 @@ describe "Api::ProjectsController" do
             "dependencies": nil,
           } },
         ].to_json)
+
+      expect(version_with_unknown_deps.reload.updated_at).to be_within(1.second).of(Time.current)
+      expect(PackageManagerDownloadWorker).to have_received(:perform_async).with(
+        "Rubygems",
+        project_with_unknown_deps.name,
+        version_with_unknown_deps.number
+      )
     end
   end
 
