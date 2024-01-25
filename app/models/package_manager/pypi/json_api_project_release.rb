@@ -5,8 +5,6 @@ module PackageManager
     class JsonApiProjectRelease
       attr_reader :version_number, :published_at, :yanked_reason
 
-      PYPI_PRERELEASE = /(a|b|rc|dev)[-_.]?[0-9]*$/.freeze
-
       def initialize(
         version_number:,
         published_at:,
@@ -24,7 +22,10 @@ module PackageManager
       end
 
       def prerelease?
-        @version_number =~ PYPI_PRERELEASE
+        PrereleaseForPlatform.prerelease?(
+          version_number: @version_number,
+          platform: "pypi"
+        )
       end
 
       def yanked?
