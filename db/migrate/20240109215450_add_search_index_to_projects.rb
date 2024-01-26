@@ -5,7 +5,7 @@ class AddSearchIndexToProjects < ActiveRecord::Migration[7.0]
 
   def up
     add_index :projects, %q{to_tsvector('simple', coalesce("projects"."description"::text, ''))}, name: "index_projects_search_on_description", using: :gist, length: 512, algorithm: :concurrently
-    add_index :projects, %q{coalesce("projects"."name"::text, '') gist_trgm_ops(siglen=512)}, name: "index_projects_search_on_name", using: :gist, algorithm: :concurrently
+    add_index :projects, %q{coalesce("projects"."name"::text, '') gist_trgm_ops}, name: "index_projects_search_on_name", using: :gist, length: 256, algorithm: :concurrently
   end
 
   def down
