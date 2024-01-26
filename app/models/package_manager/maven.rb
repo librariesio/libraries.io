@@ -166,8 +166,10 @@ module PackageManager
       end
     end
 
-    def self.one_version_for_name(version, name)
-      pom = get_pom(*name.split(NAME_DELIMITER, 2), version)
+    def self.one_version(raw_project, sync_version)
+      name = raw_project[:name]
+
+      pom = get_pom(*name.split(NAME_DELIMITER, 2), sync_version)
       begin
         license_list = licenses(pom)
       rescue StandardError
@@ -176,11 +178,11 @@ module PackageManager
 
       if license_list.blank? && pom.respond_to?("project") && pom.project.locate("parent").present?
         parent_version = extract_pom_value(pom.project, "parent/version")&.strip
-        Rails.logger.info("[POM has parent no license] name=#{name} parent_version=#{parent_version} child_version=#{version}")
+        Rails.logger.info("[POM has parent no license] name=#{name} parent_version=#{parent_version} child_version=#{sync_version}")
       end
 
       {
-        number: version,
+        number: sync_version,
         published_at: Time.parse(pom.locate("publishedAt").first.text),
         original_license: license_list,
       }
@@ -191,7 +193,7 @@ module PackageManager
       # is missing license data, use the data from the parent POM
       versions
         .map do |version|
-          one_version_for_name(version, name)
+          one_version({ name: name }, version)
         rescue Ox::Error, POMNotFound
           StructuredLog.capture("MAVEN_RETRIEVE_VERSION_FAILURE", { version: version, name: name, message: "Version POM not found or valid" })
           next
