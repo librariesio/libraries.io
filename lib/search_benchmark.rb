@@ -92,7 +92,7 @@ class SearchBenchmark
 
     IndexStats.new(
       table_total_size: results.first["table_total_size"],
-      table_indices_size: results.first["table_total_size"],
+      table_indices_size: results.first["table_indices_size"],
       table_size: results.first["table_size"],
       estimated_row_count: results.first["estimated_row_count"],
       indices: results.to_h { |r| [r["index_name"], r["index_size"]] }
