@@ -27,44 +27,26 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
     end
   end
 
-  # rubocop: disable Lint/UnusedMethodArgument
-  def self.update(name, sync_version:, force_sync_dependencies: false)
-    raw_project = project(
-      name,
-      latest: latest_version(name)
-    )
-
-    mapped_project = transform_mapping_values(mapping(raw_project))
-    return false unless mapped_project.present?
-
-    db_project = ensure_project(mapped_project, reformat_repository_url: true)
-
-    version_hash = one_version_for_name(sync_version, name)
-
-    add_version(db_project, version_hash_to_version_object(version_hash))
-
-    finalize_db_project(db_project)
-  end
-  # rubocop: enable Lint/UnusedMethodArgument
-
   def self.latest_version(name)
+    versions(nil, name).last[:number]
+  end
+
+  def self.versions(_raw_project, name)
     group_name, artifact = name.split(NAME_DELIMITER)
 
     group_path = group_name.gsub(".", "/")
 
     packages = Nokogiri::XML(get_raw("https://maven.google.com/#{group_path}/group-index.xml")).root.children.find_all(&:element?)
 
-    packages.each do |package|
-      package_name = package.name
-
-      next unless package_name == artifact
-
-      versions = package["versions"].split(",")
-
-      return versions.last
+    package_details = packages.find do |package|
+      package.name == artifact
     end
 
-    nil
+    return [] unless package_details
+
+    package_details["versions"].split(",").map do |version_number|
+      { number: version_number }
+    end
   end
 
   # This is called by the Rake task maven:populate_google_maven.
@@ -100,7 +82,7 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
         pp "added project #{name}"
 
         versions.each do |version|
-          version_hash = one_version_for_name(version, name)
+          version_hash = one_version(raw_project, versions)
 
           add_version(db_project, version_hash)
 

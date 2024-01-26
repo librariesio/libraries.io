@@ -83,17 +83,6 @@ describe PackageManager::Maven do
     end
   end
 
-  describe ".one_version" do
-    it "retrieves a single version" do
-      allow(described_class)
-        .to receive(:download_pom)
-        .and_raise(PackageManager::Maven::POMNotFound.new("https://a-maven-central-url"))
-      raw_project = { name: "org.foo:bar" }
-
-      expect(PackageManager::Maven::MavenCentral.one_version(raw_project, "1.0.0")).to eq(nil)
-    end
-  end
-
   describe ".versions" do
     it "returns the expected version data" do
       allow(described_class)
