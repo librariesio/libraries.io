@@ -35,4 +35,10 @@ namespace :search do
   task reindex_projects: %i[environment recreate_projects_index] do
     Project.import query: -> { indexable }
   end
+
+  desc "Benchmark pg_search"
+  task benchmark: :environment do
+    require_relative "../search_benchmark"
+    SearchBenchmark.new.perform
+  end
 end
