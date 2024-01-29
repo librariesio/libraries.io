@@ -1,8 +1,17 @@
 # frozen_string_literal: true
 
+# Test performance of current Project search implementation.
+# Displays relevant information about the current search configuration and
+# relevant database indices/settings. Also performs equivalent queries against
+# Elasticsearch implementation for comparison.
+#
+# Can be invoked from CLI with
+# $ bin/rails search:benchmark
 class SearchBenchmark
   attr_reader :count, :search_terms
 
+  # @param count [Integer] Number of times to retry querying each term, to make sure things are warm
+  # @param search_terms [Array<String>] An alternative list of words/phrases to use
   def initialize(count: 4, search_terms: nil)
     @count = count
     @search_terms = search_terms || default_search_terms

@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
+# ProjectSearchQuery builds a Postgres fulltext search query against Projects
+# from the given search parameters
 class ProjectSearchQuery
   attr_reader :term, :platforms, :licenses, :languages, :keywords, :sort
 
+  # @param term [String] Text to seach by
+  # @param platforms [Array<String>] Limit results to projects on given platforms
+  # @param licenses [Array<String>] Limit results to projects with given licenses
+  # @param languages [Array<String>] Limit results to projects in given languages
+  # @param keywords [Array<String>] Limit results to projects with given keywords
+  # @param sort [String] Order results by given attribute instead of relevance
   def initialize(term, platforms: [], licenses: [], languages: [], keywords: [], sort: nil)
     @term = term
     @platforms = platforms
