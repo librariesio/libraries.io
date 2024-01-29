@@ -198,15 +198,10 @@ class Project < ApplicationRecord
   include PgSearch::Model
   DB_SEARCH_OPTIONS = {
     order_within_rank: "latest_release_published_at DESC",
-    ranked_by: "(:trigram * 3.0) + :tsearch",
-    against: %i[name description],
+    ranked_by: ":trigram",
+    against: %i[name],
     using: {
-      trigram: {
-        only: [:name],
-      },
-      tsearch: {
-        only: [:description],
-      },
+      trigram: {},
     },
   }.freeze
   pg_search_scope :db_search, DB_SEARCH_OPTIONS
