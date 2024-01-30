@@ -81,18 +81,22 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
 
         pp "added project #{name}"
 
-        versions.each do |version|
-          version_hash = one_version(raw_project, versions)
+        api_versions = version_numbers
+          .map { |version_number| one_version(raw_project, version_number) }
+          .map { |mapped_version| version_hash_to_version_object(mapped_version) }
 
-          add_version(db_project, version_hash)
-
-          pp "added version #{version}"
+        retried = false
+        begin
+          BulkVersionUpdater.new(
+            db_project: db_project,
+            api_versions: api_versions,
+            repository_source_name: self::HAS_MULTIPLE_REPO_SOURCES ? [self::REPOSITORY_SOURCE_NAME] : nil
+          ).run!
         rescue Faraday::ConnectionFailed
           unless retried
             retried = true
             retry
           end
-          retry unless retried
           StructuredLog.capture(
             "GOOGLE_MAVEN_VERSION_UPSERT_FAILURE",
             {

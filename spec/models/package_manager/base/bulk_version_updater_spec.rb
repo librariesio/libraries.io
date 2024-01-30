@@ -77,8 +77,6 @@ describe PackageManager::Base::BulkVersionUpdater do
       end
     end
 
-    let(:repository_source_name) { nil }
-
     context "updating existing columns" do
       let(:api_versions_to_update) { raw_versions[0, 1] }
       let!(:version) { create(:version, project: project, number: api_versions_to_update[0].version_number) }
