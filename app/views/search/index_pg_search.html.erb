@@ -66,11 +66,11 @@
   </div>
 
   <div class='col-sm-4 facets'>
-    <%# @facets.each do |name, facet| %>
-      <%# facet = facet[facet.keys.last] %>
-      <%# next if facet.buckets.nil? || facet.buckets.empty? %>
-      <%# render 'search/facet', name: name, facet: facet %>
-    <%# end %>
+    <% @facets.each do |name, facet| %>
+      <% facet = facet[facet.keys.last] %>
+      <% next if facet.buckets.nil? || facet.buckets.empty? %>
+      <%= render 'search/facet', name: name, facet: facet %>
+    <% end %>
     <p>
       <small>
         <%= link_to url_for(params.except(:host).merge(format: :atom, sort: 'created_at', order: 'desc').permit!), class: 'rss' do %>
