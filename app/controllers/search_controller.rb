@@ -8,7 +8,7 @@ class SearchController < ApplicationController
       .values_at(:q, :platforms, :languages, :licenses, :keywords)
       .any?(&:present?)
 
-    if pg_search_projects_enabled?
+    if use_pg_search?
       @projects = pg_search_projects(@query).paginate(page: params[:page])
 
       respond_to do |format|

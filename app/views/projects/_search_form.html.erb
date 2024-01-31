@@ -11,7 +11,7 @@
       </button>
     </span>
 
-    <% if logged_in? && (current_user.admin? || current_user.current_api_key.is_internal?) %>
+    <% if logged_in? && current_user.admin_or_internal? %>
       <%= label_tag "force_pg", title: "Use beta search", style: "display:table-cell; color:#efefef; padding: 0 10px"  do -%>
         <%= fa_icon "flask" %>
         <%= check_box_tag "force_pg", nil, params.key?("force_pg"), class: "checkbox" -%>

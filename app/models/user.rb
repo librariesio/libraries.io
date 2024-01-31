@@ -107,6 +107,10 @@ class User < ApplicationRecord
     github_enabled? && is_admin?
   end
 
+  def admin_or_internal?
+    admin? || current_api_key&.is_internal
+  end
+
   def create_api_key
     api_keys.create
   end
