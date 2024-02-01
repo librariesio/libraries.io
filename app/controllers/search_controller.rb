@@ -4,6 +4,8 @@ class SearchController < ApplicationController
   def index
     @query = params[:q]
     @title = page_title
+    @facets = []
+
     @any_criteria = params
       .values_at(:q, :platforms, :languages, :licenses, :keywords)
       .any?(&:present?)
@@ -18,8 +20,6 @@ class SearchController < ApplicationController
     else
       @search = []
       @projects = []
-      @facets = []
-      @title = page_title
 
       if @any_criteria
         @search = search_projects(@query)

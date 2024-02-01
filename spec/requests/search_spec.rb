@@ -47,7 +47,7 @@ describe "SearchController", elasticsearch: true do
 
   context "with pg_search_projects enabled" do
     before do
-      expect_any_instance_of(ApplicationController).to receive(:pg_search_projects_enabled?).and_return(true)
+      expect_any_instance_of(ApplicationController).to receive(:use_pg_search?).and_return(true)
       allow_any_instance_of(ApplicationController).to receive(:es_query).and_raise
     end
 
