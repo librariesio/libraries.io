@@ -158,7 +158,11 @@ module PackageManager
           repository_source_name: self::HAS_MULTIPLE_REPO_SOURCES ? [self::REPOSITORY_SOURCE_NAME] : nil
         ).run!
 
+
+        # TODO: we might be able to pass versions returned from BulkVersionUpdater here into
+        # remove_missing_versions() to reduce version lookups.
         remove_missing_versions(db_project, api_versions.map(&:version_number)) if sync_version == :all
+
         # TODO: handle deprecation here too
       end
 
