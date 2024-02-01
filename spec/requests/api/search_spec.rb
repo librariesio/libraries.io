@@ -31,5 +31,21 @@ describe "API::SearchController", elasticsearch: true do
         expect(response.body).to be_json_eql []
       end
     end
+
+    context "with pg_search_projects enabled" do
+      let!(:project) { create :project, name: "charisma-generator" }
+      let!(:other_project) { create :project, name: "wisdom-generator" }
+
+      before do
+        expect_any_instance_of(ApplicationController).to receive(:use_pg_search?).and_return(true)
+        allow_any_instance_of(ApplicationController).to receive(:es_query).and_raise
+      end
+
+      it "renders successfully" do
+        get "/api/search", params: { api_key: user.api_key, q: "charisma" }
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to match [ProjectSerializer.new(project)].to_json
+      end
+    end
   end
 end

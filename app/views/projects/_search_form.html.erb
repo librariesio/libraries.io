@@ -4,10 +4,18 @@
     <% [:platforms, :licenses, :languages, :keywords, :sort].each do |field| %>
       <%= hidden_field_tag field, params[field] if params[field].present? %>
     <% end %>
+
     <span class="input-group-btn">
       <button class="btn btn-primary" type="submit">
         <%= fa_icon 'search' %>
       </button>
     </span>
+
+    <% if logged_in? && current_user.admin_or_internal? %>
+      <%= label_tag "force_pg", title: "Use beta search", style: "display:table-cell; color:#efefef; padding: 0 10px"  do -%>
+        <%= fa_icon "flask" %>
+        <%= check_box_tag "force_pg", nil, params.key?("force_pg"), class: "checkbox" -%>
+      <% end %>
+    <% end %>
   </div>
 <% end %>

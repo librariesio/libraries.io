@@ -184,6 +184,21 @@ class ApplicationController < ActionController::Base
                         order: format_order).paginate(page: page_number, per_page: per_page_number)
   end
 
+  def pg_search_projects(term)
+    ProjectSearchQuery.new(
+      term,
+      platforms: current_platforms,
+      languages: current_languages,
+      keywords: current_keywords,
+      licenses: current_licenses,
+      sort: format_sort
+    ).results
+  end
+
+  def use_pg_search?
+    (current_user&.admin_or_internal? && params.key?("force_pg")) || Rails.application.config.pg_search_projects_enabled
+  end
+
   def find_version
     @version_count = @project.versions.size
     @repository = @project.repository

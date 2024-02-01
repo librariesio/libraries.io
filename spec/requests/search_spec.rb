@@ -44,4 +44,21 @@ describe "SearchController", elasticsearch: true do
       expect(page).to have_content project.name
     end
   end
+
+  context "with pg_search_projects enabled" do
+    before do
+      expect_any_instance_of(ApplicationController).to receive(:use_pg_search?).and_return(true)
+      allow_any_instance_of(ApplicationController).to receive(:es_query).and_raise
+    end
+
+    it "renders results page successfully" do
+      visit search_path(params: { q: search_criteria })
+      expect(page).to have_content project.name
+    end
+
+    it "renders atom feed of results successfully" do
+      visit search_path(params: { q: search_criteria }, format: :atom)
+      expect(page).to have_content project.name
+    end
+  end
 end

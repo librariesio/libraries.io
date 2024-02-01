@@ -85,5 +85,6 @@ module Libraries
     config.ga_analytics_id = ENV.fetch("GA_ANALYTICS_ID", nil)
     config.gtm_id = ENV.fetch("GTM_ID", nil)
     config.tidelift_api_key = ENV.fetch("TIDELIFT_API_KEY", nil)
+    config.pg_search_projects_enabled = ENV.key?("PG_SEARCH_PROJECTS_ENABLED")
   end
 end

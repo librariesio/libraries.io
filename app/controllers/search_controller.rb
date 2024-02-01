@@ -3,24 +3,35 @@
 class SearchController < ApplicationController
   def index
     @query = params[:q]
+    @title = page_title
+    @facets = []
+
     @any_criteria = params
       .values_at(:q, :platforms, :languages, :licenses, :keywords)
       .any?(&:present?)
-    @search = []
-    @projects = []
-    @facets = []
-    @title = page_title
 
-    if @any_criteria
-      @search = search_projects(@query)
-      @suggestion = @search.response.suggest.did_you_mean.first if @query.present?
-      @projects = @search.results.map { |result| ProjectSearchResult.new(result) }
-      @facets = @search.response.aggregations
-    end
+    if use_pg_search?
+      @projects = pg_search_projects(@query).paginate(page: params[:page])
 
-    respond_to do |format|
-      format.html
-      format.atom
+      respond_to do |format|
+        format.html { render :index_pg_search }
+        format.atom
+      end
+    else
+      @search = []
+      @projects = []
+
+      if @any_criteria
+        @search = search_projects(@query)
+        @suggestion = @search.response.suggest.did_you_mean.first if @query.present?
+        @projects = @search.results.map { |result| ProjectSearchResult.new(result) }
+        @facets = @search.response.aggregations
+      end
+
+      respond_to do |format|
+        format.html
+        format.atom
+      end
     end
   end
 

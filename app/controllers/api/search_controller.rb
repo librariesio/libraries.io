@@ -4,8 +4,12 @@ class Api::SearchController < Api::ApplicationController
   before_action :require_api_key
 
   def index
-    @search = paginate search_projects(params[:q])
-    @projects = @search.records.includes(:repository, :versions)
+    if use_pg_search?
+      @projects = pg_search_projects(params[:q]).includes(:repository, :versions).paginate(page: params[:page])
+    else
+      search = paginate search_projects(params[:q])
+      @projects = search.records.includes(:repository, :versions)
+    end
 
     render json: @projects
   end
