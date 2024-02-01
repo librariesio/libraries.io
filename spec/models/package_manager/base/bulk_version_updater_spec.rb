@@ -157,8 +157,8 @@ describe PackageManager::Base::BulkVersionUpdater do
       let(:api_versions_to_update) { raw_versions[0, 3] }
       let(:version_numbers_called) { [] }
 
-      it "runs update_spdx_expression on each version" do
-        allow_any_instance_of(Version).to receive(:update_spdx_expression) { |v| version_numbers_called.push(v.number) }
+      it "runs set_spdx_expression on each version" do
+        allow_any_instance_of(Version).to receive(:set_spdx_expression) { |v| version_numbers_called.push(v.number) }
         bulk_version_updater.run!
 
         expect(version_numbers_called).to eq(["3.0.0", "2.0.0", "1.0.0"])

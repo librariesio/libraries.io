@@ -45,10 +45,10 @@ class Version < ApplicationRecord
   has_many :dependencies, dependent: :delete_all
   has_many :runtime_dependencies, -> { where kind: %w[runtime normal] }, class_name: "Dependency"
 
+  before_save :set_spdx_expression
   ##############################################################################################
   # NB: callbacks are run manually in bulk_after_create_commit, so keep that method in sync with these.
   ##############################################################################################
-  before_save :update_spdx_expression
   after_create_commit :send_notifications_async,
                       :update_repository_async,
                       :update_project_tags_async,
@@ -92,7 +92,7 @@ class Version < ApplicationRecord
     project.try(:update_repository_async)
   end
 
-  def update_spdx_expression
+  def set_spdx_expression
     case original_license
     when String
       self.spdx_expression = handle_string_spdx_expression(original_license)

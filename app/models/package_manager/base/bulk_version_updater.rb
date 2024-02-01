@@ -25,7 +25,7 @@ module PackageManager
             # this value will get merged w/existing in the upsert_all query (see table tests in spec)
             v.repository_sources = @repository_source_name if @repository_source_name
             # from Version#before_save
-            v.update_spdx_expression
+            v.set_spdx_expression
             # upsert_all doesn't do validation, so ensure they're valid here.
             v.validate!
           end
