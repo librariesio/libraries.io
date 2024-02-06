@@ -77,6 +77,25 @@ module RepositoryHost
 
     def get_file_contents(path, token = nil)
       file = api_client(token).contents(repository.full_name, path: path)
+
+      # Sometimes the Github API will return an array of contents instead of a single file
+      # if the path does not direct to a single manifest file as expected.
+      # There are some scenarios where the path we sent in will end up with a response like this
+      # for unknown reasons.
+      # In the case where we get an array of objects we can't read the contents, so just return nil and move on.
+      if file.is_a?(Array)
+        StructuredLog.capture(
+          "GITHUB_ARRAY_RESPONSE_GET_FILE_CONTENTS",
+          {
+            path: path,
+            repository_host: "github",
+            name: repository.full_name,
+            message: "We expected a single file response but the API returned an array.",
+          }
+        )
+        return nil
+      end
+
       {
         sha: file.sha,
         content: file.content.present? ? Base64.decode64(file.content) : file.content,
