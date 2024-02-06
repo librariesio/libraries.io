@@ -77,6 +77,14 @@ module RepositoryHost
 
     def get_file_contents(path, token = nil)
       file = api_client(token).contents(repository.full_name, path: path)
+
+      # Sometimes the Github API will return an array of contents instead of a single file
+      # if the path does not direct to a single manifest file as expected.
+      # There are some scenarios where the path we sent in will end up with a response like this
+      # for unknown reasons.
+      # In the case where we get an array of objects we can't read the contents, so just return nil and move on.
+      return nil if file.is_a?(Array)
+
       {
         sha: file.sha,
         content: file.content.present? ? Base64.decode64(file.content) : file.content,
