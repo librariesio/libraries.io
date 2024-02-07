@@ -12,6 +12,9 @@ module PackageManager
       "launchpad.net",
       "hub.jazz.net",
     ].freeze
+    SKIP_HOSTS = [
+      "jfrog.com",
+    ].freeze
     KNOWN_VCS = [
       ".bzr",
       ".fossil",
@@ -229,6 +232,7 @@ module PackageManager
     # https://golang.org/cmd/go/#hdr-Import_path_syntax
     def self.project_find_names(name)
       return [name] if name.start_with?(*KNOWN_HOSTS)
+      return [name] if name.start_with?(*SKIP_HOSTS)
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
 
       host = name.split("/").first
@@ -245,7 +249,18 @@ module PackageManager
           &.last
           &.sub(/https?:\/\//, "")
 
-        go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
+        chosen_name = go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
+        # Collect info on what data we're mapping here, to ensure it's doing the right thing.
+        StructuredLog.capture(
+          "GO_MODULES_PROJECT_FIND_NAMES",
+          {
+            name: name,
+            found_name: go_import,
+            chosen_name: chosen_name,
+          }
+        )
+
+        chosen_name
       rescue Faraday::ConnectionFailed => e
         # We can get here from go modules that don't exist anymore, or having server troubles:
         # Fallback to the given name, cache the host as "bad" for a day,
@@ -254,7 +269,8 @@ module PackageManager
         Rails.cache.write("unreachable-go-hosts:#{host}", true, ex: 1.day)
         Bugsnag.notify(e)
         [name]
-      rescue StandardError
+      rescue StandardError => e
+        Bugsnag.notify(e)
         [name]
       end
     end

@@ -324,17 +324,33 @@ describe PackageManager::Go do
   end
 
   describe ".project_find_names(name)" do
-    context "for names from a a known host" do
-      it "returns the name" do
-        expect(described_class.project_find_names("github.com/user/project"))
-          .to eq(["github.com/user/project"])
+    context "for names from a known host" do
+      it "returns the name without calling the host" do
+        name = "github.com/user/project"
+        allow(described_class).to receive(:get_html)
+
+        expect(described_class.project_find_names(name)).to eq([name])
+        expect(described_class).to_not have_received(:get_html)
+      end
+    end
+
+    context "for names from a host we ignore" do
+      it "returns the name without calling the host" do
+        name = "jfrog.com/some/git/repo"
+        allow(described_class).to receive(:get_html)
+
+        expect(described_class.project_find_names(name)).to eq([name])
+        expect(described_class).to_not have_received(:get_html)
       end
     end
 
     context "for names with a known vcs" do
       it "returns the name" do
-        expect(described_class.project_find_names("example.org/user/foo.hg"))
-          .to eq(["example.org/user/foo.hg"])
+        name = "example.org/user/foo.hg"
+        allow(described_class).to receive(:get_html)
+
+        expect(described_class.project_find_names(name)).to eq([name])
+        expect(described_class).to_not have_received(:get_html)
       end
     end
 
