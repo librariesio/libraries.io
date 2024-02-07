@@ -12,6 +12,9 @@ module PackageManager
       "launchpad.net",
       "hub.jazz.net",
     ].freeze
+    SKIP_HOSTS = [
+      "jfrog.com"
+    ]
     KNOWN_VCS = [
       ".bzr",
       ".fossil",
@@ -229,6 +232,7 @@ module PackageManager
     # https://golang.org/cmd/go/#hdr-Import_path_syntax
     def self.project_find_names(name)
       return [name] if name.start_with?(*KNOWN_HOSTS)
+      return [name] if name.start_with?(*SKIP_HOSTS)
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
 
       host = name.split("/").first
