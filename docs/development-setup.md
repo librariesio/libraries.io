@@ -17,7 +17,6 @@ rbenv install 2.7.8
 Next, you'll need to make sure that you have PostgreSQL, Elasticsearch 2.4 and Redis installed. This can be done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or postgres can be installed by using [http://postgresapp.com](http://postgresapp.com). Please also see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
 
 ```bash
-brew install --cask phantomjs homebrew/cask-versions/adoptopenjdk8
 brew install postgresql redis icu4c cmake
 ```
 
