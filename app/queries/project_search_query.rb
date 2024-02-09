@@ -22,7 +22,7 @@ class ProjectSearchQuery
 
   def results
     @results = Project
-      .visible
+      .not_removed
       .then { |query| filter_platforms(query) }
       .then { |query| filter_languages(query) }
       .then { |query| filter_licenses(query) }
