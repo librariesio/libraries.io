@@ -18,16 +18,15 @@ module PackageManager
     }.freeze
     NAME_DELIMITER = ":"
 
-    PROVIDER_MAP = {
-      "Atlassian" => Atlassian,
-      "default" => MavenCentral,
-      "Hortonworks" => Hortonworks,
-      "Maven" => MavenCentral,
-      "SpringLibs" => SpringLibs,
-      "Jboss" => Jboss,
-      "JbossEa" => JbossEa,
-      "Google" => Google,
-    }.freeze
+    PROVIDER_MAP = ProviderMap.new(
+      ProviderInfo.new(identifier: "Maven", default: true, provider_class: MavenCentral),
+      ProviderInfo.new(identifier: "Google", provider_class: Google),
+      ProviderInfo.new(identifier: "Atlassian", provider_class: Atlassian),
+      ProviderInfo.new(identifier: "Hortonworks", provider_class: Hortonworks),
+      ProviderInfo.new(identifier: "SpringLibs", provider_class: SpringLibs),
+      ProviderInfo.new(identifier: "Jboss", provider_class: Jboss),
+      ProviderInfo.new(identifier: "JbossEa", provider_class: JbossEa)
+    )
 
     class POMNotFound < StandardError
       attr_reader :url
@@ -39,7 +38,7 @@ module PackageManager
     end
 
     def self.repository_base
-      PROVIDER_MAP["default"].repository_base
+      PROVIDER_MAP.default_provider.provider_class.repository_base
     end
 
     def self.project_names

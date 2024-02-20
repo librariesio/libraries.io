@@ -177,6 +177,9 @@ GEM
     datadog-ci (0.3.0)
       msgpack
     date (3.3.3)
+    db-query-matchers (0.11.0)
+      activesupport (>= 4.0, < 7.1)
+      rspec (>= 3.0)
     ddtrace (1.16.2)
       datadog-ci (~> 0.3.0)
       debase-ruby_core_source (= 3.2.2)
@@ -689,6 +692,7 @@ DEPENDENCIES
   dalli
   database_cleaner (~> 1.99.0)
   database_cleaner-active_record
+  db-query-matchers
   ddtrace (~> 1.16.2)
   dotenv-rails
   elasticsearch (~> 2)

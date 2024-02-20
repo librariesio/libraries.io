@@ -750,6 +750,29 @@ class Project < ApplicationRecord
     subs.reject { |sub| mutes.include?(sub.id) }
   end
 
+  # @return [Array(String)] All possible Version#repository_sources for
+  #                         this package, unordered
+  def repository_sources
+    versions
+      .flat_map(&:repository_sources)
+      .compact
+      .uniq
+  end
+
+  # @return [Version,nil] If version was provided, the specific Version or
+  #                       nil if not found. If not provided, the most
+  #                       recently created Version.
+  def find_version_or_most_recent_version(version: nil)
+    if version.nil?
+      versions.order(created_at: :desc).first
+    # Avoid a database call if we can help it.
+    elsif association(:versions).loaded? && !versions.empty?
+      versions.find { |v| v.number == version }
+    else
+      versions.find_by(number: version)
+    end
+  end
+
   private
 
   def spdx_license
