@@ -6,11 +6,12 @@ module PackageManager
     # likely upstream package repository for a package. This uses the
     # packages' versions' repository_sources field to
     class ProviderMap
-      # @param prioritized_provider_infos [Array(ProviderInfo)]
+      # @param prioritized_provider_infos [Array(ProviderInfo)] ProviderInfo classes in
+      #        the order in which they should be resolved for matches.
       def initialize(*prioritized_provider_infos)
         @prioritized_provider_infos = prioritized_provider_infos
 
-        raise "Need at least one provider marked default" if @prioritized_provider_infos.none?(&:default?)
+        raise "Need exactly one default provider" unless @prioritized_provider_infos.find_all(&:default?).count == 1
       end
 
       # @param project [Project]
@@ -23,7 +24,7 @@ module PackageManager
           .compact
 
         if found_providers.empty?
-          unless project.repository_sources.empty?
+          if project.repository_sources.present?
             # If we have removed all possible providers that a version
             # can have, this means that every pacakge will use the
             # default provider, which is probably not what we want.
@@ -49,7 +50,11 @@ module PackageManager
       end
 
       def best_repository_source(project:, version: nil)
-        db_version = project.find_version_or_most_recent_version(version: version)
+        db_version = if version
+                       project.find_version(version)
+                     else
+                       project.versions.order(created_at: :desc).first
+                     end
 
         repository_sources = db_version&.repository_sources
 

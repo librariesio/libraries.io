@@ -483,7 +483,7 @@ describe Project, type: :model do
     end
   end
 
-  describe "#find_version_or_most_recent_version" do
+  describe "#find_version" do
     subject(:project) { create(:project) }
 
     let(:version) { nil }
@@ -491,7 +491,7 @@ describe Project, type: :model do
     context "without associated versions" do
       context "with nil version" do
         it "returns nil" do
-          expect(project.find_version_or_most_recent_version(version: version)).to be(nil)
+          expect(project.find_version(version)).to be(nil)
         end
       end
 
@@ -499,7 +499,7 @@ describe Project, type: :model do
         let(:version) { "1.2.3" }
 
         it "returns nil" do
-          expect(project.find_version_or_most_recent_version(version: "1.2.3")).to be(nil)
+          expect(project.find_version("1.2.3")).to be(nil)
         end
       end
     end
@@ -512,8 +512,8 @@ describe Project, type: :model do
 
       context "without association loaded" do
         context "with nil version" do
-          it "returns the most recently created version" do
-            expect(project.find_version_or_most_recent_version(version: version)).to eq(version_two)
+          it "returns nil" do
+            expect(project.find_version(version)).to be(nil)
           end
         end
 
@@ -522,7 +522,7 @@ describe Project, type: :model do
 
           it "returns the found version" do
             result = nil
-            expect { result = project.find_version_or_most_recent_version(version: version) }.to make_database_queries(count: 1)
+            expect { result = project.find_version(version) }.to make_database_queries(count: 1)
 
             expect(result).to eq(version_one)
           end
@@ -540,7 +540,7 @@ describe Project, type: :model do
 
         it "returns the found version" do
           result = nil
-          expect { result = project.find_version_or_most_recent_version(version: version) }.not_to make_database_queries
+          expect { result = project.find_version(version) }.not_to make_database_queries
 
           expect(result).to eq(version_one)
         end

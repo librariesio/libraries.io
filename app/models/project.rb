@@ -759,14 +759,9 @@ class Project < ApplicationRecord
       .uniq
   end
 
-  # @return [Version,nil] If version was provided, the specific Version or
-  #                       nil if not found. If not provided, the most
-  #                       recently created Version.
-  def find_version_or_most_recent_version(version: nil)
-    if version.nil?
-      versions.order(created_at: :desc).first
+  def find_version(version)
     # Avoid a database call if we can help it.
-    elsif association(:versions).loaded? && !versions.empty?
+    if association(:versions).loaded? && !versions.empty?
       versions.find { |v| v.number == version }
     else
       versions.find_by(number: version)

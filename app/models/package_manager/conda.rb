@@ -9,6 +9,12 @@ module PackageManager
     URL = "https://anaconda.org"
     API_URL = "https://conda.libraries.io"
 
+    PROVIDER_MAP = ProviderMap.new(
+      ProviderInfo.new(identifier: "Main", default: true, provider_class: Main),
+      ProviderInfo.new(identifier: "CondaMain", provider_class: Main),
+      ProviderInfo.new(identifier: "CondaForge", provider_class: Forge)
+    )
+
     def self.formatted_name
       "conda"
     end
@@ -60,12 +66,6 @@ module PackageManager
         .provider_class
         .install_instructions(db_project)
     end
-
-    PROVIDER_MAP = ProviderMap.new(
-      ProviderInfo.new(identifier: "Main", default: true, provider_class: Main),
-      ProviderInfo.new(identifier: "CondaMain", provider_class: Main),
-      ProviderInfo.new(identifier: "CondaForge", provider_class: Forge)
-    )
 
     def self.check_status_url(db_project)
       "#{API_URL}/package/#{db_project.name}"
