@@ -10,7 +10,7 @@ describe "API::StatusController" do
   let!(:repository) { create(:repository) }
   let!(:maintenance_stat) { create(:repository_maintenance_stat, repository: repository) }
   let!(:project) { create(:project, repository: repository) }
-  let!(:project_django) { create(:project, name: "Django", platform: "Pypi", keywords: "old keywords", keywords_array: ["new keywords"]) }
+  let!(:project_django) { create(:project, name: "Django", platform: "Pypi", keywords: "old keywords", keywords_array: %w[new keywords]) }
 
   before do
     internal_user.current_api_key.update_attribute(:is_internal, true)
@@ -119,7 +119,7 @@ describe "API::StatusController" do
       )
 
       expect(response).to have_http_status(:success)
-      expect(JSON.parse(response.body).dig(0, "keywords")).to eq(["new keywords"])
+      expect(JSON.parse(response.body).dig(0, "keywords")).to eq("new,keywords")
     end
 
     it "correctly serves the original name" do
