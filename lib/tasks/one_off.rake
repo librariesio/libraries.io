@@ -286,7 +286,6 @@ namespace :one_off do
       .joins(:versions)
       .where(platform: "Maven")
       .where(%((versions.repository_sources != '["Maven"]' AND versions.repository_sources != '["Google"]') OR repository_sources IS NULL))
-      .order(name: :asc)
       .distinct
     affected_projects = affected_projects.offset(offset) if offset.present?
     affected_projects = affected_projects.limit(limit) if limit.present?
@@ -318,9 +317,9 @@ namespace :one_off do
             end
           end
         end
+        puts "Trying manual sync for #{project.platform}/#{project.name}."
+        project.try(:manual_sync)
       end
-      puts "Trying manual sync for #{project.platform}/#{project.name}."
-      project.try(:manual_sync) if commit
 
       processed_count += 1
     end
