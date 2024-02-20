@@ -81,7 +81,7 @@ FactoryBot.define do
 
   factory :version do
     project
-    number { "1.0.0" }
+    sequence(:number) { |n| "#{n}.0.0" }
     published_at { 1.day.ago }
     repository_sources { nil }
   end

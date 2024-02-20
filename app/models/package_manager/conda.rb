@@ -9,6 +9,12 @@ module PackageManager
     URL = "https://anaconda.org"
     API_URL = "https://conda.libraries.io"
 
+    PROVIDER_MAP = ProviderMap.new(prioritized_provider_infos: [
+      ProviderInfo.new(identifier: "Main", default: true, provider_class: Main),
+      ProviderInfo.new(identifier: "CondaMain", provider_class: Main),
+      ProviderInfo.new(identifier: "CondaForge", provider_class: Forge),
+    ])
+
     def self.formatted_name
       "conda"
     end
@@ -54,32 +60,11 @@ module PackageManager
       end
     end
 
-    def self.package_link(project, _version = nil)
-      db_version = project.versions.last
-      repository_source = db_version&.repository_sources&.first.presence || "default"
-      PROVIDER_MAP[repository_source].package_link(project)
-    end
-
     def self.install_instructions(db_project, _version = nil)
-      db_version = db_project.versions.last
-      repository_source = db_version&.repository_sources&.first.presence || "default"
-      PROVIDER_MAP[repository_source].install_instructions(db_project)
-    end
-
-    PROVIDER_MAP = {
-      "CondaForge" => Forge,
-      "default" => Main,
-      "Main" => Main,
-      "CondaMain" => Main,
-    }.freeze
-
-    def self.providers(project)
-      project
-        .versions
-        .flat_map(&:repository_sources)
-        .compact
-        .uniq
-        .map { |source| PROVIDER_MAP[source] } || [PROVIDER_MAP["default"]]
+      self::PROVIDER_MAP
+        .preferred_provider_for_project(project: db_project)
+        .provider_class
+        .install_instructions(db_project)
     end
 
     def self.check_status_url(db_project)

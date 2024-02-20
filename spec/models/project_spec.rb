@@ -20,7 +20,7 @@ describe Project, type: :model do
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:platform) }
 
-  describe "license normalization" do
+  describe "#normalize_licenses" do
     let(:project) { create(:project, name: "foo", platform: PackageManager::Rubygems) }
 
     it "handles a single license" do
@@ -123,7 +123,7 @@ describe Project, type: :model do
     end
   end
 
-  describe "reformat_urls" do
+  describe "#reformat_repository_url" do
     let!(:project) { create(:project) }
 
     it "should save the updated format URL" do
@@ -135,7 +135,7 @@ describe Project, type: :model do
     end
   end
 
-  describe ".find_best!(platform, name, includes=[])" do
+  describe ".find_best!" do
     context "with an exact match" do
       it "returns the record" do
         project = create(:project, name: "Django")
@@ -160,7 +160,7 @@ describe Project, type: :model do
     end
   end
 
-  describe ".find_best(platform, name, includes=[])" do
+  describe ".find_best" do
     context "with a match" do
       it "returns the record" do
         project = create(:project, name: "Django")
@@ -325,7 +325,8 @@ describe Project, type: :model do
       expect(DeletedProject.count).to eq(0)
     end
   end
-  context "project_mailing_list" do
+
+  describe "#mailing_list" do
     let(:repository) { create(:repository) }
     let(:project) { create(:project, repository: repository) }
 
@@ -361,7 +362,7 @@ describe Project, type: :model do
     end
   end
 
-  describe "latest_release" do
+  describe "#latest_release" do
     let!(:project) { create(:project) }
     let!(:newer_release) { create(:version, project: project, number: "2.0.0", published_at: 1.month.ago, id: 1000, created_at: 1.year.ago) }
     let!(:older_release) { create(:version, project: project, number: "1.0.0", published_at: 1.year.ago, id: 2000, created_at: 1.month.ago) }
@@ -403,7 +404,7 @@ describe Project, type: :model do
     end
   end
 
-  describe "manual_sync" do
+  describe "#manual_sync" do
     let!(:project) { create(:project, platform: "Rubygems", name: "my_gem") }
 
     before { allow(PackageManagerDownloadWorker).to receive(:perform_async) }
@@ -422,7 +423,7 @@ describe Project, type: :model do
     end
   end
 
-  describe "::platform" do
+  describe ".platform" do
     subject(:scoped_collection) { described_class.platform(given_platforms) }
 
     let!(:ruby1) { create(:project, :rubygems) }
@@ -458,6 +459,91 @@ describe Project, type: :model do
 
       it "can match any" do
         expect(scoped_collection).to match_array([ruby1, ruby2, npm1])
+      end
+    end
+  end
+
+  describe "#repository_sources" do
+    subject(:project) { create(:project) }
+
+    let!(:version_one) { create(:version, project: project, repository_sources: %w[a b]) }
+    let!(:version_two) { create(:version, project: project, repository_sources: %w[b c]) }
+    let!(:version_three) { create(:version, project: project, repository_sources: [nil, "d"]) }
+
+    before do
+      # Unfortunately there's some interaction between Project, Version, and
+      # their hooks that cause the project's versions association to be cached
+      # with no versions. Force-reload the project so the above created
+      # versions can be found.
+      project.reload
+    end
+
+    it "returns repository sources" do
+      expect(project.repository_sources).to contain_exactly("a", "b", "c", "d")
+    end
+  end
+
+  describe "#find_version" do
+    subject(:project) { create(:project) }
+
+    let(:version) { nil }
+
+    context "without associated versions" do
+      context "with nil version" do
+        it "returns nil" do
+          expect(project.find_version(version)).to be(nil)
+        end
+      end
+
+      context "with specified missing version" do
+        let(:version) { "1.2.3" }
+
+        it "returns nil" do
+          expect(project.find_version("1.2.3")).to be(nil)
+        end
+      end
+    end
+
+    context "with associated versions" do
+      let(:target_found_version) { "1.0.0" }
+
+      let!(:version_one) { create(:version, number: target_found_version, project: project, created_at: 1.day.ago) }
+      let!(:version_two) { create(:version, number: "2.0.0", project: project, created_at: 1.hour.ago) }
+
+      context "without association loaded" do
+        context "with nil version" do
+          it "returns nil" do
+            expect(project.find_version(version)).to be(nil)
+          end
+        end
+
+        context "with specific version" do
+          let(:version) { target_found_version }
+
+          it "returns the found version" do
+            result = nil
+            expect { result = project.find_version(version) }.to make_database_queries(count: 1)
+
+            expect(result).to eq(version_one)
+          end
+        end
+      end
+
+      context "with association loaded and specific version" do
+        let(:version) { target_found_version }
+
+        before do
+          # Clear out the old association data, then cache the new data
+          project.reload
+          ActiveRecord::Associations::Preloader.new(records: [project], associations: :versions).call
+        end
+
+        it "returns the found version" do
+          result = nil
+          expect { result = project.find_version(version) }.not_to make_database_queries
+
+          expect(result).to eq(version_one)
+        end
       end
     end
   end

@@ -117,6 +117,7 @@ group :test do
   gem "capybara"
   gem "database_cleaner", "~> 1.99.0"
   gem "database_cleaner-active_record"
+  gem "db-query-matchers"
   gem "factory_bot_rails", "~> 6.2.0"
   gem "faker"
   gem "json_spec"
