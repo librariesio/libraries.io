@@ -66,12 +66,12 @@ RSpec.describe PackageManager::MultipleSourcesBase::ProviderMap do
     end
   end
 
-  describe "#best_repository_source" do
+  describe "#preferred_provider_for_project" do
     let(:search_version) { "2.3.4" }
 
     context "with no version found" do
       it "returns default provider" do
-        expect(provider_map.best_repository_source(project: project, version: search_version)).to eq(provider_info_one)
+        expect(provider_map.preferred_provider_for_project(project: project, version: search_version)).to eq(provider_info_one)
       end
     end
 
@@ -80,7 +80,7 @@ RSpec.describe PackageManager::MultipleSourcesBase::ProviderMap do
 
       context "with no match" do
         it "returns default provider" do
-          expect(provider_map.best_repository_source(project: project, version: search_version)).to eq(provider_info_one)
+          expect(provider_map.preferred_provider_for_project(project: project, version: search_version)).to eq(provider_info_one)
         end
       end
 
@@ -88,7 +88,7 @@ RSpec.describe PackageManager::MultipleSourcesBase::ProviderMap do
         let(:repository_sources) { %w[two] }
 
         it "returns found provider" do
-          expect(provider_map.best_repository_source(project: project, version: search_version)).to eq(provider_info_two)
+          expect(provider_map.preferred_provider_for_project(project: project, version: search_version)).to eq(provider_info_two)
         end
       end
     end

@@ -62,7 +62,7 @@ module PackageManager
 
     def self.install_instructions(db_project, _version = nil)
       self::PROVIDER_MAP
-        .best_repository_source(project: db_project)
+        .preferred_provider_for_project(project: db_project)
         .provider_class
         .install_instructions(db_project)
     end

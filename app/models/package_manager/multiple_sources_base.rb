@@ -12,21 +12,21 @@ module PackageManager
 
     def self.package_link(db_project, version = nil)
       self::PROVIDER_MAP
-        .best_repository_source(project: db_project, version: version)
+        .preferred_provider_for_project(project: db_project, version: version)
         .provider_class
         .package_link(db_project, version)
     end
 
     def self.download_url(db_project, version = nil)
       self::PROVIDER_MAP
-        .best_repository_source(project: db_project, version: version)
+        .preferred_provider_for_project(project: db_project, version: version)
         .provider_class
         .download_url(db_project, version)
     end
 
     def self.check_status_url(db_project)
       self::PROVIDER_MAP
-        .best_repository_source(project: db_project)
+        .preferred_provider_for_project(project: db_project)
         .provider_class
         .check_status_url(db_project)
     end

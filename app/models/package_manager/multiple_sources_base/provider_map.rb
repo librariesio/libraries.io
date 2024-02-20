@@ -7,7 +7,7 @@ module PackageManager
     # packages' versions' repository_sources field to
     class ProviderMap
       # @param prioritized_provider_infos [Array(ProviderInfo)] ProviderInfo classes in
-      #        the order in which they should be resolved for matches.
+      #        the order in which they should be selected for matches.
       def initialize(prioritized_provider_infos:)
         @prioritized_provider_infos = prioritized_provider_infos
 
@@ -19,7 +19,7 @@ module PackageManager
         found_providers = project
           .repository_sources
           .map do |source|
-            @prioritized_provider_infos.find { |provider_info| provider_info.identifier == source }
+            prioritized_provider_infos.find { |provider_info| provider_info.identifier == source }
           end
           .compact
 
@@ -46,10 +46,10 @@ module PackageManager
       end
 
       def default_provider
-        @prioritized_provider_infos.find(&:default?)
+        prioritized_provider_infos.find(&:default?)
       end
 
-      def best_repository_source(project:, version: nil)
+      def preferred_provider_for_project(project:, version: nil)
         db_version = if version
                        project.find_version(version)
                      else
@@ -60,12 +60,18 @@ module PackageManager
 
         return default_provider unless repository_sources
 
-        best_match = @prioritized_provider_infos.find do |provider_info|
+        best_match = prioritized_provider_infos.find do |provider_info|
           repository_sources.include?(provider_info.identifier)
         end
 
         best_match || default_provider
       end
+
+      private
+
+      # @!attribute [r] prioritized_provider_infos
+      #   ProviderInfo classes in the order in which they should be selected for matches.
+      attr_reader :prioritized_provider_infos
     end
   end
 end
