@@ -274,9 +274,10 @@ namespace :one_off do
   end
 
   desc "Delete ignored Maven versions and resync packages"
-  task :delete_ignored_maven_versions_and_resync_packages, %i[max commit] => :environment do |_t, args|
-    max = args[:max].presence.to_i == 0 ? nil : args[:max].to_i
-    commit = args[:commit].present? && args[:commit] == "yes"
+  task :delete_ignored_maven_versions_and_resync_packages, %i[offset limit commit] => :environment do |_t, args|
+    offset = args.offset&.to_i
+    limit = args.limit&.to_i
+    commit = args[:commit] == "yes"
 
     puts "DRY RUN" unless commit
 
@@ -285,8 +286,10 @@ namespace :one_off do
       .joins(:versions)
       .where(platform: "Maven")
       .where(%((versions.repository_sources != '["Maven"]' AND versions.repository_sources != '["Google"]') OR repository_sources IS NULL))
+      .order(name: :asc)
       .distinct
-    affected_projects = affected_projects.limit(max) if max.present?
+    affected_projects = affected_projects.offset(offset) if offset.present?
+    affected_projects = affected_projects.limit(limit) if limit.present?
 
     puts "Count of projects with versions to re-process: #{affected_projects.count}"
 
@@ -294,36 +297,35 @@ namespace :one_off do
     processed_count = 0
 
     puts "Processing...."
-    affected_projects.in_batches(of: batch_size).each do |projects_batch|
-      projects_batch.each do |project|
-        no_source_versions = project.versions.where("repository_sources IS NULL")
-        ignored_source_versions = project.versions.where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]')))
+    affected_projects.find_each(batch_size: batch_size) do |project|
+      no_source_versions = project.versions.where("repository_sources IS NULL")
+      ignored_source_versions = project.versions.where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]')))
 
-        puts "Updating/Deleting #{no_source_versions.count + ignored_source_versions.count} versions for #{project.platform}/#{project.name}."
-        if commit
-          # If no repository_sources, then destroy it
-          no_source_versions.destroy_all
+      puts "Updating/Deleting #{no_source_versions.count + ignored_source_versions.count} versions for #{project.platform}/#{project.name}."
+      if commit
+        # If no repository_sources, then destroy it
+        no_source_versions.destroy_all
 
-          # If there are repository_sources,
-          # - if any are Maven or Google, remove repository_sources that aren't Maven or Google
-          # - if none are Maven or Google, destroy version
-          ignored_source_versions.in_batches do |versions_batch|
-            versions_batch.each do |version|
-              if version.repository_sources.include?("Maven") || version.repository_sources.include?("Google")
-                version.update(repository_sources: version.repository_sources.select { |source| %w[Maven Google].include?(source) })
-              else
-                version.destroy
-              end
+        # If there are repository_sources,
+        # - if any are Maven or Google, remove repository_sources that aren't Maven or Google
+        # - if none are Maven or Google, destroy version
+        ignored_source_versions.in_batches do |versions_batch|
+          versions_batch.each do |version|
+            if version.repository_sources.include?("Maven") || version.repository_sources.include?("Google")
+              version.update(repository_sources: version.repository_sources.select { |source| %w[Maven Google].include?(source) })
+            else
+              version.destroy
             end
           end
         end
-        puts "Trying manual sync for #{project.platform}/#{project.name}."
-        project.try(:manual_sync) if commit
       end
+      puts "Trying manual sync for #{project.platform}/#{project.name}."
+      project.try(:manual_sync) if commit
 
-      processed_count += projects_batch.size
-      puts "Processed #{processed_count} projects."
+      processed_count += 1
     end
+
+    puts "Processed #{processed_count} projects."
   end
 
   # This should be run after the manual_syncs in delete_ignored_maven_versions_and_resync_packages are done
