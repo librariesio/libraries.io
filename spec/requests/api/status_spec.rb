@@ -10,7 +10,7 @@ describe "API::StatusController" do
   let!(:repository) { create(:repository) }
   let!(:maintenance_stat) { create(:repository_maintenance_stat, repository: repository) }
   let!(:project) { create(:project, repository: repository) }
-  let!(:project_django) { create(:project, name: "Django", platform: "Pypi") }
+  let!(:project_django) { create(:project, name: "Django", platform: "Pypi", keywords: "old kewords", keywords_array: ["new keywords"]) }
 
   before do
     internal_user.current_api_key.update_attribute(:is_internal, true)
@@ -104,6 +104,22 @@ describe "API::StatusController" do
       expected_fields.each do |field|
         expect(project).to have_key(field)
       end
+    end
+
+    it "correctly serves the keywords array" do
+      post(
+        url,
+        params: {
+          api_key: internal_user.api_key,
+          projects: [
+            { name: project_django.name, platform: project_django.platform },
+          ],
+          score: true,
+        }
+      )
+
+      expect(response).to have_http_status(:success)
+      expect(JSON.parse(response.body).dig(0, "keywords")).to eq(["new keywords"])
     end
 
     it "correctly serves the original name" do
