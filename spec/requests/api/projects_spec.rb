@@ -105,7 +105,7 @@ describe "Api::ProjectsController" do
     end
 
     it "ignores stuff before start_time" do
-      after_everything = [project.updated_at, dependent_project.updated_at].max + 1
+      after_everything = [project.reload.updated_at, dependent_project.reload.updated_at].max + 1
       get "/api/projects/updated?start_time=#{after_everything.utc.iso8601}&api_key=#{internal_user.api_key}"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to start_with("application/json")
