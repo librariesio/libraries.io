@@ -45,7 +45,7 @@ class OptimizedProjectSerializer
         .attributes
         .slice(*PROJECT_ATTRIBUTES)
         .merge!(
-          keywords: project.keywords, # the method, not the db field
+          keywords: project.keywords.join(","), # the method, not the db field
           canonical_name: project.name,
           name: @requested_name_map[[project.platform, project.name]],
           download_url: project.download_url,
