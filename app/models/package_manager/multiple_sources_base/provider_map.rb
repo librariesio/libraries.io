@@ -8,7 +8,7 @@ module PackageManager
     class ProviderMap
       # @param prioritized_provider_infos [Array(ProviderInfo)] ProviderInfo classes in
       #        the order in which they should be resolved for matches.
-      def initialize(*prioritized_provider_infos)
+      def initialize(prioritized_provider_infos:)
         @prioritized_provider_infos = prioritized_provider_infos
 
         raise "Need exactly one default provider" unless @prioritized_provider_infos.find_all(&:default?).count == 1

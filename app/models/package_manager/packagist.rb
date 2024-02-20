@@ -12,11 +12,11 @@ module PackageManager
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
 
     # TODO: rename PackageManager::Packagist -> PackageManager::Composer, and then  PackageManager::Packagist::Main => PackageManager::Composer::Packagist
-    PROVIDER_MAP = ProviderMap.new(
+    PROVIDER_MAP = ProviderMap.new(prioritized_provider_infos: [
       ProviderInfo.new(identifier: "Main", default: true, provider_class: Main),
       ProviderInfo.new(identifier: "Packagist", provider_class: Main),
-      ProviderInfo.new(identifier: "Drupal", provider_class: Drupal)
-    )
+      ProviderInfo.new(identifier: "Drupal", provider_class: Drupal),
+    ])
 
     def self.formatted_name
       "Packagist"

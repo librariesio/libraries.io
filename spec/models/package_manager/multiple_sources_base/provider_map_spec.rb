@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe PackageManager::MultipleSourcesBase::ProviderMap do
-  subject(:provider_map) { described_class.new(provider_info_one, provider_info_two) }
+  subject(:provider_map) { described_class.new(prioritized_provider_infos: [provider_info_one, provider_info_two]) }
 
   let(:provider_info_one) do
     PackageManager::MultipleSourcesBase::ProviderInfo.new(
