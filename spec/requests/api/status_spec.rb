@@ -10,7 +10,7 @@ describe "API::StatusController" do
   let!(:repository) { create(:repository) }
   let!(:maintenance_stat) { create(:repository_maintenance_stat, repository: repository) }
   let!(:project) { create(:project, repository: repository) }
-  let!(:project_django) { create(:project, name: "Django", platform: "Pypi", keywords: "old kewords", keywords_array: ["new keywords"]) }
+  let!(:project_django) { create(:project, name: "Django", platform: "Pypi", keywords: "old keywords", keywords_array: ["new keywords"]) }
 
   before do
     internal_user.current_api_key.update_attribute(:is_internal, true)
