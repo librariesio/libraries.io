@@ -237,7 +237,9 @@ namespace :one_off do
             "DELETE_IGNORED_MAVEN_VERSIONS",
             {
               project_id: project.id,
-              versions: no_source_versions.map(&:number).join(", "),
+              versions: no_source_versions.map(&:number).sort.join(", "),
+              total_versions_count: no_source_versions.count,
+              project_name: project.name,
               action: "remove_empty_source_versions",
             }
           )
