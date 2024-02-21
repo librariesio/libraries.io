@@ -267,6 +267,7 @@ namespace :one_off do
                 "DELETE_IGNORED_MAVEN_VERSIONS",
                 {
                   project_id: project.id,
+                  project_name: project.name,
                   version: version.number,
                   action: "destroy_version",
                 }
