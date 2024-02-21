@@ -229,9 +229,23 @@ namespace :one_off do
       ignored_source_versions = project.versions.where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]')))
 
       puts "Updating/Deleting #{no_source_versions.count + ignored_source_versions.count} versions for #{project.platform}/#{project.name}."
+
       if commit
         # If no repository_sources, then destroy it
-        no_source_versions.destroy_all
+        if no_source_versions.present?
+          StructuredLog.capture(
+            "DELETE_IGNORED_MAVEN_VERSIONS",
+            {
+              project_id: project.id,
+              versions: no_source_versions.map(&:number).sort.join(", "),
+              total_versions_count: no_source_versions.count,
+              project_name: project.name,
+              action: "remove_empty_source_versions",
+            }
+          )
+
+          no_source_versions.destroy_all
+        end
 
         # If there are repository_sources,
         # - if any are Maven or Google, remove repository_sources that aren't Maven or Google
@@ -239,12 +253,34 @@ namespace :one_off do
         ignored_source_versions.in_batches do |versions_batch|
           versions_batch.each do |version|
             if version.repository_sources.include?("Maven") || version.repository_sources.include?("Google")
+              StructuredLog.capture(
+                "DELETE_IGNORED_MAVEN_VERSIONS",
+                {
+                  project_id: project.id,
+                  project_name: project.name,
+                  version: version.number,
+                  action: "remove_invalid_sources",
+                  original_sources: version.repository_sources,
+                }
+              )
+
               version.update(repository_sources: version.repository_sources.select { |source| %w[Maven Google].include?(source) })
             else
+              StructuredLog.capture(
+                "DELETE_IGNORED_MAVEN_VERSIONS",
+                {
+                  project_id: project.id,
+                  project_name: project.name,
+                  version: version.number,
+                  action: "destroy_version",
+                }
+              )
+
               version.destroy
             end
           end
         end
+
         puts "Trying manual sync for #{project.platform}/#{project.name}."
         project.try(:manual_sync)
       end
