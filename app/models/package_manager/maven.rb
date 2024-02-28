@@ -215,7 +215,7 @@ module PackageManager
       raise POMNotFound, url if pom_request.status == 404
 
       xml = Ox.parse(pom_request.body)
-      raise POMParseError, url unless xml
+      raise POMParseError, url if xml.nil?
 
       published_at = pom_request.headers["Last-Modified"]
       pat = Ox::Element.new("publishedAt")
