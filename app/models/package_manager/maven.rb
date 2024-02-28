@@ -37,6 +37,15 @@ module PackageManager
       end
     end
 
+    class POMParseError < StandardError
+      attr_reader :url
+
+      def initialize(url)
+        @url = url
+        super("Unable to parse POM: #{@url}")
+      end
+    end
+
     def self.repository_base
       PROVIDER_MAP.default_provider.provider_class.repository_base
     end
@@ -206,6 +215,8 @@ module PackageManager
       raise POMNotFound, url if pom_request.status == 404
 
       xml = Ox.parse(pom_request.body)
+      raise POMParseError, url if xml.nil?
+
       published_at = pom_request.headers["Last-Modified"]
       pat = Ox::Element.new("publishedAt")
       pat << published_at

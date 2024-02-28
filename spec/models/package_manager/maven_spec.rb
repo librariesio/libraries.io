@@ -258,6 +258,23 @@ describe PackageManager::Maven do
     end
   end
 
+  describe ".download_pom" do
+    context "with an empty body" do
+      before do
+        stub_request(
+          :get,
+          "https://repo1.maven.org/maven2/group_id/artifact_id/version/artifact_id-version.pom"
+        ).to_return(body: nil, headers: { "Last-Modified" => Time.now })
+      end
+
+      it "raises POMParseError" do
+        expect do
+          described_class.download_pom("group_id", "artifact_id", "version")
+        end.to raise_error(described_class::POMParseError)
+      end
+    end
+  end
+
   describe ".licenses(xml)" do
     context "with licences in the XML" do
       it "returns those licenses" do
