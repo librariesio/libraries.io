@@ -135,18 +135,20 @@ describe "one_off" do
           expect(multiple_sources_version.reload.repository_sources).to match_array(["Maven"])
         end
 
-        context "with another Maven project" do
+        context "with another Maven project with more versions" do
           let(:second_project) { create(:project, platform: "Maven", name: "zzproject2") }
 
-          let!(:second_multiple_sources_version) { create(:version, project: second_project, number: "1.0.0", repository_sources: %w[Maven Other]) }
+          let!(:second_multiple_sources_version_one) { create(:version, project: second_project, number: "1.0.0", repository_sources: %w[Maven Other]) }
+          let!(:second_multiple_sources_version_two) { create(:version, project: second_project, number: "2.0.0", repository_sources: %w[Maven Other]) }
 
-          context "with offset and limit" do
+          context "with offset and limit and version sort" do
             it "processes only the second project" do
               expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("1", "1", "yes") }
                 .not_to change(Version, :count)
 
               expect(multiple_sources_version.reload.repository_sources).to match_array(%w[Maven Other])
-              expect(second_multiple_sources_version.reload.repository_sources).to match_array(["Maven"])
+              expect(second_multiple_sources_version_one.reload.repository_sources).to match_array(["Maven"])
+              expect(second_multiple_sources_version_two.reload.repository_sources).to match_array(["Maven"])
             end
           end
         end
