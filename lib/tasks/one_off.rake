@@ -210,13 +210,18 @@ namespace :one_off do
     puts "DRY RUN" unless commit
 
     # Retrieve the projects where at least one version's repository_sources is not solely ["Maven"] or ["Google"]
-    affected_projects = Project
-      .joins(:versions)
-      .where(platform: "Maven")
+    affected_versions_grouped_by_project = Version
+      .joins(:project)
       .where(%((versions.repository_sources != '["Maven"]' AND versions.repository_sources != '["Google"]') OR repository_sources IS NULL))
-      .distinct
-    affected_projects = affected_projects.offset(offset) if offset.present?
-    affected_projects = affected_projects.limit(limit) if limit.present?
+      .where(projects: { platform: "Maven" })
+      .select("versions.project_id")
+      .order("count(versions.id)")
+      .group("versions.project_id, versions.id")
+    affected_versions_grouped_by_project = affected_versions_grouped_by_project.offset(offset) if offset.present?
+    affected_versions_grouped_by_project = affected_versions_grouped_by_project.limit(limit) if limit.present?
+
+    affected_projects = Project
+      .where(id: affected_versions_grouped_by_project.pluck(:project_id))
 
     puts "Count of projects with versions to re-process: #{affected_projects.count}"
 
