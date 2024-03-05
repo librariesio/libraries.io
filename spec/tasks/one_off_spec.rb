@@ -125,6 +125,32 @@ describe "one_off" do
         end
       end
 
+      context "with many ignored versions" do
+        before do
+          50.times do |i|
+            create(:version, project: project, number: "#{i}.0.0", repository_sources: ["Other"])
+          end
+        end
+
+        it "deletes only some ignored versions" do
+          expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes") }
+            .to change(Version, :count).from(50).to(25)
+        end
+      end
+
+      context "with many no source versions" do
+        before do
+          50.times do |i|
+            create(:version, project: project, number: "#{i}.0.0", repository_sources: nil)
+          end
+        end
+
+        it "deletes only some ignored versions" do
+          expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes") }
+            .to change(Version, :count).from(50).to(25)
+        end
+      end
+
       context "with versions with sources that are ignored and not-ignored" do
         let!(:multiple_sources_version) { create(:version, project: project, number: "1.0.0", repository_sources: %w[Maven Other]) }
 
