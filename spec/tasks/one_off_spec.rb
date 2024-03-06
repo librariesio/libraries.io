@@ -125,14 +125,18 @@ describe "one_off" do
         end
       end
 
-      context "with many ignored versions" do
+      context "with many ignored versions and things dependent on these versions" do
         before do
           create_list(:version, 50, project: project, repository_sources: ["Other"])
+
+          create(:dependency, version: Version.first)
+          create(:dependency, version: Version.last)
         end
 
         it "deletes only some ignored versions" do
           expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes") }
             .to change(Version, :count).from(50).to(25)
+            .and change(Dependency, :count).from(2).to(1)
         end
 
         it "deletes all ignored versions if run twice" do
@@ -142,6 +146,7 @@ describe "one_off" do
             Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes")
           end
             .to change(Version, :count).from(50).to(0)
+            .and change(Dependency, :count).from(2).to(0)
         end
       end
 
