@@ -127,27 +127,41 @@ describe "one_off" do
 
       context "with many ignored versions" do
         before do
-          50.times do |i|
-            create(:version, project: project, number: "#{i}.0.0", repository_sources: ["Other"])
-          end
+          create_list(:version, 50, project: project, repository_sources: ["Other"])
         end
 
         it "deletes only some ignored versions" do
           expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes") }
             .to change(Version, :count).from(50).to(25)
+        end
+
+        it "deletes all ignored versions if run twice" do
+          expect do
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes")
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].reenable
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes")
+          end
+            .to change(Version, :count).from(50).to(0)
         end
       end
 
       context "with many no source versions" do
         before do
-          50.times do |i|
-            create(:version, project: project, number: "#{i}.0.0", repository_sources: nil)
-          end
+          create_list(:version, 50, project: project, repository_sources: ["Other"])
         end
 
-        it "deletes only some ignored versions" do
+        it "deletes only some no source versions" do
           expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes") }
             .to change(Version, :count).from(50).to(25)
+        end
+
+        it "delete all no source versions if run twice" do
+          expect do
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes")
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].reenable
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes")
+          end
+            .to change(Version, :count).from(50).to(0)
         end
       end
 
