@@ -225,13 +225,22 @@ namespace :one_off do
 
     puts "Count of projects with versions to re-process: #{affected_projects.count}"
 
+    # prevent overloading consumers with too many changes per project
+    max_versions_to_process_per_project = 25
+
     batch_size = 50
     processed_count = 0
 
     puts "Processing...."
     affected_projects.find_each(batch_size: batch_size) do |project|
-      no_source_versions = project.versions.where("repository_sources IS NULL")
-      ignored_source_versions = project.versions.where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]')))
+      no_source_versions = project
+        .versions
+        .where("repository_sources IS NULL")
+        .limit(max_versions_to_process_per_project)
+      ignored_source_versions = project
+        .versions
+        .where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]')))
+        .limit(max_versions_to_process_per_project)
 
       puts "Updating/Deleting #{no_source_versions.count + ignored_source_versions.count} versions for #{project.platform}/#{project.name}."
 

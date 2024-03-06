@@ -125,6 +125,51 @@ describe "one_off" do
         end
       end
 
+      context "with many ignored versions and things dependent on these versions" do
+        before do
+          create_list(:version, 50, project: project, repository_sources: ["Other"])
+
+          create(:dependency, version: Version.first)
+          create(:dependency, version: Version.last)
+        end
+
+        it "deletes only some ignored versions" do
+          expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes") }
+            .to change(Version, :count).from(50).to(25)
+            .and change(Dependency, :count).from(2).to(1)
+        end
+
+        it "deletes all ignored versions if run twice" do
+          expect do
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes")
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].reenable
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes")
+          end
+            .to change(Version, :count).from(50).to(0)
+            .and change(Dependency, :count).from(2).to(0)
+        end
+      end
+
+      context "with many no source versions" do
+        before do
+          create_list(:version, 50, project: project, repository_sources: ["Other"])
+        end
+
+        it "deletes only some no source versions" do
+          expect { Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes") }
+            .to change(Version, :count).from(50).to(25)
+        end
+
+        it "delete all no source versions if run twice" do
+          expect do
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes")
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].reenable
+            Rake::Task["one_off:delete_ignored_maven_versions_and_resync_packages"].invoke("", "", "yes")
+          end
+            .to change(Version, :count).from(50).to(0)
+        end
+      end
+
       context "with versions with sources that are ignored and not-ignored" do
         let!(:multiple_sources_version) { create(:version, project: project, number: "1.0.0", repository_sources: %w[Maven Other]) }
 
