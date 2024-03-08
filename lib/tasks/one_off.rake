@@ -212,7 +212,7 @@ namespace :one_off do
     # Retrieve the projects where at least one version's repository_sources is not solely ["Maven"] or ["Google"]
     affected_project_ids = Version
       .joins(:project)
-      .where(%((versions.repository_sources != '["Maven"]' AND versions.repository_sources != '["Google"]') OR repository_sources IS NULL))
+      .where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]' AND repository_sources != '["Maven","Google"]' AND repository_sources != '["Google","Maven"]') OR repository_sources IS NULL))
       .where(projects: { platform: "Maven" })
       .order("count(versions.id)")
       .group("versions.project_id")
@@ -239,7 +239,7 @@ namespace :one_off do
         .limit(max_versions_to_process_per_project)
       ignored_source_versions = project
         .versions
-        .where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]')))
+        .where(%((repository_sources != '["Maven"]' AND repository_sources != '["Google"]' AND repository_sources != '["Maven","Google"]' AND repository_sources != '["Google","Maven"]')))
         .limit(max_versions_to_process_per_project)
 
       puts "Updating/Deleting #{no_source_versions.count + ignored_source_versions.count} versions for #{project.platform}/#{project.name}."
