@@ -6,6 +6,40 @@ RSpec.describe PackageManager::Go::GoMod do
   subject(:go_mod) { described_class.new(mod_contents) }
   let(:mod_contents) { "" }
 
+  describe "#dependencies" do
+    context "with replaced versions" do
+      let(:mod_contents) do
+        <<~MODFILE
+          require github.com/go-check/check v1.0.0
+          replace github.com/go-check/check v1.0.0 => github.com/go-check/check v4.0.0
+        MODFILE
+      end
+
+      it "detects replaced version" do
+        # Note that this happens in bibliothecary
+        expect(go_mod.dependencies).to eq([
+          { kind: "runtime", platform: "Go", project_name: "github.com/go-check/check", requirements: "v4.0.0" },
+        ])
+      end
+    end
+
+    context "with local package names" do
+      let(:mod_contents) do
+        <<~MODFILE
+          require some.legit/package v1.0.0
+          require ./some-absolute-local/package v1.0.0
+          require ../some-relative-local/package v1.0.0
+        MODFILE
+      end
+
+      it "omits any absolute or relative local package names" do
+        expect(go_mod.dependencies).to eq([
+          { kind: "runtime", platform: "Go", project_name: "some.legit/package", requirements: "v1.0.0" },
+        ])
+      end
+    end
+  end
+
   describe "#retracted_version_ranges" do
     context "when empty" do
       it "has no retracted versions" do

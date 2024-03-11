@@ -7,6 +7,7 @@ class PackageManager::Go
     RETRACT_WITH_PARENS = /^\s*retract\s\((.*?)\)/m.freeze
     RETRACT_WITHOUT_PARENS = /retract\s(.+)/.freeze
     MODULE_REGEX = /module\s+(.+)/.freeze
+    LOCAL_FILEPATH_REGEXP = /\.?\.\//.freeze
 
     def initialize(mod_contents)
       @mod_contents = mod_contents
@@ -51,8 +52,11 @@ class PackageManager::Go
 
     def dependencies
       Bibliothecary::Parsers::Go.parse_go_mod(mod_contents)
+        .reject { |dep| dep[:name].match?(LOCAL_FILEPATH_REGEXP) }
         .map do |dep|
           {
+            # Note that Go "replace" directives would result in :original_requirement and :original_name keys being included
+            # here too, but Libraries does not need those (yet?)
             project_name: dep[:name],
             requirements: dep[:requirement],
             kind: dep[:type],
