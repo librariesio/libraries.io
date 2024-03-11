@@ -412,10 +412,12 @@ describe PackageManager::Go do
     let(:version_number_to_remove) { "1.0.1" }
     let(:old_updated_at) { 5.years.ago.round }
     let(:version_to_remove_status) { nil }
+    let!(:version_to_not_remove) { create(:version, project: project, number: version_number_to_not_remove, updated_at: old_updated_at) }
     let!(:version_to_remove) { create(:version, project: project, number: version_number_to_remove, updated_at: old_updated_at, status: version_to_remove_status) }
 
     before do
-      project.versions.create!(number: version_number_to_not_remove, updated_at: old_updated_at)
+      # doesn't seem like the project has any version info unless it is reloaded explicitly
+      project.versions.reload
     end
 
     it "should mark missing versions as Removed" do

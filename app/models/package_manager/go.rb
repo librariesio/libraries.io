@@ -35,7 +35,7 @@ module PackageManager
     end
 
     def self.missing_version_remover
-      PackageManager::Base::MissingVersionRemover
+      PackageManager::Go::GoMissingVersionRemover
     end
 
     def self.check_status_url(db_project)
