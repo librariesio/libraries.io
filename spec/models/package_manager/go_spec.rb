@@ -344,6 +344,16 @@ describe PackageManager::Go do
       end
     end
 
+    context "for invalid hostnames" do
+      it "returns the name without calling the host" do
+        name = "not-even-a-legit-hostname"
+        allow(described_class).to receive(:get_html)
+
+        expect(described_class.project_find_names(name)).to eq([name])
+        expect(described_class).to_not have_received(:get_html)
+      end
+    end
+
     context "for names with a known vcs" do
       it "returns the name" do
         name = "example.org/user/foo.hg"

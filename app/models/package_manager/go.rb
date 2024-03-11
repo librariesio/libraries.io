@@ -6,6 +6,7 @@ module PackageManager
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
     COLOR = "#375eab"
+    VALID_HOST = /\./.freeze
     KNOWN_HOSTS = [
       "bitbucket.org",
       "github.com",
@@ -231,6 +232,7 @@ module PackageManager
 
     # https://golang.org/cmd/go/#hdr-Import_path_syntax
     def self.project_find_names(name)
+      return [name] unless name.match?(VALID_HOST)
       return [name] if name.start_with?(*KNOWN_HOSTS)
       return [name] if name.start_with?(*SKIP_HOSTS)
       return [name] if KNOWN_VCS.any?(&name.method(:include?))
