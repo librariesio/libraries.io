@@ -53,6 +53,8 @@ class PackageManager::Go
       Bibliothecary::Parsers::Go.parse_go_mod(mod_contents)
         .map do |dep|
           {
+            # Note that Go "replace" directives would result in :original_requirement and :original_name keys being included
+            # here too, but Libraries does not need those (yet?)
             project_name: dep[:name],
             requirements: dep[:requirement],
             kind: dep[:type],
