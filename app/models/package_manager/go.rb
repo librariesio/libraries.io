@@ -86,27 +86,6 @@ module PackageManager
       data
     end
 
-    # rubocop: disable Lint/UnusedMethodArgument
-    def self.update(name, sync_version: :all, force_sync_dependencies: false)
-      project = super(name, sync_version: sync_version)
-
-      # if Base.update returns something false-y, pass that along
-      return project unless project
-
-      # call update on base module name if the name is appended with major version
-      # example: github.com/myexample/modulename/v2
-      # use the returned project name in case it finds a Project via repository_url
-
-      # pick one version to use for the base module update so that we don't sync every version
-      # when reusing the PackageManagerDownloadWorker to initialize the base name Project
-      base_sync_version = sync_version unless sync_version == :all
-      base_sync_version = base_sync_version.presence || project.versions.first&.number&.presence
-      update_base_module(project.name, base_sync_version) if project.present? && project.name.match?(VERSION_MODULE_REGEX)
-
-      project
-    end
-    # rubocop: enable Lint/UnusedMethodArgument
-
     def self.update_base_module(name, base_sync_version)
       matches = name.match(VERSION_MODULE_REGEX)
 
