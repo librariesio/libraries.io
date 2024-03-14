@@ -86,26 +86,6 @@ module PackageManager
       data
     end
 
-    def self.update_base_module(name, base_sync_version)
-      matches = name.match(VERSION_MODULE_REGEX)
-
-      unless Project.where(platform: "Go", name: matches[1]).exists?
-        # run this inline to generate the base module Project if it doesn't already exist
-        PackageManagerDownloadWorker.new.perform(self.name, matches[1], base_sync_version)
-      end
-
-      module_project = Project.find_by(platform: "Go", name: name)
-      base_module_project = Project.find_by(platform: "Go", name: matches[1])
-      return if module_project.nil? || base_module_project.nil?
-
-      # find any versions the /vx module knows about that the base module doesn't have already
-      new_base_versions = module_project.versions.where.not(number: base_module_project.versions.pluck(:number))
-
-      new_base_versions.each do |vers|
-        base_module_project.versions.create(number: vers.number, published_at: vers.published_at, original_license: vers.original_license)
-      end
-    end
-
     def self.project(name)
       # get_html will send back an empty string if response is not a 200
       # a blank response means that the project was not found on pkg.go.dev site
