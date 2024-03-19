@@ -16,7 +16,14 @@ namespace :auth_tokens do
         .authorized
         .find_in_batches(batch_size: args.batch_size, start: args.start).each do |token_batch|
           token_batch.each do |token|
-            result = token.still_authorized?
+            begin
+              result = token.still_authorized?
+            rescue Octokit::TooManyRequests
+              # Tokens can still be authorized but may have exhausted their API limit while making
+              # these calls. For these tokens do not mark them as unauthorized but keep going
+              # through the loop.
+              next
+            end
 
             if result == true
               token.login = token.github_client.user[:login]
