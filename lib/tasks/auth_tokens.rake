@@ -18,20 +18,19 @@ namespace :auth_tokens do
           token_batch.each do |token|
             begin
               result = token.still_authorized?
+              if result
+                token.login = token.github_client.user[:login]
+              else
+                token.authorized = false
+              end
+
+              token.save!
             rescue Octokit::TooManyRequests
               # Tokens can still be authorized but may have exhausted their API limit while making
               # these calls. For these tokens do not mark them as unauthorized but keep going
               # through the loop.
               next
             end
-
-            if result == true
-              token.login = token.github_client.user[:login]
-            else
-              token.authorized = false
-            end
-
-            token.save!
 
             unless result
               StructuredLog.capture(
@@ -52,6 +51,15 @@ namespace :auth_tokens do
           sleep 1
         end
     rescue StandardError, Interrupt => e
+      StructuredLog.capture(
+        "AUTH_TOKEN_REVERIFY_ERROR",
+        {
+          last_token_id: last_id,
+          error_klass: e.class,
+          error_message: e.message,
+        }
+      )
+
       puts "\n\n### Last AuthToken id processed: #{last_id} \n\n\n"
       raise e
     end
