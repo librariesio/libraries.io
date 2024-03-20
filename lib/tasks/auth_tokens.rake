@@ -16,21 +16,14 @@ namespace :auth_tokens do
         .authorized
         .find_in_batches(batch_size: args.batch_size, start: args.start).each do |token_batch|
           token_batch.each do |token|
-            begin
-              result = token.still_authorized?
-              if result
-                token.login = token.github_client.user[:login]
-              else
-                token.authorized = false
-              end
-
-              token.save!
-            rescue Octokit::TooManyRequests
-              # Tokens can still be authorized but may have exhausted their API limit while making
-              # these calls. For these tokens do not mark them as unauthorized but keep going
-              # through the loop.
-              next
+            result = token.still_authorized?
+            if result
+              token.login = token.github_client.user[:login]
+            else
+              token.authorized = false
             end
+
+            token.save!
 
             unless result
               StructuredLog.capture(
@@ -44,11 +37,17 @@ namespace :auth_tokens do
             end
 
             last_id = token.id
-          end
 
-          # Don't necessarily have to worry about rate limit #still_authorized? /should/ still work
-          # because a rate limit means we auth'ed successfully. But we can still pace ourselves.
-          sleep 1
+            # Don't necessarily have to worry about rate limit #still_authorized? /should/ still work
+            # because a rate limit means we auth'ed successfully. But we can still pace ourselves.
+            sleep 1
+          rescue Octokit::TooManyRequests
+            # Tokens can still be authorized but may have exhausted their API limit while making
+            # these calls. For these tokens do not mark them as unauthorized but keep going
+            # through the loop.
+            last_id = token.id
+            next
+          end
         end
     rescue StandardError, Interrupt => e
       StructuredLog.capture(
