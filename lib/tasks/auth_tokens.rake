@@ -45,7 +45,7 @@ namespace :auth_tokens do
             # Tokens can still be authorized but may have exhausted their API limit while making
             # these calls. For these tokens do not mark them as unauthorized but keep going
             # through the loop.
-            last_id = token.id
+            last_id = token&.id
             next
           end
         end
