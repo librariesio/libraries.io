@@ -44,9 +44,21 @@ module PackageManager
     end
 
     def self.deprecation_info(db_project)
+      # NPM only allows versions to be deprecated (not the whole package), so we count a package deprecated
+      # on NPM if the latest version is deprecated (vs requiring all versions to be deprecated), because
+      # the package page will say it's deprecated if even the latest version is actually deprecated.
       versions = project(db_project.name)&.dig("versions")&.values || []
-      is_deprecated = versions.any? && versions.all? { |version| !version["deprecated"].nil? }
-      message = is_deprecated ? versions.last["deprecated"] : nil
+      last_stable_version = versions
+        # Ignore prerelease versions as some packages will regularly push prereleases and mark them deprecated, e.g. graphql.
+        .reject do |v|
+          Semantic::Version.new(v["version"]).pre.present?
+      rescue StandardError
+        false
+        end
+        .last
+
+      message = last_stable_version&.dig("deprecated")
+      is_deprecated = !message.nil?
 
       {
         is_deprecated: is_deprecated,

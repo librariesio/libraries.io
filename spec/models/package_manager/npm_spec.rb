@@ -41,12 +41,40 @@ describe PackageManager::NPM do
       expect(PackageManager::NPM).to receive(:project).with("foo").and_return({ "versions" => version_data })
     end
 
-    context "any version isn't deprecated" do
+    context "latest version isn't deprecated" do
       let(:version_data) do
         {
-          "0.0.1" => { "deprecated" => "This package is deprecated" },
-          "0.0.2" => { "deprecated" => "This package is deprecated" },
-          "0.0.3" => {},
+          "0.0.1" => { "version" => "0.0.1", "deprecated" => "This package is deprecated" },
+          "0.0.2" => { "version" => "0.0.2", "deprecated" => "This package is deprecated" },
+          "0.0.3" => { "version" => "0.0.3" },
+        }
+      end
+
+      it "project not considered deprecated" do
+        expect(deprecation_info).to eq({ is_deprecated: false, message: nil })
+      end
+    end
+
+    context "latest version is deprecated" do
+      let(:version_data) do
+        {
+          "0.0.1" => { "version" => "0.0.1", "deprecated" => "This package is deprecated" },
+          "0.0.2" => { "version" => "0.0.2", "deprecated" => "This package is deprecated" },
+          "0.0.3" => { "version" => "0.0.3" },
+        }
+      end
+
+      it "project not considered deprecated" do
+        expect(deprecation_info).to eq({ is_deprecated: false, message: nil })
+      end
+    end
+
+    context "latest version is a prerelease and deprecated" do
+      let(:version_data) do
+        {
+          "0.0.1" => { "version" => "0.0.1" },
+          "0.0.2" => { "version" => "0.0.2" },
+          "0.0.3" => { "version" => "0.0.3-canary-release-01234", "deprecated" => "This release is a canary release" },
         }
       end
 
@@ -58,9 +86,9 @@ describe PackageManager::NPM do
     context "all versions deprecated" do
       let(:version_data) do
         {
-          "0.0.1" => { "deprecated" => "This package is deprecated" },
-          "0.0.2" => { "deprecated" => "This package is deprecated" },
-          "0.0.3" => { "deprecated" => "This package is deprecated" },
+          "0.0.1" => { "version" => "0.0.1", "deprecated" => "This package is deprecated" },
+          "0.0.2" => { "version" => "0.0.2", "deprecated" => "This package is deprecated" },
+          "0.0.3" => { "version" => "0.0.3", "deprecated" => "This package is deprecated" },
         }
       end
 
