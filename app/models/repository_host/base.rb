@@ -97,6 +97,9 @@ module RepositoryHost
       repository.license = Project.format_license(r[:license][:key]) if r[:license]
       repository.source_name = (r[:parent][:full_name] if r[:fork])
       repository.assign_attributes r.slice(*Repository::API_FIELDS)
+
+      set_unmaintained_statuses(repository_unmaintained: r[:unmaintained], readme_unmaintained: repository.readme.unmaintained?)
+
       repository.save! if repository.changed?
     rescue self.class.api_missing_error_class
       repository.update_attribute(:status, "Removed") unless repository.private?
@@ -125,6 +128,18 @@ module RepositoryHost
         stat = repository.repository_maintenance_stats.find_or_create_by(category: category.to_s)
         stat.update!(value: value.to_s)
         stat.touch unless stat.changed?  # we always want to update updated_at for later querying
+      end
+    end
+
+    def set_unmaintained_statuses(repository_unmaintained:, readme_unmaintained:)
+      if readme_unmaintained
+        repository.status = "Unmaintained"
+        repository.projects.update_all(status: "Unmaintained")
+      elsif repository_unmaintained
+        repository.status = "Unmaintained"
+      else
+        repository.status = nil
+        repository.projects.unmaintained.update_all(status: nil)
       end
     end
   end

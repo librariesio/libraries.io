@@ -201,6 +201,7 @@ module RepositoryHost
                          parent: {
                            full_name: project.fetch("parent", {}).fetch("full_name", nil),
                          },
+                         unmaintained: false,
                        })
     rescue *IGNORABLE_EXCEPTIONS
       nil

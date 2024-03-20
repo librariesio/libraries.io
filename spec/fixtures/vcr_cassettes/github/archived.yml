@@ -1,0 +1,188 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/rate_limit
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Accept:
+      - application/vnd.github.v3+json
+      Content-Type:
+      - application/json
+      Authorization:
+      - token TEST_TOKEN
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4515693047585687675'
+      X-Datadog-Parent-Id:
+      - '1747412421302935570'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 20 Mar 2024 19:25:19 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - no-cache
+      X-Oauth-Scopes:
+      - public_repo
+      X-Accepted-Oauth-Scopes:
+      - ''
+      Github-Authentication-Token-Expiration:
+      - 2024-06-18 18:59:17 UTC
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4998'
+      X-Ratelimit-Reset:
+      - '1710965388'
+      X-Ratelimit-Used:
+      - '2'
+      X-Ratelimit-Resource:
+      - core
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Vary:
+      - Accept-Encoding, Accept, X-Requested-With
+      X-Github-Request-Id:
+      - F26A:3C245F:7D2BA0:DEA1B0:65FB381F
+    body:
+      encoding: ASCII-8BIT
+      string: '{"resources":{"core":{"limit":5000,"used":2,"remaining":4998,"reset":1710965388},"search":{"limit":30,"used":0,"remaining":30,"reset":1710962779},"graphql":{"limit":5000,"used":0,"remaining":5000,"reset":1710966319},"integration_manifest":{"limit":5000,"used":0,"remaining":5000,"reset":1710966319},"source_import":{"limit":100,"used":0,"remaining":100,"reset":1710962779},"code_scanning_upload":{"limit":1000,"used":0,"remaining":1000,"reset":1710966319},"actions_runner_registration":{"limit":10000,"used":0,"remaining":10000,"reset":1710966319},"scim":{"limit":15000,"used":0,"remaining":15000,"reset":1710966319},"dependency_snapshots":{"limit":100,"used":0,"remaining":100,"reset":1710962779},"audit_log":{"limit":1750,"used":0,"remaining":1750,"reset":1710966319},"code_search":{"limit":10,"used":0,"remaining":10,"reset":1710962779}},"rate":{"limit":5000,"used":2,"remaining":4998,"reset":1710965388}}'
+    adapter_metadata:
+      vcr_decompressed: gzip
+  recorded_at: Wed, 20 Mar 2024 19:25:19 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/test/archived
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Octokit Ruby Gem 4.16.0
+      Accept:
+      - application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json
+      Content-Type:
+      - application/json
+      Authorization:
+      - token TEST_TOKEN
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4347693336244431115'
+      X-Datadog-Parent-Id:
+      - '3767642306350343028'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 20 Mar 2024 19:25:19 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - W/"8cc3c09904228efa1b3869723ed3fe3a20513f051113af87aff73c2b995869e0"
+      Last-Modified:
+      - Sat, 16 Mar 2024 01:44:18 GMT
+      X-Oauth-Scopes:
+      - public_repo
+      X-Accepted-Oauth-Scopes:
+      - repo
+      Github-Authentication-Token-Expiration:
+      - 2024-06-18 18:59:17 UTC
+      X-Github-Media-Type:
+      - github.v3; param=drax-preview; format=json, github.mercy-preview; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4997'
+      X-Ratelimit-Reset:
+      - '1710965388'
+      X-Ratelimit-Used:
+      - '3'
+      X-Ratelimit-Resource:
+      - core
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - F26A:3C245F:7D2BE7:DEA236:65FB381F
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":285662765,"node_id":"MDEwOlJlcG9zaXRvcnkyODU2NjI3NjU=","name":"archived","full_name":"test/archived","private":false,"owner":{"login":"test","id":18363268,"node_id":"MDQ6VXNlcjE4MzYzMjY4","avatar_url":"https://avatars.githubusercontent.com/u/18363268?v=4","gravatar_id":"","url":"https://api.github.com/users/test","html_url":"https://github.com/test","followers_url":"https://api.github.com/users/test/followers","following_url":"https://api.github.com/users/test/following{/other_user}","gists_url":"https://api.github.com/users/test/gists{/gist_id}","starred_url":"https://api.github.com/users/test/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/test/subscriptions","organizations_url":"https://api.github.com/users/test/orgs","repos_url":"https://api.github.com/users/test/repos","events_url":"https://api.github.com/users/test/events{/privacy}","received_events_url":"https://api.github.com/users/test/received_events","type":"User","site_admin":false},"html_url":"https://github.com/test/archived","description":"Convert
+        natural language query to appropriate SQL, make ERPs cool again.","fork":false,"url":"https://api.github.com/repos/test/archived","forks_url":"https://api.github.com/repos/test/archived/forks","keys_url":"https://api.github.com/repos/test/archived/keys{/key_id}","collaborators_url":"https://api.github.com/repos/test/archived/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/test/archived/teams","hooks_url":"https://api.github.com/repos/test/archived/hooks","issue_events_url":"https://api.github.com/repos/test/archived/issues/events{/number}","events_url":"https://api.github.com/repos/test/archived/events","assignees_url":"https://api.github.com/repos/test/archived/assignees{/user}","branches_url":"https://api.github.com/repos/test/archived/branches{/branch}","tags_url":"https://api.github.com/repos/test/archived/tags","blobs_url":"https://api.github.com/repos/test/archived/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/test/archived/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/test/archived/git/refs{/sha}","trees_url":"https://api.github.com/repos/test/archived/git/trees{/sha}","statuses_url":"https://api.github.com/repos/test/archived/statuses/{sha}","languages_url":"https://api.github.com/repos/test/archived/languages","stargazers_url":"https://api.github.com/repos/test/archived/stargazers","contributors_url":"https://api.github.com/repos/test/archived/contributors","subscribers_url":"https://api.github.com/repos/test/archived/subscribers","subscription_url":"https://api.github.com/repos/test/archived/subscription","commits_url":"https://api.github.com/repos/test/archived/commits{/sha}","git_commits_url":"https://api.github.com/repos/test/archived/git/commits{/sha}","comments_url":"https://api.github.com/repos/test/archived/comments{/number}","issue_comment_url":"https://api.github.com/repos/test/archived/issues/comments{/number}","contents_url":"https://api.github.com/repos/test/archived/contents/{+path}","compare_url":"https://api.github.com/repos/test/archived/compare/{base}...{head}","merges_url":"https://api.github.com/repos/test/archived/merges","archive_url":"https://api.github.com/repos/test/archived/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/test/archived/downloads","issues_url":"https://api.github.com/repos/test/archived/issues{/number}","pulls_url":"https://api.github.com/repos/test/archived/pulls{/number}","milestones_url":"https://api.github.com/repos/test/archived/milestones{/number}","notifications_url":"https://api.github.com/repos/test/archived/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/test/archived/labels{/name}","releases_url":"https://api.github.com/repos/test/archived/releases{/id}","deployments_url":"https://api.github.com/repos/test/archived/deployments","created_at":"2020-08-06T20:13:59Z","updated_at":"2024-03-16T01:44:18Z","pushed_at":"2020-11-12T17:24:46Z","git_url":"git://github.com/test/archived.git","ssh_url":"git@github.com:test/archived.git","clone_url":"https://github.com/test/archived.git","svn_url":"https://github.com/test/archived","homepage":"","size":1328,"stargazers_count":66,"watchers_count":66,"language":"Python","has_issues":true,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"has_discussions":false,"forks_count":17,"mirror_url":null,"archived":true,"disabled":false,"open_issues_count":1,"license":{"key":"mit","name":"MIT
+        License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":["datasets","natural-language","sql","archived"],"visibility":"public","forks":17,"open_issues":1,"watchers":66,"default_branch":"master","permissions":{"admin":false,"maintain":false,"push":false,"triage":false,"pull":true},"temp_clone_token":"","network_count":17,"subscribers_count":4}'
+    adapter_metadata:
+      vcr_decompressed: gzip
+  recorded_at: Wed, 20 Mar 2024 19:25:19 GMT
+recorded_with: VCR 6.2.0
