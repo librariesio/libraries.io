@@ -182,6 +182,7 @@ module RepositoryHost
                          parent: {
                            full_name: project.try(:forked_from_project).try(:path_with_namespace),
                          },
+                         archived: false,
                        })
     rescue *IGNORABLE_EXCEPTIONS
       nil
