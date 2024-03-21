@@ -296,7 +296,10 @@ class Repository < ApplicationRecord
       download_manifests(token)
       update_source_rank(force: true)
     end
-    update(last_synced_at: Time.now)
+    update_unmaintained_statuses
+    self.last_synced_at = Time.current
+
+    save
   end
 
   def update_from_repository(token)
@@ -404,5 +407,20 @@ class Repository < ApplicationRecord
 
   def gather_maintenance_stats_async(priority: :medium)
     RepositoryMaintenanceStatWorker.enqueue(id, priority: priority)
+  end
+
+  def update_unmaintained_statuses
+    repository_unmaintained = unmaintained?
+    readme_unmaintained = readme.unmaintained?
+
+    if readme_unmaintained
+      update(status: "Unmaintained")
+      projects.update_all(status: "Unmaintained")
+    elsif repository_unmaintained
+      update(status: "Unmaintained")
+    else
+      update(status: nil)
+      projects.unmaintained.update_all(status: nil)
+    end
   end
 end

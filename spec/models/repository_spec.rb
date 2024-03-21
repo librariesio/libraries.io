@@ -444,4 +444,113 @@ describe Repository, type: :model do
       end.to change { repository.manifests.count }.by(0)
     end
   end
+
+  describe "#update_unmaintained_statuses" do
+    let(:repository) { build(:repository, host_type: "GitHub", full_name: "vuejs/vue") }
+    let!(:project) { create(:project, repository: repository) }
+    let(:readme_double) { instance_double(Readme) }
+    let(:readme_unmaintained) { false }
+    let!(:auth_token) { create(:auth_token) }
+
+    before do
+      allow(repository).to receive(:readme).and_return(readme_double)
+      allow(readme_double).to receive(:unmaintained?).and_return(readme_unmaintained)
+    end
+
+    context "with archived status from Github" do
+      let(:repository) { build(:repository, host_type: "Github", full_name: "test/archived") }
+
+      before do
+        VCR.insert_cassette("github/archived")
+      end
+
+      after do
+        VCR.eject_cassette
+      end
+
+      context "with existing nil repository status" do
+        let(:repository) { build(:repository, host_type: "GitHub", full_name: "test/archived", status: nil) }
+
+        it "marks repository as unmaintained" do
+          repository.update_from_repository(auth_token.token)
+          repository.update_unmaintained_statuses
+
+          expect(repository.unmaintained?).to be true
+        end
+
+        it "does not mark project as unmaintained" do
+          repository.update_from_repository(auth_token.token)
+          repository.update_unmaintained_statuses
+
+          expect(project.reload.unmaintained?).to be false
+        end
+      end
+
+      context "with unmaintained readme" do
+        let(:readme_unmaintained) { true }
+
+        it "marks repository as unmaintained" do
+          repository.update_from_repository(auth_token.token)
+          repository.update_unmaintained_statuses
+
+          expect(repository.unmaintained?).to be true
+        end
+
+        it "marks project as unmaintained" do
+          repository.update_from_repository(auth_token.token)
+          repository.update_unmaintained_statuses
+
+          expect(project.reload.unmaintained?).to be true
+        end
+      end
+    end
+
+    context "with non archived status from Github" do
+      let(:repository) { build(:repository, host_type: "Github", full_name: "vuejs/vue", status: nil) }
+
+      before do
+        VCR.insert_cassette("github/vue")
+      end
+
+      after do
+        VCR.eject_cassette
+      end
+
+      context "with existing unmaintained repository status" do
+        let(:repository) { build(:repository, host_type: "GitHub", full_name: "vuejs/vue", status: "Unmaintained") }
+
+        it "marks repository as unmaintained" do
+          repository.update_from_repository(auth_token.token)
+          repository.update_unmaintained_statuses
+
+          expect(repository.unmaintained?).to be false
+        end
+
+        it "marks project as unmaintained" do
+          repository.update_from_repository(auth_token.token)
+          repository.update_unmaintained_statuses
+
+          expect(project.reload.unmaintained?).to be false
+        end
+      end
+
+      context "with unmaintained readme" do
+        let(:readme_unmaintained) { true }
+
+        it "marks repository as unmaintained" do
+          repository.update_from_repository(auth_token.token)
+          repository.update_unmaintained_statuses
+
+          expect(repository.unmaintained?).to be true
+        end
+
+        it "marks project as unmaintained" do
+          repository.update_from_repository(auth_token.token)
+          repository.update_unmaintained_statuses
+
+          expect(project.reload.unmaintained?).to be true
+        end
+      end
+    end
+  end
 end
