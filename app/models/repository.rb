@@ -414,12 +414,17 @@ class Repository < ApplicationRecord
     readme_unmaintained = readme.unmaintained?
 
     if readme_unmaintained
-      update(status: "Unmaintained")
-      projects.update_all(status: "Unmaintained")
+      # update repository status only if needed
+      update(status: "Unmaintained") unless unmaintained?
+      # Don't update Projects that have other statuses already set since those could have been set
+      # from other data sources. However if a Project has no status then it should be labeled as unmaintained
+      # from the readme.
+      projects.where(status: nil).update_all(status: "Unmaintained")
     elsif repository_unmaintained
-      update(status: "Unmaintained")
+      # no-op here since we are relying on the update to have already set this status from upstream
+      # repository host data at the moment
     else
-      update(status: nil)
+      update(status: nil) unless status.nil?
       projects.unmaintained.update_all(status: nil)
     end
   end
