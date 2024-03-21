@@ -296,7 +296,7 @@ class Repository < ApplicationRecord
       download_manifests(token)
       update_source_rank(force: true)
     end
-    update_unmaintained_statuses
+    update_unmaintained_status_from_readme
     self.last_synced_at = Time.current
 
     save
@@ -409,23 +409,38 @@ class Repository < ApplicationRecord
     RepositoryMaintenanceStatWorker.enqueue(id, priority: priority)
   end
 
-  def update_unmaintained_statuses
-    repository_unmaintained = unmaintained?
-    readme_unmaintained = readme.unmaintained?
-
-    if readme_unmaintained
+  # Set the unmaintained status for this Repository and related Projects if the readme file
+  # indicates that the repository is not currently being maintained. This method will also
+  # removed the unmaintained status if neither the readme or repository indicate that it
+  # is not being maintained in the case where a project was picked up for work again.
+  def update_unmaintained_status_from_readme
+    if readme.unmaintained?
       # update repository status only if needed
       update(status: "Unmaintained") unless unmaintained?
       # Don't update Projects that have other statuses already set since those could have been set
       # from other data sources. However if a Project has no status then it should be labeled as unmaintained
       # from the readme.
       projects.where(status: nil).update_all(status: "Unmaintained")
-    elsif repository_unmaintained
-      # no-op here since we are relying on the update to have already set this status from upstream
-      # repository host data at the moment
-    else
-      update(status: nil) unless status.nil?
+    end
+
+    if !unmaintained? && !readme.unmaintained?
+      # neither readme nor repository is marked as unmaintained so remove the label from any projects that are
       projects.unmaintained.update_all(status: nil)
+    end
+  end
+
+  # Suggest the correct Repository status based on if the upstream repository data
+  # indicates it should be and the current status set on this Repository.
+  def correct_status_from_upstream(archived_upstream:)
+    if archived_upstream && status.nil?
+      # set to unmaintained if we do not have another status already assigned
+      "Unmaintained"
+    elsif !archived_upstream && status == "Unmaintained"
+      # set back to nil if we currently have it marked as unmaintained
+      nil
+    else
+      # return the original status so it is not updated
+      status
     end
   end
 end

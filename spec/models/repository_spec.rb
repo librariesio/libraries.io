@@ -445,7 +445,7 @@ describe Repository, type: :model do
     end
   end
 
-  describe "#update_unmaintained_statuses" do
+  describe "#update_unmaintained_status_from_readme" do
     let(:repository) { build(:repository, host_type: "GitHub", full_name: "vuejs/vue") }
     let!(:project) { create(:project, repository: repository) }
     let(:readme_double) { instance_double(Readme) }
@@ -473,14 +473,14 @@ describe Repository, type: :model do
 
         it "marks repository as unmaintained" do
           repository.update_from_repository(auth_token.token)
-          repository.update_unmaintained_statuses
+          repository.update_unmaintained_status_from_readme
 
           expect(repository.unmaintained?).to be true
         end
 
         it "does not mark project as unmaintained" do
           repository.update_from_repository(auth_token.token)
-          repository.update_unmaintained_statuses
+          repository.update_unmaintained_status_from_readme
 
           expect(project.reload.unmaintained?).to be false
         end
@@ -491,14 +491,14 @@ describe Repository, type: :model do
 
         it "marks repository as unmaintained" do
           repository.update_from_repository(auth_token.token)
-          repository.update_unmaintained_statuses
+          repository.update_unmaintained_status_from_readme
 
           expect(repository.unmaintained?).to be true
         end
 
         it "marks project as unmaintained" do
           repository.update_from_repository(auth_token.token)
-          repository.update_unmaintained_statuses
+          repository.update_unmaintained_status_from_readme
 
           expect(project.reload.unmaintained?).to be true
         end
@@ -521,14 +521,14 @@ describe Repository, type: :model do
 
         it "marks repository as unmaintained" do
           repository.update_from_repository(auth_token.token)
-          repository.update_unmaintained_statuses
+          repository.update_unmaintained_status_from_readme
 
           expect(repository.unmaintained?).to be false
         end
 
         it "marks project as unmaintained" do
           repository.update_from_repository(auth_token.token)
-          repository.update_unmaintained_statuses
+          repository.update_unmaintained_status_from_readme
 
           expect(project.reload.unmaintained?).to be false
         end
@@ -539,16 +539,69 @@ describe Repository, type: :model do
 
         it "marks repository as unmaintained" do
           repository.update_from_repository(auth_token.token)
-          repository.update_unmaintained_statuses
+          repository.update_unmaintained_status_from_readme
 
           expect(repository.unmaintained?).to be true
         end
 
         it "marks project as unmaintained" do
           repository.update_from_repository(auth_token.token)
-          repository.update_unmaintained_statuses
+          repository.update_unmaintained_status_from_readme
 
           expect(project.reload.unmaintained?).to be true
+        end
+      end
+    end
+  end
+
+  describe "#correct_status_from_upstream" do
+    let(:status) { nil }
+    let(:repository) { build(:repository, status: status) }
+
+    context "with nil status repository" do
+      let(:status) { nil }
+
+      context "with archived upstream repo" do
+        it "should suggest unmaintained status" do
+          expect(repository.correct_status_from_upstream(archived_upstream: true)).to eql("Unmaintained")
+        end
+      end
+
+      context "with non archived upstream repo" do
+        it "should suggest nil status" do
+          expect(repository.correct_status_from_upstream(archived_upstream: false)).to be_nil
+        end
+      end
+    end
+
+    context "with unmaintained status repository" do
+      let(:status) { "Unmaintained" }
+
+      context "with archived upstream repo" do
+        it "should suggest unmaintained status" do
+          expect(repository.correct_status_from_upstream(archived_upstream: true)).to eql("Unmaintained")
+        end
+      end
+
+      context "with non archived upstream repo" do
+        it "should suggest nil status" do
+          expect(repository.correct_status_from_upstream(archived_upstream: false)).to be_nil
+        end
+      end
+    end
+
+    context "with hidden status repository" do
+      let(:status) { "Hidden" }
+
+      context "with archived upstream repo" do
+        it "should suggest no change" do
+          expect(repository.correct_status_from_upstream(archived_upstream: true)).to eql(status)
+        end
+      end
+
+      context "with non archived upstream repo" do
+        it "should suggest no change" do
+          expect(repository.correct_status_from_upstream(archived_upstream: false)).to eql(status)
         end
       end
     end

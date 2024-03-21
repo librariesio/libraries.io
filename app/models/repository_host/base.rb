@@ -96,6 +96,10 @@ module RepositoryHost
       end
       repository.license = Project.format_license(r[:license][:key]) if r[:license]
       repository.source_name = (r[:parent][:full_name] if r[:fork])
+
+      # set unmaintained status for the Repository based on if the repository has been archived upstream
+      # if the Repository already has another status then just leave it alone
+      repository.status = repository.correct_status_from_upstream(archived_upstream: r[:archived])
       repository.assign_attributes r.slice(*Repository::API_FIELDS)
       repository.save! if repository.changed?
     rescue self.class.api_missing_error_class
