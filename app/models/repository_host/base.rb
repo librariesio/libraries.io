@@ -84,23 +84,17 @@ module RepositoryHost
       RepositoryOwner.const_get(repository.host_type.capitalize)
     end
 
-    def update_from_host(token = nil)
-      r = self.class.fetch_repo(repository.id_or_name)
-      return unless r.present?
+    def update_from_host(repository_host_data)
+      return unless repository_host_data.present?
 
-      repository.uuid = r[:id] unless repository.uuid.to_s == r[:id].to_s
-      if repository.full_name.downcase != r[:full_name].downcase
-        clash = Repository.host(r[:host_type]).where("lower(full_name) = ?", r[:full_name].downcase).first
-        clash.destroy if clash && (!clash.repository_host.update_from_host(token) || clash.status == "Removed")
-        repository.full_name = r[:full_name]
-      end
-      repository.license = Project.format_license(r[:license][:key]) if r[:license]
-      repository.source_name = (r[:parent][:full_name] if r[:fork])
-      repository.assign_attributes r.slice(*Repository::API_FIELDS)
+      repository.uuid = repository_host_data[:id] unless repository.uuid.to_s == repository_host_data[:id].to_s
 
-      set_unmaintained_statuses(repository_unmaintained: r[:unmaintained], readme_unmaintained: repository.readme.unmaintained?)
-
+      repository.license = Project.format_license(repository_host_data[:license][:key]) if repository_host_data[:license]
+      repository.source_name = (repository_host_data[:parent][:full_name] if repository_host_data[:fork])
+      repository.assign_attributes repository_host_data.slice(*Repository::API_FIELDS)
       repository.save! if repository.changed?
+
+      handle_repository_name_clash(repository_host_data[:host_type], repository.full_name, repository_host_data[:full_name])
     rescue self.class.api_missing_error_class
       repository.update_attribute(:status, "Removed") unless repository.private?
     rescue *self.class::IGNORABLE_EXCEPTIONS
@@ -140,6 +134,20 @@ module RepositoryHost
       else
         repository.status = nil
         repository.projects.unmaintained.update_all(status: nil)
+      end
+    end
+
+    def handle_repository_name_clash(host_type, existing_repository_name, raw_upstream_name)
+      if existing_repository_name.downcase != raw_upstream_name.downcase
+        clash = Repository.host(host_type).where("lower(full_name) = ?", raw_upstream_name.downcase).first
+        if clash.present?
+          clash_upstream_data = clash.repository_host.fetch_repo(clash.id_or_name)
+
+          clash.destroy if clash.removed? || clash_upstream_data.nil?
+          # clash.destroy if clash && (!clash.repository_host.update_from_host(token) || clash.status == "Removed")
+        end
+
+        repository.full_name = raw_upstream_name
       end
     end
   end

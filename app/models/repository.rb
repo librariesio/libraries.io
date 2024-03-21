@@ -286,7 +286,11 @@ class Repository < ApplicationRecord
     check_status
     return if status == "Removed"
 
-    update_from_repository(token)
+    upstream_repo_data = repository_host.fetch_repo(id_or_name)
+    return if upstream_repo_data.nil?
+
+    repository_host.update_from_host(upstream_repo_data)
+
     unless last_synced_at && last_synced_at > 2.minutes.ago
       download_owner
       download_fork_source(token)
@@ -297,10 +301,8 @@ class Repository < ApplicationRecord
       update_source_rank(force: true)
     end
     update(last_synced_at: Time.now)
-  end
 
-  def update_from_repository(token)
-    repository_host.update_from_host(token)
+    set_unmaintained_statuses(repository_unmaintained: upstream_repo_data[:unmaintained], readme_unmaintained: readme.unmaintained?)
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
@@ -404,5 +406,21 @@ class Repository < ApplicationRecord
 
   def gather_maintenance_stats_async(priority: :medium)
     RepositoryMaintenanceStatWorker.enqueue(id, priority: priority)
+  end
+
+  private
+
+  def set_unmaintained_statuses(repository_unmaintained:, readme_unmaintained:)
+    if readme_unmaintained
+      self.status = "Unmaintained"
+      projects.update_all(status: "Unmaintained")
+    elsif repository_unmaintained
+      self.status = "Unmaintained"
+    else
+      self.status = nil
+      projects.unmaintained.update_all(status: nil)
+    end
+
+    save!
   end
 end
