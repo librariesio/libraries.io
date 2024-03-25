@@ -414,7 +414,7 @@ class Repository < ApplicationRecord
   # removed the unmaintained status if neither the readme or repository indicate that it
   # is not being maintained in the case where a project was picked up for work again.
   def update_unmaintained_status_from_readme
-    if readme.unmaintained?
+    if readme&.unmaintained?
       StructuredLog.capture("README_SET_UNMAINTAINED_STATUS",
                             {
                               repository_host: host_type,
@@ -429,7 +429,7 @@ class Repository < ApplicationRecord
       projects.where(status: nil).update_all(status: "Unmaintained")
     end
 
-    if !unmaintained? && !readme.unmaintained?
+    if !unmaintained? && !readme&.unmaintained?
       StructuredLog.capture("README_REMOVE_UNMAINTAINED_STATUS",
                             {
                               repository_host: host_type,
