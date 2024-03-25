@@ -415,6 +415,12 @@ class Repository < ApplicationRecord
   # is not being maintained in the case where a project was picked up for work again.
   def update_unmaintained_status_from_readme
     if readme.unmaintained?
+      StructuredLog.capture("README_SET_UNMAINTAINED_STATUS",
+                            {
+                              repository_host: host_type,
+                              full_name: full_name,
+                            })
+
       # update repository status only if needed
       update(status: "Unmaintained") unless unmaintained?
       # Don't update Projects that have other statuses already set since those could have been set
@@ -424,6 +430,11 @@ class Repository < ApplicationRecord
     end
 
     if !unmaintained? && !readme.unmaintained?
+      StructuredLog.capture("README_REMOVE_UNMAINTAINED_STATUS",
+                            {
+                              repository_host: host_type,
+                              full_name: full_name,
+                            })
       # neither readme nor repository is marked as unmaintained so remove the label from any projects that are
       projects.unmaintained.update_all(status: nil)
     end
@@ -433,9 +444,19 @@ class Repository < ApplicationRecord
   # indicates it should be and the current status set on this Repository.
   def correct_status_from_upstream(archived_upstream:)
     if archived_upstream && status.nil?
+      StructuredLog.capture("REPOSITORY_SET_UNMAINTAINED_STATUS",
+                            {
+                              repository_host: host_type,
+                              full_name: full_name,
+                            })
       # set to unmaintained if we do not have another status already assigned
       "Unmaintained"
     elsif !archived_upstream && status == "Unmaintained"
+      StructuredLog.capture("REPOSITORY_REMOVE_UNMAINTAINED_STATUS",
+                            {
+                              repository_host: host_type,
+                              full_name: full_name,
+                            })
       # set back to nil if we currently have it marked as unmaintained
       nil
     else
