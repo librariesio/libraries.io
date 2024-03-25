@@ -163,7 +163,7 @@ module RepositoryHost
 
     def self.fetch_repo(full_name, token = nil)
       project = api_client(token).project(full_name)
-      repo_hash = project.to_hash.with_indifferent_access.slice(:id, :description, :created_at, :name, :open_issues_count, :forks_count, :default_branch)
+      repo_hash = project.to_hash.with_indifferent_access.slice(:id, :description, :created_at, :name, :open_issues_count, :forks_count, :default_branch, :archived)
 
       repo_hash.merge!({
                          host_type: "GitLab",

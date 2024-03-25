@@ -34,7 +34,6 @@ class Readme < ApplicationRecord
   belongs_to :repository
   validates_presence_of :html_body, :repository
   after_validation :reformat
-  after_commit :check_unmaintained
 
   def self.format_markup(path, content)
     return unless content.present?
@@ -57,15 +56,6 @@ class Readme < ApplicationRecord
 
   def plain_text
     @plain_text ||= Nokogiri::HTML(html_body).try(:text)
-  end
-
-  def check_unmaintained
-    return unless unmaintained?
-
-    repository.update_attribute(:status, "Unmaintained")
-    repository.projects.each do |project|
-      project.update_attribute(:status, "Unmaintained")
-    end
   end
 
   def unmaintained?
