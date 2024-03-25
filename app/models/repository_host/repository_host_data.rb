@@ -7,7 +7,7 @@
 # schema within the Libraries.io models and code.
 class RepositoryHost::RepositoryHostData
   attr_reader :archived, :default_branch, :description, :fork, :full_name, :has_issues, :has_wiki, :homepage, :host_type,
-              :keywords, :language, :license, :name, :owner, :parent, :private, :repository_uuid, :scm, :size
+              :keywords, :language, :license, :name, :owner, :parent, :is_private, :repository_uuid, :scm, :size
 
   def initialize(
     archived:,
@@ -25,7 +25,7 @@ class RepositoryHost::RepositoryHostData
     name:,
     owner:,
     parent:,
-    private:,
+    is_private:,
     repository_uuid:,
     scm:,
     size:,
@@ -46,7 +46,7 @@ class RepositoryHost::RepositoryHostData
     @name = name
     @owner = owner
     @parent = parent
-    @private = private
+    @private = is_private
     @repository_uuid = repository_uuid
     @scm = scm
     @size = size
@@ -67,7 +67,7 @@ class RepositoryHost::RepositoryHostData
       language: language,
       license: formatted_license,
       name: name,
-      private: private,
+      private: is_private,
       scm: scm,
       size: size,
       uuid: repository_uuid,

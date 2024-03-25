@@ -19,7 +19,7 @@ class RepositoryHost::Github::GithubRepositoryHostDataFactory
       name: upstream_repository_data_hash[:name],
       owner: upstream_repository_data_hash[:owner],
       parent: upstream_repository_data_hash[:parent],
-      private: upstream_repository_data_hash[:private],
+      is_private: upstream_repository_data_hash[:private],
       scm: "git",
       size: upstream_repository_data_hash[:size],
     }

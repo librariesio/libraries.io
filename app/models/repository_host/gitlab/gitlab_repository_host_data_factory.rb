@@ -15,7 +15,7 @@ class RepositoryHost::Gitlab::GitlabRepositoryHostDataFactory
       has_issues: api_project.issues_enabled,
       has_wiki: api_project.wiki_enabled,
       scm: "git",
-      private: api_project.visibility != "public",
+      is_private: api_project.visibility != "public",
       keywords: api_project.topics,
       parent: {
         full_name: api_project.try(:forked_from_project).try(:path_with_namespace),
