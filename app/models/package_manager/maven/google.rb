@@ -65,13 +65,13 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
       packages.each do |package|
         package_name = package.name
 
-        versions = package["versions"].split(",")
+        version_numbers = package["versions"].split(",")
 
         name = [group_name, package_name].join(PackageManager::Maven::NAME_DELIMITER)
 
         raw_project = project(
           name,
-          latest: versions.last # not totally accurate but it's all we have at this point
+          latest: version_numbers.last # not totally accurate but it's all we have at this point
         )
 
         mapped_project = transform_mapping_values(mapping(raw_project))
@@ -81,14 +81,29 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
 
         pp "added project #{name}"
 
-        versions.each do |version|
-          version_hash = one_version(raw_project, versions)
+        api_versions = version_numbers
+          .map { |version_number| one_version(raw_project, version_number) }
+          .map { |mapped_version| version_hash_to_version_object(mapped_version) }
 
-          add_version(db_project, version_hash)
-
-          pp "added version #{version}"
+        retried = false
+        begin
+          BulkVersionUpdater.new(
+            db_project: db_project,
+            api_versions: api_versions,
+            repository_source_name: self::HAS_MULTIPLE_REPO_SOURCES ? [self::REPOSITORY_SOURCE_NAME] : nil
+          ).run!
         rescue Faraday::ConnectionFailed
-          retry
+          unless retried
+            retried = true
+            retry
+          end
+          StructuredLog.capture(
+            "GOOGLE_MAVEN_VERSION_UPSERT_FAILURE",
+            {
+              project_id: db_project.id,
+              versions: api_versions.map(&:version_number),
+            }
+          )
         end
 
         finalize_db_project(db_project)

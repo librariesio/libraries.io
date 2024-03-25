@@ -146,14 +146,24 @@ module PackageManager
       db_project = ensure_project(mapped_project, reformat_repository_url: sync_version == :all)
 
       if self::HAS_VERSIONS
-        if sync_version == :all
-          versions_as_version_objects(raw_project, db_project.name)
-            .each { |v| add_version(db_project, v) }
-            .tap { |vs| remove_missing_versions(db_project, vs) }
-        elsif (version = one_version_as_version_object(raw_project, sync_version))
-          add_version(db_project, version)
-          # TODO: handle deprecation here too
-        end
+        api_versions = if sync_version == :all
+                         versions_as_version_objects(raw_project, db_project.name)
+                       else
+                         [one_version_as_version_object(raw_project, sync_version)]
+                       end
+
+        BulkVersionUpdater.new(
+          db_project: db_project,
+          api_versions: api_versions,
+          repository_source_name: self::HAS_MULTIPLE_REPO_SOURCES ? [self::REPOSITORY_SOURCE_NAME] : nil
+        ).run!
+
+
+        # TODO: we might be able to pass versions returned from BulkVersionUpdater here into
+        # remove_missing_versions() to reduce version lookups.
+        remove_missing_versions(db_project, api_versions.map(&:version_number)) if sync_version == :all
+
+        # TODO: handle deprecation here too
       end
 
       save_dependencies(mapped_project, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies) if self::HAS_DEPENDENCIES
@@ -206,23 +216,11 @@ module PackageManager
       )
     end
 
-    def self.add_version(db_project, api_version)
-      return if api_version.blank?
-
-      new_repository_source = self::HAS_MULTIPLE_REPO_SOURCES ? self::REPOSITORY_SOURCE_NAME : nil
-
-      VersionUpdater.new(
-        project: db_project,
-        api_version_to_upsert: api_version,
-        new_repository_source: new_repository_source
-      ).upsert_version_for_project!
-    end
-
     def self.missing_version_remover
       nil
     end
 
-    def self.remove_missing_versions(db_project, api_versions)
+    def self.remove_missing_versions(db_project, version_numbers_to_keep)
       return unless missing_version_remover
 
       # yanked pypi versions are marked as such in the api, and the majority of them are handled upstream of here
@@ -230,7 +228,7 @@ module PackageManager
 
       missing_version_remover.new(
         project: db_project,
-        version_numbers_to_keep: api_versions.map(&:version_number),
+        version_numbers_to_keep: version_numbers_to_keep,
         target_status: "Removed",
         removal_time: Time.zone.now
       ).remove_missing_versions_of_project!
