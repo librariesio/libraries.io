@@ -503,6 +503,26 @@ describe Repository, type: :model do
           expect(project.reload.unmaintained?).to be true
         end
       end
+
+      context "with no readme data" do
+        before do
+          allow(repository).to receive(:readme).and_return(nil)
+        end
+
+        it "marks repository as unmaintained" do
+          repository.update_from_repository(auth_token.token)
+          repository.update_unmaintained_status_from_readme
+
+          expect(repository.unmaintained?).to be true
+        end
+
+        it "does not mark project as unmaintained" do
+          repository.update_from_repository(auth_token.token)
+          repository.update_unmaintained_status_from_readme
+
+          expect(project.reload.unmaintained?).to be false
+        end
+      end
     end
 
     context "with non archived status from Github" do
@@ -519,18 +539,31 @@ describe Repository, type: :model do
       context "with existing unmaintained repository status" do
         let(:repository) { build(:repository, host_type: "GitHub", full_name: "vuejs/vue", status: "Unmaintained") }
 
-        it "marks repository as unmaintained" do
+        it "marks repository as maintained" do
           repository.update_from_repository(auth_token.token)
           repository.update_unmaintained_status_from_readme
 
           expect(repository.unmaintained?).to be false
         end
 
-        it "marks project as unmaintained" do
+        it "marks project as maintained" do
           repository.update_from_repository(auth_token.token)
           repository.update_unmaintained_status_from_readme
 
           expect(project.reload.unmaintained?).to be false
+        end
+
+        context "with no readme data" do
+          before do
+            allow(repository).to receive(:readme).and_return(nil)
+          end
+
+          it "marks repository as maintained" do
+            repository.update_from_repository(auth_token.token)
+            repository.update_unmaintained_status_from_readme
+
+            expect(repository.unmaintained?).to be false
+          end
         end
       end
 
