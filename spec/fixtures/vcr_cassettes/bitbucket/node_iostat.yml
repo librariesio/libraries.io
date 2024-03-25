@@ -1,0 +1,174 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - BitBucket Ruby Gem 0.1.7
+      X-Datadog-Trace-Id:
+      - '4557842422794699314'
+      X-Datadog-Parent-Id:
+      - '205080452599422352'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - envoy
+      Vary:
+      - Authorization, Origin, Accept-Encoding
+      Cache-Control:
+      - max-age=900
+      Content-Type:
+      - application/json; charset=utf-8
+      X-B3-Traceid:
+      - de1f0bf40868eb74
+      X-Usage-Output-Ops:
+      - '0'
+      X-Used-Mesh:
+      - 'False'
+      X-Dc-Location:
+      - Micros-3
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Date:
+      - Fri, 22 Mar 2024 19:39:32 GMT
+      X-Request-Id:
+      - de1f0bf40868eb74
+      X-Usage-User-Time:
+      - '0.045665'
+      X-Usage-System-Time:
+      - '0.002523'
+      X-Served-By:
+      - cc3f4f04269b
+      X-Xss-Protection:
+      - 1; mode=block
+      Transfer-Encoding:
+      - chunked
+      X-Envoy-Upstream-Service-Time:
+      - '75'
+      X-View-Name:
+      - bitbucket.apps.repo2.api.v20.repo.RepositoryHandler
+      X-B3-Spanid:
+      - 39ceb53a82d0b2bc
+      Etag:
+      - '"5f33a27eb5af6217d32855db5addc5ec"'
+      X-Static-Version:
+      - e379ea7f1d4a
+      X-Content-Type-Options:
+      - nosniff
+      X-Accepted-Oauth-Scopes:
+      - repository
+      X-Render-Time:
+      - '0.06647086143493652'
+      X-Trace-Id:
+      - de1f0bf40868eb74
+      Connection:
+      - keep-alive
+      X-Usage-Input-Ops:
+      - '0'
+      X-Version:
+      - e379ea7f1d4a
+      X-Request-Count:
+      - '1938'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Cache-Info:
+      - caching
+    body:
+      encoding: ASCII-8BIT
+      string: '{"type": "repository", "full_name": "codekoala/node-iostat", "links":
+        {"self": {"href": "https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat"},
+        "html": {"href": "https://bitbucket.org/codekoala/node-iostat"}, "avatar":
+        {"href": "https://bytebucket.org/ravatar/%7B219c49b1-9aad-4b14-a697-b672377baebb%7D?ts=js"},
+        "pullrequests": {"href": "https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat/pullrequests"},
+        "commits": {"href": "https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat/commits"},
+        "forks": {"href": "https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat/forks"},
+        "watchers": {"href": "https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat/watchers"},
+        "branches": {"href": "https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat/refs/branches"},
+        "tags": {"href": "https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat/refs/tags"},
+        "downloads": {"href": "https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat/downloads"},
+        "source": {"href": "https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat/src"},
+        "clone": [{"name": "https", "href": "https://bitbucket.org/codekoala/node-iostat.git"},
+        {"name": "ssh", "href": "git@bitbucket.org:codekoala/node-iostat.git"}], "issues":
+        {"href": "https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat/issues"},
+        "hooks": {"href": "https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat/hooks"}},
+        "name": "node-iostat", "slug": "node-iostat", "description": "Uses Node.js
+        and flot to produce a \"real-time\" graph of data from iostat.", "scm": "git",
+        "website": "http://www.codekoala.com/", "owner": {"display_name": "Josh VanderLinden",
+        "links": {"self": {"href": "https://api.bitbucket.org/2.0/users/%7B3afa667d-3308-4857-986d-fd84e463051c%7D"},
+        "avatar": {"href": "https://secure.gravatar.com/avatar/dbfb3f4586ef3e9695911dd55c63da42?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FJV-0.png"},
+        "html": {"href": "https://bitbucket.org/%7B3afa667d-3308-4857-986d-fd84e463051c%7D/"}},
+        "type": "user", "uuid": "{3afa667d-3308-4857-986d-fd84e463051c}", "account_id":
+        "557058:d443575b-8557-44c0-8542-f57d6f33c0ac", "nickname": "codekoala"}, "workspace":
+        {"type": "workspace", "uuid": "{3afa667d-3308-4857-986d-fd84e463051c}", "name":
+        "Josh VanderLinden", "slug": "codekoala", "links": {"avatar": {"href": "https://bitbucket.org/workspaces/codekoala/avatar/?ts=1543457468"},
+        "html": {"href": "https://bitbucket.org/codekoala/"}, "self": {"href": "https://api.bitbucket.org/2.0/workspaces/codekoala"}}},
+        "is_private": false, "project": {"type": "project", "key": "PROJ", "uuid":
+        "{66910831-6b20-41b2-9c5c-bed0000e9fff}", "name": "Untitled project", "links":
+        {"self": {"href": "https://api.bitbucket.org/2.0/workspaces/codekoala/projects/PROJ"},
+        "html": {"href": "https://bitbucket.org/codekoala/workspace/projects/PROJ"},
+        "avatar": {"href": "https://bitbucket.org/account/user/codekoala/projects/PROJ/avatar/32?ts=1543457468"}}},
+        "fork_policy": "allow_forks", "created_on": "2012-02-08T20:33:39.336628+00:00",
+        "updated_on": "2012-02-12T07:02:41.642077+00:00", "size": 118925, "language":
+        "javascript", "uuid": "{219c49b1-9aad-4b14-a697-b672377baebb}", "mainbranch":
+        {"name": "master", "type": "branch"}, "override_settings": {"default_merge_strategy":
+        false, "branching_model": false}, "parent": null, "has_issues": true, "has_wiki":
+        false}'
+  recorded_at: Fri, 22 Mar 2024 19:39:32 GMT
+- request:
+    method: get
+    uri: https://api.bitbucket.org/1.0/repositories/codekoala/node-iostat?api_version=1.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - BitBucket Ruby Gem 0.1.7
+      X-Datadog-Trace-Id:
+      - '1626514665168621202'
+      X-Datadog-Parent-Id:
+      - '1804328855498564914'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 410
+      message: Gone
+    headers:
+      Vary:
+      - User-Agent
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 22 Mar 2024 19:39:32 GMT
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '262'
+    body:
+      encoding: UTF-8
+      string: '{"type": "error", "error": {"message": "Resource removed", "detail":
+        "This API is no longer supported.\n\nFor information about its removal, please
+        refer to the deprecation notice at: https://developer.atlassian.com/cloud/bitbucket/deprecation-notice-v1-apis/"}}'
+  recorded_at: Fri, 22 Mar 2024 19:39:32 GMT
+recorded_with: VCR 6.2.0

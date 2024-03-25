@@ -310,23 +310,21 @@ class Repository < ApplicationRecord
     RepositoryHost.const_get(host_type.capitalize).create(full_name, token)
   end
 
-  def self.create_from_hash(repo_hash)
-    return unless repo_hash
-
-    repo_hash = repo_hash.to_hash.with_indifferent_access
+  def self.create_from_hash(repo_host_data)
+    return unless repo_host_data
 
     ActiveRecord::Base.transaction do
-      g = Repository.where(host_type: (repo_hash[:host_type] || "GitHub")).find_by(uuid: repo_hash[:id])
-      g = Repository.host(repo_hash[:host_type] || "GitHub").find_by("lower(full_name) = ?", repo_hash[:full_name].downcase) if g.nil?
-      g = Repository.new(uuid: repo_hash[:id], full_name: repo_hash[:full_name]) if g.nil?
-      g.host_type = repo_hash[:host_type] || "GitHub"
-      g.full_name = repo_hash[:full_name] if g.full_name.downcase != repo_hash[:full_name].downcase
-      g.uuid = repo_hash[:id] if g.uuid.nil?
-      g.license = repo_hash[:license][:key] if repo_hash[:license]
-      g.source_name = (repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent])
+      g = Repository.where(host_type: (repo_host_data.host_type || "GitHub")).find_by(uuid: repo_host_data.repository_uuid)
+      g = Repository.host(repo_host_data.host_type || "GitHub").find_by("lower(full_name) = ?", repo_host_data.full_name.downcase) if g.nil?
+      g = Repository.new(uuid: repo_host_data.repository_uuid, full_name: repo_host_data.full_name) if g.nil?
+      g.host_type = repo_host_data.host_type || "GitHub"
+      g.full_name = repo_host_data.full_name if g.full_name.downcase != repo_host_data.full_name.downcase
+      g.uuid = repo_host_data.repository_uuid if g.uuid.nil?
+      g.license = repo_host_data.formatted_license if repo_host_data.formatted_license
+      g.source_name = (repo_host_data.source_name if repo_host_data.source_name.present?)
 
       g.status = g.correct_status_from_upstream(archived_upstream: repo_hash[:archived])
-      g.assign_attributes repo_hash.slice(*Repository::API_FIELDS)
+      g.assign_attributes repo_host_data.to_repository_attrs
 
       if g.changed?
         g.save ? g : nil

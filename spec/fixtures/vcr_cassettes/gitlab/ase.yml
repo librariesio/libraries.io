@@ -1,0 +1,84 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://gitlab.com/api/v4/projects/ase%2Fase?license=true
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Gitlab Ruby Gem 4.19.0
+      Authorization:
+      - Bearer TEST_TOKEN
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 22 Mar 2024 21:18:35 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Security-Policy:
+      - default-src 'none'
+      Etag:
+      - W/"3eac09171bbe56185f17b20bee622a9a"
+      Vary:
+      - Origin, Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Gitlab-Meta:
+      - '{"correlation_id":"c33be4ad4eb7e9d2be1e0ffc20797381","version":"1"}'
+      X-Request-Id:
+      - c33be4ad4eb7e9d2be1e0ffc20797381
+      X-Runtime:
+      - '0.118458'
+      Strict-Transport-Security:
+      - max-age=31536000
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Gitlab-Lb:
+      - haproxy-main-02-lb-gprd
+      Gitlab-Sv:
+      - gke-cny-api
+      Cf-Cache-Status:
+      - MISS
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=%2F1UX%2BNiITUQW5GD6LHY2HJIb0eHicN3shpwWvhieKC%2BGZVWRAZ2ZS1pdaSU0REzRaDZNnwTjk8DZHSmG3jpScFXZpxVJ%2FmI03vji23Rf0F6h8dV%2FcvcOzYYrfrw%3D"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0.01,"report_to":"cf-nel","max_age":604800}'
+      Set-Cookie:
+      - _cfuvid=QtJ9pS1HHDJr0YQaHysa2u6qay8jfEoThC5tm_4bJmY-1711142315021-0.0.1.1-604800000;
+        path=/; domain=.gitlab.com; HttpOnly; Secure; SameSite=None
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8689370bc8418f79-BOS
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":470007,"description":"[Atomic Simulation Environment](https://wiki.fysik.dtu.dk/ase/):
+        A Python library for working with atoms","name":"ase","name_with_namespace":"ase
+        / ase","path":"ase","path_with_namespace":"ase/ase","created_at":"2015-09-17T12:32:33.814Z","default_branch":"master","tag_list":["Atomistic
+        simulations","chemistry","materials","physics"],"topics":["Atomistic simulations","chemistry","materials","physics"],"ssh_url_to_repo":"git@gitlab.com:ase/ase.git","http_url_to_repo":"https://gitlab.com/ase/ase.git","web_url":"https://gitlab.com/ase/ase","readme_url":"https://gitlab.com/ase/ase/-/blob/master/README.rst","forks_count":770,"license_url":"https://gitlab.com/ase/ase/-/blob/master/COPYING","license":{"key":"lgpl-2.1","name":"GNU
+        Lesser General Public License v2.1 only","nickname":"GNU LGPLv2.1","html_url":"https://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html","source_url":null},"avatar_url":"https://gitlab.com/uploads/-/system/project/avatar/470007/ase256.png","star_count":421,"last_activity_at":"2024-03-21T22:39:06.389Z","namespace":{"id":293845,"name":"ase","path":"ase","kind":"group","full_path":"ase","parent_id":null,"avatar_url":"/uploads/-/system/group/avatar/293845/users.png","web_url":"https://gitlab.com/groups/ase"},"container_registry_image_prefix":"registry.gitlab.com/ase/ase","_links":{"self":"https://gitlab.com/api/v4/projects/470007","issues":"https://gitlab.com/api/v4/projects/470007/issues","merge_requests":"https://gitlab.com/api/v4/projects/470007/merge_requests","repo_branches":"https://gitlab.com/api/v4/projects/470007/repository/branches","labels":"https://gitlab.com/api/v4/projects/470007/labels","events":"https://gitlab.com/api/v4/projects/470007/events","members":"https://gitlab.com/api/v4/projects/470007/members","cluster_agents":"https://gitlab.com/api/v4/projects/470007/cluster_agents"},"packages_enabled":true,"empty_repo":false,"archived":false,"visibility":"public","resolve_outdated_diff_discussions":false,"repository_object_format":"sha1","issues_enabled":true,"merge_requests_enabled":true,"wiki_enabled":false,"jobs_enabled":true,"snippets_enabled":false,"container_registry_enabled":true,"service_desk_enabled":null,"can_create_merge_request_in":true,"issues_access_level":"enabled","repository_access_level":"enabled","merge_requests_access_level":"enabled","forking_access_level":"enabled","wiki_access_level":"disabled","builds_access_level":"enabled","snippets_access_level":"disabled","pages_access_level":"enabled","analytics_access_level":"enabled","container_registry_access_level":"enabled","security_and_compliance_access_level":"private","releases_access_level":"enabled","environments_access_level":"enabled","feature_flags_access_level":"enabled","infrastructure_access_level":"enabled","monitor_access_level":"enabled","model_experiments_access_level":"enabled","model_registry_access_level":"enabled","emails_disabled":false,"emails_enabled":true,"shared_runners_enabled":true,"lfs_enabled":true,"creator_id":71312,"import_status":"none","open_issues_count":515,"description_html":"\u003cp
+        data-sourcepos=\"1:1-1:104\" dir=\"auto\"\u003e\u003ca data-sourcepos=\"1:1-1:63\"
+        href=\"https://wiki.fysik.dtu.dk/ase/\" rel=\"nofollow noreferrer noopener\"
+        target=\"_blank\"\u003eAtomic Simulation Environment\u003c/a\u003e: A Python
+        library for working with atoms\u003c/p\u003e","updated_at":"2024-03-21T22:39:06.389Z","ci_config_path":"","public_jobs":true,"shared_with_groups":[],"only_allow_merge_if_pipeline_succeeds":false,"allow_merge_on_skipped_pipeline":null,"request_access_enabled":true,"only_allow_merge_if_all_discussions_are_resolved":false,"remove_source_branch_after_merge":true,"printing_merge_request_link_enabled":true,"merge_method":"merge","squash_option":"default_off","enforce_auth_checks_on_uploads":true,"suggestion_commit_message":null,"merge_commit_template":null,"squash_commit_template":null,"issue_branch_template":null,"warn_about_potentially_unwanted_characters":true,"autoclose_referenced_issues":true,"approvals_before_merge":0,"mirror":false,"external_authorization_classification_label":"","marked_for_deletion_at":null,"marked_for_deletion_on":null,"requirements_enabled":true,"requirements_access_level":"enabled","security_and_compliance_enabled":false,"compliance_frameworks":[],"issues_template":"","merge_requests_template":"","merge_pipelines_enabled":false,"merge_trains_enabled":false,"merge_trains_skip_train_allowed":false,"only_allow_merge_if_all_status_checks_passed":false,"allow_pipeline_trigger_approve_deployment":false,"prevent_merge_without_jira_issue":false,"permissions":{"project_access":null,"group_access":null}}'
+  recorded_at: Fri, 22 Mar 2024 21:18:34 GMT
+recorded_with: VCR 6.2.0

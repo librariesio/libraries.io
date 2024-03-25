@@ -85,22 +85,22 @@ module RepositoryHost
     end
 
     def update_from_host(token = nil)
-      r = self.class.fetch_repo(repository.id_or_name)
-      return unless r.present?
+      repo_data = self.class.fetch_repo(repository.id_or_name)
+      return unless repo_data.present?
 
-      repository.uuid = r[:id] unless repository.uuid.to_s == r[:id].to_s
-      if repository.full_name.downcase != r[:full_name].downcase
-        clash = Repository.host(r[:host_type]).where("lower(full_name) = ?", r[:full_name].downcase).first
+      # repository.uuid = r[:id] unless repository.uuid.to_s == r[:id].to_s
+      if repository.full_name.downcase != repo_data.full_name.downcase
+        clash = Repository.host(repo_data.host_type).where("lower(full_name) = ?", repo_data.full_name.downcase).first
         clash.destroy if clash && (!clash.repository_host.update_from_host(token) || clash.status == "Removed")
-        repository.full_name = r[:full_name]
+        repository.full_name = repo_data.full_name
       end
-      repository.license = Project.format_license(r[:license][:key]) if r[:license]
-      repository.source_name = (r[:parent][:full_name] if r[:fork])
+      # repository.license = Project.format_license(r[:license][:key]) if r[:license]
+      # repository.source_name = (r[:parent][:full_name] if r[:fork])
 
       # set unmaintained status for the Repository based on if the repository has been archived upstream
       # if the Repository already has another status then just leave it alone
-      repository.status = repository.correct_status_from_upstream(archived_upstream: r[:archived])
-      repository.assign_attributes r.slice(*Repository::API_FIELDS)
+      repository.status = repository.correct_status_from_upstream(archived_upstream: repo_data.archived)
+      repository.assign_attributes(repo_data.to_repository_attrs.slice(*Repository::API_FIELDS))
       repository.save! if repository.changed?
     rescue self.class.api_missing_error_class
       repository.update_attribute(:status, "Removed") unless repository.private?
