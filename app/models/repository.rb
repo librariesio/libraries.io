@@ -325,6 +325,7 @@ class Repository < ApplicationRecord
       g.license = repo_hash[:license][:key] if repo_hash[:license]
       g.source_name = (repo_hash[:parent][:full_name] if repo_hash[:fork] && repo_hash[:parent])
 
+      g.status = g.correct_status_from_upstream(archived_upstream: repo_hash[:archived])
       g.assign_attributes repo_hash.slice(*Repository::API_FIELDS)
 
       if g.changed?
