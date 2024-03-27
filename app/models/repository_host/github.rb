@@ -151,7 +151,7 @@ module RepositoryHost
       return true if repository.forks_count == repository.forked_repositories.host(repository.host_type).count
 
       AuthToken.new_client(token).forks(repository.full_name).each do |fork|
-        Repository.create_from_data(GithubRepositoryHostDataFactory.generate_from_api(fork))
+        Repository.create_from_data(RawUpstreamDataConverter.convert_from_github_api(fork))
       end
     end
 
