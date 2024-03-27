@@ -40,7 +40,7 @@ RepositoryHost::RawUpstreamData = Struct.new(
   end
 
   def source_name
-    parent[:full_name] if fork
+    parent&.fetch(:full_name, nil)
   end
 
   def lower_name
