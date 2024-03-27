@@ -48,7 +48,7 @@ module GithubIdentity
     current_repo_ids = []
 
     existing_permissions = repository_permissions.all
-    new_repo_ids = r.map(&:id)
+    new_repo_ids = r.map(&:repository_uuid)
     existing_repos = Repository.where(host_type: "GitHub").where(uuid: new_repo_ids).select(:id, :uuid)
 
     r.each do |repo_data|
