@@ -3,7 +3,7 @@
 class RepositoryHost::RawUpstreamDataConverter
   def self.convert_from_github_api(upstream_repository_data_hash)
     RepositoryHost::RawUpstreamData.new(
-      repository_uuid: upstream_repository_data_hash[:id],
+      repository_uuid: upstream_repository_data_hash[:id].to_s,
       archived: upstream_repository_data_hash[:archived],
       default_branch: upstream_repository_data_hash[:default_branch],
       description: upstream_repository_data_hash[:description],
@@ -27,7 +27,7 @@ class RepositoryHost::RawUpstreamDataConverter
 
   def self.convert_from_gitlab_api(api_project)
     RepositoryHost::RawUpstreamData.new(
-      repository_uuid: api_project.id,
+      repository_uuid: api_project.id.to_s,
       description: api_project.description,
       name: api_project.name,
       default_branch: api_project.default_branch,
@@ -60,7 +60,7 @@ class RepositoryHost::RawUpstreamDataConverter
       has_wiki: api_project.has_wiki,
       has_issues: api_project.has_issues,
       scm: api_project.scm,
-      repository_uuid: api_project.uuid,
+      repository_uuid: api_project.uuid.to_s,
       host_type: "Bitbucket",
       owner: api_project.owner,
       homepage: api_project.website,
