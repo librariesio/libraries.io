@@ -17,7 +17,7 @@ class RepositoryHost::Bitbucket::BitbucketRepositoryHostDataFactory
       fork: api_project.parent.present?,
       default_branch: api_project.fetch("mainbranch", {}).try(:fetch, "name", nil),
       is_private: api_project.is_private,
-      size: api_project[:size].to_f / 1000,
+      repository_size: api_project[:size].to_f / 1000,
       parent: {
         full_name: api_project.fetch("parent", {}).try(:fetch, "full_name", nil),
       },

@@ -22,7 +22,7 @@ class RepositoryHost::Gitlab::GitlabRepositoryHostDataFactory
       },
       homepage: api_project.web_url,
       license: api_project.license.key,
-      size: 0, # locked to admins only?,
+      repository_size: 0, # locked to admins only?,
       language: nil, # separate API endpoint that doesn't seem to be supported by the API gem we use
     }
 

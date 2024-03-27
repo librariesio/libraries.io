@@ -21,7 +21,7 @@ class RepositoryHost::Github::GithubRepositoryHostDataFactory
       parent: upstream_repository_data_hash[:parent],
       is_private: upstream_repository_data_hash[:private],
       scm: "git",
-      size: upstream_repository_data_hash[:size],
+      repository_size: upstream_repository_data_hash[:size],
     }
 
     RepositoryHost::RepositoryHostData.new(**input_hash)
