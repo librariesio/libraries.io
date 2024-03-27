@@ -5,7 +5,7 @@
 # is to standardize the output from each repository host into a concrete
 # set of data so we can make sure the raw data is being mapped to the same
 # schema within the Libraries.io models and code.
-RepositoryHost::RepositoryHostData = Struct.new(
+RepositoryHost::RawUpstreamData = Struct.new(
   :archived, :default_branch, :description, :fork, :full_name, :has_issues, :has_wiki, :homepage, :host_type,
   :keywords, :language, :license, :name, :owner, :parent, :is_private, :repository_uuid, :scm, :repository_size,
   keyword_init: true

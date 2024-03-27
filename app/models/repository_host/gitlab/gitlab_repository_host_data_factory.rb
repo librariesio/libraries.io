@@ -26,6 +26,6 @@ class RepositoryHost::Gitlab::GitlabRepositoryHostDataFactory
       language: nil, # separate API endpoint that doesn't seem to be supported by the API gem we use
     }
 
-    RepositoryHost::RepositoryHostData.new(**repo_hash)
+    RepositoryHost::RawUpstreamData.new(**repo_hash)
   end
 end

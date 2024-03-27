@@ -26,6 +26,6 @@ class RepositoryHost::Bitbucket::BitbucketRepositoryHostDataFactory
       license: nil,
     }
 
-    RepositoryHost::RepositoryHostData.new(**input_hash)
+    RepositoryHost::RawUpstreamData.new(**input_hash)
   end
 end

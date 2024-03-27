@@ -24,6 +24,6 @@ class RepositoryHost::Github::GithubRepositoryHostDataFactory
       repository_size: upstream_repository_data_hash[:size],
     }
 
-    RepositoryHost::RepositoryHostData.new(**input_hash)
+    RepositoryHost::RawUpstreamData.new(**input_hash)
   end
 end
