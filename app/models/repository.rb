@@ -310,7 +310,7 @@ class Repository < ApplicationRecord
     RepositoryHost.const_get(host_type.capitalize).create(full_name, token)
   end
 
-  def self.create_from_hash(repo_host_data)
+  def self.create_from_data(repo_host_data)
     return unless repo_host_data
 
     ActiveRecord::Base.transaction do

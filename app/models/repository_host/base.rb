@@ -7,7 +7,7 @@ module RepositoryHost
     end
 
     def self.create(full_name, token = nil)
-      Repository.create_from_hash(fetch_repo(full_name, token))
+      Repository.create_from_data(fetch_repo(full_name, token))
     rescue *self::IGNORABLE_EXCEPTIONS
       nil
     end

@@ -43,7 +43,7 @@ module GithubIdentity
 
     update_column(:currently_syncing, true)
     download_orgs
-    r = github_client.repos
+    r = github_client.repos.map { |repo_data| GithubRepositoryHostDataFactory.generate_from_api(repo_data) }
 
     current_repo_ids = []
 
@@ -53,7 +53,7 @@ module GithubIdentity
 
     r.each do |repo|
       unless (github_repo = existing_repos.find { |re| re.uuid.to_s == repo.id.to_s })
-        github_repo = Repository.host("GitHub").find_by("lower(full_name) = ?", repo.full_name.downcase) || Repository.create_from_hash(repo)
+        github_repo = Repository.host("GitHub").find_by("lower(full_name) = ?", repo.full_name.downcase) || Repository.create_from_data(repo)
       end
       next if github_repo.nil?
 
