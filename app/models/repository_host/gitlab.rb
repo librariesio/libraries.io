@@ -162,27 +162,9 @@ module RepositoryHost
     end
 
     def self.fetch_repo(full_name, token = nil)
-      project = api_client(token).project(full_name)
-      repo_hash = project.to_hash.with_indifferent_access.slice(:id, :description, :created_at, :name, :open_issues_count, :forks_count, :default_branch, :archived)
+      project = api_client(token).project(full_name, { license: true })
 
-      repo_hash.merge!({
-                         host_type: "GitLab",
-                         full_name: project.path_with_namespace,
-                         owner: {},
-                         fork: project.try(:forked_from_project).present?,
-                         updated_at: project.last_activity_at,
-                         stargazers_count: project.star_count,
-                         has_issues: project.issues_enabled,
-                         has_wiki: project.wiki_enabled,
-                         scm: "git",
-                         private: project.visibility != "public",
-                         pull_requests_enabled: project.merge_requests_enabled,
-                         logo_url: project.avatar_url,
-                         keywords: project.tag_list,
-                         parent: {
-                           full_name: project.try(:forked_from_project).try(:path_with_namespace),
-                         },
-                       })
+      RawUpstreamDataConverter.convert_from_gitlab_api(project)
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end

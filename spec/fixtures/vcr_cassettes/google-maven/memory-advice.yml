@@ -355,4 +355,120 @@ http_interactions:
           </dependencies>
         </project>
   recorded_at: Tue, 14 Nov 2023 20:26:52 GMT
+- request:
+    method: get
+    uri: https://dl.google.com/dl/android/maven2/com/google/android/games/memory-advice/0.22/memory-advice-0.22.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2463807712154666496'
+      X-Datadog-Parent-Id:
+      - '526226468481262336'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Cache-Control:
+      - public,max-age=86400
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '2286'
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Type:
+      - application/octet-stream
+      Etag:
+      - '"aaf84f"'
+      Last-Modified:
+      - Mon, 06 Sep 2021 15:18:46 GMT
+      Server:
+      - downloads
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Fri, 22 Mar 2024 19:57:27 GMT
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <!-- This module was also published with a richer model, Gradle metadata,  -->
+          <!-- which should be used instead. Do not delete the following line which  -->
+          <!-- is to indicate to Gradle or any Gradle module metadata file consumer  -->
+          <!-- that they should prefer consuming it instead. -->
+          <!-- do_not_remove: published-with-gradle-metadata -->
+          <modelVersion>4.0.0</modelVersion>
+          <groupId>com.google.android.games</groupId>
+          <artifactId>memory-advice</artifactId>
+          <version>0.22</version>
+          <packaging>aar</packaging>
+          <name>The Android Memory Assistance API</name>
+          <description>An experimental library to help applications avoid exceeding safe limits of memory use on devices.</description>
+          <url>https://android.googlesource.com/platform/frameworks/opt/gamesdk/+/refs/heads/master/test/memoryadvice</url>
+          <licenses>
+            <license>
+              <name>The Apache Software License, Version 2.0</name>
+              <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+              <distribution>repo</distribution>
+            </license>
+          </licenses>
+          <dependencies>
+            <dependency>
+              <groupId>com.google.android.games</groupId>
+              <artifactId>memory-advice-common</artifactId>
+              <version>0.22</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>androidx.lifecycle</groupId>
+              <artifactId>lifecycle-extensions</artifactId>
+              <version>2.2.0</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>androidx.multidex</groupId>
+              <artifactId>multidex</artifactId>
+              <version>2.0.1</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.core</groupId>
+              <artifactId>jackson-databind</artifactId>
+              <version>2.12.2</version>
+              <scope>runtime</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.tensorflow</groupId>
+              <artifactId>tensorflow-lite</artifactId>
+              <version>2.4.0</version>
+              <scope>runtime</scope>
+            </dependency>
+          </dependencies>
+        </project>
+  recorded_at: Fri, 22 Mar 2024 19:57:27 GMT
 recorded_with: VCR 6.2.0

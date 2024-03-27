@@ -182,27 +182,8 @@ module RepositoryHost
       client = api_client(token)
       user_name, repo_name = full_name.split("/")
       project = client.repos.get(user_name, repo_name)
-      v1_project = client.repos.get(user_name, repo_name, api_version: "1.0")
-      repo_hash = project.to_hash.with_indifferent_access.slice(:description, :language, :full_name, :name, :has_wiki, :has_issues, :scm)
 
-      repo_hash.merge!({
-                         id: project.uuid,
-                         host_type: "Bitbucket",
-                         owner: {},
-                         homepage: project.website,
-                         fork: project.parent.present?,
-                         created_at: project.created_on,
-                         updated_at: project.updated_on,
-                         subscribers_count: v1_project.followers_count,
-                         forks_count: v1_project.forks_count,
-                         default_branch: project.fetch("mainbranch", {}).try(:fetch, "name", nil),
-                         private: project.is_private,
-                         size: project[:size].to_f / 1000,
-                         parent: {
-                           full_name: project.fetch("parent", {}).fetch("full_name", nil),
-                         },
-                         archived: false,
-                       })
+      RawUpstreamDataConverter.convert_from_bitbucket_api(project)
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end

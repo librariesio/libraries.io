@@ -59,10 +59,7 @@ module RepositoryHost
     def self.fetch_repo(id_or_name, token = nil)
       id_or_name = id_or_name.to_i if id_or_name.match(/\A\d+\Z/)
       hash = AuthToken.fallback_client(token).repo(id_or_name, accept: "application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json").to_hash
-      hash[:keywords] = hash[:topics]
-      hash[:host_type] = "GitHub"
-      hash[:scm] = "git"
-      hash
+      RawUpstreamDataConverter.convert_from_github_api(hash)
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
@@ -154,7 +151,7 @@ module RepositoryHost
       return true if repository.forks_count == repository.forked_repositories.host(repository.host_type).count
 
       AuthToken.new_client(token).forks(repository.full_name).each do |fork|
-        Repository.create_from_hash(fork)
+        Repository.create_from_data(RawUpstreamDataConverter.convert_from_github_api(fork))
       end
     end
 
