@@ -211,6 +211,10 @@ class Repository < ApplicationRecord
     repository_organisation_id.present? ? repository_organisation : repository_user
   end
 
+  def lower_name
+    full_name&.downcase
+  end
+
   def to_s
     full_name
   end
@@ -315,10 +319,10 @@ class Repository < ApplicationRecord
 
     ActiveRecord::Base.transaction do
       g = Repository.where(host_type: (repo_host_data.host_type || "GitHub")).find_by(uuid: repo_host_data.repository_uuid)
-      g = Repository.host(repo_host_data.host_type || "GitHub").find_by("lower(full_name) = ?", repo_host_data.full_name.downcase) if g.nil?
+      g = Repository.host(repo_host_data.host_type || "GitHub").find_by("lower(full_name) = ?", repo_host_data.lower_name) if g.nil?
       g = Repository.new(uuid: repo_host_data.repository_uuid, full_name: repo_host_data.full_name) if g.nil?
       g.host_type = repo_host_data.host_type || "GitHub"
-      g.full_name = repo_host_data.full_name if g.full_name.downcase != repo_host_data.full_name.downcase
+      g.full_name = repo_host_data.full_name if g.lower_name != repo_host_data.lower_name
       g.uuid = repo_host_data.repository_uuid if g.uuid.nil?
       g.license = repo_host_data.formatted_license if repo_host_data.formatted_license
       g.source_name = (repo_host_data.source_name if repo_host_data.source_name.present?)

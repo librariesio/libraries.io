@@ -88,8 +88,8 @@ module RepositoryHost
       repo_data = self.class.fetch_repo(repository.id_or_name)
       return unless repo_data.present?
 
-      if repository.full_name.downcase != repo_data.full_name.downcase
-        clash = Repository.host(repo_data.host_type).where("lower(full_name) = ?", repo_data.full_name.downcase).first
+      if repository.lower_name != repo_data.lower_name
+        clash = Repository.host(repo_data.host_type).where("lower(full_name) = ?", repo_data.lower_name).first
         clash.destroy if clash && (!clash.repository_host.update_from_host(token) || clash.status == "Removed")
         repository.full_name = repo_data.full_name
       end

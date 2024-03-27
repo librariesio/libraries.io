@@ -42,4 +42,8 @@ RepositoryHost::RawUpstreamData = Struct.new(
   def source_name
     parent[:full_name] if fork
   end
+
+  def lower_name
+    full_name&.downcase
+  end
 end
