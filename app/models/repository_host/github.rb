@@ -59,7 +59,7 @@ module RepositoryHost
     def self.fetch_repo(id_or_name, token = nil)
       id_or_name = id_or_name.to_i if id_or_name.match(/\A\d+\Z/)
       hash = AuthToken.fallback_client(token).repo(id_or_name, accept: "application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json").to_hash
-      GithubRepositoryHostDataFactory.generate_from_api(hash)
+      RawUpstreamDataConverter.convert_from_github_api(hash)
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end

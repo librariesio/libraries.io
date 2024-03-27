@@ -183,7 +183,7 @@ module RepositoryHost
       user_name, repo_name = full_name.split("/")
       project = client.repos.get(user_name, repo_name)
 
-      BitbucketRepositoryHostDataFactory.generate_from_api(project)
+      RawUpstreamDataConverter.convert_from_bitbucket_api(project)
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end

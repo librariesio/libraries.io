@@ -164,7 +164,7 @@ module RepositoryHost
     def self.fetch_repo(full_name, token = nil)
       project = api_client(token).project(full_name, { license: true })
 
-      GitlabRepositoryHostDataFactory.generate_from_api(project)
+      RawUpstreamDataConverter.convert_from_gitlab_api(project)
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
