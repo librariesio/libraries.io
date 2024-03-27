@@ -327,7 +327,7 @@ class Repository < ApplicationRecord
       g.license = repo_host_data.formatted_license if repo_host_data.formatted_license
       g.source_name = (repo_host_data.source_name if repo_host_data.source_name.present?)
 
-      g.status = g.correct_status_from_upstream(archived_upstream: repo_host_data[:archived])
+      g.status = g.correct_status_from_upstream(archived_upstream: repo_host_data.archived)
       g.assign_attributes repo_host_data.to_repository_attrs
 
       if g.changed?
