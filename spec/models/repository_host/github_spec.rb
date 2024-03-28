@@ -22,20 +22,30 @@ describe RepositoryHost::Github do
       expect(repository_data.default_branch).to eql("main")
       expect(repository_data.description).to eql("This is the repo for Vue 2. For Vue 3, go to https://github.com/vuejs/core")
       expect(repository_data.fork).to be false
+      expect(repository_data.fork_policy).to be_nil
+      expect(repository_data.forks_count).to eql(33596)
       expect(repository_data.full_name).to eql("vuejs/vue")
       expect(repository_data.has_issues).to be true
+      expect(repository_data.has_pages).to be false
       expect(repository_data.has_wiki).to be true
       expect(repository_data.homepage).to eql("http://v2.vuejs.org")
       expect(repository_data.host_type).to eql("GitHub")
       expect(repository_data.keywords).to match_array(%w[framework frontend javascript vue])
       expect(repository_data.language).to eql("TypeScript")
       expect(repository_data.license).to eql("mit")
+      expect(repository_data.logo_url).to be_nil
+      expect(repository_data.mirror_url).to be_nil
       expect(repository_data.name).to eql("vue")
+      expect(repository_data.open_issues_count).to eql(603)
       expect(repository_data.owner).not_to be_nil
       expect(repository_data.parent).to be_nil
       expect(repository_data.is_private).to be false
+      expect(repository_data.pull_requests_enabled).to be_nil
+      expect(repository_data.pushed_at.iso8601).to eql("2024-03-14T17:24:41Z")
       expect(repository_data.repository_uuid).to eql("11730342")
       expect(repository_data.scm).to eql("git")
+      expect(repository_data.stargazers_count).to eql(206_637)
+      expect(repository_data.subscribers_count).to eql(5912)
       expect(repository_data.repository_size).to eql(32405)
     end
   end

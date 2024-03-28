@@ -171,4 +171,96 @@ http_interactions:
         "This API is no longer supported.\n\nFor information about its removal, please
         refer to the deprecation notice at: https://developer.atlassian.com/cloud/bitbucket/deprecation-notice-v1-apis/"}}'
   recorded_at: Fri, 22 Mar 2024 19:39:32 GMT
+- request:
+    method: get
+    uri: https://api.bitbucket.org/2.0/repositories/codekoala/node-iostat/forks/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - BitBucket Ruby Gem 0.1.7
+      X-Datadog-Trace-Id:
+      - '1328583822298723023'
+      X-Datadog-Parent-Id:
+      - '4088508290964722852'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - envoy
+      Vary:
+      - Authorization, Origin
+      Cache-Control:
+      - max-age=900
+      Content-Type:
+      - application/json; charset=utf-8
+      X-B3-Traceid:
+      - fa82a58466e22209
+      X-Usage-Output-Ops:
+      - '0'
+      X-Used-Mesh:
+      - 'False'
+      X-Dc-Location:
+      - Micros-3
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Date:
+      - Thu, 28 Mar 2024 20:48:02 GMT
+      X-Request-Id:
+      - fa82a58466e22209
+      X-Usage-User-Time:
+      - '0.034901'
+      X-Usage-System-Time:
+      - '0.000603'
+      X-Served-By:
+      - 0342bbcd3d75
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Envoy-Upstream-Service-Time:
+      - '72'
+      X-View-Name:
+      - bitbucket.apps.repo2.api.v20.repo.RepositoryForksHandler
+      X-B3-Spanid:
+      - 5a9065d3fe225bfc
+      Etag:
+      - '"9ef7a6f96b3f98d05691462d9b5feda5"'
+      X-Static-Version:
+      - 8ed264003e30
+      X-Content-Type-Options:
+      - nosniff
+      X-Accepted-Oauth-Scopes:
+      - repository
+      X-Render-Time:
+      - '0.06007218360900879'
+      X-Trace-Id:
+      - fa82a58466e22209
+      Connection:
+      - Keep-Alive
+      X-Usage-Input-Ops:
+      - '0'
+      X-Version:
+      - 8ed264003e30
+      X-Request-Count:
+      - '688'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Cache-Info:
+      - cached
+      Content-Length:
+      - '51'
+    body:
+      encoding: UTF-8
+      string: '{"values": [], "pagelen": 10, "size": 0, "page": 1}'
+  recorded_at: Thu, 28 Mar 2024 20:54:39 GMT
 recorded_with: VCR 6.2.0
