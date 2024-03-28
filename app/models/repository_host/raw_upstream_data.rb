@@ -12,40 +12,6 @@ RepositoryHost::RawUpstreamData = Struct.new(
   :stargazers_count, :subscribers_count, :repository_size,
   keyword_init: true
 ) do
-  def to_repository_attrs
-    attrs = {
-      default_branch: default_branch,
-      description: description,
-      fork: fork,
-      fork_policy: fork_policy,
-      forks_count: forks_count,
-      full_name: full_name,
-      has_issues: has_issues,
-      has_pages: has_pages,
-      has_wiki: has_wiki,
-      homepage: homepage,
-      host_type: host_type,
-      keywords: keywords,
-      language: language,
-      license: formatted_license,
-      logo_url: logo_url,
-      mirror_url: mirror_url,
-      name: name,
-      open_issues_count: open_issues_count,
-      private: is_private,
-      pull_requests_enabled: pull_requests_enabled,
-      pushed_at: pushed_at,
-      scm: scm,
-      size: repository_size,
-      stargazers_count: stargazers_count,
-      subscribers_count: subscribers_count,
-      uuid: repository_uuid,
-    }
-    attrs[:source_name] = source_name if fork
-
-    attrs
-  end
-
   def formatted_license
     if license
       Project.format_license(license)

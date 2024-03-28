@@ -246,4 +246,26 @@ FactoryBot.define do
     repository
     html_body { "Welcome to the jungle" }
   end
+
+  factory :raw_upstream_data, class: RepositoryHost::RawUpstreamData do
+    archived { true }
+    default_branch { "main" }
+    description { "description" }
+    fork { true }
+    full_name { "test/repo" }
+    has_issues { false }
+    has_wiki { false }
+    homepage { "http://libraries.io" }
+    host_type { "GitHub" }
+    keywords { %w[key words] }
+    language { "ruby" }
+    license { "mit" }
+    name { "repo" }
+    owner { "test" }
+    parent { { full_name: "test/parent" } }
+    is_private { false }
+    repository_uuid { "uuid" }
+    scm { "git" }
+    repository_size { 100 }
+  end
 end

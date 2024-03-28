@@ -306,36 +306,20 @@ class Repository < ApplicationRecord
     save
   end
 
-  def update_from_repository(token)
-    repository_host.update_from_host(token)
+  def update_from_repository(token = nil)
+    repo_host_data = repository_host.class.fetch_repo(id_or_name, token)
+    Repository::PersistRepositoryFromUpstream.update_from_host_data(self, repo_host_data)
+  rescue repository_host.class.api_missing_error_class
+    update!(status: "Removed") unless private?
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
-    RepositoryHost.const_get(host_type.capitalize).create(full_name, token)
+    repo_host_data = RepositoryHost.const_get(host_type.capitalize).fetch_repo(full_name, token)
+    create_from_data(repo_host_data)
   end
 
   def self.create_from_data(repo_host_data)
-    return unless repo_host_data
-
-    ActiveRecord::Base.transaction do
-      g = Repository.where(host_type: (repo_host_data.host_type || "GitHub")).find_by(uuid: repo_host_data.repository_uuid)
-      g = Repository.host(repo_host_data.host_type || "GitHub").find_by("lower(full_name) = ?", repo_host_data.lower_name) if g.nil?
-      g = Repository.new(uuid: repo_host_data.repository_uuid, full_name: repo_host_data.full_name) if g.nil?
-      g.host_type = repo_host_data.host_type || "GitHub"
-      g.full_name = repo_host_data.full_name if g.lower_name != repo_host_data.lower_name
-      g.uuid = repo_host_data.repository_uuid if g.uuid.nil?
-      g.license = repo_host_data.formatted_license if repo_host_data.formatted_license
-      g.source_name = (repo_host_data.source_name if repo_host_data.source_name.present?)
-
-      g.status = g.correct_status_from_upstream(archived_upstream: repo_host_data.archived)
-      g.assign_attributes repo_host_data.to_repository_attrs
-
-      if g.changed?
-        g.save ? g : nil
-      else
-        g
-      end
-    end
+    Repository::PersistRepositoryFromUpstream.create_or_update_from_host_data(repo_host_data)
   rescue ActiveRecord::RecordNotUnique
     nil
   end
@@ -440,31 +424,6 @@ class Repository < ApplicationRecord
                             })
       # neither readme nor repository is marked as unmaintained so remove the label from any projects that are
       projects.unmaintained.update_all(status: nil)
-    end
-  end
-
-  # Suggest the correct Repository status based on if the upstream repository data
-  # indicates it should be and the current status set on this Repository.
-  def correct_status_from_upstream(archived_upstream:)
-    if archived_upstream && status.nil?
-      StructuredLog.capture("REPOSITORY_SET_UNMAINTAINED_STATUS",
-                            {
-                              repository_host: host_type,
-                              full_name: full_name,
-                            })
-      # set to unmaintained if we do not have another status already assigned
-      "Unmaintained"
-    elsif !archived_upstream && status == "Unmaintained"
-      StructuredLog.capture("REPOSITORY_REMOVE_UNMAINTAINED_STATUS",
-                            {
-                              repository_host: host_type,
-                              full_name: full_name,
-                            })
-      # set back to nil if we currently have it marked as unmaintained
-      nil
-    else
-      # return the original status so it is not updated
-      status
     end
   end
 end
