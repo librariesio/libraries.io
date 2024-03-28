@@ -182,8 +182,9 @@ module RepositoryHost
       client = api_client(token)
       user_name, repo_name = full_name.split("/")
       project = client.repos.get(user_name, repo_name)
+      forks_response = client.repos.forks.list(user_name, repo_name)
 
-      RawUpstreamDataConverter.convert_from_bitbucket_api(project)
+      RawUpstreamDataConverter.convert_from_bitbucket_api(project, forks_response)
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
