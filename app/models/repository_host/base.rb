@@ -84,27 +84,6 @@ module RepositoryHost
       RepositoryOwner.const_get(repository.host_type.capitalize)
     end
 
-    def update_from_host(token = nil)
-      repo_data = self.class.fetch_repo(repository.id_or_name)
-      return unless repo_data.present?
-
-      if repository.lower_name != repo_data.lower_name
-        clash = Repository.host(repo_data.host_type).where("lower(full_name) = ?", repo_data.lower_name).first
-        clash.destroy if clash && (!clash.repository_host.update_from_host(token) || clash.status == "Removed")
-        repository.full_name = repo_data.full_name
-      end
-
-      # set unmaintained status for the Repository based on if the repository has been archived upstream
-      # if the Repository already has another status then just leave it alone
-      repository.status = repository.correct_status_from_upstream(archived_upstream: repo_data.archived)
-      repository.assign_attributes(repo_data.to_repository_attrs.slice(*Repository::API_FIELDS))
-      repository.save! if repository.changed?
-    rescue self.class.api_missing_error_class
-      repository.update_attribute(:status, "Removed") unless repository.private?
-    rescue *self.class::IGNORABLE_EXCEPTIONS
-      nil
-    end
-
     def gather_maintenance_stats_async
       RepositoryMaintenanceStatWorker.enqueue(repository.id, priority: :medium)
     end
