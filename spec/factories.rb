@@ -270,7 +270,7 @@ FactoryBot.define do
     owner { "test" }
     parent { { full_name: "test/parent" } }
     pull_requests_enabled { true }
-    pushed_at { 1.month.ago }
+    pushed_at { DateTime.new(2024, 1, 2) }
     is_private { false }
     repository_uuid { "uuid" }
     scm { "git" }
