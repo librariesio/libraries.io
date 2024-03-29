@@ -23,6 +23,7 @@ RSpec.describe Repository::PersistRepositoryFromUpstream do
 
       it "does not create a new Repository" do
         expect { described_class.create_or_update_from_host_data(raw_upstream_data) }.not_to change(Repository, :count)
+        expect(Repository.first.id).to eql(existing_repository.id)
       end
 
       it "updates existing repository" do
@@ -30,8 +31,7 @@ RSpec.describe Repository::PersistRepositoryFromUpstream do
 
         expected_attributes = described_class.raw_data_repository_attrs(raw_upstream_data)
 
-        # TODO: figure out how to check subset of attributes correctly
-        expect(existing_repository.reload.attributes.symbolize_keys).to include(**expected_attributes)
+        expect(Repository.find(existing_repository.id).attributes.symbolize_keys).to include(**expected_attributes)
       end
     end
   end
@@ -45,8 +45,7 @@ RSpec.describe Repository::PersistRepositoryFromUpstream do
 
       expected_attributes = described_class.raw_data_repository_attrs(raw_upstream_data)
 
-      # TODO: figure out how to check subset of attributes correctly
-      expect(existing_repository.reload.attributes.symbolize_keys).to include(**expected_attributes)
+      expect(Repository.find(existing_repository.id).attributes.symbolize_keys).to include(**expected_attributes)
     end
   end
 
@@ -59,7 +58,6 @@ RSpec.describe Repository::PersistRepositoryFromUpstream do
     end
 
     it "doesn't destroy clash on name" do
-      # TODO: figure out what is supposed to happen in this case
       described_class.remove_repository_name_clash(existing_repository.host_type, existing_repository.full_name)
 
       expect(Repository.find_by(id: existing_repository.id)).not_to be_nil

@@ -10,11 +10,6 @@ class Repository::PersistRepositoryFromUpstream
       if existing_repo.nil?
         new_repository = Repository.new(uuid: upstream_raw_host_data.repository_uuid, full_name: upstream_raw_host_data.full_name)
 
-        new_repository.host_type = upstream_raw_host_data.host_type
-
-        new_repository.license = upstream_raw_host_data.formatted_license if upstream_raw_host_data.formatted_license
-        new_repository.source_name = (upstream_raw_host_data.source_name if upstream_raw_host_data.source_name.present?)
-
         new_repository.assign_attributes(raw_data_repository_attrs(upstream_raw_host_data))
 
         new_repository.save ? new_repository : nil
@@ -63,7 +58,7 @@ class Repository::PersistRepositoryFromUpstream
                               repository_full_name: clash.full_name,
                               repository_host_type: clash.host_type,
                               repository_status: clash.status,
-                            })
+                            }.merge(clash.attributes))
       clash.destroy
     end
   end
@@ -109,6 +104,7 @@ class Repository::PersistRepositoryFromUpstream
       StructuredLog.capture("REPOSITORY_SET_UNMAINTAINED_STATUS",
                             {
                               repository_host: repository.host_type,
+                              repository_id: repository.id,
                               full_name: repository.full_name,
                             })
       # set to unmaintained if we do not have another status already assigned
@@ -117,6 +113,7 @@ class Repository::PersistRepositoryFromUpstream
       StructuredLog.capture("REPOSITORY_REMOVE_UNMAINTAINED_STATUS",
                             {
                               repository_host: repository.host_type,
+                              repository_id: repository.id,
                               full_name: repository.full_name,
                             })
       # set back to nil if we currently have it marked as unmaintained

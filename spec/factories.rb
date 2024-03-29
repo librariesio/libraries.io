@@ -254,7 +254,7 @@ FactoryBot.define do
     fork { true }
     fork_policy { "" }
     forks_count { 10 }
-    full_name { "test/repo" }
+    sequence(:full_name) { |n| "test/repo#{n}" }
     has_issues { false }
     has_pages { false }
     has_wiki { false }
