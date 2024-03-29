@@ -56,7 +56,16 @@ class Repository::PersistRepositoryFromUpstream
   def self.remove_repository_name_clash(host_type, full_name)
     # TODO: work on refactoring this out of this class and handle it in another process
     clash = Repository.host(host_type).where("lower(full_name) = ?", full_name.downcase).first
-    clash.destroy if clash && (!clash.update_from_repository || clash.status == "Removed")
+
+    if clash && (!clash.update_from_repository || clash.status == "Removed")
+      StructuredLog.capture("REMOVE_REPOSITORY_BY_NAME_CLASH",
+                            {
+                              repository_full_name: clash.full_name,
+                              repository_host_type: clash.host_type,
+                              repository_status: clash.status,
+                            })
+      clash.destroy
+    end
   end
 
   def self.raw_data_repository_attrs(raw_upstream_data)
