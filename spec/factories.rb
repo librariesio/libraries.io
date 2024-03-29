@@ -252,20 +252,30 @@ FactoryBot.define do
     default_branch { "main" }
     description { "description" }
     fork { true }
+    fork_policy { "" }
+    forks_count { 10 }
     full_name { "test/repo" }
     has_issues { false }
+    has_pages { false }
     has_wiki { false }
     homepage { "http://libraries.io" }
     host_type { "GitHub" }
     keywords { %w[key words] }
-    language { "ruby" }
-    license { "mit" }
+    language { "Ruby" }
+    license { "MIT" }
+    logo_url { "http://my.cool/logo.jpg" }
+    mirror_url { "http://some.mirror.com" }
     name { "repo" }
+    open_issues_count { 100 }
     owner { "test" }
     parent { { full_name: "test/parent" } }
+    pull_requests_enabled { true }
+    pushed_at { 1.month.ago }
     is_private { false }
     repository_uuid { "uuid" }
     scm { "git" }
+    stargazers_count { 10 }
+    subscribers_count { 10 }
     repository_size { 100 }
   end
 end

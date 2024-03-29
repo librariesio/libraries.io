@@ -15,7 +15,6 @@ RSpec.describe Repository::PersistRepositoryFromUpstream do
 
       expected_attributes = described_class.raw_data_repository_attrs(raw_upstream_data)
 
-      # TODO: figure out how to check subset of attributes correctly
       expect(Repository.first.attributes.symbolize_keys).to include(**expected_attributes)
     end
 
@@ -188,19 +187,30 @@ RSpec.describe Repository::PersistRepositoryFromUpstream do
       expect(mapped.keys).to contain_exactly(
         :default_branch,
         :description,
+        :fork,
+        :fork_policy,
+        :forks_count,
         :full_name,
         :has_issues,
+        :has_pages,
         :has_wiki,
         :homepage,
         :host_type,
         :keywords,
         :language,
         :license,
+        :logo_url,
+        :mirror_url,
         :name,
+        :open_issues_count,
         :private,
+        :pull_requests_enabled,
+        :pushed_at,
         :scm,
         :size,
         :source_name,
+        :stargazers_count,
+        :subscribers_count,
         :uuid
       )
     end
