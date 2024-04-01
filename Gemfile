@@ -29,8 +29,6 @@ gem "faraday-http-cache"
 gem "faraday_middleware"
 gem "fast_blank"
 gem "ffi"
-gem "fog-aws"
-gem "fog-google"
 gem "font-awesome-rails", "~> 4"
 gem "foreman", require: false
 gem "gemoji"
