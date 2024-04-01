@@ -20,8 +20,8 @@ RSpec.configure do |config|
 
   config.around :each, elasticsearch: true do |example|
     [Project, Repository].each do |model|
-      model.__elasticsearch__.create_index!(force: true)
-      model.__elasticsearch__.import force: true
+      model.__elasticsearch__.create_index!({force: true})
+      model.__elasticsearch__.import({force: true})
     end
     example.run
     [Project, Repository].each do |model|
