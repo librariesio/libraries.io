@@ -52,7 +52,9 @@ class Repository::PersistRepositoryFromUpstream
     # TODO: work on refactoring this out of this class and handle it in another process
     clash = Repository.host(host_type).where("lower(full_name) = ?", full_name.downcase).first
 
-    if clash && (!clash.update_from_repository || clash.status == "Removed")
+    return unless clash
+    return unless clash.update_from_repository
+    return unless clash.status == "Removed"
       StructuredLog.capture("REMOVE_REPOSITORY_BY_NAME_CLASH",
                             {
                               repository_full_name: clash.full_name,
