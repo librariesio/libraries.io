@@ -9,6 +9,14 @@ describe PackageManager::NuGet do
     expect(described_class.formatted_name).to eq("NuGet")
   end
 
+  it 'has escaped name of "SömePackage"' do
+    expect(described_class.escaped_name("SömePackage")).to eq("S%C3%B6mePackage")
+  end
+
+  it 'has unescaped name of "SömePackage"' do
+    expect(described_class.unescaped_name("S%C3%B6mePackage")).to eq("SömePackage")
+  end
+
   describe "#package_link" do
     it "returns a link to project website" do
       expect(described_class.package_link(project)).to eq("https://www.nuget.org/packages/foo/")
@@ -218,6 +226,19 @@ describe PackageManager::NuGet do
           end
         end
       end
+
+      context "nuspec with non-ASCII name" do
+        let(:name) { "SömePackage" }
+        let(:entry_name) { "#{name.upcase}.nuspec" }
+
+        context "xml" do
+          let(:entry_content) { "<xml><cat /></xml>" }
+
+          it "returns xml" do
+            expect(result).to eq(Ox.parse(entry_content))
+          end
+        end
+      end
     end
   end
 
@@ -230,6 +251,16 @@ describe PackageManager::NuGet do
     context "when input matches canonical" do
       let(:name) { canonical_name }
       let(:cassette) { "nu_get/canonical_name/canonical_name_match" }
+
+      it "returns same name" do
+        expect(result).to eq(name)
+      end
+    end
+
+    context "when non-ASCII input matches canonical" do
+      let(:canonical_name) { "Felsökning" }
+      let(:name) { canonical_name }
+      let(:cassette) { "nu_get/canonical_name/canonical_non_ascii_name_match" }
 
       it "returns same name" do
         expect(result).to eq(name)
