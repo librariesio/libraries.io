@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-ruby "2.7.8"
+ruby "3.0.5"
 
 gem "active_model_serializers"
 gem "api-pagination"
@@ -28,8 +28,6 @@ gem "escape_utils"
 gem "faraday-http-cache"
 gem "faraday_middleware"
 gem "fast_blank"
-gem "fast_xor"
-gem "fast_xs"
 gem "ffi"
 gem "fog-aws"
 gem "fog-google"

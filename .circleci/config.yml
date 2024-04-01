@@ -8,7 +8,7 @@ executors:
   libraries:
     working_directory: ~/libraries
     docker:
-      - image: ruby:2.7.8-slim-bullseye
+      - image: ruby:3.0.5-slim-bullseye
         environment:
           PGHOST: 127.0.0.1
           PGUSER: postgres
