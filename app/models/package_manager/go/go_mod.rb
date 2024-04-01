@@ -4,10 +4,10 @@ class PackageManager::Go
   class GoMod
     attr_reader :mod_contents
 
-    RETRACT_WITH_PARENS = /^\s*retract\s\((.*?)\)/m.freeze
-    RETRACT_WITHOUT_PARENS = /retract\s(.+)/.freeze
-    MODULE_REGEX = /module\s+(.+)/.freeze
-    LOCAL_FILEPATH_REGEXP = /\.?\.\//.freeze
+    RETRACT_WITH_PARENS = /^\s*retract\s\((.*?)\)/m
+    RETRACT_WITHOUT_PARENS = /retract\s(.+)/
+    MODULE_REGEX = /module\s+(.+)/
+    LOCAL_FILEPATH_REGEXP = /\.?\.\//
 
     def initialize(mod_contents)
       @mod_contents = mod_contents

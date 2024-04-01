@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-PLATFORM_CONSTRAINT = /[\w-]+/.freeze
-PROJECT_CONSTRAINT = /[^\/]+/.freeze
-VERSION_CONSTRAINT = /[\w.-]+/.freeze
+PLATFORM_CONSTRAINT = /[\w-]+/
+PROJECT_CONSTRAINT = /[^\/]+/
+VERSION_CONSTRAINT = /[\w.-]+/
 
 class IsAdminConstraint
   def matches?(request)

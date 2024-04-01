@@ -6,7 +6,7 @@ module PackageManager
     HAS_DEPENDENCIES = true
     BIBLIOTHECARY_SUPPORT = true
     COLOR = "#375eab"
-    VALID_HOST = /\./.freeze
+    VALID_HOST = /\./
     KNOWN_HOSTS = [
       "bitbucket.org",
       "github.com",
@@ -27,7 +27,7 @@ module PackageManager
     DISCOVER_URL = "https://pkg.go.dev"
     URL = DISCOVER_URL
 
-    VERSION_MODULE_REGEX = /(.+)\/(v\d+)(\/|$)/.freeze
+    VERSION_MODULE_REGEX = /(.+)\/(v\d+)(\/|$)/
 
     class UnknownGoType < StandardError
       def initialize(name, page_types)
