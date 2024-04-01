@@ -16,7 +16,7 @@ module PackageManager
     end
 
     def self.download_url_by_name(name, version = nil)
-      "https://www.nuget.org/api/v2/package/#{name}/#{version}"
+      "https://www.nuget.org/api/v2/package/#{escaped_name(name)}/#{version}"
     end
 
     def self.download_url(db_project, version = nil)
@@ -103,7 +103,9 @@ module PackageManager
         zip.each do |file|
           # the correct nuspec file will be at the root of the tree with the package name in the filename
           # package identifiers are case-insensitive: https://learn.microsoft.com/en-us/nuget/reference/nuspec#id
-          file.get_input_stream { |io| nuspec = Ox.parse(io.read) } if file.name.downcase["#{name}.nuspec".downcase]
+          if file.name.tap { |name| name.force_encoding("UTF-8") }.downcase["#{name}.nuspec".downcase]
+            file.get_input_stream { |io| nuspec = Ox.parse(io.read) }
+          end
         end
       end
 
@@ -122,7 +124,7 @@ module PackageManager
     end
 
     def self.get_releases(name)
-      SemverRegistrationApiProjectReleasesBuilder.build(project_name: name).releases
+      SemverRegistrationApiProjectReleasesBuilder.build(project_name: escaped_name(name)).releases
     rescue StandardError => e
       Rails.logger.error("Unable to retrieve releases for NuGet project #{name}: #{e.message}")
 
@@ -172,6 +174,16 @@ module PackageManager
 
     class ParseCanonicalNameFailedError < StandardError; end
 
+    # Escape name because NuGet packages can contain non-ASCII characters, e.g. Felsökning
+    def self.escaped_name(name)
+      URI::Parser.new.escape(name)
+    end
+
+    # Unescape name when we want to store the actual bytes instead of URI escaped bytes, e.g. Fels%C3%B6kning
+    def self.unescaped_name(name)
+      URI::Parser.new.unescape(name)
+    end
+
     # Returns canonical casing for case-insensitive NuGet package names
     # @param name [String] A given project name to check
     # @return [String] If successfully found, the canonical form of the given name
@@ -179,7 +191,7 @@ module PackageManager
     # @return [false] The scrape succeeded, but we didn't detect a name
     def self.fetch_canonical_nuget_name(name)
       base_url = "https://nuget.org/packages/"
-      page = get_html("#{base_url}#{name}")
+      page = get_html("#{base_url}#{escaped_name(name)}")
       og_url_element = page.css("meta[property='og:url']").first
 
       if page.text.empty? # Request failed, likely temporarily
@@ -201,7 +213,7 @@ module PackageManager
         raise ParseCanonicalNameFailedError, "Could not parse a canonical name for `#{name}`. Did upstream change their markup structure?"
       end
 
-      canonical_name
+      unescaped_name(canonical_name)
     end
   end
 end
