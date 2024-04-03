@@ -107,8 +107,8 @@ module PackageManager
       vers = mapped_project[:versions].find { |v| v["version"] == version }
       return [] if vers.nil?
 
-      map_dependencies(vers.fetch("require", {}).reject { |k, _v| k == "php" }, "runtime") +
-        map_dependencies(vers.fetch("require-dev", {}).reject { |k, _v| k == "php" }, "Development")
+      map_dependencies(vers.fetch("require", {}).except("php"), "runtime") +
+        map_dependencies(vers.fetch("require-dev", {}).except("php"), "Development")
     end
   end
 end

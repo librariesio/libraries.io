@@ -5,7 +5,7 @@ module PackageManager
     class GoMissingVersionRemover
       # should match the same regex that Golang uses to identify pseudo version numbers
       # https://github.com/golang/mod/blob/master/module/pseudo.go#L47C39-L47C135
-      PSEUDO_VERSION_REGEX = /^v[0-9]+\.(0\.0-|\d+\.\d+-([^+]*\.)?0\.)\d{14}-[A-Za-z0-9]+(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$/.freeze
+      PSEUDO_VERSION_REGEX = /^v[0-9]+\.(0\.0-|\d+\.\d+-([^+]*\.)?0\.)\d{14}-[A-Za-z0-9]+(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$/
 
       def initialize(
         project:,

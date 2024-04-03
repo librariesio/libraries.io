@@ -10,8 +10,8 @@ module PackageManager
     COLOR = "#3572A5"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
     # Adapted from https://peps.python.org/pep-0508/#names to include extras
-    PEP_508_NAME_REGEX = /[A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9]/i.freeze
-    PEP_508_NAME_WITH_EXTRAS_REGEX = /(^#{PEP_508_NAME_REGEX}\s*(?:\[#{PEP_508_NAME_REGEX}(?:,\s*#{PEP_508_NAME_REGEX})*\])?)/i.freeze
+    PEP_508_NAME_REGEX = /[A-Z0-9][A-Z0-9._-]*[A-Z0-9]|[A-Z0-9]/i
+    PEP_508_NAME_WITH_EXTRAS_REGEX = /(^#{PEP_508_NAME_REGEX}\s*(?:\[#{PEP_508_NAME_REGEX}(?:,\s*#{PEP_508_NAME_REGEX})*\])?)/i
     # This is unused but left here for possible future use and so we can quickly reference the set of valid
     # environment markers.
     PEP_508_ENVIRONMENT_MARKERS = %w[

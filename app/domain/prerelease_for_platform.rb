@@ -4,7 +4,7 @@
 # It only checks against specific platforms, not against the
 # general cases.
 class PrereleaseForPlatform
-  PYPI_PRERELEASE = /(a|b|rc|dev)[-_.]?[0-9]*$/.freeze
+  PYPI_PRERELEASE = /(a|b|rc|dev)[-_.]?[0-9]*$/
 
   # @return [Boolean,Nil] True/False if the version string is a prerelease for
   #                       the given platform, or nil if the platform is not supported.
