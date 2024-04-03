@@ -53,16 +53,16 @@ class Repository::PersistRepositoryFromUpstream
     clash = Repository.host(host_type).where("lower(full_name) = ?", full_name.downcase).first
 
     return unless clash
-    return unless clash.update_from_repository
-    return unless clash.status == "Removed"
-      StructuredLog.capture("REMOVE_REPOSITORY_BY_NAME_CLASH",
-                            {
-                              repository_full_name: clash.full_name,
-                              repository_host_type: clash.host_type,
-                              repository_status: clash.status,
-                            }.merge(clash.attributes))
-      clash.destroy
-    end
+    # skip if the repository host still provides info for the clash and it is not marked as removed
+    return if clash.update_from_repository && clash.status != "Removed"
+
+    StructuredLog.capture("REMOVE_REPOSITORY_BY_NAME_CLASH",
+                          {
+                            repository_full_name: clash.full_name,
+                            repository_host_type: clash.host_type,
+                            repository_status: clash.status,
+                          }.merge(clash.attributes))
+    clash.destroy
   end
 
   def self.raw_data_repository_attrs(raw_upstream_data)

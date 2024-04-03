@@ -47,41 +47,74 @@ RSpec.describe Repository::PersistRepositoryFromUpstream do
 
       expect(Repository.find(existing_repository.id).attributes.symbolize_keys).to include(**expected_attributes)
     end
+
+    context "with name changed in upstream data" do
+      let(:full_name) { "test/name-change" }
+      let(:raw_upstream_data) { build(:raw_upstream_data, full_name: full_name) }
+      let(:existing_repository) { create(:repository, full_name: full_name) }
+      let(:incoming_repository) { build(:repository) }
+
+      context "upstream update fails" do
+        before do
+          allow(RepositoryHost::Github).to receive(:fetch_repo).with(existing_repository.id_or_name, nil).and_return(nil)
+        end
+
+        it "deletes clashed name" do
+          described_class.update_from_host_data(incoming_repository, raw_upstream_data)
+          expect(Repository.find_by(id: existing_repository.id)).to be_nil
+        end
+      end
+
+      context "clash is marked as removed" do
+        before do
+          allow(RepositoryHost::Github).to receive(:fetch_repo).with(existing_repository.id_or_name, nil).and_return(raw_upstream_data)
+        end
+
+        let(:existing_repository) { create(:repository, full_name: full_name, status: "Removed") }
+
+        it "deletes clashed name" do
+          described_class.update_from_host_data(incoming_repository, raw_upstream_data)
+          expect(Repository.find_by(id: existing_repository.id)).to be_nil
+        end
+      end
+    end
   end
 
   describe "#remove_repository_name_clash" do
     let(:full_name) { "test/clash" }
     let(:existing_repository) { create(:repository, full_name: full_name) }
 
-    before do
-      allow_any_instance_of(Repository).to receive(:update_from_repository).and_return(true)
-    end
-
-    it "doesn't destroy clash on name" do
-      described_class.remove_repository_name_clash(existing_repository.host_type, existing_repository.full_name)
-
-      expect(Repository.find_by(id: existing_repository.id)).not_to be_nil
-    end
-
-    context "with removed status" do
-      let(:existing_repository) { create(:repository, full_name: full_name, status: "Removed") }
-
-      it "destroys the removed repository" do
-        described_class.remove_repository_name_clash(existing_repository.host_type, existing_repository.full_name)
-
-        expect(Repository.find_by(id: existing_repository.id)).to be_nil
-      end
-    end
-
-    context "with failure to update" do
+    context "with mocked update" do
       before do
-        allow_any_instance_of(Repository).to receive(:update_from_repository).and_return(nil)
+        allow_any_instance_of(Repository).to receive(:update_from_repository).and_return(true)
       end
 
-      it "destroys the removed repository" do
+      it "doesn't destroy clash on name" do
         described_class.remove_repository_name_clash(existing_repository.host_type, existing_repository.full_name)
 
-        expect(Repository.find_by(id: existing_repository.id)).to be_nil
+        expect(Repository.find_by(id: existing_repository.id)).not_to be_nil
+      end
+
+      context "with removed status" do
+        let(:existing_repository) { create(:repository, full_name: full_name, status: "Removed") }
+
+        it "destroys the removed repository" do
+          described_class.remove_repository_name_clash(existing_repository.host_type, existing_repository.full_name)
+
+          expect(Repository.find_by(id: existing_repository.id)).to be_nil
+        end
+      end
+
+      context "with failure to update" do
+        before do
+          allow_any_instance_of(Repository).to receive(:update_from_repository).and_return(nil)
+        end
+
+        it "destroys the removed repository" do
+          described_class.remove_repository_name_clash(existing_repository.host_type, existing_repository.full_name)
+
+          expect(Repository.find_by(id: existing_repository.id)).to be_nil
+        end
       end
     end
   end
