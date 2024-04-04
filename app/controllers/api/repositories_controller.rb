@@ -14,30 +14,37 @@ class Api::RepositoriesController < Api::ApplicationController
   end
 
   def dependencies
-    repo_json = RepositorySerializer.new(@repository).as_json
-    repo_json[:dependencies] = map_dependencies(@repository.repository_dependencies.includes(:project, :manifest) || [])
-
-    render json: repo_json
+    cache_key = "repository_dependencies:#{@repository.id}"
+    json_hash = Rails.cache.fetch(cache_key, expires_in: 1.day) do
+      result = RepositorySerializer.new(@repository).as_json
+      result[:dependencies] = map_dependencies(@repository.repository_dependencies.includes(:project, :manifest) || []).map(&:as_json)
+      result
+    end
+    render json: json_hash
   end
 
   # Terse payload with only the information that shields.io needs.
   def shields_dependencies
-    # The distinct cuts down the query since repositories that have many manifests tend to have many dupes.
-    deps = RepositoryDependency
-      .strict_loading
-      .where(repository: @repository)
-      .select("DISTINCT ON (project_id, requirements) *")
-      .includes(:project)
+    cache_key = "shields_dependencies:#{@repository.id}"
+    json_hash = Rails.cache.fetch(cache_key, expires_in: 1.day) do
+      # The distinct cuts down the query since repositories that have many manifests tend to have many dupes.
+      deps = RepositoryDependency
+        .strict_loading
+        .where(repository: @repository)
+        .select("DISTINCT ON (project_id, requirements) *")
+        .includes(:project)
 
-    deprecated_count = deps
-      .select(&:deprecated?)
-      .size
+      deprecated_count = deps
+        .select(&:deprecated?)
+        .size
 
-    outdated_count = deps
-      .select(&:outdated?)
-      .size
+      outdated_count = deps
+        .select(&:outdated?)
+        .size
+      { deprecated_count: deprecated_count, outdated_count: outdated_count }
+    end
 
-    render json: { deprecated_count: deprecated_count, outdated_count: outdated_count }
+    render json: json_hash
   end
 
   private
