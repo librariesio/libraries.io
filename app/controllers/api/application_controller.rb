@@ -5,10 +5,12 @@ class Api::ApplicationController < ApplicationController
   before_action :check_api_key
   before_action :add_rate_limit_headers
 
+  RACK_ATTACK_THROTTLE_KEY = "rack.attack.throttle_data"
+
   private
 
   def add_rate_limit_headers
-    throttle_data = request.env["rack.attack.throttle_data"]
+    throttle_data = request.env[RACK_ATTACK_THROTTLE_KEY]
       &.values
       &.min_by { |t| t[:limit] - t[:count] }
     return unless throttle_data

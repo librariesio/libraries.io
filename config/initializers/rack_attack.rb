@@ -45,8 +45,7 @@ class Rack::Attack
 
   # Adds RateLimit-X headers to throttled responses
   self.throttled_responder = lambda do |request|
-    match_data = request.env["rack.attack.match_data"]
-    match_data[:epoch_time]
+    throttle_data = request.env["rack.attack.match_data"]
 
     # Include the equivalent "X-RateLimit-Reset" and "Retry-After" as seconds left before reset,
     # for clients that might look for either one. Docs:
@@ -56,12 +55,15 @@ class Rack::Attack
     #
     #   * "Retry-After" is a multi-purpose header that means the same thing
     #     (fropm RFC9110 https://www.rfc-editor.org/rfc/rfc9110#field.retry-after)
-    retry_after = (throttle_data[:limit] - throttle_data[:count]).to_s
+    now = throttle_data[:epoch_time]
+    retry_after = (throttle_data[:period] - (now % throttle_data[:period])).to_s
 
-    headers["X-RateLimit-Limit"]     = throttle_data[:limit].to_s
-    headers["X-RateLimit-Remaining"] = "0"
-    headers["X-RateLimit-Reset"]     = retry_after
-    headers["Retry-After"]           = retry_after
+    headers = {
+      "X-RateLimit-Limit" => throttle_data[:limit].to_s,
+      "X-RateLimit-Remaining" => "0",
+      "X-RateLimit-Reset" => retry_after,
+      "Retry-After" => retry_after,
+    }
 
     [429, headers, ["Retry later\n"]]
   end
