@@ -15,7 +15,12 @@ class Api::RepositoriesController < Api::ApplicationController
 
   def dependencies
     repo_json = RepositorySerializer.new(@repository).as_json
-    repo_json[:dependencies] = map_dependencies(@repository.repository_dependencies.includes(:project, :manifest) || [])
+    repository_dependencies = RepositoryDependency
+      .where(repository: @repository)
+      .where(manifest: @repository.manifests.order(created_at: :desc).limit(10))
+      .includes(:project, :manifest)
+
+    repo_json[:dependencies] = map_dependencies(repository_dependencies)
 
     render json: repo_json
   end
