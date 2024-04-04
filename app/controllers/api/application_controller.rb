@@ -3,8 +3,24 @@
 class Api::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :check_api_key
+  before_action :add_rate_limit_headers
 
   private
+
+  def add_rate_limit_headers
+    throttle_data = request.env["rack.attack.throttle_data"]
+      &.values
+      &.min_by { |t| t[:limit] - t[:count] }
+    return unless throttle_data
+
+    now = throttle_data[:epoch_time]
+
+    headers["X-RateLimit-Limit"]     = throttle_data[:limit].to_s
+    headers["X-RateLimit-Remaining"] = (throttle_data[:limit] - throttle_data[:count]).to_s
+    # "A response that includes the RateLimit-Limit header field MUST also include the RateLimit-Reset."
+    # (from the IETF draft https://www.ietf.org/archive/id/draft-ietf-httpapi-ratelimit-headers-07.html#section-4)
+    headers["X-RateLimit-Reset"]     = (throttle_data[:period] - (now % throttle_data[:period])).to_s
+  end
 
   def disabled_in_read_only
     render json: { error: "Error 503, Can't perform this action, the site is in read-only mode temporarily." }, status: :service_unavailable if in_read_only_mode?
