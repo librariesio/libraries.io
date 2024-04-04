@@ -20,6 +20,28 @@ describe "Api::RepositoriesController" do
     end
   end
 
+  context "with dependencies" do
+    let!(:manifest) { create(:manifest, repository: repository) }
+
+    let!(:deprecated_project) { create(:project, status: "Deprecated", repository: repository) }
+    let!(:deprecated_dependency) { create(:repository_dependency, repository: repository, manifest: manifest, project: deprecated_project) }
+
+    let!(:outdated_project) { create(:project, repository: repository) }
+    let!(:outdated_dependency) { create(:repository_dependency, repository: repository, requirements: "<1.0.0", manifest: manifest, project: outdated_project) }
+
+    describe "GET /api/github/:owner/:name/shields_dependencies", type: :request do
+      it "renders successfully" do
+        # TODO: for some reason the factory can't save these
+        outdated_project.update_columns(latest_stable_release_number: "9.9.9", latest_release_number: "9.9.9")
+
+        get "/api/github/#{repository.full_name}/shields_dependencies"
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to start_with("application/json")
+        expect(json.to_json).to eq({ deprecated_count: 1, outdated_count: 1 }.to_json)
+      end
+    end
+  end
+
   describe "GET /api/github/:owner/:name/projects", type: :request do
     it "renders successfully" do
       get "/api/github/#{repository.full_name}/projects"

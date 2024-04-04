@@ -20,6 +20,26 @@ class Api::RepositoriesController < Api::ApplicationController
     render json: repo_json
   end
 
+  # Terse payload with only the information that shields.io needs.
+  def shields_dependencies
+    # The distinct cuts down the query since repositories that have many manifests tend to have many dupes.
+    deps = RepositoryDependency
+      .strict_loading
+      .where(repository: @repository)
+      .select("DISTINCT ON (project_id, requirements) *")
+      .includes(:project)
+
+    deprecated_count = deps
+      .select(&:deprecated?)
+      .size
+
+    outdated_count = deps
+      .select(&:outdated?)
+      .size
+
+    render json: { deprecated_count: deprecated_count, outdated_count: outdated_count }
+  end
+
   private
 
   def find_repo
