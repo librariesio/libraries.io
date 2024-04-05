@@ -15,10 +15,6 @@ FactoryBot.define do
     "andrew#{n}"
   end
 
-  sequence :repository_url do |n|
-    "https://github.com/rails/rails#{n}"
-  end
-
   trait :removed do
     status { "Removed" }
   end
@@ -31,7 +27,7 @@ FactoryBot.define do
     language        { "Ruby" }
     licenses        { "MIT" }
     keywords_array  { ["web"] }
-    repository_url
+    repository_url  { "https://github.com/rails/#{name}" }
     dependent_repos_count { 0 }
     repository { nil }
 
