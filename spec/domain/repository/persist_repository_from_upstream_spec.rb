@@ -60,8 +60,18 @@ RSpec.describe Repository::PersistRepositoryFromUpstream do
         end
 
         it "deletes clashed name" do
-          described_class.update_from_host_data(incoming_repository, raw_upstream_data)
+          expect(Repository.count).to eql(1)
+          expect { described_class.update_from_host_data(incoming_repository, raw_upstream_data) }.not_to change(Repository, :count)
           expect(Repository.find_by(id: existing_repository.id)).to be_nil
+        end
+
+        it "replaces the clashed repository" do
+          expect(Repository.count).to eql(1)
+          expect { described_class.update_from_host_data(incoming_repository, raw_upstream_data) }.not_to change(Repository, :count)
+
+          created_repository = Repository.find_by(full_name: full_name)
+          expect(created_repository).not_to be_nil
+          expect(created_repository.id).not_to eql(existing_repository.id)
         end
       end
 
