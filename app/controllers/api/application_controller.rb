@@ -17,11 +17,11 @@ class Api::ApplicationController < ApplicationController
 
     now = throttle_data[:epoch_time]
 
-    headers["X-RateLimit-Limit"]     = throttle_data[:limit].to_s
+    headers["X-RateLimit-Limit"] = throttle_data[:limit].to_s
     headers["X-RateLimit-Remaining"] = (throttle_data[:limit] - throttle_data[:count]).to_s
     # "A response that includes the RateLimit-Limit header field MUST also include the RateLimit-Reset."
     # (from the IETF draft https://www.ietf.org/archive/id/draft-ietf-httpapi-ratelimit-headers-07.html#section-4)
-    headers["X-RateLimit-Reset"]     = (throttle_data[:period] - (now % throttle_data[:period])).to_s
+    headers["X-RateLimit-Reset"] = (throttle_data[:period] - (now % throttle_data[:period])).to_s
   end
 
   def disabled_in_read_only
