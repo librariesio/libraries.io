@@ -30,9 +30,13 @@ class ProjectSerializer < ActiveModel::Serializer
     status
   ]
 
-  has_many :versions
+  has_many :versions, if: :include_versions?
 
   attribute :updated_at, if: :show_updated_at?
+
+  def include_versions?
+    instance_options.fetch(:include_versions, true)
+  end
 
   def show_updated_at?
     instance_options[:show_updated_at]
