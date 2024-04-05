@@ -300,6 +300,22 @@ describe Project, type: :model do
         end
       end
     end
+
+    context "a hidden project that is active" do
+      let!(:project) { Project.create(platform: "NPM", name: "react", status: "Hidden") }
+
+      it "should keep the project hidden" do
+        VCR.use_cassette("project/check_status/react") do
+          project.check_status
+
+          project.reload
+
+          expect(project.status).to eq("Hidden")
+          expect(project.status_checked_at).to eq(DateTime.current)
+          expect(project.updated_at).to eq(DateTime.current)
+        end
+      end
+    end
   end
 
   describe "DeletedProject management" do
