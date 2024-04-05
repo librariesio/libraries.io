@@ -26,6 +26,10 @@ describe "API::SearchController", elasticsearch: true do
     end
 
     context "with valid api key" do
+      before do
+        Project.__elasticsearch__.refresh_index!
+      end
+
       it "renders successfully" do
         get "/api/search", params: { api_key: user.api_key, q: "charisma" }
 
