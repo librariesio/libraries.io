@@ -14,7 +14,7 @@ ActiveSupport::Notifications.subscribe(/rack_attack/) do |_name, _start, _finish
 
   Rails.logger.info "[RACK_ATTACK] " \
                     "method=#{req.request_method} " \
-                    "path=#{req.fullpath} " \
+                    "path=#{req.path} " \
                     "match_type=#{match_type} " \
                     "match=#{match} " \
                     "match_discriminator=#{match_discriminator} " \
