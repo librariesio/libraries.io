@@ -302,7 +302,7 @@ describe Project, type: :model do
     end
 
     context "a hidden project that is active" do
-      let!(:project) { Project.create(platform: "NPM", name: "react", status: "Hidden") }
+      let!(:project) { create(:project, :npm, name: "react", status: "Hidden") }
 
       it "should keep the project hidden" do
         VCR.use_cassette("project/check_status/react") do

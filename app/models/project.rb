@@ -640,7 +640,7 @@ class Project < ApplicationRecord
     return if url.blank?
 
     # "Hidden" is a state set by admins, and we don't want to override that decision.
-    return if status == "Hidden"
+    return if hidden?
 
     response = Typhoeus.get(url)
     if platform.downcase == "packagist" && [302, 404].include?(response.response_code)
