@@ -178,7 +178,7 @@ describe Project, type: :model do
   end
 
   describe "#async_sync" do
-    let!(:project) { Project.create(platform: "NPM", name: "jade") }
+    let!(:project) { create(:project, platform: "NPM", name: "jade") }
 
     it "should kick off package manager download jobs" do
       expect { project.async_sync }.to change { PackageManagerDownloadWorker.jobs.size }.by(1)
@@ -193,7 +193,7 @@ describe Project, type: :model do
     before { travel_to DateTime.current }
 
     context "entire project deprecated with message" do
-      let!(:project) { Project.create(platform: "NPM", name: "jade", status: "", updated_at: 1.week.ago) }
+      let!(:project) { create(:project, platform: "NPM", name: "jade", status: "", updated_at: 1.week.ago) }
 
       it "should use the result of entire_package_deprecation_info" do
         VCR.use_cassette("project/check_status/jade") do
@@ -211,7 +211,7 @@ describe Project, type: :model do
 
     context "a go project missing from upstream" do
       context "recently created" do
-        let!(:project) { Project.create(platform: "Go", name: "github.com/some-nonexistent-fake/pkg", status: nil, created_at: 1.hour.ago) }
+        let!(:project) { create(:project, platform: "Go", name: "github.com/some-nonexistent-fake/pkg", status: nil, created_at: 1.hour.ago) }
 
         it "should not mark it as Removed" do
           VCR.use_cassette("project/check_status/go") do
@@ -224,7 +224,7 @@ describe Project, type: :model do
       end
 
       context "not recently created" do
-        let!(:project) { Project.create(platform: "Go", name: "github.com/some-nonexistent-fake/pkg", status: nil, created_at: 1.month.ago) }
+        let!(:project) { create(:project, platform: "Go", name: "github.com/some-nonexistent-fake/pkg", status: nil, created_at: 1.month.ago) }
 
         it "should mark it as Removed" do
           VCR.use_cassette("project/check_status/go") do
@@ -238,7 +238,7 @@ describe Project, type: :model do
     end
 
     context "some of project deprecated" do
-      let!(:project) { Project.create(platform: "NPM", name: "react", status: nil, updated_at: 1.week.ago) }
+      let!(:project) { create(:project, platform: "NPM", name: "react", status: nil, updated_at: 1.week.ago) }
 
       it "should use the result of entire_package_deprecation_info" do
         VCR.use_cassette("project/check_status/react") do
@@ -255,7 +255,7 @@ describe Project, type: :model do
     end
 
     context "deprecated project no longer deprecated" do
-      let!(:project) { Project.create(platform: "NPM", name: "react", status: "Deprecated", updated_at: 1.week.ago) }
+      let!(:project) { create(:project, platform: "NPM", name: "react", status: "Deprecated", updated_at: 1.week.ago) }
 
       it "should mark the project no longer deprecated" do
         VCR.use_cassette("project/check_status/react") do
@@ -273,7 +273,7 @@ describe Project, type: :model do
 
     context "removed project no longer removed" do
       context "when package manager can have entire package deprecated" do
-        let!(:project) { Project.create(platform: "NPM", name: "react", status: "Removed") }
+        let!(:project) { create(:project, platform: "NPM", name: "react", status: "Removed") }
 
         it "should mark the project no longer removed" do
           VCR.use_cassette("project/check_status/react") do
@@ -287,7 +287,7 @@ describe Project, type: :model do
       end
 
       context "when package manager cannot have entire package deprecated" do
-        let!(:project) { Project.create(platform: "Rubygems", name: "rails", status: "Removed") }
+        let!(:project) { create(:project, platform: "Rubygems", name: "rails", status: "Removed") }
 
         it "should mark the project no longer removed" do
           VCR.use_cassette("project/check_status/rails") do
@@ -319,7 +319,7 @@ describe Project, type: :model do
   end
 
   describe "DeletedProject management" do
-    let!(:project) { Project.create(platform: "NPM", name: "react") }
+    let!(:project) { create(:project, platform: "NPM", name: "react") }
 
     it "should create a DeletedProject when destroyed" do
       expect(DeletedProject.count).to eq(0)
@@ -337,7 +337,7 @@ describe Project, type: :model do
       expect(digest).to eq("ef64ba66a6ca7f649a3e384bf2345e05698d6100b931fe14a21853a3af82900c")
       project.destroy!
       expect(DeletedProject.count).to eq(1)
-      Project.create(platform: "NPM", name: "react")
+      create(:project, platform: "NPM", name: "react")
       expect(DeletedProject.count).to eq(0)
     end
   end
