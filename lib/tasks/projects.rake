@@ -71,6 +71,7 @@ namespace :projects do
 
     project_ids_to_check = Project
       .platform(platforms_for_status_checks)
+      .where.not(status: "Hidden") # "Hidden" is a state set by admins, and we don't want to override that decision, so skip these.
       .where("status_checked_at IS NULL OR status_checked_at < ?", 1.week.ago)
       .order("status_checked_at ASC NULLS FIRST")
       .limit(max_num_of_projects_to_check)
