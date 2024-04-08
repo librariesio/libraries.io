@@ -639,6 +639,9 @@ class Project < ApplicationRecord
     update_column(:status_checked_at, DateTime.current)
     return if url.blank?
 
+    # "Hidden" is a state set by admins, and we don't want to override that decision.
+    return if hidden?
+
     response = Typhoeus.get(url)
     if platform.downcase == "packagist" && [302, 404].include?(response.response_code)
       update_attribute(:status, "Removed")
