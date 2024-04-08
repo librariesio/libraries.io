@@ -118,14 +118,6 @@ class ProjectsController < ApplicationController
     redirect_back fallback_location: project_path(@project.to_param)
   end
 
-  def trending
-    orginal_scope = Project.includes(:repository).recently_created.maintained
-    scope = current_platform.present? ? orginal_scope.platform(current_platform) : orginal_scope
-    scope = current_language.present? ? scope.language(current_language) : scope
-    @projects = scope.hacker_news.paginate(page: page_number, per_page: 20)
-    @platforms = orginal_scope.where("repositories.stargazers_count > 0").group("projects.platform").count.reject { |k, _v| k.blank? }.sort_by { |_k, v| v }.reverse.first(20)
-  end
-
   def unsubscribe; end
 
   def sync

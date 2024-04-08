@@ -137,7 +137,6 @@ class Repository < ApplicationRecord
 
   scope :recently_created, -> { where("created_at > ?", 7.days.ago) }
   scope :hacker_news, -> { order(Arel.sql("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC")) }
-  scope :trending, -> { good_quality.recently_created.with_stars }
 
   scope :maintained, -> { where('repositories."status" not in (?) OR repositories."status" IS NULL', %w[Deprecated Removed Unmaintained Hidden]) }
   scope :deprecated, -> { where('repositories."status" = ?', "Deprecated") }
