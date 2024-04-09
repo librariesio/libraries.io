@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_09_215450) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_09_222313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -171,6 +171,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_09_215450) do
     t.text "deprecation_reason"
     t.datetime "status_checked_at", precision: nil
     t.boolean "lifted", default: false
+    t.integer "latest_version_id"
     t.index "(COALESCE((name)::text, ''::text)) gist_trgm_ops", name: "index_projects_search_on_name", using: :gist
     t.index "lower((language)::text)", name: "index_projects_on_lower_language"
     t.index "lower((platform)::text), lower((name)::text)", name: "index_projects_on_platform_and_name_lower"

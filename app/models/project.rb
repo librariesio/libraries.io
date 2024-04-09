@@ -35,6 +35,7 @@
 #  versions_count                     :integer          default(0), not null
 #  created_at                         :datetime         not null
 #  updated_at                         :datetime         not null
+#  latest_version_id                  :integer
 #  pm_id                              :integer
 #  repository_id                      :integer
 #
