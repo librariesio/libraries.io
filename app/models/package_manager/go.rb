@@ -151,12 +151,17 @@ module PackageManager
       if raw_project[:html]
         url = raw_project[:overview_html]&.css(".UnitMeta-repo a")&.first&.attribute("href")&.value
 
+        # grab the text that the name clipboard button would copy
+        html_name = raw_project[:overview_html]&.css(".go-Main-headerBreadcrumb .go-Clipboard")&.first&.attribute("data-to-copy")&.value
+
+        name = html_name.presence || raw_project[:name]
+
         # find an existing project with the same repository and replace the name with the existing project
         # this will avoid creating duplicate Projects with various casing
 
         # if this is a verified module name then no need to lookup anything
-        is_module = module?(raw_project[:name], raw_project: raw_project)
-        versioned_module_regex = raw_project[:name].match(VERSION_MODULE_REGEX)
+        is_module = module?(name, raw_project: raw_project)
+        versioned_module_regex = name.match(VERSION_MODULE_REGEX)
         unless is_module
           # if this is a versioned module, make sure to find the right versioned project
           if versioned_module_regex
@@ -168,13 +173,11 @@ module PackageManager
               versioned_name = Project.where(platform: "Go").where("lower(repository_url) = ? and name not like '%/v'", url.downcase).first&.name
               existing_project_name = versioned_name&.concat("/#{versioned_module_regex[2]}")
             end
-          else
-            existing_project_name = Project.where(platform: "Go").where("lower(name) = ?", raw_project[:name].downcase).first&.name
           end
         end
 
         {
-          name: existing_project_name.presence || raw_project[:name],
+          name: existing_project_name.presence || name,
           description: raw_project[:html].css(".Documentation-overview p").map(&:text).join("\n").strip,
           licenses: raw_project[:html].css('*[data-test-id="UnitHeader-license"]').map(&:text).join(","),
           repository_url: url,

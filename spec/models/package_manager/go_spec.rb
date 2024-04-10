@@ -70,6 +70,24 @@ describe PackageManager::Go do
         expect(mapping[:homepage].blank?).to be false
       end
     end
+
+    it "maps name from pkg.go.dev" do
+      # use a special matcher so that we can send an upper cased name but respond with the content
+      # for the lower cased name VCR recorded request
+      case_insensitive_matcher = lambda do |request1, request2|
+        request1.uri.downcase == request2.uri.downcase
+      end
+
+      VCR.use_cassette("go/pkg_go_dev", match_requests_on: [case_insensitive_matcher]) do
+        project = described_class.project(package_name)
+        mapping = described_class.mapping(project)
+        expect(mapping[:name]).to eq(package_name)
+      end
+    end
+
+    context "with existing project" do
+      let(:project) { create(:project, name: "foo", platform: described_class.formatted_name) }
+    end
   end
 
   describe "#versions" do
