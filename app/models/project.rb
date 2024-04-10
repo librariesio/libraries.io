@@ -271,6 +271,7 @@ class Project < ApplicationRecord
     set_latest_release_published_at
     set_latest_release_number
     set_latest_stable_release_info
+    set_latest_version
     set_runtime_dependencies_count
     set_language
   end
