@@ -428,6 +428,7 @@ describe Project, type: :model do
       before do
         newer_release.update!(published_at: nil)
         older_release.update!(published_at: nil)
+        project.set_latest_version
       end
 
       it "returns the latest created release" do
@@ -449,6 +450,7 @@ describe Project, type: :model do
       before do
         older_release.update!(published_at: nil)
         newer_release.update!(published_at: nil)
+        project.set_latest_version
       end
 
       it "returns the latest created release" do

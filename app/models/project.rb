@@ -107,6 +107,7 @@ class Project < ApplicationRecord
 
   belongs_to :repository
   has_many :versions, dependent: :destroy
+  belongs_to :latest_version, class_name: "Version"
   has_many :dependencies, -> { group "project_name" }, through: :versions
   has_many :contributions, through: :repository
   has_many :contributors, through: :contributions, source: :repository_user

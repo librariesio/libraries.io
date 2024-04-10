@@ -37,11 +37,6 @@ module Releases
     latest_stable_version || latest_stable_tag
   end
 
-  # Deprecated: will be removed once :latest_version association is added.
-  def latest_version
-    versions.order("published_at DESC NULLS LAST", created_at: :desc).first
-  end
-
   def latest_tag
     return nil if repository.nil?
 
