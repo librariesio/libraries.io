@@ -1,68 +1,61 @@
-<% if @manifests.length > 0 %>
+
+<% if @dependencies.length > 0 %>
   <hr>
   <div id="dependencies" class="table-responsive">
     <h4>Dependencies</h4>
-    <% @manifests.each do |manifest| %>
-        <% deps = manifest.repository_dependencies %>
-        <% if deps.length > 0 %>
-          <table class='table table-hover table-condensed'>
-            <thead>
-              <th>
-                <div class="pictogram tip pictogram-<%= manifest.platform.try(:downcase) %>" title='<%= manifest.platform %>'></div>
-                <%= link_to manifest.filepath, manifest.repository_link %>
-              </th>
-              <th>Kind</th>
-              <th>
-                Requirements
-              </th>
-              <th>
-                Latest Stable
-              </th>
-              <th>
-                Latest Release
-              </th>
-              <th>
-                Licenses
-              </th>
-              <th>
-
-              </th>
-            </thead>
-            <% deps.first(200).reject{|dep| dep.project_name.blank? }.sort_by(&:project_name).each do |dependency| %>
-              <tr>
-                <td>
-                  <% if dependency.platform.present? %>
-                    <%= link_to  truncate_with_tip(dependency.project_name, 30), project_path(name: dependency.project_name, platform: dependency.platform.try(:downcase)) %>
-                  <% else %>
-                    <%= truncate_with_tip(dependency.project_name, 30) %>
-                  <% end %>
-                </td>
-                <td>
-                  <%= truncate_with_tip(dependency.kind, 15) %>
-                </td>
-                <td>
-                  <%= truncate_with_tip(dependency.requirements, 15) %>
-                </td>
-                <td>
-                  <%= dependency.try(:project).try(:latest_stable_release_number) %>
-                </td>
-                <td>
-                  <%= dependency.try(:project).try(:latest_release_number) %>
-                </td>
-                <td>
-                  <% if dependency.project %>
-                    <%= linked_licenses dependency.project.normalized_licenses %>
-                  <% end %>
-                </td>
-                <td>
-                  <% if dependency.project %>
-                    <%= render 'dependencies/flags', dependency: dependency %>
-                  <% end %>
-                </td>
-              </tr>
+    <table class='table table-hover table-condensed'>
+      <thead>
+        <th>Kind</th>
+        <th>
+          Requirements
+        </th>
+        <th>
+          Latest Stable
+        </th>
+        <th>
+          Latest Release
+        </th>
+        <th>
+          Licenses
+        </th>
+        <th>
+        </th>
+      </thead>
+      <tbody>
+      <% @dependencies.first(200).reject { |d| d.project_name.blank? }.sort_by(&:project_name).each do |dependency| %>
+        <tr>
+          <td>
+            <% if dependency.platform.present? %>
+              <%= link_to  truncate_with_tip(dependency.project_name, 30), project_path(name: dependency.project_name, platform: dependency.platform.try(:downcase)) %>
+            <% else %>
+              <%= truncate_with_tip(dependency.project_name, 30) %>
             <% end %>
-          </table>
-        <% end %>
-    <% end %>
+          </td>
+          <td>
+            <%= truncate_with_tip(dependency.kind, 15) %>
+          </td>
+          <td>
+            <%= truncate_with_tip(dependency.requirements, 15) %>
+          </td>
+          <td>
+            <%= dependency.try(:project).try(:latest_stable_release_number) %>
+          </td>
+          <td>
+            <%= dependency.try(:project).try(:latest_release_number) %>
+          </td>
+          <td>
+            <% if dependency.project %>
+              <%= linked_licenses dependency.project.normalized_licenses %>
+            <% end %>
+          </td>
+          <td>
+            <% if dependency.project %>
+              <%= render 'dependencies/flags', dependency: dependency %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
   </div>
 <% end %>
