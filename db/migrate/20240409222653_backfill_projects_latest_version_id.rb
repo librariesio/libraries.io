@@ -27,7 +27,6 @@ class BackfillProjectsLatestVersionId < ActiveRecord::Migration[7.0]
         ActiveRecord::Base.connection.execute(sql)
         print "."
       end
-    end
   end
 
   def down

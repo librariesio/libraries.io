@@ -37,6 +37,7 @@ module Releases
     latest_stable_version || latest_stable_tag
   end
 
+  # Deprecated: will be removed once :latest_version association is added.
   def latest_version
     versions.order("published_at DESC NULLS LAST", created_at: :desc).first
   end
@@ -75,6 +76,10 @@ module Releases
 
   def set_latest_release_number
     self.latest_release_number = latest_release.try(:number)
+  end
+
+  def set_latest_version
+    self.latest_version_id = versions.select(:id).order("published_at DESC NULLS LAST", created_at: :desc).first&.id
   end
 
   def set_latest_stable_release_info
