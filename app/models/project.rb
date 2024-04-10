@@ -645,7 +645,7 @@ class Project < ApplicationRecord
     response = Typhoeus.get(url)
     if platform.downcase == "packagist" && [302, 404].include?(response.response_code)
       update_attribute(:status, "Removed")
-    elsif platform.downcase == "go" && [400, 404].include?(response.response_code)
+    elsif platform.downcase == "go" && [302, 400, 404].include?(response.response_code)
       # pkg.go.dev can be 404 on first-hit for a new package (or alias for the package), so ensure that the package existed in the past
       # by ensuring its age is old enough to not be just uncached by pkg.go.dev yet.
       update_attribute(:status, "Removed") if created_at < 1.week.ago
