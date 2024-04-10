@@ -401,16 +401,9 @@ describe Project, type: :model do
   describe "#update_details" do
     let!(:project) { create(:project) }
     let!(:older_release) { create(:version, project: project, number: "1.0.0", published_at: 1.year.ago, id: 2000, created_at: 1.month.ago) }
-
-    xit "should normalize licenses"
-    xit "should set latest_release_published_at"
-    xit "should set latest_release_number"
-    xit "should set latest_stable_release_info"
-    xit "should set runtime_dependencies_count"
-    xit "should set language"
+    let!(:newer_release) { create(:version, project: project, number: "2.0.0", published_at: 1.month.ago, id: 1000, created_at: 1.year.ago, skip_save_project: true) }
 
     it "should update latest_version_id" do
-      newer_release = create(:version, project: project, number: "2.0.0", published_at: 1.month.ago, id: 1000, created_at: 1.year.ago, skip_save_project: true)
       expect { project.update_details }.to change { project.latest_version_id }.from(older_release.id).to(newer_release.id)
     end
   end

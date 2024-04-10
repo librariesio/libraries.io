@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 class BackfillProjectsLatestVersionId < ActiveRecord::Migration[7.0]
   def up
     # This migration has already been run manually in production.
     return if Rails.env.production?
 
+    say "Backfilling #{Project.count} project 'latest_version_id' values. Each '.' = 10k records completed."
     Project
       .in_batches(of: 10_000) do |projects|
         sql = <<~SQL
@@ -11,19 +14,19 @@ class BackfillProjectsLatestVersionId < ActiveRecord::Migration[7.0]
             FROM projects p
             LEFT JOIN LATERAL (
               SELECT versions.*
-              FROM versions 
-              WHERE versions.project_id = p.id 
-              ORDER BY published_at DESC NULLS LAST, versions.created_at DESC 
+              FROM versions
+              WHERE versions.project_id = p.id
+              ORDER BY published_at DESC NULLS LAST, versions.created_at DESC
               LIMIT 1
             ) as latest_version ON true
-            WHERE p.id IN (#{projects.map(&:id).join(",")})
+            WHERE p.id IN (#{projects.map(&:id).join(',')})
           )
           UPDATE projects
           SET latest_version_id = rows_to_update.latest_version_id
           FROM rows_to_update
           WHERE projects.id = rows_to_update.project_id
         SQL
-      
+
         ActiveRecord::Base.connection.execute(sql)
         print "."
       end
