@@ -210,21 +210,23 @@ describe Project, type: :model do
     end
 
     context "a go project missing from upstream" do
+      let(:check_status_url) { PackageManager::Go.check_status_url(project) }
+
       context "recently created" do
         let!(:project) { create(:project, platform: "Go", name: "github.com/some-nonexistent-fake/pkg", status: nil, created_at: 1.hour.ago) }
 
         it "should not mark it as Removed for a 404" do
-          VCR.use_cassette("project/check_status/go") do
-            project.check_status
-            project.reload
-            expect(project.status).to eq(nil)
-            expect(project.status_checked_at).to eq(DateTime.current)
-          end
+          WebMock.stub_request(:get, check_status_url).to_return(status: 404)
+
+          project.check_status
+          project.reload
+          expect(project.status).to eq(nil)
+          expect(project.status_checked_at).to eq(DateTime.current)
         end
 
         it "should not mark it as Removed for a 302" do
-          url = "https://pkg.go.dev/#{project.name}"
-          WebMock.stub_request(:get, url).to_return(status: 302)
+          WebMock.stub_request(:get, check_status_url).to_return(status: 302)
+
           project.check_status
           project.reload
           expect(project.status).to eq(nil)
@@ -236,17 +238,17 @@ describe Project, type: :model do
         let!(:project) { create(:project, platform: "Go", name: "github.com/some-nonexistent-fake/pkg", status: nil, created_at: 1.month.ago) }
 
         it "should mark it as Removed for a 404" do
-          VCR.use_cassette("project/check_status/go") do
-            project.check_status
-            project.reload
-            expect(project.status).to eq("Removed")
-            expect(project.status_checked_at).to eq(DateTime.current)
-          end
+          WebMock.stub_request(:get, check_status_url).to_return(status: 404)
+
+          project.check_status
+          project.reload
+          expect(project.status).to eq("Removed")
+          expect(project.status_checked_at).to eq(DateTime.current)
         end
 
         it "should mark it as Removed for a 302" do
-          url = "https://pkg.go.dev/#{project.name}"
-          WebMock.stub_request(:get, url).to_return(status: 302)
+          WebMock.stub_request(:get, check_status_url).to_return(status: 302)
+
           project.check_status
           project.reload
           expect(project.status).to eq("Removed")
