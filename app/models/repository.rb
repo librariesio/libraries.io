@@ -262,6 +262,11 @@ class Repository < ApplicationRecord
     RepositoryTreeResolver.new(self, date).load_dependencies_tree
   end
 
+  # TODO: this could probably be refactored into an association 
+  def projects_dependencies
+    projects.map(&:latest_version).compact.flat_map(&:dependencies)
+  end
+
   def id_or_name
     if host_type == "GitHub"
       uuid || full_name

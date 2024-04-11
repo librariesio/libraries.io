@@ -37,7 +37,7 @@ class RepositoriesController < ApplicationController
 
   def dependencies
     load_repo
-    @dependencies = @repository.projects.map(&:latest_version).compact.flat_map(&:dependencies)
+    @dependencies = @repository.projects_dependencies
     render layout: false
   end
 
