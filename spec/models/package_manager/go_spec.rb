@@ -52,11 +52,17 @@ describe PackageManager::Go do
       end
     end
 
-
     it "returns nil for packages that aren't go modules" do
       VCR.use_cassette("go/pkg_go_dev_not_a_module") do
         project = described_class.project("google.golang.org/grpc/examples/route_guide/routeguide")
         expect(project).to be nil
+      end
+    end
+
+    it "finds canonical name from Go" do
+      VCR.use_cassette("pkg_go_dev_v3.yml") do
+        project = described_class.project("github.com/RobFig/cron/v3")
+        expect(project[:name]).to eql("github.com/robfig/cron/v3")
       end
     end
   end
