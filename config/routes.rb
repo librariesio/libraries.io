@@ -64,7 +64,6 @@ Rails.application.routes.draw do
     post "/maintenance/stats/begin/repositories", to: "maintenance_stats#begin_watching_repositories"
     get "/maintenance/stats/begin/:platform/:name", to: "maintenance_stats#begin_watching", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
 
-    get "/:platform/:name/usage", to: "project_usage#show", as: :project_usage, constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/sourcerank", to: "projects#sourcerank", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/contributors", to: "projects#contributors", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     get "/:platform/:name/:number/tree", to: "tree#show", constraints: { platform: /[\w-]+/, name: PROJECT_CONSTRAINT, number: VERSION_CONSTRAINT }, as: :version_tree
