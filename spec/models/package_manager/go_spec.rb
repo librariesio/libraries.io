@@ -52,7 +52,8 @@ describe PackageManager::Go do
       end
     end
 
-    it "returns nil for packages that aren't go modules froom pkg.go.dev" do
+
+    it "returns nil for packages that aren't go modules" do
       VCR.use_cassette("go/pkg_go_dev_not_a_module") do
         project = described_class.project("google.golang.org/grpc/examples/route_guide/routeguide")
         expect(project).to be nil

@@ -44,7 +44,7 @@ class PackageManager::Go
     end
 
     def canonical_module_name
-      module_line = stripped_contents.lines.find { |line| line.match(MODULE_REGEX) }
+      module_line = stripped_contents.lines.find { |line| line.match(MODULE_REGEX) }&.squish
       return unless module_line
 
       module_line.scan(MODULE_REGEX).dig(0, 0)
