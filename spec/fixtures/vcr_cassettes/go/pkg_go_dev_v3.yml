@@ -993,4 +993,119 @@ http_interactions:
       string: 'not found: github.com/robfig/cron@v3.0.0-rc1: invalid version: go.mod
         has post-v3 module path "github.com/robfig/cron/v3" at revision v3.0.0-rc1'
   recorded_at: Wed, 17 Jan 2024 20:27:28 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/!rob!fig/cron/v3/@latest
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1695875061070113713'
+      X-Datadog-Parent-Id:
+      - '1571954779692345550'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=60
+      Content-Length:
+      - '187'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 12 Apr 2024 13:35:22 GMT
+      Expires:
+      - Fri, 12 Apr 2024 13:36:22 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: '{"Version":"v3.0.1","Time":"2020-01-04T01:05:08Z","Origin":{"VCS":"git","URL":"https://github.com/RobFig/cron","Ref":"refs/tags/v3.0.1","Hash":"ccba498c397bb90a9c84945bbb0f7af2d72b6309"}}'
+  recorded_at: Fri, 12 Apr 2024 13:35:22 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/!rob!fig/cron/v3/@v/v3.0.1.mod
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '4253829651034975163'
+      X-Datadog-Parent-Id:
+      - '318048659500568429'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Length:
+      - '42'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Fri, 12 Apr 2024 13:35:22 GMT
+      Expires:
+      - Fri, 12 Apr 2024 16:35:22 GMT
+      Cache-Control:
+      - public, max-age=10800
+      Last-Modified:
+      - Thu, 11 Apr 2024 18:11:21 GMT
+      Etag:
+      - '"f895601ed42554966d2979f56420f655966b079254d92205b53828422298244f"'
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Age:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        module github.com/robfig/cron/v3
+
+        go 1.12
+  recorded_at: Fri, 12 Apr 2024 13:35:22 GMT
 recorded_with: VCR 6.2.0
