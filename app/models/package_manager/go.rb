@@ -173,14 +173,14 @@ module PackageManager
           if versioned_module_regex
             # try and find a versioned name matching this repository_url
             existing_project_name = Project
-                                      .visible
-                                      .where(platform: "Go")
-                                      .where(
-                                        "lower(repository_url) = :repo_url and name like :name",
-                                        repo_url: url.downcase,
-                                        name: "%/#{versioned_module_regex[2]}"
-                                      )
-                                      .first
+              .visible
+              .where(platform: "Go")
+              .where(
+                "lower(repository_url) = :repo_url and name like :name",
+                repo_url: url.downcase,
+                name: "%/#{versioned_module_regex[2]}"
+              )
+              .first
                                       &.name
 
             # if we didn't find one then try and get the base project
