@@ -173,7 +173,6 @@ module PackageManager
           if versioned_module_regex
             # try and find a versioned name matching this repository_url
             existing_project_name = Project
-              .visible
               .where(platform: "Go")
               .where(
                 "lower(repository_url) = :repo_url and name like :name",
@@ -185,14 +184,14 @@ module PackageManager
 
             # if we didn't find one then try and get the base project
             unless existing_project_name.present? # rubocop: disable Metrics/BlockNesting
-              versioned_name = Project.visible.where(platform: "Go").where("lower(repository_url) = ? and name not like '%/v'", url.downcase).first&.name
+              versioned_name = Project.where(platform: "Go").where("lower(repository_url) = ? and name not like '%/v'", url.downcase).first&.name
               existing_project_name = versioned_name&.concat("/#{versioned_module_regex[2]}")
             end
           else
             # we cannot always be sure that the incoming name is the canonical name if we are receiving a non module name
             # so to reduce generating multiple projects for the same name see if there is a case insensitive
             # match already for this name
-            existing_project_name = Project.visible.where(platform: "Go").lower_name(raw_project[:name].downcase).first&.name
+            existing_project_name = Project.where(platform: "Go").lower_name(raw_project[:name].downcase).first&.name
           end
         end
 
