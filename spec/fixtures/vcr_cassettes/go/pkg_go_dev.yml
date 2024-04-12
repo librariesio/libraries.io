@@ -1562,4 +1562,58 @@ http_interactions:
 
         go 1.12
   recorded_at: Wed, 17 Jan 2024 20:09:54 GMT
+- request:
+    method: get
+    uri: https://proxy.golang.org/github.com/robfig/cron/v3/@latest
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2572345782565578762'
+      X-Datadog-Parent-Id:
+      - '4283909548052168320'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - public, max-age=60
+      Content-Length:
+      - '50'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 11 Apr 2024 15:45:30 GMT
+      Expires:
+      - Thu, 11 Apr 2024 15:46:30 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - '0'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: '{"Version":"v3.0.1","Time":"2020-01-04T01:05:08Z"}'
+  recorded_at: Thu, 11 Apr 2024 15:45:30 GMT
 recorded_with: VCR 6.2.0

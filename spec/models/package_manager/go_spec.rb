@@ -49,13 +49,22 @@ describe PackageManager::Go do
       VCR.use_cassette("go/pkg_go_dev_is_a_module") do
         project = described_class.project("google.golang.org/grpc")
         expect(project[:name]).to eq("google.golang.org/grpc")
+        expect(project[:html]).not_to be_nil
+        expect(project[:overview_html]).not_to be_nil
       end
     end
 
-    it "returns nil for packages that aren't go modules froom pkg.go.dev" do
+    it "returns nil for packages that aren't go modules" do
       VCR.use_cassette("go/pkg_go_dev_not_a_module") do
         project = described_class.project("google.golang.org/grpc/examples/route_guide/routeguide")
         expect(project).to be nil
+      end
+    end
+
+    it "finds canonical name from Go" do
+      VCR.use_cassette("go/pkg_go_dev_v3") do
+        project = described_class.project("github.com/RobFig/cron/v3")
+        expect(project[:name]).to eql("github.com/robfig/cron/v3")
       end
     end
   end
@@ -65,9 +74,40 @@ describe PackageManager::Go do
       VCR.use_cassette("go/pkg_go_dev") do
         project = described_class.project(package_name)
         mapping = described_class.mapping(project)
-        expect(mapping[:description].blank?).to be false
-        expect(mapping[:repository_url].blank?).to be false
-        expect(mapping[:homepage].blank?).to be false
+        expect(mapping[:description]).to start_with("Package cron implements a cron spec parser")
+        expect(mapping[:repository_url]).to eql("https://github.com/robfig/cron")
+        expect(mapping[:homepage]).to eql("https://github.com/robfig/cron")
+      end
+    end
+
+    context "with existing project" do
+      # create a project that matches name with a different case
+      let!(:existing_project) { create(:project, :go, name: name.upcase) }
+
+      context "with non module name" do
+        let(:name) { "github.com/robfig/cron" }
+
+        it "finds existing project for non module name" do
+          VCR.use_cassette("go/pkg_go_dev") do
+            project = described_class.project(name)
+            mapping = described_class.mapping(project)
+
+            expect(mapping[:name]).to eql(existing_project.name)
+          end
+        end
+      end
+
+      context "with module name" do
+        let(:name) { "github.com/robfig/cron/v3" }
+
+        it "ignores existing name for module name" do
+          VCR.use_cassette("go/pkg_go_dev") do
+            project = described_class.project(name)
+            mapping = described_class.mapping(project)
+
+            expect(mapping[:name]).to eql(name)
+          end
+        end
       end
     end
   end

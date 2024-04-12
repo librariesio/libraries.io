@@ -14,8 +14,38 @@ class GoProjectVerificationWorker
     # check to see if the module is found on pkg.go.dev and if it isn't then go ahead and delete this name
     return project.destroy unless PackageManager::Go.valid_project?(project.name)
 
-    # if this name is found and is considered a module then that should be considered canonical
-    unless PackageManager::Go.module?(project.name)
+    # if this name is found and is considered a module then we can determine the canonical name
+    if PackageManager::Go.module?(project.name)
+      canonical_name = PackageManager::Go.canonical_module_name(project.name)
+
+      # if we can't get a canonical name then bail out of here and we'll have to investigate further
+      return if canonical_name.blank?
+
+      # if the name for the project doesn't match the canonical name then we can remove it
+      PackageManager::Go.update(canonical_name) unless Project.where(platform: "Go", name: canonical_name).exists?
+
+      if project.name != canonical_name
+        if canonical_name.downcase == project.name.downcase
+          StructuredLog.capture(
+            "GO_PROJECT_VERIFICATION_DESTROY_PROJECT",
+            {
+              project_name: project.name,
+              canonical_name: canonical_name,
+            }
+          )
+          project.destroy
+        else
+          StructuredLog.capture(
+            "GO_PROJECT_VERIFICATION_REMOVE_PROJECT",
+            {
+              project_name: project.name,
+              canonical_name: canonical_name,
+            }
+          )
+          project.update(status: "Removed")
+        end
+      end
+    else
       # not a module
       # figure out what the correct module name is
       module_name = non_module_name(name)
@@ -27,6 +57,15 @@ class GoProjectVerificationWorker
       # with different cased names for the same package.
       if name != module_name
         PackageManager::Go.update(module_name) unless module_name.nil? || Project.where(platform: "Go", name: module_name).exists?
+
+        StructuredLog.capture(
+          "GO_PROJECT_VERIFICATION_DESTROY_NON_MODULE_PROJECT",
+          {
+            project_name: project.name,
+            non_module_name: module_name,
+          }
+        )
+
         project.destroy
       end
     end

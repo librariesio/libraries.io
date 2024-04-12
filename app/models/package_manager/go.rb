@@ -87,17 +87,27 @@ module PackageManager
     end
 
     def self.project(name)
+      # Try and find the canonical name from the Go proxy and use that if we find it.
+      # pkg.go.dev will sometimes have multiple cased names for the same project, but for
+      # a project with a go.mod file specified the proxy should have the canonical name.
+      # It is still possible for the proxy to return a non canonical name for a project
+      # that is not a valid module. https://go.dev/ref/mod#goproxy-protocol describes
+      # how a $base/$module/@v/$version.mod request will return back a virtual go.mod file
+      # with whatever name was passed in if there is not a go.mod file found for that version.
+      canonical_name = canonical_module_name(name)
+      search_name = canonical_name.presence || name
+
       # get_html will send back an empty string if response is not a 200
       # a blank response means that the project was not found on pkg.go.dev site
       # if it is not found on that site it should be considered an invalid project name
       # although the go proxy may respond with data for this project name
-      doc_html = get_html("#{DISCOVER_URL}/#{name}")
+      doc_html = get_html("#{DISCOVER_URL}/#{search_name}")
 
       # send back nil if the response is blank
       # base package manager handles if the project is not present
       return nil if doc_html.text.blank?
 
-      raw_project = { name: name, html: doc_html, overview_html: doc_html }
+      raw_project = { name: search_name, html: doc_html, overview_html: doc_html }
 
       # pages on pkg.go.dev can be categorized as 'package', 'module', 'command', or 'directory'. We only scrape Go Modules.
       page_types = page_types(raw_project: raw_project)
@@ -157,11 +167,20 @@ module PackageManager
         # if this is a verified module name then no need to lookup anything
         is_module = module?(raw_project[:name], raw_project: raw_project)
         versioned_module_regex = raw_project[:name].match(VERSION_MODULE_REGEX)
+
         unless is_module
           # if this is a versioned module, make sure to find the right versioned project
           if versioned_module_regex
             # try and find a versioned name matching this repository_url
-            existing_project_name = Project.where(platform: "Go").where("lower(repository_url) = :repo_url and name like :name", repo_url: url.downcase, name: "%/#{versioned_module_regex[2]}").first&.name
+            existing_project_name = Project
+              .where(platform: "Go")
+              .where(
+                "lower(repository_url) = :repo_url and name like :name",
+                repo_url: url.downcase,
+                name: "%/#{versioned_module_regex[2]}"
+              )
+              .first
+                                      &.name
 
             # if we didn't find one then try and get the base project
             unless existing_project_name.present? # rubocop: disable Metrics/BlockNesting
@@ -169,7 +188,10 @@ module PackageManager
               existing_project_name = versioned_name&.concat("/#{versioned_module_regex[2]}")
             end
           else
-            existing_project_name = Project.where(platform: "Go").where("lower(name) = ?", raw_project[:name].downcase).first&.name
+            # we cannot always be sure that the incoming name is the canonical name if we are receiving a non module name
+            # so to reduce generating multiple projects for the same name see if there is a case insensitive
+            # match already for this name
+            existing_project_name = Project.where(platform: "Go").lower_name(raw_project[:name].downcase).first&.name
           end
         end
 
