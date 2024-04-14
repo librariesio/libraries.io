@@ -424,7 +424,7 @@ namespace :open_data do
 
     Repository.open_source.not_removed.includes(manifests: :repository_dependencies).find_each do |repo|
       repo.manifests.each do |manifest|
-        manifest.repository_dependencies.each do |repository_dependency|
+        manifest.projects_dependencies.each do |repository_dependency|
           csv_file << [
             repository_dependency.id,
             repo.host_type,
