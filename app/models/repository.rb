@@ -262,8 +262,8 @@ class Repository < ApplicationRecord
     RepositoryTreeResolver.new(self, date).load_dependencies_tree
   end
 
-  # TODO: this could probably be refactored into an association 
-  def projects_dependencies(includes: {})
+  # TODO: this could probably be refactored into an association
+  def projects_dependencies(includes: nil)
     projects
       .map(&:latest_version)
       .compact

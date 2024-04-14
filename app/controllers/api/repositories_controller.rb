@@ -17,7 +17,7 @@ class Api::RepositoriesController < Api::ApplicationController
     cache_key = "repository_dependencies:#{@repository.id}"
     json_hash = Rails.cache.fetch(cache_key, expires_in: 1.day) do
       result = RepositorySerializer.new(@repository).as_json
-      result[:dependencies] = map_dependencies(@repository.projects_dependencies(includes: [])|| []).map(&:as_json)
+      result[:dependencies] = map_dependencies(@repository.projects_dependencies(includes: []) || []).map(&:as_json)
       result
     end
     render json: json_hash
@@ -27,12 +27,8 @@ class Api::RepositoriesController < Api::ApplicationController
   def shields_dependencies
     cache_key = "shields_dependencies:#{@repository.id}"
     json_hash = Rails.cache.fetch(cache_key, expires_in: 1.day) do
-      # The distinct cuts down the query since repositories that have many manifests tend to have many dupes.
-      deps = RepositoryDependency
-        .strict_loading
-        .where(repository: @repository)
-        .select("DISTINCT ON (project_id, requirements) *")
-        .includes(:project)
+      deps = @repository
+        .projects_dependencies(includes: [:project])
 
       deprecated_count = deps
         .select(&:deprecated?)
@@ -41,6 +37,7 @@ class Api::RepositoriesController < Api::ApplicationController
       outdated_count = deps
         .select(&:outdated?)
         .size
+
       { deprecated_count: deprecated_count, outdated_count: outdated_count }
     end
 
