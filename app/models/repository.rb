@@ -263,8 +263,12 @@ class Repository < ApplicationRecord
   end
 
   # TODO: this could probably be refactored into an association 
-  def projects_dependencies
-    projects.map(&:latest_version).compact.flat_map(&:dependencies)
+  def projects_dependencies(includes: {})
+    projects
+      .map(&:latest_version)
+      .compact
+      .flat_map { |v| v.dependencies.includes(includes) }
+      .uniq { |d| [d.project_id, d.requirements] }
   end
 
   def id_or_name
