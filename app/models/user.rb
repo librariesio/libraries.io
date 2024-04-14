@@ -93,13 +93,13 @@ class User < ApplicationRecord
   def watched_dependent_projects
     repository_subscriptions
       .map(&:repository)
-      .map { |r| r.projects_dependencies(includes: [:project]).map(&:project) }
+      .map { |r| r.projects_dependencies(includes: [:project], only_visible: true).map(&:project) }
       .flatten
       .uniq
   end
 
   def all_subscribed_project_ids
-    (subscribed_projects.visible.pluck(:id) + watched_dependent_projects.visible.pluck(:id)).uniq
+    (subscribed_projects.visible.pluck(:id) + watched_dependent_projects.pluck(:id)).uniq
   end
 
   def all_subscribed_versions

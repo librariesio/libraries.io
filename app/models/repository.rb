@@ -263,8 +263,8 @@ class Repository < ApplicationRecord
   end
 
   # TODO: this could probably be refactored into an association
-  def projects_dependencies(includes: nil)
-    projects
+  def projects_dependencies(includes: nil, only_visible: false)
+    (only_visible ? projects.visible : projects)
       .map(&:latest_version)
       .compact
       .flat_map { |v| v.dependencies.includes(includes) }
