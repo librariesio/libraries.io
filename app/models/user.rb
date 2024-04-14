@@ -91,8 +91,11 @@ class User < ApplicationRecord
   end
 
   def watched_dependent_projects
-    repo_subs = repository_subscriptions.pluck(:repository_id)
-    Project.where(id: RepositoryDependency.where(repository_id: repo_subs).pluck(:project_id).uniq)
+    repository_subscriptions
+      .map(&:repository)
+      .map { |r| r.projects_dependencies(includes: [:project]).map(&:project) }
+      .flatten
+      .uniq
   end
 
   def all_subscribed_project_ids
