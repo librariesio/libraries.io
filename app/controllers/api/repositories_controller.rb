@@ -17,7 +17,7 @@ class Api::RepositoriesController < Api::ApplicationController
     cache_key = "repository_dependencies:#{@repository.id}"
     json_hash = Rails.cache.fetch(cache_key, expires_in: 1.day) do
       result = RepositorySerializer.new(@repository).as_json
-      result[:dependencies] = map_dependencies(@repository.projects_dependencies(includes: []) || []).map(&:as_json)
+      result[:dependencies] = map_dependencies(@repository.projects_dependencies || []).map(&:as_json)
       result
     end
     render json: json_hash
