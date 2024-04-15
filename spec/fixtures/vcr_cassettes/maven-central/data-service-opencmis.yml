@@ -1,0 +1,211 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/io/github/caffetteria/data-service-opencmis/maven-metadata.xml
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '1722616086099909448'
+      X-Datadog-Parent-Id:
+      - '3815706884938041962'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"a8f88eeac3b56e4f7d0b324c01047efa"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Tue, 09 Apr 2024 21:48:53 GMT
+      X-Checksum-Md5:
+      - a8f88eeac3b56e4f7d0b324c01047efa
+      X-Checksum-Sha1:
+      - 8087a0c8e812db86b7f631e776d2ed94d8e8c016
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Age:
+      - '195518'
+      Date:
+      - Mon, 15 Apr 2024 18:45:26 GMT
+      X-Served-By:
+      - cache-iad-kcgs7200159-IAD, cache-lax-kwhp1940147-LAX
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 46, 0
+      X-Timer:
+      - S1713206726.154567,VS0,VE1
+      Content-Length:
+      - '367'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <metadata>
+          <groupId>io.github.caffetteria</groupId>
+          <artifactId>data-service-opencmis</artifactId>
+          <versioning>
+            <latest>${revision}</latest>
+            <release>${revision}</release>
+            <versions>
+              <version>${revision}</version>
+            </versions>
+            <lastUpdated>20240409214851</lastUpdated>
+          </versioning>
+        </metadata>
+  recorded_at: Mon, 15 Apr 2024 18:45:26 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/io/github/caffetteria/data-service-opencmis
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3743411347866597932'
+      X-Datadog-Parent-Id:
+      - '444112088566449910'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 302
+      message: ''
+    headers:
+      X-Amz-Error-Code:
+      - Found
+      X-Amz-Error-Message:
+      - Resource Found
+      Location:
+      - "/maven2/io/github/caffetteria/data-service-opencmis/"
+      Content-Type:
+      - text/html; charset=utf-8
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Age:
+      - '10021'
+      Date:
+      - Mon, 15 Apr 2024 18:45:26 GMT
+      X-Served-By:
+      - cache-iad-kiad7000041-IAD, cache-lax-kwhp1940147-LAX
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 1, 0
+      X-Timer:
+      - S1713206726.188298,VS0,VE1
+      Vary:
+      - Fastly-SSL,
+      Content-Length:
+      - '313'
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        <html>
+        <head><title>302 Moved Temporarily</title></head>
+        <body>
+        <h1>302 Moved Temporarily</h1>
+        <ul>
+        <li>Code: Found</li>
+        <li>Message: Resource Found</li>
+        <li>RequestId: E971VRTJ8XP35S3B</li>
+        <li>HostId: oQY+2+gbCH4iFBt4hcL3LetqjltXojpiNxFrXo/f77QcE/zulWL9Rf7i3nDVVqkv6j4QoMZz33U=</li>
+        </ul>
+        <hr/>
+        </body>
+        </html>
+  recorded_at: Mon, 15 Apr 2024 18:45:26 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/io/github/caffetteria/data-service-opencmis/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '411693538559425590'
+      X-Datadog-Parent-Id:
+      - '599816703915740703'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Last-Modified:
+      - Thu, 11 Apr 2024 19:40:13 GMT
+      Etag:
+      - '"e3f88ac0aaa8c0a247a4f9cf23641574"'
+      Content-Type:
+      - text/html
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Age:
+      - '127985'
+      Date:
+      - Mon, 15 Apr 2024 18:45:26 GMT
+      X-Served-By:
+      - cache-iad-kjyo7100068-IAD, cache-lax-kwhp1940147-LAX
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 76, 0
+      X-Timer:
+      - S1713206726.218812,VS0,VE1
+      Content-Length:
+      - '1398'
+    body:
+      encoding: ASCII-8BIT
+      string: "<!DOCTYPE html>\n<html>\n\n<head>\n\t<title>Central Repository: io/github/caffetteria/data-service-opencmis</title>\n\t<meta
+        name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n\t<style>\nbody
+        {\n\tbackground: #fff;\n}\n\t</style>\n</head>\n\n<body>\n\t<header>\n\t\t<h1>io/github/caffetteria/data-service-opencmis</h1>\n\t</header>\n\t<hr/>\n\t<main>\n\t\t<pre
+        id=\"contents\">\n<a href=\"../\">../</a>\n<a href=\"0.1.0/\" title=\"0.1.0/\">0.1.0/</a>
+        \                                           2024-03-23 20:38         -      \n<a
+        href=\"0.2.0/\" title=\"0.2.0/\">0.2.0/</a>                                            2024-03-24
+        17:19         -      \n<a href=\"0.2.1/\" title=\"0.2.1/\">0.2.1/</a>                                            2024-03-24
+        21:31         -      \n<a href=\"1.0.0/\" title=\"1.0.0/\">1.0.0/</a>                                                           -
+        \        -      \n<a href=\"1.0.1/\" title=\"1.0.1/\">1.0.1/</a>                                                           -
+        \        -      \n<a href=\"1.1.0/\" title=\"1.1.0/\">1.1.0/</a>                                                           -
+        \        -      \n<a href=\"1.1.1/\" title=\"1.1.1/\">1.1.1/</a>                                                           -
+        \        -      \n<a href=\"maven-metadata.xml\" title=\"maven-metadata.xml\">maven-metadata.xml</a>
+        \                               2024-04-09 21:48       367      \n\t\t</pre>\n\t</main>\n\t<hr/>\n</body>\n\n</html>"
+  recorded_at: Mon, 15 Apr 2024 18:45:26 GMT
+recorded_with: VCR 6.2.0

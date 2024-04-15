@@ -3,6 +3,20 @@
 require "rails_helper"
 
 describe PackageManager::Maven::MavenCentral do
+  describe ".latest_version" do
+    context "when maven-metadata.xml's version contained an interpolation string" do
+      let(:project_name) { "io.github.caffetteria:data-service-opencmis" }
+
+      it "scrapes the maven HTML to find a real version" do
+        latest_version = VCR.use_cassette("maven-central/data-service-opencmis") do
+          described_class.latest_version(project_name)
+        end
+
+        expect(latest_version).to eq("1.1.1")
+      end
+    end
+  end
+
   describe ".update" do
     context "with existing package with removed releases" do
       # several vulnerable releases of com.appdynamics:lambda-tracer were removed
