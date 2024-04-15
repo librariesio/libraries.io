@@ -3,19 +3,6 @@
 class ProjectUsageController < ApplicationController
   before_action :find_project
   def show
-    # TODO: can remove this early return if it never gets logged or is not slow anymore
-    if @project.dependents_count > 10000
-      StructuredLog.capture(
-        "PROJECT_USAGE_TOO_MANY_DEPENDENTS", {
-          name: @project.name,
-          platform: @project.platform,
-          dependents_count: @project.dependents_count,
-        }
-      )
-      @too_big = true
-      @total = @project.dependents_count
-      return
-    end
     @all_counts = @project.dependents.group("dependencies.requirements").count.select { |k, _v| k.present? }
     @total = @all_counts.sum { |_k, v| v }
     if @all_counts.any?
