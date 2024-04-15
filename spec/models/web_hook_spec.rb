@@ -115,7 +115,7 @@ describe WebHook, type: :model do
 
         expect do
           web_hook.send_project_updated(project)
-        end.to raise_error(/webhook #{web_hook.id} failed; timed_out=false code=500/)
+        end.to raise_error(/webhook failed webhook_id=#{web_hook.id} timed_out=false code=500/)
       end
 
       it "raises an error if the receiver times out" do
@@ -124,7 +124,7 @@ describe WebHook, type: :model do
 
         expect do
           web_hook.send_project_updated(project)
-        end.to raise_error(/webhook #{web_hook.id} failed; timed_out=true code=0/)
+        end.to raise_error(/webhook failed webhook_id=#{web_hook.id} timed_out=true code=0/)
       end
     end
   end

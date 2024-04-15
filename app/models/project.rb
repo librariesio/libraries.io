@@ -668,21 +668,13 @@ class Project < ApplicationRecord
     end
   end
 
-  def unique_repo_requirement_ranges
-    repository_dependencies.select("repository_dependencies.requirements").distinct.pluck(:requirements)
-  end
-
   def unique_project_requirement_ranges
     dependents.select("dependencies.requirements").distinct.pluck(:requirements)
   end
 
-  def unique_requirement_ranges
-    (unique_repo_requirement_ranges + unique_project_requirement_ranges).uniq
-  end
-
   def potentially_outdated?
     current_version = SemanticRange.clean(latest_release_number)
-    unique_requirement_ranges.compact.sort.any? do |range|
+    unique_project_requirement_ranges.compact.sort.any? do |range|
       !(SemanticRange.gtr(current_version, range, false, platform) ||
       SemanticRange.satisfies(current_version, range, false, platform))
     rescue StandardError

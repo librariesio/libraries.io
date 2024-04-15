@@ -37,7 +37,7 @@ class RepositoriesController < ApplicationController
 
   def dependencies
     load_repo
-    @manifests = @repository.manifests.latest.limit(10).includes(repository_dependencies: { project: :versions })
+    @dependencies = @repository.projects_dependencies
     render layout: false
   end
 

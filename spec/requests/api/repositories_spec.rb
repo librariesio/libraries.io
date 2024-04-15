@@ -12,8 +12,9 @@ describe "Api::RepositoriesController" do
   end
 
   describe "GET /api/github/:owner/:name/dependencies", type: :request do
-    let!(:manifest) { create(:manifest, repository: repository) }
-    let!(:repository_dependency) { create(:repository_dependency, repository: repository, manifest: manifest) }
+    let!(:project) { create(:project, repository: repository) }
+    let!(:version) { create(:version, project: project) }
+    let!(:dependency) { create(:dependency, version: version) }
 
     it "renders successfully" do
       get "/api/github/#{repository.full_name}/dependencies"
@@ -37,9 +38,9 @@ describe "Api::RepositoriesController" do
               latest: nil,
               deprecated: false,
               outdated: nil,
-              filepath: "Gemfile",
-              kind: nil,
-              optional: nil,
+              filepath: nil,
+              kind: "runtime",
+              optional: false,
               normalized_licenses: ["MIT"],
             },
           ])
@@ -48,25 +49,24 @@ describe "Api::RepositoriesController" do
     end
   end
 
-  context "with dependencies" do
-    let!(:manifest) { create(:manifest, repository: repository) }
+  describe "GET /api/github/:owner/:name/shields_dependencies", type: :request do
+    let!(:project) { create(:project, repository: repository) }
+    let!(:version) { create(:version, project: project) }
 
-    let!(:deprecated_project) { create(:project, status: "Deprecated", repository: repository) }
-    let!(:deprecated_dependency) { create(:repository_dependency, repository: repository, manifest: manifest, project: deprecated_project) }
+    let!(:deprecated_project) { create(:project, status: "Deprecated") }
+    let!(:deprecated_dependency) { create(:dependency, project: deprecated_project, version: version) }
 
     let!(:outdated_project) { create(:project, repository: repository) }
-    let!(:outdated_dependency) { create(:repository_dependency, repository: repository, requirements: "<1.0.0", manifest: manifest, project: outdated_project) }
+    let!(:outdated_dependency) { create(:dependency, requirements: "<1.0.0", project: outdated_project, version: version) }
 
-    describe "GET /api/github/:owner/:name/shields_dependencies", type: :request do
-      it "renders successfully" do
-        # TODO: for some reason the factory can't save these
-        outdated_project.update_columns(latest_stable_release_number: "9.9.9", latest_release_number: "9.9.9")
+    it "renders successfully" do
+      # TODO: for some reason the factory can't save these
+      outdated_project.update_columns(latest_stable_release_number: "9.9.9", latest_release_number: "9.9.9")
 
-        get "/api/github/#{repository.full_name}/shields_dependencies"
-        expect(response).to have_http_status(:success)
-        expect(response.content_type).to start_with("application/json")
-        expect(json.to_json).to eq({ deprecated_count: 1, outdated_count: 1 }.to_json)
-      end
+      get "/api/github/#{repository.full_name}/shields_dependencies"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to start_with("application/json")
+      expect(json.to_json).to eq({ deprecated_count: 1, outdated_count: 1 }.to_json)
     end
   end
 
