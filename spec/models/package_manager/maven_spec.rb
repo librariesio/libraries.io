@@ -84,16 +84,22 @@ describe PackageManager::Maven do
 
     context "when latest_version is an interpolation string" do
       before do
-        allow(PackageManager::Maven::MavenCentral).to receive(:latest_version).and_return("${revision}")
+        allow(PackageManager::Maven).to receive(:latest_version).and_return("${revision}")
       end
 
-      it "falls back to latest_version_scraped()" do
+      it "falls back to latest_version_scraped() when supported" do
         allow(PackageManager::Maven::MavenCentral).to receive(:latest_version_scraped).and_return("1.2.3")
 
         raw_project = PackageManager::Maven::MavenCentral.project("foo")
 
         expect(raw_project[:latest_version]).to eq("1.2.3")
         expect(PackageManager::Maven::MavenCentral).to have_received(:latest_version_scraped).once
+      end
+
+      it "falls back to latest_version_scraped() when not supported" do
+        raw_project = PackageManager::Maven::Google.project("foo")
+
+        expect(raw_project).to eq({})
       end
     end
   end
