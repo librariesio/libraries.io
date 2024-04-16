@@ -6,11 +6,28 @@ describe PackageManager::Maven::MavenCentral do
   describe ".latest_version_scraped" do
     context "when maven-metadata.xml's version contained an interpolation string" do
       let(:project_name) { "io.github.caffetteria:data-service-opencmis" }
+      let(:html) do
+        <<-HTML
+          <html><body><main>
+            <pre id="contents">
+              <a href="../">../</a>
+              <a href="0.1.0/" title="0.1.0/">0.1.0/</a>
+              <a href="0.2.0/" title="0.2.0/">0.2.0/</a>
+              <a href="0.2.1/" title="0.2.1/">0.2.1/</a>
+              <a href="1.0.0/" title="1.0.0/">1.0.0/</a>
+              <a href="1.0.1/" title="1.0.1/">1.0.1/</a>
+              <a href="1.1.0/" title="1.1.0/">1.1.0/</a>
+              <a href="1.1.1/" title="1.1.1/">1.1.1/</a>
+              <a href="maven-metadata.xml" title="maven-metadata.xml">maven-metadata.xml</a>
+            </pre>
+          </main></body></html>
+        HTML
+      end
 
       it "scrapes the maven HTML to find a real version" do
-        latest_version_scraped = VCR.use_cassette("maven-central/data-service-opencmis") do
-          described_class.latest_version_scraped(project_name)
-        end
+        allow(PackageManager::ApiService).to receive(:request_raw_data).and_return(html)
+
+        latest_version_scraped = described_class.latest_version_scraped(project_name)
 
         expect(latest_version_scraped).to eq("1.1.1")
       end
