@@ -87,19 +87,21 @@ describe PackageManager::Maven do
         allow(PackageManager::Maven).to receive(:latest_version).and_return("${revision}")
       end
 
-      it "falls back to latest_version_scraped() when supported" do
-        allow(PackageManager::Maven::MavenCentral).to receive(:latest_version_scraped).and_return("1.2.3")
+      context "when latest_version_scraped() is not supported" do
+        it "returns no project data" do
+          raw_project = PackageManager::Maven::Google.project("foo")
 
-        raw_project = PackageManager::Maven::MavenCentral.project("foo")
-
-        expect(raw_project[:latest_version]).to eq("1.2.3")
-        expect(PackageManager::Maven::MavenCentral).to have_received(:latest_version_scraped).once
+          expect(raw_project).to eq({})
+        end
       end
 
-      it "falls back to latest_version_scraped() when not supported" do
-        raw_project = PackageManager::Maven::Google.project("foo")
+      context "when latest_version_scraped() is supported" do
+        before { allow(PackageManager::Maven::MavenCentral).to receive(:latest_version_scraped).and_return("1.2.3") }
 
-        expect(raw_project).to eq({})
+        it "returns project data with the scraped latest_version" do
+          expect(PackageManager::Maven::MavenCentral.project("foo")[:latest_version]).to eq("1.2.3")
+          expect(PackageManager::Maven::MavenCentral).to have_received(:latest_version_scraped).once
+        end
       end
     end
   end
