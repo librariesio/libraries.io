@@ -146,6 +146,18 @@ RSpec.describe PackageManager::Go::GoMod do
       expect(go_mod.canonical_module_name).to eq("my_cool_package")
     end
 
+    context "when an older vgo go.mod file has quoted name" do
+      let(:mod_contents) do
+        <<~MODFILE
+          module "my_cool_package"
+        MODFILE
+      end
+
+      it "reads module name from go.mod" do
+        expect(go_mod.canonical_module_name).to eq("my_cool_package")
+      end
+    end
+
     context "when malformed" do
       let(:mod_contents) do
         <<~MODFILE
