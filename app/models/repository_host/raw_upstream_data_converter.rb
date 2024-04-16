@@ -52,7 +52,7 @@ class RepositoryHost::RawUpstreamDataConverter
       is_private: api_project.visibility != "public",
       keywords: api_project.topics,
       language: nil, # separate API endpoint that doesn't seem to be supported by the API gem we use,
-      license: api_project.license.key,
+      license: api_project.license&.key,
       logo_url: api_project.avatar_url,
       mirror_url: nil,
       name: api_project.name,

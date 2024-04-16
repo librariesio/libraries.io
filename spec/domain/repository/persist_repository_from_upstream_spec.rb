@@ -181,6 +181,22 @@ RSpec.describe Repository::PersistRepositoryFromUpstream do
       end
     end
 
+    context "with Removed status repository" do
+      let(:status) { "Removed" }
+
+      context "with archived upstream repo" do
+        it "should suggest removed status" do
+          expect(described_class.correct_status_from_upstream(repository, archived_upstream: true)).to eql("Removed")
+        end
+      end
+
+      context "with non archived upstream repo" do
+        it "should suggest nil status" do
+          expect(described_class.correct_status_from_upstream(repository, archived_upstream: false)).to be_nil
+        end
+      end
+    end
+
     context "with hidden status repository" do
       let(:status) { "Hidden" }
 
