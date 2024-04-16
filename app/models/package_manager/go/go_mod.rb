@@ -6,7 +6,7 @@ class PackageManager::Go
 
     RETRACT_WITH_PARENS = /^\s*retract\s\((.*?)\)/m
     RETRACT_WITHOUT_PARENS = /retract\s(.+)/
-    MODULE_REGEX = /module\s+(.+)/
+    MODULE_REGEX = /module\s+"?([^"]+)"?/
     LOCAL_FILEPATH_REGEXP = /\.?\.\//
 
     def initialize(mod_contents)
