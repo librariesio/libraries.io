@@ -3,6 +3,33 @@
 require "rails_helper"
 
 describe PackageManager::Maven::MavenCentral do
+  describe ".latest_version_scraped" do
+    let(:html) do
+      # Example HTML scraped from https://repo1.maven.org/maven2/io/github/caffetteria/data-service-opencmis/
+      <<-HTML
+        <html><body><main>
+          <pre id="contents">
+            <a href="../">../</a>
+            <a href="0.1.0/" title="0.1.0/">0.1.0/</a>
+            <a href="0.2.0/" title="0.2.0/">0.2.0/</a>
+            <a href="0.2.1/" title="0.2.1/">0.2.1/</a>
+            <a href="1.0.0/" title="1.0.0/">1.0.0/</a>
+            <a href="1.0.1/" title="1.0.1/">1.0.1/</a>
+            <a href="1.1.0/" title="1.1.0/">1.1.0/</a>
+            <a href="1.1.1/" title="1.1.1/">1.1.1/</a>
+            <a href="maven-metadata.xml" title="maven-metadata.xml">maven-metadata.xml</a>
+          </pre>
+        </main></body></html>
+      HTML
+    end
+
+    before { allow(PackageManager::ApiService).to receive(:request_raw_data).and_return(html) }
+
+    it "scrapes the maven HTML to find a real version" do
+      expect(described_class.latest_version_scraped("foo:bar")).to eq("1.1.1")
+    end
+  end
+
   describe ".update" do
     context "with existing package with removed releases" do
       # several vulnerable releases of com.appdynamics:lambda-tracer were removed

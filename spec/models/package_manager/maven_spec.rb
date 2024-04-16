@@ -81,6 +81,29 @@ describe PackageManager::Maven do
 
       expect(described_class.project("javax.faces:javax.faces-api")).to eq(expected)
     end
+
+    context "when latest_version is an interpolation string" do
+      before do
+        allow(PackageManager::Maven).to receive(:latest_version).and_return("${revision}")
+      end
+
+      context "when latest_version_scraped() is not supported" do
+        it "returns no project data" do
+          raw_project = PackageManager::Maven::Google.project("foo")
+
+          expect(raw_project).to eq({})
+        end
+      end
+
+      context "when latest_version_scraped() is supported" do
+        before { allow(PackageManager::Maven::MavenCentral).to receive(:latest_version_scraped).and_return("1.2.3") }
+
+        it "returns project data with the scraped latest_version" do
+          expect(PackageManager::Maven::MavenCentral.project("foo")[:latest_version]).to eq("1.2.3")
+          expect(PackageManager::Maven::MavenCentral).to have_received(:latest_version_scraped).once
+        end
+      end
+    end
   end
 
   describe ".versions" do
