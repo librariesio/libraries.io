@@ -28,6 +28,7 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven::Common
         # Maven versions range from 1 to many "." and may not be valid SemVer. Use the more forgiving Gem::Version to sort
         Gem::Version.new(text)
       rescue ArgumentError
+        Bugsnag.notify("Couldn't find scraped HTML version for #{name}. Check the HTML and ensure scraping still works.")
         nil
       end
   end
