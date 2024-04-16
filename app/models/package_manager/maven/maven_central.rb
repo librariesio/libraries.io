@@ -16,30 +16,20 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven::Common
     PackageManager::Base::MissingVersionRemover
   end
 
-  def self.latest_version(name)
-    metadata_version = super
-
-    # When maven-metadata.xml returned an interpolation string for latest version, e.g. ${revision},
-    # attempt to scrape MavenCentral's index HTML to infer the latest version.
-    if metadata_version =~ /\$\{/
-      version_listing = get_html(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).base)
-      scraped_version = version_listing
-        .css("#contents a")                                  # scrape the list of file/folders
-        .map(&:text)                                         # get each innerText
-        .select { |text| text.end_with?("/") }               # only look at folders
-        .map { |folder| folder.chomp("/") }                  # remove folder trailing slash
-        .grep(/^\d+.\d/)                                     # only folders that look like versions
-        .max_by do |text|
-          # Maven versions range from 1 to many "." and may not be valid SemVer. Use the more forgiving Gem::Version to sort
-          Gem::Version.new(text)
-        rescue ArgumentError
-          nil
-        end
-
-      return scraped_version if scraped_version
-    end
-
-    metadata_version
+  # Attempt to scrape MavenCentral's index HTML to infer the latest version.
+  def self.latest_version_scraped(name)
+    get_html(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).base)
+      .css("#contents a")                                  # scrape the list of file/folders
+      .map(&:text)                                         # get each innerText
+      .select { |text| text.end_with?("/") }               # only look at folders
+      .map { |folder| folder.chomp("/") }                  # remove folder trailing slash
+      .grep(/^\d+.\d/)                                     # only folders that look like versions
+      .max_by do |text|
+        # Maven versions range from 1 to many "." and may not be valid SemVer. Use the more forgiving Gem::Version to sort
+        Gem::Version.new(text)
+      rescue ArgumentError
+        nil
+      end
   end
 
   # maven-metadata.xml for Maven Central does not appear to be guaranteed to contain all relevant versions for a package

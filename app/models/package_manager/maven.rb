@@ -61,6 +61,12 @@ module PackageManager
 
       latest = latest_version(name) unless latest.present?
 
+      # MavenCentral, at least, can return interpolation strings in maven-metadata.xml,
+      # which is not useful to us. In that case, try scraping as a method of finding latest version.
+      if latest =~ /\$\{/
+        latest = latest_version_scraped(name)
+      end
+
       return {} unless latest.present?
 
       {
@@ -266,6 +272,11 @@ module PackageManager
         .css("versioning > latest, versioning > release, metadata > version")
         .map(&:text)
         .first
+    end
+
+    # Override this to add HTML-scraping logic to fetch latest_version.
+    def self.latest_version_scraped(_name)
+      nil
     end
 
     def self.db_platform
