@@ -112,14 +112,13 @@ class Repository::PersistRepositoryFromUpstream
       # set to unmaintained if we do not have another status already assigned
       "Unmaintained"
     elsif !archived_upstream && %w[Unmaintained Removed].include?(repository.status)
-      if repository.status == "Unmaintained"
-        StructuredLog.capture("REPOSITORY_REMOVE_UNMAINTAINED_STATUS",
-                              {
-                                repository_host: repository.host_type,
-                                repository_id: repository.id,
-                                full_name: repository.full_name,
-                              })
-      end
+      StructuredLog.capture("REPOSITORY_UNSETTING_REMOVED_STATUS",
+                            {
+                              repository_host: repository.host_type,
+                              repository_id: repository.id,
+                              full_name: repository.full_name,
+                              current_status: repository.status,
+                            })
 
       # set back to nil if we currently have it marked as unmaintained
       nil
