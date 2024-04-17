@@ -356,7 +356,6 @@ class Repository < ApplicationRecord
     repository = Repository.where(host_type: "GitHub").find_by_uuid(uuid)
     user = Identity.where("provider ILIKE ?", "github%").where(uid: sender_id).first.try(:user)
     if user.present? && repository.present?
-      repository.download_metadata(user.token)
       repository.update_all_info_async(user.token)
     end
   end
