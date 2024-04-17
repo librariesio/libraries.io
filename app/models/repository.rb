@@ -347,7 +347,7 @@ class Repository < ApplicationRecord
         end
       end
 
-      false
+      return false
     end
 
     true
