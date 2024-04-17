@@ -1,37 +1,13 @@
 # frozen_string_literal: true
 
 module RepoManifests
-  def download_manifests(token = nil)
+  def download_metadata(token = nil)
     file_list = get_file_list(token)
     return if file_list.blank?
 
-    new_manifests = parse_manifests(file_list, token)
     sync_metadata(file_list)
 
-    return if new_manifests.blank?
-
-    new_manifests.each { |m| sync_manifest(m) }
-
-    delete_old_manifests(new_manifests)
-
     repository_subscriptions.each(&:update_subscriptions)
-  end
-
-  def parse_manifests(file_list, token = nil)
-    manifest_paths = Bibliothecary.identify_manifests(file_list)
-
-    manifest_paths.map do |manifest_path|
-      file = get_file_contents(manifest_path, token)
-      next unless file.present? && file[:content].present?
-
-      begin
-        manifest = Bibliothecary.analyse_file(manifest_path, file[:content]).first
-        manifest&.merge!(sha: file[:sha])
-        manifest
-      rescue StandardError
-        nil
-      end
-    end.reject(&:blank?)
   end
 
   def sync_metadata(file_list)
@@ -45,44 +21,5 @@ module RepoManifests
     self.has_threat_model = file_list.find { |file| file.match(/^THREAT[-_]MODEL/i) }
     self.has_audit        = file_list.find { |file| file.match(/^AUDIT/i) }
     save if changed?
-  end
-
-  def sync_manifest(manifest_info)
-    args = { platform: manifest_info[:platform], kind: manifest_info[:kind], filepath: manifest_info[:path], sha: manifest_info[:sha] }
-
-    unless manifests.where(args).exists?
-      if manifest_info[:dependencies].nil?
-        Rails.logger.info "RepoManifests#sync_manifest error from parsed manifest: repository_id=#{id} path=#{manifest_info[:platform]} kind=#{manifest_info[:kind]} manifest=#{manifest_info[:path]} sha=#{manifest_info[:sha]} error=#{manifest_info[:error_message]}"
-        return
-      end
-
-      manifest = manifests.create(args)
-
-      dependencies = manifest_info[:dependencies].map(&:with_indifferent_access).uniq { |dep| [dep[:name].try(:strip), dep[:requirement], dep[:type]] }
-      dependencies.each do |dep|
-        platform = manifest.platform
-        next unless dep.is_a?(Hash)
-
-        project_id = Project.find_best(platform, dep[:name])&.id
-
-        manifest.repository_dependencies.create({
-                                                  project_id: project_id,
-                                                  project_name: dep[:name].try(:strip),
-                                                  platform: platform,
-                                                  requirements: dep[:requirement],
-                                                  kind: dep[:type],
-                                                  repository_id: id,
-                                                })
-      end
-    end
-  end
-
-  def delete_old_manifests(new_manifests)
-    existing_manifests = manifests.map { |m| [m.platform, m.filepath] }
-    to_be_removed = existing_manifests - new_manifests.map { |m| [m[:platform], m[:path]] }
-    to_be_removed.each do |m|
-      manifests.where(platform: m[0], filepath: m[1]).each(&:destroy)
-    end
-    manifests.where.not(id: manifests.latest.map(&:id)).each(&:destroy)
   end
 end

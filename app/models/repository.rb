@@ -300,7 +300,7 @@ class Repository < ApplicationRecord
       download_readme(token)
       download_tags(token)
       download_contributions(token)
-      download_manifests(token)
+      download_metadata(token)
       update_source_rank(force: true)
     end
     update_unmaintained_status_from_readme
@@ -357,7 +357,7 @@ class Repository < ApplicationRecord
     repository = Repository.where(host_type: "GitHub").find_by_uuid(uuid)
     user = Identity.where("provider ILIKE ?", "github%").where(uid: sender_id).first.try(:user)
     if user.present? && repository.present?
-      repository.download_manifests(user.token)
+      repository.download_metadata(user.token)
       repository.update_all_info_async(user.token)
     end
   end
