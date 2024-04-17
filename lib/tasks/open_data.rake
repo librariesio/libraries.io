@@ -13,7 +13,6 @@ namespace :open_data do
     export_dependencies
     export_repositories
     export_tags
-    export_repository_dependencies
     export_projects_with_repository_fields
   ]
 
@@ -398,49 +397,6 @@ namespace :open_data do
           tag.created_at,
           tag.updated_at,
         ]
-      end
-    end
-  end
-
-  desc "Export repository dependencies open data csv"
-  task export_repository_dependencies: :environment do
-    csv_file = File.open("data/repository_dependencies-#{EXPORT_VERSION}-#{EXPORT_DATE}.csv", "w")
-    csv_file = CSV.new(csv_file)
-    csv_file << [
-      "ID",
-      "Host Type",
-      "Repository Name with Owner",
-      "Repository ID",
-      "Manifest Platform",
-      "Manifest Filepath",
-      "Git branch",
-      "Manifest kind",
-      "Optional",
-      "Dependency Project Name",
-      "Dependency Requirements",
-      "Dependency Kind",
-      "Dependency Project ID",
-    ]
-
-    Repository.open_source.not_removed.includes(manifests: :repository_dependencies).find_each do |repo|
-      repo.manifests.each do |manifest|
-        manifest.projects_dependencies.each do |repository_dependency|
-          csv_file << [
-            repository_dependency.id,
-            repo.host_type,
-            repo.full_name,
-            repo.id,
-            manifest.platform,
-            manifest.filepath.try(:strip),
-            manifest.branch,
-            manifest.kind,
-            repository_dependency.optional,
-            repository_dependency.project_name.try(:tr, "\r\n", " "),
-            repository_dependency.requirements.try(:tr, "\r\n", " "),
-            repository_dependency.kind.try(:tr, "\r\n", " "),
-            repository_dependency.project_id,
-          ]
-        end
       end
     end
   end
