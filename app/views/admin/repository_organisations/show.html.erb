@@ -108,7 +108,7 @@
         - <%= number_to_human repository.contributors.count %> contributors
         <% count = repository.contributors.sum(:count) %>
         - <%= number_to_human count %> commits (<%= number_to_percentage(count/@total_commits.to_f*100) %>)
-        - <%= number_to_human repository.dependencies.count %> dependencies
+        - <%= number_to_human repository.projects_dependencies.count %> dependencies
       </small>
     </div>
     <% end %>

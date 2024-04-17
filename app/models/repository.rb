@@ -258,10 +258,6 @@ class Repository < ApplicationRecord
     "https://www.gravatar.com/avatar/#{hash}?s=#{size}&f=y&d=retro"
   end
 
-  def load_dependencies_tree(date = nil)
-    RepositoryTreeResolver.new(self, date).load_dependencies_tree
-  end
-
   # TODO: this could probably be refactored into an association
   def projects_dependencies(includes: nil, only_visible: false)
     (only_visible ? projects.visible : projects)

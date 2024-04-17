@@ -158,7 +158,6 @@ Rails.application.routes.draw do
     get "/:host_type/:owner/:name/forks", to: "repositories#forks", as: :repository_forks, format: false, constraints: { name: /[^\/]+/ }
     get "/:host_type/:owner/:name/tags", to: "repositories#tags", as: :repository_tags, format: false, constraints: { name: /[^\/]+/ }
     get "/:host_type/:owner/:name/dependencies", to: "repositories#dependencies", format: false, constraints: { name: /[^\/]+/ }, as: :repository_dependencies
-    get "/:host_type/:owner/:name/tree", to: "repository_tree#show", as: :repository_tree, format: false, constraints: { name: /[^\/]+/ }
 
     get "/:host_type/:owner/:name/web_hooks", to: "web_hooks#index", as: :repository_web_hooks, format: false, constraints: { name: /[^\/]+/ }
     get "/:host_type/:owner/:name/web_hooks/new", to: "web_hooks#new", as: :new_repository_web_hook, format: false, constraints: { name: /[^\/]+/ }
