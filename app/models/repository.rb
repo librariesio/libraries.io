@@ -295,8 +295,7 @@ class Repository < ApplicationRecord
 
   def update_all_info(token = nil)
     token ||= AuthToken.token if host_type == "GitHub"
-    check_status
-    return if status == "Removed"
+    return unless check_status
 
     update_from_repository(token)
     unless last_synced_at && last_synced_at > 2.minutes.ago
@@ -336,6 +335,7 @@ class Repository < ApplicationRecord
     Repository.check_status(host_type, full_name)
   end
 
+  # @return [Boolean] false if we received a 404 response code when checking the status, true otherwise
   def self.check_status(host_type, repo_full_name)
     domain = RepositoryHost::Base.domain(host_type)
     response = Typhoeus.head("#{domain}/#{repo_full_name}")
@@ -350,7 +350,11 @@ class Repository < ApplicationRecord
           project.update_attribute(:status, "Removed")
         end
       end
+
+      false
     end
+
+    true
   end
 
   def self.update_from_hook(uuid, sender_id)
