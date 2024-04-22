@@ -66,6 +66,7 @@
 #
 class Repository < ApplicationRecord
   include Status
+  include RepoMetadata
   include RepositorySourceRank
 
   # eager load this module to avoid clashing with Gitlab gem in development
