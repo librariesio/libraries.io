@@ -66,7 +66,6 @@
 #
 class Repository < ApplicationRecord
   include Status
-  include RepoManifests
   include RepositorySourceRank
 
   # eager load this module to avoid clashing with Gitlab gem in development
@@ -84,10 +83,8 @@ class Repository < ApplicationRecord
   has_many :contributors, through: :contributions, source: :repository_user
   has_many :tags, dependent: :delete_all
   has_many :published_tags, -> { published }, anonymous_class: Tag
-  has_many :manifests, dependent: :destroy
   has_many :repository_dependencies
   has_many :repository_maintenance_stats, dependent: :destroy
-  has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :dependency_projects, -> { group("projects.id").order(Arel.sql("COUNT(projects.id) DESC")) }, through: :dependencies, source: :project
   has_many :dependency_repos, -> { group("repositories.id") }, through: :dependency_projects, source: :repository
 
@@ -121,9 +118,6 @@ class Repository < ApplicationRecord
   scope :open_source, -> { where(private: false) }
   scope :from_org, ->(org_id) { where(repository_organisation_id: org_id) }
 
-  scope :with_manifests, -> { joins(:manifests) }
-  scope :without_manifests, -> { includes(:manifests).where(manifests: { repository_id: nil }) }
-
   scope :with_description, -> { where("repositories.description <> ''") }
   scope :with_license, -> { where("repositories.license <> ''") }
   scope :without_license, -> { where("repositories.license IS ? OR repositories.license = ''", nil) }
@@ -132,7 +126,7 @@ class Repository < ApplicationRecord
   scope :good_quality, -> { maintained.open_source.pushed }
   scope :with_stars, -> { where("repositories.stargazers_count > 0") }
   scope :interesting, -> { with_stars.order(Arel.sql("repositories.stargazers_count DESC, repositories.rank DESC NULLS LAST, repositories.pushed_at DESC")) }
-  scope :uninteresting, -> { without_readme.without_manifests.without_license.where("repositories.stargazers_count = 0").where("repositories.forks_count = 0") }
+  scope :uninteresting, -> { without_readme.without_license.where("repositories.stargazers_count = 0").where("repositories.forks_count = 0") }
 
   scope :recently_created, -> { where("created_at > ?", 7.days.ago) }
   scope :hacker_news, -> { order(Arel.sql("((stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-created_at)/3600)+2,1.8)) DESC")) }
