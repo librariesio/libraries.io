@@ -42,10 +42,6 @@ class User < ApplicationRecord
 
   has_many :watched_repositories, source: :repository, through: :repository_subscriptions
 
-  has_many :dependencies, through: :source_repositories
-  has_many :really_all_dependencies, through: :all_repositories, source: :dependencies
-  has_many :all_dependent_projects, -> { group("projects.id") }, through: :really_all_dependencies, source: :project
-
   has_many :project_mutes, dependent: :delete_all
   has_many :muted_projects, through: :project_mutes, source: :project
   has_many :project_suggestions
@@ -56,6 +52,18 @@ class User < ApplicationRecord
 
   validates_presence_of :email, on: :update
   validates_format_of :email, with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, on: :update
+
+  # TODO: can this be an association again if we made projects_dependencies a Repository association again?
+  def dependencies
+    source_repositories
+      .flat_map(&:projects_dependencies)
+  end
+
+  # TODO: can this be an association again if we made projects_dependencies a Repository association again?
+  def really_all_dependencies
+    all_repositories
+      .flat_map(&:projects_dependencies)
+  end
 
   # TODO: can this be an association again if we made projects_dependencies a Repository association again?
   def favourite_projects
