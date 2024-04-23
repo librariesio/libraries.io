@@ -65,7 +65,6 @@
 #  index_repositories_on_status                            (status)
 #
 class Repository < ApplicationRecord
-  include RepoSearch
   include Status
   include RepoManifests
   include RepositorySourceRank
