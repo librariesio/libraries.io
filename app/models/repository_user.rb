@@ -35,13 +35,25 @@ class RepositoryUser < ApplicationRecord
   has_many :repositories
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository
   has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository
-  has_many :favourite_projects, -> { group("projects.id").order(Arel.sql("COUNT(projects.id) DESC, projects.rank DESC")) }, through: :repositories, source: :projects
   has_many :contributed_repositories, -> { Repository.source.open_source }, through: :contributions, source: :repository
   has_many :contributed_projects, through: :contributed_repositories, source: :projects
   has_many :contributors, -> { group("repository_users.id").order(Arel.sql("sum(contributions.count) DESC")) }, through: :open_source_repositories, source: :contributors
   has_many :fellow_contributors, ->(object) { where.not(id: object.id).group("repository_users.id").order(Arel.sql("COUNT(repository_users.id) DESC")) }, through: :contributed_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
   has_many :identities
+
+  # TODO: can this be an association again if we made projects_dependencies a Repository association again?
+  def favourite_projects
+    dep_ids = open_source_repositories
+      .flat_map { |r| r.projects_dependencies(only_visible: true).map(&:id) }
+      .uniq
+
+    Project
+      .joins(:dependents)
+      .where(dependencies: { id: dep_ids })
+      .group("projects.id")
+      .order(Arel.sql("COUNT(projects.id) DESC, projects.rank DESC"))
+  end
 
   # eager load this module to avoid clashing with Gitlab gem in development
   RepositoryOwner::Gitlab # rubocop: disable Lint/Void

@@ -46,8 +46,6 @@ class User < ApplicationRecord
   has_many :really_all_dependencies, through: :all_repositories, source: :dependencies
   has_many :all_dependent_projects, -> { group("projects.id") }, through: :really_all_dependencies, source: :project
 
-  has_many :favourite_projects, -> { group("projects.id").order("COUNT(projects.id) DESC, projects.rank DESC") }, through: :dependencies, source: :projects
-
   has_many :project_mutes, dependent: :delete_all
   has_many :muted_projects, through: :project_mutes, source: :project
   has_many :project_suggestions
@@ -58,6 +56,19 @@ class User < ApplicationRecord
 
   validates_presence_of :email, on: :update
   validates_format_of :email, with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, on: :update
+
+  # TODO: can this be an association again if we made projects_dependencies a Repository association again?
+  def favourite_projects
+    dep_ids = source_repositories
+      .flat_map { |r| r.projects_dependencies(only_visible: true).map(&:id) }
+      .uniq
+
+    Project
+      .joins(:dependents)
+      .where(dependencies: { id: dep_ids })
+      .group("projects.id")
+      .order(Arel.sql("COUNT(projects.id) DESC, projects.rank DESC"))
+  end
 
   def assign_from_auth_hash(hash)
     return unless new_record?
