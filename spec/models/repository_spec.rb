@@ -4,11 +4,14 @@ require "rails_helper"
 
 describe Repository, type: :model do
   it { should have_many(:projects) }
+  it { should have_many(:latest_versions) }
+  it { should have_many(:projects_dependencies) }
   it { should have_many(:contributions) }
   it { should have_many(:contributors) }
   it { should have_many(:tags) }
   it { should have_many(:published_tags) }
   it { should have_many(:forked_repositories) }
+  it { should have_many(:projects) }
   it { should have_many(:repository_subscriptions) }
   it { should have_many(:web_hooks) }
   it { should have_one(:readme) }
@@ -18,6 +21,31 @@ describe Repository, type: :model do
 
   it { should validate_uniqueness_of(:full_name).scoped_to(:host_type) }
   it { should validate_uniqueness_of(:uuid).scoped_to(:host_type) }
+
+  describe "#projects_dependencies" do
+    let!(:repository) { create(:repository) }
+    let!(:project_one) { create(:project, repository: repository) }
+    let!(:project_two) { create(:project, repository: repository) }
+
+    let!(:project_one_version_old) { create(:version, project: project_one, number: "1.0.0") }
+    let!(:project_one_version_new) { create(:version, project: project_one, number: "2.0.0") }
+    let!(:project_two_version_old) { create(:version, project: project_two, number: "1.0.0") }
+    let!(:project_two_version_new) { create(:version, project: project_two, number: "2.0.0") }
+
+    let!(:project_one_dependency_old) { create(:dependency, version: project_one_version_old, requirements: "1.0.0") }
+    let!(:project_one_dependency_new) { create(:dependency, version: project_one_version_new, project: project_one_dependency_old.project, requirements: "2.0.0") }
+    let!(:project_two_dependency_old) { create(:dependency, version: project_two_version_old, requirements: "1.0.0") }
+    let!(:project_two_dependency_new) { create(:dependency, version: project_two_version_new, project: project_two_dependency_old.project, requirements: "2.0.0") }
+
+    before do
+      project_one.update(latest_version: project_one_version_new)
+      project_two.update(latest_version: project_two_version_new)
+    end
+
+    it "should return all deps for tis " do
+      expect(repository.projects_dependencies).to match_array([project_one_dependency_new, project_two_dependency_new])
+    end
+  end
 
   describe "#domain" do
     it "should be https://github.com for GitHub repos" do

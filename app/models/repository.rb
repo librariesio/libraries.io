@@ -80,11 +80,12 @@ class Repository < ApplicationRecord
                   subscribers_count private logo_url pull_requests_enabled scm keywords status].freeze
 
   has_many :projects
+  has_many :latest_versions, through: :projects, source: :latest_version
+  has_many :projects_dependencies, through: :latest_versions, class_name: "Dependency", source: :dependencies
   has_many :contributions, dependent: :delete_all
   has_many :contributors, through: :contributions, source: :repository_user
   has_many :tags, dependent: :delete_all
   has_many :published_tags, -> { published }, anonymous_class: Tag
-  has_many :repository_dependencies
   has_many :repository_maintenance_stats, dependent: :destroy
   has_many :dependency_projects, -> { group("projects.id").order(Arel.sql("COUNT(projects.id) DESC")) }, through: :dependencies, source: :project
   has_many :dependency_repos, -> { group("repositories.id") }, through: :dependency_projects, source: :repository
@@ -250,15 +251,6 @@ class Repository < ApplicationRecord
   def fallback_avatar_url(size = 60)
     hash = Digest::MD5.hexdigest("#{host_type}-#{full_name}")
     "https://www.gravatar.com/avatar/#{hash}?s=#{size}&f=y&d=retro"
-  end
-
-  # TODO: this could probably be refactored into an association
-  def projects_dependencies(includes: nil, only_visible: false)
-    (only_visible ? projects.visible : projects)
-      .map(&:latest_version)
-      .compact
-      .flat_map { |v| v.dependencies.includes(includes) }
-      .uniq { |d| [d.project_id, d.requirements] }
   end
 
   def id_or_name

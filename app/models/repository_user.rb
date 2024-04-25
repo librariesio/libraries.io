@@ -45,7 +45,7 @@ class RepositoryUser < ApplicationRecord
   # TODO: can this be an association again if we made projects_dependencies a Repository association again?
   def favourite_projects
     dep_ids = open_source_repositories
-      .flat_map { |r| r.projects_dependencies(only_visible: true).map(&:id) }
+      .flat_map { |r| r.projects_dependencies.merge(Project.visible).map(&:id) }
       .uniq
 
     Project

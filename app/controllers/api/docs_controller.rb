@@ -19,7 +19,7 @@ class Api::DocsController < ApplicationController
 
     @repo_dependencies = @repository.as_json
 
-    @repo_dependencies[:dependencies] = map_dependencies(@repository.projects_dependencies || [])
+    @repo_dependencies[:dependencies] = map_dependencies(@repository.projects_dependencies)
 
     @search = Project.search("grunt", api: true).records
 
