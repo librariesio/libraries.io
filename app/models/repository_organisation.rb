@@ -31,7 +31,6 @@ class RepositoryOrganisation < ApplicationRecord
   has_many :repositories
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository
   has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository
-  has_many :all_dependent_repos, -> { group("repositories.id") }, through: :favourite_projects, source: :repository
   has_many :contributors, -> { group("repository_users.id").order(Arel.sql("sum(contributions.count) DESC")) }, through: :open_source_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
