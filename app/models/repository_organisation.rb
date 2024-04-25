@@ -31,6 +31,8 @@ class RepositoryOrganisation < ApplicationRecord
   has_many :repositories
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository
   has_many :open_source_repositories, -> { where fork: false, private: false }, anonymous_class: Repository
+  has_many :open_source_projects_dependencies, through: :open_source_repositories, source: :projects_dependencies
+  has_many :favourite_projects, -> { group("projects.id").order(Arel.sql("COUNT(projects.id) DESC, projects.rank DESC")) }, through: :open_source_projects_dependencies, source: :project
   has_many :contributors, -> { group("repository_users.id").order(Arel.sql("sum(contributions.count) DESC")) }, through: :open_source_repositories, source: :contributors
   has_many :projects, through: :open_source_repositories
 
@@ -53,19 +55,6 @@ class RepositoryOrganisation < ApplicationRecord
            :to_s, :to_param, :github_id, :download_org_from_host, :download_orgs,
            :download_org_from_host_by_login, :download_repos, :download_members,
            :check_status, to: :repository_owner
-
-  # TODO: can this be an association again if we made projects_dependencies a Repository association again?
-  def favourite_projects
-    dep_ids = open_source_repositories
-      .flat_map { |r| r.projects_dependencies.merge(Project.visible).map(&:id) }
-      .uniq
-
-    Project
-      .joins(:dependents)
-      .where(dependencies: { id: dep_ids })
-      .group("projects.id")
-      .order(Arel.sql("COUNT(projects.id) DESC, projects.rank DESC"))
-  end
 
   def repository_owner
     @repository_owner ||= RepositoryOwner.const_get(host_type.capitalize).new(self)

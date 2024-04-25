@@ -39,6 +39,9 @@ class User < ApplicationRecord
   has_many :adminable_repository_organisations, -> { group("repository_organisations.id") }, through: :adminable_repositories, source: :repository_organisation
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, through: :repository_users
   has_many :public_repositories, -> { where private: false }, anonymous_class: Repository, through: :repository_users
+  has_many :dependencies, through: :source_repositories, source: :projects_dependencies
+  has_many :really_all_dependencies, through: :all_repositories, source: :projects_dependencies
+  has_many :favourite_projects, -> { group("projects.id").order(Arel.sql("COUNT(projects.id) DESC, projects.rank DESC")) }, through: :dependencies, source: :project
 
   has_many :watched_repositories, source: :repository, through: :repository_subscriptions
 
@@ -52,31 +55,6 @@ class User < ApplicationRecord
 
   validates_presence_of :email, on: :update
   validates_format_of :email, with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, on: :update
-
-  # TODO: can this be an association again if we made projects_dependencies a Repository association again?
-  def dependencies
-    source_repositories
-      .flat_map(&:projects_dependencies)
-  end
-
-  # TODO: can this be an association again if we made projects_dependencies a Repository association again?
-  def really_all_dependencies
-    all_repositories
-      .flat_map(&:projects_dependencies)
-  end
-
-  # TODO: can this be an association again if we made projects_dependencies a Repository association again?
-  def favourite_projects
-    dep_ids = source_repositories
-      .flat_map { |r| r.projects_dependencies.merge(Project.visible).map(&:id) }
-      .uniq
-
-    Project
-      .joins(:dependents)
-      .where(dependencies: { id: dep_ids })
-      .group("projects.id")
-      .order(Arel.sql("COUNT(projects.id) DESC, projects.rank DESC"))
-  end
 
   def assign_from_auth_hash(hash)
     return unless new_record?
