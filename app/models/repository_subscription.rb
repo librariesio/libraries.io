@@ -25,7 +25,7 @@ class RepositorySubscription < ApplicationRecord
 
   def update_subscriptions
     projects = []
-    repository.projects_dependencies(includes: [:project]).each do |dep|
+    repository.projects_dependencies.includes(:project).each do |dep|
       if dep.project.present?
         project = dep.project.try(:id)
       elsif dep.project_name.present?

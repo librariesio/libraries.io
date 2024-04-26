@@ -4,6 +4,7 @@ require "rails_helper"
 
 describe Project, type: :model do
   it { should have_many(:versions) }
+  it { should belong_to(:latest_version) }
   it { should have_many(:dependencies) }
   it { should have_many(:contributions) }
   it { should have_many(:contributors) }

@@ -39,15 +39,11 @@ class User < ApplicationRecord
   has_many :adminable_repository_organisations, -> { group("repository_organisations.id") }, through: :adminable_repositories, source: :repository_organisation
   has_many :source_repositories, -> { where fork: false }, anonymous_class: Repository, through: :repository_users
   has_many :public_repositories, -> { where private: false }, anonymous_class: Repository, through: :repository_users
+  has_many :dependencies, through: :source_repositories, source: :projects_dependencies
+  has_many :really_all_dependencies, through: :all_repositories, source: :projects_dependencies
+  has_many :favourite_projects, -> { group("projects.id").order(Arel.sql("COUNT(projects.id) DESC, projects.rank DESC")) }, through: :dependencies, source: :project
 
   has_many :watched_repositories, source: :repository, through: :repository_subscriptions
-
-  has_many :dependencies, through: :source_repositories
-  has_many :really_all_dependencies, through: :all_repositories, source: :dependencies
-  has_many :all_dependent_projects, -> { group("projects.id") }, through: :really_all_dependencies, source: :project
-  has_many :all_dependent_repos, -> { group("repositories.id") }, through: :all_dependent_projects, source: :repository
-
-  has_many :favourite_projects, -> { group("projects.id").order("COUNT(projects.id) DESC, projects.rank DESC") }, through: :dependencies, source: :project
 
   has_many :project_mutes, dependent: :delete_all
   has_many :muted_projects, through: :project_mutes, source: :project
@@ -93,7 +89,7 @@ class User < ApplicationRecord
   def watched_dependent_projects
     repository_subscriptions
       .map(&:repository)
-      .map { |r| r.projects_dependencies(includes: [:project], only_visible: true).map(&:project) }
+      .map { |r| r.projects_dependencies.includes(:project).merge(Project.visible).map(&:project) }
       .flatten
       .uniq
   end

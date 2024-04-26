@@ -26,7 +26,6 @@
 class RepositoryDependency < ApplicationRecord
   include DependencyChecks
 
-  belongs_to :manifest
   belongs_to :project
   belongs_to :repository
 
@@ -45,7 +44,6 @@ class RepositoryDependency < ApplicationRecord
   alias outdated outdated?
 
   delegate :latest_stable_release_number, :latest_release_number, :deprecated?, to: :project, allow_nil: true
-  delegate :filepath, to: :manifest
 
   def find_project_id
     Project.find_best(platform, project_name&.strip)&.id
