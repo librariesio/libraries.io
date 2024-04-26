@@ -116,7 +116,7 @@ class Project < ApplicationRecord
   has_many :dependents, class_name: "Dependency"
   has_many :dependent_versions, through: :dependents, source: :version, class_name: "Version"
   has_many :dependent_projects, -> { group("projects.id").order("projects.rank DESC NULLS LAST") }, through: :dependent_versions, source: :project, class_name: "Project"
-  # TODO: unscope().group() can be replaced with regroup() in rails 7.1: https://github.com/rails/rails/pull/47010  
+  # TODO: unscope().group() can be replaced with regroup() in rails 7.1: https://github.com/rails/rails/pull/47010
   has_many :dependent_repositories, -> { unscope(:group).group("repositories.id").reorder("repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC") }, through: :dependent_projects, source: :repository
 
   has_many :subscriptions, dependent: :destroy

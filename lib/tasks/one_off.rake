@@ -3,6 +3,18 @@
 require_relative "input_tsv_file"
 
 namespace :one_off do
+  # this table is huge and requires a manual batch-deletion
+  desc "clean out repository_dependencies table"
+  task batch_delete_repository_dependencies: :environment do
+    RepositoryDependency.in_batches.each_with_index do |b, idx|
+      b.delete_all
+      if idx % 1000 == 0
+        print "."
+        sleep 1
+      end
+    end
+  end
+
   # put your one off tasks here and delete them once they've been ran
   desc "set stable flag on all versions"
   task set_stable_versions: :environment do
