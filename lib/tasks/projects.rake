@@ -153,7 +153,7 @@ namespace :projects do
   desc "Refresh project_dependent_repos view"
   task refresh_project_dependent_repos_view: :environment do
     exit if ENV["READ_ONLY"].present?
-    ProjectDependentRepository.refresh
+    raise "The projects:refresh_project_dependent_repos_view task has been disabled after the ProjectDependentRepository code has been removed. This task is a no-op now."
   end
 
   desc "Set license_normalized flag"

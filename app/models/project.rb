@@ -404,7 +404,7 @@ class Project < ApplicationRecord
     new_dependents_count = ActiveRecord::Base.connection.with_statement_timeout(60.minutes.to_i) do
       dependents.joins(:version).pluck(Arel.sql("DISTINCT versions.project_id")).count
     end
-    new_dependent_repos_count = dependent_repos_fast_count
+    new_dependent_repos_count = dependent_repositories.count
 
     updates = {}
     updates[:dependents_count] = new_dependents_count if read_attribute(:dependents_count) != new_dependents_count
@@ -632,10 +632,6 @@ class Project < ApplicationRecord
 
   def dependent_repos_top_ten
     dependent_repos_view_query(10)
-  end
-
-  def dependent_repos_fast_count
-    ProjectDependentRepository.where(project_id: id).count
   end
 
   def check_status
