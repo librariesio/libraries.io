@@ -4,7 +4,8 @@ class Api::RepositoriesController < Api::ApplicationController
   before_action :find_repo, except: :search
 
   def show
-    repo_json = RepositorySerializer.new(@repository).as_json
+    include_readme = ActiveModel::Type::Boolean.new.cast(params[:include_readme])
+    repo_json = RepositorySerializer.new(@repository, include_readme: include_readme).as_json
     repo_json[:maintenance_stats] = maintenance_stats(@repository) if internal_api_key?
     render json: repo_json
   end

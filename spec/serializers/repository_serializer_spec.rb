@@ -18,4 +18,13 @@ describe RepositorySerializer do
       pull_requests_enabled logo_url github_contributions_count keywords
     ])
   end
+
+  context "when :include_readme option is true" do
+    subject { described_class.new(build(:repository, readme: build(:readme, html_body: "<html>this is my readme</html>")), include_readme: true) }
+
+    it "renders readme when flag is passed" do
+      expect(subject.attributes.keys).to include(:readme_html_body)
+      expect(subject.readme_html_body).to eq("<html>this is my readme</html>")
+    end
+  end
 end

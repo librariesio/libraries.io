@@ -10,4 +10,10 @@ class RepositorySerializer < ActiveModel::Serializer
              :has_threat_model, :has_audit, :status, :last_synced_at, :rank,
              :host_type, :host_domain, :name, :scm, :fork_policy, :github_id,
              :pull_requests_enabled, :logo_url, :github_contributions_count, :keywords
+
+  attribute :readme_html_body, if: -> { instance_options[:include_readme] == true }
+
+  def readme_html_body
+    object.readme&.html_body
+  end
 end

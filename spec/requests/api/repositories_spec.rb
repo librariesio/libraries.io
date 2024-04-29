@@ -93,5 +93,19 @@ describe "Api::RepositoriesController" do
 
       expect(json["maintenance_stats"].to_json).to be_json_eql([maintenance_stat.attributes.symbolize_keys.slice(*RepositoryMaintenanceStat::API_FIELDS)].to_json)
     end
+
+    it "doesn't include readme when include_readme=false" do
+      get "/api/github/#{repository.full_name}?include_readme=false", params: { api_key: internal_user.api_key }
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to start_with("application/json")
+      expect(json.as_json.keys).to_not include("readme_html_body")
+    end
+
+    it "includes readme when include_readme=true" do
+      get "/api/github/#{repository.full_name}?include_readme=true", params: { api_key: internal_user.api_key }
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to start_with("application/json")
+      expect(json.as_json.keys).to include("readme_html_body")
+    end
   end
 end
