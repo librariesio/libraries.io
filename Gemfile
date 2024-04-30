@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-ruby "3.0.5"
+ruby "3.1.5"
 
 gem "active_model_serializers"
 gem "api-pagination"
@@ -32,7 +32,7 @@ gem "ffi"
 gem "font-awesome-rails", "~> 4"
 gem "foreman", require: false
 gem "gemoji"
-gem "github-linguist"
+gem "github-linguist", "7.4.0"
 gem "github-markup", require: "github/markup"
 gem "gitlab"
 gem "graphql", "< 2"
@@ -84,7 +84,7 @@ gem "sidekiq-unique-jobs", "~> 7"
 gem "simple_form"
 gem "simple-rss"
 gem "sitemap_generator"
-gem "spdx"
+gem "spdx", "2.0.11"
 gem "strong_migrations", "0.8.0"
 gem "tomlrb"
 gem "turbolinks"
