@@ -134,11 +134,9 @@ namespace :projects do
   desc "Sync potentially outdated projects"
   task potentially_outdated: :environment do
     exit if ENV["READ_ONLY"].present?
-    rd_names = RepositoryDependency.where("created_at > ?", 1.hour.ago).select("project_name,platform").distinct.pluck(:platform, :project_name).map { |r| [PackageManager::Base.format_name(r[0]), r[1]] }
     d_names = Dependency.where("created_at > ?", 1.hour.ago).select("project_name,platform").distinct.pluck(:platform, :project_name).map { |r| [PackageManager::Base.format_name(r[0]), r[1]] }
-    all_names = (d_names + rd_names).uniq
 
-    all_names.each do |platform, name|
+    d_names.each do |platform, name|
       project = Project.platform(platform).find_by_name(name)
       if project
         begin
@@ -150,12 +148,6 @@ namespace :projects do
         PackageManagerDownloadWorker.perform_async("PackageManager::#{platform}", name, nil, "potentially_outdated")
       end
     end
-  end
-
-  desc "Refresh project_dependent_repos view"
-  task refresh_project_dependent_repos_view: :environment do
-    exit if ENV["READ_ONLY"].present?
-    ProjectDependentRepository.refresh
   end
 
   desc "Set license_normalized flag"
