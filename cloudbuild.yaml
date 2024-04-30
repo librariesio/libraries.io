@@ -1,5 +1,5 @@
 steps:
-- name: 'gcr.io/kaniko-project/executor:v1.22.0
+- name: 'gcr.io/kaniko-project/executor:v1.22.0'
   env: ['REVISION_ID=$REVISION_ID']
   args:
   - --destination=gcr.io/$PROJECT_ID/libraries.io:$REVISION_ID
