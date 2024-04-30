@@ -705,7 +705,7 @@ DEPENDENCIES
   sassc-rails
   scenic (~> 1.7)
   semantic!
-  semantic_range (= 2.3.0)
+  semantic_range
   shoulda
   sidekiq (< 7)
   sidekiq-unique-jobs (~> 7)
