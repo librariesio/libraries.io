@@ -154,9 +154,9 @@ GEM
     commander (4.6.0)
       highline (~> 2.0.0)
     commonmarker (0.23.10)
-    concurrent-ruby (1.1.5)
-    concurrent-ruby-ext (1.1.5)
-      concurrent-ruby (= 1.1.5)
+    concurrent-ruby (1.2.3)
+    concurrent-ruby-ext (1.2.3)
+      concurrent-ruby (= 1.2.3)
     connection_pool (2.4.1)
     counter_culture (2.2.2)
       activerecord (>= 4.2.0)
@@ -648,7 +648,7 @@ DEPENDENCIES
   font-awesome-rails (~> 4)
   foreman
   gemoji
-  github-linguist
+  github-linguist (= 7.4.0)
   github-markup
   gitlab
   graphql (< 2)
@@ -705,7 +705,7 @@ DEPENDENCIES
   sassc-rails
   scenic (~> 1.7)
   semantic!
-  semantic_range
+  semantic_range (= 2.3.0)
   shoulda
   sidekiq (< 7)
   sidekiq-unique-jobs (~> 7)
@@ -713,7 +713,7 @@ DEPENDENCIES
   simple_form
   simplecov
   sitemap_generator
-  spdx
+  spdx (= 2.0.11)
   sql_queries_count
   strong_migrations (= 0.8.0)
   tomlrb
@@ -726,7 +726,7 @@ DEPENDENCIES
   yajl-ruby
 
 RUBY VERSION
-   ruby 3.0.5p211
+   ruby 3.1.5p252
 
 BUNDLED WITH
    2.2.33
