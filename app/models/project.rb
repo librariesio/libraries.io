@@ -225,11 +225,11 @@ class Project < ApplicationRecord
 
   def manual_sync
     StructuredLog.capture("PROJECT_MANUAL_SYNC",
-    {
-      platform: platform,
-      name: name,
-      last_synced_at: last_synced_at,
-    })
+                          {
+                            platform: platform,
+                            name: name,
+                            last_synced_at: last_synced_at,
+                          })
     async_sync(force_sync_dependencies: true)
     update_repository_async
     forced_save

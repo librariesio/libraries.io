@@ -267,11 +267,11 @@ class Repository < ApplicationRecord
 
   def manual_sync(token = nil)
     StructuredLog.capture("REPOSITORY_MANUAL_SYNC",
-    {
-      host_type: host_type,
-      full_name: full_name,
-      repository_last_synced_at: last_synced_at,
-    })
+                          {
+                            host_type: host_type,
+                            full_name: full_name,
+                            repository_last_synced_at: last_synced_at,
+                          })
     update_all_info_async(token)
     update(last_synced_at: Time.now)
   end
