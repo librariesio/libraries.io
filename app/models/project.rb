@@ -234,10 +234,6 @@ class Project < ApplicationRecord
     save
   end
 
-  def set_last_synced_at
-    update_attribute(:last_synced_at, Time.zone.now)
-  end
-
   def async_sync(force_sync_dependencies: false)
     return unless platform_class_exists?
 
