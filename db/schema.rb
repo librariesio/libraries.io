@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_09_222653) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_01_171850) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -66,7 +66,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_222653) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index "project_id, ((created_at)::date)", name: "index_dependencies_on_project_created_at_date"
-    t.index ["project_id"], name: "index_dependencies_on_project_id"
+    t.index ["project_id", "version_id"], name: "index_dependencies_on_project_id_and_version_id"
     t.index ["version_id"], name: "index_dependencies_on_version_id"
   end
 
