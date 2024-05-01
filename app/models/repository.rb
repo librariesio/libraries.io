@@ -266,9 +266,14 @@ class Repository < ApplicationRecord
   end
 
   def manual_sync(token = nil)
+    StructuredLog.capture("REPOSITORY_MANUAL_SYNC",
+                          {
+                            host_type: host_type,
+                            full_name: full_name,
+                            repository_last_synced_at: last_synced_at,
+                          })
     update_all_info_async(token)
-    self.last_synced_at = Time.zone.now
-    save
+    update(last_synced_at: Time.now)
   end
 
   def update_all_info_async(token = nil)

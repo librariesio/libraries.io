@@ -224,6 +224,12 @@ class Project < ApplicationRecord
   end
 
   def manual_sync
+    StructuredLog.capture("PROJECT_MANUAL_SYNC",
+                          {
+                            platform: platform,
+                            name: name,
+                            last_synced_at: last_synced_at,
+                          })
     async_sync(force_sync_dependencies: true)
     update_repository_async
     forced_save
@@ -232,10 +238,6 @@ class Project < ApplicationRecord
   def forced_save
     self.updated_at = Time.zone.now
     save
-  end
-
-  def set_last_synced_at
-    update_attribute(:last_synced_at, Time.zone.now)
   end
 
   def async_sync(force_sync_dependencies: false)

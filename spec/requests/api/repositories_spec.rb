@@ -113,4 +113,48 @@ describe "Api::RepositoriesController" do
       end
     end
   end
+
+  describe "GET /api/github/:owner/:name/sync", type: :request do
+    context "without api key" do
+      it "forbids action" do
+        get "/api/github/#{repository.full_name}/sync"
+
+        expect(response).to have_http_status(:forbidden)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to include("403")
+      end
+    end
+
+    context "without internal api key" do
+      it "forbids action" do
+        get "/api/github/#{repository.full_name}/sync", params: { api_key: create(:user).api_key }
+
+        expect(response).to have_http_status(:forbidden)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to include("403")
+      end
+    end
+
+    context "already recently synced" do
+      before { repository.update!(last_synced_at: 1.hour.ago) }
+
+      it "notifies already recently synced" do
+        get "/api/github/#{repository.full_name}/sync", params: { api_key: internal_user.api_key }
+
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to include("Repository has already been synced recently")
+      end
+    end
+
+    context "success" do
+      it "notifies the sync is queued" do
+        get "/api/github/#{repository.full_name}/sync", params: { api_key: internal_user.api_key }
+
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to include("Repository queued for re-sync")
+      end
+    end
+  end
 end
