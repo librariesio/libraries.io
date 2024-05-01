@@ -54,6 +54,7 @@ Rails.application.routes.draw do
       get "/:host_type/:owner/:name/dependencies", to: "repositories#dependencies", constraints: { name: /[^\/]+/ }
       get "/:host_type/:owner/:name/shields_dependencies", to: "repositories#shields_dependencies", constraints: { name: /[^\/]+/ }
       get "/:host_type/:owner/:name/projects", to: "repositories#projects", constraints: { name: /[^\/]+/ }
+      get "/:host_type/:owner/:name/sync", to: "repositories#sync", constraints: { name: /[^\/]+/ }
       get "/:host_type/:owner/:name", to: "repositories#show", constraints: { name: /[^\/]+/ }
 
       get "/:host_type/:login", to: "repository_users#show"

@@ -2,6 +2,7 @@
 
 class Api::RepositoriesController < Api::ApplicationController
   before_action :find_repo, except: :search
+  before_action :require_internal_api_key, only: :sync
 
   def show
     include_readme = ActiveModel::Type::Boolean.new.cast(params[:include_readme])
@@ -43,6 +44,22 @@ class Api::RepositoriesController < Api::ApplicationController
     end
 
     render json: json_hash
+  end
+
+  def sync
+    if @repository.recently_synced?
+      StructuredLog.capture(
+        "REPOSITORY_SYNC_REQUEST_SKIPPED", {
+          host_type: @repository.host_type,
+          full_name: @repository.full_name,
+          repository_last_synced_at: @repository.last_synced_at,
+        }
+      )
+      render json: { error: "Repository has already been synced recently" }
+    else
+      @repository.manual_sync
+      render json: { message: "Repository queued for re-sync" }
+    end
   end
 
   private
