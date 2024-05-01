@@ -49,10 +49,10 @@ class Api::RepositoriesController < Api::ApplicationController
   def sync
     if @repository.recently_synced?
       StructuredLog.capture(
-        "REPOSITORY_SYNC_REQUEST_SKIPPED", {
+        "REPOSITORY_MANUAL_SYNC_REQUEST_SKIPPED", {
           host_type: @repository.host_type,
           full_name: @repository.full_name,
-          repository_last_synced_at: @repository.last_synced_at,
+          last_synced_at: @repository.last_synced_at,
         }
       )
       render json: { error: "Repository has already been synced recently" }
