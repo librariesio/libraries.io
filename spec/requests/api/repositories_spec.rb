@@ -115,6 +115,16 @@ describe "Api::RepositoriesController" do
   end
 
   describe "GET /api/github/:owner/:name/sync", type: :request do
+    context "without api key" do
+      it "forbids action" do
+        get "/api/github/#{repository.full_name}/sync"
+
+        expect(response).to have_http_status(:forbidden)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to include("403")
+      end
+    end
+
     context "without internal api key" do
       it "forbids action" do
         get "/api/github/#{repository.full_name}/sync", params: { api_key: create(:user).api_key }
