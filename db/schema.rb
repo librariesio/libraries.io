@@ -274,23 +274,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_01_171850) do
     t.index ["status"], name: "index_repositories_on_status"
   end
 
-  create_table "repository_dependencies", force: :cascade do |t|
-    t.integer "project_id"
-    t.integer "manifest_id"
-    t.boolean "optional"
-    t.string "project_name"
-    t.string "platform"
-    t.string "requirements"
-    t.string "kind"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.integer "repository_id"
-    t.index "project_id, ((created_at)::date)", name: "index_repository_dependencies_on_project_created_at_date"
-    t.index ["manifest_id"], name: "index_repository_dependencies_on_manifest_id"
-    t.index ["project_id"], name: "index_repository_dependencies_on_project_id"
-    t.index ["repository_id"], name: "index_repository_dependencies_on_repository_id"
-  end
-
   create_table "repository_maintenance_stats", force: :cascade do |t|
     t.bigint "repository_id"
     t.string "category"
@@ -433,24 +416,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_01_171850) do
     t.index ["all_project_updates"], name: "index_web_hooks_on_all_project_updates"
     t.index ["repository_id"], name: "index_web_hooks_on_repository_id"
   end
-
-
-  create_view "project_dependent_repositories", materialized: true, sql_definition: <<-SQL
-      SELECT t1.project_id,
-      t1.id AS repository_id,
-      t1.rank,
-      t1.stargazers_count
-     FROM (( SELECT repositories.id,
-              repositories.rank,
-              repositories.stargazers_count,
-              repository_dependencies.project_id
-             FROM (repositories
-               JOIN repository_dependencies ON ((repositories.id = repository_dependencies.repository_id)))
-            WHERE (repositories.private = false)
-            GROUP BY repositories.id, repository_dependencies.project_id) t1
-       JOIN projects ON ((t1.project_id = projects.id)));
-  SQL
-  add_index "project_dependent_repositories", ["project_id", "rank", "stargazers_count"], name: "index_project_dependent_repos_on_rank", order: { rank: "DESC NULLS LAST", stargazers_count: :desc }
-  add_index "project_dependent_repositories", ["project_id", "repository_id"], name: "index_project_dependent_repos_on_proj_id_and_repo_id", unique: true
 
 end
