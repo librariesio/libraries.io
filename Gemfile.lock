@@ -693,6 +693,7 @@ DEPENDENCIES
   rails (= 7.0.8.1)
   rails-timeago!
   rails_safe_tasks
+  rainbow (~> 3)
   rb-readline
   rdoc
   redis
