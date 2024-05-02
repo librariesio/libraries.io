@@ -7,10 +7,10 @@ env = {
 }.fetch(ENV["RAILS_ENV"] || ENV.fetch("RACK_ENV", nil), "dev")
 
 IRB.conf[:PROMPT][:DEFAULT] = {
-  PROMPT_I: env + ">%N(%m):%03n:%i> ",
-  PROMPT_N: env + ">%N(%m):%03n:%i> ",
-  PROMPT_S: env + ">%N(%m):%03n:%i%l ",
-  PROMPT_C: env + ">%N(%m):%03n:%i* ",
+  PROMPT_I: "#{env}>%N(%m):%03n:%i> ",
+  PROMPT_N: "#{env}>%N(%m):%03n:%i> ",
+  PROMPT_S: "#{env}>%N(%m):%03n:%i%l ",
+  PROMPT_C: "#{env}>%N(%m):%03n:%i* ",
   RETURN: "=> %s\n",
 }
 
