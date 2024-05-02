@@ -621,22 +621,29 @@ class Project < ApplicationRecord
     subscriptions.with_repository_subscription.where("repository_subscriptions.user_id = ?", user.id).map(&:repository).uniq
   end
 
-  def dependent_repos_view_query(limit, offset = 0)
-    sql = "SELECT *
-           FROM   repositories
-           WHERE  id IN
-                  (
-                        SELECT   repository_id
-                        FROM     project_dependent_repositories
-                        WHERE    project_id = ?
-                        ORDER BY rank DESC nulls last,
-                                 stargazers_count DESC limit ? offset ?);"
+  # This is an optimized query alternative to the :dependent_repositories association. It can be
+  # very slow for super popular repositories, so cap the timeout to 5 seconds.
+  def dependent_repositories_optimized(limit, offset = 0)
+    repo_ids = ActiveRecord::Base.connection.with_statement_timeout(5) do
+      Version
+        .where(id: dependents.select(:version_id))
+        .joins(:project)
+        .select("projects.repository_id")
+        .distinct
+        .count
+    rescue ActiveRecord::QueryCanceled
+      []
+    end
 
-    Repository.find_by_sql([sql, id, limit, offset])
+    Repository
+      .where(id: repo_ids)
+      .order("repositories.rank DESC NULLS LAST, repositories.stargazers_count DESC")
+      .limit(limit)
+      .offset(offset)
   end
 
   def dependent_repos_top_ten
-    dependent_repos_view_query(10)
+    dependent_repositories_optimized(10)
   end
 
   def check_status
