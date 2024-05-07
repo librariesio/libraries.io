@@ -570,4 +570,18 @@ describe Repository, type: :model do
       end
     end
   end
+
+  describe "#update_all_info" do
+    let(:repository) { build(:repository) }
+
+    context "with removed repository" do
+      before do
+        allow(Repository).to receive(:check_status).with(repository.host_type, repository.full_name).and_return(false)
+      end
+
+      it "sets last_synced_at for 404" do
+        expect { repository.update_all_info("token") }.to change(repository, :last_synced_at)
+      end
+    end
+  end
 end
