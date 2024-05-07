@@ -282,10 +282,9 @@ class Repository < ApplicationRecord
 
   def update_all_info(token = nil)
     token ||= AuthToken.token if host_type == "GitHub"
-    return unless check_status
 
-    update_from_repository(token)
-    unless last_synced_at && last_synced_at > 2.minutes.ago
+    if check_status && (last_synced_at.nil? || last_synced_at < 2.minutes.ago)
+      update_from_repository(token)
       download_owner
       download_fork_source(token)
       download_readme(token)
@@ -293,8 +292,9 @@ class Repository < ApplicationRecord
       download_contributions(token)
       download_metadata(token)
       update_source_rank(force: true)
+      update_unmaintained_status_from_readme
     end
-    update_unmaintained_status_from_readme
+
     self.last_synced_at = Time.current
 
     save
