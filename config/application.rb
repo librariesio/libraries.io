@@ -86,5 +86,8 @@ module Libraries
     config.gtm_id = ENV.fetch("GTM_ID", nil)
     config.tidelift_api_key = ENV.fetch("TIDELIFT_API_KEY", nil)
     config.pg_search_projects_enabled = ENV.key?("PG_SEARCH_PROJECTS_ENABLED")
+
+    # In rails 7.1 we can use autoload_lib instead
+    require "extensions"
   end
 end
