@@ -40,7 +40,7 @@ module Monitoring
   end
 
   def your_dependent_repos(project)
-    ids = really_all_dependencies.where(project_id: project.id).pluck(:repository_id).uniq
+    ids = really_all_dependencies.where(project_id: project.id).pluck("projects.repository_id").uniq
     all_repositories.where(id: ids).order("fork ASC, pushed_at DESC, rank DESC NULLS LAST")
   end
 end
