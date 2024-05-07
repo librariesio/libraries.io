@@ -74,7 +74,10 @@ module RepositoryOwner
     def self.create_org(org_hash)
       return if org_hash.nil?
 
-      org_hash = org_hash.to_hash.with_indifferent_access
+      org_hash = org_hash
+        .to_hash
+        .with_indifferent_access
+        .transform_values { |v| v.is_a?(String) ? v.gsub("\u0000", "") : v }
       org = nil
       org_by_id = RepositoryOrganisation.where(host_type: "GitHub").find_by_uuid(org_hash[:id])
       org_by_login = RepositoryOrganisation.host("GitHub").login(org_hash[:login]).first
@@ -99,7 +102,10 @@ module RepositoryOwner
     def self.create_user(user_hash)
       return if user_hash.nil?
 
-      user_hash = user_hash.to_hash.with_indifferent_access
+      user_hash = user_hash
+        .to_hash
+        .with_indifferent_access
+        .transform_values { |v| v.is_a?(String) ? v.gsub("\u0000", "") : v }
       user = nil
       user_by_id = RepositoryUser.where(host_type: "GitHub").find_by_uuid(user_hash[:id])
       user_by_login = RepositoryUser.host("GitHub").login(user_hash[:login]).first
