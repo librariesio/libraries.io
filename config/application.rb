@@ -88,6 +88,6 @@ module Libraries
     config.pg_search_projects_enabled = ENV.key?("PG_SEARCH_PROJECTS_ENABLED")
 
     # In rails 7.1 we can use autoload_lib instead
-    require "extensions"
+    require "string_utils"
   end
 end

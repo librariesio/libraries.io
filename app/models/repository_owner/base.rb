@@ -131,7 +131,7 @@ module RepositoryOwner
       response
         .to_hash
         .with_indifferent_access
-        .transform_values { |v| v.is_a?(String) ? v.strip_null_bytes : v }
+        .transform_values { |v| v.is_a?(String) ? StringUtils.strip_null_bytes(v) : v }
     end
 
     private
