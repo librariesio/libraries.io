@@ -79,9 +79,11 @@ describe "Api::RepositoriesController" do
     end
   end
 
-  describe "GET /api/github/:owner/:name", type: :request do
+  # specs to share between the two different URL routes for the repository#show endpoint
+  # must define url and params
+  shared_examples "repository#show" do
     it "renders successfully" do
-      get "/api/github/#{repository.full_name}", params: { api_key: internal_user.api_key }
+      get url, params: params
       expect(response).to have_http_status(:success)
       expect(response.content_type).to start_with("application/json")
       expect(json.to_json).to be_json_eql(
@@ -95,22 +97,52 @@ describe "Api::RepositoriesController" do
     end
 
     context "when repository has a readme" do
-      let!(:repository) { create(:repository, readme: build(:readme, html_body: "<html>this is my readme</html>")) }
+      before do
+        repository.update(readme: build(:readme, html_body: "<html>this is my readme</html>"))
+      end
 
       it "doesn't include readme when include_readme=false" do
-        get "/api/github/#{repository.full_name}?include_readme=false", params: { api_key: internal_user.api_key }
+        get url, params: params.merge(include_readme: false)
         expect(response).to have_http_status(:success)
         expect(response.content_type).to start_with("application/json")
         expect(json.as_json.keys).to_not include("readme_html_body")
       end
 
       it "includes readme when include_readme=true" do
-        get "/api/github/#{repository.full_name}?include_readme=true", params: { api_key: internal_user.api_key }
+        get url, params: params.merge(include_readme: true)
         expect(response).to have_http_status(:success)
         expect(response.content_type).to start_with("application/json")
         expect(json.as_json.keys).to include("readme_html_body")
         expect(json["readme_html_body"]).to include("this is my readme")
       end
+    end
+  end
+
+  describe "GET /api/github/:owner/:name", type: :request do
+    let(:url) { "/api/github/#{repository.full_name}" }
+    let(:params) { { api_key: internal_user.api_key } }
+
+    it_behaves_like "repository#show"
+  end
+
+  describe "GET /api/github/repository", type: :request do
+    let(:url) { "/api/github/repository" }
+    let(:params) { { api_key: internal_user.api_key, owner: repository.owner_name, name: repository.project_name } }
+
+    it_behaves_like "repository#show"
+
+    it "returns error on missing owner param" do
+      get url, params: params.except(:owner)
+      expect(response).to have_http_status(:bad_request)
+      expect(response.content_type).to start_with("application/json")
+      expect(json).to eql({ "owner" => ["is required"] })
+    end
+
+    it "returns error on missing name param" do
+      get url, params: params.except(:name)
+      expect(response).to have_http_status(:bad_request)
+      expect(response.content_type).to start_with("application/json")
+      expect(json).to eql({ "name" => ["is required"] })
     end
   end
 

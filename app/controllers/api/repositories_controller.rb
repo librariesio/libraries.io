@@ -64,8 +64,15 @@ class Api::RepositoriesController < Api::ApplicationController
 
   private
 
+  # handle a missing owner or name parameter when doing the lookup for Repository in find_repo
+  # and return a formatted JSON with the missing parameter name with a 400 HTTP status code
+  rescue_from ActionController::ParameterMissing do |e|
+    errors = { e.param => ["is required"] }
+    render json: errors, status: :bad_request
+  end
+
   def find_repo
-    full_name = [params[:owner], params[:name]].join("/")
+    full_name = params.require(%i[owner name]).join("/")
     @repository = Repository.host(current_host).open_source.where("lower(full_name) = ?", full_name.downcase).first
 
     raise ActiveRecord::RecordNotFound if @repository.nil?
