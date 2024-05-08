@@ -56,6 +56,7 @@ Rails.application.routes.draw do
       get "/:host_type/:owner/:name/projects", to: "repositories#projects", constraints: { name: /[^\/]+/ }
       get "/:host_type/:owner/:name/sync", to: "repositories#sync", constraints: { name: /[^\/]+/ }
       get "/:host_type/:owner/:name", to: "repositories#show", constraints: { name: /[^\/]+/ }
+      get "/:host_type/repository", to: "repositories#show" # query params version of the show repository API endpoint
 
       get "/:host_type/:login", to: "repository_users#show"
     end
