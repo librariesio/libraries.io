@@ -92,7 +92,8 @@ module RepositoryOwner
     def self.create_user(user_hash)
       return if user_hash.nil?
 
-      user_hash = user_hash.to_hash.with_indifferent_access
+      user_hash = sanitized_hash_with_indifferent_access_from_client_response(user_hash)
+
       user_hash = {
         id: user_hash[:id],
         login: user_hash[:username],
@@ -129,7 +130,8 @@ module RepositoryOwner
     def self.create_org(org_hash)
       return if org_hash.nil?
 
-      org_hash = org_hash.to_hash.with_indifferent_access
+      org_hash = sanitized_hash_with_indifferent_access_from_client_response(org_hash)
+
       org_hash = {
         id: org_hash[:id],
         login: org_hash[:path],

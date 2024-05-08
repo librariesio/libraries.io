@@ -121,6 +121,19 @@ module RepositoryOwner
       raise NotImplementedError
     end
 
+    # Return a HashWithIndifferentAccess, where null bytes are removed from string values,
+    # for each repositories' client response. The possible response Hash wrappers are:
+    #
+    #   * Bitbucket returns Hashie::Mash
+    #   * GitHub returns Sawyer::Resource
+    #   * GitLab returns Gitlab::ObjectifiedHash
+    def self.sanitized_hash_with_indifferent_access_from_client_response(response)
+      response
+        .to_hash
+        .with_indifferent_access
+        .transform_values { |v| v.is_a?(String) ? StringUtils.strip_null_bytes(v) : v }
+    end
+
     private
 
     def top_favourite_project_ids

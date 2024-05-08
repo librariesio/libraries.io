@@ -93,7 +93,7 @@ module PackageManager
 
     private_class_method def self.transform_mapping_values(mapping)
       mapping.try do |p|
-        p.compact.transform_values { |v| v.is_a?(String) ? v.gsub("\u0000", "") : v }
+        p.compact.transform_values { |v| v.is_a?(String) ? StringUtils.strip_null_bytes(v) : v }
       end
     end
 
