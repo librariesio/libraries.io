@@ -34,6 +34,7 @@ module PackageManager
               published_at: published_at,
               original_license: original_license,
               status: status,
+              deprecation_reason: project_release&.yanked_reason,
             }
           end
         end

@@ -60,10 +60,33 @@ module PackageManager
     def self.deprecation_info(db_project)
       json_api_project = project(db_project.name)
 
-      {
-        is_deprecated: json_api_project.deprecated?,
-        message: json_api_project.deprecation_message,
-      }
+      if json_api_project.deprecated?
+        # project metadata indicates it is deprecated so return the metadata message
+        {
+          is_deprecated: true,
+          message: json_api_project.deprecation_message,
+        }
+      else
+        # check to see if all the versions have been yanked
+        # this is represented by a "Removed" status on mapped versions data
+        mapped_versions = versions(json_api_project, nil)
+
+        versions_all_removed = mapped_versions.all? { |v| v[:status] == "Removed" }
+
+        if versions_all_removed
+          message = mapped_versions.max_by { |v| v[:published_at] }[:deprecation_reason]
+
+          return {
+            is_deprecated: true,
+            message: message,
+          }
+        end
+
+        {
+          is_deprecated: false,
+          message: nil,
+        }
+      end
     end
 
     # mapping eventually receives the return value of the project method.
