@@ -130,12 +130,7 @@ module PackageManager
         is_deprecated = false
         message = nil
 
-        latest_stable = releases.reject(&:prerelease?).last
-
-        if latest_stable&.yanked?
-          is_deprecated = true
-          message = latest_stable.yanked_reason
-        elsif classifiers.include?(CLASSIFIER_INACTIVE)
+        if classifiers.include?(CLASSIFIER_INACTIVE)
           is_deprecated = true
           message = CLASSIFIER_INACTIVE
         end

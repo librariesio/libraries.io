@@ -157,18 +157,6 @@ describe PackageManager::Pypi::JsonApiProject do
       allow(project).to receive(:classifiers).and_return(classifiers)
     end
 
-    context "with latest stable yanked" do
-      let(:latest_stable_yanked) { true }
-
-      it "#deprecated? returns true" do
-        expect(project.deprecated?).to eq(true)
-      end
-
-      it "#deprecation_message returns value" do
-        expect(project.deprecation_message).to eq("because")
-      end
-    end
-
     context "with inactive classifier" do
       let(:classifiers) { [described_class::CLASSIFIER_INACTIVE] }
 
