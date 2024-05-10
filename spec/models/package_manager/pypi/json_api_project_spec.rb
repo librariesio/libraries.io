@@ -134,19 +134,17 @@ describe PackageManager::Pypi::JsonApiProject do
     end
   end
 
-  shared_context "deprecation releases" do
+  describe "#deprecated? and #deprecation_message" do
     let(:releases) do
       [
-        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0-dev", is_yanked: false, yanked_reason: nil, published_at: nil),
-        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0", is_yanked: false, yanked_reason: nil, published_at: nil),
-        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "2.0.0", is_yanked: latest_stable_yanked, yanked_reason: "because", published_at: nil),
+        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0-dev", is_yanked: dev_version_status[:yanked], yanked_reason: dev_version_status[:reason], published_at: nil),
+        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0", is_yanked: early_version_status[:yanked], yanked_reason: early_version_status[:reason], published_at: nil),
+        PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "2.0.0", is_yanked: latest_version_status[:yanked], yanked_reason: latest_version_status[:reason], published_at: nil),
       ]
     end
-    let(:latest_stable_yanked) { false }
-  end
-
-  describe "#deprecated? and #deprecation_message" do
-    include_context "deprecation releases"
+    let(:dev_version_status) { { yanked: false, reason: nil } }
+    let(:early_version_status) { { yanked: false, reason: nil } }
+    let(:latest_version_status) { { yanked: false, reason: nil } }
 
     let(:classifiers) { [] }
 
@@ -155,6 +153,44 @@ describe PackageManager::Pypi::JsonApiProject do
     before do
       allow(project).to receive(:releases).and_return(releases)
       allow(project).to receive(:classifiers).and_return(classifiers)
+    end
+
+    context "with latest stable yanked" do
+      let(:latest_version_status) { { yanked: true, reason: "please don't use" } }
+
+      it "#deprecated? returns false" do
+        expect(project.deprecated?).to eq(false)
+      end
+    end
+
+    context "with prerelease version yanked" do
+      let(:dev_version_status) { { yanked: true, reason: "please don't use" } }
+
+      it "#deprecated? returns false" do
+        expect(project.deprecated?).to eq(false)
+      end
+
+      context "with latest stable yanked" do
+        let(:latest_version_status) { { yanked: true, reason: "please don't use" } }
+
+        it "#deprecated? returns false" do
+          # should not deprecate as version 1.0.0 is not yanked
+          expect(project.deprecated?).to eq(false)
+        end
+      end
+    end
+
+    context "with all non prerelease versions yanked" do
+      let(:early_version_status) { { yanked: true, reason: "no" } }
+      let(:latest_version_status) { { yanked: true, reason: "please don't use" } }
+
+      it "#deprecated? returns true" do
+        expect(project.deprecated?).to eq(true)
+      end
+
+      it "#deprecation_message returns value" do
+        expect(project.deprecation_message).to eq(latest_version_status[:reason])
+      end
     end
 
     context "with inactive classifier" do
