@@ -232,7 +232,6 @@ class Project < ApplicationRecord
                           })
     async_sync(force_sync_dependencies: true)
     update_repository_async
-    forced_save
   end
 
   def forced_save
