@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SearchController < ApplicationController
+  before_action :ensure_logged_in
+
   def index
     @query = params[:q]
     @title = page_title

@@ -5,9 +5,14 @@ require "rails_helper"
 describe "SearchController", elasticsearch: true do
   let!(:project) { create(:project) }
   let(:search_criteria) { project.name }
+  let(:user) { create :user }
 
   describe "GET /search", type: :request do
     context "without search criteria" do
+      before do
+        login(user)
+      end
+
       let(:search_criteria) { "" }
 
       it "renders instructions to try again" do
@@ -19,16 +24,20 @@ describe "SearchController", elasticsearch: true do
       end
     end
 
-    it "renders successfully when logged out" do
+    it "requires a log in to search" do
       Project.__elasticsearch__.refresh_index!
       visit search_path(params: { q: search_criteria })
-      expect(page).to have_content project.name
+      expect(page).to have_content "Login to Libraries.io"
     end
   end
 
   describe "GET /search.atom", type: :request do
     context "without search criteria" do
       let(:search_criteria) { "" }
+
+      before do
+        login(user)
+      end
 
       it "renders no results" do
         Project.__elasticsearch__.refresh_index!
@@ -38,10 +47,10 @@ describe "SearchController", elasticsearch: true do
       end
     end
 
-    it "renders successfully when logged out" do
+    it "requires a log in to search" do
       Project.__elasticsearch__.refresh_index!
       visit search_path(params: { q: search_criteria }, format: :atom)
-      expect(page).to have_content project.name
+      expect(page).to have_content "Login to Libraries.io"
     end
   end
 
@@ -49,6 +58,8 @@ describe "SearchController", elasticsearch: true do
     before do
       expect_any_instance_of(ApplicationController).to receive(:use_pg_search?).and_return(true)
       allow_any_instance_of(ApplicationController).to receive(:es_query).and_raise
+
+      login(user)
     end
 
     it "renders results page successfully" do
