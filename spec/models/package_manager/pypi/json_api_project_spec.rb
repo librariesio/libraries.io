@@ -193,6 +193,23 @@ describe PackageManager::Pypi::JsonApiProject do
       end
     end
 
+    context "with no stable releases" do
+      let(:releases) do
+        [
+          PackageManager::Pypi::JsonApiProjectRelease.new(version_number: "1.0.0-dev", is_yanked: true, yanked_reason: "yanked_reason", published_at: nil),
+        ]
+      end
+
+      it "#deprecated? returns false" do
+        # should not deprecate as version 1.0.0 is not yanked
+        expect(project.deprecated?).to eq(false)
+      end
+
+      it "#deprecation_message returns nil" do
+        expect(project.deprecation_message).to eq(nil)
+      end
+    end
+
     context "with inactive classifier" do
       let(:classifiers) { [described_class::CLASSIFIER_INACTIVE] }
 
