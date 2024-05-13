@@ -138,6 +138,7 @@ module PackageManager
         # do not conflict.
         # TODO: refactor this deprecation method to reuse the VersionProcessor status logic
         if !stable_releases.empty? && stable_releases.all?(&:yanked?)
+        if stable_releases.any? && stable_releases.all?(&:yanked?)
           is_deprecated = true
           message = latest_stable.yanked_reason
         elsif classifiers.include?(CLASSIFIER_INACTIVE)
