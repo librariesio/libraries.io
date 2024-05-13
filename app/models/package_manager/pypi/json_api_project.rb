@@ -130,7 +130,17 @@ module PackageManager
         is_deprecated = false
         message = nil
 
-        if classifiers.include?(CLASSIFIER_INACTIVE)
+        stable_releases = releases.reject(&:prerelease?)
+        latest_stable = stable_releases.last
+
+        # The VersionProcessor class is also inspecting yanked status
+        # on Releases. Make sure that the code here and in the VersionProcessor
+        # do not conflict.
+        # TODO: refactor this deprecation method to reuse the VersionProcessor status logic
+        if stable_releases.all?(&:yanked?)
+          is_deprecated = true
+          message = latest_stable.yanked_reason
+        elsif classifiers.include?(CLASSIFIER_INACTIVE)
           is_deprecated = true
           message = CLASSIFIER_INACTIVE
         end

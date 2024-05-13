@@ -2,6 +2,12 @@
 
 module PackageManager
   class Pypi
+    # The VersionProcess class is responsible for converting PyPI version
+    # data and preparing each release for persisting to the database. It
+    # is setting the status for each Version based on if it has been yanked
+    # within PyPI. Please note that the JsonApiProject class is also inspecting
+    # the yanked status of each release to determine deprecation information
+    # and that the logic here and in the deprecation method should be n*sync.
     class VersionProcessor
       def initialize(project_releases:, project_name:, known_versions:)
         @project_releases = project_releases
