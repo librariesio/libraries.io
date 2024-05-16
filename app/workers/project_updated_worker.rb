@@ -10,6 +10,10 @@ class ProjectUpdatedWorker
   def perform(project_id, web_hook_id)
     project = Project.find(project_id)
     web_hook = WebHook.find(web_hook_id)
-    web_hook.send_project_updated(project)
+    web_hook.send_project_updated(project, ignore_errors: true)
+  end
+
+  sidekiq_retries_exhausted do |job, ex|
+    Rails.logger.warn "Failed #{job['class']} with #{job['args']}: #{job['error_message']}"
   end
 end
