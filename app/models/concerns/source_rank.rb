@@ -4,8 +4,9 @@ module SourceRank
   extend ActiveSupport::Concern
 
   def update_source_rank
-    self.rank = source_rank
-    save if changed?
+    if rank != source_rank
+      update_column(:rank, source_rank)
+    end
   end
 
   def update_source_rank_async
