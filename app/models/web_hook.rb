@@ -62,12 +62,13 @@ class WebHook < ApplicationRecord
                  ignore_errors: true)
   end
 
-  def send_project_updated(project)
+  def send_project_updated(project, ignore_errors: false)
     serialized = ProjectUpdatedSerializer.new(project).as_json
     send_payload({
                    event: "project_updated",
                    project: serialized,
-                 })
+                 },
+                 ignore_errors: ignore_errors)
   end
 
   def request(data)
