@@ -13,7 +13,7 @@ class ProjectUpdatedWorker
     web_hook.send_project_updated(project, ignore_errors: true)
   end
 
-  sidekiq_retries_exhausted do |job, ex|
+  sidekiq_retries_exhausted do |job, _ex|
     Rails.logger.warn "Failed #{job['class']} with #{job['args']}: #{job['error_message']}"
   end
 end
