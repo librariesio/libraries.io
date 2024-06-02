@@ -114,11 +114,11 @@ module PackageManager
         license = v.fetch("license", nil)
         license = licenses(v) unless license.is_a?(String)
         license = "" if license.nil?
-        {
+        VersionBuilder.build_hash(
           number: k,
           published_at: raw_project.fetch("time", {}).fetch(k, nil),
-          original_license: license,
-        }
+          original_license: license
+        )
       end
     end
 

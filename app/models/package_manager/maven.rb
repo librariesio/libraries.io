@@ -82,7 +82,15 @@ module PackageManager
 
     def self.mapping(raw_project, depth = 0)
       latest_version_xml = get_pom(raw_project[:group_id], raw_project[:artifact_id], raw_project[:latest_version])
-      mapping_from_pom_xml(latest_version_xml, depth).merge({ name: raw_project[:name] })
+      pom_data = mapping_from_pom_xml(latest_version_xml, depth)
+
+      MappingBuilder.build_hash(
+        name: raw_project[:name],
+        description: pom_data[:description],
+        homepage: pom_data[:homepage],
+        repository_url: pom_data[:repository_url],
+        licenses: pom_data[:licenses]
+      )
     rescue POMNotFound => e
       Rails.logger.info "Missing POM: #{e.url}"
       nil
@@ -126,7 +134,7 @@ module PackageManager
         properties: parent[:properties].merge(extract_pom_properties(xml)),
       }.select { |_k, v| v.present? }
 
-      MappingBuilder.build_hash(**parent.merge(child))
+      parent.merge(child)
     end
 
     def self.extract_pom_value(xml, location, parent_properties = {})
@@ -172,7 +180,9 @@ module PackageManager
 
     def self.versions(raw_project, name)
       if raw_project && raw_project[:versions]
-        raw_project[:versions]
+        raw_project[:versions].map do |v|
+          VersionBuilder.build_hash(v)
+        end
       else
         xml_metadata = maven_metadata(name)
         xml_versions = Nokogiri::XML(xml_metadata).css("version").map(&:text)
@@ -195,11 +205,11 @@ module PackageManager
         Rails.logger.info("[POM has parent no license] name=#{name} parent_version=#{parent_version} child_version=#{sync_version}")
       end
 
-      {
+      VersionBuilder.build_hash(
         number: sync_version,
         published_at: Time.parse(pom.locate("publishedAt").first.text),
-        original_license: license_list,
-      }
+        original_license: license_list
+      )
     end
 
     def self.retrieve_versions(versions, name)

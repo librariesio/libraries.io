@@ -150,11 +150,11 @@ module PackageManager
 
     def self.versions(raw_project, _name)
       raw_project[:releases].map do |item|
-        {
+        VersionBuilder.build_hash(
           number: item.version_number,
           published_at: item.published_at,
-          original_license: item.original_license,
-        }
+          original_license: item.original_license
+        )
       end
     end
 

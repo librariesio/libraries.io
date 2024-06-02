@@ -48,10 +48,10 @@ module PackageManager
     end
 
     def self.versions(raw_project, _name)
-      [{
+      [VersionBuilder.build_hash(
         number: raw_project["version"],
-        published_at: Time.at(raw_project["published"]["$date"] / 1000.0),
-      }]
+        published_at: Time.at(raw_project["published"]["$date"] / 1000.0)
+      )]
     end
   end
 end

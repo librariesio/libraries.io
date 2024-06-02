@@ -45,7 +45,9 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
     return [] unless package_details
 
     package_details["versions"].split(",").map do |version_number|
-      { number: version_number }
+      VersionBuilder.build_hash(
+        number: version_number
+      )
     end
   end
 

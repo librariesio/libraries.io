@@ -153,11 +153,11 @@ module PackageManager
       json.map do |v|
         license = v.fetch("licenses", "")
         license = "" if license.nil?
-        {
+        VersionBuilder.build_hash(
           number: v["number"],
           published_at: v["created_at"],
-          original_license: license,
-        }
+          original_license: license
+        )
       end
     end
   end

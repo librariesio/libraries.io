@@ -52,9 +52,9 @@ module PackageManager
       versions = find_attribute(raw_project[:page], "Versions")
       versions = find_attribute(raw_project[:page], "Version") if versions.nil?
       versions.delete("(info)").split(",").map(&:strip).map do |v|
-        {
-          number: v,
-        }
+        VersionBuilder.build_hash(
+          number: v
+        )
       end
     end
 

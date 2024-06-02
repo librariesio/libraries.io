@@ -48,10 +48,10 @@ module PackageManager
     def self.versions(raw_project, _name)
       versions = get("https://fastapi.metacpan.org/v1/release/_search?q=distribution:#{raw_project['distribution']}&size=5000&_source=version,date")["hits"]["hits"]
       versions.map do |version|
-        {
+        VersionBuilder.build_hash(
           number: version["_source"]["version"],
-          published_at: version["_source"]["date"],
-        }
+          published_at: version["_source"]["date"]
+        )
       end
     end
 

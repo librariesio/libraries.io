@@ -88,11 +88,11 @@ module PackageManager
 
     def self.versions(raw_project, _name)
       acceptable_versions(raw_project).map do |version|
-        {
+        VersionBuilder.build_hash(
           number: version["version"],
           published_at: version["time"],
-          original_license: version["license"],
-        }
+          original_license: version["license"]
+        )
       end
     end
 

@@ -55,11 +55,11 @@ class PackageManager::Packagist::Drupal < PackageManager::Packagist
             &.first
             &.strip # e.g. "12 May 2021 at 15:19 UTC"
           published_at = Time.parse(published_at) if published_at
-          {
+          VersionBuilder.build_hash(
             number: number,
             published_at: published_at,
-            original_license: DRUPAL_MODULE_LICENSE,
-          }
+            original_license: DRUPAL_MODULE_LICENSE
+          )
         end
       page += 1
       doc = get_html("https://www.drupal.org/project/#{name}/releases?page=#{page}")

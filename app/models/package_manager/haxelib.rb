@@ -46,10 +46,10 @@ module PackageManager
 
     def self.versions(raw_project, _name)
       raw_project["info"]["versions"].map do |version|
-        {
+        VersionBuilder.build_hash(
           number: version["name"],
-          published_at: version["date"],
-        }
+          published_at: version["date"]
+        )
       end
     end
 

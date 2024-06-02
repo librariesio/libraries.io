@@ -36,9 +36,9 @@ module PackageManager
 
     def self.versions(raw_project, _name)
       raw_project["versions"].map do |v|
-        {
-          number: v,
-        }
+        VersionBuilder.build_hash(
+          number: v
+        )
       end
     end
   end

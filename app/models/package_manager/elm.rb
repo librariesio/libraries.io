@@ -47,10 +47,10 @@ module PackageManager
     def self.versions(_raw_project, name)
       get("https://package.elm-lang.org/packages/#{name}/releases.json")
         .map do |version, timestamp|
-          {
+          VersionBuilder.build_hash(
             number: version,
-            published_at: Time.at(timestamp),
-          }
+            published_at: Time.at(timestamp)
+          )
         end
     end
 

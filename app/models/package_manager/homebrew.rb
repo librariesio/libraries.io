@@ -46,9 +46,9 @@ module PackageManager
       return [] if stable.blank?
 
       [
-        {
-          number: stable,
-        },
+        VersionBuilder.build_hash(
+          number: stable
+        ),
       ]
     end
 

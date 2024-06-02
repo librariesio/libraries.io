@@ -99,11 +99,11 @@ module PackageManager
 
     def self.versions(raw_project, _name)
       raw_project["versions"].map do |version|
-        {
+        VersionBuilder.build_hash(
           number: version["num"],
           published_at: version["created_at"],
-          original_license: version["license"],
-        }
+          original_license: version["license"]
+        )
       end
     end
 
