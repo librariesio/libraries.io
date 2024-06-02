@@ -35,7 +35,7 @@ module PackageManager
             published_at = project_release.published_at || rss_api_release&.published_at
             status = project_release&.yanked? ? "Removed" : nil
 
-            VersionBuilder.build_hash(
+            PackageManager::Base::VersionBuilder.build_hash(
               number: version_number,
               published_at: published_at,
               original_license: original_license,
