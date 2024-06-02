@@ -40,11 +40,11 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project["name"],
         description: raw_project["description"],
-        repository_url: repo_fallback(raw_project["git"], nil),
-      }
+        repository_url: repo_fallback(raw_project["git"], nil)
+      )
     end
 
     def self.versions(raw_project, _name)

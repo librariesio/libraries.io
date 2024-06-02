@@ -48,13 +48,13 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project[:name],
         homepage: raw_project[:info].fetch("URL:", "").split(",").first,
         description: raw_project[:html].css("h2").text.split(":")[1..].join(":").strip,
         licenses: raw_project[:info]["License:"],
-        repository_url: repo_fallback("", (raw_project[:info].fetch("URL:", "").split(",").first.presence || raw_project[:info]["BugReports:"])).to_s[0, 255],
-      }
+        repository_url: repo_fallback("", (raw_project[:info].fetch("URL:", "").split(",").first.presence || raw_project[:info]["BugReports:"])).to_s[0, 255]
+      )
     end
 
     def self.versions(raw_project, _name)

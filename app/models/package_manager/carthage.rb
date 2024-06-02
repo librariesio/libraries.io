@@ -43,14 +43,14 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project[:full_name],
         description: raw_project[:description],
         homepage: raw_project[:homepage],
         keywords_array: raw_project[:topics],
         licenses: (raw_project.fetch(:license, {}) || {})[:key],
-        repository_url: raw_project[:html_url],
-      }
+        repository_url: raw_project[:html_url]
+      )
     end
   end
 end

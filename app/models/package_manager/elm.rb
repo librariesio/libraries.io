@@ -37,11 +37,11 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project["name"],
         description: raw_project["summary"],
-        repository_url: "https://github.com/#{raw_project['name']}",
-      }
+        repository_url: "https://github.com/#{raw_project['name']}"
+      )
     end
 
     def self.versions(_raw_project, name)

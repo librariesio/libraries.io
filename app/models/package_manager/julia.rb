@@ -27,10 +27,11 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project[:name],
-        repository_url: repo_fallback(raw_project[:repository_url], ""),
-      }
+        description: nil, # TODO: can we get description?
+        repository_url: repo_fallback(raw_project[:repository_url], "")
+      )
     end
 
     def self.versions(raw_project, _name)

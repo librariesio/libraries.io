@@ -39,13 +39,13 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project["name"],
         description: raw_project["summary"],
         homepage: raw_project["homepage"],
         licenses: parse_license(raw_project["license"]),
-        repository_url: repo_fallback(raw_project.dig("source", "git"), ""),
-      }
+        repository_url: repo_fallback(raw_project.dig("source", "git"), "")
+      )
     end
 
     def self.versions(raw_project, _name)

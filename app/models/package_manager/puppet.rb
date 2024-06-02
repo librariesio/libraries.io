@@ -29,13 +29,14 @@ module PackageManager
     def self.mapping(raw_project)
       current_release = raw_project["current_release"]
       metadata = current_release["metadata"]
-      {
+
+      MappingBuilder.build_hash(
         name: raw_project["slug"],
         repository_url: metadata["source"],
         description: metadata["description"],
         keywords_array: current_release["tags"],
-        licenses: metadata["license"],
-      }
+        licenses: metadata["license"]
+      )
     end
 
     def self.versions(raw_project, _name)

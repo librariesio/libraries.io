@@ -93,19 +93,6 @@ module PackageManager
         )
       end
 
-      # Various parts of this process still want raw hashes for a type
-      # of data called a "mapping".
-      def to_mapping
-        {
-          name: name,
-          description: description,
-          homepage: homepage,
-          keywords_array: keywords_array,
-          licenses: licenses,
-          repository_url: preferred_repository_url,
-        }
-      end
-
       def deprecated?
         deprecation_status[:is_deprecated]
       end

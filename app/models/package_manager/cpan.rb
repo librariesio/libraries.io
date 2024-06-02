@@ -35,14 +35,14 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project["distribution"],
         homepage: raw_project.fetch("resources", {})["homepage"],
         description: raw_project["abstract"],
         licenses: raw_project.fetch("license", []).join(","),
         repository_url: repo_fallback(raw_project.fetch("resources", {}).fetch("repository", {})["web"], raw_project.fetch("resources", {})["homepage"]),
-        versions: versions(raw_project, raw_project["distribution"]),
-      }
+        versions: versions(raw_project, raw_project["distribution"])
+      )
     end
 
     def self.versions(raw_project, _name)

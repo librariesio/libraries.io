@@ -137,15 +137,15 @@ module PackageManager
       nuspec_repo = raw_nuspec&.locate("package/metadata/repository")&.first
       nuspec_repo = nuspec_repo["url"] if nuspec_repo
 
-      {
+      MappingBuilder.build_hash(
         name: raw_project[:name],
         description: item.description,
         homepage: item.project_url,
         keywords_array: item.tags,
         repository_url: repo_fallback(nuspec_repo, item.project_url),
-        releases: raw_project[:releases],
         licenses: item.licenses,
-      }
+        versions: versions(raw_project, raw_project[:name])
+      )
     end
 
     def self.versions(raw_project, _name)

@@ -72,8 +72,14 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      # TODO: can we make this more explicit?
-      raw_project.deep_symbolize_keys
+      MappingBuilder.build_hash(
+        name: raw_project["name"],
+        description: raw_project["description"],
+        repository_url: raw_project["repository_url"],
+        homepage: raw_project["homepage"],
+        licenses: raw_project["licenses"],
+        versions: raw_project["versions"]
+      )
     end
 
     def self.versions(raw_project, _name)

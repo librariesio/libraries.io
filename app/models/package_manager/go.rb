@@ -195,13 +195,13 @@ module PackageManager
           end
         end
 
-        {
+        MappingBuilder.build_hash(
           name: existing_project_name.presence || raw_project[:name],
           description: raw_project[:html].css(".Documentation-overview p").map(&:text).join("\n").strip,
           licenses: raw_project[:html].css('*[data-test-id="UnitHeader-license"]').map(&:text).join(","),
           repository_url: url,
-          homepage: url,
-        }
+          homepage: url
+        )
       else
         { name: raw_project[:name] }
       end

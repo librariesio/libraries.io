@@ -23,7 +23,7 @@ class PackageManager::Packagist::Drupal < PackageManager::Packagist
 
     homepage = raw_project.css("link[rel=canonical]").attr("href").value
 
-    {
+    MappingBuilder.build_hash(
       name: "drupal/#{homepage.split('/project/', 2)[1]}",
       description: raw_project.css("meta[name=description]").first&.attr("content"),
       homepage: homepage,
@@ -31,8 +31,8 @@ class PackageManager::Packagist::Drupal < PackageManager::Packagist
       repository_url: raw_project
         .css("#block-drupalorg-project-development .links a")
         .find { |l| l.text =~ /code repository|source code/i }
-        &.attr("href"),
-    }
+        &.attr("href")
+    )
   end
 
   def self.versions(_raw_project, name)

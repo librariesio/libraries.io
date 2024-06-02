@@ -126,7 +126,7 @@ module PackageManager
         properties: parent[:properties].merge(extract_pom_properties(xml)),
       }.select { |_k, v| v.present? }
 
-      parent.merge(child)
+      MappingBuilder.build_hash(**parent.merge(child))
     end
 
     def self.extract_pom_value(xml, location, parent_properties = {})

@@ -46,13 +46,13 @@ module PackageManager
 
     def self.mapping(raw_project)
       links = raw_project["meta"].fetch("links", {}).transform_keys(&:downcase)
-      {
+      MappingBuilder.build_hash(
         name: raw_project["name"],
         homepage: links.except("github").first.try(:last),
         repository_url: links["github"],
         description: raw_project["meta"]["description"],
-        licenses: repo_fallback(raw_project["meta"].fetch("licenses", []).join(","), links.except("github").first.try(:last)),
-      }
+        licenses: repo_fallback(raw_project["meta"].fetch("licenses", []).join(","), links.except("github").first.try(:last))
+      )
     end
 
     def self.versions(raw_project, _name)

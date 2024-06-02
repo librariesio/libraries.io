@@ -67,9 +67,16 @@ module PackageManager
     end
 
     # mapping eventually receives the return value of the project method.
-    # This happens in PackageManager:Base.
+    # This happens in PackageManager::Base.
     def self.mapping(json_api_project)
-      json_api_project.to_mapping
+      MappingBuilder.build_hash(
+        name: json_api_project.name,
+        description: json_api_project.description,
+        homepage: json_api_project.homepage,
+        keywords_array: json_api_project.keywords_array,
+        licenses: json_api_project.licenses,
+        repository_url: json_api_project.preferred_repository_url
+      )
     end
 
     # versions eventually receives the return value of the project method.
