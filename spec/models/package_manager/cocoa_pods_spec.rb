@@ -48,4 +48,22 @@ describe PackageManager::CocoaPods do
       expect(described_class.parse_license({ "type" => "foobar" })).to eq("foobar")
     end
   end
+
+  describe ".versions" do
+    it "returns mapped versions" do
+      versions = described_class.versions({
+                                            "name" => "some-package",
+                                            "versions" => {
+                                              "1.0.0" => {
+                                                "name" => "some-package",
+                                                "version" => "1.0.0",
+                                              },
+                                            },
+                                          }, "some-package")
+
+      expect(versions).to eq([{
+                               number: "1.0.0",
+                             }])
+    end
+  end
 end

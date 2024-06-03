@@ -125,10 +125,10 @@ Here's an example from [NuGet](../app/models/package_manager/nu_get.rb):
 ```ruby
 def self.versions(raw_project, _name)
   raw_project[:releases].map do |item|
-    VersionBuilder.build_hash({
+    VersionBuilder.build_hash(
       number: item['catalogEntry']['version'],
       published_at: item['catalogEntry']['published']
-    })
+    )
   end
 end
 ```
