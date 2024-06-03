@@ -5,6 +5,8 @@ module PackageManager
   # specific release of a pacakge. This retrieval can be triggered via
   # asynchronous jobs, or directly by API endpoints or the console.
   class Base
+    class MethodNotImplementedError < StandardError; end
+
     COLOR = "#fff"
     BIBLIOTHECARY_SUPPORT = false
     BIBLIOTHECARY_PLANNED = false
@@ -164,14 +166,14 @@ module PackageManager
     # package manager. This can be any arbitrary data, and will passed on to the
     # mapping() method to get a standard shape of data.
     def self.project(_name)
-      nil
+      raise MethodNotImplementedError
     end
 
     # Override this in the subclass to map the raw data from project() to
     # a Hash of data that we'll need to save Project and Version records.
     # Use the PackageManager::MappingBuilder to create the Hash.
     def self.mapping(_raw_project)
-      nil
+      raise MethodNotImplementedError
     end
 
     # Returns the versions found within the raw project data for the package.
@@ -179,7 +181,7 @@ module PackageManager
     # retrieve all the information to pass into
     # version_hash_to_version_object.
     def self.versions(_raw_project, _name)
-      nil
+      raise MethodNotImplementedError
     end
 
     def self.versions_as_version_objects(raw_project, name)
