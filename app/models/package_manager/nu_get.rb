@@ -151,11 +151,21 @@ module PackageManager
 
     def self.versions(raw_project, _name)
       raw_project[:raw_versions].map do |raw_version|
-        VersionBuilder.build_hash(
+        version_data = {
           number: raw_version.version_number,
           published_at: raw_version.published_at,
-          original_license: raw_version.original_license
-        )
+          original_license: raw_version.original_license,
+        }
+
+        if raw_version.deprecation.present?
+          # We considered NuGet versions that are unlisted as "Deprecated", and those
+          # versions have their "published" reset to 1/1/1900 in the NuGet API.
+          # Keep the original "published_at" on our side but mark it as deprecated.
+          version_data.delete(:published_at)
+          version_data[:status] = "Deprecated"
+        end
+
+        VersionBuilder.build_hash(**version_data)
       end
     end
 
