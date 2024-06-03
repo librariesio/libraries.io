@@ -38,23 +38,23 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project[:name],
         keywords_array: Array(raw_project[:page].css("#content div:first a")[1..].map(&:text)),
         description: description(raw_project[:page]),
         licenses: find_attribute(raw_project[:page], "License"),
         homepage: find_attribute(raw_project[:page], "Home page"),
-        repository_url: repo_fallback(repository_url(find_attribute(raw_project[:page], "Source repository")), find_attribute(raw_project[:page], "Home page")),
-      }
+        repository_url: repo_fallback(repository_url(find_attribute(raw_project[:page], "Source repository")), find_attribute(raw_project[:page], "Home page"))
+      )
     end
 
     def self.versions(raw_project, _name)
       versions = find_attribute(raw_project[:page], "Versions")
       versions = find_attribute(raw_project[:page], "Version") if versions.nil?
       versions.delete("(info)").split(",").map(&:strip).map do |v|
-        {
-          number: v,
-        }
+        VersionBuilder.build_hash(
+          number: v
+        )
       end
     end
 

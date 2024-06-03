@@ -5,6 +5,8 @@ module PackageManager
   # specific release of a pacakge. This retrieval can be triggered via
   # asynchronous jobs, or directly by API endpoints or the console.
   class Base
+    class MethodNotImplementedError < StandardError; end
+
     COLOR = "#fff"
     BIBLIOTHECARY_SUPPORT = false
     BIBLIOTHECARY_PLANNED = false
@@ -101,7 +103,7 @@ module PackageManager
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
       db_project.reformat_repository_url if reformat_repository_url && !db_project.new_record?
       mapped_project[:repository_url] = db_project.repository_url if mapped_project[:repository_url].blank?
-      db_project.attributes = mapped_project.except(:name, :releases, :versions, :version, :dependencies, :properties)
+      db_project.attributes = mapped_project.except(:name, :versions, :version, :dependencies, :properties)
 
       begin
         db_project.save!
@@ -160,12 +162,26 @@ module PackageManager
       finalize_db_project(db_project)
     end
 
+    # Override this in the subclass to fetch the raw data from the upstream
+    # package manager. This can be any arbitrary data, and will passed on to the
+    # mapping() method to get a standard shape of data.
+    def self.project(_name)
+      raise MethodNotImplementedError
+    end
+
+    # Override this in the subclass to map the raw data from project() to
+    # a Hash of data that we'll need to save Project and Version records.
+    # Use the PackageManager::MappingBuilder to create the Hash.
+    def self.mapping(_raw_project)
+      raise MethodNotImplementedError
+    end
+
     # Returns the versions found within the raw project data for the package.
     # Depending on the package manager, additional work may need to be done to
     # retrieve all the information to pass into
     # version_hash_to_version_object.
     def self.versions(_raw_project, _name)
-      nil
+      raise MethodNotImplementedError
     end
 
     def self.versions_as_version_objects(raw_project, name)

@@ -30,11 +30,11 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project["name"],
         description: raw_project["description"],
-        repository_url: raw_project["url"],
-      }
+        repository_url: raw_project["url"]
+      )
     end
   end
 end

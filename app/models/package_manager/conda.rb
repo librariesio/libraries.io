@@ -72,12 +72,24 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      # TODO: can we make this more explicit?
-      raw_project.deep_symbolize_keys
+      MappingBuilder.build_hash(
+        name: raw_project["name"],
+        description: raw_project["description"],
+        repository_url: raw_project["repository_url"],
+        homepage: raw_project["homepage"],
+        licenses: raw_project["licenses"],
+        versions: raw_project["versions"]
+      )
     end
 
     def self.versions(raw_project, _name)
-      raw_project["versions"].map { |version| version.deep_symbolize_keys.slice(:number, :original_license, :published_at) }
+      raw_project["versions"].map do |version|
+        VersionBuilder.build_hash(
+          number: version["number"],
+          original_license: version["original_license"],
+          published_at: version["published_at"]
+        )
+      end
     end
 
     def self.dependencies(name, version, _mapped_project)

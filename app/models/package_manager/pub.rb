@@ -43,20 +43,20 @@ module PackageManager
 
     def self.mapping(raw_project)
       latest_version = raw_project["versions"].last
-      {
+      MappingBuilder.build_hash(
         name: raw_project["name"],
         homepage: latest_version["pubspec"]["homepage"],
         description: latest_version["pubspec"]["description"],
         repository_url: repo_fallback("", latest_version["pubspec"]["homepage"]),
-        versions: raw_project["versions"],
-      }
+        versions: raw_project["versions"]
+      )
     end
 
     def self.versions(raw_project, _name)
       raw_project["versions"].map do |v|
-        {
-          number: v["version"],
-        }
+        VersionBuilder.build_hash(
+          number: v["version"]
+        )
       end
     end
 

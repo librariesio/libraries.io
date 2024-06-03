@@ -36,14 +36,14 @@ module PackageManager
 
     def self.mapping(raw_project)
       bower_json = load_bower_json(raw_project) || raw_project
-      {
+      MappingBuilder.build_hash(
         name: raw_project["name"],
         repository_url: raw_project["url"],
         licenses: bower_json["license"],
         keywords_array: bower_json["keywords"],
         homepage: bower_json["homepage"],
-        description: bower_json["description"],
-      }
+        description: bower_json["description"]
+      )
     end
 
     def self.load_bower_json(mapped_project)

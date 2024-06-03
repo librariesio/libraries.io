@@ -52,13 +52,13 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project["name"],
         description: raw_project["info"],
         homepage: raw_project["homepage_uri"],
         licenses: raw_project.fetch("licenses", []).try(:join, ","),
-        repository_url: repo_fallback(raw_project["source_code_uri"], raw_project["homepage_uri"]),
-      }
+        repository_url: repo_fallback(raw_project["source_code_uri"], raw_project["homepage_uri"])
+      )
     end
 
     def self.versions(raw_project, _name, parse_html: false)
@@ -153,11 +153,11 @@ module PackageManager
       json.map do |v|
         license = v.fetch("licenses", "")
         license = "" if license.nil?
-        {
+        VersionBuilder.build_hash(
           number: v["number"],
           published_at: v["created_at"],
-          original_license: license,
-        }
+          original_license: license
+        )
       end
     end
   end

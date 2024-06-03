@@ -40,18 +40,18 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project["name"],
         description: raw_project["description"],
-        repository_url: repo_fallback(raw_project["git"], nil),
-      }
+        repository_url: repo_fallback(raw_project["git"], nil)
+      )
     end
 
     def self.versions(raw_project, _name)
-      [{
+      [VersionBuilder.build_hash(
         number: raw_project["version"],
-        published_at: Time.at(raw_project["published"]["$date"] / 1000.0),
-      }]
+        published_at: Time.at(raw_project["published"]["$date"] / 1000.0)
+      )]
     end
   end
 end

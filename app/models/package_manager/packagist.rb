@@ -75,24 +75,24 @@ module PackageManager
 
       return if latest_version.nil?
 
-      {
+      MappingBuilder.build_hash(
         name: latest_version["name"],
         description: latest_version["description"],
         homepage: latest_version["homepage"],
         keywords_array: Array.wrap(latest_version["keywords"]),
         licenses: latest_version["license"]&.join(","),
         repository_url: repo_fallback(latest_version["source"]&.fetch("url"), latest_version["homepage"]),
-        versions: raw_project, # packagist has the list of versions as raw_project and this then lets us pull dependencies in self.dependencies
-      }
+        versions: raw_project # packagist has the list of versions as raw_project and this then lets us pull dependencies in self.dependencies
+      )
     end
 
     def self.versions(raw_project, _name)
       acceptable_versions(raw_project).map do |version|
-        {
+        VersionBuilder.build_hash(
           number: version["version"],
           published_at: version["time"],
-          original_license: version["license"],
-        }
+          original_license: version["license"]
+        )
       end
     end
 

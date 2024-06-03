@@ -35,23 +35,23 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project["distribution"],
         homepage: raw_project.fetch("resources", {})["homepage"],
         description: raw_project["abstract"],
         licenses: raw_project.fetch("license", []).join(","),
         repository_url: repo_fallback(raw_project.fetch("resources", {}).fetch("repository", {})["web"], raw_project.fetch("resources", {})["homepage"]),
-        versions: versions(raw_project, raw_project["distribution"]),
-      }
+        versions: versions(raw_project, raw_project["distribution"])
+      )
     end
 
     def self.versions(raw_project, _name)
       versions = get("https://fastapi.metacpan.org/v1/release/_search?q=distribution:#{raw_project['distribution']}&size=5000&_source=version,date")["hits"]["hits"]
       versions.map do |version|
-        {
+        VersionBuilder.build_hash(
           number: version["_source"]["version"],
-          published_at: version["_source"]["date"],
-        }
+          published_at: version["_source"]["date"]
+        )
       end
     end
 

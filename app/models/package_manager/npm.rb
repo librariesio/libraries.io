@@ -75,15 +75,15 @@ module PackageManager
       repo = repo[0] if repo.is_a?(Array)
       repo_url = repo.try(:fetch, "url", nil)
 
-      {
+      MappingBuilder.build_hash(
         name: raw_project["name"],
         description: latest_version["description"],
         homepage: raw_project["homepage"],
         keywords_array: Array.wrap(latest_version.fetch("keywords", [])),
         licenses: licenses(latest_version),
         repository_url: repo_fallback(repo_url, raw_project["homepage"]),
-        versions: raw_project["versions"],
-      }
+        versions: raw_project["versions"]
+      )
     end
 
     def self.licenses(latest_version)
@@ -114,11 +114,11 @@ module PackageManager
         license = v.fetch("license", nil)
         license = licenses(v) unless license.is_a?(String)
         license = "" if license.nil?
-        {
+        VersionBuilder.build_hash(
           number: k,
           published_at: raw_project.fetch("time", {}).fetch(k, nil),
-          original_license: license,
-        }
+          original_license: license
+        )
       end
     end
 

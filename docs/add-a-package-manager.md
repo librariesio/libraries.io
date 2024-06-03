@@ -99,14 +99,14 @@ Here's an example from [Cargo](../app/models/package_manager/cargo.rb):
 
 ```ruby
 def self.mapping(raw_project)
-  {
-    :name => raw_project['crate']['id'],
-    :homepage => raw_project['crate']['homepage'],
-    :description => raw_project['crate']['description'],
-    :keywords_array => Array.wrap(raw_project['crate']['keywords']),
-    :licenses => raw_project['crate']['license'],
-    :repository_url => repo_fallback(raw_project['crate']['repository'], raw_project['crate']['homepage'])
-  }
+  MappingBuilder.build_hash({
+    name: raw_project['crate']['id'],
+    homepage: raw_project['crate']['homepage'],
+    description: raw_project['crate']['description'],
+    keywords_array: Array.wrap(raw_project['crate']['keywords']),
+    licenses: raw_project['crate']['license'],
+    repository_url: repo_fallback(raw_project['crate']['repository'], raw_project['crate']['homepage'])
+  })
 end
 ```
 
@@ -125,10 +125,10 @@ Here's an example from [NuGet](../app/models/package_manager/nu_get.rb):
 ```ruby
 def self.versions(raw_project, _name)
   raw_project[:releases].map do |item|
-    {
+    VersionBuilder.build_hash({
       number: item['catalogEntry']['version'],
       published_at: item['catalogEntry']['published']
-    }
+    })
   end
 end
 ```

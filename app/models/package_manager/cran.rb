@@ -48,20 +48,20 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project[:name],
         homepage: raw_project[:info].fetch("URL:", "").split(",").first,
         description: raw_project[:html].css("h2").text.split(":")[1..].join(":").strip,
         licenses: raw_project[:info]["License:"],
-        repository_url: repo_fallback("", (raw_project[:info].fetch("URL:", "").split(",").first.presence || raw_project[:info]["BugReports:"])).to_s[0, 255],
-      }
+        repository_url: repo_fallback("", (raw_project[:info].fetch("URL:", "").split(",").first.presence || raw_project[:info]["BugReports:"])).to_s[0, 255]
+      )
     end
 
     def self.versions(raw_project, _name)
-      [{
+      [VersionBuilder.build_hash(
         number: raw_project[:info]["Version:"],
-        published_at: raw_project[:info]["Published:"],
-      }] + find_old_versions(raw_project)
+        published_at: raw_project[:info]["Published:"]
+      )] + find_old_versions(raw_project)
     end
 
     def self.find_old_versions(project)
@@ -72,10 +72,10 @@ module PackageManager
       end
       trs.map do |tr|
         tds = tr.css("td")
-        {
+        VersionBuilder.build_hash(
           number: tds[1].text.strip.split("_").last.gsub(".tar.gz", ""),
-          published_at: tds[2].text.strip,
-        }
+          published_at: tds[2].text.strip
+        )
       end
     end
 

@@ -74,16 +74,15 @@ module PackageManager
       # e.g. https://proxy.golang.org/github.com/ysweid/aws-sdk-go/@v/v1.12.68.info
       version_string = info.nil? ? version_string : info["Version"]
       published_at = info && info["Time"].presence && Time.parse(info["Time"])
-      data = {
-        number: version_string,
-        published_at: published_at,
-      }
 
       # Supplement with license info from pkg.go.dev
       doc_html = get_html("#{DISCOVER_URL}/#{raw_project[:name]}")
-      data[:original_license] = doc_html.css('*[data-test-id="UnitHeader-license"]').map(&:text).join(",")
 
-      data
+      VersionBuilder.build_hash(
+        number: version_string,
+        published_at: published_at,
+        original_license: doc_html.css('*[data-test-id="UnitHeader-license"]').map(&:text).join(",")
+      )
     end
 
     def self.project(name)
@@ -147,7 +146,12 @@ module PackageManager
         known = known_versions[v]
 
         if known && known[:original_license].present?
-          known.slice(:number, :created_at, :published_at, :original_license)
+          VersionBuilder.build_hash(
+            number: known[:number],
+            created_at: known[:created_at], # TODO: do we need created_at?
+            published_at: known[:published_at],
+            original_license: known[:original_license]
+          )
         else
           one_version(raw_project, v)
         end
@@ -195,13 +199,13 @@ module PackageManager
           end
         end
 
-        {
+        MappingBuilder.build_hash(
           name: existing_project_name.presence || raw_project[:name],
           description: raw_project[:html].css(".Documentation-overview p").map(&:text).join("\n").strip,
           licenses: raw_project[:html].css('*[data-test-id="UnitHeader-license"]').map(&:text).join(","),
           repository_url: url,
-          homepage: url,
-        }
+          homepage: url
+        )
       else
         { name: raw_project[:name] }
       end

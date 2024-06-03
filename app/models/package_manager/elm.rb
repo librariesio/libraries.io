@@ -37,20 +37,20 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      {
+      MappingBuilder.build_hash(
         name: raw_project["name"],
         description: raw_project["summary"],
-        repository_url: "https://github.com/#{raw_project['name']}",
-      }
+        repository_url: "https://github.com/#{raw_project['name']}"
+      )
     end
 
     def self.versions(_raw_project, name)
       get("https://package.elm-lang.org/packages/#{name}/releases.json")
         .map do |version, timestamp|
-          {
+          VersionBuilder.build_hash(
             number: version,
-            published_at: Time.at(timestamp),
-          }
+            published_at: Time.at(timestamp)
+          )
         end
     end
 
