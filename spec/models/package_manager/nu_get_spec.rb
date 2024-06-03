@@ -156,7 +156,7 @@ describe PackageManager::NuGet do
       let(:name) { "Steeltoe.Common" }
       let(:cassette) { "nu_get/package" }
 
-      before { allow(described_class).to receive(:get_releases).and_return([]) }
+      before { allow(described_class).to receive(:raw_versions).and_return([]) }
 
       it "is not deprecated" do
         expect(deprecation_info[:is_deprecated]).to eq(false)
