@@ -65,7 +65,7 @@ describe PackageManager::NuGet do
     let(:raw_project) do
       {
         name: name,
-        releases: [
+        raw_versions: [
           PackageManager::NuGet::SemverRegistrationProjectRelease.new(
             published_at: Time.now,
             version_number: version,
@@ -79,6 +79,11 @@ describe PackageManager::NuGet do
             dependencies: []
           ),
         ],
+        versions: {
+          number: version,
+          published_at: Time.now,
+          original_license: "licenses"
+        }
       }
     end
 
