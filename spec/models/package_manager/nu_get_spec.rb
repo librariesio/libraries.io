@@ -3,6 +3,8 @@
 require "rails_helper"
 
 describe PackageManager::NuGet do
+  before { freeze_time }
+
   let(:project) { create(:project, name: "foo", platform: described_class.formatted_name) }
 
   it 'has formatted name of "NuGet"' do
@@ -65,7 +67,7 @@ describe PackageManager::NuGet do
     let(:raw_project) do
       {
         name: name,
-        releases: [
+        raw_versions: [
           PackageManager::NuGet::SemverRegistrationProjectRelease.new(
             published_at: Time.now,
             version_number: version,
@@ -79,6 +81,11 @@ describe PackageManager::NuGet do
             dependencies: []
           ),
         ],
+        versions: {
+          number: version,
+          published_at: Time.now,
+          original_license: "licenses",
+        },
       }
     end
 
@@ -156,7 +163,7 @@ describe PackageManager::NuGet do
       let(:name) { "Steeltoe.Common" }
       let(:cassette) { "nu_get/package" }
 
-      before { allow(described_class).to receive(:get_releases).and_return([]) }
+      before { allow(described_class).to receive(:raw_versions).and_return([]) }
 
       it "is not deprecated" do
         expect(deprecation_info[:is_deprecated]).to eq(false)
@@ -358,7 +365,82 @@ describe PackageManager::NuGet do
     end
   end
 
-  describe "::update" do
+  describe ".versions" do
+    let(:name) { "name" }
+    let(:version) { "version" }
+    let(:raw_project) do
+      {
+        name: name,
+        raw_versions: [
+          PackageManager::NuGet::SemverRegistrationProjectRelease.new(
+            published_at: Time.now,
+            version_number: version,
+            project_url: "project_url",
+            deprecation: nil,
+            description: "description",
+            summary: "summary",
+            tags: [],
+            licenses: "licenses",
+            license_url: "license_url",
+            dependencies: []
+          ),
+        ],
+        # Note that :versions is usually set in project() but we're not
+        # setting it here yet to show that it returns the proper thing
+      }
+    end
+
+    it "maps raw_versions to versions correctly" do
+      versions = described_class.versions(raw_project, name)
+
+      expect(versions).to eq([
+        {
+          number: "version",
+          published_at: Time.now.iso8601,
+          original_license: "licenses",
+        },
+      ])
+    end
+
+    context "when it contains a deprecated release" do
+      before do
+        raw_project[:raw_versions] << PackageManager::NuGet::SemverRegistrationProjectRelease.new(
+          published_at: DateTime.new(1900, 1, 1),
+          version_number: "version2",
+          project_url: "project_url",
+          deprecation: PackageManager::NuGet::SemverRegistrationProjectDeprecation.new(
+            message: "this release is deprecated, but the package is still fine",
+            alternate_package: nil
+          ),
+          description: "description",
+          summary: "summary",
+          tags: [],
+          licenses: "licenses",
+          license_url: "license_url",
+          dependencies: []
+        )
+      end
+
+      it "sets deprecated status and doesn't set published_at" do
+        versions = described_class.versions(raw_project, name)
+
+        expect(versions).to eq([
+          {
+            number: "version",
+            published_at: Time.now.iso8601,
+            original_license: "licenses",
+          },
+          {
+            number: "version2",
+            original_license: "licenses",
+            status: "Deprecated",
+          },
+        ])
+      end
+    end
+  end
+
+  describe ".update" do
     subject(:result) do
       VCR.use_cassette(cassette) { described_class.update(name) }
     end

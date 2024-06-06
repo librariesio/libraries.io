@@ -28,7 +28,7 @@ module PackageManager
     end
 
     def self.deprecation_info(db_project)
-      releases = get_releases(db_project.name)
+      releases = raw_versions(db_project.name)
 
       deprecation = releases.last&.deprecation
 
@@ -84,7 +84,7 @@ module PackageManager
       h = {
         name: name,
       }
-      h[:releases] = get_releases(name)
+      h[:raw_versions] = raw_versions(name)
       h[:versions] = versions(h, name)
       return {} unless h[:versions].any?
 
@@ -123,7 +123,8 @@ module PackageManager
       nil
     end
 
-    def self.get_releases(name)
+    # These are the raw version data we get from the upstream API
+    def self.raw_versions(name)
       SemverRegistrationApiProjectReleasesBuilder.build(project_name: escaped_name(name)).releases
     rescue StandardError => e
       Rails.logger.error("Unable to retrieve releases for NuGet project #{name}: #{e.message}")
@@ -132,34 +133,44 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      item = raw_project[:releases].last
-      raw_nuspec = nuspec(raw_project[:name], item.version_number)
+      latest_raw_version = raw_project[:raw_versions].last
+      raw_nuspec = nuspec(raw_project[:name], latest_raw_version.version_number)
       nuspec_repo = raw_nuspec&.locate("package/metadata/repository")&.first
       nuspec_repo = nuspec_repo["url"] if nuspec_repo
 
       MappingBuilder.build_hash(
         name: raw_project[:name],
-        description: item.description,
-        homepage: item.project_url,
-        keywords_array: item.tags,
-        repository_url: repo_fallback(nuspec_repo, item.project_url),
-        licenses: item.licenses,
+        description: latest_raw_version.description,
+        homepage: latest_raw_version.project_url,
+        keywords_array: latest_raw_version.tags,
+        repository_url: repo_fallback(nuspec_repo, latest_raw_version.project_url),
+        licenses: latest_raw_version.licenses,
         versions: versions(raw_project, raw_project[:name])
       )
     end
 
     def self.versions(raw_project, _name)
-      raw_project[:releases].map do |item|
-        VersionBuilder.build_hash(
-          number: item.version_number,
-          published_at: item.published_at,
-          original_license: item.original_license
-        )
+      raw_project[:raw_versions].map do |raw_version|
+        version_data = {
+          number: raw_version.version_number,
+          published_at: raw_version.published_at,
+          original_license: raw_version.original_license,
+        }
+
+        if raw_version.deprecation.present?
+          # We considered NuGet versions that are unlisted as "Deprecated", and those
+          # versions have their "published" reset to 1/1/1900 in the NuGet API.
+          # Keep the original "published_at" on our side but mark it as deprecated.
+          version_data.delete(:published_at)
+          version_data[:status] = "Deprecated"
+        end
+
+        VersionBuilder.build_hash(**version_data)
       end
     end
 
     def self.dependencies(_name, version, mapped_project)
-      current_version = mapped_project[:releases].find { |v| v.version_number == version }
+      current_version = mapped_project[:raw_versions].find { |v| v.version_number == version }
 
       current_version.dependencies.map do |dep|
         {
