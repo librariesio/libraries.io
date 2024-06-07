@@ -52,3 +52,8 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+# fake Bugsnag for testing
+class Bugsnag
+  def self.notify(*); end
+end
