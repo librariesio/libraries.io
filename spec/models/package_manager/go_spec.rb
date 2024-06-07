@@ -268,6 +268,23 @@ describe PackageManager::Go do
             .to eq(["go.example.org/user/foo"])
         end
       end
+
+      context "with a request timeout" do
+        before do
+          allow(Bugsnag).to receive(:notify)
+        end
+
+        it "returns the original name", focus: true do
+          allow(described_class)
+            .to receive(:get_html)
+            .with("https://go.example.org/user/foo?go-get=1", { request: { timeout: 2 } })
+            .and_raise(Faraday::TimeoutError)
+
+          expect(described_class.project_find_names("go.example.org/user/foo"))
+            .to eq(["go.example.org/user/foo"])
+          expect(Bugsnag).to have_received(:notify)
+        end
+      end
     end
   end
 

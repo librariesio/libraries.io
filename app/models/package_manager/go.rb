@@ -15,6 +15,7 @@ module PackageManager
     ].freeze
     SKIP_HOSTS = [
       "jfrog.com",
+      "github.office.opendns.com",
     ].freeze
     KNOWN_VCS = [
       ".bzr",
