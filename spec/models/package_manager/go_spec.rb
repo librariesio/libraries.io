@@ -274,7 +274,7 @@ describe PackageManager::Go do
           allow(Bugsnag).to receive(:notify)
         end
 
-        it "returns the original name", focus: true do
+        it "returns the original name" do
           allow(described_class)
             .to receive(:get_html)
             .with("https://go.example.org/user/foo?go-get=1", { request: { timeout: 2 } })
