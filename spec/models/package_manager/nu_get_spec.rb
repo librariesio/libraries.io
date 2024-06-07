@@ -398,6 +398,7 @@ describe PackageManager::NuGet do
           number: "version",
           published_at: Time.now.iso8601,
           original_license: "licenses",
+          status: nil,
         },
       ])
     end
@@ -421,7 +422,7 @@ describe PackageManager::NuGet do
         )
       end
 
-      it "sets deprecated status and doesn't set published_at" do
+      it "sets deprecated status and doesn't modify published_at" do
         versions = described_class.versions(raw_project, name)
 
         expect(versions).to eq([
@@ -429,6 +430,7 @@ describe PackageManager::NuGet do
             number: "version",
             published_at: Time.now.iso8601,
             original_license: "licenses",
+            status: nil,
           },
           {
             number: "version2",

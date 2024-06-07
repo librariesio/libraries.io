@@ -163,6 +163,10 @@ module PackageManager
           # Keep the original "published_at" on our side but mark it as deprecated.
           version_data.delete(:published_at)
           version_data[:status] = "Deprecated"
+        else
+          # If the version is listed on NuGet and not deprecated, then we'd currently
+          # consider it "Active", or status: nil.
+          version_data[:status] = nil
         end
 
         VersionBuilder.build_hash(**version_data)
