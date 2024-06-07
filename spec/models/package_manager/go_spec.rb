@@ -277,8 +277,8 @@ describe PackageManager::Go do
         it "returns the original name", focus: true do
           allow(described_class)
             .to receive(:get_html)
-                  .with("https://go.example.org/user/foo?go-get=1", { request: { timeout: 2 } })
-                  .and_raise(Faraday::TimeoutError)
+            .with("https://go.example.org/user/foo?go-get=1", { request: { timeout: 2 } })
+            .and_raise(Faraday::TimeoutError)
 
           expect(described_class.project_find_names("go.example.org/user/foo"))
             .to eq(["go.example.org/user/foo"])
