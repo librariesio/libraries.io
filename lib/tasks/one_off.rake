@@ -59,7 +59,8 @@ namespace :one_off do
     catalog_size = catalog["items"].size
     puts "found #{catalog_size} pages."
 
-    catalog["items"][catalog_start_idx..].each.with_index do |catalog_item, idx|
+    catalog["items"].each.with_index do |catalog_item, idx|
+      next if idx < catalog_start_idx
       puts "Processing NuGet catalog page #{idx}, out of #{catalog_size} pages..."
       page = PackageManager::ApiService.request_json_with_headers(catalog_item["@id"])
 
