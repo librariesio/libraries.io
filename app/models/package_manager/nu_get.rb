@@ -158,10 +158,14 @@ module PackageManager
         }
 
         if raw_version.deprecation.present?
-          # We considered NuGet versions that are unlisted as "Deprecated", and those
-          # versions have their "published" reset to 1/1/1900 in the NuGet API.
-          # Keep the original "published_at" on our side but mark it as deprecated.
-          version_data.delete(:published_at)
+          # NuGet versions can be marked as deprecated as returned by the API, e.g.
+          # "EventBus.RabbitMQ.Standard@1.0.9".
+          # Additionally, if they have a "published" date of "1900-01-01 00:00:00"
+          # then they're "unlisted" too, and won't be shown on nuget.org, e.g.
+          # "Microsoft.IdentityModel@6.1.7600.16394".
+          # When "unlisted", we want to maintain the original "published" date
+          # so don't overwrite it with "1900-01-01 00:00:00".
+          version_data.delete(:published_at) if version_data[:published_at].year < 1901
           version_data[:status] = "Deprecated"
         else
           # If the version is listed on NuGet and not deprecated, then we'd currently
