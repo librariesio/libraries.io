@@ -284,6 +284,40 @@ describe PackageManager::Go do
             .to eq(["go.example.org/user/foo"])
           expect(Bugsnag).to have_received(:notify)
         end
+
+        context "with rails cache" do
+          let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
+          let(:cache) { Rails.cache }
+
+          before do
+            allow(Rails).to receive(:cache).and_return(memory_store)
+            Rails.cache.clear
+          end
+
+          it "caches the host name to avoid checking later" do
+            allow(described_class)
+              .to receive(:get_html)
+              .with("https://go.example.org/user/foo?go-get=1", { request: { timeout: 2 } })
+              .and_raise(Faraday::TimeoutError)
+
+            expect(described_class.project_find_names("go.example.org/user/foo"))
+              .to eq(["go.example.org/user/foo"])
+
+            cache_key = "unreachable-go-hosts:go.example.org"
+            expect(Rails.cache.exist?(cache_key)).to eq(true)
+          end
+
+          it "does not get html for cached unreachable name" do
+            Rails.cache.write("unreachable-go-hosts:go.example.org", true, ex: 1.day)
+
+            allow(described_class).to receive(:get_html)
+
+            expect(described_class.project_find_names("go.example.org/user/foo"))
+              .to eq(["go.example.org/user/foo"])
+
+            expect(described_class).not_to have_received(:get_html)
+          end
+        end
       end
     end
   end
