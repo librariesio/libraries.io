@@ -249,7 +249,7 @@ module PackageManager
         )
 
         chosen_name
-      rescue Faraday::ConnectionFailed => e
+      rescue Faraday::ConnectionFailed, Faraday::TimeoutError => e
         # We can get here from go modules that don't exist anymore, or having server troubles:
         # Fallback to the given name, cache the host as "bad" for a day,
         # log it (to analyze later) and notify us to be safe.
