@@ -61,10 +61,11 @@ namespace :one_off do
 
     catalog["items"].each.with_index do |catalog_item, idx|
       next if idx < catalog_start_idx
+
       puts "Processing NuGet catalog page #{idx}, out of #{catalog_size} pages..."
       page = PackageManager::ApiService.request_json_with_headers(catalog_item["@id"])
 
-      Parallel.each(page["items"], in_threads: threads, progress: "Page #{idx} (out of #{page['items'].size} items)") do |item|
+      Parallel.each(page["items"], in_threads: threads.to_i, progress: "Page #{idx} out of #{catalog_size}, with #{page['items'].size} items") do |item|
         page_item = PackageManager::ApiService.request_json_with_headers(item["@id"])
         name = page_item["id"]
         version = page_item["version"]
