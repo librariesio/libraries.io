@@ -59,34 +59,42 @@ namespace :one_off do
     catalog_size = catalog["items"].size
     puts "found #{catalog_size} pages."
 
-    catalog["items"].each.with_index do |catalog_item, idx|
-      next if idx < catalog_start_idx
+    catalog["items"]
+      .sort_by { |catalog_item| catalog_item["@id"].split("/").last.gsub(/page/, "").gsub(/\.json/, "").to_i }
+      .each.with_index do |catalog_item, idx|
+        next if idx < catalog_start_idx
 
-      puts "Processing NuGet catalog page #{idx}, out of #{catalog_size} pages..."
-      page = PackageManager::ApiService.request_json_with_headers(catalog_item["@id"])
+        page_filename = catalog_item["@id"].split("/").last
 
-      Parallel.each(page["items"], in_threads: threads.to_i, progress: "Page #{idx} out of #{catalog_size}, with #{page['items'].size} items") do |item|
-        page_item = PackageManager::ApiService.request_json_with_headers(item["@id"])
-        name = page_item["id"]
-        version = page_item["version"]
-        published = page_item["published"]
+        puts "Processing NuGet catalog page #{page_filename} (idx #{idx}), out of #{catalog_size} pages..."
+        page = PackageManager::ApiService.request_json_with_headers(catalog_item["@id"])
 
-        if published.nil?
-          raise "'published' field not found on page #{catalog_item['@id']} in #{item['@id']}."
-        elsif unlisted_name_versions.key?([name, version]) && published !~ /1900-/
-          p = Project.find_by(platform: "NuGet", name: name)
-          v = p.versions.find_by(number: version)
-          if v.published_at.year == 1900
-            published_at = Time.parse(published)
-            v.update_columns(published_at: published, status: "Deprecated")
-            unlisted_name_versions.delete([name, version])
-            puts "Updating #{p.name}@#{v.number} to #{published_at}."
-          else
-            puts "Skipping #{p.name}@#{v.number}. Version is already #{v.published_at}."
+        Parallel.each(page["items"], in_threads: threads.to_i, progress: "Page #{idx} out of #{catalog_size}, with #{page['items'].size} items") do |item|
+          page_item = PackageManager::ApiService.request_json_with_headers(item["@id"])
+          if page_item.nil?
+            puts "\n!!! Found a page without @id: #{item} !!!\b\b\n"
+            next
+          end
+          name = page_item["id"]
+          version = page_item["version"]
+          published = page_item["published"]
+
+          if published.nil?
+            raise "'published' field not found on page #{catalog_item['@id']} in #{item['@id']}."
+          elsif unlisted_name_versions.key?([name, version]) && published !~ /1900-/
+            p = Project.find_by(platform: "NuGet", name: name)
+            v = p.versions.find_by(number: version)
+            if v.published_at.year == 1900
+              published_at = Time.parse(published)
+              v.update_columns(published_at: published, status: "Deprecated")
+              unlisted_name_versions.delete([name, version])
+              puts "Updating #{p.name}@#{v.number} to #{published_at}."
+            else
+              puts "Skipping #{p.name}@#{v.number}. Version is already #{v.published_at}."
+            end
           end
         end
       end
-    end
     puts "Catalog page idx #{idx} (#{(idx / catalog_size.to_f) * 100}% complete)"
   end
 end
