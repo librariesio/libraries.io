@@ -70,9 +70,15 @@ namespace :one_off do
         page = PackageManager::ApiService.request_json_with_headers(catalog_item["@id"])
 
         Parallel.each(page["items"], in_threads: threads.to_i, progress: "Page #{idx} out of #{catalog_size}, with #{page['items'].size} items") do |item|
-          page_item = PackageManager::ApiService.request_json_with_headers(item["@id"])
+          retries = 0
+          page_item = nil
+          while page_item.nil? && retries < 3
+            sleep 0.5 if retries > 0 # Give NuGet server a short break and retry
+            page_item = PackageManager::ApiService.request_json_with_headers(item["@id"])
+            retries += 1
+          end
           if page_item.nil?
-            puts "\n!!! Found a page without @id: #{item} !!!\b\b\n"
+            puts "\n !!!!!!!!!!!!!!!!!!!!!!!! Found a page without @id: #{item} !!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n"
             next
           end
           name = page_item["id"]
