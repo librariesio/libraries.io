@@ -440,6 +440,41 @@ describe PackageManager::NuGet do
         ])
       end
     end
+
+    context "when it contains an unlisted release" do
+      before do
+        raw_project[:raw_versions] << PackageManager::NuGet::SemverRegistrationProjectRelease.new(
+          published_at: DateTime.new(1900, 1, 1),
+          version_number: "version2",
+          project_url: "project_url",
+          deprecation: nil,
+          description: "description",
+          summary: "summary",
+          tags: [],
+          licenses: "licenses",
+          license_url: "license_url",
+          dependencies: []
+        )
+      end
+
+      it "sets deprecated status and doesn't modify published_at" do
+        versions = described_class.versions(raw_project, name)
+
+        expect(versions).to eq([
+          {
+            number: "version",
+            published_at: Time.now.iso8601,
+            original_license: "licenses",
+            status: nil,
+          },
+          {
+            number: "version2",
+            original_license: "licenses",
+            status: "Deprecated",
+          },
+        ])
+      end
+    end
   end
 
   describe ".update" do
