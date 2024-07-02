@@ -66,6 +66,10 @@ module PackageManager
       if latest =~ /\$\{/
         latest = latest_version_scraped(name)
       end
+      # latest isn't guaranteed to be in maven metadata so let's just guess if it's not present
+      if latest.nil?
+        latest = latest_version_scraped(name)
+      end
 
       return {} unless latest.present?
 
@@ -81,8 +85,18 @@ module PackageManager
     end
 
     def self.mapping(raw_project, depth = 0)
-      latest_version_xml = get_pom(raw_project[:group_id], raw_project[:artifact_id], raw_project[:latest_version])
-      pom_data = mapping_from_pom_xml(latest_version_xml, depth)
+      begin
+        version_xml = get_pom(raw_project[:group_id], raw_project[:artifact_id], raw_project[:latest_version])
+      rescue POMNotFound => e
+        Rails.logger.info "Missing POM for #{raw_project[:name]}/#{raw_project[:latest_version]}, trying to scrape latest"
+        scraped = latest_version_scraped(raw_project[:name])
+        if scraped != raw_project[:latest_version]
+          raw_project[:latest_version] = scraped
+          return mapping(raw_project, depth)
+        end
+        raise e
+      end
+      pom_data = mapping_from_pom_xml(version_xml, depth)
 
       MappingBuilder.build_hash(
         name: raw_project[:name],
