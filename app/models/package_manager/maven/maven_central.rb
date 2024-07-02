@@ -19,7 +19,7 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven::Common
   # Attempt to scrape MavenCentral's index HTML to infer the latest version.
   def self.latest_version_scraped(name)
     versions = get_html(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).base)
-      .css("#contents a")                                  # scrape the list of file/folders
+      .css("a")                                            # scrape the list of file/folders
       .map(&:text)                                         # get each innerText
       .select { |text| text.end_with?("/") }               # only look at folders
       .map { |folder| folder.chomp("/") }                  # remove folder trailing slash
