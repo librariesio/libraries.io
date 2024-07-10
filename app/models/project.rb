@@ -662,6 +662,9 @@ class Project < ApplicationRecord
       update_attribute(:status, "Removed") if created_at < 1.week.ago
     elsif !platform.downcase.in?(%w[packagist go]) && [400, 404, 410].include?(response.response_code)
       update_attribute(:status, "Removed")
+    elsif response.timed_out? || response.failure?
+      # failure could be a problem checking so let's just log for now
+      StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, status_code: response.response_code })
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(self)
       if result[:is_deprecated]
