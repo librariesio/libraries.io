@@ -1,24 +1,29 @@
 <% title "Login to Libraries.io" %>
 <h1>Login to Libraries.io</h1>
 
-<p>Choose one of the identity providers to login with:</p>
+<p>Please click on one of the buttons below to link your account.</p>
 
 <p>
-  <%= link_to '/auth/github', class: 'btn btn-success' do %>
+  <%= link_to '/auth/github', class: 'btn btn-primary' do %>
     <%= fa_icon 'github' %> Login with GitHub
   <% end %>
 </p>
 
 <p>
-  <%= link_to '/auth/gitlab', class: 'btn btn-success' do %>
+  <%= link_to '/auth/gitlab', class: 'btn btn-primary' do %>
     <%= fa_icon 'gitlab' %> Login with GitLab
   <% end %>
 </p>
 
 <p>
-  <%= link_to '/auth/bitbucket', class: 'btn btn-success' do %>
+  <%= link_to '/auth/bitbucket', class: 'btn btn-primary' do %>
     <%= fa_icon 'bitbucket' %> Login with Bitbucket
   <% end %>
 </p>
 
 <p>By logging in you accept our <a href='/terms'>terms of service</a> and <a href='/privacy'>privacy policy</a>.</p>
+<hr>
+<h2>Why login to Libraries.io?</h2>
+<p>Libraries.io lets you watch packages that you depend on and notifies you when there's a new release. When you follow a package, new releases will show up here in your newsfeed.</p>
+<p>Libraries.io can automatically keep track of all of the packages that your repositories depend upon across many different package managers.</p>
+<p>Data from Libraries.io can easily be integrated into your day-to-day workflows using our API. Get your API key now! Libraries.io will also email you about new versions of your dependencies, if you add or remove a new dependency it will change the notifications settings for that package as soon as you push to your repositories.</p>

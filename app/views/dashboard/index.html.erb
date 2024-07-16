@@ -79,11 +79,11 @@
             <td>
               <% if sub = current_user.subscribed_to_repo?(repository) %>
                 <div class="btn-group pull-right">
-                  <%= link_to unwatch_path(repository.id), method: :post, class: 'tip btn btn-sm btn-success', title: 'Stop watching' do %>
+                  <%= link_to unwatch_path(repository.id), method: :post, class: 'tip btn btn-sm btn-primary', title: 'Stop watching' do %>
                     <%= fa_icon('check') %>
                     Monitoring
                   <% end %>
-                  <%= link_to fa_icon('cog'), edit_repository_subscription_path(sub), class: 'btn btn-sm btn-success' %>
+                  <%= link_to fa_icon('cog'), edit_repository_subscription_path(sub), class: 'btn btn-sm btn-primary' %>
                 </div>
               <% else %>
                 <%= button_to watch_path(repository.id), method: :post, class: 'btn btn-sm btn-default  pull-right' do %>

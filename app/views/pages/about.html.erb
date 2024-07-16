@@ -64,14 +64,14 @@
     </p>
         <%- if logged_in? %>
     <p>
-      <a href="<%= platforms_path %>" class="btn btn-success">
+      <a href="<%= platforms_path %>" class="btn btn-primary">
         <%= fa_icon 'star' %>
         Explore all <%= PackageManager::Base.platforms.count %> package managers
       </a>
     </p>
     <% else %>
     <p>
-      <a href="<%= login_path(return_to: request.original_url) %>" class="btn btn-success">
+      <a href="<%= login_path(return_to: request.original_url) %>" class="btn btn-primary">
         <%= fa_icon 'star' %>
         Sign up, it's free for Open Source
       </a>
