@@ -1,6 +1,6 @@
 <div class='row'>
   <div class="col-md-12 headline">
-    <h1>Libraries.io</h1>
+    <h1>Welcome to Libraries.io - a Tidelift project</h1>
     <%= link_to 'Find out more &raquo;'.html_safe, about_path, class: 'visible-xs' %>
 
     <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
@@ -10,85 +10,97 @@
           <button class="btn btn-primary" type="submit">Search</button>
         </span>
       </div>
-      <p class='hidden-xs'>Libraries.io monitors <strong><%= number_with_delimiter(Project.fast_total) %></strong> open source packages across <strong><%= PackageManager::Base.platforms.length %></strong> different package managers, so you don't have to. <%= link_to 'Find out more', about_path %>
+      <p class='hidden-xs'>
+        Libraries.io monitors <strong><%= number_with_delimiter(Project.fast_total) %></strong> open source packages across <strong><%= PackageManager::Base.platforms.length %></strong> different package managers, so you don't have to.
       </p>
-      <hr>
     <% end %>
   </div>
 </div>
+<% if not logged_in? %>
+  <div class="row">
+    <div class="col-md-5"></div>
+    <div class="col-md-2">
+      <%= link_to 'Login', login_path, class:'btn btn-primary center-block' %>
+    </div>
+    <div class="col-md-5"></div>
+  </div>
+<% end %>
+<hr>
+<h2>Why use Libraries.io?</h2>
 <div class='row cta'>
   <div class='col-md-3'>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h2 class="panel-title"><%= fa_icon 'binoculars' %>&nbsp;Discover new software</h2>
+        <h2 class="panel-title"><%= fa_icon 'search' %>&nbsp;Evaluating package risk</h2>
+      </div>
+      <div class="panel-body">
+        <p>
+          Analyze open source package insights to evaluate whether a package is suitable for use.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title"><%= fa_icon 'binoculars' %>&nbsp;Discovering new software</h2>
       </div>
       <div class="panel-body">
         <p>
           Search <%= number_to_human(Project.fast_total) %> packages by <%= link_to 'license'.html_safe, licenses_path %>, <%= link_to 'language'.html_safe, languages_path %>, or explore new, trending or popular packages.
         </p>
       </div>
-      <div class="panel-footer"><%= link_to 'Explore', explore_path, class:'btn btn-primary center-block' %></div>
     </div>
   </div>
   <div class='col-md-3'>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h2 class="panel-title"><%= fa_icon 'thumb-tack' %>&nbsp;Monitor your dependencies</h2>
+        <h2 class="panel-title"><%= fa_icon 'thumb-tack' %>&nbsp;Monitoring your dependencies</h2>
       </div>
       <div class="panel-body">
         <p>
           Stay up to date with notifications of updates, license incompatibilities or deleted dependencies.
         </p>
       </div>
-      <div class="panel-footer">
-        <% if logged_in? %>
-          <%= link_to 'Subscriptions', subscriptions_path, class:'btn btn-success center-block'%>
-        <% else %>
-          <%= link_to 'Login', login_path, class:'btn btn-success center-block' %>
-        <% end %>
-      </div>
     </div>
   </div>
   <div class='col-md-3'>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h2 class="panel-title"><%= fa_icon 'wrench' %>&nbsp;Maintain your OSS project</h2>
+        <h2 class="panel-title"><%= fa_icon 'wrench' %>&nbsp;Maintaining your OSS project</h2>
       </div>
       <div class="panel-body">
         <p>
           Understand your users and make informed decisions about features with usage and version data.
         </p>
       </div>
-      <div class="panel-footer">
-        <% if logged_in? %>
-          <%= link_to 'Repository Monitoring', repositories_path, class:'btn btn-success center-block'%>
-        <% else %>
-          <%= link_to 'Login', login_path, class:'btn btn-success center-block' %>
-        <% end %>
-      </div>
     </div>
   </div>
-  <div class='col-md-3'>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h2 class="panel-title"><%= fa_icon 'database' %>&nbsp;Use Libraries.io data</h2>
-      </div>
-      <div class="panel-body">
-        <p>
-          Use Libraries.io data in your applications, services or research. Use our <%= link_to 'API', '/api'%> to stay up to date.
-        </p>
-      </div>
-      <div class="panel-footer"><%= link_to 'Documentation', '/data', class:'btn btn-primary center-block'%></div>
-    </div>
-  </div>
+</div>
 
+<div class="row">
+  <div class="col-md-4"></div>
+  <% if not logged_in? %>
+    <div class="col-md-2">
+      <%= link_to 'Login', login_path, class:'btn btn-primary center-block' %>
+    </div>
+  <% end %>
+  <div class="col-md-2">
+    <%= link_to 'API Documentation', '/api', class:'btn btn-primary center-block'%>
+  </div>
+  <div class="col-md-4"></div>
 </div>
 
 <hr>
 
-<h3 data-ga-tracked-el='search-by-language'>
+<h2>Looking for more package risk indicators?</h2>
+<p>The <%= link_to 'Tidelift', 'https://tidelift.com/' %> Subscription provides deeper, more meaningful insights that allow you to evaluate latent risk indicators such as package maintenance and end-of-life status, evaluating code contributors and security measures such as two-factor-authentication to eliminate malicious code injections, and more.</p>
+<br>
+<hr>
+
+<h2 data-ga-tracked-el='search-by-language'>
   Supported Package Managers
-</h3>
+</h2>
 <div class='row'>
   <%= render partial: 'platforms/platform', collection: @platforms %>
 </div>
