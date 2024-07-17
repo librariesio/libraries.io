@@ -21,7 +21,6 @@ class RepositoryHost::RawUpstreamDataConverter
       keywords: upstream_repository_data_hash[:topics],
       language: upstream_repository_data_hash[:language],
       license: upstream_repository_data_hash.dig(:license, :key),
-      security_policy_url: upstream_repository_data_hash[:security_policy_url],
       logo_url: upstream_repository_data_hash[:logo_url],
       mirror_url: upstream_repository_data_hash[:mirror_url],
       name: upstream_repository_data_hash[:name],
@@ -32,6 +31,7 @@ class RepositoryHost::RawUpstreamDataConverter
       pushed_at: upstream_repository_data_hash[:pushed_at],
       is_private: upstream_repository_data_hash[:private],
       scm: "git",
+      security_policy_url: upstream_repository_data_hash[:security_policy_url],
       stargazers_count: upstream_repository_data_hash[:stargazers_count],
       subscribers_count: upstream_repository_data_hash[:subscribers_count],
       repository_size: upstream_repository_data_hash[:size],
@@ -60,7 +60,6 @@ class RepositoryHost::RawUpstreamDataConverter
       keywords: api_project.topics,
       language: nil, # separate API endpoint that doesn't seem to be supported by the API gem we use,
       license: api_project.license&.key,
-      security_policy_url: nil,
       logo_url: api_project.avatar_url,
       mirror_url: nil,
       name: api_project.name,
@@ -74,6 +73,7 @@ class RepositoryHost::RawUpstreamDataConverter
       repository_size: 0, # locked to admins only?,
       repository_uuid: api_project.id.to_s,
       scm: "git",
+      security_policy_url: nil,
       stargazers_count: api_project.star_count,
       subscribers_count: nil
     )
@@ -100,7 +100,6 @@ class RepositoryHost::RawUpstreamDataConverter
       keywords: [],
       language: api_project.language,
       license: nil,
-      security_policy_url: nil,
       logo_url: nil,
       mirror_url: nil,
       name: api_project.name,
@@ -114,6 +113,7 @@ class RepositoryHost::RawUpstreamDataConverter
       repository_size: api_project[:size].to_f / 1000,
       repository_uuid: api_project.uuid.to_s,
       scm: api_project.scm,
+      security_policy_url: nil,
       stargazers_count: nil,
       subscribers_count: nil # need an update to our BitBucket API gem to get list of repo watchers
     )
