@@ -5,6 +5,8 @@
 # Table name: repositories
 #
 #  id                             :integer          not null, primary key
+#  code_of_conduct_url            :string
+#  contribution_guidelines_url    :string
 #  contributions_count            :integer          default(0), not null
 #  default_branch                 :string
 #  description                    :string
@@ -12,6 +14,7 @@
 #  fork_policy                    :string
 #  forks_count                    :integer
 #  full_name                      :string
+#  funding_urls                   :string           default([]), is an Array
 #  has_audit                      :string
 #  has_changelog                  :string
 #  has_coc                        :string
@@ -39,6 +42,7 @@
 #  pushed_at                      :datetime
 #  rank                           :integer
 #  scm                            :string
+#  security_policy_url            :string
 #  size                           :integer
 #  source_name                    :string
 #  stargazers_count               :integer

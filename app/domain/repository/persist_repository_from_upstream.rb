@@ -67,12 +67,15 @@ class Repository::PersistRepositoryFromUpstream
 
   def self.raw_data_repository_attrs(raw_upstream_data)
     attrs = {
+      code_of_conduct_url: raw_upstream_data.code_of_conduct_url,
+      contribution_guidelines_url: raw_upstream_data.contribution_guidelines_url,
       default_branch: raw_upstream_data.default_branch,
       description: raw_upstream_data.description,
       fork: raw_upstream_data.fork,
       fork_policy: raw_upstream_data.fork_policy,
       forks_count: raw_upstream_data.forks_count,
       full_name: raw_upstream_data.full_name,
+      funding_urls: raw_upstream_data.funding_urls,
       has_issues: raw_upstream_data.has_issues,
       has_pages: raw_upstream_data.has_pages,
       has_wiki: raw_upstream_data.has_wiki,
@@ -89,6 +92,7 @@ class Repository::PersistRepositoryFromUpstream
       pull_requests_enabled: raw_upstream_data.pull_requests_enabled&.to_s,
       pushed_at: raw_upstream_data.pushed_at,
       scm: raw_upstream_data.scm,
+      security_policy_url: raw_upstream_data.security_policy_url,
       size: raw_upstream_data.repository_size,
       stargazers_count: raw_upstream_data.stargazers_count,
       subscribers_count: raw_upstream_data.subscribers_count,

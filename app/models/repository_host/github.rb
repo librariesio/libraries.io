@@ -66,8 +66,14 @@ module RepositoryHost
 
       graphql_client = AuthToken.new_v4_client(token)
       graphql_values = GraphqlRepositoryFieldsQuery.new(graphql_client).query(params: { owner: owner, repository_name: repository_name })
+      graphql_hash = {
+        code_of_conduct_url: graphql_values.code_of_conduct_url,
+        contribution_guidelines_url: graphql_values.contribution_guidelines_url,
+        funding_urls: graphql_values.funding_urls,
+        security_policy_url: graphql_values.security_policy_url,
+      }
 
-      RawUpstreamDataConverter.convert_from_github_api(api_hash.merge(graphql_values))
+      RawUpstreamDataConverter.convert_from_github_api(api_hash.merge(graphql_hash))
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end

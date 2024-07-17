@@ -4,6 +4,7 @@ module RepositoryHost
   class Github
     class GraphqlRepositoryFieldsQuery
       class QueryError < StandardError; end
+      GraphQlRepositoryResult = Struct.new(:code_of_conduct_url, :contribution_guidelines_url, :funding_urls, :security_policy_url, keyword_init: true)
 
       VALID_PARAMS = %i[owner repository_name].freeze
       REQUIRED_PARAMS = %i[owner repository_name].freeze
@@ -45,11 +46,12 @@ module RepositoryHost
       def extract_results(results)
         results = results.data.to_h
 
-        {
+        GraphQlRepositoryResult.new(
           code_of_conduct_url: results.dig("repository", "codeOfConduct", "url"),
-          contributing_guidelines_url: results.dig("repository", "contributingGuidelines", "url"),
+          contribution_guidelines_url: results.dig("repository", "contributingGuidelines", "url"),
           funding_urls: results.dig("repository", "fundingLinks")&.map { |funding_link| funding_link["url"] },
-        }
+          security_policy_url: results.dig("repository", "securityPolicyUrl")
+        )
       end
 
       def validate_params(params)
