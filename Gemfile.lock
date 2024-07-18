@@ -147,7 +147,7 @@ GEM
       xpath (~> 3.2)
     case_transform (0.2)
       activesupport
-    charlock_holmes (0.7.7)
+    charlock_holmes (0.7.9)
     chartkick (3.4.0)
     chronic (0.10.2)
     coderay (1.1.3)
