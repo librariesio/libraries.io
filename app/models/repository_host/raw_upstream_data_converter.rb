@@ -4,12 +4,15 @@ class RepositoryHost::RawUpstreamDataConverter
   def self.convert_from_github_api(upstream_repository_data_hash)
     RepositoryHost::RawUpstreamData.new(
       archived: upstream_repository_data_hash[:archived],
+      code_of_conduct_url: upstream_repository_data_hash[:code_of_conduct_url],
+      contribution_guidelines_url: upstream_repository_data_hash[:contribution_guidelines_url],
       default_branch: upstream_repository_data_hash[:default_branch],
       description: upstream_repository_data_hash[:description],
       fork: upstream_repository_data_hash[:fork],
       fork_policy: upstream_repository_data_hash[:fork_policy],
       forks_count: upstream_repository_data_hash[:forks_count],
       full_name: upstream_repository_data_hash[:full_name],
+      funding_urls: upstream_repository_data_hash[:funding_urls],
       has_issues: upstream_repository_data_hash[:has_issues],
       has_pages: upstream_repository_data_hash[:has_pages],
       has_wiki: upstream_repository_data_hash[:has_wiki],
@@ -28,6 +31,7 @@ class RepositoryHost::RawUpstreamDataConverter
       pushed_at: upstream_repository_data_hash[:pushed_at],
       is_private: upstream_repository_data_hash[:private],
       scm: "git",
+      security_policy_url: upstream_repository_data_hash[:security_policy_url],
       stargazers_count: upstream_repository_data_hash[:stargazers_count],
       subscribers_count: upstream_repository_data_hash[:subscribers_count],
       repository_size: upstream_repository_data_hash[:size],
@@ -38,12 +42,15 @@ class RepositoryHost::RawUpstreamDataConverter
   def self.convert_from_gitlab_api(api_project)
     RepositoryHost::RawUpstreamData.new(
       archived: api_project.archived,
+      code_of_conduct_url: nil,
+      contribution_guidelines_url: nil,
       default_branch: api_project.default_branch,
       description: api_project.description,
       fork: api_project.try(:forked_from_project).present?,
       fork_policy: nil,
       forks_count: api_project.forks_count,
       full_name: api_project.path_with_namespace,
+      funding_urls: [],
       has_issues: api_project.issues_enabled,
       has_pages: nil,
       has_wiki: api_project.wiki_enabled,
@@ -66,6 +73,7 @@ class RepositoryHost::RawUpstreamDataConverter
       repository_size: 0, # locked to admins only?,
       repository_uuid: api_project.id.to_s,
       scm: "git",
+      security_policy_url: nil,
       stargazers_count: api_project.star_count,
       subscribers_count: nil
     )
@@ -74,12 +82,15 @@ class RepositoryHost::RawUpstreamDataConverter
   def self.convert_from_bitbucket_api(api_project, forks_response)
     RepositoryHost::RawUpstreamData.new(
       archived: false,
+      code_of_conduct_url: nil,
+      contribution_guidelines_url: nil,
       default_branch: api_project.fetch("mainbranch", {}).try(:fetch, "name", nil),
       description: api_project.description,
       fork: api_project.parent.present?,
       fork_policy: api_project.fork_policy,
       forks_count: forks_response.fetch("size", 0),
       full_name: api_project.full_name,
+      funding_urls: [],
       has_issues: api_project.has_issues,
       has_pages: nil,
       has_wiki: api_project.has_wiki,
@@ -102,6 +113,7 @@ class RepositoryHost::RawUpstreamDataConverter
       repository_size: api_project[:size].to_f / 1000,
       repository_uuid: api_project.uuid.to_s,
       scm: api_project.scm,
+      security_policy_url: nil,
       stargazers_count: nil,
       subscribers_count: nil # need an update to our BitBucket API gem to get list of repo watchers
     )

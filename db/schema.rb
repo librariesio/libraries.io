@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_01_171850) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_17_173229) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -262,6 +262,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_01_171850) do
     t.string "keywords", default: [], array: true
     t.datetime "maintenance_stats_refreshed_at"
     t.index "lower((host_type)::text), lower((full_name)::text)", name: "index_repositories_on_lower_host_type_lower_full_name", unique: true
+    t.string "code_of_conduct_url"
+    t.string "contribution_guidelines_url"
+    t.string "security_policy_url"
+    t.string "funding_urls", default: [], array: true
     t.index "lower((language)::text)", name: "github_repositories_lower_language"
     t.index ["fork"], name: "index_repositories_on_fork"
     t.index ["host_type", "uuid"], name: "index_repositories_on_host_type_and_uuid", unique: true

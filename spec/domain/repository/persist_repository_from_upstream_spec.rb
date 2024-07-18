@@ -242,12 +242,15 @@ RSpec.describe Repository::PersistRepositoryFromUpstream do
       mapped = described_class.raw_data_repository_attrs(raw_upstream_data)
 
       expect(mapped.keys).to contain_exactly(
+        :code_of_conduct_url,
+        :contribution_guidelines_url,
         :default_branch,
         :description,
         :fork,
         :fork_policy,
         :forks_count,
         :full_name,
+        :funding_urls,
         :has_issues,
         :has_pages,
         :has_wiki,
@@ -264,6 +267,7 @@ RSpec.describe Repository::PersistRepositoryFromUpstream do
         :pull_requests_enabled,
         :pushed_at,
         :scm,
+        :security_policy_url,
         :size,
         :source_name,
         :stargazers_count,

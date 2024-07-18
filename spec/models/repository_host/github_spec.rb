@@ -19,12 +19,15 @@ describe RepositoryHost::Github do
       repository_data = repository_host.class.fetch_repo(repository.id_or_name, api_token)
 
       expect(repository_data.archived).to be false
+      expect(repository_data.code_of_conduct_url).to eql("https://github.com/vuejs/vue/blob/main/.github/CODE_OF_CONDUCT.md")
+      expect(repository_data.contribution_guidelines_url).to eql("https://github.com/vuejs/vue/blob/main/.github/CONTRIBUTING.md")
       expect(repository_data.default_branch).to eql("main")
       expect(repository_data.description).to eql("This is the repo for Vue 2. For Vue 3, go to https://github.com/vuejs/core")
       expect(repository_data.fork).to be false
       expect(repository_data.fork_policy).to be_nil
       expect(repository_data.forks_count).to eql(33596)
       expect(repository_data.full_name).to eql("vuejs/vue")
+      expect(repository_data.funding_urls).to match_array(["https://github.com/yyx990803", "https://github.com/posva", "https://patreon.com/evanyou", "https://opencollective.com/vuejs", "https://tidelift.com/funding/github/npm/vue"])
       expect(repository_data.has_issues).to be true
       expect(repository_data.has_pages).to be false
       expect(repository_data.has_wiki).to be true
@@ -44,6 +47,7 @@ describe RepositoryHost::Github do
       expect(repository_data.pushed_at.iso8601).to eql("2024-03-14T17:24:41Z")
       expect(repository_data.repository_uuid).to eql("11730342")
       expect(repository_data.scm).to eql("git")
+      expect(repository_data.security_policy_url).to eql("https://github.com/vuejs/vue/blob/main/.github/SECURITY.md")
       expect(repository_data.stargazers_count).to eql(206_637)
       expect(repository_data.subscribers_count).to eql(5912)
       expect(repository_data.repository_size).to eql(32405)

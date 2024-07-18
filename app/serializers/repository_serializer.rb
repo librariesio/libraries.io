@@ -9,7 +9,8 @@ class RepositorySerializer < ActiveModel::Serializer
              :has_changelog, :has_contributing, :has_license, :has_coc,
              :has_threat_model, :has_audit, :status, :last_synced_at, :rank,
              :host_type, :host_domain, :name, :scm, :fork_policy, :github_id,
-             :pull_requests_enabled, :logo_url, :github_contributions_count, :keywords
+             :pull_requests_enabled, :logo_url, :github_contributions_count, :keywords,
+             :code_of_conduct_url, :contribution_guidelines_url, :funding_urls, :security_policy_url
 
   attribute :readme_html_body, if: -> { instance_options[:include_readme] == true }
 

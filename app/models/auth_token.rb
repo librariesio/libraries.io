@@ -87,7 +87,7 @@ class AuthToken < ApplicationRecord
   end
 
   def self.new_v4_client(token)
-    token ||= AuthToken.find_token(:v4)
+    token ||= AuthToken.find_token(:v4).token
     GithubGraphql.new_client(token)
   end
 
