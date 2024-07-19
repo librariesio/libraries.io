@@ -61,19 +61,20 @@ module RepositoryHost
       token ||= AuthToken.find_token(:v4).token
 
       api_hash = AuthToken.fallback_client(token).repo(id_or_name, accept: "application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json").to_hash
-      owner = api_hash.dig(:owner, :login)
-      repository_name = api_hash[:name]
 
-      graphql_client = AuthToken.new_v4_client(token)
-      graphql_values = GraphqlRepositoryFieldsQuery.new(graphql_client).query(params: { owner: owner, repository_name: repository_name })
-      graphql_hash = {
-        code_of_conduct_url: graphql_values.code_of_conduct_url,
-        contribution_guidelines_url: graphql_values.contribution_guidelines_url,
-        funding_urls: graphql_values.funding_urls,
-        security_policy_url: graphql_values.security_policy_url,
-      }
+      # disabling for now due to some permission issues in the GH API
+      # owner = api_hash.dig(:owner, :login)
+      # repository_name = api_hash[:name]
+      # graphql_client = AuthToken.new_v4_client(token)
+      # graphql_values = GraphqlRepositoryFieldsQuery.new(graphql_client).query(params: { owner: owner, repository_name: repository_name })
+      # graphql_hash = {
+      #   code_of_conduct_url: graphql_values.code_of_conduct_url,
+      #   contribution_guidelines_url: graphql_values.contribution_guidelines_url,
+      #   funding_urls: graphql_values.funding_urls,
+      #   security_policy_url: graphql_values.security_policy_url,
+      # }
 
-      RawUpstreamDataConverter.convert_from_github_api(api_hash.merge(graphql_hash))
+      RawUpstreamDataConverter.convert_from_github_api(api_hash)
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end
