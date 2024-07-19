@@ -285,7 +285,7 @@ class Repository < ApplicationRecord
   end
 
   def update_all_info(token = nil)
-    token ||= AuthToken.token if host_type == "GitHub"
+    token ||= AuthToken.find_token(:v4) if host_type == "GitHub"
 
     if check_status && (last_synced_at.nil? || last_synced_at < 2.minutes.ago)
       update_from_repository(token)
