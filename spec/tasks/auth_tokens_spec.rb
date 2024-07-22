@@ -13,9 +13,12 @@ describe "auth tokens" do
     context "with single token" do
       let(:token) { create(:auth_token) }
       let(:token_github_api_stub) { instance_double(Octokit::Client) }
+      let(:token_response_stub) { instance_double(Sawyer::Response) }
 
       before do
         allow(Octokit::Client).to receive(:new).with(hash_including(access_token: token.token)).and_return(token_github_api_stub)
+        allow(token_github_api_stub).to receive(:last_response).and_return(token_response_stub)
+        allow(token_github_api_stub).to receive(:user).and_return({ login: "login" })
       end
 
       it "marks unauthorized tokens" do
@@ -27,6 +30,20 @@ describe "auth tokens" do
         Rake::Task["auth_tokens:reverify_authorized"].invoke
 
         expect(token.reload.authorized).to be false
+      end
+
+      it "saves token scopes" do
+        # return as still_authorized
+        allow(token_github_api_stub).to receive(:rate_limit).and_return(5000)
+
+        expected_scopes = "some, fun, scopes"
+        allow(token_response_stub).to receive(:headers).and_return({ "x-oauth-scopes" => expected_scopes })
+
+        expect(token.scopes).to be_empty
+
+        Rake::Task["auth_tokens:reverify_authorized"].invoke
+
+        expect(token.reload.scopes).to match_array(expected_scopes.split(", "))
       end
     end
 

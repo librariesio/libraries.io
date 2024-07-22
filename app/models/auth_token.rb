@@ -7,6 +7,7 @@
 #  id         :integer          not null, primary key
 #  authorized :boolean
 #  login      :string
+#  scopes     :string           default([]), is an Array
 #  token      :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -67,6 +68,13 @@ class AuthToken < ApplicationRecord
     !!github_client.rate_limit
   rescue Octokit::Unauthorized, Octokit::AccountSuspended
     false
+  end
+
+  def fetch_auth_scopes
+    client = github_client
+    client.rate_limit!.remaining unless client.last_response
+
+    client.last_response.headers.fetch("x-oauth-scopes", "").split(", ")
   end
 
   def github_client(options = {})
