@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_17_173229) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_22_132336) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -34,6 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_17_173229) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "authorized"
+    t.string "scopes", default: [], array: true
   end
 
   create_table "contributions", id: :serial, force: :cascade do |t|
