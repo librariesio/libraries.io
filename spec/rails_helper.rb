@@ -39,7 +39,7 @@ RSpec.configure do |config|
 end
 
 def project_json_response(projects)
-  projects.as_json(only: Project::API_FIELDS, methods: %i[code_of_conduct_url contributions_count contribution_guidelines_url funding_urls package_manager_url  security_policy_url stars forks keywords latest_download_url repository_license repository_status], include: { versions: { only: %i[number published_at original_license spdx_expression researched_at repository_sources] } })
+  projects.as_json(only: Project::API_FIELDS, methods: %i[code_of_conduct_url contributions_count contribution_guidelines_url funding_urls package_manager_url security_policy_url stars forks keywords latest_download_url repository_license repository_status], include: { versions: { only: %i[number published_at original_license spdx_expression researched_at repository_sources] } })
 end
 
 RSpec::Sidekiq.configure do |config|
