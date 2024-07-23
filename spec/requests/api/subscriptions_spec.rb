@@ -12,7 +12,7 @@ describe "Api::SubscriptionsController" do
       get "/api/subscriptions?api_key=#{user.api_key}"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to start_with("application/json")
-      expect(response.body).to be_json_eql [subscription.as_json(only: %i[include_prerelease created_at updated_at], include: { project: { only: Project::API_FIELDS, methods: %i[contributions_count package_manager_url stars forks keywords latest_download_url repository_license repository_status], include: { versions: { only: %i[number published_at] } } } })].to_json
+      expect(response.body).to be_json_eql [subscription.as_json(only: %i[include_prerelease created_at updated_at], include: { project: { only: Project::API_FIELDS, methods: %i[code_of_conduct_url contributions_count contribution_guidelines_url funding_urls package_manager_url security_policy_url stars forks keywords latest_download_url repository_license repository_status], include: { versions: { only: %i[number published_at] } } } })].to_json
     end
   end
 
@@ -21,7 +21,7 @@ describe "Api::SubscriptionsController" do
       get "/api/subscriptions/#{subscription.project.platform}/#{subscription.project.name}?api_key=#{user.api_key}"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to start_with("application/json")
-      expect(response.body).to be_json_eql subscription.to_json(only: %i[include_prerelease created_at updated_at], include: { project: { only: Project::API_FIELDS, methods: %i[contributions_count package_manager_url stars forks keywords latest_download_url repository_license repository_status], include: { versions: { only: %i[number published_at] } } } })
+      expect(response.body).to be_json_eql subscription.to_json(only: %i[include_prerelease created_at updated_at], include: { project: { only: Project::API_FIELDS, methods: %i[code_of_conduct_url contributions_count contribution_guidelines_url funding_urls package_manager_url security_policy_url stars forks keywords latest_download_url repository_license repository_status], include: { versions: { only: %i[number published_at] } } } })
     end
   end
 
@@ -46,7 +46,7 @@ describe "Api::SubscriptionsController" do
       put "/api/subscriptions/#{subscription.project.platform}/#{subscription.project.name}?api_key=#{user.api_key}", params: { subscription: { include_prerelease: true } }
       expect(response).to have_http_status(:success)
       expect(response.content_type).to start_with("application/json")
-      expect(response.body).to be_json_eql subscription.reload.to_json(only: %i[include_prerelease created_at updated_at], include: { project: { only: Project::API_FIELDS, methods: %i[contributions_count package_manager_url stars forks keywords latest_download_url repository_license repository_status], include: { versions: { only: %i[number published_at] } } } })
+      expect(response.body).to be_json_eql subscription.reload.to_json(only: %i[include_prerelease created_at updated_at], include: { project: { only: Project::API_FIELDS, methods: %i[code_of_conduct_url contributions_count contribution_guidelines_url funding_urls package_manager_url security_policy_url stars forks keywords latest_download_url repository_license repository_status], include: { versions: { only: %i[number published_at] } } } })
     end
   end
 

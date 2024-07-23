@@ -56,7 +56,11 @@ class OptimizedProjectSerializer
           repository_status: project.repository_status,
           stars: project.stars,
           versions: project.versions,
-          contributions_count: project.contributions_count
+          contributions_count: project.contributions_count,
+          code_of_conduct_url: project.code_of_conduct_url,
+          contribution_guidelines_url: project.contribution_guidelines_url,
+          funding_urls: project.funding_urls,
+          security_policy_url: project.security_policy_url
         ).tap do |result|
           if @internal_key
             result[:updated_at] = project.updated_at
