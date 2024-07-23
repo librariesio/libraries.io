@@ -73,12 +73,15 @@ class Project < ApplicationRecord
   HAS_DEPENDENCIES = false
   STATUSES = ["Active", "Deprecated", "Unmaintained", "Help Wanted", "Removed", "Hidden"].freeze
   API_FIELDS = %i[
+    code_of_conduct_url
     contributions_count
+    contribution_guidelines_url
     dependent_repos_count
     dependents_count
     deprecation_reason
     description
     forks
+    funding_urls
     homepage
     keywords
     language
@@ -97,9 +100,12 @@ class Project < ApplicationRecord
     repository_license
     repository_status
     repository_url
+    security_policy_url
     stars
     status
   ].freeze
+
+  delegate :code_of_conduct_url, :contribution_guidelines_url, :funding_urls, :security_policy_url, to: :repository, allow_nil: true
 
   validates :name, :platform, presence: true
   validates :name, uniqueness: { scope: :platform, case_sensitive: true }
