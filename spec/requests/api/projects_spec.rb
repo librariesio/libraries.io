@@ -172,7 +172,9 @@ describe "Api::ProjectsController" do
       expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql(
         {
+          code_of_conduct_url: project.code_of_conduct_url,
           contributions_count: 0,
+          contribution_guidelines_url: project.contribution_guidelines_url,
           dependencies_for_version: version.number,
           dependent_repos_count: project.dependent_repos_count,
           dependents_count: project.dependents_count,
@@ -195,6 +197,7 @@ describe "Api::ProjectsController" do
           end,
           description: project.description,
           forks: project.forks,
+          funding_urls: project.funding_urls,
           homepage: project.homepage,
           keywords: project.keywords,
           language: project.language,
@@ -213,6 +216,7 @@ describe "Api::ProjectsController" do
           repository_license: project.repository_license,
           repository_status: project.repository_status,
           repository_url: project.repository_url,
+          security_policy_url: project.security_policy_url,
           stars: project.stars,
           status: project.status,
           versions: project.versions.as_json(only: %i[number original_license published_at spdx_expression researched_at repository_sources]),

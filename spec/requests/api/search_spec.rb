@@ -64,12 +64,15 @@ describe "API::SearchController", elasticsearch: true do
         expect(response_hash.size).to eq(1)
         expect(response_hash.first).to match(
           {
+            "code_of_conduct_url" => nil,
+            "contribution_guidelines_url" => nil,
             "contributions_count" => 0,
             "dependent_repos_count" => 0,
             "dependents_count" => 0,
             "deprecation_reason" => nil,
             "description" => "Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.",
             "forks" => 0,
+            "funding_urls" => nil,
             "homepage" => "http://rubyonrails.org/",
             "keywords" => ["web"],
             "language" => "Ruby",
@@ -88,6 +91,7 @@ describe "API::SearchController", elasticsearch: true do
             "repository_license" => nil,
             "repository_status" => nil,
             "repository_url" => "https://github.com/rails/charisma-generator",
+            "security_policy_url" => nil,
             "stars" => 0,
             "status" => nil,
             "versions" => [

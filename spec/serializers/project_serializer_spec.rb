@@ -5,12 +5,15 @@ require "rails_helper"
 describe ProjectSerializer do
   let(:default_attribute_names) do
     %i[
+      code_of_conduct_url
       contributions_count
+      contribution_guidelines_url
       dependent_repos_count
       dependents_count
       deprecation_reason
       description
       forks
+      funding_urls
       homepage
       keywords
       language
@@ -29,6 +32,7 @@ describe ProjectSerializer do
       repository_license
       repository_status
       repository_url
+      security_policy_url
       stars
       status
     ]
