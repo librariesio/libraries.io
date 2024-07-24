@@ -58,23 +58,31 @@ module RepositoryHost
 
     def self.fetch_repo(id_or_name, token = nil)
       id_or_name = id_or_name.to_i if id_or_name.match(/\A\d+\Z/)
-      token ||= AuthToken.find_token(:v4).token
+      required_scope = %w[repo public_repo]
+      token ||= AuthToken.find_token(:v4, required_scope: required_scope).token
 
-      api_hash = AuthToken.fallback_client(token).repo(id_or_name, accept: "application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json").to_hash
+      github_client = AuthToken.fallback_client(token)
+      api_hash = github_client.repo(id_or_name, accept: "application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json").to_hash
 
-      # disabling for now due to some permission issues in the GH API
-      # owner = api_hash.dig(:owner, :login)
-      # repository_name = api_hash[:name]
-      # graphql_client = AuthToken.new_v4_client(token)
-      # graphql_values = GraphqlRepositoryFieldsQuery.new(graphql_client).query(params: { owner: owner, repository_name: repository_name })
-      # graphql_hash = {
-      #   code_of_conduct_url: graphql_values.code_of_conduct_url,
-      #   contribution_guidelines_url: graphql_values.contribution_guidelines_url,
-      #   funding_urls: graphql_values.funding_urls,
-      #   security_policy_url: graphql_values.security_policy_url,
-      # }
+      owner = api_hash.dig(:owner, :login)
+      repository_name = api_hash[:name]
 
-      RawUpstreamDataConverter.convert_from_github_api(api_hash)
+      # verify the token being used has the correct scopes for the document URLs API call
+      unless AuthToken.fetch_auth_scopes(token, github_client.last_response).any? { |scope| required_scope.include?(scope) }
+        token = AuthToken.find_token(:v4, required_scope: %w[repo public_repo]).token
+        StructuredLog.capture("GITHUB_FETCH_REPO_FINDING_NEW_TOKEN", { id_or_name: id_or_name })
+      end
+
+      graphql_client = AuthToken.new_v4_client(token)
+      graphql_values = GraphqlRepositoryFieldsQuery.new(graphql_client).query(params: { owner: owner, repository_name: repository_name })
+      graphql_hash = {
+        code_of_conduct_url: graphql_values.code_of_conduct_url,
+        contribution_guidelines_url: graphql_values.contribution_guidelines_url,
+        funding_urls: graphql_values.funding_urls,
+        security_policy_url: graphql_values.security_policy_url,
+      }
+
+      RawUpstreamDataConverter.convert_from_github_api(api_hash.merge(graphql_hash))
     rescue *IGNORABLE_EXCEPTIONS
       nil
     end

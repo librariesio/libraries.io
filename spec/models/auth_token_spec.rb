@@ -55,4 +55,48 @@ describe AuthToken, type: :model do
       expect(limit_stats[:v4]).to eq(4998)
     end
   end
+
+  describe "find_token" do
+    let(:scope1) { "scope1" }
+    let(:scope2) { "scope2" }
+    let!(:auth_token1) { create(:auth_token, scopes: [scope1, scope2]) }
+    let!(:auth_token2) { create(:auth_token, scopes: [scope2]) }
+    let(:token_github_api_stub) { instance_double(Octokit::Client) }
+
+    before do
+      allow(Octokit::Client).to receive(:new).with(hash_including(access_token: auth_token1.token)).and_return(token_github_api_stub)
+      allow(Octokit::Client).to receive(:new).with(hash_including(access_token: auth_token2.token)).and_return(token_github_api_stub)
+      allow(token_github_api_stub).to receive_message_chain(:rate_limit!, :remaining).and_return(5000)
+      allow(token_github_api_stub).to receive_message_chain(:last_response, :data, :resources, :graphql, :remaining).and_return(5000)
+    end
+
+    it "finds auth token with scope" do
+      result = described_class.find_token(:v3, required_scope: [scope1])
+      expect(result).to eql(auth_token1)
+    end
+  end
+
+  describe "with_either_scope" do
+    let(:scope1) { "scope1" }
+    let(:scope2) { "scope2" }
+    let!(:auth_token1) { create(:auth_token, scopes: [scope1, scope2]) }
+    let!(:auth_token2) { create(:auth_token, scopes: [scope2]) }
+
+    it "finds auth token with scope" do
+      result = described_class.with_either_scope(scope1)
+      expect(result.size).to eql(1)
+      expect(result.first).to eql(auth_token1)
+    end
+
+    it "finds auth tokens with either scope" do
+      result = described_class.with_either_scope([scope1, scope2])
+      expect(result.size).to eql(2)
+      expect(result.ids).to contain_exactly(auth_token1.id, auth_token2.id)
+    end
+
+    it "does not find tokens with missing scope" do
+      result = described_class.with_either_scope("something-else")
+      expect(result.size).to eql(0)
+    end
+  end
 end

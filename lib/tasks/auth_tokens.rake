@@ -19,7 +19,7 @@ namespace :auth_tokens do
             result = token.still_authorized?
             if result
               token.login = token.github_client.user[:login]
-              token.scopes = token.fetch_auth_scopes
+              token.scopes = AuthToken.fetch_auth_scopes(token.token, token.github_client.last_response)
             else
               token.authorized = false
             end

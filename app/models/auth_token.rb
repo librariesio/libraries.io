@@ -15,6 +15,8 @@
 class AuthToken < ApplicationRecord
   validates_presence_of :token
   scope :authorized, -> { where(authorized: [true, nil]) }
+  # find tokens that include ANY of the scopes provided
+  scope :with_either_scope, ->(required_scope) { where("scopes && array[?]::varchar[]", Array(required_scope)) }
 
   LOW_RATE_LIMIT_REMAINING_THRESHOLD = 500
 
@@ -70,11 +72,14 @@ class AuthToken < ApplicationRecord
     false
   end
 
-  def fetch_auth_scopes
-    client = github_client
-    client.rate_limit!.remaining unless client.last_response
+  def self.fetch_auth_scopes(token, github_response)
+    unless github_response
+      client = AuthToken.new_client(token)
+      client.rate_limit!.remaining
+      github_response = client.last_response
+    end
 
-    client.last_response.headers.fetch("x-oauth-scopes", "").split(", ")
+    github_response.headers.fetch("x-oauth-scopes", "").split(", ")
   end
 
   def github_client(options = {})
@@ -99,8 +104,12 @@ class AuthToken < ApplicationRecord
     GithubGraphql.new_client(token)
   end
 
-  def self.find_token(api_version, retries: 0)
-    auth_token = authorized.order(Arel.sql("RANDOM()")).first
+  def self.find_token(api_version, retries: 0, required_scope: [])
+    query = authorized.order(Arel.sql("RANDOM()"))
+    unless required_scope.blank?
+      query = query.with_either_scope(required_scope)
+    end
+    auth_token = query.first
     return auth_token if auth_token.safe_to_use?(api_version)
 
     retries += 1
