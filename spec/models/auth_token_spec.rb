@@ -76,26 +76,26 @@ describe AuthToken, type: :model do
     end
   end
 
-  describe "with_either_scope" do
+  describe "has_scope" do
     let(:scope1) { "scope1" }
     let(:scope2) { "scope2" }
     let!(:auth_token1) { create(:auth_token, scopes: [scope1, scope2]) }
     let!(:auth_token2) { create(:auth_token, scopes: [scope2]) }
 
     it "finds auth token with scope" do
-      result = described_class.with_either_scope(scope1)
+      result = described_class.has_scope(scope1)
       expect(result.size).to eql(1)
       expect(result.first).to eql(auth_token1)
     end
 
     it "finds auth tokens with either scope" do
-      result = described_class.with_either_scope([scope1, scope2])
+      result = described_class.has_scope([scope1, scope2])
       expect(result.size).to eql(2)
       expect(result.ids).to contain_exactly(auth_token1.id, auth_token2.id)
     end
 
     it "does not find tokens with missing scope" do
-      result = described_class.with_either_scope("something-else")
+      result = described_class.has_scope("something-else")
       expect(result.size).to eql(0)
     end
   end

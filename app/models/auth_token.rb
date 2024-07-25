@@ -16,7 +16,7 @@ class AuthToken < ApplicationRecord
   validates_presence_of :token
   scope :authorized, -> { where(authorized: [true, nil]) }
   # find tokens that include ANY of the scopes provided
-  scope :with_either_scope, ->(required_scope) { where("scopes && array[?]::varchar[]", Array(required_scope)) }
+  scope :has_scope, ->(searched_scopes) { where("scopes && array[?]::varchar[]", Array(searched_scopes)) }
 
   LOW_RATE_LIMIT_REMAINING_THRESHOLD = 500
 
@@ -107,7 +107,7 @@ class AuthToken < ApplicationRecord
   def self.find_token(api_version, retries: 0, required_scope: [])
     query = authorized.order(Arel.sql("RANDOM()"))
     unless required_scope.blank?
-      query = query.with_either_scope(required_scope)
+      query = query.has_scope(required_scope)
     end
     auth_token = query.first
     return auth_token if auth_token.safe_to_use?(api_version)
