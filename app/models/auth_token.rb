@@ -115,6 +115,6 @@ class AuthToken < ApplicationRecord
     retries += 1
     raise "No Authorized AuthToken Could Be Found!" if retries >= 10
 
-    find_token(api_version, retries: retries)
+    find_token(api_version, retries: retries, required_scope: required_scope)
   end
 end
