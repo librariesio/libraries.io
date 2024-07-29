@@ -277,7 +277,6 @@ class Repository < ApplicationRecord
                             repository_last_synced_at: last_synced_at,
                           })
     update_all_info_async(token)
-    update_column(:last_synced_at, Time.now)
   end
 
   def update_all_info_async(token = nil)
