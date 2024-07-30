@@ -1,3 +1,4 @@
+<% title "#{platform_name(@platform_name)}" %>
 <% description "A detailed listing of the most popular, recently updated and most watched #{platform_name(@platform_name)} packages online" %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(platforms: @platform_name, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{platform_name(@platform_name)} Packages") %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(platforms: @platform_name, sort: 'created_at', order: 'desc', format: :atom), title: "New #{platform_name(@platform_name)} Packages") %>

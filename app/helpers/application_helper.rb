@@ -94,6 +94,11 @@ module ApplicationHelper
     end
   end
 
+  def title(page_title)
+    content_for(:title) { page_title }
+    page_title
+  end
+
   def description(page_description)
     content_for(:description) { truncate(page_description, length: 160) }
   end
@@ -176,7 +181,7 @@ module ApplicationHelper
     text = project.description || project.name
     text += " - #{version}" if version
     library_text = [project.language, "package"].compact.join(" ").with_indefinite_article
-    text + " - #{library_text} on #{project.platform_name} - Libraries.io"
+    text + " - #{library_text} on #{project.platform_name}"
   end
 
   def truncate_with_tip(text, length)
