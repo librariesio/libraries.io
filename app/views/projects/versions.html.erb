@@ -1,4 +1,3 @@
-<% title "#{@project} published releases on #{@project.platform_name} - Libraries.io" %>
 <% content_for :atom, auto_discovery_link_tag(:atom, project_versions_url({format: "atom"}.merge(@project.to_param))) %>
 
 <h1>

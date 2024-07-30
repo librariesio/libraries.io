@@ -94,11 +94,6 @@ module ApplicationHelper
     end
   end
 
-  def title(page_title)
-    content_for(:title) { page_title }
-    page_title
-  end
-
   def description(page_description)
     content_for(:description) { truncate(page_description, length: 160) }
   end
@@ -217,7 +212,7 @@ module ApplicationHelper
 
   def default_meta_tags
     {
-      title: "Libraries - The Open Source Discovery Service",
+      title: "Libraries.io - security & maintenance data for open source software",
       url: "https://libraries.io",
       description: "Discover open source libraries, modules and frameworks you can use in your code",
       image: "https://libraries.io/apple-touch-icon-152x152.png",

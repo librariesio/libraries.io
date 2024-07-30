@@ -1,4 +1,3 @@
-<% title "#{@license.name} license - Libraries.io" %>
 <% description "A detailed listing of the most popular, recently updated and most watched #{@license.name} licensed packages online" %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(licenses: @license.id, sort: 'latest_release_published_at', order: 'desc', format: :atom), title: "Updated #{@license.id} Packages") %>
 <% content_for :atom, auto_discovery_link_tag(:atom, search_url(licenses: @license.id, sort: 'created_at', order: 'desc', format: :atom), title: "New #{@license.id} Packages") %>

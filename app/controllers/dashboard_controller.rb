@@ -21,7 +21,7 @@ class DashboardController < ApplicationController
         end
       end
       format.html do
-        redirect_to root_path
+        render "dashboard/home"
       end
     end
   end
