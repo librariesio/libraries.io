@@ -181,7 +181,7 @@ module ApplicationHelper
     text = project.description || project.name
     text += " - #{version}" if version
     library_text = [project.language, "package"].compact.join(" ").with_indefinite_article
-    text + " - #{library_text} on #{project.platform_name} - Libraries.io"
+    text + " - #{library_text} on #{project.platform_name}"
   end
 
   def truncate_with_tip(text, length)
@@ -217,7 +217,7 @@ module ApplicationHelper
 
   def default_meta_tags
     {
-      title: "Libraries - The Open Source Discovery Service",
+      title: "Libraries.io - security & maintenance data for open source software",
       url: "https://libraries.io",
       description: "Discover open source libraries, modules and frameworks you can use in your code",
       image: "https://libraries.io/apple-touch-icon-152x152.png",

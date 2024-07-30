@@ -5,7 +5,7 @@
   <meta name="msvalidate.01" content="3667D2FEB238C1BF174F3CB1AE0D3C16" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
-  <title><%= content_for?(:title) ? content_for(:title) : "Libraries.io - The Open Source Discovery Service" %></title>
+  <title><%= content_for(:title) + " - " if content_for?(:title) %>Libraries.io - security & maintenance data for open source software</title>
   <meta name="description" content="<%= content_for?(:description) ? content_for(:description) : "Discover open source packages, modules and frameworks you can use in your code." %>">
   <%= csrf_meta_tags %>
   <%= content_for :atom %>
