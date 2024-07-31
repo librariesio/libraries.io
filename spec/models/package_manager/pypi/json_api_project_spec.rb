@@ -242,6 +242,14 @@ describe PackageManager::Pypi::JsonApiProject do
     end
     let(:raw_releases) { {} }
 
+    context "with a removed project with no data" do
+      let(:raw_project) { {} }
+
+      it "returns nothing" do
+        expect(project.releases).to be_empty
+      end
+    end
+
     context "with no releases" do
       it "returns nothing" do
         expect(project.releases).to be_empty

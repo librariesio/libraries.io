@@ -79,7 +79,7 @@ module PackageManager
 
       def releases
         JsonApiProjectReleases.new(
-          @data["releases"].map do |version_number, details|
+          @data.fetch("releases", []).map do |version_number, details|
             # this assumes that each file type distribution of the package/version has the same yanked status & reason
             first_details = details.first || {}
 
