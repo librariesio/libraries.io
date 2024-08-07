@@ -77,7 +77,7 @@ Create a [Personal access token on GitHub](https://help.github.com/articles/crea
 
 ```sh
  bundle exec rails c
- irb> AuthToken.create(token: "<secure github token here>")
+ irb> AuthToken.create(token: "<secure github token here>", scopes: ["public_repo"])
  irb> PackageManager::NPM.update "base62" # this is needed to make the API page work
  irb> PackageManager::Rubygems.update "split"
  irb> PackageManager::Bower.update "sbteclipse"
