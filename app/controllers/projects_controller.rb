@@ -46,6 +46,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    add_tracking_properties({ lifted: @project.lifted })
     if incorrect_case?
       if params[:number].present?
         return redirect_to(version_path(@project.to_param.merge(number: params[:number])), status: :moved_permanently)

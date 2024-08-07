@@ -7,6 +7,15 @@ class SessionsController < ApplicationController
   def new
     if params[:host_type].present?
       session[:pre_login_destination] = params[:return_to] if params[:return_to].present?
+
+      AmplitudeService.event(
+        event_type: AmplitudeService::EVENTS[:login_started],
+        event_properties: {
+          account_type: params[:host_type],
+        },
+        user: nil
+      )
+
       redirect_to "/auth/#{params[:host_type]}"
     end
   end
@@ -49,9 +58,20 @@ class SessionsController < ApplicationController
       session[:user_id] = identity.user.id
     end
 
+    previous_last_login_at = identity.user.last_login_at
     identity.user.update_columns(last_login_at: Time.current)
     identity.user.update_repo_permissions_async
     login_destination = pre_login_destination
+
+    AmplitudeService.event(
+      event_type: AmplitudeService::EVENTS[:login_successful],
+      event_properties: {
+        account_type: identity.provider,
+        last_login: previous_last_login_at,
+        referrer_url: request.referrer,
+      },
+      user: identity.user
+    )
 
     redirect_to login_destination || root_path
   end

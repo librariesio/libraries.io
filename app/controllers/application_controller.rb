@@ -8,9 +8,36 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :logged_in?, :logged_out?, :current_host, :formatted_host, :tidelift_flash_partial
 
+  after_action :track_page_view
   around_action :trace_span
 
   private
+
+  # Call from controllers to add additional properties to the Page Viewed
+  # tracking event
+  # @param properties [Hash]
+  def add_tracking_properties(properties)
+    @additional_tracking_properties ||= {}
+    @additional_tracking_properties.merge!(properties)
+  end
+
+  def track_page_view
+    return if request.xhr?
+
+    event_properties = {
+      url: request.original_url,
+      referrer_url: request.referrer,
+      controller: controller_name,
+      action: action_name,
+      params: request.filtered_parameters.except(:controller, :action, :format),
+    }.merge(@additional_tracking_properties || {})
+
+    AmplitudeService.event(
+      event_type: AmplitudeService::EVENTS[:page_viewed],
+      event_properties: event_properties,
+      user: current_user
+    )
+  end
 
   def trace_span(&block)
     Datadog::Tracing.trace("endpoint##{controller_path}##{action_name}") do |_span, _trace|
