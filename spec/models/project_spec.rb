@@ -262,7 +262,7 @@ describe Project, type: :model do
       let(:check_status_url) { PackageManager::NPM.check_status_url(project) }
 
       it "should mark it as Removed for a 404" do
-        WebMock.stub_request(:get, check_status_url).to_return(status: 302)
+        WebMock.stub_request(:get, check_status_url).to_return(status: 404)
 
         project.check_status
         project.reload
