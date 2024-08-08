@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe AmplitudeService do
   let(:user) { create(:user, id: 4, email: "user@email.com") }
 
-  let(:event_type) { AmplitudeService::EVENTS[:login_started] }
+  let(:event_type) { AmplitudeService::EVENTS[:login_successful] }
   let(:event_properties) do
     {
       name: "Alice",
@@ -39,7 +39,7 @@ RSpec.describe AmplitudeService do
           events: [
             {
               user_id: "000004",
-              event_type: "Login Started",
+              event_type: "Login Successful",
               time: timestamp_ms,
               event_properties:
               {
@@ -79,7 +79,7 @@ RSpec.describe AmplitudeService do
             events: [
               {
                 user_id: nil,
-                event_type: "Login Started",
+                event_type: "Login Successful",
                 time: timestamp_ms,
                 event_properties:
                 {

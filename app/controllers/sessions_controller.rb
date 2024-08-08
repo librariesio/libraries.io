@@ -8,14 +8,6 @@ class SessionsController < ApplicationController
     if params[:host_type].present?
       session[:pre_login_destination] = params[:return_to] if params[:return_to].present?
 
-      AmplitudeService.event(
-        event_type: AmplitudeService::EVENTS[:login_started],
-        event_properties: {
-          account_type: params[:host_type],
-        },
-        user: nil
-      )
-
       redirect_to "/auth/#{params[:host_type]}"
     end
   end

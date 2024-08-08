@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
 
   def track_page_view
     return if request.xhr?
+    return if logged_out?
 
     event_properties = {
       url: request.original_url,

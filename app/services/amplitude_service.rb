@@ -6,7 +6,6 @@ class AmplitudeService
 
   EVENTS = {
     page_viewed: "Page Viewed",
-    login_started: "Login Started",
     login_successful: "Login Successful",
     account_updated: "Account Updated",
     account_deleted: "Account Deleted",
@@ -66,8 +65,8 @@ class AmplitudeService
     is_valid
   end
 
-  # The User IDs stored on Amplitude are 6 characters long and are padded with
-  # 0s if they are any shorter than this.
+  # The User IDs stored on Amplitude are at least 6 characters long and are
+  # padded with 0s if needed.
   private_class_method def self.pad_user_id(user_id)
     user_id&.to_s&.rjust(6, "0")
   end
