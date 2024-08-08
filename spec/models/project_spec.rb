@@ -259,10 +259,11 @@ describe Project, type: :model do
 
     context "removed NPM project" do
       let!(:project) { create(:project, platform: "NPM", name: "react-for-pets", status: nil, created_at: 1.month.ago) }
+      let(:check_status_url) { PackageManager::NPM.check_status_url(project) }
 
       it "should mark it as Removed for a 404" do
         WebMock.stub_request(:get, check_status_url).to_return(status: 302)
-        
+
         project.check_status
         project.reload
         expect(project.status).to eq("Removed")
