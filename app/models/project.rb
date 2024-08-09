@@ -660,6 +660,9 @@ class Project < ApplicationRecord
     return if hidden?
 
     response = Typhoeus.get(url)
+
+    StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if platform.downcase == "npm"
+
     if platform.downcase == "packagist" && [302, 404].include?(response.response_code)
       update_attribute(:status, "Removed")
     elsif platform.downcase == "go" && [302, 400, 404].include?(response.response_code)
