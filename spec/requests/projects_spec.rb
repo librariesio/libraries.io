@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ProjectsController do
-  let!(:project) { create(:project) }
+  let!(:project) { create(:project, platform: "Rubygems", name: "super_package") }
   let!(:version) { create(:version, project: project) }
   let!(:dependency) { create(:dependency, version: version) }
 
@@ -15,9 +15,41 @@ RSpec.describe ProjectsController do
   end
 
   describe "GET #show" do
+    before do
+      allow(AmplitudeService).to receive(:event)
+    end
+
     it "responds successfully", type: :request do
       visit project_path(project.to_param)
       expect(page).to have_content project.name
+
+      expect(AmplitudeService).not_to have_received(:event)
+    end
+
+    context "with authenticated user" do
+      let(:user) { create(:user) }
+
+      it "logs to amplitude" do
+        login(user)
+        visit project_path(project.to_param)
+        expect(page).to have_content project.name
+
+        expect(AmplitudeService).to have_received(:event).with(
+          event_properties: {
+            action: "show",
+            controller: "projects",
+            lifted: false,
+            params: {
+              "name" => "super_package",
+              "platform" => "rubygems",
+            },
+            referrer_url: nil,
+            url: "http://www.example.com/rubygems/super_package",
+          },
+          event_type: "Page Viewed",
+          user: user
+        )
+      end
     end
   end
 
