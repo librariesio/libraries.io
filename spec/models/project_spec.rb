@@ -258,7 +258,7 @@ describe Project, type: :model do
     end
 
     context "should not change status in case of error" do
-      let!(:project) { create(:project, platform: "NPM", name: "coolpackage", status: nil, created_at: 1.month.ago) }
+      let!(:project) { create(:project, platform: "NPM", name: "coolpackage", status: "Removed", created_at: 1.month.ago) }
       let(:check_status_url) { PackageManager::NPM.check_status_url(project) }
 
       it "error 429" do
@@ -271,7 +271,7 @@ describe Project, type: :model do
         expect(project.status).to eq(status_before)
       end
 
-      it "error 429" do
+      it "error 500" do
         WebMock.stub_request(:get, check_status_url).to_return(status: 500)
 
         status_before = project.status
