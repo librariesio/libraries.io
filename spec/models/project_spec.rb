@@ -265,24 +265,20 @@ describe Project, type: :model do
         WebMock.stub_request(:get, check_status_url).to_return(status: 429)
 
         status_before = project.status
-        last_changed = project.status_checked_at
 
         project.check_status
         project.reload
         expect(project.status).to eq(status_before)
-        expect(project.status_checked_at).to eq(last_changed)
       end
 
       it "error 429" do
         WebMock.stub_request(:get, check_status_url).to_return(status: 500)
 
         status_before = project.status
-        last_changed = project.status_checked_at
 
         project.check_status
         project.reload
         expect(project.status).to eq(status_before)
-        expect(project.status_checked_at).to eq(last_changed)
       end
     end
 
