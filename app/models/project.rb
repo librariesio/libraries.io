@@ -671,7 +671,7 @@ class Project < ApplicationRecord
       update_attribute(:status, "Removed") if created_at < 1.week.ago
     elsif !platform.downcase.in?(%w[packagist go]) && [400, 404, 410].include?(response.response_code)
       update_attribute(:status, "Removed")
-    elsif response.timed_out? || response.failure?
+    elsif response.timed_out? || response.response_code == 429 || (response.response_code >= 500 && response.response_code <= 599) || response.response_code == 0
       # failure could be a problem checking so let's just log for now
       StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, status_code: response.response_code })
     elsif can_have_entire_package_deprecated?
@@ -679,13 +679,14 @@ class Project < ApplicationRecord
       if result[:is_deprecated]
         update_attribute(:status, "Deprecated")
         update_attribute(:deprecation_reason, result[:message])
-      else # in case package was accidentally marked as deprecated (their logic or ours), mark it as not deprecated
+      elsif response.response_code >= 200 && response.response_code <= 299 # in case package was accidentally marked as deprecated (their logic or ours), mark it as not deprecated
         update_attribute(:status, nil)
         update_attribute(:deprecation_reason, nil)
       end
-    else
+    elsif response.response_code >= 200 && response.response_code <= 299
       update_attribute(:status, nil)
     end
+    # only update status to nil if the response code is a success
   end
 
   def unique_project_requirement_ranges

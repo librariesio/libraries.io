@@ -257,6 +257,31 @@ describe Project, type: :model do
       end
     end
 
+    context "should not change status in case of error" do
+      let!(:project) { create(:project, platform: "NPM", name: "coolpackage", status: nil, created_at: 1.month.ago) }
+      let(:check_status_url) { PackageManager::NPM.check_status_url(project) }
+
+      it "error 429" do
+        WebMock.stub_request(:get, check_status_url).to_return(status: 429)
+
+        status_before = project.status
+
+        project.check_status
+        project.reload
+        expect(project.status).to eq(status_before)
+      end
+
+      it "error 429" do
+        WebMock.stub_request(:get, check_status_url).to_return(status: 500)
+
+        status_before = project.status
+
+        project.check_status
+        project.reload
+        expect(project.status).to eq(status_before)
+      end
+    end
+
     context "some of project deprecated" do
       let!(:project) { create(:project, platform: "NPM", name: "react", status: nil, updated_at: 1.week.ago) }
 
