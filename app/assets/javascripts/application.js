@@ -22,6 +22,8 @@
 //= require subtome
 //= require turbolinks
 //= require autotrack
+//= require amplitude-min.umd
+//= require metrics
 
 document.addEventListener('turbolinks:load', function(){
   $('.tip').tooltip({placement: 'bottom'})

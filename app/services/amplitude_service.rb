@@ -11,16 +11,20 @@ class AmplitudeService
     account_deleted: "Account Deleted",
   }.freeze
 
-  def self.event(event_type:, event_properties:, user:)
+  def self.event(event_type:, event_properties:, user:, device_id:)
     validate_event_type!(event_type)
-    track(event_type, event_properties, user)
+    track(event_type, event_properties, user, device_id)
   end
 
-  private_class_method def self.track(event_type, event_properties, user)
+  private_class_method def self.track(event_type, event_properties, user, device_id)
+    # Amplitude needs either user_id or device_id. Exit if we have neither.
+    return if user.nil? && device_id.nil?
+
     timestamp_ms = (Time.current.to_f * 1000).to_i
 
     event = {
       user_id: pad_user_id(user&.id),
+      device_id: device_id,
       event_type: event_type,
       time: timestamp_ms,
       event_properties: event_properties,

@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :logged_in?, :logged_out?, :current_host, :formatted_host, :tidelift_flash_partial
 
+  before_action :extract_amplitude_device_id
   after_action :track_page_view
   around_action :trace_span
 
@@ -21,9 +22,25 @@ class ApplicationController < ActionController::Base
     @additional_tracking_properties.merge!(properties)
   end
 
+  def extract_amplitude_device_id
+    return unless Rails.configuration.amplitude_api_key.present?
+
+    cookie_name = "AMP_#{Rails.configuration.amplitude_api_key.first(10)}"
+    amplitude_cookie = request.cookies[cookie_name]
+    return unless amplitude_cookie
+
+    # The cookie is base64 encoded and url encoded
+    base64_decoded_cookie = Base64.decode64(amplitude_cookie)
+    decoded_cookie = CGI.unescape(base64_decoded_cookie)
+    cookie_data = JSON.parse(decoded_cookie)
+    @amplitude_device_id = cookie_data["deviceId"]
+  rescue StandardError => e
+    # don't allow analytics to break the app
+    Bugsnag.notify(e)
+  end
+
   def track_page_view
     return if request.xhr?
-    return if logged_out?
 
     event_properties = {
       url: request.original_url,
@@ -36,7 +53,8 @@ class ApplicationController < ActionController::Base
     AmplitudeService.event(
       event_type: AmplitudeService::EVENTS[:page_viewed],
       event_properties: event_properties,
-      user: current_user
+      user: current_user,
+      device_id: @amplitude_device_id
     )
   end
 
