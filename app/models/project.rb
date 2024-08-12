@@ -680,14 +680,14 @@ class Project < ApplicationRecord
       if result[:is_deprecated]
         update_attribute(:status, "Deprecated")
         update_attribute(:deprecation_reason, result[:message])
-      elsif (response.response_code >= 200 && response.response_code <= 299) # in case package was accidentally marked as deprecated (their logic or ours), mark it as not deprecated
+      elsif response.response_code >= 200 && response.response_code <= 299 # in case package was accidentally marked as deprecated (their logic or ours), mark it as not deprecated
         update_attribute(:status, nil)
         update_attribute(:deprecation_reason, nil)
       end
-    else
-      # only update status to nil if the response code is a success
-      update_attribute(:status, nil) if (response.response_code >= 200 && response.response_code <= 299)
+    elsif response.response_code >= 200 && response.response_code <= 299
+      update_attribute(:status, nil)
     end
+    # only update status to nil if the response code is a success
   end
 
   def unique_project_requirement_ranges
