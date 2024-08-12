@@ -26,7 +26,8 @@ RSpec.describe AmplitudeService do
     described_class.event(
       event_type: event_type,
       event_properties: event_properties,
-      user: user
+      user: user,
+      device_id: nil
     )
 
     expect(Typhoeus).to have_received(:post) { |url, options|
@@ -39,6 +40,7 @@ RSpec.describe AmplitudeService do
           events: [
             {
               user_id: "000004",
+              device_id: nil,
               event_type: "Login Successful",
               time: timestamp_ms,
               event_properties:
@@ -59,14 +61,15 @@ RSpec.describe AmplitudeService do
     }.once
   end
 
-  context "with no user" do
+  context "with device_id and no user" do
     let(:user) { nil }
 
     it "logs an amplitude event with nil user properties" do
       described_class.event(
         event_type: event_type,
         event_properties: event_properties,
-        user: user
+        user: user,
+        device_id: "999999"
       )
 
       expect(Typhoeus).to have_received(:post) { |url, options|
@@ -79,6 +82,7 @@ RSpec.describe AmplitudeService do
             events: [
               {
                 user_id: nil,
+                device_id: "999999",
                 event_type: "Login Successful",
                 time: timestamp_ms,
                 event_properties:
@@ -100,6 +104,19 @@ RSpec.describe AmplitudeService do
     end
   end
 
+  context "with no user and no device_id" do
+    it "does not log an amplitude event" do
+      described_class.event(
+        event_type: event_type,
+        event_properties: event_properties,
+        user: nil,
+        device_id: nil
+      )
+
+      expect(Typhoeus).not_to have_received(:post)
+    end
+  end
+
   context "with an unknown event_type" do
     let(:event_type) { "Not A Real Event" }
 
@@ -108,7 +125,8 @@ RSpec.describe AmplitudeService do
         described_class.event(
           event_type: event_type,
           event_properties: event_properties,
-          user: user
+          user: user,
+          device_id: nil
         )
       end.to raise_error(ArgumentError, "event type 'Not A Real Event' is invalid")
     end
@@ -125,7 +143,8 @@ RSpec.describe AmplitudeService do
         described_class.event(
           event_type: event_type,
           event_properties: event_properties,
-          user: user
+          user: user,
+          device_id: nil
         )
       end.not_to raise_error
 

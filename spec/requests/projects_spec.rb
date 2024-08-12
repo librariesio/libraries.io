@@ -23,7 +23,12 @@ RSpec.describe ProjectsController do
       visit project_path(project.to_param)
       expect(page).to have_content project.name
 
-      expect(AmplitudeService).not_to have_received(:event)
+      expect(AmplitudeService).to have_received(:event).with(
+        hash_including(
+          user: nil,
+          device_id: nil
+        )
+      )
     end
 
     context "with authenticated user" do
@@ -47,7 +52,8 @@ RSpec.describe ProjectsController do
             url: "http://www.example.com/rubygems/super_package",
           },
           event_type: "Page Viewed",
-          user: user
+          user: user,
+          device_id: nil
         )
       end
     end
