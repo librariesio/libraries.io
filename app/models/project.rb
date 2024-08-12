@@ -660,6 +660,10 @@ class Project < ApplicationRecord
 
     response = Typhoeus.get(url)
 
+    puts "is it a bad response?"
+    puts response.response_code
+    puts response.failure?
+
     StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if platform.downcase == "npm"
 
     if platform.downcase == "packagist" && [302, 404].include?(response.response_code)
