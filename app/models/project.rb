@@ -660,7 +660,6 @@ class Project < ApplicationRecord
     return if hidden?
 
     response = Typhoeus.get(url)
-    # 429 200 404 503 302 0
 
     StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if platform.downcase == "npm"
 
