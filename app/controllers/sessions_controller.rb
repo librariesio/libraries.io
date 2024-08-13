@@ -62,7 +62,8 @@ class SessionsController < ApplicationController
         last_login: previous_last_login_at,
         referrer_url: request.referrer,
       },
-      user: identity.user
+      user: identity.user,
+      device_id: @amplitude_device_id
     )
 
     redirect_to login_destination || root_path
