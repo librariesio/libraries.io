@@ -32,6 +32,7 @@
 #  score_last_calculated              :datetime
 #  status                             :string
 #  status_checked_at                  :datetime
+#  status_reason                      :string
 #  versions_count                     :integer          default(0), not null
 #  created_at                         :datetime         not null
 #  updated_at                         :datetime         not null
