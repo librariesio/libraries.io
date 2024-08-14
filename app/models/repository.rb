@@ -106,7 +106,8 @@ class Repository < ApplicationRecord
   validates :full_name, uniqueness: { scope: :host_type }, if: -> { full_name_changed? }
   validates :uuid, uniqueness: { scope: :host_type }, if: -> { uuid_changed? }
 
-  before_save  :normalize_license_and_language
+  before_save :normalize_license_and_language
+  before_save :reset_status_reason
   after_commit :update_all_info_async, on: :create
   after_commit :save_projects, on: :update
   after_commit :update_source_rank_async, on: [:update]
@@ -308,7 +309,7 @@ class Repository < ApplicationRecord
     repo_host_data = repository_host.class.fetch_repo(id_or_name, token)
     Repository::PersistRepositoryFromUpstream.update_from_host_data(self, repo_host_data)
   rescue repository_host.class.api_missing_error_class
-    update!(status: "Removed") unless private?
+    update!(status: "Removed", status_reason: "Api missing error") unless private?
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
@@ -334,11 +335,11 @@ class Repository < ApplicationRecord
     if response.response_code == 404
       repo = Repository.includes(:projects).find_by_full_name(repo_full_name)
       if repo
-        repo.update_attribute(:status, "Removed") unless repo.private?
+        repo.update(status: "Removed", status_reason: "Response 404") unless repo.private?
         repo.projects.each do |project|
           next unless %w[bower go elm alcatraz julia nimble].include?(project.platform.downcase)
 
-          project.update_attribute(:status, "Removed")
+          project.update_attribute(status: "Removed", status_reason: "Response 404")
         end
       end
 
@@ -391,7 +392,7 @@ class Repository < ApplicationRecord
   end
 
   def hide
-    update!(status: "Hidden")
+    update!(status: "Hidden", status_reason: "Manually hidden")
   end
 
   def gather_maintenance_stats_async(priority: :medium)
@@ -411,11 +412,11 @@ class Repository < ApplicationRecord
                             })
 
       # update repository status only if needed
-      update(status: "Unmaintained") unless unmaintained?
+      update(status: "Unmaintained", status_reason: "Readme indicates unmaintained") unless unmaintained?
       # Don't update Projects that have other statuses already set since those could have been set
       # from other data sources. However if a Project has no status then it should be labeled as unmaintained
       # from the readme.
-      projects.where(status: nil).update_all(status: "Unmaintained")
+      projects.where(status: nil).update_all(status: "Unmaintained", status_reason: "Readme indicates unmaintained")
     end
 
     if !unmaintained? && !readme&.unmaintained?
@@ -425,7 +426,16 @@ class Repository < ApplicationRecord
                               full_name: full_name,
                             })
       # neither readme nor repository is marked as unmaintained so remove the label from any projects that are
-      projects.unmaintained.update_all(status: nil)
+      projects.unmaintained.update_all(status: nil, status_reason: "Readme indicates maintainedd")
+    end
+  end
+
+  private
+
+  def reset_status_reason
+    # If status changed for some reason but status_reason didn't, nullify status_reason.
+    if status_changed? && status_reason.present? && !status_reason_changed?
+      self.status_reason = nil
     end
   end
 end

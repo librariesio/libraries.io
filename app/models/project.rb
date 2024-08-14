@@ -56,13 +56,12 @@
 #  index_projects_on_status_checked_at              (status_checked_at)
 #  index_projects_on_updated_at                     (updated_at)
 #  index_projects_on_versions_count                 (versions_count)
-#  index_projects_search_on_description             (to_tsvector('simple'::regconfig, COALESCE(description, ''::text))) USING gist
-#  index_projects_search_on_name                    ((COALESCE((name)::text, ''::text)) gist_trgm_ops) USING gist
+#  index_projects_search_on_name                    (COALESCE((name)::text, ''::text) gist_trgm_ops) USING gist
 #
 class Project < ApplicationRecord
   require "query_counter"
 
-  include ProjectSearch
+  # include ProjectSearch
   include SourceRank
   include Status
   include Releases
@@ -285,6 +284,7 @@ class Project < ApplicationRecord
     set_latest_stable_release_info
     set_runtime_dependencies_count
     set_language
+    reset_status_reason
   end
 
   def keywords
@@ -668,27 +668,25 @@ class Project < ApplicationRecord
     StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if platform.downcase == "npm"
 
     if platform.downcase == "packagist" && [302, 404].include?(response.response_code)
-      update_attribute(:status, "Removed")
+      update(status: "Removed", status_reason: "Response #{response.response_code}")
     elsif platform.downcase == "go" && [302, 400, 404].include?(response.response_code)
       # pkg.go.dev can be 404 on first-hit for a new package (or alias for the package), so ensure that the package existed in the past
       # by ensuring its age is old enough to not be just uncached by pkg.go.dev yet.
-      update_attribute(:status, "Removed") if created_at < 1.week.ago
+      update(status: "Removed", status_reason: "Response #{response.response_code}") if created_at < 1.week.ago
     elsif !platform.downcase.in?(%w[packagist go]) && [400, 404, 410].include?(response.response_code)
-      update_attribute(:status, "Removed")
+      update(status: "Removed", status_reason: "Response #{response.response_code}")
     elsif response.timed_out? || response.response_code == 429 || (response.response_code >= 500 && response.response_code <= 599) || response.response_code == 0
       # failure could be a problem checking so let's just log for now
       StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, status_code: response.response_code })
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(self)
       if result[:is_deprecated]
-        update_attribute(:status, "Deprecated")
-        update_attribute(:deprecation_reason, result[:message])
+        update(status: "Deprecated", deprecation_reason: result[:message], status_reason: "Reason '#{result[:message]}'")
       elsif response.response_code >= 200 && response.response_code <= 299 # in case package was accidentally marked as deprecated (their logic or ours), mark it as not deprecated
-        update_attribute(:status, nil)
-        update_attribute(:deprecation_reason, nil)
+        update(status: nil, deprecation_reason: nil, status_reason: "Response #{response.response_code}")
       end
     elsif response.response_code >= 200 && response.response_code <= 299
-      update_attribute(:status, nil)
+      update(status: nil, status_reason: "Response #{response.response_code}")
     end
     # only update status to nil if the response code is a success
   end
@@ -792,6 +790,13 @@ class Project < ApplicationRecord
   end
 
   private
+
+  def reset_status_reason
+    # If status changed for some reason but status_reason didn't, nullify status_reason.
+    if status_changed? && status_reason.present? && !status_reason_changed?
+      self.status_reason = nil
+    end
+  end
 
   def spdx_license
     licenses

@@ -22,6 +22,22 @@ describe Repository, type: :model do
   it { should validate_uniqueness_of(:full_name).scoped_to(:host_type) }
   it { should validate_uniqueness_of(:uuid).scoped_to(:host_type) }
 
+  describe "#reset_status_reason" do
+    context "a repo with status and status_reason" do
+      let!(:repo) { create(:repository, status: "Removed", status_reason: "Some reason") }
+
+      it "should reset status_reason if it hasn't changed but status has" do
+        repo.update!(status: "Deprecated")
+        expect(repo.status_reason).to eq(nil)
+      end
+
+      it "should not reset status_reason if it has changed and status has" do
+        repo.update!(status: "Deprecated", status_reason: "Some message")
+        expect(repo.status_reason).to eq("Some message")
+      end
+    end
+  end
+
   describe "#projects_dependencies" do
     let!(:repository) { create(:repository) }
     let!(:project_one) { create(:project, repository: repository) }
