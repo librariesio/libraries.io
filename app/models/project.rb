@@ -61,7 +61,7 @@
 class Project < ApplicationRecord
   require "query_counter"
 
-  # include ProjectSearch
+  include ProjectSearch
   include SourceRank
   include Status
   include Releases

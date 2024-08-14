@@ -323,27 +323,25 @@ class Repository < ApplicationRecord
     nil
   end
 
-  def check_status
-    Repository.check_status(host_type, full_name)
-  end
-
   # @return [Boolean] false if we received a 404 response code when checking the status, true otherwise
-  def self.check_status(host_type, repo_full_name)
+  def check_status
     domain = RepositoryHost::Base.domain(host_type)
-    response = Typhoeus.head("#{domain}/#{repo_full_name}")
+    response = Typhoeus.head("#{domain}/#{full_name}")
+
+    return true if status == "Hidden" # don't overwrite Hidden projects
 
     if response.response_code == 404
-      repo = Repository.includes(:projects).find_by_full_name(repo_full_name)
-      if repo
-        repo.update(status: "Removed", status_reason: "Response 404") unless repo.private?
-        repo.projects.each do |project|
-          next unless %w[bower go elm alcatraz julia nimble].include?(project.platform.downcase)
+      update(status: "Removed", status_reason: "Response 404") unless private?
 
-          project.update_attribute(status: "Removed", status_reason: "Response 404")
-        end
+      projects.each do |project|
+        next unless %w[bower go elm alcatraz julia nimble].include?(project.platform.downcase)
+
+        project.update_attribute(status: "Removed", status_reason: "Response 404")
       end
 
       return false
+    elsif response.response_code == 200
+      update(status: nil, status_reason: "Response 200")
     end
 
     true
