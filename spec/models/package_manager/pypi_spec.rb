@@ -398,7 +398,7 @@ describe PackageManager::Pypi do
             "name" => project_name,
             "license" => project_license,
             "summary" => project_summary,
-            "homepage" => "https://www.libraries.io/package_name/home",
+            "home_page" => "https://www.libraries.io/package_name/home",
             "project_urls" => { "Source" => project_source_repository_url },
           },
           "releases" =>
@@ -437,6 +437,24 @@ describe PackageManager::Pypi do
       expect(actual_project.description).to eq(project_summary)
       expect(actual_project.repository_url).to eq(project_source_repository_url)
       expect(actual_project.licenses).to eq(project_license)
+      expect(actual_project.homepage).to eq("https://www.libraries.io/package_name/home")
+    end
+
+    context "when project already exists" do
+      let!(:db_project) { create(:project, platform: "Pypi", name: project_name, homepage: "https://my.project.homepage") }
+
+      it "overwrites the homepage" do
+        described_class.update(project_name)
+
+        expect(db_project.reload.homepage).to eq("https://www.libraries.io/package_name/home")
+      end
+
+      it "overwrites the homepage even when upstream value is nil" do
+        expect(project).to receive(:homepage).and_return(nil).exactly(2).times
+        described_class.update(project_name)
+
+        expect(db_project.reload.homepage).to eq(nil)
+      end
     end
 
     it "adds the versions with correct statuses" do
