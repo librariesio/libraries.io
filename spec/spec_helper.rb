@@ -3,6 +3,7 @@
 require "pry"
 require "simplecov"
 require "custom_matchers"
+require "audited/rspec_matchers"
 SimpleCov.start "rails"
 
 RSpec.configure do |config|
@@ -29,4 +30,5 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
 
   config.include(CustomMatchers)
+  config.include(Audited::RspecMatchers)
 end

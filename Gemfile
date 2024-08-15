@@ -6,6 +6,7 @@ ruby "3.1.5"
 gem "active_model_serializers"
 gem "api-pagination"
 gem "asciidoctor"
+gem "audited"
 gem "bibliothecary", ">= 8.7.6"
 gem "bitbucket_rest_api", git: "https://github.com/librariesio/bitbucket"
 gem "bootsnap", require: false
