@@ -17,7 +17,6 @@ FactoryBot.define do
 
   trait :removed do
     status { "Removed" }
-    status_reason { "Some reason." }
   end
 
   factory :project do

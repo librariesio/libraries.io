@@ -106,7 +106,6 @@ class Repository < ApplicationRecord
   validates :uuid, uniqueness: { scope: :host_type }, if: -> { uuid_changed? }
 
   before_save :normalize_license_and_language
-  before_save :reset_status_reason
   after_commit :update_all_info_async, on: :create
   after_commit :save_projects, on: :update
   after_commit :update_source_rank_async, on: [:update]
@@ -149,6 +148,8 @@ class Repository < ApplicationRecord
 
   scope :least_recently_updated_stats, -> { where.not(maintenance_stats_refreshed_at: nil).order(maintenance_stats_refreshed_at: :asc) }
   scope :no_existing_stats, -> { where.missing(:repository_maintenance_stats).where(maintenance_stats_refreshed_at: nil) }
+
+  audited only: %w[status]
 
   delegate :download_owner, :download_readme, :domain, :watchers_url, :forks_url,
            :download_fork_source, :download_tags, :download_contributions, :url,
@@ -308,7 +309,7 @@ class Repository < ApplicationRecord
     repo_host_data = repository_host.class.fetch_repo(id_or_name, token)
     Repository::PersistRepositoryFromUpstream.update_from_host_data(self, repo_host_data)
   rescue repository_host.class.api_missing_error_class
-    update!(status: "Removed", status_reason: "Api missing error") unless private?
+    update!(status: "Removed", audit_comment: "Api missing error") unless private?
   end
 
   def self.create_from_host(host_type, full_name, token = nil)
@@ -330,17 +331,17 @@ class Repository < ApplicationRecord
     return true if status == "Hidden" # don't overwrite Hidden projects
 
     if response.response_code == 404
-      update(status: "Removed", status_reason: "Response 404") unless private?
+      update(status: "Removed", audit_comment: "Response 404") unless private?
 
       projects.each do |project|
         next unless %w[bower go elm alcatraz julia nimble].include?(project.platform.downcase)
 
-        project.update_attribute(status: "Removed", status_reason: "Response 404")
+        project.update_attribute(status: "Removed", audit_comment: "Response 404")
       end
 
       return false
     elsif response.response_code == 200
-      update(status: nil, status_reason: "Response 200")
+      update(status: nil, audit_comment: "Response 200")
     end
 
     true
@@ -389,7 +390,7 @@ class Repository < ApplicationRecord
   end
 
   def hide
-    update!(status: "Hidden", status_reason: "Manually hidden")
+    update!(status: "Hidden", audit_comment: "Manually hidden")
   end
 
   def gather_maintenance_stats_async(priority: :medium)
@@ -409,11 +410,11 @@ class Repository < ApplicationRecord
                             })
 
       # update repository status only if needed
-      update(status: "Unmaintained", status_reason: "Readme indicates unmaintained") unless unmaintained?
+      update(status: "Unmaintained", audit_comment: "Readme indicates unmaintained") unless unmaintained?
       # Don't update Projects that have other statuses already set since those could have been set
       # from other data sources. However if a Project has no status then it should be labeled as unmaintained
       # from the readme.
-      projects.where(status: nil).update_all(status: "Unmaintained", status_reason: "Readme indicates unmaintained")
+      projects.where(status: nil).update(status: "Unmaintained", audit_comment: "Readme indicates unmaintained")
     end
 
     if !unmaintained? && !readme&.unmaintained?
@@ -423,16 +424,7 @@ class Repository < ApplicationRecord
                               full_name: full_name,
                             })
       # neither readme nor repository is marked as unmaintained so remove the label from any projects that are
-      projects.unmaintained.update_all(status: nil, status_reason: "Readme indicates maintainedd")
-    end
-  end
-
-  private
-
-  def reset_status_reason
-    # If status changed for some reason but status_reason didn't, nullify status_reason.
-    if status_changed? && status_reason.present? && !status_reason_changed?
-      self.status_reason = nil
+      projects.unmaintained.update(status: nil, audit_comment: "Readme indicates maintained")
     end
   end
 end

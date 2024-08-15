@@ -18,25 +18,10 @@ describe Repository, type: :model do
   it { should belong_to(:repository_organisation) }
   it { should belong_to(:repository_user) }
   it { should belong_to(:source) }
+  it { should be_audited.only(%w[status]) }
 
   it { should validate_uniqueness_of(:full_name).scoped_to(:host_type) }
   it { should validate_uniqueness_of(:uuid).scoped_to(:host_type) }
-
-  describe "#reset_status_reason" do
-    context "a repo with status and status_reason" do
-      let!(:repo) { create(:repository, status: "Removed", status_reason: "Some reason") }
-
-      it "should reset status_reason if it hasn't changed but status has" do
-        repo.update!(status: "Deprecated")
-        expect(repo.status_reason).to eq(nil)
-      end
-
-      it "should not reset status_reason if it has changed and status has" do
-        repo.update!(status: "Deprecated", status_reason: "Some message")
-        expect(repo.status_reason).to eq("Some message")
-      end
-    end
-  end
 
   describe "#projects_dependencies" do
     let!(:repository) { create(:repository) }
@@ -603,7 +588,7 @@ describe Repository, type: :model do
 
   describe "#check_status" do
     context "with a previously removed repository" do
-      let(:repository) { build(:repository, status: "Removed", status_reason: "Response 404") }
+      let(:repository) { build(:repository, status: "Removed") }
 
       before do
         allow(Typhoeus).to receive(:head).and_return(request_double)
@@ -623,7 +608,8 @@ describe Repository, type: :model do
         it "sets last_synced_at for 404" do
           expect { repository.check_status }
             .to change(repository, :status).to(nil)
-            .and change(repository, :status_reason).to("Response 200")
+
+          expect(repository.audits.last.comment).to eq("Response 200")
         end
       end
     end

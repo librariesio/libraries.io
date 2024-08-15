@@ -16,26 +16,10 @@ describe Project, type: :model do
   it { should have_one(:readme) }
   it { should belong_to(:repository) }
   it { should have_many(:repository_maintenance_stats) }
-  it { should be_audited.only(%w[name description repository_url homepage keywords_array licenses]) }
+  it { should be_audited.only(%w[status name description repository_url homepage keywords_array licenses]) }
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:platform) }
-
-  describe "#reset_status_reason" do
-    context "a project with status and status_reason" do
-      let!(:project) { create(:project, status: "Removed", status_reason: "Some reason") }
-
-      it "should reset status_reason if it hasn't changed but status has" do
-        project.update!(status: "Deprecated")
-        expect(project.status_reason).to eq(nil)
-      end
-
-      it "should not reset status_reason if it has changed and status has" do
-        project.update!(status: "Deprecated", status_reason: "Some message")
-        expect(project.status_reason).to eq("Some message")
-      end
-    end
-  end
 
   describe "#normalize_licenses" do
     let(:project) { create(:project, name: "foo", platform: PackageManager::Rubygems) }
@@ -300,7 +284,7 @@ describe Project, type: :model do
     end
 
     context "some of project deprecated" do
-      let!(:project) { create(:project, platform: "NPM", name: "react", status: nil, status_reason: "Response 200", updated_at: 1.week.ago) }
+      let!(:project) { create(:project, platform: "NPM", name: "react", status: nil, updated_at: 1.week.ago) }
 
       it "should use the result of entire_package_deprecation_info" do
         VCR.use_cassette("project/check_status/react") do
@@ -309,7 +293,7 @@ describe Project, type: :model do
           project.reload
 
           expect(project.status).to eq(nil)
-          expect(project.status_reason).to eq("Response 200")
+          expect(project.audits.last.comment).to eq("Response 200")
           # Since there was no change, update status_checked_at but do not update updated_at
           expect(project.status_checked_at).to eq(DateTime.current)
           expect(project.updated_at).to eq(1.week.ago)

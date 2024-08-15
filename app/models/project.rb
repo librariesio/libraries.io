@@ -105,7 +105,7 @@ class Project < ApplicationRecord
   ].freeze
 
   # Currently these are the fields defined in PackageManager::Base::MappingBuilder
-  audited only: %w[name description repository_url homepage keywords_array licenses]
+  audited only: %w[status name description repository_url homepage keywords_array licenses]
 
   delegate :code_of_conduct_url, :contribution_guidelines_url, :funding_urls, :security_policy_url, to: :repository, allow_nil: true
 
@@ -283,7 +283,6 @@ class Project < ApplicationRecord
     set_latest_stable_release_info
     set_runtime_dependencies_count
     set_language
-    reset_status_reason
   end
 
   def keywords
@@ -667,25 +666,25 @@ class Project < ApplicationRecord
     StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if platform.downcase == "npm"
 
     if platform.downcase == "packagist" && [302, 404].include?(response.response_code)
-      update(status: "Removed", status_reason: "Response #{response.response_code}")
+      update(status: "Removed", audit_comment: "Response #{response.response_code}")
     elsif platform.downcase == "go" && [302, 400, 404].include?(response.response_code)
       # pkg.go.dev can be 404 on first-hit for a new package (or alias for the package), so ensure that the package existed in the past
       # by ensuring its age is old enough to not be just uncached by pkg.go.dev yet.
-      update(status: "Removed", status_reason: "Response #{response.response_code}") if created_at < 1.week.ago
+      update(status: "Removed", audit_comment: "Response #{response.response_code}") if created_at < 1.week.ago
     elsif !platform.downcase.in?(%w[packagist go]) && [400, 404, 410].include?(response.response_code)
-      update(status: "Removed", status_reason: "Response #{response.response_code}")
+      update(status: "Removed", audit_comment: "Response #{response.response_code}")
     elsif response.timed_out? || response.response_code == 429 || (response.response_code >= 500 && response.response_code <= 599) || response.response_code == 0
       # failure could be a problem checking so let's just log for now
       StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, status_code: response.response_code })
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(self)
       if result[:is_deprecated]
-        update(status: "Deprecated", deprecation_reason: result[:message], status_reason: "Reason '#{result[:message]}'")
+        update(status: "Deprecated", deprecation_reason: result[:message], audit_comment: "Reason '#{result[:message]}'")
       elsif response.response_code >= 200 && response.response_code <= 299 # in case package was accidentally marked as deprecated (their logic or ours), mark it as not deprecated
-        update(status: nil, deprecation_reason: nil, status_reason: "Response #{response.response_code}")
+        update(status: nil, deprecation_reason: nil, audit_comment: "Response #{response.response_code}")
       end
     elsif response.response_code >= 200 && response.response_code <= 299
-      update(status: nil, status_reason: "Response #{response.response_code}")
+      update(status: nil, audit_comment: "Response #{response.response_code}")
     end
     # only update status to nil if the response code is a success
   end
@@ -789,13 +788,6 @@ class Project < ApplicationRecord
   end
 
   private
-
-  def reset_status_reason
-    # If status changed for some reason but status_reason didn't, nullify status_reason.
-    if status_changed? && status_reason.present? && !status_reason_changed?
-      self.status_reason = nil
-    end
-  end
 
   def spdx_license
     licenses

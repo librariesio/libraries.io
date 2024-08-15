@@ -22,7 +22,7 @@ describe "Api::RepositoryUsersController" do
       get "/api/github/#{@user.login}/repositories"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to start_with("application/json")
-      expect(response.body).to be_json_eql [repo.as_json({ except: %i[id maintenance_stats_refreshed_at repository_organisation_id repository_user_id status_reason], methods: %i[github_contributions_count github_id] })].to_json
+      expect(response.body).to be_json_eql [repo.as_json({ except: %i[id maintenance_stats_refreshed_at repository_organisation_id repository_user_id], methods: %i[github_contributions_count github_id] })].to_json
     end
   end
 
