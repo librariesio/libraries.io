@@ -14,16 +14,16 @@ class InstallAudited < ActiveRecord::Migration[7.0]
       t.column :username, :string
       t.column :action, :string
       t.column :audited_changes, :text
-      t.column :version, :integer, :default => 0
+      t.column :version, :integer, default: 0
       t.column :comment, :string
       t.column :remote_address, :string
       t.column :request_uuid, :string
       t.column :created_at, :datetime
     end
 
-    add_index :audits, [:auditable_type, :auditable_id, :version], :name => 'auditable_index', algorithm: :concurrently
-    add_index :audits, [:associated_type, :associated_id], :name => 'associated_index', algorithm: :concurrently
-    add_index :audits, [:user_id, :user_type], :name => 'user_index', algorithm: :concurrently
+    add_index :audits, %i[auditable_type auditable_id version], name: "auditable_index", algorithm: :concurrently
+    add_index :audits, %i[associated_type associated_id], name: "associated_index", algorithm: :concurrently
+    add_index :audits, %i[user_id user_type], name: "user_index", algorithm: :concurrently
     add_index :audits, :request_uuid, algorithm: :concurrently
     add_index :audits, :created_at, algorithm: :concurrently
   end
