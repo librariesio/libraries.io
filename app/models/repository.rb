@@ -47,7 +47,6 @@
 #  source_name                    :string
 #  stargazers_count               :integer
 #  status                         :string
-#  status_reason                  :string
 #  subscribers_count              :integer
 #  uuid                           :string
 #  created_at                     :datetime         not null

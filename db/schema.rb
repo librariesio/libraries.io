@@ -195,11 +195,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_15_181932) do
     t.datetime "status_checked_at", precision: nil
     t.boolean "lifted", default: false
     t.integer "latest_version_id"
-    t.string "status_reason"
     t.index "COALESCE((name)::text, ''::text) gist_trgm_ops", name: "index_projects_search_on_name", using: :gist
     t.index "lower((language)::text)", name: "index_projects_on_lower_language"
     t.index "lower((platform)::text), lower((name)::text)", name: "index_projects_on_platform_and_name_lower"
-    t.index "to_tsvector('simple'::regconfig, COALESCE(description, ''::text))", name: "index_projects_search_on_description", using: :gist
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["dependents_count"], name: "index_projects_on_dependents_count"
     t.index ["keywords_array"], name: "index_projects_on_keywords_array", using: :gin
@@ -289,7 +287,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_15_181932) do
     t.string "contribution_guidelines_url"
     t.string "security_policy_url"
     t.string "funding_urls", default: [], array: true
-    t.string "status_reason"
     t.index "lower((host_type)::text), lower((full_name)::text)", name: "index_repositories_on_lower_host_type_lower_full_name", unique: true
     t.index "lower((language)::text)", name: "github_repositories_lower_language"
     t.index ["fork"], name: "index_repositories_on_fork"
