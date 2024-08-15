@@ -328,7 +328,7 @@ class Repository < ApplicationRecord
     domain = RepositoryHost::Base.domain(host_type)
     response = Typhoeus.head("#{domain}/#{full_name}")
 
-    return true if status == "Hidden" # don't overwrite Hidden projects
+    return true if status == "Hidden" # don't overwrite Hidden repositories
 
     if response.response_code == 404
       update(status: "Removed", audit_comment: "Response 404") unless private?
