@@ -105,6 +105,7 @@ class Project < ApplicationRecord
     status
   ].freeze
 
+  # Currently these are the fields defined in PackageManager::Base::MappingBuilder
   audited only: %w[name description repository_url homepage keywords_array licenses]
 
   delegate :code_of_conduct_url, :contribution_guidelines_url, :funding_urls, :security_policy_url, to: :repository, allow_nil: true
