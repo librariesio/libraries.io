@@ -55,7 +55,8 @@
 #  index_projects_on_status_checked_at              (status_checked_at)
 #  index_projects_on_updated_at                     (updated_at)
 #  index_projects_on_versions_count                 (versions_count)
-#  index_projects_search_on_name                    (COALESCE((name)::text, ''::text) gist_trgm_ops) USING gist
+#  index_projects_search_on_description             (to_tsvector('simple'::regconfig, COALESCE(description, ''::text))) USING gist
+#  index_projects_search_on_name                    ((COALESCE((name)::text, ''::text)) gist_trgm_ops) USING gist
 #
 class Project < ApplicationRecord
   require "query_counter"
