@@ -108,6 +108,9 @@ GEM
     api-pagination (4.8.2)
     asciidoctor (2.0.20)
     ast (2.4.2)
+    audited (5.7.0)
+      activerecord (>= 5.2, < 8.0)
+      activesupport (>= 5.2, < 8.0)
     autoprefixer-rails (9.5.1.1)
       execjs
     base64 (0.1.1)
@@ -612,6 +615,7 @@ DEPENDENCIES
   annotate
   api-pagination
   asciidoctor
+  audited
   bibliothecary (>= 8.7.6)
   bitbucket_rest_api!
   bootsnap
