@@ -96,7 +96,6 @@ module PackageManager
     private_class_method def self.ensure_project(mapped_project, reformat_repository_url: false)
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
       db_project.reformat_repository_url if reformat_repository_url && !db_project.new_record?
-      mapped_project[:repository_url] = db_project.repository_url if mapped_project[:repository_url].blank?
       db_project.attributes = mapped_project.except(:name, :versions, :version, :dependencies, :properties)
 
       begin
