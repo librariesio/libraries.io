@@ -155,6 +155,8 @@ module PackageManager
           number: raw_version.version_number,
           published_at: raw_version.published_at,
           original_license: raw_version.original_license,
+          # This is a one-off VersionBuilder field for NuGet -- see VersionBuilder for more details.
+          dependencies: raw_version.dependencies,
         }
 
         # NuGet releases can be:
@@ -179,17 +181,18 @@ module PackageManager
     end
 
     def self.dependencies(_name, version, mapped_project)
-      current_version = mapped_project[:raw_versions].find { |v| v.version_number == version }
+      mapped_version = mapped_project[:versions].find { |v| v[:number] == version }
 
-      current_version.dependencies.map do |dep|
-        {
-          project_name: dep.name,
-          requirements: dep.requirements,
-          kind: "runtime",
-          optional: false,
-          platform: name.demodulize,
-        }
-      end
+      mapped_version[:dependencies]
+        .map do |dep|
+          {
+            project_name: dep.name,
+            requirements: dep.requirements,
+            kind: "runtime",
+            optional: false,
+            platform: name.demodulize,
+          }
+        end
     end
 
     class ParseCanonicalNameFailedError < StandardError; end

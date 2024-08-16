@@ -365,6 +365,21 @@ describe PackageManager::NuGet do
     end
   end
 
+  describe ".dependencies" do
+    let(:name) { "name" }
+    let(:version) { "version" }
+    let(:raw_project) do
+      it "fetch the deps" do
+        mapped_project = described_class.mapping(raw_project)
+        dependencies = described_class.dependencies(name, version, mapped_project)
+
+        expect(dependencies.size).to eq(1)
+        expect(dependencies[0][:project_name]).to eq("another-name")
+        expect(dependencies[0][:requirements]).to eq("1.0.0")
+      end
+    end
+  end
+
   describe ".versions" do
     let(:name) { "name" }
     let(:version) { "version" }
@@ -399,6 +414,7 @@ describe PackageManager::NuGet do
           published_at: Time.now.iso8601,
           original_license: "licenses",
           status: nil,
+          dependencies: [],
         },
       ])
     end
@@ -431,11 +447,13 @@ describe PackageManager::NuGet do
             published_at: Time.now.iso8601,
             original_license: "licenses",
             status: nil,
+            dependencies: [],
           },
           {
             number: "version2",
             original_license: "licenses",
             status: "Deprecated",
+            dependencies: [],
           },
         ])
       end
@@ -466,11 +484,13 @@ describe PackageManager::NuGet do
             published_at: Time.now.iso8601,
             original_license: "licenses",
             status: nil,
+            dependencies: [],
           },
           {
             number: "version2",
             original_license: "licenses",
             status: "Deprecated",
+            dependencies: [],
           },
         ])
       end

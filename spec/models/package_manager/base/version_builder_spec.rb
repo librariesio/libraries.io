@@ -24,7 +24,8 @@ describe PackageManager::Base::VersionBuilder do
         status: "a-status",
         created_at: "a-created-at",
         published_at: "a-published-at",
-        original_license: "original-license"
+        original_license: "original-license",
+        dependencies: [] # this is a one-off for NuGet, see VersionBuilder for details
       )
 
       expect(hash[:number]).to eq("a-number")
@@ -32,6 +33,7 @@ describe PackageManager::Base::VersionBuilder do
       expect(hash[:created_at]).to eq("a-created-at")
       expect(hash[:published_at]).to eq("a-published-at")
       expect(hash[:original_license]).to eq("original-license")
+      expect(hash[:dependencies]).to eq([])
     end
   end
 end
