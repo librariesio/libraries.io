@@ -29,7 +29,8 @@ class Repository::PersistRepositoryFromUpstream
     # set unmaintained status for the Repository based on if the repository has been archived upstream
     # if the Repository already has another status then just leave it alone
     repository.status = correct_status_from_upstream(repository, archived_upstream: upstream_raw_host_data.archived)
-    repository.assign_attributes(raw_data_repository_attrs(upstream_raw_host_data))
+    repository.audit_comment = "Status updated from upstream data"
+    repository.attributes = raw_data_repository_attrs(upstream_raw_host_data)
     # TODO: do we need this?
     repository.full_name = upstream_raw_host_data.full_name if repository.lower_name != upstream_raw_host_data.lower_name
     repository.uuid = upstream_raw_host_data.repository_uuid if repository.uuid.nil?
