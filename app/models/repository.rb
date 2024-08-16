@@ -331,17 +331,17 @@ class Repository < ApplicationRecord
     return true if status == "Hidden" # don't overwrite Hidden repositories
 
     if response.response_code == 404
-      update(status: "Removed", audit_comment: "Response 404") unless private?
+      update(status: "Removed", audit_comment: "Response 404") unless private? || project.status == "Removed"
 
       projects.each do |project|
         next unless %w[bower go elm alcatraz julia nimble].include?(project.platform.downcase)
 
-        project.update(status: "Removed", audit_comment: "Response 404")
+        project.update(status: "Removed", audit_comment: "Response 404") unless project.status == "Removed"
       end
 
       return false
     elsif response.response_code == 200
-      update(status: nil, audit_comment: "Response 200")
+      update(status: nil, audit_comment: "Response 200") unless status.nil?
     end
 
     true
