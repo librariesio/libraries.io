@@ -19,7 +19,8 @@ module PackageManager
         hash[:licenses] = licenses if licenses != MISSING
         hash[:versions] = versions if versions != MISSING
 
-        hash
+        # Clean up any string values
+        hash.transform_values { |val| val.is_a?(String) ? StringUtils.strip_null_bytes(val) : val }
       end
     end
   end

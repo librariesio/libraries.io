@@ -93,12 +93,6 @@ module PackageManager
       find(platform).try(:formatted_name) || platform
     end
 
-    private_class_method def self.transform_mapping_values(mapping)
-      mapping.try do |p|
-        p.compact.transform_values { |v| v.is_a?(String) ? StringUtils.strip_null_bytes(v) : v }
-      end
-    end
-
     private_class_method def self.ensure_project(mapped_project, reformat_repository_url: false)
       db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
       db_project.reformat_repository_url if reformat_repository_url && !db_project.new_record?
@@ -142,7 +136,7 @@ module PackageManager
       raw_project = project(name)
       return false unless raw_project.present?
 
-      mapped_project = transform_mapping_values(mapping(raw_project))
+      mapped_project = mapping(raw_project)
       return false unless mapped_project.present?
 
       db_project = ensure_project(mapped_project, reformat_repository_url: sync_version == :all)
