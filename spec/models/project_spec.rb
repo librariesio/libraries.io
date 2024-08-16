@@ -16,7 +16,7 @@ describe Project, type: :model do
   it { should have_one(:readme) }
   it { should belong_to(:repository) }
   it { should have_many(:repository_maintenance_stats) }
-  it { should be_audited.only(%w[name description repository_url homepage keywords_array licenses]) }
+  it { should be_audited.only(%w[status name description repository_url homepage keywords_array licenses]) }
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:platform) }
@@ -293,6 +293,7 @@ describe Project, type: :model do
           project.reload
 
           expect(project.status).to eq(nil)
+          expect(project.audits.last.comment).to eq("Response 200")
           # Since there was no change, update status_checked_at but do not update updated_at
           expect(project.status_checked_at).to eq(DateTime.current)
           expect(project.updated_at).to eq(1.week.ago)

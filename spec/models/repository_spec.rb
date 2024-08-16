@@ -18,6 +18,7 @@ describe Repository, type: :model do
   it { should belong_to(:repository_organisation) }
   it { should belong_to(:repository_user) }
   it { should belong_to(:source) }
+  it { should be_audited.only(%w[status]) }
 
   it { should validate_uniqueness_of(:full_name).scoped_to(:host_type) }
   it { should validate_uniqueness_of(:uuid).scoped_to(:host_type) }
@@ -576,11 +577,40 @@ describe Repository, type: :model do
 
     context "with removed repository" do
       before do
-        allow(Repository).to receive(:check_status).with(repository.host_type, repository.full_name).and_return(false)
+        allow(repository).to receive(:check_status).and_return(false)
       end
 
       it "sets last_synced_at for 404" do
         expect { repository.update_all_info("token") }.to change(repository, :last_synced_at)
+      end
+    end
+  end
+
+  describe "#check_status" do
+    context "with a previously removed repository" do
+      let(:repository) { build(:repository, status: "Removed") }
+
+      before do
+        allow(Typhoeus).to receive(:head).and_return(request_double)
+      end
+
+      context "still removed" do
+        let(:request_double) { instance_double(Typhoeus::Response, response_code: 404) }
+
+        it "sets last_synced_at for 404" do
+          expect { repository.check_status }.to_not change(repository, :status)
+        end
+      end
+
+      context "no longer removed" do
+        let(:request_double) { instance_double(Typhoeus::Response, response_code: 200) }
+
+        it "sets last_synced_at for 404" do
+          expect { repository.check_status }
+            .to change(repository, :status).to(nil)
+
+          expect(repository.audits.last.comment).to eq("Response 200")
+        end
       end
     end
   end
