@@ -336,7 +336,7 @@ class Repository < ApplicationRecord
       projects.each do |project|
         next unless %w[bower go elm alcatraz julia nimble].include?(project.platform.downcase)
 
-        project.update_attribute(status: "Removed", audit_comment: "Response 404")
+        project.update(status: "Removed", audit_comment: "Response 404")
       end
 
       return false
