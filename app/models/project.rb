@@ -59,6 +59,8 @@
 #  index_projects_search_on_name                    ((COALESCE((name)::text, ''::text)) gist_trgm_ops) USING gist
 #
 class Project < ApplicationRecord
+  class CheckStatusRateLimited < StandardError; end
+
   require "query_counter"
 
   include ProjectSearch
@@ -677,6 +679,7 @@ class Project < ApplicationRecord
     elsif response.timed_out? || response.response_code == 429 || (response.response_code >= 500 && response.response_code <= 599) || response.response_code == 0
       # failure could be a problem checking so let's just log for now
       StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, status_code: response.response_code })
+      raise CheckStatusRateLimited if response.response_code == 429
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(self)
       if result[:is_deprecated]
