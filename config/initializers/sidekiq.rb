@@ -64,4 +64,15 @@ SidekiqUniqueJobs.configure do |config|
   config.lock_ttl = 1.day.to_i
 end
 
+SidekiqUniqueJobs.reflect do |on|
+  on.lock_failed do |job_hash|
+    message = {
+      message: "Skipping duplicate job",
+      worker: job_hash["class"],
+      args: job_hash["args"],
+    }
+    Sidekiq.logger.info(message)
+  end
+end
+
 Marginalia::SidekiqInstrumentation.enable!
