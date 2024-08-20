@@ -63,7 +63,7 @@ class SessionsController < ApplicationController
         referrer_url: request.referrer,
       },
       user: identity.user,
-      device_id: @amplitude_device_id
+      request_data: @amplitude_request_data
     )
 
     redirect_to login_destination || root_path

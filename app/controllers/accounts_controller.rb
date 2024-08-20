@@ -17,7 +17,7 @@ class AccountsController < ApplicationController
         event_type: AmplitudeService::EVENTS[:account_updated],
         event_properties: user_params.to_h,
         user: current_user,
-        device_id: @amplitude_device_id
+        request_data: @amplitude_request_data
       )
 
       redirect_to account_path, notice: "Preferences updated"
@@ -32,7 +32,7 @@ class AccountsController < ApplicationController
       event_type: AmplitudeService::EVENTS[:account_deleted],
       event_properties: user_params.to_h,
       user: current_user,
-      device_id: @amplitude_device_id
+      request_data: @amplitude_request_data
     )
 
     current_user.destroy
