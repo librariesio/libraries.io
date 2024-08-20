@@ -79,16 +79,22 @@
 </div>
 
 <div class="row">
+<% if not logged_in? %>
   <div class="col-md-4"></div>
-  <% if not logged_in? %>
-    <div class="col-md-2">
-      <%= link_to 'Login', login_path, class:'btn btn-primary center-block' %>
-    </div>
-  <% end %>
+  <div class="col-md-2">
+    <%= link_to 'Login', login_path, class:'btn btn-primary center-block' %>
+  </div>
   <div class="col-md-2">
     <%= link_to 'API Documentation', '/api', class:'btn btn-primary center-block'%>
   </div>
   <div class="col-md-4"></div>
+<% else %>
+<div class="col-md-5"></div>
+    <div class="col-md-2">
+      <%= link_to 'API Documentation', '/api', class:'btn btn-primary center-block'%>
+    </div>
+    <div class="col-md-5"></div>
+<% end %>
 </div>
 
 <hr>
