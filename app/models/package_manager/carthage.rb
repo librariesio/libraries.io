@@ -9,7 +9,14 @@ module PackageManager
     COLOR = "#ffac45"
 
     def self.project_names
-      Project.platform("Carthage").map { |m| m.projects_dependencies.map(&:project_name).compact.map(&:downcase) }.flatten.uniq
+      Project.platform("Carthage")
+        .joins(:repository)
+        .includes(:repository)
+        .map(&:repository)
+        .flat_map do |r|
+          r.projects_dependencies.map(&:project_name).compact.map(&:downcase)
+        end
+        .uniq
     end
 
     def self.project(name)
