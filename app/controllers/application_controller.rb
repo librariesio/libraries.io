@@ -33,7 +33,12 @@ class ApplicationController < ActionController::Base
     base64_decoded_cookie = Base64.decode64(amplitude_cookie)
     decoded_cookie = CGI.unescape(base64_decoded_cookie)
     cookie_data = JSON.parse(decoded_cookie)
-    @amplitude_device_id = cookie_data["deviceId"]
+    @amplitude_request_data = {
+      device_id: cookie_data["deviceId"],
+      session_id: cookie_data["sessionId"],
+      ip: request.remote_ip,
+      user_agent: request.user_agent,
+    }
   rescue StandardError => e
     # don't allow analytics to break the app
     Bugsnag.notify(e)
@@ -54,7 +59,7 @@ class ApplicationController < ActionController::Base
       event_type: AmplitudeService::EVENTS[:page_viewed],
       event_properties: event_properties,
       user: current_user,
-      device_id: @amplitude_device_id
+      request_data: @amplitude_request_data
     )
   end
 

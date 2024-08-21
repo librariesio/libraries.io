@@ -27,7 +27,7 @@ RSpec.describe AmplitudeService do
       event_type: event_type,
       event_properties: event_properties,
       user: user,
-      device_id: nil
+      request_data: nil
     )
 
     expect(Typhoeus).to have_received(:post) { |url, options|
@@ -40,7 +40,6 @@ RSpec.describe AmplitudeService do
           events: [
             {
               user_id: "000004",
-              device_id: nil,
               event_type: "Login Successful",
               time: timestamp_ms,
               event_properties:
@@ -69,7 +68,9 @@ RSpec.describe AmplitudeService do
         event_type: event_type,
         event_properties: event_properties,
         user: user,
-        device_id: "999999"
+        request_data: {
+          device_id: "999999",
+        }
       )
 
       expect(Typhoeus).to have_received(:post) { |url, options|
@@ -110,7 +111,7 @@ RSpec.describe AmplitudeService do
         event_type: event_type,
         event_properties: event_properties,
         user: nil,
-        device_id: nil
+        request_data: nil
       )
 
       expect(Typhoeus).not_to have_received(:post)
@@ -126,7 +127,7 @@ RSpec.describe AmplitudeService do
           event_type: event_type,
           event_properties: event_properties,
           user: user,
-          device_id: nil
+          request_data: nil
         )
       end.to raise_error(ArgumentError, "event type 'Not A Real Event' is invalid")
     end
@@ -144,7 +145,7 @@ RSpec.describe AmplitudeService do
           event_type: event_type,
           event_properties: event_properties,
           user: user,
-          device_id: nil
+          request_data: nil
         )
       end.not_to raise_error
 

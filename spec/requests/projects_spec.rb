@@ -26,7 +26,7 @@ RSpec.describe ProjectsController do
       expect(AmplitudeService).to have_received(:event).with(
         hash_including(
           user: nil,
-          device_id: nil
+          request_data: nil
         )
       )
     end
@@ -53,7 +53,7 @@ RSpec.describe ProjectsController do
           },
           event_type: "Page Viewed",
           user: user,
-          device_id: nil
+          request_data: nil
         )
       end
     end
