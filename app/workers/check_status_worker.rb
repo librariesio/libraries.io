@@ -9,6 +9,6 @@ class CheckStatusWorker
   rescue Project::CheckStatusRateLimited
     # Don't give up when we are rate-limited: we would get 429'ed when we are checking many statuses at once,
     # so detect these and retry them within the next 10-60 minutes.
-    CheckStatusWorker.perform_in(rand(10..59))
+    CheckStatusWorker.perform_in(rand(10..59), project_id, _ignored)
   end
 end
