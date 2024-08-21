@@ -10,6 +10,7 @@ class OptimizedProjectSerializer
     description
     homepage
     language
+    last_synced_at
     latest_release_number
     latest_release_published_at
     latest_stable_release_number

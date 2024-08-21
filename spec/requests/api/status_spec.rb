@@ -71,6 +71,7 @@ describe "API::StatusController" do
         homepage
         keywords
         language
+        last_synced_at
         latest_download_url
         latest_release_number
         latest_release_published_at
