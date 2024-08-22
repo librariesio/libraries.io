@@ -153,6 +153,7 @@ module PackageManager
 
       save_dependencies(mapped_project, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies) if self::HAS_DEPENDENCIES
       finalize_db_project(db_project)
+      CheckStatusWorker.perform_async(db_project.id) if db_project.status_checked_at.nil? || db_project.status_checked_at < 1.day.ago
     end
 
     # Override this in the subclass to fetch the raw data from the upstream
