@@ -1,6 +1,6 @@
-<div class='row'>
+<div class="row">
   <div class="col-md-12 headline">
-    <h1>Welcome to Libraries.io - a Tidelift project</h1>
+    <h1>Welcome to Libraries.io</h1>
     <%= link_to 'Find out more &raquo;'.html_safe, about_path, class: 'visible-xs' %>
 
     <%= form_tag search_path, method: :get, class: 'search-form', enforce_utf8: false do |f| %>
@@ -11,7 +11,7 @@
         </span>
       </div>
       <p class='hidden-xs'>
-        Libraries.io monitors <strong><%= number_with_delimiter(Project.fast_total) %></strong> open source packages across <strong><%= PackageManager::Base.platforms.length %></strong> different package managers, so you don't have to.
+        Libraries.io monitors <strong><%= number_with_delimiter(Project.fast_total) %></strong> open source packages across <strong><%= PackageManager::Base.platforms.length %></strong> different package managers.
       </p>
     <% end %>
   </div>
@@ -26,57 +26,10 @@
   </div>
 <% end %>
 <hr>
-<h2>Why use Libraries.io?</h2>
-<div class='row cta'>
-  <div class='col-md-3'>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h2 class="panel-title"><%= fa_icon 'search' %>&nbsp;Evaluating package risk</h2>
-      </div>
-      <div class="panel-body">
-        <p>
-          Analyze open source package insights to evaluate whether a package is suitable for use.
-        </p>
-      </div>
-    </div>
-  </div>
-  <div class='col-md-3'>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h2 class="panel-title"><%= fa_icon 'binoculars' %>&nbsp;Discovering new software</h2>
-      </div>
-      <div class="panel-body">
-        <p>
-          Search <%= number_to_human(Project.fast_total) %> packages by <%= link_to 'license'.html_safe, licenses_path %>, <%= link_to 'language'.html_safe, languages_path %>, or explore new, trending or popular packages.
-        </p>
-      </div>
-    </div>
-  </div>
-  <div class='col-md-3'>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h2 class="panel-title"><%= fa_icon 'thumb-tack' %>&nbsp;Monitoring your dependencies</h2>
-      </div>
-      <div class="panel-body">
-        <p>
-          Stay up to date with notifications of updates, license incompatibilities or deleted dependencies.
-        </p>
-      </div>
-    </div>
-  </div>
-  <div class='col-md-3'>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h2 class="panel-title"><%= fa_icon 'wrench' %>&nbsp;Maintaining your OSS project</h2>
-      </div>
-      <div class="panel-body">
-        <p>
-          Understand your users and make informed decisions about features with usage and version data.
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
+<h2>What is Libraries.io?</h2>
+<p class="has-large-font">
+  Libraries.io is a free service that collects publicly available open source package information scraped from the internet. With it you can search 9.96M packages by license, language, or explore new, trending, or popular packages.
+</p>
 
 <div class="row">
 <% if not logged_in? %>
@@ -99,9 +52,76 @@
 
 <hr>
 
-<h2>Looking for more package risk indicators?</h2>
-<p>The <%= link_to 'Tidelift', 'https://tidelift.com/' %> Subscription provides deeper, more meaningful insights that allow you to evaluate latent risk indicators such as package maintenance and end-of-life status, evaluating code contributors and security measures such as two-factor-authentication to eliminate malicious code injections, and more.</p>
+<h2>The Tidelift Subscription: for more complete and accurate package data</h2>
+<p class="has-large-font">
+  Data available via Libraries.io is scraped from the internet and not validated, corrected, or curated for accuracy. If you are looking to make important decisions about open source usage and management, consider our paid offering: <%= link_to 'The Tidelift Subscription', 'https://tidelift.com/' %>.
+</p>
+<p class="has-large-font">
+  The Tidelift Subscription provides a curated source of open source package data backed by Tidelift and our maintainer partners, who are paid to ensure their projects follow enterprise-grade secure software development practices, now and into the future. 
+</p>
+<p class="has-large-font">
+  The Tidelift Subscription provides deeper, more meaningful insights that allow you to evaluate latent risk indicators such as package maintenance and end-of-life status, evaluating code contributors and security measures such as two-factor-authentication to eliminate malicious code injections, and more.
+</p>
 <br>
+<hr>
+
+<h2>Libraries.io vs. The Tidelift Subscription</h2>
+<p class="has-large-font">The table below provides a deeper comparison of the differences between Libraries.io and the Tidelift Subscription.</p>
+
+<table class="compare-table">
+  <tr>
+    <th></th>
+    <th class="has-large-font">Libraries.io</th>
+    <th class="has-large-font">Tidelift</th>
+  </tr>
+  <tr>
+    <td>Package metadata</td>
+    <td>Read from package and source repository metadata, not validated for accuracy</td>
+    <td>Extensive and human-validated for accuracy</td>
+  </tr>
+  <tr>
+    <td>Paying maintainers to implement secure development practices and provide attestations (examples: 2FA status, security policy, and more)</td>
+    <td>Not included</td>
+    <td><%= link_to 'Extensive data', 'https://support.tidelift.com/hc/en-us/articles/4406288074260-Lifter-tasks-overview#lifter-tasks-overview-0-0'%> about practices and attestations made available only to customers</td>
+  </tr>
+  <tr>
+    <td>License data</td>
+    <td>Read from package metadata, not validated for accuracy</td>
+    <td><%= link_to 'Analyzed, and manually validated for accuracy', 'https://support.tidelift.com/hc/en-us/articles/28083703073300-Licenses'%>, also including normalized SPDX expression</td>
+  </tr>
+  <tr>
+    <td>Dependency insights</td>
+    <td>Limited insights only, not validated for accuracy</td>
+    <td>Extensive and human-validated for accuracy, and including dependency graph relationships</td>
+  </tr>
+  <tr>
+    <td>Vulnerability insights</td>
+    <td>Not included</td>
+    <td>CVE <%= link_to 'data ingested from multiple sources', 'https://support.tidelift.com/hc/en-us/articles/23594803916436-Vulnerabilities'%> and mapped to specific versions, plus maintainer CVE reviews for impact, workarounds, and false positive identification</td>
+  </tr>
+  <tr>
+    <td>Maintenance status, including deprecation, end-of-life, and package rename insights</td>
+    <td>Not included</td>
+    <td><%= link_to 'Extensive and human-validated', 'https://support.tidelift.com/hc/en-us/articles/28083691870740-End-of-life-software'%> for accuracy</td>
+  </tr>
+  <tr>
+    <td>Release and usage recommendations</td>
+    <td>Not included</td>
+    <td><%= link_to 'Extensive and human-validated', 'https://support.tidelift.com/hc/en-us/articles/23366439177748-Release-recommendations'%> for accuracy</td>
+  </tr>
+  <tr>
+    <td>API access</td>
+    <td>Limited and rate restricted</td>
+    <td><%= link_to 'Robust set of APIs', 'https://support.tidelift.com/hc/en-us/articles/18135603270164-Data-APIs-overview#data-apis-overview-0-0' %>, <%= link_to 'enterprise support', 'https://tidelift.com/subscription/support' %> and SLA, and rate customizable</td>
+  </tr>
+  <tr>
+    <td>New package(s) assessment SLA</td>
+    <td>Not included</td>
+    <td>Package assessment SLAs included with Tidelift Subscription</td>
+  </tr>
+</table>
+
+
 <hr>
 
 <h2 data-ga-tracked-el='search-by-language'>
@@ -112,5 +132,5 @@
 </div>
 <br>
 <p>
-  Package manager not listed above? <%= link_to 'Consider adding support for it', "https://github.com/librariesio/libraries.io/blob/main/docs/add-a-package-manager.md" %>.
+  Package manager not listed above? <%= link_to 'Consider adding support for it', 'https://github.com/librariesio/libraries.io/blob/main/docs/add-a-package-manager.md' %>.
 </p>
