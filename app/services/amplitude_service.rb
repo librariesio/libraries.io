@@ -3,6 +3,7 @@
 class AmplitudeService
   # API Docs: https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/
   HTTP_V2_URL = "https://api2.amplitude.com/2/httpapi"
+  BLOCK_LIST_PATH = Rails.root.join("lib", "amplitude_block_list.txt")
 
   EVENTS = {
     page_viewed: "Page Viewed",
@@ -11,9 +12,26 @@ class AmplitudeService
     account_deleted: "Account Deleted",
   }.freeze
 
+  def self.request_ip
+    Current.amplitude_request_ip
+  end
+
+  def self.request_ip=(ip)
+    Current.amplitude_request_ip = ip
+  end
+
   def self.event(event_type:, event_properties:, user:, request_data:)
     validate_event_type!(event_type)
     track(event_type, event_properties, user, request_data)
+  end
+
+  def self.enabled_for_request?
+    return false unless Rails.configuration.amplitude_enabled
+    return false unless Rails.configuration.amplitude_api_key.present?
+
+    cidrs = load_cidrs
+    ip_addr = IPAddr.new(request_ip)
+    cidrs.none? { |cidr| cidr.include?(ip_addr) }
   end
 
   private_class_method def self.track(event_type, event_properties, user, request_data)
@@ -36,7 +54,7 @@ class AmplitudeService
       },
     }
 
-    if Rails.configuration.amplitude_api_key.present?
+    if enabled_for_request?
       Typhoeus.post(
         HTTP_V2_URL,
         headers: {
@@ -79,5 +97,21 @@ class AmplitudeService
   # padded with 0s if needed.
   private_class_method def self.pad_user_id(user_id)
     user_id&.to_s&.rjust(6, "0")
+  end
+
+  private_class_method def self.load_cidrs
+    @load_cidrs ||= begin # rubocop:disable Style/RedundantBegin
+      File
+        .readlines(BLOCK_LIST_PATH)
+        .map do |line|
+          line.strip!
+          next if line.start_with?("#")
+
+          IPAddr.new(line)
+        rescue IPAddr::InvalidAddressError
+          nil
+        end
+        .compact
+    end
   end
 end

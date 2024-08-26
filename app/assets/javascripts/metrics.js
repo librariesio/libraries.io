@@ -1,4 +1,5 @@
 (function() {
+  if (!amplitudeEnabledForRequest) return
 
   amplitude.init(amplitudeApiKey, padUserId(currentUserId))
 

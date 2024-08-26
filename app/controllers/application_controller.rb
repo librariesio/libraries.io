@@ -23,7 +23,9 @@ class ApplicationController < ActionController::Base
   end
 
   def extract_amplitude_device_id
-    return unless Rails.configuration.amplitude_api_key.present?
+    AmplitudeService.request_ip = request.remote_ip
+    @amplitude_enabled_for_request = AmplitudeService.enabled_for_request?
+    return unless @amplitude_enabled_for_request
 
     cookie_name = "AMP_#{Rails.configuration.amplitude_api_key.first(10)}"
     amplitude_cookie = request.cookies[cookie_name]
