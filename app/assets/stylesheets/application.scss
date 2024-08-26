@@ -546,9 +546,27 @@ h4.panel-title{
   padding-right: 3px;
 }
 
+.compare-table {
+  th, td {
+    padding: 8px 16px;
+  }
+
+  td {
+    border: 1px solid #F0F1F4;
+  }
+
+  td:first-child {
+    font-weight: bold;
+    max-width: 350px;
+  }
+}
+
+.dev-practices-padding {
+  padding: 1rem 2rem;
+}
+
 .has-large-font {
   font-size: 18px;
-  padding: 1rem 2rem;
 }
 
 .btn, .btn-primary, .open > .btn-primary.dropdown-toggle {
