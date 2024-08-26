@@ -48,6 +48,21 @@ describe PackageManager::Maven do
   end
 
   describe ".mapping" do
+    it "maps properties" do
+      pom = Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read)
+      allow(described_class).to receive(:get_pom).and_return(pom)
+
+      mapped = described_class.mapping(
+        {
+          group_id: "com.google.api.grpc",
+          artifact_id: "proto-google-common-protos",
+          version: "0.1.9",
+        }
+      )
+
+      expect(mapped[:properties]).to include("api.version", "scm.url")
+    end
+
     context "with missing pom" do
       it "should return nil" do
         allow(described_class).to receive(:download_pom).and_raise(PackageManager::Maven::POMNotFound.new("https://a-spring-url"))
@@ -205,6 +220,13 @@ describe PackageManager::Maven do
 
       it "to find repository url" do
         expect(parsed[:repository_url]).to eq("https://github.com/googleapis/googleapis-dummy")
+      end
+
+      it "to map properties" do
+        expect(parsed[:properties]).to include(
+          "api.version" => "1.0.0-rc1",
+          "scm.url" => "https://github.com/googleapis/googleapis-dummy"
+        )
       end
     end
 

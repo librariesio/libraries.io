@@ -103,7 +103,8 @@ module PackageManager
         description: pom_data[:description],
         homepage: pom_data[:homepage],
         repository_url: pom_data[:repository_url],
-        licenses: pom_data[:licenses]
+        licenses: pom_data[:licenses],
+        properties: pom_data[:properties]
       )
     rescue POMNotFound => e
       Rails.logger.info "Missing POM: #{e.url}"
