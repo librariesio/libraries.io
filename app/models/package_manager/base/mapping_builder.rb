@@ -7,7 +7,7 @@ module PackageManager
     class MappingBuilder
       MISSING = Object.new
 
-      def self.build_hash(name:, description:, repository_url:, homepage: MISSING, keywords_array: MISSING, licenses: MISSING, versions: MISSING)
+      def self.build_hash(name:, description:, repository_url:, homepage: MISSING, keywords_array: MISSING, licenses: MISSING, versions: MISSING, properties: MISSING)
         hash = {
           name: name,
           description: description,
@@ -18,6 +18,7 @@ module PackageManager
         hash[:keywords_array] = keywords_array if keywords_array != MISSING
         hash[:licenses] = licenses if licenses != MISSING
         hash[:versions] = versions if versions != MISSING
+        hash[:properties] = properties if properties != MISSING
 
         # Clean up any string values
         hash.transform_values { |val| val.is_a?(String) ? StringUtils.strip_null_bytes(val) : val }
