@@ -202,5 +202,15 @@ RSpec.describe AmplitudeService do
         expect(described_class.enabled_for_request?).to be(true)
       end
     end
+
+    context "with no ip" do
+      before do
+        described_class.request_ip = nil
+      end
+
+      it "returns false" do
+        expect(described_class.enabled_for_request?).to be(false)
+      end
+    end
   end
 end

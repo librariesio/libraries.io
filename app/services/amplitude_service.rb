@@ -28,6 +28,7 @@ class AmplitudeService
   def self.enabled_for_request?
     return false unless Rails.configuration.amplitude_enabled
     return false unless Rails.configuration.amplitude_api_key.present?
+    return false unless request_ip.present?
 
     cidrs = load_cidrs
     ip_addr = IPAddr.new(request_ip)
