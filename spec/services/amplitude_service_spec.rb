@@ -6,6 +6,11 @@ RSpec.describe AmplitudeService do
   let(:blocked_ip) { "2.56.24.5" }
   let(:allowed_ip) { "9.56.24.5" }
 
+  before do
+    allow(Rails.configuration).to receive(:amplitude_api_key).and_return("dummy_key")
+    allow(Rails.configuration).to receive(:amplitude_enabled).and_return(true)
+  end
+
   describe ".event" do
     let(:user) { create(:user, id: 4, email: "user@email.com") }
 
@@ -19,8 +24,6 @@ RSpec.describe AmplitudeService do
     end
 
     before do
-      allow(Rails.configuration).to receive(:amplitude_api_key).and_return("dummy_key")
-      allow(Rails.configuration).to receive(:amplitude_enabled).and_return(true)
       allow(Typhoeus).to receive(:post)
       described_class.request_ip = allowed_ip
       freeze_time
