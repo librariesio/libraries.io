@@ -32,6 +32,7 @@
   <% end %>
   <link href="/opensearch.xml" title="Libraries.io" rel="search" type="application/opensearchdescription+xml">
     <script type="text/javascript">
+      const amplitudeEnabledForRequest = <%= @amplitude_enabled_for_request %>
       const amplitudeApiKey = "<%= Rails.configuration.amplitude_api_key %>"
       <% if logged_in? %>
         const currentUserId = <%= current_user.id %>

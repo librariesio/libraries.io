@@ -86,6 +86,7 @@ module Libraries
     config.gtm_id = ENV.fetch("GTM_ID", nil)
     config.tidelift_api_key = ENV.fetch("TIDELIFT_API_KEY", nil)
     config.pg_search_projects_enabled = ENV.key?("PG_SEARCH_PROJECTS_ENABLED")
+    config.amplitude_enabled = ENV.fetch("AMPLITUDE_ENABLED", "true").downcase == "true"
     config.amplitude_api_key = ENV.fetch("AMPLITUDE_API_KEY", nil)
 
     require "string_utils"

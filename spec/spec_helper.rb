@@ -26,6 +26,10 @@ RSpec.configure do |config|
     end
   end
 
+  config.before do
+    Current.clear_all
+  end
+
   config.filter_run :focus
   config.run_all_when_everything_filtered = true
 
