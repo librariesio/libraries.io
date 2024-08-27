@@ -1,0 +1,147 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.npmjs.com/package/@abcdefgh/ijklmnop
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Typhoeus - https://github.com/typhoeus/typhoeus
+      Expect:
+      - ''
+  response:
+    status:
+      code: 302
+      message: ''
+    headers:
+      Date:
+      - Tue, 27 Aug 2024 20:35:35 GMT
+      Content-Type:
+      - text/plain;charset=UTF-8
+      Content-Length:
+      - '20'
+      Location:
+      - "/login?next=%2Fpackage%2F%40abcdefgh%2Fijklmnop"
+      Cf-Ray:
+      - 8b9ed94eca5252ff-SLC
+      Cf-Cache-Status:
+      - MISS
+      Cache-Control:
+      - public, max-age=14400
+      Strict-Transport-Security:
+      - max-age=31536000
+      Vary:
+      - x-requested-with, x-spiferack, Accept-Encoding
+      Npm-Cost:
+      - '1'
+      Npm-Remaining:
+      - '99'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Xss-Protection:
+      - 1; mode=block
+      Set-Cookie:
+      - __cf_bm=7o.l._891JRrUC0Lm.csMtIbYvHAb02C_.cj0SlZGq8-1724790935-1.0.1.1-u9BN.GlOiECYD0SUtqGYvstNFEWA.EL4CjusdX.V3G2EX.F5JCiAdOla5Zg3d8Ls3dppkF3uyqoySMwiI_Ozfw;
+        path=/; expires=Tue, 27-Aug-24 21:05:35 GMT; domain=.npmjs.com; HttpOnly;
+        Secure; SameSite=None
+      - __cfruid=5dc5b57c5b777ed14ddf59b121f07b722ccd424e-1724790935; path=/; domain=.npmjs.com;
+        HttpOnly; Secure; SameSite=None
+      Server:
+      - cloudflare
+    body:
+      encoding: ASCII-8BIT
+      string: "<h1>Redirect...</h1>"
+  recorded_at: Tue, 27 Aug 2024 20:35:34 GMT
+- request:
+    method: get
+    uri: http://registry.npmjs.org/@abcdefgh%2Fijklmnop
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '3454897174776194814'
+      X-Datadog-Parent-Id:
+      - '2344045752864091268'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 301
+      message: Moved Permanently
+    headers:
+      Date:
+      - Tue, 27 Aug 2024 20:35:35 GMT
+      Content-Type:
+      - text/plain;charset=UTF-8
+      Content-Length:
+      - '0'
+      Connection:
+      - keep-alive
+      Location:
+      - https://registry.npmjs.org/@abcdefgh%2Fijklmnop
+      Vary:
+      - Accept-Encoding
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8b9ed950da1727d8-SLC
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+  recorded_at: Tue, 27 Aug 2024 20:35:34 GMT
+- request:
+    method: get
+    uri: https://registry.npmjs.org/@abcdefgh%2Fijklmnop
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2436969725848342521'
+      X-Datadog-Parent-Id:
+      - '2346715009131915843'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 404
+      message: ''
+    headers:
+      Date:
+      - Tue, 27 Aug 2024 20:35:35 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '21'
+      Vary:
+      - Accept-Encoding
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8b9ed953999f2c69-SLC
+    body:
+      encoding: ASCII-8BIT
+      string: '{"error":"Not found"}'
+  recorded_at: Tue, 27 Aug 2024 20:35:34 GMT
+recorded_with: VCR 6.2.0

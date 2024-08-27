@@ -301,6 +301,23 @@ describe Project, type: :model do
       end
     end
 
+    context "a private NPM package that returns 302" do
+      let!(:project) { create(:project, platform: "NPM", name: "@abcdefgh/ijklmnop", status: nil, updated_at: 1.week.ago) }
+
+      it "should mark it as Removed since it's not accessible" do
+        VCR.use_cassette("project/check_status/private_package") do
+          project.check_status
+
+          project.reload
+
+          expect(project.status).to eq("Removed")
+          expect(project.audits.last.comment).to eq("Response 302")
+          expect(project.status_checked_at).to eq(DateTime.current)
+          expect(project.updated_at).to eq(DateTime.current)
+        end
+      end
+    end
+
     context "deprecated project no longer deprecated" do
       let!(:project) { create(:project, platform: "NPM", name: "react", status: "Deprecated", updated_at: 1.week.ago) }
 

@@ -668,7 +668,8 @@ class Project < ApplicationRecord
 
     StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if platform.downcase == "npm"
 
-    if platform.downcase == "packagist" && [302, 404].include?(response.response_code)
+    if platform.downcase.in?(%w[packagist npm]) && [302, 404].include?(response.response_code)
+      # NPM 302 happens with privately scoped packages, which should be considered Removed.
       update(status: "Removed", audit_comment: "Response #{response.response_code}")
     elsif platform.downcase == "go" && [302, 400, 404].include?(response.response_code)
       # pkg.go.dev can be 404 on first-hit for a new package (or alias for the package), so ensure that the package existed in the past
