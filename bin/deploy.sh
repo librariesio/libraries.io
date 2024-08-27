@@ -8,7 +8,7 @@ gcloud --quiet container images describe ${TAGGED_IMAGE} || { status=$?; echo "C
 
 gcloud --quiet container images add-tag ${TAGGED_IMAGE} gcr.io/${GOOGLE_PROJECT}/libraries.io:latest
 
-kubectl run --rm=true -i --tty db-migration --image=${TAGGED_IMAGE} --restart=Never --overrides="`cat kube/migrate.json`"
+kubectl run --rm=true --force --grace-period=0 --pod-running-timeout=5m -i --tty db-migration --image=${TAGGED_IMAGE} --restart=Never --overrides="`cat kube/migrate.json`"
 
 kubectl set image deployment/libraries-sidekiq-worker-deploy libraries-sidekiq-worker=${TAGGED_IMAGE}
 kubectl set image deployment/libraries-rails libraries-rails=${TAGGED_IMAGE}
