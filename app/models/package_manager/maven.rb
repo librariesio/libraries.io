@@ -186,7 +186,7 @@ module PackageManager
           project_name: dep[:name],
           requirements: dep[:requirement],
           kind: dep[:type],
-          optional: dep.key?(:optional) ? dep[:optional] : false,
+          optional: dep.optional.blank? ? false : dep.optional,
           platform: db_platform,
         }
       end
