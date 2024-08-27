@@ -261,6 +261,13 @@ describe PackageManager::Pypi do
         expect(version.dependencies.count).to be 1
         expect(version.dependencies.first).to eql(dependency)
       end
+
+      it "raises an error if the dependency info is invalid" do
+        expect(PackageManager::Pypi).to receive(:dependencies).and_return([{ project_name: nil, requirements: nil }])
+        expect do
+          described_class.save_dependencies(mapped_project, sync_version: version_number, force_sync_dependencies: true)
+        end.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
   end
 

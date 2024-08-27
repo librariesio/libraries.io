@@ -328,11 +328,11 @@ module PackageManager
         new_dep_attributes = deps
           .reject { |dep| existing_dep_names.include?(dep[:project_name]) }
           .map do |dep|
-            dep_platform_and_name = [db_platform, dep[:project_name].strip]
+            dep_platform_and_name = [db_platform, dep[:project_name].to_s.strip]
             named_project_id = if platform_and_names_to_project_ids.key?(dep_platform_and_name)
                                  platform_and_names_to_project_ids[dep_platform_and_name]
                                else
-                                 platform_and_names_to_project_ids[dep_platform_and_name] = Project.find_best(db_platform, dep[:project_name].strip)&.id
+                                 platform_and_names_to_project_ids[dep_platform_and_name] = Project.find_best(db_platform, dep[:project_name].to_s.strip)&.id
                                end
 
             dep.merge(version_id: db_version.id, project_id: named_project_id)
