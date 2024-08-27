@@ -27,7 +27,7 @@ describe PackageManager::Maven::Google do
   describe ".dependencies" do
     before do
       allow(described_class).to receive(:parse_pom_manifest).and_return(
-        [{ name: "bibliothecary", requirement: "*", type: "runtime" }]
+        [Bibliothecary::Dependency.new(name: "bibliothecary", requirement: "*", type: "runtime")]
       )
     end
 
