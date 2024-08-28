@@ -104,30 +104,32 @@ namespace :one_off do
     puts "Catalog page idx #{idx} (#{(idx / catalog_size.to_f) * 100}% complete)"
   end
 
-  # @param start_id String The id of the Project to resume from,
+  # @param start_id Integer The id of the Project to resume from,
   #                         to skip already-processed projects (default: nil)
   # @param commit String Must equal 'yes' to perform changes
   desc "Backfill maven dependencies after bugfixes"
   task :backfill_maven_dependencies, %i[start_id commit] => :environment do |_t, args|
-    start = args.start_id
+    start_id = args.start_id
     commit = args.commit == "yes"
+    batch_size = 1000
+    batch_wait = 10.minutes
 
     bugfix_timestamp = Date.new(2024, 8, 28).beginning_of_day
 
     projects = Project.platform("Maven")
       .not_removed
       .joins(:repository_maintenance_stats)
-      .where("last_synced_at < ?", bugfix_timestamp)
+      .where("projects.last_synced_at < ?", bugfix_timestamp)
       .distinct
 
-    projects.find_in_batches(start: start, batch_size: 1000).with_index do |project_batch, batch_number|
+    projects.find_in_batches(start: start_id, batch_size: batch_size).with_index do |project_batch, batch_number|
       puts "!! Updating batch ##{batch_number + 1} of Maven project dependencies (#{project_batch.first.id} - #{project_batch.last.id})"
 
       project_batch.each do |project|
         project.async_sync(force_sync_dependencies: true) if commit
       end
 
-      sleep 600
+      sleep batch_wait
     end
   end
 end
