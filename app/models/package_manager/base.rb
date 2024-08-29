@@ -344,7 +344,8 @@ module PackageManager
           dependency.validate!
         rescue ActiveRecord::RecordInvalid => e
           # If we don't have a valid dependency to upsert, log it, and fail noisily
-          StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: db_version, dependency_name: dependency.project_name, message: dependency.errors.full_messages.join })
+          message = dependency.errors.full_messages.join(", ").gsub(/'/, "")
+          StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: db_version, dependency_name: dependency.project_name, message: message })
           raise e
         end
 
