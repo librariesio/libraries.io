@@ -79,8 +79,19 @@ module PackageManager
       end
     end
 
-    def self.dependencies(name, version, mapped_project)
-      find_and_map_dependencies(name, version, mapped_project)
+    def self.dependencies(name, version, _mapped_project)
+      dependencies = find_dependencies(name, version)
+      return [] unless dependencies&.any?
+
+      dependencies.map do |dependency|
+        dependency = dependency.deep_stringify_keys
+        {
+          project_name: dependency["name"],
+          requirements: dependency["requirement"] || "*",
+          kind: dependency["type"],
+          platform: db_platform,
+        }
+      end
     end
 
     def self.find_dependencies(name, version)
