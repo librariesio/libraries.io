@@ -375,21 +375,6 @@ module PackageManager
       end
     end
 
-    def self.find_and_map_dependencies(name, version, _mapped_project)
-      dependencies = find_dependencies(name, version)
-      return [] unless dependencies&.any?
-
-      dependencies.map do |dependency|
-        dependency = dependency.deep_stringify_keys
-        {
-          project_name: dependency["name"],
-          requirements: dependency["requirement"] || "*",
-          kind: dependency["type"],
-          platform: db_platform,
-        }
-      end
-    end
-
     def self.repo_fallback(repo, homepage)
       RepositoryService.repo_fallback(repo, homepage)
     end
