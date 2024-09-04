@@ -55,17 +55,31 @@ describe PackageManager::NPM do
       end
     end
 
-    context "latest version is deprecated" do
+    context "latest version isn't deprecated and the value of deprecated field is false" do
       let(:version_data) do
         {
           "0.0.1" => { "version" => "0.0.1", "deprecated" => "This package is deprecated" },
           "0.0.2" => { "version" => "0.0.2", "deprecated" => "This package is deprecated" },
-          "0.0.3" => { "version" => "0.0.3" },
+          "0.0.3" => { "version" => "0.0.3", "deprecated" => false },
         }
       end
 
       it "project not considered deprecated" do
         expect(deprecation_info).to eq({ is_deprecated: false, message: nil })
+      end
+    end
+
+    context "latest version is deprecated with a true boolean" do
+      let(:version_data) do
+        {
+          "0.0.1" => { "version" => "0.0.1", "deprecated" => "This package is deprecated" },
+          "0.0.2" => { "version" => "0.0.2", "deprecated" => "This package is deprecated" },
+          "0.0.3" => { "version" => "0.0.3", "deprecated" => true },
+        }
+      end
+
+      it "project is considered deprecated" do
+        expect(deprecation_info).to eq({ is_deprecated: true, message: nil })
       end
     end
 

@@ -58,7 +58,18 @@ module PackageManager
         .last
 
       message = last_stable_version&.dig("deprecated")
-      is_deprecated = !message.nil?
+      # sometimes message is a boolean `false`, and it may be `true` sometimes (not sure but
+      # may as well handle it, apparently we return any type we like)
+      if message.nil?
+        is_deprecated = false
+      elsif [true, false].include?(message)
+        is_deprecated = message
+        message = nil
+      elsif message.is_a? String
+        is_deprecated = true
+      else
+        is_deprecated = false
+      end
 
       {
         is_deprecated: is_deprecated,
