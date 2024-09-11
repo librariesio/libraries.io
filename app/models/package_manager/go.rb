@@ -94,8 +94,24 @@ module PackageManager
       # that is not a valid module. https://go.dev/ref/mod#goproxy-protocol describes
       # how a $base/$module/@v/$version.mod request will return back a virtual go.mod file
       # with whatever name was passed in if there is not a go.mod file found for that version.
-      canonical_name = canonical_module_name(name)
-      search_name = canonical_name.presence || name
+      name_in_go_mod = canonical_module_name(name)
+      search_name = if name_in_go_mod.present?
+                      if name.downcase.include?(name_in_go_mod.downcase)
+                        name_in_go_mod
+                      else
+                        StructuredLog.capture(
+                          "GO_PROJECT_NAME_DOES_NOT_MATCH_GO_MOD_NAME",
+                          {
+                            go_mod_name: name_in_go_mod,
+                            project_name: name,
+                            source: self.name,
+                          }
+                        )
+                        name
+                      end
+                    else
+                      name
+                    end
 
       # get_html will send back an empty string if response is not a 200
       # a blank response means that the project was not found on pkg.go.dev site

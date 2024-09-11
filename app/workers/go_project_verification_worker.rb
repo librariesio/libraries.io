@@ -21,6 +21,17 @@ class GoProjectVerificationWorker
       # if we can't get a canonical name then bail out of here and we'll have to investigate further
       return if canonical_name.blank?
 
+      unless name.downcase.include?(canonical_name.downcase)
+        StructuredLog.capture(
+          "GO_PROJECT_NAME_DOES_NOT_MATCH_GO_MOD_NAME",
+          {
+            go_mod_name: canonical_name,
+            project_name: name,
+            source: self.name,
+          }
+        )
+      end
+
       # if the name for the project doesn't match the canonical name then we can remove it
       PackageManager::Go.update(canonical_name) unless Project.where(platform: "Go", name: canonical_name).exists?
 
