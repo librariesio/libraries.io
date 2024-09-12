@@ -16,32 +16,21 @@ class GoProjectVerificationWorker
 
     # if this name is found and is considered a module then we can determine the canonical name
     if PackageManager::Go.module?(project.name)
-      canonical_name = PackageManager::Go.canonical_module_name(project.name)
+      name_in_go_mod = PackageManager::Go.name_in_go_mod(project.name)
 
       # if we can't get a canonical name then bail out of here and we'll have to investigate further
-      return if canonical_name.blank?
-
-      unless name.downcase.include?(canonical_name.downcase)
-        StructuredLog.capture(
-          "GO_PROJECT_NAME_DOES_NOT_MATCH_GO_MOD_NAME",
-          {
-            go_mod_name: canonical_name,
-            project_name: name,
-            source: self.name,
-          }
-        )
-      end
+      return if name_in_go_mod.blank?
 
       # if the name for the project doesn't match the canonical name then we can remove it
-      PackageManager::Go.update(canonical_name) unless Project.where(platform: "Go", name: canonical_name).exists?
+      PackageManager::Go.update(name_in_go_mod) unless Project.where(platform: "Go", name: name_in_go_mod).exists?
 
-      if project.name != canonical_name
-        if canonical_name.downcase == project.name.downcase
+      if project.name != name_in_go_mod
+        if name_in_go_mod.downcase == project.name.downcase
           StructuredLog.capture(
             "GO_PROJECT_VERIFICATION_DESTROY_PROJECT",
             {
               project_name: project.name,
-              canonical_name: canonical_name,
+              canonical_name: name_in_go_mod,
             }
           )
           project.destroy
@@ -50,7 +39,7 @@ class GoProjectVerificationWorker
             "GO_PROJECT_VERIFICATION_REMOVE_PROJECT",
             {
               project_name: project.name,
-              canonical_name: canonical_name,
+              canonical_name: name_in_go_mod,
             }
           )
           project.update(status: "Removed")
@@ -88,7 +77,7 @@ class GoProjectVerificationWorker
   # if the proxy sends back the same cased name that we sent, then it will likely do that for all the different casings
   # in that case downcase the name and use that as the canonical name for this package
   def non_module_name(name)
-    proxy_name = PackageManager::Go.canonical_module_name(name)
+    proxy_name = PackageManager::Go.name_in_go_mod(name)
 
     proxy_name = proxy_name.downcase if proxy_name == name
     proxy_name

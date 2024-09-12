@@ -94,7 +94,7 @@ module PackageManager
       # that is not a valid module. https://go.dev/ref/mod#goproxy-protocol describes
       # how a $base/$module/@v/$version.mod request will return back a virtual go.mod file
       # with whatever name was passed in if there is not a go.mod file found for that version.
-      name_in_go_mod = canonical_module_name(name)
+      name_in_go_mod = name_in_go_mod(name)
       search_name = if name_in_go_mod.present?
                       if name.downcase.include?(name_in_go_mod.downcase)
                         name_in_go_mod
@@ -314,7 +314,7 @@ module PackageManager
 
     # looks at the module declaration for the latest version's go.mod file and returns that if found
     # if nothing is found, nil is returned
-    def self.canonical_module_name(name)
+    def self.name_in_go_mod(name)
       fetch_mod(name)&.canonical_module_name
     end
 
