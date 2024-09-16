@@ -5,10 +5,12 @@ class CheckStatusWorker
   sidekiq_options queue: :status, lock: :until_and_while_executing, lock_ttl: 10.minutes.to_i
 
   def perform(project_id)
-    Project.find_by_id(project_id).try(:check_status)
+    project = Project.find_by_id(project_id)
+    project.try(:check_status)
   rescue Project::CheckStatusRateLimited
-    # Don't give up when we are rate-limited: we would get 429'ed when we are checking many statuses at once,
-    # so detect these and retry them within the next 10-60 minutes.
-    CheckStatusWorker.perform_in(rand(10..59).minutes, project_id)
+    # We eagerly updated status_checked_at before checking status, so reset it to
+    # nil if we get 429'ed, and it'll get picked up first by the nightly projects:check_status
+    # rake  task.
+    project.update_column(:status_checked_at, nil)
   end
 end
