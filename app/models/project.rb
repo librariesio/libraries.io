@@ -621,7 +621,7 @@ class Project < ApplicationRecord
       end
     end
 
-    Rails.logger.info("Project#update_tags platform=#{platform.downcase} name=#{name} qcount=#{qcount} benchmark:#{(benchmark.real * 1000).round(2)}ms")
+    Rails.logger.debug("Project#update_tags platform=#{platform.downcase} name=#{name} qcount=#{qcount} benchmark:#{(benchmark.real * 1000).round(2)}ms")
   rescue StandardError => e
     Rails.logger.error("Project#update_tags error #{e.inspect}")
     nil
