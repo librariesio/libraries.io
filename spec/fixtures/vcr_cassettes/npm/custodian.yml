@@ -2,52 +2,6 @@
 http_interactions:
 - request:
     method: get
-    uri: http://registry.npmjs.org/custodian
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.17.6
-      Accept-Encoding:
-      - gzip,deflate,br
-      X-Datadog-Trace-Id:
-      - '3957329616443248889'
-      X-Datadog-Parent-Id:
-      - '2555927443506983721'
-      X-Datadog-Sampling-Priority:
-      - '1'
-      X-Datadog-Tags:
-      - _dd.p.dm=-0
-      Expect:
-      - ''
-  response:
-    status:
-      code: 301
-      message: Moved Permanently
-    headers:
-      Date:
-      - Wed, 18 Sep 2024 18:36:22 GMT
-      Content-Type:
-      - text/plain;charset=UTF-8
-      Content-Length:
-      - '0'
-      Connection:
-      - keep-alive
-      Location:
-      - https://registry.npmjs.org/custodian
-      Vary:
-      - Accept-Encoding
-      Server:
-      - cloudflare
-      Cf-Ray:
-      - 8c5370f39a3c7ee7-LAX
-    body:
-      encoding: ASCII-8BIT
-      string: ''
-  recorded_at: Wed, 18 Sep 2024 18:36:22 GMT
-- request:
-    method: get
     uri: https://registry.npmjs.org/custodian
     body:
       encoding: US-ASCII
@@ -58,9 +12,9 @@ http_interactions:
       Accept-Encoding:
       - gzip,deflate,br
       X-Datadog-Trace-Id:
-      - '4069959608247590276'
+      - '2775695761658922448'
       X-Datadog-Parent-Id:
-      - '3743089796355953859'
+      - '1258395467481299040'
       X-Datadog-Sampling-Priority:
       - '1'
       X-Datadog-Tags:
@@ -73,15 +27,17 @@ http_interactions:
       message: ''
     headers:
       Date:
-      - Wed, 18 Sep 2024 18:36:23 GMT
+      - Wed, 18 Sep 2024 18:51:05 GMT
       Content-Type:
       - application/json
       Cf-Ray:
-      - 8c5370f47c1d2efd-LAX
+      - 8c53867cfd512f4b-LAX
       Cf-Cache-Status:
-      - REVALIDATED
+      - HIT
       Access-Control-Allow-Origin:
       - "*"
+      Age:
+      - '75'
       Cache-Control:
       - public, max-age=300
       Etag:
@@ -160,5 +116,5 @@ http_interactions:
         to periodically restart watched jobs.\n","homepage":"https://github.com/BetSmartMedia/custodian","bugs":{"url":"https://github.com/BetSmartMedia/custodian/issues"},"readmeFilename":"README.md","users":{"coyool":true}}'
     adapter_metadata:
       vcr_decompressed: gzip
-  recorded_at: Wed, 18 Sep 2024 18:36:23 GMT
+  recorded_at: Wed, 18 Sep 2024 18:51:05 GMT
 recorded_with: VCR 6.2.0

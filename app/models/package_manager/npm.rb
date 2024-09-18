@@ -40,7 +40,7 @@ module PackageManager
     end
 
     def self.project(name)
-      get("http://registry.npmjs.org/#{name.gsub('/', '%2F')}")
+      get("https://registry.npmjs.org/#{name.gsub('/', '%2F')}")
     end
 
     def self.deprecation_info(db_project)
