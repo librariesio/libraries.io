@@ -161,6 +161,8 @@ module PackageManager
         #   `"" (just an empty string) Same as *`
         d[:requirements] = "*" if d[:requirements].blank?
       end
+
+      deps
     end
   end
 end
