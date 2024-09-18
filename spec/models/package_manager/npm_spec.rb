@@ -138,4 +138,23 @@ describe PackageManager::NPM do
       expect(project.reload.versions.pluck(:number, :status)).to match_array([["1.0.0", nil], ["1.0.1", "Removed"]])
     end
   end
+
+  describe ".dependencies" do
+    context "when there are blank dependencies" do
+      it "replaces blanks with '*' wildcards" do
+        raw_project = VCR.use_cassette("npm/custodian") do
+          described_class.project("custodian")
+        end
+        mapped_project = described_class.mapping(raw_project)
+        dependencies = described_class.dependencies("custodian", "1.3.4", mapped_project)
+
+        expect(dependencies.pluck(:project_name, :requirements)).to match_array([
+          ["daemon", "1.1.0"],
+          ["dateformat", "*"],
+          ["nodemailer", "~0.3.28"],
+          ["shell-quote", "0.0.1"],
+        ])
+      end
+    end
+  end
 end

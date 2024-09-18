@@ -1,0 +1,120 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://registry.npmjs.org/custodian
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      X-Datadog-Trace-Id:
+      - '2775695761658922448'
+      X-Datadog-Parent-Id:
+      - '1258395467481299040'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      X-Datadog-Tags:
+      - _dd.p.dm=-0
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Date:
+      - Wed, 18 Sep 2024 18:51:05 GMT
+      Content-Type:
+      - application/json
+      Cf-Ray:
+      - 8c53867cfd512f4b-LAX
+      Cf-Cache-Status:
+      - HIT
+      Access-Control-Allow-Origin:
+      - "*"
+      Age:
+      - '75'
+      Cache-Control:
+      - public, max-age=300
+      Etag:
+      - W/"6ee0a87de862fccc7e591b2c49dbb7e1"
+      Last-Modified:
+      - Tue, 14 Jun 2022 06:09:11 GMT
+      Vary:
+      - accept-encoding, accept
+      Server:
+      - cloudflare
+    body:
+      encoding: ASCII-8BIT
+      string: '{"_id":"custodian","_rev":"25-dd9e85500ce32ed7004655498089189a","name":"custodian","description":"A
+        process watchdog and command scheduler","dist-tags":{"latest":"1.3.4"},"versions":{"1.2.0":{"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"name":"custodian","description":"A
+        different sort of cron","version":"1.2.0","main":"custodian.js","engines":{"node":"~0.4.11"},"dependencies":{"node-mailer":"","dateformat":"","daemon":"0.4.1"},"devDependencies":{},"_npmUser":{"name":"jvinet","email":"jvinet@gmail.com"},"_id":"custodian@1.2.0","_engineSupported":true,"_npmVersion":"1.0.103","_nodeVersion":"v0.4.12","_defaultsLoaded":true,"dist":{"shasum":"7fc24b9fd7a1d02f7f2bfaa8e86de7b6073553d1","tarball":"https://registry.npmjs.org/custodian/-/custodian-1.2.0.tgz","integrity":"sha512-FpdMRFHFmZB0ediKkqMS+0OUT5R2ZN1Lk2P/oa6XjngzyXaadCSwn1jm89WRNBFD/FS3ZP3pJ7/e+teRNlOi0w==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCIQClaxLWNed/a8MdgtsHyiY6UwX7ZyTjesu7AiQow3yrXgIgL2mFMITuc72BkceCgo29Ffn+YnM9yQQ816WYSe97pMs="}]},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}]},"1.2.1":{"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"name":"custodian","description":"A
+        different sort of cron","version":"1.2.1","main":"custodian.js","engines":{"node":"~0.6.7"},"dependencies":{"node-mailer":"","dateformat":"","daemon":"0.4.1"},"devDependencies":{},"_npmUser":{"name":"jvinet","email":"jvinet@gmail.com"},"_id":"custodian@1.2.1","_engineSupported":true,"_npmVersion":"1.1.0-beta-10","_nodeVersion":"v0.6.7","_defaultsLoaded":true,"dist":{"shasum":"8d5f3780313e7f0e4c25b027d1a4bf99b939f1fd","tarball":"https://registry.npmjs.org/custodian/-/custodian-1.2.1.tgz","integrity":"sha512-/Ux00LtAyblHQgY7eFa/OYn9m/mP9xqdnaTSFAiSu4WMbFukgwlJItfqsv1ERTaAoJPcnyYq8Cc5036wjTMMIg==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCIQDS5uqLXqTIRWAuaq37pzDvgLgVTqQMhA8oYfdWVhi4JwIge30NuZk5Gn1yT7FlPvuFWRKLYXE0F9nL9F0lftDhVQs="}]},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}]},"1.2.2":{"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"name":"custodian","description":"A
+        different sort of cron","version":"1.2.2","main":"custodian.js","bin":{"custodian":"custodian.js"},"engines":{"node":"~0.6.7"},"repository":{"type":"git","url":"git://github.com/BetSmartMedia/custodian.git"},"dependencies":{"node-mailer":"","dateformat":"","daemon":"0.4.1"},"devDependencies":{},"_npmUser":{"name":"jvinet","email":"jvinet@gmail.com"},"_id":"custodian@1.2.2","_engineSupported":true,"_npmVersion":"1.1.0-beta-10","_nodeVersion":"v0.6.7","_defaultsLoaded":true,"dist":{"shasum":"c0aa139bce31f44525ef484a2825b33883d07695","tarball":"https://registry.npmjs.org/custodian/-/custodian-1.2.2.tgz","integrity":"sha512-Zgo8J3Zyxy1c5ryVuyjXNq5A6nW4I/KGt39WrSFGl9adF1uqYjtQXG0yE3ApPma98i56Q+h2VEz0jqeTveruBg==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEYCIQCqSNpGkM8H9ApQjY87aPZ3/Gwx8SHh0Y3X6zuvaPFgHwIhAIa/orQVMivxqEoAQNBmKZ6TW549qbyC4UsKQtIV68fG"}]},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}]},"1.2.3":{"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"name":"custodian","description":"A
+        different sort of cron","version":"1.2.3","main":"custodian.js","bin":{"custodian":"custodian.js"},"engines":{"node":"~0.6.7"},"repository":{"type":"git","url":"git://github.com/BetSmartMedia/custodian.git"},"dependencies":{"node-mailer":"","dateformat":"","daemon":"0.4.1"},"devDependencies":{},"_npmUser":{"name":"jvinet","email":"jvinet@gmail.com"},"_id":"custodian@1.2.3","_engineSupported":true,"_npmVersion":"1.1.0-beta-10","_nodeVersion":"v0.6.7","_defaultsLoaded":true,"dist":{"shasum":"eda077b461b08b34108ff1f095b56b3e137dcda2","tarball":"https://registry.npmjs.org/custodian/-/custodian-1.2.3.tgz","integrity":"sha512-yLvY+/lgZ5pds2VdhI50k/mXo17wcgNWcCpdrXZ6kIe0SztS9lIQ6vs1fZWDyJ0zWmuxbrAyHM8+FXAEjyfzmA==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCIQD1JosDbz8eofSndpZ+wb+PsEWdoL9Lcj/hkQUEqlcKZQIgPqzbHwQqeUeUswBBxq8bq6RQ3/T+04Ja6H6jKRebTxs="}]},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}]},"1.2.4":{"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"name":"custodian","description":"A
+        different sort of cron","version":"1.2.4","main":"custodian.js","bin":{"custodian":"custodian.js"},"engines":{"node":"~0.6.10"},"repository":{"type":"git","url":"git://github.com/BetSmartMedia/custodian.git"},"dependencies":{"node-mailer":"","dateformat":"","daemon":"0.4.1"},"devDependencies":{},"_npmUser":{"name":"jvinet","email":"jvinet@gmail.com"},"_id":"custodian@1.2.4","_engineSupported":false,"_npmVersion":"1.1.0-beta-10","_nodeVersion":"v0.6.7","_defaultsLoaded":true,"dist":{"shasum":"3aca3e07f47c33cdf65fe08038b13d569e6529ad","tarball":"https://registry.npmjs.org/custodian/-/custodian-1.2.4.tgz","integrity":"sha512-hPVbRjPdEpOyZykFwLW7ZBsn4Ry0mdH75cCUgEQVlqqxgQYYmTU5o1EQXbr3gilvX07EAS7766NAOPyV/+hxAQ==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEYCIQDVjxp43shSC/BGXlqB3dGwtwaaiqaRP0JR/qNv3Gz1TQIhANJQWDO4iZhBHddvMy/AjRVrmOUN5ew+AxR5BkgGF0fy"}]},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}]},"1.2.5":{"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"name":"custodian","description":"A
+        different sort of cron","version":"1.2.5","main":"custodian.js","bin":{"custodian":"custodian.js"},"engines":{"node":"~0.6.10"},"repository":{"type":"git","url":"git://github.com/BetSmartMedia/custodian.git"},"dependencies":{"dateformat":"","daemon":"0.4.1","nodemailer":"0.2.4"},"devDependencies":{},"_npmUser":{"name":"jvinet","email":"jvinet@gmail.com"},"_id":"custodian@1.2.5","_engineSupported":false,"_npmVersion":"1.1.0-beta-10","_nodeVersion":"v0.6.7","_defaultsLoaded":true,"dist":{"shasum":"3403f673f9e2c57119377c99ae531c269e643a42","tarball":"https://registry.npmjs.org/custodian/-/custodian-1.2.5.tgz","integrity":"sha512-pq2PQa2qEkQwbp0fiu2mcCtMF/t4lNpEoQjpQRqdggHo2ivw6DfOnH92Mj72VK9XTxuZONjYpwBWAsaLeako5Q==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCIQDsOjwlSBPfLcMR3p0jibmTSFnortrDJq164g8RMjmdgAIgJdQ4avo+F9hQHwaefieoo+/ydfkcev+0ktChnpJwlSk="}]},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}]},"1.2.6":{"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"name":"custodian","description":"A
+        different sort of cron","version":"1.2.6","main":"custodian.js","bin":{"custodian":"custodian.js"},"engines":{"node":"~0.6.0"},"repository":{"type":"git","url":"git://github.com/BetSmartMedia/custodian.git"},"dependencies":{"dateformat":"","daemon":"0.4.1","nodemailer":"0.2.4"},"devDependencies":{},"_npmUser":{"name":"jvinet","email":"jvinet@gmail.com"},"_id":"custodian@1.2.6","optionalDependencies":{},"_engineSupported":true,"_npmVersion":"1.1.16","_nodeVersion":"v0.6.15","_defaultsLoaded":true,"dist":{"shasum":"156a649a06b00d0a8127d401fd318a9478248039","tarball":"https://registry.npmjs.org/custodian/-/custodian-1.2.6.tgz","integrity":"sha512-gD/yk5xcCPgyf7kC6KgxglfBdDMO0gDmVxKx3XdUGv4uF31iwwIFjjQe4zP9I7lCvu/S4yq3VigXxjGo+boGtA==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEYCIQCvp9B+XrGdTtydTf/hvMoFIElfATTIWbolFYSnEv5bzAIhAPitTQe4sgB+KwX8tTdO6QMldT/FWJUE9fxaDmMM4j65"}]},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}]},"1.2.8":{"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"name":"custodian","description":"A
+        different sort of cron","version":"1.2.8","main":"custodian.js","bin":{"custodian":"custodian.js"},"engines":{"node":"~0.6.0"},"repository":{"type":"git","url":"git://github.com/BetSmartMedia/custodian.git"},"dependencies":{"dateformat":"","daemon":"0.4.1","nodemailer":"0.2.4"},"devDependencies":{},"_npmUser":{"name":"jvinet","email":"jvinet@gmail.com"},"_id":"custodian@1.2.8","optionalDependencies":{},"_engineSupported":true,"_npmVersion":"1.1.18","_nodeVersion":"v0.6.16","_defaultsLoaded":true,"dist":{"shasum":"040f1a4798742dd85f1a3b1d366b266d146c7e00","tarball":"https://registry.npmjs.org/custodian/-/custodian-1.2.8.tgz","integrity":"sha512-VaA0VHThbTW8j8LGcnlSytM8eLXD35Wh9vqE2uG3eLIAuWNL3Iuu/jNdt46yaq1ODWuPCQ2TFMUs4G9YHSPxgg==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCIQD4KQdo9dJRosUD0SS17nRCzOLd2zhEED89xc+m4kaHZQIgR2bO+XicoU5XWQF7CArJQhVfuVhXrtbft4YJHCzqSHg="}]},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}]},"1.3.0":{"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"name":"custodian","description":"A
+        process watchdog and command scheduler","version":"1.3.0","main":"custodian.js","bin":{"custodian":"custodian.js"},"engines":{"node":">=0.6.0
+        <0.9.0"},"scripts":{"test":"node test.js"},"repository":{"type":"git","url":"git://github.com/BetSmartMedia/custodian.git"},"dependencies":{"dateformat":"","daemon":"0.4.1","nodemailer":"~0.3.28","shell-quote":"0.0.1"},"devDependencies":{},"_id":"custodian@1.3.0","dist":{"shasum":"4a90f2c1a276479f96cb8edb5e67aea6c956ca44","tarball":"https://registry.npmjs.org/custodian/-/custodian-1.3.0.tgz","integrity":"sha512-gp3vVESXW86uzHfP70de36triGHPvvn9wCBsPGY2VbC8v7ig23JWCQPxo7yoU33Vg9BB41t/F+QPM76n/i/ykA==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEQCIHocsAYUrv8ZVsVT2ZVRM11mhNSFiorDut97+0YPUGjZAiAS3JEf4mTG3cp1fD1yraVOQDGEzUR85zntwj3iI89pTQ=="}]},"_npmVersion":"1.1.69","_npmUser":{"name":"jvinet","email":"jvinet@gmail.com"},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}]},"1.3.1":{"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"name":"custodian","description":"A
+        process watchdog and command scheduler","version":"1.3.1","main":"custodian.js","bin":{"custodian":"custodian.js"},"engines":{"node":">=0.8.0
+        <0.11.0"},"scripts":{"test":"node test.js"},"repository":{"type":"git","url":"git://github.com/BetSmartMedia/custodian.git"},"dependencies":{"dateformat":"","daemon":"1.1.0","nodemailer":"~0.3.28","shell-quote":"0.0.1"},"devDependencies":{},"_id":"custodian@1.3.1","dist":{"shasum":"5cc17364f6b299201b02b58d5235138e454b0a35","tarball":"https://registry.npmjs.org/custodian/-/custodian-1.3.1.tgz","integrity":"sha512-gKnfVcLitg04ITiK72ud/t4Gg20XVNddIOLwGjUKTIwBcWspb6yfWut6lKdW7ygmHekoeP11YwmnCmCPyQJBPw==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCID4zWgj6MmFK2n/dauxpCnKfZHYKKrCOyQKj4NOVRxjkAiEA2YYR5LbkT+bsfLlxjcOg8UjkOzun8iwPyuUAh0OvW/s="}]},"_from":".","_npmVersion":"1.2.18","_npmUser":{"name":"jvinet","email":"jvinet@gmail.com"},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}]},"1.3.4":{"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"name":"custodian","description":"A
+        process watchdog and command scheduler","version":"1.3.4","main":"custodian.js","bin":{"custodian":"custodian.js"},"engines":{"node":">=0.8.0"},"scripts":{"test":"node
+        test.js"},"repository":{"type":"git","url":"git://github.com/BetSmartMedia/custodian.git"},"dependencies":{"dateformat":"","daemon":"1.1.0","nodemailer":"~0.3.28","shell-quote":"0.0.1"},"devDependencies":{},"gitHead":"4c61db7dd438541fde89a1176e03a3f095468140","bugs":{"url":"https://github.com/BetSmartMedia/custodian/issues"},"homepage":"https://github.com/BetSmartMedia/custodian","_id":"custodian@1.3.4","_shasum":"740146509fd39a009e239298c2918f583a8fd494","_from":".","_npmVersion":"2.7.4","_nodeVersion":"0.12.0","_npmUser":{"name":"jvinet","email":"jvinet@gmail.com"},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}],"dist":{"shasum":"740146509fd39a009e239298c2918f583a8fd494","tarball":"https://registry.npmjs.org/custodian/-/custodian-1.3.4.tgz","integrity":"sha512-EU6VCF579zeWYOlyhCuWQAtt/7oky1LnIrIlb9VcC+Yoq9k90+P5NGVejGWTPCvwwyXTcqxOSUzxMpVpDSPPUA==","signatures":[{"keyid":"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA","sig":"MEUCIC8XRwFz2x6RZHR/ta5GtXBuExyIpbjFzhI2JMxIqWUEAiEA9sEkLMFxng/QIOD/ClOKfnqDZXK+FgGVfaYRTf0wqbU="}]}}},"maintainers":[{"name":"jvinet","email":"jvinet@gmail.com"}],"time":{"modified":"2022-06-14T06:09:10.259Z","created":"2012-01-09T22:17:37.775Z","1.2.0":"2012-01-09T22:18:30.083Z","1.2.1":"2012-01-10T00:04:07.899Z","1.2.2":"2012-01-12T18:47:49.701Z","1.2.3":"2012-02-03T23:45:53.842Z","1.2.4":"2012-02-08T19:54:07.474Z","1.2.5":"2012-02-21T18:52:03.276Z","1.2.6":"2012-04-15T23:42:15.702Z","1.2.8":"2012-05-17T18:11:44.673Z","1.3.0":"2013-01-17T21:34:52.925Z","1.3.1":"2013-04-19T19:29:35.887Z","1.3.4":"2015-03-31T23:06:10.091Z"},"author":{"name":"Judd
+        Vinet","email":"judd@betsmartmedia.com"},"repository":{"type":"git","url":"git://github.com/BetSmartMedia/custodian.git"},"readme":"##
+        Custodian\n\nCustodian is a program somewhat similar to cron.  Unlike cron,
+        Custodian\ncannot run programs at specific times, only at intervals (eg, every
+        5\nminutes, or every 2 seconds).\n\nCustodian has a unique spin, however:
+        It can also run programs *after*\nanother program has completed. This is quite
+        useful in scenarios where you\nhave a number of programs that need to be run
+        at regular intervals and in\na specific order.\n\nIn addition to relative
+        scheduling, Custodian also provides basic watchdog\ncapabilities. When Custodian
+        starts up, it will start all watched processes,\nand if one dies, it will
+        attempt to restart it and notify you.\n\n\n### Example: Scheduling\n\nSay
+        you have a script that fetches an external XML data feed, processes\nit, and
+        loads it into your local database.  Once the ETL process is\ncomplete, you
+        want to perform some post-processing actions on it.\n\nThis is an ideal use
+        case for Custodian.  You can accomplish this with the\nfollowing configuration
+        excerpt:\n\n```json\n{\n\t\"schedule\": {\n\t\t\"etl\":       {\"cmd\":\"etl.js\",
+        \"when\":\"every 60s\"},\n\t\t\"postproc1\": {\"cmd\":\"pp1.js\", \"when\":\"after
+        postproc1\"},\n\t\t\"postproc2\": {\"cmd\":\"pp2.js\", \"when\":\"after postproc1\"}\n\t}\n}\n```\n\n###
+        Example: Watchdog\n\nThis excerpt will log all output from the watch_me.sh
+        script to a file. If\nthe script dies, it will restart it and notify the administrator.\n\n```json\n{\n\t\"admin\":
+        \"admin@example.com\",\n\n\t\"daemon\": true,\n\t\"log\": \"custodian.log\",\n\t\"pid\":
+        \"custodian.pid\",\n\n\t\"watch\": {\n\t\t\"watch1\": {\"cmd\":\"watch_me.sh\",
+        \"notify\":true, \"output\":\"watch1.log\"}\n\t}\n}\n```\n\n### Example: Environment
+        variables\n\nTo set environment variables that will apply to all jobs, you
+        can use the\n\"env\" key in your configuration:\n\n```json\n{\n\t\"env\":
+        {\n\t\t\"API_KEY\": \"abcdef1234567890\"\n\t}\n}\n```\n\nYou can also specify
+        environment variables inside `\"schedule\"` and `\"watch\"`\njobs:\n\n```json\n{\n\t\"env\":
+        {\n\t\t\"API_KEY\": \"abcdef1234567890\"\n\t},\n\t\"watch\": {\n\t\t\"web-server\":
+        {\n\t\t\t\"cmd\": \"npm start myapp\",\n\t\t\t\"env\": {\n\t\t\t\t\"PORT\":
+        1234\n\t\t\t}\n\t\t}\n\t}\n}\n```\n\nConfiguration environment variables override
+        pre-existing environment variables,\nand job-specific variables override both.\n\n###
+        Example: Killing jobs that run too long\n\nSuppose you have a job that occasionally
+        hangs, you can specify the \"maxtime\"\nparameter and custodian will kill
+        the process if it runs beyond it''s limit:\n\n```json\n{\n\t\"schedule\":
+        {\n\t\t\"my-job\": {\n\t\t\t\"cmd\": \"do a thing that sometimes fails\",\n\t\t\t\"maxtime\":
+        \"10s\"\n\t\t}\n\t}\n}\n```\n\nNow if `my-job` runs more than 10 seconds,
+        custodian will kill it for us.\nAnother interesting use of \"maxtime\" is
+        to periodically restart watched jobs.\n","homepage":"https://github.com/BetSmartMedia/custodian","bugs":{"url":"https://github.com/BetSmartMedia/custodian/issues"},"readmeFilename":"README.md","users":{"coyool":true}}'
+    adapter_metadata:
+      vcr_decompressed: gzip
+  recorded_at: Wed, 18 Sep 2024 18:51:05 GMT
+recorded_with: VCR 6.2.0

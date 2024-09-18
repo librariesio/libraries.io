@@ -40,7 +40,7 @@ module PackageManager
     end
 
     def self.project(name)
-      get("http://registry.npmjs.org/#{name.gsub('/', '%2F')}")
+      get("https://registry.npmjs.org/#{name.gsub('/', '%2F')}")
     end
 
     def self.deprecation_info(db_project)
@@ -145,16 +145,24 @@ module PackageManager
         .find { |v| v[:number] == version_string }
     end
 
-    def self.dependencies(_name, version, mapped_project)
+    def self.dependencies(name, version, mapped_project)
       vers = mapped_project.fetch(:versions, {})[version]
       if vers.nil?
         StructuredLog.capture("DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: version, message: "version not found in upstream" })
         return []
       end
 
-      map_dependencies(vers.fetch("dependencies", {}), "runtime") +
-        map_dependencies(vers.fetch("devDependencies", {}), "Development") +
-        map_dependencies(vers.fetch("optionalDependencies", {}), "Optional", optional: true)
+      deps = map_dependencies(vers.fetch("dependencies", {}), "runtime") +
+             map_dependencies(vers.fetch("devDependencies", {}), "Development") +
+             map_dependencies(vers.fetch("optionalDependencies", {}), "Optional", optional: true)
+
+      deps.each do |d|
+        # Via https://docs.npmjs.com/cli/v9/configuring-npm/package-json#dependencies:
+        #   `"" (just an empty string) Same as *`
+        d[:requirements] = "*" if d[:requirements].blank?
+      end
+
+      deps
     end
   end
 end
