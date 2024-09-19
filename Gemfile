@@ -99,15 +99,12 @@ group :development do
   gem "annotate"
   gem "brakeman", require: false
   gem "listen"
-  gem "pry-rails"
   gem "rubocop"
   gem "sql_queries_count"
 end
 
 group :development, :test do
-  gem "byebug"
-  gem "pry"
-  gem "pry-byebug"
+  gem "debug", "~> 1.9"
   gem "rspec-rails"
 end
 
