@@ -672,7 +672,7 @@ class Project < ApplicationRecord
 
     # Don't overload NPM by only allowing 100 concurrent requests at a time.
     if downcased_platform == "npm"
-      npm_semaphore = ExpiringSemaphore.new(name: "check_status_npm", size: 100, ttl_seconds: 5)
+      npm_semaphore = ExpiringSemaphore.new(name: "check_status_npm", size: 10, ttl_seconds: 5)
       lock_acquired = npm_semaphore.acquire
       if lock_acquired == false
         StructuredLog.capture("CHECK_STATUS_THROTTLE", { platform: platform, name: name })
