@@ -680,7 +680,11 @@ class Project < ApplicationRecord
       end
     end
 
-    response = Typhoeus.get(url)
+    begin
+      response = Typhoeus.get(url)
+    ensure
+      npm_semaphore&.release
+    end
 
     StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if downcased_platform == "npm"
 
@@ -708,8 +712,6 @@ class Project < ApplicationRecord
       update(status: nil, audit_comment: "Response #{response.response_code}")
     end
     # only update status to nil if the response code is a success
-  ensure
-    npm_semaphore&.release
   end
 
   def unique_project_requirement_ranges
