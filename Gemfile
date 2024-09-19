@@ -14,6 +14,7 @@ gem "bootstrap-sass"
 gem "brotli"
 gem "bundler"
 gem "charlock_holmes", ">= 0.7.5"
+gem "chartkick", "~> 3.4"
 gem "chronic"
 gem "commonmarker"
 gem "concurrent-ruby-ext"
@@ -73,12 +74,12 @@ gem "rack-cors", require: "rack/cors"
 gem "rails", "7.0.8.1"
 gem "rails-timeago", git: "https://github.com/librariesio/rails-timeago"
 gem "rainbow", "~> 3"
-gem "rb-readline"
 gem "rdoc"
 gem "redis"
 gem "rubyzip", "~> 2.3.0"
 gem "sanitize-url"
 gem "sassc-rails"
+gem "scenic", "~> 1.7"
 gem "semantic", git: "https://github.com/librariesio/semantic"
 gem "semantic_range"
 gem "sidekiq", "< 7"
@@ -99,15 +100,12 @@ group :development do
   gem "annotate"
   gem "brakeman", require: false
   gem "listen"
-  gem "pry-rails"
   gem "rubocop"
   gem "sql_queries_count"
 end
 
 group :development, :test do
-  gem "byebug"
-  gem "pry"
-  gem "pry-byebug"
+  gem "debug", "~> 1.9"
   gem "rspec-rails"
 end
 
@@ -131,7 +129,3 @@ group :production do
   gem "bugsnag"
   gem "rails_safe_tasks"
 end
-
-gem "scenic", "~> 1.7"
-
-gem "chartkick", "~> 3.4"
