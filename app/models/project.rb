@@ -670,7 +670,7 @@ class Project < ApplicationRecord
     # "Hidden" is a state set by admins, and we don't want to override that decision.
     return if hidden?
 
-    # Don't overload NPM by only allowing 100 concurrent requests at a time.
+    # Don't overload NPM by limiting the number of concurrent requests we make.
     if downcased_platform == "npm"
       npm_semaphore = ExpiringSemaphore.new(name: "check_status_npm", size: 10, ttl_seconds: 5)
       lock_acquired = npm_semaphore.acquire
