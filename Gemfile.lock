@@ -450,7 +450,7 @@ GEM
       psych (>= 4.0.0)
     redis (4.8.1)
     regexp_parser (2.8.1)
-    reline (0.5.10)
+    reline (0.5.8)
       io-console (~> 0.5)
     request_store (1.4.1)
       rack (>= 1.4)
