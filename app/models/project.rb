@@ -675,8 +675,8 @@ class Project < ApplicationRecord
       npm_semaphore = ExpiringSemaphore.new(name: "check_status_npm", size: 100, ttl_seconds: 5)
       lock_acquired = npm_semaphore.acquire
       if lock_acquired == false
-        raise CheckStatusThrottled
         StructuredLog.capture("CHECK_STATUS_THROTTLE", { platform: platform, name: name })
+        raise CheckStatusThrottled
       end
     end
 
