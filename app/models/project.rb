@@ -59,6 +59,11 @@
 #  index_projects_search_on_name                    ((COALESCE((name)::text, ''::text)) gist_trgm_ops) USING gist
 #
 class Project < ApplicationRecord
+  # We currently have too many concurrent requests for this projects' upstream package repo/index,
+  # by our own definition.
+  class CheckStatusThrottled < StandardError; end
+
+  # We received a 429 from the upstream package repo/index.
   class CheckStatusRateLimited < StandardError; end
 
   require "query_counter"
@@ -657,6 +662,7 @@ class Project < ApplicationRecord
   end
 
   def check_status
+    downcased_platform = platform.downcase
     url = platform_class.check_status_url(self)
     update_column(:status_checked_at, DateTime.current)
     return if url.blank?
@@ -664,18 +670,28 @@ class Project < ApplicationRecord
     # "Hidden" is a state set by admins, and we don't want to override that decision.
     return if hidden?
 
+    # Don't overload NPM by only allowing 100 concurrent requests at a time.
+    if downcased_platform == "npm"
+      npm_semaphore = ExpiringSemaphore.new(name: "check_status_npm", size: 100, ttl_seconds: 5)
+      lock_acquired = npm_semaphore.acquire
+      if lock_acquired == false
+        raise CheckStatusThrottled
+        StructuredLog.capture("CHECK_STATUS_THROTTLE", { platform: platform, name: name })
+      end
+    end
+
     response = Typhoeus.get(url)
 
-    StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if platform.downcase == "npm"
+    StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if downcased_platform == "npm"
 
-    if platform.downcase.in?(%w[packagist npm]) && [302, 404].include?(response.response_code)
+    if downcased_platform.in?(%w[packagist npm]) && [302, 404].include?(response.response_code)
       # NPM 302 happens with privately scoped packages, which should be considered Removed.
       update(status: "Removed", audit_comment: "Response #{response.response_code}")
-    elsif platform.downcase == "go" && [302, 400, 404].include?(response.response_code)
+    elsif downcased_platform == "go" && [302, 400, 404].include?(response.response_code)
       # pkg.go.dev can be 404 on first-hit for a new package (or alias for the package), so ensure that the package existed in the past
       # by ensuring its age is old enough to not be just uncached by pkg.go.dev yet.
       update(status: "Removed", audit_comment: "Response #{response.response_code}") if created_at < 1.week.ago
-    elsif !platform.downcase.in?(%w[packagist go]) && [400, 404, 410].include?(response.response_code)
+    elsif !downcased_platform.in?(%w[packagist go]) && [400, 404, 410].include?(response.response_code)
       update(status: "Removed", audit_comment: "Response #{response.response_code}")
     elsif response.timed_out? || response.response_code == 429 || (response.response_code >= 500 && response.response_code <= 599) || response.response_code == 0
       # failure could be a problem checking so let's just log for now
@@ -692,6 +708,8 @@ class Project < ApplicationRecord
       update(status: nil, audit_comment: "Response #{response.response_code}")
     end
     # only update status to nil if the response code is a success
+  ensure
+    npm_semaphore&.release
   end
 
   def unique_project_requirement_ranges

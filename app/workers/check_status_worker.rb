@@ -7,6 +7,11 @@ class CheckStatusWorker
   def perform(project_id)
     project = Project.find_by_id(project_id)
     project.try(:check_status)
+  rescue Project::CheckStatusThrottled
+    # If we hit the throttle, unset the new status_checked_at and try again in 5 minutes,
+    # since it's cheap to try again.
+    project.update_column(:status_checked_at, nil)
+    CheckStatusWorker.perform_in(5.minutes)
   rescue Project::CheckStatusRateLimited
     # We eagerly updated status_checked_at before checking status, so reset it to
     # nil if we get 429'ed, and it'll get picked up first by the nightly projects:check_status
