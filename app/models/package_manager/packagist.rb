@@ -97,9 +97,9 @@ module PackageManager
     end
 
     def self.acceptable_versions(versions)
-      versions.select do |k, _v|
+      versions.select do |v|
         # See: https://getcomposer.org/doc/articles/versions.md#branches
-        (k =~ /^dev-.*/i).nil? && (k =~ /\.x-dev$/i).nil?
+        (v["version"] =~ /^dev-.*/i).nil? && (v["version"] =~ /\.x-dev$/i).nil?
       end
     end
 
