@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "pry"
 require "simplecov"
 require "custom_matchers"
 require "audited/rspec_matchers"
