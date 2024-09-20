@@ -3,14 +3,21 @@
 # The RateLimitService allows you to run a named item at most N
 # times per second, and if the rate limit is exceeded, it raises
 # OverLimitError instead of running the block. If OverLimitError
-# is raised, the error includes a seconds_to_wait field telling
+# is raised, the error includes a exceeded_by field telling
 # you how long you need to wait before you retry (based on how
 # many times we already tried to run the named item in the current
 # window). The count of how many times we've run already is kept
 # in Redis so it's shared across jobs and threads.
 
 class RateLimitService
-  class OverLimitError < StandardError; end
+  class OverLimitError < StandardError
+    attr_reader :exceeded_by
+
+    def initialize(message, exceeded_by)
+      @exceeded_by = exceeded_by
+      super(message)
+    end
+  end
 
   # @param [String] what_to_limit
   # @param [Integer] limit the limit
@@ -43,7 +50,10 @@ class RateLimitService
 
       exceeded_by = incr_result - @limit
       if exceeded_by.positive?
-        raise OverLimitError, "Rate limit for '#{@what_to_limit}' of #{@limit} per #{@period} seconds exceeded by #{exceeded_by}"
+        raise OverLimitError.new(
+          "Rate limit for '#{@what_to_limit}' of #{@limit} per #{@period} seconds exceeded by #{exceeded_by}",
+          exceeded_by
+        )
       else
         yield
       end

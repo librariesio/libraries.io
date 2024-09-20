@@ -16,22 +16,31 @@ describe RateLimitService do
       3.times do
         rate_limiter.rate_limited { true }
       end
-      expect { rate_limiter.rate_limited { true } }.to raise_error(RateLimitService::OverLimitError)
+      expect { rate_limiter.rate_limited { true } }.to raise_error do |e|
+        expect(e.class).to eq(RateLimitService::OverLimitError)
+        expect(e.exceeded_by).to eq(1)
+      end
     end
 
     it "limits rate after specified count with a different RateLimitService instance each time" do
       3.times do
         rate_limiter.rate_limited { true }
       end
-      expect { rate_limiter.rate_limited { true } }.to raise_error(RateLimitService::OverLimitError)
+      expect { rate_limiter.rate_limited { true } }.to raise_error do |e|
+        expect(e.class).to eq(RateLimitService::OverLimitError)
+        expect(e.exceeded_by).to eq(1)
+      end
     end
 
     it "uses a different key after time passes" do
       3.times do
         rate_limiter.rate_limited { true }
       end
-      3.times do
-        expect { rate_limiter.rate_limited { true } }.to raise_error(RateLimitService::OverLimitError)
+      3.times do |i|
+        expect { rate_limiter.rate_limited { true } }.to raise_error do |e|
+          expect(e.class).to eq(RateLimitService::OverLimitError)
+          expect(e.exceeded_by).to eq(i + 1)
+        end
       end
 
       allow(Time).to receive(:current).and_return(period.seconds.from_now)
@@ -39,8 +48,11 @@ describe RateLimitService do
       3.times do
         rate_limiter.rate_limited { true }
       end
-      3.times do
-        expect { rate_limiter.rate_limited { true } }.to raise_error(RateLimitService::OverLimitError)
+      3.times do |i|
+        expect { rate_limiter.rate_limited { true } }.to raise_error do |e|
+          expect(e.class).to eq(RateLimitService::OverLimitError)
+          expect(e.exceeded_by).to eq(i + 1)
+        end
       end
     end
   end

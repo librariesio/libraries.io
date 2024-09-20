@@ -61,10 +61,10 @@
 class Project < ApplicationRecord
   # We currently have too many concurrent requests for this projects' upstream package repo/index,
   # by our own definition.
-  class CheckStatusThrottled < StandardError; end
+  class CheckStatusInternallyRateLimited < StandardError; end
 
   # We received a 429 from the upstream package repo/index.
-  class CheckStatusRateLimited < StandardError; end
+  class CheckStatusExternallyRateLimited < StandardError; end
 
   require "query_counter"
 
@@ -671,20 +671,12 @@ class Project < ApplicationRecord
     return if hidden?
 
     # Don't overload NPM by limiting the number of concurrent requests we make.
-    if downcased_platform == "npm"
-      npm_semaphore = ExpiringSemaphore.new(name: "check_status_npm", size: 10, ttl_seconds: 5)
-      lock_acquired = npm_semaphore.acquire
-      if lock_acquired == false
-        StructuredLog.capture("CHECK_STATUS_THROTTLE", { platform: platform, name: name })
-        raise CheckStatusThrottled
-      end
-    end
-
-    begin
-      response = Typhoeus.get(url)
-    ensure
-      npm_semaphore&.release
-    end
+    response = if downcased_platform == "npm"
+                 RateLimitService.new(what_to_limit: "check_status_npm", limit: 10, period: 1)
+                   .rate_limited { Typhoeus.get(url) }
+               else
+                 Typhoeus.get(url)
+               end
 
     StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if downcased_platform == "npm"
 
@@ -700,7 +692,7 @@ class Project < ApplicationRecord
     elsif response.timed_out? || response.response_code == 429 || (response.response_code >= 500 && response.response_code <= 599) || response.response_code == 0
       # failure could be a problem checking so let's just log for now
       StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, status_code: response.response_code })
-      raise CheckStatusRateLimited if response.response_code == 429
+      raise CheckStatusExternallyRateLimited if response.response_code == 429
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(self)
       if result[:is_deprecated]
@@ -712,6 +704,9 @@ class Project < ApplicationRecord
       update(status: nil, audit_comment: "Response #{response.response_code}")
     end
     # only update status to nil if the response code is a success
+  rescue RateLimitService::OverLimitError => e
+    StructuredLog.capture("CHECK_STATUS_RATE_LIMITED", { platform: platform, name: name, exceeded_by: e.exceeded_by })
+    raise CheckStatusInternallyRateLimited
   end
 
   def unique_project_requirement_ranges
