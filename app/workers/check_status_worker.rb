@@ -7,15 +7,12 @@ class CheckStatusWorker
   def perform(project_id)
     project = Project.find_by_id(project_id)
     project.try(:check_status)
-  rescue Project::CheckStatusInternallyRateLimited
-    # If we hit the throttle, unset the new status_checked_at and try again in 5 minutes,
-    # since it's cheap to try again.
+  rescue Project::CheckStatusInternallyRateLimited, Project::CheckStatusExternallyRateLimited
+    # status_check_at is eagerly updated in Project#check_status, so reset it to nil
+    # so we can tell if it was throttled.
     project.update_column(:status_checked_at, nil)
+    # By retrying in 5 minutes, when we have a big queue of CheckStatusWorker, we'll
+    # work it down gradually by retrying things 5 minutes at a time.
     CheckStatusWorker.perform_in(5.minutes)
-  rescue Project::CheckStatusExternallyRateLimited
-    # We eagerly updated status_checked_at before checking status, so reset it to
-    # nil if we get 429'ed, and it'll get picked up first by the nightly projects:check_status
-    # rake  task.
-    project.update_column(:status_checked_at, nil)
   end
 end
