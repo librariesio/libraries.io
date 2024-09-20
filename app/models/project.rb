@@ -59,7 +59,12 @@
 #  index_projects_search_on_name                    ((COALESCE((name)::text, ''::text)) gist_trgm_ops) USING gist
 #
 class Project < ApplicationRecord
-  class CheckStatusRateLimited < StandardError; end
+  # We currently have too many concurrent requests for this projects' upstream package repo/index,
+  # by our own definition.
+  class CheckStatusInternallyRateLimited < StandardError; end
+
+  # We received a 429 from the upstream package repo/index.
+  class CheckStatusExternallyRateLimited < StandardError; end
 
   require "query_counter"
 
@@ -657,6 +662,7 @@ class Project < ApplicationRecord
   end
 
   def check_status
+    downcased_platform = platform.downcase
     url = platform_class.check_status_url(self)
     update_column(:status_checked_at, DateTime.current)
     return if url.blank?
@@ -664,23 +670,29 @@ class Project < ApplicationRecord
     # "Hidden" is a state set by admins, and we don't want to override that decision.
     return if hidden?
 
-    response = Typhoeus.get(url)
+    # Don't overload NPM by limiting the number of concurrent requests we make.
+    response = if downcased_platform == "npm"
+                 RateLimitService.new(what_to_limit: "check_status_npm", limit: 10, period: 60)
+                   .rate_limited { Typhoeus.get(url) }
+               else
+                 Typhoeus.get(url)
+               end
 
-    StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if platform.downcase == "npm"
+    StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if downcased_platform == "npm"
 
-    if platform.downcase.in?(%w[packagist npm]) && [302, 404].include?(response.response_code)
+    if downcased_platform.in?(%w[packagist npm]) && [302, 404].include?(response.response_code)
       # NPM 302 happens with privately scoped packages, which should be considered Removed.
       update(status: "Removed", audit_comment: "Response #{response.response_code}")
-    elsif platform.downcase == "go" && [302, 400, 404].include?(response.response_code)
+    elsif downcased_platform == "go" && [302, 400, 404].include?(response.response_code)
       # pkg.go.dev can be 404 on first-hit for a new package (or alias for the package), so ensure that the package existed in the past
       # by ensuring its age is old enough to not be just uncached by pkg.go.dev yet.
       update(status: "Removed", audit_comment: "Response #{response.response_code}") if created_at < 1.week.ago
-    elsif !platform.downcase.in?(%w[packagist go]) && [400, 404, 410].include?(response.response_code)
+    elsif !downcased_platform.in?(%w[packagist go]) && [400, 404, 410].include?(response.response_code)
       update(status: "Removed", audit_comment: "Response #{response.response_code}")
     elsif response.timed_out? || response.response_code == 429 || (response.response_code >= 500 && response.response_code <= 599) || response.response_code == 0
       # failure could be a problem checking so let's just log for now
       StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, status_code: response.response_code })
-      raise CheckStatusRateLimited if response.response_code == 429
+      raise CheckStatusExternallyRateLimited if response.response_code == 429
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(self)
       if result[:is_deprecated]
@@ -692,6 +704,9 @@ class Project < ApplicationRecord
       update(status: nil, audit_comment: "Response #{response.response_code}")
     end
     # only update status to nil if the response code is a success
+  rescue RateLimitService::OverLimitError => e
+    StructuredLog.capture("CHECK_STATUS_RATE_LIMITED", { platform: platform, name: name, exceeded_by: e.exceeded_by })
+    raise CheckStatusInternallyRateLimited
   end
 
   def unique_project_requirement_ranges
