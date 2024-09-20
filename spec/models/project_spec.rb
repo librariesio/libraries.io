@@ -267,7 +267,7 @@ describe Project, type: :model do
 
         status_before = project.status
 
-        expect { project.check_status }.to raise_error(Project::CheckStatusRateLimited)
+        expect { project.check_status }.to raise_error(Project::CheckStatusExternallyRateLimited)
         project.reload
         expect(project.status).to eq(status_before)
       end
