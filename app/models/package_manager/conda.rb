@@ -94,8 +94,12 @@ module PackageManager
 
     def self.dependencies(name, version, _mapped_project)
       version_data = get_json("#{API_URL}/package/#{name}")["versions"]
-      deps = version_data.find { |item| item["number"] == version }&.dig("dependencies")&.map(&:split)
+      deps = version_data
+        .find { |item| item["number"] == version }
+        &.dig("dependencies")&.map(&:split)
+
       map_dependencies(deps, "runtime")
+        .each { |d| d[:requirements] = "*" if d[:requirements].blank? } # consider nil/blank requirements from the API as wildcard "*", since Bibliothecary does
     end
   end
 end
