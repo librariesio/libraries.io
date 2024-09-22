@@ -672,7 +672,7 @@ class Project < ApplicationRecord
 
     # Don't overload NPM by limiting the number of concurrent requests we make.
     response = if downcased_platform == "npm"
-                 RateLimitService.new(what_to_limit: "check_status_npm", limit: 10, period: 5)
+                 RateLimitService.new(what_to_limit: "check_status_npm", limit: 5, period: 5)
                    .rate_limited { Typhoeus.get(url) }
                else
                  Typhoeus.get(url)

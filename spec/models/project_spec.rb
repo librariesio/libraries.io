@@ -191,7 +191,10 @@ describe Project, type: :model do
   end
 
   describe "#check_status" do
-    before { travel_to DateTime.current }
+    before do
+      freeze_time
+      REDIS.keys("rate_limit:check_status_npm:*").each { |k| REDIS.del(k) }
+    end
 
     context "entire project deprecated with message" do
       let!(:project) { create(:project, platform: "NPM", name: "jade", status: "", updated_at: 1.week.ago) }
