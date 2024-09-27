@@ -734,14 +734,14 @@ class Project < ApplicationRecord
     if current_retry_after.present?
       # Block this attempt if we have stored a "retry-after" value, per worker box.
       StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, retry_after: current_retry_after })
-      raise CheckStatusInternallyRateLimited, current_retry_after
+      raise CheckStatusInternallyRateLimited, current_retry_after.to_i
     else
       # If the key isn't set, then we're safe to attempt a request.
       resp = Typhoeus.get(url)
       if resp.response_code == 429
         new_retry_after = if resp.headers["retry-after"].blank?
                             # A blank "retry-after" has been observed in some 429 responses, so use a safe default for those cases.
-                            1.minute.from_now
+                            1.minute
                           else
                             # It's possible to receive a "0" back when 429'ed, so add 1 to normalize.
                             # Based on testing, "retry-after" is sporadically random and ranges from 0..15, so we may need to rethink this.
