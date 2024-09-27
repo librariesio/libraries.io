@@ -193,7 +193,7 @@ describe Project, type: :model do
   describe "#check_status" do
     before do
       freeze_time
-      REDIS.keys("rate_limit:check_status_npm:*").each { |k| REDIS.del(k) }
+      REDIS.keys("check_status_npm:*").each { |k| REDIS.del(k) }
     end
 
     context "entire project deprecated with message" do
@@ -264,25 +264,41 @@ describe Project, type: :model do
     context "should not change status in case of error" do
       let!(:project) { create(:project, platform: "NPM", name: "coolpackage", status: nil, created_at: 1.month.ago) }
       let(:check_status_url) { PackageManager::NPM.check_status_url(project) }
+      let(:redis_key) { "#{Project::CHECK_STATUS_NPM_RETRY_AFTER}:#{Socket.gethostname}" }
 
-      it "error 429" do
-        WebMock.stub_request(:get, check_status_url).to_return(status: 429)
+      context "with a cached 429" do
+        before { REDIS.set(redis_key, 5, ex: 5) }
 
-        status_before = project.status
+        it "doesn't make a request and raises an error" do
+          status_before = project.status
 
-        expect { project.check_status }.to raise_error(Project::CheckStatusExternallyRateLimited)
-        project.reload
-        expect(project.status).to eq(status_before)
+          expect { project.check_status }.to raise_error(Project::CheckStatusInternallyRateLimited)
+          expect(project.reload.status).to eq(status_before)
+        end
       end
 
-      it "error 429" do
-        WebMock.stub_request(:get, check_status_url).to_return(status: 500)
+      context "with a 429 response" do
+        before { WebMock.stub_request(:get, check_status_url).to_return(status: 429, headers: { "retry-after" => 3 }) }
 
-        status_before = project.status
+        it "raises an error and caches the 'retry-after' header in redis" do
+          status_before = project.status
 
-        project.check_status
-        project.reload
-        expect(project.status).to eq(status_before)
+          expect { project.check_status }.to raise_error(Project::CheckStatusExternallyRateLimited)
+          expect(REDIS.get(redis_key).to_i).to eq(4)
+          expect(project.reload.status).to eq(status_before)
+        end
+      end
+
+      context "with a 500 response" do
+        before { WebMock.stub_request(:get, check_status_url).to_return(status: 500) }
+
+        it "doesn't change the status" do
+          status_before = project.status
+
+          project.check_status
+          project.reload
+          expect(project.status).to eq(status_before)
+        end
       end
     end
 

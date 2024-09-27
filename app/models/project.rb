@@ -61,10 +61,28 @@
 class Project < ApplicationRecord
   # We currently have too many concurrent requests for this projects' upstream package repo/index,
   # by our own definition.
-  class CheckStatusInternallyRateLimited < StandardError; end
+  # @param [Integer] retry_after_seconds the optional number of seconds to retry
+  #   after, if we have that info available.
+  class CheckStatusInternallyRateLimited < StandardError
+    attr_reader :retry_after_seconds
+
+    def initialize(retry_after_seconds = nil)
+      @retry_after_seconds = retry_after_seconds
+      super("Prevented ourselves from making a request.")
+    end
+  end
 
   # We received a 429 from the upstream package repo/index.
-  class CheckStatusExternallyRateLimited < StandardError; end
+  # @param [Integer] retry_after_seconds the optional number of seconds to retry
+  #   after, if we have that info available.
+  class CheckStatusExternallyRateLimited < StandardError
+    attr_reader :retry_after_seconds
+
+    def initialize(retry_after_seconds = nil)
+      @retry_after_seconds = retry_after_seconds
+      super("Prevented by upstream from making a request.")
+    end
+  end
 
   require "query_counter"
 
@@ -111,6 +129,7 @@ class Project < ApplicationRecord
     stars
     status
   ].freeze
+  CHECK_STATUS_NPM_RETRY_AFTER = "check_status_npm:retry_after"
 
   # Currently these are the fields defined in PackageManager::Base::MappingBuilder
   audited only: %w[status name description repository_url homepage keywords_array licenses]
@@ -672,8 +691,7 @@ class Project < ApplicationRecord
 
     # Don't overload NPM by limiting the number of concurrent requests we make.
     response = if downcased_platform == "npm"
-                 RateLimitService.new(what_to_limit: "check_status_npm", limit: 5, period: 5)
-                   .rate_limited { Typhoeus.get(url) }
+                 rate_limited_npm_request(url)
                else
                  Typhoeus.get(url)
                end
@@ -692,7 +710,7 @@ class Project < ApplicationRecord
     elsif response.timed_out? || response.response_code == 429 || (response.response_code >= 500 && response.response_code <= 599) || response.response_code == 0
       # failure could be a problem checking so let's just log for now
       StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, status_code: response.response_code })
-      raise CheckStatusExternallyRateLimited if response.response_code == 429
+      raise CheckStatusExternallyRateLimited, 5.minutes if response.response_code == 429
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(self)
       if result[:is_deprecated]
@@ -704,9 +722,38 @@ class Project < ApplicationRecord
       update(status: nil, audit_comment: "Response #{response.response_code}")
     end
     # only update status to nil if the response code is a success
-  rescue RateLimitService::OverLimitError => e
-    StructuredLog.capture("CHECK_STATUS_RATE_LIMITED", { platform: platform, name: name, exceeded_by: e.exceeded_by })
-    raise CheckStatusInternallyRateLimited
+  end
+
+  # Special-case of fetching package url for NPM, where we observe their rate-limiting and raise an error
+  # if we're exceeding their "retry-after" value.
+  def rate_limited_npm_request(url)
+    # This key needs to be host-specific so hosts don't overwrite each other's different values.
+    key = "#{Project::CHECK_STATUS_NPM_RETRY_AFTER}:#{Socket.gethostname}"
+    current_retry_after = REDIS.get(key)
+
+    if current_retry_after.present?
+      # Block this attempt if we have stored a "retry-after" value, per worker box.
+      StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, retry_after: current_retry_after })
+      raise CheckStatusInternallyRateLimited, current_retry_after
+    else
+      # If the key isn't set, then we're safe to attempt a request.
+      resp = Typhoeus.get(url)
+      if resp.response_code == 429
+        new_retry_after = if resp.headers["retry-after"].blank?
+                            # A blank "retry-after" has been observed in some 429 responses, so use a safe default for those cases.
+                            1.minute.from_now
+                          else
+                            # It's possible to receive a "0" back when 429'ed, so add 1 to normalize.
+                            # Based on testing, "retry-after" is sporadically random and ranges from 0..15, so we may need to rethink this.
+                            resp.headers["retry-after"].to_i + 1
+                          end
+        StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, status_code: resp.response_code, retry_after: new_retry_after })
+        REDIS.set(key, new_retry_after, ex: new_retry_after)
+        raise CheckStatusExternallyRateLimited, new_retry_after
+      else
+        resp
+      end
+    end
   end
 
   def unique_project_requirement_ranges

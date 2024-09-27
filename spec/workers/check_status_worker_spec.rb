@@ -18,7 +18,7 @@ describe CheckStatusWorker do
   it "should rescue CheckStatusExternallyRateLimited and retry later" do
     project = create(:project, name: "rails")
     expect(Project).to receive(:find_by_id).with(project.id).and_return(project)
-    expect(project).to receive(:check_status).and_raise(Project::CheckStatusExternallyRateLimited)
+    expect(project).to receive(:check_status).and_raise(Project::CheckStatusExternallyRateLimited.new(5))
     expect(project.reload.status_checked_at).to be_nil
 
     subject.perform(project.id)
