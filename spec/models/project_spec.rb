@@ -289,6 +289,18 @@ describe Project, type: :model do
         end
       end
 
+      context "with a 429 response but no 'retry-after' header" do
+        before { WebMock.stub_request(:get, check_status_url).to_return(status: 429, headers: {}) }
+
+        it "raises an error and caches a fallback of 60 second retry-after in redis" do
+          status_before = project.status
+
+          expect { project.check_status }.to raise_error(Project::CheckStatusExternallyRateLimited)
+          expect(REDIS.get(redis_key).to_i).to eq(60)
+          expect(project.reload.status).to eq(status_before)
+        end
+      end
+
       context "with a 500 response" do
         before { WebMock.stub_request(:get, check_status_url).to_return(status: 500) }
 
