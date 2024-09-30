@@ -187,7 +187,7 @@ module PackageManager
         .map do |dep|
           {
             project_name: dep.name,
-            requirements: dep.requirements,
+            requirements: dep.requirements.presence || "*",
             kind: "runtime",
             optional: false,
             platform: name.demodulize,

@@ -368,15 +368,35 @@ describe PackageManager::NuGet do
   describe ".dependencies" do
     let(:name) { "name" }
     let(:version) { "version" }
-    let(:raw_project) do
-      it "fetch the deps" do
-        mapped_project = described_class.mapping(raw_project)
-        dependencies = described_class.dependencies(name, version, mapped_project)
+    let(:mapped_project) do
+      {
+        name: name,
+        raw_versions: [], # leaving empty for spec simplicity, but this will normally be populated
+        description: "a package",
+        repository_url: "",
+        homepage: "",
+        keywords_array: ["JavaScript"],
+        licenses: "licenses",
+        versions: [
+          {
+            number: version,
+            status: nil,
+            original_license: "licenses",
+            dependencies: [
+              PackageManager::NuGet::SemverRegistrationProjectDependency.new(name: "foo", requirements: "0.0.1"),
+              PackageManager::NuGet::SemverRegistrationProjectDependency.new(name: "bar", requirements: ""),
+            ],
+          },
+        ],
+      }
+    end
 
-        expect(dependencies.size).to eq(1)
-        expect(dependencies[0][:project_name]).to eq("another-name")
-        expect(dependencies[0][:requirements]).to eq("1.0.0")
-      end
+    it "fetch the deps" do
+      dependencies = described_class.dependencies(name, version, mapped_project)
+
+      expect(dependencies.size).to eq(2)
+      expect(dependencies.pluck(:project_name)).to eq(%w[foo bar])
+      expect(dependencies.pluck(:requirements)).to eq(["0.0.1", "*"])
     end
   end
 
