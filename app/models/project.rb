@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "query_counter"
+
 # == Schema Information
 #
 # Table name: projects
@@ -59,19 +61,6 @@
 #  index_projects_search_on_name                    ((COALESCE((name)::text, ''::text)) gist_trgm_ops) USING gist
 #
 class Project < ApplicationRecord
-  # We currently have too many concurrent requests for this projects' upstream package repo/index,
-  # by our own definition.
-  # @param [Integer] retry_after_seconds the optional number of seconds to retry
-  #   after, if we have that info available.
-  class CheckStatusInternallyRateLimited < StandardError
-    attr_reader :retry_after_seconds
-
-    def initialize(retry_after_seconds = nil)
-      @retry_after_seconds = retry_after_seconds
-      super("Prevented ourselves from making a request.")
-    end
-  end
-
   # We received a 429 from the upstream package repo/index.
   # @param [Integer] retry_after_seconds the optional number of seconds to retry
   #   after, if we have that info available.
@@ -83,8 +72,6 @@ class Project < ApplicationRecord
       super("Prevented by upstream from making a request.")
     end
   end
-
-  require "query_counter"
 
   include ProjectSearch
   include SourceRank
@@ -129,7 +116,6 @@ class Project < ApplicationRecord
     stars
     status
   ].freeze
-  CHECK_STATUS_NPM_RETRY_AFTER = "check_status_npm:retry_after"
 
   # Currently these are the fields defined in PackageManager::Base::MappingBuilder
   audited only: %w[status name description repository_url homepage keywords_array licenses]
@@ -689,18 +675,15 @@ class Project < ApplicationRecord
     # "Hidden" is a state set by admins, and we don't want to override that decision.
     return if hidden?
 
-    # Don't overload NPM by limiting the number of concurrent requests we make.
-    response = if downcased_platform == "npm"
-                 rate_limited_npm_request(url)
-               else
-                 Typhoeus.get(url)
-               end
+    response = Typhoeus.get(url)
 
     StructuredLog.capture("CHECK_STATUS_CHANGE", { platform: platform, name: name, status_code: response.response_code }) if downcased_platform == "npm"
 
     if downcased_platform.in?(%w[packagist npm]) && [302, 404].include?(response.response_code)
       # NPM 302 happens with privately scoped packages, which should be considered Removed.
       update(status: "Removed", audit_comment: "Response #{response.response_code}")
+    elsif downcased_platform == "npm" && response.response_code == 200 && npm_unpublished_response?(JSON.parse(response.body))
+      update(status: "Removed", audit_comment: "Response #{response.response_code} + unpublished.")
     elsif downcased_platform == "go" && [302, 400, 404].include?(response.response_code)
       # pkg.go.dev can be 404 on first-hit for a new package (or alias for the package), so ensure that the package existed in the past
       # by ensuring its age is old enough to not be just uncached by pkg.go.dev yet.
@@ -724,37 +707,12 @@ class Project < ApplicationRecord
     # only update status to nil if the response code is a success
   end
 
-  # Special-case of fetching package url for NPM, where we observe their rate-limiting and raise an error
-  # if we're exceeding their "retry-after" value.
-  def rate_limited_npm_request(url)
-    # This key needs to be host-specific so hosts don't overwrite each other's different values.
-    key = "#{Project::CHECK_STATUS_NPM_RETRY_AFTER}:#{Socket.gethostname}"
-    # The value will be the original 'retry-after', and the TTL will be the remaining 'retry-after', so use the latter.
-    current_retry_after = REDIS.ttl(key)
-
-    if current_retry_after >= 0 # -2 == key does not exist, -1 == key exists without a TTL
-      # Block this attempt if we have stored a "retry-after" value, per worker box.
-      StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, retry_after: current_retry_after })
-      raise CheckStatusInternallyRateLimited, current_retry_after.to_i
-    else
-      # If the key isn't set, then we're safe to attempt a request.
-      resp = Typhoeus.get(url)
-      if resp.response_code == 429
-        new_retry_after = if resp.headers["retry-after"].blank?
-                            # A blank "retry-after" has been observed in some 429 responses, so use a safe default for those cases.
-                            1.minute
-                          else
-                            # It's possible to receive a "0" back when 429'ed, so add 1 to normalize.
-                            # Based on testing, "retry-after" is sporadically random and ranges from 0..15, so we may need to rethink this.
-                            resp.headers["retry-after"].to_i + 1
-                          end
-        StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, status_code: resp.response_code, retry_after: new_retry_after })
-        REDIS.set(key, new_retry_after, ex: new_retry_after)
-        raise CheckStatusExternallyRateLimited, new_retry_after
-      else
-        resp
-      end
-    end
+  # The Web url returns 404 for unpublished packages, bu the API returns 200.
+  # This logic should determine if a package was removed from NPM, but it's possible there
+  # may be other permutations of the response that suggest it was unpublished/removed.
+  def npm_unpublished_response?(json)
+    json.dig("time", "unpublished").present? && # unpublished packages will have a list of unpublished versions
+      !json.key?("versions") # published packages should have a "versions" key
   end
 
   def unique_project_requirement_ranges

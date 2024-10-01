@@ -7,7 +7,7 @@ class CheckStatusWorker
   def perform(project_id)
     project = Project.find_by_id(project_id)
     project.try(:check_status)
-  rescue Project::CheckStatusInternallyRateLimited, Project::CheckStatusExternallyRateLimited => e
+  rescue Project::CheckStatusExternallyRateLimited => e
     # status_check_at is eagerly updated in Project#check_status, so reset it to nil
     # so we can tell if it was throttled.
     project.update_column(:status_checked_at, nil)
