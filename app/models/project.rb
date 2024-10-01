@@ -729,9 +729,10 @@ class Project < ApplicationRecord
   def rate_limited_npm_request(url)
     # This key needs to be host-specific so hosts don't overwrite each other's different values.
     key = "#{Project::CHECK_STATUS_NPM_RETRY_AFTER}:#{Socket.gethostname}"
-    current_retry_after = REDIS.get(key)
+    # The value will be the original 'retry-after', and the TTL will be the remaining 'retry-after', so use the latter.
+    current_retry_after = REDIS.ttl(key)
 
-    if current_retry_after.present?
+    if current_retry_after >= 0 # -2 == key does not exist, -1 == key exists without a TTL
       # Block this attempt if we have stored a "retry-after" value, per worker box.
       StructuredLog.capture("CHECK_STATUS_FAILURE", { platform: platform, name: name, retry_after: current_retry_after })
       raise CheckStatusInternallyRateLimited, current_retry_after.to_i
