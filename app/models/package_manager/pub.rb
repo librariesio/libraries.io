@@ -64,8 +64,19 @@ module PackageManager
       vers = mapped_project[:versions].find { |v| v["version"] == version }
       return [] if vers.nil?
 
-      map_dependencies(vers["pubspec"].fetch("dependencies", {}), "runtime") +
-        map_dependencies(vers["pubspec"].fetch("dev_dependencies", {}), "Development")
+      deps = map_dependencies(vers.dig("pubspec", "dependencies" || []), "runtime") +
+             map_dependencies(vers.dig("pubspec", "dev_dependencies") || [], "Development")
+
+      deps.each do |d|
+        # "dependencies" items can be a String, or a Hash with more details
+        d[:requirements] = d[:requirements]["version"] if d[:requirements].is_a?(Hash)
+
+        # "any" means any version, and it is assumed when the version is blank.
+        # https://dart.dev/tools/pub/dependencies#hosted-packages
+        d[:requirements] = "*" if d[:requirements].blank? || d[:requirements] == "any"
+      end
+
+      deps
     end
   end
 end
