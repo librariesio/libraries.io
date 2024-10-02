@@ -90,6 +90,5 @@ module Libraries
     config.amplitude_api_key = ENV.fetch("AMPLITUDE_API_KEY", nil)
 
     require "string_utils"
-    require "rate_limit_service"
   end
 end

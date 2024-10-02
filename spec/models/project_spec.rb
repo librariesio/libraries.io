@@ -191,10 +191,7 @@ describe Project, type: :model do
   end
 
   describe "#check_status" do
-    before do
-      freeze_time
-      REDIS.keys("check_status_npm:*").each { |k| REDIS.del(k) }
-    end
+    before { freeze_time }
 
     context "entire project deprecated with message" do
       let!(:project) { create(:project, platform: "NPM", name: "jade", status: "", updated_at: 1.week.ago) }
@@ -261,21 +258,9 @@ describe Project, type: :model do
       end
     end
 
-    context "should not change status in case of error" do
+    context "with response from NPM" do
       let!(:project) { create(:project, platform: "NPM", name: "coolpackage", status: nil, created_at: 1.month.ago) }
       let(:check_status_url) { PackageManager::NPM.check_status_url(project) }
-      let(:redis_key) { "#{Project::CHECK_STATUS_NPM_RETRY_AFTER}:#{Socket.gethostname}" }
-
-      context "with a cached 429" do
-        before { REDIS.set(redis_key, 5, ex: 5) }
-
-        it "doesn't make a request and raises an error" do
-          status_before = project.status
-
-          expect { project.check_status }.to raise_error(Project::CheckStatusInternallyRateLimited)
-          expect(project.reload.status).to eq(status_before)
-        end
-      end
 
       context "with a 429 response" do
         before { WebMock.stub_request(:get, check_status_url).to_return(status: 429, headers: { "retry-after" => 3 }) }
@@ -284,20 +269,15 @@ describe Project, type: :model do
           status_before = project.status
 
           expect { project.check_status }.to raise_error(Project::CheckStatusExternallyRateLimited)
-          expect(REDIS.get(redis_key).to_i).to eq(4)
           expect(project.reload.status).to eq(status_before)
         end
       end
 
-      context "with a 429 response but no 'retry-after' header" do
-        before { WebMock.stub_request(:get, check_status_url).to_return(status: 429, headers: {}) }
-
+      context "with a 200 response but unpublished" do
         it "raises an error and caches a fallback of 60 second retry-after in redis" do
-          status_before = project.status
-
-          expect { project.check_status }.to raise_error(Project::CheckStatusExternallyRateLimited)
-          expect(REDIS.get(redis_key).to_i).to eq(60)
-          expect(project.reload.status).to eq(status_before)
+          VCR.use_cassette("project/check_status/atguigu_english") do
+            expect { project.check_status }.to change(project, :status).to("Removed")
+          end
         end
       end
 
@@ -342,7 +322,7 @@ describe Project, type: :model do
           project.reload
 
           expect(project.status).to eq("Removed")
-          expect(project.audits.last.comment).to eq("Response 302")
+          expect(project.audits.last.comment).to eq("Response 404")
           expect(project.status_checked_at).to eq(DateTime.current)
           expect(project.updated_at).to eq(DateTime.current)
         end

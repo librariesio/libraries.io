@@ -22,6 +22,10 @@ module PackageManager
       "https://registry.npmjs.org/#{db_project.name}/-/#{db_project.name}-#{version}.tgz"
     end
 
+    def self.check_status_url(db_project)
+      "https://registry.npmjs.org/#{db_project.name.gsub('/', '%2F')}"
+    end
+
     def self.install_instructions(db_project, version = nil)
       "npm install #{db_project.name}" + (version ? "@#{version}" : "")
     end

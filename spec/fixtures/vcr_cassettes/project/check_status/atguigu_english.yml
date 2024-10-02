@@ -1,0 +1,37 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://registry.npmjs.org/coolpackage
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Typhoeus - https://github.com/typhoeus/typhoeus
+      Expect:
+      - ''
+  response:
+    status:
+      code: 404
+      message: ''
+    headers:
+      Date:
+      - Tue, 01 Oct 2024 23:13:49 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '21'
+      Cf-Ray:
+      - 8cc025392eb57c56-LAX
+      Access-Control-Allow-Origin:
+      - "*"
+      Vary:
+      - Accept-Encoding
+      Server:
+      - cloudflare
+    body:
+      encoding: ASCII-8BIT
+      string: '{"error":"Not found"}'
+  recorded_at: Tue, 01 Oct 2024 23:13:48 GMT
+recorded_with: VCR 6.2.0
