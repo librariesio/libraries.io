@@ -296,9 +296,6 @@ module PackageManager
 
       db_versions = db_project.versions
       db_versions = db_versions.where(number: sync_version) unless sync_version == :all
-      # Some Projects have thousands of Versions, so load them in batches to avoid
-      # a list of thousands of Version ids in a single query, each of which is returning
-      # possibly hundreds or thousands of Dependencies.
       # Do preloads in batches of 200 versions, because we don't want a big preload query that
       # queries on thousands of Version ids, especially when each Version could have thousands
       # of Dependencies.
