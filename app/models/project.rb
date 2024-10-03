@@ -416,7 +416,8 @@ class Project < ApplicationRecord
   def set_dependents_count_async
     return if destroyed?
 
-    SetProjectDependentsCountWorker.perform_async(id)
+    # TEMPFIX: pushing these workers out a day to let the db catch up on indices
+    SetProjectDependentsCountWorker.perform_in(6.hours, id)
   end
 
   def set_dependents_count
