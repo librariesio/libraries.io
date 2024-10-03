@@ -142,11 +142,14 @@ module PackageManager
 
       if self::HAS_VERSIONS
         if sync_version == :all
-          versions_as_version_objects(raw_project, db_project.name)
-            .each { |v| add_version(db_project, v) }
+          version_objects = versions_as_version_objects(raw_project, db_project.name)
+          preloaded_db_versions = db_project.versions.where(number: version_objects.map(&:version_number))
+          version_objects
+            .each { |v| add_version(db_project, v, preloaded_db_versions) }
             .tap { |vs| remove_missing_versions(db_project, vs) }
         elsif (version = one_version_as_version_object(raw_project, sync_version))
-          add_version(db_project, version)
+          preloaded_db_versions = db_project.versions.where(number: version.version_number)
+          add_version(db_project, version, preloaded_db_versions)
           # TODO: handle deprecation here too
         end
       end
@@ -215,7 +218,7 @@ module PackageManager
       )
     end
 
-    def self.add_version(db_project, api_version)
+    def self.add_version(db_project, api_version, preloaded_db_versions)
       return if api_version.blank?
 
       new_repository_source = self::HAS_MULTIPLE_REPO_SOURCES ? self::REPOSITORY_SOURCE_NAME : nil
@@ -223,7 +226,8 @@ module PackageManager
       VersionUpdater.new(
         project: db_project,
         api_version_to_upsert: api_version,
-        new_repository_source: new_repository_source
+        new_repository_source: new_repository_source,
+        preloaded_db_versions: preloaded_db_versions
       ).upsert_version_for_project!
     end
 
