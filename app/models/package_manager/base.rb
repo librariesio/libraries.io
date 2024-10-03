@@ -299,7 +299,10 @@ module PackageManager
       # Some Projects have thousands of Versions, so load them in batches to avoid
       # a list of thousands of Version ids in a single query, each of which is returning
       # possibly hundreds or thousands of Dependencies.
-      db_versions = db_versions.includes(:dependencies).in_batches(of: 200).to_a.flatten
+      # Do preloads in batches of 200 versions, because we don't want a big preload query that
+      # queries on thousands of Version ids, especially when each Version could have thousands
+      # of Dependencies.
+      db_versions = db_versions.in_batches(of: 200).map { |vs| vs.includes(:dependencies) }.flatten
 
       # cached lookup of dependency platform/names => project ids, so we avoid repetitive project lookups in find_best! below.
       platform_and_names_to_project_ids = {}
