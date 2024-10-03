@@ -293,8 +293,13 @@ module PackageManager
     def self.save_dependencies(mapped_project, sync_version: :all, force_sync_dependencies: false)
       name = mapped_project[:name]
       db_project = Project.find_by(name: name, platform: db_platform)
-      db_versions = db_project.versions.includes(:dependencies)
+
+      db_versions = db_project.versions
       db_versions = db_versions.where(number: sync_version) unless sync_version == :all
+      # Do preloads in batches of 200 versions, because we don't want a big preload query that
+      # queries on thousands of Version ids, especially when each Version could have thousands
+      # of Dependencies.
+      db_versions = db_versions.in_batches(of: 200).map { |vs| vs.includes(:dependencies) }.flatten
 
       # cached lookup of dependency platform/names => project ids, so we avoid repetitive project lookups in find_best! below.
       platform_and_names_to_project_ids = {}
