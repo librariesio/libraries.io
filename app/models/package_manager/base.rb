@@ -144,12 +144,12 @@ module PackageManager
         if sync_version == :all
           version_objects = versions_as_version_objects(raw_project, db_project.name)
           preloaded_db_versions = db_project.versions.where(number: version_objects.map(&:version_number))
-
           version_objects
             .each { |v| add_version(db_project, v, preloaded_db_versions) }
             .tap { |vs| remove_missing_versions(db_project, vs) }
         elsif (version = one_version_as_version_object(raw_project, sync_version))
-          add_version(db_project, version)
+          preloaded_db_versions = db_project.versions.where(number: version.version_number)
+          add_version(db_project, version, preloaded_db_versions)
           # TODO: handle deprecation here too
         end
       end
