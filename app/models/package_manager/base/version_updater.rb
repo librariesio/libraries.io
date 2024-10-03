@@ -6,11 +6,13 @@ module PackageManager
       def initialize(
         project:,
         api_version_to_upsert:,
-        new_repository_source:
+        new_repository_source:,
+        preloaded_db_versions:
       )
         @project = project
         @api_version_to_upsert = api_version_to_upsert
         @new_repository_source = new_repository_source
+        @preloaded_db_versions = preloaded_db_versions
       end
 
       def upsert_version_for_project!
@@ -49,7 +51,8 @@ module PackageManager
       private
 
       def db_project_version
-        @db_project_version ||= @project.versions.find_or_initialize_by(number: @api_version_to_upsert.version_number)
+        @db_project_version ||= @preloaded_db_versions.find { |v| v.number == @api_version_to_upsert.version_number } ||
+                                @project.versions.new(number: @api_version_to_upsert.version_number)
       end
     end
   end

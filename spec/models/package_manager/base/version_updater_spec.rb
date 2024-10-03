@@ -20,7 +20,15 @@ describe PackageManager::Base::VersionUpdater do
     let(:version_number) { "1.0.0" }
     let(:published_at) { Time.zone.now.change(usec: 0, subsec: 0) }
 
-    let(:version_updater) { described_class.new(project: db_project, api_version_to_upsert: api_version_to_upsert, new_repository_source: "b") }
+    let(:preloaded_db_versions) { db_project.versions }
+    let(:version_updater) do
+      described_class.new(
+        project: db_project,
+        api_version_to_upsert: api_version_to_upsert,
+        new_repository_source: "b",
+        preloaded_db_versions: preloaded_db_versions
+      )
+    end
 
     context "with real project version" do
       let!(:db_project_version) { db_project.versions.create(number: version_number, published_at: nil, repository_sources: ["a"]) }
@@ -37,15 +45,13 @@ describe PackageManager::Base::VersionUpdater do
     end
 
     context "with stub project version" do
-      let(:db_project_version_stub) do
-        Version.new
-      end
+      let(:preloaded_db_versions) { [Version.new(number: version_number, project: db_project)] }
 
       let(:logger) { instance_double(ActiveSupport::Logger) }
 
       before do
-        allow(db_project.versions).to receive(:find_or_initialize_by).with(number: version_number).and_return(db_project_version_stub)
-        allow(db_project_version_stub).to receive(:save!).and_raise(error_class, exception_details)
+        # allow(db_project.versions).to receive(:find_or_initialize_by).with(number: version_number).and_return(db_project_version_stub)
+        allow(preloaded_db_versions[0]).to receive(:save!).and_raise(error_class, exception_details)
 
         allow(Rails).to receive(:logger).and_return(logger)
         allow(logger).to receive(:info)
@@ -75,7 +81,7 @@ describe PackageManager::Base::VersionUpdater do
         let(:error_class) { ActiveRecord::RecordInvalid }
 
         # ActiveRecord::RecordInvalid expects a model as the parameter
-        let(:exception_details) { db_project_version_stub }
+        let(:exception_details) { preloaded_db_versions[0] }
         # and that models needs an ActiveModel::Errors object
         let(:errors) do
           instance_double(
@@ -87,7 +93,7 @@ describe PackageManager::Base::VersionUpdater do
         let(:message_text) { "Number has already been taken" }
 
         before do
-          allow(db_project_version_stub).to receive(:errors).and_return(errors)
+          allow(preloaded_db_versions[0]).to receive(:errors).and_return(errors)
         end
 
         context "when the version_number is already in the database" do
