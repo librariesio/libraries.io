@@ -296,25 +296,16 @@ module PackageManager
 
       db_versions = db_project.versions
       db_versions = db_versions.where(number: sync_version) unless sync_version == :all
+      # Some Projects have thousands of Versions, so load them in batches to avoid
+      # a list of thousands of Version ids in a single query, each of which is returning
+      # possibly hundreds or thousands of Dependencies.
+      db_versions = db_versions.includes(:dependencies).in_batches(of: 200).to_a.flatten
 
       # cached lookup of dependency platform/names => project ids, so we avoid repetitive project lookups in find_best! below.
       platform_and_names_to_project_ids = {}
 
       if db_versions.empty?
         StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: sync_version, message: "no versions found" })
-      end
-
-      # This is a direct/awkward way to preload Version#dependencies#name manually, since ".includes(:dependencies)"
-      # can potentially pull records for thousands of Versions, and AR doesn't have a way to
-      # batch ".includes()".
-      db_version_to_dependency_names = {}
-      Benchmark.ms do
-        db_project.versions.in_batches(of: 500) do |versions|
-          Dependency.where(version: versions).pluck(:version_id, :project_name).each do |(version_id, project_name)|
-            db_version_to_dependency_names[version_id] ||= []
-            db_version_to_dependency_names[version_id] << project_name
-          end
-        end
       end
 
       db_versions.each do |db_version|
@@ -337,7 +328,7 @@ module PackageManager
           db_version.dependencies.destroy_all
         end
 
-        existing_dep_names = db_version_to_dependency_names.fetch(db_version.number, [])
+        existing_dep_names = db_version.dependencies.map(&:project_name)
 
         new_dep_attributes = deps
           .reject { |dep| existing_dep_names.include?(dep[:project_name]) }
