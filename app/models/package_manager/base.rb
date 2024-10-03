@@ -323,7 +323,7 @@ module PackageManager
           db_version.dependencies.destroy_all
         end
 
-        existing_dep_names = db_version.dependencies.map(&:project_name)
+        existing_dep_names = db_version.dependencies.pluck(:project_name)
 
         new_dep_attributes = deps
           .reject { |dep| existing_dep_names.include?(dep[:project_name]) }
