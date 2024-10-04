@@ -240,6 +240,7 @@ describe PackageManager::Pypi do
         end
           .to change { version.reload.dependencies_count }.to(6)
           .and change { version.runtime_dependencies_count }.to(4)
+          .and change { SetProjectDependentsCountWorker.jobs.size }.by(1)
       end
 
       it "updates the dependencies counters when there are zero deps" do

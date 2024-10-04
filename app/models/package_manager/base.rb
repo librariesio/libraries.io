@@ -366,6 +366,8 @@ module PackageManager
         db_version.set_runtime_dependencies_count
         db_version.set_dependencies_count
       end
+
+      db_project.set_dependents_count_async
     end
 
     def self.dependencies(_name, _version, _mapped_project)
