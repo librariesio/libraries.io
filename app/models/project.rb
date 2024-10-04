@@ -211,7 +211,6 @@ class Project < ApplicationRecord
   scope :recently_created, -> { with_repo.where("repositories.created_at > ?", 2.weeks.ago) }
 
   after_commit :update_repository_async, on: :create
-  after_commit :set_dependents_count_async, on: %i[create update]
   after_commit :update_source_rank_async, on: %i[create update]
   after_commit :send_project_updated, on: %i[create update]
   before_save  :update_details
@@ -417,7 +416,7 @@ class Project < ApplicationRecord
     return if destroyed?
 
     # TEMPFIX: pushing these workers out a day to let the db catch up on indices
-    SetProjectDependentsCountWorker.perform_in(6.hours, id)
+    SetProjectDependentsCountWorker.perform_async(id)
   end
 
   def set_dependents_count
