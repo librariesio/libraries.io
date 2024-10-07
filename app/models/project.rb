@@ -667,7 +667,7 @@ class Project < ApplicationRecord
   end
 
   def check_status
-    return if status_checked_at > CHECK_STATUS_FREQUENCY_LIMIT.ago
+    return if status_checked_at && status_checked_at > CHECK_STATUS_FREQUENCY_LIMIT.ago
 
     downcased_platform = platform.downcase
     url = platform_class.check_status_url(self)
