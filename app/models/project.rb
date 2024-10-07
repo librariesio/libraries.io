@@ -116,6 +116,7 @@ class Project < ApplicationRecord
     stars
     status
   ].freeze
+  CHECK_STATUS_FREQUENCY_LIMIT = 1.day
 
   # Currently these are the fields defined in PackageManager::Base::MappingBuilder
   audited only: %w[status name description repository_url homepage keywords_array licenses]
@@ -666,9 +667,12 @@ class Project < ApplicationRecord
   end
 
   def check_status
+    return if status_checked_at > CHECK_STATUS_FREQUENCY_LIMIT.ago
+
     downcased_platform = platform.downcase
     url = platform_class.check_status_url(self)
     update_column(:status_checked_at, DateTime.current)
+
     return if url.blank?
 
     # "Hidden" is a state set by admins, and we don't want to override that decision.
