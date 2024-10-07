@@ -193,6 +193,17 @@ describe Project, type: :model do
   describe "#check_status" do
     before { freeze_time }
 
+    context "already checked recently" do
+      let!(:project) { create(:project, platform: "NPM", name: "jade", status: "", status_checked_at: 12.hours.ago) }
+
+      it "should not check status" do
+        allow(Typhoeus).to receive(:get)
+
+        expect { project.check_status }.to_not change(project, :status_checked_at)
+        expect(Typhoeus).to_not have_received(:get)
+      end
+    end
+
     context "entire project deprecated with message" do
       let!(:project) { create(:project, platform: "NPM", name: "jade", status: "", updated_at: 1.week.ago) }
 

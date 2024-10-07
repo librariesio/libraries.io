@@ -192,14 +192,14 @@ class Repository < ApplicationRecord
   def deprecate!
     update_attribute(:status, "Deprecated")
     projects.each do |project|
-      project.update_attribute(:status, "Deprecated")
+      project.update_attribute(:status, "Deprecated", audit_comment: "Repository#deprecate!")
     end
   end
 
   def unmaintain!
     update_attribute(:status, "Unmaintained")
     projects.each do |project|
-      project.update_attribute(:status, "Unmaintained")
+      project.update_attribute(:status, "Unmaintained", audit_comment: "Repository#unmaintain!")
     end
   end
 
@@ -336,7 +336,7 @@ class Repository < ApplicationRecord
       projects.each do |project|
         next unless %w[bower go elm alcatraz julia nimble].include?(project.platform.downcase)
 
-        project.update(status: "Removed", audit_comment: "Response 404") unless project.status == "Removed"
+        project.update(status: "Removed", audit_comment: "Repository#check_status: Response 404") unless project.status == "Removed"
       end
 
       return false
