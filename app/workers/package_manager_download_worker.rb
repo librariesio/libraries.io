@@ -76,7 +76,7 @@ class PackageManagerDownloadWorker
     end
 
     Rails.logger.info("Package update for platform=#{key} name=#{name} version=#{version} source=#{source}")
-    project = package_manager.update(name, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies)
+    project = package_manager.update(name, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies, source: source)
 
     # Raise/log if version was requested but not found
     if version.present? && project && !project&.versions&.exists?(number: version)
