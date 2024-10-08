@@ -84,7 +84,7 @@ module PackageManager
       return [] unless dependencies&.any?
 
       dependencies.map do |dependency|
-        dependency = dependency.deep_stringify_keys
+        dependency = dependency.to_h.deep_stringify_keys
         {
           project_name: dependency["name"],
           requirements: dependency["requirement"] || "*",
