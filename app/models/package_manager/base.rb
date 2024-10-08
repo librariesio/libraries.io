@@ -326,7 +326,7 @@ module PackageManager
         # so that we have the fresh and correct dependency information from the most recent
         # call to dependencies() from the platform provider
         if force_sync_dependencies
-          Rails.logger.info("[Full Dependency Refresh] platform=#{db_platform} name=#{name} version=#{db_version.number}")
+          Rails.logger.info("[Full Dependency Refresh] platform=#{db_platform} name=#{name} version=#{db_version.number} source=#{source}")
           db_version.dependencies.destroy_all
         end
 
