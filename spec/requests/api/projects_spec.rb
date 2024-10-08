@@ -357,7 +357,8 @@ describe "Api::ProjectsController" do
       expect(PackageManagerDownloadWorker).to have_received(:perform_async).with(
         "Rubygems",
         project_with_unknown_deps.name,
-        version_with_unknown_deps.number
+        version_with_unknown_deps.number,
+        "Api::Projects#dependencies_bulk"
       )
     end
   end
