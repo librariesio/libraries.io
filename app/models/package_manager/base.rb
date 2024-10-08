@@ -126,7 +126,7 @@ module PackageManager
     #   published_at: <Time version was published>,
     #   original_license: <License string from upstream>
     # }
-    def self.update(name, sync_version: :all, force_sync_dependencies: false)
+    def self.update(name, sync_version: :all, force_sync_dependencies: false, source: nil)
       if sync_version != :all && !supports_single_version_update?
         Rails.logger.warn("#{db_platform}.update(#{name}, sync_version: #{sync_version}) called but not supported on platform")
         return
@@ -154,7 +154,7 @@ module PackageManager
         end
       end
 
-      save_dependencies(mapped_project, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies) if self::HAS_DEPENDENCIES
+      save_dependencies(mapped_project, sync_version: sync_version, force_sync_dependencies: force_sync_dependencies, source: source) if self::HAS_DEPENDENCIES
       finalize_db_project(db_project)
     end
 
@@ -294,7 +294,7 @@ module PackageManager
       names - existing_names
     end
 
-    def self.save_dependencies(mapped_project, sync_version: :all, force_sync_dependencies: false)
+    def self.save_dependencies(mapped_project, sync_version: :all, force_sync_dependencies: false, source: nil)
       name = mapped_project[:name]
       db_project = Project.find_by(name: name, platform: db_platform)
 
@@ -309,7 +309,7 @@ module PackageManager
       platform_and_names_to_project_ids = {}
 
       if db_versions.empty?
-        StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: sync_version, message: "no versions found" })
+        StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: sync_version, message: "no versions found", source: source })
       end
 
       db_versions.each do |db_version|
@@ -318,9 +318,7 @@ module PackageManager
         deps = begin
           dependencies(name, db_version.number, mapped_project)
         rescue StandardError => e
-          Rails.logger.error(
-            "Error while trying to get dependencies for #{db_platform}/#{name}@#{db_version.number}: #{e.message}"
-          )
+          StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: db_version.number, message: "error getting dependencies: #{e.message}", source: source })
           []
         end
 
@@ -354,7 +352,7 @@ module PackageManager
         rescue ActiveRecord::RecordInvalid => e
           # If we don't have a valid dependency to upsert, log it, and fail noisily
           message = dependency.errors.full_messages.join(", ").gsub(/'/, "")
-          StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: db_version, dependency_name: dependency.project_name, message: message })
+          StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: db_version, dependency_name: dependency.project_name, message: message, source: source })
           raise e
         end
 

@@ -48,7 +48,7 @@ module DependencyChecks
   def update_project
     return unless project_name.present? && package_manager
 
-    package_manager.update(project_name)
+    package_manager.update(project_name, source: "DependencyChecks#update_project")
   end
 
   def package_manager

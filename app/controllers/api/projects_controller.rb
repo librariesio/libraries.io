@@ -153,7 +153,7 @@ class Api::ProjectsController < Api::ApplicationController
         version.update_column(:dependencies_count, deps.size)
       elsif deps.empty? && version.updated_at < 1.day.ago
         version.touch
-        PackageManagerDownloadWorker.perform_async(platform, name, version.number)
+        PackageManagerDownloadWorker.perform_async(platform, name, version.number, "Api::Projects##{action_name}")
       end
     end
 

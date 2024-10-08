@@ -186,9 +186,9 @@ namespace :projects do
     projects.each_key do |project_name|
       project = Project.find_by(platform: "Conda", name: project_name)
       if project.nil?
-        PackageManager::Conda.update(project_name)
+        PackageManager::Conda.update(project_name, source: "backfill_conda")
       elsif project.versions.count != projects[project_name]["versions"].count
-        PackageManager::Conda.update(project_name)
+        PackageManager::Conda.update(project_name, source: "backfill_conda")
         LicenseBackfillWorker.perform_async("Conda", project_name)
       else
         LicenseBackfillWorker.perform_async("Conda", project_name)
