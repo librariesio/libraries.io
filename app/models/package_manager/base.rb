@@ -169,9 +169,8 @@ module PackageManager
     # a Hash of data that we'll need to save Project and Version records.
     # Use the PackageManager::MappingBuilder to create the Hash.
     #
-    # Note: ideally use MappingBuilder in every return value. Be careful
-    # when returning nil if the project is removed, etc, because that
-    # could prevent last_synced_at from being updated above.
+    # @return [Hash{Symbol => Any}] Libraries' common package data fields, mapped
+    # from the api response. Keys are defined in MappingBuilder.
     def self.mapping(_raw_project)
       raise MethodNotImplementedError
     end
