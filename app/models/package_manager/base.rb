@@ -168,6 +168,10 @@ module PackageManager
     # Override this in the subclass to map the raw data from project() to
     # a Hash of data that we'll need to save Project and Version records.
     # Use the PackageManager::MappingBuilder to create the Hash.
+    #
+    # Note: ideally use MappingBuilder in every return value. Be careful
+    # when returning nil if the project is removed, etc, because that
+    # could prevent last_synced_at from being updated above.
     def self.mapping(_raw_project)
       raise MethodNotImplementedError
     end

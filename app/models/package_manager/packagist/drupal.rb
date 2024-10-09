@@ -18,9 +18,6 @@ class PackageManager::Packagist::Drupal < PackageManager::Packagist
   end
 
   def self.mapping(raw_project)
-    most_recent_versions = raw_project.css(".view-drupalorg-project-downloads .release")
-    return nil unless most_recent_versions.any?
-
     homepage = raw_project.css("link[rel=canonical]").attr("href").value
 
     MappingBuilder.build_hash(

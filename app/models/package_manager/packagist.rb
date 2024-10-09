@@ -67,13 +67,13 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      return nil unless raw_project.any?
-
       # In V2 API, it looks like the first version is the one with all the metadata (name, etc)
       # (This might not necessarily be the version with the highest "time" value)
-      latest_version = raw_project.first
-
-      return if latest_version.nil?
+      latest_version = raw_project.any?
+        raw_project.first
+      else
+        {}
+      end
 
       MappingBuilder.build_hash(
         name: latest_version["name"],
