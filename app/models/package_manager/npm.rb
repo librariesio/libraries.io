@@ -88,8 +88,7 @@ module PackageManager
                          {} # "Removed" projects won't have a "versions" Hash
                        end
 
-      repo = raw_project.fetch("repository", {})
-      repo = latest_version.fetch("repository", {}) if repo.blank?
+      repo = raw_project.fetch("repository", {}).presence || latest_version.fetch("repository", {})
       repo = repo[0] if repo.is_a?(Array)
       repo_url = repo.try(:fetch, "url", nil)
 
