@@ -139,6 +139,49 @@ describe PackageManager::NPM do
     end
   end
 
+  describe ".mapping" do
+    context "with an active project" do
+      it "returns a mapping of raw data to our data" do
+        raw_project = VCR.use_cassette("npm/eslint") do
+          described_class.project("eslint")
+        end
+        mapped_project = described_class.mapping(raw_project)
+
+        expect(mapped_project[:name]).to eq("eslint")
+        expect(mapped_project[:description]).to eq("An AST-based pattern checker for JavaScript.")
+        expect(mapped_project[:repository_url]).to eq("https://github.com/eslint/eslint")
+        expect(mapped_project[:homepage]).to eq("https://eslint.org")
+        expect(mapped_project[:keywords_array]).to eq(%w[ast lint javascript ecmascript espree])
+        expect(mapped_project[:licenses]).to eq("MIT")
+        expect(mapped_project[:versions].length).to eq(370)
+      end
+    end
+
+    context "with an unpublished/Removed project" do
+      it "returns a best-effort mapping of raw data to our data" do
+        raw_project = {
+          "_id" => "eslint-patch",
+          "name" => "eslint-patch",
+          "time" => {
+            "created" => "2023-03-13T04:11:27.097Z",
+            "8.0.11" => "2023-03-13T04:11:27.272Z",
+            "modified" => "2023-03-15T02:57:26.602Z",
+            "unpublished" => { "time" => "2023-03-15T02:57:26.602Z", "versions" => [] },
+          },
+        }
+        mapped_project = described_class.mapping(raw_project)
+
+        expect(mapped_project[:name]).to eq("eslint-patch")
+        expect(mapped_project[:description]).to eq(nil)
+        expect(mapped_project[:repository]).to eq(nil)
+        expect(mapped_project[:homepage]).to eq(nil)
+        expect(mapped_project[:keywords_array]).to eq([])
+        expect(mapped_project[:licenses]).to eq("")
+        expect(mapped_project[:versions].length).to eq(0)
+      end
+    end
+  end
+
   describe ".dependencies" do
     context "when there are blank dependencies" do
       it "replaces blanks with '*' wildcards" do

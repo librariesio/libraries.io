@@ -87,14 +87,15 @@ module PackageManager
 
     def self.mapping(raw_project)
       latest_version = versions(raw_project, nil).to_a.first
-      {
+
+      MappingBuilder.build_hash(
         name: raw_project["crate"]["id"],
         homepage: raw_project["crate"]["homepage"],
         description: raw_project["crate"]["description"],
         keywords_array: Array.wrap(raw_project["crate"]["keywords"]),
         licenses: latest_version&.fetch(:original_license),
-        repository_url: repo_fallback(raw_project["crate"]["repository"], raw_project["crate"]["homepage"]),
-      }
+        repository_url: repo_fallback(raw_project["crate"]["repository"], raw_project["crate"]["homepage"])
+      )
     end
 
     def self.versions(raw_project, _name)

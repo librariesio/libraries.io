@@ -168,6 +168,9 @@ module PackageManager
     # Override this in the subclass to map the raw data from project() to
     # a Hash of data that we'll need to save Project and Version records.
     # Use the PackageManager::MappingBuilder to create the Hash.
+    #
+    # @return [Hash{Symbol => Any}] Libraries' common package data fields, mapped
+    # from the api response. Keys are defined in MappingBuilder.
     def self.mapping(_raw_project)
       raise MethodNotImplementedError
     end

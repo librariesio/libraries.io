@@ -82,11 +82,13 @@ module PackageManager
     end
 
     def self.mapping(raw_project)
-      return nil unless raw_project["versions"].present?
+      latest_version = if raw_project["versions"].present?
+                         raw_project["versions"].to_a.last[1]
+                       else
+                         {} # "Removed" projects won't have a "versions" Hash
+                       end
 
-      latest_version = raw_project["versions"].to_a.last[1]
-
-      repo = latest_version.fetch("repository", {})
+      repo = raw_project.fetch("repository", {}).presence || latest_version.fetch("repository", {})
       repo = repo[0] if repo.is_a?(Array)
       repo_url = repo.try(:fetch, "url", nil)
 
@@ -97,7 +99,7 @@ module PackageManager
         keywords_array: Array.wrap(latest_version.fetch("keywords", [])),
         licenses: licenses(latest_version),
         repository_url: repo_fallback(repo_url, raw_project["homepage"]),
-        versions: raw_project["versions"]
+        versions: raw_project.fetch("versions", {})
       )
     end
 
