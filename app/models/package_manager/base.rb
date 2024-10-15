@@ -101,7 +101,7 @@ module PackageManager
       begin
         db_project.save!
       rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => e
-        raise e if e == ActiveRecord::RecordInvalid && e.message !~ /Name has already been taken/
+        raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.message !~ /Name has already been taken/
 
         # Probably a race condition with multiple versions of a new project being updated.
         db_project = Project.find_by(platform: db_platform, name: mapped_project[:name])
