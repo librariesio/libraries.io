@@ -463,6 +463,16 @@ describe PackageManager::Pypi do
 
         expect(db_project.reload.homepage).to eq(nil)
       end
+
+      context "that was created by another process in between lookup and save (a race condition)" do
+        it "overwrites the homepage" do
+          allow(Project).to receive(:find_or_initialize_by).and_return(Project.new(name: project_name, platform: "Pypi"))
+
+          described_class.update(project_name)
+
+          expect(db_project.reload.homepage).to eq("https://www.libraries.io/package_name/home")
+        end
+      end
     end
 
     it "adds the versions with correct statuses" do
