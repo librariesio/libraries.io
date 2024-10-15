@@ -94,19 +94,19 @@ module PackageManager
     end
 
     private_class_method def self.ensure_project(mapped_project, reformat_repository_url: false)
-      db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
-      db_project.reformat_repository_url if reformat_repository_url && !db_project.new_record?
-      db_project.attributes = mapped_project.except(:name, :versions, :version, :dependencies, :properties)
-
+      retries = 0
+      db_project = nil
       begin
+        db_project = Project.find_or_initialize_by({ name: mapped_project[:name], platform: db_platform })
+        db_project.reformat_repository_url if reformat_repository_url && !db_project.new_record?
+        db_project.attributes = mapped_project.except(:name, :versions, :version, :dependencies, :properties)
         db_project.save!
-      rescue ActiveRecord::RecordInvalid => e
-        raise e unless e.message =~ /Name has already been taken/
-
-        # Probably a race condition with multiple versions of a new project being updated.
-        db_project = Project.find_by(platform: db_platform, name: mapped_project[:name])
+      rescue ActiveRecord::RecordNotUnique => e
+        # Probably a race condition with multiple versions of a new project being updated at once.
+        retries += 1
+        retry if retries < 2
+        raise e
       end
-
       db_project
     end
 

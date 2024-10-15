@@ -463,6 +463,19 @@ describe PackageManager::Pypi do
 
         expect(db_project.reload.homepage).to eq(nil)
       end
+
+      context "that was created by another process in between validation and save (a race condition)" do
+        it "overwrites the homepage" do
+          expect(Project).to receive(:find_or_initialize_by).and_invoke(
+            ->(args) { Project.new(args) }, # first try: Project doesn't exist yet, so we get a new instance
+            ->(_args) { db_project }        # second try: Project was created by another process, so we get that instance
+          )
+
+          described_class.update(project_name)
+
+          expect(db_project.reload.homepage).to eq("https://www.libraries.io/package_name/home")
+        end
+      end
     end
 
     it "adds the versions with correct statuses" do
