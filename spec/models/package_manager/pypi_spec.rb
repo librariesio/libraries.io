@@ -466,7 +466,10 @@ describe PackageManager::Pypi do
 
       context "that was created by another process in between validation and save (a race condition)" do
         it "overwrites the homepage" do
-          allow(Project).to receive(:find_or_initialize_by).and_return(Project.new(name: project_name, platform: "Pypi"))
+          expect(Project).to receive(:find_or_initialize_by).and_invoke(
+            ->(args) { Project.new(args) }, # first try: Project doesn't exist yet, so we get a new instance
+            ->(_args) { db_project }        # second try: Project was created by another process, so we get that instance
+          )
 
           described_class.update(project_name)
 

@@ -124,7 +124,6 @@ class Project < ApplicationRecord
   delegate :code_of_conduct_url, :contribution_guidelines_url, :funding_urls, :security_policy_url, to: :repository, allow_nil: true
 
   validates :name, :platform, presence: true
-  validates :name, uniqueness: { scope: :platform, case_sensitive: true }
   validates :status, inclusion: { in: STATUSES, allow_blank: true }
 
   belongs_to :repository
