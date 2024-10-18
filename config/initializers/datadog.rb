@@ -1,25 +1,28 @@
 # frozen_string_literal: true
 
-require "ddtrace"
+def prod?
+  Rails.env.production? && (ENV["DD_AGENT_HOST"].present? || ENV["DD_TRACE_AGENT_URL"].present?)
+end
+
+def local_dev?
+  Rails.env.development? && ENV["DD_ENABLE_LOCAL"].present?
+end
 
 Datadog.configure do |c|
-  if Rails.env.production? && (ENV["DD_AGENT_HOST"].present? || ENV["DD_TRACE_AGENT_URL"].present?)
+  if prod? || local_dev?
     c.tracing.instrument :rack, quantize: { query: { show: :all } }
     c.tracing.instrument :rails
-    c.tracing.instrument :sidekiq, tag_args: true
+    c.tracing.instrument :sidekiq, quantize: { args: { show: :all } }
     c.tracing.instrument :faraday
     c.tracing.instrument :elasticsearch
     c.tracing.instrument :active_record, service_name: "libraries_postgres"
+    c.tracing.instrument :pg, service_name: "libraries_pg"
 
     # turn on Ruby profiler; there's also a require in config.ru
     # that is part of this.
     c.profiling.enabled = false
   else
-    # Tracer can be disabled with DD_TRACE_ENABLED="false" too
-    c.tracing.transport_options = lambda { |t|
-      t.adapter :test # no-op transport
-    }
-    c.diagnostics.startup_logs.enabled = false
+    c.tracing.enabled = false
   end
 
   c.env = Rails.env
