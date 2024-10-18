@@ -175,20 +175,17 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    datadog-ci (0.3.0)
+    datadog (2.4.0)
+      debase-ruby_core_source (= 3.3.1)
+      libdatadog (~> 12.0.0.1.0)
+      libddwaf (~> 1.14.0.0.0)
       msgpack
     date (3.3.4)
     db-query-matchers (0.11.0)
       activesupport (>= 4.0, < 7.1)
       rspec (>= 3.0)
-    ddtrace (1.16.2)
-      datadog-ci (~> 0.3.0)
-      debase-ruby_core_source (= 3.2.2)
-      libdatadog (~> 5.0.0.1.0)
-      libddwaf (~> 1.14.0.0.0)
-      msgpack
     deb_control (0.0.1)
-    debase-ruby_core_source (3.2.2)
+    debase-ruby_core_source (3.3.1)
     debug (1.9.2)
       irb (~> 1.10)
       reline (>= 0.3.8)
@@ -282,7 +279,7 @@ GEM
     jwt (2.8.1)
       base64
     language_server-protocol (3.17.0.3)
-    libdatadog (5.0.0.1.0)
+    libdatadog (12.0.0.1.0)
     libddwaf (1.14.0.0.0)
       ffi (~> 1.0)
     librariesio-gem-parser (1.0.0)
@@ -633,8 +630,8 @@ DEPENDENCIES
   dalli
   database_cleaner (~> 1.99.0)
   database_cleaner-active_record
+  datadog (~> 2.0)
   db-query-matchers
-  ddtrace (~> 1.16.2)
   debug (~> 1.9)
   dotenv-rails
   elasticsearch (~> 2)
