@@ -22,7 +22,6 @@ describe ProjectUpdatedWorker do
 
       described_class.drain
 
-      expect(web_hook.reload.last_sent_at).not_to be_nil
       assert_requested :post, url,
                        body: be_json_string_matching({
                          event: "project_updated",

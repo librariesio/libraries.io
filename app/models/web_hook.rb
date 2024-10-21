@@ -92,7 +92,10 @@ class WebHook < ApplicationRecord
 
   def send_payload(data, ignore_errors: false)
     response = request(data).run
-    update(last_sent_at: Time.now.utc, last_response: response.response_code)
+    # for user facing webhooks, we update last sent/last response
+    # but skip that for the all_project_updates to avoid hammering
+    # the db too much
+    update(last_sent_at: Time.now.utc, last_response: response.response_code) unless all_project_updates
     raise StandardError, "webhook failed webhook_id=#{id} timed_out=#{response.timed_out?} code=#{response.code}" unless response.success? || ignore_errors
   end
 end
