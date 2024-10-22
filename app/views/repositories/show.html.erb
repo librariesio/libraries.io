@@ -70,10 +70,6 @@
           Monitor dependencies
         <% end %>
       <% end %>
-      <%= link_to repository_web_hooks_path(repo.to_param), class: 'btn btn-info pull-right', id: 'webhooks' do %>
-        <%= fa_icon 'plug' %>
-        Web Hooks
-      <% end %>
     <% end %>
     <% if logged_in? && current_user.admin? %>
       <%= link_to 'Admin', admin_repository_path(repo.id), class: 'btn btn-primary pull-right', rel: 'nofollow' %>
