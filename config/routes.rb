@@ -161,14 +161,6 @@ Rails.application.routes.draw do
     get "/:host_type/:owner/:name/tags", to: "repositories#tags", as: :repository_tags, format: false, constraints: { name: /[^\/]+/ }
     get "/:host_type/:owner/:name/dependencies", to: "repositories#dependencies", format: false, constraints: { name: /[^\/]+/ }, as: :repository_dependencies
 
-    get "/:host_type/:owner/:name/web_hooks", to: "web_hooks#index", as: :repository_web_hooks, format: false, constraints: { name: /[^\/]+/ }
-    get "/:host_type/:owner/:name/web_hooks/new", to: "web_hooks#new", as: :new_repository_web_hook, format: false, constraints: { name: /[^\/]+/ }
-    delete "/:host_type/:owner/:name/web_hooks/:id", to: "web_hooks#destroy", as: :repository_web_hook, format: false, constraints: { name: /[^\/]+/ }
-    patch "/:host_type/:owner/:name/web_hooks/:id", to: "web_hooks#update", format: false, constraints: { name: /[^\/]+/ }
-    get "/:host_type/:owner/:name/web_hooks/:id/edit", to: "web_hooks#edit", as: :edit_repository_web_hook, format: false, constraints: { name: /[^\/]+/ }
-    post "/:host_type/:owner/:name/web_hooks/:id/test", to: "web_hooks#test", as: :test_repository_web_hook, format: false, constraints: { name: /[^\/]+/ }
-    post "/:host_type/:owner/:name/web_hooks", to: "web_hooks#create", format: false, constraints: { name: /[^\/]+/ }
-
     get "/:host_type", to: redirect("/")
   end
 
