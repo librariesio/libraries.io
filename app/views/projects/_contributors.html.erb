@@ -7,6 +7,6 @@
 	  </div>
 	</div>
 	<p>
-		<br><%= link_to 'See all contributors', repository_contributors_path(@repository.to_param) %>
+		<br><%= link_to 'See all contributors', @repository.contributors_url %>
 	</p>
 <% end %>
