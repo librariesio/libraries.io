@@ -5,15 +5,15 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
     BIBLIOTHECARY_SUPPORT = true
-    URL = "http://cocoapods.org/"
+    URL = "https://cocoapods.org/"
     COLOR = "#438eff"
 
     def self.package_link(db_project, _version = nil)
-      "http://cocoapods.org/pods/#{db_project.name}"
+      "https://cocoapods.org/pods/#{db_project.name}"
     end
 
     def self.documentation_url(name, version = nil)
-      "http://cocoadocs.org/docsets/#{name}/#{version}"
+      "https://cocoadocs.org/docsets/#{name}/#{version}"
     end
 
     def self.install_instructions(db_project, _version = nil)
@@ -21,18 +21,38 @@ module PackageManager
     end
 
     def self.project_names
-      get_json("http://cocoapods.libraries.io/pods.json")
+      get_raw("https://cdn.cocoapods.org/all_pods.txt").split("\n")
     end
 
     def self.recent_names
-      u = "http://cocoapods.libraries.io/feed.rss"
+      # changes to cocoapods show up in their commit feed
+      u = "https://github.com/CocoaPods/Specs/commits.atom"
       titles = SimpleRSS.parse(get_raw(u)).items.map(&:title)
       titles.map { |t| t.split[1] }.uniq
     end
 
     def self.project(name)
-      versions = get_json("http://cocoapods.libraries.io/pods/#{name}.json") || {}
-      latest_version = versions.keys.max_by { |version| version.split(".").map(&:to_i) }
+      # cocoapods has a CDN version of the podspecs that can be retrieved
+      # based on the details in https://blog.cocoapods.org/CocoaPods-1.7.2/
+      # so let's use that as the basis of how we pull information about a given
+      # project
+
+      # the cocoapods shard is based on the first 3 digits of the md5 of the name of the project
+      shard = Digest::MD5.hexdigest(name)[0..2].chars
+
+      # we want to get all the versions for a given pod from the text file
+      pod_versions = get_raw("https://cdn.cocoapods.org/all_pods_versions_#{shard.join('_')}.txt")
+        .split("\n")
+        .find { |line| line.starts_with?("#{name}/") }
+        .split("/")[1..]
+
+      latest_version = pod_versions.max_by { |version| version.split(".").map(&:to_i) }
+      # then we have to get the information for each version
+      versions = pod_versions.to_h do |v|
+        [v, get_json("https://cdn.cocoapods.org/Specs/#{shard.join('/')}/#{name}/#{v}/#{name}.podspec.json")]
+      end
+
+      # and finally, merge the latest version info to the top-level
       versions.fetch(latest_version, {}).then do |v|
         v.merge("versions" => versions) if versions.present?
       end
