@@ -73,8 +73,10 @@ module PackageManager
     end
 
     def self.versions(raw_project, _name)
-      raw_project.fetch("versions", {}).keys.map do |v|
-        VersionBuilder.build_hash(number: v.to_s)
+      raw_project.fetch("versions", {}).values.map do |v|
+        VersionBuilder.build_hash(number: v["version"].to_s,
+                                  published_at: v["published_at"] || VersionBuilder::MISSING,
+                                  original_license: parse_license(v["license"]) || VersionBuilder::MISSING)
       end
     end
 

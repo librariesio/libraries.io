@@ -57,12 +57,14 @@ describe PackageManager::CocoaPods do
                                               "1.0.0" => {
                                                 "name" => "some-package",
                                                 "version" => "1.0.0",
+                                                "published_at" => Time.parse("2023-09-06 19:24:46.72 +0000"),
                                               },
                                             },
                                           }, "some-package")
 
       expect(versions).to eq([{
                                number: "1.0.0",
+                               published_at: Time.parse("2023-09-06 19:24:46.72 +0000"),
                              }])
     end
   end
