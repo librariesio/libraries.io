@@ -47,9 +47,13 @@ module PackageManager
         .split("/")[1..]
 
       latest_version = pod_versions.max_by { |version| version.split(".").map(&:to_i) }
-      # then we have to get the information for each version
+      # then we have to get the information for each version. cdn has the podspec but we have to go to the
+      # git commit history to get a published_at date
       versions = pod_versions.to_h do |v|
-        [v, get_json("https://cdn.cocoapods.org/Specs/#{shard.join('/')}/#{name}/#{v}/#{name}.podspec.json")]
+        commit_info = AuthToken.client.commits("CocoaPods/Specs", path: "Specs/#{shard.join('/')}/#{name}/#{v}/#{name}.podspec.json", page: 1, per_page: 1)
+        pod_json = get_json("https://cdn.cocoapods.org/Specs/#{shard.join('/')}/#{name}/#{v}/#{name}.podspec.json")
+        pod_json["published_at"] = commit_info[0][:commit][:committer][:date]
+        [v, pod_json]
       end
 
       # and finally, merge the latest version info to the top-level
