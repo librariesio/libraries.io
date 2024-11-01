@@ -37,11 +37,8 @@ module PackageManager
       # so let's use that as the basis of how we pull information about a given
       # project
 
-      # the cocoapods shard is based on the first 3 digits of the md5 of the name of the project
-      shard = Digest::MD5.hexdigest(name)[0..2].chars
-
       # we want to get all the versions for a given pod from the text file
-      pod_info = get_raw("https://cdn.cocoapods.org/all_pods_versions_#{shard.join('_')}.txt")
+      pod_info = get_raw(pod_versions_url(name))
         .split("\n")
         .find { |line| line.starts_with?("#{name}/") }
       return {} unless pod_info.present? # it's been removed
@@ -52,8 +49,8 @@ module PackageManager
       # then we have to get the information for each version. cdn has the podspec but we have to go to the
       # git commit history to get a published_at date
       versions = pod_versions.to_h do |v|
-        commit_info = AuthToken.client.commits("CocoaPods/Specs", path: "Specs/#{shard.join('/')}/#{name}/#{v}/#{name}.podspec.json", page: 1, per_page: 1)
-        pod_json = get_json("https://cdn.cocoapods.org/Specs/#{shard.join('/')}/#{name}/#{v}/#{name}.podspec.json")
+        commit_info = AuthToken.client.commits("CocoaPods/Specs", path: podspec_path(name, v), page: 1, per_page: 1)
+        pod_json = get_json("https://cdn.cocoapods.org/#{podspec_path(name, v)}")
         pod_json["published_at"] = commit_info[0][:commit][:committer][:date]
         [v, pod_json]
       end
@@ -84,6 +81,19 @@ module PackageManager
 
     def self.parse_license(project_license)
       project_license.is_a?(Hash) ? project_license["type"] : project_license
+    end
+
+    def self.cdn_shard(name)
+      # the cocoapods shard is based on the first 3 digits of the md5 of the name of the project
+      Digest::MD5.hexdigest(name)[0..2].chars
+    end
+
+    def self.pod_versions_url(name)
+      "https://cdn.cocoapods.org/all_pods_versions_#{cdn_shard(name).join('_')}.txt"
+    end
+
+    def self.podspec_path(name, version)
+      "Specs/#{cdn_shard(name).join('/')}/#{name}/#{version}/#{name}.podspec.json"
     end
   end
 end
