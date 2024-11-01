@@ -41,10 +41,12 @@ module PackageManager
       shard = Digest::MD5.hexdigest(name)[0..2].chars
 
       # we want to get all the versions for a given pod from the text file
-      pod_versions = get_raw("https://cdn.cocoapods.org/all_pods_versions_#{shard.join('_')}.txt")
+      pod_info = get_raw("https://cdn.cocoapods.org/all_pods_versions_#{shard.join('_')}.txt")
         .split("\n")
         .find { |line| line.starts_with?("#{name}/") }
-        .split("/")[1..]
+      return {} unless pod_info.present? # it's been removed
+
+      pod_versions = pod_info.split("/")[1..]
 
       latest_version = pod_versions.max_by { |version| version.split(".").map(&:to_i) }
       # then we have to get the information for each version. cdn has the podspec but we have to go to the
