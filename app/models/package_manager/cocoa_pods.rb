@@ -51,7 +51,7 @@ module PackageManager
       versions = pod_versions.to_h do |v|
         commit_info = AuthToken.client.commits("CocoaPods/Specs", path: podspec_path(name, v), page: 1, per_page: 1)
         pod_json = get_json("https://cdn.cocoapods.org/#{podspec_path(name, v)}")
-        pod_json["published_at"] = commit_info[0][:commit][:committer][:date]
+        pod_json["published_at"] = commit_info[0]&.to_h&.dig(:commit, :committer, :date)
         [v, pod_json]
       end
 
