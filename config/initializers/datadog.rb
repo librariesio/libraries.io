@@ -17,10 +17,6 @@ Datadog.configure do |c|
     c.tracing.instrument :elasticsearch
     c.tracing.instrument :active_record, service_name: "libraries_postgres"
     c.tracing.instrument :pg, service_name: "libraries_pg"
-
-    # turn on Ruby profiler; there's also a require in config.ru
-    # that is part of this.
-    c.profiling.enabled = false
   else
     c.tracing.enabled = false
   end
