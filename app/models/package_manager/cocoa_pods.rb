@@ -39,6 +39,7 @@ module PackageManager
 
       # we want to get all the versions for a given pod from the text file
       pod_info = get_raw(pod_versions_url(name))
+        .force_encoding("UTF-8")
         .split("\n")
         .find { |line| line.starts_with?("#{name}/") }
       return {} unless pod_info.present? # it's been removed
@@ -93,7 +94,7 @@ module PackageManager
     end
 
     def self.podspec_path(name, version)
-      "Specs/#{cdn_shard(name).join('/')}/#{name}/#{version}/#{name}.podspec.json"
+      "Specs/#{cdn_shard(name).join('/')}/#{CGI.escape(name)}/#{version}/#{CGI.escape(name)}.podspec.json"
     end
   end
 end
