@@ -59,13 +59,24 @@ describe PackageManager::CocoaPods do
                                                 "version" => "1.0.0",
                                                 "published_at" => Time.parse("2023-09-06 19:24:46.72 +0000"),
                                               },
+                                              "1.0.1" => { # Deprecated versions won't have "name"/"version" keys, e.g. AFNetworking
+                                                "deprecated_in_favor_of" => "another-package-name",
+                                                "published_at" => Time.parse("2023-09-07 19:24:46.72 +0000"),
+                                              },
                                             },
                                           }, "some-package")
 
-      expect(versions).to eq([{
-                               number: "1.0.0",
-                               published_at: Time.parse("2023-09-06 19:24:46.72 +0000"),
-                             }])
+      expect(versions).to eq([
+        {
+          number: "1.0.0",
+          published_at: Time.parse("2023-09-06 19:24:46.72 +0000"),
+        },
+        {
+          number: "1.0.1",
+          status: "Deprecated",
+          published_at: Time.parse("2023-09-07 19:24:46.72 +0000"),
+        },
+                           ])
     end
   end
 end

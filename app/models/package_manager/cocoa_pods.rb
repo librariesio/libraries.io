@@ -73,8 +73,10 @@ module PackageManager
     end
 
     def self.versions(raw_project, _name)
-      raw_project.fetch("versions", {}).values.map do |v|
-        VersionBuilder.build_hash(number: v["version"].to_s,
+      raw_project.fetch("versions", {}).map do |(k, v)|
+        VersionBuilder.build_hash(number: k.to_s,
+                                  # TODO: we could capture deprecated_in_favor_of and use it
+                                  status: v["deprecated"] || v["deprecated_in_favor_of"].present? ? "Deprecated" : VersionBuilder::MISSING,
                                   published_at: v["published_at"] || VersionBuilder::MISSING,
                                   original_license: parse_license(v["license"]) || VersionBuilder::MISSING)
       end
