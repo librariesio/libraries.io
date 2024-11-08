@@ -49,14 +49,21 @@ describe PackageManager::Pypi::JsonApiProject do
   # These tests were migrated over from spec/models/package_manager/pypi_spec.rb
   # I'm keeping them as-is until we have a reason to update them.
   describe "#preferred_repository_url" do
-    let(:requests) do
-      JSON.parse(File.open("spec/fixtures/pypi-with-repository.json").read)
-    end
+    [
+      ["spec/fixtures/pypi-with-repository.json", "https://github.com/python-attrs/attrs"],
+      ["spec/fixtures/pypi-with-lower-case-repository.json", "https://github.com/fpgmaas/deptry"],
+    ].each do |fixture_path, expected_repository_url|
+      context "with fixture #{fixture_path}" do
+        let(:requests) do
+          JSON.parse(File.open(fixture_path).read)
+        end
 
-    let(:project) { described_class.new(requests) }
+        let(:project) { described_class.new(requests) }
 
-    it "finds the rarely-populated repository url" do
-      expect(project.preferred_repository_url).to eq("https://github.com/python-attrs/attrs")
+        it "finds the rarely-populated repository url" do
+          expect(project.preferred_repository_url).to eq(expected_repository_url)
+        end
+      end
     end
   end
 
