@@ -69,7 +69,7 @@ module PackageManager
         license.presence || license_classifiers
       end
 
-      REPOSITORY_PROJECT_URL_FIELDS = ["Source", "Source Code", "Repository", "Code"].flat_map do |field|
+      REPOSITORY_PROJECT_URL_FIELDS = ["Source", "Source Code", "Repository", "Code", "GitHub"].flat_map do |field|
         [field, field.downcase]
       end.freeze
 
