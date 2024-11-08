@@ -48,12 +48,17 @@ module PackageManager
         @data.dig("info", "summary")
       end
 
+      HOMEPAGE_PROJECT_URL_FIELDS = %w[Homepage Home HomePage].flat_map do |field|
+        [field, field.downcase]
+      end.freeze
+
       def homepage
-        @data.dig("info", "home_page").presence ||
-          @data.dig("info", "project_urls", "Homepage") ||
-          @data.dig("info", "project_urls", "Home") ||
-          @data.dig("info", "project_urls", "homepage") ||
-          @data.dig("info", "project_urls", "HomePage")
+        result = @data.dig("info", "home_page").presence
+        return result if result
+
+        HOMEPAGE_PROJECT_URL_FIELDS.filter_map do |field|
+          @data.dig("info", "project_urls", field).presence
+        end.first
       end
 
       def keywords_array
@@ -64,9 +69,13 @@ module PackageManager
         license.presence || license_classifiers
       end
 
+      REPOSITORY_PROJECT_URL_FIELDS = ["Source", "Source Code", "Repository", "Code"].flat_map do |field|
+        [field, field.downcase]
+      end.freeze
+
       def repository_url
-        ["Source", "Source Code", "Repository", "Code"].filter_map do |field|
-          @data.dig("info", "project_urls", field)
+        REPOSITORY_PROJECT_URL_FIELDS.filter_map do |field|
+          @data.dig("info", "project_urls", field).presence
         end.first
       end
 
