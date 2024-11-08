@@ -50,7 +50,7 @@ module PackageManager
 
       HOMEPAGE_PROJECT_URL_FIELDS = %w[Homepage Home HomePage].flat_map do |field|
         [field, field.downcase]
-      end.freeze
+      end.uniq.freeze
 
       def homepage
         result = @data.dig("info", "home_page").presence
@@ -69,9 +69,9 @@ module PackageManager
         license.presence || license_classifiers
       end
 
-      REPOSITORY_PROJECT_URL_FIELDS = ["Source", "Source Code", "Repository", "Code", "GitHub"].flat_map do |field|
+      REPOSITORY_PROJECT_URL_FIELDS = ["Source", "Source Code", "Repository", "Code", "GitHub", "Github"].flat_map do |field|
         [field, field.downcase]
-      end.freeze
+      end.uniq.freeze
 
       def repository_url
         REPOSITORY_PROJECT_URL_FIELDS.filter_map do |field|
