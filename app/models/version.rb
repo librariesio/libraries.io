@@ -146,7 +146,11 @@ class Version < ApplicationRecord
     if parsed_number.is_a?(String) || other.parsed_number.is_a?(String)
       other.published_at <=> published_at
     else
-      other.parsed_number <=> parsed_number
+      begin
+        other.parsed_number <=> parsed_number
+      rescue ArgumentError # fallback to publish date for not real semantic versions
+        other.published_at <=> published_at
+      end
     end
   end
 
