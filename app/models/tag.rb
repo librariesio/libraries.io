@@ -74,7 +74,11 @@ class Tag < ApplicationRecord
     if parsed_number.is_a?(String) || other.parsed_number.is_a?(String)
       other.number <=> number
     else
-      other.parsed_number <=> parsed_number
+      begin
+        other.parsed_number <=> parsed_number
+      rescue ArgumentError
+        other.number <=> number
+      end
     end
   end
 
