@@ -24,12 +24,9 @@ class TreeResolver
   end
 
   def load_dependencies_tree
-    tree_data = Rails.cache.fetch(
-      cache_key,
-      expires_in: 1.day,
-      race_condition_ttl: 2.minutes,
-      &method(:generate_dependency_tree)
-    )
+    tree_data = Rails.cache.fetch(cache_key, expires_in: 1.day, race_condition_ttl: 2.minutes) do
+      generate_dependency_tree
+    end
     @project_names = tree_data[:project_names]
     @license_names = tree_data[:license_names]
     @tree = tree_data[:tree]
@@ -45,7 +42,7 @@ class TreeResolver
 
   private
 
-  def generate_dependency_tree(_key)
+  def generate_dependency_tree(_key = nil)
     {
       tree: load_dependencies_for(@version, @version.project, @kind, 0),
       project_names: @project_names,
