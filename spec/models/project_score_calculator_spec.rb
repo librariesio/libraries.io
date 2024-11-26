@@ -184,7 +184,7 @@ describe ProjectScoreCalculator do
     end
 
     context "platform doesn't support dependent repos" do
-      let(:project) { build(:project, platform: "Homebrew") }
+      let(:project) { build(:project, platform: "Julia") }
 
       it "should be nil" do
         expect(calculator.dependent_repositories_score).to eq(nil)
@@ -546,14 +546,14 @@ describe ProjectScoreCalculator do
     end
 
     context "when package manager lacks support for features" do
-      let(:project) { build(:project, platform: "CocoaPods") }
+      let(:project) { build(:project, platform: "Julia") }
       it "should be the contain details of each score category" do
         expect(calculator.breakdown).to eq({
-                                             overall_score: 19,
+                                             overall_score: 28,
                                              popularity: {
-                                               score: 0.0,
+                                               score: nil,
                                                dependent_projects: nil,
-                                               dependent_repositories: 0,
+                                               dependent_repositories: nil,
                                                stars: nil,
                                                forks: nil,
                                                watchers: nil,

@@ -100,7 +100,7 @@ class ProjectScoreCalculator
   end
 
   def dependent_repositories_score
-    return nil unless platform_class::BIBLIOTHECARY_SUPPORT
+    return nil unless platform_class::HAS_DEPENDENCIES
     return 0 if max_dependent_repositories.zero? || @project.dependent_repos_count.zero?
 
     Math.log10(@project.dependent_repos_count) / Math.log10(max_dependent_repositories) * 100
