@@ -15,15 +15,6 @@
     <th class='text-center'>
       Dependencies
     </th>
-    <th class='text-center'>
-      Manifest Parsing
-    </th>
-    <th class='text-center'>
-      Security Notifications
-    </th>
-    <th class='text-center'>
-      License checking
-    </th>
   </thead>
   <% PackageManager::Base.platforms.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
     <tr>
@@ -42,15 +33,6 @@
       </td>
       <td class='text-center'>
         <%= feature_flag platform::HAS_DEPENDENCIES %>
-      </td>
-      <td class='text-center'>
-        <%= feature_flag platform::BIBLIOTHECARY_SUPPORT, (platform::BIBLIOTHECARY_PLANNED ? 'Coming soon' : nil) %>
-      </td>
-      <td class='text-center'>
-        <i> <%= platform::SECURITY_PLANNED ? 'Coming soon' : '-' %></i>
-      </td>
-      <td class='text-center'>
-        <i>Coming soon</i>
       </td>
     </tr>
   <% end %>
