@@ -17,11 +17,6 @@
 <% end %>
 
 <div class='row'>
-  <% if current_user.needs_to_enable_github_access? %>
-    <div class="col-md-8">
-      <%= render 'monitoring_promo' %>
-    </div>
-  <% else %>
     <div class="col-md-3">
       <div class='org-filter <%= 'active' unless @org %>'>
         <%= link_to url_for(org: nil) do %>
@@ -98,5 +93,4 @@
 
       <%= will_paginate @repos, page_links: false %>
     </div>
-  <% end %>
 </div>

@@ -26,19 +26,6 @@
           <% end %>
         </small>
       </p>
-    <% else %>
-      <h2>Hi there <%= current_user %>!</h2>
-      <p>
-        Libraries.io lets you watch packages that you depend on and notifies you when there's a new release.
-        When you follow a package, new releases will show up here in your newsfeed.
-      </p>
-      <%= render 'dashboard/monitoring_promo' %>
-    <% end %>
-  </div>
-  <div class="col-md-4">
-    <% if @versions.length > 0 %>
-      <h3>Repository Monitoring</h3>
-      <%= render 'dashboard/monitoring_promo' %>
     <% end %>
   </div>
 </div>
