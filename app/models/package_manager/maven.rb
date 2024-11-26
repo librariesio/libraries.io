@@ -5,8 +5,6 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     REPOSITORY_SOURCE_NAME = "Maven"
-    BIBLIOTHECARY_SUPPORT = true
-    SECURITY_PLANNED = true
     URL = "http://maven.org"
     COLOR = "#b07219"
     MAX_DEPTH = 5

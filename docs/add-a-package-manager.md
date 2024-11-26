@@ -300,24 +300,6 @@ If the `PackageManager` class has a `#dependencies` method then set this to `tru
 HAS_DEPENDENCIES = true
 ```
 
-### `BIBLIOTHECARY_SUPPORT`
-
-If your package manager has the concept of a manifest, a file that lists dependencies for a repository, for example `Gemfile`, `package.json` and `setup.py`, then you can add support to [Bibliothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
-
-If [Bibliothecary](https://github.com/librariesio/bibliothecary) already has support for parsing manifest files for this package manager set it to `true`:
-
-```ruby
-BIBLIOTHECARY_SUPPORT = true
-```
-
-### `BIBLIOTHECARY_PLANNED`
-
-If it's possible that [Bibliothecary](https://github.com/librariesio/bibliothecary) support for parsing manifest files can be added for this package manager, but has not yet, set it to `true`:
-
-```ruby
-BIBLIOTHECARY_PLANNED = true
-```
-
 ### `URL`
 
 If the package manager has a website then set this to the full url with protocol:
@@ -403,12 +385,6 @@ Once the `PackageManager` class is ready, there's some optional updates that can
 If your package manager has RSS feeds of new packages or recently updated packages then add each url to the [`RSS_SERVICES`](https://github.com/librariesio/dispatch/blob/master/dispatch.rb#L125) array, along with the class name of the package.
 
 If your package manager has JSON API of new packages or recently updated packages then add each url to the [`JSON_SERVICES`](https://github.com/librariesio/dispatch/blob/master/dispatch.rb#L103) array, along with the class name of the package.
-
-### Add Bibliothecary support
-
-If your package manager has the concept of a manifest, a file that lists dependencies for a repository, then you can add support to [Bibliothecary](https://github.com/librariesio/bibliothecary) to parse dependencies from those manifests from repositories on GitHub, GitLab and Bitbucket.
-
-Check out the documentation on adding support for a new package manager in the Bibliothecary repo: https://github.com/librariesio/bibliothecary
 
 ### Add icon to Pictogram
 

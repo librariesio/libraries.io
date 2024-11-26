@@ -4,7 +4,6 @@ module PackageManager
   class Haxelib < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    BIBLIOTHECARY_SUPPORT = true
     URL = "https://lib.haxe.org"
     COLOR = "#df7900"
 

@@ -4,7 +4,6 @@ module PackageManager
   class CPAN < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    BIBLIOTHECARY_SUPPORT = true
     URL = "https://metacpan.org"
     COLOR = "#0298c3"
 

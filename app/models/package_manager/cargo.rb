@@ -7,7 +7,6 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     HAS_OWNERS = true
-    BIBLIOTHECARY_SUPPORT = true
     URL = "https://crates.io"
     COLOR = "#dea584"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true

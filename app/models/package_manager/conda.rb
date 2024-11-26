@@ -5,7 +5,6 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     REPOSITORY_SOURCE_NAME = "Main"
-    BIBLIOTHECARY_SUPPORT = true
     URL = "https://anaconda.org"
     API_URL = "https://conda.libraries.io"
 

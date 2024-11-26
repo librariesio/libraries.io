@@ -4,7 +4,6 @@ module PackageManager
   class Meteor < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    BIBLIOTHECARY_SUPPORT = true
     URL = "https://atmospherejs.com"
     COLOR = "#f1e05a"
 

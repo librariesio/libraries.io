@@ -4,8 +4,6 @@ module PackageManager
   class Puppet < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    BIBLIOTHECARY_SUPPORT = false
-    BIBLIOTHECARY_PLANNED = true
     URL = "https://forge.puppet.com"
     COLOR = "#302B6D"
 
