@@ -4,7 +4,6 @@ module PackageManager
   class Pub < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    BIBLIOTHECARY_SUPPORT = true
     URL = "https://pub.dartlang.org"
     COLOR = "#00B4AB"
 

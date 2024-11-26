@@ -6,7 +6,6 @@ module PackageManager
   class NuGet < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    BIBLIOTHECARY_SUPPORT = true
     URL = "https://www.nuget.org"
     COLOR = "#178600"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true

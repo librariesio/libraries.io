@@ -5,8 +5,6 @@ module PackageManager
     REPOSITORY_SOURCE_NAME = "Main"
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    BIBLIOTHECARY_SUPPORT = true
-    SECURITY_PLANNED = true
     URL = "https://packagist.org"
     COLOR = "#4F5D95"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true

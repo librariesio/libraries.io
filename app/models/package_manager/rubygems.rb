@@ -5,8 +5,6 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     HAS_OWNERS = true
-    BIBLIOTHECARY_SUPPORT = true
-    SECURITY_PLANNED = true
     URL = "https://rubygems.org"
     COLOR = "#701516"
 

@@ -4,7 +4,6 @@ module PackageManager
   class Go < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    BIBLIOTHECARY_SUPPORT = true
     COLOR = "#375eab"
     VALID_HOST = /\./
     KNOWN_HOSTS = [

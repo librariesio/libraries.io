@@ -4,7 +4,6 @@ module PackageManager
   class Nimble < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    BIBLIOTHECARY_PLANNED = true
     URL = "https://github.com/nim-lang/nimble"
     COLOR = "#37775b"
 

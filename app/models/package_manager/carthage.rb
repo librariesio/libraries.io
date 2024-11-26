@@ -4,7 +4,6 @@ module PackageManager
   class Carthage < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    BIBLIOTHECARY_SUPPORT = true
     URL = "https://github.com/Carthage/Carthage"
     COLOR = "#ffac45"
 

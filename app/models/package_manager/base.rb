@@ -8,10 +8,7 @@ module PackageManager
     class MethodNotImplementedError < StandardError; end
 
     COLOR = "#fff"
-    BIBLIOTHECARY_SUPPORT = false
-    BIBLIOTHECARY_PLANNED = false
     HAS_MULTIPLE_REPO_SOURCES = false
-    SECURITY_PLANNED = false
     HIDDEN = false
     SYNC_ACTIVE = true
     HAS_OWNERS = false

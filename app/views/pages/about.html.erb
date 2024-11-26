@@ -86,7 +86,7 @@
       Libraries.io supports the following package managers. For more detail check out <%= link_to 'our compatibility matrix', compatibility_path %>.
     </p> 
     <div class="">
-      <% PackageManager::Base.platforms.select{|p| p::BIBLIOTHECARY_SUPPORT }.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
+      <% PackageManager::Base.platforms.sort_by{|p| p.formatted_name.downcase }.each do |platform| %>
         <a class="pictogram tip pictogram-<%= platform.formatted_name.downcase %>" href="/<%= platform.formatted_name %>" title='<%= platform.formatted_name %>'></a>
       <% end %>
     </div>

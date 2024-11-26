@@ -4,7 +4,6 @@ module PackageManager
   class Clojars < Maven
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    BIBLIOTHECARY_SUPPORT = true
     URL = "https://clojars.org"
     COLOR = "#db5855"
     NAME_DELIMITER = "/"

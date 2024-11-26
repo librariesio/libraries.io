@@ -4,7 +4,6 @@ module PackageManager
   class Elm < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    BIBLIOTHECARY_SUPPORT = true
     URL = "http://package.elm-lang.org/"
     COLOR = "#60B5CC"
 

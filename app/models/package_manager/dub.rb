@@ -4,7 +4,6 @@ module PackageManager
   class Dub < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
-    BIBLIOTHECARY_SUPPORT = true
     URL = "http://code.dlang.org"
     COLOR = "#ba595e"
 

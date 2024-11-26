@@ -4,7 +4,6 @@ module PackageManager
   class Hackage < Base
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = false
-    BIBLIOTHECARY_SUPPORT = true
     URL = "http://hackage.haskell.org"
     COLOR = "#29b544"
 

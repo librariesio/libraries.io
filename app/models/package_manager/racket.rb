@@ -4,7 +4,6 @@ module PackageManager
   class Racket < Base
     HAS_VERSIONS = false
     HAS_DEPENDENCIES = false
-    BIBLIOTHECARY_SUPPORT = false
     URL = "http://pkgs.racket-lang.org/"
     COLOR = "#375eab"
 
