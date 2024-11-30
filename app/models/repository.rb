@@ -109,7 +109,6 @@ class Repository < ApplicationRecord
 
   before_save :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
-  after_commit :save_projects, on: :update
   after_commit :update_source_rank_async, on: [:update], if: -> { previous_changes.except("updated_at").any? }
   after_commit :send_repository_updated, on: %i[create update]
 
@@ -204,10 +203,6 @@ class Repository < ApplicationRecord
     projects.each do |project|
       project.update_attribute(:status, "Unmaintained", audit_comment: "Repository#unmaintain!")
     end
-  end
-
-  def save_projects
-    projects.find_each(&:forced_save) if previous_changes.except("updated_at").any?
   end
 
   def owner
