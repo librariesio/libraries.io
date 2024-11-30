@@ -10,6 +10,7 @@ describe WebHook, type: :model do
   context "with a sample webhook" do
     let(:url) { "https://example.com/hook" }
     let(:project) { create(:project) }
+    let(:repository) { create(:repository) }
     let(:version) { create(:version, project: project) }
     let(:shared_secret) { nil }
     let(:web_hook) { create(:web_hook, url: url, repository: project.repository, shared_secret: shared_secret) }
@@ -134,6 +135,44 @@ describe WebHook, type: :model do
 
         expect do
           web_hook.send_project_updated(project)
+        end.to raise_error(/webhook failed webhook_id=#{web_hook.id} timed_out=true code=0/)
+      end
+    end
+
+    describe "#send_repository_updated" do
+      it "sends the repository_updated event" do
+        WebMock.stub_request(:post, url)
+          .to_return(status: 200)
+        web_hook.send_repository_updated(repository)
+
+        assert_requested :post, url,
+                         body: be_json_string_matching({
+                           event: "repository_updated",
+                           repository: {
+                             full_name: repository.full_name,
+                             host_type: repository.host_type,
+                             name: repository.name,
+                             updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(repository.updated_at),
+                             url: repository.url,
+                           }.stringify_keys,
+                         }.stringify_keys)
+      end
+
+      it "raises an error if the receiver returns 500" do
+        WebMock.stub_request(:post, url)
+          .to_return(status: 500)
+
+        expect do
+          web_hook.send_repository_updated(repository)
+        end.to raise_error(/webhook failed webhook_id=#{web_hook.id} timed_out=false code=500/)
+      end
+
+      it "raises an error if the receiver times out" do
+        WebMock.stub_request(:post, url)
+          .to_timeout
+
+        expect do
+          web_hook.send_repository_updated(repository)
         end.to raise_error(/webhook failed webhook_id=#{web_hook.id} timed_out=true code=0/)
       end
     end

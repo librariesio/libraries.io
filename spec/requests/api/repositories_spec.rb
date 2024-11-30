@@ -24,7 +24,7 @@ describe "Api::RepositoriesController" do
         repository
           .as_json(
             {
-              except: %i[id maintenance_stats_refreshed_at repository_organisation_id repository_user_id],
+              except: %i[id maintenance_stats_refreshed_at repository_organisation_id repository_user_id interesting],
               methods: %i[github_contributions_count github_id],
             }
           )
@@ -109,7 +109,7 @@ describe "Api::RepositoriesController" do
       expect(response.content_type).to start_with("application/json")
       expect(json.to_json).to be_json_eql(
         repository.to_json({
-                             except: %i[id maintenance_stats_refreshed_at repository_organisation_id repository_user_id],
+                             except: %i[id maintenance_stats_refreshed_at repository_organisation_id repository_user_id interesting],
                              methods: %i[github_contributions_count github_id],
                            })
       ).excluding("maintenance_stats") # exclude maintenance stats since those are not included in the serializer
