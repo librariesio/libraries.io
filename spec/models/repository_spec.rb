@@ -225,7 +225,7 @@ describe Repository, type: :model do
   end
 
   describe "#gather_maintenance_stats" do
-    let(:repository) { create(:repository, full_name: "chalk/chalk") }
+    let(:repository) { create(:repository, full_name: "chalk/chalk", interesting: true) }
     let!(:auth_token) { create(:auth_token) }
     let!(:project) do
       repository.projects.create!(
@@ -263,7 +263,7 @@ describe Repository, type: :model do
         end
       end
 
-      it "should update existing stats" do
+      it "should update existing stat timestamps even though values are unchanged" do
         first_updated_at = repository.repository_maintenance_stats.first.updated_at
         category = repository.repository_maintenance_stats.first.category
 
@@ -276,12 +276,49 @@ describe Repository, type: :model do
         expect(updated_stat.updated_at).to be > first_updated_at
       end
 
-      it "should not trigger callbacks" do
+      it "should not trigger source rank callback when values are unchanged" do
         VCR.use_cassette("github/chalk_api", match_requests_on: %i[method uri body query]) do
-          repository.gather_maintenance_stats
+          expect do
+            repository.gather_maintenance_stats
+          end.to change { UpdateRepositorySourceRankWorker.jobs.size }.by(0)
+        end
+      end
+
+      context "with a webhook listening to interesting repositories" do
+        let(:webhook_url) { "https://example.com/hook" }
+        let(:shared_secret) { nil }
+        let!(:web_hook) do
+          create(:web_hook,
+                 url: webhook_url,
+                 interesting_repository_updates: true,
+                 shared_secret: shared_secret)
         end
 
-        expect(UpdateRepositorySourceRankWorker.jobs.size).to eql(0)
+        it "should not trigger source rank callback but should trigger webhooks when values are changed" do
+          # gather_maintenance_stats has already run once as we enter this test
+          expect(repository.interesting).to eq(true)
+          expect(WebHook.receives_interesting_repository_updates.count).to eq(1)
+
+          # sneak a change behind ActiveRecord models back so we'll notice it changing in the below
+          # code.
+          repository.repository_maintenance_stats.where(category: "last_month_releases").update_all(value: "42")
+          repository.repository_maintenance_stats.reset
+
+          VCR.use_cassette("github/chalk_api", match_requests_on: %i[method uri body query]) do
+            expect do
+              repository.gather_maintenance_stats
+            end.to change { UpdateRepositorySourceRankWorker.jobs.size }.by(0)
+              .and change { RepositoryUpdatedWorker.jobs.size }.by(1)
+          end
+
+          # now gather stats again with no changes
+          VCR.use_cassette("github/chalk_api", match_requests_on: %i[method uri body query]) do
+            expect do
+              repository.gather_maintenance_stats
+            end.to change { UpdateRepositorySourceRankWorker.jobs.size }.by(0)
+              .and change { RepositoryUpdatedWorker.jobs.size }.by(0)
+          end
+        end
       end
     end
 
@@ -612,6 +649,20 @@ describe Repository, type: :model do
           expect(repository.audits.last.comment).to eq("Response 200")
         end
       end
+    end
+  end
+
+  describe "#update_source_rank_async" do
+    let(:repository) { create(:repository) }
+
+    it "should not trigger on updated_at change" do
+      repository.touch
+      expect(UpdateRepositorySourceRankWorker.jobs.size).to eql(0)
+    end
+
+    it "should trigger on a change besides updated_at" do
+      repository.update(status: "Removed")
+      expect(UpdateRepositorySourceRankWorker.jobs.size).to eql(1)
     end
   end
 end
