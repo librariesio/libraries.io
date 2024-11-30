@@ -110,7 +110,7 @@ class Repository < ApplicationRecord
   before_save :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
   after_commit :save_projects, on: :update
-  after_commit :update_source_rank_async, on: [:update]
+  after_commit :update_source_rank_async, on: [:update], if: -> { previous_changes.except("updated_at").any? }
   after_commit :send_repository_updated, on: %i[create update]
 
   scope :without_readme, -> { where("repositories.id NOT IN (SELECT repository_id FROM readmes)") }
@@ -207,7 +207,7 @@ class Repository < ApplicationRecord
   end
 
   def save_projects
-    projects.find_each(&:forced_save) if previous_changes.any?
+    projects.find_each(&:forced_save) if previous_changes.except("updated_at").any?
   end
 
   def owner
