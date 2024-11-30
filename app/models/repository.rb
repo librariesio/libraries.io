@@ -28,6 +28,7 @@
 #  homepage                       :string
 #  host_domain                    :string
 #  host_type                      :string
+#  interesting                    :boolean
 #  keywords                       :string           default([]), is an Array
 #  language                       :string
 #  last_synced_at                 :datetime
@@ -59,6 +60,7 @@
 #  github_repositories_lower_language                      (lower((language)::text))
 #  index_repositories_on_fork                              (fork)
 #  index_repositories_on_host_type_and_uuid                (host_type,uuid) UNIQUE
+#  index_repositories_on_interesting                       (interesting)
 #  index_repositories_on_lower_host_type_lower_full_name   (lower((host_type)::text), lower((full_name)::text)) UNIQUE
 #  index_repositories_on_maintenance_stats_refreshed_at    (maintenance_stats_refreshed_at)
 #  index_repositories_on_private                           (private)
@@ -109,6 +111,7 @@ class Repository < ApplicationRecord
   after_commit :update_all_info_async, on: :create
   after_commit :save_projects, on: :update
   after_commit :update_source_rank_async, on: [:update]
+  after_commit :send_repository_updated, on: %i[create update]
 
   scope :without_readme, -> { where("repositories.id NOT IN (SELECT repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
@@ -425,6 +428,19 @@ class Repository < ApplicationRecord
                             })
       # neither readme nor repository is marked as unmaintained so remove the label from any projects that are
       projects.unmaintained.update(status: nil, audit_comment: "Readme indicates maintained")
+    end
+  end
+
+  def send_repository_updated
+    # this is pretty important to prevent denial-of-servicing ourselves
+    return unless interesting
+
+    # this should be a cheap no-op if we remove all the
+    # receives_interesting_repository_updates WebHook, so that's an emergency off switch if
+    # required. Each webhook must be its own sidekiq job so it can be
+    # independently retried if failing.
+    WebHook.receives_interesting_repository_updates.pluck(:id).each do |web_hook_id|
+      RepositoryUpdatedWorker.perform_async(id, web_hook_id)
     end
   end
 end

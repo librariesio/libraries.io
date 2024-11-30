@@ -170,6 +170,7 @@ FactoryBot.define do
     size { 1000 }
     default_branch { "master" }
     forks_count { 1 }
+    interesting { false }
 
     trait :with_stats do
       after :build do |repo|
@@ -217,6 +218,7 @@ FactoryBot.define do
     user
     url { "http://google.com" }
     all_project_updates { false }
+    interesting_repository_updates { false }
   end
 
   factory :api_key do
