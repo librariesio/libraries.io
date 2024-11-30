@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_15_181932) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_30_150002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -287,10 +287,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_15_181932) do
     t.string "contribution_guidelines_url"
     t.string "security_policy_url"
     t.string "funding_urls", default: [], array: true
+    t.boolean "interesting"
     t.index "lower((host_type)::text), lower((full_name)::text)", name: "index_repositories_on_lower_host_type_lower_full_name", unique: true
     t.index "lower((language)::text)", name: "github_repositories_lower_language"
     t.index ["fork"], name: "index_repositories_on_fork"
     t.index ["host_type", "uuid"], name: "index_repositories_on_host_type_and_uuid", unique: true
+    t.index ["interesting"], name: "index_repositories_on_interesting"
     t.index ["maintenance_stats_refreshed_at"], name: "index_repositories_on_maintenance_stats_refreshed_at"
     t.index ["private"], name: "index_repositories_on_private"
     t.index ["rank", "stargazers_count", "id"], name: "index_repositories_on_rank_and_stargazers_count_and_id"
@@ -439,6 +441,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_15_181932) do
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "all_project_updates", default: false, null: false
     t.string "shared_secret"
+    t.boolean "interesting_repository_updates", default: false, null: false
     t.index ["all_project_updates"], name: "index_web_hooks_on_all_project_updates"
     t.index ["repository_id"], name: "index_web_hooks_on_repository_id"
   end
