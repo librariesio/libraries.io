@@ -136,6 +136,65 @@ describe Project, type: :model do
     end
   end
 
+  describe "#update_repository" do
+    context "with a repository_url that goes to a repository we have" do
+      let(:full_name) { "librariesio/libraries.io" }
+      let(:repository_url) { "https://github.com/#{full_name}" }
+      let(:repository) { create(:repository, full_name: full_name) }
+      let(:repository_url) { repository.url }
+      let(:project) { create(:project, name: "foo", repository_url: repository_url) }
+
+      before do
+        allow(RepositoryHost::Github).to receive(:fetch_repo)
+          .with(full_name, nil)
+          .and_return(RepositoryHost::RawUpstreamData.new(full_name: full_name,
+                                                          host_type: "github"))
+      end
+
+      it "sets project.repository to the existing repository" do
+        expect(project.repository_id).to be_nil
+        expect do
+          project.update_repository
+        end.not_to change(Repository, :count)
+        expect(project.repository).to eq(repository)
+      end
+
+      context "with junk repository_url but a homepage url" do
+        let(:project) { create(:project, name: "foo", repository_url: "junk", homepage: repository_url) }
+
+        it "sets project.repository to the existing repository" do
+          expect(project.repository_id).to be_nil
+          expect do
+            project.update_repository
+          end.not_to change(Repository, :count)
+          expect(project.repository).to eq(repository)
+        end
+      end
+
+      context "with a repository url that goes to a different repository" do
+        let(:different_full_name) { "foo/bar" }
+        let(:different_repository_url) { "https://github.com/#{different_full_name}" }
+        let(:project) { create(:project, name: "blah", repository_url: different_repository_url) }
+
+        before do
+          allow(RepositoryHost::Github).to receive(:fetch_repo)
+            .with(different_full_name, nil)
+            .and_return(RepositoryHost::RawUpstreamData.new(full_name: different_full_name,
+                                                            host_type: "github"))
+        end
+
+        it "creates a new project.repository" do
+          expect(project.repository_id).to be_nil
+          expect do
+            project.update_repository
+          end.to change(Repository, :count).by(1)
+          expect(project.repository).not_to eq(repository)
+          expect(project.repository&.url).to eq(different_repository_url)
+        end
+      end
+    end
+  end
+
   describe ".find_best!" do
     context "with an exact match" do
       it "returns the record" do
