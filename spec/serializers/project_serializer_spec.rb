@@ -53,4 +53,14 @@ describe ProjectSerializer do
       expect(subject.attributes.keys).to eq(default_attribute_names + %i[updated_at])
     end
   end
+
+  context "with a project that has a repository that does not match repository_url" do
+    let(:repository) { create(:repository) }
+    let(:project) { create(:project, repository_url: "https://github.com/something/unused", repository: repository) }
+    subject { described_class.new(project) }
+    it "should return repository_url not repository.url" do
+      expect(project.repository_url).not_to eq(project.repository.url)
+      expect(subject.attributes[:repository_url]).to eq(project.repository_url)
+    end
+  end
 end
