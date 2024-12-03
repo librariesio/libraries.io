@@ -22,7 +22,6 @@ class OptimizedProjectSerializer
     platform
     rank
     repository_url
-    score
     status
   ].freeze
 

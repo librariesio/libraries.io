@@ -84,7 +84,6 @@ describe "API::StatusController" do
         rank
         repository_maintenance_stats
         repository_url
-        score
         stars
         status
         versions
@@ -95,7 +94,6 @@ describe "API::StatusController" do
         params: {
           api_key: internal_user.api_key,
           projects: [{ name: project_django.name, platform: project_django.platform }],
-          score: true,
         }
       )
       expect(response).to have_http_status(:success)
@@ -115,7 +113,6 @@ describe "API::StatusController" do
           projects: [
             { name: project_django.name, platform: project_django.platform },
           ],
-          score: true,
         }
       )
 
@@ -133,7 +130,6 @@ describe "API::StatusController" do
           projects: [
             { name: requested_name, platform: project_django.platform },
           ],
-          score: true,
         }
       )
 
@@ -156,7 +152,6 @@ describe "API::StatusController" do
           projects: [
             { name: requested_name, platform: project.platform },
           ],
-          score: true,
         }
       )
 
