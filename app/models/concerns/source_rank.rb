@@ -11,8 +11,6 @@ module SourceRank
 
   def update_source_rank_async
     UpdateSourceRankWorker.perform_async(id)
-
-    ProjectScoreCalculationBatch.enqueue(platform, [id])
   end
 
   def set_source_rank
