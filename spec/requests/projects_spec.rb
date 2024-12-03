@@ -59,13 +59,6 @@ RSpec.describe ProjectsController do
     end
   end
 
-  describe "GET #score" do
-    it "responds successfully", type: :request do
-      visit project_score_path(project.to_param)
-      expect(page).to have_content project.name
-    end
-  end
-
   describe "GET #sourcerank" do
     it "responds successfully", type: :request do
       visit project_sourcerank_path(project.to_param)

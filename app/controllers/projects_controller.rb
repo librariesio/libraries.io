@@ -10,7 +10,6 @@ class ProjectsController < ApplicationController
     dependents
     mute
     refresh_stats
-    score
     show
     sourcerank
     sync
@@ -141,10 +140,6 @@ class ProjectsController < ApplicationController
 
   def top_dependent_projects
     render layout: false
-  end
-
-  def score
-    @calculator = ProjectScoreCalculator.new(@project)
   end
 
   def refresh_stats

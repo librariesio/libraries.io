@@ -208,7 +208,6 @@ Rails.application.routes.draw do
   post "/:platform/:name/mute", to: "projects#mute", as: :mute_project, constraints: { name: /.*/ }
   delete "/:platform/:name/unmute", to: "projects#unmute", as: :unmute_project, constraints: { name: /.*/ }
   get "/:platform/:name/tree", to: "tree#show", constraints: { name: PROJECT_CONSTRAINT }, as: :tree
-  get "/:platform/:name/score", to: "projects#score", as: :project_score, constraints: { name: /.*/ }
   get "/:platform/:name/sourcerank", to: "projects#sourcerank", as: :project_sourcerank, constraints: { name: /.*/ }
   get "/:platform/:name/versions", to: "projects#versions", as: :project_versions, constraints: { name: /.*/ }
   get "/:platform/:name/tags", to: "projects#tags", as: :project_tags, constraints: { name: /.*/ }
