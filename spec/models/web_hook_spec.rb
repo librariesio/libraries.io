@@ -96,16 +96,25 @@ describe WebHook, type: :model do
           .to_return(status: 200)
         web_hook.send_project_updated(project)
 
+        expected_payload = {
+          created_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(project.created_at),
+          dependents_count: project.dependents_count,
+          homepage: project.homepage,
+          keywords_array: project.keywords_array,
+          latest_release_number: project.latest_release_number,
+          latest_release_published_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(project.latest_release_published_at),
+          latest_stable_release_number: project.latest_stable_release_number,
+          name: project.name,
+          platform: project.platform,
+          repository_url: project.repository_url,
+          updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(project.updated_at),
+          versions_count: project.versions_count,
+        }.stringify_keys
+
         assert_requested :post, url,
                          body: be_json_string_matching({
                            event: "project_updated",
-                           project: {
-                             name: project.name,
-                             platform: project.platform,
-                             # this seems a little awkward but not sure what else to do to match
-                             # exactly how the serializer serializes this timestamp
-                             updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(project.updated_at),
-                           }.stringify_keys,
+                           project: expected_payload,
                          }.stringify_keys)
       end
 
