@@ -15,6 +15,11 @@ class Api::RepositoriesController < Api::ApplicationController
     paginate json: @repository.projects.visible.order(custom_order).includes(:versions, :repository)
   end
 
+  def project_names
+    columns = %i[platform name]
+    render json: Project.visible.select(columns).where(repository: @repository).order(custom_order).as_json(only: columns)
+  end
+
   def dependencies
     cache_key = "repository_dependencies:#{@repository.id}"
     json_hash = Rails.cache.fetch(cache_key, expires_in: 1.day) do

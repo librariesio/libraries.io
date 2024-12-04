@@ -61,6 +61,8 @@ Rails.application.routes.draw do
       get "/:host_type/:login", to: "repository_users#show"
     end
 
+    get "/repository/projects", to: "repositories#project_names"
+
     put "/maintenance/stats/enqueue/:platform/:name", as: :maintenance_stat_enqueue, to: "maintenance_stats#enqueue", constraints: { platform: PLATFORM_CONSTRAINT, name: PROJECT_CONSTRAINT }
     post "/maintenance/stats/begin/bulk", to: "maintenance_stats#begin_watching_bulk"
     post "/maintenance/stats/begin/repositories", to: "maintenance_stats#begin_watching_repositories"
