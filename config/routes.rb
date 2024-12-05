@@ -146,7 +146,7 @@ Rails.application.routes.draw do
   scope constraints: { host_type: /(github|gitlab|bitbucket)/i }, defaults: { host_type: "github" } do
     post "/hooks/:host_type", to: "hooks#github"
 
-    get "/:host_type/organisations", to: "repository_organisations#index", as: :repository_organisations
+    get "/:host_type/organisations", to: redirect("/")
     get "/:host_type/:login/dependencies", to: "repository_users#dependencies", as: :user_dependencies
     get "/:host_type/:login/repositories", to: "repository_users#repositories", as: :user_repositories
     get "/:host_type/:login/contributions", to: "repository_users#contributions", as: :user_contributions
