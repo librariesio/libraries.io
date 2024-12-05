@@ -3,35 +3,18 @@
 require "rails_helper"
 
 describe "RepositoriesController" do
-  let!(:repository) { create(:repository) }
-  let!(:tag) { create(:tag, repository: repository) }
-  let!(:contribution) { create(:contribution, repository: repository) }
-
-  describe "GET /github/:owner/:name", type: :request do
-    it "renders successfully when logged out" do
-      visit "/github/#{repository.full_name}"
-      expect(page).to have_content repository.full_name
+  shared_examples "repo redirect" do |fetch_url, redirect_target_url|
+    it "redirects to the repo host" do
+      get fetch_url
+      expect(response.status).to eq 301
+      expect(response.location).to eq redirect_target_url
     end
   end
 
-  describe "GET /github/:owner/:name/tags", type: :request do
-    it "renders successfully when logged out" do
-      visit "/github/#{repository.full_name}/tags"
-      expect(page).to have_content "#{repository.full_name} tags"
-    end
-  end
-
-  describe "GET /github/:owner/:name/contributors", type: :request do
-    it "renders successfully when logged out" do
-      visit "/github/#{repository.full_name}/contributors"
-      expect(page).to have_content "Committers to #{repository.full_name}"
-    end
-  end
-
-  describe "GET /github/:owner/:name/forks", type: :request do
-    it "renders successfully when logged out" do
-      visit "/github/#{repository.full_name}/forks"
-      expect(page).to have_content "Repositories forked from #{repository.full_name}"
-    end
-  end
+  it_behaves_like "repo redirect", "/github/rails/rails", "https://github.com/rails/rails"
+  it_behaves_like "repo redirect", "/github/rails/rails/tags", "https://github.com/rails/rails"
+  it_behaves_like "repo redirect", "/github/rails/rails/contributors", "https://github.com/rails/rails"
+  it_behaves_like "repo redirect", "/github/rails/rails/forks", "https://github.com/rails/rails"
+  it_behaves_like "repo redirect", "/bitbucket/rails/rails", "https://bitbucket.com/rails/rails"
+  it_behaves_like "repo redirect", "/gitlab/rails/rails", "https://gitlab.com/rails/rails"
 end
