@@ -52,9 +52,14 @@ describe "Api::RepositoriesController" do
   describe "GET /api/repository/projects", type: :request do
     let!(:project) { create(:project, repository: repository) }
     let!(:hidden_project) { create(:project, status: "Hidden", repository: repository) }
+    let(:internal_user) { create(:user) }
+
+    before do
+      internal_user.current_api_key.update_attribute(:is_internal, true)
+    end
 
     it "renders visible project names" do
-      get "/api/repository/projects", params: { host_type: repository.host_type, owner: repository.owner_name, name: repository.project_name }
+      get "/api/repository/projects", params: { host_type: repository.host_type, owner: repository.owner_name, name: repository.project_name, api_key: internal_user.api_key }
 
       expect(response).to have_http_status(:success)
       expect(response.content_type).to start_with("application/json")
