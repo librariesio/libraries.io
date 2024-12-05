@@ -49,6 +49,22 @@ describe "Api::RepositoriesController" do
     end
   end
 
+  describe "GET /api/repository/projects", type: :request do
+    let!(:project) { create(:project, repository: repository) }
+    let!(:hidden_project) { create(:project, status: "Hidden", repository: repository) }
+
+    it "renders visible project names" do
+      get "/api/repository/projects", params: { host_type: repository.host_type, owner: repository.owner_name, name: repository.project_name }
+
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to start_with("application/json")
+
+      expect(json).to contain_exactly(
+        { "name" => project.name, "platform" => project.platform }
+      )
+    end
+  end
+
   describe "GET /api/github/:owner/:name/shields_dependencies", type: :request do
     let!(:project) { create(:project, repository: repository) }
     let!(:version) { create(:version, project: project) }
