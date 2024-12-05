@@ -2,7 +2,7 @@
 
 class Api::RepositoriesController < Api::ApplicationController
   before_action :find_repo, except: :search
-  before_action :require_internal_api_key, only: :sync
+  before_action :require_internal_api_key, only: %i[sync project_names]
 
   def show
     include_readme = ActiveModel::Type::Boolean.new.cast(params[:include_readme])
