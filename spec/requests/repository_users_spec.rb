@@ -3,18 +3,15 @@
 require "rails_helper"
 
 describe "UsersController" do
-  let(:repository_user) { create(:repository_user) }
-  let(:repository_organisation) { create(:repository_organisation) }
-
-  describe "GET /github/:login", type: :request do
-    it "renders successfully when logged out" do
-      visit user_path(repository_user.to_param)
-      expect(page).to have_content repository_user.name
-    end
-
-    it "renders orgs successfully when logged out" do
-      visit user_path(repository_organisation.to_param)
-      expect(page).to have_content repository_organisation.name
+  shared_examples "repo user redirect" do |fetch_url, redirect_target_url|
+    it "redirects to the repo host" do
+      get fetch_url
+      expect(response.status).to eq 301
+      expect(response.location).to eq redirect_target_url
     end
   end
+
+  it_behaves_like "repo user redirect", "/github/rails", "https://github.com/rails"
+  it_behaves_like "repo user redirect", "/bitbucket/rails", "https://bitbucket.com/rails"
+  it_behaves_like "repo user redirect", "/gitlab/rails", "https://gitlab.com/rails"
 end
