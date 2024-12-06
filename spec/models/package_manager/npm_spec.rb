@@ -97,6 +97,20 @@ describe PackageManager::NPM do
       end
     end
 
+    context "latest version is a prerelease and not deprecated but last stable is deprecated" do
+      let(:version_data) do
+        {
+          "1.0.0" => { "version" => "1.0.0" },
+          "1.0.1" => { "version" => "1.0.1", "deprecated" => "Accidental" },
+          "2.0.0-pre23" => { "version" => "2.0.0-pre23" },
+        }
+      end
+
+      it "project not considered deprecated" do
+        expect(deprecation_info).to eq({ is_deprecated: false, message: nil })
+      end
+    end
+
     context "all versions deprecated" do
       let(:version_data) do
         {
