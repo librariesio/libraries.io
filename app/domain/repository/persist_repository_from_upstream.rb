@@ -42,9 +42,14 @@ class Repository::PersistRepositoryFromUpstream
     end
   end
 
+  def self.find_repository_from_host_type_and_full_name(host_type:, full_name:)
+    Repository.host(host_type || "GitHub").find_by("lower(full_name) = ?", full_name)
+  end
+
   def self.find_repository_from_host_data(upstream_raw_host_data)
     existing_repo = Repository.where(host_type: (upstream_raw_host_data.host_type || "GitHub")).find_by(uuid: upstream_raw_host_data.repository_uuid)
-    existing_repo = Repository.host(upstream_raw_host_data.host_type || "GitHub").find_by("lower(full_name) = ?", upstream_raw_host_data.lower_name) if existing_repo.nil?
+    existing_repo ||= find_repository_from_host_type_and_full_name(host_type: upstream_raw_host_data.host_type,
+                                                                   full_name: upstream_raw_host_data.lower_name)
 
     existing_repo
   end

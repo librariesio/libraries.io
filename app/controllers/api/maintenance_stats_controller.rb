@@ -26,27 +26,24 @@ class Api::MaintenanceStatsController < Api::BulkProjectController
   def begin_watching_repositories
     lookup_names = params.require(:repositories).map { |p| p.permit(%i[host_type full_name]).to_h.symbolize_keys }
 
-    github_lookup_names, other_lookup_names = lookup_names.partition { |repo_host_and_name| repo_host_and_name[:host_type].downcase == "github" }
+    auth_token = nil
+    repos = lookup_names.map do |repo_host_and_name|
+      # the create_from_host below does a remote API call to refresh the repo and THEN looks for an
+      # existing repo; we look for existing here first to save some time.
+      existing_repo = Repository::PersistRepositoryFromUpstream
+        .find_repository_from_host_type_and_full_name(host_type: repo_host_and_name[:host_type],
+                                                      full_name: repo_host_and_name[:full_name])
 
-    # grab a working token now so we don't run into issues trying to find one in the loop for each
-    # repository name
-    auth_token = AuthToken.find_token(:v3) if github_lookup_names.present?
-
-    # do we really want to synchronously create and refresh these repos here?
-    # Not sure this is the right choice.
-
-    github_repos = github_lookup_names.map do |repo_host_and_name|
-      Repository.create_from_host(repo_host_and_name[:host_type], repo_host_and_name[:full_name], auth_token.token)
-    end
-
-    other_repos = other_lookup_names.map do |repo_host_and_name|
-      Repository.create_from_host(repo_host_and_name[:host_type], repo_host_and_name[:full_name], nil)
+      existing_repo || begin
+        is_github = repo_host_and_name[:host_type].downcase == "github"
+        auth_token ||= AuthToken.find_token(:v3) if is_github
+        Repository.create_from_host(repo_host_and_name[:host_type], repo_host_and_name[:full_name],
+                                    is_github ? auth_token.token : nil)
+      end
     end
 
     # compact repos array to remove any invalid/not found repositories
-    repos = (github_repos + other_repos).compact
-
-    repos.each do |repo|
+    repos.compact.each do |repo|
       # mark it as now interesting; someday we may make a dedicated endpoint for this.
       # We use update_column here to avoid any callbacks/validation since none of those
       # should care about the interesting flag.
