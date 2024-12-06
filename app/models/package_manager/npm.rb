@@ -73,6 +73,17 @@ module PackageManager
         is_deprecated = false
       end
 
+      # if the last stable version is deprecated but there have been pre-releases since, let's assume that
+      # the package isn't deprecated and there was a bad publish, eg attr-accept in Nov 2024
+      last_version = versions.last
+      if is_deprecated && last_version != last_stable_version
+        last_message = last_version&.dig("deprecated")
+        if last_message == false || !last_message.is_a?(String)
+          is_deprecated = false
+          message = nil
+        end
+      end
+
       {
         is_deprecated: is_deprecated,
         message: message,
