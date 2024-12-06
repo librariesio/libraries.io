@@ -28,13 +28,14 @@ class RepositoryUsersController < ApplicationController
   private
 
   def redirect_url
+    login = ERB::Util.url_encode(params[:login].downcase)
     case params[:host_type].try(:downcase)
     when "github"
-      "https://github.com/#{params[:login].downcase}"
+      "https://github.com/#{login}"
     when "gitlab"
-      "https://gitlab.com/#{params[:login].downcase}"
+      "https://gitlab.com/#{login}"
     when "bitbucket"
-      "https://bitbucket.com/#{params[:login].downcase}"
+      "https://bitbucket.com/#{login}"
     else
       raise ActiveRecord::RecordNotFound
     end
