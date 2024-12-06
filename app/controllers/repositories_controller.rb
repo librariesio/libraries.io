@@ -28,14 +28,14 @@ class RepositoriesController < ApplicationController
   private
 
   def redirect_url
-    full_name = [params[:owner], params[:name]].join("/")
+    full_name = [ERB::Util.url_encode(params[:owner]), ERB::Util.url_encode(params[:name])].join("/").downcase
     case params[:host_type].try(:downcase)
     when "github"
-      "https://github.com/#{full_name.downcase}"
+      "https://github.com/#{full_name}"
     when "gitlab"
-      "https://gitlab.com/#{full_name.downcase}"
+      "https://gitlab.com/#{full_name}"
     when "bitbucket"
-      "https://bitbucket.com/#{full_name.downcase}"
+      "https://bitbucket.com/#{full_name}"
     else
       raise ActiveRecord::RecordNotFound
     end
