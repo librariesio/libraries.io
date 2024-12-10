@@ -4,16 +4,17 @@
 #
 # Table name: web_hooks
 #
-#  id                  :integer          not null, primary key
-#  all_project_updates :boolean          default(FALSE), not null
-#  last_response       :string
-#  last_sent_at        :datetime
-#  shared_secret       :string
-#  url                 :string
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  repository_id       :integer
-#  user_id             :integer
+#  id                             :integer          not null, primary key
+#  all_project_updates            :boolean          default(FALSE), not null
+#  interesting_repository_updates :boolean          default(FALSE), not null
+#  last_response                  :string
+#  last_sent_at                   :datetime
+#  shared_secret                  :string
+#  url                            :string
+#  created_at                     :datetime         not null
+#  updated_at                     :datetime         not null
+#  repository_id                  :integer
+#  user_id                        :integer
 #
 # Indexes
 #
@@ -29,6 +30,7 @@ class WebHook < ApplicationRecord
   before_save :clear_timestamps
 
   scope :receives_all_project_updates, -> { where(all_project_updates: true) }
+  scope :receives_interesting_repository_updates, -> { where(interesting_repository_updates: true) }
 
   def clear_timestamps
     return unless url_changed?
@@ -71,6 +73,15 @@ class WebHook < ApplicationRecord
                  ignore_errors: ignore_errors)
   end
 
+  def send_repository_updated(repository, ignore_errors: false)
+    serialized = RepositoryUpdatedSerializer.new(repository).as_json
+    send_payload({
+                   event: "repository_updated",
+                   repository: serialized,
+                 },
+                 ignore_errors: ignore_errors)
+  end
+
   def request(data)
     body = JSON.dump(data)
 
@@ -95,7 +106,7 @@ class WebHook < ApplicationRecord
     # for user facing webhooks, we update last sent/last response
     # but skip that for the all_project_updates to avoid hammering
     # the db too much
-    update(last_sent_at: Time.now.utc, last_response: response.response_code) unless all_project_updates
+    update(last_sent_at: Time.now.utc, last_response: response.response_code) unless all_project_updates || interesting_repository_updates
     raise StandardError, "webhook failed webhook_id=#{id} timed_out=#{response.timed_out?} code=#{response.code}" unless response.success? || ignore_errors
   end
 end

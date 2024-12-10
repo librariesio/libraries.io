@@ -98,14 +98,22 @@ module RepositoryHost
     attr_reader :repository
 
     def add_metrics_to_repo(results)
+      any_changed = false
       # create one hash with all results
       results.reduce({}, :merge).each do |category, value|
         next if value.nil?
 
         stat = repository.repository_maintenance_stats.find_or_create_by(category: category.to_s)
-        stat.update!(value: value.to_s)
-        stat.touch unless stat.changed?  # we always want to update updated_at for later querying
+        stat.value = value.to_s
+        if stat.changed?
+          any_changed = true
+          stat.save!
+        else
+          stat.touch # we always want to update updated_at for later querying
+        end
       end
+      # this triggers the "repository_updated" webhook
+      repository.touch if any_changed
     end
   end
 end
