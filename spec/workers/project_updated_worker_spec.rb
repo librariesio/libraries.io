@@ -33,6 +33,7 @@ describe ProjectUpdatedWorker do
         name: project.name,
         platform: project.platform,
         repository_url: project.repository_url,
+        status: project.status,
         updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(first_updated_at),
         versions_count: project.versions_count,
       }.stringify_keys
