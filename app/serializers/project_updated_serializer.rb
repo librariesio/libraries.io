@@ -15,6 +15,7 @@ class ProjectUpdatedSerializer < ActiveModel::Serializer
     name
     platform
     repository_url
+    status
     updated_at
     versions_count
   ]
