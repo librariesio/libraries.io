@@ -724,4 +724,58 @@ describe Project, type: :model do
       end
     end
   end
+
+  describe "#update_details" do
+    let!(:project) do
+      create(:project, name: "foo", platform: PackageManager::Rubygems,
+                       repository_url: "https://github.com/foo/bar",
+                       homepage: "http://example.com")
+    end
+
+    # the specific bug we added this spec to check for was setting latest_release_published_at to
+    # updated_at when there were no versions on a project, which resulted in constantly increasing
+    # the latest_release_published_at when there wasn't a release at all...
+    it "does not keep changing stuff when nothing changed" do
+      # run it once because apparently we don't on create?
+      # should probably fix that... but don't want to risk it
+      # at the time of working on this.
+      project.update_details
+      project.save!
+      expect do
+        project.update_details
+        project.save!
+      end.to not_change(project, :latest_release_published_at)
+        .and not_change(project, :updated_at)
+    end
+  end
+
+  describe "#send_project_updated" do
+    let!(:project) do
+      p = create(:project, name: "foo", platform: PackageManager::Rubygems,
+                           repository_url: "https://github.com/foo/bar",
+                           homepage: "http://example.com")
+      # this is because the Project.update_details callback doesn't run on create, which is probably
+      # not quite right honestly, but beyond the scope of the commit where I'm adding this.
+      p.save!
+      p
+    end
+    let(:url) { "https://example.com/hook" }
+    let!(:web_hook) { create(:web_hook, url: url, all_project_updates: true, shared_secret: nil) }
+
+    it "is called on touch and queues webhook" do
+      allow(ProjectUpdatedWorker).to receive(:perform_async)
+      expect do
+        project.touch
+      end.to change(project, :updated_at)
+      expect(ProjectUpdatedWorker).to have_received(:perform_async).with(project.id, web_hook.id)
+    end
+
+    it "is not called when there's a no-op update" do
+      allow(ProjectUpdatedWorker).to receive(:perform_async)
+      expect do
+        project.update(repository_url: project.repository_url, homepage: project.homepage)
+      end.not_to change(project, :updated_at)
+      expect(ProjectUpdatedWorker).not_to have_received(:perform_async).with(project.id, web_hook.id)
+    end
+  end
 end

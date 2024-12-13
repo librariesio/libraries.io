@@ -66,7 +66,7 @@ module Releases
   end
 
   def set_latest_release_published_at
-    self.latest_release_published_at = (latest_release.try(:published_at).presence || updated_at)
+    self.latest_release_published_at = (latest_release.try(:published_at).presence || read_attribute(:latest_release_published_at) || updated_at)
   end
 
   def set_latest_release_number
