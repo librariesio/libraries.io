@@ -212,7 +212,7 @@ class Project < ApplicationRecord
 
   after_commit :update_repository_async, on: :create
   after_commit :update_source_rank_async, on: %i[create update]
-  after_commit :send_project_updated, on: %i[create update]
+  after_commit :send_project_updated, on: %i[create update], if: :saved_change_to_updated_at?
   before_save  :update_details
   before_destroy :destroy_versions
   before_destroy :create_deleted_project
