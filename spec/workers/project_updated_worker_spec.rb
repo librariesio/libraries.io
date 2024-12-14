@@ -64,5 +64,15 @@ describe ProjectUpdatedWorker do
                          project: second_expected_payload,
                        }.stringify_keys)
     end
+
+    it "should raise an error on non-200" do
+      WebMock.stub_request(:post, url)
+        .to_return(status: 500)
+
+      project # create the project here
+      expect do
+        described_class.new.perform(project.id, web_hook.id)
+      end.to raise_error(/webhook failed.*code=500/)
+    end
   end
 end
