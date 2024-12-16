@@ -93,31 +93,60 @@ describe WebHook, type: :model do
 
     describe "#send_project_updated" do
       it "sends the project_updated event" do
+        allow(StructuredLog).to receive(:capture)
+
         WebMock.stub_request(:post, url)
           .to_return(status: 200)
         web_hook.send_project_updated(project)
 
         expected_payload = {
-          created_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(project.created_at),
+          created_at: project.created_at,
           dependents_count: project.dependents_count,
           homepage: project.homepage,
           keywords_array: project.keywords_array,
           latest_release_number: project.latest_release_number,
-          latest_release_published_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(project.latest_release_published_at),
+          latest_release_published_at: project.latest_release_published_at,
           latest_stable_release_number: project.latest_stable_release_number,
           name: project.name,
           platform: project.platform,
           repository_url: project.repository_url,
           status: project.status,
-          updated_at: ActiveModel::Type::DateTime.new(precision: 0).serialize(project.updated_at),
+          updated_at: project.updated_at,
           versions_count: project.versions_count,
         }.stringify_keys
+
+        # this is kind of annoying but we serialize to http with precision 0 and serialize to the
+        # logs with full precision, and serialize http with string keys and logs with symbol keys
+        expected_log_payload = expected_payload.clone
+        %w[created_at updated_at latest_release_published_at].each do |timestamp_attr|
+          expected_payload[timestamp_attr] = ActiveModel::Type::DateTime.new(precision: 0).serialize(expected_payload[timestamp_attr])
+          expected_log_payload[timestamp_attr] = ActiveModel::Type::DateTime.new.serialize(expected_log_payload[timestamp_attr])
+        end
+        expected_log_payload.symbolize_keys!
 
         assert_requested :post, url,
                          body: be_json_string_matching({
                            event: "project_updated",
                            project: expected_payload,
                          }.stringify_keys)
+
+        expect(StructuredLog).to have_received(:capture).with(
+          "WEB_HOOK_SENT",
+          {
+            webhook_id: web_hook.id,
+            response_timed_out: false,
+            response_code: 200,
+            response_success: true,
+            project_platform: project.platform,
+            project_name: project.name,
+            project_id: project.id,
+            request_duration: instance_of(Float),
+            webhook_payload: {
+              event: "project_updated",
+              project: expected_log_payload,
+            },
+          }
+        )
       end
 
       it "raises an error if the receiver returns 500" do

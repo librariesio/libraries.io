@@ -442,6 +442,13 @@ class Project < ApplicationRecord
     # required. Each webhook must be its own sidekiq job so it can be
     # independently retried if failing.
     WebHook.receives_all_project_updates.pluck(:id).each do |web_hook_id|
+      StructuredLog.capture("WEB_HOOK_ABOUT_TO_QUEUE",
+                            {
+                              webhook_id: web_hook_id,
+                              project_id: id,
+                              project_platform: platform,
+                              project_name: name,
+                            })
       ProjectUpdatedWorker.perform_async(id, web_hook_id)
     end
   end

@@ -70,7 +70,14 @@ class WebHook < ApplicationRecord
                    event: "project_updated",
                    project: serialized,
                  },
-                 ignore_errors: ignore_errors)
+                 ignore_errors: ignore_errors,
+                 # the platform and name are also in the serialization, but easier to use in datadog
+                 # if we pull them up here.
+                 extra_log_attrs: {
+                   project_platform: project.platform,
+                   project_name: project.name,
+                   project_id: project.id,
+                 })
   end
 
   def send_repository_updated(repository, ignore_errors: false)
@@ -101,8 +108,20 @@ class WebHook < ApplicationRecord
                           })
   end
 
-  def send_payload(data, ignore_errors: false)
+  def send_payload(data, ignore_errors: false, extra_log_attrs: {})
+    start_time = Time.current
     response = request(data).run
+    StructuredLog.capture("WEB_HOOK_SENT",
+                          {
+                            webhook_id: id,
+                            response_timed_out: response.timed_out?,
+                            response_code: response.code,
+                            response_success: response.success?,
+                            # this would be in datadog already if we have a trace, but it seems we
+                            # don't always have a trace.
+                            request_duration: Time.current - start_time,
+                            webhook_payload: data,
+                          }.merge(extra_log_attrs))
     # for user facing webhooks, we update last sent/last response
     # but skip that for the all_project_updates to avoid hammering
     # the db too much

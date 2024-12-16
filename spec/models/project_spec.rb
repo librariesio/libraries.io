@@ -763,11 +763,22 @@ describe Project, type: :model do
     let!(:web_hook) { create(:web_hook, url: url, all_project_updates: true, shared_secret: nil) }
 
     it "is called on touch and queues webhook" do
+      allow(StructuredLog).to receive(:capture)
       allow(ProjectUpdatedWorker).to receive(:perform_async)
       expect do
         project.touch
       end.to change(project, :updated_at)
       expect(ProjectUpdatedWorker).to have_received(:perform_async).with(project.id, web_hook.id)
+
+      expect(StructuredLog).to have_received(:capture).with(
+        "WEB_HOOK_ABOUT_TO_QUEUE",
+        {
+          webhook_id: web_hook.id,
+          project_id: project.id,
+          project_platform: project.platform,
+          project_name: project.name,
+        }
+      )
     end
 
     it "is not called when there's a no-op update" do
