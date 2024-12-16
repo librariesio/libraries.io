@@ -10,7 +10,8 @@ class RepositoryUpdatedWorker
   def perform(repository_id, web_hook_id)
     repository = Repository.find(repository_id)
     web_hook = WebHook.find(web_hook_id)
-    web_hook.send_repository_updated(repository, ignore_errors: true)
+    # remember, we need to raise errors in order to get retries
+    web_hook.send_repository_updated(repository, ignore_errors: false)
   end
 
   sidekiq_retries_exhausted do |job, _ex|
