@@ -110,7 +110,7 @@ class Repository < ApplicationRecord
   before_save :normalize_license_and_language
   after_commit :update_all_info_async, on: :create
   after_commit :update_source_rank_async, on: [:update], if: -> { previous_changes.except("updated_at").any? }
-  after_commit :send_repository_updated, on: %i[create update]
+  after_commit :send_repository_updated, on: %i[create update], if: :saved_change_to_updated_at?
 
   scope :without_readme, -> { where("repositories.id NOT IN (SELECT repository_id FROM readmes)") }
   scope :with_projects, -> { joins(:projects) }
