@@ -6,12 +6,10 @@ class Api::StatusController < Api::BulkProjectController
   def check
     serializer = OptimizedProjectSerializer.new(projects, project_names, internal_key: internal_api_key?)
     serialized = serializer.serialize
-    dumped = Datadog::Tracing.trace("status_check_oj_dump") do |_span, trace|
-      trace&.set_tag("project_ids", projects.map(&:id))
+    dumped = Datadog::Tracing.trace("status_check_oj_dump", tags: { "project_ids" => projects.map(&:id) }) do |_span, _trace|
       Oj.dump(serialized, mode: :rails)
     end
-    Datadog::Tracing.trace("status_check_render_dumped") do |_span, trace|
-      trace&.set_tag("project_ids", projects.map(&:id))
+    Datadog::Tracing.trace("status_check_render_dumped", tags: { "project_ids": projects.map(&:id) }) do |_span, _trace|
       render json: dumped
     end
   end
