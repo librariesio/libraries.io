@@ -71,8 +71,6 @@ class WebHook < ApplicationRecord
                    project: serialized,
                  },
                  ignore_errors: ignore_errors,
-                 # the platform and name are also in the serialization, but easier to use in datadog
-                 # if we pull them up here.
                  extra_log_attrs: {
                    project_platform: project.platform,
                    project_name: project.name,
@@ -120,7 +118,7 @@ class WebHook < ApplicationRecord
                             # this would be in datadog already if we have a trace, but it seems we
                             # don't always have a trace.
                             request_duration: Time.current - start_time,
-                            webhook_payload: data,
+                            webhook_event: data[:event],
                           }.merge(extra_log_attrs))
     # for user facing webhooks, we update last sent/last response
     # but skip that for the all_project_updates to avoid hammering
