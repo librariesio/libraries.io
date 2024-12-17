@@ -115,14 +115,10 @@ describe WebHook, type: :model do
           versions_count: project.versions_count,
         }.stringify_keys
 
-        # this is kind of annoying but we serialize to http with precision 0 and serialize to the
-        # logs with full precision, and serialize http with string keys and logs with symbol keys
-        expected_log_payload = expected_payload.clone
+        # match the serialization of timestamp that rails appears to use
         %w[created_at updated_at latest_release_published_at].each do |timestamp_attr|
           expected_payload[timestamp_attr] = ActiveModel::Type::DateTime.new(precision: 0).serialize(expected_payload[timestamp_attr])
-          expected_log_payload[timestamp_attr] = ActiveModel::Type::DateTime.new.serialize(expected_log_payload[timestamp_attr])
         end
-        expected_log_payload.symbolize_keys!
 
         assert_requested :post, url,
                          body: be_json_string_matching({
@@ -141,10 +137,7 @@ describe WebHook, type: :model do
             project_name: project.name,
             project_id: project.id,
             request_duration: instance_of(Float),
-            webhook_payload: {
-              event: "project_updated",
-              project: expected_log_payload,
-            },
+            webhook_event: "project_updated",
           }
         )
       end
