@@ -2,6 +2,11 @@
 
 # NOTE: This is _not_ an active model serializer. To use, instantiate and
 # call #serialize
+#
+# @param [Boolean] internal_key is the caller coming from an internal ApiKey?
+# @param [Boolean] minimal_versions when true, returns a subset of fields for
+#   each Version (published_at, number, status, original_license), instead of
+#   the entire Versions.
 class OptimizedProjectSerializer
   PROJECT_ATTRIBUTES = %w[
     dependent_repos_count
