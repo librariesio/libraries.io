@@ -14,6 +14,7 @@ describe "API::StatusController" do
 
   before do
     internal_user.current_api_key.update_attribute(:is_internal, true)
+    project_django.versions << build(:version)
   end
 
   describe "POST /api/check", type: :request do
@@ -103,6 +104,8 @@ describe "API::StatusController" do
       expected_fields.each do |field|
         expect(project).to have_key(field)
       end
+
+      expect(project["versions"][0].keys).to eq(%w[number published_at original_license status repository_sources])
     end
 
     it "correctly serves the keywords array" do
