@@ -31,7 +31,7 @@ describe OptimizedProjectSerializer do
       pending "when internal_key is true"
 
       context "with versions" do
-        let!(:project_1_versions) { create_list(:version, 5, project: projects[0]) }
+        let!(:project_1_versions) { create_list(:version, 5, project: projects[0], published_at: 1.year.ago) }
 
         before { projects[0].versions = project_1_versions }
 
@@ -51,6 +51,16 @@ describe OptimizedProjectSerializer do
               }
             end
           )
+        end
+
+        it "should include versions that fall back to created_at for published_at" do
+          version = project_1_versions.first
+          version.update_column(:published_at, nil)
+
+          result = subject.serialize
+
+          actual_version = result[0][:versions].find { |v| v[:number] == version.number }
+          expect(actual_version[:published_at]).to eq(version.created_at)
         end
       end
     end
