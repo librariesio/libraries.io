@@ -43,6 +43,7 @@ describe OptimizedProjectSerializer do
                 "published_at" => v.published_at,
                 "original_license" => v.original_license,
                 "status" => v.status,
+                "repository_sources" => v.repository_sources,
               }
             end
           )

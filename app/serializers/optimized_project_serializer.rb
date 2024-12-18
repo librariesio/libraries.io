@@ -27,7 +27,7 @@ class OptimizedProjectSerializer
     status
   ].freeze
 
-  VERSION_ATTRIBUTES = %i[number published_at original_license status].freeze
+  VERSION_ATTRIBUTES = %i[number published_at original_license status repository_sources].freeze
 
   def initialize(projects, requested_name_map, internal_key: false)
     @projects = projects
