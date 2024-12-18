@@ -25,10 +25,13 @@ class OptimizedProjectSerializer
     status
   ].freeze
 
-  def initialize(projects, requested_name_map, internal_key: false)
+  VERSION_ATTRIBUTES = %i[published_at number original_license status].freeze
+
+  def initialize(projects, requested_name_map, internal_key: false, minimal_versions: false)
     @projects = projects
     @requested_name_map = requested_name_map
     @internal_key = internal_key
+    @minimal_versions = minimal_versions
   end
 
   def serialize
@@ -55,7 +58,7 @@ class OptimizedProjectSerializer
           repository_license: project.repository_license,
           repository_status: project.repository_status,
           stars: project.stars,
-          versions: project.versions,
+          versions: @minimal_versions ? project.versions.map { |v| v.slice(*VERSION_ATTRIBUTES) } : project.versions,
           contributions_count: project.contributions_count,
           code_of_conduct_url: project.code_of_conduct_url,
           contribution_guidelines_url: project.contribution_guidelines_url,

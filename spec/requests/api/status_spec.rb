@@ -14,6 +14,7 @@ describe "API::StatusController" do
 
   before do
     internal_user.current_api_key.update_attribute(:is_internal, true)
+    project_django.versions << build(:version)
   end
 
   describe "POST /api/check", type: :request do
@@ -103,6 +104,24 @@ describe "API::StatusController" do
       expected_fields.each do |field|
         expect(project).to have_key(field)
       end
+
+      expect(project["versions"][0].keys).to eq(Version.column_names)
+    end
+
+    it "contains minimal version fields when minimal_versions=true" do
+      post(
+        url,
+        params: {
+          api_key: internal_user.api_key,
+          minimal_versions: "1",
+          projects: [{ name: project_django.name, platform: project_django.platform }],
+        }
+      )
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to start_with("application/json")
+
+      project = JSON.parse(response.body).first
+      expect(project["versions"][0].keys).to eq(%w[published_at number original_license status])
     end
 
     it "correctly serves the keywords array" do
