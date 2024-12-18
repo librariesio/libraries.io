@@ -88,12 +88,17 @@ class OptimizedProjectSerializer
   def versions_by_project_id
     @versions_by_project_id ||= Version
       .where(project_id: @projects.map(&:id))
-      .pluck(:project_id, *VERSION_ATTRIBUTES)
+      .pluck(:project_id, :created_at, *VERSION_ATTRIBUTES)
       .group_by(&:first)
       .transform_values do |versions_values|
         versions_values.map do |version_values|
           # turn Arrays into attribute Hashes, sans "id"
-          VERSION_ATTRIBUTES.zip(version_values[1..]).to_h
+          attrs = VERSION_ATTRIBUTES.zip(version_values[2..]).to_h
+
+          # Version model falls back published_at to created_at
+          attrs[:published_at] ||= version_values[1]
+
+          attrs
         end
       end
   end
