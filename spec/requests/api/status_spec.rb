@@ -105,7 +105,7 @@ describe "API::StatusController" do
         expect(project).to have_key(field)
       end
 
-      expect(project["versions"][0].keys).to eq(%w[number published_at original_license status])
+      expect(project["versions"][0].keys).to eq(%w[number published_at original_license status repository_sources])
     end
 
     it "correctly serves the keywords array" do

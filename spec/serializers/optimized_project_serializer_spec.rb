@@ -5,6 +5,10 @@ require "rails_helper"
 describe OptimizedProjectSerializer do
   let(:project_names) { projects.to_h { |p| [[p.platform, p.name], p.name] } }
 
+  before do
+    freeze_time
+  end
+
   context "#serialize" do
     context "with projects" do
       let!(:projects) { create_list(:project, 3) }
@@ -27,7 +31,7 @@ describe OptimizedProjectSerializer do
       pending "when internal_key is true"
 
       context "with versions" do
-        let(:project_1_versions) { create_list(:version, 5, project: projects[0]) }
+        let!(:project_1_versions) { create_list(:version, 5, project: projects[0]) }
 
         before { projects[0].versions = project_1_versions }
 
@@ -39,11 +43,11 @@ describe OptimizedProjectSerializer do
           expect(result[0][:versions]).to eq(
             project_1_versions.map do |v|
               {
-                "number" => v.number,
-                "published_at" => v.published_at,
-                "original_license" => v.original_license,
-                "status" => v.status,
-                "repository_sources" => v.repository_sources,
+                number: v.number,
+                published_at: v.published_at,
+                original_license: v.original_license,
+                status: v.status,
+                repository_sources: v.repository_sources,
               }
             end
           )

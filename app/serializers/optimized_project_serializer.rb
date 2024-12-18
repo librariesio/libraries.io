@@ -59,7 +59,7 @@ class OptimizedProjectSerializer
           repository_license: project.repository_license,
           repository_status: project.repository_status,
           stars: project.stars,
-          versions: project.versions.map { |v| v.slice(*VERSION_ATTRIBUTES) },
+          versions: versions_by_project_id.fetch(project.id, []),
           contributions_count: project.contributions_count,
           code_of_conduct_url: project.code_of_conduct_url,
           contribution_guidelines_url: project.contribution_guidelines_url,
@@ -83,5 +83,18 @@ class OptimizedProjectSerializer
           stats[row[-1]] << RepositoryMaintenanceStat::API_FIELDS.zip(row).to_h
         end
     end
+  end
+
+  def versions_by_project_id
+    @versions_by_project_id ||= Version
+      .where(project_id: @projects.map(&:id))
+      .pluck(:project_id, *VERSION_ATTRIBUTES)
+      .group_by(&:first)
+      .transform_values do |versions_values|
+        versions_values.map do |version_values|
+          # turn Arrays into attribute Hashes, sans "id"
+          VERSION_ATTRIBUTES.zip(version_values[1..]).to_h
+        end
+      end
   end
 end
