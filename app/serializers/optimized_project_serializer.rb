@@ -4,9 +4,6 @@
 # call #serialize
 #
 # @param [Boolean] internal_key is the caller coming from an internal ApiKey?
-# @param [Boolean] minimal_versions when true, returns a subset of fields for
-#   each Version (published_at, number, status, original_license), instead of
-#   the entire Versions.
 class OptimizedProjectSerializer
   PROJECT_ATTRIBUTES = %w[
     dependent_repos_count
@@ -30,13 +27,12 @@ class OptimizedProjectSerializer
     status
   ].freeze
 
-  VERSION_ATTRIBUTES = %i[published_at number original_license status].freeze
+  VERSION_ATTRIBUTES = %i[number published_at original_license status].freeze
 
-  def initialize(projects, requested_name_map, internal_key: false, minimal_versions: false)
+  def initialize(projects, requested_name_map, internal_key: false)
     @projects = projects
     @requested_name_map = requested_name_map
     @internal_key = internal_key
-    @minimal_versions = minimal_versions
   end
 
   def serialize
@@ -63,7 +59,7 @@ class OptimizedProjectSerializer
           repository_license: project.repository_license,
           repository_status: project.repository_status,
           stars: project.stars,
-          versions: @minimal_versions ? project.versions.map { |v| v.slice(*VERSION_ATTRIBUTES) } : project.versions,
+          versions: project.versions.map { |v| v.slice(*VERSION_ATTRIBUTES) },
           contributions_count: project.contributions_count,
           code_of_conduct_url: project.code_of_conduct_url,
           contribution_guidelines_url: project.contribution_guidelines_url,

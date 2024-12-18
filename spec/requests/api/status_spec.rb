@@ -105,23 +105,7 @@ describe "API::StatusController" do
         expect(project).to have_key(field)
       end
 
-      expect(project["versions"][0].keys).to eq(Version.column_names)
-    end
-
-    it "contains minimal version fields when minimal_versions=true" do
-      post(
-        url,
-        params: {
-          api_key: internal_user.api_key,
-          minimal_versions: "1",
-          projects: [{ name: project_django.name, platform: project_django.platform }],
-        }
-      )
-      expect(response).to have_http_status(:success)
-      expect(response.content_type).to start_with("application/json")
-
-      project = JSON.parse(response.body).first
-      expect(project["versions"][0].keys).to eq(%w[published_at number original_license status])
+      expect(project["versions"][0].keys).to eq(%w[number published_at original_license status])
     end
 
     it "correctly serves the keywords array" do
