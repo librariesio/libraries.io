@@ -34,6 +34,7 @@ class ProjectSerializer < ActiveModel::Serializer
     status
   ]
 
+  # Note: this implicitly uses VersionSerializer
   has_many :versions, if: :include_versions?
 
   attribute :updated_at, if: :show_updated_at?
