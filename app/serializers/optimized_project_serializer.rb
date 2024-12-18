@@ -2,8 +2,6 @@
 
 # NOTE: This is _not_ an active model serializer. To use, instantiate and
 # call #serialize
-#
-# @param [Boolean] internal_key is the caller coming from an internal ApiKey?
 class OptimizedProjectSerializer
   PROJECT_ATTRIBUTES = %w[
     dependent_repos_count
@@ -26,8 +24,6 @@ class OptimizedProjectSerializer
     repository_url
     status
   ].freeze
-
-  VERSION_ATTRIBUTES = %i[number published_at original_license status repository_sources].freeze
 
   def initialize(projects, requested_name_map, internal_key: false)
     @projects = projects
@@ -59,7 +55,7 @@ class OptimizedProjectSerializer
           repository_license: project.repository_license,
           repository_status: project.repository_status,
           stars: project.stars,
-          versions: versions_by_project_id.fetch(project.id, []),
+          versions: project.versions,
           contributions_count: project.contributions_count,
           code_of_conduct_url: project.code_of_conduct_url,
           contribution_guidelines_url: project.contribution_guidelines_url,
@@ -83,18 +79,5 @@ class OptimizedProjectSerializer
           stats[row[-1]] << RepositoryMaintenanceStat::API_FIELDS.zip(row).to_h
         end
     end
-  end
-
-  def versions_by_project_id
-    @versions_by_project_id ||= Version
-      .where(project_id: @projects.map(&:id))
-      .pluck(:project_id, *VERSION_ATTRIBUTES)
-      .group_by(&:first)
-      .transform_values do |versions_values|
-        versions_values.map do |version_values|
-          # turn Arrays into attribute Hashes, sans "id"
-          VERSION_ATTRIBUTES.zip(version_values[1..]).to_h
-        end
-      end
   end
 end
