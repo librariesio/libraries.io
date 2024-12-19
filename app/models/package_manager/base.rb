@@ -318,6 +318,7 @@ module PackageManager
         deps = begin
           dependencies(name, db_version.number, mapped_project)
         rescue StandardError => e
+          raise e
           StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: db_version.number, message: "error getting dependencies: #{e.message}", source: source })
           []
         end

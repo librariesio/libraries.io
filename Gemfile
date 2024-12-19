@@ -7,7 +7,8 @@ gem "active_model_serializers"
 gem "api-pagination"
 gem "asciidoctor"
 gem "audited"
-gem "bibliothecary", "~> 10.2.0"
+# gem "bibliothecary", "~> 10.2.0"
+gem "bibliothecary", path: "/home/travis/projects/bibliothecary/"
 gem "bitbucket_rest_api", git: "https://github.com/librariesio/bitbucket"
 gem "bootsnap", require: false
 gem "bootstrap-sass"
@@ -129,3 +130,5 @@ group :production do
   gem "bugsnag"
   gem "rails_safe_tasks"
 end
+
+gem "solargraph", "~> 0.50.0"

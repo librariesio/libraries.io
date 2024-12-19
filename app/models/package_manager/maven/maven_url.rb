@@ -7,7 +7,7 @@ module PackageManager
       GROUP_ARTIFACT_SPLIT_SIZE = 2
 
       def self.from_name(name, repo_base, delimiter = DELIMITER)
-        group_id, artifact_id = *name.split(delimiter, GROUP_ARTIFACT_SPLIT_SIZE)
+        group_id, artifact_id = *parse_name(name, delimiter)
 
         # Clojars names, when missing a group id, are implied to have the same group and artifact ids.
         artifact_id = group_id if artifact_id.nil? && delimiter == PackageManager::Clojars::NAME_DELIMITER
@@ -17,6 +17,10 @@ module PackageManager
 
       def self.legal_name?(name, delimiter = DELIMITER)
         name.present? && name.split(delimiter).size == GROUP_ARTIFACT_SPLIT_SIZE
+      end
+
+      def self.parse_name(name, delimiter = DELIMITER)
+        name.split(delimiter, GROUP_ARTIFACT_SPLIT_SIZE)
       end
 
       def initialize(group_id, artifact_id, repo_base)
