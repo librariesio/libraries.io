@@ -282,7 +282,6 @@ describe PackageManager::Go do
 
           expect(described_class.project_find_names("go.example.org/user/foo"))
             .to eq(["go.example.org/user/foo"])
-          expect(Bugsnag).to have_received(:notify)
         end
 
         context "with rails cache" do

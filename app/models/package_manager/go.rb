@@ -9,6 +9,10 @@ module PackageManager
     KNOWN_HOSTS = [
       "bitbucket.org",
       "github.com",
+      "gitlab.com",
+      "gitee.com",
+      "gopkg.in",
+      "k8s.io",
       "launchpad.net",
       "hub.jazz.net",
     ].freeze
@@ -243,34 +247,48 @@ module PackageManager
 
       begin
         # https://go.dev/ref/mod#serving-from-proxy
-        go_import = get_html("https://#{name}?go-get=1", { request: { timeout: 2 } })
-          .xpath('//meta[@name="go-import"]')
-          .first
-          &.attribute("content")
-          &.value
-          &.split(" ")
-          &.last
-          &.sub(/https?:\/\//, "")
+        # TODO: if nothing is being logged in GO_MODULES_PROJECT_FIND_NAMES_SUCCESS
+        # after a while, we might want to start using root_path instead of
+        # repo_url, if anything.
+        root_path = nil
+        vcs = nil
+        repo_url = nil
+        ms = Benchmark.ms do
+          root_path, vcs, repo_url = *get_html("https://#{name}?go-get=1", { request: { timeout: 2 } })
+            .xpath('//meta[@name="go-import"]')
+            .first
+            &.attribute("content")
+            &.value
+            &.split(" ")
 
-        chosen_name = go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
+          repo_url = repo_url&.sub(/https?:\/\//, "")
+        end
+
+        chosen_name = repo_url&.start_with?(*KNOWN_HOSTS) ? [repo_url] : [name]
         # Collect info on what data we're mapping here, to ensure it's doing the right thing.
         StructuredLog.capture(
           "GO_MODULES_PROJECT_FIND_NAMES",
           {
             name: name,
-            found_name: go_import,
+            root_path: root_path,
+            vcs: vcs,
+            repo_url: repo_url,
+            found_name: repo_url,
             chosen_name: chosen_name,
+            go_lookup_duration: ms,
           }
         )
 
         chosen_name
-      rescue Faraday::ConnectionFailed, Faraday::TimeoutError => e
+      rescue Faraday::ConnectionFailed, Faraday::TimeoutError
         # We can get here from go modules that don't exist anymore, or having server troubles:
         # Fallback to the given name, cache the host as "bad" for a day,
         # log it (to analyze later) and notify us to be safe.
-        Rails.logger.info "[Caching unreachable go host] name=#{name}"
+        StructuredLog.capture(
+          "GO_MODULES_PROJECT_FIND_NAMES_UNREACHABLE_HOST",
+          { name: name }
+        )
         Rails.cache.write("unreachable-go-hosts:#{host}", true, ex: 1.day)
-        Bugsnag.notify(e)
         [name]
       rescue StandardError => e
         Bugsnag.notify(e)
