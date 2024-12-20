@@ -121,15 +121,13 @@ GEM
       execjs
     base64 (0.1.1)
     benchmark (0.4.0)
-    bibliothecary (10.2.0)
+    bibliothecary (11.0.1)
       commander
       deb_control
       librariesio-gem-parser
       ox (>= 2.8.1)
       packageurl-ruby
       sdl4r
-      strings
-      strings-ansi
       tomlrb (~> 2.0)
       typhoeus
     bigdecimal (3.1.8)
@@ -236,7 +234,7 @@ GEM
     faraday_middleware (0.14.0)
       faraday (>= 0.7.4, < 1.0)
     fast_blank (1.0.1)
-    ffi (1.16.3)
+    ffi (1.17.0)
     font-awesome-rails (4.7.0.8)
       railties (>= 3.2, < 8.0)
     foreman (0.88.1)
@@ -577,11 +575,6 @@ GEM
     sql_queries_count (0.0.1)
       rails (> 3.0.0)
     stringio (3.1.0)
-    strings (0.2.1)
-      strings-ansi (~> 0.2)
-      unicode-display_width (>= 1.5, < 3.0)
-      unicode_utils (~> 1.4)
-    strings-ansi (0.2.0)
     strong_migrations (0.8.0)
       activerecord (>= 5.2)
     terminal-table (3.0.2)
@@ -602,7 +595,6 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
-    unicode_utils (1.4.0)
     vcr (6.2.0)
     version_gem (1.1.3)
     webmock (3.19.1)
@@ -630,7 +622,7 @@ DEPENDENCIES
   api-pagination
   asciidoctor
   audited
-  bibliothecary (~> 10.2.0)
+  bibliothecary (~> 11.0.0)
   bitbucket_rest_api!
   bootsnap
   bootstrap-sass

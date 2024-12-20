@@ -187,21 +187,18 @@ describe PackageManager::Maven do
     end
   end
 
-  describe "mapping_from_pom_xml" do
-    let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read) }
+  describe "mapping_from_pom_documents" do
+    let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read).project }
     let(:parent_pom) { Ox.parse("<project><scm><url>https://github.com/googleapis/googleapis-dummy</url></scm><licenses><license><name>unknown</name></license></licenses><url>https://github.com/googleapis/googleapis</url></project>") }
     let(:parent_project) { { name: "com.google.api.grpc:proto-google-common-parent", groupId: "com.google.api.grpc", artifactId: "proto-google-common-parent", versions: [{ number: "1.0", published_at: Time.now.to_s }] } }
-    let(:parsed) { described_class.mapping_from_pom_xml(pom) }
+    let(:pom_documents) { [pom, parent_pom] }
+    let(:parsed) { described_class.mapping_from_pom_documents(pom_documents) }
 
     context "with parsed pom" do
       before do
         allow(described_class)
           .to receive(:project)
           .and_return(parent_project)
-        allow(described_class)
-          .to receive(:get_pom)
-          .with("com.google.api.grpc", "proto-google-common-parent", "0.1.9")
-          .and_return(parent_pom)
       end
 
       it "to find license" do
@@ -230,20 +227,21 @@ describe PackageManager::Maven do
         )
       end
     end
+  end
 
-    it "to stop calling parent poms at maximum depth" do
-      allow(described_class)
-        .to receive(:get_pom)
-        .and_return(pom)
+  describe "update" do
+    context "with jaxb-runtime" do
+      let!(:project) { create(:project, name: "org.glassfish.jaxb:jaxb-runtime", platform: described_class.formatted_name) }
+      let!(:version) { create(:version, project: project, repository_sources: ["Maven"], number: "2.3.1") }
 
-      # parent lookup methods should be called 6 times (once here, plus 5 recursions)
-      # each call to get the parent will return a pom file also with a parent, which would be an endless loop
-      expect(described_class)
-        .to receive(:mapping_from_pom_xml)
-        .exactly(6)
-        .times
-        .and_call_original
-      described_class.mapping_from_pom_xml(pom)
+      it "creates dependencies with the expected requirements" do
+        VCR.use_cassette("maven-central/jaxb-runtime", record: :once) do
+          described_class.update("org.glassfish.jaxb:jaxb-runtime", sync_version: "2.3.1", force_sync_dependencies: true)
+        end
+
+        dependency = Dependency.find_sole_by(project_name: "com.sun.xml.fastinfoset:FastInfoset")
+        expect(dependency.requirements).to eq("1.2.15")
+      end
     end
   end
 

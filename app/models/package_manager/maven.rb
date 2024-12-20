@@ -7,7 +7,7 @@ module PackageManager
     REPOSITORY_SOURCE_NAME = "Maven"
     URL = "http://maven.org"
     COLOR = "#b07219"
-    MAX_DEPTH = 5
+    MAX_DEPTH = 50
     LICENSE_STRINGS = {
       "://www.apache.org/licenses/LICENSE-2.0" => "Apache-2.0",
       "://www.eclipse.org/legal/epl-v10" => "Eclipse Public License (EPL), Version 1.0",
@@ -82,19 +82,20 @@ module PackageManager
       {}
     end
 
-    def self.mapping(raw_project, depth = 0)
+    def self.mapping(raw_project)
       begin
-        version_xml = get_pom(raw_project[:group_id], raw_project[:artifact_id], raw_project[:latest_version])
+        pom_documents = get_pom_documents(raw_project[:group_id], raw_project[:artifact_id], raw_project[:latest_version])
       rescue POMNotFound => e
         Rails.logger.info "Missing POM for #{raw_project[:name]}/#{raw_project[:latest_version]}, trying to scrape latest"
         scraped = latest_version_scraped(raw_project[:name])
         if scraped != raw_project[:latest_version]
           raw_project[:latest_version] = scraped
-          return mapping(raw_project, depth)
+          return mapping(raw_project)
         end
         raise e
       end
-      pom_data = mapping_from_pom_xml(version_xml, depth)
+
+      pom_data = mapping_from_pom_documents(pom_documents)
 
       MappingBuilder.build_hash(
         name: raw_project[:name],
@@ -109,45 +110,58 @@ module PackageManager
       nil
     end
 
-    def self.mapping_from_pom_xml(version_xml, depth = 0)
-      xml = if version_xml.respond_to?("project")
-              version_xml.project
-            else
-              version_xml
-            end
+    def self.get_pom_documents(group_id, artifact_id, version, depth = 0)
+      return [] if depth >= MAX_DEPTH
 
-      parent = {
-        description: nil,
-        homepage: nil,
-        repository_url: "",
-        licenses: "",
-        properties: {},
-      }
-      if xml.locate("parent").present? && depth < MAX_DEPTH
-        group_id = extract_pom_value(xml, "parent/groupId")&.strip
-        artifact_id = extract_pom_value(xml, "parent/artifactId")&.strip
-        version = extract_pom_value(xml, "parent/version")&.strip
-        if group_id && artifact_id && version
-          parent = mapping_from_pom_xml(
-            get_pom(group_id, artifact_id, version),
-            depth + 1
-          )
+      pom_document = get_pom(group_id, artifact_id, version)
+      if pom_document.respond_to?("project")
+        pom_document = pom_document.project
+      end
+
+      result = [pom_document]
+
+      # Check if the POM document has a parent
+      if pom_document.locate("parent").present?
+        parent_group_id = extract_pom_value(pom_document, "parent/groupId")&.strip
+        parent_artifact_id = extract_pom_value(pom_document, "parent/artifactId")&.strip
+        parent_version = extract_pom_value(pom_document, "parent/version")&.strip
+        if parent_group_id && parent_artifact_id && parent_version
+          # Recursively call this method for the parent POM document. Parents
+          # are added to the end of the array
+          result += get_pom_documents(parent_group_id, parent_artifact_id, parent_version, depth + 1)
         end
       end
 
-      # merge with parent data if available and take child values on overlap
-      child = {
-        description: extract_pom_value(xml, "description", parent[:properties]),
-        homepage: extract_pom_value(xml, "url", parent[:properties])&.strip,
-        repository_url: repo_fallback(
-          extract_pom_value(xml, "scm/url", parent[:properties])&.strip,
-          extract_pom_value(xml, "url", parent[:properties])&.strip
-        ),
-        licenses: licenses(version_xml).join(","),
-        properties: parent[:properties].merge(extract_pom_properties(xml)),
-      }.select { |_k, v| v.present? }
+      result
+    end
 
-      parent.merge(child)
+    def self.mapping_from_pom_documents(pom_documents)
+      properties = {}
+
+      pom_documents.each do |pom_document|
+        properties.merge!(extract_pom_properties(pom_document))
+      end
+
+      result = {
+        properties: properties,
+      }
+
+      # Process all POM files to merge the data. Take child values on overlap
+      pom_documents.each do |pom_document|
+        new_result = {
+          description: extract_pom_value(pom_document, "description", properties),
+          homepage: extract_pom_value(pom_document, "url", properties)&.strip,
+          repository_url: repo_fallback(
+            extract_pom_value(pom_document, "scm/url", properties)&.strip,
+            extract_pom_value(pom_document, "url", properties)&.strip
+          ),
+          licenses: licenses(pom_document).join(","),
+        }.select { |_k, v| v.present? }
+
+        result = new_result.merge(result)
+      end
+
+      result
     end
 
     def self.extract_pom_value(xml, location, parent_properties = {})
@@ -174,13 +188,16 @@ module PackageManager
       properties
     end
 
-    def self.parse_pom_manifest(name, version, project)
-      pom_file = get_raw(MavenUrl.from_name(name, repository_base, NAME_DELIMITER).pom(version))
-      Bibliothecary::Parsers::Maven.parse_pom_manifest(pom_file, project[:properties])
+    def self.parse_pom_manifest(name, version)
+      group_id, artifact_id = *MavenUrl.parse_name(name)
+      pom_documents = get_pom_documents(group_id, artifact_id, version)
+      mapping = mapping_from_pom_documents(pom_documents)
+
+      Bibliothecary::Parsers::Maven.parse_pom_manifests(pom_documents.map { |doc| Ox.dump(doc) }, mapping[:properties])
     end
 
-    def self.dependencies(name, version, project)
-      parse_pom_manifest(name, version, project).map do |dep|
+    def self.dependencies(name, version, _project)
+      parse_pom_manifest(name, version).map do |dep|
         {
           project_name: dep[:name],
           requirements: dep[:requirement],
