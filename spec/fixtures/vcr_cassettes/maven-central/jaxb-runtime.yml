@@ -33,17 +33,17 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Age:
-      - '3229699'
+      - '3289474'
       Date:
-      - Thu, 19 Dec 2024 23:38:07 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
       X-Served-By:
-      - cache-iad-kiad7000027-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kiad7000027-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
       - 83389, 0
       X-Timer:
-      - S1734651488.739213,VS0,VE1
+      - S1734711263.132632,VS0,VE1
       Content-Length:
       - '1715'
     body:
@@ -102,7 +102,7 @@ http_interactions:
             <lastUpdated>20240307075257</lastUpdated>
           </versioning>
         </metadata>
-  recorded_at: Thu, 19 Dec 2024 23:38:07 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 - request:
     method: get
     uri: https://repo1.maven.org/maven2/org/glassfish/jaxb/jaxb-runtime/4.0.5/jaxb-runtime-4.0.5.pom
@@ -136,17 +136,17 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Age:
-      - '1342841'
+      - '1402617'
       Date:
-      - Thu, 19 Dec 2024 23:38:07 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
       X-Served-By:
-      - cache-iad-kcgs7200118-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kcgs7200118-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
       - 15745, 0
       X-Timer:
-      - S1734651488.760951,VS0,VE2
+      - S1734711263.157119,VS0,VE1
       Content-Length:
       - '10834'
     body:
@@ -380,7 +380,7 @@ http_interactions:
                 </plugins>
             </build>
         </project>
-  recorded_at: Thu, 19 Dec 2024 23:38:07 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 - request:
     method: get
     uri: https://repo1.maven.org/maven2/com/sun/xml/bind/mvn/jaxb-runtime-parent/4.0.5/jaxb-runtime-parent-4.0.5.pom
@@ -413,18 +413,18 @@ http_interactions:
       - 1.1 varnish, 1.1 varnish
       Accept-Ranges:
       - bytes
-      Age:
-      - '1348784'
       Date:
-      - Thu, 19 Dec 2024 23:38:07 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
+      Age:
+      - '1408560'
       X-Served-By:
-      - cache-iad-kcgs7200170-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kcgs7200170-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
-      - 15804, 0
+      - 15804, 2
       X-Timer:
-      - S1734651488.783410,VS0,VE1
+      - S1734711263.184369,VS0,VE0
       Content-Length:
       - '1188'
     body:
@@ -466,7 +466,7 @@ http_interactions:
             </modules>
 
         </project>
-  recorded_at: Thu, 19 Dec 2024 23:38:07 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 - request:
     method: get
     uri: https://repo1.maven.org/maven2/com/sun/xml/bind/mvn/jaxb-parent/4.0.5/jaxb-parent-4.0.5.pom
@@ -500,17 +500,17 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 19 Dec 2024 23:38:07 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
       Age:
-      - '237626'
+      - '263351'
       X-Served-By:
-      - cache-iad-kjyo7100048-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kjyo7100048-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
-      - 29778, 838
+      - 29778, 2
       X-Timer:
-      - S1734651488.800875,VS0,VE0
+      - S1734711263.208920,VS0,VE0
       Content-Length:
       - '35014'
     body:
@@ -1293,7 +1293,7 @@ http_interactions:
                 </profile>
             </profiles>
         </project>
-  recorded_at: Thu, 19 Dec 2024 23:38:07 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 - request:
     method: get
     uri: https://repo1.maven.org/maven2/com/sun/xml/bind/jaxb-bom-ext/4.0.5/jaxb-bom-ext-4.0.5.pom
@@ -1327,17 +1327,17 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Age:
-      - '229652'
+      - '289427'
       Date:
-      - Thu, 19 Dec 2024 23:38:07 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
       X-Served-By:
-      - cache-iad-kcgs7200128-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kcgs7200128-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
       - 32939, 0
       X-Timer:
-      - S1734651488.824115,VS0,VE1
+      - S1734711263.234738,VS0,VE1
       Content-Length:
       - '3474'
     body:
@@ -1435,7 +1435,7 @@ http_interactions:
             </dependencyManagement>
 
         </project>
-  recorded_at: Thu, 19 Dec 2024 23:38:07 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 - request:
     method: get
     uri: https://repo1.maven.org/maven2/org/glassfish/jaxb/jaxb-bom/4.0.5/jaxb-bom-4.0.5.pom
@@ -1469,17 +1469,17 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Age:
-      - '1933817'
+      - '1993592'
       Date:
-      - Thu, 19 Dec 2024 23:38:07 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
       X-Served-By:
-      - cache-iad-kcgs7200025-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kcgs7200025-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
       - 12448, 0
       X-Timer:
-      - S1734651488.851422,VS0,VE1
+      - S1734711263.256762,VS0,VE1
       Content-Length:
       - '11645'
     body:
@@ -1777,7 +1777,227 @@ http_interactions:
                 </pluginManagement>
             </build>
         </project>
-  recorded_at: Thu, 19 Dec 2024 23:38:07 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/org/eclipse/ee4j/project/1.0.9/project-1.0.9.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"f332cb0d94a1cda1c04c7af1276ff8cb"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Wed, 25 Oct 2023 16:33:56 GMT
+      X-Checksum-Md5:
+      - f332cb0d94a1cda1c04c7af1276ff8cb
+      X-Checksum-Sha1:
+      - 5c02bae4f34e508f6e22b0f7beb0fef77880ad02
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Age:
+      - '199173'
+      Date:
+      - Fri, 20 Dec 2024 16:14:23 GMT
+      X-Served-By:
+      - cache-iad-kcgs7200159-IAD, cache-den-kden1300067-DEN
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 23449, 0
+      X-Timer:
+      - S1734711263.279040,VS0,VE1
+      Content-Length:
+      - '16135'
+    body:
+      encoding: ASCII-8BIT
+      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--\n\n    Copyright (c)
+        2022 Contributors to the Eclipse Foundation. All rights reserved.\n    Copyright
+        (c) 2018 Oracle and/or its affiliates. All rights reserved.\n\n    This program
+        and the accompanying materials are made available under the\n    terms of
+        the Eclipse Public License v. 2.0, which is available at\n    http://www.eclipse.org/legal/epl-2.0.\n\n
+        \   This Source Code may also be made available under the following Secondary\n
+        \   Licenses when the conditions for such availability set forth in the\n
+        \   Eclipse Public License v. 2.0 are satisfied: GNU General Public License,\n
+        \   version 2 with the GNU Classpath Exception, which is available at\n    https://www.gnu.org/software/classpath/license.html.\n\n
+        \   SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0\n\n-->\n\n<project
+        xmlns=\"http://maven.apache.org/POM/4.0.0\"\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n
+        \        xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n
+        \   <modelVersion>4.0.0</modelVersion>\n    <groupId>org.eclipse.ee4j</groupId>\n
+        \   <artifactId>project</artifactId>\n    <version>1.0.9</version>\n    <packaging>pom</packaging>\n\n
+        \   <name>EE4J Project</name>\n    <url>https://projects.eclipse.org/projects/ee4j</url>\n
+        \   <description>\n        Eclipse Enterprise for Java (EE4J) is an open source
+        initiative to create standard APIs,\n        implementations of those APIs,
+        and technology compatibility kits for Java runtimes\n        that enable development,
+        deployment, and management of server-side and cloud-native applications.\n
+        \   </description>\n\n    <organization>\n        <name>Eclipse Foundation</name>\n
+        \       <url>https://www.eclipse.org</url>\n    </organization>\n    <inceptionYear>2017</inceptionYear>\n\n
+        \   <developers>\n        <developer>\n            <id>eclipseee4j</id>\n
+        \           <name>Eclipse EE4J Developers</name>\n            <organization>Eclipse
+        Foundation</organization>\n            <email>ee4j-pmc@eclipse.org</email>\n
+        \       </developer>\n    </developers>\n\n    <licenses>\n        <license>\n
+        \           <name>Eclipse Public License v. 2.0</name>\n            <url>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</url>\n
+        \           <distribution>repo</distribution>\n        </license>\n        <license>\n
+        \           <name>GNU General Public License, version 2 with the GNU Classpath
+        Exception</name>\n            <url>https://www.gnu.org/software/classpath/license.html</url>\n
+        \           <distribution>repo</distribution>\n        </license>\n    </licenses>\n\n
+        \   <issueManagement>\n        <system>GitHub Issues</system>\n        <url>https://github.com/eclipse-ee4j/ee4j/issues</url>\n
+        \   </issueManagement>\n\n    <scm>\n        <connection>scm:git:git@github.com:eclipse-ee4j/ee4j.git</connection>\n
+        \       <developerConnection>scm:git:git@github.com:eclipse-ee4j/ee4j.git</developerConnection>\n
+        \       <url>https://github.com/eclipse-ee4j/ee4j</url>\n    </scm>\n\n    <mailingLists>\n
+        \       <mailingList>\n            <name>Community discussions</name>\n            <post>jakarta.ee-community@eclipse.org</post>\n
+        \           <subscribe>https://accounts.eclipse.org/mailing-list/jakarta.ee-community</subscribe>\n
+        \           <unsubscribe>https://accounts.eclipse.org/mailing-list/jakarta.ee-community</unsubscribe>\n
+        \           <archive>https://dev.eclipse.org/mhonarc/lists/jakarta.ee-community/</archive>\n
+        \           <otherArchives>\n                <otherArchive>http://dev.eclipse.org/mhonarc/lists/jakarta.ee-community/maillist.rss</otherArchive>\n
+        \           </otherArchives>\n        </mailingList>\n        <mailingList>\n
+        \           <name>PMC discussions</name>\n            <post>ee4j-pmc@eclipse.org</post>\n
+        \           <subscribe>https://accounts.eclipse.org/mailing-list/ee4j-pmc</subscribe>\n
+        \           <unsubscribe>https://accounts.eclipse.org/mailing-list/ee4j-pmc</unsubscribe>\n
+        \           <archive>https://dev.eclipse.org/mhonarc/lists/ee4j-pmc/</archive>\n
+        \           <otherArchives>\n                <otherArchive>http://dev.eclipse.org/mhonarc/lists/ee4j-pmc/maillist.rss</otherArchive>\n
+        \           </otherArchives>\n        </mailingList>\n    </mailingLists>\n\n
+        \   <properties>\n        <sonatypeOssDistMgmtNexusUrl>https://jakarta.oss.sonatype.org/</sonatypeOssDistMgmtNexusUrl>\n
+        \       <sonatypeOssDistMgmtSnapshotsUrl>${sonatypeOssDistMgmtNexusUrl}content/repositories/snapshots/</sonatypeOssDistMgmtSnapshotsUrl>\n
+        \       <sonatypeOssDistMgmtStagingUrl>${sonatypeOssDistMgmtNexusUrl}content/repositories/staging/</sonatypeOssDistMgmtStagingUrl>\n
+        \       <sonatypeOssDistMgmtReleasesUrl>${sonatypeOssDistMgmtNexusUrl}service/local/staging/deploy/maven2/</sonatypeOssDistMgmtReleasesUrl>\n
+        \       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n
+        \       <!--\n          Initialize release.arguments to empty, otherwise if
+        not defined\n          it can fail the release plugin.\n        -->\n        <release.arguments></release.arguments>\n
+        \       <project.build.outputTimestamp>2020-12-19T17:24:00Z</project.build.outputTimestamp>\n
+        \   </properties>\n\n    <distributionManagement>\n        <snapshotRepository>\n
+        \           <id>ossrh</id>\n            <name>Sonatype Nexus Snapshots</name>\n
+        \           <url>${sonatypeOssDistMgmtSnapshotsUrl}</url>\n        </snapshotRepository>\n
+        \       <repository>\n            <id>ossrh</id>\n            <name>Sonatype
+        Nexus Releases</name>\n            <url>${sonatypeOssDistMgmtReleasesUrl}</url>\n
+        \       </repository>\n    </distributionManagement>\n\n    <build>\n        <pluginManagement>\n
+        \           <plugins>\n                <plugin>\n                    <groupId>org.apache.maven.plugins</groupId>\n
+        \                   <artifactId>maven-release-plugin</artifactId>\n                    <version>3.0.1</version>\n
+        \                   <configuration>\n                        <mavenExecutorId>forked-path</mavenExecutorId>\n
+        \                       <useReleaseProfile>false</useReleaseProfile>\n                        <arguments>-Poss-release
+        ${release.arguments}</arguments>\n                    </configuration>\n                </plugin>\n
+        \               <plugin>\n                    <groupId>org.sonatype.plugins</groupId>\n
+        \                   <artifactId>nexus-staging-maven-plugin</artifactId>\n
+        \                   <version>1.6.13</version>\n                    <configuration>\n
+        \                       <serverId>ossrh</serverId>\n                        <nexusUrl>${sonatypeOssDistMgmtNexusUrl}</nexusUrl>\n
+        \                       <autoReleaseAfterClose>false</autoReleaseAfterClose>\n
+        \                       <!-- Skip based on the maven.deploy.skip property
+        -->\n                        <skipNexusStagingDeployMojo>${maven.deploy.skip}</skipNexusStagingDeployMojo>\n
+        \                   </configuration>\n                </plugin>\n                <plugin>\n
+        \                   <groupId>org.apache.maven.plugins</groupId>\n                    <artifactId>maven-enforcer-plugin</artifactId>\n
+        \                   <version>3.4.1</version>\n                </plugin>\n
+        \               <plugin>\n                    <groupId>org.apache.maven.plugins</groupId>\n
+        \                   <artifactId>maven-jar-plugin</artifactId>\n                    <version>3.3.0</version>\n
+        \               </plugin>\n                <plugin>\n                    <groupId>org.apache.maven.plugins</groupId>\n
+        \                   <artifactId>maven-source-plugin</artifactId>\n                    <version>3.2.1</version>\n
+        \               </plugin>\n                <plugin>\n                    <groupId>org.apache.maven.plugins</groupId>\n
+        \                   <artifactId>maven-javadoc-plugin</artifactId>\n                    <version>3.6.0</version>\n
+        \               </plugin>\n                <plugin>\n                    <groupId>org.apache.maven.plugins</groupId>\n
+        \                   <artifactId>maven-gpg-plugin</artifactId>\n                    <!--
+        Older versions have issues with the gpg passphrase -->\n                    <version>3.1.0</version>\n
+        \               </plugin>\n                <plugin>\n                    <groupId>org.cyclonedx</groupId>\n
+        \                   <artifactId>cyclonedx-maven-plugin</artifactId>\n                    <version>2.7.9</version>\n
+        \               </plugin>\n                <plugin>\n                    <groupId>org.asciidoctor</groupId>\n
+        \                   <artifactId>asciidoctor-maven-plugin</artifactId>\n                    <version>2.2.4</version>\n
+        \               </plugin>\n            </plugins>\n        </pluginManagement>\n
+        \       \n    </build>\n\n    <profiles>\n\n        <profile>\n        <!--
+        Generates SBOM. Skip with '-DskipSBOM'.-->\n            <id>sbom</id>\n            <activation>\n
+        \             <property>\n                <name>!skipSBOM</name>\n              </property>\n
+        \           </activation>\n            <build>\n                <plugins>\n
+        \                   <plugin>\n                        <groupId>org.cyclonedx</groupId>\n
+        \                       <artifactId>cyclonedx-maven-plugin</artifactId>\n
+        \                       <configuration>\n                            <schemaVersion>1.4</schemaVersion>\n
+        \                           <projectType>library</projectType>\n                        </configuration>\n
+        \                       <executions>\n                            <execution>\n
+        \                               <phase>package</phase>\n                                <goals>\n
+        \                                   <goal>makeAggregateBom</goal>\n                                </goals>\n
+        \                           </execution>\n                        </executions>\n
+        \                   </plugin>\n                </plugins>\n            </build>\n
+        \       </profile>\n\n        <!--\n            This profile provides configuration
+        for the plugins that are required are in\n            order to deploy non
+        SNAPSHOT artifacts.\n            SNAPSHOT artifacts can be deployed without
+        using any profile.\n        -->\n        <profile>\n            <id>oss-release</id>\n
+        \           <build>\n                <plugins>\n                    <plugin>\n
+        \                       <groupId>org.apache.maven.plugins</groupId>\n                        <artifactId>maven-enforcer-plugin</artifactId>\n
+        \                       <executions>\n                            <execution>\n
+        \                               <id>enforce-maven</id>\n                                <goals>\n
+        \                                   <goal>enforce</goal>\n                                </goals>\n
+        \                               <configuration>\n                                    <rules>\n
+        \                                       <requireMavenVersion>\n                                            <version>[3.2.5,)</version>\n
+        \                                           <message>Maven 3.0 through 3.0.3
+        inclusive does not pass\n                                                correct
+        settings.xml to Maven Release Plugin.</message>\n                                        </requireMavenVersion>\n
+        \                                   </rules>\n                                </configuration>\n
+        \                           </execution>\n                        </executions>\n
+        \                   </plugin>\n                    <plugin>\n                        <groupId>org.apache.maven.plugins</groupId>\n
+        \                       <artifactId>maven-source-plugin</artifactId>\n                        <executions>\n
+        \                           <execution>\n                                <id>attach-sources</id>\n
+        \                               <goals>\n                                    <goal>jar-no-fork</goal>\n
+        \                               </goals>\n                            </execution>\n
+        \                       </executions>\n                    </plugin>\n                    <plugin>\n
+        \                       <groupId>org.apache.maven.plugins</groupId>\n                        <artifactId>maven-javadoc-plugin</artifactId>\n
+        \                       <executions>\n                            <execution>\n
+        \                               <id>attach-javadocs</id>\n                                <goals>\n
+        \                                   <goal>jar</goal>\n                                </goals>\n
+        \                           </execution>\n                        </executions>\n
+        \                   </plugin>\n                    <plugin>\n                        <groupId>org.apache.maven.plugins</groupId>\n
+        \                       <artifactId>maven-gpg-plugin</artifactId>\n                        <configuration>\n
+        \                           <gpgArguments>\n                                <arg>--pinentry-mode</arg>\n
+        \                               <arg>loopback</arg>\n                            </gpgArguments>\n
+        \                       </configuration>\n                        <executions>\n
+        \                           <execution>\n                                <id>sign-artifacts</id>\n
+        \                               <phase>verify</phase>\n                                <goals>\n
+        \                                   <goal>sign</goal>\n                                </goals>\n
+        \                           </execution>\n                        </executions>\n
+        \                   </plugin>\n                    <plugin>\n                        <groupId>org.sonatype.plugins</groupId>\n
+        \                       <artifactId>nexus-staging-maven-plugin</artifactId>\n
+        \                       <extensions>true</extensions>\n                    </plugin>\n
+        \               </plugins>\n            </build>\n        </profile>\n\n        <!--\n
+        \           This profile enables consuming snapshot artifacts from the ossrh\n
+        \           snapshots repository.\n        -->\n        <profile>\n            <id>snapshots</id>\n
+        \           <activation>\n                <activeByDefault>false</activeByDefault>\n
+        \           </activation>\n            <repositories>\n                <repository>\n
+        \                   <id>sonatype-nexus-snapshots</id>\n                    <name>Sonatype
+        Nexus Snapshots</name>\n                    <url>${sonatypeOssDistMgmtSnapshotsUrl}</url>\n
+        \                   <releases>\n                        <enabled>false</enabled>\n
+        \                   </releases>\n                    <snapshots>\n                        <enabled>true</enabled>\n
+        \                   </snapshots>\n                </repository>\n            </repositories>\n
+        \           <pluginRepositories>\n                <pluginRepository>\n                    <id>sonatype-nexus-snapshots</id>\n
+        \                   <name>Sonatype Nexus Snapshots</name>\n                    <url>${sonatypeOssDistMgmtSnapshotsUrl}</url>\n
+        \                   <releases>\n                        <enabled>false</enabled>\n
+        \                   </releases>\n                    <snapshots>\n                        <enabled>true</enabled>\n
+        \                   </snapshots>\n                </pluginRepository>\n            </pluginRepositories>\n
+        \       </profile>\n\n        <!--\n            This profile enables consuming
+        artifacts from the ossrh staging\n            repository group.\n        -->\n
+        \       <profile>\n            <id>staging</id>\n            <activation>\n
+        \               <activeByDefault>false</activeByDefault>\n            </activation>\n
+        \           <repositories>\n                <repository>\n                    <id>sonatype-nexus-staging</id>\n
+        \                   <name>Sonatype Nexus Staging</name>\n                    <url>${sonatypeOssDistMgmtStagingUrl}</url>\n
+        \                   <releases>\n                        <enabled>true</enabled>\n
+        \                   </releases>\n                    <snapshots>\n                        <enabled>false</enabled>\n
+        \                   </snapshots>\n                </repository>\n            </repositories>\n
+        \           <pluginRepositories>\n                <pluginRepository>\n                    <id>sonatype-nexus-staging</id>\n
+        \                   <name>Sonatype Nexus Staging</name>\n                    <url>${sonatypeOssDistMgmtStagingUrl}</url>\n
+        \                   <releases>\n                        <enabled>true</enabled>\n
+        \                   </releases>\n                    <snapshots>\n                        <enabled>false</enabled>\n
+        \                   </snapshots>\n                </pluginRepository>\n            </pluginRepositories>\n
+        \       </profile>\n    </profiles>\n</project>\n"
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 - request:
     method: get
     uri: https://repo1.maven.org/maven2/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.pom
@@ -1811,17 +2031,17 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Age:
-      - '236736'
+      - '1464932'
       Date:
-      - Thu, 19 Dec 2024 23:38:08 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
       X-Served-By:
-      - cache-iad-kiad7000146-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kiad7000146-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
       - 21565, 0
       X-Timer:
-      - S1734651488.000113,VS0,VE1
+      - S1734711263.437654,VS0,VE1
       Content-Length:
       - '7774'
     body:
@@ -2014,7 +2234,7 @@ http_interactions:
                 </plugins>
             </build>
         </project>
-  recorded_at: Thu, 19 Dec 2024 23:38:07 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 - request:
     method: get
     uri: https://repo1.maven.org/maven2/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.pom
@@ -2048,17 +2268,17 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 19 Dec 2024 23:38:08 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
       Age:
-      - '236736'
+      - '1464932'
       X-Served-By:
-      - cache-iad-kiad7000146-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kiad7000146-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
       - 21565, 1
       X-Timer:
-      - S1734651488.042805,VS0,VE1
+      - S1734711263.484194,VS0,VE1
       Content-Length:
       - '7774'
     body:
@@ -2251,7 +2471,7 @@ http_interactions:
                 </plugins>
             </build>
         </project>
-  recorded_at: Thu, 19 Dec 2024 23:38:07 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 - request:
     method: get
     uri: https://repo1.maven.org/maven2/com/sun/xml/bind/mvn/jaxb-runtime-parent/2.3.1/jaxb-runtime-parent-2.3.1.pom
@@ -2285,17 +2505,17 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Age:
-      - '1345860'
+      - '1405635'
       Date:
-      - Thu, 19 Dec 2024 23:38:08 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
       X-Served-By:
-      - cache-iad-kcgs7200162-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kcgs7200162-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
       - 20517, 0
       X-Timer:
-      - S1734651488.064883,VS0,VE1
+      - S1734711264.503111,VS0,VE1
       Content-Length:
       - '2758'
     body:
@@ -2366,7 +2586,7 @@ http_interactions:
             </modules>
 
         </project>
-  recorded_at: Thu, 19 Dec 2024 23:38:08 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 - request:
     method: get
     uri: https://repo1.maven.org/maven2/com/sun/xml/bind/mvn/jaxb-parent/2.3.1/jaxb-parent-2.3.1.pom
@@ -2400,17 +2620,17 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Age:
-      - '143246'
+      - '203022'
       Date:
-      - Thu, 19 Dec 2024 23:38:08 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
       X-Served-By:
-      - cache-iad-kjyo7100037-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kjyo7100037-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
       - 32944, 0
       X-Timer:
-      - S1734651488.089094,VS0,VE1
+      - S1734711264.526477,VS0,VE1
       Content-Length:
       - '41072'
     body:
@@ -3340,7 +3560,7 @@ http_interactions:
                 </profile>
             </profiles>
         </project>
-  recorded_at: Thu, 19 Dec 2024 23:38:08 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 - request:
     method: get
     uri: https://repo1.maven.org/maven2/com/sun/xml/bind/jaxb-bom-ext/2.3.1/jaxb-bom-ext-2.3.1.pom
@@ -3374,17 +3594,17 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Age:
-      - '832067'
+      - '891842'
       Date:
-      - Thu, 19 Dec 2024 23:38:08 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
       X-Served-By:
-      - cache-iad-kiad7000063-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kiad7000063-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
       - 10001, 0
       X-Timer:
-      - S1734651488.115369,VS0,VE27
+      - S1734711264.552200,VS0,VE1
       Content-Length:
       - '4989'
     body:
@@ -3511,7 +3731,7 @@ http_interactions:
                 </pluginManagement>
             </build>
         </project>
-  recorded_at: Thu, 19 Dec 2024 23:38:08 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 - request:
     method: get
     uri: https://repo1.maven.org/maven2/org/glassfish/jaxb/jaxb-bom/2.3.1/jaxb-bom-2.3.1.pom
@@ -3545,17 +3765,17 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Age:
-      - '137516'
+      - '197291'
       Date:
-      - Thu, 19 Dec 2024 23:38:08 GMT
+      - Fri, 20 Dec 2024 16:14:23 GMT
       X-Served-By:
-      - cache-iad-kcgs7200107-IAD, cache-den-kden1300033-DEN
+      - cache-iad-kcgs7200107-IAD, cache-den-kden1300067-DEN
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
       - 54056, 0
       X-Timer:
-      - S1734651488.159716,VS0,VE1
+      - S1734711264.572286,VS0,VE1
       Content-Length:
       - '10202'
     body:
@@ -3816,5 +4036,156 @@ http_interactions:
                 </pluginManagement>
             </build>
         </project>
-  recorded_at: Thu, 19 Dec 2024 23:38:08 GMT
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
+- request:
+    method: get
+    uri: https://repo1.maven.org/maven2/net/java/jvnet-parent/5/jvnet-parent-5.pom
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.6
+      Accept-Encoding:
+      - gzip,deflate,br
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Etag:
+      - '"9fa4076b514301eb40c3b734bf6371a4"'
+      Content-Type:
+      - text/xml
+      Last-Modified:
+      - Wed, 04 Jun 2014 14:51:20 GMT
+      X-Checksum-Md5:
+      - 9fa4076b514301eb40c3b734bf6371a4
+      X-Checksum-Sha1:
+      - 5343c954d21549d039feebe5fadef023cdfc1388
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Fri, 20 Dec 2024 16:14:23 GMT
+      Age:
+      - '1405438'
+      X-Served-By:
+      - cache-iad-kcgs7200162-IAD, cache-den-kden1300067-DEN
+      X-Cache:
+      - HIT, HIT
+      X-Cache-Hits:
+      - 5840, 1
+      X-Timer:
+      - S1734711264.591130,VS0,VE1
+      Content-Length:
+      - '8863'
+    body:
+      encoding: ASCII-8BIT
+      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--\n  ~ Copyright (c)
+        2007-2014 Sonatype, Inc. All rights reserved.\n  ~\n  ~ This program is licensed
+        to you under the Apache License Version 2.0,\n  ~ and you may not use this
+        file except in compliance with the Apache License Version 2.0.\n  ~ You may
+        obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.\n
+        \ ~\n  ~ Unless required by applicable law or agreed to in writing,\n  ~ software
+        distributed under the Apache License Version 2.0 is distributed on an\n  ~
+        \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+        or implied.\n  ~ See the Apache License Version 2.0 for the specific language
+        governing permissions and limitations there under.\n  -->\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"
+        xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0
+        http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n  <modelVersion>4.0.0</modelVersion>\n\n
+        \ <groupId>net.java</groupId>\n  <artifactId>jvnet-parent</artifactId>\n  <version>5</version>\n
+        \ <packaging>pom</packaging>\n\n  <name>Java.net Parent</name>\n  <url>http://java.net/</url>\n
+        \ <description>Java.net - The Source for Java Technology Collaboration</description>\n\n
+        \ <scm>\n    <connection>scm:git:git@github.com:sonatype/jvnet-parent.git</connection>\n
+        \   <developerConnection>scm:git:git@github.com:sonatype/jvnet-parent.git</developerConnection>\n
+        \   <url>https://github.com/sonatype/jvnet-parent</url>\n  </scm>\n\n  <distributionManagement>\n
+        \   <snapshotRepository>\n      <id>jvnet-nexus-snapshots</id>\n      <name>Java.net
+        Nexus Snapshots Repository</name>\n      <url>${jvnetDistMgmtSnapshotsUrl}</url>\n
+        \   </snapshotRepository>\n    <repository>\n      <id>jvnet-nexus-staging</id>\n
+        \     <name>Java.net Nexus Staging Repository</name>\n      <url>https://maven.java.net/service/local/staging/deploy/maven2/</url>\n
+        \   </repository>\n  </distributionManagement>\n\n  <!--\n    Configure jvnet-nexus-releases
+        repository by default.\n  -->\n  <repositories>\n    <repository>\n      <id>jvnet-nexus-releases</id>\n
+        \     <name>Java.net Releases Repositories</name>\n      <url>https://maven.java.net/content/repositories/releases/</url>\n
+        \     <releases>\n        <enabled>true</enabled>\n      </releases>\n      <snapshots>\n
+        \       <enabled>false</enabled>\n      </snapshots>\n    </repository>\n
+        \ </repositories>\n  <pluginRepositories>\n    <pluginRepository>\n      <id>jvnet-nexus-releases</id>\n
+        \     <name>Java.net Releases Repositories</name>\n      <url>https://maven.java.net/content/repositories/releases/</url>\n
+        \     <releases>\n        <enabled>true</enabled>\n      </releases>\n      <snapshots>\n
+        \       <enabled>false</enabled>\n      </snapshots>\n    </pluginRepository>\n
+        \ </pluginRepositories>\n\n  <build>\n    <pluginManagement>\n      <plugins>\n
+        \       <plugin>\n          <groupId>org.apache.maven.plugins</groupId>\n
+        \         <artifactId>maven-release-plugin</artifactId>\n          <configuration>\n
+        \           <mavenExecutorId>forked-path</mavenExecutorId>\n            <useReleaseProfile>false</useReleaseProfile>\n
+        \           <arguments>-Pjvnet-release ${release.arguments}</arguments>\n
+        \         </configuration>\n        </plugin>\n      </plugins>\n    </pluginManagement>\n
+        \ </build>\n\n  <properties>\n    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n
+        \   <jvnetDistMgmtSnapshotsUrl>https://maven.java.net/content/repositories/snapshots/</jvnetDistMgmtSnapshotsUrl>\n
+        \   <!-- \n      intialize release.arguments to empty, otherwise if not defined\n
+        \     it can fail the release plugin\n    -->\n    <release.arguments></release.arguments>\n
+        \ </properties>\n\n  <profiles>\n    <profile>\n      <id>jvnet-release</id>\n
+        \     <build>\n        <plugins>\n          <plugin>\n            <groupId>org.apache.maven.plugins</groupId>\n
+        \           <artifactId>maven-source-plugin</artifactId>\n            <version>2.1</version>\n
+        \           <executions>\n              <execution>\n                <id>attach-sources</id>\n
+        \               <goals>\n                  <goal>jar-no-fork</goal>\n                </goals>\n
+        \             </execution>\n            </executions>\n          </plugin>\n
+        \         <plugin>\n            <groupId>org.apache.maven.plugins</groupId>\n
+        \           <artifactId>maven-javadoc-plugin</artifactId>\n            <version>2.8</version>\n
+        \           <executions>\n              <execution>\n                <id>attach-javadocs</id>\n
+        \               <goals>\n                  <goal>jar</goal>\n                </goals>\n
+        \             </execution>\n            </executions>\n          </plugin>\n
+        \         <plugin>\n            <groupId>org.apache.maven.plugins</groupId>\n
+        \           <artifactId>maven-enforcer-plugin</artifactId>\n            <version>1.0-beta-1</version>\n
+        \           <executions>\n              <execution>\n                <id>enforce-maven</id>\n
+        \               <goals>\n                  <goal>enforce</goal>\n                </goals>\n
+        \               <configuration>\n                  <rules>\n                    <requireMavenVersion>\n
+        \                     <version>(,2.1.0),(2.1.0,2.2.0),(2.2.0,)</version>\n
+        \                     <message>Maven 2.1.0 and 2.2.0 produce incorrect GPG
+        signatures\n                        and checksums respectively.</message>\n
+        \                   </requireMavenVersion>\n                  </rules>\n                </configuration>\n
+        \             </execution>\n            </executions>\n          </plugin>\n
+        \         <plugin>\n            <groupId>org.apache.maven.plugins</groupId>\n
+        \           <artifactId>maven-gpg-plugin</artifactId>\n            <version>1.1</version>\n
+        \           <executions>\n              <execution>\n                <id>sign-artifacts</id>\n
+        \               <phase>verify</phase>\n                <goals>\n                  <goal>sign</goal>\n
+        \               </goals>\n              </execution>\n            </executions>\n
+        \         </plugin>\n        </plugins>\n      </build>\n    </profile>\n
+        \   <profile>\n      <id>snapshots</id>\n      <repositories>\n        <repository>\n
+        \         <id>jvnet-nexus-snapshots</id>\n          <name>Java.net Nexus Snapshots
+        Repository</name>\n          <url>https://maven.java.net/content/repositories/snapshots</url>\n
+        \         <releases>\n            <enabled>false</enabled>\n          </releases>\n
+        \         <snapshots>\n            <enabled>true</enabled>\n          </snapshots>\n
+        \       </repository>\n      </repositories>\n      <pluginRepositories>\n
+        \       <pluginRepository>\n          <id>jvnet-nexus-snapshots</id>\n          <name>Java.net
+        Nexus Snapshots Repository</name>\n          <url>https://maven.java.net/content/repositories/snapshots</url>\n
+        \         <releases>\n            <enabled>false</enabled>\n          </releases>\n
+        \         <snapshots>\n            <enabled>true</enabled>\n          </snapshots>\n
+        \       </pluginRepository>\n      </pluginRepositories>\n    </profile>\n
+        \   <profile>\n      <id>staging</id>\n      <activation>\n        <activeByDefault>false</activeByDefault>\n
+        \     </activation>\n      <repositories>\n        <repository>\n          <id>jvnet-nexus-staging</id>\n
+        \         <name>Java.net Staging Repositoriy</name>\n          <url>https://maven.java.net/content/repositories/staging/</url>\n
+        \         <releases>\n            <enabled>true</enabled>\n          </releases>\n
+        \         <snapshots>\n            <enabled>false</enabled>\n          </snapshots>\n
+        \       </repository>\n      </repositories>\n      <pluginRepositories>\n
+        \       <pluginRepository>\n          <id>jvnet-nexus-staging</id>\n          <name>Java.net
+        Staging Repositoriy</name>\n          <url>https://maven.java.net/content/repositories/staging/</url>\n
+        \         <releases>\n            <enabled>true</enabled>\n          </releases>\n
+        \         <snapshots>\n            <enabled>false</enabled>\n          </snapshots>\n
+        \       </pluginRepository>\n      </pluginRepositories>\n    </profile>\n
+        \   <profile>\n      <id>promoted</id>\n      <activation>\n        <activeByDefault>false</activeByDefault>\n
+        \     </activation>\n      <repositories>\n        <repository>\n          <id>jvnet-nexus-promoted</id>\n
+        \         <name>Java.net Promoted Repositories</name>\n          <url>https://maven.java.net/content/repositories/promoted/</url>\n
+        \         <releases>\n            <enabled>true</enabled>\n          </releases>\n
+        \         <snapshots>\n            <enabled>false</enabled>\n          </snapshots>\n
+        \       </repository>\n      </repositories>\n      <pluginRepositories>\n
+        \       <pluginRepository>\n          <id>jvnet-nexus-promoted</id>\n          <name>Java.net
+        Promoted Repositories</name>\n          <url>https://maven.java.net/content/repositories/promoted/</url>\n
+        \         <releases>\n            <enabled>true</enabled>\n          </releases>\n
+        \         <snapshots>\n            <enabled>false</enabled>\n          </snapshots>\n
+        \       </pluginRepository>\n      </pluginRepositories>\n    </profile>\n
+        \ </profiles>\n</project>\n"
+  recorded_at: Fri, 20 Dec 2024 16:14:23 GMT
 recorded_with: VCR 6.2.0
