@@ -122,13 +122,13 @@ module PackageManager
 
       # Check if the POM document has a parent
       if pom_document.locate("parent").present?
-        group_id = extract_pom_value(pom_document, "parent/groupId")&.strip
-        artifact_id = extract_pom_value(pom_document, "parent/artifactId")&.strip
-        version = extract_pom_value(pom_document, "parent/version")&.strip
-        if group_id && artifact_id && version
+        parent_group_id = extract_pom_value(pom_document, "parent/groupId")&.strip
+        parent_artifact_id = extract_pom_value(pom_document, "parent/artifactId")&.strip
+        parent_version = extract_pom_value(pom_document, "parent/version")&.strip
+        if parent_group_id && parent_artifact_id && parent_version
           # Recursively call this method for the parent POM document. Parents
           # are added to the end of the array
-          result += get_pom_documents(group_id, artifact_id, version, depth + 1)
+          result += get_pom_documents(parent_group_id, parent_artifact_id, parent_version, depth + 1)
         end
       end
 
