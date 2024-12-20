@@ -7,7 +7,7 @@ module PackageManager
     REPOSITORY_SOURCE_NAME = "Maven"
     URL = "http://maven.org"
     COLOR = "#b07219"
-    MAX_DEPTH = 5
+    MAX_DEPTH = 50
     LICENSE_STRINGS = {
       "://www.apache.org/licenses/LICENSE-2.0" => "Apache-2.0",
       "://www.eclipse.org/legal/epl-v10" => "Eclipse Public License (EPL), Version 1.0",
