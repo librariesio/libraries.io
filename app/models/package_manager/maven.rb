@@ -139,7 +139,9 @@ module PackageManager
       properties = {}
 
       pom_documents.each do |pom_document|
-        properties.merge!(extract_pom_properties(pom_document))
+        # prefer child values on overlap
+        new_properties = extract_pom_properties(pom_document)
+        properties = new_properties.merge(properties)
       end
 
       result = {
