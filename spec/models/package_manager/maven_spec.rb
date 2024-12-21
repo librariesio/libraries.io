@@ -60,7 +60,7 @@ describe PackageManager::Maven do
         }
       )
 
-      expect(mapped[:properties]).to include("api.version", "scm.url")
+      expect(mapped[:properties]).to include("api.version")
     end
 
     context "with missing pom" do
@@ -188,13 +188,13 @@ describe PackageManager::Maven do
   end
 
   describe "mapping_from_pom_documents" do
-    let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read).project }
-    let(:parent_pom) { Ox.parse("<project><scm><url>https://github.com/googleapis/googleapis-dummy</url></scm><licenses><license><name>unknown</name></license></licenses><url>https://github.com/googleapis/googleapis</url></project>") }
-    let(:parent_project) { { name: "com.google.api.grpc:proto-google-common-parent", groupId: "com.google.api.grpc", artifactId: "proto-google-common-parent", versions: [{ number: "1.0", published_at: Time.now.to_s }] } }
-    let(:pom_documents) { [pom, parent_pom] }
-    let(:parsed) { described_class.mapping_from_pom_documents(pom_documents) }
-
     context "with parsed pom" do
+      let(:pom) { Ox.parse(File.open("spec/fixtures/proto-google-common-protos-0.1.9.pom").read).project }
+      let(:parent_pom) { Ox.parse("<project><scm><url>https://github.com/googleapis/googleapis-dummy</url></scm><licenses><license><name>unknown</name></license></licenses><url>https://github.com/googleapis/googleapis</url></project>") }
+      let(:parent_project) { { name: "com.google.api.grpc:proto-google-common-parent", groupId: "com.google.api.grpc", artifactId: "proto-google-common-parent", versions: [{ number: "1.0", published_at: Time.now.to_s }] } }
+      let(:pom_documents) { [pom, parent_pom] }
+      let(:parsed) { described_class.mapping_from_pom_documents(pom_documents) }
+
       before do
         allow(described_class)
           .to receive(:project)
@@ -220,11 +220,67 @@ describe PackageManager::Maven do
       end
 
       it "to map properties" do
-        # TODO: figure out why the spec setup does not resolve scm.url correctly
-        expect(parsed[:properties]).to include(
-          "api.version",
-          "scm.url"
+        expect(parsed[:properties]).to eq(
+          {
+            "api.version" => "1.0.0-rc1",
+            "scm.url" => "https://github.com/googleapis/googleapis-dummy",
+          }
         )
+      end
+    end
+
+    context "without overrides" do
+      let(:parent_pom) do
+        Ox.parse(<<~XML)
+          <project>
+            <properties>
+              <foo>parent_value</foo>
+            </properties>
+          </project>
+        XML
+      end
+      let(:pom) do
+        Ox.parse(<<~XML)
+          <project>
+            <properties>
+            </properties>
+          </project>
+        XML
+      end
+      let(:pom_documents) { [pom, parent_pom] }
+
+      it "returns the parent value" do
+        result = described_class.mapping_from_pom_documents(pom_documents)
+
+        expect(result[:properties]["foo"]).to eq("parent_value")
+      end
+    end
+
+    context "with overrides" do
+      let(:parent_pom) do
+        Ox.parse(<<~XML)
+          <project>
+            <properties>
+              <foo>parent_value</foo>
+            </properties>
+          </project>
+        XML
+      end
+      let(:pom) do
+        Ox.parse(<<~XML)
+          <project>
+            <properties>
+              <foo>child_value</foo>
+            </properties>
+          </project>
+        XML
+      end
+      let(:pom_documents) { [pom, parent_pom] }
+
+      it "returns the child value" do
+        result = described_class.mapping_from_pom_documents(pom_documents)
+
+        expect(result[:properties]["foo"]).to eq("child_value")
       end
     end
   end
