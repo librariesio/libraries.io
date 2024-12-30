@@ -28,14 +28,15 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven::Common
     # Maven versions range from 1 to many "." and may not be valid SemVer. Use the more forgiving Gem::Version to sort
     # but we also want to prefer things that _don't_ look like a date as that's an ancient maven practice
     dated_versions, nodate_versions = versions.partition { |v| v =~ /\d{8}.\d+/ }
-    if nodate_versions.count > 0
-      nodate_versions.max_by { |v| Gem::Version.new(v) }
-    else
-      dated_versions.max_by { |v| Gem::Version.new(v) }
+    max_version = (nodate_versions.count > 0 ? nodate_versions : dated_versions)
+      .select { |v| Gem::Version.correct?(v) }
+      .max_by { |v| Gem::Version.new(v) }
+
+    if max_version.nil?
+      Bugsnag.notify("Couldn't find scraped HTML version for #{name}. Check the HTML and ensure scraping still works.")
     end
-  rescue ArgumentError
-    Bugsnag.notify("Couldn't find scraped HTML version for #{name}. Check the HTML and ensure scraping still works.")
-    nil
+
+    max_version
   end
 
   # maven-metadata.xml for Maven Central does not appear to be guaranteed to contain all relevant versions for a package
