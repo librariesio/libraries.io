@@ -243,14 +243,14 @@ class Project < ApplicationRecord
     name
   end
 
-  def manual_sync
+  def manual_sync(force_sync_dependencies: true)
     StructuredLog.capture("PROJECT_MANUAL_SYNC",
                           {
                             platform: platform,
                             name: name,
                             last_synced_at: last_synced_at,
                           })
-    async_sync(force_sync_dependencies: true)
+    async_sync(force_sync_dependencies: force_sync_dependencies)
     update_repository_async
   end
 
