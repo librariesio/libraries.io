@@ -466,8 +466,8 @@ describe "Api::ProjectsController" do
 
     context "success" do
       it "notifies the sync is queued" do
-        expect_any_instance_of(Project).to receive(:manual_sync).with(force_sync_dependencies: true)
-        
+        expect_any_instance_of(Project).to receive(:manual_sync).with(force_sync_dependencies: false)
+
         get "/api/#{project.platform}/#{project.name}/sync", params: { api_key: internal_user.api_key }
 
         expect(response).to have_http_status(:success)
@@ -476,9 +476,9 @@ describe "Api::ProjectsController" do
       end
 
       it "notifies the sync is queued with force_sync_dependencies=true" do
-        expect_any_instance_of(Project).to receive(:manual_sync).with(force_sync_dependencies: false)
+        expect_any_instance_of(Project).to receive(:manual_sync).with(force_sync_dependencies: true)
 
-        get "/api/#{project.platform}/#{project.name}/sync", params: { api_key: internal_user.api_key, force_sync_dependencies: false }
+        get "/api/#{project.platform}/#{project.name}/sync", params: { api_key: internal_user.api_key, force_sync_dependencies: true }
 
         expect(response).to have_http_status(:success)
         expect(response.content_type).to start_with("application/json")
