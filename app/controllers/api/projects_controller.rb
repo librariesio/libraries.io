@@ -123,7 +123,10 @@ class Api::ProjectsController < Api::ApplicationController
       )
       render json: { error: "Project has already been synced recently" }
     else
-      @project.manual_sync
+      # TODO: was there a reason to default force_sync_dependencies to true
+      # in this endpoint? If not, we can default to false here instead.
+      force_sync_dependencies = ActiveModel::Type::Boolean.new.cast(params[:force_sync_dependencies].presence || true)
+      @project.manual_sync(force_sync_dependencies: force_sync_dependencies)
       render json: { message: "Project queued for re-sync" }
     end
   end
