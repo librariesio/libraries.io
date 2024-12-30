@@ -7,7 +7,7 @@ class ProjectUpdatedWorker
   #
   # Keep in mind that this retry only happens if we raise an exception, so only when we set
   # ignore_errors:false below.
-  sidekiq_options queue: :small, retries: 10, lock: :until_executed
+  sidekiq_options queue: :small, retries: 10
 
   def perform(project_id, web_hook_id)
     project = Project.find(project_id)
