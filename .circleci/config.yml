@@ -50,8 +50,11 @@ jobs:
             gem -v
             bundle -v
             bundle config path vendor/bundle
+            echo "bundle list:"
+            bundle list
 
-      - ruby/install-deps # NB this command does save and restore of caching by default ("with-cache: false" to disable)
+      - ruby/install-deps: # NB this command does save and restore of caching by default ("with-cache: false" to disable)
+          app-dir: ~/libraries
 
       - persist_to_workspace:
           root: ~/
