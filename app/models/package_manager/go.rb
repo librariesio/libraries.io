@@ -5,28 +5,6 @@ module PackageManager
     HAS_VERSIONS = true
     HAS_DEPENDENCIES = true
     COLOR = "#375eab"
-    VALID_HOST = /\./
-    KNOWN_HOSTS = [
-      "bitbucket.org",
-      "github.com",
-      "gitlab.com",
-      "gitee.com",
-      "gopkg.in",
-      "k8s.io",
-      "launchpad.net",
-      "hub.jazz.net",
-    ].freeze
-    SKIP_HOSTS = [
-      "jfrog.com",
-      "github.office.opendns.com",
-    ].freeze
-    KNOWN_VCS = [
-      ".bzr",
-      ".fossil",
-      ".git",
-      ".hg",
-      ".svn",
-    ].freeze
     PROXY_BASE_URL = "https://proxy.golang.org"
     DISCOVER_URL = "https://pkg.go.dev"
     URL = DISCOVER_URL
@@ -233,67 +211,6 @@ module PackageManager
 
     def self.dependencies(name, version, _mapped_project)
       fetch_mod(name, version: version)&.dependencies || []
-    end
-
-    # https://golang.org/cmd/go/#hdr-Import_path_syntax
-    def self.project_find_names(name)
-      return [name] unless name.match?(VALID_HOST)
-      return [name] if name.start_with?(*KNOWN_HOSTS)
-      return [name] if name.start_with?(*SKIP_HOSTS)
-      return [name] if KNOWN_VCS.any?(&name.method(:include?))
-
-      host = name.split("/").first
-      return [name] if Rails.cache.exist?("unreachable-go-hosts:#{host}")
-
-      begin
-        # https://go.dev/ref/mod#serving-from-proxy
-        # TODO: if nothing is being logged in GO_MODULES_PROJECT_FIND_NAMES_SUCCESS
-        # after a while, we might want to start using root_path instead of
-        # repo_url, if anything.
-        root_path = nil
-        vcs = nil
-        repo_url = nil
-        ms = Benchmark.ms do
-          root_path, vcs, repo_url = *get_html("https://#{name}?go-get=1", { request: { timeout: 2 } })
-            .xpath('//meta[@name="go-import"]')
-            .first
-            &.attribute("content")
-            &.value
-            &.split(" ")
-
-          repo_url = repo_url&.sub(/https?:\/\//, "")
-        end
-
-        chosen_name = repo_url&.start_with?(*KNOWN_HOSTS) ? [repo_url] : [name]
-        # Collect info on what data we're mapping here, to ensure it's doing the right thing.
-        StructuredLog.capture(
-          "GO_MODULES_PROJECT_FIND_NAMES",
-          {
-            name: name,
-            root_path: root_path,
-            vcs: vcs,
-            repo_url: repo_url,
-            found_name: repo_url,
-            chosen_name: chosen_name,
-            go_lookup_duration: ms,
-          }
-        )
-
-        chosen_name
-      rescue Faraday::ConnectionFailed, Faraday::TimeoutError
-        # We can get here from go modules that don't exist anymore, or having server troubles:
-        # Fallback to the given name, cache the host as "bad" for a day,
-        # log it (to analyze later) and notify us to be safe.
-        StructuredLog.capture(
-          "GO_MODULES_PROJECT_FIND_NAMES_UNREACHABLE_HOST",
-          { name: name }
-        )
-        Rails.cache.write("unreachable-go-hosts:#{host}", true, ex: 1.day)
-        [name]
-      rescue StandardError => e
-        Bugsnag.notify(e)
-        [name]
-      end
     end
 
     def self.get_repository_url(project)
