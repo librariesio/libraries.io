@@ -542,23 +542,11 @@ class Project < ApplicationRecord
       .compact
       .map(&:downcase)
 
-    project = visible
+    visible
       .lower_platform(platform)
       .where("lower(projects.name) in (?)", names)
       .includes(includes.present? ? includes : nil)
       .first!
-
-    # Track these lookups for a while and see if they actually work. Currently
-    # we're picking the last "repo-url" part of ?go-get=1, which is the VCS url,
-    # but we'd want the first "root-path" part to get actual go module name.
-    if project && platform == "Go"
-      StructuredLog.capture(
-        "GO_MODULES_PROJECT_FIND_NAMES_SUCCESS",
-        { name: name, project_find_names: names, project_id: project.id }
-      )
-    end
-
-    project
   end
 
   def normalize_licenses
