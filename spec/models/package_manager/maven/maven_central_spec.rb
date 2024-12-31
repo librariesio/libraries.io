@@ -4,29 +4,88 @@ require "rails_helper"
 
 describe PackageManager::Maven::MavenCentral do
   describe ".latest_version_scraped" do
-    let(:html) do
-      # Example HTML scraped from https://repo1.maven.org/maven2/io/github/caffetteria/data-service-opencmis/
-      <<-HTML
-        <html><body><main>
-          <pre id="contents">
-            <a href="../">../</a>
-            <a href="0.1.0/" title="0.1.0/">0.1.0/</a>
-            <a href="0.2.0/" title="0.2.0/">0.2.0/</a>
-            <a href="0.2.1/" title="0.2.1/">0.2.1/</a>
-            <a href="1.0.0/" title="1.0.0/">1.0.0/</a>
-            <a href="1.0.1/" title="1.0.1/">1.0.1/</a>
-            <a href="1.1.0/" title="1.1.0/">1.1.0/</a>
-            <a href="1.1.1/" title="1.1.1/">1.1.1/</a>
-            <a href="maven-metadata.xml" title="maven-metadata.xml">maven-metadata.xml</a>
-          </pre>
-        </main></body></html>
-      HTML
+    context "with all valid semver versions" do
+      let(:html) do
+        # Example HTML scraped from https://repo1.maven.org/maven2/io/github/caffetteria/data-service-opencmis/
+        <<-HTML
+          <html><body><main>
+            <pre id="contents">
+              <a href="../">../</a>
+              <a href="0.1.0/" title="0.1.0/">0.1.0/</a>
+              <a href="0.2.0/" title="0.2.0/">0.2.0/</a>
+              <a href="0.2.1/" title="0.2.1/">0.2.1/</a>
+              <a href="1.0.0/" title="1.0.0/">1.0.0/</a>
+              <a href="1.0.1/" title="1.0.1/">1.0.1/</a>
+              <a href="1.1.0/" title="1.1.0/">1.1.0/</a>
+              <a href="1.1.1/" title="1.1.1/">1.1.1/</a>
+              <a href="maven-metadata.xml" title="maven-metadata.xml">maven-metadata.xml</a>
+            </pre>
+          </main></body></html>
+        HTML
+      end
+
+      before do
+        allow(PackageManager::ApiService).to receive(:request_raw_data).and_return(html)
+        allow(Bugsnag).to receive(:notify)
+      end
+
+      it "scrapes the maven HTML to find a real version" do
+        expect(described_class.latest_version_scraped("foo:bar")).to eq("1.1.1")
+        expect(Bugsnag).to_not have_received(:notify)
+      end
     end
 
-    before { allow(PackageManager::ApiService).to receive(:request_raw_data).and_return(html) }
+    context "with non-semver versions" do
+      let(:html) do
+        # Example portion of HTML scraped from https://repo1.maven.org/maven2/org/wso2/am/am-parent/
+        <<-HTML
+          <html><body><main>
+            <pre id="contents">
+              <a href="../">../</a>
+              <a href="1.10.0/" title="1.10.0/">1.10.0/</a>                                           2016-01-07 12:19
+              <a href="2.0.0/" title="2.0.0/">2.0.0/</a>                                            2016-07-27 19:45
+              <a href="3.0.0/" title="3.0.0/">3.0.0/</a>                                            2018-04-11 21:37
+              <a href="3.0.0-,3/" title="3.0.0-,3/">3.0.0-,3/</a>                                         2017-06-15 14:07
+              <a href="maven-metadata.xml" title="maven-metadata.xml">maven-metadata.xml</a>
+            </pre>
+          </main></body></html>
+        HTML
+      end
 
-    it "scrapes the maven HTML to find a real version" do
-      expect(described_class.latest_version_scraped("foo:bar")).to eq("1.1.1")
+      before do
+        allow(PackageManager::ApiService).to receive(:request_raw_data).and_return(html)
+        allow(Bugsnag).to receive(:notify)
+      end
+
+      it "scrapes the maven HTML and ignores non-semver versions to find a real version" do
+        expect(described_class.latest_version_scraped("foo:bar")).to eq("3.0.0")
+        expect(Bugsnag).to_not have_received(:notify)
+      end
+    end
+
+    context "with no valid semver versions" do
+      let(:html) do
+        # Example portion of HTML scraped from https://repo1.maven.org/maven2/org/wso2/am/am-parent/
+        <<-HTML
+          <html><body><main>
+            <pre id="contents">
+              <a href="../">../</a>
+              <a href="3.0.0-,3/" title="3.0.0-,3/">3.0.0-,3/</a>                                         2017-06-15 14:07
+              <a href="maven-metadata.xml" title="maven-metadata.xml">maven-metadata.xml</a>
+            </pre>
+          </main></body></html>
+        HTML
+      end
+
+      before do
+        allow(PackageManager::ApiService).to receive(:request_raw_data).and_return(html)
+        allow(Bugsnag).to receive(:notify)
+      end
+
+      it "scrapes the maven HTML and notifies us that there was no version found" do
+        expect(described_class.latest_version_scraped("foo:bar")).to eq(nil)
+        expect(Bugsnag).to have_received(:notify)
+      end
     end
   end
 
