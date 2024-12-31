@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-ruby "3.2.5"
+ruby "3.2.6"
 
 gem "active_model_serializers"
 gem "api-pagination"
@@ -100,13 +100,13 @@ group :development do
   gem "annotate"
   gem "brakeman", require: false
   gem "listen"
+  gem "rubocop"
   gem "sql_queries_count"
 end
 
 group :development, :test do
   gem "debug", "~> 1.9"
   gem "rspec-rails"
-  gem "rubocop"
 end
 
 group :test do
