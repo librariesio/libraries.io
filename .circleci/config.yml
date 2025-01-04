@@ -8,7 +8,7 @@ executors:
   libraries:
     working_directory: ~/libraries
     docker:
-      - image: ruby:3.2.5-slim-bullseye
+      - image: ruby:3.2.6-slim-bullseye
         environment:
           PGHOST: 127.0.0.1
           PGUSER: postgres
@@ -45,11 +45,16 @@ jobs:
       - run:
           name: Prep ruby
           command: |
+            echo "gem: --no-document" > /root/.gemrc
+            gem install bundler -v 2.6.2
             gem -v
             bundle -v
             bundle config path vendor/bundle
+            echo "bundle list:"
+            bundle list
 
-      - ruby/install-deps # NB this command does save and restore of caching by default ("with-cache: false" to disable)
+      - ruby/install-deps: # NB this command does save and restore of caching by default ("with-cache: false" to disable)
+          app-dir: ~/libraries
 
       - persist_to_workspace:
           root: ~/
