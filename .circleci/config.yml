@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@2.1.0
+  ruby: circleci/ruby@2.3.1
 
 executors:
   # TODO: we don't need ES/PG/Redis for "lint" job, so we could create another
@@ -8,7 +8,7 @@ executors:
   libraries:
     working_directory: ~/libraries
     docker:
-      - image: ruby:3.2.6-slim-bullseye
+      - image: cimg/ruby:3.2-node
         environment:
           PGHOST: 127.0.0.1
           PGUSER: postgres
@@ -23,39 +23,16 @@ executors:
           - cluster.name: elasticsearch
           - action.auto_create_index: true
 
-commands:
-  setup-ruby-env:
-    description: "Required steps to setup environmnt for doing ruby stuff"
-    steps:
-      - run:
-          name: Update system libraries
-          command: |
-            apt-get -y -qq update
-            apt-get -y --no-install-recommends install cmake libpq-dev git-core build-essential libicu-dev pkg-config nodejs curl
-
 jobs:
   install:
     executor: libraries
     steps:
-      - setup-ruby-env
-
-      - checkout:
-          path: ~/libraries
-
-      - run:
-          name: Prep ruby
-          command: |
-            echo "gem: --no-document" > /root/.gemrc
-            gem install bundler -v 2.6.2
-            gem -v
-            bundle -v
-            bundle config path vendor/bundle
-            echo "bundle list:"
-            bundle list
-
-      - ruby/install-deps: # NB this command does save and restore of caching by default ("with-cache: false" to disable)
-          app-dir: ~/libraries
-
+      - checkout
+      # This CI config relies heavily on the ruby orb/image setting most of the
+      # default config. e.g. install_deps does save/restore of caching by
+      # default ("with-cache: false" will disable). See docs for customization:
+      # https://circleci.com/developer/orbs/orb/circleci/ruby
+      - ruby/install-deps
       - persist_to_workspace:
           root: ~/
           paths:
@@ -66,7 +43,6 @@ jobs:
     parallelism: 4
     executor: libraries
     steps:
-      - setup-ruby-env
       - attach_workspace:
           at: ~/
       - ruby/rspec-test
@@ -74,9 +50,7 @@ jobs:
   lint:
     parallelism: 1
     executor: libraries
-    working_directory: ~/libraries
     steps:
-      - setup-ruby-env
       - attach_workspace:
           at: ~/
       - run:
