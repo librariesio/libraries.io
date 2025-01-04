@@ -32,7 +32,8 @@ jobs:
       # default config. e.g. install_deps does save/restore of caching by
       # default ("with-cache: false" will disable). See docs for customization:
       # https://circleci.com/developer/orbs/orb/circleci/ruby
-      - ruby/install-deps
+      - ruby/install-deps:
+          key: gems-v2 # bump this when you need to expire gem cache
       - persist_to_workspace:
           root: ~/
           paths:
