@@ -39,7 +39,11 @@ module PackageManager
     def self.mapping(raw_project)
       MappingBuilder.build_hash(
         name: raw_project[:name],
-        keywords_array: Array(raw_project[:page].css("#content div:first a")[1..].map(&:text)),
+        keywords_array: Array(
+          raw_project[:page].css("#content table.properties tr")
+            .find { |tr| tr.css("th")&.text&.strip == "Category" }
+            &.css("a")&.map(&:text)&.reject(&:blank?)&.map(&:strip)
+        ),
         description: description(raw_project[:page]),
         licenses: find_attribute(raw_project[:page], "License"),
         homepage: find_attribute(raw_project[:page], "Home page"),
