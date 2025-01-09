@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "resolv-replace" # pure ruby DNS
-require "sidekiq_enqueue_logger"
 
 # Just adds "sidekiq=true" to the default Pretty formatter, to make aggregating simpler.
 class StructuredLogSidekiqFormatter < Sidekiq::Logger::Formatters::Base
@@ -27,7 +26,6 @@ Sidekiq.configure_server do |config|
   # ensure that jobs-that-enqueue-jobs get the client middleware too
   config.client_middleware do |chain|
     chain.add SidekiqUniqueJobs::Middleware::Client
-    chain.add SidekiqEnqueueLogger::Middleware::Client unless Rails.env.test?
   end
 
   # disable id so that sidekiq will work with google cloud memorystore redis
@@ -46,7 +44,6 @@ Sidekiq.configure_client do |config|
 
   config.client_middleware do |chain|
     chain.add SidekiqUniqueJobs::Middleware::Client
-    chain.add SidekiqEnqueueLogger::Middleware::Client unless Rails.env.test?
   end
 end
 
