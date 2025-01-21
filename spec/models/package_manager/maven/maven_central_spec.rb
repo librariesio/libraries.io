@@ -87,6 +87,21 @@ describe PackageManager::Maven::MavenCentral do
         expect(Bugsnag).to have_received(:notify)
       end
     end
+
+    context "with empty response" do
+      # Example blank HTML from when we get a 404 back, e.g. https://repo1.maven.org/maven2/cljsjs/hammer
+      let(:html) { "" }
+
+      before do
+        allow(PackageManager::ApiService).to receive(:request_raw_data).and_return(html)
+        allow(Bugsnag).to receive(:notify)
+      end
+
+      it "scrapes the maven HTML and notifies us that there was no version found" do
+        expect(described_class.latest_version_scraped("foo:bar")).to eq(nil)
+        expect(Bugsnag).to_not have_received(:notify)
+      end
+    end
   end
 
   describe ".update" do

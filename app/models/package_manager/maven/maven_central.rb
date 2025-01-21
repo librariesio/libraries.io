@@ -25,6 +25,8 @@ class PackageManager::Maven::MavenCentral < PackageManager::Maven::Common
       .map { |folder| folder.chomp("/") }                  # remove folder trailing slash
       .grep(/^\d+.\d/)                                     # only folders that look like versions
 
+    return nil if versions.empty?
+
     # Maven versions range from 1 to many "." and may not be valid SemVer. Use the more forgiving Gem::Version to sort
     # but we also want to prefer things that _don't_ look like a date as that's an ancient maven practice
     dated_versions, nodate_versions = versions.partition { |v| v =~ /\d{8}.\d+/ }
