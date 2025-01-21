@@ -97,7 +97,7 @@ describe PackageManager::Maven::MavenCentral do
         allow(Bugsnag).to receive(:notify)
       end
 
-      it "scrapes the maven HTML and notifies us that there was no version found" do
+      it "translates a 404 response into a blank string and ultimately a nil response" do
         expect(described_class.latest_version_scraped("foo:bar")).to eq(nil)
         expect(Bugsnag).to_not have_received(:notify)
       end
