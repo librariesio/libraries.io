@@ -1,0 +1,48 @@
+<div class='project' style="border-color: <%= repository.color %>;">
+  <h5>
+    <%= link_to repository.full_name, repository_path(repository.to_param) %>
+    <small>
+      <%= fa_icon("lock") if repository.private? %>
+      <%= fa_icon("code-fork") if repository.fork? %>
+    </small>
+  </h5>
+
+  <div>
+    <%= emojify truncate(repository.description, :length => 100) %>
+  </div>
+
+  <small>
+    <%= fa_icon repository.host_type.downcase %>
+    <% if repository.removed? %>
+      <%= fa_icon('exclamation-triangle') %> This repository is no longer available
+    <% elsif repository.deprecated? %>
+      <%= fa_icon('exclamation-triangle') %> This repository is deprecated -
+    <% elsif repository.unmaintained? %>
+      <%= fa_icon('exclamation-triangle') %> This repository is no longer maintained -
+    <% else %>
+      <% if repository.language.present? %>
+        <%= link_to repository.language, language_path(repository.language) %> -
+      <% end %>
+      <% if repository.license.present? %>
+        <%= linked_licenses [repository.license] %> -
+      <% end %>
+    <% end %>
+    <% unless repository.removed? %>
+      <% if repository.pushed_at && repository.pushed_at > repository.created_at + 1.minute %>
+        Last pushed <%= timeago_tag repository.pushed_at %>
+      <% elsif repository.updated_at && repository.updated_at > repository.created_at + 1.minute %>
+        Updated <%= timeago_tag repository.updated_at %>
+      <% else %>
+        Published <%= timeago_tag repository.created_at %>
+      <% end %>
+    <% end %>
+    <% unless repository.deprecated? || repository.unmaintained? %>
+      <% if repository.stargazers_count %>
+      - <%= number_to_human repository.stars %> stars
+      <% end %>
+      <% if repository.forks > 0 %>
+        - <%= number_to_human repository.forks %> forks
+      <% end %>
+    <% end %>
+  </small>
+</div>
