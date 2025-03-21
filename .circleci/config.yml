@@ -8,7 +8,7 @@ executors:
   libraries:
     working_directory: ~/libraries
     docker:
-      - image: cimg/ruby:3.2-node
+      - image: cimg/ruby:3.2.6-node
         environment:
           PGHOST: 127.0.0.1
           PGUSER: postgres
