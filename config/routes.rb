@@ -107,7 +107,7 @@ Rails.application.routes.draw do
   end
 
   get "/explore", to: "explore#index"
-  get "/explore/:language-:keyword-libraries", to: "collections#show", as: :collection
+  get "/explore/:keyword", to: redirect("/explore")
 
   get "/recommendations", to: "recommendations#index", as: :recommendations
 
