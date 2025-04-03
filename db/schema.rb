@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_30_150002) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_03_234330) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -88,6 +88,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_30_150002) do
     t.string "requirements"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.uuid "id_new", default: -> { "gen_random_uuid()" }
     t.index "project_id, ((created_at)::date)", name: "index_dependencies_on_project_created_at_date"
     t.index ["project_id", "version_id"], name: "index_dependencies_on_project_id_and_version_id"
     t.index ["version_id"], name: "index_dependencies_on_version_id"
