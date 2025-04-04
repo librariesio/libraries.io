@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_03_234704) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_03_235003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -80,7 +80,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_03_234704) do
     t.index ["updated_at"], name: "index_deleted_projects_on_updated_at"
   end
 
-  create_table "dependencies", id: :serial, force: :cascade do |t|
+  create_table "dependencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "id_old", default: -> { "nextval('dependencies_id_seq'::regclass)" }, null: false
     t.integer "version_id"
     t.integer "project_id"
     t.string "project_name"
@@ -90,12 +91,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_03_234704) do
     t.string "requirements"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.uuid "id_new", default: -> { "gen_random_uuid()" }
     t.index "project_id, ((created_at)::date)", name: "index_dependencies_on_project_created_at_date"
-    t.index ["id_new"], name: "index_dependencies_on_id_new", unique: true
     t.index ["project_id", "version_id"], name: "index_dependencies_on_project_id_and_version_id"
     t.index ["version_id"], name: "index_dependencies_on_version_id"
-    t.check_constraint "id_new IS NOT NULL", name: "dependencies_id_new_null"
+    t.check_constraint "id IS NOT NULL", name: "dependencies_id_new_null"
   end
 
   create_table "identities", id: :serial, force: :cascade do |t|
