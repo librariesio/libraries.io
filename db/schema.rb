@@ -14,7 +14,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_03_234330) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "api_keys", id: :serial, force: :cascade do |t|
     t.string "access_token"
