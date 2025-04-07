@@ -18,6 +18,7 @@
 #
 # Indexes
 #
+#  index_dependencies_on_id_new                     (id_new) UNIQUE
 #  index_dependencies_on_project_created_at_date    (project_id, ((created_at)::date))
 #  index_dependencies_on_project_id_and_version_id  (project_id,version_id)
 #  index_dependencies_on_version_id                 (version_id)
