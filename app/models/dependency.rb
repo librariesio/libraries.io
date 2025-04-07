@@ -5,6 +5,7 @@
 # Table name: dependencies
 #
 #  id           :integer          not null, primary key
+#  id_new       :uuid
 #  kind         :string
 #  optional     :boolean          default(FALSE)
 #  platform     :string
