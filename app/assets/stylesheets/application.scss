@@ -523,25 +523,6 @@ h4.panel-title{
   }
 }
 
-.dev-practices {
-  border-top: 3px solid #F6914D;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, #F6F0E9 100%);
-
-  // add gradient blur
-  dd:nth-last-of-type(2),
-  dt:nth-last-of-type(2) {
-    color: rgba(47, 51, 66, 0.65);
-  }
-  dd:last-of-type,
-  dt:last-of-type {
-    margin-bottom: 8px;
-    background: linear-gradient(180deg, rgba(47, 51, 66, 0.50) 0%, rgba(47, 51, 66, 0.00) 100%);
-    -webkit-text-fill-color: transparent;
-    -webkit-background-clip: text;
-    background-clip: text;
-  }
-}
-
 .cta .col-md-3 {
   padding-right: 3px;
 }
