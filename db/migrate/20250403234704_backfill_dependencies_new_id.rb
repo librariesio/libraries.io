@@ -29,8 +29,10 @@ class BackfillDependenciesNewId < ActiveRecord::Migration[7.1]
     # change_column_null never uses the index to validate, so this is the
     # only option.
     add_check_constraint :dependencies, "id_new IS NOT NULL", name: "dependencies_id_new_null", validate: false
-    # should not actually take 2 hours but needs more than a few minutes
-    execute("SET statement_timeout = '120min';")
+    safety_assured do
+      # should not actually take 2 hours but needs more than a few minutes
+      execute("SET statement_timeout = '120min';")
+    end
     validate_check_constraint :dependencies, name: "dependencies_id_new_null"
   end
 end
