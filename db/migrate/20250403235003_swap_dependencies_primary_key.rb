@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SwapDependenciesPrimaryKey < ActiveRecord::Migration[7.1]
   disable_ddl_transaction!
 
@@ -14,11 +16,16 @@ class SwapDependenciesPrimaryKey < ActiveRecord::Migration[7.1]
             ALTER TABLE dependencies DROP CONSTRAINT dependencies_pkey;
             ALTER TABLE dependencies ADD PRIMARY KEY USING INDEX index_dependencies_on_id_new;
 
+            ALTER TABLE dependencies ALTER COLUMN id_old DROP NOT NULL;
+            ALTER TABLE dependencies ALTER COLUMN id_old DROP DEFAULT;
+
             COMMIT;
           SQL
         end
 
         dir.down do
+          # reversing this migration is kind of fantasy in production but maybe
+          # for local dev you could approximately reverse it
           execute <<-SQL
             BEGIN;
 

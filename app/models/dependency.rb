@@ -4,8 +4,8 @@
 #
 # Table name: dependencies
 #
-#  id           :integer          not null, primary key
-#  id_new       :uuid
+#  id           :uuid             not null, primary key
+#  id_old       :integer
 #  kind         :string
 #  optional     :boolean          default(FALSE)
 #  platform     :string
@@ -18,7 +18,6 @@
 #
 # Indexes
 #
-#  index_dependencies_on_id_new                     (id_new) UNIQUE
 #  index_dependencies_on_project_created_at_date    (project_id, ((created_at)::date))
 #  index_dependencies_on_project_id_and_version_id  (project_id,version_id)
 #  index_dependencies_on_version_id                 (version_id)
