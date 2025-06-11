@@ -140,13 +140,9 @@ describe "API::StatusController" do
       expect(JSON.parse(response.body).dig(0, "name")).to eq(requested_name)
     end
 
-    it "correctly handles go redirects" do
-      project = create(:project, platform: "Go", name: "known/project")
-      requested_name = "unknown/project"
-      allow(PackageManager::Go)
-        .to receive(:project_find_names)
-        .with(requested_name)
-        .and_return([project.name])
+    it "correctly handles pypi lookup" do
+      project = create(:project, platform: "Pypi", name: "A-Python-Package")
+      requested_name = "a_python_package"
 
       post(
         url,

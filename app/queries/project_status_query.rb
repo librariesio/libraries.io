@@ -27,17 +27,17 @@ class ProjectStatusQuery
     @missing_projects ||= Project
       .visible
       .lower_platform(@platform)
-      .where("lower(name) in (?)", missing_project_find_names.keys)
+      .where("lower(name) in (?)", missing_possible_lookup_names.keys)
       .includes(:repository)
       .find_each
-      .index_by { |project| missing_project_find_names[project.name.downcase] }
+      .index_by { |project| missing_possible_lookup_names[project.name.downcase] }
   end
 
-  def missing_project_find_names
-    @missing_project_find_names ||= (@requested_project_names - exact_projects.keys)
+  def missing_possible_lookup_names
+    @missing_possible_lookup_names ||= (@requested_project_names - exact_projects.keys)
       .each_with_object({}) do |requested_name, hash|
         platform_class
-          .project_find_names(requested_name)
+          .possible_lookup_names(requested_name)
           .each { |find_name| hash[find_name.downcase] = requested_name }
       end
   end

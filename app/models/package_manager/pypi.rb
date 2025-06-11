@@ -136,7 +136,7 @@ module PackageManager
       end
     end
 
-    def self.project_find_names(project_name)
+    def self.possible_lookup_names(project_name)
       [
         project_name,
         Bibliothecary::Parsers::Pypi.normalize_name(project_name),

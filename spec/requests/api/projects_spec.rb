@@ -377,7 +377,7 @@ describe "Api::ProjectsController" do
       context "that redirects to a known project" do
         it "redirects" do
           allow(PackageManager::Go)
-            .to receive(:project_find_names)
+            .to receive(:possible_lookup_names)
             .with("unknown/project")
             .and_return([project.name])
 
@@ -389,7 +389,7 @@ describe "Api::ProjectsController" do
       context "that redirects to an unknown project" do
         it "returns not found" do
           allow(PackageManager::Go)
-            .to receive(:project_find_names)
+            .to receive(:possible_lookup_names)
             .with("unknown/project")
             .and_return(["other/unknown/project"])
 
@@ -401,7 +401,7 @@ describe "Api::ProjectsController" do
       context "that does not redirect" do
         it "returns not found" do
           allow(PackageManager::Go)
-            .to receive(:project_find_names)
+            .to receive(:possible_lookup_names)
             .with("unknown/project")
             .and_return(["unknown/project"])
 
