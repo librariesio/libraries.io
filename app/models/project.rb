@@ -537,16 +537,17 @@ class Project < ApplicationRecord
     platform_class = PackageManager::Base.find(platform)
     raise ActiveRecord::RecordNotFound if platform_class.nil?
 
-    names = platform_class
-      .project_find_names(name)
-      .compact
-      .map(&:downcase)
-
-    visible
-      .lower_platform(platform)
-      .where("lower(projects.name) in (?)", names)
-      .includes(includes.present? ? includes : nil)
-      .first!
+    # PEP 503 requires that Python repos have a /simple API that is queryable by a "normalized" name,
+    # which is the canonical name lowercased with runs of "-_." replaced by a single "-".
+    # https://peps.python.org/pep-0503/#normalized-names
+    # As of writing, all Pypi packages in Libraries can be queried on Pypi's API by their normalized name.
+    if platform_class == PackageManager::Pypi
+      visible
+        .lower_platform(platform)
+        .includes(includes.present? ? includes : nil)
+        .where("lower(regexp_replace(name, '[-_.]+', '-', 'ig')) = ?", Bibliothecary::Parsers::Pypi.normalize_name(name))
+        .first!
+    end
   end
 
   def normalize_licenses

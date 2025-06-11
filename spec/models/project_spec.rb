@@ -218,6 +218,56 @@ describe Project, type: :model do
           .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
+
+    context "querying a Pypi package based on PEP503 name normalization" do
+      context "with underscores" do
+        let!(:package) { create(:project, name: "test____underscores", platform: "Pypi") }
+
+        it "finds the package by its normalized name" do
+          expect(Project.find_best!("pypi", "test-underscores")).to eq(package)
+        end
+
+        it "finds the package by an equivalent un-normalized name" do
+          expect(Project.find_best!("pypi", "test_-__underscores")).to eq(package)
+        end
+      end
+
+      context "with dots" do
+        let!(:package) { create(:project, name: "test.....dots", platform: "Pypi") }
+
+        it "finds the package by its normalized name" do
+          expect(Project.find_best!("pypi", "test-dots")).to eq(package)
+        end
+
+        it "finds the package by an equivalent un-normalized name" do
+          expect(Project.find_best!("pypi", "test_-__..dots")).to eq(package)
+        end
+      end
+
+      context "with hyphens" do
+        let!(:package) { create(:project, name: "test-----hyphens", platform: "Pypi") }
+
+        it "finds the package by its normalized name" do
+          expect(Project.find_best!("pypi", "test-hyphens")).to eq(package)
+        end
+
+        it "finds the package by an equivalent un-normalized name" do
+          expect(Project.find_best!("pypi", "test_-__..hyphens")).to eq(package)
+        end
+      end
+
+      context "with a mix of hyphens, dots, underscores and uppercase" do
+        let!(:package) { create(:project, name: "test---__a..mix--of-EVERYthing", platform: "Pypi") }
+
+        it "finds the package by its normalized name" do
+          expect(Project.find_best!("pypi", "test-a-mix-of-everything")).to eq(package)
+        end
+
+        it "finds the package by an equivalent un-normalized name" do
+          expect(Project.find_best!("pypi", "test-__a..mix--of-everyTHING")).to eq(package)
+        end
+      end
+    end
   end
 
   describe ".find_best" do
