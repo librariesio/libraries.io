@@ -5,28 +5,19 @@ require "rails_helper"
 describe ProjectStatusQuery do
   describe "#projects_by_name" do
     it "returns a list of projects by their requested names" do
-      project = create(:project, platform: "Go", name: "known/project")
+      project = create(:project, platform: "Pypi", name: "foo")
 
-      instance = described_class.new("go", ["known/project"])
+      instance = described_class.new("Pypi", ["foo"])
 
-      expect(instance.projects_by_name).to eq({ "known/project" => project })
+      expect(instance.projects_by_name).to eq({ "foo" => project })
     end
 
-    it "handles go project redirects" do
-      project = create(:project, platform: "Go", name: "known/project")
+    it "handles pypi normalized names" do
+      project = create(:project, platform: "Pypi", name: "a-python-package")
 
-      allow(PackageManager::Go)
-        .to receive(:project_find_names)
-        .with("unknown/project")
-        .and_return(["known/project"])
-      allow(PackageManager::Go)
-        .to receive(:project_find_names)
-        .with("second/unknown/project")
-        .and_return(["other/unknown/project"])
+      instance = described_class.new("Pypi", ["A___Python___Package"])
 
-      instance = described_class.new("Go", ["unknown/project", "second/unknown/project"])
-
-      expect(instance.projects_by_name).to eq({ "unknown/project" => project })
+      expect(instance.projects_by_name).to eq({ "A___Python___Package" => project })
     end
   end
 end

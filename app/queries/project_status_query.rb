@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Returns found projects by their requested names.
 class ProjectStatusQuery
   def initialize(platform, requested_project_names)
     @platform = platform

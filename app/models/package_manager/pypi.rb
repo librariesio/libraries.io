@@ -139,8 +139,7 @@ module PackageManager
     def self.project_find_names(project_name)
       [
         project_name,
-        project_name.gsub("-", "_"),
-        project_name.gsub("_", "-"),
+        Bibliothecary::Parsers::Pypi.normalize_name(project_name),
       ]
     end
 
