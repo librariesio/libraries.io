@@ -7,7 +7,7 @@ gem "active_model_serializers"
 gem "api-pagination"
 gem "asciidoctor"
 gem "audited"
-gem "bibliothecary", "~> 11.0.0"
+gem "bibliothecary", "~> 12.3.1"
 gem "bitbucket_rest_api", git: "https://github.com/librariesio/bitbucket"
 gem "bootsnap", require: false
 gem "bootstrap-sass"

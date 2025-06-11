@@ -121,9 +121,10 @@ GEM
       execjs
     base64 (0.1.1)
     benchmark (0.4.0)
-    bibliothecary (11.0.1)
+    bibliothecary (12.3.1)
       commander
       deb_control
+      json (~> 2.8)
       librariesio-gem-parser
       ox (>= 2.8.1)
       packageurl-ruby
@@ -234,7 +235,7 @@ GEM
     faraday_middleware (0.14.0)
       faraday (>= 0.7.4, < 1.0)
     fast_blank (1.0.1)
-    ffi (1.17.0)
+    ffi (1.17.2)
     font-awesome-rails (4.7.0.8)
       railties (>= 3.2, < 8.0)
     foreman (0.88.1)
@@ -278,7 +279,7 @@ GEM
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
-    json (2.6.3)
+    json (2.12.2)
     json_spec (1.1.5)
       multi_json (~> 1.0)
       rspec (>= 2.0, < 4.0)
@@ -374,8 +375,9 @@ GEM
       omniauth (~> 2.0)
     org-ruby (0.9.12)
       rubypants (~> 0.2)
-    ox (2.14.18)
-    packageurl-ruby (0.1.0)
+    ox (2.14.23)
+      bigdecimal (>= 3.0)
+    packageurl-ruby (0.2.0)
     parallel (1.23.0)
     parser (3.2.2.3)
       ast (~> 2.4.1)
@@ -622,7 +624,7 @@ DEPENDENCIES
   api-pagination
   asciidoctor
   audited
-  bibliothecary (~> 11.0.0)
+  bibliothecary (~> 12.3.1)
   bitbucket_rest_api!
   bootsnap
   bootstrap-sass
@@ -755,7 +757,7 @@ CHECKSUMS
   autoprefixer-rails (9.5.1.1) sha256=68f6076794fe4d37f42a53bb3c324808e341359c38d9e8c585dbc8557945a038
   base64 (0.1.1) sha256=0c75d351a429b5176a476cd8a3740cff3277d2bac26a50b5c7456c266e9acd33
   benchmark (0.4.0) sha256=0f12f8c495545e3710c3e4f0480f63f06b4c842cc94cec7f33a956f5180e874a
-  bibliothecary (11.0.1) sha256=8367e601b710260b12f9f9f6e5ed055da2d76f329c018d540eeeaae364e60ce1
+  bibliothecary (12.3.1) sha256=2d629b0b1f9033f50be67028c1037b6a252eb3cd2e1a766de010ead6f74c72ee
   bigdecimal (3.1.8) sha256=a89467ed5a44f8ae01824af49cbc575871fa078332e8f77ea425725c1ffe27be
   bitbucket_rest_api (0.1.7)
   bootsnap (1.12.0) sha256=6c6d7e57e6da89817953dbfb410d04c44ddfa6c3eb4be303d21e6c41dc20ea7b
@@ -811,7 +813,7 @@ CHECKSUMS
   faraday-http-cache (2.5.0) sha256=64b7366d66e508e1c3dd855ebb20ce9da429330e412a23d9ebbc0a7a7b227463
   faraday_middleware (0.14.0) sha256=4cb37ddd656b2c4de0bd684b72b08c34486f70560c31cb303cd506faef7ef2f4
   fast_blank (1.0.1) sha256=269fc30414fed4e6403bc4a49081e1ea539f8b9226e59276ed1efaefabaa17ea
-  ffi (1.17.0) sha256=51630e43425078311c056ca75f961bb3bda1641ab36e44ad4c455e0b0e4a231c
+  ffi (1.17.2) sha256=297235842e5947cc3036ebe64077584bff583cd7a4e94e9a02fdec399ef46da6
   font-awesome-rails (4.7.0.8) sha256=c26183d5f902858289692d3a173c3d8d0f769c3b0930259ae4181ddfd74d496c
   foreman (0.88.1) sha256=59c022125b6a328a2ce63da8d70b731f5dd13519e8d9a4184c696538088ea00a
   fuzzy_match (2.1.0) sha256=e97e25d0eaee48a5f77ed970d007c7b6ff3c6a6858303fead2d1986859204dfc
@@ -835,7 +837,7 @@ CHECKSUMS
   irb (1.14.0) sha256=53d805013bbd194874b8c13a56aca6aebcd11dd79166d88724f8a434fedde615
   jb (0.8.0) sha256=a100e19e5663d1401ab14c97b83ee2a792263e22a0ca53685404e6fb9398d32a
   jquery-rails (4.6.0) sha256=3c4e6bf47274340b44d836b8aa1b5472c6d451e2739af5ec094421f39025a7e2
-  json (2.6.3) sha256=86aaea16adf346a2b22743d88f8dcceeb1038843989ab93cda44b5176c845459
+  json (2.12.2) sha256=ba94a48ad265605c8fa9a50a5892f3ba6a02661aa010f638211f3cb36f44abf4
   json_spec (1.1.5) sha256=7a77b97a92c787e2aa3fbc4a1239afc3342c781151dc98cfb81461b3b7cad10f
   jsonapi-renderer (0.2.2) sha256=b5c44b033d61b4abdb6500fa4ab84807ca0b36ea0e59e47a2c3ca7095a6e447b
   jwt (2.8.1) sha256=4baaf38208a172398a802da9410d73235ecfd6af1bd9cb736c69dd44d4dfa30a
@@ -881,8 +883,8 @@ CHECKSUMS
   omniauth-oauth2 (1.8.0) sha256=b2f8e9559cc7e2d4efba57607691d6d2b634b879fc5b5b6ccfefa3da85089e78
   omniauth-rails_csrf_protection (1.0.1) sha256=fc546aeb7d43b7b9d7737051c380156e61c8f080b898cd4934d523eaa7e59acf
   org-ruby (0.9.12) sha256=93cbec3a4470cb9dca6a4a98dc276a6434ea9d9e7bc2d42ea33c3aedd5d1c974
-  ox (2.14.18) sha256=993e0290491bab6bbd4946d2fa98711b052634bbb25d7812b931b29de5562f71
-  packageurl-ruby (0.1.0) sha256=3edfa1ce355200fde2a1d2cf625dafdf28d0cc9472eb99493325bf3d88e9daa3
+  ox (2.14.23) sha256=4a9aedb4d6c78c5ebac1d7287dc7cc6808e14a8831d7adb727438f6a1b461b66
+  packageurl-ruby (0.2.0) sha256=9bef22c96622b7d3a0087a7fbca8903f9187b66fbfd6a78299ef115768f5012b
   parallel (1.23.0) sha256=27154713ad6ef32fa3dcb7788a721d6c07bca77e72443b4c6080a14145288c49
   parser (3.2.2.3) sha256=10685f358ab36ffea2252dc4952e5b8fad3a297a8152a85f59adc982747b91eb
   pg (1.5.4) sha256=04f7b247151c639a0b955d8e5a9a41541343f4640aa3c2bdf749a872c339d25d
