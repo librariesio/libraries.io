@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Returns found projects by their requested names.
 class ProjectStatusQuery
   def initialize(platform, requested_project_names)
     @platform = platform
@@ -22,23 +23,15 @@ class ProjectStatusQuery
       .index_by(&:name)
   end
 
+  # Returns a list of projects by their alternative lookup logic from Project.find_all_with_package_manager!,
+  # using the names that weren't found with exact matches.
+  # @return [Array<Project>] The projects that were found
   def missing_projects
-    @missing_projects ||= Project
-      .visible
-      .lower_platform(@platform)
-      .where("lower(name) in (?)", missing_project_find_names.keys)
-      .includes(:repository)
-      .find_each
-      .index_by { |project| missing_project_find_names[project.name.downcase] }
-  end
-
-  def missing_project_find_names
-    @missing_project_find_names ||= (@requested_project_names - exact_projects.keys)
-      .each_with_object({}) do |requested_name, hash|
-        platform_class
-          .project_find_names(requested_name)
-          .each { |find_name| hash[find_name.downcase] = requested_name }
-      end
+    @missing_projects ||= Project.find_all_with_package_manager!(
+      @platform,
+      (@requested_project_names - exact_projects.keys),
+      [:repository]
+    ).compact
   end
 
   def platform_class

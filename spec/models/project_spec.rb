@@ -218,6 +218,56 @@ describe Project, type: :model do
           .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
+
+    context "querying a Pypi package based on PEP503 name normalization" do
+      context "with underscores" do
+        let!(:package) { create(:project, name: "test____underscores", platform: "Pypi") }
+
+        it "finds the package by its normalized name" do
+          expect(Project.find_best!("pypi", "test-underscores")).to eq(package)
+        end
+
+        it "finds the package by an equivalent un-normalized name" do
+          expect(Project.find_best!("pypi", "test_-__underscores")).to eq(package)
+        end
+      end
+
+      context "with dots" do
+        let!(:package) { create(:project, name: "test.....dots", platform: "Pypi") }
+
+        it "finds the package by its normalized name" do
+          expect(Project.find_best!("pypi", "test-dots")).to eq(package)
+        end
+
+        it "finds the package by an equivalent un-normalized name" do
+          expect(Project.find_best!("pypi", "test_-__..dots")).to eq(package)
+        end
+      end
+
+      context "with hyphens" do
+        let!(:package) { create(:project, name: "test-----hyphens", platform: "Pypi") }
+
+        it "finds the package by its normalized name" do
+          expect(Project.find_best!("pypi", "test-hyphens")).to eq(package)
+        end
+
+        it "finds the package by an equivalent un-normalized name" do
+          expect(Project.find_best!("pypi", "test_-__..hyphens")).to eq(package)
+        end
+      end
+
+      context "with a mix of hyphens, dots, underscores and uppercase" do
+        let!(:package) { create(:project, name: "test---__a..mix--of-EVERYthing", platform: "Pypi") }
+
+        it "finds the package by its normalized name" do
+          expect(Project.find_best!("pypi", "test-a-mix-of-everything")).to eq(package)
+        end
+
+        it "finds the package by an equivalent un-normalized name" do
+          expect(Project.find_best!("pypi", "test-__a..mix--of-everyTHING")).to eq(package)
+        end
+      end
+    end
   end
 
   describe ".find_best" do
@@ -233,6 +283,92 @@ describe Project, type: :model do
       it "returns nil" do
         expect(Project.find_best("unknown", "unknown"))
           .to be_nil
+      end
+    end
+  end
+
+  describe ".find_all_with_package_manager!" do
+    context "querying an NPM package" do
+      let!(:package1) { create(:project, name: "some-npm-pkg", platform: "NPM") }
+      let!(:package2) { create(:project, name: "another-npm-pkg", platform: "NPM") }
+
+      it "finds a single package" do
+        results = Project.find_all_with_package_manager!("npm", ["some-npm-pkg"])
+
+        expect(results).to eq({
+                                "some-npm-pkg" => package1,
+                              })
+      end
+
+      it "finds multiple packages" do
+        results = Project.find_all_with_package_manager!("npm", %w[some-npm-pkg another-npm-pkg])
+
+        expect(results).to eq({
+                                "some-npm-pkg" => package1,
+                                "another-npm-pkg" => package2,
+                              })
+      end
+
+      it "finds and doesn't find multiple packages" do
+        results = Project.find_all_with_package_manager!("npm", %w[some-npm-pkg not-found-pkg])
+
+        expect(results).to eq({
+                                "some-npm-pkg" => package1,
+                                "not-found-pkg" => nil,
+                              })
+      end
+    end
+
+    context "querying a Pypi package based on PEP503 name normalization" do
+      let!(:package1) { create(:project, name: "test____underscores", platform: "Pypi") }
+      let!(:package2) { create(:project, name: "test.....dots", platform: "Pypi") }
+      let!(:package3) { create(:project, name: "test-----hyphens", platform: "Pypi") }
+      let!(:package4) { create(:project, name: "test---__a..mix--of-EVERYthing", platform: "Pypi") }
+
+      it "finds a single package" do
+        results = Project.find_all_with_package_manager!("pypi", ["test-underscores"])
+
+        expect(results).to eq({
+                                "test-underscores" => package1,
+                              })
+      end
+
+      it "finds multiple packages" do
+        results = Project.find_all_with_package_manager!("pypi", %w[test-underscores test-dots test-hyphens test-a-mix-of-everything])
+
+        expect(results).to eq({
+                                "test-underscores" => package1,
+                                "test-dots" => package2,
+                                "test-hyphens" => package3,
+                                "test-a-mix-of-everything" => package4,
+                              })
+      end
+
+      it "finds and doesn't find multiple packages" do
+        results = Project.find_all_with_package_manager!("pypi", %w[test-underscores test-not-found test-dots])
+
+        expect(results).to eq({
+                                "test-underscores" => package1,
+                                "test-not-found" => nil,
+                                "test-dots" => package2,
+                              })
+      end
+
+      it "finds multiple package with different un-normalized names" do
+        results = Project.find_all_with_package_manager!(
+          "pypi",
+          ["test__...--__underscores",
+           "test....---__dots",
+           "test....__---hyphens",
+           "test____a....mix-of_-.everything"]
+        )
+
+        expect(results).to eq({
+                                "test__...--__underscores" => package1,
+                                "test....---__dots" => package2,
+                                "test....__---hyphens" => package3,
+                                "test____a....mix-of_-.everything" => package4,
+                              })
       end
     end
   end

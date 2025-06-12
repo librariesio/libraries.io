@@ -388,10 +388,6 @@ module PackageManager
       RepositoryService.repo_fallback(repo, homepage)
     end
 
-    def self.project_find_names(project_name)
-      [project_name]
-    end
-
     def self.deprecation_info(_db_project)
       { is_deprecated: false, message: nil }
     end

@@ -136,14 +136,6 @@ module PackageManager
       end
     end
 
-    def self.project_find_names(project_name)
-      [
-        project_name,
-        project_name.gsub("-", "_"),
-        project_name.gsub("_", "-"),
-      ]
-    end
-
     # checks to see if the package exists on PyPI and the name matches the canonical name
     def self.canonical_pypi_name?(name)
       json_api_project = project(name)
