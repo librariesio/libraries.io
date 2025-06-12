@@ -136,13 +136,6 @@ module PackageManager
       end
     end
 
-    def self.possible_lookup_names(project_name)
-      [
-        project_name,
-        Bibliothecary::Parsers::Pypi.normalize_name(project_name),
-      ]
-    end
-
     # checks to see if the package exists on PyPI and the name matches the canonical name
     def self.canonical_pypi_name?(name)
       json_api_project = project(name)

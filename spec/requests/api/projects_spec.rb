@@ -371,41 +371,19 @@ describe "Api::ProjectsController" do
       expect(response.body).to be_json_eql([].to_json)
     end
 
-    context "for a Go project that is not in the DB" do
-      let!(:project) { create(:project, platform: "Go", name: "known/project") }
+    context "for a Pypi project that has an un-normalized name" do
+      let!(:project) { create(:project, platform: "Pypi", name: "this_IS__NOT__a-normalized-NAME") }
 
-      context "that redirects to a known project" do
+      context "that redirects to the name of the project" do
         it "redirects" do
-          allow(PackageManager::Go)
-            .to receive(:possible_lookup_names)
-            .with("unknown/project")
-            .and_return([project.name])
-
-          get "/api/go/unknown%2Fproject/contributors"
-          expect(response).to redirect_to("/api/go/known%2Fproject/contributors")
+          get "/api/pypi/this-is-NOT...a-normalized-name/contributors"
+          expect(response).to redirect_to("/api/pypi/this_IS__NOT__a-normalized-NAME/contributors")
         end
       end
 
-      context "that redirects to an unknown project" do
+      context "that is not found" do
         it "returns not found" do
-          allow(PackageManager::Go)
-            .to receive(:possible_lookup_names)
-            .with("unknown/project")
-            .and_return(["other/unknown/project"])
-
-          expect { get "/api/go/unknown%2Fproject/contributors" }
-            .to raise_exception(ActiveRecord::RecordNotFound)
-        end
-      end
-
-      context "that does not redirect" do
-        it "returns not found" do
-          allow(PackageManager::Go)
-            .to receive(:possible_lookup_names)
-            .with("unknown/project")
-            .and_return(["unknown/project"])
-
-          expect { get "/api/go/unknown%2Fproject/contributors" }
+          expect { get "/api/pypi/unknown%2Fproject/contributors" }
             .to raise_exception(ActiveRecord::RecordNotFound)
         end
       end

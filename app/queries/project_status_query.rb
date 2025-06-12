@@ -23,23 +23,15 @@ class ProjectStatusQuery
       .index_by(&:name)
   end
 
+  # Returns a list of projects by their alternative lookup logic from Project.find_all_with_package_manager!,
+  # using the names that weren't found with exact matches.
+  # @return [Array<Project>] The projects that were found
   def missing_projects
-    @missing_projects ||= Project
-      .visible
-      .lower_platform(@platform)
-      .where("lower(name) in (?)", missing_possible_lookup_names.keys)
-      .includes(:repository)
-      .find_each
-      .index_by { |project| missing_possible_lookup_names[project.name.downcase] }
-  end
-
-  def missing_possible_lookup_names
-    @missing_possible_lookup_names ||= (@requested_project_names - exact_projects.keys)
-      .each_with_object({}) do |requested_name, hash|
-        platform_class
-          .possible_lookup_names(requested_name)
-          .each { |find_name| hash[find_name.downcase] = requested_name }
-      end
+    @missing_projects ||= Project.find_all_with_package_manager!(
+      @platform,
+      (@requested_project_names - exact_projects.keys),
+      [:repository]
+    ).compact
   end
 
   def platform_class

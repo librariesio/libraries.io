@@ -533,21 +533,48 @@ class Project < ApplicationRecord
       .first
   end
 
-  private_class_method def self.find_with_package_manager!(platform, name, includes = [])
+  # Finds projects with the given names based on lowercase, using package-manager-specific
+  # rules if they exist.
+  #
+  # @param platform [string] Platform name, case-insensitive.
+  # @param names [<Array<String>>] A list of project names for lookup, case-insensitive.
+  # @param includes [Array] A list of AR-includes, optional.
+  # @return [Hash<String, [Project, nil]>] A mapping of lookup names to their found project,
+  #   or nil if the Project wasn't found.
+  def self.find_all_with_package_manager!(platform, names = [], includes = [])
     platform_class = PackageManager::Base.find(platform)
     raise ActiveRecord::RecordNotFound if platform_class.nil?
+
+    scope = visible
+      .lower_platform(platform)
+      .includes(includes.present? ? includes : nil)
 
     # PEP 503 requires that Python repos have a /simple API that is queryable by a "normalized" name,
     # which is the canonical name lowercased with runs of "-_." replaced by a single "-".
     # https://peps.python.org/pep-0503/#normalized-names
     # As of writing, all Pypi packages in Libraries can be queried on Pypi's API by their normalized name.
     if platform_class == PackageManager::Pypi
-      visible
-        .lower_platform(platform)
-        .includes(includes.present? ? includes : nil)
-        .where("lower(regexp_replace(name, '[-_.]+', '-', 'ig')) = ?", Bibliothecary::Parsers::Pypi.normalize_name(name))
-        .first!
+      normalized_names = names.map { |name| Bibliothecary::Parsers::Pypi.normalize_name(name) }
+      projects = scope.where("lower(regexp_replace(name, '[-_.]+', '-', 'ig')) in (?)", normalized_names)
+
+      names.to_h do |name|
+        [
+          name,
+          projects.find { |project| Bibliothecary::Parsers::Pypi.normalize_name(project.name) == Bibliothecary::Parsers::Pypi.normalize_name(name) },
+        ]
+      end
+    else
+      projects = scope.where("lower(name) in (?)", names.map(&:downcase))
+
+      names.to_h do |name|
+        [name, projects.find { |project| project.name.downcase == name }]
+      end
     end
+  end
+
+  # This is a single-name lookup using find_all_with_package_manager!().
+  private_class_method def self.find_with_package_manager!(platform, name, _includes = [])
+    find_all_with_package_manager!(platform, [name]).fetch(name, nil) || raise(ActiveRecord::RecordNotFound)
   end
 
   def normalize_licenses

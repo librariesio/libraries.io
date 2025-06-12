@@ -12,6 +12,14 @@ describe ProjectStatusQuery do
       expect(instance.projects_by_name).to eq({ "foo" => project })
     end
 
+    it "omits projects that aren't found" do
+      project = create(:project, platform: "Pypi", name: "foo")
+
+      instance = described_class.new("Pypi", %w[foo bar])
+
+      expect(instance.projects_by_name).to eq({ "foo" => project })
+    end
+
     it "handles pypi lookups using unnormalized names against packages that would have the same normalized name" do
       project = create(:project, platform: "Pypi", name: "A-Python-Package")
 
