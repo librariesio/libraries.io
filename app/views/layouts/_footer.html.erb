@@ -8,14 +8,11 @@
           <p>
             <a href="https://github.com/librariesio" title='GitHub'><%= fa_icon('github') %></a>&nbsp;
             <a href="mailto:support@libraries.io" title='Email'><%= fa_icon('envelope') %></a>&nbsp;
-            <a href="https://github.com/librariesio/libraries.io/issues/new" title='Support'><%= fa_icon('question-circle') %></a>&nbsp;
           </p>
           <hr>
-          <p>
-            <%= link_to image_tag('Tidelift_project_logo_white.svg', width: 160), 'https://tidelift.com/?utm_source=librariesio&utm_medium=referral&utm_campaign=footer' %>
-          </p>
           <p class='text-muted'>
-            Copyright © <%= Date.today.year %> Tidelift, Inc<br>
+            <%= link_to image_tag('Sonar.svg', width: 160), 'https://sonarsource.com' %>
+            Copyright © <%= Date.today.year %> SourceSource SA<br>
             Code is Open Source under <%= link_to 'AGPLv3', 'https://github.com/librariesio/libraries.io/blob/main/LICENSE.txt' %> license<br>
             Data is available under <%= link_to 'CC-BY-SA 4.0', 'https://libraries.io/data' %> license
           </p>
@@ -30,11 +27,22 @@
       </div>
       <div class="col-xs-12 col-md-2">
         <ul class='list-unstyled'>
-          <li><strong><%= link_to 'About', '/about' %></strong></li>
-          <li><strong><%= link_to 'Team', '/team' %></strong></li>
           <li><strong><%= link_to 'Terms and Conditions', '/terms' %></strong></li>
           <li><strong><%= link_to 'Privacy Policy', '/privacy' %></strong></li>
           <li><strong><%= link_to 'API', '/api' %></strong></li>
+        </ul>
+      </div>
+      <div class="col-xs-12 col-md-2">
+        <strong>Sonar Products</strong>
+        <ul class='list-unstyled'>
+          <li><strong><a href='https://www.sonarsource.com/products/sonarlint/' target='_blank'>SonarQube for IDE</a></strong></li>
+          <li><strong><a href='https://www.sonarsource.com/products/sonarqube/' target='_blank'>SonarQube Server</a></strong></li>
+          <li><strong><a href='https://www.sonarsource.com/products/sonarcloud/' target='_blank'>SonarQube Cloud</a></strong></li>
+        </ul>
+        <strong>Sonar Resources</strong>
+        <ul class='list-unstyled'>
+          <li><strong><a href='https://www.sonarsource.com/company/about/' target='_blank'>About</a></strong></li>
+          <li><strong><a href='https://www.sonarsource.com/blog/' target='_blank'>Blog</a></strong></li>
         </ul>
       </div>
     </div>

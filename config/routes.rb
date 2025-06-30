@@ -185,11 +185,11 @@ Rails.application.routes.draw do
   get "/experiments/*", to: redirect("/")
 
   # content
-  get "/about", to: "pages#about", as: :about
-  get "/team", to: "pages#team", as: :team
+  get "/about", to: redirect("/")
+  get "/team", to: redirect("/")
   get "/privacy", to: "pages#privacy", as: :privacy
   get "/terms", to: "pages#terms", as: :terms
-  get "/compatibility", to: "pages#compatibility", as: :compatibility
+  get "/compatibility", to: redirect("/")
   get "/data", to: redirect("/")
   get "/open-data", to: redirect("/")
 
