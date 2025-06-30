@@ -11,7 +11,7 @@
           </p>
           <hr>
           <p class='text-muted'>
-            <%= link_to image_tag('logo.svg', width: 180, height: 45), 'https://sonarsource.com', class: 'navbar-brand' %><br>
+            <%= link_to image_tag('logo.svg', width: 180, height: 45), 'https://sonarsource.com' %><br>
             Copyright © <%= Date.today.year %> SourceSource SA<br>
             Code is Open Source under <%= link_to 'AGPLv3', 'https://github.com/librariesio/libraries.io/blob/main/LICENSE.txt' %> license<br>
             Data is available under <%= link_to 'CC-BY-SA 4.0', 'https://libraries.io/data' %> license
@@ -26,6 +26,13 @@
         </ul>
       </div>
       <div class="col-xs-12 col-md-2">
+        <ul class='list-unstyled'>
+          <li><strong><%= link_to 'Terms and Conditions', '/terms' %></strong></li>
+          <li><strong><%= link_to 'Privacy Policy', '/privacy' %></strong></li>
+          <li><strong><%= link_to 'API', '/api' %></strong></li>
+        </ul>
+      </div>
+      <div class="col-xs-12 col-md-2">
         <strong>Sonar Products</strong>
         <ul class='list-unstyled'>
           <li><strong><a href='https://www.sonarsource.com/products/sonarlint/' target='_blank'>SonarQube for IDE</a></strong></li>
@@ -33,6 +40,8 @@
           <li><strong><a href='https://www.sonarsource.com/products/sonarcloud/' target='_blank'>SonarQube Cloud</a></strong></li>
           <li><strong><a href='https://www.sonarsource.com/products/sonarqube/advanced-security/' target='_blank'>SonarQube Advanced Security</a></strong></li>
         </ul>
+      </div>
+      <div class="col-xs-12 col-md-2">
         <strong>Sonar Resources</strong>
         <ul class='list-unstyled'>
           <li><strong><a href='https://www.sonarsource.com/company/about/' target='_blank'>About</a></strong></li>
@@ -42,14 +51,6 @@
           <li><strong><a href='https://www.sonarsource.com/resources/customer-stories/' target='_blank'>Customer stories</a></strong></li>
         </ul>
       </div>
-      <div class="col-xs-12 col-md-2">
-        <ul class='list-unstyled'>
-          <li><strong><%= link_to 'Terms and Conditions', '/terms' %></strong></li>
-          <li><strong><%= link_to 'Privacy Policy', '/privacy' %></strong></li>
-          <li><strong><%= link_to 'API', '/api' %></strong></li>
-        </ul>
-      </div>
-
     </div>
   </div>
 </footer>
