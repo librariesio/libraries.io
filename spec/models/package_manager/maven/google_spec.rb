@@ -56,4 +56,11 @@ describe PackageManager::Maven::Google do
       end
     end
   end
+
+  describe ".check_status_url" do
+    it "uses Google's maven-metadata.xml for lack of better options" do
+      project = Project.new(platform: "Maven", name: "fake:package")
+      expect(described_class.check_status_url(project)).to eq("https://dl.google.com/dl/android/maven2/fake/package/maven-metadata.xml")
+    end
+  end
 end

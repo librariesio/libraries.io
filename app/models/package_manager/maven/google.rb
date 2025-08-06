@@ -16,6 +16,10 @@ class PackageManager::Maven::Google < PackageManager::Maven::Common
     get("https://maven.libraries.io/googleMaven/recent")
   end
 
+  def self.check_status_url(db_project)
+    MavenUrl.from_name(db_project.name, repository_base, NAME_DELIMITER).maven_metadata
+  end
+
   # TODO: check and store if the value on the other end is a JAR or AAR file
   # This returns a link to the Google Maven docs where the JAR or AAR
   # file can be downloaded.
