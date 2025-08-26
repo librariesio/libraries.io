@@ -3,6 +3,7 @@
 class TreeController < ApplicationController
   before_action :find_project
   before_action :load_tree_resolver
+  before_action :ensure_logged_in
 
   def show
     # if cache is disabled (such as in dev), just do this synchronously
