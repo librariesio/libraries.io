@@ -165,7 +165,7 @@ describe "Api::ProjectsController" do
     end
   end
 
-  describe "GET /api/:platform/:name/dependencies", type: :request do
+  describe "GET /api/:platform/:name/:number/dependencies", type: :request do
     it "renders successfully" do
       get "/api/#{project.platform}/#{project.name}/#{version.number}/dependencies"
       expect(response).to have_http_status(:success)
@@ -222,6 +222,68 @@ describe "Api::ProjectsController" do
           versions: project.versions.as_json(only: %i[number original_license published_at spdx_expression researched_at repository_sources]),
         }.to_json
       )
+    end
+
+    context "with a long version" do
+      let!(:version) { create(:version, number: "1.0.0-alpha-a.b-c-somethinglong+build.1-aef.1-its-okay", project: project, repository_sources: ["Rubygems"]) }
+
+      it "renders successfully" do
+        get "/api/#{project.platform}/#{project.name}/#{version.number}/dependencies"
+        expect(response).to have_http_status(:success)
+        expect(response.content_type).to start_with("application/json")
+        expect(response.body).to be_json_eql(
+          {
+            code_of_conduct_url: project.code_of_conduct_url,
+            contributions_count: 0,
+            contribution_guidelines_url: project.contribution_guidelines_url,
+            dependencies_for_version: version.number,
+            dependent_repos_count: project.dependent_repos_count,
+            dependents_count: project.dependents_count,
+            deprecation_reason: project.deprecation_reason,
+            dependencies: version.dependencies.map do |dependency|
+              {
+                project_name: dependency.name,
+                name: dependency.name,
+                platform: dependency.platform,
+                requirements: dependency.requirements,
+                latest_stable: dependency.latest_stable,
+                latest: dependency.latest,
+                deprecated: dependency.deprecated,
+                outdated: dependency.outdated,
+                filepath: dependency.filepath,
+                kind: dependency.kind,
+                optional: dependency.optional,
+                normalized_licenses: dependency.project.normalized_licenses,
+              }
+            end,
+            description: project.description,
+            forks: project.forks,
+            funding_urls: project.funding_urls,
+            homepage: project.homepage,
+            keywords: project.keywords,
+            language: project.language,
+            latest_download_url: project.latest_download_url,
+            latest_release_number: project.latest_release_number,
+            latest_release_published_at: project.latest_release_published_at,
+            latest_stable_release_number: project.latest_stable_release_number,
+            latest_stable_release_published_at: project.latest_stable_release_published_at,
+            license_normalized: project.license_normalized,
+            licenses: project.licenses,
+            name: project.name,
+            normalized_licenses: project.normalized_licenses,
+            package_manager_url: project.package_manager_url,
+            platform: project.platform,
+            rank: project.rank,
+            repository_license: project.repository_license,
+            repository_status: project.repository_status,
+            repository_url: project.repository_url,
+            security_policy_url: project.security_policy_url,
+            stars: project.stars,
+            status: project.status,
+            versions: project.versions.as_json(only: %i[number original_license published_at spdx_expression researched_at repository_sources]),
+          }.to_json
+        )
+      end
     end
   end
 

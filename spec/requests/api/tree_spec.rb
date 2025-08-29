@@ -4,6 +4,7 @@ require "rails_helper"
 
 describe "Api::TreesController" do
   let!(:old_version) { create(:version, number: "1.0.0", published_at: 1.month.ago) }
+  let!(:long_version) { create(:version, number: "1.0.0-alpha-a.b-c-somethinglong+build.1-aef.1-its-okay", project: old_version.project, published_at: 1.week.ago) }
   let!(:new_version) { create(:version, number: "2.0.0", project: old_version.project, published_at: 1.day.ago) }
   let(:user) { create(:user) }
 
@@ -22,6 +23,13 @@ describe "Api::TreesController" do
       expect(response).to have_http_status(:success)
       expect(response.content_type).to start_with("application/json")
       expect(response.body).to be_json_eql TreeResolver.new(old_version, "runtime", Date.today).tree.to_json
+    end
+
+    it "renders successfully with all semver versions" do
+      get "/api/#{old_version.project.platform}/#{old_version.project.name}/#{long_version.number}/tree?api_key=#{user.api_key}"
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to start_with("application/json")
+      expect(response.body).to be_json_eql TreeResolver.new(long_version, "runtime", Date.today).tree.to_json
     end
   end
 end

@@ -2,7 +2,7 @@
 
 PLATFORM_CONSTRAINT = /[\w-]+/
 PROJECT_CONSTRAINT = /[^\/]+/
-VERSION_CONSTRAINT = /[\w.-]+/
+VERSION_CONSTRAINT = /[\w.+\-%]+/
 
 class IsAdminConstraint
   def matches?(request)
