@@ -567,7 +567,7 @@ class Project < ApplicationRecord
       projects = scope.where("lower(name) in (?)", names.map(&:downcase))
 
       names.to_h do |name|
-        [name, projects.find { |project| project.name.downcase == name }]
+        [name, projects.find { |project| project.name.downcase == name.downcase }]
       end
     end
   end
