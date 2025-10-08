@@ -5,7 +5,6 @@ require "parallel"
 SitemapGenerator::Sitemap.default_host = "https://libraries.io"
 SitemapGenerator::Sitemap.public_path = "tmp/"
 SitemapGenerator::Sitemap.sitemaps_path = "sitemaps/"
-SitemapGenerator::Sitemap.search_engines[:yandex] = "https://blogs.yandex.ru/pings/?status=success&url=%s"
 
 SitemapGenerator::Sitemap.create(create_index: true) do
   projects = lambda {
@@ -20,30 +19,6 @@ SitemapGenerator::Sitemap.create(create_index: true) do
   misc = lambda {
     group = sitemap.group(filename: :misc, sitemaps_path: "sitemaps/misc") do
       add root_path, priority: 1, changefreq: "daily"
-
-      add search_path
-      add about_path
-
-      add platforms_path, changefreq: "daily"
-      add licenses_path, changefreq: "daily"
-      add languages_path, changefreq: "daily"
-
-      PackageManager::Base.platforms.each do |platform|
-        name = platform.formatted_name
-        add platform_path(name.downcase), lastmod: Project.platform(name).order("updated_at DESC").first.try(:updated_at)
-      end
-
-      Project.popular_licenses(facet_limit: 300).each do |license|
-        name = license["key"]
-        add license_path(name), lastmod: Project.license(name).order("updated_at DESC").first.try(:updated_at)
-      end
-
-      Project.popular_languages(facet_limit: 200).each do |language|
-        name = language["key"]
-        add language_path(name), lastmod: Project.language(name).order("updated_at DESC").first.try(:updated_at)
-      end
-    end
-    group.sitemap.write unless group.sitemap.written?
   }
 
   Parallel.each([projects, misc], &:call)
