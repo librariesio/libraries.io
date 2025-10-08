@@ -19,6 +19,8 @@ SitemapGenerator::Sitemap.create(create_index: true) do
   misc = lambda {
     group = sitemap.group(filename: :misc, sitemaps_path: "sitemaps/misc") do
       add root_path, priority: 1, changefreq: "daily"
+    end
+    group.sitemap.write unless group.sitemap.written?
   }
 
   Parallel.each([projects, misc], &:call)
