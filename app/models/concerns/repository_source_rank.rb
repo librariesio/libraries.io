@@ -73,7 +73,7 @@ module RepositorySourceRank
   end
 
   def any_outdated_dependencies?
-    projects_dependencies.any?(&:outdated?)
+    false
   end
 
   def log_scale(number)
