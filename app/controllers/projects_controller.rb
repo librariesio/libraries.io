@@ -23,7 +23,9 @@ class ProjectsController < ApplicationController
   ]
 
   def index
-    @platforms = Project.maintained.group(:platform).order("count_id DESC").count("id").map { |k, v| { "key" => k, "doc_count" => v } }
+    @platforms = Rails.cache.fetch("platforms:index", expires_in: 1.day, race_condition_ttl: 2.minutes) do
+      Project.maintained.group(:platform).order("count_id DESC").count("id").map { |k, v| { "key" => k, "doc_count" => v } }
+    end
     if current_user
       muted_ids = params[:include_muted].present? ? [] : current_user.muted_project_ids
       @versions = current_user.all_subscribed_versions.where.not(project_id: muted_ids).where.not(published_at: nil).newest_first.includes(project: :versions).paginate(per_page: 20, page: page_number)
