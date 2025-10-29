@@ -76,8 +76,6 @@ document.addEventListener('turbolinks:load', function(){
   });
 
   load_async('#version_dependencies');
-  load_async('#top_dependent_projects');
-  load_async('#top_dependent_repos');
   load_async('#repository_dependencies');
 
   $('.rss').on('click', function(){
