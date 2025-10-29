@@ -79,7 +79,6 @@ module Libraries
     config.gitlab_key = ENV.fetch("GITLAB_KEY", nil)
     config.gitlab_application_id = ENV.fetch("GITLAB_APPLICATION_ID", nil)
     config.gitlab_secret = ENV.fetch("GITLAB_SECRET", nil)
-    config.bugsnag_api_key = ENV.fetch("BUGSNAG_API_KEY", nil)
     config.bitbucket_application_id = ENV.fetch("BITBUCKET_APPLICATION_ID", nil)
     config.bitbucket_secret = ENV.fetch("BITBUCKET_SECRET", nil)
     config.ga_analytics_id = ENV.fetch("GA_ANALYTICS_ID", nil)

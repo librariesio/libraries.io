@@ -126,6 +126,5 @@ group :test do
 end
 
 group :production do
-  gem "bugsnag"
   gem "rails_safe_tasks"
 end
