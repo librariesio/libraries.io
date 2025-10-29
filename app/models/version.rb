@@ -187,6 +187,7 @@ class Version < ApplicationRecord
 
   def related_tag
     return nil unless project&.repository
+    return nil if project.repository.tags.count > 100
 
     @related_tag ||= project.repository.tags.find { |t| t.clean_number == clean_number }
   end
