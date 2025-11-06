@@ -6,7 +6,6 @@ class ProjectUsageController < ApplicationController
     @all_counts = @project.dependents.group("dependencies.requirements").count.select { |k, _v| k.present? }
     @total = @all_counts.sum { |_k, v| v }
     if @all_counts.any?
-      @kinds = @project.dependents.group("dependencies.kind").count
       @counts = sort_by_semver_range(@all_counts.length > 18 ? 17 : 18)
       @highest_percentage = @counts.map { |_k, v| v.to_f / @total * 100 }.max
     end
