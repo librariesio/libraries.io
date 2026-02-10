@@ -254,7 +254,8 @@ GEM
       terminal-table (>= 1.5.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    graphql (1.13.20)
+    graphql (1.13.25)
+      base64
     graphql-client (0.18.0)
       activesupport (>= 3.0)
       graphql
@@ -826,7 +827,7 @@ CHECKSUMS
   github-markup (4.0.1) sha256=1e51b67098d606dec4d640a5c604afd53da170c31c5dd0e7f52fe19ff382805c
   gitlab (4.19.0) sha256=3f645e3e195dbc24f0834fbf83e8ccfb2056d8e9712b01a640aad418a6949679
   globalid (1.2.1) sha256=70bf76711871f843dbba72beb8613229a49429d1866828476f9c9d6ccc327ce9
-  graphql (1.13.20) sha256=b1451f94408122dacb5b0e5bd5f1873bfd64c885de1cfb22a97e5611a0c3c6a0
+  graphql (1.13.25) sha256=99d685d654ea072fd2a63ee9718476516ec62dec3ea57b1a22b9548ba8887adb
   graphql-client (0.18.0) sha256=98aadc810f23dce5404621903945aa584279574f87855b4301d69c90ddc6250b
   groupdate (6.1.0) sha256=7a2d009bd669054367725a0cc71824041661d7e7ddcf1a6b5548b22007ff6f39
   hashdiff (1.0.1) sha256=2cd4d04f5080314ecc8403c4e2e00dbaa282dff395e2d031bc16c8d501bdd6db
