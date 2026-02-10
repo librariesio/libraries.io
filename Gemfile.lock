@@ -307,7 +307,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.23.1)
+    loofah (2.25.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     mail (2.8.1)
@@ -330,7 +330,7 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.8.1)
       bigdecimal (>= 3.1, < 5)
-    multipart-post (2.4.0)
+    multipart-post (2.4.1)
     mutex_m (0.2.0)
     net-imap (0.5.1)
       date
@@ -447,9 +447,9 @@ GEM
       activesupport (>= 5.0.0)
       minitest
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.6.0)
+    rails-html-sanitizer (1.6.2)
       loofah (~> 2.21)
-      nokogiri (~> 1.14)
+      nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
     rails_safe_tasks (1.0.0)
     railties (7.1.6)
       actionpack (= 7.1.6)
@@ -859,7 +859,7 @@ CHECKSUMS
   listen (3.8.0) sha256=9679040ac6e7845ad9f19cf59ecde60861c78e2fae57a5c20fe35e94959b2f8f
   logger (1.6.1) sha256=3ad9587ed3940bf7897ea64a673971415523f4f7d6b22c5e3af5219705669653
   lograge (0.11.1) sha256=ad86d5141f1ba738a61bd075fffe8034137a9ae26d862e703c8376a7fc99428b
-  loofah (2.23.1) sha256=d0a07422cb3b69272e124afa914ef6d517e30d5496b7f1c1fc5b95481f13f75e
+  loofah (2.25.0) sha256=df5ed7ac3bac6a4ec802df3877ee5cc86d027299f8952e6243b3dac446b060e6
   mail (2.8.1) sha256=ec3b9fadcf2b3755c78785cb17bc9a0ca9ee9857108a64b6f5cfc9c0b5bfc9ad
   marcel (1.0.4) sha256=0d5649feb64b8f19f3d3468b96c680bae9746335d02194270287868a661516a4
   marginalia (1.11.1) sha256=cb63212ab63e42746e27595e912cb20408a1a28bcd0edde55d15b7c45fa289cf
@@ -872,7 +872,7 @@ CHECKSUMS
   msgpack (1.8.0) sha256=e64ce0212000d016809f5048b48eb3a65ffb169db22238fb4b72472fecb2d732
   multi_json (1.15.0) sha256=1fd04138b6e4a90017e8d1b804c039031399866ff3fbabb7822aea367c78615d
   multi_xml (0.8.1) sha256=addba0290bac34e9088bfe73dc4878530297a82a7bbd66cb44dcd0a4b86edf5a
-  multipart-post (2.4.0) sha256=c7c48ce6cd32cd7a3bf5fa58fed39cf58e90f75a526de24fbaa91913cab86380
+  multipart-post (2.4.1) sha256=9872d03a8e552020ca096adadbf5e3cb1cd1cdd6acd3c161136b8a5737cdb4a8
   mutex_m (0.2.0) sha256=b6ef0c6c842ede846f2ec0ade9e266b1a9dac0bc151682b04835e8ebd54840d5
   net-imap (0.5.1) sha256=c0ceb85d8459f7081d5ed1ac86159f8e80d25e704eb52dbf0d9f703b7bc838d7
   net-pop (0.1.2) sha256=848b4e982013c15b2f0382792268763b748cce91c9e91e36b0f27ed26420dff3
@@ -918,7 +918,7 @@ CHECKSUMS
   rackup (1.0.1) sha256=ba86604a28989fe1043bff20d819b360944ca08156406812dca6742b24b3c249
   rails (7.1.6) sha256=9a0a335e510de3daad7542cd791af3d8ff710c644e1da17ed12e96d2f28a7470
   rails-dom-testing (2.2.0) sha256=e515712e48df1f687a1d7c380fd7b07b8558faa26464474da64183a7426fa93b
-  rails-html-sanitizer (1.6.0) sha256=86e9f19d2e6748890dcc2633c8945ca45baa08a1df9d8c215ce17b3b0afaa4de
+  rails-html-sanitizer (1.6.2) sha256=35fce2ca8242da8775c83b6ba9c1bcaad6751d9eb73c1abaa8403475ab89a560
   rails-timeago (2.16.0)
   rails_safe_tasks (1.0.0) sha256=c21ede7e53306066e6533485e0afca8a6e01af005792da3001cc4b241f4b7419
   railties (7.1.6) sha256=2a10e97f2eaca66d11f0fef4b1f4d826e6ee28d4cf01ff16624420dd45e7de1c
