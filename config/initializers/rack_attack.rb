@@ -26,15 +26,23 @@ class Rack::Attack
     !req.valid_key if api_key.present?
   end
 
+  period_proc = proc do |req|
+    if req.params["api_key"].present?
+      1.minute
+    else
+      1.hours
+    end
+  end
+
   limit_proc = proc do |req|
     if req.params["api_key"].present?
       req.valid_key.rate_limit
     else
-      10 # req/min for anonymous users
+      10 # req/hour for anonymous users
     end
   end
 
-  throttle("api", limit: limit_proc, period: 1.minute) do |req|
+  throttle("api", limit: limit_proc, period: period_proc) do |req|
     req.params["api_key"] || req.remote_ip if req.path.match(/^\/api\/.+/) && !req.path.match(/^\/api\/bower-search/)
   end
 
