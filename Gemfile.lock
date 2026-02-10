@@ -177,6 +177,7 @@ GEM
     creole (0.5.0)
     css_parser (1.14.0)
       addressable
+    csv (3.3.5)
     dalli (3.2.5)
     database_cleaner (1.99.0)
     database_cleaner-active_record (2.1.0)
@@ -266,7 +267,8 @@ GEM
     highline (3.0.1)
     hiredis (0.6.3)
     htmlentities (4.3.4)
-    httparty (0.21.0)
+    httparty (0.24.2)
+      csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     i18n (1.14.6)
@@ -326,7 +328,8 @@ GEM
     minitest (5.25.1)
     msgpack (1.8.0)
     multi_json (1.15.0)
-    multi_xml (0.6.0)
+    multi_xml (0.8.1)
+      bigdecimal (>= 3.1, < 5)
     multipart-post (2.4.0)
     mutex_m (0.2.0)
     net-imap (0.5.1)
@@ -787,6 +790,7 @@ CHECKSUMS
   crass (1.0.6) sha256=dc516022a56e7b3b156099abc81b6d2b08ea1ed12676ac7a5657617f012bd45d
   creole (0.5.0) sha256=951701e2d80760f156b1cb2a93471ca97c076289becc067a33b745133ed32c03
   css_parser (1.14.0) sha256=f2ce6148cd505297b07bdbe7a5db4cce5cf530071f9b732b9a23538d6cdc0113
+  csv (3.3.5) sha256=6e5134ac3383ef728b7f02725d9872934f523cb40b961479f69cf3afa6c8e73f
   dalli (3.2.5) sha256=4a4e42e823fa15a30c5211ce38e1225e4c0e40936ec66c3e912341b198262f86
   database_cleaner (1.99.0) sha256=4854c518ed36fae7ea8961993ff3cfe7c0a0434c4762ab2f0026075adbd2d1b2
   database_cleaner-active_record (2.1.0) sha256=7384b973d67bcc1b5a850b876a4638aa83cca3bc88f9d87562fe25cd2dd60d8a
@@ -835,7 +839,7 @@ CHECKSUMS
   highline (3.0.1) sha256=ca18b218fd581b1fae832f89bfeaf2b34d3a93429c44fd4411042ffce286f009
   hiredis (0.6.3) sha256=7f052e320f7d24b5c2a9fdf67c6ff6facdf6e256394a703511bce34ecf445212
   htmlentities (4.3.4) sha256=125a73c6c9f2d1b62100b7c3c401e3624441b663762afa7fe428476435a673da
-  httparty (0.21.0) sha256=00ef7bf9a71f30a3bff88edeb5b16a34bea883ab67c246b3f0db2d6794fe1214
+  httparty (0.24.2) sha256=8fca6a54aa0c4aa4303a0fd33e5e2156175d6a5334f714263b458abd7fda9c38
   i18n (1.14.6) sha256=dc229a74f5d181f09942dd60ab5d6e667f7392c4ee826f35096db36d1fe3614c
   indefinite_article (0.2.4) sha256=cc5bda1fcb8d508ae4135146d7dd5f6609626a7cd3b581b868be451de24cca87
   io-console (0.7.2) sha256=f0dccff252f877a4f60d04a4dc6b442b185ebffb4b320ab69212a92b48a7a221
@@ -867,7 +871,7 @@ CHECKSUMS
   minitest (5.25.1) sha256=3db6795a80634def1cf86fda79d2d83b59b25ce5e186fa675f73c565589d2ad8
   msgpack (1.8.0) sha256=e64ce0212000d016809f5048b48eb3a65ffb169db22238fb4b72472fecb2d732
   multi_json (1.15.0) sha256=1fd04138b6e4a90017e8d1b804c039031399866ff3fbabb7822aea367c78615d
-  multi_xml (0.6.0) sha256=d24393cf958adb226db884b976b007914a89c53ad88718e25679d7008823ad52
+  multi_xml (0.8.1) sha256=addba0290bac34e9088bfe73dc4878530297a82a7bbd66cb44dcd0a4b86edf5a
   multipart-post (2.4.0) sha256=c7c48ce6cd32cd7a3bf5fa58fed39cf58e90f75a526de24fbaa91913cab86380
   mutex_m (0.2.0) sha256=b6ef0c6c842ede846f2ec0ade9e266b1a9dac0bc151682b04835e8ebd54840d5
   net-imap (0.5.1) sha256=c0ceb85d8459f7081d5ed1ac86159f8e80d25e704eb52dbf0d9f703b7bc838d7
