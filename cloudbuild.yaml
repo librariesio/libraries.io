@@ -9,7 +9,7 @@ steps:
   timeout: 2400s
 # copy the compiled assets from the docker container to the workspace to then push to GCS
 - name: 'docker'
-  env: ['DOCKER_API_VERSION'='1.41']
+  env: ['DOCKER_API_VERSION=1.41']
   args: ['run', '-v', '/workspace:/workspace', 'gcr.io/$PROJECT_ID/libraries.io:$REVISION_ID', 'cp', '-R', '/libraries.io/public/assets/', '/workspace/']
   timeout: 2400s
 - name: 'gcr.io/cloud-builders/gsutil'
