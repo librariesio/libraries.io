@@ -246,6 +246,11 @@ namespace :download do
     PackageManager::SwiftPM.import
   end
 
+  desc 'Download all Spack packages asynchronously'
+  task spack_all: :environment do
+    PackageManager::Spack.import_async
+  end
+
   desc "Download all Rubygems packages asynchronously"
   task rubygems_all: :environment do
     PackageManager::Rubygems.import_async
