@@ -7,14 +7,9 @@ Libraries.io helps developers find new open source libraries, modules and framew
 
 ## Documentation
 
-Project wide documentation can be found on https://docs.libraries.io, which contains high level guides on:
+Some general information can be found on the website [libraries.io](https://libraries.io/).
 
-- [What Libraries.io is](https://docs.libraries.io/)
-- [The strategy driving the project](https://docs.libraries.io/strategy)
-- [The roadmap of future goals](https://docs.libraries.io/roadmap)
-- [Architecture overview](https://docs.libraries.io/overview)
-- [Contributing guide](https://docs.libraries.io/contributorshandbook)
-- [Labelling policy](https://docs.libraries.io/labelling)
+API documentation can be found at [libraries.io/api](https://libraries.io/api)
 
 Each repository has more details documentation on getting setup and adding new features, for this repository check out the following guides:
 
