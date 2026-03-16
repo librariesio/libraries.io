@@ -379,6 +379,10 @@ class Repository < ApplicationRecord
     uuid # legacy alias
   end
 
+  def tags_count
+    @tags_count ||= tags.count
+  end
+
   def sorted_tags
     @sorted_tags ||= tags.sort
   end
