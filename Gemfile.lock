@@ -342,7 +342,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.19.0)
+    nokogiri (1.19.1)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oauth2 (2.0.9)
@@ -412,7 +412,7 @@ GEM
     puma (6.4.3)
       nio4r (~> 2.0)
     racc (1.8.1)
-    rack (2.2.20)
+    rack (2.2.22)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
     rack-canonical-host (0.2.3)
@@ -474,7 +474,7 @@ GEM
       io-console (~> 0.5)
     request_store (1.4.1)
       rack (>= 1.4)
-    rexml (3.3.9)
+    rexml (3.4.4)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -686,7 +686,7 @@ DEPENDENCIES
   mail
   marginalia
   mime-types
-  nokogiri
+  nokogiri (>= 1.19.1)
   octicons_helper
   octokit
   oj
@@ -704,6 +704,7 @@ DEPENDENCIES
   pictogram
   premailer-rails (= 1.12.0)
   puma
+  rack (>= 2.2.22)
   rack-attack
   rack-canonical-host
   rack-cors
@@ -713,6 +714,7 @@ DEPENDENCIES
   rainbow (~> 3)
   rdoc
   redis
+  rexml (>= 3.4.2)
   rspec-rails
   rspec-sidekiq
   rspec_junit_formatter
@@ -879,7 +881,7 @@ CHECKSUMS
   net-protocol (0.2.2) sha256=aa73e0cba6a125369de9837b8d8ef82a61849360eba0521900e2c3713aa162a8
   net-smtp (0.5.0) sha256=5fc0415e6ea1cc0b3dfea7270438ec22b278ca8d524986a3ae4e5ae8d087b42a
   nio4r (2.7.4) sha256=d95dee68e0bb251b8ff90ac3423a511e3b784124e5db7ff5f4813a220ae73ca9
-  nokogiri (1.19.0) sha256=e304d21865f62518e04f2bf59f93bd3a97ca7b07e7f03952946d8e1c05f45695
+  nokogiri (1.19.1) sha256=598b327f36df0b172abd57b68b18979a6e14219353bca87180c31a51a00d5ad3
   oauth2 (2.0.9) sha256=b21f9defcf52dc1610e0dfab4c868342173dcd707fd15c777d9f4f04e153f7fb
   octicons (8.5.0) sha256=e5f841892e40edec91527a667c0d6f751f0d43fc62cdd17b4345d1ea2ed4c63b
   octicons_helper (8.5.0) sha256=8c3c5548c85e437ad363d7d6a13a1fe379bcf84b2761c212d731da1f64d0b5c8
@@ -908,7 +910,7 @@ CHECKSUMS
   public_suffix (5.0.4) sha256=35cd648e0d21d06b8dce9331d19619538d1d898ba6d56a6f2258409d2526d1ae
   puma (6.4.3) sha256=24a4645c006811d83f2480057d1f54a96e7627b6b90e1c99b260b9dc630eb43e
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
-  rack (2.2.20) sha256=85da3447a4845230a00803d47413ed4d1dd9823f948a8d93c0b2d1e149c07170
+  rack (2.2.22) sha256=c5cf0b7f872559966d974abe3101a57d51caf12504ee76290b98720004f64542
   rack-attack (6.7.0) sha256=3ca47e8f66cd33b2c96af53ea4754525cd928ed3fa8da10ee6dad0277791d77c
   rack-canonical-host (0.2.3) sha256=58254285ad41b3d3ae6c7fffd372a4ee662b3f8accff68db67ef18a09a5b38a6
   rack-cors (1.1.1) sha256=4702644ac6d63ebbddff372a3cd4cd573513287e3524b5a5415f678970057a4b
@@ -931,7 +933,7 @@ CHECKSUMS
   regexp_parser (2.8.1) sha256=83f63e2bfae3db38f988c66f114485140ff1791321fd827480bc75aa42cacb8c
   reline (0.5.8) sha256=467faa77616677035786819d7d2e6cfa048be64542c10d8eda81dacd939aea02
   request_store (1.4.1) sha256=cdd0ff614c9ed70073b914b790aa41d02ef67c18c2a3e8041ad30df0c118c3a4
-  rexml (3.3.9) sha256=d71875b85299f341edf47d44df0212e7658cbdf35aeb69cefdb63f57af3137c9
+  rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   rspec (3.13.0) sha256=d490914ac1d5a5a64a0e1400c1d54ddd2a501324d703b8cfe83f458337bab993
   rspec-core (3.13.2) sha256=94fbda6e4738e478f1c7532b7cc241272fcdc8b9eac03a97338b1122e4573300
   rspec-expectations (3.13.3) sha256=0e6b5af59b900147698ea0ff80456c4f2e69cac4394fbd392fbd1ca561f66c58
