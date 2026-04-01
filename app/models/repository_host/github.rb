@@ -148,7 +148,13 @@ module RepositoryHost
       gh_contributions = api_client(token).contributors(repository.full_name)
       return if gh_contributions.empty?
 
-      existing_contributions = repository.contributions.includes(:repository_user).to_a
+      gh_uuids = gh_contributions.filter_map { |c| c.id.to_s if c["id"] }
+      # Only load contributions for the contributors present in the API response, not the entire history.
+      existing_contributions = repository.contributions
+        .joins(:repository_user)
+        .where(repository_users: { uuid: gh_uuids })
+        .includes(:repository_user)
+        .to_a
       platform = repository.projects.first.try(:platform)
       gh_contributions.each do |c|
         next unless c["id"]
