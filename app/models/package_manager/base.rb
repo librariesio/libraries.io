@@ -140,10 +140,12 @@ module PackageManager
       if self::HAS_VERSIONS
         if sync_version == :all
           version_objects = versions_as_version_objects(raw_project, db_project.name)
-          preloaded_db_versions = db_project.versions.where(number: version_objects.map(&:version_number))
-          version_objects
-            .each { |v| add_version(db_project, v, preloaded_db_versions) }
-            .tap { |vs| remove_missing_versions(db_project, vs) }
+          # Process in slices to avoid loading thousands of Version AR objects at once.
+          version_objects.each_slice(200) do |slice|
+            preloaded_db_versions = db_project.versions.where(number: slice.map(&:version_number))
+            slice.each { |v| add_version(db_project, v, preloaded_db_versions) }
+          end
+          remove_missing_versions(db_project, version_objects)
         elsif (version = one_version_as_version_object(raw_project, sync_version))
           preloaded_db_versions = db_project.versions.where(number: version.version_number)
           add_version(db_project, version, preloaded_db_versions)
@@ -300,69 +302,68 @@ module PackageManager
 
       db_versions = db_project.versions
       db_versions = db_versions.where(number: sync_version) unless sync_version == :all
-      # Do preloads in batches of 200 versions, because we don't want a big preload query that
-      # queries on thousands of Version ids, especially when each Version could have thousands
-      # of Dependencies.
-      db_versions = db_versions.in_batches(of: 200).map { |vs| vs.includes(:dependencies) }.flatten
-
-      # cached lookup of dependency platform/names => project ids, so we avoid repetitive project lookups in find_best! below.
-      platform_and_names_to_project_ids = {}
 
       if db_versions.empty?
         StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: sync_version, message: "no versions found", source: source })
       end
 
-      db_versions.each do |db_version|
-        next if !db_version.dependencies_count.nil? && !force_sync_dependencies
+      # cached lookup of dependency platform/names => project ids, so we avoid repetitive project lookups in find_best! below.
+      platform_and_names_to_project_ids = {}
 
-        deps = begin
-          dependencies(name, db_version.number, mapped_project)
-        rescue StandardError => e
-          StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: db_version.number, message: "error getting dependencies: #{e.message}", source: source })
-          []
-        end
+      # Process versions in batches to avoid loading all Version and Dependency records into memory at once.
+      db_versions.in_batches(of: 200) do |batch|
+        batch.includes(:dependencies).each do |db_version|
+          next if !db_version.dependencies_count.nil? && !force_sync_dependencies
 
-        # if we are forcing a resync of the dependencies in here then wipe out existing ones
-        # so that we have the fresh and correct dependency information from the most recent
-        # call to dependencies() from the platform provider
-        if force_sync_dependencies
-          StructuredLog.capture("SAVE_DEPENDENCIES_FULL_REFRESH", { platform: db_platform, name: name, version: db_version.number, source: source })
-          db_version.dependencies.destroy_all
-        end
-
-        existing_dep_names = db_version.dependencies.map(&:project_name)
-
-        new_dep_attributes = deps
-          .reject { |dep| existing_dep_names.include?(dep[:project_name]) }
-          .map do |dep|
-            dep_platform_and_name = [db_platform, dep[:project_name].to_s.strip]
-            named_project_id = if platform_and_names_to_project_ids.key?(dep_platform_and_name)
-                                 platform_and_names_to_project_ids[dep_platform_and_name]
-                               else
-                                 platform_and_names_to_project_ids[dep_platform_and_name] = Project.find_best(db_platform, dep[:project_name].to_s.strip)&.id
-                               end
-
-            dep.merge(version_id: db_version.id, project_id: named_project_id)
+          deps = begin
+            dependencies(name, db_version.number, mapped_project)
+          rescue StandardError => e
+            StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: db_version.number, message: "error getting dependencies: #{e.message}", source: source })
+            []
           end
 
-        # Validate the new dependencies before performing the upsert
-        new_dep_attributes.each do |attrs|
-          dependency = Dependency.new(attrs)
-          dependency.validate!
-        rescue ActiveRecord::RecordInvalid => e
-          # If we don't have a valid dependency to upsert, log it, and fail noisily
-          message = dependency.errors.full_messages.join(", ").gsub(/'/, "")
-          StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: db_version, dependency_name: dependency.project_name, message: message, source: source })
-          raise e
+          # if we are forcing a resync of the dependencies in here then wipe out existing ones
+          # so that we have the fresh and correct dependency information from the most recent
+          # call to dependencies() from the platform provider
+          if force_sync_dependencies
+            StructuredLog.capture("SAVE_DEPENDENCIES_FULL_REFRESH", { platform: db_platform, name: name, version: db_version.number, source: source })
+            db_version.dependencies.destroy_all
+          end
+
+          existing_dep_names = db_version.dependencies.map(&:project_name)
+
+          new_dep_attributes = deps
+            .reject { |dep| existing_dep_names.include?(dep[:project_name]) }
+            .map do |dep|
+              dep_platform_and_name = [db_platform, dep[:project_name].to_s.strip]
+              named_project_id = if platform_and_names_to_project_ids.key?(dep_platform_and_name)
+                                   platform_and_names_to_project_ids[dep_platform_and_name]
+                                 else
+                                   platform_and_names_to_project_ids[dep_platform_and_name] = Project.find_best(db_platform, dep[:project_name].to_s.strip)&.id
+                                 end
+
+              dep.merge(version_id: db_version.id, project_id: named_project_id)
+            end
+
+          # Validate the new dependencies before performing the upsert
+          new_dep_attributes.each do |attrs|
+            dependency = Dependency.new(attrs)
+            dependency.validate!
+          rescue ActiveRecord::RecordInvalid => e
+            # If we don't have a valid dependency to upsert, log it, and fail noisily
+            message = dependency.errors.full_messages.join(", ").gsub(/'/, "")
+            StructuredLog.capture("SAVE_DEPENDENCIES_FAILURE", { platform: db_platform, name: name, version: db_version, dependency_name: dependency.project_name, message: message, source: source })
+            raise e
+          end
+
+          # bulk insert all the Dependencies for the Version: note that as of writing there are no unique indices on Dependency, so any de-duping
+          # was done in the reject() above. So doing an upsert here would be pointless which is why we only do a bulk insert.
+          Dependency.insert_all(new_dep_attributes) unless new_dep_attributes.empty?
+
+          # this serves as a marker that we have saved Version#dependencies or not, even if there are zero (other)
+          db_version.set_runtime_dependencies_count
+          db_version.set_dependencies_count
         end
-
-        # bulk insert all the Dependencies for the Version: note that as of writing there are no unique indices on Dependency, so any de-duping
-        # was done in the reject() above. So doing an upsert here would be pointless which is why we only do a bulk insert.
-        Dependency.insert_all(new_dep_attributes) unless new_dep_attributes.empty?
-
-        # this serves as a marker that we have saved Version#dependencies or not, even if there are zero (other)
-        db_version.set_runtime_dependencies_count
-        db_version.set_dependencies_count
       end
 
       db_project.set_dependents_count_async
