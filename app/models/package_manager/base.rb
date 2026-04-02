@@ -140,12 +140,15 @@ module PackageManager
       if self::HAS_VERSIONS
         if sync_version == :all
           version_objects = versions_as_version_objects(raw_project, db_project.name)
+          # Extract version numbers up-front so version_objects can be released before the remove step.
+          version_numbers_to_keep = version_objects.map(&:version_number)
           # Process in slices to avoid loading thousands of Version AR objects at once.
           version_objects.each_slice(200) do |slice|
             preloaded_db_versions = db_project.versions.where(number: slice.map(&:version_number))
             slice.each { |v| add_version(db_project, v, preloaded_db_versions) }
           end
-          remove_missing_versions(db_project, version_objects)
+          version_objects = nil # rubocop:disable Lint/UselessAssignment -- drop reference so GC can collect ApiVersion structs while save_dependencies runs
+          remove_missing_versions(db_project, version_numbers_to_keep)
         elsif (version = one_version_as_version_object(raw_project, sync_version))
           preloaded_db_versions = db_project.versions.where(number: version.version_number)
           add_version(db_project, version, preloaded_db_versions)
@@ -237,7 +240,7 @@ module PackageManager
       nil
     end
 
-    def self.remove_missing_versions(db_project, api_versions)
+    def self.remove_missing_versions(db_project, version_numbers_to_keep)
       return unless missing_version_remover
 
       # yanked pypi versions are marked as such in the api, and the majority of them are handled upstream of here
@@ -245,7 +248,7 @@ module PackageManager
 
       missing_version_remover.new(
         project: db_project,
-        version_numbers_to_keep: api_versions.map(&:version_number),
+        version_numbers_to_keep: version_numbers_to_keep,
         target_status: "Removed",
         removal_time: Time.zone.now
       ).remove_missing_versions_of_project!
