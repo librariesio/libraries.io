@@ -311,10 +311,11 @@ module PackageManager
       platform_and_names_to_project_ids = {}
 
       # Process versions in batches to avoid loading all Version and Dependency records into memory at once.
+      # When not force-syncing, skip versions that already have dependency data recorded so we don't
+      # eagerly load their Dependency records only to discard them.
       db_versions.in_batches(of: 200) do |batch|
-        batch.includes(:dependencies).each do |db_version|
-          next if !db_version.dependencies_count.nil? && !force_sync_dependencies
-
+        to_process = force_sync_dependencies ? batch : batch.where(dependencies_count: nil)
+        to_process.includes(:dependencies).each do |db_version|
           deps = begin
             dependencies(name, db_version.number, mapped_project)
           rescue StandardError => e
